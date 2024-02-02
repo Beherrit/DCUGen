@@ -1,0 +1,124 @@
+Character Creation Summary
+----------------------------------------
+
+STATS:
+- Strength: 11 (Cost: 22)
+- Agility: 14 (Cost: 28)
+- Fighting: 11 (Cost: 22)
+- Stamina: 6 (Cost: 12)
+- Intellect: 3 (Cost: 6)
+- Awareness: 0 (Cost: 0)
+- Presence: 7 (Cost: 14)
+- Dexterity: 3 (Cost: 6)
+
+ADVANTAGES:
+- Diehard (Rank: 1, Cost: 1)
+- Improved Smash (Rank: 1, Cost: 1)
+- Interpose (Rank: 1, Cost: 1)
+- Extraordinary Effort (Rank: 1, Cost: 1)
+- Favored Foe (Rank: 1, Cost: 1)
+- Assessment (Rank: 1, Cost: 1)
+- Luck (Rank: 5, Cost: 5)
+- Connected (Rank: 1, Cost: 1)
+- Move-by Action (Rank: 1, Cost: 1)
+- Improved Defense (Rank: 1, Cost: 1)
+- Ambidexterity (Rank: 1, Cost: 2)
+- Sidekick (Rank: 2, Cost: 2)
+- Daze (Rank: 2, Cost: 2)
+- All-out Attack (Rank: 1, Cost: 1)
+- Benefit (Rank: 2, Cost: 2)
+- Fast Grab (Rank: 1, Cost: 1)
+- Close Attack (Rank: 2, Cost: 2)
+- Contacts (Rank: 1, Cost: 1)
+- Evasion (Rank: 1, Cost: 1)
+- Improved Critical (Rank: 3, Cost: 3)
+- Second Chance (Rank: 3, Cost: 3)
+- Uncanny Dodge (Rank: 1, Cost: 1)
+- Beginner's Luck (Rank: 1, Cost: 1)
+- Minion (Rank: 1, Cost: 1)
+- Ranged Attack (Rank: 1, Cost: 1)
+- Agile Feint (Rank: 1, Cost: 1)
+- Leadership (Rank: 1, Cost: 1)
+- Inventor (Rank: 1, Cost: 1)
+- Improved Grab (Rank: 1, Cost: 1)
+- Trance (Rank: 1, Cost: 1)
+- Great Endurance (Rank: 1, Cost: 1)
+- Taunt (Rank: 1, Cost: 1)
+- Improved Aim (Rank: 1, Cost: 1)
+- Seize Initiative (Rank: 1, Cost: 1)
+- Improved Initiative (Rank: 2, Cost: 2)
+- Hide in Plain Sight (Rank: 1, Cost: 1)
+- Artificer (Rank: 1, Cost: 1)
+- Defensive Roll (Rank: 3, Cost: 3)
+- Weapon Break (Rank: 1, Cost: 1)
+- Startle (Rank: 1, Cost: 1)
+- Improved Disarm (Rank: 1, Cost: 1)
+- Languages (Rank: 2, Cost: 2)
+- Equipment (Rank: 2, Cost: 2)
+- Grabbing Finesse (Rank: 1, Cost: 1)
+- Accurate Attack (Rank: 1, Cost: 1)
+- Teamwork (Rank: 1, Cost: 1)
+- Animal Empathy (Rank: 1, Cost: 1)
+- Chokehold (Rank: 1, Cost: 1)
+- Redirect (Rank: 1, Cost: 1)
+- Jack-of-all-trades (Rank: 1, Cost: 1)
+- Precise Attack (Rank: 2, Cost: 2)
+- Ritualist (Rank: 1, Cost: 1)
+- Inspire (Rank: 3, Cost: 3)
+- Throwing Mastery (Rank: 1, Cost: 1)
+- Well-informed (Rank: 1, Cost: 1)
+- Eidetic Memory (Rank: 1, Cost: 1)
+- Weapon Bind (Rank: 1, Cost: 1)
+- Ultimate Effort (Rank: 1, Cost: 1)
+- Improved Hold (Rank: 1, Cost: 1)
+- Tracking (Rank: 1, Cost: 1)
+- Quick Draw (Rank: 1, Cost: 1)
+- Fearless (Rank: 1, Cost: 1)
+
+SKILLS:
+- Deception (Rank: 6, Cost: 3.0, Total: 13)
+- Investigation (Rank: 20, Cost: 10.0, Total: 23)
+- Ranged Combat (Rank: 16, Cost: 8.0, Total: 19)
+- Expertise (Rank: 6, Cost: 3.0, Total: 9)
+- Treatment (Rank: 2, Cost: 1.0, Total: 5)
+- Perception (Rank: 14, Cost: 7.0, Total: 14)
+- Technology (Rank: 10, Cost: 5.0, Total: 13)
+- Persuasion (Rank: 16, Cost: 8.0, Total: 23)
+- Close Combat (Rank: 18, Cost: 9.0, Total: 29)
+- Stealth (Rank: 8, Cost: 4.0, Total: 22)
+- Sleight of Hand (Rank: 4, Cost: 2.0, Total: 7)
+
+POWERS:
+
+DEFENSES:
+- Dodge: 14
+- Fortitude: 6
+- Parry: 11
+- Toughness: 6
+- Will: 0
+
+ATTACKS:
+Melee Attack Bonus: 31
+Ranged Attack Bonus: 20
+
+NAME: Maria
+GENDER: Female
+AGE: 15
+
+LANGUAGES SECTION: Fijian, English
+INITIATIVE: 22
+
+MOTIVATION: Personal Growth: Striving for self-improvement and personal betterment.
+
+COMPLICATIONS:
+- Overconfident:
+  An inflated sense of one’s own abilities.
+- Secret Identity:
+  Maintaining a separate civilian identity.
+
+----------------------------------------
+TOTAL COST: 253.0
+Attributes Total Cost: 110.0
+Advantages Total Cost: 83.0
+Skills Total Cost: 60.0
+Powers Total Cost (Adjusted): 0.0
