@@ -1,0 +1,609 @@
+[
+    {
+        "name": "Affliction",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": [
+            "Fort",
+            "Will"
+        ]
+    },
+    {
+        "name": "Alternate Form",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Blast",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": "Toughness"
+    },
+    {
+        "name": "Burrowing",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Movement"
+    },
+    {
+        "name": "Communication",
+        "cost": 4,
+        "max_rank": 5,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Comprehend",
+        "cost": 2,
+        "max_rank": 6,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Concealment",
+        "cost": 2,
+        "max_rank": 5,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Create",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "range": "Ranged",
+        "type": "Utility"
+    },
+    {
+        "name": "Damage",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Melee",
+        "resisted": "Toughness"
+    },
+    {
+        "name": "Dazzle",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": [
+            "Fort",
+            "Will"
+        ]
+    },
+    {
+        "name": "Deflect",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "range": "Ranged",
+        "type": "Defensive"
+    },
+    {
+        "name": "Duplication",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Element Control",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": "Strength"
+    },
+    {
+        "name": "Elongation",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Energy Absorption",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive"
+    },
+    {
+        "name": "Energy Aura",
+        "cost": 4,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Melee",
+        "resisted": "Toughness"
+    },
+    {
+        "name": "Energy Control",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": "Toughness"
+    },
+    {
+        "name": "Enhanced Trait Dodge",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Enhanced Trait Fortitude",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Enhanced Trait Parry",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Enhanced Trait Will",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Environment Control",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Extra Limbs",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Feature",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Flight",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Movement"
+    },
+    {
+        "name": "Force Field",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive"
+    },
+    {
+        "name": "Growth",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Healing",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Support"
+    },
+    {
+        "name": "Illusion Control",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": "Awareness"
+    },
+    {
+        "name": "Immortality",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Immunity",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive"
+    },
+    {
+        "name": "Insubstantial",
+        "cost": 5,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive"
+    },
+    {
+        "name": "Invisibility",
+        "cost": 4,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Leaping",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Movement"
+    },
+    {
+        "name": "Luck Control",
+        "cost": 3,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Magic",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": "Toughness"
+    },
+    {
+        "name": "Mental Blast",
+        "cost": 4,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": "Will"
+    },
+    {
+        "name": "Mimic",
+        "cost": 8,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Mind Control",
+        "cost": 4,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": "Will"
+    },
+    {
+        "name": "Mind Reading",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": "Will"
+    },
+    {
+        "name": "Morph",
+        "cost": 5,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Move Object",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": "Strength"
+    },
+    {
+        "name": "Movement",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Movement"
+    },
+    {
+        "name": "Nullify",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Melee",
+        "resisted": "Will"
+    },
+    {
+        "name": "Nullify Ranged",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": "Will"
+    },
+    {
+        "name": "Power-Lifting",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Protection",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive"
+    },
+    {
+        "name": "Quickness",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Movement"
+    },
+    {
+        "name": "Ranged Affliction",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": [
+            "Fort",
+            "Will"
+        ]
+    },
+    {
+        "name": "Ranged Damage",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": "Toughness"
+    },
+    {
+        "name": "Regeneration",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Support"
+    },
+    {
+        "name": "Remote Sensing",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Senses",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Shapeshift",
+        "cost": 8,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Shrinking",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Sleep Attack",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": "Fort"
+    },
+    {
+        "name": "Snare Attack",
+        "cost": 3,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": "Dodge"
+    },
+    {
+        "name": "Speed",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Movement"
+    },
+    {
+        "name": "Strike",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Melee",
+        "resisted": "Toughness"
+    },
+    {
+        "name": "Suffocation Attack",
+        "cost": 4,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": "Fort"
+    },
+    {
+        "name": "Summon Control",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Super-Speed",
+        "cost": 3,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Movement"
+    },
+    {
+        "name": "Swimming",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Movement"
+    },
+    {
+        "name": "Teleport",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Movement"
+    },
+    {
+        "name": "Transform Control",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Variable",
+        "cost": 7,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Weaken Attack",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Melee",
+        "resisted": [
+            "Fort",
+            "Will"
+        ]
+    },
+    {
+        "name": "Weaken Attack Ranged",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Combat",
+        "range": "Ranged",
+        "resisted": [
+            "Fort",
+            "Will"
+        ]
+    }
+]

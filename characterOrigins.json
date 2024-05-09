@@ -1,0 +1,888 @@
+[
+    {
+        "region": "Western Africa",
+        "countries": [
+            {
+                "name": "Benin & Togo",
+                "languages": [
+                    "French",
+                    "local dialects"
+                ]
+            },
+            {
+                "name": "Burkina Faso",
+                "languages": [
+                    "French",
+                    "tribal languages"
+                ]
+            },
+            {
+                "name": "Cameroon",
+                "languages": [
+                    "English",
+                    "French",
+                    "tribal languages"
+                ]
+            },
+            {
+                "name": "Cote D'Ivoire",
+                "languages": [
+                    "French",
+                    "tribal languages"
+                ]
+            },
+            {
+                "name": "Ghana",
+                "languages": [
+                    "English",
+                    "tribal languages"
+                ]
+            },
+            {
+                "name": "Guinea",
+                "languages": [
+                    "French",
+                    "tribal languages"
+                ]
+            },
+            {
+                "name": "Liberia",
+                "languages": [
+                    "English",
+                    "tribal dialects"
+                ]
+            },
+            {
+                "name": "Mali",
+                "languages": [
+                    "French",
+                    "Bambara"
+                ]
+            },
+            {
+                "name": "Mauritania",
+                "languages": [
+                    "French",
+                    "Hassaniya Arabic"
+                ]
+            },
+            {
+                "name": "Nigeria",
+                "languages": [
+                    "English",
+                    "Hausa",
+                    "Yoruba",
+                    "Ibo"
+                ]
+            },
+            {
+                "name": "Senegal",
+                "languages": [
+                    "French",
+                    "tribal languages"
+                ]
+            },
+            {
+                "name": "Sierra Leone",
+                "languages": [
+                    "English",
+                    "tribal languages"
+                ]
+            }
+        ]
+    },
+    {
+        "region": "Eastern Africa",
+        "countries": [
+            {
+                "name": "Ethiopia",
+                "languages": [
+                    "Amharic",
+                    "Tigre",
+                    "Hamatic",
+                    "Arabic"
+                ]
+            },
+            {
+                "name": "Kenya",
+                "languages": [
+                    "Swahili",
+                    "English"
+                ]
+            },
+            {
+                "name": "Madagascar",
+                "languages": [
+                    "Malagasy",
+                    "French"
+                ]
+            },
+            {
+                "name": "Mauritius",
+                "languages": [
+                    "English",
+                    "French",
+                    "Creole"
+                ]
+            },
+            {
+                "name": "Somalia",
+                "languages": [
+                    "Somali",
+                    "Arabic"
+                ]
+            },
+            {
+                "name": "Tanzania",
+                "languages": [
+                    "Swahili",
+                    "English"
+                ]
+            }
+        ]
+    },
+    {
+        "region": "Central Africa",
+        "countries": [
+            {
+                "name": "Burundi",
+                "languages": [
+                    "French",
+                    "Rundi"
+                ]
+            },
+            {
+                "name": "Central African Republic",
+                "languages": [
+                    "French"
+                ]
+            },
+            {
+                "name": "Chad",
+                "languages": [
+                    "French",
+                    "Arabic",
+                    "tribal languages"
+                ]
+            },
+            {
+                "name": "Congo",
+                "languages": [
+                    "French",
+                    "Bantu dialects"
+                ]
+            },
+            {
+                "name": "Niger",
+                "languages": [
+                    "French",
+                    "Hausa",
+                    "Djerma"
+                ]
+            },
+            {
+                "name": "Rwanda",
+                "languages": [
+                    "French",
+                    "Kinyarwanda"
+                ]
+            },
+            {
+                "name": "Uganda",
+                "languages": [
+                    "English",
+                    "Luganda",
+                    "Swahili"
+                ]
+            },
+            {
+                "name": "Zaire",
+                "languages": [
+                    "French",
+                    "Bantu dialects"
+                ]
+            }
+        ]
+    },
+    {
+        "region": "Southern Africa",
+        "countries": [
+            {
+                "name": "Angola",
+                "languages": [
+                    "Portuguese",
+                    "Bantu dialects"
+                ]
+            },
+            {
+                "name": "Botswana",
+                "languages": [
+                    "English",
+                    "Setswana"
+                ]
+            },
+            {
+                "name": "Malawi",
+                "languages": [
+                    "English",
+                    "Chichewa"
+                ]
+            },
+            {
+                "name": "Mozambique",
+                "languages": [
+                    "Portuguese",
+                    "Bantu dialects"
+                ]
+            },
+            {
+                "name": "Namibia",
+                "languages": [
+                    "Afrikaans",
+                    "English",
+                    "tribal dialects"
+                ]
+            },
+            {
+                "name": "South Africa",
+                "languages": [
+                    "Afrikaans",
+                    "English",
+                    "Bantu"
+                ]
+            },
+            {
+                "name": "Swaziland",
+                "languages": [
+                    "Swazi",
+                    "English"
+                ]
+            },
+            {
+                "name": "Zambia",
+                "languages": [
+                    "English",
+                    "Bantu dialects"
+                ]
+            },
+            {
+                "name": "Zimbabwe (Rhodesia)",
+                "languages": [
+                    "English",
+                    "Bantu dialects"
+                ]
+            }
+        ]
+    },
+    {
+        "region": "Caribbean Islands",
+        "languages": [
+            "English",
+            "Spanish",
+            "French",
+            "Danish"
+        ]
+    },
+    {
+        "region": "Canada",
+        "languages": [
+            "English",
+            "French-Quebec"
+        ]
+    },
+    {
+        "region": "Central American Nations",
+        "countries": [
+            {
+                "name": "Belize",
+                "languages": [
+                    "English",
+                    "Spanish"
+                ]
+            },
+            {
+                "name": "Costa Rica",
+                "languages": [
+                    "Spanish"
+                ]
+            },
+            {
+                "name": "El Salvador",
+                "languages": [
+                    "Spanish"
+                ]
+            },
+            {
+                "name": "Guatemala",
+                "languages": [
+                    "Spanish"
+                ]
+            },
+            {
+                "name": "Honduras",
+                "languages": [
+                    "Spanish"
+                ]
+            },
+            {
+                "name": "Mexico",
+                "languages": [
+                    "Spanish"
+                ]
+            },
+            {
+                "name": "Nicaragua",
+                "languages": [
+                    "Spanish",
+                    "English"
+                ]
+            },
+            {
+                "name": "Panama",
+                "languages": [
+                    "Spanish",
+                    "English"
+                ]
+            }
+        ]
+    },
+    {
+        "region": "China",
+        "countries": [
+            {
+                "name": "China",
+                "languages": [
+                    "Mandarin Chinese",
+                    "many regional dialects"
+                ]
+            }
+        ]
+    },
+    {
+        "region": "Eastern Europe",
+        "countries": [
+            {
+                "name": "Bulgaria",
+                "languages": [
+                    "Bulgarian",
+                    "Turkish",
+                    "Greek"
+                ]
+            },
+            {
+                "name": "Czechoslovakia",
+                "languages": [
+                    "Czech",
+                    "Slovak"
+                ]
+            },
+            {
+                "name": "Finland",
+                "languages": [
+                    "Finnish",
+                    "Swedish"
+                ]
+            },
+            {
+                "name": "Hungary",
+                "languages": [
+                    "Hungarian"
+                ]
+            },
+            {
+                "name": "Poland",
+                "languages": [
+                    "Polish"
+                ]
+            },
+            {
+                "name": "Romania",
+                "languages": [
+                    "Romanian"
+                ]
+            },
+            {
+                "name": "Soviet Union",
+                "languages": [
+                    "Russian",
+                    "other regional languages"
+                ]
+            },
+            {
+                "name": "Yugoslavia",
+                "languages": [
+                    "Serbo-Croatian"
+                ]
+            }
+        ]
+    },
+    {
+        "region": "Mediterranean Nations",
+        "countries": [
+            {
+                "name": "Greece",
+                "languages": [
+                    "Greek"
+                ]
+            },
+            {
+                "name": "Italy",
+                "languages": [
+                    "Italian"
+                ]
+            },
+            {
+                "name": "Turkey",
+                "languages": [
+                    "Turkish"
+                ]
+            },
+            {
+                "name": "Albania",
+                "languages": [
+                    "Albanian",
+                    "Greek"
+                ]
+            }
+        ]
+    },
+    {
+        "region": "Mideast & Other Arab Lands",
+        "countries": [
+            {
+                "name": "Algeria",
+                "languages": [
+                    "Arabic",
+                    "Berber",
+                    "French"
+                ]
+            },
+            {
+                "name": "Arabia",
+                "languages": [
+                    "Arabic"
+                ]
+            },
+            {
+                "name": "Egypt",
+                "languages": [
+                    "Arabic",
+                    "English"
+                ]
+            },
+            {
+                "name": "Iraq",
+                "languages": [
+                    "Arabic"
+                ]
+            },
+            {
+                "name": "Jordan",
+                "languages": [
+                    "Arabic"
+                ]
+            },
+            {
+                "name": "Lebanon",
+                "languages": [
+                    "Arabic",
+                    "French",
+                    "Armenian"
+                ]
+            },
+            {
+                "name": "Libya",
+                "languages": [
+                    "Arabic"
+                ]
+            },
+            {
+                "name": "Morocco",
+                "languages": [
+                    "Arabic"
+                ]
+            },
+            {
+                "name": "Palestine/Israel",
+                "languages": [
+                    "Hebrew",
+                    "Arabic"
+                ]
+            },
+            {
+                "name": "Sudan",
+                "languages": [
+                    "Arabic"
+                ]
+            },
+            {
+                "name": "Syria",
+                "languages": [
+                    "Arabic"
+                ]
+            },
+            {
+                "name": "Tunisia",
+                "languages": [
+                    "Arabic"
+                ]
+            }
+        ]
+    },
+    {
+        "region": "Scandinavia",
+        "countries": [
+            {
+                "name": "Norway",
+                "languages": [
+                    "Norwegian"
+                ]
+            },
+            {
+                "name": "Sweden",
+                "languages": [
+                    "Swedish"
+                ]
+            },
+            {
+                "name": "Denmark",
+                "languages": [
+                    "Danish"
+                ]
+            },
+            {
+                "name": "Iceland",
+                "languages": [
+                    "Icelandic"
+                ]
+            }
+        ]
+    },
+    {
+        "region": "Southern/Eastern Asia",
+        "countries": [
+            {
+                "name": "Afghanistan",
+                "languages": [
+                    "Pashto",
+                    "Dari Persian"
+                ]
+            },
+            {
+                "name": "Bangladesh",
+                "languages": [
+                    "Bengali"
+                ]
+            },
+            {
+                "name": "Cambodia",
+                "languages": [
+                    "Khmer",
+                    "French"
+                ]
+            },
+            {
+                "name": "Hong Kong",
+                "languages": [
+                    "Chinese"
+                ]
+            },
+            {
+                "name": "India",
+                "languages": [
+                    "Hindi",
+                    "English"
+                ]
+            },
+            {
+                "name": "Iran",
+                "languages": [
+                    "Farsi",
+                    "Arabic",
+                    "English",
+                    "French"
+                ]
+            },
+            {
+                "name": "Japan",
+                "languages": [
+                    "Japanese"
+                ]
+            },
+            {
+                "name": "Korea",
+                "languages": [
+                    "Korean"
+                ]
+            },
+            {
+                "name": "Laos",
+                "languages": [
+                    "Lao",
+                    "French"
+                ]
+            },
+            {
+                "name": "Mongolia",
+                "languages": [
+                    "Mongolian"
+                ]
+            },
+            {
+                "name": "Myanmar",
+                "languages": [
+                    "Burmese"
+                ]
+            },
+            {
+                "name": "Nepal",
+                "languages": [
+                    "Nepali"
+                ]
+            },
+            {
+                "name": "Pakistan",
+                "languages": [
+                    "Urdu",
+                    "Pashto"
+                ]
+            },
+            {
+                "name": "Philippines",
+                "languages": [
+                    "Filipino",
+                    "English"
+                ]
+            },
+            {
+                "name": "Sri Lanka",
+                "languages": [
+                    "Sinhala",
+                    "Tamil"
+                ]
+            },
+            {
+                "name": "Taiwan",
+                "languages": [
+                    "Chinese"
+                ]
+            },
+            {
+                "name": "Thailand",
+                "languages": [
+                    "Thai"
+                ]
+            },
+            {
+                "name": "Vietnam",
+                "languages": [
+                    "Vietnamese",
+                    "English",
+                    "French"
+                ]
+            }
+        ]
+    },
+    {
+        "region": "South American Nations",
+        "countries": [
+            {
+                "name": "Argentina",
+                "languages": [
+                    "Spanish"
+                ]
+            },
+            {
+                "name": "Bolivia",
+                "languages": [
+                    "Spanish",
+                    "Quechua",
+                    "Aymara"
+                ]
+            },
+            {
+                "name": "Brazil",
+                "languages": [
+                    "Portuguese",
+                    "English"
+                ]
+            },
+            {
+                "name": "Chile",
+                "languages": [
+                    "Spanish"
+                ]
+            },
+            {
+                "name": "Colombia",
+                "languages": [
+                    "Spanish"
+                ]
+            },
+            {
+                "name": "Ecuador",
+                "languages": [
+                    "Spanish",
+                    "Quechua",
+                    "Jivaroan"
+                ]
+            },
+            {
+                "name": "Paraguay",
+                "languages": [
+                    "Spanish"
+                ]
+            },
+            {
+                "name": "Peru",
+                "languages": [
+                    "Spanish"
+                ]
+            },
+            {
+                "name": "Suriname",
+                "languages": [
+                    "Dutch"
+                ]
+            },
+            {
+                "name": "Uruguay",
+                "languages": [
+                    "Spanish"
+                ]
+            },
+            {
+                "name": "Venezuela",
+                "languages": [
+                    "Portuguese"
+                ]
+            }
+        ]
+    },
+    {
+        "region": "South Pacific",
+        "countries": [
+            {
+                "name": "Australia",
+                "languages": [
+                    "English",
+                    "Aboriginal languages"
+                ]
+            },
+            {
+                "name": "Indonesia",
+                "languages": [
+                    "Malay-Indonesian",
+                    "Javanese"
+                ]
+            },
+            {
+                "name": "Malaysia",
+                "languages": [
+                    "Malay-Indonesian"
+                ]
+            },
+            {
+                "name": "New Zealand",
+                "languages": [
+                    "English",
+                    "Maori"
+                ]
+            },
+            {
+                "name": "Papua New Guinea",
+                "languages": [
+                    "English",
+                    "Melanesian Pidgin"
+                ]
+            },
+            {
+                "name": "Polynesian Island Nation",
+                "languages": [
+                    "English",
+                    "French",
+                    "Tribal languages"
+                ]
+            }
+        ]
+    },
+    {
+        "region": "United States of America",
+        "countries": [
+            {
+                "name": "United States of America",
+                "languages": [
+                    "English"
+                ]
+            }
+        ]
+    },
+    {
+        "region": "Western Europe",
+        "countries": [
+            {
+                "name": "Austria",
+                "languages": [
+                    "German"
+                ]
+            },
+            {
+                "name": "Belgium",
+                "languages": [
+                    "Flemish-Dutch",
+                    "French"
+                ]
+            },
+            {
+                "name": "France",
+                "languages": [
+                    "French"
+                ]
+            },
+            {
+                "name": "Germany",
+                "languages": [
+                    "German"
+                ]
+            },
+            {
+                "name": "Great Britain",
+                "languages": [
+                    "English"
+                ]
+            },
+            {
+                "name": "Ireland",
+                "languages": [
+                    "English",
+                    "Gaelic"
+                ]
+            },
+            {
+                "name": "Netherlands",
+                "languages": [
+                    "Dutch"
+                ]
+            },
+            {
+                "name": "Portugal",
+                "languages": [
+                    "Portuguese"
+                ]
+            },
+            {
+                "name": "Spain",
+                "languages": [
+                    "Spanish"
+                ]
+            },
+            {
+                "name": "Switzerland",
+                "languages": [
+                    "German",
+                    "French"
+                ]
+            }
+        ]
+    }
+]

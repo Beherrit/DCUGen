@@ -1,0 +1,114 @@
+[
+    {
+        "name": "Acrobatics",
+        "tags": [
+            "Agility"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Athletics",
+        "tags": [
+            "Strength"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Close Combat",
+        "tags": [
+            "Fighting"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Deception",
+        "tags": [
+            "Presence"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Expertise",
+        "tags": [
+            "Intellect"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Insight",
+        "tags": [
+            "Awareness"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Intimidation",
+        "tags": [
+            "Presence"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Investigation",
+        "tags": [
+            "Intellect"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Perception",
+        "tags": [
+            "Awareness"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Persuasion",
+        "tags": [
+            "Presence"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Ranged Combat",
+        "tags": [
+            "Dexterity"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Sleight of Hand",
+        "tags": [
+            "Dexterity"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Stealth",
+        "tags": [
+            "Agility"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Technology",
+        "tags": [
+            "Intellect"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Treatment",
+        "tags": [
+            "Intellect"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Vehicles",
+        "tags": [
+            "Dexterity"
+        ],
+        "cost": 1
+    }
+]

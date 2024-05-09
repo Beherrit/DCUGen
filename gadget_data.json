@@ -1,0 +1,1947 @@
+[
+    {
+        "name": "Blaster",
+        "type": "Ranged Weapon",
+        "description": "A beam of charged particles that inflicts impact damage.",
+        "rank": "2-8",
+        "cost": 2
+    },
+    {
+        "name": "Close Weapons",
+        "type": "Melee Weapon",
+        "description": "Weapons for close combat, often with cultural or ceremonial significance.",
+        "modifiers": [
+            "Penetrating",
+            "Reach"
+        ],
+        "rank": "2-8",
+        "cost": 1
+    },
+    {
+        "name": "Control Pod",
+        "type": "Device",
+        "description": "Attaches to the skin to control the mind of the victim.",
+        "effects": [
+            "Affliction (Entranced, Compelled, Controlled)",
+            "Progressive"
+        ],
+        "rank": "2-8",
+        "cost": 3
+    },
+    {
+        "name": "Containment Pod",
+        "type": "Device",
+        "description": "Keeps creatures in suspended animation for later revival.",
+        "effects": [
+            "Trance",
+            "Immunity (Aging, Starvation, Suffocation)"
+        ],
+        "rank": "2-8",
+        "cost": 1
+    },
+    {
+        "name": "Environment Suit",
+        "type": "Suit",
+        "description": "Provides life support for different environments.",
+        "effects": [
+            "Immunity (Cold, Heat, Pressure, Radiation, Suffocation, Vacuum)"
+        ],
+        "rank": "2-8",
+        "cost": 7
+    },
+    {
+        "name": "Force Cell",
+        "type": "Device",
+        "description": "Prison cells made of force fields, capable of withstanding superhuman might.",
+        "effects": [
+            "Create Force Cell",
+            "Impervious"
+        ],
+        "rank": "2-8",
+        "cost": 1
+    },
+    {
+        "name": "Gun-Jamming Field",
+        "type": "Device",
+        "description": "Renders chemical propellant weapons useless in a given area.",
+        "effects": [
+            "Nullify Firearms",
+            "Burst Area",
+            "Simultaneous",
+            "Sustained"
+        ],
+        "rank": "2-8",
+        "cost": 5
+    },
+    {
+        "name": "Communicator",
+        "type": "Device",
+        "description": "A communications device that transmits an encrypted signal.",
+        "effects": [
+            "Communication (Radio)",
+            "Subtle"
+        ],
+        "rank": "2-8",
+        "cost": 13
+    },
+    {
+        "name": "Examination Suite",
+        "type": "Device",
+        "description": "Uses sensors to examine living subjects for scientific or military purposes.",
+        "effects": [
+            "Senses (Detect Life Form, Acute, Analytical, Microscopic Vision, Penetrates Concealment, Rapid)"
+        ],
+        "rank": "2-8",
+        "cost": 3
+    },
+    {
+        "name": "Mind Probe",
+        "type": "Device",
+        "description": "Delves into the deepest recesses of the subject's mind.",
+        "effects": [
+            "Mind Reading",
+            "Cumulative",
+            "Effortless",
+            "Close"
+        ],
+        "rank": "2-8",
+        "cost": 1
+    },
+    {
+        "name": "Universal Translator",
+        "type": "Device",
+        "description": "Automatically provides translations from a vast database of languages.",
+        "effects": [
+            "Comprehend (Languages, Speak and Understand)"
+        ],
+        "rank": "2-8",
+        "cost": 4
+    },
+    {
+        "name": "Chameleon Cloak",
+        "type": "Device",
+        "description": "Creates the realistic illusion of a human appearance.",
+        "effects": [
+            "Morph (Humanoids)",
+            "Limited to Visual and Auditory"
+        ],
+        "rank": "2-8",
+        "cost": 12
+    },
+    {
+        "name": "Cloaking Device",
+        "type": "Device",
+        "description": "Allows the wearer or vehicle to vanish from sight.",
+        "effects": [
+            "Concealment (Visual)"
+        ],
+        "rank": "2-8",
+        "cost": 8
+    },
+    {
+        "name": "Mind Mask",
+        "type": "Device",
+        "description": "Masks the wearer's unique thoughts and brain patterns from detection.",
+        "effects": [
+            "Concealment (Mental)"
+        ],
+        "rank": "2-8",
+        "cost": 4
+    },
+    {
+        "name": "Teleporter",
+        "type": "Device",
+        "description": "Instantly transports the user from one location to another.",
+        "effects": [
+            "Teleport",
+            "Extended",
+            "Limited to Extended"
+        ],
+        "rank": "2-8",
+        "cost": 2
+    },
+    {
+        "name": "Dagger",
+        "type": "Melee Weapon",
+        "description": "A small, sharp, piercing weapon.",
+        "effect": "Strength-based Damage 1 (piercing), Dangerous 19–20",
+        "rank": "2-8",
+        "cost": 2
+    },
+    {
+        "name": "Sword",
+        "type": "Melee Weapon",
+        "description": "A long-bladed weapon used for slashing.",
+        "effect": "Strength-based Damage 3 (slashing)",
+        "rank": "2-8",
+        "cost": 3
+    },
+    {
+        "name": "Axe",
+        "type": "Melee Weapon",
+        "description": "A heavy weapon with a sharp edge for slashing.",
+        "effect": "Strength-based Damage 3 (slashing), Breaking, Dangerous 19–20",
+        "cost": 5
+    },
+    {
+        "name": "Club",
+        "type": "Bludgeon",
+        "description": "A simple wooden club used for bludgeoning.",
+        "effect": "Strength-based Damage 2 (bludgeoning)",
+        "cost": 2
+    },
+    {
+        "name": "Hammer",
+        "type": "Bludgeon",
+        "description": "A heavy hammer for delivering powerful blows.",
+        "effect": "Strength-based Damage 3 (bludgeoning), Smashing",
+        "cost": 4
+    },
+    {
+        "name": "Mace",
+        "type": "Bludgeon",
+        "description": "A metal club with a heavy head for smashing.",
+        "effect": "Strength-based Damage 2 (bludgeoning), Dangerous 19–20",
+        "cost": 3
+    },
+    {
+        "name": "Flail",
+        "type": "Bludgeon",
+        "description": "A weapon with a spiked head attached to a chain.",
+        "effect": "Strength-based Damage 2, Dangerous, Disarming, Reach",
+        "cost": 5
+    },
+    {
+        "name": "Staff",
+        "type": "Polearm",
+        "description": "A long wooden staff for striking and blocking.",
+        "effect": "Strength-based Damage 2, Double",
+        "cost": 3
+    },
+    {
+        "name": "Javelin",
+        "type": "Polearm",
+        "description": "A light spear designed for throwing.",
+        "effect": "Damage 1 (Ranged), Dangerous 19–20",
+        "cost": 3
+    },
+    {
+        "name": "Spear",
+        "type": "Polearm",
+        "description": "A long weapon with a pointed tip for thrusting.",
+        "effect": "Strength-based Damage 2, Dangerous, Reach",
+        "cost": 4
+    },
+    {
+        "name": "Trident",
+        "type": "Polearm",
+        "description": "A three-pronged spear used for thrusting and trapping.",
+        "effect": "Strength-based Damage 3, Dangerous, Disarming, Reach",
+        "cost": 5
+    },
+    {
+        "name": "Bolos",
+        "type": "Entangling",
+        "description": "A throwing weapon designed to entangle the target's legs.",
+        "effect": "Ranged, Grabbing 3 (no damage)",
+        "cost": 6
+    },
+    {
+        "name": "Net",
+        "type": "Entangling",
+        "description": "A net used to entangle and immobilize the target.",
+        "effect": "Grabbing 2, Entangling",
+        "cost": 3
+    },
+    {
+        "name": "Whip",
+        "type": "Entangling",
+        "description": "A long, flexible whip used for striking, disarming, and grabbing.",
+        "effect": "Damage 1, Disarming, Grabbing, Reach 2",
+        "cost": 5
+    },
+    {
+        "name": "Bow",
+        "type": "Ranged",
+        "description": "A bow used for shooting arrows at a distance.",
+        "effect": "Ranged Damage 3",
+        "cost": 6
+    },
+    {
+        "name": "Crossbow",
+        "type": "Ranged",
+        "description": "A weapon that shoots bolts using a mechanical trigger.",
+        "effect": "Ranged Damage 3",
+        "cost": 6
+    },
+    {
+        "name": "Sling",
+        "type": "Ranged",
+        "description": "A simple weapon for hurling stones or bullets.",
+        "effect": "Ranged Damage 1",
+        "cost": 2
+    },
+    {
+        "name": "Leather Armor",
+        "type": "Armor",
+        "description": "Simple armor made from hardened leather.",
+        "effect": "Protection 1",
+        "cost": 1
+    },
+    {
+        "name": "Chain-mail Armor",
+        "type": "Armor",
+        "description": "A type of armor consisting of small metal rings linked together in a pattern to form a mesh.",
+        "effect": "Protection 3",
+        "cost": 3
+    },
+    {
+        "name": "Laminate Armor",
+        "type": "Armor",
+        "description": "Armor made from layers of material laminated together.",
+        "effect": "Protection 3",
+        "cost": 3
+    },
+    {
+        "name": "Plate-mail Armor",
+        "type": "Armor",
+        "description": "Armor made from large metal plates.",
+        "effect": "Protection 5",
+        "cost": 5
+    },
+    {
+        "name": "Full-plate Armor",
+        "type": "Armor",
+        "description": "A complete suit of plate armor covering the entire body.",
+        "effect": "Protection 6",
+        "cost": 6
+    },
+    {
+        "name": "Hook Sword",
+        "description": "Curved hooks at the end of the blade, effective at tripping, catching opposing weapons, and blocking.",
+        "type": "Blade",
+        "effects": [
+            "Strength-based Damage 3 (slashing)",
+            "Double or Reach",
+            "Tripping"
+        ],
+        "cost": 5
+    },
+    {
+        "name": "Kama",
+        "description": "A weapon adapted from a small sickle, often wielded in pairs.",
+        "type": "Blade",
+        "effects": [
+            "Strength-based Damage 2 (slashing)",
+            "Dangerous"
+        ],
+        "cost": 3
+    },
+    {
+        "name": "Katana",
+        "description": "The famous 'samurai sword' wielded by noble warriors in feudal Japan.",
+        "type": "Blade",
+        "effects": [
+            "Strength-based Damage 3 (slashing)",
+            "Dangerous"
+        ],
+        "cost": 4
+    },
+    {
+        "name": "Katar",
+        "description": "The Indian 'punch dagger' with an H-shaped grip.",
+        "type": "Blade",
+        "effects": [
+            "Strength-based Damage 2 (piercing or slashing)",
+            "Penetrating 1"
+        ],
+        "cost": 3
+    },
+    {
+        "name": "Kris",
+        "description": "An Indonesian dagger with a distinctive wavy blade design.",
+        "type": "Blade",
+        "effects": [
+            "Strength-based Damage 2 (piercing or slashing)",
+            "Dangerous 2"
+        ],
+        "cost": 4
+    },
+    {
+        "name": "Kukri",
+        "description": "A heavy Nepalese knife with an inward curving edge.",
+        "type": "Blade",
+        "effects": [
+            "Strength-based Damage 2 (slashing)",
+            "Dangerous"
+        ],
+        "cost": 3
+    },
+    {
+        "name": "Ninja-to",
+        "description": "A short straight sword carried and used by ninja.",
+        "type": "Blade",
+        "effects": [
+            "Strength-based Damage 2 (slashing)"
+        ],
+        "cost": 2
+    },
+    {
+        "name": "Sai",
+        "description": "Tapering metal batons often wielded in pairs with curved side prongs.",
+        "type": "Blade",
+        "effects": [
+            "Strength-based Damage 1 (piercing)",
+            "Defensive",
+            "Disarming"
+        ],
+        "cost": 3
+    },
+    {
+        "name": "Wakizashi",
+        "description": "The shorter companion blade to a katana, useful for close-in fighting.",
+        "type": "Blade",
+        "effects": [
+            "Strength-based Damage 2 (slashing)",
+            "Dangerous"
+        ],
+        "cost": 3
+    },
+    {
+        "name": "War Fan",
+        "description": "A weapon based on the folding fans, can be wielded closed or open.",
+        "type": "Blade",
+        "effects": [
+            "Strength-based Damage 1 (slashing)",
+            "Concealed",
+            "Defensive"
+        ],
+        "cost": 3
+    },
+    {
+        "name": "Wind and Fire Wheels",
+        "description": "Chinese weapons consisting of metal rings with flame-styled blades.",
+        "type": "Blade",
+        "effects": [
+            "Strength-based Damage 2 (slashing)"
+        ],
+        "cost": 2
+    },
+    {
+        "name": "Injected",
+        "description": "The effect must be injected into the target’s body in order to work. This means it must first penetrate the target’s skin or outer surface, typically using a needle or other injector.",
+        "type": "Biometrics",
+        "modifier": 1
+    },
+    {
+        "name": "Treatment Tools",
+        "description": "The most common role biochemicals play is as a part of the tools used with the Treatment skill for dealing with injuries and illnesses.",
+        "type": "Biochemicals"
+    },
+    {
+        "name": "Wonder Drugs",
+        "description": "Comic books are full of “miracle pills” and “super-serums” with amazing effects, especially in the Golden and Silver Ages before the “war on drugs.”",
+        "type": "Biochemicals",
+        "modifiers": [
+            "Fades",
+            "Unreliable",
+            "Activation"
+        ]
+    },
+    {
+        "name": "Tailored Toxins",
+        "description": "Other biochemicals are baneful brews, usually cooked up by villains and functioning as a poison of one kind or another.",
+        "type": "Biochemicals",
+        "effect": "Affliction",
+        "resisted_by": "Fortitude",
+        "modifiers": [
+            "Slow"
+        ]
+    },
+    {
+        "name": "Disease",
+        "description": "Most diseases in superhero settings are either handled as extended complications or as specific powers inflicting fast-acting disease symptoms on targets as an Affliction, for example.",
+        "type": "Microorganisms"
+    },
+    {
+        "name": "Micro-Monsters",
+        "description": "A common comic book element is heroes shrunk down to microscopic scale faced with invading microbes or even white blood cells convinced they are invaders!",
+        "type": "Microorganisms",
+        "archetypes": [
+            "Blob",
+            "Giant Flytrap"
+        ]
+    },
+    {
+        "name": "Duplication",
+        "description": "A clone can be force-grown from a still-living person in order to create a living duplicate.",
+        "type": "Cloning",
+        "effect": "Summon",
+        "modifiers": [
+            "Heroic",
+            "Permanent"
+        ]
+    },
+    {
+        "name": "Empowerment",
+        "description": "If super-powers have a genetic basis, then genetic engineering may be able to isolate the genes and sequences that grant certain powers and deliberately engineer people who have them.",
+        "type": "Genetic Engineering"
+    },
+    {
+        "name": "Uplifting",
+        "description": "Uplifting is the process of granting sentience to non-sentient species (or individual members of a species).",
+        "type": "Genetic Engineering",
+        "effect": "Adding higher Intellect and Presence ranks",
+        "modifiers": [
+            "Manipulative Appendages",
+            "Vocal Capabilities",
+            "Movement Capabilities"
+        ]
+    },
+    {
+        "name": "Chimeras",
+        "description": "A chimera is an organism made up of cells with distinct genetic differences, that is, some of its cells are genetically unrelated to others.",
+        "type": "Biomodification",
+        "examples": [
+            "Frankenstein's Monster",
+            "Human-Animal Hybrid"
+        ]
+    },
+    {
+        "name": "Biomanufacturing",
+        "description": "Living creatures are powerful “factories” for the production of many biochemicals, consuming food (and, in the case of photosynthetic life, sunlight) and producing biomass and waste products.",
+        "type": "Living Technology"
+    },
+    {
+        "name": "Self-Maintaining Items",
+        "description": "Growth and healing are primary qualities of life that biotechnology seeks to emulate.",
+        "type": "Living Technology",
+        "effect": "Feature 1 (recovers from damage) or Regeneration",
+        "cost": 1
+    },
+    {
+        "name": "Living Vessels",
+        "description": "Biotechnology may virtually erase the lines between creature, construct, and vehicle in M&M game terms, creating creatures modified for use as a form of transportation.",
+        "type": "Living Technology",
+        "cost": 1
+    },
+    {
+        "name": "Investigative Computer",
+        "description": "A computer designed as an aid for Investigation skill use, providing a circumstance bonus on checks to analyze evidence.",
+        "type": "Device",
+        "effects": [
+            "Circumstance Bonus (Investigation)"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Installation Computer",
+        "description": "A dedicated computer system for an installation, capable of overseeing its functions and automation.",
+        "type": "Device",
+        "effects": [
+            "Feature (Computer)"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Navigational Computer",
+        "description": "A computer able to determine position and plot routes to known destinations, usually via GPS.",
+        "type": "Device",
+        "effects": [
+            "Feature (Direction Sense)"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Targeting Computer",
+        "description": "A computer that calculates variables involved in aiming a ranged weapon, improving the user's aim.",
+        "type": "Device",
+        "effects": [
+            "Enhanced Advantage (Improved Aim)",
+            "Enhanced Advantage (Ranged Attack)"
+        ],
+        "cost": 2
+    },
+    {
+        "name": "Tactical Computer",
+        "description": "A system linking sensors to software to calculate advantageous tactics, providing information via HUD.",
+        "type": "Device",
+        "effects": [
+            "Enhanced Advantage (Various Combat Advantages)"
+        ],
+        "cost": 3
+    },
+    {
+        "name": "Vehicle Computer",
+        "description": "A dedicated computer system for a vehicle, allowing for autopilot and remote control.",
+        "type": "Device",
+        "effects": [
+            "Feature (Computer)",
+            "Feature (Remote Control)"
+        ],
+        "cost": 5
+    },
+    {
+        "name": "Virtual Reality",
+        "description": "A computer-generated simulation of a real or imaginary experience, interfaced with via various means.",
+        "type": "Device",
+        "effects": [
+            "Illusion (Varies)"
+        ],
+        "cost": 6
+    },
+    {
+        "name": "Neural Boosters",
+        "description": "Rewired and enhanced central nervous system with superconductors, signal boosters, and computer sub-processors for faster response time.",
+        "type": "Enhancement",
+        "effects": [
+            "Enhanced Advantage (Improved Initiative)",
+            "Optional: Enhanced Advantage (Seize Initiative)",
+            "Optional: Quickness"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Targeting System",
+        "description": "Range finders, sensors, and targeting software linked to the central nervous system for greater accuracy in ranged attacks.",
+        "type": "Device",
+        "effects": [
+            "Enhanced Advantage (Ranged Attack)"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Skeletal Reinforcement",
+        "description": "Skeleton reinforced or replaced with durable materials like diamond-analog carbon molecules, making bones virtually unbreakable.",
+        "type": "Enhancement",
+        "effects": [
+            "Immunity (Bludgeoning Damage) Limited to Half Effect"
+        ],
+        "cost": 10
+    },
+    {
+        "name": "Skinmorph",
+        "description": "Artificial skin capable of shifting appearance, including features, skin tone, and texture.",
+        "type": "Enhancement",
+        "effects": [
+            "Morph (people of your size and gender)"
+        ],
+        "cost": 10
+    },
+    {
+        "name": "Stinger",
+        "description": "Drug injector designed to inject others, concealed in a fingertip or inside the mouth.",
+        "type": "Weapon",
+        "effects": [
+            "Affliction (Resisted by Fortitude; various conditions) Cumulative, Resistible (Toughness)"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Cyberears",
+        "description": "Ears enhanced or replaced with implants providing various auditory senses and potentially immunity to hearing-dependent attacks.",
+        "type": "Enhancement",
+        "effects": [
+            "Senses (Auditory)",
+            "Optional: Immunity (hearing-dependent attacks)"
+        ],
+        "cost": 5
+    },
+    {
+        "name": "Cybereyes",
+        "description": "Eyes enhanced or replaced with implants providing various visual senses and potentially immunity to vision-dependent attacks.",
+        "type": "Enhancement",
+        "effects": [
+            "Senses (Visual)",
+            "Optional: Immunity (vision-dependent attacks)"
+        ],
+        "cost": 5
+    },
+    {
+        "name": "Cyberhair",
+        "description": "Artificial hair fibers capable of animation and changing color and texture, functioning like an additional prehensile limb.",
+        "type": "Enhancement",
+        "effects": [
+            "Extra Limb",
+            "Optional: Feature (change color and texture)"
+        ],
+        "cost": 3
+    },
+    {
+        "name": "Cerebral Cache",
+        "description": "Slaved computer memory system providing additional mental processing power and memory storage.",
+        "type": "Enhancement",
+        "effects": [
+            "Enhanced Advantage (Eidetic Memory)",
+            "Quickness (Limited to Mental Actions)"
+        ],
+        "cost": 1
+    },
+    {
+        "name": "Chemical Analyzer",
+        "description": "Tongue and sinuses enhanced with chemical analyzers for enhanced olfactory senses.",
+        "type": "Enhancement",
+        "effects": [
+            "Senses (Olfactory) Acute or Accurate and Analytical"
+        ],
+        "cost": 4
+    },
+    {
+        "name": "Cybervox",
+        "description": "Modified or replaced voice box capable of mimicking sounds and voices, and potentially other sonic powers.",
+        "type": "Enhancement",
+        "effects": [
+            "Feature (mimic sounds)",
+            "Optional: Communication (auditory)"
+        ],
+        "cost": 4
+    },
+    {
+        "name": "Headlink",
+        "description": "Implanted radio communicator connected to auditory nerves for subvocal communication.",
+        "type": "Communication Device",
+        "effects": [
+            "Communication (Radio)"
+        ],
+        "cost": 4
+    },
+    {
+        "name": "Interface Jack",
+        "description": "Input/output port for interfacing with computers and networks, providing direct brain-computer interaction.",
+        "type": "Enhancement",
+        "effects": [
+            "Comprehend (Machines)"
+        ],
+        "cost": 4
+    },
+    {
+        "name": "Persona Backup",
+        "description": "Automatic backup system for memories and personality, allowing for transfer to a new body upon death.",
+        "type": "Enhancement",
+        "effects": [
+            "Immortality (Limited to body transfer)"
+        ],
+        "cost": 4
+    },
+    {
+        "name": "Skill Software",
+        "description": "Ability to download pre-programmed skill and advantage models into the mind.",
+        "type": "Enhancement",
+        "effects": [
+            "Variable (Skills and Advantages)"
+        ],
+        "cost": 7
+    },
+    {
+        "name": "Blaster Pistol",
+        "type": "Ranged Weapon",
+        "description": "A handheld energy weapon firing charged particles.",
+        "effect": "Ranged Damage 5 (force)",
+        "cost": 10
+    },
+    {
+        "name": "Blaster Rifle",
+        "type": "Ranged Weapon",
+        "description": "A larger energy weapon with a stock and longer barrel for greater accuracy and power.",
+        "effect": "Ranged Damage 8 (force)",
+        "cost": 16
+    },
+    {
+        "name": "Flamethrower",
+        "type": "Ranged Weapon",
+        "description": "A weapon that sprays burning fuel at targets.",
+        "effect": "Line Area Damage 6 (fire) Secondary Effect",
+        "cost": 18
+    },
+    {
+        "name": "Ice Gun",
+        "type": "Ranged Weapon",
+        "description": "A weapon that fires a beam of cold energy to freeze targets.",
+        "effect": "Ranged Affliction 8 (ice; Hindered, Vulnerable, Defenseless, Immobilized)",
+        "cost": 16
+    },
+    {
+        "name": "Laser Pistol",
+        "type": "Ranged Weapon",
+        "description": "A handheld weapon that fires a concentrated beam of light.",
+        "effect": "Ranged Damage 5 (light) Accurate",
+        "cost": 11
+    },
+    {
+        "name": "Microwave Disruptor",
+        "type": "Ranged Weapon",
+        "description": "A weapon that fires a beam of microwaves to disrupt electronics.",
+        "effect": "Ranged Weaken Electronics 6 Broad Simultaneous Accurate",
+        "cost": 25
+    },
+    {
+        "name": "Plasma Burst",
+        "type": "Ranged Weapon",
+        "description": "A weapon that fires a burst of super-heated plasma.",
+        "effect": "Cone Area Damage 8 (fire) Secondary Effect",
+        "cost": 24
+    },
+    {
+        "name": "Sonic Stunner",
+        "type": "Ranged Weapon",
+        "description": "A weapon that uses sound frequencies to stun targets.",
+        "effect": "Ranged Affliction 6 (sonic; Dazed, Stunned, Incapacitated)",
+        "cost": 12
+    },
+    {
+        "name": "X-ray Laser Sniper Rifle",
+        "type": "Ranged Weapon",
+        "description": "A sniper rifle that fires a beam of X-ray radiation.",
+        "effect": "Subtle Ranged Damage 8 (radiation) Penetrating 5 Accurate Dangerous Extended Range",
+        "cost": 25
+    },
+    {
+        "name": "Electro-Whip",
+        "type": "Melee Weapon",
+        "description": "A whip that delivers an electric shock on contact.",
+        "effect": "Damage 3 (electricity) Concentration Disarming Grabbing",
+        "cost": 8
+    },
+    {
+        "name": "Grav Gauntlet",
+        "type": "Melee Weapon",
+        "description": "A gauntlet that uses gravity manipulation to enhance the wearer's punches.",
+        "effect": "Strength-based Damage 6",
+        "cost": 6
+    },
+    {
+        "name": "Laser Sword",
+        "type": "Melee Weapon",
+        "description": "A sword with a blade made of pure energy.",
+        "effect": "Damage 6 Penetrating",
+        "cost": 12
+    },
+    {
+        "name": "Shock Baton",
+        "type": "Melee Weapon",
+        "description": "A baton that delivers an electric shock on contact.",
+        "effect": "Cumulative Affliction 5 (Dazed, Stunned, Incapacitated)",
+        "cost": 10
+    },
+    {
+        "name": "Sonic Knife",
+        "type": "Melee Weapon",
+        "description": "A knife that uses sonic vibrations to cut through materials.",
+        "effect": "Strength-based Damage 2 (slashing sonic) Dangerous",
+        "cost": 3
+    },
+    {
+        "name": "Holdout Pistol",
+        "type": "Pistol",
+        "description": "A small, easily concealed low-caliber weapon.",
+        "effect": "Ranged Damage 2",
+        "cost": 4
+    },
+    {
+        "name": "Light Pistol",
+        "type": "Pistol",
+        "description": "A common semi-automatic handgun used by police officers.",
+        "effect": "Ranged Damage 3",
+        "cost": 6
+    },
+    {
+        "name": "Heavy Pistol",
+        "type": "Pistol",
+        "description": "A high-caliber handgun such as a .357 Magnum.",
+        "effect": "Ranged Damage 4",
+        "cost": 8
+    },
+    {
+        "name": "Rifle",
+        "type": "Rifle",
+        "description": "A long-barrelled firearm fired with both hands, used for hunting and target shooting.",
+        "effect": "Ranged Damage 4",
+        "cost": 8
+    },
+    {
+        "name": "Rifle High-Power",
+        "type": "Rifle",
+        "description": "A high-caliber rifle with greater range and accuracy.",
+        "effect": "Ranged Damage 5",
+        "cost": 10
+    },
+    {
+        "name": "Sniper Rifle",
+        "type": "Rifle",
+        "description": "A rifle designed for use at greater range, often with accessories like a targeting scope.",
+        "effect": "Ranged Damage 5 Extended Range",
+        "cost": 11
+    },
+    {
+        "name": "Assault Rifle",
+        "type": "Rifle",
+        "description": "An automatic weapon with settings for single shot, burst, and fully automatic fire.",
+        "effect": "Ranged Damage 5 Multiattack",
+        "cost": 15
+    },
+    {
+        "name": "Shotgun",
+        "type": "Shotgun",
+        "description": "A firearm that can fire solid slugs or shot, typically used for hunting and law enforcement.",
+        "effect": "Ranged Damage 5 (Accurate 2 ranks Limited to targets without Protection)",
+        "cost": 11
+    },
+    {
+        "name": "Machine Pistol",
+        "type": "Submachine Gun",
+        "description": "An automatic carbine or pistol that can be fired with one or both hands.",
+        "effect": "Ranged Damage 3 Multiattack",
+        "cost": 9
+    },
+    {
+        "name": "Submachine Gun",
+        "type": "Submachine Gun",
+        "description": "An automatic weapon with enhanced effectiveness due to its ability to fire multiple rounds with a single trigger pull.",
+        "effect": "Ranged Damage 4 Multiattack",
+        "cost": 12
+    },
+    {
+        "name": "Air Gun",
+        "type": "Other Gun",
+        "description": "A non-lethal weapon that fires a blast of compressed air.",
+        "effect": "Ranged Affliction (Dazed, Prone, Incapacitated)",
+        "cost": 2
+    },
+    {
+        "name": "Dart Gun",
+        "type": "Other Gun",
+        "description": "A weapon that fires small hypodermic darts to deliver drugs or poisons.",
+        "effect": "Ranged Affliction (Impaired, Disabled, Incapacitated; Resistible by Toughness)",
+        "cost": 5
+    },
+    {
+        "name": "Flare Gun",
+        "type": "Other Gun",
+        "description": "A signaling device that fires a brightly glowing flare.",
+        "effect": "Environment 2 (light)",
+        "cost": 2
+    },
+    {
+        "name": "Taser",
+        "type": "Other Gun",
+        "description": "A weapon that fires a pair of darts releasing a powerful electrical charge.",
+        "effect": "Ranged Affliction (Dazed, Stunned, Incapacitated)",
+        "cost": 2
+    },
+    {
+        "name": "Paintball Gun",
+        "type": "Other Gun",
+        "description": "A sporting weapon that fires gel pellets filled with paint or dye.",
+        "effect": "Feature 1 or Ranged Affliction",
+        "cost": 2
+    },
+    {
+        "name": "Light Machine Gun",
+        "type": "Heavy Weapon",
+        "description": "A fully automatic weapon designed for mobility and rate of fire.",
+        "effects": [
+            "Ranged Damage 5",
+            "Multiattack",
+            "Extended Range"
+        ],
+        "cost": 15
+    },
+    {
+        "name": "Medium Machine Gun",
+        "type": "Heavy Weapon",
+        "description": "A belt-fed automatic weapon with increased firepower.",
+        "effects": [
+            "Ranged Damage 6",
+            "Multiattack",
+            "Extended Range"
+        ],
+        "cost": 18
+    },
+    {
+        "name": "Heavy Machine Gun",
+        "type": "Heavy Weapon",
+        "description": "A high-caliber automatic weapon with devastating firepower.",
+        "effects": [
+            "Ranged Damage 7",
+            "Multiattack",
+            "Extended Range"
+        ],
+        "cost": 21
+    },
+    {
+        "name": "Cannon",
+        "type": "Heavy Weapon",
+        "description": "A large, mounted gun designed to fire heavy projectiles.",
+        "effects": [
+            "Ranged Damage 8",
+            "Extended Range",
+            "Increased Range Increment"
+        ],
+        "cost": 16
+    },
+    {
+        "name": "Howitzer",
+        "type": "Heavy Weapon",
+        "description": "A type of artillery piece characterized by a relatively short barrel and the use of comparatively small propellant charges to propel projectiles over high trajectories.",
+        "effects": [
+            "Ranged Damage 9",
+            "Extended Range",
+            "Increased Range Increment",
+            "Indirect 4"
+        ],
+        "cost": 27
+    },
+    {
+        "name": "Guided Missile",
+        "type": "Heavy Weapon",
+        "description": "A self-propelled weapon that can adjust its trajectory during flight to hit a specific target.",
+        "effects": [
+            "Ranged Damage 10",
+            "Homing 2",
+            "Increased Range Increment"
+        ],
+        "cost": 30
+    },
+    {
+        "name": "Cruise Missile",
+        "type": "Heavy Weapon",
+        "description": "A guided missile used primarily for attacking land and sea targets.",
+        "effects": [
+            "Ranged Damage 11",
+            "Homing 3",
+            "Increased Range Increment",
+            "Indirect 4"
+        ],
+        "cost": 33
+    },
+    {
+        "name": "Torpedo",
+        "type": "Heavy Weapon",
+        "description": "A self-propelled underwater missile designed to detonate on contact with or in proximity to a target.",
+        "effects": [
+            "Ranged Damage 8",
+            "Subtle",
+            "Increased Range Increment"
+        ],
+        "cost": 24
+    },
+    {
+        "name": "Advanced Torpedo",
+        "type": "Heavy Weapon",
+        "description": "A highly advanced and more powerful version of a conventional torpedo.",
+        "effects": [
+            "Ranged Damage 9",
+            "Subtle",
+            "Increased Range Increment",
+            "Homing 2"
+        ],
+        "cost": 27
+    },
+    {
+        "name": "Tactical Nuclear Weapon",
+        "type": "Heavy Weapon",
+        "description": "A nuclear weapon designed for use in battlefield tactical situations.",
+        "effects": [
+            "Ranged Damage 12",
+            "Area (Burst)",
+            "Increased Range Increment"
+        ],
+        "cost": 48
+    },
+    {
+        "name": "Strategic Nuclear Weapon",
+        "type": "Heavy Weapon",
+        "description": "A nuclear weapon designed for long-range use, typically to target cities or large military formations.",
+        "effects": [
+            "Ranged Damage 15",
+            "Area (Burst)",
+            "Increased Range Increment",
+            "Indirect 4"
+        ],
+        "cost": 60
+    },
+    {
+        "name": "Eye of Argon",
+        "type": "Artifact",
+        "description": "A darkling gemstone housing a malign intelligence, transforming the wielder into the villainess Opal.",
+        "effects": [
+            "Create Object 8 (energy constructs; Movable, Precise)",
+            "Enhanced Advantage 10 (Attractive 2, Ranged Attack 8)",
+            "Enhanced Dodge 8",
+            "Enhanced Parry 8",
+            "Enhanced Stamina 5",
+            "Enhanced Strength 4",
+            "Flight 8 (500 MPH)",
+            "Immunity 10 (life support)",
+            "Protection 3 (Impervious)"
+        ],
+        "cost": 80
+    },
+    {
+        "name": "Mask of the Modrossus",
+        "type": "Artifact",
+        "description": "Transforms the wearer into a living avatar of the Modrossus, the greatest mystical force for order.",
+        "effects": [
+            "Enhanced Advantages 7 (Benefit (guidance from the Modrossus), Fearless, Luck 5)",
+            "Enhanced Awareness 10",
+            "Enhanced Presence 5",
+            "Enhanced Magic 20 (adds 20 points to existing Magic array)",
+            "Enhanced Skill 5 (+10 Expertise: Magic)",
+            "Immunity 10 (life support)",
+            "Protection 8",
+            "Senses 9 (Cosmic Awareness, Detect Magic (Acute, Analytical, Extended 3, Ranged), Magic Awareness)"
+        ],
+        "cost": 60
+    },
+    {
+        "name": "Medallion of the Modrossus",
+        "type": "Artifact",
+        "description": "A powerful talisman of light and truth against the forces of darkness and chaos.",
+        "effects": [
+            "Three Dynamic Alternate Effects: Ranged Affliction (blinding light; Impaired, Disabled, Unaware), Cumulative, Limited to Vision",
+            "Mind Reading",
+            "Nullify Summon Supernatural Creatures (Perception Range)"
+        ],
+        "cost": 5
+    },
+    {
+        "name": "Philosopher's Stone",
+        "type": "Artifact",
+        "description": "The ultimate instrument of alchemy, capable of transmuting elements.",
+        "effects": [
+            "Transform 11 (any element into any other)"
+        ],
+        "cost": 33
+    },
+    {
+        "name": "Scrying Stone of Sirrion",
+        "type": "Artifact",
+        "description": "Allows remote sensing and detection of evil and magic.",
+        "effects": [
+            "Remote Sensing 20 (visual, auditory, mental; Dimensional)",
+            "Senses 9 (Detect Evil 2, Detect Magic 2, Magical Awareness, Vision Counters Concealment and Illusion; Expertise: Magic Check Required, DC 13)"
+        ],
+        "cost": 53
+    },
+    {
+        "name": "Serpent Scepter",
+        "type": "Artifact",
+        "description": "A creation of the ancient Serpent Empire, capable of controlling minds and transforming beings into Serpent People.",
+        "effects": [
+            "Perception Range Burst Area Affliction 20 (Resisted and Overcome by Will; Entranced, Compelled, Controlled; Extra Condition (controlled subjects undergo slow transformation into Serpent People with one resistance check per day), Progressive)",
+            "Side-Effect (wielder suffers from complications and Extra Condition effect)"
+        ],
+        "cost": 49
+    },
+    {
+        "name": "Base of Operations",
+        "type": "Installation",
+        "description": "A base of operations provides a place for heroes to rest, train, and prepare for their adventures.",
+        "features": [
+            "Living Space",
+            "Power System",
+            "Security System",
+            "Workshop"
+        ],
+        "cost": 5
+    },
+    {
+        "name": "Command Center",
+        "type": "Installation",
+        "description": "A command center is equipped with advanced technology for monitoring and managing operations.",
+        "features": [
+            "Communications",
+            "Computer",
+            "Defense System",
+            "Sensors"
+        ],
+        "cost": 5
+    },
+    {
+        "name": "Laboratory",
+        "type": "Installation",
+        "description": "A laboratory is a dedicated space for scientific research and experimentation.",
+        "features": [
+            "Chemical Analysis Equipment",
+            "Microscope",
+            "Test Equipment",
+            "Workbench"
+        ],
+        "cost": 5
+    },
+    {
+        "name": "Prison",
+        "type": "Installation",
+        "description": "A prison is designed to securely contain and manage criminals.",
+        "features": [
+            "Cell Blocks",
+            "Guard Station",
+            "Security System",
+            "Visitor Area"
+        ],
+        "cost": 8
+    },
+    {
+        "name": "Safe House",
+        "type": "Installation",
+        "description": "A safe house provides a secure location for heroes to hide or recover.",
+        "features": [
+            "Concealed Entrance",
+            "Living Space",
+            "Medical Facility",
+            "Security System"
+        ],
+        "cost": 12
+    },
+    {
+        "name": "Training Facility",
+        "type": "Installation",
+        "description": "A training facility is equipped with various equipment and environments for honing skills and abilities.",
+        "features": [
+            "Combat Simulator",
+            "Gym",
+            "Obstacle Course",
+            "Target Range"
+        ],
+        "cost": 5
+    },
+    {
+        "name": "Vehicle Hangar",
+        "type": "Installation",
+        "description": "A vehicle hangar provides storage and maintenance space for vehicles.",
+        "features": [
+            "Fuel Station",
+            "Maintenance Bay",
+            "Storage Area",
+            "Vehicle Lift"
+        ],
+        "cost": 5
+    },
+    {
+        "name": "Workshop",
+        "type": "Installation",
+        "description": "A workshop is a space equipped with tools and equipment for building and repairing gadgets.",
+        "features": [
+            "Machining Equipment",
+            "Power Tools",
+            "Storage Cabinets",
+            "Workbench"
+        ],
+        "cost": "4"
+    },
+    {
+        "name": "Adaptive Camouflage",
+        "type": "Device",
+        "description": "Nanobots that alter the color and texture of the wearer's clothing or skin to blend in with the environment.",
+        "effects": [
+            "Concealment (Visual)"
+        ],
+        "rank": "2-8",
+        "cost": 8
+    },
+    {
+        "name": "Combat Swarm",
+        "type": "Device",
+        "description": "A cloud of nanobots programmed to swarm and attack targets.",
+        "effects": [
+            "Damage",
+            "Area (Cloud)",
+            "Multiattack"
+        ],
+        "rank": "2-8",
+        "cost": 3
+    },
+    {
+        "name": "Disassembler Cloud",
+        "type": "Device",
+        "description": "Nanobots designed to break down materials at the molecular level.",
+        "effects": [
+            "Weaken (Toughness)",
+            "Area (Cloud)"
+        ],
+        "rank": "2-8",
+        "cost": 3
+    },
+    {
+        "name": "Healing Swarm",
+        "type": "Device",
+        "description": "Nanobots programmed to repair tissue and heal wounds.",
+        "effects": [
+            "Healing"
+        ],
+        "rank": "2-8",
+        "cost": 9
+    },
+    {
+        "name": "Nano-Blade",
+        "type": "Melee Weapon",
+        "description": "A blade formed from densely packed nanobots, capable of cutting through almost anything.",
+        "effects": [
+            "Strength-based Damage",
+            "Penetrating"
+        ],
+        "rank": "2-8",
+        "cost": 2
+    },
+    {
+        "name": "Nano-Communicator",
+        "type": "Device",
+        "description": "A communication device utilizing nanobots for enhanced signal clarity and encryption.",
+        "effects": [
+            "Communication (Radio)",
+            "Subtle"
+        ],
+        "rank": "2-8",
+        "cost": 13
+    },
+    {
+        "name": "Nano-Disruptor",
+        "type": "Ranged Weapon",
+        "description": "A weapon that fires a stream of disruptive nanobots, capable of short-circuiting electronics.",
+        "effects": [
+            "Damage",
+            "Area (Line)",
+            "Secondary Effect"
+        ],
+        "rank": "2-8",
+        "cost": 3
+    },
+    {
+        "name": "Nano-Sensor Array",
+        "type": "Device",
+        "description": "A set of sensors enhanced with nanotechnology for precise measurements and analysis.",
+        "effects": [
+            "Senses (Various Enhanced Senses)"
+        ],
+        "rank": "2-8",
+        "cost": 5
+    },
+    {
+        "name": "Reconstruction Swarm",
+        "type": "Device",
+        "description": "Nanobots that can rapidly assemble or disassemble objects at the molecular level.",
+        "effects": [
+            "Transform (Matter)"
+        ],
+        "rank": "2-8",
+        "cost": 4
+    },
+    {
+        "name": "Self-Replicating Nanobots",
+        "type": "Device",
+        "description": "Nanobots capable of replicating themselves to repair or create new structures.",
+        "effects": [
+            "Create",
+            "Continuous",
+            "Innate"
+        ],
+        "rank": "2-8",
+        "cost": 6
+    },
+    {
+        "name": "Energy Control",
+        "type": "Power",
+        "description": "Manipulate a particular form of energy, such as fire, electricity, or radiation.",
+        "effects": [
+            "Array (Energy Blast, Energy Construct, Energy Shield, etc.)"
+        ],
+        "rank": "2-8",
+        "cost": 2
+    },
+    {
+        "name": "Flight",
+        "type": "Power",
+        "description": "Ability to fly through the air at various speeds.",
+        "effects": [
+            "Flight"
+        ],
+        "rank": "1-8",
+        "cost": 2
+    },
+    {
+        "name": "Invisibility",
+        "type": "Power",
+        "description": "Render oneself unseen to the naked eye.",
+        "effects": [
+            "Concealment (Visual)"
+        ],
+        "rank": "2-4",
+        "cost": 4
+    },
+    {
+        "name": "Mind Control",
+        "type": "Power",
+        "description": "Control the actions of others through mental domination.",
+        "effects": [
+            "Affliction (Compelled, Controlled)"
+        ],
+        "rank": "2-8",
+        "cost": 3
+    },
+    {
+        "name": "Regeneration",
+        "type": "Power",
+        "description": "Heal injuries and recover from damage at an accelerated rate.",
+        "effects": [
+            "Regeneration"
+        ],
+        "rank": "1-10",
+        "cost": 1
+    },
+    {
+        "name": "Shape Shifting",
+        "type": "Power",
+        "description": "Alter one's physical form to mimic other people or creatures.",
+        "effects": [
+            "Morph"
+        ],
+        "rank": "2-8",
+        "cost": 5
+    },
+    {
+        "name": "Super Strength",
+        "type": "Power",
+        "description": "Possess physical strength far beyond human limits.",
+        "effects": [
+            "Enhanced Strength"
+        ],
+        "rank": "2-8",
+        "cost": 2
+    },
+    {
+        "name": "Telekinesis",
+        "type": "Power",
+        "description": "Manipulate objects and matter with one's mind.",
+        "effects": [
+            "Move Object"
+        ],
+        "rank": "2-8",
+        "cost": 3
+    },
+    {
+        "name": "Telepathy",
+        "type": "Power",
+        "description": "Communicate with others and read minds using mental abilities.",
+        "effects": [
+            "Mind Reading",
+            "Communication (Mental)"
+        ],
+        "rank": "2-8",
+        "cost": 4
+    },
+    {
+        "name": "Teleportation",
+        "type": "Power",
+        "description": "Instantly transport oneself and others to different locations.",
+        "effects": [
+            "Teleport"
+        ],
+        "rank": "2-8",
+        "cost": 2
+    },
+    {
+        "name": "Aura Sight",
+        "type": "Device",
+        "description": "A device that allows the user to see psychic auras, revealing emotions and other mental states.",
+        "effects": [
+            "Senses (Detect Emotions, Ranged, Acute)"
+        ],
+        "rank": "2-8",
+        "cost": 6
+    },
+    {
+        "name": "Mind Shield",
+        "type": "Device",
+        "description": "A protective psychic barrier that shields the mind from intrusion and influence.",
+        "effects": [
+            "Protection",
+            "Limited to Mental Effects"
+        ],
+        "rank": "2-8",
+        "cost": 1
+    },
+    {
+        "name": "Psi-Blade",
+        "type": "Melee Weapon",
+        "description": "A blade of psychic energy that can cut through mental defenses.",
+        "effects": [
+            "Strength-based Damage",
+            "Affects Insubstantial (Mental)"
+        ],
+        "rank": "2-8",
+        "cost": 2
+    },
+    {
+        "name": "Psychic Blast",
+        "type": "Ranged Weapon",
+        "description": "A focused blast of psychic energy that can overwhelm the minds of targets.",
+        "effects": [
+            "Ranged Damage",
+            "Resisted by Will"
+        ],
+        "rank": "2-8",
+        "cost": 2
+    },
+    {
+        "name": "Telekinetic Field",
+        "type": "Device",
+        "description": "A field of psychic energy that can manipulate objects and create barriers.",
+        "effects": [
+            "Move Object",
+            "Create"
+        ],
+        "rank": "2-8",
+        "cost": 3
+    },
+    {
+        "name": "Telepathic Communicator",
+        "type": "Device",
+        "description": "A device that facilitates telepathic communication over long distances.",
+        "effects": [
+            "Communication (Mental)",
+            "Area",
+            "Selective"
+        ],
+        "rank": "2-8",
+        "cost": 8
+    },
+    {
+        "name": "Thought Detector",
+        "type": "Device",
+        "description": "A device that can detect and interpret the thoughts of others.",
+        "effects": [
+            "Senses (Detect Thoughts, Ranged, Acute)"
+        ],
+        "rank": "2-8",
+        "cost": 6
+    },
+    {
+        "name": "Battle Drone",
+        "type": "Robot",
+        "description": "A small, agile drone equipped with weapons for combat.",
+        "effects": [
+            "Ranged Damage",
+            "Flight",
+            "Senses (Infravision, Radar)"
+        ],
+        "rank": "2-8",
+        "cost": 7
+    },
+    {
+        "name": "Construction Bot",
+        "type": "Robot",
+        "description": "A robot designed for construction and repair tasks.",
+        "effects": [
+            "Move Object",
+            "Protection",
+            "Immunity (Environmental Conditions)"
+        ],
+        "rank": "2-8",
+        "cost": 5
+    },
+    {
+        "name": "Hazardous Environment Drone",
+        "type": "Robot",
+        "description": "A drone designed to operate in extreme conditions, such as high radiation or toxic environments.",
+        "effects": [
+            "Immunity (Environmental Conditions)",
+            "Flight",
+            "Senses (Radar, Radio)"
+        ],
+        "rank": "2-8",
+        "cost": 6
+    },
+    {
+        "name": "Medical Droid",
+        "type": "Robot",
+        "description": "A robot equipped with medical tools and knowledge to provide first aid and medical care.",
+        "effects": [
+            "Healing",
+            "Senses (Diagnostic Scanner)",
+            "Immunity (Disease, Poison)"
+        ],
+        "rank": "2-8",
+        "cost": 8
+    },
+    {
+        "name": "Reconnaissance Drone",
+        "type": "Robot",
+        "description": "A small, stealthy drone used for surveillance and reconnaissance missions.",
+        "effects": [
+            "Concealment (Visual, Auditory)",
+            "Senses (Extended Vision, Infravision, Ultravision)",
+            "Flight"
+        ],
+        "rank": "2-8",
+        "cost": 9
+    },
+    {
+        "name": "Security Bot",
+        "type": "Robot",
+        "description": "A robot designed for security and patrol duties, equipped with sensors and defensive systems.",
+        "effects": [
+            "Protection",
+            "Senses (Infravision, Motion Sensor)",
+            "Ranged Damage"
+        ],
+        "rank": "2-8",
+        "cost": 7
+    },
+    {
+        "name": "Utility Drone",
+        "type": "Robot",
+        "description": "A versatile drone equipped with tools for various tasks, such as repair, manipulation, and data collection.",
+        "effects": [
+            "Move Object",
+            "Senses (Camera, Microphone)",
+            "Flight"
+        ],
+        "rank": "2-8",
+        "cost": 6
+    },
+    {
+        "name": "Bug Detector",
+        "type": "Device",
+        "description": "A device used to detect and locate hidden surveillance bugs.",
+        "effects": [
+            "Senses (Detect Electronic Surveillance, Ranged, Acute, Analytical)"
+        ],
+        "rank": "2-8",
+        "cost": 5
+    },
+    {
+        "name": "Concealed Holster",
+        "type": "Device",
+        "description": "A holster designed to conceal a small firearm or other weapon.",
+        "effects": [
+            "Feature (Concealed Weapon)"
+        ],
+        "rank": "1",
+        "cost": 1
+    },
+    {
+        "name": "Decryption Software",
+        "type": "Software",
+        "description": "Software used to decrypt encrypted data and communications.",
+        "effects": [
+            "Feature (Decryption Capability)"
+        ],
+        "rank": "1",
+        "cost": 1
+    },
+    {
+        "name": "Disguise Kit",
+        "type": "Kit",
+        "description": "A kit containing various items used for creating disguises.",
+        "effects": [
+            "Feature (Disguise Tools)"
+        ],
+        "rank": "1",
+        "cost": 1
+    },
+    {
+        "name": "Eavesdropping Device",
+        "type": "Device",
+        "description": "A device used to listen in on conversations and other sounds from a distance.",
+        "effects": [
+            "Senses (Extended Hearing, Audio Recorder)"
+        ],
+        "rank": "2-8",
+        "cost": 4
+    },
+    {
+        "name": "Encryption Software",
+        "type": "Software",
+        "description": "Software used to encrypt data and communications.",
+        "effects": [
+            "Feature (Encryption Capability)"
+        ],
+        "rank": "1",
+        "cost": 1
+    },
+    {
+        "name": "False Identity",
+        "type": "Identity",
+        "description": "A set of false identification papers and credentials.",
+        "effects": [
+            "Feature (False Identity)"
+        ],
+        "rank": "1",
+        "cost": 1
+    },
+    {
+        "name": "Lock Picks",
+        "type": "Tool",
+        "description": "A set of tools used for picking locks.",
+        "effects": [
+            "Feature (Lockpicking)"
+        ],
+        "rank": "1",
+        "cost": 1
+    },
+    {
+        "name": "Miniature Camera",
+        "type": "Camera",
+        "description": "A small camera used for covert surveillance.",
+        "effects": [
+            "Senses (Visual Recording)"
+        ],
+        "rank": "1",
+        "cost": 1
+    },
+    {
+        "name": "Poison Detector",
+        "type": "Detector",
+        "description": "A device used to detect the presence of poison in food or drink.",
+        "effects": [
+            "Senses (Detect Poison, Ranged, Acute, Analytical)"
+        ],
+        "rank": "2-8",
+        "cost": 5
+    },
+    {
+        "name": "Safe-Cracking Tools",
+        "type": "Tool",
+        "description": "A set of tools used for breaking into safes.",
+        "effects": [
+            "Feature (Safe-Cracking Tools)"
+        ],
+        "rank": "1",
+        "cost": 1
+    },
+    {
+        "name": "Secret Compartment",
+        "type": "Compartment",
+        "description": "A hidden compartment used to conceal items.",
+        "effects": [
+            "Feature (Secret Compartment)"
+        ],
+        "rank": "1",
+        "cost": 1
+    },
+    {
+        "name": "Silencer",
+        "type": "Attachment",
+        "description": "An attachment for a firearm that reduces the sound of gunfire.",
+        "effects": [
+            "Feature (Silenced Weapon)"
+        ],
+        "rank": "1",
+        "cost": 1
+    },
+    {
+        "name": "Voice Changer",
+        "type": "Device",
+        "description": "A device used to alter the user's voice.",
+        "effects": [
+            "Feature (Voice Alteration)"
+        ],
+        "rank": "1",
+        "cost": 1
+    },
+    {
+        "name": "Steam-Powered Exoskeleton",
+        "type": "Device",
+        "description": "A wearable mechanical suit powered by steam, enhancing the wearer's strength and durability.",
+        "effects": [
+            "Enhanced Strength",
+            "Protection"
+        ],
+        "rank": "2-8",
+        "cost": 7
+    },
+    {
+        "name": "Steam Cannon",
+        "type": "Weapon",
+        "description": "A large cannon that uses steam pressure to launch projectiles at high velocity.",
+        "effects": [
+            "Ranged Damage",
+            "Area (Burst)"
+        ],
+        "rank": "2-8",
+        "cost": 4
+    },
+    {
+        "name": "Steam-Powered Carriage",
+        "type": "Vehicle",
+        "description": "A carriage driven by a steam engine, capable of transporting passengers at moderate speeds.",
+        "effects": [
+            "Speed",
+            "Feature (Cargo Space)"
+        ],
+        "rank": "2-8",
+        "cost": 3
+    },
+    {
+        "name": "Steam Rifle",
+        "type": "Weapon",
+        "description": "A rifle powered by steam pressure, capable of firing bullets with considerable force.",
+        "effects": [
+            "Ranged Damage",
+            "Increased Range"
+        ],
+        "rank": "2-8",
+        "cost": 2
+    },
+    {
+        "name": "Steam-Powered Automaton",
+        "type": "Device",
+        "description": "A mechanical construct powered by steam, capable of performing simple tasks autonomously.",
+        "effects": [
+            "Feature (Autonomous)",
+            "Immunity (Life Support)"
+        ],
+        "rank": "2-8",
+        "cost": 5
+    },
+    {
+        "name": "Steam Jetpack",
+        "type": "Device",
+        "description": "A backpack-mounted device that uses steam pressure to propel the wearer into the air.",
+        "effects": [
+            "Flight",
+            "Feature (Steampunk Aesthetics)"
+        ],
+        "rank": "2-8",
+        "cost": 4
+    },
+    {
+        "name": "Steam-Powered Drill",
+        "type": "Tool",
+        "description": "A heavy-duty drill powered by steam, capable of boring through tough materials.",
+        "effects": [
+            "Feature (Drilling Capability)",
+            "Strength-based Damage"
+        ],
+        "rank": "2-8",
+        "cost": 3
+    },
+    {
+        "name": "Steam Clock",
+        "type": "Device",
+        "description": "A precision clockwork mechanism powered by steam, known for its accuracy and reliability.",
+        "effects": [
+            "Feature (Accurate Timekeeping)"
+        ],
+        "rank": "1",
+        "cost": 1
+    },
+    {
+        "name": "Steam-Powered Grappling Hook",
+        "type": "Device",
+        "description": "A grappling hook launcher powered by steam, allowing for quick ascension or traversal.",
+        "effects": [
+            "Movement (Swinging)",
+            "Feature (Retractable Hook)"
+        ],
+        "rank": "2-8",
+        "cost": 2
+    },
+    {
+        "name": "Steam-Powered Hammer",
+        "type": "Tool",
+        "description": "A powerful hammer driven by steam, used for construction or demolition.",
+        "effects": [
+            "Strength-based Damage",
+            "Feature (Impact Force Amplification)"
+        ],
+        "rank": "2-8",
+        "cost": 3
+    },
+    {
+        "name": "Steam-Powered Locomotive",
+        "type": "Vehicle",
+        "description": "A train engine powered by steam, capable of pulling carriages along railway tracks.",
+        "effects": [
+            "Speed",
+            "Feature (Passenger Capacity)"
+        ],
+        "rank": "2-8",
+        "cost": 5
+    },
+    {
+        "name": "Steam-Powered Water Pump",
+        "type": "Device",
+        "description": "A pump that uses steam power to move water, useful for irrigation or firefighting.",
+        "effects": [
+            "Feature (Water Pumping)",
+            "Environment (Create Water)"
+        ],
+        "rank": "2-8",
+        "cost": 4
+    },
+    {
+        "name": "Car",
+        "type": "Land Vehicle",
+        "description": "A standard automobile for personal transportation.",
+        "speed": "6",
+        "cost": 10
+    },
+    {
+        "name": "Motorcycle",
+        "type": "Land Vehicle",
+        "description": "A two-wheeled vehicle for fast and agile transportation.",
+        "speed": "7",
+        "cost": 8
+    },
+    {
+        "name": "Tank",
+        "type": "Land Vehicle",
+        "description": "A heavily armored combat vehicle with a powerful cannon.",
+        "speed": "4",
+        "toughness": "12",
+        "cost": 25
+    },
+    {
+        "name": "Helicopter",
+        "type": "Air Vehicle",
+        "description": "A rotary-wing aircraft for versatile aerial transportation.",
+        "speed": "8",
+        "cost": 20
+    },
+    {
+        "name": "Jet Fighter",
+        "type": "Air Vehicle",
+        "description": "A high-speed military aircraft designed for aerial combat.",
+        "speed": "10",
+        "toughness": "10",
+        "cost": 30
+    },
+    {
+        "name": "Speedboat",
+        "type": "Water Vehicle",
+        "description": "A fast boat designed for racing or quick transportation on water.",
+        "speed": "7",
+        "cost": 15
+    },
+    {
+        "name": "Submarine",
+        "type": "Water Vehicle",
+        "description": "An underwater vehicle designed for stealth and exploration.",
+        "speed": "5",
+        "toughness": "10",
+        "cost": 25
+    },
+    {
+        "name": "Space Shuttle",
+        "type": "Space Vehicle",
+        "description": "A spacecraft designed for travel to and from orbit.",
+        "speed": "10",
+        "toughness": "10",
+        "cost": 40
+    },
+    {
+        "name": "Hoverbike",
+        "type": "Land Vehicle",
+        "description": "A futuristic bike that hovers above the ground for fast travel.",
+        "speed": "8",
+        "cost": 12
+    },
+    {
+        "name": "ATV",
+        "type": "Land Vehicle",
+        "description": "An all-terrain vehicle designed for off-road travel.",
+        "speed": "6",
+        "cost": 10
+    }
+]

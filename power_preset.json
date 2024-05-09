@@ -1,0 +1,812 @@
+[
+    {
+        "name": "Air Blast",
+        "cost_per_rank": 2,
+        "max_rank": 20,
+        "effect": "Ranged Damage",
+        "extras": [],
+        "flaws": [],
+        "resisted": "Toughness",
+        "type": "Combat",
+        "range": "Ranged"
+    },
+    {
+        "name": "Air Control",
+        "cost_per_rank": 2,
+        "max_rank": 20,
+        "effect": "Move Object",
+        "extras": [],
+        "flaws": [
+            "Limited to air"
+        ],
+        "type": "Utility",
+        "range": "Ranged"
+    },
+    {
+        "name": "Air Cushion",
+        "cost_per_rank": 1,
+        "max_rank": 20,
+        "effect": "Flight, Safe Fall",
+        "extras": [],
+        "flaws": [],
+        "type": "Movement"
+    },
+    {
+        "name": "Air Walking",
+        "cost_per_rank": 2,
+        "max_rank": 20,
+        "effect": "Movement",
+        "extras": [
+            "Air Walking"
+        ],
+        "flaws": [],
+        "type": "Movement"
+    },
+    {
+        "name": "Airborne",
+        "cost_per_rank": 2,
+        "max_rank": 20,
+        "effect": "Flight",
+        "extras": [],
+        "flaws": [],
+        "type": "Movement"
+    },
+    {
+        "name": "Flight",
+        "cost_per_rank": 2,
+        "max_rank": 20,
+        "effect": "Flight",
+        "extras": [],
+        "flaws": [],
+        "type": "Movement"
+    },
+    {
+        "name": "Invisibility",
+        "cost_per_rank": 4,
+        "max_rank": 20,
+        "effect": "Invisibility",
+        "extras": [],
+        "flaws": [
+            "Limited to Visual"
+        ],
+        "type": "Utility"
+    },
+    {
+        "name": "Stench",
+        "cost_per_rank": 2,
+        "max_rank": 20,
+        "effect": "Ranged Cumulative Affliction",
+        "extras": [],
+        "flaws": [
+            "Smell-Dependent"
+        ],
+        "resisted": "Fortitude",
+        "type": "Combat",
+        "range": "Ranged"
+    },
+    {
+        "name": "Suffocate",
+        "cost_per_rank": 4,
+        "max_rank": 20,
+        "effect": "Ranged Concentration Affliction",
+        "extras": [],
+        "flaws": [],
+        "resisted": "Fortitude",
+        "type": "Combat",
+        "range": "Ranged"
+    },
+    {
+        "name": "Wind Screen",
+        "cost_per_rank": 1,
+        "max_rank": 20,
+        "effect": "Deflect",
+        "extras": [],
+        "flaws": [
+            "Limited to air"
+        ],
+        "type": "Defensive"
+    },
+    {
+        "name": "Windstorm",
+        "cost_per_rank": 3,
+        "max_rank": 20,
+        "effect": "Environment",
+        "extras": [
+            "Impede Movement",
+            "Visibility"
+        ],
+        "flaws": [],
+        "type": "Utility"
+    },
+    {
+        "name": "Shock",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Cumulative Affliction",
+        "resisted": "Fortitude",
+        "conditions": [
+            "Dazed",
+            "Stunned",
+            "Incapacitated"
+        ]
+    },
+    {
+        "name": "Terrifying Roar",
+        "cost": 0.5,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Enhanced Intimidation"
+    },
+    {
+        "name": "Crushing Grip",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Enhanced Strength",
+        "limitations": [
+            "Limited to Grabs"
+        ]
+    },
+    {
+        "name": "Ferocious Charge",
+        "cost": 0.5,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Strength-based Damage",
+        "limitations": [
+            "Limited to While Charging"
+        ]
+    },
+    {
+        "name": "Natural Weapons",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Strength-based Damage"
+    },
+    {
+        "name": "Webbing",
+        "cost": 3,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Ranged Cumulative Affliction",
+        "resisted": "Dodge",
+        "overcome": "Damage",
+        "conditions": [
+            "Hindered and Vulnerable",
+            "Defenseless and Immobilized"
+        ],
+        "limitations": [
+            "Extra Condition",
+            "Limited Degree"
+        ]
+    },
+    {
+        "name": "Quills",
+        "cost": 4,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive",
+        "effect": "Reaction Damage",
+        "trigger": "to being touched"
+    },
+    {
+        "name": "Protective Hide",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive",
+        "effect": "Protection"
+    },
+    {
+        "name": "Regrowth",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive",
+        "effect": "Regeneration"
+    },
+    {
+        "name": "Squeeze Through",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive",
+        "effect": "Movement",
+        "limitations": [
+            "Limited to Small Spaces"
+        ]
+    },
+    {
+        "name": "Serpent Slither",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Movement",
+        "effect": "Movement",
+        "limitations": [
+            "Slithering"
+        ]
+    },
+    {
+        "name": "Wall-Walker",
+        "cost": 2,
+        "max_rank": 2,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Movement",
+        "effect": "Movement",
+        "limitations": [
+            "Wall-Crawling"
+        ]
+    },
+    {
+        "name": "Animal Companion",
+        "cost": 3,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility",
+        "effect": "Summon Animal Companion",
+        "qualities": [
+            "Heroic",
+            "Self-Powered"
+        ]
+    },
+    {
+        "name": "Animal Form",
+        "cost": 6,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility",
+        "effect": "Morph",
+        "qualities": [
+            "Animal Form",
+            "Metamorph"
+        ]
+    },
+    {
+        "name": "Animal Mimicry",
+        "cost": 6,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility",
+        "effect": "Variable",
+        "limitations": [
+            "Limited to traits possessed by animals"
+        ]
+    },
+    {
+        "name": "Animal Senses",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility",
+        "effect": "Senses"
+    },
+    {
+        "name": "Animal Summoning",
+        "cost": 42,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility",
+        "effect": "Summon Animals",
+        "qualities": [
+            "Broad Type (Animals)",
+            "Horde",
+            "Multiple Minions 5 (32 animals)",
+            "Self-Powered"
+        ]
+    },
+    {
+        "name": "Chameleon Camouflage",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility",
+        "effect": "Concealment",
+        "qualities": [
+            "Visual",
+            "Blending"
+        ]
+    },
+    {
+        "name": "Create Chimera",
+        "cost": 4,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility",
+        "effect": "Summon Chimera",
+        "qualities": [
+            "Broad Type (Mixed Animals)",
+            "Heroic",
+            "Limited to Available Animals"
+        ]
+    },
+    {
+        "name": "Multiple Limbs",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility",
+        "effect": "Extra Limbs"
+    },
+    {
+        "name": "Speak With Animals",
+        "cost": 4,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility",
+        "effect": "Comprehend",
+        "qualities": [
+            "Animals"
+        ]
+    },
+    {
+        "name": "Drench",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Environment Control",
+        "qualities": [
+            "Impede Movement 2 (50%)"
+        ]
+    },
+    {
+        "name": "Ink Cloud",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Environment Control",
+        "qualities": [
+            "Visual Concealment Attack"
+        ]
+    },
+    {
+        "name": "Sonic Screech",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Ranged Damage",
+        "resisted": "Dodge",
+        "qualities": [
+            "Burst Area"
+        ]
+    },
+    {
+        "name": "Swirling Waters",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Environment Control",
+        "qualities": [
+            "Impede Movement 2 (50%)"
+        ]
+    },
+    {
+        "name": "Water Control",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Move Object",
+        "limitations": [
+            "Limited to Water"
+        ]
+    },
+    {
+        "name": "Tsunami",
+        "cost": 3,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Burst Area Move Object",
+        "limitations": [
+            "Limited to Water"
+        ]
+    },
+    {
+        "name": "Burst Area",
+        "cost": 3,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Affliction",
+        "conditions": [
+            "Dazed and Hindered",
+            "Prone and Immobile"
+        ],
+        "resisted": "Dodge",
+        "overcome": "Strength",
+        "limitations": [
+            "Extra Condition",
+            "Limited Degree"
+        ]
+    },
+    {
+        "name": "Impenetrable Shell",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive",
+        "effect": "Protection",
+        "qualities": [
+            "Impervious"
+        ]
+    },
+    {
+        "name": "Aquatic Camouflage",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive",
+        "effect": "Concealment",
+        "limitations": [
+            "Limited to Aquatic Environments"
+        ]
+    },
+    {
+        "name": "Electrolocation",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive",
+        "effect": "Senses",
+        "qualities": [
+            "Accurate Ranged Radius Detect Electricity"
+        ]
+    },
+    {
+        "name": "Breathe Underwater",
+        "cost": 1,
+        "max_rank": 1,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive",
+        "effect": "Immunity",
+        "qualities": [
+            "Suffocation (Drowning)"
+        ]
+    },
+    {
+        "name": "Pressure Adaptation",
+        "cost": 1,
+        "max_rank": 1,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive",
+        "effect": "Immunity",
+        "qualities": [
+            "Environmental Condition (Pressure)"
+        ]
+    },
+    {
+        "name": "Aquatic Adaptation",
+        "cost": 1,
+        "max_rank": 3,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive",
+        "effect": "Immunity",
+        "qualities": [
+            "Environmental Condition (Cold)",
+            "Environmental Condition (Pressure)",
+            "Suffocation (Drowning)"
+        ]
+    },
+    {
+        "name": "Fast Swimmer",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Movement",
+        "effect": "Swimming"
+    },
+    {
+        "name": "Water Walking",
+        "cost": 1,
+        "max_rank": 1,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Movement",
+        "effect": "Movement",
+        "qualities": [
+            "Water Walking"
+        ]
+    },
+    {
+        "name": "Sonar",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Sensory",
+        "effect": "Senses",
+        "qualities": [
+            "Accurate Ranged Extended Ultrasonic Hearing"
+        ]
+    },
+    {
+        "name": "Aqua-Telepathy",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Sensory",
+        "effect": "Communication",
+        "qualities": [
+            "Mental",
+            "Subtle",
+            "Area"
+        ],
+        "limitations": [
+            "Limited to Aquatic Life"
+        ]
+    },
+    {
+        "name": "Archer's Arsenal",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Array",
+        "components": [
+            {
+                "name": "Blast Arrow",
+                "effect": "Ranged Damage",
+                "resisted": "Toughness"
+            },
+            {
+                "name": "Explosive Arrow",
+                "effect": "Burst Area Ranged Damage",
+                "resisted": "Dodge, then Toughness"
+            },
+            {
+                "name": "Bola Arrow",
+                "effect": "Ranged Affliction",
+                "resisted": "Dodge, then Strength or Acrobatics",
+                "conditions": [
+                    "Hindered and Vulnerable",
+                    "Defenseless and Immobile"
+                ]
+            },
+            {
+                "name": "Flash-Bang Arrow",
+                "effect": "Burst Area Ranged Affliction",
+                "resisted": "Dodge, then Fortitude",
+                "conditions": [
+                    "Impaired and Dazzled",
+                    "Disabled and Unaware"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Trick Shot",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Advantages",
+        "qualities": [
+            "Precise Attack",
+            "Improved Critical",
+            "Ranged Attack"
+        ]
+    },
+    {
+        "name": "Rapid Fire",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Multiattack",
+        "base_power": "Ranged Damage"
+    },
+    {
+        "name": "Aimed Shot",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Ranged Damage",
+        "qualities": [
+            "Increased Range",
+            "Penetrating"
+        ]
+    },
+    {
+        "name": "Pinpoint Accuracy",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Ranged Damage",
+        "qualities": [
+            "Accurate",
+            "Improved Aim",
+            "Improved Critical"
+        ]
+    },
+    {
+        "name": "Entangling Shot",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Ranged Affliction",
+        "resisted": "Dodge, then Strength or Acrobatics",
+        "conditions": [
+            "Hindered and Vulnerable",
+            "Defenseless and Immobile"
+        ]
+    },
+    {
+        "name": "Falcon's Eye",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Sensory",
+        "effect": "Senses",
+        "qualities": [
+            "Extended Vision",
+            "Penetrates Concealment"
+        ]
+    },
+    {
+        "name": "Armored",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive",
+        "effect": "Protection"
+    },
+    {
+        "name": "Sealed Systems",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive",
+        "effect": "Immunity",
+        "qualities": [
+            "Life Support"
+        ]
+    },
+    {
+        "name": "Deflector Screens",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive",
+        "effect": "Deflect",
+        "qualities": [
+            "Reflect",
+            "Redirect"
+        ]
+    },
+    {
+        "name": "Energy Shields",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive",
+        "effect": "Protection",
+        "qualities": [
+            "Impervious"
+        ]
+    },
+    {
+        "name": "Force Field",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive",
+        "effect": "Create",
+        "qualities": [
+            "Impervious",
+            "Movable"
+        ]
+    },
+    {
+        "name": "Reactive Armor",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Defensive",
+        "effect": "Protection",
+        "qualities": [
+            "Impervious",
+            "Reflective"
+        ]
+    },
+    {
+        "name": "Power Armor",
+        "cost": 2,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Utility",
+        "effect": "Feature",
+        "qualities": [
+            "Removable",
+            "Feature: Enhanced Strength, Flight, Communication, Sensors"
+        ]
+    },
+    {
+        "name": "Weapon Systems",
+        "cost": 1,
+        "max_rank": 20,
+        "excluded_extras": [],
+        "excluded_flaws": [],
+        "type": "Offensive",
+        "effect": "Array",
+        "components": [
+            {
+                "name": "Blasters",
+                "effect": "Ranged Damage"
+            },
+            {
+                "name": "Missiles",
+                "effect": "Burst Area Ranged Damage"
+            },
+            {
+                "name": "Gatling Gun",
+                "effect": "Ranged Multiattack Damage"
+            }
+        ]
+    }
+]
