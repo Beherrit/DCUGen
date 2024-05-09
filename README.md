@@ -1,7 +1,5 @@
 # DCUGen# Character Creation Tool
 
-## Version 1.0.3 QA
-
 This Character Creation Tool is designed to streamline the process of generating characters for role-playing games. It provides a GUI interface to enter character details, generate random attributes, and export the data to a formatted character sheet.
 
 ### Features
@@ -25,3 +23,6 @@ This Character Creation Tool is designed to streamline the process of generating
 
 pyinstaller DCUQA.spec
 python DCUQA.py
+
+
+## Inno Setup Compiler (Create an exe)
