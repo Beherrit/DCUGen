@@ -407,37 +407,6 @@ def generate_random_distinctive_feature():
 def get_items_by_names(items_dict, names):
     return [items_dict[name] for name in names if name in items_dict]
 
-def on_generate_button_click():
-    global character, selected_archetype
-    try:
-        power_level = int(pl_entry.get())
-        if power_level < 1 or power_level > 20:
-            raise ValueError
-    except ValueError:
-        messagebox.showerror("Invalid Input", "Please enter a valid Power Level (1-20).")
-        return
-
-    archetype = selected_archetype.get()
-    character = generate_character(power_level, archetype, include_powers=include_powers.get(), random_physical_features=True, random_costume_style=True, random_distinctive_feature=True)
-
-    # Create a new tab
-    new_tab = ttk.Frame(notebook)
-    notebook.add(new_tab, text=f"Tab {notebook.index('end') + 1}")
-    # Create a new text widget in the new tab
-    new_character_summary_text = tk.Text(new_tab, height=15, width=50)
-    new_character_summary_text.pack(expand=True, fill='both')
-    new_character_summary_text.tag_configure("bold", font=("Helvetica", 12, "bold", "underline"))
-    new_character_summary_text.tag_configure("bold_no_underline", font=("Helvetica", 10, "bold"))
-    new_character_summary_text.tag_configure("normal_format", font=("Helvetica", 10))
-    
-    # Display the character information in the new text widget
-    pretty_print_character(character, new_character_summary_text)
-    text_widgets[new_tab] = new_character_summary_text
-    # Switch to the new tab
-    notebook.select(new_tab)
-    colors = dark_mode_colors if dark_mode else light_mode_colors
-    apply_color_scheme_to_tab(new_tab, colors)
-
 def calculate_modified_cost(base_cost, rank, selected_extras_with_ranks, selected_flaws_with_ranks, extras, flaws):
     # Create dictionaries for easy access
     extras_dict = {extra["name"]: extra for extra in extras}
@@ -1050,6 +1019,40 @@ def allocate_powers(character, allocated_points, power_level, allocations):
 
     return character, allocated_points
 
+def on_generate_button_click():
+    global character, selected_archetype
+    try:
+        power_level = int(pl_entry.get())
+        if power_level < 1 or power_level > 20:
+            raise ValueError
+    except ValueError:
+        messagebox.showerror("Invalid Input", "Please enter a valid Power Level (1-20).")
+        return
+
+    archetype = selected_archetype.get()
+    include_powers_value = not include_powers.get()  # Invert the checkbox value to match the new logic
+
+    # Generate character with the correct include_powers value
+    character = generate_character(power_level, archetype, include_powers=include_powers_value, random_physical_features=True, random_costume_style=True, random_distinctive_feature=True)
+
+    # Create a new tab
+    new_tab = ttk.Frame(notebook)
+    notebook.add(new_tab, text=f"Tab {notebook.index('end') + 1}")
+    # Create a new text widget in the new tab
+    new_character_summary_text = tk.Text(new_tab, height=15, width=50)
+    new_character_summary_text.pack(expand=True, fill='both')
+    new_character_summary_text.tag_configure("bold", font=("Helvetica", 12, "bold", "underline"))
+    new_character_summary_text.tag_configure("bold_no_underline", font=("Helvetica", 10, "bold"))
+    new_character_summary_text.tag_configure("normal_format", font=("Helvetica", 10))
+    
+    # Display the character information in the new text widget
+    pretty_print_character(character, new_character_summary_text)
+    text_widgets[new_tab] = new_character_summary_text
+    # Switch to the new tab
+    notebook.select(new_tab)
+    colors = dark_mode_colors if dark_mode else light_mode_colors
+    apply_color_scheme_to_tab(new_tab, colors)
+
 def generate_character(power_level, archetype, include_powers=True, random_physical_features=False, random_costume_style=False, random_distinctive_feature=False):
     random.seed()
     random_theme = generate_random_theme() 
@@ -1089,7 +1092,6 @@ def generate_character(power_level, archetype, include_powers=True, random_physi
         "costume_style": generate_random_costume_style() if random_costume_style else "Not Specified",
         "distinctive_feature": generate_random_distinctive_feature() if random_distinctive_feature else "Not Specified",
         "personality_traits": generate_random_traits()  # Add the randomly generated traits here
-        
     }
 
     # Load archetypes from the JSON file
@@ -1326,7 +1328,8 @@ def main():
     root = tk.Tk()
     root.title("Character Creation Version 1.0.Prod")
     dark_mode = True
-    include_powers = tk.BooleanVar()
+    include_powers = tk.BooleanVar(value=False)  # Set include_powers to False by default (unchecked)
+
     text_widgets = {}
     create_table_if_not_exists()
 
@@ -1371,8 +1374,6 @@ def main():
     # Set 'Powerhouse' as the default archetype if it exists in the list
     default_archetype = "Powerhouse" if "Powerhouse" in archetype_names else archetype_names[0]
     selected_archetype = tk.StringVar(value=default_archetype)
-    selected_archetype = tk.StringVar()
-    selected_archetype.set(archetype_names[0])
 
     # Archetype Dropdown
     archetype_label = tk.Label(left_frame, text="Select Archetype:")
@@ -1384,7 +1385,7 @@ def main():
     generate_button = tk.Button(left_frame, text="Generate Character", command=on_generate_button_click)
     generate_button.pack(fill="x", pady=5)
 
-    powers_checkbox = tk.Checkbutton(left_frame, text="Include Powers", variable=include_powers)
+    powers_checkbox = tk.Checkbutton(left_frame, text="Exclude Powers", variable=include_powers)
     powers_checkbox.pack(anchor="w")
 
     # Equipment Widgets
