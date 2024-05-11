@@ -34,6 +34,7 @@ light_mode_colors = {
     'text_foreground': '#000000'
 }
 hideout_details = {}
+characters = {}
 
 def generate_hideout():
     with open('headquarters.json', 'r') as file:
@@ -353,32 +354,45 @@ def create_table_if_not_exists():
     with sqlite3.connect('tabs_data.db') as conn:
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS tabs
-                     (content TEXT)''')
+                     (content TEXT, character TEXT)''')
         conn.commit()
 
 def save_tabs():
     with sqlite3.connect('tabs_data.db') as conn:
         c = conn.cursor()
         c.execute('DELETE FROM tabs')  # Clear existing data
-        for tab in notebook.winfo_children():
+        for tab in notebook.tabs():
+            tab_name = notebook.tab(tab, "text")
             text_widget = text_widgets.get(tab)
+            character = characters.get(tab_name)
             if text_widget:
                 tab_content = text_widget.get("1.0", tk.END)
-                c.execute('INSERT INTO tabs VALUES (?)', (tab_content,))
+                tab_character = json.dumps(character) if character else None
+                c.execute('INSERT INTO tabs VALUES (?, ?)', (tab_content, tab_character))
         conn.commit()
 
 def load_tabs():
-    conn = sqlite3.connect('tabs_data.db')
-    c = conn.cursor()
-    c.execute('SELECT * FROM tabs')
-    tabs_data = c.fetchall()
-    for tab_content, in tabs_data:
-        create_new_tab(tab_content)
-    conn.close()
+    with sqlite3.connect('tabs_data.db') as conn:
+        c = conn.cursor()
+        try:
+            c.execute('SELECT content, character FROM tabs')
+            tabs_data = c.fetchall()
+            for tab_content, tab_character in tabs_data:
+                tab_name, tab_widget = create_new_tab(tab_content)
+                if tab_character:
+                    characters[tab_name] = json.loads(tab_character)
+        except sqlite3.OperationalError:
+            # Handle case where the database is still in the old format
+            c.execute('SELECT content FROM tabs')
+            tabs_data = c.fetchall()
+            for tab_content, in tabs_data:
+                tab_name, tab_widget = create_new_tab(tab_content)
+                # No character data to load in this case
 
 def create_new_tab(content=""):
     new_tab = ttk.Frame(notebook)
-    notebook.add(new_tab, text=f"Tab {notebook.index('end') + 1}")
+    tab_name = f"Tab {len(notebook.tabs()) + 1}"
+    notebook.add(new_tab, text=tab_name)
     new_character_summary_text = tk.Text(new_tab, height=15, width=50)
     new_character_summary_text.pack(expand=True, fill='both')
     new_character_summary_text.insert("1.0", content)
@@ -387,6 +401,8 @@ def create_new_tab(content=""):
 
     # Configure the highlight tag for the text widget
     new_character_summary_text.tag_configure('highlight', background='yellow')
+    
+    return tab_name, new_tab
 
 def close_current_tab():
     # Get the currently selected tab widget
@@ -636,7 +652,17 @@ def calculate_initiative(character):
     
     return initiative
 
-def on_export_character_sheet_click(character):
+def on_export_character_sheet_click():
+    # Get the name of the currently selected tab
+    current_tab = notebook.tab(notebook.select(), "text")
+    
+    # Retrieve the character associated with the current tab
+    character = characters.get(current_tab)
+    
+    if not character:
+        messagebox.showerror("Error", "No character found for the current tab.")
+        return
+
     # Retrieve origin details from character
     origin_region = character['origin']['region']
     origin_country = character['origin']['country']
@@ -1105,7 +1131,8 @@ def on_generate_button_click():
 
     # Create a new tab
     new_tab = ttk.Frame(notebook)
-    notebook.add(new_tab, text=f"Tab {notebook.index('end') + 1}")
+    tab_name = f"Tab {len(notebook.tabs()) + 1}"
+    notebook.add(new_tab, text=tab_name)
     # Create a new text widget in the new tab
     new_character_summary_text = tk.Text(new_tab, height=15, width=50)
     new_character_summary_text.pack(expand=True, fill='both')
@@ -1116,6 +1143,7 @@ def on_generate_button_click():
     # Display the character information in the new text widget
     pretty_print_character(character, new_character_summary_text)
     text_widgets[new_tab] = new_character_summary_text
+    characters[tab_name] = character  # Store the character in the dictionary
     # Switch to the new tab
     notebook.select(new_tab)
     colors = dark_mode_colors if dark_mode else light_mode_colors
@@ -1483,7 +1511,7 @@ def main():
     close_tab_button = tk.Button(left_frame, text="Close Tab", command=close_current_tab)
     close_tab_button.pack(fill="x", pady=5)
 
-    export_character_sheet_button = tk.Button(left_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click(character))
+    export_character_sheet_button = tk.Button(left_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click())
     export_character_sheet_button.pack(fill="x", pady=5)
 
     # Mode Toggle
