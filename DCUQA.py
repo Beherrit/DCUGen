@@ -33,6 +33,74 @@ light_mode_colors = {
     'text_background': '#FFFFFF',
     'text_foreground': '#000000'
 }
+hideout_details = {}
+
+def generate_hideout():
+    with open('headquarters.json', 'r') as file:
+        headquarters_data = json.load(file)
+
+    hq_size = random.choice(headquarters_data['headquarters']['sizes'])
+    num_traits = random.randint(10, 20)
+    
+    # Initialize a set to keep track of selected feature IDs
+    selected_feature_ids = set()
+    
+    def get_unique_feature():
+        while True:
+            feature = random.choice(headquarters_data['headquarters']['traits'])
+            if feature['id'] not in selected_feature_ids:
+                selected_feature_ids.add(feature['id'])
+                return feature
+
+    # Generate the required number of unique traits
+    hq_traits = [get_unique_feature() for _ in range(num_traits)]
+    hq_toughness = random.choice(headquarters_data['headquarters']['toughness'])
+
+    # Create a new tab for the hideout
+    new_tab = ttk.Frame(notebook)
+    notebook.add(new_tab, text="Hideout")
+    
+    # Create a new text widget in the new tab
+    hideout_summary_text = tk.Text(new_tab, height=15, width=50)
+    hideout_summary_text.pack(expand=True, fill='both')
+    hideout_summary_text.tag_configure("bold", font=("Helvetica", 12, "bold", "underline"))
+    hideout_summary_text.tag_configure("bold_no_underline", font=("Helvetica", 10, "bold"))
+    hideout_summary_text.tag_configure("normal_format", font=("Helvetica", 10))
+
+    # Display the hideout information in the new text widget
+    hideout_summary_text.insert("end", "Hideout Summary\n", "bold")
+    hideout_summary_text.insert("end", "-" * 40 + "\n")
+    hideout_summary_text.insert("end", f"\nSize: {hq_size}\n", "bold_no_underline")
+    hideout_summary_text.insert("end", f"Toughness: {hq_toughness}\n", "bold_no_underline")
+    hideout_summary_text.insert("end", "\nTraits:\n", "bold_no_underline")
+
+    for trait in hq_traits:
+        hideout_summary_text.insert("end", f"- {trait['name']}\n", "normal_format")
+        hideout_summary_text.insert("end", f"  {trait['description']}\n\n", "normal_format")
+    
+    text_widgets[new_tab] = hideout_summary_text
+    notebook.select(new_tab)
+
+def save_hideout():
+    filename = filedialog.asksaveasfilename(
+        defaultextension=".txt",
+        filetypes=[("Text files", "*.txt")],
+        initialdir=os.path.expanduser("~/Desktop")
+    )
+    
+    if not filename:
+        return  # User cancelled the save dialog
+
+    with open(filename, 'w') as file:
+        file.write("Hideout Summary\n")
+        file.write("-" * 40 + "\n")
+        file.write(f"\nSize: {hideout_details['Size']}\n")
+        file.write(f"Toughness: {hideout_details['Toughness']}\n")
+        file.write("\nTraits:\n")
+        for trait in hideout_details['Traits']:
+            file.write(f"- {trait}\n")
+
+    messagebox.showinfo("Save Hideout", f"Hideout details saved to {filename}")
 
 def generate_random_traits():
     # Load the traits from the JSON file
@@ -1324,13 +1392,14 @@ def pretty_print_character(character, text_widget):
     text_widget.insert("end", f"Powers Total Cost (Adjusted): {int(sum(power['cost'] for power in character['powers']))}\n", "bold")  # Convert to int
 
 def main():
-    global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, selected_archetype
+    global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, selected_archetype, hideout_details
     root = tk.Tk()
     root.title("Character Creation Version 1.0.Prod")
     dark_mode = True
     include_powers = tk.BooleanVar(value=False)  # Set include_powers to False by default (unchecked)
 
     text_widgets = {}
+    hideout_details = {}  # Initialize hideout details dictionary
     create_table_if_not_exists()
 
     # Main layout frames
@@ -1350,6 +1419,10 @@ def main():
     search_frame = tk.Frame(right_frame)
     search_frame.pack(side='top', anchor='ne')
 
+    # Adding the label "SEARCH" next to the search entry
+    search_label = tk.Label(search_frame, text="SEARCH")
+    search_label.pack(side='left')
+
     search_var = StringVar()
     search_entry = tk.Entry(search_frame, textvariable=search_var)
     search_entry.pack(side='right')
@@ -1359,7 +1432,6 @@ def main():
 
     # Bind KeyRelease event to search function
     search_entry.bind('<KeyRelease>', lambda event: on_search_change(search_var))
-
     # Power Level Widgets
     pl_label = tk.Label(left_frame, text="Please select Power Level:")
     pl_label.pack(anchor="w")
@@ -1400,6 +1472,13 @@ def main():
 
     save_equipment_button = tk.Button(left_frame, text="Save Equipment", command=on_save_equipment_click)
     save_equipment_button.pack(fill="x", pady=5)
+
+    # Add the new Generate Hideout and Save Hideout buttons using pack geometry manager
+    generate_hideout_button = tk.Button(left_frame, text="Generate Hideout", command=generate_hideout)
+    generate_hideout_button.pack(fill="x", pady=5)
+
+    save_hideout_button = tk.Button(left_frame, text="Save Hideout", command=save_hideout)
+    save_hideout_button.pack(fill="x", pady=5)
 
     close_tab_button = tk.Button(left_frame, text="Close Tab", command=close_current_tab)
     close_tab_button.pack(fill="x", pady=5)

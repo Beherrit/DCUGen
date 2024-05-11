@@ -1,0 +1,410 @@
+{
+  "headquarters": {
+    "sizes": [
+      "Awesome (Small Town)",
+      "Colossal (City Block)",
+      "Gargantuan (Skyscrapper)",
+      "Huge (Castle)",
+      "Large (Mansion)",
+      "Medium (Warehouse)",
+      "Small (House)",
+      "Tiny (Townhouse)",
+      "Diminuitive (Apartment)",
+      "Fine (Loft)"
+      
+    ],
+    "traits": [
+      {
+        "id": 1,
+        "name": "Armoury Basic (10 Equipment Points)",
+        "description": "A basic armory equipped with essential weapons and gear worth 10 equipment points."
+      },
+      {
+        "id": 2,
+        "name": "Armoury Advanced (30 Equipment Points)",
+        "description": "An advanced armory stocked with a wide variety of weapons and gear worth 30 equipment points."
+      },
+      {
+        "id": 3,
+        "name": "Artificer Lab (Rank 1)",
+        "description": "A laboratory for creating and enchanting magical items, offering basic facilities and equipment."
+      },
+      {
+        "id": 3,
+        "name": "Artificer Lab (Rank 2)",
+        "description": "An improved laboratory with enhanced tools and materials for creating and enchanting magical items."
+      },
+      {
+        "id": 3,
+        "name": "Artificer Lab (Rank 3)",
+        "description": "A well-equipped laboratory with specialized equipment for advanced magical item creation and enchantment."
+      },
+      {
+        "id": 3,
+        "name": "Artificer Lab (Rank 4)",
+        "description": "A highly advanced laboratory with top-tier equipment and materials for expert-level magical item creation."
+      },
+      {
+        "id": 3,
+        "name": "Artificer Lab (Rank 5)",
+        "description": "A state-of-the-art laboratory offering the best facilities and equipment for master-level magical item creation."
+      },
+      {
+        "id": 8,
+        "name": "Automation",
+        "description": "A system that allows for the automated functioning of various tasks within the hideout, increasing efficiency and reducing the need for manual intervention."
+      },
+      {
+        "id": 9,
+        "name": "Combat Simulator (Basic)",
+        "description": "A basic combat simulator for training and honing combat skills, offering fundamental training programs."
+      },
+      {
+        "id": 10,
+        "name": "Combat Simulator (Advanced)",
+        "description": "An advanced combat simulator with a wide range of training programs and scenarios for expert-level combat training."
+      },
+      {
+        "id": 11,
+        "name": "Communications (Basic)",
+        "description": "Basic communication systems for maintaining contact with team members and monitoring local activities."
+      },
+      {
+        "id": 12,
+        "name": "Communications (Advanced)",
+        "description": "Advanced communication systems with enhanced capabilities for secure and reliable global communications."
+      },
+      {
+        "id": 13,
+        "name": "Communications (Dimensional)",
+        "description": "Communication systems capable of maintaining contact across different dimensions, allowing for interdimensional communication."
+      },
+      {
+        "id": 14,
+        "name": "Communications (Global)",
+        "description": "Global communication systems that ensure contact and monitoring capabilities across the entire world."
+      },
+      {
+        "id": 15,
+        "name": "Communications (Space)",
+        "description": "Space communication systems designed to maintain contact and monitoring capabilities in outer space."
+      },
+      {
+        "id": 16,
+        "name": "Computer (Basic)",
+        "description": "A basic computer system for handling general data processing and communication tasks."
+      },
+      {
+        "id": 17,
+        "name": "Computer (Advanced)",
+        "description": "An advanced computer system with enhanced processing power and capabilities for handling complex data and tasks."
+      },
+      {
+        "id": 18,
+        "name": "Concealed DC(20)",
+        "description": "The hideout is concealed, requiring a DC 20 check to locate it."
+      },
+      {
+        "id": 18,
+        "name": "Concealed DC(25)",
+        "description": "The hideout is well-concealed, requiring a DC 25 check to locate it."
+      },
+      {
+        "id": 18,
+        "name": "Concealed DC(30)",
+        "description": "The hideout is very well-concealed, requiring a DC 30 check to locate it."
+      },
+      {
+        "id": 18,
+        "name": "Concealed DC(35)",
+        "description": "The hideout is extremely well-concealed, requiring a DC 35 check to locate it."
+      },
+      {
+        "id": 18,
+        "name": "Concealed DC(40)",
+        "description": "The hideout is nearly impossible to find, requiring a DC 40 check to locate it."
+      },
+      {
+        "id": 18,
+        "name": "Concealed DC(45)",
+        "description": "The hideout is almost undetectable, requiring a DC 45 check to locate it."
+      },
+      {
+        "id": 18,
+        "name": "Concealed DC(50)",
+        "description": "The hideout is virtually undetectable, requiring a DC 50 check to locate it."
+      },
+      {
+        "id": 25,
+        "name": "Defense System",
+        "description": "A system designed to protect the hideout from intruders and attacks, including alarms, automated defenses, and security protocols."
+      },
+      {
+        "id": 26,
+        "name": "Deathtraps",
+        "description": "A series of lethal traps set up within the hideout to eliminate intruders and protect sensitive areas."
+      },
+      {
+        "id": 27,
+        "name": "Dimensional Portal",
+        "description": "A portal that allows for travel between different dimensions, providing instant access to various alternate realities."
+      },
+      {
+        "id": 28,
+        "name": "Dimensional Capacity",
+        "description": "The hideout has expanded capacity through the use of dimensional manipulation, allowing it to contain more than its physical size would suggest."
+      },
+      {
+        "id": 29,
+        "name": "Drones",
+        "description": "A fleet of drones available for surveillance, defense, or other tasks, enhancing the hideout's capabilities."
+      },
+      {
+        "id": 30,
+        "name": "Dock",
+        "description": "A docking facility for watercraft or other vehicles, providing secure mooring and maintenance capabilities."
+      },
+      {
+        "id": 31,
+        "name": "Dual Size",
+        "description": "The hideout has the ability to change its size, offering flexibility in its layout and capacity."
+      },
+      {
+        "id": 32,
+        "name": "Escape Tunnel",
+        "description": "A secret tunnel designed for quick and covert escapes, ensuring a safe exit in case of an emergency."
+      },
+      {
+        "id": 33,
+        "name": "Food Supply",
+        "description": "A stocked supply of food to sustain the occupants of the hideout for an extended period."
+      },
+      {
+        "id": 34,
+        "name": "Game Room",
+        "description": "A recreational area equipped with games and entertainment for relaxation and leisure."
+      },
+      {
+        "id": 35,
+        "name": "Habitat",
+        "description": "Living quarters for the inhabitants of the hideout, including sleeping areas, bathrooms, and common spaces."
+      },
+      {
+        "id": 36,
+        "name": "Intelligent",
+        "description": "The hideout is equipped with an intelligent system that can manage its functions, respond to threats, and assist occupants."
+      },
+      {
+        "id": 37,
+        "name": "Inventor Lab",
+        "description": "A lab equipped with tools and materials for inventors, providing facilities for creating and testing new gadgets and technologies."
+      },
+      {
+        "id": 38,
+        "name": "Kitchen",
+        "description": "A fully equipped kitchen for preparing meals, including appliances, utensils, and storage for food."
+      },
+      {
+        "id": 39,
+        "name": "Kennel",
+        "description": "A dedicated space for housing animals, providing them with shelter, food, and care."
+      },
+      {
+        "id": 40,
+        "name": "Movable",
+        "description": "The hideout can be moved to different locations, providing flexibility and the ability to relocate as needed."
+      },
+      {
+        "id": 41,
+        "name": "Pool",
+        "description": "A swimming pool for recreation, exercise, or relaxation, enhancing the hideout's amenities."
+      },
+      {
+        "id": 42,
+        "name": "Ritual Chamber",
+        "description": "A specially designed chamber for performing magical or occult rituals, equipped with the necessary tools and materials."
+      },
+      {
+        "id": 43,
+        "name": "Temporal Warp",
+        "description": "A facility or device within the hideout that allows for manipulation of time, providing unique temporal advantages."
+      },
+      {
+        "id": 44,
+        "name": "Translocation",
+        "description": "A system that allows for instant teleportation of individuals or objects to and from the hideout, providing rapid movement capabilities."
+      },
+      {
+        "id": 45,
+        "name": "Untraceable",
+        "description": "The hideout is designed to be untraceable, preventing it from being located or tracked by any means."
+      },
+      {
+        "id": 46,
+        "name": "Vault",
+        "description": "A secure vault for storing valuable items, protected by advanced security measures to prevent unauthorized access."
+      },
+      {
+        "id": 47,
+        "name": "War Room",
+        "description": "A command center equipped with communication systems, maps, and planning tools for strategizing and coordinating operations."
+      },
+      {
+        "id": 48,
+        "name": "Fire Prevention System",
+        "description": "A system designed to detect and suppress fires within the hideout, ensuring safety and minimizing damage."
+      },
+      {
+        "id": 49,
+        "name": "Garage",
+        "description": "A garage for storing and maintaining vehicles, equipped with tools and facilities for vehicle repair and upkeep."
+      },
+      {
+        "id": 50,
+        "name": "Gym",
+        "description": "A fitness facility with equipment for exercise and training, promoting health and physical conditioning."
+      },
+      {
+        "id": 51,
+        "name": "Grounds",
+        "description": "The surrounding land or property of the hideout, including gardens, landscapes, or other outdoor areas."
+      },
+      {
+        "id": 52,
+        "name": "Hangar",
+        "description": "A hangar for storing and maintaining aircraft or other large vehicles, providing secure and sheltered storage."
+      },
+      {
+        "id": 53,
+        "name": "Holding Cells",
+        "description": "Secure cells for detaining prisoners or capturing intruders, equipped with security measures to prevent escape."
+      },
+      {
+        "id": 54,
+        "name": "Infirmary",
+        "description": "A medical facility for treating injuries and illnesses, equipped with medical supplies and equipment."
+      },
+      {
+        "id": 55,
+        "name": "Isolated",
+        "description": "The hideout is located in an isolated area, providing privacy and reducing the likelihood of discovery."
+      },
+      {
+        "id": 56,
+        "name": "Laboratory",
+        "description": "A scientific lab equipped with tools and materials for research, experimentation, and analysis."
+      },
+      {
+        "id": 57,
+        "name": "Library",
+        "description": "A collection of books, documents, and other resources for research and reference, providing valuable information."
+      },
+      {
+        "id": 58,
+        "name": "Living Space",
+        "description": "Comfortable living quarters for the inhabitants, including bedrooms, living rooms, and personal spaces."
+      },
+      {
+        "id": 59,
+        "name": "Personnel",
+        "description": "A staff of individuals who manage and maintain the hideout, providing various services and support."
+      },
+      {
+        "id": 60,
+        "name": "Power System",
+        "description": "A reliable power source that provides electricity and energy to the hideout, ensuring all systems remain operational."
+      },
+      {
+        "id": 61,
+        "name": "Sealed",
+        "description": "The hideout is sealed to prevent unauthorized access, protected by secure doors and barriers."
+      },
+      {
+        "id": 62,
+        "name": "Secret (DC 20)",
+        "description": "The hideout is hidden, requiring a DC 20 check to discover its location."
+      },
+      {
+        "id": 62,
+        "name": "Secret (DC 25)",
+        "description": "The hideout is well-hidden, requiring a DC 25 check to discover its location."
+      },
+      {
+        "id": 62,
+        "name": "Secret (DC 30)",
+        "description": "The hideout is very well-hidden, requiring a DC 30 check to discover its location."
+      },
+      {
+        "id": 62,
+        "name": "Secret (DC 35)",
+        "description": "The hideout is extremely well-hidden, requiring a DC 35 check to discover its location."
+      },
+      {
+        "id": 62,
+        "name": "Secret (DC 40)",
+        "description": "The hideout is nearly impossible to find, requiring a DC 40 check to discover its location."
+      },
+      {
+        "id": 62,
+        "name": "Secret (DC 45)",
+        "description": "The hideout is almost undetectable, requiring a DC 45 check to discover its location."
+      },
+      {
+        "id": 62,
+        "name": "Secret (DC 50)",
+        "description": "The hideout is virtually undetectable, requiring a DC 50 check to discover its location."
+      },
+      {
+        "id": 69,
+        "name": "Security Systems (DC 20)",
+        "description": "The hideout is equipped with security systems that require a DC 20 check to bypass."
+      },
+      {
+        "id": 69,
+        "name": "Security Systems (DC 25)",
+        "description": "The hideout is equipped with advanced security systems that require a DC 25 check to bypass."
+      },
+      {
+        "id": 69,
+        "name": "Security Systems (DC 30)",
+        "description": "The hideout is equipped with highly advanced security systems that require a DC 30 check to bypass."
+      },
+      {
+        "id": 69,
+        "name": "Security Systems (DC 35)",
+        "description": "The hideout is equipped with extremely advanced security systems that require a DC 35 check to bypass."
+      },
+      {
+        "id": 69,
+        "name": "Security Systems (DC 40)",
+        "description": "The hideout is equipped with top-tier security systems that require a DC 40 check to bypass."
+      },
+      {
+        "id": 74,
+        "name": "Self Repairing",
+        "description": "The hideout has systems in place that allow it to repair itself, reducing maintenance needs and ensuring longevity."
+      },
+      {
+        "id": 75,
+        "name": "Temporal Limbo",
+        "description": "The hideout is located in a state of temporal limbo, existing outside of normal time, providing unique advantages."
+      },
+      {
+        "id": 76,
+        "name": "Small Workshop",
+        "description": "A small workshop equipped with tools and materials for creating and repairing items."
+      },
+      {
+        "id": 77,
+        "name": "Medium Workshop",
+        "description": "A medium-sized workshop with more extensive tools and materials for creating and repairing items."
+      },
+      {
+        "id": 78,
+        "name": "Large Workshop",
+        "description": "A large workshop with comprehensive tools and materials for creating and repairing a wide variety of items."
+      }
+    ],
+    "toughness": [6, 8, 10, 12, 14, 16, 18, 20]
+  }
+}
