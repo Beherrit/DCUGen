@@ -24,7 +24,8 @@ a = Analysis(['DCUQA.py'],
                 ('archetypes.json', '.'),
                 ('CharacterName.xlsx', '.'),  # Add the path to 'CharacterName.xlsx' if it's in a different folder
                 ('PersonalityTraits.json', '.'),
-                ('theme.json', '.')
+                ('theme.json', '.'),
+                ('descriptions.json', '.')
              ],
              hiddenimports=[],
              hookspath=[],

@@ -47,6 +47,7 @@ def generate_hideout(notebook, text_widgets):
     text_widgets[new_tab] = hideout_summary_text
     notebook.select(new_tab)
 
+# Function to save hideout details to a file
 def save_hideout(hideout_details):
     filename = filedialog.asksaveasfilename(
         defaultextension=".txt",

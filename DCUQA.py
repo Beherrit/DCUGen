@@ -22,13 +22,6 @@ from database import *
 hideout_details = {}
 characters = {}
 
-# Load descriptions from JSON file
-def load_descriptions():
-    with open('descriptions.json', 'r', encoding='utf-8') as file:
-        return json.load(file)
-
-descriptions = load_descriptions()
-
 def copy_prompt_to_clipboard():
     # Get the name of the currently selected tab
     current_tab = notebook.tab(notebook.select(), "text")
@@ -839,6 +832,16 @@ def pretty_print_character(character, text_widget):
     text_widget.insert("end", "Character Creation Summary Version\n", "bold")
     text_widget.insert("end", "-" * 40 + "\n\n")
 
+    total_cost = calculate_total_cost(character)
+    text_widget.insert("end", f"Power Level: {character['power_level']}\n", "bold")
+    text_widget.insert("end", f"TOTAL COST: {int(total_cost)}\n", "bold")  # Convert to int for display
+    max_points = character['power_level'] * POWER_POINTS_PER_LEVEL
+    text_widget.insert("end", f"Maximum Points Allowed: {max_points}\n", "bold")
+    text_widget.insert("end", f"Attributes Total Cost: {int(sum(details['cost'] for details in character['stats'].values()))}\n", "bold")  # Convert to int
+    text_widget.insert("end", f"Advantages Total Cost: {int(sum(advantage['cost'] for advantage in character['advantages']))}\n", "bold")  # Convert to int
+    text_widget.insert("end", f"Skills Total Cost: {int(sum(skill['cost'] for skill in character['skills']))}\n", "bold")  # Convert to int
+    text_widget.insert("end", f"Powers Total Cost (Adjusted): {int(sum(power['cost'] for power in character['powers']))}\n\n\n", "bold")  # Convert to int
+
     # Insert the generated description into the text widget
     text_widget.insert("end", "AI Image Generator Prompt:\n", "bold")
     text_widget.insert("end", description + "\n\n", "normal_format")
@@ -1004,23 +1007,12 @@ def pretty_print_character(character, text_widget):
         comp_name = complication['name']
         comp_description = complication['description']
         text_widget.insert("end", f"- {comp_name}: ", "bold_no_underline")
-        text_widget.insert("end", f"{comp_description}\n")
-
-    total_cost = calculate_total_cost(character)
-    text_widget.insert("end", "\n" + "-" * 40 + "\n")
-    text_widget.insert("end", f"Power Level: {character['power_level']}\n", "bold")
-    text_widget.insert("end", f"TOTAL COST: {int(total_cost)}\n", "bold")  # Convert to int for display
-    max_points = character['power_level'] * POWER_POINTS_PER_LEVEL
-    text_widget.insert("end", f"Maximum Points Allowed: {max_points}\n", "bold")
-    text_widget.insert("end", f"Attributes Total Cost: {int(sum(details['cost'] for details in character['stats'].values()))}\n", "bold")  # Convert to int
-    text_widget.insert("end", f"Advantages Total Cost: {int(sum(advantage['cost'] for advantage in character['advantages']))}\n", "bold")  # Convert to int
-    text_widget.insert("end", f"Skills Total Cost: {int(sum(skill['cost'] for skill in character['skills']))}\n", "bold")  # Convert to int
-    text_widget.insert("end", f"Powers Total Cost (Adjusted): {int(sum(power['cost'] for power in character['powers']))}\n", "bold")  # Convert to int
+        text_widget.insert("end", f"{comp_description}\n\n\n")
 
 def main():
     global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, selected_archetype, hideout_details
     root = tk.Tk()
-    root.title("Character Creation Version 1.0.Prod")
+    root.title("Character Creation Version 1.3 Prod")
     dark_mode = True
     include_powers = tk.BooleanVar(value=False)  # Set include_powers to False by default (unchecked)
 
@@ -1096,6 +1088,10 @@ def main():
 
     save_equipment_button = tk.Button(left_frame, text="Save Equipment", command=on_save_equipment_click)
     save_equipment_button.pack(fill="x", pady=5)
+
+   # Add Generate Hideout button
+    generate_hideout_button = tk.Button(left_frame, text="Generate Hideout", command=lambda: generate_hideout(notebook, text_widgets))
+    generate_hideout_button.pack(fill="x", pady=5)
 
     save_hideout_button = tk.Button(left_frame, text="Save Hideout", command=lambda: save_hideout(hideout_details))
     save_hideout_button.pack(fill="x", pady=5)
