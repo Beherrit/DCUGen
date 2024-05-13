@@ -165,7 +165,7 @@ def calculate_total_cost(character):
     
     return total_stat_cost + total_advantage_cost + total_skill_cost + total_power_cost
 
-def calculate_defenses(character, power_level,allocated_points):
+def calculate_defenses(character, power_level, allocated_points):
     defenses = {
         "Dodge": character["stats"].get("Agility", {}).get("value", 0) + character["stats"].get("Dodge", {}).get("value", 0),
         "Fortitude": character["stats"].get("Stamina", {}).get("value", 0) + character["stats"].get("Fortitude", {}).get("value", 0),
@@ -506,14 +506,11 @@ def allocate_stat(stat_name, allocated_points, total_range, stats):
 def allocate_stats(character, power_level, allocated_points, total_range, allocations):
     stats = load_data_from_json('stats.json')
 
-    # Ensure that allocations["stats"] is an iterable
-    if not isinstance(allocations["stats"], (list, tuple)):
+    if not isinstance(allocations["stats"], list):
         raise ValueError(f"Expected allocations['stats'] to be a list or tuple, got {type(allocations['stats'])}")
 
-    # Allocate points for each stat
     for stat in stats["STATS"]:
         stat_name = stat["name"]
-        # Use allocated_percentages for determining the range
         stat_percentage = random.uniform(*allocations["stats"])
         stat_points = int(stat_percentage * power_level * POWER_POINTS_PER_LEVEL)
         attribute_value, cost = allocate_stat(stat_name, stat_points, total_range, stats)
@@ -524,7 +521,7 @@ def allocate_stats(character, power_level, allocated_points, total_range, alloca
 
 def allocate_advantages(character, allocated_points, power_level, max_advantages, allocations):
     advantages = load_data_from_json('advantages.json')
-    random.shuffle(advantages)  # Shuffle the list of advantages
+    random.shuffle(advantages)
     for advantage in advantages:
         if allocated_points["advantages"] <= 0 or len(character["advantages"]) >= max_advantages:
             break
@@ -540,41 +537,32 @@ def allocate_advantages(character, allocated_points, power_level, max_advantages
                 })
                 allocated_points["advantages"] -= adjusted_cost
 
-            # Adjust the rank for the "Languages" advantage
-            if advantage["name"] == "Languages":
-                weights = [0.06, 0.05, 0.04, 0.03, 0.02, 0.01]
-                for i, weight in enumerate(weights, start=2):
-                    if random.random() <= weight:
-                        rank = i
-                        break
-
     return character, allocated_points
 
 def allocate_skills(character, allocated_points, power_level, allocations):
     skills = load_data_from_json('skills.json')
     skill_list = list(skills)
-    random.shuffle(skill_list)  # Shuffle the list to randomize the skill order
+    random.shuffle(skill_list)
 
-    skill_points = allocated_points["skills"] * 2  # Total skill points to be allocated (each rank costs 0.5 points)
-    max_rank_per_iteration = 4  # Limit the maximum rank allocated per iteration to spread points more evenly
+    # Calculate total skill points to allocate based on the percentage defined in allocations
+    min_skill_percentage, max_skill_percentage = allocations["skills"]
+    skill_points_percentage = random.uniform(min_skill_percentage, max_skill_percentage)
+    total_skill_points = int(skill_points_percentage * power_level * POWER_POINTS_PER_LEVEL)
+
+    # Each skill rank costs 0.5 points, so double the total_skill_points for the actual points to allocate
+    skill_points = total_skill_points * 2
+    max_rank_per_iteration = 4
 
     while skill_points > 0 and skill_list:
-        # Select a random skill from the list
         skill = skill_list.pop(0)
-
-        # Determine the maximum rank for this skill
         max_rank = min(power_level + 10, skill_points // 2, max_rank_per_iteration)
         if max_rank <= 0:
             continue
-
-        # Randomly assign a rank to the skill within the maximum rank
         rank = random.randint(1, max_rank)
-        rank = rank - 1 if rank % 2 != 0 else rank  # Ensure rank is even
+        rank = rank - 1 if rank % 2 != 0 else rank
 
-        # Calculate the cost of the skill
         adjusted_cost = rank / 2
 
-        # Add the skill to the character's skill list
         character["skills"].append({
             "name": skill["name"],
             "rank": rank,
@@ -582,19 +570,25 @@ def allocate_skills(character, allocated_points, power_level, allocations):
             "tags": skill.get("tags", [])
         })
 
-        # Deduct the allocated points
         skill_points -= rank
         allocated_points["skills"] -= adjusted_cost
 
-        # If we still have points left and more skills to allocate, re-shuffle the remaining skills
         if skill_points > 0 and skill_list:
             random.shuffle(skill_list)
 
     return character, allocated_points
 
 def allocate_powers(character, allocated_points, power_level, allocations):
+    if allocations["powers"] == [0, 0]:
+        remaining_power_points = allocated_points["powers"]
+        allocated_points["stats"] += remaining_power_points * 0.4
+        allocated_points["advantages"] += remaining_power_points * 0.3
+        allocated_points["skills"] += remaining_power_points * 0.3
+        allocated_points["powers"] = 0
+        return character, allocated_points
+
     powers = load_data_from_json('powers.json')
-    random.shuffle(powers)  # Shuffle the list of powers to randomize their order
+    random.shuffle(powers)
     extras = load_data_from_json('extras.json')
     flaws = load_data_from_json('flaws.json')
     power_range = allocations.get("power_range", [1, 3])
@@ -622,7 +616,6 @@ def allocate_powers(character, allocated_points, power_level, allocations):
                 selected_extras_with_ranks = [(extra["name"], random.randint(1, min(extra["max_rank"], rank))) for extra in selected_extras]
                 selected_flaws_with_ranks = [(flaw["name"], random.randint(1, min(flaw["max_rank"], rank))) for flaw in selected_flaws]
 
-                # Determine the range for Accurate extra based on power level
                 if power_level <= 3:
                     accurate_rank_range = (0, 0)
                 elif power_level <= 7:
@@ -632,17 +625,15 @@ def allocate_powers(character, allocated_points, power_level, allocations):
                 else:
                     accurate_rank_range = (3, 5)
 
-                # Add "Accurate" extra if it's a combat power
                 if power["type"] == "Combat":
-                    accurate_rank = random.randint(*accurate_rank_range)  # Assign a random rank within the determined range
-                    if accurate_rank > 0:  # Only add Accurate if the rank is greater than 0
-                        selected_extras_with_ranks.append(("Accurate", accurate_rank))  # Add Accurate with a randomly chosen rank
+                    accurate_rank = random.randint(*accurate_rank_range)
+                    if accurate_rank > 0:
+                        selected_extras_with_ranks.append(("Accurate", accurate_rank))
 
                 total_cost, adjusted_cost_per_rank, adjusted_flats = calculate_modified_cost(
                     base_cost, rank, selected_extras_with_ranks, selected_flaws_with_ranks, extras, flaws
                 )
 
-                # Ensure accuracy + rank <= PL * 2
                 max_total = power_level * 2
                 for i, (extra_name, extra_rank) in enumerate(selected_extras_with_ranks):
                     if extra_name == "Accurate" and extra_rank + rank > max_total:
@@ -735,8 +726,7 @@ def on_generate_button_click():
 
 def generate_character(power_level, archetype, include_powers=True, random_physical_features=False, random_costume_style=False, random_distinctive_feature=False):
     random.seed()
-    random_theme = generate_random_theme() 
-    
+    random_theme = generate_random_theme()
     
     # Load stats data from JSON
     stats = load_data_from_json('stats.json')
@@ -781,7 +771,6 @@ def generate_character(power_level, archetype, include_powers=True, random_physi
     allocations = archetypes[archetype][allocation_key]
     max_points = power_level * POWER_POINTS_PER_LEVEL
     allocated_points = {category: int(allocations[category][1] * max_points) for category in allocations if category != "max_advantages" and category != "max_powers" and category != "power_range"}
-    allocated_points["skills"] = math.floor(allocated_points["skills"])
     max_advantages = allocations["max_advantages"]
     character['failure_effects'] = random_failure_effects() 
 
@@ -794,28 +783,33 @@ def generate_character(power_level, archetype, include_powers=True, random_physi
     # Check if powers are included and allocate accordingly
     if include_powers:
         character, allocated_points = allocate_powers(character, allocated_points, power_level, allocations)
+    else:
+        remaining_power_points = allocated_points["powers"]
+        allocated_points["stats"] += remaining_power_points * 0.4
+        allocated_points["advantages"] += remaining_power_points * 0.3
+        allocated_points["skills"] += remaining_power_points * 0.3
+        allocated_points["powers"] = 0
+        character, allocated_points = allocate_stats(character, power_level, allocated_points, total_range, allocations)
+        character, allocated_points = allocate_advantages(character, allocated_points, power_level, max_advantages, allocations)
+        character, allocated_points = allocate_skills(character, allocated_points, power_level, allocations)
 
     equipment_advantage = next((adv for adv in character["advantages"] if adv["name"] == "Equipment"), None)
     if equipment_advantage:
-        # If they rolled Equipment, adjust the rank and cost to match the PL, if it's less
         if equipment_advantage['rank'] < power_level:
             equipment_advantage['rank'] = power_level
-            allocated_points["advantages"] += equipment_advantage['cost']  # Refund the original cost
-            equipment_advantage['cost'] = power_level  # Set new cost
-            allocated_points["advantages"] -= power_level  # Deduct new cost
+            allocated_points["advantages"] += equipment_advantage['cost']
+            equipment_advantage['cost'] = power_level
+            allocated_points["advantages"] -= power_level
     else:
-        # If they didn't roll Equipment, allocate new points equal to the PL
         equipment_advantage = {"name": "Equipment", "rank": power_level, "cost": power_level}
         character["advantages"].append(equipment_advantage)
-        allocated_points["advantages"] -= power_level  # Deduct cost
+        allocated_points["advantages"] -= power_level
 
-    # Calculate equipment based on the updated rank in the Equipment advantage
-    equipment_points = equipment_advantage["rank"] * 5  # Each rank of Equipment provides 5 equipment points
+    equipment_points = equipment_advantage["rank"] * 5
     gadgets = load_gadgets()
     items, total_cost = random_gadget_generator(equipment_points, gadgets)
     character['equipment'] = items
 
-    # Calculate other character properties
     character["defenses"] = calculate_defenses(character, power_level, allocated_points)
     character["initiative"] = calculate_initiative(character)
     character["total_cost"] = calculate_total_cost(character)
