@@ -10,486 +10,82 @@ import sqlite3
 import json
 import openpyxl
 from openpyxl.styles import Font
+import pyperclip
 
 POWER_POINTS_PER_LEVEL = 15
 current_theme = None
+from utils import *
+from hideout import *
+from equipment import *
+from database import *
 
-dark_mode_colors = {
-    'background': '#2E2E2E',
-    'foreground': '#FFFFFF',
-    'button_background': '#333333',
-    'button_foreground': '#FFFFFF',
-    'text_background': '#333333',
-    'text_foreground': '#FFFFFF',
-    'highlight': '#5C5C5C'  # New highlight color for dark mode
-}
-
-light_mode_colors = {
-
-    'background': '#F0F0F0',
-    'foreground': '#000000',
-    'button_background': '#E0E0E0',
-    'button_foreground': '#000000',
-    'text_background': '#FFFFFF',
-    'text_foreground': '#000000'
-}
 hideout_details = {}
 characters = {}
 
-def generate_hideout():
-    with open('headquarters.json', 'r') as file:
-        headquarters_data = json.load(file)
+# Load descriptions from JSON file
+def load_descriptions():
+    with open('descriptions.json', 'r', encoding='utf-8') as file:
+        return json.load(file)
 
-    hq_size = random.choice(headquarters_data['headquarters']['sizes'])
-    num_traits = random.randint(10, 20)
+descriptions = load_descriptions()
+
+def copy_prompt_to_clipboard():
+    # Get the name of the currently selected tab
+    current_tab = notebook.tab(notebook.select(), "text")
     
-    # Initialize a set to keep track of selected feature IDs
-    selected_feature_ids = set()
+    # Retrieve the character associated with the current tab
+    character = characters.get(current_tab)
     
-    def get_unique_feature():
-        while True:
-            feature = random.choice(headquarters_data['headquarters']['traits'])
-            if feature['id'] not in selected_feature_ids:
-                selected_feature_ids.add(feature['id'])
-                return feature
+    if not character:
+        messagebox.showerror("Error", "No character found for the current tab.")
+        return
 
-    # Generate the required number of unique traits
-    hq_traits = [get_unique_feature() for _ in range(num_traits)]
-    hq_toughness = random.choice(headquarters_data['headquarters']['toughness'])
+    prompt = generate_character_description(character)
+    pyperclip.copy(prompt)
+    messagebox.showinfo("AI Prompt Copied", "The AI prompt has been copied to the clipboard.")
 
-    # Create a new tab for the hideout
-    new_tab = ttk.Frame(notebook)
-    notebook.add(new_tab, text="Hideout")
-    
-    # Create a new text widget in the new tab
-    hideout_summary_text = tk.Text(new_tab, height=15, width=50)
-    hideout_summary_text.pack(expand=True, fill='both')
-    hideout_summary_text.tag_configure("bold", font=("Helvetica", 12, "bold", "underline"))
-    hideout_summary_text.tag_configure("bold_no_underline", font=("Helvetica", 10, "bold"))
-    hideout_summary_text.tag_configure("normal_format", font=("Helvetica", 10))
+def generate_character_description(character):
+    gender = character.get('gender', 'person')
+    age = character.get('age', 'unknown age')
+    nationality = character['origin'].get('country', 'an unknown country')
+    hair_color = character['physical_traits'].get('hair_color', 'unknown hair color')
+    eye_color = character['physical_traits'].get('eye_color', 'unknown eye color')
+    power_theme = character.get('theme', 'an unknown power theme')
+    costume_style = character.get('costume_style', 'unknown costume style')
+    distinctive_feature = character.get('distinctive_feature', 'no distinctive features')
+    descriptions = load_data_from_json('descriptions.json')
 
-    # Display the hideout information in the new text widget
-    hideout_summary_text.insert("end", "Hideout Summary\n", "bold")
-    hideout_summary_text.insert("end", "-" * 40 + "\n")
-    hideout_summary_text.insert("end", f"\nSize: {hq_size}\n", "bold_no_underline")
-    hideout_summary_text.insert("end", f"Toughness: {hq_toughness}\n", "bold_no_underline")
-    hideout_summary_text.insert("end", "\nTraits:\n", "bold_no_underline")
+    if gender.lower() == 'male':
+        template = random.choice(descriptions['male'])
+    elif gender.lower() == 'female':
+        template = random.choice(descriptions['female'])
+    else:
+        # Default description if gender is not specifically male or female
+        template = (
+            f"Create a portrait of a {gender} that is around the age of {age}. "
+            f"They are from {nationality}. {gender.capitalize()} has {hair_color} hair "
+            f"that complements their striking features and {eye_color} eyes that seem to hold a world of secrets. "
+            f"Their abilities revolve around a {power_theme}, giving them control over specific aspects related to it. "
+            f"They don a {costume_style} costume that reflects their persona and powers. "
+            f"A distinctive feature of theirs is {distinctive_feature}, making them easily recognizable."
+        )
 
-    for trait in hq_traits:
-        hideout_summary_text.insert("end", f"- {trait['name']}\n", "normal_format")
-        hideout_summary_text.insert("end", f"  {trait['description']}\n\n", "normal_format")
-    
-    text_widgets[new_tab] = hideout_summary_text
-    notebook.select(new_tab)
-
-def save_hideout():
-    filename = filedialog.asksaveasfilename(
-        defaultextension=".txt",
-        filetypes=[("Text files", "*.txt")],
-        initialdir=os.path.expanduser("~/Desktop")
+    description = template.format(
+        age=age,
+        nationality=nationality,
+        hair_color=hair_color,
+        eye_color=eye_color,
+        power_theme=power_theme,
+        costume_style=costume_style,
+        distinctive_feature=distinctive_feature
     )
-    
-    if not filename:
-        return  # User cancelled the save dialog
 
-    with open(filename, 'w') as file:
-        file.write("Hideout Summary\n")
-        file.write("-" * 40 + "\n")
-        file.write(f"\nSize: {hideout_details['Size']}\n")
-        file.write(f"Toughness: {hideout_details['Toughness']}\n")
-        file.write("\nTraits:\n")
-        for trait in hideout_details['Traits']:
-            file.write(f"- {trait}\n")
-
-    messagebox.showinfo("Save Hideout", f"Hideout details saved to {filename}")
-
-def generate_random_traits():
-    # Load the traits from the JSON file
-    traits = load_data_from_json('PersonalityTraits.json')
-
-    # Randomly select the number of traits from each category
-    positive_traits = random.sample(traits['positive_traits'], random.randint(1, 3))
-    negative_traits = random.sample(traits['negative_traits'], random.randint(1, 2))
-    quirky_traits = random.sample(traits['quirky_traits'], random.randint(0, 1))
-
-    return {
-        'positive_traits': positive_traits,
-        'negative_traits': negative_traits,
-        'quirky_traits': quirky_traits
-    }
-
-def generate_random_theme():
-    themes = load_data_from_json('theme.json')['theme']
-    return random.choice(themes)
-
-def random_failure_effects():
-    failures = {
-        'Failure 1 Degree': ['dazed', 'entranced', 'fatigued', 'hindered', 'impaired', 'vulnerable'],
-        'Failure 2 Degrees': ['compelled', 'defenseless', 'disabled', 'exhausted', 'immobile', 'prone', 'stunned'],
-        'Failure 3 Degrees': ['asleep', 'controlled', 'incapacitated', 'paralyzed', 'transformed', 'unaware']
-    }
-    return {key: random.choice(value) for key, value in failures.items()}
+    return description
 
 def load_data_from_json(file_name):
     with open(file_name, 'r', encoding='utf-8') as file:
         data = json.load(file)
     return data
-
-def generate_random_origin():
-    origins = load_data_from_json('characterOrigins.json')
-    origin = random.choice(origins)
-
-    if 'countries' in origin:
-        country = random.choice(origin['countries'])
-        language = random.choice(country['languages'])
-        return {
-            "region": origin.get('region', 'Unknown'),
-            "country": country.get('name', 'Unknown'),  # Ensuring there is a 'name' key
-            "language": language
-        }
-    else:
-        language = random.choice(origin['languages'])
-        return {
-            "region": origin.get('region', 'Unknown'),  # Adding region here for consistency
-            "country": origin.get('region', 'Unknown'),  # Using region as country if no countries are listed
-            "language": language
-        }
-
-def load_archetypes():
-    with open('archetypes.json', 'r', encoding='utf-8') as file:
-        return json.load(file)
-
-def calculate_range(rank):
-    range_chart = [
-        60, 120, 250, 500, 900, 1800, 2640, 5280, 10560, 21120, 42240,
-        84480, 158400, 316800, 633600, 1320000, 2640000, 5280000, 10560000, 21120000
-    ]
-    return range_chart[rank - 1] if rank <= len(range_chart) else "Beyond chart"
-
-def calculate_equipment_points(character):
-    equipment_advantage = next((adv for adv in character['advantages'] if adv['name'] == 'Equipment'), None)
-    if equipment_advantage:
-        rank = equipment_advantage['rank']
-        equipment_points = rank * 5  # Each rank of Equipment provides 5 equipment points
-        return equipment_points
-    return 0
-
-def assign_languages(character):
-    all_languages = load_data_from_json('languages.json')
-    base_language = "English"
-    language_list = all_languages
-    assigned_languages = [base_language]  # English is the base language
-
-    # Check if character has the "Languages" advantage
-    for advantage in character.get("advantages", []):
-        if advantage["name"] == "Languages":
-            rank = advantage["rank"]
-            
-            # Calculate the number of additional languages based on the original rank
-            num_additional_languages = 2 ** (rank - 1) - 1
-            # Ensure the number of languages does not exceed available languages
-            num_additional_languages = min(num_additional_languages, len(language_list) - 1)
-            selectable_languages = [lang for lang in language_list if lang != base_language]
-            selected_languages = random.sample(selectable_languages, k=num_additional_languages)
-            assigned_languages.extend(selected_languages)
-    
-    return assigned_languages
-
-def highlight_text(text_widget, search_query):
-    # Convert the search query to lowercase for case-insensitive search
-    search_query = search_query.lower()
-
-    # Remove previous highlights
-    text_widget.tag_remove('highlight', '1.0', tk.END)
-
-    # If search query is not empty, highlight the matching text
-    if search_query:
-        start_index = '1.0'
-        while True:
-            # Use the text widget's search method with the 'nocase' option for case-insensitive search
-            start_index = text_widget.search(search_query, start_index, tk.END, nocase=True)
-            if not start_index:
-                break
-            end_index = f"{start_index}+{len(search_query)}c"
-            text_widget.tag_add('highlight', start_index, end_index)
-            start_index = end_index
-
-        # Configure the highlight color based on the current mode
-        highlight_color = dark_mode_colors['highlight'] if dark_mode else 'yellow'
-        text_widget.tag_configure('highlight', background=highlight_color)
-
-def on_search_change(search_var):
-    search_query = search_var.get()
-    selected_tab = notebook.nametowidget(notebook.select())
-    text_widget = text_widgets.get(selected_tab)
-    if text_widget:
-        highlight_text(text_widget, search_query)
-
-def load_gadgets():
-    with open('gadget_data.json', 'r', encoding='utf-8') as json_file:
-        return json.load(json_file)
-
-def random_gadget_generator(points, gadgets):
-    selected_gadgets = []
-    total_cost = 0
-
-    while points > 0 and gadgets:
-        chosen_gadget = random.choice(gadgets).copy()  # Copy the gadget to avoid modifying the original list
-        chosen_gadget['total_cost'] = 0  # Set default total_cost
-
-        if 'cost' in chosen_gadget:  # Check if 'cost' key exists
-            base_cost = int(chosen_gadget['cost'])
-
-            if base_cost <= points:
-                if 'rank' in chosen_gadget and isinstance(chosen_gadget['rank'], str):
-                    rank_range = [int(x) for x in chosen_gadget['rank'].split('-') if x.isdigit()]
-                    if len(rank_range) == 2:
-                        max_rank = min(rank_range[1], points // base_cost)  # Adjust max rank based on remaining points
-                        if rank_range[0] <= max_rank:
-                            chosen_rank = random.randint(rank_range[0], max_rank)
-                            chosen_gadget['total_cost'] = chosen_rank * base_cost
-                            chosen_gadget['rank'] = chosen_rank
-                        else:
-                            # If max_rank is less than the lower bound, skip this gadget
-                            gadgets = [g for g in gadgets if g['name'] != chosen_gadget['name']]
-                            continue
-                    else:
-                        # If the rank is not a range, use the base rank
-                        chosen_gadget['rank'] = base_cost
-                        chosen_gadget['total_cost'] = base_cost
-                else:
-                    # If there's no rank, only use the base cost
-                    chosen_gadget['rank'] = base_cost
-                    chosen_gadget['total_cost'] = base_cost
-
-                total_cost += chosen_gadget['total_cost']
-                points -= chosen_gadget['total_cost']
-                selected_gadgets.append(chosen_gadget)
-                gadgets = [g for g in gadgets if g['name'] != chosen_gadget['name']]
-            else:
-                gadgets = [g for g in gadgets if g['name'] != chosen_gadget['name']]
-        else:
-            gadgets = [g for g in gadgets if g['name'] != chosen_gadget['name']]  # Remove gadget if 'cost' key is missing
-
-    return selected_gadgets, total_cost
-
-def display_gadgets(items, total_cost, allocated_points, text_widget):
-    text_widget.delete("1.0", tk.END)
-    
-    for item in items:
-        text_widget.insert(tk.END, f"{item['name']}\n")
-        if 'description' in item:
-            text_widget.insert(tk.END, f"- Description: {item['description']}\n")
-        if 'effects' in item:
-            text_widget.insert(tk.END, f"- Effect: {', '.join(item['effects'])}\n")
-        if 'speed' in item:
-            text_widget.insert(tk.END, f"- Speed: {item['speed']}\n")    
-        if 'total_cost' in item:
-            text_widget.insert(tk.END, f"- Cost: {item['cost']}, Rank: {item['rank']}, Total Cost: {item['total_cost']}\n")
-        text_widget.insert(tk.END, "\n")
-    
-    text_widget.insert(tk.END, f"Total cost spent: {total_cost} of {allocated_points}\n")
-
-def save_to_txt(items, filename):
-    with open(filename, 'w') as file:
-        for item in items:
-            file.write(f"{item['name']}\n")
-            if 'description' in item:
-                file.write(f"- Description: {item['description']}\n")
-            if 'effects' in item and isinstance(item['effects'], list):
-                file.write(f"- Effect: {', '.join(item['effects'])}\n")
-            if 'total_cost' in item:
-                file.write(f"- Cost: {item['cost']}, Rank: {item['rank']}, Total Cost: {item['total_cost']}\n")
-            file.write("\n")
-
-def on_generate_equipment_click():
-    points = int(equipment_points_entry.get())
-    gadgets = load_gadgets()  # Make sure you have this function defined
-    items, total_cost = random_gadget_generator(points, gadgets)
-
-    # Create a new tab for displaying the equipment
-    new_tab = ttk.Frame(notebook)
-    notebook.add(new_tab, text=f"Equipment")
-    equipment_text = tk.Text(new_tab, height=15, width=50)
-    equipment_text.pack(expand=True, fill='both')
-    text_widgets[new_tab] = equipment_text
-
-    # Display the generated equipment
-    display_gadgets(items, total_cost, points, equipment_text)
-
-def on_save_equipment_click():
-    selected_tab = notebook.nametowidget(notebook.select())
-    text_widget = text_widgets.get(selected_tab)
-
-    if text_widget:
-        content = text_widget.get("1.0", tk.END)
-        filename = filedialog.asksaveasfilename(
-            defaultextension=".txt",
-            filetypes=[("Text files", "*.txt")],
-            initialdir=os.path.expanduser("~/Desktop")
-        )
-        if filename:
-            with open(filename, 'w') as file:
-                file.write(content)
-            messagebox.showinfo("Save Equipment", f"Equipment saved to {filename}")
-
-def save_equipment():
-    selected_tab = notebook.nametowidget(notebook.select())
-    text_widget = text_widgets.get(selected_tab)
-
-    if text_widget and text_widget.get("1.0", tk.END).strip():
-        content = text_widget.get("1.0", tk.END)
-        filename = filedialog.asksaveasfilename(
-            defaultextension=".txt",
-            filetypes=[("Text files", "*.txt")],
-            initialdir=os.path.expanduser("~/Desktop")
-        )
-        if filename:
-            save_to_txt(content, filename)
-            messagebox.showinfo("Save Equipment", f"Equipment saved to {filename}")
-    else:
-        messagebox.showerror("Error", "Please generate equipment before saving.")
-
-def create_table_if_not_exists():
-    with sqlite3.connect('tabs_data.db') as conn:
-        c = conn.cursor()
-        c.execute('''CREATE TABLE IF NOT EXISTS tabs
-                     (content TEXT, character TEXT)''')
-        conn.commit()
-
-def save_tabs():
-    with sqlite3.connect('tabs_data.db') as conn:
-        c = conn.cursor()
-        c.execute('DELETE FROM tabs')  # Clear existing data
-        for tab in notebook.tabs():
-            tab_name = notebook.tab(tab, "text")
-            text_widget = text_widgets.get(tab)
-            character = characters.get(tab_name)
-            if text_widget:
-                tab_content = text_widget.get("1.0", tk.END)
-                tab_character = json.dumps(character) if character else None
-                c.execute('INSERT INTO tabs VALUES (?, ?)', (tab_content, tab_character))
-        conn.commit()
-
-def load_tabs():
-    with sqlite3.connect('tabs_data.db') as conn:
-        c = conn.cursor()
-        try:
-            c.execute('SELECT content, character FROM tabs')
-            tabs_data = c.fetchall()
-            for tab_content, tab_character in tabs_data:
-                tab_name, tab_widget = create_new_tab(tab_content)
-                if tab_character:
-                    characters[tab_name] = json.loads(tab_character)
-        except sqlite3.OperationalError:
-            # Handle case where the database is still in the old format
-            c.execute('SELECT content FROM tabs')
-            tabs_data = c.fetchall()
-            for tab_content, in tabs_data:
-                tab_name, tab_widget = create_new_tab(tab_content)
-                # No character data to load in this case
-
-def create_new_tab(content=""):
-    new_tab = ttk.Frame(notebook)
-    tab_name = f"Tab {len(notebook.tabs()) + 1}"
-    notebook.add(new_tab, text=tab_name)
-    new_character_summary_text = tk.Text(new_tab, height=15, width=50)
-    new_character_summary_text.pack(expand=True, fill='both')
-    new_character_summary_text.insert("1.0", content)
-    text_widgets[new_tab] = new_character_summary_text
-    notebook.select(new_tab)  
-
-    # Configure the highlight tag for the text widget
-    new_character_summary_text.tag_configure('highlight', background='yellow')
-    
-    return tab_name, new_tab
-
-def close_current_tab():
-    # Get the currently selected tab widget
-    current_tab = notebook.nametowidget(notebook.select())
-
-    # Check if there is at least one tab open
-    if notebook.tabs():
-        # Close the selected tab
-        notebook.forget(current_tab)
-        # Remove the associated text widget from the dictionary
-        text_widgets.pop(current_tab, None)
-
-def apply_color_scheme_to_tab(tab, colors):
-    for widget in tab.winfo_children():
-        if isinstance(widget, tk.Text):
-            widget.configure(bg=colors['text_background'], fg=colors['text_foreground'])
-        # Add more types here if necessary
-            
-def update_color_scheme(mode, notebook):
-    colors = dark_mode_colors if mode else light_mode_colors
-    for tab in notebook.winfo_children(): 
-        apply_color_scheme_to_tab(tab, colors)
-
-def toggle_dark_mode():
-    global dark_mode, notebook
-    dark_mode = not dark_mode
-    update_color_scheme(dark_mode, notebook)
-
-def generate_motivations_and_complications():
-    motivations = load_data_from_json('motivations.json')  # Load the data from JSON file
-    complications = load_data_from_json('complications.json')
-    character_motivations_and_complications = {
-        "Motivation": {},
-        "Complications": []
-    }
-
-    motivation_key = random.choice(list(motivations.keys()))
-    character_motivations_and_complications["Motivation"] = {
-        "name": motivation_key,
-        "description": motivations[motivation_key]
-    }
-
-    selected_complications_keys = random.sample(list(complications.keys()), random.randint(2, 2))
-    for complication_key in selected_complications_keys:
-        character_motivations_and_complications["Complications"].append({
-            "name": complication_key,
-            "description": complications[complication_key]
-        })
-
-    return character_motivations_and_complications
-
-def generate_random_age():
-    age_ranges = [(18, 31), (8, 17), (32, 100)]
-    weights = [0.80, 0.05, 0.15]
-    selected_range = random.choices(age_ranges, weights)[0]
-    return random.randint(selected_range[0], selected_range[1])
-
-def generate_random_gender():
-    # Load the names from JSON files
-    male_names = load_data_from_json('male_names.json')
-    female_names = load_data_from_json('female_names.json')
-    
-    # Choose a random gender
-    gender = random.choice(["Male", "Female"])
-    
-    # Pick a random name based on the gender
-    if gender == "Male":
-        name = random.choice(male_names)
-    else:
-        name = random.choice(female_names)
-    
-    return gender, name
-
-def generate_random_physical_trait(trait_category):
-    physical_traits = load_data_from_json('physical_traits.json')
-    return random.choice(physical_traits["PHYSICAL_TRAITS"][trait_category])
-
-def generate_random_costume_style():
-    physical_traits = load_data_from_json('physical_traits.json')
-    return random.choice(physical_traits["COSTUME_STYLES"])
-
-def generate_random_distinctive_feature():
-    physical_traits = load_data_from_json('physical_traits.json')
-    return random.choice(physical_traits["DISTINCTIVE_FEATURES"])
-
-def get_items_by_names(items_dict, names):
-    return [items_dict[name] for name in names if name in items_dict]
 
 def calculate_modified_cost(base_cost, rank, selected_extras_with_ranks, selected_flaws_with_ranks, extras, flaws):
     # Create dictionaries for easy access
@@ -621,36 +217,6 @@ def calculate_defenses(character, power_level,allocated_points):
                         break
 
     return defenses
-
-def calculate_attack_bonuses(character):
-    melee_attack_bonus = character["stats"].get("Fighting", {}).get("value", 0)
-    ranged_attack_bonus = character["stats"].get("Dexterity", {}).get("value", 0)
-
-    for advantage in character.get("advantages", []):
-        if advantage["name"] == "Close Attack":
-            melee_attack_bonus += advantage.get("rank", 0)
-        elif advantage["name"] == "Ranged Attack":
-            ranged_attack_bonus += advantage.get("rank", 0)
-
-    for skill in character.get("skills", []):
-        if skill["name"] == "Close Combat":
-            melee_attack_bonus += skill.get("rank", 0)
-        elif skill["name"] == "Ranged Combat":
-            ranged_attack_bonus += skill.get("rank", 0)
-
-    return melee_attack_bonus, ranged_attack_bonus
-
-def calculate_initiative(character):
-    initiative = character["stats"].get("Agility", {}).get("value", 0)
-    
-    for advantage in character.get("advantages", []):
-        if advantage["name"] == "Improved Initiative":
-            initiative_bonus_per_rank = 4
-            initiative += advantage.get("rank", 0) * initiative_bonus_per_rank
-        elif "Initiative" in advantage.get("tags", []):
-            initiative += advantage.get("rank", 0)
-    
-    return initiative
 
 def on_export_character_sheet_click():
     # Get the name of the currently selected tab
@@ -993,19 +559,44 @@ def allocate_advantages(character, allocated_points, power_level, max_advantages
 
 def allocate_skills(character, allocated_points, power_level, allocations):
     skills = load_data_from_json('skills.json')
-    for skill in skills:
-        if allocated_points["skills"] <= 0:
-            break
-        rank = random.randint(1, min(power_level + 10, allocated_points["skills"]))
-        rank -= 1 if rank % 2 != 0 else 0
+    skill_list = list(skills)
+    random.shuffle(skill_list)  # Shuffle the list to randomize the skill order
+
+    skill_points = allocated_points["skills"] * 2  # Total skill points to be allocated (each rank costs 0.5 points)
+    max_rank_per_iteration = 4  # Limit the maximum rank allocated per iteration to spread points more evenly
+
+    while skill_points > 0 and skill_list:
+        # Select a random skill from the list
+        skill = skill_list.pop(0)
+
+        # Determine the maximum rank for this skill
+        max_rank = min(power_level + 10, skill_points // 2, max_rank_per_iteration)
+        if max_rank <= 0:
+            continue
+
+        # Randomly assign a rank to the skill within the maximum rank
+        rank = random.randint(1, max_rank)
+        rank = rank - 1 if rank % 2 != 0 else rank  # Ensure rank is even
+
+        # Calculate the cost of the skill
         adjusted_cost = rank / 2
+
+        # Add the skill to the character's skill list
         character["skills"].append({
             "name": skill["name"],
             "rank": rank,
             "cost": adjusted_cost,
             "tags": skill.get("tags", [])
         })
-        allocated_points["skills"] -= skill["cost"] * rank
+
+        # Deduct the allocated points
+        skill_points -= rank
+        allocated_points["skills"] -= adjusted_cost
+
+        # If we still have points left and more skills to allocate, re-shuffle the remaining skills
+        if skill_points > 0 and skill_list:
+            random.shuffle(skill_list)
+
     return character, allocated_points
 
 def allocate_powers(character, allocated_points, power_level, allocations):
@@ -1153,6 +744,7 @@ def generate_character(power_level, archetype, include_powers=True, random_physi
     random.seed()
     random_theme = generate_random_theme() 
     
+    
     # Load stats data from JSON
     stats = load_data_from_json('stats.json')
     if not isinstance(stats.get("STATS"), list):
@@ -1243,8 +835,13 @@ def generate_character(power_level, archetype, include_powers=True, random_physi
     return character
 
 def pretty_print_character(character, text_widget):
+    description = generate_character_description(character)
     text_widget.insert("end", "Character Creation Summary Version\n", "bold")
-    text_widget.insert("end", "-" * 40 + "\n")
+    text_widget.insert("end", "-" * 40 + "\n\n")
+
+    # Insert the generated description into the text widget
+    text_widget.insert("end", "AI Image Generator Prompt:\n", "bold")
+    text_widget.insert("end", description + "\n\n", "normal_format")
 
     text_widget.insert("end", "\nTHEME:\n", "bold")
     text_widget.insert("end", f"- {character['theme']}\n")
@@ -1360,6 +957,7 @@ def pretty_print_character(character, text_widget):
     text_widget.insert("end", f"Language: {origin['language']}\n")
 
 
+
     text_widget.insert("end", "\nPHYSICAL TRAITS:\n", "bold")
     for trait, value in character["physical_traits"].items():
         text_widget.insert("end", f"{trait.capitalize()}: ", "bold_no_underline")
@@ -1441,8 +1039,6 @@ def main():
     notebook = ttk.Notebook(right_frame)
     notebook.pack(expand=True, fill='both')
 
-    load_tabs()  # Load tabs when the program starts
-
     # Search Box Widgets
     search_frame = tk.Frame(right_frame)
     search_frame.pack(side='top', anchor='ne')
@@ -1495,28 +1091,24 @@ def main():
     equipment_points_entry = tk.Entry(left_frame)
     equipment_points_entry.pack(fill="x")
 
-    generate_equipment_button = tk.Button(left_frame, text="Generate Equipment", command=on_generate_equipment_click)
+    generate_equipment_button = tk.Button(left_frame, text="Generate Equipment", command=lambda: on_generate_equipment_click(equipment_points_entry, notebook, text_widgets))
     generate_equipment_button.pack(fill="x", pady=5)
 
     save_equipment_button = tk.Button(left_frame, text="Save Equipment", command=on_save_equipment_click)
     save_equipment_button.pack(fill="x", pady=5)
 
-    # Add the new Generate Hideout and Save Hideout buttons using pack geometry manager
-    generate_hideout_button = tk.Button(left_frame, text="Generate Hideout", command=generate_hideout)
-    generate_hideout_button.pack(fill="x", pady=5)
-
-    save_hideout_button = tk.Button(left_frame, text="Save Hideout", command=save_hideout)
+    save_hideout_button = tk.Button(left_frame, text="Save Hideout", command=lambda: save_hideout(hideout_details))
     save_hideout_button.pack(fill="x", pady=5)
 
-    close_tab_button = tk.Button(left_frame, text="Close Tab", command=close_current_tab)
+    close_tab_button = tk.Button(left_frame, text="Close Tab", command=lambda: close_current_tab(notebook, text_widgets))
     close_tab_button.pack(fill="x", pady=5)
 
     export_character_sheet_button = tk.Button(left_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click())
     export_character_sheet_button.pack(fill="x", pady=5)
 
-    # Mode Toggle
-    dark_mode_button = tk.Button(left_frame, text="Toggle Dark Mode", command=toggle_dark_mode)
-    dark_mode_button.pack(fill="x", pady=5)
+    # Add the new button to copy the prompt to the clipboard
+    copy_prompt_button = tk.Button(left_frame, text="Select AI Prompt", command=copy_prompt_to_clipboard)
+    copy_prompt_button.pack(fill="x", pady=5)
 
     # Configure the main window to resize properly
     root.grid_rowconfigure(0, weight=1)
@@ -1524,7 +1116,7 @@ def main():
 
     update_color_scheme(dark_mode, root)
 
-    root.protocol("WM_DELETE_WINDOW", lambda: [save_tabs(), root.destroy()])  # Save tabs and close the program
+    root.protocol("WM_DELETE_WINDOW", lambda: [save_tabs(notebook, text_widgets, characters), root.destroy()])  # Save tabs and close the program
     root.mainloop()
 
 if __name__ == "__main__":
