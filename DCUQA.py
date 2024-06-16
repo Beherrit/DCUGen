@@ -22,11 +22,15 @@ from database import *
 hideout_details = {}
 characters = {}
 
+# Import the initiative tracker function
+from initiative_tracker import open_initiative_tracker
+from dice_roller import open_dice_roller
+
 def copy_prompt_to_clipboard():
     # Get the name of the currently selected tab
     current_tab = notebook.tab(notebook.select(), "text")
     
-    # Retrieve the character associated with the current tab
+    # Retrieve the character associated with the current_tab
     character = characters.get(current_tab)
     
     if not character:
@@ -41,6 +45,9 @@ def generate_character_description(character):
     gender = character.get('gender', 'person')
     age = character.get('age', 'unknown age')
     nationality = character['origin'].get('country', 'an unknown country')
+    origin = character['origin'].get('region', 'an unknown region')
+    height = character['physical_traits'].get('height', 'unknown height')
+    weight = character['physical_traits'].get('weight', 'unknown weight')
     hair_color = character['physical_traits'].get('hair_color', 'unknown hair color')
     eye_color = character['physical_traits'].get('eye_color', 'unknown eye color')
     power_theme = character.get('theme', 'an unknown power theme')
@@ -53,19 +60,23 @@ def generate_character_description(character):
     elif gender.lower() == 'female':
         template = random.choice(descriptions['female'])
     else:
-        # Default description if gender is not specifically male or female
         template = (
-            f"Create a portrait of a {gender} that is around the age of {age}. "
-            f"They are from {nationality}. {gender.capitalize()} has {hair_color} hair "
-            f"that complements their striking features and {eye_color} eyes that seem to hold a world of secrets. "
-            f"Their abilities revolve around a {power_theme}, giving them control over specific aspects related to it. "
-            f"They don a {costume_style} costume that reflects their persona and powers. "
-            f"A distinctive feature of theirs is {distinctive_feature}, making them easily recognizable."
+            "Create a full body image of a {gender} that is around the age of {age}. "
+            "They are from {nationality} in {origin}. {gender.capitalize()} has {hair_color} hair "
+            "that complements their striking features and {eye_color} eyes that seem to hold a world of secrets. "
+            "They have a {height} height and a weight of {weight} pounds. "
+            "Their abilities revolve around a {power_theme}, giving them control over specific aspects related to it. "
+            "They don a {costume_style} costume that reflects their persona and powers. "
+            "A distinctive feature of theirs is {distinctive_feature}, making them easily recognizable."
         )
 
     description = template.format(
+        gender=gender,
         age=age,
         nationality=nationality,
+        origin=origin,
+        height=height,
+        weight=weight,
         hair_color=hair_color,
         eye_color=eye_color,
         power_theme=power_theme,
@@ -74,6 +85,18 @@ def generate_character_description(character):
     )
 
     return description
+
+def generate_weight():
+    weights = list(range(110, 351))
+    probabilities = (
+        [0.4] * 41 +   # 110-150
+        [0.4] * 50 +   # 151-200
+        [0.10] * 50 +   # 201-250
+        [0.05] * 50 +  # 251-300
+        [0.05] * 50    # 301-350
+    )
+    weight = random.choices(weights, probabilities, k=1)[0]
+    return weight
 
 def load_data_from_json(file_name):
     with open(file_name, 'r', encoding='utf-8') as file:
@@ -259,7 +282,7 @@ def on_export_character_sheet_click():
     sheet['R38'] = formatted_languages
     sheet['G93'] = f"{origin_region} | {origin_country} | {origin_language}"
     sheet['BE5'] = character['physical_traits']['height']
-    sheet['BE8'] = character['physical_traits']['build']
+    sheet['BE8'] = character['physical_traits']['weight']
     sheet['AP5'] = character['physical_traits']['eye_color']
     sheet['AP8'] = character['physical_traits']['hair_color'] 
     sheet['N18'] = character['stats'].get('Strength', {}).get('value', '')
@@ -726,7 +749,7 @@ def on_generate_button_click():
 
 def generate_character(power_level, archetype, include_powers=True, random_physical_features=False, random_costume_style=False, random_distinctive_feature=False):
     random.seed()
-    random_theme = generate_random_theme()
+    random_theme = generate_random_theme() if include_powers else "Mundane"
     
     # Load stats data from JSON
     stats = load_data_from_json('stats.json')
@@ -755,7 +778,7 @@ def generate_character(power_level, archetype, include_powers=True, random_physi
         'age': generate_random_age(),
         "physical_traits": {
             "height": generate_random_physical_trait("HEIGHT") if random_physical_features else "Not Specified",
-            "build": generate_random_physical_trait("BUILD") if random_physical_features else "Not Specified",
+            "weight": generate_weight(),
             "eye_color": generate_random_physical_trait("EYE_COLOR") if random_physical_features else "Not Specified",
             "hair_color": generate_random_physical_trait("HAIR_COLOR") if random_physical_features else "Not Specified",
             "skin_tone": generate_random_physical_trait("SKIN_TONE") if random_physical_features else "Not Specified"
@@ -1003,10 +1026,15 @@ def pretty_print_character(character, text_widget):
         text_widget.insert("end", f"- {comp_name}: ", "bold_no_underline")
         text_widget.insert("end", f"{comp_description}\n\n\n")
 
+def generate_encounter():
+    encounters = load_data_from_json('encounters.json')['encounters']
+    encounter = random.choice(encounters)
+    messagebox.showinfo("Random Encounter", f"Encounter Type: {encounter['type']}\nDescription: {encounter['description']}")
+
 def main():
     global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, selected_archetype, hideout_details
     root = tk.Tk()
-    root.title("Character Creation Version 1.3 Prod")
+    root.title("Character Creation Version 1.4 Prod")
     dark_mode = True
     include_powers = tk.BooleanVar(value=False)  # Set include_powers to False by default (unchecked)
 
@@ -1083,7 +1111,7 @@ def main():
     save_equipment_button = tk.Button(left_frame, text="Save Equipment", command=on_save_equipment_click)
     save_equipment_button.pack(fill="x", pady=5)
 
-   # Add Generate Hideout button
+    # Add Generate Hideout button
     generate_hideout_button = tk.Button(left_frame, text="Generate Hideout", command=lambda: generate_hideout(notebook, text_widgets))
     generate_hideout_button.pack(fill="x", pady=5)
 
@@ -1099,6 +1127,14 @@ def main():
     # Add the new button to copy the prompt to the clipboard
     copy_prompt_button = tk.Button(left_frame, text="Select AI Prompt", command=copy_prompt_to_clipboard)
     copy_prompt_button.pack(fill="x", pady=5)
+
+    # Add the new button to generate a random encounter
+    generate_encounter_button = tk.Button(left_frame, text="Generate Encounter", command=generate_encounter)
+    generate_encounter_button.pack(fill="x", pady=5)
+
+    # Add the new button to open the initiative tracker
+    init_tracker_button = tk.Button(left_frame, text="Initiative Tracker", command=open_initiative_tracker)
+    init_tracker_button.pack(fill="x", pady=5)
 
     # Configure the main window to resize properly
     root.grid_rowconfigure(0, weight=1)

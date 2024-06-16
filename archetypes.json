@@ -1,4 +1,25 @@
 {
+    "Balanced": {
+        "with_powers": {
+            "stats": [0.25, 0.25],
+            "advantages": [0.25, 0.25],
+            "skills": [0.25, 0.25],
+            "powers": [0.25, 0.25],
+            "defense": [0.05, 0.05], 
+            "max_advantages": 10,
+            "max_powers": 8,
+            "power_range": [3, 8]
+        },
+        "without_powers": {
+            "stats": [0.33, 0.33],
+            "advantages": [0.33, 0.33],
+            "skills": [0.34, 0.34],
+            "powers": [0, 0],
+            "max_advantages": 15,
+            "max_powers": 0,
+            "power_range": [0, 0]
+        }
+    },
     "Powerhouse": {
         "with_powers": {
             "stats": [0.15, 0.20],
@@ -93,26 +114,6 @@
             "stats": [0.20, 0.25],
             "advantages": [0.10, 0.15],
             "skills": [0.30, 0.35],
-            "powers": [0, 0],
-            "max_advantages": 15,
-            "max_powers": 0,
-            "power_range": [0, 0]
-        }
-    },
-    "Balanced": {
-        "with_powers": {
-            "stats": [0.25, 0.30],
-            "advantages": [0.10, 0.15],
-            "skills": [0.25, 0.30],
-            "powers": [0.25, 0.30],
-            "max_advantages": 10,
-            "max_powers": 8,
-            "power_range": [3, 8]
-        },
-        "without_powers": {
-            "stats": [0.30, 0.35],
-            "advantages": [0.15, 0.20],
-            "skills": [0.35, 0.40],
             "powers": [0, 0],
             "max_advantages": 15,
             "max_powers": 0,
