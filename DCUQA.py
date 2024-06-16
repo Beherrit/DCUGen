@@ -24,7 +24,6 @@ characters = {}
 
 # Import the initiative tracker function
 from initiative_tracker import open_initiative_tracker
-from dice_roller import open_dice_roller
 
 def copy_prompt_to_clipboard():
     # Get the name of the currently selected tab
