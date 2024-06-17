@@ -57,11 +57,30 @@ def open_initiative_tracker():
 
     # Configure the description column to handle text wrapping
     tree.column("Description", width=500, stretch=True)
-
     tree.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
 
     tracker_window.grid_rowconfigure(1, weight=1)
     tracker_window.grid_columnconfigure(0, weight=1)
+
+    # Right-click context menu for deleting rows
+    right_click_menu = tk.Menu(tracker_window, tearoff=0)
+    right_click_menu.add_command(label="Remove/Delete", command=lambda: remove_selected_item())
+
+    def right_click_action(event):
+        try:
+            row_id = tree.identify_row(event.y)
+            if row_id:
+                tree.selection_set(row_id)
+                right_click_menu.post(event.x_root, event.y_root)
+        finally:
+            right_click_menu.grab_release()
+
+    tree.bind("<Button-3>", right_click_action)
+
+    def remove_selected_item():
+        selected_item = tree.selection()
+        if selected_item:
+            tree.delete(selected_item)
 
     # List of conditions
     conditions = [

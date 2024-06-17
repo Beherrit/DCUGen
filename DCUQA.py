@@ -24,6 +24,7 @@ characters = {}
 
 # Import the initiative tracker function
 from initiative_tracker import open_initiative_tracker
+from calculate_powers import open_calculate_powers_window
 
 def copy_prompt_to_clipboard():
     # Get the name of the currently selected tab
@@ -1041,6 +1042,13 @@ def main():
     hideout_details = {}  # Initialize hideout details dictionary
     create_table_if_not_exists()
 
+    # Define colors for different button groups
+    equipment_button_color = "#a2d9ce"  # Soft teal
+    hideout_button_color = "#f9e79f"  # Light yellow
+    character_button_color = "#aed6f1"  # Light blue
+    encounter_button_color = "#f5b7b1"  # Light red
+    initiative_button_color = "#d7bde2"  # Light purple
+
     # Main layout frames
     left_frame = tk.Frame(root)
     left_frame.grid(row=0, column=0, sticky="ns")
@@ -1091,7 +1099,7 @@ def main():
     archetype_menu = tk.OptionMenu(left_frame, selected_archetype, *archetype_names)
     archetype_menu.pack(anchor="w")
 
-    generate_button = tk.Button(left_frame, text="Generate Character", command=on_generate_button_click)
+    generate_button = tk.Button(left_frame, text="Generate Character", command=on_generate_button_click, bg=character_button_color)
     generate_button.pack(fill="x", pady=5)
 
     powers_checkbox = tk.Checkbutton(left_frame, text="Exclude Powers", variable=include_powers)
@@ -1104,36 +1112,40 @@ def main():
     equipment_points_entry = tk.Entry(left_frame)
     equipment_points_entry.pack(fill="x")
 
-    generate_equipment_button = tk.Button(left_frame, text="Generate Equipment", command=lambda: on_generate_equipment_click(equipment_points_entry, notebook, text_widgets))
+    generate_equipment_button = tk.Button(left_frame, text="Generate Equipment", command=lambda: on_generate_equipment_click(equipment_points_entry, notebook, text_widgets), bg=equipment_button_color)
     generate_equipment_button.pack(fill="x", pady=5)
 
-    save_equipment_button = tk.Button(left_frame, text="Save Equipment", command=on_save_equipment_click)
+    save_equipment_button = tk.Button(left_frame, text="Save Equipment", command=on_save_equipment_click, bg=equipment_button_color)
     save_equipment_button.pack(fill="x", pady=5)
 
-    # Add Generate Hideout button
-    generate_hideout_button = tk.Button(left_frame, text="Generate Hideout", command=lambda: generate_hideout(notebook, text_widgets))
+    # Hideout Buttons
+    generate_hideout_button = tk.Button(left_frame, text="Generate Hideout", command=lambda: generate_hideout(notebook, text_widgets), bg=hideout_button_color)
     generate_hideout_button.pack(fill="x", pady=5)
 
-    save_hideout_button = tk.Button(left_frame, text="Save Hideout", command=lambda: save_hideout(hideout_details))
+    save_hideout_button = tk.Button(left_frame, text="Save Hideout", command=lambda: save_hideout(hideout_details), bg=hideout_button_color)
     save_hideout_button.pack(fill="x", pady=5)
 
-    close_tab_button = tk.Button(left_frame, text="Close Tab", command=lambda: close_current_tab(notebook, text_widgets))
+    close_tab_button = tk.Button(left_frame, text="Close Tab", command=lambda: close_current_tab(notebook, text_widgets), bg=character_button_color)
     close_tab_button.pack(fill="x", pady=5)
 
-    export_character_sheet_button = tk.Button(left_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click())
+    export_character_sheet_button = tk.Button(left_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click(), bg=character_button_color)
     export_character_sheet_button.pack(fill="x", pady=5)
 
     # Add the new button to copy the prompt to the clipboard
-    copy_prompt_button = tk.Button(left_frame, text="Select AI Prompt", command=copy_prompt_to_clipboard)
+    copy_prompt_button = tk.Button(left_frame, text="Select AI Prompt", command=copy_prompt_to_clipboard, bg=character_button_color)
     copy_prompt_button.pack(fill="x", pady=5)
 
     # Add the new button to generate a random encounter
-    generate_encounter_button = tk.Button(left_frame, text="Generate Encounter", command=generate_encounter)
+    generate_encounter_button = tk.Button(left_frame, text="Generate Encounter", command=generate_encounter, bg=encounter_button_color)
     generate_encounter_button.pack(fill="x", pady=5)
 
     # Add the new button to open the initiative tracker
-    init_tracker_button = tk.Button(left_frame, text="Initiative Tracker", command=open_initiative_tracker)
+    init_tracker_button = tk.Button(left_frame, text="Initiative Tracker", command=open_initiative_tracker, bg=initiative_button_color)
     init_tracker_button.pack(fill="x", pady=5)
+
+    # Add the new button to open the Calculate Powers window
+    calculate_powers_button = tk.Button(left_frame, text="Calculate Powers", command=open_calculate_powers_window, bg=character_button_color)
+    calculate_powers_button.pack(fill="x", pady=5)
 
     # Configure the main window to resize properly
     root.grid_rowconfigure(0, weight=1)
