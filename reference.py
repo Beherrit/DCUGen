@@ -18,6 +18,7 @@ def open_reference_data():
     # Create a new top-level window
     ref_window = tk.Toplevel()
     ref_window.title("Reference Data")
+    ref_window.geometry("800x600")  # Set the base starting size
 
     # Label for the combobox
     label = ttk.Label(ref_window, text="Select a Category:")
@@ -197,3 +198,72 @@ def open_reference_data():
     extra_cb.bind("<<ComboboxSelected>>", handle_extra_selection)
     flaw_cb.bind("<<ComboboxSelected>>", handle_flaw_selection)
 
+    # Search bar setup
+    search_label = ttk.Label(ref_window, text="Search Image:")
+    search_label.pack(pady=(10, 5))
+
+    search_frame = ttk.Frame(ref_window)
+    search_frame.pack(pady=(0, 10))
+
+    search_var = tk.StringVar()
+    search_entry = ttk.Entry(search_frame, textvariable=search_var, width=50)
+    search_entry.pack(side="left", padx=(5, 5))
+
+    search_results_frame = ttk.Frame(ref_window)
+    search_results_frame.pack(pady=(0, 10))
+
+    # Listbox to display search results
+    search_results_listbox = tk.Listbox(search_results_frame, width=50, height=10)
+    search_results_listbox.pack(side="left", fill="y")
+
+    search_results_scrollbar = ttk.Scrollbar(search_results_frame, orient="vertical")
+    search_results_scrollbar.config(command=search_results_listbox.yview)
+    search_results_scrollbar.pack(side="left", fill="y")
+
+    search_results_listbox.config(yscrollcommand=search_results_scrollbar.set)
+
+    # Function to search images
+    def search_images(query):
+        search_results_listbox.delete(0, tk.END)
+        query = query.lower()
+
+        for name, image_file in {**action_image_map, **env_image_map, **maneuver_image_map, **extra_image_map, **flaw_image_map}.items():
+            if query in name.lower():
+                search_results_listbox.insert(tk.END, name)
+
+    # Function to handle image selection from search results
+    def handle_search_selection(event):
+        if not search_results_listbox.curselection():
+            return
+        selected_name = search_results_listbox.get(search_results_listbox.curselection())
+        
+        # Determine the category to find the corresponding image file
+        if selected_name in action_image_map:
+            image_file = action_image_map[selected_name].lower()
+        elif selected_name in env_image_map:
+            image_file = env_image_map[selected_name].lower()
+        elif selected_name in maneuver_image_map:
+            image_file = maneuver_image_map[selected_name].lower()
+        elif selected_name in extra_image_map:
+            image_file = extra_image_map[selected_name].lower()
+        elif selected_name in flaw_image_map:
+            image_file = flaw_image_map[selected_name].lower()
+        else:
+            image_file = None
+        
+        if image_file and image_file in images:
+            image_label.config(image=images[image_file])
+
+    # Bind the listbox selection to the handle_search_selection function
+    search_results_listbox.bind("<<ListboxSelect>>", handle_search_selection)
+
+    # Update search results in real-time as the user types
+    search_var.trace_add("write", lambda name, index, mode: search_images(search_var.get()))
+
+# Sample code to open the reference data window
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("Main Window")
+    open_ref_button = ttk.Button(root, text="Open Reference Data", command=open_reference_data)
+    open_ref_button.pack(pady=20)
+    root.mainloop()

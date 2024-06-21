@@ -1,14 +1,8 @@
-import os
-import random
-import math
-import pandas as pd
-import xlsxwriter
 import tkinter as tk
-from tkinter import messagebox, filedialog, ttk, StringVar
+from tkinter import ttk
 from openpyxl import load_workbook
 import sqlite3
 import json
-import openpyxl
 from openpyxl.styles import Font
 
 dark_mode_colors = {

@@ -4,7 +4,6 @@ import random
 import json
 import tkinter as tk
 from tkinter import messagebox, filedialog, ttk
-import sqlite3
 
 def generate_hideout(notebook, text_widgets):
     with open('./json/headquarters.json', 'r') as file:

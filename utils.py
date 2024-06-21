@@ -1,15 +1,10 @@
-import os
 import random
-import math
 import pandas as pd
-import xlsxwriter
 import tkinter as tk
-from tkinter import messagebox, filedialog, ttk, StringVar
+from tkinter import messagebox
 from openpyxl import load_workbook
-import sqlite3
 import json
-import openpyxl
-from openpyxl.styles import Font
+import pyperclip
 
 POWER_POINTS_PER_LEVEL = 15
 current_theme = None
@@ -216,3 +211,81 @@ def calculate_initiative(character):
             initiative += advantage.get("rank", 0)
     
     return initiative
+
+def generate_encounter():
+    encounters = load_data_from_json('./json/encounters.json')['encounters']
+    encounter = random.choice(encounters)
+    messagebox.showinfo("Random Encounter", f"Encounter Type: {encounter['type']}\nDescription: {encounter['description']}")
+
+def generate_weight():
+    weights = list(range(110, 351))
+    probabilities = (
+        [0.4] * 41 +   # 110-150
+        [0.4] * 50 +   # 151-200
+        [0.10] * 50 +   # 201-250
+        [0.05] * 50 +  # 251-300
+        [0.05] * 50    # 301-350
+    )
+    weight = random.choices(weights, probabilities, k=1)[0]
+    return weight
+
+
+def copy_prompt_to_clipboard(notebook, characters):
+    # Get the name of the currently selected tab
+    current_tab = notebook.tab(notebook.select(), "text")
+    
+    # Retrieve the character associated with the current_tab
+    character = characters.get(current_tab)
+    
+    if not character:
+        messagebox.showerror("Error", "No character found for the current tab.")
+        return
+
+    prompt = generate_character_description(character)
+    pyperclip.copy(prompt)
+    messagebox.showinfo("AI Prompt Copied", "The AI prompt has been copied to the clipboard.")
+
+def generate_character_description(character):
+    gender = character.get('gender', 'person')
+    age = character.get('age', 'unknown age')
+    nationality = character['origin'].get('country', 'an unknown country')
+    origin = character['origin'].get('region', 'an unknown region')
+    height = character['physical_traits'].get('height', 'unknown height')
+    weight = character['physical_traits'].get('weight', 'unknown weight')
+    hair_color = character['physical_traits'].get('hair_color', 'unknown hair color')
+    eye_color = character['physical_traits'].get('eye_color', 'unknown eye color')
+    power_theme = character.get('theme', 'an unknown power theme')
+    costume_style = character.get('costume_style', 'unknown costume style')
+    distinctive_feature = character.get('distinctive_feature', 'no distinctive features')
+    descriptions = load_data_from_json('./json/descriptions.json')
+
+    if gender.lower() == 'male':
+        template = random.choice(descriptions['male'])
+    elif gender.lower() == 'female':
+        template = random.choice(descriptions['female'])
+    else:
+        template = (
+            "Create a full body image of a {gender} that is around the age of {age}. "
+            "They are from {nationality} in {origin}. {gender.capitalize()} has {hair_color} hair "
+            "that complements their striking features and {eye_color} eyes that seem to hold a world of secrets. "
+            "They have a {height} height and a weight of {weight} pounds. "
+            "Their abilities revolve around a {power_theme}, giving them control over specific aspects related to it. "
+            "They don a {costume_style} costume that reflects their persona and powers. "
+            "A distinctive feature of theirs is {distinctive_feature}, making them easily recognizable."
+        )
+
+    description = template.format(
+        gender=gender,
+        age=age,
+        nationality=nationality,
+        origin=origin,
+        height=height,
+        weight=weight,
+        hair_color=hair_color,
+        eye_color=eye_color,
+        power_theme=power_theme,
+        costume_style=costume_style,
+        distinctive_feature=distinctive_feature
+    )
+
+    return description
