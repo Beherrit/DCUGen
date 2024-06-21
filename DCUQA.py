@@ -26,6 +26,7 @@ characters = {}
 from initiative_tracker import open_initiative_tracker
 from calculate_powers import open_calculate_powers_window
 from reference import open_reference_data
+from notes import *
 
 
 def copy_prompt_to_clipboard():
@@ -1171,6 +1172,10 @@ def main():
 
     reference_data_button = ttk.Button(left_frame, text="Reference Data TBD WIP", command=open_reference_data, style='Character.TButton')
     reference_data_button.pack(fill="x", pady=5)
+
+    # Add the new "Notes" button
+    notes_button = ttk.Button(left_frame, text="Notes", command=open_notes_window, style='Character.TButton')
+    notes_button.pack(fill="x", pady=5)
 
     # Configure the main window to resize properly
     root.grid_rowconfigure(0, weight=1)
