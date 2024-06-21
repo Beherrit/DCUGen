@@ -25,6 +25,8 @@ characters = {}
 # Import the initiative tracker function
 from initiative_tracker import open_initiative_tracker
 from calculate_powers import open_calculate_powers_window
+from reference import open_reference_data
+
 
 def copy_prompt_to_clipboard():
     # Get the name of the currently selected tab
@@ -53,7 +55,7 @@ def generate_character_description(character):
     power_theme = character.get('theme', 'an unknown power theme')
     costume_style = character.get('costume_style', 'unknown costume style')
     distinctive_feature = character.get('distinctive_feature', 'no distinctive features')
-    descriptions = load_data_from_json('descriptions.json')
+    descriptions = load_data_from_json('./json/descriptions.json')
 
     if gender.lower() == 'male':
         template = random.choice(descriptions['male'])
@@ -97,11 +99,6 @@ def generate_weight():
     )
     weight = random.choices(weights, probabilities, k=1)[0]
     return weight
-
-def load_data_from_json(file_name):
-    with open(file_name, 'r', encoding='utf-8') as file:
-        data = json.load(file)
-    return data
 
 def calculate_modified_cost(base_cost, rank, selected_extras_with_ranks, selected_flaws_with_ranks, extras, flaws):
     # Create dictionaries for easy access
@@ -265,7 +262,7 @@ def on_export_character_sheet_click():
         return
     
     # Open the existing character sheet
-    wb = load_workbook(filename='CharacterName.xlsx')
+    wb = load_workbook(filename='./json/CharacterName.xlsx')
     sheet = wb.active
 
     default_font = Font(size=8)
@@ -352,7 +349,7 @@ def on_export_character_sheet_click():
     sheet['AQ14'] = total_advantage_cost
 
     # Load advantages data including descriptions
-    advantages_data = load_data_from_json('advantages.json')
+    advantages_data = load_data_from_json('./json/advantages.json')
     advantage_descriptions = {adv['name']: adv['description'] for adv in advantages_data}
 
     # Prepare cell mappings for names, ranks, and descriptions
@@ -370,7 +367,7 @@ def on_export_character_sheet_click():
             print(f"Error writing advantage data for {advantage['name']}: {str(e)}")
 
     # Add Skills
-    skills = load_data_from_json('skills.json')
+    skills = load_data_from_json('./json/skills.json')
     skill_rank_cells = {
         "Acrobatics": "P104",
         "Athletics": "P106",
@@ -527,7 +524,7 @@ def allocate_stat(stat_name, allocated_points, total_range, stats):
     return (attribute_value, cost) if cost <= allocated_points else (allocated_points, allocated_points)
 
 def allocate_stats(character, power_level, allocated_points, total_range, allocations):
-    stats = load_data_from_json('stats.json')
+    stats = load_data_from_json('./json/stats.json')
 
     if not isinstance(allocations["stats"], list):
         raise ValueError(f"Expected allocations['stats'] to be a list or tuple, got {type(allocations['stats'])}")
@@ -543,7 +540,7 @@ def allocate_stats(character, power_level, allocated_points, total_range, alloca
     return character, allocated_points
 
 def allocate_advantages(character, allocated_points, power_level, max_advantages, allocations):
-    advantages = load_data_from_json('advantages.json')
+    advantages = load_data_from_json('./json/advantages.json')
     random.shuffle(advantages)
     for advantage in advantages:
         if allocated_points["advantages"] <= 0 or len(character["advantages"]) >= max_advantages:
@@ -563,7 +560,7 @@ def allocate_advantages(character, allocated_points, power_level, max_advantages
     return character, allocated_points
 
 def allocate_skills(character, allocated_points, power_level, allocations):
-    skills = load_data_from_json('skills.json')
+    skills = load_data_from_json('./json/skills.json')
     skill_list = list(skills)
     random.shuffle(skill_list)
 
@@ -610,10 +607,10 @@ def allocate_powers(character, allocated_points, power_level, allocations):
         allocated_points["powers"] = 0
         return character, allocated_points
 
-    powers = load_data_from_json('powers.json')
+    powers = load_data_from_json('./json/powers.json')
     random.shuffle(powers)
-    extras = load_data_from_json('extras.json')
-    flaws = load_data_from_json('flaws.json')
+    extras = load_data_from_json('./json/extras.json')
+    flaws = load_data_from_json('./json/flaws.json')
     power_range = allocations.get("power_range", [1, 3])
     num_powers = random.randint(*power_range)
     selected_power_names = []
@@ -752,7 +749,7 @@ def generate_character(power_level, archetype, include_powers=True, random_physi
     random_theme = generate_random_theme() if include_powers else "Mundane"
     
     # Load stats data from JSON
-    stats = load_data_from_json('stats.json')
+    stats = load_data_from_json('./json/stats.json')
     if not isinstance(stats.get("STATS"), list):
         print("Error: 'stats.json' does not contain a list of stats.")
         return None
@@ -879,7 +876,7 @@ def pretty_print_character(character, text_widget):
         text_widget.insert("end", f"(Rank: {advantage['rank']}, Cost: {advantage['cost']})\n")
 
     text_widget.insert("end", "\nSKILLS:\n", "bold")
-    skills = load_data_from_json('skills.json')
+    skills = load_data_from_json('./json/skills.json')
     for skill_template in skills:
         skill_name = skill_template["name"]
         skill = next((s for s in character["skills"] if s["name"] == skill_name), None)
@@ -1027,14 +1024,15 @@ def pretty_print_character(character, text_widget):
         text_widget.insert("end", f"{comp_description}\n\n\n")
 
 def generate_encounter():
-    encounters = load_data_from_json('encounters.json')['encounters']
+    encounters = load_data_from_json('./json/encounters.json')['encounters']
     encounter = random.choice(encounters)
     messagebox.showinfo("Random Encounter", f"Encounter Type: {encounter['type']}\nDescription: {encounter['description']}")
+
 
 def main():
     global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, selected_archetype, hideout_details
     root = tk.Tk()
-    root.title("Character Creation Version 1.4 Prod")
+    root.title("Character Creation Version 2.1 Prod")
     dark_mode = True
     include_powers = tk.BooleanVar(value=False)  # Set include_powers to False by default (unchecked)
 
@@ -1049,27 +1047,51 @@ def main():
     encounter_button_color = "#f5b7b1"  # Light red
     initiative_button_color = "#d7bde2"  # Light purple
 
-    # Main layout frames
-    left_frame = tk.Frame(root)
-    left_frame.grid(row=0, column=0, sticky="ns")
+    # Style Configuration
+    style = ttk.Style()
+    style.theme_use('default')
+    
+    # Configure styles for buttons
+    style.configure("Character.TButton", background=character_button_color, foreground="black", font=("Helvetica", 10))
+    style.map("Character.TButton", background=[("active", character_button_color)])
+    
+    style.configure("Equipment.TButton", background=equipment_button_color, foreground="black", font=("Helvetica", 10))
+    style.map("Equipment.TButton", background=[("active", equipment_button_color)])
+    
+    style.configure("Hideout.TButton", background=hideout_button_color, foreground="black", font=("Helvetica", 10))
+    style.map("Hideout.TButton", background=[("active", hideout_button_color)])
+    
+    style.configure("Encounter.TButton", background=encounter_button_color, foreground="black", font=("Helvetica", 10))
+    style.map("Encounter.TButton", background=[("active", encounter_button_color)])
+    
+    style.configure("Initiative.TButton", background=initiative_button_color, foreground="black", font=("Helvetica", 10))
+    style.map("Initiative.TButton", background=[("active", initiative_button_color)])
 
-    right_frame = tk.Frame(root)
-    right_frame.grid(row=0, column=1, sticky="nsew")
+    style.configure("TLabel", padding=6)
+    style.configure("TFrame", background="#f0f0f0")
+    style.configure("TCheckbutton", padding=6)
+
+    # Main layout frames
+    left_frame = ttk.Frame(root)
+    left_frame.grid(row=0, column=0, sticky="ns", padx=10, pady=10)
+
+    right_frame = ttk.Frame(root)
+    right_frame.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
 
     # Notebook for character display
     notebook = ttk.Notebook(right_frame)
     notebook.pack(expand=True, fill='both')
 
     # Search Box Widgets
-    search_frame = tk.Frame(right_frame)
+    search_frame = ttk.Frame(right_frame)
     search_frame.pack(side='top', anchor='ne')
 
     # Adding the label "SEARCH" next to the search entry
-    search_label = tk.Label(search_frame, text="SEARCH")
+    search_label = ttk.Label(search_frame, text="SEARCH")
     search_label.pack(side='left')
 
-    search_var = StringVar()
-    search_entry = tk.Entry(search_frame, textvariable=search_var)
+    search_var = tk.StringVar()
+    search_entry = ttk.Entry(search_frame, textvariable=search_var)
     search_entry.pack(side='right')
 
     # Set up a trace on the search_var after it's defined
@@ -1077,11 +1099,12 @@ def main():
 
     # Bind KeyRelease event to search function
     search_entry.bind('<KeyRelease>', lambda event: on_search_change(search_var))
+
     # Power Level Widgets
-    pl_label = tk.Label(left_frame, text="Please select Power Level:")
+    pl_label = ttk.Label(left_frame, text="Please select Power Level:")
     pl_label.pack(anchor="w")
 
-    pl_entry = tk.Entry(left_frame)
+    pl_entry = ttk.Entry(left_frame)
     pl_entry.pack(fill="x")
 
     # Load archetypes from the JSON file
@@ -1093,59 +1116,61 @@ def main():
     selected_archetype = tk.StringVar(value=default_archetype)
 
     # Archetype Dropdown
-    archetype_label = tk.Label(left_frame, text="Select Archetype:")
+    archetype_label = ttk.Label(left_frame, text="Select Archetype:")
     archetype_label.pack(anchor="w")
 
-    archetype_menu = tk.OptionMenu(left_frame, selected_archetype, *archetype_names)
+    archetype_menu = ttk.OptionMenu(left_frame, selected_archetype, *archetype_names)
     archetype_menu.pack(anchor="w")
-
-    generate_button = tk.Button(left_frame, text="Generate Character", command=on_generate_button_click, bg=character_button_color)
+    generate_button = ttk.Button(left_frame, text="Generate Character", command=on_generate_button_click, style='Character.TButton')
     generate_button.pack(fill="x", pady=5)
 
-    powers_checkbox = tk.Checkbutton(left_frame, text="Exclude Powers", variable=include_powers)
+    export_character_sheet_button = ttk.Button(left_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click(), style='Character.TButton')
+    export_character_sheet_button.pack(fill="x", pady=5)
+
+    powers_checkbox = ttk.Checkbutton(left_frame, text="Exclude Powers", variable=include_powers)
     powers_checkbox.pack(anchor="w")
 
     # Equipment Widgets
-    equipment_points_label = tk.Label(left_frame, text="Equipment Points:")
+    equipment_points_label = ttk.Label(left_frame, text="Equipment Points:")
     equipment_points_label.pack(anchor="w")
 
-    equipment_points_entry = tk.Entry(left_frame)
+    equipment_points_entry = ttk.Entry(left_frame)
     equipment_points_entry.pack(fill="x")
 
-    generate_equipment_button = tk.Button(left_frame, text="Generate Equipment", command=lambda: on_generate_equipment_click(equipment_points_entry, notebook, text_widgets), bg=equipment_button_color)
+    generate_equipment_button = ttk.Button(left_frame, text="Generate Equipment", command=lambda: on_generate_equipment_click(equipment_points_entry, notebook, text_widgets), style='Equipment.TButton')
     generate_equipment_button.pack(fill="x", pady=5)
 
-    save_equipment_button = tk.Button(left_frame, text="Save Equipment", command=on_save_equipment_click, bg=equipment_button_color)
+    save_equipment_button = ttk.Button(left_frame, text="Save Equipment", command=lambda: on_save_equipment_click(notebook, text_widgets), style='Equipment.TButton')
     save_equipment_button.pack(fill="x", pady=5)
 
     # Hideout Buttons
-    generate_hideout_button = tk.Button(left_frame, text="Generate Hideout", command=lambda: generate_hideout(notebook, text_widgets), bg=hideout_button_color)
+    generate_hideout_button = ttk.Button(left_frame, text="Generate Hideout", command=lambda: generate_hideout(notebook, text_widgets), style='Hideout.TButton')
     generate_hideout_button.pack(fill="x", pady=5)
 
-    save_hideout_button = tk.Button(left_frame, text="Save Hideout", command=lambda: save_hideout(hideout_details), bg=hideout_button_color)
+    save_hideout_button = ttk.Button(left_frame, text="Save Hideout", command=lambda: save_hideout(hideout_details), style='Hideout.TButton')
     save_hideout_button.pack(fill="x", pady=5)
 
-    close_tab_button = tk.Button(left_frame, text="Close Tab", command=lambda: close_current_tab(notebook, text_widgets), bg=character_button_color)
+    close_tab_button = ttk.Button(left_frame, text="Close Tab", command=lambda: close_current_tab(notebook, text_widgets), style='Character.TButton')
     close_tab_button.pack(fill="x", pady=5)
 
-    export_character_sheet_button = tk.Button(left_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click(), bg=character_button_color)
-    export_character_sheet_button.pack(fill="x", pady=5)
-
     # Add the new button to copy the prompt to the clipboard
-    copy_prompt_button = tk.Button(left_frame, text="Select AI Prompt", command=copy_prompt_to_clipboard, bg=character_button_color)
+    copy_prompt_button = ttk.Button(left_frame, text="Select AI Prompt", command=copy_prompt_to_clipboard, style='Character.TButton')
     copy_prompt_button.pack(fill="x", pady=5)
 
     # Add the new button to generate a random encounter
-    generate_encounter_button = tk.Button(left_frame, text="Generate Encounter", command=generate_encounter, bg=encounter_button_color)
+    generate_encounter_button = ttk.Button(left_frame, text="Generate Encounter", command=generate_encounter, style='Encounter.TButton')
     generate_encounter_button.pack(fill="x", pady=5)
 
     # Add the new button to open the initiative tracker
-    init_tracker_button = tk.Button(left_frame, text="Initiative Tracker", command=open_initiative_tracker, bg=initiative_button_color)
+    init_tracker_button = ttk.Button(left_frame, text="Initiative Tracker", command=open_initiative_tracker, style='Initiative.TButton')
     init_tracker_button.pack(fill="x", pady=5)
 
     # Add the new button to open the Calculate Powers window
-    calculate_powers_button = tk.Button(left_frame, text="Calculate Powers", command=open_calculate_powers_window, bg=character_button_color)
+    calculate_powers_button = ttk.Button(left_frame, text="Calculate Powers", command=open_calculate_powers_window, style='Character.TButton')
     calculate_powers_button.pack(fill="x", pady=5)
+
+    reference_data_button = ttk.Button(left_frame, text="Reference Data TBD WIP", command=open_reference_data, style='Character.TButton')
+    reference_data_button.pack(fill="x", pady=5)
 
     # Configure the main window to resize properly
     root.grid_rowconfigure(0, weight=1)

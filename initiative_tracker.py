@@ -1,5 +1,7 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
+from PIL import Image, ImageTk
+import json
 import random
 
 class WrappingText(tk.Text):
@@ -14,14 +16,129 @@ class WrappingText(tk.Text):
         self.destroy()
         self.sort_callback()
 
+def load_conditions():
+    with open("./json/conditions.json", "r") as file:
+        data = json.load(file)
+    return data["conditions"]
+
+def open_combat_calculator():
+    calc_window = tk.Toplevel()
+    calc_window.title("Combat Calculator")
+    calc_window.geometry("800x400")
+
+    # Dodge Frame
+    dodge_frame = tk.Frame(calc_window, bd=2, relief="sunken")
+    dodge_frame.pack(side="left", fill="both", expand=True, padx=5, pady=5)
+
+    tk.Label(dodge_frame, text="Dodge:").pack()
+    dodge_entry = tk.Entry(dodge_frame)
+    dodge_entry.pack()
+
+    tk.Label(dodge_frame, text="Attacker's To Hit:").pack()
+    dodge_hit_entry = tk.Entry(dodge_frame)
+    dodge_hit_entry.pack()
+
+    def calculate_dodge_hit():
+        dodge = dodge_entry.get()
+        to_hit = dodge_hit_entry.get()
+
+        dodge = int(dodge) + 10 if dodge else 10
+        to_hit = int(to_hit) if to_hit else 0
+
+        result = "YOU HIT" if to_hit > dodge else "YOU MISSED"
+        messagebox.showinfo("Hit Result", result)
+
+    tk.Button(dodge_frame, text="Calculate Hit", command=calculate_dodge_hit).pack()
+
+    # Parry Frame
+    parry_frame = tk.Frame(calc_window, bd=2, relief="sunken")
+    parry_frame.pack(side="left", fill="both", expand=True, padx=5, pady=5)
+
+    tk.Label(parry_frame, text="Parry:").pack()
+    parry_entry = tk.Entry(parry_frame)
+    parry_entry.pack()
+
+    tk.Label(parry_frame, text="Attacker's To Hit:").pack()
+    parry_hit_entry = tk.Entry(parry_frame)
+    parry_hit_entry.pack()
+
+    def calculate_parry_hit():
+        parry = parry_entry.get()
+        to_hit = parry_hit_entry.get()
+
+        parry = int(parry) + 10 if parry else 10
+        to_hit = int(to_hit) if to_hit else 0
+
+        result = "YOU HIT" if to_hit > parry else "YOU MISSED"
+        messagebox.showinfo("Hit Result", result)
+
+    tk.Button(parry_frame, text="Calculate Hit", command=calculate_parry_hit).pack()
+
+    # Toughness Damage Frame
+    toughness_frame = tk.Frame(calc_window, bd=2, relief="sunken")
+    toughness_frame.pack(side="left", fill="both", expand=True, padx=5, pady=5)
+
+    tk.Label(toughness_frame, text="Attacker's Damage Value:").pack()
+    damage_entry = tk.Entry(toughness_frame)
+    damage_entry.pack()
+
+    tk.Label(toughness_frame, text="Defender's Defense Roll:").pack()
+    defense_entry = tk.Entry(toughness_frame)
+    defense_entry.pack()
+
+    def calculate_toughness():
+        damage_value = damage_entry.get()
+        defense_roll = defense_entry.get()
+
+        damage_value = int(damage_value) + 15 if damage_value else 15
+        defense_roll = int(defense_roll) if defense_roll else 0
+
+        excess = (damage_value - defense_roll) // 5
+        penalty = -excess if excess > 0 else 0
+        messagebox.showinfo("Toughness Penalty", f"Penalty: {penalty}")
+
+    tk.Button(toughness_frame, text="Calculate Toughness", command=calculate_toughness).pack()
+
+    # Resistance Damage Frame
+    resistance_frame = tk.Frame(calc_window, bd=2, relief="sunken")
+    resistance_frame.pack(side="left", fill="both", expand=True, padx=5, pady=5)
+
+    tk.Label(resistance_frame, text="Attacker's Effect Rank:").pack()
+    effect_rank_entry = tk.Entry(resistance_frame)
+    effect_rank_entry.pack()
+
+    tk.Label(resistance_frame, text="Defender's Resistance Value Rolled:").pack()
+    resistance_roll_entry = tk.Entry(resistance_frame)
+    resistance_roll_entry.pack()
+
+    def calculate_resistance():
+        effect_rank = effect_rank_entry.get()
+        resistance_roll = resistance_roll_entry.get()
+
+        effect_rank = int(effect_rank) + 10 if effect_rank else 10
+        resistance_roll = int(resistance_roll) if resistance_roll else 0
+
+        excess = (effect_rank - resistance_roll) // 5
+        effect = -excess if excess > 0 else 0
+        messagebox.showinfo("Resistance Effect", f"Effect: {effect}")
+
+    tk.Button(resistance_frame, text="Calculate Resistance", command=calculate_resistance).pack()
+
 def open_initiative_tracker():
+    conditions_dict = load_conditions()
+    conditions = list(conditions_dict.keys())
+
     tracker_window = tk.Toplevel()
     tracker_window.title("Initiative Tracker")
-    tracker_window.geometry("1400x600")
+    tracker_window.geometry("1600x600")
+
+    # Configure styles
+    style = ttk.Style()
+    style.configure("TCombobox", arrowsize=15)  # Set the arrow size for comboboxes
 
     # Frame for input fields
     input_frame = tk.Frame(tracker_window)
-    input_frame.grid(row=0, column=0, padx=10, pady=10)
+    input_frame.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
     # Input fields for name, awareness, agility, initiative
     name_label = tk.Label(input_frame, text="Name:")
@@ -47,24 +164,75 @@ def open_initiative_tracker():
     add_button = tk.Button(input_frame, text="Add Person", command=lambda: add_person())
     add_button.grid(row=4, columnspan=2, pady=10)
 
+    # Frame for the treeview and scrollbar
+    tree_frame = tk.Frame(tracker_window)
+    tree_frame.grid(row=1, column=0, columnspan=3, padx=20, pady=20, sticky="nsew")
+
+    # Adding scrollbar for the treeview
+    tree_scroll_y = tk.Scrollbar(tree_frame, orient="vertical")
+    tree_scroll_y.pack(side="right", fill="y")
+
+    tree_scroll_x = tk.Scrollbar(tree_frame, orient="horizontal")
+    tree_scroll_x.pack(side="bottom", fill="x")
+
     # Treeview for displaying initiative order
     columns = ("Name", "Awareness", "Agility", "Initiative", "Hold Action", "Condition 1", "Condition 2", "Condition 3", "Toughness", "Will", "Dead", "Description")
     global tree
-    tree = ttk.Treeview(tracker_window, columns=columns, show="headings")
-    for col in columns:
-        tree.heading(col, text=col)
-        tree.column(col, stretch=True)
+    tree = ttk.Treeview(tree_frame, columns=columns, show="headings", yscrollcommand=tree_scroll_y.set, xscrollcommand=tree_scroll_x.set)
 
-    # Configure the description column to handle text wrapping
-    tree.column("Description", width=500, stretch=True)
-    tree.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
+    # Adjusting column sizes
+    tree.heading("Name", text="Name")
+    tree.column("Name", width=100, stretch=True)
+    
+    tree.heading("Awareness", text="Awareness")
+    tree.column("Awareness", width=80, stretch=True)
+    
+    tree.heading("Agility", text="Agility")
+    tree.column("Agility", width=80, stretch=True)
+    
+    tree.heading("Initiative", text="Initiative")
+    tree.column("Initiative", width=80, stretch=True)
+    
+    tree.heading("Hold Action", text="Hold Action")
+    tree.column("Hold Action", width=80, stretch=True)
+    
+    tree.heading("Condition 1", text="Condition 1")
+    tree.column("Condition 1", width=80, stretch=True)
+    
+    tree.heading("Condition 2", text="Condition 2")
+    tree.column("Condition 2", width=80, stretch=True)
+    
+    tree.heading("Condition 3", text="Condition 3")
+    tree.column("Condition 3", width=80, stretch=True)
+    
+    tree.heading("Toughness", text="Toughness")
+    tree.column("Toughness", width=80, stretch=True)
+    
+    tree.heading("Will", text="Will")
+    tree.column("Will", width=80, stretch=True)
+    
+    tree.heading("Dead", text="Dead")
+    tree.column("Dead", width=80, stretch=True)
+    
+    tree.heading("Description", text="Description")
+    tree.column("Description", width=400, stretch=True)
+
+    tree.pack(side="left", fill="both", expand=True)
+    tree_scroll_y.config(command=tree.yview)
+    tree_scroll_x.config(command=tree.xview)
 
     tracker_window.grid_rowconfigure(1, weight=1)
     tracker_window.grid_columnconfigure(0, weight=1)
+    tracker_window.grid_columnconfigure(1, weight=1)
+    tracker_window.grid_columnconfigure(2, weight=1)
 
     # Right-click context menu for deleting rows
     right_click_menu = tk.Menu(tracker_window, tearoff=0)
     right_click_menu.add_command(label="Remove/Delete", command=lambda: remove_selected_item())
+
+    combat_calc_button = tk.Button(tracker_window, text="Combat Calculator", command=open_combat_calculator)
+    combat_calc_button.grid(row=0, column=3, padx=5, pady=5, sticky="ne")
+
 
     def right_click_action(event):
         try:
@@ -82,52 +250,11 @@ def open_initiative_tracker():
         if selected_item:
             tree.delete(selected_item)
 
-    # List of conditions
-    conditions = [
-        "Compelled", "Controlled", "Dazed", "Debilitated", "Defenseless", "Disabled",
-        "Fatigued", "Hindered", "Immobile", "Impaired", "Normal", "Stunned", "Transformed",
-        "Unaware", "Vulnerable", "Weakened", "Asleep", "Blind", "Bound", "Deaf", "Dying",
-        "Entranced", "Exhausted", "Incapacitated", "Paralyzed", "Prone", "Restrained",
-        "Staggered", "Surprised"
-    ]
-
-    conditions_dict = {
-        "Compelled": "Limited to a single standard action each turn, chosen by another controlling character.",
-        "Controlled": "No free will. Actions dictated by another controlling character.",
-        "Dazed": "Single standard action per round. Stunned supersedes Dazed.",
-        "Debilitated": "The character has one or more abilities lowered below -5.",
-        "Defenseless": "Active Defense bonuses of 0. Attacks can make attacks as routine checks. If the attacker makes a normal attack, any hit is treated as a critical hit. Defenseless characters are often Prone.",
-        "Disabled": "-5 circumstance penalty on checks. Debilitated (if it applies to the same traits) supersedes disabled.",
-        "Fatigued": "Fatigued characters are hindered. Characters recover from Fatigue after an hour of rest.",
-        "Hindered": "Moves at half normal speed (-1 speed rank). Immobile supersedes hindered.",
-        "Immobile": "No movement speed and cannot move from the spot they occupy.",
-        "Impaired": "-2 circumstance penalty on checks. Disabled (if it applies to the same traits) supersedes Impaired.",
-        "Normal": "Unharmed and unaffected by other conditions.",
-        "Stunned": "Cannot take any actions.",
-        "Transformed": "Some or all traits altered.",
-        "Unaware": "Unable to make interaction or Perception checks or perform any action based on them. Subjects have full concealment from all of a character's unaware senses.",
-        "Vulnerable": "Half Active Defenses (rounding up). Defenseless supersedes vulnerable.",
-        "Weakened": "Temporarily lost power points in a trait. Debilitated supersedes Weakened.",
-        "Asleep": "Defenseless, Stunned, and Unaware. Hearing Perception check with three or more levels of success wakes the character.",
-        "Blind": "Everything has full visual concealment. Hindered, visually Unaware, and Vulnerable.",
-        "Bound": "Defenseless, Immobile, and Impaired.",
-        "Deaf": "Everything has auditory concealment. Interaction limited to sign-language and lip-reading.",
-        "Dying": "Incapacitated. When a character gained Dying, making a Fortitude check (DC15). If succeeds, nothing happens. If two degrees of success, the character stabilizes, removing this condition. If the check fails, the character remains Dying. Three or more total degrees of failure mean the character dies. Dying characters make a check each round until they stabilize or die.",
-        "Entranced": "Stunned. Any obvious threat automatically breaks the trance. Allies can break with interaction skill check (DC10+Effect Rank)",
-        "Exhausted": "Impaired and Hindered. Characters recover after an hour of rest in comfortable surroundings.",
-        "Incapacitated": "Defenseless, Stunned, and Unaware. Usually fall prone, unless some outside force keeps them standing.",
-        "Paralyzed": "Defenseless, Immobile, and physically Stunned, frozen in place and unable to move. Still aware and can take purely mental actions.",
-        "Prone": "Lying on the ground, receiving a -5 circumstance penalty on close attack checks. Opponents receive a +5 circumstance bonus to close attack checks but a -5 penalty to ranged attacks. Prone characters are Hindered. Standing up is a Move action.",
-        "Restrained": "Hindered and Vulnerable. If the restraints are anchored to an immobile object, the character is Immobile instead of Hindered.",
-        "Staggered": "Dazed and Hindered.",
-        "Surprised": "Stunned and Vulnerable, caught off-guard and unable to act."
-    }
-
     def add_person():
         name = name_entry.get()
-        awareness = int(awareness_entry.get())
-        agility = int(agility_entry.get())
-        initiative = int(initiative_entry.get())
+        awareness = int(awareness_entry.get()) if awareness_entry.get() else 0
+        agility = int(agility_entry.get()) if agility_entry.get() else 0
+        initiative = int(initiative_entry.get()) if initiative_entry.get() else 0
 
         tree.insert("", "end", values=(name, awareness, agility, initiative, "False", "Normal", "Normal", "Normal", "", "", "False", ""))
         sort_treeview()
@@ -151,30 +278,39 @@ def open_initiative_tracker():
 
         def focus_out(event):
             widget = event.widget
-            value = widget.get() if isinstance(widget, tk.Entry) else widget.get("1.0", "end").strip()
+            if isinstance(widget, ttk.Combobox):
+                save_edit(item, column, widget.get())
+            else:
+                value = widget.get() if isinstance(widget, tk.Entry) else widget.get("1.0", "end").strip()
+                save_edit(item, column, value)
             widget.destroy()
-            save_edit(item, column, value)
+
+        cell_bbox = tree.bbox(item, column)
 
         if column_index in [4, 10]:  # Hold Action and Dead columns
-            combobox = ttk.Combobox(tree, values=["True", "False"])
+            combobox = ttk.Combobox(tree, values=["True", "False"], style="TCombobox")
             combobox.set(tree.set(item, column))
-            combobox.place(x=tree.bbox(item, column)[0], y=tree.bbox(item, column)[1], anchor="nw")
-            combobox.bind("<<ComboboxSelected>>", focus_out)
+            combobox.place(x=cell_bbox[0], y=cell_bbox[1], width=cell_bbox[2], height=cell_bbox[3], anchor="nw")
+            combobox.bind("<<ComboboxSelected>>", lambda e: focus_out(e))
+            combobox.bind("<FocusOut>", focus_out)
+            combobox.focus()
         elif column_index in [5, 6, 7]:  # Condition columns
-            combobox = ttk.Combobox(tree, values=conditions)
+            combobox = ttk.Combobox(tree, values=conditions, style="TCombobox")
             combobox.set(tree.set(item, column))
-            combobox.place(x=tree.bbox(item, column)[0], y=tree.bbox(item, column)[1], anchor="nw")
-            combobox.bind("<<ComboboxSelected>>", focus_out)
+            combobox.place(x=cell_bbox[0], y=cell_bbox[1], width=cell_bbox[2], height=cell_bbox[3], anchor="nw")
+            combobox.bind("<<ComboboxSelected>>", lambda e: focus_out(e))
+            combobox.bind("<FocusOut>", focus_out)
+            combobox.focus()
         elif column_index == 11:  # Description column
             text_widget = WrappingText(tree, sort_treeview, wrap="word", height=10, width=50)
             text_widget.insert("1.0", tree.set(item, column))
-            text_widget.place(x=tree.bbox(item, column)[0], y=tree.bbox(item, column)[1], anchor="nw")
+            text_widget.place(x=cell_bbox[0], y=cell_bbox[1], width=cell_bbox[2], height=cell_bbox[3], anchor="nw")
             text_widget.bind("<FocusOut>", lambda e: text_widget.save_edit(item, column))
             text_widget.focus()
         else:  # Other columns
             entry = tk.Entry(tree)
             entry.insert(0, tree.set(item, column))
-            entry.place(x=tree.bbox(item, column)[0], y=tree.bbox(item, column)[1], anchor="nw")
+            entry.place(x=cell_bbox[0], y=cell_bbox[1], width=cell_bbox[2], height=cell_bbox[3], anchor="nw")
             entry.bind("<FocusOut>", focus_out)
             entry.focus()
 
@@ -185,6 +321,7 @@ def open_initiative_tracker():
         condition_window.title("Conditions")
         condition_window.geometry("500x400")
 
+        conditions_dict = load_conditions()
         canvas = tk.Canvas(condition_window)
         scrollbar = ttk.Scrollbar(condition_window, orient="vertical", command=canvas.yview)
         scrollable_frame = ttk.Frame(canvas)
@@ -213,11 +350,27 @@ def open_initiative_tracker():
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
+    def open_measurement_calcs():
+        calcs_window = tk.Toplevel()
+        calcs_window.title("Measurement Calcs")
+        calcs_window.geometry("600x800")
+
+        img = Image.open("./images/combat_misc/cm_calcs.jpg")
+        img = img.resize((580, 780), Image.LANCZOS)
+        img = ImageTk.PhotoImage(img)
+
+        panel = tk.Label(calcs_window, image=img)
+        panel.image = img  # keep a reference!
+        panel.pack(side="top", fill="both", expand=True)
+
     condition_button = tk.Button(tracker_window, text="Condition Lookup", command=open_condition_lookup)
-    condition_button.grid(row=0, column=1, padx=10, pady=10, sticky="ne")
+    condition_button.grid(row=0, column=1, padx=5, pady=5, sticky="ne")
+
+    measurement_calcs_button = tk.Button(tracker_window, text="Measurement Calcs", command=open_measurement_calcs)
+    measurement_calcs_button.grid(row=0, column=2, padx=5, pady=5, sticky="ne")
 
     dice_roller_button = tk.Button(tracker_window, text="Dice Roller", command=open_dice_roller)
-    dice_roller_button.grid(row=1, column=1, padx=10, pady=10, sticky="ne")
+    dice_roller_button.grid(row=0, column=0, padx=5, pady=5, sticky="ne")
 
     tracker_window.mainloop()
 

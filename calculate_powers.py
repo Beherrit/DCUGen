@@ -31,7 +31,7 @@ def open_calculate_powers_window():
     calculate_powers_window.title("Calculate Powers")
     calculate_powers_window.geometry("400x500")
 
-    with open('powers.json', 'r') as file:
+    with open('./json/powers.json', 'r') as file:
         powers = json.load(file)
 
     power_names = [power['name'] for power in powers]

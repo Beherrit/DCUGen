@@ -1,0 +1,15 @@
+{
+    "Sizes": [
+      {"name": "Small", "cost": 5, "attributes": {"Strength": 2, "Toughness": 3, "Defense": 1}},
+      {"name": "Medium", "cost": 10, "attributes": {"Strength": 4, "Toughness": 5, "Defense": 2}}
+    ],
+    "Features": [
+      {"name": "Autopilot", "cost": 3},
+      {"name": "FTL Radio", "cost": 2}
+    ],
+    "Powers": [
+      {"name": "Cloaking Device", "cost": 15},
+      {"name": "Armored Hull", "cost": 10}
+    ]
+  }
+  

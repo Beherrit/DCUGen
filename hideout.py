@@ -7,14 +7,15 @@ from tkinter import messagebox, filedialog, ttk
 import sqlite3
 
 def generate_hideout(notebook, text_widgets):
-    with open('headquarters.json', 'r') as file:
+    with open('./json/headquarters.json', 'r') as file:
         headquarters_data = json.load(file)
 
     hq_size = random.choice(headquarters_data['headquarters']['sizes'])
     num_traits = random.randint(10, 20)
     
     selected_feature_ids = set()
-    
+    hideout_details = {}
+
     def get_unique_feature():
         while True:
             feature = random.choice(headquarters_data['headquarters']['traits'])
@@ -24,6 +25,10 @@ def generate_hideout(notebook, text_widgets):
 
     hq_traits = [get_unique_feature() for _ in range(num_traits)]
     hq_toughness = random.choice(headquarters_data['headquarters']['toughness'])
+
+    hideout_details['Size'] = hq_size
+    hideout_details['Toughness'] = hq_toughness
+    hideout_details['Traits'] = [trait['name'] for trait in hq_traits]
 
     new_tab = ttk.Frame(notebook)
     notebook.add(new_tab, text="Hideout")
@@ -46,6 +51,8 @@ def generate_hideout(notebook, text_widgets):
     
     text_widgets[new_tab] = hideout_summary_text
     notebook.select(new_tab)
+
+    return hideout_details  # Returning the dictionary to be used later
 
 # Function to save hideout details to a file
 def save_hideout(hideout_details):

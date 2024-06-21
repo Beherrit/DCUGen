@@ -5,7 +5,7 @@ import tkinter as tk
 from tkinter import messagebox, filedialog, ttk
 
 def load_gadgets():
-    with open('gadget_data.json', 'r', encoding='utf-8') as json_file:
+    with open('./json/gadget_data.json', 'r', encoding='utf-8') as json_file:
         return json.load(json_file)
 
 def calculate_equipment_points(character):

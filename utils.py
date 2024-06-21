@@ -51,13 +51,14 @@ def toggle_dark_mode(root):
     update_color_scheme(dark_mode, root)
 
 def load_data_from_json(file_name):
+    file_path = f'../json/{file_name}'
     with open(file_name, 'r', encoding='utf-8') as file:
         data = json.load(file)
     return data
 
 def generate_random_traits():
     # Load the traits from the JSON file
-    traits = load_data_from_json('PersonalityTraits.json')
+    traits = load_data_from_json('./json/PersonalityTraits.json')
 
     # Randomly select the number of traits from each category
     positive_traits = random.sample(traits['positive_traits'], random.randint(1, 3))
@@ -71,7 +72,7 @@ def generate_random_traits():
     }
 
 def generate_random_theme():
-    themes = load_data_from_json('theme.json')['theme']
+    themes = load_data_from_json('./json/theme.json')['theme']
     return random.choice(themes)
 
 def random_failure_effects():
@@ -83,7 +84,7 @@ def random_failure_effects():
     return {key: random.choice(value) for key, value in failures.items()}
 
 def generate_random_origin():
-    origins = load_data_from_json('characterOrigins.json')
+    origins = load_data_from_json('./json/characterOrigins.json')
     origin = random.choice(origins)
 
     if 'countries' in origin:
@@ -109,7 +110,7 @@ def calculate_range(rank):
     ]
     return range_chart[rank - 1] if rank <= len(range_chart) else "Beyond chart"
 def assign_languages(character):
-    all_languages = load_data_from_json('languages.json')
+    all_languages = load_data_from_json('./json/languages.json')
     base_language = "English"
     language_list = all_languages
     assigned_languages = [base_language]  # English is the base language
@@ -130,8 +131,8 @@ def assign_languages(character):
     return assigned_languages
 
 def generate_motivations_and_complications():
-    motivations = load_data_from_json('motivations.json')  # Load the data from JSON file
-    complications = load_data_from_json('complications.json')
+    motivations = load_data_from_json('./json/motivations.json')  # Load the data from JSON file
+    complications = load_data_from_json('./json/complications.json')
     character_motivations_and_complications = {
         "Motivation": {},
         "Complications": []
@@ -160,8 +161,8 @@ def generate_random_age():
 
 def generate_random_gender():
     # Load the names from JSON files
-    male_names = load_data_from_json('male_names.json')
-    female_names = load_data_from_json('female_names.json')
+    male_names = load_data_from_json('./json/male_names.json')
+    female_names = load_data_from_json('./json/female_names.json')
     
     # Choose a random gender
     gender = random.choice(["Male", "Female"])
@@ -175,15 +176,15 @@ def generate_random_gender():
     return gender, name
 
 def generate_random_physical_trait(trait_category):
-    physical_traits = load_data_from_json('physical_traits.json')
+    physical_traits = load_data_from_json('./json/physical_traits.json')
     return random.choice(physical_traits["PHYSICAL_TRAITS"][trait_category])
 
 def generate_random_costume_style():
-    physical_traits = load_data_from_json('physical_traits.json')
+    physical_traits = load_data_from_json('./json/physical_traits.json')
     return random.choice(physical_traits["COSTUME_STYLES"])
 
 def generate_random_distinctive_feature():
-    physical_traits = load_data_from_json('physical_traits.json')
+    physical_traits = load_data_from_json('./json/physical_traits.json')
     return random.choice(physical_traits["DISTINCTIVE_FEATURES"])
 
 def calculate_attack_bonuses(character):

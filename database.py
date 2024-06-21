@@ -36,7 +36,7 @@ def load_data_from_json(file_name):
     return data
 
 def load_archetypes():
-    with open('archetypes.json', 'r', encoding='utf-8') as file:
+    with open('./json/archetypes.json', 'r', encoding='utf-8') as file:
         return json.load(file)
 
 def highlight_text(text_widget, search_query, dark_mode):
