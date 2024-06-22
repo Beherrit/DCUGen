@@ -12,12 +12,12 @@ from hideout import *
 from equipment import *
 from database import *
 from export import *
+import settings
 
 hideout_details = {}
 characters = {}
 POWER_POINTS_PER_LEVEL = 15
 current_theme = None
-
 
 def calculate_modified_cost(base_cost, rank, selected_extras_with_ranks, selected_flaws_with_ranks, extras, flaws):
     # Create dictionaries for easy access
@@ -703,34 +703,35 @@ def main():
 
     # Style Configuration
     style = ttk.Style()
-    style.theme_use('default')
+    style.theme_use('clam')
     
     # Configure styles for buttons
-    style.configure("Character.TButton", background=character_button_color, foreground="black", font=("Helvetica", 10))
+    style.configure("TButton", padding=2, font=("Helvetica", 8))  # Smaller padding and font size
+    style.configure("Character.TButton", background=character_button_color, foreground="black")
     style.map("Character.TButton", background=[("active", character_button_color)])
     
-    style.configure("Equipment.TButton", background=equipment_button_color, foreground="black", font=("Helvetica", 10))
+    style.configure("Equipment.TButton", background=equipment_button_color, foreground="black")
     style.map("Equipment.TButton", background=[("active", equipment_button_color)])
     
-    style.configure("Hideout.TButton", background=hideout_button_color, foreground="black", font=("Helvetica", 10))
+    style.configure("Hideout.TButton", background=hideout_button_color, foreground="black")
     style.map("Hideout.TButton", background=[("active", hideout_button_color)])
     
-    style.configure("Encounter.TButton", background=encounter_button_color, foreground="black", font=("Helvetica", 10))
+    style.configure("Encounter.TButton", background=encounter_button_color, foreground="black")
     style.map("Encounter.TButton", background=[("active", encounter_button_color)])
     
-    style.configure("Initiative.TButton", background=initiative_button_color, foreground="black", font=("Helvetica", 10))
+    style.configure("Initiative.TButton", background=initiative_button_color, foreground="black")
     style.map("Initiative.TButton", background=[("active", initiative_button_color)])
 
-    style.configure("TLabel", padding=6)
+    style.configure("TLabel", padding=2, font=("Helvetica", 8))  # Smaller padding and font size
     style.configure("TFrame", background="#f0f0f0")
-    style.configure("TCheckbutton", padding=6)
+    style.configure("TCheckbutton", padding=2, font=("Helvetica", 8))  # Smaller padding and font size
 
     # Main layout frames
     left_frame = ttk.Frame(root)
-    left_frame.grid(row=0, column=0, sticky="ns", padx=10, pady=10)
+    left_frame.grid(row=0, column=0, sticky="ns", padx=5, pady=5)
 
     right_frame = ttk.Frame(root)
-    right_frame.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
+    right_frame.grid(row=0, column=1, sticky="nsew", padx=5, pady=5)
 
     # Notebook for character display
     notebook = ttk.Notebook(right_frame)
@@ -738,7 +739,7 @@ def main():
 
     # Search Box Widgets
     search_frame = ttk.Frame(right_frame)
-    search_frame.pack(side='top', anchor='ne')
+    search_frame.pack(side='top', anchor='ne', pady=2)
 
     # Adding the label "SEARCH" next to the search entry
     search_label = ttk.Label(search_frame, text="SEARCH")
@@ -749,17 +750,17 @@ def main():
     search_entry.pack(side='right')
 
     # Set up a trace on the search_var after it's defined
-    search_var.trace_add('write', lambda *args: on_search_change(search_var))
+    search_var.trace_add('write', lambda *args: on_search_change(search_var, text_widgets, notebook, dark_mode))
 
     # Bind KeyRelease event to search function
-    search_entry.bind('<KeyRelease>', lambda event: on_search_change(search_var))
+    search_entry.bind('<KeyRelease>', lambda event: on_search_change(search_var, text_widgets, notebook, dark_mode))
 
     # Power Level Widgets
     pl_label = ttk.Label(left_frame, text="Please select Power Level:")
     pl_label.pack(anchor="w")
 
     pl_entry = ttk.Entry(left_frame)
-    pl_entry.pack(fill="x")
+    pl_entry.pack(fill="x", pady=2)
 
     # Load archetypes from the JSON file
     archetypes = load_archetypes()
@@ -774,64 +775,81 @@ def main():
     archetype_label.pack(anchor="w")
 
     archetype_menu = ttk.OptionMenu(left_frame, selected_archetype, *archetype_names)
-    archetype_menu.pack(anchor="w")
-    generate_button = ttk.Button(left_frame, text="Generate Character", command=on_generate_button_click, style='Character.TButton')
-    generate_button.pack(fill="x", pady=5)
+    archetype_menu.pack(anchor="w", pady=2)
 
-    export_character_sheet_button = ttk.Button(left_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click(), style='Character.TButton')
-    export_character_sheet_button.pack(fill="x", pady=5)
+    # Character Management Frame
+    char_frame = ttk.Labelframe(left_frame, text="Character Management", padding=5)
+    char_frame.pack(fill="x", pady=5)
 
-    powers_checkbox = ttk.Checkbutton(left_frame, text="Exclude Powers", variable=include_powers)
-    powers_checkbox.pack(anchor="w")
+    generate_button = ttk.Button(char_frame, text="Generate Character", command=on_generate_button_click, style='Character.TButton')
+    generate_button.pack(fill="x", pady=2)
 
-    # Equipment Widgets
-    equipment_points_label = ttk.Label(left_frame, text="Equipment Points:")
+    export_character_sheet_button = ttk.Button(char_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click(), style='Character.TButton')
+    export_character_sheet_button.pack(fill="x", pady=2)
+
+    powers_checkbox = ttk.Checkbutton(char_frame, text="Exclude Powers", variable=include_powers)
+    powers_checkbox.pack(anchor="w", pady=2)
+
+    close_tab_button = ttk.Button(char_frame, text="Close Tab", command=lambda: close_current_tab(notebook, text_widgets), style='Character.TButton')
+    close_tab_button.pack(fill="x", pady=2)
+
+    copy_prompt_button = ttk.Button(char_frame, text="Select AI Prompt", command=lambda: copy_prompt_to_clipboard(notebook, characters), style='Character.TButton')
+    copy_prompt_button.pack(fill="x", pady=2)
+
+    # Equipment Management Frame
+    equip_frame = ttk.Labelframe(left_frame, text="Equipment Management", padding=5)
+    equip_frame.pack(fill="x", pady=5)
+
+    equipment_points_label = ttk.Label(equip_frame, text="Equipment Points:")
     equipment_points_label.pack(anchor="w")
 
-    equipment_points_entry = ttk.Entry(left_frame)
-    equipment_points_entry.pack(fill="x")
+    equipment_points_entry = ttk.Entry(equip_frame)
+    equipment_points_entry.pack(fill="x", pady=2)
 
-    generate_equipment_button = ttk.Button(left_frame, text="Generate Equipment", command=lambda: on_generate_equipment_click(equipment_points_entry, notebook, text_widgets), style='Equipment.TButton')
-    generate_equipment_button.pack(fill="x", pady=5)
+    generate_equipment_button = ttk.Button(equip_frame, text="Generate Equipment", command=lambda: on_generate_equipment_click(equipment_points_entry, notebook, text_widgets), style='Equipment.TButton')
+    generate_equipment_button.pack(fill="x", pady=2)
 
-    save_equipment_button = ttk.Button(left_frame, text="Save Equipment", command=lambda: on_save_equipment_click(notebook, text_widgets), style='Equipment.TButton')
-    save_equipment_button.pack(fill="x", pady=5)
+    save_equipment_button = ttk.Button(equip_frame, text="Save Equipment", command=lambda: on_save_equipment_click(notebook, text_widgets), style='Equipment.TButton')
+    save_equipment_button.pack(fill="x", pady=2)
 
-    # Hideout Buttons
-    generate_hideout_button = ttk.Button(left_frame, text="Generate Hideout", command=lambda: generate_hideout(notebook, text_widgets), style='Hideout.TButton')
-    generate_hideout_button.pack(fill="x", pady=5)
+    # Hideout Management Frame
+    hideout_frame = ttk.Labelframe(left_frame, text="Hideout Management", padding=5)
+    hideout_frame.pack(fill="x", pady=5)
 
-    save_hideout_button = ttk.Button(left_frame, text="Save Hideout", command=lambda: save_hideout(hideout_details), style='Hideout.TButton')
-    save_hideout_button.pack(fill="x", pady=5)
+    generate_hideout_button = ttk.Button(hideout_frame, text="Generate Hideout", command=lambda: generate_hideout(notebook, text_widgets), style='Hideout.TButton')
+    generate_hideout_button.pack(fill="x", pady=2)
 
-    close_tab_button = ttk.Button(left_frame, text="Close Tab", command=lambda: close_current_tab(notebook, text_widgets), style='Character.TButton')
-    close_tab_button.pack(fill="x", pady=5)
+    save_hideout_button = ttk.Button(hideout_frame, text="Save Hideout", command=lambda: save_hideout(hideout_details), style='Hideout.TButton')
+    save_hideout_button.pack(fill="x", pady=2)
 
-    # Add the new button to copy the prompt to the clipboard
-    copy_prompt_button = ttk.Button(left_frame, text="Select AI Prompt", command=lambda: copy_prompt_to_clipboard(notebook, characters), style='Character.TButton')
-    copy_prompt_button.pack(fill="x", pady=5)
+    # Miscellaneous Frame
+    misc_frame = ttk.Labelframe(left_frame, text="Miscellaneous", padding=5)
+    misc_frame.pack(fill="x", pady=5)
 
-    # Add the new button to generate a random encounter
-    generate_encounter_button = ttk.Button(left_frame, text="Generate Encounter", command=generate_encounter, style='Encounter.TButton')
-    generate_encounter_button.pack(fill="x", pady=5)
+    generate_encounter_button = ttk.Button(misc_frame, text="Generate Encounter", command=generate_encounter, style='Encounter.TButton')
+    generate_encounter_button.pack(fill="x", pady=2)
 
-    # Add the new button to open the initiative tracker
-    init_tracker_button = ttk.Button(left_frame, text="Initiative Tracker", command=open_initiative_tracker, style='Initiative.TButton')
-    init_tracker_button.pack(fill="x", pady=5)
+    init_tracker_button = ttk.Button(misc_frame, text="Initiative Tracker", command=open_initiative_tracker, style='Initiative.TButton')
+    init_tracker_button.pack(fill="x", pady=2)
 
-    # Add the new button to open the Calculate Powers window
-    calculate_powers_button = ttk.Button(left_frame, text="Calculate Powers", command=open_calculate_powers_window, style='Character.TButton')
-    calculate_powers_button.pack(fill="x", pady=5)
+    settings_button = ttk.Button(misc_frame, text="Settings", command=lambda: settings.open_settings(root), style='Initiative.TButton')  # Add settings button
+    settings_button.pack(fill="x", pady=2)
 
-    reference_data_button = ttk.Button(left_frame, text="Reference Data TBD WIP", command=open_reference_data, style='Character.TButton')
-    reference_data_button.pack(fill="x", pady=5)
+    # Reference Management Frame
+    reference_frame = ttk.Labelframe(left_frame, text="Reference Management", padding=5)
+    reference_frame.pack(fill="x", pady=5)
 
-    # Add the new "Notes" button
-    notes_button = ttk.Button(left_frame, text="Notes", command=open_notes_window, style='Character.TButton')
-    notes_button.pack(fill="x", pady=5)
+    calculate_powers_button = ttk.Button(reference_frame, text="Calculate Powers", command=open_calculate_powers_window, style='Character.TButton')
+    calculate_powers_button.pack(fill="x", pady=2)
 
-    gm_cheat_sheet_button = ttk.Button(left_frame, text="GM Cheat Sheet", command=open_gm_cheat_sheet, style='Character.TButton')
-    gm_cheat_sheet_button.pack(fill="x", pady=5)
+    reference_data_button = ttk.Button(reference_frame, text="Reference Data", command=open_reference_data, style='Character.TButton')
+    reference_data_button.pack(fill="x", pady=2)
+
+    notes_button = ttk.Button(reference_frame, text="Notes", command=open_notes_window, style='Character.TButton')
+    notes_button.pack(fill="x", pady=2)
+
+    gm_cheat_sheet_button = ttk.Button(reference_frame, text="GM Cheat Sheet", command=open_gm_cheat_sheet, style='Character.TButton')
+    gm_cheat_sheet_button.pack(fill="x", pady=2)
 
     # Configure the main window to resize properly
     root.grid_rowconfigure(0, weight=1)
