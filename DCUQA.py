@@ -683,10 +683,37 @@ def pretty_print_character(character, text_widget):
         text_widget.insert("end", f"- {comp_name}: ", "bold_no_underline")
         text_widget.insert("end", f"{comp_description}\n\n\n")
 
+
+class CollapsibleSection:
+    def __init__(self, master, title):
+        self.frame = ttk.Frame(master)
+        self.title = title
+        self.is_collapsed = False
+
+        self.header = ttk.Label(self.frame, text=title, anchor="w", cursor="hand2")
+        self.header.pack(fill="x")
+        self.header.bind("<Button-1>", self.toggle)
+
+        self.body_frame = ttk.Frame(self.frame)
+        self.body_frame.pack(fill="x", expand=True)
+
+    def toggle(self, event=None):
+        if self.is_collapsed:
+            self.body_frame.pack(fill="x", expand=True)
+        else:
+            self.body_frame.forget()
+        self.is_collapsed = not self.is_collapsed
+
+    def add_widget(self, widget):
+        widget.pack(fill="x", padx=5, pady=2)
+
+    def pack(self, **kwargs):
+        self.frame.pack(**kwargs)
+
 def main():
     global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, selected_archetype, hideout_details
     root = tk.Tk()
-    root.title("Character Creation Version 2.1 Prod")
+    root.title("Character Creation Version 3.0 Prod")
     dark_mode = True
     include_powers = tk.BooleanVar(value=False)  # Set include_powers to False by default (unchecked)
 
@@ -778,78 +805,78 @@ def main():
     archetype_menu.pack(anchor="w", pady=2)
 
     # Character Management Frame
-    char_frame = ttk.Labelframe(left_frame, text="Character Management", padding=5)
+    char_frame = CollapsibleSection(left_frame, "Character Management")
     char_frame.pack(fill="x", pady=5)
 
-    generate_button = ttk.Button(char_frame, text="Generate Character", command=on_generate_button_click, style='Character.TButton')
-    generate_button.pack(fill="x", pady=2)
+    generate_button = ttk.Button(char_frame.body_frame, text="Generate Character", command=on_generate_button_click, style='Character.TButton')
+    char_frame.add_widget(generate_button)
 
-    export_character_sheet_button = ttk.Button(char_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click(), style='Character.TButton')
-    export_character_sheet_button.pack(fill="x", pady=2)
+    export_character_sheet_button = ttk.Button(char_frame.body_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click(), style='Character.TButton')
+    char_frame.add_widget(export_character_sheet_button)
 
-    powers_checkbox = ttk.Checkbutton(char_frame, text="Exclude Powers", variable=include_powers)
-    powers_checkbox.pack(anchor="w", pady=2)
+    powers_checkbox = ttk.Checkbutton(char_frame.body_frame, text="Exclude Powers", variable=include_powers)
+    char_frame.add_widget(powers_checkbox)
 
-    close_tab_button = ttk.Button(char_frame, text="Close Tab", command=lambda: close_current_tab(notebook, text_widgets), style='Character.TButton')
-    close_tab_button.pack(fill="x", pady=2)
+    close_tab_button = ttk.Button(char_frame.body_frame, text="Close Tab", command=lambda: close_current_tab(notebook, text_widgets), style='Character.TButton')
+    char_frame.add_widget(close_tab_button)
 
-    copy_prompt_button = ttk.Button(char_frame, text="Select AI Prompt", command=lambda: copy_prompt_to_clipboard(notebook, characters), style='Character.TButton')
-    copy_prompt_button.pack(fill="x", pady=2)
+    copy_prompt_button = ttk.Button(char_frame.body_frame, text="Select AI Prompt", command=lambda: copy_prompt_to_clipboard(notebook, characters), style='Character.TButton')
+    char_frame.add_widget(copy_prompt_button)
 
     # Equipment Management Frame
-    equip_frame = ttk.Labelframe(left_frame, text="Equipment Management", padding=5)
+    equip_frame = CollapsibleSection(left_frame, "Equipment Management")
     equip_frame.pack(fill="x", pady=5)
 
-    equipment_points_label = ttk.Label(equip_frame, text="Equipment Points:")
-    equipment_points_label.pack(anchor="w")
+    equipment_points_label = ttk.Label(equip_frame.body_frame, text="Equipment Points:")
+    equip_frame.add_widget(equipment_points_label)
 
-    equipment_points_entry = ttk.Entry(equip_frame)
-    equipment_points_entry.pack(fill="x", pady=2)
+    equipment_points_entry = ttk.Entry(equip_frame.body_frame)
+    equip_frame.add_widget(equipment_points_entry)
 
-    generate_equipment_button = ttk.Button(equip_frame, text="Generate Equipment", command=lambda: on_generate_equipment_click(equipment_points_entry, notebook, text_widgets), style='Equipment.TButton')
-    generate_equipment_button.pack(fill="x", pady=2)
+    generate_equipment_button = ttk.Button(equip_frame.body_frame, text="Generate Equipment", command=lambda: on_generate_equipment_click(equipment_points_entry, notebook, text_widgets), style='Equipment.TButton')
+    equip_frame.add_widget(generate_equipment_button)
 
-    save_equipment_button = ttk.Button(equip_frame, text="Save Equipment", command=lambda: on_save_equipment_click(notebook, text_widgets), style='Equipment.TButton')
-    save_equipment_button.pack(fill="x", pady=2)
+    save_equipment_button = ttk.Button(equip_frame.body_frame, text="Save Equipment", command=lambda: on_save_equipment_click(notebook, text_widgets), style='Equipment.TButton')
+    equip_frame.add_widget(save_equipment_button)
 
     # Hideout Management Frame
-    hideout_frame = ttk.Labelframe(left_frame, text="Hideout Management", padding=5)
+    hideout_frame = CollapsibleSection(left_frame, "Hideout Management")
     hideout_frame.pack(fill="x", pady=5)
 
-    generate_hideout_button = ttk.Button(hideout_frame, text="Generate Hideout", command=lambda: generate_hideout(notebook, text_widgets), style='Hideout.TButton')
-    generate_hideout_button.pack(fill="x", pady=2)
+    generate_hideout_button = ttk.Button(hideout_frame.body_frame, text="Generate Hideout", command=lambda: generate_hideout(notebook, text_widgets), style='Hideout.TButton')
+    hideout_frame.add_widget(generate_hideout_button)
 
-    save_hideout_button = ttk.Button(hideout_frame, text="Save Hideout", command=lambda: save_hideout(hideout_details), style='Hideout.TButton')
-    save_hideout_button.pack(fill="x", pady=2)
+    save_hideout_button = ttk.Button(hideout_frame.body_frame, text="Save Hideout", command=lambda: save_hideout(hideout_details), style='Hideout.TButton')
+    hideout_frame.add_widget(save_hideout_button)
 
     # Miscellaneous Frame
-    misc_frame = ttk.Labelframe(left_frame, text="Miscellaneous", padding=5)
+    misc_frame = CollapsibleSection(left_frame, "Miscellaneous")
     misc_frame.pack(fill="x", pady=5)
 
-    generate_encounter_button = ttk.Button(misc_frame, text="Generate Encounter", command=generate_encounter, style='Encounter.TButton')
-    generate_encounter_button.pack(fill="x", pady=2)
+    generate_encounter_button = ttk.Button(misc_frame.body_frame, text="Generate Encounter", command=generate_encounter, style='Encounter.TButton')
+    misc_frame.add_widget(generate_encounter_button)
 
-    init_tracker_button = ttk.Button(misc_frame, text="Initiative Tracker", command=open_initiative_tracker, style='Initiative.TButton')
-    init_tracker_button.pack(fill="x", pady=2)
+    init_tracker_button = ttk.Button(misc_frame.body_frame, text="Initiative Tracker", command=open_initiative_tracker, style='Initiative.TButton')
+    misc_frame.add_widget(init_tracker_button)
 
-    settings_button = ttk.Button(misc_frame, text="Settings", command=lambda: settings.open_settings(root), style='Initiative.TButton')  # Add settings button
-    settings_button.pack(fill="x", pady=2)
+    settings_button = ttk.Button(misc_frame.body_frame, text="Settings", command=lambda: settings.open_settings(root), style='Initiative.TButton')  # Add settings button
+    misc_frame.add_widget(settings_button)
 
     # Reference Management Frame
-    reference_frame = ttk.Labelframe(left_frame, text="Reference Management", padding=5)
+    reference_frame = CollapsibleSection(left_frame, "Reference Management")
     reference_frame.pack(fill="x", pady=5)
 
-    calculate_powers_button = ttk.Button(reference_frame, text="Calculate Powers", command=open_calculate_powers_window, style='Character.TButton')
-    calculate_powers_button.pack(fill="x", pady=2)
+    calculate_powers_button = ttk.Button(reference_frame.body_frame, text="Calculate Powers", command=open_calculate_powers_window, style='Character.TButton')
+    reference_frame.add_widget(calculate_powers_button)
 
-    reference_data_button = ttk.Button(reference_frame, text="Reference Data", command=open_reference_data, style='Character.TButton')
-    reference_data_button.pack(fill="x", pady=2)
+    reference_data_button = ttk.Button(reference_frame.body_frame, text="Reference Data", command=open_reference_data, style='Character.TButton')
+    reference_frame.add_widget(reference_data_button)
 
-    notes_button = ttk.Button(reference_frame, text="Notes", command=open_notes_window, style='Character.TButton')
-    notes_button.pack(fill="x", pady=2)
+    notes_button = ttk.Button(reference_frame.body_frame, text="Notes", command=open_notes_window, style='Character.TButton')
+    reference_frame.add_widget(notes_button)
 
-    gm_cheat_sheet_button = ttk.Button(reference_frame, text="GM Cheat Sheet", command=open_gm_cheat_sheet, style='Character.TButton')
-    gm_cheat_sheet_button.pack(fill="x", pady=2)
+    gm_cheat_sheet_button = ttk.Button(reference_frame.body_frame, text="GM Cheat Sheet", command=open_gm_cheat_sheet, style='Character.TButton')
+    reference_frame.add_widget(gm_cheat_sheet_button)
 
     # Configure the main window to resize properly
     root.grid_rowconfigure(0, weight=1)
@@ -859,6 +886,7 @@ def main():
 
     root.protocol("WM_DELETE_WINDOW", lambda: [save_tabs(notebook, text_widgets, characters), root.destroy()])  # Save tabs and close the program
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()

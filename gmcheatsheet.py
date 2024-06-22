@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog, simpledialog, messagebox
 import pandas as pd
 import json
+import os
 
 class Tooltip:
     def __init__(self, widget):
@@ -76,6 +77,10 @@ class GMcheatSheetApp:
 
         self.tooltip = Tooltip(self.tree)
 
+        self.load_data()
+
+        self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
+
     def add_character(self):
         character_name = simpledialog.askstring("Input", "Enter CHARACTER NAME:")
         if character_name:
@@ -143,22 +148,18 @@ class GMcheatSheetApp:
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to upload character: {e}")
 
-    def save_data(self):
+    def save_data(self, filename="gmcheatsheet_data.json"):
         data = []
         for item in self.tree.get_children():
             values = self.tree.item(item, "values")
             row_data = {self.columns[i]: values[i] for i in range(len(self.columns))}
             data.append(row_data)
 
-        filename = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON files", "*.json")])
-        if filename:
-            with open(filename, "w") as f:
-                json.dump(data, f, indent=4)
-            messagebox.showinfo("Save", "Data saved successfully!")
+        with open(filename, "w") as f:
+            json.dump(data, f, indent=4)
 
-    def load_data(self):
-        filename = filedialog.askopenfilename(filetypes=[("JSON files", "*.json")])
-        if filename:
+    def load_data(self, filename="gmcheatsheet_data.json"):
+        if os.path.exists(filename):
             with open(filename, "r") as f:
                 data = json.load(f)
 
@@ -168,7 +169,10 @@ class GMcheatSheetApp:
             for row in data:
                 values = [row[col] for col in self.columns]
                 self.tree.insert("", "end", values=values)
-            messagebox.showinfo("Load", "Data loaded successfully!")
+
+    def on_closing(self):
+        self.save_data()
+        self.master.destroy()
 
     def on_double_click(self, event):
         selected_items = self.tree.selection()
@@ -259,5 +263,5 @@ def open_gm_cheat_sheet():
 
 if __name__ == "__main__":
     root = tk.Tk()
-    GMcheatSheetApp(root)
+    app = GMcheatSheetApp(root)
     root.mainloop()

@@ -1,7 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
 
+current_theme = 'default'
+
 def apply_theme(theme, root):
+    global current_theme
+    current_theme = theme
     style = ttk.Style()
     if theme == 'dark':
         style.theme_use('clam')
@@ -64,7 +68,7 @@ def open_settings(root):
     theme_label.pack(pady=10)
 
     themes = ['default', 'dark', 'light', 'blue', 'green', 'red', 'system']
-    theme_var = tk.StringVar(value='default')
+    theme_var = tk.StringVar(value=current_theme)
 
     for theme in themes:
         radio_button = ttk.Radiobutton(settings_window, text=theme.capitalize(), variable=theme_var, value=theme)
@@ -77,3 +81,6 @@ def open_settings(root):
     apply_button.pack(pady=20)
 
     settings_window.mainloop()
+
+def apply_current_theme(window):
+    apply_theme(current_theme, window)

@@ -3,6 +3,7 @@ from tkinter import ttk, messagebox
 from PIL import Image, ImageTk
 import json
 import random
+import settings  # Import the settings module
 
 class WrappingText(tk.Text):
     def __init__(self, parent, sort_callback, **kwargs):
@@ -25,6 +26,7 @@ def open_combat_calculator():
     calc_window = tk.Toplevel()
     calc_window.title("Combat Calculator")
     calc_window.geometry("800x400")
+    settings.apply_current_theme(calc_window)  # Apply current theme
 
     # Dodge Frame
     dodge_frame = tk.Frame(calc_window, bd=2, relief="sunken")
@@ -131,6 +133,7 @@ def open_initiative_tracker():
     tracker_window = tk.Toplevel()
     tracker_window.title("Initiative Tracker")
     tracker_window.geometry("1600x600")
+    settings.apply_current_theme(tracker_window)  # Apply current theme
 
     # Configure styles
     style = ttk.Style()
@@ -320,6 +323,7 @@ def open_initiative_tracker():
         condition_window = tk.Toplevel()
         condition_window.title("Conditions")
         condition_window.geometry("500x400")
+        settings.apply_current_theme(condition_window)  # Apply current theme
 
         conditions_dict = load_conditions()
         canvas = tk.Canvas(condition_window)
@@ -354,6 +358,7 @@ def open_initiative_tracker():
         calcs_window = tk.Toplevel()
         calcs_window.title("Measurement Calcs")
         calcs_window.geometry("600x800")
+        settings.apply_current_theme(calcs_window)  # Apply current theme
 
         img = Image.open("./images/combat_misc/cm_calcs.jpg")
         img = img.resize((580, 780), Image.LANCZOS)
@@ -378,6 +383,7 @@ def open_dice_roller():
     dice_window = tk.Toplevel()
     dice_window.title("Dice Roller")
     dice_window.geometry("200x400")
+    settings.apply_current_theme(dice_window)  # Apply current theme
 
     def roll_and_display(dice_type):
         result = roll_dice(dice_type)
