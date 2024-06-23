@@ -289,3 +289,23 @@ def generate_character_description(character):
     )
 
     return description
+
+
+def calculate_accuracy(character, power):
+    accuracy = 0
+    extras = {extra: rank for extra, rank in zip(power.get('extras', []), power.get('extras_ranks', []))}
+    
+    if power['type'] == 'Combat':
+        if power['range'] == 'Ranged':
+            dex_stat = character['stats'].get('Dexterity', {}).get('value', 0)
+            ranged_attack_bonus = sum(adv['rank'] for adv in character['advantages'] if adv['name'] == 'Ranged Attack')
+            accurate_bonus = extras.get('Accurate', 0) * 2  # Each rank of Accurate provides a +2 bonus
+            accuracy = dex_stat + ranged_attack_bonus + accurate_bonus
+        
+        elif power['range'] == 'Melee':
+            fighting_stat = character['stats'].get('Fighting', {}).get('value', 0)
+            close_attack_bonus = sum(adv['rank'] for adv in character['advantages'] if adv['name'] == 'Close Attack')
+            accurate_bonus = extras.get('Accurate', 0) * 2
+            accuracy = fighting_stat + close_attack_bonus + accurate_bonus
+    
+    return accuracy

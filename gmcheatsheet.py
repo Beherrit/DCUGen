@@ -3,6 +3,7 @@ from tkinter import ttk, filedialog, simpledialog, messagebox
 import pandas as pd
 import json
 import os
+from utils import calculate_accuracy
 
 gm_cheat_sheet_app = None  # Global variable for GM Cheat Sheet app
 
@@ -29,11 +30,12 @@ class Tooltip:
             self.tooltip_window.destroy()
         self.tooltip_window = None
 
+
 class GMcheatSheetApp:
     def __init__(self, master):
         self.master = master
         self.master.title("GM Cheat Sheet")
-        self.master.geometry("1600x600")
+        self.master.geometry("1600x1000")
 
         self.frame = tk.Frame(self.master)
         self.frame.pack(fill="both", expand=True)
@@ -65,9 +67,9 @@ class GMcheatSheetApp:
         self.tree_scroll_x = tk.Scrollbar(self.tree_frame, orient="horizontal")
         self.tree_scroll_x.pack(side="bottom", fill="x")
 
-        self.columns = ["CHARACTER NAME", "Strength", "Stamina", "Agility", "Dexterity", "Fighting", 
-                        "Intellect", "Awareness", "Presence", "Dodge", "Fortitude", "Parry", 
-                        "Willpower", "Toughness", "Initiative", "Motivation", "Complication One", 
+        self.columns = ["CHARACTER NAME", "Strength", "Stamina", "Agility", "Dexterity", "Fighting",
+                        "Intellect", "Awareness", "Presence", "Dodge", "Fortitude", "Parry",
+                        "Willpower", "Toughness", "Initiative", "Motivation", "Complication One",
                         "Complication Two", "Summary"]
 
         self.tree = ttk.Treeview(self.tree_frame, columns=self.columns, show="headings", yscrollcommand=self.tree_scroll_y.set, xscrollcommand=self.tree_scroll_x.set)
@@ -80,7 +82,7 @@ class GMcheatSheetApp:
                 self.tree.heading(col, text=col)
                 self.tree.column(col, width=150, stretch=True)
 
-        self.tree.pack(side="left", fill="both", expand=True)
+        self.tree.pack(side="top", fill="both", expand=True)
         self.tree_scroll_y.config(command=self.tree.yview)
         self.tree_scroll_x.config(command=self.tree.xview)
 
@@ -93,6 +95,36 @@ class GMcheatSheetApp:
         # Create a context menu
         self.context_menu = tk.Menu(self.tree, tearoff=0)
         self.context_menu.add_command(label="Delete Character", command=self.delete_character)
+
+        # Create secondary tree for powers, skills, and advantages
+        self.secondary_frame = tk.Frame(self.master)
+        self.secondary_frame.pack(fill="both", expand=True, padx=20, pady=10)
+
+        self.tree_secondary_scroll_y = tk.Scrollbar(self.secondary_frame, orient="vertical")
+        self.tree_secondary_scroll_y.pack(side="right", fill="y")
+
+        self.tree_secondary_scroll_x = tk.Scrollbar(self.secondary_frame, orient="horizontal")
+        self.tree_secondary_scroll_x.pack(side="bottom", fill="x")
+
+        self.secondary_columns = ["CHARACTER NAME"] + [f"Power {i+1}" for i in range(8)] + ["Skills", "Advantages"]
+        self.tree_secondary = ttk.Treeview(self.secondary_frame, columns=self.secondary_columns, show="headings", yscrollcommand=self.tree_secondary_scroll_y.set, xscrollcommand=self.tree_secondary_scroll_x.set)
+
+        for col in self.secondary_columns:
+            self.tree_secondary.heading(col, text=col)
+            self.tree_secondary.column(col, width=150, stretch=True)
+
+        self.tree_secondary.pack(side="top", fill="both", expand=True)
+        self.tree_secondary_scroll_y.config(command=self.tree_secondary.yview)
+        self.tree_secondary_scroll_x.config(command=self.tree_secondary.xview)
+
+        self.tree_secondary.bind("<Double-1>", self.on_double_click_secondary)
+        self.tree_secondary.bind("<Motion>", self.on_hover_secondary)
+        self.tree_secondary.bind("<Button-3>", self.show_context_menu_secondary)
+
+        self.tooltip_secondary = Tooltip(self.tree_secondary)
+
+        self.context_menu_secondary = tk.Menu(self.tree_secondary, tearoff=0)
+        self.context_menu_secondary.add_command(label="Delete Character", command=self.delete_character_secondary)
 
         self.load_data("gmcheatsheet_data.json")
 
@@ -110,7 +142,7 @@ class GMcheatSheetApp:
             try:
                 df = pd.read_excel(file_path, engine='openpyxl', header=None)
                 character = {
-                    'name': df.iloc[1, 10],  # K2
+                    'name': str(df.iloc[1, 10]) if not pd.isna(df.iloc[1, 10]) else 'Unknown',  # K2
                     'stats': {
                         'Strength': {'value': int(df.iloc[17, 13]) if not pd.isna(df.iloc[17, 13]) else ''},  # N18
                         'Stamina': {'value': int(df.iloc[21, 13]) if not pd.isna(df.iloc[21, 13]) else ''},  # N22
@@ -123,12 +155,12 @@ class GMcheatSheetApp:
                     },
                     'defenses': {
                         'Dodge': int(df.iloc[17, 25]) if not pd.isna(df.iloc[17, 25]) else '',  # Z18
-                        'Fort': int(df.iloc[20, 25]) if not pd.isna(df.iloc[20, 25]) else '',  # Z21
+                        'Fortitude': int(df.iloc[20, 25]) if not pd.isna(df.iloc[20, 25]) else '',  # Z21
                         'Parry': int(df.iloc[23, 25]) if not pd.isna(df.iloc[23, 25]) else '',  # Z24
                         'Will': int(df.iloc[26, 25]) if not pd.isna(df.iloc[26, 25]) else '',  # Z27
                         'Toughness': int(df.iloc[29, 25]) if not pd.isna(df.iloc[29, 25]) else '',  # Z30
                     },
-                    'Init': int(df.iloc[17, 36]) if not pd.isna(df.iloc[17, 36]) else '',  # AK18
+                    'initiative': int(df.iloc[17, 36]) if not pd.isna(df.iloc[17, 36]) else '',  # AK18
                     'Motivation': {
                         'name': str(df.iloc[87, 5]) if not pd.isna(df.iloc[87, 5]) else '',  # F88
                     },
@@ -161,15 +193,22 @@ class GMcheatSheetApp:
                 ]
 
                 self.tree.insert("", "end", values=row_data)
+                self.import_character_secondary(character)
+
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to upload character: {e}")
 
     def save_data(self, filename="gmcheatsheet_data.json"):
-        data = []
+        data = {'primary': [], 'secondary': []}
         for item in self.tree.get_children():
             values = self.tree.item(item, "values")
             row_data = {self.columns[i]: values[i] for i in range(len(self.columns))}
-            data.append(row_data)
+            data['primary'].append(row_data)
+
+        for item in self.tree_secondary.get_children():
+            values = self.tree_secondary.item(item, "values")
+            row_data = {self.secondary_columns[i]: values[i] for i in range(len(self.secondary_columns))}
+            data['secondary'].append(row_data)
 
         with open(filename, "w") as f:
             json.dump(data, f, indent=4)
@@ -182,9 +221,16 @@ class GMcheatSheetApp:
             for item in self.tree.get_children():
                 self.tree.delete(item)
 
-            for row in data:
+            for row in data['primary']:
                 values = [row[col] for col in self.columns]
                 self.tree.insert("", "end", values=values)
+
+            for item in self.tree_secondary.get_children():
+                self.tree_secondary.delete(item)
+
+            for row in data['secondary']:
+                values = [row[col] for col in self.secondary_columns]
+                self.tree_secondary.insert("", "end", values=values)
 
     def load_manual_file(self):
         file_path = filedialog.askopenfilename(filetypes=[("JSON files", "*.json")])
@@ -199,7 +245,7 @@ class GMcheatSheetApp:
         selected_items = self.tree.selection()
         if not selected_items:
             return
-        
+
         item = selected_items[0]
         column = self.tree.identify_column(event.x)
         column_index = int(column[1:]) - 1
@@ -311,6 +357,142 @@ class GMcheatSheetApp:
             ""  # Summary field
         ]
         self.tree.insert("", "end", values=row_data)
+        self.import_character_secondary(character)
+
+    def import_character_secondary(self, character):
+        powers_data = [character['name']]
+        for power in character.get('powers', []):
+            power_info = f"{power['name']} (Rank: {power['rank']}, Cost: {power['cost']})"
+            if 'resisted' in power:
+                power_info += f"\n  Resisted by: {power['resisted']}"
+            if power['type'] == 'Combat':
+                accuracy = calculate_accuracy(character, power)
+                power_info += f"\n  Accuracy: {accuracy}"
+            if 'extras' in power and power['extras']:
+                extras_details = ", ".join([f"{extra_name} (Rank: {extra_rank})" for extra_name, extra_rank in zip(power['extras'], power['extras_ranks'])])
+                power_info += f"\n- Extras: {extras_details}"
+            if 'flaws' in power and power['flaws']:
+                flaws_details = ", ".join([f"{flaw_name} (Rank: {flaw_rank})" for flaw_name, flaw_rank in zip(power['flaws'], power['flaws_ranks'])])
+                power_info += f"\n- Flaws: {flaws_details}"
+            if 'increased_range' in power:
+                power_info += f"\n- Increased Range: {power['increased_range']} feet"
+            powers_data.append(power_info)
+
+        # Ensure the powers_data has the correct number of columns
+        while len(powers_data) < len(self.secondary_columns) - 2:
+            powers_data.append("")
+
+        # Add skills and advantages
+        skills_info = ", ".join([f"{skill['name']} (Rank: {skill['rank']})" for skill in character.get('skills', [])])
+        advantages_info = ", ".join([f"{advantage['name']} (Rank: {advantage['rank']})" for advantage in character.get('advantages', [])])
+
+        powers_data.extend([skills_info, advantages_info])
+
+        self.tree_secondary.insert("", "end", values=powers_data)
+
+        # Adjust the row height
+        self.adjust_row_height(self.tree_secondary)
+
+    def adjust_row_height(self, tree):
+        style = ttk.Style()
+        style.configure("Treeview", rowheight=40)  # Adjust the height as needed
+
+    def on_double_click_secondary(self, event):
+        selected_items = self.tree_secondary.selection()
+        if not selected_items:
+            return
+
+        item = selected_items[0]
+        column = self.tree_secondary.identify_column(event.x)
+        column_index = int(column[1:]) - 1
+
+        def save_edit(event):
+            self.tree_secondary.set(item, column, entry.get())
+            entry.destroy()
+            self.focus_next_cell_secondary(item, column_index)
+
+        def cancel_edit(event):
+            entry.destroy()
+            self.focus_next_cell_secondary(item, column_index)
+
+        cell_bbox = self.tree_secondary.bbox(item, column)
+        if cell_bbox:
+            x, y, width, height = cell_bbox
+            entry = tk.Entry(self.tree_secondary)
+            entry.place(x=x, y=y, width=width, height=height, anchor="nw")
+            entry.insert(0, self.tree_secondary.item(item, "values")[column_index])
+            entry.bind("<Return>", save_edit)
+            entry.bind("<Tab>", save_edit)
+            entry.bind("<FocusOut>", cancel_edit)
+            entry.focus()
+            entry.select_range(0, tk.END)
+
+    def focus_next_cell_secondary(self, item, column_index):
+        next_column_index = (column_index + 1) % len(self.secondary_columns)
+        next_column = f"#{next_column_index + 1}"
+        self.tree_secondary.focus(item)
+        self.tree_secondary.selection_set(item)
+        self.tree_secondary.see(item)
+        self.tree_secondary.bbox(item, next_column)
+        self.on_double_click_create_entry_secondary(item, next_column_index)
+
+    def on_double_click_create_entry_secondary(self, item, column_index):
+        def save_edit(event):
+            self.tree_secondary.set(item, f"#{column_index + 1}", entry.get())
+            entry.destroy()
+            self.focus_next_cell_secondary(item, column_index)
+
+        def cancel_edit(event):
+            entry.destroy()
+
+        cell_bbox = self.tree_secondary.bbox(item, f"#{column_index + 1}")
+        if cell_bbox:
+            x, y, width, height = cell_bbox
+            entry = tk.Entry(self.tree_secondary)
+            entry.place(x=x, y=y, width=width, height=height, anchor="nw")
+            entry.insert(0, self.tree_secondary.item(item, "values")[column_index])
+            entry.bind("<Return>", save_edit)
+            entry.bind("<Tab>", save_edit)
+            entry.bind("<FocusOut>", cancel_edit)
+            entry.focus()
+            entry.select_range(0, tk.END)
+
+    def show_context_menu_secondary(self, event):
+        self.context_menu_secondary.tk_popup(event.x_root, event.y_root)
+
+    def delete_character_secondary(self):
+        selected_items = self.tree_secondary.selection()
+        if not selected_items:
+            return
+        for item in selected_items:
+            self.tree_secondary.delete(item)
+
+    def on_hover_secondary(self, event):
+        region = self.tree_secondary.identify_region(event.x, event.y)
+        if region == "cell":
+            item = self.tree_secondary.identify_row(event.y)
+            column = self.tree_secondary.identify_column(event.x)
+            column_index = int(column[1:]) - 1
+            if item:
+                bbox = self.tree_secondary.bbox(item, column)
+                if bbox:
+                    x, y, width, height = bbox
+                    values = self.tree_secondary.item(item, "values")
+                    if values:
+                        if column_index in [9, 10]:  # Skills or Advantages column
+                            text = "\n".join(values[column_index].split(", "))
+                        else:
+                            text = values[column_index]
+                        self.tooltip_secondary.show(text, x, y)
+                    else:
+                        self.tooltip_secondary.hide()
+                else:
+                    self.tooltip_secondary.hide()
+            else:
+                self.tooltip_secondary.hide()
+        else:
+            self.tooltip_secondary.hide()
+
 
 def open_gm_cheat_sheet():
     global gm_cheat_sheet_app
@@ -318,7 +500,6 @@ def open_gm_cheat_sheet():
         gm_cheat_sheet_window = tk.Toplevel()
         gm_cheat_sheet_app = GMcheatSheetApp(gm_cheat_sheet_window)
     return gm_cheat_sheet_app
-
 
 
 if __name__ == "__main__":

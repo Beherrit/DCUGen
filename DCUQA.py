@@ -151,25 +151,6 @@ def calculate_defenses(character, power_level, allocated_points):
 
     return defenses
 
-def calculate_accuracy(character, power):
-    accuracy = 0
-    extras = {extra: rank for extra, rank in zip(power.get('extras', []), power.get('extras_ranks', []))}
-    
-    if power['type'] == 'Combat':
-        if power['range'] == 'Ranged':
-            dex_stat = character['stats'].get('Dexterity', {}).get('value', 0)
-            ranged_attack_bonus = sum(adv['rank'] for adv in character['advantages'] if adv['name'] == 'Ranged Attack')
-            accurate_bonus = extras.get('Accurate', 0) * 2  # Each rank of Accurate provides a +2 bonus
-            accuracy = dex_stat + ranged_attack_bonus + accurate_bonus
-        
-        elif power['range'] == 'Melee':
-            fighting_stat = character['stats'].get('Fighting', {}).get('value', 0)
-            close_attack_bonus = sum(adv['rank'] for adv in character['advantages'] if adv['name'] == 'Close Attack')
-            accurate_bonus = extras.get('Accurate', 0) * 2
-            accuracy = fighting_stat + close_attack_bonus + accurate_bonus
-    
-    return accuracy
-
 def allocate_stat(stat_name, allocated_points, total_range, stats):
     stat_details = next(stat for stat in stats["STATS"] if stat["name"] == stat_name)
     stat_range = stat_details["range"][1] - stat_details["range"][0] + 1
@@ -711,19 +692,53 @@ class CollapsibleSection:
     def pack(self, **kwargs):
         self.frame.pack(**kwargs)
 
-def on_export_to_gm_screen():
+def export_to_gm_screen():
     global gm_cheat_sheet_app
-    gm_cheat_sheet_app = open_gm_cheat_sheet()
-
-    current_tab = notebook.select()
-    tab_name = notebook.tab(current_tab, "text")
-    character = characters.get(tab_name)
     
-    if character:
-        gm_cheat_sheet_app.import_character(character)
-        messagebox.showinfo("Success", f"Character from {tab_name} exported to GM Screen.")
-    else:
-        messagebox.showerror("Error", f"No character found in {tab_name}.")
+    if not gm_cheat_sheet_app or not gm_cheat_sheet_app.master.winfo_exists():
+        gm_cheat_sheet_app = open_gm_cheat_sheet()
+
+    # Clear existing data in the GM Cheat Sheet
+    for item in gm_cheat_sheet_app.tree.get_children():
+        gm_cheat_sheet_app.tree.delete(item)
+
+    for item in gm_cheat_sheet_app.tree_secondary.get_children():
+        gm_cheat_sheet_app.tree_secondary.delete(item)
+
+    # Transfer characters from the tabs
+    for tab in notebook.tabs():
+        tab_name = notebook.tab(tab, "text")
+        character = characters.get(tab_name)
+
+        if character:
+            # Insert primary character details into the GM Cheat Sheet
+            row_data = [
+                character['name'],
+                character['stats'].get('Strength', {}).get('value', ''),
+                character['stats'].get('Stamina', {}).get('value', ''),
+                character['stats'].get('Agility', {}).get('value', ''),
+                character['stats'].get('Dexterity', {}).get('value', ''),
+                character['stats'].get('Fighting', {}).get('value', ''),
+                character['stats'].get('Intellect', {}).get('value', ''),
+                character['stats'].get('Awareness', {}).get('value', ''),
+                character['stats'].get('Presence', {}).get('value', ''),
+                character['defenses'].get('Dodge', ''),
+                character['defenses'].get('Fortitude', ''),
+                character['defenses'].get('Parry', ''),
+                character['defenses'].get('Will', ''),
+                character['defenses'].get('Toughness', ''),
+                character['initiative'],
+                character['Motivation']['name'],
+                character['Complications'][0],
+                character['Complications'][1],
+                ""  # Summary field
+            ]
+            gm_cheat_sheet_app.tree.insert("", "end", values=row_data)
+            gm_cheat_sheet_app.import_character_secondary(character)
+
+    gm_cheat_sheet_app.master.lift()  # Bring the GM Cheat Sheet window to the front
+
+
 
 def main():
     global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, selected_archetype, hideout_details
@@ -838,7 +853,7 @@ def main():
     copy_prompt_button = ttk.Button(char_frame.body_frame, text="Select AI Prompt", command=lambda: copy_prompt_to_clipboard(notebook, characters), style='Character.TButton')
     char_frame.add_widget(copy_prompt_button)
 
-    export_to_gm_screen_button = ttk.Button(char_frame.body_frame, text="Export to GM Screen", command=on_export_to_gm_screen, style='Character.TButton')
+    export_to_gm_screen_button = ttk.Button(char_frame.body_frame, text="Export to GM Screen", command=export_to_gm_screen, style='Character.TButton')
     char_frame.add_widget(export_to_gm_screen_button)
 
     # Equipment Management Frame

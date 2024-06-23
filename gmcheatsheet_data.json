@@ -1,1 +1,74 @@
-[]
+{
+    "primary": [
+        {
+            "CHARACTER NAME": "Paula",
+            "Strength": "0",
+            "Stamina": "3",
+            "Agility": "1",
+            "Dexterity": "0",
+            "Fighting": "0",
+            "Intellect": "3",
+            "Awareness": "0",
+            "Presence": "3",
+            "Dodge": "14",
+            "Fortitude": "13",
+            "Parry": "12",
+            "Willpower": "2",
+            "Toughness": "3",
+            "Initiative": "1",
+            "Motivation": "Recognition",
+            "Complication One": "{'name': 'Haunted Past', 'description': 'Traumatic or troubling events from the past.'}",
+            "Complication Two": "{'name': 'Lost Love', 'description': 'The memory or presence of a lost love causes emotional turmoil.'}",
+            "Summary": ""
+        },
+        {
+            "CHARACTER NAME": "Phoebe",
+            "Strength": "3",
+            "Stamina": "2",
+            "Agility": "3",
+            "Dexterity": "0",
+            "Fighting": "2",
+            "Intellect": "1",
+            "Awareness": "3",
+            "Presence": "1",
+            "Dodge": "3",
+            "Fortitude": "2",
+            "Parry": "4",
+            "Willpower": "3",
+            "Toughness": "2",
+            "Initiative": "3",
+            "Motivation": "Moral Duty",
+            "Complication One": "{'name': 'Rivalry', 'description': 'Competition or conflict with another hero or group.'}",
+            "Complication Two": "{'name': 'Debt', 'description': 'Financial, moral, or other debts that are owed.'}",
+            "Summary": ""
+        }
+    ],
+    "secondary": [
+        {
+            "CHARACTER NAME": "Paula",
+            "Power 1": "Enhanced Trait Fortitude (Rank: 8, Cost: 11)\n- Extras: Area Perception (Rank: 1)",
+            "Power 2": "Immunity (Rank: 8, Cost: 5)\n- Extras: Precise (Rank: 1)\n- Flaws: Increased Action (Rank: 3), Side Effect (Rank: 1)",
+            "Power 3": "Enhanced Trait Dodge (Rank: 10, Cost: 9)\n- Extras: Variable Descriptor (Rank: 2), Dimensional (Rank: 1), Insidious (Rank: 1)\n- Flaws: Tiring (Rank: 4)",
+            "Power 4": "Enhanced Trait Parry (Rank: 12, Cost: 8)\n- Flaws: Removable (Rank: 1), Concentration (Rank: 3)",
+            "Power 5": "Environment Control (Rank: 3, Cost: 3)\n- Extras: Extended Range (Rank: 2), Accurate (Rank: 2)\n- Flaws: Diminished Range (Rank: 3), Resistible (Rank: 2)",
+            "Power 6": "Power-Lifting (Rank: 1, Cost: 1)\n- Flaws: Grab-Based (Rank: 1), Tiring (Rank: 1)",
+            "Power 7": "",
+            "Power 8": "",
+            "Skills": "Investigation (Rank: 0), Ranged Combat (Rank: 2), Deception (Rank: 4), Persuasion (Rank: 0), Close Combat (Rank: 0), Sleight of Hand (Rank: 0), Acrobatics (Rank: 0), Insight (Rank: 2), Stealth (Rank: 4), Athletics (Rank: 0), Intimidation (Rank: 2), Technology (Rank: 2), Vehicles (Rank: 2), Perception (Rank: 2), Expertise (Rank: 2), Treatment (Rank: 2)",
+            "Advantages": "Improved Defense (Rank: 1), Minion (Rank: 9), Artificer (Rank: 1), Favored Foe (Rank: 1), Improved Critical (Rank: 4), Fearless (Rank: 1), Evasion (Rank: 2), All-out Attack (Rank: 1), Benefit Ambidexterity (Rank: 1), Power Attack (Rank: 1), Equipment (Rank: 10)"
+        },
+        {
+            "CHARACTER NAME": "Phoebe",
+            "Power 1": "Mind Reading (Rank: 9, Cost: 22)\n  Resisted by: Will\n  Accuracy: 6\n- Extras: Accurate (Rank: 1), Accurate (Rank: 3)",
+            "Power 2": "Senses (Rank: 5, Cost: 3)\n- Extras: Affects Corporeal (Rank: 2), Increased Range (Rank: 2)\n- Flaws: Unreliable (Rank: 4), Tiring (Rank: 1)\n- Increased Range: 120 feet",
+            "Power 3": "Feature (Rank: 12, Cost: 8)\n- Extras: Feature (Rank: 4), Affects Corporeal (Rank: 5), Alternate Resistance Dodge (Rank: 1)\n- Flaws: Check Required (Rank: 4), Concentration (Rank: 4), Tiring (Rank: 2)",
+            "Power 4": "Duplication (Rank: 1, Cost: 2)",
+            "Power 5": "Affliction (Rank: 2, Cost: 1)\n  Resisted by: Fort\n  Accuracy: 4\n- Extras: Accurate (Rank: 2)\n- Flaws: Quirk (Rank: 1), Permanent (Rank: 2), Concentration (Rank: 1)",
+            "Power 6": "Alternate Form (Rank: 1, Cost: 1)",
+            "Power 7": "",
+            "Power 8": "",
+            "Skills": "Intimidation (Rank: 2), Sleight of Hand (Rank: 0), Perception (Rank: 0), Close Combat (Rank: 0), Technology (Rank: 0), Investigation (Rank: 2), Stealth (Rank: 4), Deception (Rank: 4), Treatment (Rank: 2), Acrobatics (Rank: 2), Ranged Combat (Rank: 4), Vehicles (Rank: 4), Expertise (Rank: 0), Athletics (Rank: 2), Insight (Rank: 4), Persuasion (Rank: 4)",
+            "Advantages": "Extraordinary Effort (Rank: 1), All-out Attack (Rank: 1), Leadership (Rank: 1), Luck (Rank: 10), Diehard (Rank: 1), Close Attack (Rank: 7), Second Chance (Rank: 3), Chokehold (Rank: 1), Benefit Alternate Identity (Rank: 1), Connected (Rank: 1), Equipment (Rank: 10)"
+        }
+    ]
+}
