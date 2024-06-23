@@ -26,7 +26,6 @@ class Tooltip:
             self.tooltip_window.destroy()
         self.tooltip_window = None
 
-
 class GMcheatSheetApp:
     def __init__(self, master):
         self.master = master
@@ -74,8 +73,13 @@ class GMcheatSheetApp:
 
         self.tree.bind("<Double-1>", self.on_double_click)
         self.tree.bind("<Motion>", self.on_hover)
+        self.tree.bind("<Button-3>", self.show_context_menu)  # Bind right-click to show context menu
 
         self.tooltip = Tooltip(self.tree)
+
+        # Create a context menu
+        self.context_menu = tk.Menu(self.tree, tearoff=0)
+        self.context_menu.add_command(label="Delete Character", command=self.delete_character)
 
         self.load_data()
 
@@ -95,30 +99,29 @@ class GMcheatSheetApp:
                 character = {
                     'name': df.iloc[1, 10],  # K2
                     'stats': {
-                        'Strength': {'value': int(df.iloc[13, 13]) if not pd.isna(df.iloc[13, 13]) else ''},  # N14
-                        'Stamina': {'value': int(df.iloc[17, 13]) if not pd.isna(df.iloc[17, 13]) else ''},  # N18
-                        'Agility': {'value': int(df.iloc[21, 13]) if not pd.isna(df.iloc[21, 13]) else ''},  # N22
-                        'Dexterity': {'value': int(df.iloc[25, 13]) if not pd.isna(df.iloc[25, 13]) else ''},  # N26
-                        'Fighting': {'value': int(df.iloc[29, 13]) if not pd.isna(df.iloc[29, 13]) else ''},  # N30
-                        'Intellect': {'value': int(df.iloc[33, 13]) if not pd.isna(df.iloc[33, 13]) else ''},  # N34
-                        'Awareness': {'value': int(df.iloc[37, 13]) if not pd.isna(df.iloc[37, 13]) else ''},  # N38
-                        'Presence': {'value': int(df.iloc[41, 13]) if not pd.isna(df.iloc[41, 13]) else ''},  # N42
+                        'Strength': {'value': int(df.iloc[17, 13]) if not pd.isna(df.iloc[17, 13]) else ''},  # N18
+                        'Stamina': {'value': int(df.iloc[21, 13]) if not pd.isna(df.iloc[21, 13]) else ''},  # N22
+                        'Agility': {'value': int(df.iloc[25, 13]) if not pd.isna(df.iloc[25, 13]) else ''},  # N26
+                        'Dexterity': {'value': int(df.iloc[29, 13]) if not pd.isna(df.iloc[29, 13]) else ''},  # N30
+                        'Fighting': {'value': int(df.iloc[33, 13]) if not pd.isna(df.iloc[33, 13]) else ''},  # N34
+                        'Intellect': {'value': int(df.iloc[37, 13]) if not pd.isna(df.iloc[37, 13]) else ''},  # N38
+                        'Awareness': {'value': int(df.iloc[41, 13]) if not pd.isna(df.iloc[41, 13]) else ''},  # N42
+                        'Presence': {'value': int(df.iloc[45, 13]) if not pd.isna(df.iloc[45, 13]) else ''},  # N46
                     },
                     'defenses': {
-                        'Dodge': int(df.iloc[14, 26]) if not pd.isna(df.iloc[14, 26]) else '',  # AA15
-                        'Fortitude': int(df.iloc[17, 26]) if not pd.isna(df.iloc[17, 26]) else '',  # AA18
-                        'Parry': int(df.iloc[20, 26]) if not pd.isna(df.iloc[20, 26]) else '',  # AA21
-                        'Willpower': int(df.iloc[23, 26]) if not pd.isna(df.iloc[23, 26]) else '',  # AA24
-                        'Toughness': int(df.iloc[26, 26]) if not pd.isna(df.iloc[26, 26]) else '',  # AA27
+                        'Dodge': int(df.iloc[17, 25]) if not pd.isna(df.iloc[17, 25]) else '',  # Z18
+                        'Fortitude': int(df.iloc[20, 25]) if not pd.isna(df.iloc[20, 25]) else '',  # Z21
+                        'Parry': int(df.iloc[23, 25]) if not pd.isna(df.iloc[23, 25]) else '',  # Z24
+                        'Willpower': int(df.iloc[26, 25]) if not pd.isna(df.iloc[26, 25]) else '',  # Z27
+                        'Toughness': int(df.iloc[29, 25]) if not pd.isna(df.iloc[29, 25]) else '',  # Z30
                     },
-                    'initiative': int(df.iloc[14, 37]) if not pd.isna(df.iloc[14, 37]) else '',  # AL15
+                    'initiative': int(df.iloc[17, 36]) if not pd.isna(df.iloc[17, 36]) else '',  # AK18
                     'Motivation': {
-                        'name': str(df.iloc[83, 5]).split(':')[0] if isinstance(df.iloc[83, 5], str) else '',
-                        'description': str(df.iloc[83, 5]).split(':')[1].strip() if isinstance(df.iloc[83, 5], str) and ':' in df.iloc[83, 5] else '',
+                        'name': str(df.iloc[87, 5]) if not pd.isna(df.iloc[87, 5]) else '',  # F88
                     },
                     'Complications': [
-                        str(df.iloc[85, 5]) if not pd.isna(df.iloc[85, 5]) else '',  # F86
-                        str(df.iloc[83, 35]) if not pd.isna(df.iloc[83, 35]) else '',  # AJ84
+                        str(df.iloc[87, 36]) if not pd.isna(df.iloc[87, 36]) else '',  # AK88
+                        str(df.iloc[89, 36]) if not pd.isna(df.iloc[89, 36]) else '',  # AK90
                     ]
                 }
 
@@ -138,7 +141,7 @@ class GMcheatSheetApp:
                     character['defenses'].get('Willpower', ''),
                     character['defenses'].get('Toughness', ''),
                     character['initiative'],
-                    f"{character['Motivation']['name']}: {character['Motivation']['description']}",
+                    character['Motivation']['name'],
                     character['Complications'][0],
                     character['Complications'][1],
                     ""  # Summary field
@@ -233,6 +236,16 @@ class GMcheatSheetApp:
             entry.bind("<FocusOut>", cancel_edit)
             entry.focus()
             entry.select_range(0, tk.END)
+
+    def show_context_menu(self, event):
+        self.context_menu.tk_popup(event.x_root, event.y_root)
+
+    def delete_character(self):
+        selected_items = self.tree.selection()
+        if not selected_items:
+            return
+        for item in selected_items:
+            self.tree.delete(item)
 
     def on_hover(self, event):
         region = self.tree.identify_region(event.x, event.y)

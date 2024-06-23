@@ -713,7 +713,7 @@ class CollapsibleSection:
 def main():
     global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, selected_archetype, hideout_details
     root = tk.Tk()
-    root.title("Character Creation Version 3.0 Prod")
+    root.title("Character Creation Version 3.1 Prod")
     dark_mode = True
     include_powers = tk.BooleanVar(value=False)  # Set include_powers to False by default (unchecked)
 
@@ -811,7 +811,7 @@ def main():
     generate_button = ttk.Button(char_frame.body_frame, text="Generate Character", command=on_generate_button_click, style='Character.TButton')
     char_frame.add_widget(generate_button)
 
-    export_character_sheet_button = ttk.Button(char_frame.body_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click(), style='Character.TButton')
+    export_character_sheet_button = ttk.Button(char_frame.body_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click(notebook, characters,text_widgets ), style='Character.TButton')
     char_frame.add_widget(export_character_sheet_button)
 
     powers_checkbox = ttk.Checkbutton(char_frame.body_frame, text="Exclude Powers", variable=include_powers)
