@@ -35,20 +35,26 @@ class GMcheatSheetApp:
         self.frame = tk.Frame(self.master)
         self.frame.pack(fill="both", expand=True)
 
-        self.add_button = ttk.Button(self.frame, text="Add New Character", command=self.add_character)
-        self.add_button.pack(pady=10)
+        self.button_frame = tk.Frame(self.frame)
+        self.button_frame.pack(fill="x", pady=10)
 
-        self.upload_button = ttk.Button(self.frame, text="Upload Character", command=self.upload_character)
-        self.upload_button.pack(pady=10)
+        self.add_button = ttk.Button(self.button_frame, text="Add New Character", command=self.add_character)
+        self.add_button.pack(side="left", padx=5)
 
-        self.save_button = ttk.Button(self.frame, text="Save", command=self.save_data)
-        self.save_button.pack(pady=10)
+        self.upload_button = ttk.Button(self.button_frame, text="Upload Character", command=self.upload_character)
+        self.upload_button.pack(side="left", padx=5)
 
-        self.load_button = ttk.Button(self.frame, text="Load", command=self.load_data)
-        self.load_button.pack(pady=10)
+        self.save_button = ttk.Button(self.button_frame, text="Save", command=self.save_data)
+        self.save_button.pack(side="left", padx=5)
+
+        self.load_button = ttk.Button(self.button_frame, text="Load", command=lambda: self.load_data("gmcheatsheet_data.json"))
+        self.load_button.pack(side="left", padx=5)
+
+        self.load_manual_button = ttk.Button(self.button_frame, text="Load Manual File", command=self.load_manual_file)
+        self.load_manual_button.pack(side="left", padx=5)
 
         self.tree_frame = tk.Frame(self.frame)
-        self.tree_frame.pack(fill="both", expand=True, padx=20, pady=20)
+        self.tree_frame.pack(fill="both", expand=True, padx=20, pady=10)
 
         self.tree_scroll_y = tk.Scrollbar(self.tree_frame, orient="vertical")
         self.tree_scroll_y.pack(side="right", fill="y")
@@ -64,8 +70,12 @@ class GMcheatSheetApp:
         self.tree = ttk.Treeview(self.tree_frame, columns=self.columns, show="headings", yscrollcommand=self.tree_scroll_y.set, xscrollcommand=self.tree_scroll_x.set)
 
         for col in self.columns:
-            self.tree.heading(col, text=col)
-            self.tree.column(col, width=100, stretch=True)
+            if col in ["Strength", "Stamina", "Agility", "Dexterity", "Fighting", "Intellect", "Awareness", "Presence", "Dodge", "Fortitude", "Parry", "Willpower", "Toughness", "Initiative"]:
+                self.tree.heading(col, text=col)
+                self.tree.column(col, width=50, stretch=False)
+            else:
+                self.tree.heading(col, text=col)
+                self.tree.column(col, width=150, stretch=True)
 
         self.tree.pack(side="left", fill="both", expand=True)
         self.tree_scroll_y.config(command=self.tree.yview)
@@ -81,7 +91,7 @@ class GMcheatSheetApp:
         self.context_menu = tk.Menu(self.tree, tearoff=0)
         self.context_menu.add_command(label="Delete Character", command=self.delete_character)
 
-        self.load_data()
+        self.load_data("gmcheatsheet_data.json")
 
         self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
 
@@ -172,6 +182,11 @@ class GMcheatSheetApp:
             for row in data:
                 values = [row[col] for col in self.columns]
                 self.tree.insert("", "end", values=values)
+
+    def load_manual_file(self):
+        file_path = filedialog.askopenfilename(filetypes=[("JSON files", "*.json")])
+        if file_path:
+            self.load_data(file_path)
 
     def on_closing(self):
         self.save_data()
