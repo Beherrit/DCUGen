@@ -75,12 +75,15 @@ class GMcheatSheetApp:
         self.tree = ttk.Treeview(self.tree_frame, columns=self.columns, show="headings", yscrollcommand=self.tree_scroll_y.set, xscrollcommand=self.tree_scroll_x.set)
 
         for col in self.columns:
-            if col in ["Strength", "Stamina", "Agility", "Dexterity", "Fighting", "Intellect", "Awareness", "Presence", "Dodge", "Fortitude", "Parry", "Will", "Toughness", "Initiative"]:
+            if col in ["Strength", "Stamina", "Agility", "Dexterity", "Fighting", "Intellect", "Awareness", "Presence", "Dodge", "Fortitude", "Parry", "Willpower", "Toughness", "Initiative"]:
                 self.tree.heading(col, text=col)
                 self.tree.column(col, width=50, stretch=False)
             else:
                 self.tree.heading(col, text=col)
                 self.tree.column(col, width=150, stretch=True)
+
+        # Make Willpower column smaller
+        self.tree.column("Willpower", width=50, stretch=False)
 
         self.tree.pack(side="top", fill="both", expand=True)
         self.tree_scroll_y.config(command=self.tree.yview)
@@ -106,12 +109,12 @@ class GMcheatSheetApp:
         self.tree_secondary_scroll_x = tk.Scrollbar(self.secondary_frame, orient="horizontal")
         self.tree_secondary_scroll_x.pack(side="bottom", fill="x")
 
-        self.secondary_columns = ["CHARACTER NAME"] + [f"Power {i+1}" for i in range(8)] + ["Skills", "Advantages"]
+        self.secondary_columns = ["CHARACTER NAME"] + [f"Power {i+1}" for i in range(10)] + ["Skills", "Advantages"]
         self.tree_secondary = ttk.Treeview(self.secondary_frame, columns=self.secondary_columns, show="headings", yscrollcommand=self.tree_secondary_scroll_y.set, xscrollcommand=self.tree_secondary_scroll_x.set)
 
         for col in self.secondary_columns:
             self.tree_secondary.heading(col, text=col)
-            self.tree_secondary.column(col, width=150, stretch=True)
+            self.tree_secondary.column(col, width=120, stretch=False)
 
         self.tree_secondary.pack(side="top", fill="both", expand=True)
         self.tree_secondary_scroll_y.config(command=self.tree_secondary.yview)
@@ -142,7 +145,7 @@ class GMcheatSheetApp:
             try:
                 df = pd.read_excel(file_path, engine='openpyxl', header=None)
                 character = {
-                    'name': str(df.iloc[1, 10]) if not pd.isna(df.iloc[1, 10]) else 'Unknown',  # K2
+                    'name': df.iloc[1, 10],  # K2
                     'stats': {
                         'Strength': {'value': int(df.iloc[17, 13]) if not pd.isna(df.iloc[17, 13]) else ''},  # N18
                         'Stamina': {'value': int(df.iloc[21, 13]) if not pd.isna(df.iloc[21, 13]) else ''},  # N22
@@ -376,6 +379,9 @@ class GMcheatSheetApp:
                 power_info += f"\n- Flaws: {flaws_details}"
             if 'increased_range' in power:
                 power_info += f"\n- Increased Range: {power['increased_range']} feet"
+            if 'failure_effects' in power:
+                failure_effects = ", ".join(power['failure_effects'])
+                power_info += f"\n- Failure Effects: {failure_effects}"
             powers_data.append(power_info)
 
         # Ensure the powers_data has the correct number of columns
@@ -479,10 +485,7 @@ class GMcheatSheetApp:
                     x, y, width, height = bbox
                     values = self.tree_secondary.item(item, "values")
                     if values:
-                        if column_index in [9, 10]:  # Skills or Advantages column
-                            text = "\n".join(values[column_index].split(", "))
-                        else:
-                            text = values[column_index]
+                        text = values[column_index].replace(", ", "\n")  # Display text vertically
                         self.tooltip_secondary.show(text, x, y)
                     else:
                         self.tooltip_secondary.hide()
