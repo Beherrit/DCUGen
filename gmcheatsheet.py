@@ -4,6 +4,9 @@ import pandas as pd
 import json
 import os
 
+gm_cheat_sheet_app = None  # Global variable for GM Cheat Sheet app
+
+
 class Tooltip:
     def __init__(self, widget):
         self.widget = widget
@@ -70,7 +73,7 @@ class GMcheatSheetApp:
         self.tree = ttk.Treeview(self.tree_frame, columns=self.columns, show="headings", yscrollcommand=self.tree_scroll_y.set, xscrollcommand=self.tree_scroll_x.set)
 
         for col in self.columns:
-            if col in ["Strength", "Stamina", "Agility", "Dexterity", "Fighting", "Intellect", "Awareness", "Presence", "Dodge", "Fortitude", "Parry", "Willpower", "Toughness", "Initiative"]:
+            if col in ["Strength", "Stamina", "Agility", "Dexterity", "Fighting", "Intellect", "Awareness", "Presence", "Dodge", "Fortitude", "Parry", "Will", "Toughness", "Initiative"]:
                 self.tree.heading(col, text=col)
                 self.tree.column(col, width=50, stretch=False)
             else:
@@ -120,12 +123,12 @@ class GMcheatSheetApp:
                     },
                     'defenses': {
                         'Dodge': int(df.iloc[17, 25]) if not pd.isna(df.iloc[17, 25]) else '',  # Z18
-                        'Fortitude': int(df.iloc[20, 25]) if not pd.isna(df.iloc[20, 25]) else '',  # Z21
+                        'Fort': int(df.iloc[20, 25]) if not pd.isna(df.iloc[20, 25]) else '',  # Z21
                         'Parry': int(df.iloc[23, 25]) if not pd.isna(df.iloc[23, 25]) else '',  # Z24
-                        'Willpower': int(df.iloc[26, 25]) if not pd.isna(df.iloc[26, 25]) else '',  # Z27
+                        'Will': int(df.iloc[26, 25]) if not pd.isna(df.iloc[26, 25]) else '',  # Z27
                         'Toughness': int(df.iloc[29, 25]) if not pd.isna(df.iloc[29, 25]) else '',  # Z30
                     },
-                    'initiative': int(df.iloc[17, 36]) if not pd.isna(df.iloc[17, 36]) else '',  # AK18
+                    'Init': int(df.iloc[17, 36]) if not pd.isna(df.iloc[17, 36]) else '',  # AK18
                     'Motivation': {
                         'name': str(df.iloc[87, 5]) if not pd.isna(df.iloc[87, 5]) else '',  # F88
                     },
@@ -148,7 +151,7 @@ class GMcheatSheetApp:
                     character['defenses'].get('Dodge', ''),
                     character['defenses'].get('Fortitude', ''),
                     character['defenses'].get('Parry', ''),
-                    character['defenses'].get('Willpower', ''),
+                    character['defenses'].get('Will', ''),
                     character['defenses'].get('Toughness', ''),
                     character['initiative'],
                     character['Motivation']['name'],
@@ -285,9 +288,38 @@ class GMcheatSheetApp:
         else:
             self.tooltip.hide()
 
+    def import_character(self, character):
+        row_data = [
+            character['name'],
+            character['stats'].get('Strength', {}).get('value', ''),
+            character['stats'].get('Stamina', {}).get('value', ''),
+            character['stats'].get('Agility', {}).get('value', ''),
+            character['stats'].get('Dexterity', {}).get('value', ''),
+            character['stats'].get('Fighting', {}).get('value', ''),
+            character['stats'].get('Intellect', {}).get('value', ''),
+            character['stats'].get('Awareness', {}).get('value', ''),
+            character['stats'].get('Presence', {}).get('value', ''),
+            character['defenses'].get('Dodge', ''),
+            character['defenses'].get('Fortitude', ''),
+            character['defenses'].get('Parry', ''),
+            character['defenses'].get('Will', ''),
+            character['defenses'].get('Toughness', ''),
+            character['initiative'],
+            character['Motivation']['name'],
+            character['Complications'][0],
+            character['Complications'][1],
+            ""  # Summary field
+        ]
+        self.tree.insert("", "end", values=row_data)
+
 def open_gm_cheat_sheet():
-    gm_cheat_sheet_window = tk.Toplevel()
-    GMcheatSheetApp(gm_cheat_sheet_window)
+    global gm_cheat_sheet_app
+    if gm_cheat_sheet_app is None or not gm_cheat_sheet_app.master.winfo_exists():
+        gm_cheat_sheet_window = tk.Toplevel()
+        gm_cheat_sheet_app = GMcheatSheetApp(gm_cheat_sheet_window)
+    return gm_cheat_sheet_app
+
+
 
 if __name__ == "__main__":
     root = tk.Tk()

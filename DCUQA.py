@@ -18,6 +18,7 @@ hideout_details = {}
 characters = {}
 POWER_POINTS_PER_LEVEL = 15
 current_theme = None
+gm_cheat_sheet_app = None  # Store the GM Cheat Sheet app instance
 
 def calculate_modified_cost(base_cost, rank, selected_extras_with_ranks, selected_flaws_with_ranks, extras, flaws):
     # Create dictionaries for easy access
@@ -710,6 +711,20 @@ class CollapsibleSection:
     def pack(self, **kwargs):
         self.frame.pack(**kwargs)
 
+def on_export_to_gm_screen():
+    global gm_cheat_sheet_app
+    gm_cheat_sheet_app = open_gm_cheat_sheet()
+
+    current_tab = notebook.select()
+    tab_name = notebook.tab(current_tab, "text")
+    character = characters.get(tab_name)
+    
+    if character:
+        gm_cheat_sheet_app.import_character(character)
+        messagebox.showinfo("Success", f"Character from {tab_name} exported to GM Screen.")
+    else:
+        messagebox.showerror("Error", f"No character found in {tab_name}.")
+
 def main():
     global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, selected_archetype, hideout_details
     root = tk.Tk()
@@ -823,6 +838,9 @@ def main():
     copy_prompt_button = ttk.Button(char_frame.body_frame, text="Select AI Prompt", command=lambda: copy_prompt_to_clipboard(notebook, characters), style='Character.TButton')
     char_frame.add_widget(copy_prompt_button)
 
+    export_to_gm_screen_button = ttk.Button(char_frame.body_frame, text="Export to GM Screen", command=on_export_to_gm_screen, style='Character.TButton')
+    char_frame.add_widget(export_to_gm_screen_button)
+
     # Equipment Management Frame
     equip_frame = CollapsibleSection(left_frame, "Equipment Management")
     equip_frame.pack(fill="x", pady=5)
@@ -886,7 +904,6 @@ def main():
 
     root.protocol("WM_DELETE_WINDOW", lambda: [save_tabs(notebook, text_widgets, characters), root.destroy()])  # Save tabs and close the program
     root.mainloop()
-
 
 if __name__ == "__main__":
     main()
