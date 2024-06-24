@@ -225,14 +225,14 @@ class GMcheatSheetApp:
                 self.tree.delete(item)
 
             for row in data['primary']:
-                values = [row[col] for col in self.columns]
+                values = [row.get(col, "") for col in self.columns]  # Use .get to handle missing keys
                 self.tree.insert("", "end", values=values)
 
             for item in self.tree_secondary.get_children():
                 self.tree_secondary.delete(item)
 
             for row in data['secondary']:
-                values = [row[col] for col in self.secondary_columns]
+                values = [row.get(col, "") for col in self.secondary_columns]  # Use .get to handle missing keys
                 self.tree_secondary.insert("", "end", values=values)
 
     def load_manual_file(self):

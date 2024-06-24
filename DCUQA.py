@@ -151,7 +151,7 @@ def calculate_defenses(character, power_level, allocated_points):
 
     return defenses
 
-def allocate_stat(stat_name, allocated_points, total_range, stats):
+def allocate_stat(stat_name, allocated_points, total_range, stats, power_level):
     stat_details = next(stat for stat in stats["STATS"] if stat["name"] == stat_name)
     stat_range = stat_details["range"][1] - stat_details["range"][0] + 1
     max_possible_allocation = allocated_points * (stat_range / total_range)
@@ -163,7 +163,11 @@ def allocate_stat(stat_name, allocated_points, total_range, stats):
         attribute_value = random.randint(stat_details["range"][0], int(stat_details["range"][0] + max_possible_allocation))
         cost = abs(attribute_value - stat_details["range"][0]) * 2  # 2 points per rank
 
-    return (attribute_value, cost) if cost <= allocated_points else (allocated_points, allocated_points)
+    if cost <= allocated_points:
+        return (attribute_value, cost)
+    else:
+        max_value = stat_details["range"][0] + allocated_points
+        return (max_value, allocated_points)
 
 def allocate_stats(character, power_level, allocated_points, total_range, allocations):
     stats = load_data_from_json('./json/stats.json')
@@ -175,7 +179,7 @@ def allocate_stats(character, power_level, allocated_points, total_range, alloca
         stat_name = stat["name"]
         stat_percentage = random.uniform(*allocations["stats"])
         stat_points = int(stat_percentage * power_level * POWER_POINTS_PER_LEVEL)
-        attribute_value, cost = allocate_stat(stat_name, stat_points, total_range, stats)
+        attribute_value, cost = allocate_stat(stat_name, stat_points, total_range, stats, power_level)
         character["stats"][stat_name] = {"value": attribute_value, "cost": cost}
         allocated_points["stats"] -= cost
 
@@ -536,7 +540,6 @@ def pretty_print_character(character, text_widget):
         power_details = f"{power['name']} (Rank: {power['rank']}, Cost: {power['cost']})"
         text_widget.insert("end", power_details + "\n")
         
-
         if 'resisted' in power:
             text_widget.insert("end", f"  Resisted by: {power['resisted']}\n")
 
@@ -549,7 +552,7 @@ def pretty_print_character(character, text_widget):
             effects_text = " | ".join([effect for _, effect in power['failure_effects'].items()])
             text_widget.insert("end", f"Failure Effects: {effects_text}\n")
 
-                    # Display failure effects if it is the Affliction power
+        # Display failure effects if it is the Affliction power
         if power['name'] == "Ranged Affliction" and 'failure_effects' in power:
             effects_text = " | ".join([effect for _, effect in power['failure_effects'].items()])
             text_widget.insert("end", f"Failure Effects: {effects_text}\n")
@@ -605,7 +608,6 @@ def pretty_print_character(character, text_widget):
             if "close_range" in power:
                 text_widget.insert("end", f"        Close Range: {power['close_range']} ft, Medium Range: {power['medium_range']} ft, Long Range: {power['long_range']} ft\n")
 
-
     text_widget.insert("end", f"\nNAME: {character['name']}\n", "bold")
     text_widget.insert("end", f"GENDER: {character['gender']}\n", "bold")
     text_widget.insert("end", f"AGE: {character['age']}\n", "bold")
@@ -614,8 +616,6 @@ def pretty_print_character(character, text_widget):
     text_widget.insert("end", f"Region: {origin['region']}\n")
     text_widget.insert("end", f"Country: {origin['country']}\n")
     text_widget.insert("end", f"Language: {origin['language']}\n")
-
-
 
     text_widget.insert("end", "\nPHYSICAL TRAITS:\n", "bold")
     for trait, value in character["physical_traits"].items():
@@ -643,7 +643,6 @@ def pretty_print_character(character, text_widget):
     else:
         text_widget.insert("end", "None\n")
 
-
     text_widget.insert("end", "\nLANGUAGES:\n", "bold")
     for language in character['languages']:
         text_widget.insert("end", f"- {language}\n")
@@ -664,7 +663,6 @@ def pretty_print_character(character, text_widget):
         comp_description = complication['description']
         text_widget.insert("end", f"- {comp_name}: ", "bold_no_underline")
         text_widget.insert("end", f"{comp_description}\n\n\n")
-
 
 class CollapsibleSection:
     def __init__(self, master, title):
@@ -737,8 +735,6 @@ def export_to_gm_screen():
             gm_cheat_sheet_app.import_character_secondary(character)
 
     gm_cheat_sheet_app.master.lift()  # Bring the GM Cheat Sheet window to the front
-
-
 
 def main():
     global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, selected_archetype, hideout_details

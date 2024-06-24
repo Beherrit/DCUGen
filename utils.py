@@ -290,7 +290,6 @@ def generate_character_description(character):
 
     return description
 
-
 def calculate_accuracy(character, power):
     accuracy = 0
     extras = {extra: rank for extra, rank in zip(power.get('extras', []), power.get('extras_ranks', []))}

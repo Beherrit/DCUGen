@@ -150,6 +150,77 @@ def open_image_window():
 
     panel.bind('<Configure>', resize_image)
 
+def open_condition_lookup():
+    condition_window = tk.Toplevel()
+    condition_window.title("Conditions")
+    condition_window.geometry("500x400")
+    settings.apply_current_theme(condition_window)  # Apply current theme
+
+    conditions_dict = load_conditions()
+    canvas = tk.Canvas(condition_window)
+    scrollbar = ttk.Scrollbar(condition_window, orient="vertical", command=canvas.yview)
+    scrollable_frame = ttk.Frame(canvas)
+
+    scrollable_frame.bind(
+        "<Configure>",
+        lambda e: canvas.configure(
+            scrollregion=canvas.bbox("all")
+        )
+    )
+
+    canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+    canvas.configure(yscrollcommand=scrollbar.set)
+
+    def on_mousewheel(event):
+        canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+    canvas.bind_all("<MouseWheel>", on_mousewheel)
+
+    for condition, description in conditions_dict.items():
+        condition_label = tk.Label(scrollable_frame, text=condition, font=("Helvetica", 10, "bold"))
+        condition_label.pack(anchor="w", padx=10, pady=5)
+        description_label = tk.Label(scrollable_frame, text=description, wraplength=480, justify="left")
+        description_label.pack(anchor="w", padx=10, pady=5)
+
+    canvas.pack(side="left", fill="both", expand=True)
+    scrollbar.pack(side="right", fill="y")
+
+def open_measurement_calcs():
+    calcs_window = tk.Toplevel()
+    calcs_window.title("Measurement Calcs")
+    calcs_window.geometry("600x800")
+    settings.apply_current_theme(calcs_window)  # Apply current theme
+
+    img = Image.open("./images/combat_misc/cm_calcs.jpg")
+    img = img.resize((580, 780), Image.Resampling.LANCZOS)
+    img = ImageTk.PhotoImage(img)
+
+    panel = tk.Label(calcs_window, image=img)
+    panel.image = img  # keep a reference!
+    panel.pack(side="top", fill="both", expand=True)
+
+def open_dice_roller():
+    dice_window = tk.Toplevel()
+    dice_window.title("Dice Roller")
+    dice_window.geometry("200x400")
+    settings.apply_current_theme(dice_window)  # Apply current theme
+
+    def roll_and_display(dice_type):
+        result = roll_dice(dice_type)
+        result_label.config(text=f"Result: {result}")
+
+    ttk.Label(dice_window, text="Select a die to roll:").pack(pady=10)
+
+    dice_types = [20, 12, 10, 8, 6, 4, 3, 2, 100]
+    for dice in dice_types:
+        ttk.Button(dice_window, text=f"D{dice}", command=lambda dice=dice: roll_and_display(dice)).pack(padx=5, pady=5)
+
+    result_label = ttk.Label(dice_window, text="Result: ")
+    result_label.pack(pady=10)
+
+def roll_dice(dice_type):
+    return random.randint(1, dice_type)
+
 def open_initiative_tracker():
     conditions_dict = load_conditions()
     conditions = list(conditions_dict.keys())
@@ -174,26 +245,41 @@ def open_initiative_tracker():
     name_entry.grid(row=0, column=1, padx=5, pady=5)
 
     awareness_label = tk.Label(input_frame, text="Awareness:")
-    awareness_label.grid(row=1, column=0, padx=5, pady=5, sticky="e")
+    awareness_label.grid(row=0, column=2, padx=5, pady=5, sticky="e")
     awareness_entry = tk.Entry(input_frame)
-    awareness_entry.grid(row=1, column=1, padx=5, pady=5)
+    awareness_entry.grid(row=0, column=3, padx=5, pady=5)
 
     agility_label = tk.Label(input_frame, text="Agility:")
-    agility_label.grid(row=2, column=0, padx=5, pady=5, sticky="e")
+    agility_label.grid(row=0, column=4, padx=5, pady=5, sticky="e")
     agility_entry = tk.Entry(input_frame)
-    agility_entry.grid(row=2, column=1, padx=5, pady=5)
+    agility_entry.grid(row=0, column=5, padx=5, pady=5)
 
     initiative_label = tk.Label(input_frame, text="Initiative:")
-    initiative_label.grid(row=3, column=0, padx=5, pady=5, sticky="e")
+    initiative_label.grid(row=0, column=6, padx=5, pady=5, sticky="e")
     initiative_entry = tk.Entry(input_frame)
-    initiative_entry.grid(row=3, column=1, padx=5, pady=5)
+    initiative_entry.grid(row=0, column=7, padx=5, pady=5)
 
     add_button = tk.Button(input_frame, text="Add Person", command=lambda: add_person())
-    add_button.grid(row=4, column=0, columnspan=2, pady=10)
+    add_button.grid(row=0, column=8, padx=5, pady=5)
+
+    condition_button = tk.Button(input_frame, text="Condition Lookup", command=open_condition_lookup)
+    condition_button.grid(row=0, column=9, padx=5, pady=5)
+
+    measurement_calcs_button = tk.Button(input_frame, text="Measurement Calcs", command=open_measurement_calcs)
+    measurement_calcs_button.grid(row=0, column=10, padx=5, pady=5)
+
+    dice_roller_button = tk.Button(input_frame, text="Dice Roller", command=open_dice_roller)
+    dice_roller_button.grid(row=0, column=11, padx=5, pady=5)
+
+    combat_calc_button = tk.Button(input_frame, text="Combat Calculator", command=open_combat_calculator)
+    combat_calc_button.grid(row=0, column=12, padx=5, pady=5)
+
+    toggle_image_button = tk.Button(input_frame, text="Damage Degree Reference", command=open_image_window)
+    toggle_image_button.grid(row=0, column=13, padx=5, pady=5)
 
     # Frame for the treeview and scrollbar
     tree_frame = tk.Frame(tracker_window)
-    tree_frame.grid(row=1, column=0, columnspan=8, padx=20, pady=20, sticky="nsew")
+    tree_frame.grid(row=1, column=0, columnspan=14, padx=20, pady=20, sticky="nsew")
 
     # Adding scrollbar for the treeview
     tree_scroll_y = tk.Scrollbar(tree_frame, orient="vertical")
@@ -337,93 +423,7 @@ def open_initiative_tracker():
 
     tree.bind("<Double-1>", edit_cell)
 
-    def open_condition_lookup():
-        condition_window = tk.Toplevel()
-        condition_window.title("Conditions")
-        condition_window.geometry("500x400")
-        settings.apply_current_theme(condition_window)  # Apply current theme
-
-        conditions_dict = load_conditions()
-        canvas = tk.Canvas(condition_window)
-        scrollbar = ttk.Scrollbar(condition_window, orient="vertical", command=canvas.yview)
-        scrollable_frame = ttk.Frame(canvas)
-
-        scrollable_frame.bind(
-            "<Configure>",
-            lambda e: canvas.configure(
-                scrollregion=canvas.bbox("all")
-            )
-        )
-
-        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
-        canvas.configure(yscrollcommand=scrollbar.set)
-
-        def on_mousewheel(event):
-            canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
-
-        canvas.bind_all("<MouseWheel>", on_mousewheel)
-
-        for condition, description in conditions_dict.items():
-            condition_label = tk.Label(scrollable_frame, text=condition, font=("Helvetica", 10, "bold"))
-            condition_label.pack(anchor="w", padx=10, pady=5)
-            description_label = tk.Label(scrollable_frame, text=description, wraplength=480, justify="left")
-            description_label.pack(anchor="w", padx=10, pady=5)
-
-        canvas.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
-
-    def open_measurement_calcs():
-        calcs_window = tk.Toplevel()
-        calcs_window.title("Measurement Calcs")
-        calcs_window.geometry("600x800")
-        settings.apply_current_theme(calcs_window)  # Apply current theme
-
-        img = Image.open("./images/combat_misc/cm_calcs.jpg")
-        img = img.resize((580, 780), Image.Resampling.LANCZOS)
-        img = ImageTk.PhotoImage(img)
-
-        panel = tk.Label(calcs_window, image=img)
-        panel.image = img  # keep a reference!
-        panel.pack(side="top", fill="both", expand=True)
-
-    condition_button = tk.Button(tracker_window, text="Condition Lookup", command=open_condition_lookup)
-    condition_button.grid(row=0, column=1, padx=5, pady=5, sticky="e")
-
-    measurement_calcs_button = tk.Button(tracker_window, text="Measurement Calcs", command=open_measurement_calcs)
-    measurement_calcs_button.grid(row=0, column=2, padx=5, pady=5, sticky="e")
-
-    dice_roller_button = tk.Button(tracker_window, text="Dice Roller", command=open_dice_roller)
-    dice_roller_button.grid(row=0, column=3, padx=5, pady=5, sticky="e")
-
-    combat_calc_button = tk.Button(tracker_window, text="Combat Calculator", command=open_combat_calculator)
-    combat_calc_button.grid(row=0, column=4, padx=5, pady=5, sticky="e")
-
-    toggle_image_button = tk.Button(tracker_window, text="Damage Degree Reference", command=open_image_window)
-    toggle_image_button.grid(row=0, column=5, padx=5, pady=5, sticky="e")
-
     tracker_window.mainloop()
-
-def open_dice_roller():
-    dice_window = tk.Toplevel()
-    dice_window.title("Dice Roller")
-    dice_window.geometry("200x400")
-    settings.apply_current_theme(dice_window)  # Apply current theme
-
-    def roll_and_display(dice_type):
-        result = roll_dice(dice_type)
-        result_label.config(text=f"Result: {result}")
-
-    ttk.Label(dice_window, text="Select a die to roll:").pack(pady=10)
-
-    dice_types = [20, 12, 10, 8, 6, 4, 3, 2, 100]
-    for dice in dice_types:
-        ttk.Button(dice_window, text=f"D{dice}", command=lambda dice=dice: roll_and_display(dice)).pack(padx=5, pady=5)
-
-    result_label = ttk.Label(dice_window, text="Result: ")
-    result_label.pack(pady=10)
-
-def roll_dice(dice_type):
-    return random.randint(1, dice_type)
 
 if __name__ == "__main__":
     root = tk.Tk()
