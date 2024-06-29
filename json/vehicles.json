@@ -1,15 +1,63 @@
 {
-    "Sizes": [
-      {"name": "Small", "cost": 5, "attributes": {"Strength": 2, "Toughness": 3, "Defense": 1}},
-      {"name": "Medium", "cost": 10, "attributes": {"Strength": 4, "Toughness": 5, "Defense": 2}}
-    ],
-    "Features": [
-      {"name": "Autopilot", "cost": 3},
-      {"name": "FTL Radio", "cost": 2}
-    ],
-    "Powers": [
-      {"name": "Cloaking Device", "cost": 15},
-      {"name": "Armored Hull", "cost": 10}
-    ]
-  }
-  
+  "Sizes": [
+    {"name": "Mini", "cost": 3, "attributes": {"Strength": 1, "Toughness": 2, "Defense": 1}, "description": "A small, compact vehicle, easy to maneuver and park."},
+    {"name": "Small", "cost": 5, "attributes": {"Strength": 2, "Toughness": 3, "Defense": 1}, "description": "A small vehicle with limited space, suitable for personal transport."},
+    {"name": "Medium", "cost": 10, "attributes": {"Strength": 4, "Toughness": 5, "Defense": 2}, "description": "A standard vehicle size, offering a balance of space and maneuverability."},
+    {"name": "Large", "cost": 15, "attributes": {"Strength": 6, "Toughness": 7, "Defense": 3}, "description": "A larger vehicle with increased capacity and durability."},
+    {"name": "Huge", "cost": 20, "attributes": {"Strength": 8, "Toughness": 10, "Defense": 4}, "description": "A very large vehicle, suitable for carrying heavy loads or multiple passengers."},
+    {"name": "Gargantuan", "cost": 25, "attributes": {"Strength": 10, "Toughness": 12, "Defense": 5}, "description": "An enormous vehicle, often used for military or industrial purposes."},
+    {"name": "Colossal", "cost": 30, "attributes": {"Strength": 12, "Toughness": 15, "Defense": 6}, "description": "A gigantic vehicle, capable of withstanding significant damage and carrying large loads."}
+  ],
+  "Features": [
+    {"name": "Autopilot", "cost": 3, "description": "The vehicle can pilot itself, using its own Vehicle skill of 4 per rank."},
+    {"name": "FTL Radio", "cost": 2, "description": "A faster-than-light communication system for real-time interstellar contact."},
+    {"name": "Reinforced Frame", "cost": 5, "description": "Strengthens the vehicle's frame, increasing its durability."},
+    {"name": "Stealth Technology", "cost": 7, "description": "Allows the vehicle to avoid detection through various means."},
+    {"name": "Submersible Capability", "cost": 6, "description": "Enables the vehicle to operate underwater."},
+    {"name": "All-Terrain", "cost": 4, "description": "Equips the vehicle to traverse a variety of terrains without difficulty."},
+    {"name": "Energy Shield", "cost": 8, "description": "Provides additional protection by generating a defensive energy field."},
+    {"name": "Sensor Array", "cost": 5, "description": "A comprehensive array of sensors for detecting environmental changes and threats."},
+    {"name": "Weapon Mounts", "cost": 3, "description": "Allows the vehicle to be equipped with various weapons."},
+    {"name": "ECM (Electronic Countermeasures)", "cost": 6, "description": "Countermeasures to disrupt enemy electronic systems."},
+    {"name": "EMP Resistance", "cost": 7, "description": "Protects the vehicle's electronics from electromagnetic pulses."},
+    {"name": "Self-Repair Systems", "cost": 9, "description": "Automated systems that allow the vehicle to repair itself over time."},
+    {"name": "AI Co-Pilot", "cost": 8, "description": "An artificial intelligence system that assists in piloting the vehicle."},
+    {"name": "Escape Pod", "cost": 5, "description": "A small, detachable pod for emergency evacuation."},
+    {"name": "Improved Handling", "cost": 4, "description": "Enhances the vehicle's maneuverability."},
+    {"name": "Ram Prow", "cost": 3, "description": "A reinforced front end designed for ramming other vehicles."},
+    {"name": "Remote Control", "cost": 6, "description": "Allows the vehicle to be controlled remotely."},
+    {"name": "Transponder", "cost": 2, "description": "A device that transmits the vehicle's location for tracking purposes."},
+    {"name": "Dual Size", "cost": 3, "description": "The vehicle has an interior size larger than its exterior."},
+    {"name": "Rooms", "cost": 5, "description": "The vehicle includes additional rooms such as an infirmary or living space."},
+    {"name": "Hidden Compartments", "cost": 4, "description": "Concealed storage areas within the vehicle."},
+    {"name": "Alarm", "cost": 1, "description": "An alarm system that activates when unauthorized access is attempted."},
+    {"name": "Caltrops", "cost": 1, "description": "A dispenser that releases caltrops to damage pursuing vehicles."},
+    {"name": "Oil Slick", "cost": 1, "description": "A system that releases oil to create a slick surface behind the vehicle."},
+    {"name": "Navigation System", "cost": 2, "description": "A GPS or similar system that assists in navigation."}
+  ],
+  "Powers": [
+    {"name": "Cloaking Device", "cost": 15, "description": "Renders the vehicle invisible to the naked eye and various sensors."},
+    {"name": "Armored Hull", "cost": 10, "description": "Provides additional protection through reinforced armor."},
+    {"name": "Energy Blasters", "cost": 12, "description": "Powerful energy weapons mounted on the vehicle."},
+    {"name": "Regeneration Field", "cost": 8, "description": "A field that accelerates the vehicle's repair processes."},
+    {"name": "Teleportation Drive", "cost": 20, "description": "Enables the vehicle to teleport short distances instantly."},
+    {"name": "Time Travel Capability", "cost": 25, "description": "Allows the vehicle to travel through time."},
+    {"name": "Gravity Weapons", "cost": 13, "description": "Weapons that manipulate gravitational forces to cause damage."},
+    {"name": "Holographic Disguise", "cost": 9, "description": "Projects a hologram around the vehicle, altering its appearance."},
+    {"name": "Quantum Tunneling", "cost": 22, "description": "Enables the vehicle to phase through solid objects."},
+    {"name": "Dimensional Phase Shifter", "cost": 18, "description": "Allows the vehicle to shift into a different dimension temporarily."},
+    {"name": "Laser Defense System", "cost": 14, "description": "A defensive system that shoots down incoming projectiles with lasers."},
+    {"name": "Molecular Disassembler", "cost": 20, "description": "Breaks down the molecular structure of targeted objects."},
+    {"name": "Plasma Cannon", "cost": 16, "description": "A high-powered cannon that fires concentrated plasma."},
+    {"name": "Smokescreen", "cost": 12, "description": "Releases a cloud of smoke to obscure vision and confuse pursuers."},
+    {"name": "Weapons", "cost": 8, "description": "Standard weapons mounted on the vehicle."}
+  ],
+  "Modifiers": [
+    {"name": "Durable", "cost": 1, "description": "The vehicle can take more damage before becoming incapacitated."},
+    {"name": "Minion", "cost": -1, "description": "The vehicle is considered a minion, making it easier to control."},
+    {"name": "Summonable", "cost": 2, "description": "The vehicle can be summoned and dismissed at will."},
+    {"name": "Guzzler", "cost": -1, "description": "The vehicle consumes more fuel than normal, requiring frequent refueling."},
+    {"name": "Hold Together!", "cost": -1, "description": "The vehicle is prone to falling apart under stress."},
+    {"name": "Clunker", "cost": -1, "description": "The vehicle is old and unreliable, often requiring repairs."}
+  ]
+}

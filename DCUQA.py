@@ -13,6 +13,7 @@ from equipment import *
 from database import *
 from export import *
 import settings
+from vehicles import *
 
 hideout_details = {}
 characters = {}
@@ -217,16 +218,16 @@ def allocate_skills(character, allocated_points, power_level, allocations):
 
     # Each skill rank costs 0.5 points, so double the total_skill_points for the actual points to allocate
     skill_points = total_skill_points * 2
-    max_rank_per_iteration = 4
 
     while skill_points > 0 and skill_list:
         skill = skill_list.pop(0)
-        max_rank = min(power_level + 10, skill_points // 2, max_rank_per_iteration)
+        stat_value = sum(character["stats"].get(tag, {}).get("value", 0) for tag in skill.get("tags", []))
+        max_rank = min(power_level + 10 - stat_value, skill_points // 2)
+
         if max_rank <= 0:
             continue
-        rank = random.randint(1, max_rank)
-        rank = rank - 1 if rank % 2 != 0 else rank
 
+        rank = random.randint(max(0, max_rank - 8), max_rank)
         adjusted_cost = rank / 2
 
         character["skills"].append({
@@ -236,7 +237,7 @@ def allocate_skills(character, allocated_points, power_level, allocations):
             "tags": skill.get("tags", [])
         })
 
-        skill_points -= rank
+        skill_points -= rank * 2  # Adjust for the cost per rank
         allocated_points["skills"] -= adjusted_cost
 
         if skill_points > 0 and skill_list:
@@ -370,10 +371,11 @@ def on_generate_button_click():
     # Generate character with the correct include_powers value
     character = generate_character(power_level, archetype, include_powers=include_powers_value, random_physical_features=True, random_costume_style=True, random_distinctive_feature=True)
 
-    # Create a new tab
+    # Create a new tab with the character's name
+    character_name = character.get('name', 'Unnamed Character')
     new_tab = ttk.Frame(notebook)
-    tab_name = f"Tab {len(notebook.tabs()) + 1}"
-    notebook.add(new_tab, text=tab_name)
+    notebook.add(new_tab, text=character_name)
+    
     # Create a new text widget in the new tab
     new_character_summary_text = tk.Text(new_tab, height=15, width=50)
     new_character_summary_text.pack(expand=True, fill='both')
@@ -384,7 +386,7 @@ def on_generate_button_click():
     # Display the character information in the new text widget
     pretty_print_character(character, new_character_summary_text)
     text_widgets[new_tab] = new_character_summary_text
-    characters[tab_name] = character  # Store the character in the dictionary
+    characters[character_name] = character  # Store the character in the dictionary
     # Switch to the new tab
     notebook.select(new_tab)
     colors = dark_mode_colors if dark_mode else light_mode_colors
@@ -664,32 +666,6 @@ def pretty_print_character(character, text_widget):
         text_widget.insert("end", f"- {comp_name}: ", "bold_no_underline")
         text_widget.insert("end", f"{comp_description}\n\n\n")
 
-class CollapsibleSection:
-    def __init__(self, master, title):
-        self.frame = ttk.Frame(master)
-        self.title = title
-        self.is_collapsed = False
-
-        self.header = ttk.Label(self.frame, text=title, anchor="w", cursor="hand2")
-        self.header.pack(fill="x")
-        self.header.bind("<Button-1>", self.toggle)
-
-        self.body_frame = ttk.Frame(self.frame)
-        self.body_frame.pack(fill="x", expand=True)
-
-    def toggle(self, event=None):
-        if self.is_collapsed:
-            self.body_frame.pack(fill="x", expand=True)
-        else:
-            self.body_frame.forget()
-        self.is_collapsed = not self.is_collapsed
-
-    def add_widget(self, widget):
-        widget.pack(fill="x", padx=5, pady=2)
-
-    def pack(self, **kwargs):
-        self.frame.pack(**kwargs)
-
 def export_to_gm_screen():
     global gm_cheat_sheet_app
     
@@ -736,10 +712,38 @@ def export_to_gm_screen():
 
     gm_cheat_sheet_app.master.lift()  # Bring the GM Cheat Sheet window to the front
 
+class CollapsibleSection:
+    def __init__(self, master, title):
+        self.frame = ttk.Frame(master)
+        self.title = title
+        self.is_collapsed = False
+
+        self.header = ttk.Label(self.frame, text=title, anchor="w", cursor="hand2")
+        self.header.pack(fill="x")
+        self.header.bind("<Button-1>", self.toggle)
+
+        self.body_frame = ttk.Frame(self.frame)
+        self.body_frame.pack(fill="x", expand=True)
+
+    def toggle(self, event=None):
+        if self.is_collapsed:
+            self.body_frame.pack(fill="x", expand=True)
+        else:
+            self.body_frame.forget()
+        self.is_collapsed = not self.is_collapsed
+
+    def add_widget(self, widget):
+        widget.pack(fill="x", padx=5, pady=2)
+
+    def pack(self, **kwargs):
+        self.frame.pack(**kwargs)
+
+
+
 def main():
     global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, selected_archetype, hideout_details
     root = tk.Tk()
-    root.title("Character Creation Version 3.1 Prod")
+    root.title("Character Creation Version 3.4 Prod")
     dark_mode = True
     include_powers = tk.BooleanVar(value=False)  # Set include_powers to False by default (unchecked)
 
@@ -753,27 +757,41 @@ def main():
     character_button_color = "#aed6f1"  # Light blue
     encounter_button_color = "#f5b7b1"  # Light red
     initiative_button_color = "#d7bde2"  # Light purple
+    vehicle_button_color = "#a3e4d7"  # Light green
+    reference_button_color = "#d3d3d3"  # Light grey
 
     # Style Configuration
     style = ttk.Style()
     style.theme_use('clam')
     
-    # Configure styles for buttons
-    style.configure("TButton", padding=2, font=("Helvetica", 8))  # Smaller padding and font size
+    # Configure styles for frames and buttons
+    style.configure("Character.TFrame", background=character_button_color)
     style.configure("Character.TButton", background=character_button_color, foreground="black")
     style.map("Character.TButton", background=[("active", character_button_color)])
-    
+
+    style.configure("Equipment.TFrame", background=equipment_button_color)
     style.configure("Equipment.TButton", background=equipment_button_color, foreground="black")
     style.map("Equipment.TButton", background=[("active", equipment_button_color)])
-    
+
+    style.configure("Hideout.TFrame", background=hideout_button_color)
     style.configure("Hideout.TButton", background=hideout_button_color, foreground="black")
     style.map("Hideout.TButton", background=[("active", hideout_button_color)])
-    
+
+    style.configure("Encounter.TFrame", background=encounter_button_color)
     style.configure("Encounter.TButton", background=encounter_button_color, foreground="black")
     style.map("Encounter.TButton", background=[("active", encounter_button_color)])
-    
+
+    style.configure("Initiative.TFrame", background=initiative_button_color)
     style.configure("Initiative.TButton", background=initiative_button_color, foreground="black")
     style.map("Initiative.TButton", background=[("active", initiative_button_color)])
+
+    style.configure("Vehicle.TFrame", background=vehicle_button_color)
+    style.configure("Vehicle.TButton", background=vehicle_button_color, foreground="black")
+    style.map("Vehicle.TButton", background=[("active", vehicle_button_color)])
+
+    style.configure("Reference.TFrame", background=reference_button_color)
+    style.configure("Reference.TButton", background=reference_button_color, foreground="black")
+    style.map("Reference.TButton", background=[("active", reference_button_color)])
 
     style.configure("TLabel", padding=2, font=("Helvetica", 8))  # Smaller padding and font size
     style.configure("TFrame", background="#f0f0f0")
@@ -817,11 +835,8 @@ def main():
 
     # Load archetypes from the JSON file
     archetypes = load_archetypes()
-    archetype_names = list(archetypes.keys())
-
-    # Set 'Powerhouse' as the default archetype if it exists in the list
-    default_archetype = "Powerhouse" if "Powerhouse" in archetype_names else archetype_names[0]
-    selected_archetype = tk.StringVar(value=default_archetype)
+    archetype_names = ["Please Select"] + list(archetypes.keys())
+    selected_archetype = tk.StringVar(value="Please Select")
 
     # Archetype Dropdown
     archetype_label = ttk.Label(left_frame, text="Select Archetype:")
@@ -829,6 +844,15 @@ def main():
 
     archetype_menu = ttk.OptionMenu(left_frame, selected_archetype, *archetype_names)
     archetype_menu.pack(anchor="w", pady=2)
+
+    # Define the function to toggle include/exclude powers
+    def toggle_include_powers():
+        if include_powers.get():
+            include_powers.set(False)
+            toggle_button.config(text="Exclude Powers OFF")
+        else:
+            include_powers.set(True)
+            toggle_button.config(text="Exclude Powers ON")
 
     # Character Management Frame
     char_frame = CollapsibleSection(left_frame, "Character Management")
@@ -840,8 +864,8 @@ def main():
     export_character_sheet_button = ttk.Button(char_frame.body_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click(notebook, characters,text_widgets ), style='Character.TButton')
     char_frame.add_widget(export_character_sheet_button)
 
-    powers_checkbox = ttk.Checkbutton(char_frame.body_frame, text="Exclude Powers", variable=include_powers)
-    char_frame.add_widget(powers_checkbox)
+    toggle_button = ttk.Button(char_frame.body_frame, text="Exclude Powers OFF", command=toggle_include_powers, style='Character.TButton')
+    char_frame.add_widget(toggle_button)
 
     close_tab_button = ttk.Button(char_frame.body_frame, text="Close Tab", command=lambda: close_current_tab(notebook, text_widgets), style='Character.TButton')
     char_frame.add_widget(close_tab_button)
@@ -867,6 +891,22 @@ def main():
 
     save_equipment_button = ttk.Button(equip_frame.body_frame, text="Save Equipment", command=lambda: on_save_equipment_click(notebook, text_widgets), style='Equipment.TButton')
     equip_frame.add_widget(save_equipment_button)
+
+    # Vehicle Management Frame
+    vehicle_frame = CollapsibleSection(left_frame, "Vehicle Management")
+    vehicle_frame.pack(fill="x", pady=5)
+
+    vehicle_points_label = ttk.Label(vehicle_frame.body_frame, text="Vehicle Points:")
+    vehicle_frame.add_widget(vehicle_points_label)
+
+    vehicle_points_entry = ttk.Entry(vehicle_frame.body_frame)
+    vehicle_frame.add_widget(vehicle_points_entry)
+
+    generate_vehicle_button = ttk.Button(vehicle_frame.body_frame, text="Generate Vehicle", command=lambda: on_generate_vehicle_click(vehicle_points_entry, notebook, text_widgets), style='Vehicle.TButton')
+    vehicle_frame.add_widget(generate_vehicle_button)
+
+    save_vehicle_button = ttk.Button(vehicle_frame.body_frame, text="Save Vehicle", command=lambda: on_save_vehicle_click(notebook, text_widgets), style='Vehicle.TButton')
+    vehicle_frame.add_widget(save_vehicle_button)
 
     # Hideout Management Frame
     hideout_frame = CollapsibleSection(left_frame, "Hideout Management")
@@ -895,16 +935,16 @@ def main():
     reference_frame = CollapsibleSection(left_frame, "Reference Management")
     reference_frame.pack(fill="x", pady=5)
 
-    calculate_powers_button = ttk.Button(reference_frame.body_frame, text="Calculate Powers", command=open_calculate_powers_window, style='Character.TButton')
+    calculate_powers_button = ttk.Button(reference_frame.body_frame, text="Calculate Powers", command=open_calculate_powers_window, style='Reference.TButton')
     reference_frame.add_widget(calculate_powers_button)
 
-    reference_data_button = ttk.Button(reference_frame.body_frame, text="Reference Data", command=open_reference_data, style='Character.TButton')
+    reference_data_button = ttk.Button(reference_frame.body_frame, text="Reference Data", command=open_reference_data, style='Reference.TButton')
     reference_frame.add_widget(reference_data_button)
 
-    notes_button = ttk.Button(reference_frame.body_frame, text="Notes", command=open_notes_window, style='Character.TButton')
+    notes_button = ttk.Button(reference_frame.body_frame, text="Notes", command=open_notes_window, style='Reference.TButton')
     reference_frame.add_widget(notes_button)
 
-    gm_cheat_sheet_button = ttk.Button(reference_frame.body_frame, text="GM Cheat Sheet", command=open_gm_cheat_sheet, style='Character.TButton')
+    gm_cheat_sheet_button = ttk.Button(reference_frame.body_frame, text="GM Cheat Sheet", command=open_gm_cheat_sheet, style='Reference.TButton')
     reference_frame.add_widget(gm_cheat_sheet_button)
 
     # Configure the main window to resize properly
