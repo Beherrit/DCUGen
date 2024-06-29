@@ -1,19 +1,19 @@
 {
     "Balanced": {
         "with_powers": {
-            "stats": [0.25, 0.25],
-            "advantages": [0.25, 0.25],
-            "skills": [0.25, 0.25],
-            "powers": [0.25, 0.25],
-            "defense": [0.05, 0.05], 
+            "stats": [0.225, 0.25],
+            "advantages": [0.225, 0.25],
+            "skills": [0.225, 0.25],
+            "powers": [0.225, 0.25],
+            "defense": [0.045, 0.05], 
             "max_advantages": 10,
             "max_powers": 8,
             "power_range": [3, 8]
         },
         "without_powers": {
-            "stats": [0.33, 0.33],
-            "advantages": [0.33, 0.33],
-            "skills": [0.34, 0.34],
+            "stats": [0.297, 0.33],
+            "advantages": [0.297, 0.33],
+            "skills": [0.306, 0.34],
             "powers": [0, 0],
             "max_advantages": 15,
             "max_powers": 0,
@@ -22,18 +22,18 @@
     },
     "Powerhouse": {
         "with_powers": {
-            "stats": [0.15, 0.20],
-            "advantages": [0.05, 0.10],
-            "skills": [0.15, 0.20],
-            "powers": [0.50, 0.55],
+            "stats": [0.135, 0.20],
+            "advantages": [0.045, 0.10],
+            "skills": [0.135, 0.20],
+            "powers": [0.45, 0.55],
             "max_advantages": 10,
             "max_powers": 8,
             "power_range": [3, 8]
         },
         "without_powers": {
-            "stats": [0.35, 0.40],
-            "advantages": [0.15, 0.20],
-            "skills": [0.35, 0.40],
+            "stats": [0.315, 0.40],
+            "advantages": [0.135, 0.20],
+            "skills": [0.315, 0.40],
             "powers": [0, 0],
             "max_advantages": 15,
             "max_powers": 0,
@@ -42,18 +42,18 @@
     },
     "JackOfAllTrades": {
         "with_powers": {
-            "stats": [0.25, 0.30],
-            "advantages": [0.10, 0.15],
-            "skills": [0.30, 0.35],
-            "powers": [0.20, 0.25],
+            "stats": [0.225, 0.30],
+            "advantages": [0.09, 0.15],
+            "skills": [0.27, 0.35],
+            "powers": [0.18, 0.25],
             "max_advantages": 15,
             "max_powers": 8,
             "power_range": [3, 8]
         },
         "without_powers": {
-            "stats": [0.35, 0.40],
-            "advantages": [0.20, 0.25],
-            "skills": [0.35, 0.40],
+            "stats": [0.315, 0.40],
+            "advantages": [0.18, 0.25],
+            "skills": [0.315, 0.40],
             "powers": [0, 0],
             "max_advantages": 20,
             "max_powers": 0,
@@ -62,18 +62,18 @@
     },
     "Tactician": {
         "with_powers": {
-            "stats": [0.20, 0.25],
-            "advantages": [0.15, 0.20],
-            "skills": [0.40, 0.45],
-            "powers": [0.10, 0.15],
+            "stats": [0.18, 0.25],
+            "advantages": [0.135, 0.20],
+            "skills": [0.36, 0.45],
+            "powers": [0.09, 0.15],
             "max_advantages": 10,
             "max_powers": 8,
             "power_range": [3, 8]
         },
         "without_powers": {
-            "stats": [0.30, 0.35],
-            "advantages": [0.25, 0.30],
-            "skills": [0.45, 0.50],
+            "stats": [0.27, 0.35],
+            "advantages": [0.225, 0.30],
+            "skills": [0.405, 0.50],
             "powers": [0, 0],
             "max_advantages": 15,
             "max_powers": 0,
@@ -82,18 +82,18 @@
     },
     "Tank": {
         "with_powers": {
-            "stats": [0.40, 0.45],
-            "advantages": [0.10, 0.15],
-            "skills": [0.10, 0.15],
-            "powers": [0.25, 0.30],
+            "stats": [0.36, 0.45],
+            "advantages": [0.09, 0.15],
+            "skills": [0.09, 0.15],
+            "powers": [0.225, 0.30],
             "max_advantages": 10,
             "max_powers": 8,
             "power_range": [3, 8]
         },
         "without_powers": {
-            "stats": [0.45, 0.50],
-            "advantages": [0.15, 0.20],
-            "skills": [0.15, 0.20],
+            "stats": [0.405, 0.50],
+            "advantages": [0.135, 0.20],
+            "skills": [0.135, 0.20],
             "powers": [0, 0],
             "max_advantages": 15,
             "max_powers": 0,
@@ -102,18 +102,18 @@
     },
     "GlassCannon": {
         "with_powers": {
-            "stats": [0.10, 0.15],
-            "advantages": [0.05, 0.10],
-            "skills": [0.15, 0.20],
-            "powers": [0.55, 0.60],
+            "stats": [0.09, 0.15],
+            "advantages": [0.045, 0.10],
+            "skills": [0.135, 0.20],
+            "powers": [0.495, 0.60],
             "max_advantages": 10,
             "max_powers": 8,
             "power_range": [3, 8]
         },
         "without_powers": {
-            "stats": [0.20, 0.25],
-            "advantages": [0.10, 0.15],
-            "skills": [0.30, 0.35],
+            "stats": [0.18, 0.25],
+            "advantages": [0.09, 0.15],
+            "skills": [0.27, 0.35],
             "powers": [0, 0],
             "max_advantages": 15,
             "max_powers": 0,
@@ -122,18 +122,18 @@
     },
     "Strategist": {
         "with_powers": {
-            "stats": [0.20, 0.25],
-            "advantages": [0.20, 0.25],
-            "skills": [0.35, 0.40],
-            "powers": [0.15, 0.20],
+            "stats": [0.18, 0.25],
+            "advantages": [0.18, 0.25],
+            "skills": [0.315, 0.40],
+            "powers": [0.135, 0.20],
             "max_advantages": 10,
             "max_powers": 8,
             "power_range": [3, 8]
         },
         "without_powers": {
-            "stats": [0.25, 0.30],
-            "advantages": [0.30, 0.35],
-            "skills": [0.40, 0.45],
+            "stats": [0.225, 0.30],
+            "advantages": [0.27, 0.35],
+            "skills": [0.36, 0.45],
             "powers": [0, 0],
             "max_advantages": 15,
             "max_powers": 0,
@@ -141,4 +141,3 @@
         }
     }
 }
-

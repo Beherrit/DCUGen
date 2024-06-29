@@ -1,0 +1,839 @@
+{
+    "Creatures": [
+      {
+        "name": "Goblin",
+        "PL": 2,
+        "stats": {
+          "Strength": 1,
+          "Stamina": 1,
+          "Agility": 2,
+          "Dexterity": 1,
+          "Fighting": 2,
+          "Intellect": 0,
+          "Awareness": 1,
+          "Presence": 0
+        },
+        "advantages": [
+          {"name": "Teamwork", "rank": 1}
+        ],
+        "skills": ["Stealth 4", "Athletics 2", "Perception 2"],
+        "powers": [],
+        "defenses": {
+          "Dodge": 4,
+          "Parry": 4,
+          "Fortitude": 2,
+          "Toughness": 1,
+          "Will": 1
+        },
+        "initiative": 2,
+        "attacks": [
+          {"name": "Dagger", "to_hit": 4, "effect": "Damage 2"}
+        ],
+        "description": "A small, cunning creature known for its stealth and agility."
+      },
+      {
+        "name": "Orc",
+        "PL": 4,
+        "stats": {
+          "Strength": 4,
+          "Stamina": 3,
+          "Agility": 1,
+          "Dexterity": 1,
+          "Fighting": 3,
+          "Intellect": 0,
+          "Awareness": 1,
+          "Presence": 1
+        },
+        "advantages": [
+          {"name": "Power Attack", "rank": 1}
+        ],
+        "skills": ["Intimidation 4", "Athletics 4", "Close Combat: Swords 3"],
+        "powers": [],
+        "defenses": {
+          "Dodge": 3,
+          "Parry": 6,
+          "Fortitude": 6,
+          "Toughness": 3,
+          "Will": 1
+        },
+        "initiative": 1,
+        "attacks": [
+          {"name": "Sword", "to_hit": 6, "effect": "Damage 4"}
+        ],
+        "description": "A brutish, powerful warrior known for its strength and combat prowess."
+      },
+      {
+        "name": "Elf Archer",
+        "PL": 5,
+        "stats": {
+          "Strength": 2,
+          "Stamina": 2,
+          "Agility": 4,
+          "Dexterity": 5,
+          "Fighting": 2,
+          "Intellect": 2,
+          "Awareness": 3,
+          "Presence": 2
+        },
+        "advantages": [
+          {"name": "Improved Aim", "rank": 1},
+          {"name": "Ranged Attack", "rank": 3}
+        ],
+        "skills": ["Perception 6", "Stealth 4", "Ranged Combat: Bows 5"],
+        "powers": [],
+        "defenses": {
+          "Dodge": 8,
+          "Parry": 4,
+          "Fortitude": 4,
+          "Toughness": 2,
+          "Will": 6
+        },
+        "initiative": 4,
+        "attacks": [
+          {"name": "Bow", "to_hit": 8, "effect": "Damage 4"}
+        ],
+        "description": "A skilled archer with keen senses and exceptional aim."
+      },
+      {
+        "name": "Dragon",
+        "PL": 15,
+        "stats": {
+          "Strength": 10,
+          "Stamina": 10,
+          "Agility": 3,
+          "Dexterity": 2,
+          "Fighting": 8,
+          "Intellect": 4,
+          "Awareness": 4,
+          "Presence": 5
+        },
+        "advantages": [
+          {"name": "Improved Initiative", "rank": 1},
+          {"name": "Fearless", "rank": 1},
+          {"name": "Diehard", "rank": 1}
+        ],
+        "skills": ["Intimidation 10", "Perception 10", "Athletics 8"],
+        "powers": [
+          {"name": "Fire Breath", "description": "A powerful breath attack that deals massive fire damage.", "rank": 15, "cost": 20},
+          {"name": "Flight", "description": "The ability to fly at high speeds.", "rank": 15, "cost": 15},
+          {"name": "Tough Scales", "description": "Natural armor that provides additional protection.", "rank": 10, "cost": 10}
+        ],
+        "defenses": {
+          "Dodge": 8,
+          "Parry": 8,
+          "Fortitude": 10,
+          "Toughness": 10,
+          "Will": 9
+        },
+        "initiative": 4,
+        "attacks": [
+          {"name": "Claw", "to_hit": 10, "effect": "Damage 10"},
+          {"name": "Bite", "to_hit": 10, "effect": "Damage 12"},
+          {"name": "Fire Breath", "to_hit": 15, "effect": "Damage 15 (Area Effect)"}
+        ],
+        "description": "A massive, powerful creature with the ability to breathe fire and fly."
+      },
+      {
+        "name": "Werewolf",
+        "PL": 7,
+        "stats": {
+          "Strength": 5,
+          "Stamina": 6,
+          "Agility": 4,
+          "Dexterity": 2,
+          "Fighting": 6,
+          "Intellect": 1,
+          "Awareness": 3,
+          "Presence": 3
+        },
+        "advantages": [
+          {"name": "Fast Grab", "rank": 1},
+          {"name": "Improved Critical: Claws", "rank": 2}
+        ],
+        "skills": ["Athletics 6", "Perception 5", "Stealth 4"],
+        "powers": [
+          {"name": "Regeneration", "description": "Rapidly heals from injuries.", "rank": 10, "cost": 10},
+          {"name": "Enhanced Senses", "description": "Heightened sense of smell and hearing.", "rank": 5, "cost": 5}
+        ],
+        "defenses": {
+          "Dodge": 8,
+          "Parry": 8,
+          "Fortitude": 8,
+          "Toughness": 6,
+          "Will": 6
+        },
+        "initiative": 4,
+        "attacks": [
+          {"name": "Claws", "to_hit": 8, "effect": "Damage 6"},
+          {"name": "Bite", "to_hit": 8, "effect": "Damage 7"}
+        ],
+        "description": "A fearsome creature that can transform into a powerful wolf-like beast."
+      },
+      {
+        "name": "Vampire",
+        "PL": 8,
+        "stats": {
+          "Strength": 4,
+          "Stamina": 5,
+          "Agility": 4,
+          "Dexterity": 3,
+          "Fighting": 5,
+          "Intellect": 3,
+          "Awareness": 3,
+          "Presence": 4
+        },
+        "advantages": [
+          {"name": "Attractive", "rank": 1},
+          {"name": "Fascinate: Persuasion", "rank": 1}
+        ],
+        "skills": ["Persuasion 6", "Stealth 5", "Acrobatics 4"],
+        "powers": [
+          {"name": "Vampiric Bite", "description": "Drains the life force of the victim.", "rank": 8, "cost": 10},
+          {"name": "Shape Change", "description": "Can transform into a bat or mist.", "rank": 8, "cost": 10},
+          {"name": "Immortality", "description": "Can only be killed under specific conditions.", "rank": 8, "cost": 15}
+        ],
+        "defenses": {
+          "Dodge": 9,
+          "Parry": 8,
+          "Fortitude": 7,
+          "Toughness": 5,
+          "Will": 7
+        },
+        "initiative": 4,
+        "attacks": [
+          {"name": "Bite", "to_hit": 8, "effect": "Damage 8 (Vampiric Drain)"}
+        ],
+        "description": "A seductive, immortal creature that feeds on the blood of the living."
+      },
+      {
+        "name": "Giant Spider",
+        "PL": 6,
+        "stats": {
+          "Strength": 3,
+          "Stamina": 3,
+          "Agility": 4,
+          "Dexterity": 2,
+          "Fighting": 4,
+          "Intellect": 0,
+          "Awareness": 2,
+          "Presence": 0
+        },
+        "advantages": [
+          {"name": "Improved Initiative", "rank": 1},
+          {"name": "Tracking", "rank": 1}
+        ],
+        "skills": ["Athletics 4", "Perception 4", "Stealth 6"],
+        "powers": [
+          {"name": "Webbing", "description": "Can shoot webs to entangle enemies.", "rank": 5, "cost": 5},
+          {"name": "Venom", "description": "A poisonous bite that can paralyze or kill.", "rank": 10, "cost": 10}
+        ],
+        "defenses": {
+          "Dodge": 8,
+          "Parry": 8,
+          "Fortitude": 6,
+          "Toughness": 3,
+          "Will": 4
+        },
+        "initiative": 4,
+        "attacks": [
+          {"name": "Bite", "to_hit": 6, "effect": "Damage 3 (Venom)"}
+        ],
+        "description": "A large, deadly spider capable of spinning webs and injecting venom."
+      },
+      {
+        "name": "Griffin",
+        "PL": 9,
+        "stats": {
+          "Strength": 6,
+          "Stamina": 6,
+          "Agility": 4,
+          "Dexterity": 3,
+          "Fighting": 5,
+          "Intellect": 2,
+          "Awareness": 3,
+          "Presence": 3
+        },
+        "advantages": [
+          {"name": "Power Attack", "rank": 1},
+          {"name": "Improved Initiative", "rank": 1}
+        ],
+        "skills": ["Perception 8", "Athletics 6", "Intimidation 5"],
+        "powers": [
+          {"name": "Flight", "description": "The ability to fly at high speeds.", "rank": 15, "cost": 15},
+          {"name": "Keen Senses", "description": "Heightened vision and hearing.", "rank": 5, "cost": 5}
+        ],
+        "defenses": {
+          "Dodge": 8,
+          "Parry": 8,
+          "Fortitude": 8,
+          "Toughness": 6,
+          "Will": 6
+        },
+        "initiative": 4,
+        "attacks": [
+          {"name": "Claw", "to_hit": 8, "effect": "Damage 6"},
+          {"name": "Bite", "to_hit": 8, "effect": "Damage 7"}
+        ],
+        "description": "A majestic creature with the body of a lion and the wings and head of an eagle."
+      },
+      {
+        "name": "Troll",
+        "PL": 7,
+        "stats": {
+          "Strength": 5,
+          "Stamina": 6,
+          "Agility": 1,
+          "Dexterity": 1,
+          "Fighting": 4,
+          "Intellect": -1,
+          "Awareness": 1,
+          "Presence": 1
+        },
+        "advantages": [
+          {"name": "Fearless", "rank": 1},
+          {"name": "Diehard", "rank": 1}
+        ],
+        "skills": ["Intimidation 6", "Athletics 5"],
+        "powers": [
+          {"name": "Regeneration", "description": "Rapidly heals from injuries.", "rank": 10, "cost": 10}
+        ],
+        "defenses": {
+          "Dodge": 5,
+          "Parry": 4,
+          "Fortitude": 8,
+          "Toughness": 6,
+          "Will": 3
+        },
+        "initiative": 1,
+        "attacks": [
+          {"name": "Club", "to_hit": 6, "effect": "Damage 5"}
+        ],
+        "description": "A large, brutish creature with incredible regenerative abilities."
+      },
+      {
+        "name": "Phoenix",
+        "PL": 10,
+        "stats": {
+          "Strength": 4,
+          "Stamina": 6,
+          "Agility": 5,
+          "Dexterity": 4,
+          "Fighting": 4,
+          "Intellect": 3,
+          "Awareness": 4,
+          "Presence": 5
+        },
+        "advantages": [
+          {"name": "Diehard", "rank": 1},
+          {"name": "Fearless", "rank": 1}
+        ],
+        "skills": ["Athletics 5", "Perception 6", "Intimidation 6"],
+        "powers": [
+          {"name": "Fire Control", "description": "Can control and generate fire.", "rank": 15, "cost": 15},
+          {"name": "Immortality", "description": "Reborn from its ashes upon death.", "rank": 20, "cost": 20},
+          {"name": "Flight", "description": "The ability to fly at high speeds.", "rank": 15, "cost": 15}
+        ],
+        "defenses": {
+          "Dodge": 8,
+          "Parry": 8,
+          "Fortitude": 10,
+          "Toughness": 6,
+          "Will": 9
+        },
+        "initiative": 5,
+        "attacks": [
+          {"name": "Fire Blast", "to_hit": 10, "effect": "Damage 10"},
+          {"name": "Claw", "to_hit": 8, "effect": "Damage 4"}
+        ],
+        "description": "A legendary bird that is reborn from its ashes and has control over fire."
+      },
+      {
+        "name": "Hydra",
+        "PL": 12,
+        "stats": {
+          "Strength": 8,
+          "Stamina": 8,
+          "Agility": 3,
+          "Dexterity": 2,
+          "Fighting": 7,
+          "Intellect": 2,
+          "Awareness": 3,
+          "Presence": 3
+        },
+        "advantages": [
+          {"name": "Multiattack", "rank": 1},
+          {"name": "Diehard", "rank": 1}
+        ],
+        "skills": ["Athletics 8", "Perception 6", "Intimidation 7"],
+        "powers": [
+          {"name": "Regeneration", "description": "Regrows lost heads rapidly.", "rank": 20, "cost": 20},
+          {"name": "Multiple Heads", "description": "Can attack multiple targets at once.", "rank": 15, "cost": 15}
+        ],
+        "defenses": {
+          "Dodge": 7,
+          "Parry": 7,
+          "Fortitude": 10,
+          "Toughness": 8,
+          "Will": 6
+        },
+        "initiative": 3,
+        "attacks": [
+          {"name": "Bite", "to_hit": 10, "effect": "Damage 8 (Multiattack)"}
+        ],
+        "description": "A multi-headed serpent-like creature with incredible regenerative abilities."
+      },
+      {
+        "name": "Cyclops",
+        "PL": 8,
+        "stats": {
+          "Strength": 8,
+          "Stamina": 7,
+          "Agility": 1,
+          "Dexterity": 1,
+          "Fighting": 5,
+          "Intellect": 0,
+          "Awareness": 2,
+          "Presence": 2
+        },
+        "advantages": [
+          {"name": "Power Attack", "rank": 1},
+          {"name": "Improved Critical: Unarmed", "rank": 1}
+        ],
+        "skills": ["Athletics 8", "Intimidation 6"],
+        "powers": [
+          {"name": "Eye Beam", "description": "A powerful energy beam from its single eye.", "rank": 10, "cost": 10}
+        ],
+        "defenses": {
+          "Dodge": 3,
+          "Parry": 5,
+          "Fortitude": 9,
+          "Toughness": 7,
+          "Will": 4
+        },
+        "initiative": 1,
+        "attacks": [
+          {"name": "Unarmed", "to_hit": 8, "effect": "Damage 8"},
+          {"name": "Eye Beam", "to_hit": 8, "effect": "Damage 10"}
+        ],
+        "description": "A giant with a single eye in the center of its forehead, known for its brute strength."
+      },
+      {
+        "name": "Lich",
+        "PL": 14,
+        "stats": {
+          "Strength": 2,
+          "Stamina": 2,
+          "Agility": 1,
+          "Dexterity": 2,
+          "Fighting": 3,
+          "Intellect": 8,
+          "Awareness": 6,
+          "Presence": 6
+        },
+        "advantages": [
+          {"name": "Ritualist", "rank": 1},
+          {"name": "Artificer", "rank": 1}
+        ],
+        "skills": ["Arcana 10", "Intimidation 8", "Deception 7"],
+        "powers": [
+          {"name": "Necromancy", "description": "Control over the undead and dark magic.", "rank": 20, "cost": 20},
+          {"name": "Immortality", "description": "Cannot die unless its phylactery is destroyed.", "rank": 15, "cost": 15},
+          {"name": "Paralysis Touch", "description": "A touch that paralyzes its victims.", "rank": 10, "cost": 10}
+        ],
+        "defenses": {
+          "Dodge": 5,
+          "Parry": 3,
+          "Fortitude": 6,
+          "Toughness": 2,
+          "Will": 12
+        },
+        "initiative": 1,
+        "attacks": [
+          {"name": "Paralysis Touch", "to_hit": 8, "effect": "Paralyze 10"},
+          {"name": "Dark Bolt", "to_hit": 10, "effect": "Damage 10"}
+        ],
+        "description": "An undead sorcerer with control over dark magic and the undead."
+      },
+      {
+        "name": "Zombie",
+        "PL": 2,
+        "stats": {
+          "Strength": 3,
+          "Stamina": 4,
+          "Agility": 0,
+          "Dexterity": 0,
+          "Fighting": 2,
+          "Intellect": -2,
+          "Awareness": 0,
+          "Presence": 0
+        },
+        "advantages": [
+          {"name": "Fearless", "rank": 1}
+        ],
+        "skills": ["Intimidation 2"],
+        "powers": [],
+        "defenses": {
+          "Dodge": 0,
+          "Parry": 2,
+          "Fortitude": 4,
+          "Toughness": 4,
+          "Will": 0
+        },
+        "initiative": 0,
+        "attacks": [
+          {"name": "Slam", "to_hit": 2, "effect": "Damage 3"}
+        ],
+        "description": "A mindless, undead creature that relentlessly pursues the living."
+      },
+      {
+        "name": "Golem",
+        "PL": 10,
+        "stats": {
+          "Strength": 8,
+          "Stamina": 10,
+          "Agility": 0,
+          "Dexterity": 0,
+          "Fighting": 6,
+          "Intellect": -2,
+          "Awareness": 0,
+          "Presence": 0
+        },
+        "advantages": [
+          {"name": "Fearless", "rank": 1},
+          {"name": "Diehard", "rank": 1}
+        ],
+        "skills": ["Intimidation 6"],
+        "powers": [
+          {"name": "Immunity", "description": "Immune to various conditions such as poison, disease, and mental effects.", "rank": 15, "cost": 15}
+        ],
+        "defenses": {
+          "Dodge": 0,
+          "Parry": 6,
+          "Fortitude": 10,
+          "Toughness": 10,
+          "Will": 0
+        },
+        "initiative": 0,
+        "attacks": [
+          {"name": "Slam", "to_hit": 6, "effect": "Damage 8"}
+        ],
+        "description": "A magically animated construct of stone or clay, nearly indestructible."
+      },
+      {
+        "name": "Manticore",
+        "PL": 9,
+        "stats": {
+          "Strength": 6,
+          "Stamina": 6,
+          "Agility": 3,
+          "Dexterity": 2,
+          "Fighting": 5,
+          "Intellect": 2,
+          "Awareness": 3,
+          "Presence": 2
+        },
+        "advantages": [
+          {"name": "Power Attack", "rank": 1},
+          {"name": "Improved Initiative", "rank": 1}
+        ],
+        "skills": ["Perception 6", "Athletics 5", "Intimidation 5"],
+        "powers": [
+          {"name": "Poisonous Tail", "description": "A deadly sting that can poison its victims.", "rank": 10, "cost": 10},
+          {"name": "Flight", "description": "The ability to fly at high speeds.", "rank": 15, "cost": 15}
+        ],
+        "defenses": {
+          "Dodge": 6,
+          "Parry": 8,
+          "Fortitude": 8,
+          "Toughness": 6,
+          "Will": 5
+        },
+        "initiative": 3,
+        "attacks": [
+          {"name": "Claw", "to_hit": 8, "effect": "Damage 6"},
+          {"name": "Bite", "to_hit": 8, "effect": "Damage 7"},
+          {"name": "Poisonous Tail", "to_hit": 8, "effect": "Damage 10 (Poison)"}
+        ],
+        "description": "A fearsome creature with the body of a lion, wings of a dragon, and a poisonous tail."
+      },
+      {
+        "name": "Kraken",
+        "PL": 16,
+        "stats": {
+          "Strength": 12,
+          "Stamina": 12,
+          "Agility": 2,
+          "Dexterity": 1,
+          "Fighting": 10,
+          "Intellect": 2,
+          "Awareness": 3,
+          "Presence": 5
+        },
+        "advantages": [
+          {"name": "Improved Grab", "rank": 1},
+          {"name": "Fast Grab", "rank": 1}
+        ],
+        "skills": ["Athletics 12", "Intimidation 10", "Perception 8"],
+        "powers": [
+          {"name": "Tentacle Attack", "description": "Can attack multiple targets with its tentacles.", "rank": 20, "cost": 20},
+          {"name": "Ink Cloud", "description": "Releases a cloud of ink to obscure vision.", "rank": 5, "cost": 5},
+          {"name": "Aquatic", "description": "Can breathe and move freely underwater.", "rank": 10, "cost": 10}
+        ],
+        "defenses": {
+          "Dodge": 4,
+          "Parry": 10,
+          "Fortitude": 14,
+          "Toughness": 12,
+          "Will": 8
+        },
+        "initiative": 2,
+        "attacks": [
+          {"name": "Tentacle", "to_hit": 12, "effect": "Damage 12 (Multiattack)"},
+          {"name": "Bite", "to_hit": 10, "effect": "Damage 14"}
+        ],
+        "description": "A massive sea monster with numerous tentacles and the ability to breathe underwater."
+      },
+      {
+        "name": "Medusa",
+        "PL": 10,
+        "stats": {
+          "Strength": 3,
+          "Stamina": 4,
+          "Agility": 4,
+          "Dexterity": 2,
+          "Fighting": 5,
+          "Intellect": 3,
+          "Awareness": 4,
+          "Presence": 5
+        },
+        "advantages": [
+          {"name": "Fascinate: Deception", "rank": 1},
+          {"name": "Improved Initiative", "rank": 1}
+        ],
+        "skills": ["Deception 8", "Perception 6", "Stealth 6"],
+        "powers": [
+          {"name": "Petrifying Gaze", "description": "Can turn creatures to stone with a look.", "rank": 20, "cost": 20}
+        ],
+        "defenses": {
+          "Dodge": 6,
+          "Parry": 6,
+          "Fortitude": 6,
+          "Toughness": 4,
+          "Will": 8
+        },
+        "initiative": 4,
+        "attacks": [
+          {"name": "Petrifying Gaze", "to_hit": 10, "effect": "Petrify 20"}
+        ],
+        "description": "A cursed creature with snakes for hair and the ability to turn others to stone with her gaze."
+      },
+      {
+        "name": "Minotaur",
+        "PL": 8,
+        "stats": {
+          "Strength": 8,
+          "Stamina": 7,
+          "Agility": 2,
+          "Dexterity": 1,
+          "Fighting": 6,
+          "Intellect": 1,
+          "Awareness": 2,
+          "Presence": 3
+        },
+        "advantages": [
+          {"name": "Power Attack", "rank": 1},
+          {"name": "Improved Critical: Unarmed", "rank": 1}
+        ],
+        "skills": ["Athletics 8", "Intimidation 6", "Perception 4"],
+        "powers": [],
+        "defenses": {
+          "Dodge": 4,
+          "Parry": 6,
+          "Fortitude": 9,
+          "Toughness": 7,
+          "Will": 4
+        },
+        "initiative": 2,
+        "attacks": [
+          {"name": "Gore", "to_hit": 8, "effect": "Damage 10"},
+          {"name": "Unarmed", "to_hit": 8, "effect": "Damage 8"}
+        ],
+        "description": "A fearsome creature with the body of a man and the head of a bull, known for its brute strength."
+      },
+      {
+        "name": "Naga",
+        "PL": 7,
+        "stats": {
+          "Strength": 4,
+          "Stamina": 5,
+          "Agility": 4,
+          "Dexterity": 3,
+          "Fighting": 5,
+          "Intellect": 3,
+          "Awareness": 3,
+          "Presence": 3
+        },
+        "advantages": [
+          {"name": "Improved Initiative", "rank": 1},
+          {"name": "Improved Critical: Bite", "rank": 2}
+        ],
+        "skills": ["Athletics 5", "Perception 6", "Stealth 5"],
+        "powers": [
+          {"name": "Venomous Bite", "description": "A poisonous bite that can paralyze or kill.", "rank": 10, "cost": 10},
+          {"name": "Water Control", "description": "Can control and manipulate water.", "rank": 10, "cost": 10}
+        ],
+        "defenses": {
+          "Dodge": 8,
+          "Parry": 8,
+          "Fortitude": 8,
+          "Toughness": 5,
+          "Will": 6
+        },
+        "initiative": 4,
+        "attacks": [
+          {"name": "Bite", "to_hit": 8, "effect": "Damage 4 (Venom)"},
+          {"name": "Water Blast", "to_hit": 8, "effect": "Damage 10"}
+        ],
+        "description": "A serpentine creature with the ability to control water and deliver a deadly bite."
+      },
+      {
+        "name": "Pegasus",
+        "PL": 6,
+        "stats": {
+          "Strength": 4,
+          "Stamina": 5,
+          "Agility": 5,
+          "Dexterity": 2,
+          "Fighting": 4,
+          "Intellect": 2,
+          "Awareness": 3,
+          "Presence": 3
+        },
+        "advantages": [
+          {"name": "Evasion", "rank": 1},
+          {"name": "Fearless", "rank": 1}
+        ],
+        "skills": ["Athletics 6", "Perception 6", "Stealth 4"],
+        "powers": [
+          {"name": "Flight", "description": "The ability to fly at high speeds.", "rank": 15, "cost": 15}
+        ],
+        "defenses": {
+          "Dodge": 10,
+          "Parry": 8,
+          "Fortitude": 5,
+          "Toughness": 5,
+          "Will": 6
+        },
+        "initiative": 5,
+        "attacks": [
+          {"name": "Hoof", "to_hit": 6, "effect": "Damage 4"}
+        ],
+        "description": "A majestic, winged horse capable of swift flight."
+      },
+      {
+        "name": "Doppelganger",
+        "PL": 8,
+        "stats": {
+          "Strength": 3,
+          "Stamina": 4,
+          "Agility": 4,
+          "Dexterity": 4,
+          "Fighting": 5,
+          "Intellect": 3,
+          "Awareness": 4,
+          "Presence": 4
+        },
+        "advantages": [
+          {"name": "Deception", "rank": 3},
+          {"name": "Improved Initiative", "rank": 1}
+        ],
+        "skills": ["Deception 8", "Stealth 6", "Perception 6"],
+        "powers": [
+          {"name": "Shape Change", "description": "Can take on the appearance of others.", "rank": 10, "cost": 10}
+        ],
+        "defenses": {
+          "Dodge": 8,
+          "Parry": 8,
+          "Fortitude": 6,
+          "Toughness": 4,
+          "Will": 8
+        },
+        "initiative": 4,
+        "attacks": [
+          {"name": "Unarmed", "to_hit": 8, "effect": "Damage 3"}
+        ],
+        "description": "A creature that can mimic the appearance and voice of others."
+      },
+      {
+        "name": "Basilisk",
+        "PL": 9,
+        "stats": {
+          "Strength": 4,
+          "Stamina": 5,
+          "Agility": 3,
+          "Dexterity": 2,
+          "Fighting": 4,
+          "Intellect": 2,
+          "Awareness": 3,
+          "Presence": 2
+        },
+        "advantages": [
+          {"name": "Improved Initiative", "rank": 1},
+          {"name": "Fearless", "rank": 1}
+        ],
+        "skills": ["Athletics 5", "Perception 6", "Stealth 4"],
+        "powers": [
+          {"name": "Petrifying Gaze", "description": "Can turn creatures to stone with a look.", "rank": 10, "cost": 10}
+        ],
+        "defenses": {
+          "Dodge": 6,
+          "Parry": 6,
+          "Fortitude": 7,
+          "Toughness": 5,
+          "Will": 6
+        },
+        "initiative": 3,
+        "attacks": [
+          {"name": "Bite", "to_hit": 6, "effect": "Damage 4"},
+          {"name": "Petrifying Gaze", "to_hit": 10, "effect": "Petrify 10"}
+        ],
+        "description": "A serpentine creature with a deadly gaze that can turn others to stone."
+      },
+      {
+        "name": "Yeti",
+        "PL": 8,
+        "stats": {
+          "Strength": 6,
+          "Stamina": 6,
+          "Agility": 2,
+          "Dexterity": 1,
+          "Fighting": 5,
+          "Intellect": 1,
+          "Awareness": 3,
+          "Presence": 2
+        },
+        "advantages": [
+          {"name": "Improved Critical: Claws", "rank": 1},
+          {"name": "Fearless", "rank": 1}
+        ],
+        "skills": ["Athletics 6", "Perception 4", "Stealth 4"],
+        "powers": [
+          {"name": "Cold Immunity", "description": "Unaffected by cold and ice.", "rank": 10, "cost": 10}
+        ],
+        "defenses": {
+          "Dodge": 4,
+          "Parry": 5,
+          "Fortitude": 8,
+          "Toughness": 6,
+          "Will": 5
+        },
+        "initiative": 2,
+        "attacks": [
+          {"name": "Claws", "to_hit": 8, "effect": "Damage 6"},
+          {"name": "Bite", "to_hit": 8, "effect": "Damage 7"}
+        ],
+        "description": "A large, fur-covered creature that inhabits cold regions, known for its strength and ferocity."
+      }
+    ]
+  }
+  
