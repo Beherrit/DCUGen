@@ -102,39 +102,29 @@ def reduce_stat(character, stat_name, amount, allocated_points):
         allocated_points["stats"] += refund  # Allocate refund to stats if no powers key is present
     return refund  # Return the amount refunded
 
-def calculate_total_cost(character):
-    total_stat_cost = sum(details['cost'] for details in character['stats'].values())
-    total_advantage_cost = sum(advantage['cost'] for advantage in character['advantages'])
-    total_skill_cost = sum(skill['cost'] for skill in character['skills'])
-    total_power_cost = sum(power['cost'] for power in character['powers'])
-    
-    return total_stat_cost + total_advantage_cost + total_skill_cost + total_power_cost
+def allocate_and_calculate_defenses(character, power_level, allocated_points, allocations):
+    stats = load_data_from_json('./json/stats.json')
 
-def calculate_defenses(character, power_level, allocated_points):
+    total_range = sum(details["range"][1] - details["range"][0] + 1 for details in stats["STATS"])
+
     defenses = {
-        "Dodge": character["stats"].get("Agility", {}).get("value", 0) + character["stats"].get("Dodge", {}).get("value", 0),
-        "Fortitude": character["stats"].get("Stamina", {}).get("value", 0) + character["stats"].get("Fortitude", {}).get("value", 0),
-        "Parry": character["stats"].get("Fighting", {}).get("value", 0) + character["stats"].get("Parry", {}).get("value", 0),
+        "Dodge": character["stats"].get("Agility", {}).get("value", 0),
+        "Fortitude": character["stats"].get("Stamina", {}).get("value", 0),
+        "Parry": character["stats"].get("Fighting", {}).get("value", 0),
         "Toughness": character["stats"].get("Stamina", {}).get("value", 0),
-        "Will": character["stats"].get("Awareness", {}).get("value", 0) + character["stats"].get("Will", {}).get("value", 0),
+        "Will": character["stats"].get("Awareness", {}).get("value", 0),
     }
 
-    # Add enhancements from powers
-    for power in character.get("powers", []):
-        if power["name"].startswith("Enhanced Trait"):
-            defense_name = power["name"].split()[-1]
-            if defense_name in defenses:
-                defenses[defense_name] += power["rank"]
+    defense_types = ["Dodge", "Fortitude", "Parry", "Will"]
+    defense_allocation_ranges = allocations.get("defenses", [0.1, 0.2])
 
-    # Add Defensive Roll to Toughness
-    defensive_roll_bonus = sum(advantage.get("rank", 0) for advantage in character.get("advantages", []) if advantage["name"] == "Defensive Roll")
-    defenses["Toughness"] += defensive_roll_bonus
+    for defense in defense_types:
+        defense_percentage = random.uniform(*defense_allocation_ranges)
+        defense_points = int(defense_percentage * power_level * POWER_POINTS_PER_LEVEL)
+        defense_value, cost = allocate_stat(defense, defense_points, total_range, stats, power_level)
+        defenses[defense] += defense_value
+        allocated_points["stats"] -= cost
 
-    # Add Protection Power to Toughness
-    protection_bonus = sum(power.get("rank", 0) for power in character.get("powers", []) if power["name"] == "Protection")
-    defenses["Toughness"] += protection_bonus
-
-    # Enforce power level caps for defense pairs
     defense_pairs = {
         ("Dodge", "Toughness"): power_level * 2,
         ("Parry", "Toughness"): power_level * 2,
@@ -147,14 +137,50 @@ def calculate_defenses(character, power_level, allocated_points):
             excess = total - cap
             for defense in defense_pair:
                 if defenses[defense] > 0:
-                    # Note: The refund from reduce_stat should update allocated_points
                     refund = reduce_stat(character, defense, excess, allocated_points)
                     defenses[defense] = max(0, defenses[defense])
                     total = sum(defenses[defense] for defense in defense_pair)
                     if total <= cap:
                         break
 
-    return defenses
+    # Add enhancements from powers
+    for power in character.get("powers", []):
+        if power["name"].startswith("Enhanced Trait"):
+            defense_name = power["name"].replace("Enhanced Trait ", "")
+            if defense_name in defenses:
+                defenses[defense_name] += power["rank"]
+
+    # Add Defensive Roll to Toughness
+    defensive_roll_bonus = sum(advantage.get("rank", 0) for advantage in character.get("advantages", []) if advantage["name"] == "Defensive Roll")
+    defenses["Toughness"] += defensive_roll_bonus
+
+    # Add Protection Power to Toughness
+    protection_bonus = sum(power.get("rank", 0) for power in character.get("powers", []) if power["name"] == "Protection")
+    defenses["Toughness"] += protection_bonus
+
+    # Enforce power level caps for defense pairs (again after adding power effects)
+    for defense_pair, cap in defense_pairs.items():
+        total = sum(defenses[defense] for defense in defense_pair)
+        if total > cap:
+            excess = total - cap
+            for defense in defense_pair:
+                if defenses[defense] > 0:
+                    refund = reduce_stat(character, defense, excess, allocated_points)
+                    defenses[defense] = max(0, defenses[defense])
+                    total = sum(defenses[defense] for defense in defense_pair)
+                    if total <= cap:
+                        break
+
+    character["defenses"] = defenses
+    return character, allocated_points
+
+def calculate_total_cost(character):
+    total_stat_cost = sum(details['cost'] for details in character['stats'].values())
+    total_advantage_cost = sum(advantage['cost'] for advantage in character['advantages'])
+    total_skill_cost = sum(skill['cost'] for skill in character['skills'])
+    total_power_cost = sum(power['cost'] for power in character['powers'])
+    
+    return total_stat_cost + total_advantage_cost + total_skill_cost + total_power_cost
 
 def allocate_stat(stat_name, allocated_points, total_range, stats, power_level):
     stat_details = next(stat for stat in stats["STATS"] if stat["name"] == stat_name)
@@ -193,21 +219,28 @@ def allocate_stats(character, power_level, allocated_points, total_range, alloca
 def allocate_advantages(character, allocated_points, power_level, max_advantages, allocations):
     advantages = load_data_from_json('./json/advantages.json')
     random.shuffle(advantages)
+    
+    allocated_advantage_points = 0
+    
     for advantage in advantages:
         if allocated_points["advantages"] <= 0 or len(character["advantages"]) >= max_advantages:
             break
-        if advantage["cost"] <= allocated_points["advantages"]:
-            max_rank = min(advantage.get("max_rank", power_level), allocated_points["advantages"] // advantage["cost"])
-            if max_rank > 0:
-                rank = random.randint(1, max_rank)
-                adjusted_cost = advantage["cost"] * rank
-                character["advantages"].append({
-                    "name": advantage["name"],
-                    "rank": rank,
-                    "cost": adjusted_cost
-                })
-                allocated_points["advantages"] -= adjusted_cost
-
+        
+        max_rank = min(advantage.get("max_rank", power_level), allocated_points["advantages"] // advantage["cost"])
+        
+        if max_rank > 0:
+            rank = random.randint(1, max_rank)
+            adjusted_cost = advantage["cost"] * rank
+            character["advantages"].append({
+                "name": advantage["name"],
+                "rank": rank,
+                "cost": adjusted_cost
+            })
+            allocated_points["advantages"] -= adjusted_cost
+            allocated_advantage_points += adjusted_cost
+    
+    allocated_points["advantages"] += (allocated_advantage_points - sum(advantage['cost'] for advantage in character["advantages"]))  # Adjust remaining points
+    
     return character, allocated_points
 
 def allocate_skills(character, allocated_points, power_level, allocations):
@@ -287,7 +320,7 @@ def allocate_skills(character, allocated_points, power_level, allocations):
     return character, allocated_points
 
 def allocate_powers(character, allocated_points, power_level, allocations):
-    max_powers = allocations["max_powers"]
+    max_powers = allocations.get("max_powers", 8)  # Default to 8 if not specified
     if allocations["powers"] == [0, 0]:
         remaining_power_points = allocated_points["powers"]
         allocated_points["stats"] += remaining_power_points * 0.4
@@ -403,10 +436,10 @@ def reroll_stats(character, text_widget):
     stats = load_data_from_json('./json/stats.json')
     total_range = sum(details["range"][1] - details["range"][0] + 1 for details in stats["STATS"])
     allocations = {"stats": [0.1, 0.3]}  # Adjust based on your allocation rules
-    allocated_points = {"stats": total_stats_cost, "powers": 0}  # Ensure 'powers' key is present
+    allocated_points = {"stats": total_stats_cost, "powers": 0, "advantages": 0, "skills": 0}  # Ensure 'powers' key is present
     character["stats"] = {}
     character, allocated_points = allocate_stats(character, power_level, allocated_points, total_range, allocations)
-    character["defenses"] = calculate_defenses(character, power_level, allocated_points)  # Update defenses after reroll
+    character, allocated_points = allocate_and_calculate_defenses(character, power_level, allocated_points, allocations)  # Update defenses after reroll
     text_widget.delete("1.0", "end")
     pretty_print_character(character, text_widget)
 
@@ -415,9 +448,10 @@ def reroll_advantages(character, text_widget):
     power_level = character['power_level']
     max_advantages = 10  # Adjust based on your allocation rules
     allocations = {"advantages": [0.1, 0.3]}  # Adjust based on your allocation rules
-    allocated_points = {"advantages": total_advantage_cost}
+    allocated_points = {"advantages": total_advantage_cost, "stats": 0, "skills": 0, "powers": 0}
     character["advantages"] = []
     character, allocated_points = allocate_advantages(character, allocated_points, power_level, max_advantages, allocations)
+    character, allocated_points = allocate_and_calculate_defenses(character, power_level, allocated_points, allocations)  # Update defenses after reroll
     text_widget.delete("1.0", "end")
     pretty_print_character(character, text_widget)
 
@@ -425,9 +459,10 @@ def reroll_skills(character, text_widget):
     total_skill_cost = sum(skill['cost'] for skill in character['skills'])
     power_level = character['power_level']
     allocations = {"skills": [0.1, 0.3]}  # Adjust based on your allocation rules
-    allocated_points = {"skills": total_skill_cost}
+    allocated_points = {"skills": total_skill_cost, "stats": 0, "advantages": 0, "powers": 0}
     character["skills"] = []
     character, allocated_points = allocate_skills(character, allocated_points, power_level, allocations)
+    character, allocated_points = allocate_and_calculate_defenses(character, power_level, allocated_points, allocations)  # Update defenses after reroll
     text_widget.delete("1.0", "end")
     pretty_print_character(character, text_widget)
 
@@ -435,10 +470,10 @@ def reroll_powers(character, text_widget):
     total_power_cost = sum(power['cost'] for power in character['powers'])
     power_level = character['power_level']
     allocations = {"powers": [0.1, 0.3]}  # Adjust based on your allocation rules
-    allocated_points = {"powers": total_power_cost}
+    allocated_points = {"powers": total_power_cost, "stats": 0, "advantages": 0, "skills": 0}
     character["powers"] = []
     character, allocated_points = allocate_powers(character, allocated_points, power_level, allocations)
-    character["defenses"] = calculate_defenses(character, power_level, allocated_points)  # Update defenses after reroll
+    character, allocated_points = allocate_and_calculate_defenses(character, power_level, allocated_points, allocations)  # Update defenses after reroll
     text_widget.delete("1.0", "end")
     pretty_print_character(character, text_widget)
 
@@ -530,6 +565,7 @@ def generate_character(power_level, archetype, include_powers=True, random_physi
 
     total_range = sum(details["range"][1] - details["range"][0] + 1 for details in stats["STATS"])
     character, allocated_points = allocate_stats(character, power_level, allocated_points, total_range, allocations)
+    character, allocated_points = allocate_and_calculate_defenses(character, power_level, allocated_points, allocations)  # Allocate defenses
     character, allocated_points = allocate_advantages(character, allocated_points, power_level, max_advantages, allocations)
     character, allocated_points = allocate_skills(character, allocated_points, power_level, allocations)
 
@@ -563,7 +599,7 @@ def generate_character(power_level, archetype, include_powers=True, random_physi
     items, total_cost = random_gadget_generator(equipment_points, gadgets)
     character['equipment'] = items
 
-    character["defenses"] = calculate_defenses(character, power_level, allocated_points)
+    character["defenses"], allocated_points = allocate_and_calculate_defenses(character, power_level, allocated_points, allocations)  # Update defenses after reroll
     character["initiative"] = calculate_initiative(character)
     character["total_cost"] = calculate_total_cost(character)
     motivations_and_complications = generate_motivations_and_complications()
