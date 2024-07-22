@@ -32,7 +32,7 @@ def open_combat_calculator():
     dodge_frame = tk.Frame(calc_window, bd=2, relief="sunken")
     dodge_frame.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
 
-    tk.Label(dodge_frame, text="Ranged Attack:").pack()
+    tk.Label(dodge_frame, text="Dodge Defense Number:").pack()
     dodge_entry = tk.Entry(dodge_frame)
     dodge_entry.pack()
 
@@ -56,7 +56,7 @@ def open_combat_calculator():
     parry_frame = tk.Frame(calc_window, bd=2, relief="sunken")
     parry_frame.grid(row=0, column=1, padx=5, pady=5, sticky="nsew")
 
-    tk.Label(parry_frame, text="Melee Attack:").pack()
+    tk.Label(parry_frame, text="Parry Defense Number:").pack()
     parry_entry = tk.Entry(parry_frame)
     parry_entry.pack()
 

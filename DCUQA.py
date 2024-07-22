@@ -230,11 +230,17 @@ def allocate_skills(character, allocated_points, power_level, allocations):
         rank = random.randint(max(0, max_rank - 8), max_rank)
         adjusted_cost = rank / 2
 
+        if skill["name"] == "Expertise" and "sub_skills" in skill:
+            sub_skill = random.choice(skill["sub_skills"])
+        else:
+            sub_skill = None
+
         character["skills"].append({
             "name": skill["name"],
             "rank": rank,
             "cost": adjusted_cost,
-            "tags": skill.get("tags", [])
+            "tags": skill.get("tags", []),
+            "sub_skill": sub_skill
         })
 
         skill_points -= rank * 2  # Adjust for the cost per rank
@@ -531,8 +537,9 @@ def pretty_print_character(character, text_widget):
         rank = skill["rank"] if skill else 0
         total = rank + sum(character["stats"].get(tag, {}).get("value", 0) for tag in skill_template.get("tags", []))
         cost = rank / 2 if rank > 0 else 0
+        sub_skill_display = f" : {skill['sub_skill']}" if skill and skill["sub_skill"] else ""
         text_widget.insert("end", f"- ", "bold_no_underline")
-        text_widget.insert("end", f"{skill_name} ", "bold_no_underline")
+        text_widget.insert("end", f"{skill_name}{sub_skill_display} ", "bold_no_underline")
         text_widget.insert("end", f"(Rank: {rank}, Cost: {cost:.1f}, Total: {total})\n")
 
     sorted_powers = sorted(character["powers"], key=lambda p: ["Combat", "Defensive", "Support", "Movement", "Utility", "Unknown"].index(p.get("type", "Unknown")))
@@ -737,8 +744,6 @@ class CollapsibleSection:
 
     def pack(self, **kwargs):
         self.frame.pack(**kwargs)
-
-
 
 def main():
     global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, selected_archetype, hideout_details
