@@ -57,14 +57,15 @@ def reduce_stat(character, stat_name, amount, allocated_points):
     refund = 0
 
     # Attempt to reduce from powers like 'Enhanced Trait'
-    for power in character.get("powers", []):
-        if power["name"] == f"Enhanced Trait {stat_name}" and power["rank"] > 0:
-            reduction = min(power["rank"], amount)
-            power["rank"] -= reduction
-            amount -= reduction
-            refund += reduction  # Add the points back to the pool
-            if amount == 0:
-                break
+    if "powers" in character:
+        for power in character["powers"]:
+            if power["name"] == f"Enhanced Trait {stat_name}" and power["rank"] > 0:
+                reduction = min(power["rank"], amount)
+                power["rank"] -= reduction
+                amount -= reduction
+                refund += reduction  # Add the points back to the pool
+                if amount == 0:
+                    break
 
     # Attempt to reduce from advantages, like 'Defensive Roll' for Toughness
     if stat_name == "Toughness":
@@ -95,7 +96,10 @@ def reduce_stat(character, stat_name, amount, allocated_points):
             refund += reduction  # Add the points back to the pool
 
     # Update allocated points
-    allocated_points["powers"] += refund
+    if "powers" in allocated_points:
+        allocated_points["powers"] += refund
+    else:
+        allocated_points["stats"] += refund  # Allocate refund to stats if no powers key is present
     return refund  # Return the amount refunded
 
 def calculate_total_cost(character):
@@ -219,17 +223,54 @@ def allocate_skills(character, allocated_points, power_level, allocations):
     # Each skill rank costs 0.5 points, so double the total_skill_points for the actual points to allocate
     skill_points = total_skill_points * 2
 
-    while skill_points > 0 and skill_list:
-        skill = skill_list.pop(0)
-        stat_value = sum(character["stats"].get(tag, {}).get("value", 0) for tag in skill.get("tags", []))
-        max_rank = min(power_level + 10 - stat_value, skill_points // 2)
+    # Divide skills into groups
+    high_value_skills = random.sample(skill_list, 4)
+    remaining_skills = [skill for skill in skill_list if skill not in high_value_skills]
+    moderate_value_skills = random.sample(remaining_skills, 8)
+    zero_value_skills = [skill for skill in remaining_skills if skill not in moderate_value_skills]
 
-        if max_rank <= 0:
-            continue
+    def allocate_to_skills(skill_group, min_rank, max_rank):
+        nonlocal skill_points
+        for skill in skill_group:
+            if skill_points <= 0:
+                break
+            stat_value = sum(character["stats"].get(tag, {}).get("value", 0) for tag in skill.get("tags", []))
+            max_skill_rank = min(power_level + 10 - stat_value, max_rank)
 
-        rank = random.randint(max(0, max_rank - 8), max_rank)
-        adjusted_cost = rank / 2
+            if max_skill_rank <= 0:
+                continue
 
+            rank = random.randint(min_rank, max_skill_rank)
+            adjusted_cost = rank / 2
+
+            if adjusted_cost > skill_points:
+                rank = int(skill_points)
+                adjusted_cost = rank / 2
+
+            if skill["name"] == "Expertise" and "sub_skills" in skill:
+                sub_skill = random.choice(skill["sub_skills"])
+            else:
+                sub_skill = None
+
+            character["skills"].append({
+                "name": skill["name"],
+                "rank": rank,
+                "cost": adjusted_cost,
+                "tags": skill.get("tags", []),
+                "sub_skill": sub_skill
+            })
+
+            skill_points -= rank * 2
+            allocated_points["skills"] -= adjusted_cost
+
+    # Allocate points to high value skills
+    allocate_to_skills(high_value_skills, max(0, power_level - 5), power_level)
+
+    # Allocate points to moderate value skills
+    allocate_to_skills(moderate_value_skills, max(0, power_level - 10), max(0, power_level - 5))
+
+    # Allocate rank 0 to remaining skills
+    for skill in zero_value_skills:
         if skill["name"] == "Expertise" and "sub_skills" in skill:
             sub_skill = random.choice(skill["sub_skills"])
         else:
@@ -237,21 +278,16 @@ def allocate_skills(character, allocated_points, power_level, allocations):
 
         character["skills"].append({
             "name": skill["name"],
-            "rank": rank,
-            "cost": adjusted_cost,
+            "rank": 0,
+            "cost": 0,
             "tags": skill.get("tags", []),
             "sub_skill": sub_skill
         })
 
-        skill_points -= rank * 2  # Adjust for the cost per rank
-        allocated_points["skills"] -= adjusted_cost
-
-        if skill_points > 0 and skill_list:
-            random.shuffle(skill_list)
-
     return character, allocated_points
 
 def allocate_powers(character, allocated_points, power_level, allocations):
+    max_powers = allocations["max_powers"]
     if allocations["powers"] == [0, 0]:
         remaining_power_points = allocated_points["powers"]
         allocated_points["stats"] += remaining_power_points * 0.4
@@ -268,7 +304,7 @@ def allocate_powers(character, allocated_points, power_level, allocations):
     num_powers = random.randint(*power_range)
     selected_power_names = []
 
-    while len(character["powers"]) < num_powers and allocated_points["powers"] > 0:
+    while len(character["powers"]) < num_powers and len(character["powers"]) < max_powers and allocated_points["powers"] > 0:
         for power in powers:
             if power["name"] in selected_power_names:
                 continue
@@ -361,6 +397,51 @@ def allocate_powers(character, allocated_points, power_level, allocations):
 
     return character, allocated_points
 
+def reroll_stats(character, text_widget):
+    total_stats_cost = sum(details['cost'] for details in character['stats'].values())
+    power_level = character['power_level']
+    stats = load_data_from_json('./json/stats.json')
+    total_range = sum(details["range"][1] - details["range"][0] + 1 for details in stats["STATS"])
+    allocations = {"stats": [0.1, 0.3]}  # Adjust based on your allocation rules
+    allocated_points = {"stats": total_stats_cost, "powers": 0}  # Ensure 'powers' key is present
+    character["stats"] = {}
+    character, allocated_points = allocate_stats(character, power_level, allocated_points, total_range, allocations)
+    character["defenses"] = calculate_defenses(character, power_level, allocated_points)  # Update defenses after reroll
+    text_widget.delete("1.0", "end")
+    pretty_print_character(character, text_widget)
+
+def reroll_advantages(character, text_widget):
+    total_advantage_cost = sum(advantage['cost'] for advantage in character['advantages'])
+    power_level = character['power_level']
+    max_advantages = 10  # Adjust based on your allocation rules
+    allocations = {"advantages": [0.1, 0.3]}  # Adjust based on your allocation rules
+    allocated_points = {"advantages": total_advantage_cost}
+    character["advantages"] = []
+    character, allocated_points = allocate_advantages(character, allocated_points, power_level, max_advantages, allocations)
+    text_widget.delete("1.0", "end")
+    pretty_print_character(character, text_widget)
+
+def reroll_skills(character, text_widget):
+    total_skill_cost = sum(skill['cost'] for skill in character['skills'])
+    power_level = character['power_level']
+    allocations = {"skills": [0.1, 0.3]}  # Adjust based on your allocation rules
+    allocated_points = {"skills": total_skill_cost}
+    character["skills"] = []
+    character, allocated_points = allocate_skills(character, allocated_points, power_level, allocations)
+    text_widget.delete("1.0", "end")
+    pretty_print_character(character, text_widget)
+
+def reroll_powers(character, text_widget):
+    total_power_cost = sum(power['cost'] for power in character['powers'])
+    power_level = character['power_level']
+    allocations = {"powers": [0.1, 0.3]}  # Adjust based on your allocation rules
+    allocated_points = {"powers": total_power_cost}
+    character["powers"] = []
+    character, allocated_points = allocate_powers(character, allocated_points, power_level, allocations)
+    character["defenses"] = calculate_defenses(character, power_level, allocated_points)  # Update defenses after reroll
+    text_widget.delete("1.0", "end")
+    pretty_print_character(character, text_widget)
+
 def on_generate_button_click():
     global character, selected_archetype
     try:
@@ -439,16 +520,14 @@ def generate_character(power_level, archetype, include_powers=True, random_physi
         "personality_traits": generate_random_traits()  # Add the randomly generated traits here
     }
 
-    # Load archetypes from the JSON file
-    archetypes = load_archetypes()
+    # Allocate stats, advantages, skills, and powers
     allocation_key = "with_powers" if include_powers else "without_powers"
+    archetypes = load_archetypes()
     allocations = archetypes[archetype][allocation_key]
     max_points = power_level * POWER_POINTS_PER_LEVEL
     allocated_points = {category: int(allocations[category][1] * max_points) for category in allocations if category != "max_advantages" and category != "max_powers" and category != "power_range"}
     max_advantages = allocations["max_advantages"]
-    character['failure_effects'] = random_failure_effects() 
 
-    # Allocate stats, advantages, skills, and powers
     total_range = sum(details["range"][1] - details["range"][0] + 1 for details in stats["STATS"])
     character, allocated_points = allocate_stats(character, power_level, allocated_points, total_range, allocations)
     character, allocated_points = allocate_advantages(character, allocated_points, power_level, max_advantages, allocations)
@@ -492,23 +571,24 @@ def generate_character(power_level, archetype, include_powers=True, random_physi
     character["languages"] = assign_languages(character)
     character['origin'] = generate_random_origin()
     character['generation_log'] = []
+    character["description"] = generate_character_description(character)  # Store the generated description
 
     return character
 
 def pretty_print_character(character, text_widget):
-    description = generate_character_description(character)
+    description = character["description"]  # Use the stored description
     text_widget.insert("end", "Character Creation Summary Version\n", "bold")
     text_widget.insert("end", "-" * 40 + "\n\n")
 
     total_cost = calculate_total_cost(character)
     text_widget.insert("end", f"Power Level: {character['power_level']}\n", "bold")
-    text_widget.insert("end", f"TOTAL COST: {int(total_cost)}\n", "bold")  # Convert to int for display
+    text_widget.insert("end", f"TOTAL COST: {int(total_cost)}\n", "bold")
     max_points = character['power_level'] * POWER_POINTS_PER_LEVEL
     text_widget.insert("end", f"Maximum Points Allowed: {max_points}\n", "bold")
-    text_widget.insert("end", f"Attributes Total Cost: {int(sum(details['cost'] for details in character['stats'].values()))}\n", "bold")  # Convert to int
-    text_widget.insert("end", f"Advantages Total Cost: {int(sum(advantage['cost'] for advantage in character['advantages']))}\n", "bold")  # Convert to int
-    text_widget.insert("end", f"Skills Total Cost: {int(sum(skill['cost'] for skill in character['skills']))}\n", "bold")  # Convert to int
-    text_widget.insert("end", f"Powers Total Cost (Adjusted): {int(sum(power['cost'] for power in character['powers']))}\n\n\n", "bold")  # Convert to int
+    text_widget.insert("end", f"Attributes Total Cost: {int(sum(details['cost'] for details in character['stats'].values()))}\n", "bold")
+    text_widget.insert("end", f"Advantages Total Cost: {int(sum(advantage['cost'] for advantage in character['advantages']))}\n", "bold")
+    text_widget.insert("end", f"Skills Total Cost: {int(sum(skill['cost'] for skill in character['skills']))}\n", "bold")
+    text_widget.insert("end", f"Powers Total Cost (Adjusted): {int(sum(power['cost'] for power in character['powers']))}\n\n\n", "bold")
 
     # Insert the generated description into the text widget
     text_widget.insert("end", "AI Image Generator Prompt:\n", "bold")
@@ -517,19 +597,31 @@ def pretty_print_character(character, text_widget):
     text_widget.insert("end", "\nTHEME:\n", "bold")
     text_widget.insert("end", f"- {character['theme']}\n")
 
-    text_widget.insert("end", "\nSTATS:\n", "bold")
+    # Stats Section with Reroll Button
+    text_widget.insert("end", "\nSTATS (Reroll Click Here):\n", "bold")
+    reroll_stats_button = tk.Button(text_widget, text="Reroll Stats", command=lambda: reroll_stats(character, text_widget))
+    text_widget.window_create("end", window=reroll_stats_button)
+    text_widget.insert("end", "\n", "bold")
     for stat, details in character["stats"].items():
         text_widget.insert("end", f"- ", "bold_no_underline")
         text_widget.insert("end", f"{stat}: ", "bold_no_underline")
         text_widget.insert("end", f"{details['value']} (Cost: {details['cost']})\n")
 
-    text_widget.insert("end", "\nADVANTAGES:\n", "bold")
+    # Advantages Section with Reroll Button
+    text_widget.insert("end", "\nADVANTAGES (Reroll Click Here):\n", "bold")
+    reroll_advantages_button = tk.Button(text_widget, text="Reroll Advantages", command=lambda: reroll_advantages(character, text_widget))
+    text_widget.window_create("end", window=reroll_advantages_button)
+    text_widget.insert("end", "\n", "bold")
     for advantage in character["advantages"]:
         text_widget.insert("end", f"- ", "bold_no_underline")
         text_widget.insert("end", f"{advantage['name']} ", "bold_no_underline")
         text_widget.insert("end", f"(Rank: {advantage['rank']}, Cost: {advantage['cost']})\n")
 
-    text_widget.insert("end", "\nSKILLS:\n", "bold")
+    # Skills Section with Reroll Button
+    text_widget.insert("end", "\nSKILLS (Reroll Click Here):\n", "bold")
+    reroll_skills_button = tk.Button(text_widget, text="Reroll Skills", command=lambda: reroll_skills(character, text_widget))
+    text_widget.window_create("end", window=reroll_skills_button)
+    text_widget.insert("end", "\n", "bold")
     skills = load_data_from_json('./json/skills.json')
     for skill_template in skills:
         skill_name = skill_template["name"]
@@ -542,8 +634,12 @@ def pretty_print_character(character, text_widget):
         text_widget.insert("end", f"{skill_name}{sub_skill_display} ", "bold_no_underline")
         text_widget.insert("end", f"(Rank: {rank}, Cost: {cost:.1f}, Total: {total})\n")
 
+    # Powers Section with Reroll Button
+    text_widget.insert("end", "\nPOWERS (Reroll Click Here):\n", "bold")
+    reroll_powers_button = tk.Button(text_widget, text="Reroll Powers", command=lambda: reroll_powers(character, text_widget))
+    text_widget.window_create("end", window=reroll_powers_button)
+    text_widget.insert("end", "\n", "bold")
     sorted_powers = sorted(character["powers"], key=lambda p: ["Combat", "Defensive", "Support", "Movement", "Utility", "Unknown"].index(p.get("type", "Unknown")))
-    text_widget.insert("end", "\nPOWERS:\n", "bold")
     for power in sorted_powers:
         # Display power details
         power_details = f"{power['name']} (Rank: {power['rank']}, Cost: {power['cost']})"
@@ -577,18 +673,20 @@ def pretty_print_character(character, text_widget):
         if 'increased_range' in power:
             text_widget.insert("end", f"- Increased Range: {power['increased_range']} feet\n")
 
-    if 'equipment' in character:
-        text_widget.insert("end", "\nEQUIPMENT:\n", "bold")
-        for item in character['equipment']:
-            text_widget.insert("end", f"- {item['name']}\n")
-            if 'description' in item:
-                text_widget.insert("end", f"  Description: {item['description']}\n")
-            if 'effects' in item:
-                text_widget.insert("end", f"  Effects: {', '.join(item['effects'])}\n")
-            if 'rank' in item:
-                text_widget.insert("end", f"  Rank: {item['rank']}\n")
-            if 'cost' in item:
-                text_widget.insert("end", f"  Cost: {item['cost']}\n")
+    # Equipment Section with Reroll Button
+    text_widget.insert("end", "\nEQUIPMENT:\n", "bold")
+    text_widget.insert("end", "\n", "bold")
+    for item in character['equipment']:
+        text_widget.insert("end", f"- {item['name']}\n")
+        if 'description' in item:
+            text_widget.insert("end", f"  Description: {item['description']}\n")
+        if 'effects' in item:
+            text_widget.insert("end", f"  Effects: {', '.join(item['effects'])}\n")
+        if 'rank' in item:
+            text_widget.insert("end", f"  Rank: {item['rank']}\n")
+        if 'cost' in item:
+            text_widget.insert("end", f"  Cost: {item['cost']}\n")
+
 
     text_widget.insert("end", "\nDEFENSES:\n", "bold")
     defenses = character["defenses"]
@@ -720,17 +818,18 @@ def export_to_gm_screen():
     gm_cheat_sheet_app.master.lift()  # Bring the GM Cheat Sheet window to the front
 
 class CollapsibleSection:
-    def __init__(self, master, title):
+    def __init__(self, master, title, start_collapsed=True):
         self.frame = ttk.Frame(master)
         self.title = title
-        self.is_collapsed = False
+        self.is_collapsed = start_collapsed
 
         self.header = ttk.Label(self.frame, text=title, anchor="w", cursor="hand2")
         self.header.pack(fill="x")
         self.header.bind("<Button-1>", self.toggle)
 
         self.body_frame = ttk.Frame(self.frame)
-        self.body_frame.pack(fill="x", expand=True)
+        if not self.is_collapsed:
+            self.body_frame.pack(fill="x", expand=True)
 
     def toggle(self, event=None):
         if self.is_collapsed:
@@ -859,14 +958,14 @@ def main():
             include_powers.set(True)
             toggle_button.config(text="Exclude Powers ON")
 
-    # Character Management Frame
-    char_frame = CollapsibleSection(left_frame, "Character Management")
+    # Character Management Frame (start open)
+    char_frame = CollapsibleSection(left_frame, "Character Management (Click to open/close)", start_collapsed=False)
     char_frame.pack(fill="x", pady=5)
 
     generate_button = ttk.Button(char_frame.body_frame, text="Generate Character", command=on_generate_button_click, style='Character.TButton')
     char_frame.add_widget(generate_button)
 
-    export_character_sheet_button = ttk.Button(char_frame.body_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click(notebook, characters,text_widgets ), style='Character.TButton')
+    export_character_sheet_button = ttk.Button(char_frame.body_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click(notebook, characters, text_widgets), style='Character.TButton')
     char_frame.add_widget(export_character_sheet_button)
 
     toggle_button = ttk.Button(char_frame.body_frame, text="Exclude Powers OFF", command=toggle_include_powers, style='Character.TButton')
@@ -875,14 +974,17 @@ def main():
     close_tab_button = ttk.Button(char_frame.body_frame, text="Close Tab", command=lambda: close_current_tab(notebook, text_widgets), style='Character.TButton')
     char_frame.add_widget(close_tab_button)
 
+    close_all_tabs_button = ttk.Button(char_frame.body_frame, text="Close All Tabs", command=lambda: close_all_tabs(notebook, text_widgets, characters), style='Character.TButton')
+    char_frame.add_widget(close_all_tabs_button)
+
     copy_prompt_button = ttk.Button(char_frame.body_frame, text="Select AI Prompt", command=lambda: copy_prompt_to_clipboard(notebook, characters), style='Character.TButton')
     char_frame.add_widget(copy_prompt_button)
 
     export_to_gm_screen_button = ttk.Button(char_frame.body_frame, text="Export to GM Screen", command=export_to_gm_screen, style='Character.TButton')
     char_frame.add_widget(export_to_gm_screen_button)
 
-    # Equipment Management Frame
-    equip_frame = CollapsibleSection(left_frame, "Equipment Management")
+    # Equipment Management Frame (start collapsed)
+    equip_frame = CollapsibleSection(left_frame, "Equipment Management (Click to open/close)", start_collapsed=True)
     equip_frame.pack(fill="x", pady=5)
 
     equipment_points_label = ttk.Label(equip_frame.body_frame, text="Equipment Points:")
@@ -897,8 +999,8 @@ def main():
     save_equipment_button = ttk.Button(equip_frame.body_frame, text="Save Equipment", command=lambda: on_save_equipment_click(notebook, text_widgets), style='Equipment.TButton')
     equip_frame.add_widget(save_equipment_button)
 
-    # Vehicle Management Frame
-    vehicle_frame = CollapsibleSection(left_frame, "Vehicle Management")
+    # Vehicle Management Frame (start collapsed)
+    vehicle_frame = CollapsibleSection(left_frame, "Vehicle Management (Click to open/close)", start_collapsed=True)
     vehicle_frame.pack(fill="x", pady=5)
 
     vehicle_points_label = ttk.Label(vehicle_frame.body_frame, text="Vehicle Points:")
@@ -913,8 +1015,8 @@ def main():
     save_vehicle_button = ttk.Button(vehicle_frame.body_frame, text="Save Vehicle", command=lambda: on_save_vehicle_click(notebook, text_widgets), style='Vehicle.TButton')
     vehicle_frame.add_widget(save_vehicle_button)
 
-    # Hideout Management Frame
-    hideout_frame = CollapsibleSection(left_frame, "Hideout Management")
+    # Hideout Management Frame (start collapsed)
+    hideout_frame = CollapsibleSection(left_frame, "Hideout Management (Click to open/close)", start_collapsed=True)
     hideout_frame.pack(fill="x", pady=5)
 
     generate_hideout_button = ttk.Button(hideout_frame.body_frame, text="Generate Hideout", command=lambda: generate_hideout(notebook, text_widgets), style='Hideout.TButton')
@@ -923,8 +1025,8 @@ def main():
     save_hideout_button = ttk.Button(hideout_frame.body_frame, text="Save Hideout", command=lambda: save_hideout(hideout_details), style='Hideout.TButton')
     hideout_frame.add_widget(save_hideout_button)
 
-    # Miscellaneous Frame
-    misc_frame = CollapsibleSection(left_frame, "Miscellaneous")
+    # Miscellaneous Frame (start collapsed)
+    misc_frame = CollapsibleSection(left_frame, "Miscellaneous", start_collapsed=True)
     misc_frame.pack(fill="x", pady=5)
 
     generate_encounter_button = ttk.Button(misc_frame.body_frame, text="Generate Encounter", command=generate_encounter, style='Encounter.TButton')
@@ -936,8 +1038,8 @@ def main():
     settings_button = ttk.Button(misc_frame.body_frame, text="Settings", command=lambda: settings.open_settings(root), style='Initiative.TButton')  # Add settings button
     misc_frame.add_widget(settings_button)
 
-    # Reference Management Frame
-    reference_frame = CollapsibleSection(left_frame, "Reference Management")
+    # Reference Management Frame (start collapsed)
+    reference_frame = CollapsibleSection(left_frame, "Reference Management (Click to open/close)", start_collapsed=True)
     reference_frame.pack(fill="x", pady=5)
 
     calculate_powers_button = ttk.Button(reference_frame.body_frame, text="Calculate Powers", command=open_calculate_powers_window, style='Reference.TButton')

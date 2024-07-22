@@ -308,3 +308,13 @@ def calculate_accuracy(character, power):
             accuracy = fighting_stat + close_attack_bonus + accurate_bonus
     
     return accuracy
+
+def close_all_tabs(notebook, text_widgets, characters):
+    tabs = notebook.tabs()
+    for tab in tabs:
+        tab_name = notebook.tab(tab, "text")
+        if tab_name in characters:
+            del characters[tab_name]
+        notebook.forget(tab)
+        if tab in text_widgets:
+            del text_widgets[tab]

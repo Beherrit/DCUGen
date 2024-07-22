@@ -1,11 +1,10 @@
 {
     "Balanced": {
         "with_powers": {
-            "stats": [0.225, 0.25],
-            "advantages": [0.225, 0.25],
-            "skills": [0.225, 0.25],
-            "powers": [0.225, 0.25],
-            "defense": [0.045, 0.05], 
+            "stats": [0.25, 0.25],
+            "advantages": [0.25, 0.25],
+            "skills": [0.25, 0.25],
+            "powers": [0.25, 0.25],
             "max_advantages": 10,
             "max_powers": 8,
             "power_range": [3, 8]

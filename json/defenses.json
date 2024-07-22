@@ -1,0 +1,44 @@
+{
+    "DEFENSES": [
+        {
+            "name": "Parry",
+            "range": [
+                0,
+                20
+            ],
+            "tags": [
+                "Parry"
+            ]
+        },
+        {
+            "name": "Dodge",
+            "range": [
+                0,
+                20
+            ],
+            "tags": [
+                "Dodge"
+            ]
+        },
+        {
+            "name": "Fortitude",
+            "range": [
+                0,
+                20
+            ],
+            "tags": [
+                "Fortitude"
+            ]
+        },
+        {
+            "name": "Will",
+            "range": [
+                0,
+                20
+            ],
+            "tags": [
+                "Will"
+            ]
+        }
+    ]
+}
