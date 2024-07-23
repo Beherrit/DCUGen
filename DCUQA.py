@@ -17,9 +17,20 @@ import settings
 from vehicles import *
 import logging
 import os
+import sys
 
 # Set up logging
-log_file_path = os.path.join(os.path.dirname(__file__), 'character_generation.log')
+def get_log_file_path():
+    if getattr(sys, 'frozen', False):  # Check if the program is running as an executable
+        application_path = os.path.dirname(sys.executable)
+    else:
+        application_path = os.path.dirname(os.path.abspath(__file__))
+    
+    log_dir = os.path.join(application_path, 'logs')
+    os.makedirs(log_dir, exist_ok=True)  # Create log directory if it does not exist
+    return os.path.join(log_dir, 'character_generation.log')
+
+log_file_path = get_log_file_path()
 
 # Clear the log file contents
 with open(log_file_path, 'w'):
