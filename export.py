@@ -6,8 +6,6 @@ from openpyxl import load_workbook
 from openpyxl.styles import Font
 from utils import *
 
-
-
 def on_export_character_sheet_click(notebook, characters, text_widgets):
     # Get the name of the currently selected tab
     current_tab = notebook.tab(notebook.select(), "text")
@@ -65,13 +63,13 @@ def on_export_character_sheet_click(notebook, characters, text_widgets):
     sheet['N30'] = character['stats'].get('Dexterity', {}).get('value', '')
     sheet['N38'] = character['stats'].get('Intellect', {}).get('value', '')
     sheet['N46'] = character['stats'].get('Presence', {}).get('value', '')
-    sheet['Z18'] = character['defenses'].get('Dodge', '')
-    sheet['Z24'] = character['defenses'].get('Parry', '')
-    sheet['Z21'] = character['defenses'].get('Fortitude', '')
-    sheet['Z30'] = character['defenses'].get('Toughness', '')
-    sheet['Z27'] = character['defenses'].get('Will', '')
+    sheet['Z18'] = character['defenses'].get('Dodge', {}).get('total_rank', '')
+    sheet['Z24'] = character['defenses'].get('Parry', {}).get('total_rank', '')
+    sheet['Z21'] = character['defenses'].get('Fortitude', {}).get('total_rank', '')
+    sheet['Z30'] = character['defenses'].get('Toughness', {}).get('total_rank', '')
+    sheet['Z27'] = character['defenses'].get('Will', {}).get('total_rank', '')
     sheet['AK18'] = character['initiative']
-    # sheet['AD33'] = f"{int(total_cost)}"
+    sheet['AD33'] = f"{int(character['total_cost'])}"  # Updated to show total points spent
 
     # Compile personality traits
     positive_traits = " | ".join(character['personality_traits']['positive_traits'])
@@ -220,8 +218,7 @@ def on_export_character_sheet_click(notebook, characters, text_widgets):
     # Write equipment details to cell AI55
     sheet['AI55'] = equipment_details.strip()
 
-
-# Writing power details to the Excel sheet
+    # Writing power details to the Excel sheet
     power_cells = [f'B{i}' for i in range(54, 84, 3)]  # Adjust the range as needed for more powers
     total_cost_cells = [f'AE{i}' for i in range(54, 84, 3)]
         
@@ -251,9 +248,11 @@ def on_export_character_sheet_click(notebook, characters, text_widgets):
     total_powers_cost = sum(power['cost'] for power in character['powers'])
     sheet['AB14'] = total_powers_cost
 
-    # Calculate and write the total abilities cost to the Excel cell
-    total_abilities_cost = sum(details['cost'] for details in character['stats'].values())
-    sheet['M14'] = total_abilities_cost
+    # Calculate and write the total abilities and defenses cost to the Excel cell
+    total_abilities_cost = sum(details['cost'] for details in character['stats'].values())  # Define total_abilities_cost
+    total_defense_cost = sum(details['bought_rank'] for details in character['defenses'].values())
+    total_abilities_and_defenses_cost = total_abilities_cost + total_defense_cost
+    sheet['M14'] = total_abilities_and_defenses_cost
     
     # Ask the user for a filename and save the updated character sheet
     filename = filedialog.asksaveasfilename(

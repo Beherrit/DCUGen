@@ -12,7 +12,7 @@ def open_reference_data():
     # Define image mappings for each category
     categories = {
         "Actions": image_mappings.get("actions", {}),
-        "Environmental Hazards": image_mappings.get("environmental", {}),
+        "Environmental": image_mappings.get("environmental", {}),
         "Maneuvers": image_mappings.get("maneuvers", {}),
         "Extras": image_mappings.get("extras", {}),
         "Flaws": image_mappings.get("flaws", {}),
@@ -31,8 +31,6 @@ def open_reference_data():
     # Dictionary to hold images
     images = {}
 
-    # Function to load images
-    # Function to load images
     def load_images():
         base_path = os.path.join(os.path.dirname(__file__), 'images')
         for category in categories.keys():
@@ -40,13 +38,20 @@ def open_reference_data():
                 category_path = os.path.join(base_path, "bmt_skills")
             else:
                 category_path = os.path.join(base_path, category.lower().replace(' ', '_'))
+            
             if os.path.exists(category_path):
                 for filename in os.listdir(category_path):
                     if filename.lower().endswith('.jpg'):
                         img_path = os.path.join(category_path, filename)
-                        img = Image.open(img_path)
-                        img = ImageTk.PhotoImage(img)
-                        images[filename.lower()] = img
+                        try:
+                            img = Image.open(img_path)
+                            img = ImageTk.PhotoImage(img)
+                            images[filename.lower()] = img
+                        except Exception as e:
+                            print(f"Error loading image {img_path}: {e}")
+            else:
+                print(f"Category path not found: {category_path}")
+
 
     # Load images at the start
     load_images()

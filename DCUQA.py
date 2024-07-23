@@ -20,6 +20,11 @@ import os
 
 # Set up logging
 log_file_path = os.path.join(os.path.dirname(__file__), 'character_generation.log')
+
+# Clear the log file contents
+with open(log_file_path, 'w'):
+    pass
+
 logging.basicConfig(filename=log_file_path, level=logging.DEBUG, format='%(asctime)s %(message)s')
 
 # Add a logger instance
@@ -104,10 +109,13 @@ def calculate_modified_cost(base_cost, rank, selected_extras_with_ranks, selecte
 
 def calculate_totals(character):
     attribute_total_cost = sum(stat['cost'] for stat in character['stats'].values())
-    advantage_total_cost = sum(advantage['cost'] for advantage in character['advantages'])
+    advantage_total_cost = sum(advantage['cost'] for advantage in character['advantages'] if advantage['name'] != 'Unspent Points')
     skill_total_cost = sum(skill['cost'] for skill in character['skills'])
     power_total_cost = sum(power['cost'] for power in character.get('powers', []))
-    defense_total_cost = sum(defense['bought_rank'] for defense in character['defenses'].values())
+    
+    # Exclude 'Unspent Points' from the defense total cost calculation
+    defense_total_cost = sum(defense['bought_rank'] for defense_name, defense in character['defenses'].items() if defense_name != 'Unspent Points')
+    
     total_cost = attribute_total_cost + advantage_total_cost + skill_total_cost + power_total_cost + defense_total_cost
     return attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, total_cost
 
@@ -187,6 +195,11 @@ def allocate_stats(stat_points, stats_data):
         remaining_points -= additional_value
         logger.debug(f"Distributed remaining points to {stat_name}, adding {additional_value} points.")
 
+    # Add any remaining points to "Unspent Points"
+    if remaining_points > 0:
+        allocated_stats['Unspent Points'] = {'value': remaining_points, 'cost': remaining_points * 2}
+        logger.debug(f"Allocated remaining points to Unspent Points: {remaining_points}.")
+
     return allocated_stats
 
 def allocate_defenses(defense_points, character, power_level):
@@ -200,20 +213,32 @@ def allocate_defenses(defense_points, character, power_level):
         "Toughness": 0
     }
 
+    max_rank = max_defense_toughness // 2
+
     # Distribute defense points equally among defenses
     while defense_points > 0:
+        all_maxed_out = True
         for defense in defense_allocation.keys():
             if defense_points <= 0:
                 break
             stat_bonus = character['defenses'][defense]['stat_bonus']
             bought_rank = character['defenses'][defense]['bought_rank']
             total_rank = stat_bonus + bought_rank
-            if total_rank < max_defense_toughness / 2:
+            if total_rank < max_rank:
                 defense_allocation[defense] += 1
                 character['defenses'][defense]['bought_rank'] += 1
                 character['defenses'][defense]['total_rank'] += 1
                 defense_points -= 1
+                all_maxed_out = False
                 logger.debug(f"Allocated 1 point to {defense}, total rank is now {total_rank + 1}.")
+        
+        if all_maxed_out:
+            break
+
+    # Add any remaining points to "Unspent Points"
+    if defense_points > 0:
+        character['defenses']['Unspent Points'] = defense_points
+        logger.debug(f"Allocated remaining points to Unspent Points: {defense_points}.")
 
     return character, defense_points
 
@@ -285,7 +310,7 @@ def allocate_skills(skill_points, character):
         all_skills[skill['name']] = skill
 
     logger.debug("Skill allocation complete.")
-    return sorted(list(all_skills.values()), key=lambda x: x["name"])
+    return sorted(list(all_skills.values()), key=lambda x: x["name"]), remaining_points
 
 def allocate_advantages(max_advantages, total_points):
     logger.debug(f"Allocating {total_points} points to advantages with a max of {max_advantages} advantages.")
@@ -314,19 +339,10 @@ def allocate_advantages(max_advantages, total_points):
         })
         logger.debug(f"Allocated advantage {advantage['name']} with rank {rank} and cost {cost}.")
 
-    # Allocate remaining points to Equipment if any points are left
     remaining_points = total_points - total_cost
-    if remaining_points > 0:
-        equipment_rank = remaining_points
-        selected_advantages.append({
-            "name": "Equipment",
-            "rank": equipment_rank,
-            "cost": equipment_rank * 1  # Each rank of Equipment costs 1 point
-        })
-        total_cost += equipment_rank
-        logger.debug(f"Allocated remaining points to Equipment, rank {equipment_rank}.")
+    logger.debug(f"Remaining points after allocation: {remaining_points}")
 
-    return selected_advantages, total_cost
+    return selected_advantages, total_cost, remaining_points
 
 def allocate_powers(character, power_points, power_level, max_powers, selected_power_types):
     logger.debug(f"Allocating {power_points} points to powers with a max of {max_powers} powers.")
@@ -335,7 +351,7 @@ def allocate_powers(character, power_points, power_level, max_powers, selected_p
 
     random.shuffle(powers_data)
     selected_power_names = []
-    
+
     for power_type, range_type, num_powers in selected_power_types:
         for _ in range(num_powers):
             if power_points <= 0:
@@ -436,131 +452,10 @@ def allocate_powers(character, power_points, power_level, max_powers, selected_p
                     character["powers"].append(power_entry)
                     selected_power_names.append(power["name"])
                     power_points -= total_cost
-                    logger.debug(f"Allocated power {power['name']} with rank {rank} and total cost {total_cost}.")
+                    logger.debug(f"Allocated power {power['name']} with rank {rank}, total cost {total_cost}, extras {selected_extras_with_ranks}, flaws {selected_flaws_with_ranks}.")
 
+    # Return remaining unspent points instead of appending as a power
     return character, power_points
-
-def generate_character(power_level, include_powers, stat_percent, advantage_percent, skill_percent, defense_percent, power_percent, max_advantages, max_powers, selected_power_types, random_physical_features=True, random_costume_style=True, random_distinctive_feature=True):
-    try:
-        logger.debug(f"Starting character generation with Power Level: {power_level}")
-        stat_points, advantage_points, skill_points, defense_points, power_points = allocate_points(power_level, stat_percent, advantage_percent, skill_percent, defense_percent, power_percent)
-
-        random.seed()
-        random_theme = generate_random_theme() if include_powers else "Mundane"
-
-        # Initialize character basics
-        gender, name = generate_random_gender()
-        origin = generate_random_origin()
-        personality_traits = generate_random_traits()
-        motivations_and_complications = generate_motivations_and_complications()
-        languages = assign_languages({'advantages': []})  # Pass an empty list for advantages to get base language
-        initiative = calculate_initiative({'advantages': [], 'stats': {}})  # Initialize with default values for stats and advantages
-
-        # Generate physical traits early for description
-        physical_traits = {
-            "height": generate_random_physical_trait("HEIGHT") if random_physical_features else "Not Specified",
-            "weight": generate_weight(),
-            "eye_color": generate_random_physical_trait("EYE_COLOR") if random_physical_features else "Not Specified",
-            "hair_color": generate_random_physical_trait("HAIR_COLOR") if random_physical_features else "Not Specified",
-            "skin_tone": generate_random_physical_trait("SKIN_TONE") if random_physical_features else "Not Specified"
-        }
-
-        character = {
-            "defenses": {
-                "Dodge": {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0},
-                "Fortitude": {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0},
-                "Parry": {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0},
-                "Will": {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0},
-                "Toughness": {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0}
-            },
-            "name": name,
-            "gender": gender,
-            "theme": random_theme,
-            "origin": origin,
-            "stats": {},
-            "advantages": [],
-            "skills": [],
-            "powers": [],
-            "total_cost": 0,
-            "power_level": power_level,
-            'age': generate_random_age(),
-            "physical_traits": physical_traits,
-            "costume_style": generate_random_costume_style() if random_costume_style else "Not Specified",
-            "distinctive_feature": generate_random_distinctive_feature() if random_distinctive_feature else "Not Specified",
-            "personality_traits": personality_traits,
-            "languages": languages,
-            "initiative": initiative,
-            "Motivation": motivations_and_complications["Motivation"],
-            "Complications": motivations_and_complications["Complications"]
-        }
-
-        # Generate the character description for the AI image prompt
-        character["description"] = generate_character_description({
-            'gender': gender,
-            'age': character['age'],
-            'origin': origin,
-            'physical_traits': physical_traits,
-            'theme': random_theme,
-            'costume_style': character['costume_style'],
-            'distinctive_feature': character['distinctive_feature']
-        })
-
-        logger.debug("Allocated Points - Stats: %d, Advantages: %d, Skills: %d, Defenses: %d, Powers: %d",
-                     stat_points, advantage_points, skill_points, defense_points, power_points)
-
-        # Allocate stats
-        allocated_stats = allocate_stats(stat_points, stats_data)
-        character['stats'] = allocated_stats
-        logger.debug("Allocated Stats.")
-
-        # Update defenses based on stats
-        character = update_defenses(character, allocated_stats)
-        logger.debug("Updated Defenses.")
-
-        # Allocate skills
-        character['skills'] = allocate_skills(skill_points, character)
-        logger.debug("Allocated Skills.")
-
-        # Allocate advantages
-        advantages, advantage_total_cost = allocate_advantages(max_advantages, advantage_points)
-        character['advantages'] = advantages
-        logger.debug("Allocated Advantages.")
-
-        # Allocate defenses
-        character, remaining_defense_points = allocate_defenses(defense_points, character, power_level)
-        logger.debug("Allocated Defenses.")
-
-        # Allocate powers
-        character, remaining_power_points = allocate_powers(character, power_points, power_level, max_powers, selected_power_types)
-        logger.debug("Allocated Powers.")
-
-        # Allocate equipment if Equipment advantage is present
-        equipment_points = calculate_equipment_points(character)
-        if equipment_points > 0:
-            gadgets = load_gadgets()
-            items, total_cost = random_gadget_generator(equipment_points, gadgets)
-            character['equipment'] = items
-
-        # Update initiative with actual values after advantages are assigned
-        character['languages'] = assign_languages(character)
-        character['initiative'] = calculate_initiative(character)
-
-        # Enforce rules
-        character = enforce_rules(character, power_level)
-
-        # Calculate total cost
-        attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, total_cost = calculate_totals(character)
-        character['total_cost'] = total_cost
-
-        # Set maximum points allowed
-        character['max_points'] = power_level * POWER_POINTS_PER_LEVEL
-
-        logger.debug("Character generation completed.")
-        return character
-
-    except Exception as e:
-        logger.exception("An error occurred during character generation.")
-        raise
 
 def update_defenses(character, stats):
     for stat_name, stat_value in stats.items():
@@ -580,7 +475,7 @@ def open_character_filters_window():
             if power_level < 1 or power_level > 20:
                 raise ValueError
 
-            include_powers_value = include_powers.get()
+            include_powers_value = not exclude_powers.get()
             stat_percent = float(stat_percent_entry.get())
             advantage_percent = float(advantage_percent_entry.get())
             skill_percent = float(skill_percent_entry.get())
@@ -654,45 +549,53 @@ def open_character_filters_window():
     pl_label.grid(row=0, column=0, padx=5, pady=5)
     pl_entry = ttk.Entry(filters_window)
     pl_entry.grid(row=0, column=1, padx=5, pady=5)
+    pl_entry.insert(0, "10")  # Default power level
 
-    include_powers = tk.BooleanVar(value=False)
-    include_powers_button = ttk.Checkbutton(filters_window, text="Include Powers", variable=include_powers)
-    include_powers_button.grid(row=1, column=0, padx=5, pady=5, columnspan=2)
+    exclude_powers = tk.BooleanVar(value=False)  # Default include powers to True (exclude_powers to False)
+    exclude_powers_button = ttk.Checkbutton(filters_window, text="Exclude Powers", variable=exclude_powers)
+    exclude_powers_button.grid(row=1, column=0, padx=5, pady=5, columnspan=2)
 
     stat_percent_label = ttk.Label(filters_window, text="Stats Percent:")
     stat_percent_label.grid(row=2, column=0, padx=5, pady=5)
     stat_percent_entry = ttk.Entry(filters_window)
     stat_percent_entry.grid(row=2, column=1, padx=5, pady=5)
+    stat_percent_entry.insert(0, "20")  # Default stats percent
 
     advantage_percent_label = ttk.Label(filters_window, text="Advantages Percent:")
     advantage_percent_label.grid(row=3, column=0, padx=5, pady=5)
     advantage_percent_entry = ttk.Entry(filters_window)
     advantage_percent_entry.grid(row=3, column=1, padx=5, pady=5)
+    advantage_percent_entry.insert(0, "20")  # Default advantages percent
 
     skill_percent_label = ttk.Label(filters_window, text="Skills Percent:")
     skill_percent_label.grid(row=4, column=0, padx=5, pady=5)
     skill_percent_entry = ttk.Entry(filters_window)
     skill_percent_entry.grid(row=4, column=1, padx=5, pady=5)
+    skill_percent_entry.insert(0, "20")  # Default skills percent
 
     defense_percent_label = ttk.Label(filters_window, text="Defenses Percent:")
     defense_percent_label.grid(row=5, column=0, padx=5, pady=5)
     defense_percent_entry = ttk.Entry(filters_window)
     defense_percent_entry.grid(row=5, column=1, padx=5, pady=5)
+    defense_percent_entry.insert(0, "20")  # Default defenses percent
 
     power_percent_label = ttk.Label(filters_window, text="Powers Percent:")
     power_percent_label.grid(row=6, column=0, padx=5, pady=5)
     power_percent_entry = ttk.Entry(filters_window)
     power_percent_entry.grid(row=6, column=1, padx=5, pady=5)
+    power_percent_entry.insert(0, "20")  # Default powers percent
 
     max_advantages_label = ttk.Label(filters_window, text="Max Advantages:")
     max_advantages_label.grid(row=7, column=0, padx=5, pady=5)
     max_advantages_entry = ttk.Entry(filters_window)
     max_advantages_entry.grid(row=7, column=1, padx=5, pady=5)
+    max_advantages_entry.insert(0, "20")  # Default max advantages
 
     max_powers_label = ttk.Label(filters_window, text="Max Powers:")
     max_powers_label.grid(row=8, column=0, padx=5, pady=5)
     max_powers_entry = ttk.Entry(filters_window)
     max_powers_entry.grid(row=8, column=1, padx=5, pady=5)
+    max_powers_entry.insert(0, "20")  # Default max powers
 
     # Add power type options
     power_type_frame = ttk.LabelFrame(filters_window, text="Power Types")
@@ -717,6 +620,7 @@ def open_character_filters_window():
 
         entry = ttk.Entry(frame)
         entry.pack(side="right")
+        entry.insert(0, "1")  # Default value for power types
         power_type_entries.append((power_type, power_range, entry))
 
     generate_character_button = ttk.Button(filters_window, text="Generate Character Now", command=on_generate_character_filters)
@@ -735,9 +639,11 @@ def pretty_print_character(character, text_widget):
     max_points = character.get("max_points", "N/A")
 
     attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, _ = calculate_totals(character)
+    unspent_points = character.get('unspent_points', 0)
 
     text_widget.insert("end", f"Power Level: {power_level}\n", "bold")
     text_widget.insert("end", f"TOTAL COST: {int(total_cost)}\n", "bold")
+    text_widget.insert("end", f"UNSPENT POINTS: {unspent_points}\n", "bold")
     text_widget.insert("end", f"Maximum Points Allowed: {max_points}\n", "bold")
     text_widget.insert("end", f"Attribute Total Cost: {attribute_total_cost}\n", "bold")
     text_widget.insert("end", f"Advantage Total Cost: {advantage_total_cost}\n", "bold")
@@ -759,7 +665,8 @@ def pretty_print_character(character, text_widget):
 
     text_widget.insert("end", "\nDEFENSES:\n", "bold")
     for defense, details in character.get("defenses", {}).items():
-        text_widget.insert("end", f"- {defense}: Stat Bonus: {details['stat_bonus']}, Bought Rank: {details['bought_rank']}, Total Rank: {details['total_rank']}\n")
+        if isinstance(details, dict):  # Ensure it's a dictionary before accessing keys
+            text_widget.insert("end", f"- {defense}: Stat Bonus: {details['stat_bonus']}, Bought Rank: {details['bought_rank']}, Total Rank: {details['total_rank']}\n")
 
     text_widget.insert("end", "\nADVANTAGES:\n", "bold")
     sorted_advantages = sorted(character.get("advantages", []), key=lambda x: x["name"])
@@ -779,14 +686,33 @@ def pretty_print_character(character, text_widget):
     text_widget.insert("end", "\nPOWERS:\n", "bold")
     for power in character.get("powers", []):
         text_widget.insert("end", f"- {power['name']} (Rank: {power['rank']}, Cost: {power['cost']})\n")
-        if power['extras']:
+        if 'extras' in power and power['extras']:
             text_widget.insert("end", f"  Extras: {', '.join([f'{extra} (Rank: {rank})' for extra, rank in zip(power['extras'], power['extras_ranks'])])}\n")
-        if power['flaws']:
+        if 'flaws' in power and power['flaws']:
             text_widget.insert("end", f"  Flaws: {', '.join([f'{flaw} (Rank: {rank})' for flaw, rank in zip(power['flaws'], power['flaws_ranks'])])}\n")
         if 'resisted' in power:
             text_widget.insert("end", f"  Resisted by: {power['resisted']}\n")
         if 'range' in power and power['range'] == "Ranged":
-            text_widget.insert("end", f"  Accuracy: {power['extras_ranks'][power['extras'].index('Accurate')]} if 'Accurate' in power['extras'] else 'N/A'\n")
+            accuracy = next((rank for extra, rank in zip(power.get('extras', []), power.get('extras_ranks', [])) if extra == 'Accurate'), 'N/A')
+            text_widget.insert("end", f"  Accuracy: {accuracy}\n")
+
+    text_widget.insert("end", "\nATTACKS:\n", "bold")
+    melee_attack_bonus, ranged_attack_bonus = calculate_attack_bonuses(character)
+    text_widget.insert("end", "Melee Attack Bonus: ", "bold_no_underline")
+    text_widget.insert("end", f"{melee_attack_bonus}\n")
+
+    for power in character["powers"]:
+        if power.get("range") == "Melee":
+            text_widget.insert("end", f"    - {power['name']} (Effect Rank: {power['rank']})\n")
+
+    text_widget.insert("end", "Ranged Attack Bonus: ", "bold_no_underline")
+    text_widget.insert("end", f"{ranged_attack_bonus}\n")
+
+    for power in character["powers"]:
+        if power.get("range") == "Ranged":
+            text_widget.insert("end", f"    - {power['name']} (Effect Rank: {power['rank']})\n")
+            if "close_range" in power:
+                text_widget.insert("end", f"        Close Range: {power['close_range']} ft, Medium Range: {power['medium_range']} ft, Long Range: {power['long_range']} ft\n")
 
     text_widget.insert("end", "\nEQUIPMENT:\n", "bold")
     for item in character.get('equipment', []):
@@ -875,11 +801,11 @@ def export_to_gm_screen():
                 character['stats'].get('Intellect', {}).get('value', ''),
                 character['stats'].get('Awareness', {}).get('value', ''),
                 character['stats'].get('Presence', {}).get('value', ''),
-                character['defenses'].get('Dodge', ''),
-                character['defenses'].get('Fortitude', ''),
-                character['defenses'].get('Parry', ''),
-                character['defenses'].get('Will', ''),
-                character['defenses'].get('Toughness', ''),
+                character['defenses'].get('Dodge', {}).get('total_rank', ''),
+                character['defenses'].get('Parry', {}).get('total_rank', ''),
+                character['defenses'].get('Fortitude', {}).get('total_rank', ''),
+                character['defenses'].get('Toughness', {}).get('total_rank', ''),
+                character['defenses'].get('Will', {}).get('total_rank', ''),
                 character.get('initiative', ''),
                 character['Motivation'].get('name', ''),
                 character['Complications'][0].get('description', '') if character['Complications'] else '',
@@ -918,10 +844,142 @@ class CollapsibleSection:
     def pack(self, **kwargs):
         self.frame.pack(**kwargs)
 
+def generate_character(power_level, include_powers, stat_percent, advantage_percent, skill_percent, defense_percent, power_percent, max_advantages, max_powers, selected_power_types, random_physical_features=True, random_costume_style=True, random_distinctive_feature=True):
+    max_retries = 10
+    for attempt in range(max_retries):
+        try:
+            logger.debug(f"Starting character generation attempt {attempt + 1} with Power Level: {power_level}")
+            stat_points, advantage_points, skill_points, defense_points, power_points = allocate_points(power_level, stat_percent, advantage_percent, skill_percent, defense_percent, power_percent)
+
+            random.seed()
+            random_theme = generate_random_theme() if include_powers else "Mundane"
+
+            # Initialize character basics
+            gender, name = generate_random_gender()
+            origin = generate_random_origin()
+            personality_traits = generate_random_traits()
+            motivations_and_complications = generate_motivations_and_complications()
+            languages = assign_languages({'advantages': []})  # Pass an empty list for advantages to get base language
+            initiative = calculate_initiative({'advantages': [], 'stats': {}})  # Initialize with default values for stats and advantages
+
+            # Generate physical traits early for description
+            physical_traits = {
+                "height": generate_random_physical_trait("HEIGHT") if random_physical_features else "Not Specified",
+                "weight": generate_weight(),
+                "eye_color": generate_random_physical_trait("EYE_COLOR") if random_physical_features else "Not Specified",
+                "hair_color": generate_random_physical_trait("HAIR_COLOR") if random_physical_features else "Not Specified",
+                "skin_tone": generate_random_physical_trait("SKIN_TONE") if random_physical_features else "Not Specified"
+            }
+
+            character = {
+                "defenses": {
+                    "Dodge": {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0},
+                    "Fortitude": {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0},
+                    "Parry": {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0},
+                    "Will": {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0},
+                    "Toughness": {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0}
+                },
+                "name": name,
+                "gender": gender,
+                "theme": random_theme,
+                "origin": origin,
+                "stats": {},
+                "advantages": [],
+                "skills": [],
+                "powers": [],
+                "total_cost": 0,
+                "power_level": power_level,
+                'age': generate_random_age(),
+                "physical_traits": physical_traits,
+                "costume_style": generate_random_costume_style() if random_costume_style else "Not Specified",
+                "distinctive_feature": generate_random_distinctive_feature() if random_distinctive_feature else "Not Specified",
+                "personality_traits": personality_traits,
+                "languages": languages,
+                "initiative": initiative,
+                "Motivation": motivations_and_complications["Motivation"],
+                "Complications": motivations_and_complications["Complications"]
+            }
+
+            # Generate the character description for the AI image prompt
+            character["description"] = generate_character_description({
+                'gender': gender,
+                'age': character['age'],
+                'origin': origin,
+                'physical_traits': physical_traits,
+                'theme': random_theme,
+                'costume_style': character['costume_style'],
+                'distinctive_feature': character['distinctive_feature']
+            })
+
+            logger.debug("Allocated Points - Stats: %d, Advantages: %d, Skills: %d, Defenses: %d, Powers: %d",
+                         stat_points, advantage_points, skill_points, defense_points, power_points)
+
+            # Allocate stats
+            allocated_stats = allocate_stats(stat_points, stats_data)
+            character['stats'] = allocated_stats
+            logger.debug("Allocated Stats.")
+
+            # Update defenses based on stats
+            character = update_defenses(character, allocated_stats)
+            logger.debug("Updated Defenses.")
+
+            # Allocate skills
+            allocated_skills, remaining_skill_points = allocate_skills(skill_points, character)
+            character['skills'] = allocated_skills
+            logger.debug("Allocated Skills.")
+
+            # Allocate advantages
+            advantages, advantage_total_cost, remaining_advantage_points = allocate_advantages(max_advantages, advantage_points)
+            character['advantages'] = advantages
+            logger.debug("Allocated Advantages.")
+
+            # Allocate defenses
+            character, remaining_defense_points = allocate_defenses(defense_points, character, power_level)
+            logger.debug("Allocated Defenses.")
+
+            # Allocate powers
+            character, remaining_power_points = allocate_powers(character, power_points, power_level, max_powers, selected_power_types)
+            logger.debug("Allocated Powers.")
+
+            # Allocate equipment if Equipment advantage is present
+            equipment_points = calculate_equipment_points(character)
+            if equipment_points > 0:
+                gadgets = load_gadgets()
+                items, total_cost = random_gadget_generator(equipment_points, gadgets)
+                character['equipment'] = items
+
+            # Update initiative with actual values after advantages are assigned
+            character['languages'] = assign_languages(character)
+            character['initiative'] = calculate_initiative(character)
+
+            # Enforce rules
+            character = enforce_rules(character, power_level)
+
+            # Calculate total cost
+            attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, total_cost = calculate_totals(character)
+            character['total_cost'] = total_cost
+
+            # Set maximum points allowed
+            character['max_points'] = power_level * POWER_POINTS_PER_LEVEL
+
+            # Handle unspent points
+            character['unspent_points'] = remaining_power_points + remaining_skill_points
+
+            logger.debug("Character generation completed.")
+            return character
+
+        except ValueError as e:
+            logger.warning(f"Character generation attempt {attempt + 1} failed due to enforcement rules: {e}")
+            continue  # Retry character generation
+
+    # If all attempts fail, raise an exception
+    raise ValueError("Failed to generate a valid character within the maximum number of retries.")
+
 def main():
-    global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, hideout_details
+    global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, hideout_details, logger
+
     root = tk.Tk()
-    root.title("Character Creation Version 3.4 Prod")
+    root.title("Character Creation Version 4.0 Prod")
     dark_mode = True
     include_powers = tk.BooleanVar(value=False)  # Set include_powers to False by default (unchecked)
 

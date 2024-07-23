@@ -7,7 +7,6 @@ from utils import calculate_accuracy
 
 gm_cheat_sheet_app = None  # Global variable for GM Cheat Sheet app
 
-
 class Tooltip:
     def __init__(self, widget):
         self.widget = widget
@@ -29,7 +28,6 @@ class Tooltip:
         if self.tooltip_window:
             self.tooltip_window.destroy()
         self.tooltip_window = None
-
 
 class GMcheatSheetApp:
     def __init__(self, master):
@@ -157,11 +155,11 @@ class GMcheatSheetApp:
                         'Presence': {'value': int(df.iloc[45, 13]) if not pd.isna(df.iloc[45, 13]) else ''},  # N46
                     },
                     'defenses': {
-                        'Dodge': int(df.iloc[17, 25]) if not pd.isna(df.iloc[17, 25]) else '',  # Z18
-                        'Fortitude': int(df.iloc[20, 25]) if not pd.isna(df.iloc[20, 25]) else '',  # Z21
-                        'Parry': int(df.iloc[23, 25]) if not pd.isna(df.iloc[23, 25]) else '',  # Z24
-                        'Will': int(df.iloc[26, 25]) if not pd.isna(df.iloc[26, 25]) else '',  # Z27
-                        'Toughness': int(df.iloc[29, 25]) if not pd.isna(df.iloc[29, 25]) else '',  # Z30
+                        'Dodge': df.iloc[17, 25]['total_rank'] if isinstance(df.iloc[17, 25], dict) else df.iloc[17, 25],  # Z18
+                        'Fortitude': df.iloc[20, 25]['total_rank'] if isinstance(df.iloc[20, 25], dict) else df.iloc[20, 25],  # Z21
+                        'Parry': df.iloc[23, 25]['total_rank'] if isinstance(df.iloc[23, 25], dict) else df.iloc[23, 25],  # Z24
+                        'Will': df.iloc[26, 25]['total_rank'] if isinstance(df.iloc[26, 25], dict) else df.iloc[26, 25],  # Z27
+                        'Toughness': df.iloc[29, 25]['total_rank'] if isinstance(df.iloc[29, 25], dict) else df.iloc[29, 25],  # Z30
                     },
                     'initiative': int(df.iloc[17, 36]) if not pd.isna(df.iloc[17, 36]) else '',  # AK18
                     'Motivation': {
@@ -183,11 +181,11 @@ class GMcheatSheetApp:
                     character['stats'].get('Intellect', {}).get('value', ''),
                     character['stats'].get('Awareness', {}).get('value', ''),
                     character['stats'].get('Presence', {}).get('value', ''),
-                    character['defenses'].get('Dodge', ''),
-                    character['defenses'].get('Fortitude', ''),
-                    character['defenses'].get('Parry', ''),
-                    character['defenses'].get('Will', ''),
-                    character['defenses'].get('Toughness', ''),
+                    character['defenses'].get('Dodge', {}).get('total_rank', ''),
+                    character['defenses'].get('Parry', {}).get('total_rank', ''),
+                    character['defenses'].get('Fortitude', {}).get('total_rank', ''),
+                    character['defenses'].get('Toughness', {}).get('total_rank', ''),
+                    character['defenses'].get('Will', {}).get('total_rank', ''),
                     character['initiative'],
                     character['Motivation']['name'],
                     character['Complications'][0],
@@ -348,11 +346,11 @@ class GMcheatSheetApp:
             character['stats'].get('Intellect', {}).get('value', ''),
             character['stats'].get('Awareness', {}).get('value', ''),
             character['stats'].get('Presence', {}).get('value', ''),
-            character['defenses'].get('Dodge', ''),
-            character['defenses'].get('Fortitude', ''),
-            character['defenses'].get('Parry', ''),
-            character['defenses'].get('Will', ''),
-            character['defenses'].get('Toughness', ''),
+            character['defenses'].get('Dodge', {}).get('total_rank', ''),
+            character['defenses'].get('Parry', {}).get('total_rank', ''),
+            character['defenses'].get('Fortitude', {}).get('total_rank', ''),
+            character['defenses'].get('Toughness', {}).get('total_rank', ''),
+            character['defenses'].get('Will', {}).get('total_rank', ''),
             character['initiative'],
             character['Motivation']['name'],
             character['Complications'][0],
@@ -368,7 +366,7 @@ class GMcheatSheetApp:
             power_info = f"{power['name']} (Rank: {power['rank']}, Cost: {power['cost']})"
             if 'resisted' in power:
                 power_info += f"\n  Resisted by: {power['resisted']}"
-            if power['type'] == 'Combat':
+            if power.get('type') == 'Combat':
                 accuracy = calculate_accuracy(character, power)
                 power_info += f"\n  Accuracy: {accuracy}"
             if 'extras' in power and power['extras']:
@@ -496,14 +494,12 @@ class GMcheatSheetApp:
         else:
             self.tooltip_secondary.hide()
 
-
 def open_gm_cheat_sheet():
     global gm_cheat_sheet_app
     if gm_cheat_sheet_app is None or not gm_cheat_sheet_app.master.winfo_exists():
         gm_cheat_sheet_window = tk.Toplevel()
         gm_cheat_sheet_app = GMcheatSheetApp(gm_cheat_sheet_window)
     return gm_cheat_sheet_app
-
 
 if __name__ == "__main__":
     root = tk.Tk()
