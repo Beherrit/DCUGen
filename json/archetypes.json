@@ -1,24 +1,22 @@
 {
     "Balanced": {
         "with_powers": {
-            "stats": [0.25, 0.25],
-            "advantages": [0.25, 0.25],
-            "skills": [0.25, 0.25],
-            "defenses": [0.25, 0.25],
-            "powers": [0.25, 0.25],
+            "stats": [0.2, 0.2],
+            "advantages": [0.2, 0.2],
+            "skills": [0.2, 0.2],
+            "defenses": [0.2, 0.2],
+            "powers": [0.2, 0.2],
             "max_advantages": 10,
-            "max_powers": 8,
-            "power_range": [3, 8]
+            "max_powers": 8
         },
         "without_powers": {
-            "stats": [0.297, 0.33],
-            "advantages": [0.297, 0.33],
-            "skills": [0.306, 0.34],
-            "defenses": [0.1, 0.2],
+            "stats": [0.3, 0.3],
+            "advantages": [0.1, 0.1],
+            "skills": [0.3, 0.3],
+            "defenses": [0.3, 0.3],
             "powers": [0, 0],
             "max_advantages": 15,
-            "max_powers": 0,
-            "power_range": [0, 0]
+            "max_powers": 0
         }
     },
     "Powerhouse": {
@@ -29,8 +27,7 @@
             "defenses": [0.1, 0.2],
             "powers": [0.45, 0.55],
             "max_advantages": 10,
-            "max_powers": 8,
-            "power_range": [3, 8]
+            "max_powers": 8
         },
         "without_powers": {
             "stats": [0.315, 0.40],
@@ -39,8 +36,7 @@
             "defenses": [0.1, 0.2],
             "powers": [0, 0],
             "max_advantages": 15,
-            "max_powers": 0,
-            "power_range": [0, 0]
+            "max_powers": 0
         }
     },
     "JackOfAllTrades": {
@@ -51,8 +47,7 @@
             "defenses": [0.1, 0.2],
             "powers": [0.18, 0.25],
             "max_advantages": 15,
-            "max_powers": 8,
-            "power_range": [3, 8]
+            "max_powers": 8
         },
         "without_powers": {
             "stats": [0.315, 0.40],
@@ -61,8 +56,7 @@
             "defenses": [0.1, 0.2],
             "powers": [0, 0],
             "max_advantages": 20,
-            "max_powers": 0,
-            "power_range": [0, 0]
+            "max_powers": 0
         }
     },
     "Tactician": {
@@ -73,8 +67,7 @@
             "defenses": [0.1, 0.2],
             "powers": [0.09, 0.15],
             "max_advantages": 10,
-            "max_powers": 8,
-            "power_range": [3, 8]
+            "max_powers": 8
         },
         "without_powers": {
             "stats": [0.27, 0.35],
@@ -83,8 +76,7 @@
             "defenses": [0.1, 0.2],
             "powers": [0, 0],
             "max_advantages": 15,
-            "max_powers": 0,
-            "power_range": [0, 0]
+            "max_powers": 0
         }
     },
     "Tank": {
@@ -95,8 +87,7 @@
             "defenses": [0.1, 0.2],
             "powers": [0.225, 0.30],
             "max_advantages": 10,
-            "max_powers": 8,
-            "power_range": [3, 8]
+            "max_powers": 8
         },
         "without_powers": {
             "stats": [0.405, 0.50],
@@ -105,8 +96,7 @@
             "defenses": [0.1, 0.2],
             "powers": [0, 0],
             "max_advantages": 15,
-            "max_powers": 0,
-            "power_range": [0, 0]
+            "max_powers": 0
         }
     },
     "GlassCannon": {
@@ -117,8 +107,7 @@
             "defenses": [0.1, 0.2],
             "powers": [0.495, 0.60],
             "max_advantages": 10,
-            "max_powers": 8,
-            "power_range": [3, 8]
+            "max_powers": 8
         },
         "without_powers": {
             "stats": [0.18, 0.25],
@@ -127,8 +116,7 @@
             "defenses": [0.1, 0.2],
             "powers": [0, 0],
             "max_advantages": 15,
-            "max_powers": 0,
-            "power_range": [0, 0]
+            "max_powers": 0
         }
     },
     "Strategist": {
@@ -139,8 +127,7 @@
             "defenses": [0.1, 0.2],
             "powers": [0.135, 0.20],
             "max_advantages": 10,
-            "max_powers": 8,
-            "power_range": [3, 8]
+            "max_powers": 8
         },
         "without_powers": {
             "stats": [0.225, 0.30],
@@ -149,8 +136,7 @@
             "defenses": [0.1, 0.2],
             "powers": [0, 0],
             "max_advantages": 15,
-            "max_powers": 0,
-            "power_range": [0, 0]
+            "max_powers": 0
         }
     }
 }

@@ -318,3 +318,5 @@ def close_all_tabs(notebook, text_widgets, characters):
         notebook.forget(tab)
         if tab in text_widgets:
             del text_widgets[tab]
+
+

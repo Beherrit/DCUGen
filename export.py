@@ -5,7 +5,6 @@ from tkinter import messagebox, filedialog
 from openpyxl import load_workbook
 from openpyxl.styles import Font
 from utils import *
-from DCUQA import calculate_total_cost, calculate_accuracy
 
 
 
@@ -24,7 +23,6 @@ def on_export_character_sheet_click(notebook, characters, text_widgets):
     origin_region = character['origin']['region']
     origin_country = character['origin']['country']
     origin_language = character['origin']['language']
-    total_cost = calculate_total_cost(character)
     # Retrieve equipment from character
     equipment = character.get('equipment', [])
 
@@ -32,7 +30,6 @@ def on_export_character_sheet_click(notebook, characters, text_widgets):
     languages = character['languages']  # Assuming this is a list of language names
     formatted_languages = ", ".join(languages)
     # Check if a character has been generated
-    character["total_cost"] = calculate_total_cost(character)
     selected_tab = notebook.nametowidget(notebook.select())
     text_widget = text_widgets.get(selected_tab)
     if not text_widget or not text_widget.get("1.0", tk.END).strip():
@@ -74,7 +71,7 @@ def on_export_character_sheet_click(notebook, characters, text_widgets):
     sheet['Z30'] = character['defenses'].get('Toughness', '')
     sheet['Z27'] = character['defenses'].get('Will', '')
     sheet['AK18'] = character['initiative']
-    sheet['AD33'] = f"{int(total_cost)}"
+    # sheet['AD33'] = f"{int(total_cost)}"
 
     # Compile personality traits
     positive_traits = " | ".join(character['personality_traits']['positive_traits'])
