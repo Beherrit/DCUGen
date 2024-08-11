@@ -119,7 +119,7 @@ class GMSheetApp:
             section_frame.pack(fill="x", pady=5)
 
     def confirm_delete(self, name):
-        response = messagebox.askyesno("Confirm Delete", "Are you sure you want to delete this character?")
+        response = messagebox.askyesno("Confirm Delete", "Are you sure you want to delete this character? When this character is deleted you can NOT re-load this character into the GM Cheat Sheet. Please save if you wish to retain the characters.")
         if response:
             self.delete_character(name)
 

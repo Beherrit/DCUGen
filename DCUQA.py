@@ -526,6 +526,7 @@ def open_character_filters_window():
                 raise ValueError
 
             include_powers_value = not exclude_powers.get()
+            villain_value = villain_var.get()
             stat_percent = float(stat_percent_entry.get())
             advantage_percent = float(advantage_percent_entry.get())
             skill_percent = float(skill_percent_entry.get())
@@ -541,8 +542,20 @@ def open_character_filters_window():
 
             logger.debug(f"Selected Power Types: {selected_power_types}")
 
-            # Generate character
-            character = generate_character(power_level, include_powers_value, stat_percent, advantage_percent, skill_percent, defense_percent, power_percent, max_advantages, max_powers, selected_power_types)
+            # Generate character with the villain flag
+            character = generate_character(
+                power_level,
+                include_powers_value,
+                stat_percent,
+                advantage_percent,
+                skill_percent,
+                defense_percent,
+                power_percent,
+                max_advantages,
+                max_powers,
+                selected_power_types,
+                villain=villain_value  # Pass the villain flag
+            )
 
             # Create a new tab with the character's name
             character_name = character.get('name', 'Unnamed Character')
@@ -604,6 +617,12 @@ def open_character_filters_window():
     exclude_powers = tk.BooleanVar(value=False)  # Default include powers to True (exclude_powers to False)
     exclude_powers_button = ttk.Checkbutton(filters_window, text="Exclude Powers", variable=exclude_powers)
     exclude_powers_button.grid(row=1, column=0, padx=5, pady=5, columnspan=2)
+
+    # Add the villain checkbox
+    villain_var = tk.BooleanVar(value=False)
+    villain_checkbox = ttk.Checkbutton(filters_window, text="Villain", variable=villain_var)
+    villain_checkbox.grid(row=1, column=1, padx=5, pady=5, columnspan=2)
+
 
     stat_percent_label = ttk.Label(filters_window, text="Stats Percent:")
     stat_percent_label.grid(row=2, column=0, padx=5, pady=5)
@@ -848,7 +867,7 @@ class CollapsibleSection:
     def pack(self, **kwargs):
         self.frame.pack(**kwargs)
 
-def generate_character(power_level, include_powers, stat_percent, advantage_percent, skill_percent, defense_percent, power_percent, max_advantages, max_powers, selected_power_types, random_physical_features=True, random_costume_style=True, random_distinctive_feature=True):
+def generate_character(power_level, include_powers, stat_percent, advantage_percent, skill_percent, defense_percent, power_percent, max_advantages, max_powers, selected_power_types, random_physical_features=True, random_costume_style=True, random_distinctive_feature=True, villain=False):
     max_retries = 10
     for attempt in range(max_retries):
         try:
@@ -862,7 +881,7 @@ def generate_character(power_level, include_powers, stat_percent, advantage_perc
             gender, name = generate_random_gender()
             origin = generate_random_origin()
             personality_traits = generate_random_traits()
-            motivations_and_complications = generate_motivations_and_complications()
+            motivations_and_complications = generate_motivations_and_complications(villain=villain)
             languages = assign_languages({'advantages': []})  # Pass an empty list for advantages to get base language
             initiative = calculate_initiative({'advantages': [], 'stats': {}})  # Initialize with default values for stats and advantages
 
@@ -1156,9 +1175,15 @@ def main():
     misc_frame.add_widget(generate_encounter_button)
     ToolTip(generate_encounter_button, "Generate a random encounter.")
 
-    init_tracker_button = ttk.Button(misc_frame.body_frame, text="Initiative Tracker", command=open_initiative_tracker, style='Initiative.TButton')
+    init_tracker_button = ttk.Button(
+        misc_frame.body_frame, 
+        text="Initiative Tracker", 
+        command=lambda: open_initiative_tracker(notebook, characters), 
+        style='Initiative.TButton'
+    )
     misc_frame.add_widget(init_tracker_button)
     ToolTip(init_tracker_button, "Open the initiative tracker for combat encounters.")
+
 
     settings_button = ttk.Button(misc_frame.body_frame, text="Settings", command=lambda: settings.open_settings(root), style='Initiative.TButton')  # Add settings button
     misc_frame.add_widget(settings_button)

@@ -126,7 +126,7 @@ def assign_languages(character):
     
     return assigned_languages
 
-def generate_motivations_and_complications():
+def generate_motivations_and_complications(villain=False):
     motivations = load_data_from_json('./json/motivations.json')  # Load the data from JSON file
     complications = load_data_from_json('./json/complications.json')
     character_motivations_and_complications = {
@@ -134,12 +134,18 @@ def generate_motivations_and_complications():
         "Complications": []
     }
 
-    # Randomly select a motivation
-    motivation_key = random.choice(list(motivations.keys()))
-    character_motivations_and_complications["Motivation"] = {
-        "name": motivation_key,
-        "description": motivations[motivation_key]
-    }
+    # Choose the motivation type based on the villain flag
+    motivation_type = "Villain" if villain else "Hero"
+
+    # Randomly select a motivation from the specified type
+    if motivation_type in motivations:
+        motivation_key = random.choice(list(motivations[motivation_type].keys()))
+        character_motivations_and_complications["Motivation"] = {
+            "name": motivation_key,
+            "description": motivations[motivation_type][motivation_key]
+        }
+    else:
+        raise ValueError(f"Motivation type '{motivation_type}' not found in motivations.")
 
     # Randomly select two complications
     selected_complications_keys = random.sample(list(complications.keys()), 2)
