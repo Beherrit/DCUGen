@@ -1,9 +1,12 @@
+import os
+import sys
+import json
+import logging
 import random
 import pandas as pd
 import tkinter as tk
 from tkinter import messagebox, ttk
-import json
-from gmcheatsheet import *
+import settings
 from initiative_tracker import *
 from calculate_powers import *
 from reference import *
@@ -13,11 +16,13 @@ from hideout import *
 from equipment import *
 from database import *
 from export import *
-import settings
 from vehicles import *
-import logging
-import os
-import sys
+from gmsheet import *
+from howto import *
+gm_cheat_sheet_app = None 
+from tooltip import ToolTip
+from complication import *
+from encounters import *
 
 # Set up logging
 def get_log_file_path():
@@ -291,7 +296,7 @@ def allocate_skills(skill_points, character):
 
             cost = (rank + 1) // 2  # Ensuring costs are always whole numbers
             if remaining_points < cost:
-                rank = remaining_points * 2 - 1  # Adjust rank to fit remaining points
+                rank = (remaining_points * 2) - 1  # Adjust rank to fit remaining points
                 cost = remaining_points
 
             associated_attribute = skill['tags'][0]
@@ -314,6 +319,40 @@ def allocate_skills(skill_points, character):
 
         if remaining_points <= 0:
             break
+
+    # Loop to spend any remaining points
+    while remaining_points > 0:
+        skill = random.choice(skills_data)
+        skill_name = skill['name']
+        selected_skill = next((s for s in skills if s['name'] == skill_name), None)
+
+        if selected_skill:
+            rank = selected_skill['rank']
+            cost = (rank + 2) // 2  # Cost to increase rank by 1
+            if remaining_points >= cost:
+                selected_skill['rank'] += 1
+                selected_skill['cost'] += cost
+                selected_skill['total'] += 1
+                remaining_points -= cost
+                logger.debug(f"Increased {skill_name} rank to {selected_skill['rank']} at cost of {cost}, remaining points {remaining_points}")
+        else:
+            rank = 0
+            cost = (rank + 1) // 2
+            if remaining_points >= cost:
+                selected_skills.add(skill_name)
+                associated_attribute = skill['tags'][0]
+                if associated_attribute not in character['stats']:
+                    character['stats'][associated_attribute] = {'value': 0, 'cost': 0}
+                total = rank + character['stats'][associated_attribute]['value']
+                skills.append({
+                    "name": skill_name,
+                    "rank": rank,
+                    "cost": cost,
+                    "total": total,
+                    "sub_skill": random.choice(skill.get('sub_skills', [None]))
+                })
+                remaining_points -= cost
+                logger.debug(f"Allocated {skill_name} initially: rank {rank}, cost {cost}, remaining points {remaining_points}")
 
     # Ensure all skills from skills_data are present and sorted
     all_skills = {skill['name']: {"name": skill['name'], "rank": 0, "cost": 0, "total": 0, "sub_skill": None} for skill in skills_data}
@@ -782,52 +821,6 @@ def pretty_print_character(character, text_widget):
     for complication in character.get("Complications", []):
         text_widget.insert("end", f"- {complication['name']}: {complication['description']}\n")
 
-def export_to_gm_screen():
-    global gm_cheat_sheet_app
-    
-    if not gm_cheat_sheet_app or not gm_cheat_sheet_app.master.winfo_exists():
-        gm_cheat_sheet_app = open_gm_cheat_sheet()
-
-    # Clear existing data in the GM Cheat Sheet
-    for item in gm_cheat_sheet_app.tree.get_children():
-        gm_cheat_sheet_app.tree.delete(item)
-
-    for item in gm_cheat_sheet_app.tree_secondary.get_children():
-        gm_cheat_sheet_app.tree_secondary.delete(item)
-
-    # Transfer characters from the tabs
-    for tab in notebook.tabs():
-        tab_name = notebook.tab(tab, "text")
-        character = characters.get(tab_name)
-
-        if character:
-            # Insert primary character details into the GM Cheat Sheet
-            row_data = [
-                character.get('name', ''),
-                character['stats'].get('Strength', {}).get('value', ''),
-                character['stats'].get('Stamina', {}).get('value', ''),
-                character['stats'].get('Agility', {}).get('value', ''),
-                character['stats'].get('Dexterity', {}).get('value', ''),
-                character['stats'].get('Fighting', {}).get('value', ''),
-                character['stats'].get('Intellect', {}).get('value', ''),
-                character['stats'].get('Awareness', {}).get('value', ''),
-                character['stats'].get('Presence', {}).get('value', ''),
-                character['defenses'].get('Dodge', {}).get('total_rank', ''),
-                character['defenses'].get('Parry', {}).get('total_rank', ''),
-                character['defenses'].get('Fortitude', {}).get('total_rank', ''),
-                character['defenses'].get('Toughness', {}).get('total_rank', ''),
-                character['defenses'].get('Will', {}).get('total_rank', ''),
-                character.get('initiative', ''),
-                character['Motivation'].get('name', ''),
-                character['Complications'][0].get('description', '') if character['Complications'] else '',
-                character['Complications'][1].get('description', '') if len(character['Complications']) > 1 else '',
-                ""  # Summary field
-            ]
-            gm_cheat_sheet_app.tree.insert("", "end", values=row_data)
-            gm_cheat_sheet_app.import_character_secondary(character)
-
-    gm_cheat_sheet_app.master.lift()  # Bring the GM Cheat Sheet window to the front
-
 class CollapsibleSection:
     def __init__(self, master, title, start_collapsed=True):
         self.frame = ttk.Frame(master)
@@ -990,7 +983,7 @@ def main():
     global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, hideout_details, logger
 
     root = tk.Tk()
-    root.title("Character Creation Version 4.0 Prod")
+    root.title("Character Creation Version 4.1 Prod")
     dark_mode = True
     include_powers = tk.BooleanVar(value=False)  # Set include_powers to False by default (unchecked)
 
@@ -1079,21 +1072,29 @@ def main():
 
     generate_character_filters_button = ttk.Button(char_frame.body_frame, text="Generate Character Filters", command=open_character_filters_window, style='Character.TButton')
     char_frame.add_widget(generate_character_filters_button)
+    ToolTip(generate_character_filters_button, "Open a window to set filters and generate a character.")
 
     export_character_sheet_button = ttk.Button(char_frame.body_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click(notebook, characters, text_widgets), style='Character.TButton')
     char_frame.add_widget(export_character_sheet_button)
+    ToolTip(export_character_sheet_button, "Export the current character data to a character sheet.")
 
     close_tab_button = ttk.Button(char_frame.body_frame, text="Close Tab", command=lambda: close_current_tab(notebook, text_widgets), style='Character.TButton')
     char_frame.add_widget(close_tab_button)
+    ToolTip(close_tab_button, "Close the currently selected tab.")
 
     close_all_tabs_button = ttk.Button(char_frame.body_frame, text="Close All Tabs", command=lambda: close_all_tabs(notebook, text_widgets, characters), style='Character.TButton')
     char_frame.add_widget(close_all_tabs_button)
+    ToolTip(close_all_tabs_button, "Close all open tabs in the notebook.")
 
     copy_prompt_button = ttk.Button(char_frame.body_frame, text="Select AI Prompt", command=lambda: copy_prompt_to_clipboard(notebook, characters), style='Character.TButton')
     char_frame.add_widget(copy_prompt_button)
+    ToolTip(copy_prompt_button, "Copy the AI prompt for the character to the clipboard.")
 
-    export_to_gm_screen_button = ttk.Button(char_frame.body_frame, text="Export to GM Screen", command=export_to_gm_screen, style='Character.TButton')
-    char_frame.add_widget(export_to_gm_screen_button)
+    # Add the Complications button under Character Management
+    complications = load_data_from_json('./json/complications.json')
+    complications_button = ttk.Button(char_frame.body_frame, text="Complications", command=lambda: open_complications_window(complications), style='Character.TButton')
+    char_frame.add_widget(complications_button)
+    ToolTip(complications_button, "Open the complications window to select and view random conflicts.")
 
     # Equipment Management Frame (start collapsed)
     equip_frame = CollapsibleSection(left_frame, "Equipment Management (Click to open/close)", start_collapsed=True)
@@ -1101,15 +1102,19 @@ def main():
 
     equipment_points_label = ttk.Label(equip_frame.body_frame, text="Equipment Points:")
     equip_frame.add_widget(equipment_points_label)
+    ToolTip(equipment_points_label, "Specify the number of equipment points available.")
 
     equipment_points_entry = ttk.Entry(equip_frame.body_frame)
     equip_frame.add_widget(equipment_points_entry)
+    ToolTip(equipment_points_entry, "Input field for equipment points.")
 
     generate_equipment_button = ttk.Button(equip_frame.body_frame, text="Generate Equipment", command=lambda: on_generate_equipment_click(equipment_points_entry, notebook, text_widgets), style='Equipment.TButton')
     equip_frame.add_widget(generate_equipment_button)
+    ToolTip(generate_equipment_button, "Generate equipment based on the specified points.")
 
     save_equipment_button = ttk.Button(equip_frame.body_frame, text="Save Equipment", command=lambda: on_save_equipment_click(notebook, text_widgets), style='Equipment.TButton')
     equip_frame.add_widget(save_equipment_button)
+    ToolTip(save_equipment_button, "Save the generated equipment to a file.")
 
     # Vehicle Management Frame (start collapsed)
     vehicle_frame = CollapsibleSection(left_frame, "Vehicle Management (Click to open/close)", start_collapsed=True)
@@ -1117,15 +1122,19 @@ def main():
 
     vehicle_points_label = ttk.Label(vehicle_frame.body_frame, text="Vehicle Points:")
     vehicle_frame.add_widget(vehicle_points_label)
+    ToolTip(vehicle_points_label, "Specify the number of vehicle points available.")
 
     vehicle_points_entry = ttk.Entry(vehicle_frame.body_frame)
     vehicle_frame.add_widget(vehicle_points_entry)
+    ToolTip(vehicle_points_entry, "Input field for vehicle points.")
 
     generate_vehicle_button = ttk.Button(vehicle_frame.body_frame, text="Generate Vehicle", command=lambda: on_generate_vehicle_click(vehicle_points_entry, notebook, text_widgets), style='Vehicle.TButton')
     vehicle_frame.add_widget(generate_vehicle_button)
+    ToolTip(generate_vehicle_button, "Generate a vehicle using the specified points.")
 
     save_vehicle_button = ttk.Button(vehicle_frame.body_frame, text="Save Vehicle", command=lambda: on_save_vehicle_click(notebook, text_widgets), style='Vehicle.TButton')
     vehicle_frame.add_widget(save_vehicle_button)
+    ToolTip(save_vehicle_button, "Save the generated vehicle to a file.")
 
     # Hideout Management Frame (start collapsed)
     hideout_frame = CollapsibleSection(left_frame, "Hideout Management (Click to open/close)", start_collapsed=True)
@@ -1133,9 +1142,11 @@ def main():
 
     generate_hideout_button = ttk.Button(hideout_frame.body_frame, text="Generate Hideout", command=lambda: generate_hideout(notebook, text_widgets), style='Hideout.TButton')
     hideout_frame.add_widget(generate_hideout_button)
+    ToolTip(generate_hideout_button, "Generate a hideout with random features.")
 
     save_hideout_button = ttk.Button(hideout_frame.body_frame, text="Save Hideout", command=lambda: save_hideout(hideout_details), style='Hideout.TButton')
     hideout_frame.add_widget(save_hideout_button)
+    ToolTip(save_hideout_button, "Save the generated hideout details to a file.")
 
     # Miscellaneous Frame (start collapsed)
     misc_frame = CollapsibleSection(left_frame, "Miscellaneous", start_collapsed=True)
@@ -1143,28 +1154,50 @@ def main():
 
     generate_encounter_button = ttk.Button(misc_frame.body_frame, text="Generate Encounter", command=generate_encounter, style='Encounter.TButton')
     misc_frame.add_widget(generate_encounter_button)
+    ToolTip(generate_encounter_button, "Generate a random encounter.")
 
     init_tracker_button = ttk.Button(misc_frame.body_frame, text="Initiative Tracker", command=open_initiative_tracker, style='Initiative.TButton')
     misc_frame.add_widget(init_tracker_button)
+    ToolTip(init_tracker_button, "Open the initiative tracker for combat encounters.")
 
     settings_button = ttk.Button(misc_frame.body_frame, text="Settings", command=lambda: settings.open_settings(root), style='Initiative.TButton')  # Add settings button
     misc_frame.add_widget(settings_button)
+    ToolTip(settings_button, "Open application settings.")
 
     # Reference Management Frame (start collapsed)
     reference_frame = CollapsibleSection(left_frame, "Reference Management (Click to open/close)", start_collapsed=True)
     reference_frame.pack(fill="x", pady=5)
 
+    # Function to open GM Cheat Sheet
+    def open_gm_cheat_sheet():
+        new_window = tk.Toplevel(root)
+        gm_app = GMSheetApp(new_window, notebook, characters)
+
+    # Function to open HowTo guide
+    def open_howto():
+        new_window = tk.Toplevel(root)
+        howto_app = HowToApp(new_window)
+
+    # Create buttons and add them to the reference frame
     calculate_powers_button = ttk.Button(reference_frame.body_frame, text="Calculate Powers", command=open_calculate_powers_window, style='Reference.TButton')
     reference_frame.add_widget(calculate_powers_button)
+    ToolTip(calculate_powers_button, "Open the power calculation window.")
 
     reference_data_button = ttk.Button(reference_frame.body_frame, text="Reference Data", command=open_reference_data, style='Reference.TButton')
     reference_frame.add_widget(reference_data_button)
+    ToolTip(reference_data_button, "Open the reference data window.")
 
     notes_button = ttk.Button(reference_frame.body_frame, text="Notes", command=open_notes_window, style='Reference.TButton')
     reference_frame.add_widget(notes_button)
+    ToolTip(notes_button, "Open the notes window to manage notes.")
 
     gm_cheat_sheet_button = ttk.Button(reference_frame.body_frame, text="GM Cheat Sheet", command=open_gm_cheat_sheet, style='Reference.TButton')
     reference_frame.add_widget(gm_cheat_sheet_button)
+    ToolTip(gm_cheat_sheet_button, "Open the GM Cheat Sheet for quick access to character details.")
+
+    howto_button = ttk.Button(reference_frame.body_frame, text="Guides / How To", command=open_howto, style='Reference.TButton')
+    reference_frame.add_widget(howto_button)
+    ToolTip(howto_button, "Access guides and instructions for using the application.")
 
     # Configure the main window to resize properly
     root.grid_rowconfigure(0, weight=1)

@@ -104,6 +104,7 @@ def calculate_range(rank):
         84480, 158400, 316800, 633600, 1320000, 2640000, 5280000, 10560000, 21120000
     ]
     return range_chart[rank - 1] if rank <= len(range_chart) else "Beyond chart"
+
 def assign_languages(character):
     all_languages = load_data_from_json('./json/languages.json')
     base_language = "English"
@@ -133,18 +134,22 @@ def generate_motivations_and_complications():
         "Complications": []
     }
 
+    # Randomly select a motivation
     motivation_key = random.choice(list(motivations.keys()))
     character_motivations_and_complications["Motivation"] = {
         "name": motivation_key,
         "description": motivations[motivation_key]
     }
 
-    selected_complications_keys = random.sample(list(complications.keys()), random.randint(2, 2))
+    # Randomly select two complications
+    selected_complications_keys = random.sample(list(complications.keys()), 2)
     for complication_key in selected_complications_keys:
-        character_motivations_and_complications["Complications"].append({
-            "name": complication_key,
-            "description": complications[complication_key]
-        })
+        complication = complications[complication_key]
+        if isinstance(complication, dict) and 'description' in complication:
+            character_motivations_and_complications["Complications"].append({
+                "name": complication_key,
+                "description": complication['description']
+            })
 
     return character_motivations_and_complications
 
@@ -212,11 +217,6 @@ def calculate_initiative(character):
     
     return initiative
 
-def generate_encounter():
-    encounters = load_data_from_json('./json/encounters.json')['encounters']
-    encounter = random.choice(encounters)
-    messagebox.showinfo("Random Encounter", f"Encounter Type: {encounter['type']}\nDescription: {encounter['description']}")
-
 def generate_weight():
     weights = list(range(110, 351))
     probabilities = (
@@ -228,7 +228,6 @@ def generate_weight():
     )
     weight = random.choices(weights, probabilities, k=1)[0]
     return weight
-
 
 def copy_prompt_to_clipboard(notebook, characters):
     # Get the name of the currently selected tab
@@ -318,5 +317,3 @@ def close_all_tabs(notebook, text_widgets, characters):
         notebook.forget(tab)
         if tab in text_widgets:
             del text_widgets[tab]
-
-
