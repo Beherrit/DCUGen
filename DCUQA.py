@@ -406,9 +406,7 @@ def allocate_powers(character, power_points, power_level, max_powers, selected_p
         for _ in range(num_powers):
             if power_points <= 0:
                 break
-            available_powers = [power for power in powers_data if power['type'] == power_type]
-            if range_type:
-                available_powers = [power for power in available_powers if power.get('range') == range_type]
+            available_powers = [power for power in powers_data if power['type'] == power_type and (range_type is None or power.get('range') == range_type)]
             if not available_powers:
                 continue
             power = random.choice(available_powers)
@@ -426,7 +424,6 @@ def allocate_powers(character, power_points, power_level, max_powers, selected_p
 
                 num_extras = random.randint(0, min(3, len(available_extras)))
                 num_flaws = random.randint(0, min(3, len(available_flaws)))
-
                 selected_extras = random.sample(available_extras, num_extras)
                 selected_flaws = random.sample(available_flaws, num_flaws)
 
@@ -446,6 +443,11 @@ def allocate_powers(character, power_points, power_level, max_powers, selected_p
                     accurate_rank = random.randint(*accurate_rank_range)
                     if accurate_rank > 0:
                         selected_extras_with_ranks.append(("Accurate", accurate_rank))
+
+                has_area_extra = any("Area" in extra for extra, _ in selected_extras_with_ranks)
+                if has_area_extra:
+                    selected_extras_with_ranks = [(extra, rank) for extra, rank in selected_extras_with_ranks if "Accuracy" not in extra]
+                    max_rank = min(max_rank, power_level)  # Limit max rank to PL
 
                 total_cost, adjusted_cost_per_rank, adjusted_flats = calculate_modified_cost(
                     base_cost, rank, selected_extras_with_ranks, selected_flaws_with_ranks, extras_data, flaws_data
@@ -498,6 +500,12 @@ def allocate_powers(character, power_points, power_level, max_powers, selected_p
                         defense_name = power_entry['name'].replace('Enhanced Trait ', '')
                         if defense_name in ['Dodge', 'Parry', 'Fortitude', 'Will']:
                             character['defenses'][defense_name]['total_rank'] += power_entry['rank']
+
+                    # Check for "Area" extra and adjust "Accuracy"
+                    has_area_extra = any("Area" in extra for extra, _ in selected_extras_with_ranks)
+                    if has_area_extra:
+                        selected_extras_with_ranks = [(extra, rank) for extra, rank in selected_extras_with_ranks if "Accuracy" not in extra]
+                        max_rank = min(max_rank, power_level)  # Limit max rank to PL
 
                     character["powers"].append(power_entry)
                     selected_power_names.append(power["name"])
