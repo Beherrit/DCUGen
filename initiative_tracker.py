@@ -235,7 +235,8 @@ def load_initiative_data():
         with open("initiative_data.json", "r") as file:
             data = json.load(file)
         for row in data:
-            tree.insert("", "end", values=row)
+            tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
+            tree.insert("", "end", values=row, tags=(tag,))
         sort_treeview()
 
 def save_initiative_data():
@@ -330,6 +331,10 @@ def open_initiative_tracker(notebook, characters):
     global tree
     tree = ttk.Treeview(tree_frame, columns=columns, show="headings", yscrollcommand=tree_scroll_y.set, xscrollcommand=tree_scroll_x.set)
 
+    # Configure alternating row colors
+    tree.tag_configure('oddrow', background='#f0f0f0')  # Darker grey for odd rows
+    tree.tag_configure('evenrow', background='#b0b0b0')  # Even darker grey for even rows
+
     # Adjusting column sizes
     tree.heading("Name", text="Name")
     tree.column("Name", width=100, stretch=True)
@@ -399,8 +404,9 @@ def open_initiative_tracker(notebook, characters):
         awareness = int(awareness_entry.get()) if awareness_entry.get() else 0
         agility = int(agility_entry.get()) if agility_entry.get() else 0
         initiative = int(initiative_entry.get()) if initiative_entry.get() else 0
+        tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
 
-        tree.insert("", "end", values=(name, awareness, agility, initiative, "False", "Normal", "Normal", "Normal", "", "", "False", ""))
+        tree.insert("", "end", values=(name, awareness, agility, initiative, "False", "Normal", "Normal", "Normal", "", "", "False", ""), tags=(tag,))
         sort_treeview()
 
     def edit_cell(event):
@@ -459,7 +465,9 @@ def open_initiative_tracker(notebook, characters):
             awareness = character_data.get("stats", {}).get("Awareness", {}).get("value", 0)
             agility = character_data.get("stats", {}).get("Agility", {}).get("value", 0)
             initiative = character_data.get("initiative", 0)
-            tree.insert("", "end", values=(name, awareness, agility, initiative, "False", "Normal", "Normal", "Normal", "", "", "False", ""))
+            tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
+
+            tree.insert("", "end", values=(name, awareness, agility, initiative, "False", "Normal", "Normal", "Normal", "", "", "False", ""), tags=(tag,))
             sort_treeview()
 
     # Load the initiative data when the tracker is opened
