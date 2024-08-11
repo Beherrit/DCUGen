@@ -1,761 +1,741 @@
 {
     "encounters": [
-        {
-            "type": "Bank Robbery",
-            "description": "A group of armed robbers have taken over a local bank. They have hostages and are demanding a helicopter to escape. The heroes need to diffuse the situation without harming the hostages."
-        },
-        {
-            "type": "Natural Disaster",
-            "description": "A sudden earthquake has struck the city, causing widespread destruction. The heroes must assist in rescue operations, provide medical aid, and prevent further damage."
-        },
-        {
-            "type": "Alien Invasion",
-            "description": "A fleet of alien ships has appeared in the sky, and they are attacking key infrastructure points in the city. The heroes must repel the invaders and discover their motives."
-        },
-        {
-            "type": "Mystical Disturbance",
-            "description": "A portal to another dimension has opened in the park, and strange creatures are emerging from it. The heroes must close the portal and deal with the creatures."
-        },
-        {
-            "type": "Supervillain Attack",
-            "description": "A notorious supervillain is wreaking havoc downtown, destroying buildings and endangering civilians. The heroes need to stop the villain and minimize collateral damage."
-        },
-        {
-            "type": "Hostage Situation",
-            "description": "A group of terrorists have taken over a high-rise building, holding the employees hostage. The heroes must infiltrate the building and rescue the hostages."
-        },
-        {
-            "type": "Environmental Crisis",
-            "description": "A chemical spill at a nearby factory is threatening to contaminate the water supply. The heroes must contain the spill and clean up the area before it causes irreversible damage."
-        },
-        {
-            "type": "Power Outage",
-            "description": "A major power outage has left the city in darkness, leading to chaos and looting. The heroes must restore order and find the cause of the blackout."
-        },
-        {
-            "type": "Missing Persons",
-            "description": "Several people have gone missing in a specific neighborhood, and the authorities suspect foul play. The heroes must investigate the disappearances and find the missing individuals."
-        },
-        {
-            "type": "Tech Heist",
-            "description": "A high-tech company has been robbed of its latest prototype. The heroes must track down the thieves and recover the stolen technology."
-        },
-        {
-            "type": "Mad Scientist",
-            "description": "A rogue scientist is threatening to unleash a deadly virus on the city. The heroes must infiltrate his lab and stop him before it's too late."
-        },
-        {
-            "type": "Political Assassination",
-            "description": "A foreign diplomat is in town for a peace summit, but there are rumors of an assassination attempt. The heroes must protect the diplomat and uncover the plot."
-        },
-        {
-            "type": "Kidnapping",
-            "description": "A high-profile individual has been kidnapped. The heroes must track down the kidnappers and rescue the victim."
-        },
-        {
-            "type": "Drug Bust",
-            "description": "A new and dangerous drug has hit the streets. The heroes must find the source and shut down the operation."
-        },
-        {
-            "type": "Environmental Disaster",
-            "description": "An oil tanker has run aground, spilling oil into the ocean. The heroes need to contain the spill and save the marine life."
-        },
-        {
-            "type": "Underground Fighting Ring",
-            "description": "The heroes discover an illegal underground fighting ring where superhumans are forced to fight. They must shut it down and free the captives."
-        },
-        {
-            "type": "Stolen Technology",
-            "description": "A new piece of advanced technology has been stolen. The heroes must retrieve it before it falls into the wrong hands."
-        },
-        {
-            "type": "Cult Activity",
-            "description": "A dangerous cult is planning a ritual that could have catastrophic consequences. The heroes must infiltrate the cult and stop the ritual."
-        },
-        {
-            "type": "Mutant Uprising",
-            "description": "A group of mutants is causing havoc in the city. The heroes need to intervene and restore peace."
-        },
-        {
-            "type": "Train Derailment",
-            "description": "A train has derailed, causing a massive wreck. The heroes need to rescue the passengers and prevent further damage."
-        },
-        {
-            "type": "Hostage Situation",
-            "description": "A building has been taken over by armed criminals. The heroes must find a way to safely rescue the hostages."
-        },
-        {
-            "type": "Rogue AI",
-            "description": "An AI system has gone rogue, taking control of critical infrastructure. The heroes must find a way to shut it down."
-        },
-        {
-            "type": "Zombie Outbreak",
-            "description": "A zombie virus has broken out in a small town. The heroes must contain the outbreak and find a cure."
-        },
-        {
-            "type": "Gang War",
-            "description": "Rival gangs are causing chaos in the streets. The heroes need to intervene and restore order."
-        },
-        {
-            "type": "Prison Break",
-            "description": "A group of dangerous criminals has escaped from prison. The heroes must track them down and bring them back to justice."
-        },
-        {
-            "type": "Corrupt Politician",
-            "description": "A politician is involved in illegal activities. The heroes must gather evidence and bring them to justice."
-        },
-        {
-            "type": "Mystical Artifact",
-            "description": "A powerful artifact has been stolen. The heroes must retrieve it before it is used for evil purposes."
-        },
-        {
-            "type": "Eco-Terrorist",
-            "description": "An eco-terrorist is threatening to destroy a major city. The heroes must stop them and prevent the disaster."
-        },
-        {
-            "type": "Time Traveler",
-            "description": "A time traveler has come from the future with a warning. The heroes must help them prevent a future catastrophe."
-        },
-        {
-            "type": "Clone Army",
-            "description": "A villain has created an army of clones. The heroes must find the source and shut it down."
-        },
-        {
-            "type": "Meteor Strike",
-            "description": "A massive meteor is headed towards Earth. The heroes must find a way to divert it and save the planet."
-        },
-        {
-            "type": "Superhuman Trafficking",
-            "description": "A trafficking ring is kidnapping superhumans. The heroes must shut down the operation and rescue the victims."
-        },
-        {
-            "type": "Mind Control",
-            "description": "A villain is using mind control to manipulate people. The heroes must find a way to stop the villain and free the victims."
-        },
-        {
-            "type": "Robot Uprising",
-            "description": "Robots have gone rogue and are attacking humans. The heroes must find a way to stop the robots and prevent further damage."
-        },
-        {
-            "type": "Dark Magic",
-            "description": "A dark mage is using forbidden magic to summon demons. The heroes must stop the mage and send the demons back to their realm."
-        },
-        {
-            "type": "Nuclear Threat",
-            "description": "A terrorist group has acquired a nuclear weapon and is threatening to detonate it. The heroes must find and disarm the bomb."
-        },
-        {
-            "type": "Hostile Takeover",
-            "description": "A villain is attempting a hostile takeover of a major corporation. The heroes must stop the villain and protect the company's employees."
-        },
-        {
-            "type": "Superhuman Rivalry",
-            "description": "Two superhumans are having a destructive battle in the city. The heroes must intervene and stop the fight before innocent lives are lost."
-        },
-        {
-            "type": "Alien Abduction",
-            "description": "People are disappearing and reports indicate alien abductions. The heroes must investigate and rescue the abductees."
-        },
-        {
-            "type": "Haunted House",
-            "description": "A house is reported to be haunted by malevolent spirits. The heroes must investigate and banish the spirits."
-        },
-        {
-            "type": "Bio-Weapon",
-            "description": "A villain has developed a deadly bio-weapon. The heroes must find and neutralize the weapon before it's deployed."
-        },
-        {
-            "type": "Invasion from the Deep",
-            "description": "Creatures from the deep sea are attacking coastal areas. The heroes must defend the coast and find out why the creatures are attacking."
-        },
-        {
-            "type": "Superhuman Disease",
-            "description": "A disease that affects only superhumans is spreading. The heroes must find a cure before it's too late."
-        },
-        {
-            "type": "Rogue Hero",
-            "description": "A former hero has turned rogue and is causing chaos. The heroes must confront their former ally and bring them to justice."
-        },
-        {
-            "type": "Tech Takeover",
-            "description": "A villain has taken control of the city's technology. The heroes must shut down the villain's operation and restore control."
-        },
-        {
-            "type": "Ancient Curse",
-            "description": "An ancient curse has been unleashed, causing strange phenomena. The heroes must find the source of the curse and break it."
-        },
-        {
-            "type": "Mutant Rampage",
-            "description": "A mutant is on a rampage in the city. The heroes must stop the mutant and find out what caused the rampage."
-        },
-        {
-            "type": "Psychic Attack",
-            "description": "A psychic villain is attacking people's minds. The heroes must find and stop the villain before more people are harmed."
-        },
-        {
-            "type": "Secret Base",
-            "description": "The heroes discover a secret base where a villain is planning an attack. They must infiltrate the base and stop the villain's plans."
-        },
-        {
-            "type": "Hostage Crisis",
-            "description": "A group of hostages is being held in a public building. The heroes must find a way to safely rescue the hostages."
-        },
-        {
-            "type": "Meteor Shower",
-            "description": "A meteor shower is causing widespread damage. The heroes must protect the city and find out if the meteors are natural or engineered."
-        },
-        {
-            "type": "Power Surge",
-            "description": "A power surge has caused a massive blackout. The heroes must restore power and find out what caused the surge."
-        },
-        {
-            "type": "Monster Attack",
-            "description": "A giant monster is attacking the city. The heroes must find a way to stop the monster and protect the civilians."
-        },
-        {
-            "type": "Fires",
-            "description": "A series of suspicious fires have broken out across the city. The heroes must assist the fire department and investigate the cause."
-        },
-        {
-            "type": "Police Chase",
-            "description": "A high-speed police chase is underway through the city streets. The heroes must assist in apprehending the fleeing suspects safely."
-        },
-        {
-            "type": "Building Collapse",
-            "description": "A building under construction has collapsed. The heroes must rescue trapped workers and ensure the site is safe."
-        },
-        {
-            "type": "Riots",
-            "description": "A peaceful protest has turned into a violent riot. The heroes must restore order and protect innocent bystanders."
-        },
-        {
-            "type": "Water Main Break",
-            "description": "A water main has burst, flooding streets and homes. The heroes must help evacuate residents and assist in repairs."
-        },
-        {
-            "type": "Bus Hijacking",
-            "description": "A city bus has been hijacked with passengers on board. The heroes must negotiate with the hijacker and ensure everyone's safety."
-        },
-        {
-            "type": "Gas Leak",
-            "description": "A gas leak in a residential area is causing a major hazard. The heroes must evacuate residents and assist in sealing the leak."
-        },
-        {
-            "type": "Subway Accident",
-            "description": "A subway train has derailed, trapping passengers underground. The heroes must assist in the rescue operation."
-        },
-        {
-            "type": "Cyber Attack",
-            "description": "A hacker group has launched a cyber attack on the city's infrastructure. The heroes must track down the hackers and stop them."
-        },
-        {
-            "type": "Animal Rampage",
-            "description": "Wild animals have escaped from a zoo and are running loose in the city. The heroes must safely capture the animals."
-        },
-        {
-            "type": "Bridge Collapse",
-            "description": "A major bridge has collapsed, cutting off a crucial route. The heroes must rescue people and help establish alternate routes."
-        },
-        {
-            "type": "Plane Crash",
-            "description": "A plane has crash-landed near the city. The heroes must assist in the rescue and investigate the cause of the crash."
-        },
-        {
-            "type": "Hospital Evacuation",
-            "description": "A fire has broken out in a hospital. The heroes must help evacuate patients and contain the fire."
-        },
-        {
-            "type": "Runaway Train",
-            "description": "A train is out of control and speeding towards a busy station. The heroes must find a way to stop the train before disaster strikes."
-        },
-        {
-            "type": "Chemical Fire",
-            "description": "A fire has broken out at a chemical plant. The heroes must help contain the fire and prevent hazardous material from spreading."
-        },
-        {
-            "type": "Supermarket Hold-Up",
-            "description": "A group of armed robbers have taken over a supermarket. The heroes must diffuse the situation and ensure the safety of shoppers."
-        },
-        {
-            "type": "Park Vandalism",
-            "description": "Vandals are causing destruction in a public park. The heroes must stop them and repair the damage."
-        },
-        {
-            "type": "Power Plant Meltdown",
-            "description": "A malfunction at a nuclear power plant is causing a potential meltdown. The heroes must help stabilize the plant and prevent a catastrophe."
-        },
-        {
-            "type": "Flooding",
-            "description": "Heavy rains have caused severe flooding in the city. The heroes must help with evacuations and provide aid to those affected."
-        },
-        {
-            "type": "School Fire",
-            "description": "A fire has broken out in a school. The heroes must help evacuate students and staff and contain the blaze."
-        },
-        {
-            "type": "Construction Accident",
-            "description": "An accident at a construction site has injured workers and caused structural instability. The heroes must assist in the rescue and stabilize the site."
-        },
-        {
-            "type": "Library Break-In",
-            "description": "Thieves have broken into the city's library to steal valuable artifacts. The heroes must stop the thieves and protect the library's treasures."
-        },
-        {
-            "type": "Bank Heist",
-            "description": "A bank is under siege by armed robbers. The heroes must stop the heist and protect the hostages."
-        },
-        {
-            "type": "Damaged Dam",
-            "description": "A dam has been damaged and is at risk of collapsing. The heroes must help reinforce the dam and evacuate nearby residents."
-        },
-        {
-            "type": "Vehicle Pile-Up",
-            "description": "A major vehicle pile-up has occurred on the highway. The heroes must assist in the rescue and clear the wreckage."
-        },
-        {
-            "type": "Sinking Ship",
-            "description": "A ship is sinking off the coast. The heroes must assist in the rescue of passengers and crew."
-        },
-        {
-            "type": "Missing Children",
-            "description": "Several children have gone missing from a park. The heroes must investigate and find the missing kids."
-        },
-        {
-            "type": "Hostile Drone",
-            "description": "A drone has been hacked and is causing havoc in the city. The heroes must track down the drone and disable it."
-        },
-        {
-            "type": "Factory Explosion",
-            "description": "An explosion has occurred at a factory, causing a fire and structural damage. The heroes must assist in the rescue and containment."
-        },
-        {
-            "type": "Traffic Jam",
-            "description": "A major traffic jam is causing chaos in the city. The heroes must help direct traffic and assist stranded motorists."
-        },
-        {
-            "type": "Street Racing",
-            "description": "Illegal street racing is causing danger on the roads. The heroes must stop the racers and ensure public safety."
-        },
-        {
-            "type": "Runaway Bus",
-            "description": "A bus has lost control and is speeding through the city. The heroes must find a way to stop the bus and ensure the safety of passengers."
-        },
-        {
-            "type": "School Hostage Situation",
-            "description": "Armed individuals have taken a school hostage. The heroes must negotiate and safely rescue the hostages."
-        },
-        {
-            "type": "Park Bomb Threat",
-            "description": "A bomb threat has been made against a public park. The heroes must find and defuse the bomb before it detonates."
-        },
-        {
-            "type": "Parade Attack",
-            "description": "A villain plans to attack a city parade. The heroes must protect the parade and apprehend the villain."
-        },
-        {
-            "type": "Power Plant Sabotage",
-            "description": "A villain has sabotaged a power plant, causing critical damage. The heroes must repair the plant and stop the villain."
-        },
-        {
-            "type": "Mall Robbery",
-            "description": "A robbery is in progress at a shopping mall. The heroes must stop the robbers and protect the shoppers."
-        },
-        {
-            "type": "Riot in Prison",
-            "description": "A riot has broken out in the city's prison. The heroes must help quell the riot and ensure the safety of guards and inmates."
-        },
-        {
-            "type": "Bridge Collapse",
-            "description": "A bridge has collapsed, trapping vehicles and people. The heroes must rescue the trapped individuals and ensure the area is safe."
-        },
-        {
-            "type": "Building Fire",
-            "description": "A fire has broken out in a residential building. The heroes must help evacuate residents and contain the blaze."
-        },
-        {
-            "type": "Flooded Suburb",
-            "description": "Heavy rains have caused flooding in a suburb. The heroes must assist with evacuations and provide aid to those affected."
-        },
-        {
-            "type": "Train Hijacking",
-            "description": "A passenger train has been hijacked. The heroes must board the train, subdue the hijackers, and ensure the safety of the passengers."
-        },
-        {
-            "type": "Chemical Leak",
-            "description": "A chemical plant has sprung a leak, releasing toxic fumes. The heroes must seal the leak and evacuate the surrounding area."
-        },
-        {
-            "type": "Park Vandalism",
-            "description": "A group of vandals is damaging a public park. The heroes must stop them and repair the damage."
-        },
-        {
-            "type": "Armed Robbery",
-            "description": "An armed robbery is taking place at a local convenience store. The heroes must stop the robbers and protect the store's employees and customers."
-        },
-        {
-            "type": "Hostage Situation at School",
-            "description": "A group of armed individuals has taken students and teachers hostage at a school. The heroes must negotiate with the hostage-takers and ensure everyone's safety."
-        },
-        {
-            "type": "Airport Security Breach",
-            "description": "A security breach at the airport has caused chaos. The heroes must restore order and find the perpetrators."
-        },
-        {
-            "type": "Forest Fire",
-            "description": "A wildfire is spreading through a forest near the city. The heroes must assist in firefighting efforts and evacuate any nearby residents."
-        },
-        {
-            "type": "Hostile Takeover",
-            "description": "A hostile takeover is in progress at a major corporation. The heroes must protect the employees and stop the takeover."
-        },
-        {
-            "type": "Collapsed Tunnel",
-            "description": "A tunnel has collapsed, trapping vehicles and people inside. The heroes must rescue the trapped individuals and ensure the tunnel is safe."
-        },
-        {
-            "type": "Protest Turned Violent",
-            "description": "A peaceful protest has turned violent. The heroes must restore order and protect innocent bystanders."
-        },
-        {
-            "type": "Rogue Drones",
-            "description": "A group of drones has gone rogue and is causing havoc in the city. The heroes must track down and disable the drones."
-        },
-        {
-            "type": "Bank Heist",
-            "description": "A bank is under siege by armed robbers. The heroes must stop the heist and protect the hostages."
-        },
-        {
-            "type": "Power Plant Explosion",
-            "description": "An explosion has occurred at a power plant, causing widespread power outages. The heroes must assist in repairs and ensure the plant is safe."
-        },
-        {
-            "type": "Bus Accident",
-            "description": "A city bus has been involved in a major accident. The heroes must assist with the rescue and ensure the safety of the passengers."
-        },
-        {
-            "type": "Earthquake Aftermath",
-            "description": "An earthquake has struck the city, causing widespread damage. The heroes must assist with rescue operations and provide aid to those affected."
-        },
-        {
-            "type": "Hijacked Plane",
-            "description": "A commercial plane has been hijacked. The heroes must find a way to safely resolve the situation and protect the passengers."
-        },
-        {
-            "type": "Tornado Touchdown",
-            "description": "A tornado has touched down in a residential area, causing destruction. The heroes must assist with rescue efforts and provide aid to those affected."
-        },
-        {
-            "type": "Runaway Truck",
-            "description": "A truck carrying hazardous materials is out of control and speeding through the city. The heroes must stop the truck and ensure the safety of the city."
-        },
-        {
-            "type": "Animal Control",
-            "description": "A group of wild animals has escaped from the zoo and is roaming the city. The heroes must safely capture the animals and return them to the zoo."
-        },
-        {
-            "type": "Gang Shootout",
-            "description": "A gang shootout is taking place in a residential neighborhood. The heroes must stop the violence and protect the residents."
-        },
-        {
-            "type": "Chemical Spill on Highway",
-            "description": "A truck carrying chemicals has overturned on the highway, causing a spill. The heroes must contain the spill and ensure the safety of motorists."
-        },
-        {
-            "type": "Fallen Power Lines",
-            "description": "A storm has caused power lines to fall, creating a dangerous situation. The heroes must assist in securing the area and restoring power."
-        },
-        {
-            "type": "Robbery in Progress",
-            "description": "A robbery is in progress at a jewelry store. The heroes must stop the robbers and protect the store's employees and customers."
-        },
-        {
-            "type": "Collapsed Building",
-            "description": "A building has collapsed, trapping people inside. The heroes must rescue the trapped individuals and ensure the area is safe."
-        },
-        {
-            "type": "Railway Sabotage",
-            "description": "Saboteurs have damaged railway tracks, causing a potential disaster. The heroes must repair the tracks and stop the saboteurs."
-        },
-        {
-            "type": "Hostage Crisis at Mall",
-            "description": "A group of armed individuals has taken hostages at a shopping mall. The heroes must negotiate with the hostage-takers and ensure everyone's safety."
-        },
-        {
-            "type": "Gas Station Explosion",
-            "description": "An explosion has occurred at a gas station, causing a fire. The heroes must assist in containing the blaze and ensuring the safety of the surrounding area."
-        },
-        {
-            "type": "Park Riot",
-            "description": "A riot has broken out in a city park. The heroes must restore order and protect innocent bystanders."
-        },
-        {
-            "type": "High-Speed Pursuit",
-            "description": "A high-speed pursuit is underway through the city streets. The heroes must assist in apprehending the fleeing suspects safely."
-        },
-        {
-            "type": "Industrial Accident",
-            "description": "An industrial accident has occurred at a factory, injuring workers and causing structural instability. The heroes must assist in the rescue and stabilize the site."
-        },
-        {
-            "type": "Prison Break",
-            "description": "A group of dangerous criminals has escaped from prison. The heroes must track them down and bring them back to justice."
-        },
-        {
-            "type": "Storm Surge",
-            "description": "A powerful storm has caused a surge, flooding coastal areas. The heroes must assist with evacuations and provide aid to those affected."
-        },
-        {
-            "type": "Toxic Gas Leak",
-            "description": "A gas leak in an industrial area is causing a major hazard. The heroes must evacuate residents and assist in sealing the leak."
-        },
-        {
-            "type": "Collapsed Mine",
-            "description": "A mine has collapsed, trapping workers underground. The heroes must assist with the rescue and ensure the safety of the site."
-        },
-        {
-            "type": "Concert Riot",
-            "description": "A riot has broken out at a concert. The heroes must restore order and protect the attendees."
-        },
-        {
-            "type": "Suspicious Package",
-            "description": "A suspicious package has been found in a public place. The heroes must investigate and ensure it poses no threat."
-        },
-        {
-            "type": "Construction Site Accident",
-            "description": "An accident at a construction site has injured workers and caused structural instability. The heroes must assist in the rescue and stabilize the site."
-        },
-        {
-            "type": "River Flooding",
-            "description": "Heavy rains have caused a river to flood, threatening nearby homes. The heroes must assist with evacuations and provide aid to those affected."
-        },
-        {
-            "type": "Park Hostage Situation",
-            "description": "Armed individuals have taken hostages in a public park. The heroes must negotiate and safely rescue the hostages."
-        },
-        {
-            "type": "Underground Fire",
-            "description": "A fire has broken out in an underground tunnel. The heroes must assist in the rescue and containment efforts."
-        },
-        {
-            "type": "Mall Fire",
-            "description": "A fire has broken out in a shopping mall. The heroes must help evacuate shoppers and contain the blaze."
-        },
-        {
-            "type": "Avalanche",
-            "description": "An avalanche has struck a mountain resort, trapping skiers and snowboarders. The heroes must assist with rescue efforts."
-        },
-        {
-            "type": "Hostage Situation at Theater",
-            "description": "Armed individuals have taken hostages at a theater. The heroes must negotiate with the hostage-takers and ensure everyone's safety."
-        },
-        {
-            "type": "Rogue Driver",
-            "description": "A driver is recklessly speeding through the city, endangering lives. The heroes must stop the driver and ensure public safety."
-        },
-        {
-            "type": "Chemical Explosion",
-            "description": "An explosion has occurred at a chemical plant, causing a fire and toxic fumes. The heroes must assist in the rescue and containment."
-        },
-        {
-            "type": "Bridge Sabotage",
-            "description": "Saboteurs have planted explosives on a major bridge. The heroes must defuse the bombs and catch the perpetrators."
-        },
-        {
-            "type": "Arson Attack",
-            "description": "A series of arson attacks are happening around the city. The heroes must catch the arsonist and prevent further fires."
-        },
-        {
-            "type": "Cyber Attack",
-            "description": "A hacker has taken control of the city's traffic lights, causing chaos. The heroes must find the hacker and restore order."
-        },
-        {
-            "type": "Factory Fire",
-            "description": "A fire has broken out in a factory. The heroes must help evacuate workers and contain the blaze."
-        },
-        {
-            "type": "Lost Child",
-            "description": "A child has gone missing in a crowded area. The heroes must find the child and reunite them with their parents."
-        },
-        {
-            "type": "Subway Collapse",
-            "description": "A section of the subway has collapsed, trapping commuters. The heroes must assist in the rescue and ensure the tunnels are safe."
-        },
-        {
-            "type": "Dam Failure",
-            "description": "A dam is about to burst, threatening to flood a town. The heroes must reinforce the dam and evacuate residents."
-        },
-        {
-            "type": "Warehouse Heist",
-            "description": "A gang is robbing a warehouse. The heroes must stop the heist and protect the goods."
-        },
-        {
-            "type": "Superhuman Fight Club",
-            "description": "An illegal fight club for superhumans has been discovered. The heroes must shut it down and rescue the participants."
-        },
-        {
-            "type": "Hostage Situation on Yacht",
-            "description": "A group of criminals has taken hostages on a luxury yacht. The heroes must negotiate and rescue the hostages safely."
-        },
-        {
-            "type": "Drug Overdose Epidemic",
-            "description": "An epidemic of drug overdoses is sweeping the city. The heroes must find the source and shut it down."
-        },
-        {
-            "type": "Bank Heist in Progress",
-            "description": "A bank is being robbed in broad daylight. The heroes must stop the robbers and protect the hostages."
-        },
-        {
-            "type": "Factory Explosion",
-            "description": "An explosion has occurred in a factory, causing a fire. The heroes must assist in the rescue and contain the blaze."
-        },
-        {
-            "type": "Suspicious Drone Activity",
-            "description": "Drones are being used for illegal activities. The heroes must track down the operators and stop them."
-        },
-        {
-            "type": "Hostage Situation at Hospital",
-            "description": "A group of armed individuals has taken hostages at a hospital. The heroes must ensure the safety of the patients and staff."
-        },
-        {
-            "type": "Flooded Subway",
-            "description": "Heavy rains have flooded the subway system. The heroes must assist in evacuations and ensure the safety of commuters."
-        },
-        {
-            "type": "Vehicle Pileup",
-            "description": "A major pileup has occurred on the highway. The heroes must assist in the rescue and ensure the safety of motorists."
-        },
-        {
-            "type": "Fire in Skyscraper",
-            "description": "A fire has broken out in a skyscraper. The heroes must help evacuate the building and contain the blaze."
-        },
-        {
-            "type": "Kidnapping at Park",
-            "description": "A child has been kidnapped from a park. The heroes must find the kidnapper and rescue the child."
-        },
-        {
-            "type": "Armed Robbery at Jewelry Store",
-            "description": "An armed robbery is in progress at a jewelry store. The heroes must stop the robbers and protect the store's employees and customers."
-        },
-        {
-            "type": "Chemical Spill in Factory",
-            "description": "A chemical spill in a factory is causing a major hazard. The heroes must contain the spill and ensure the safety of the workers."
-        },
-        {
-            "type": "Forest Creature Rampage",
-            "description": "A mythical creature has emerged from the forest and is causing chaos in the city. The heroes must stop the creature and protect the civilians."
-        },
-        {
-            "type": "Hostage Situation on Train",
-            "description": "A group of armed individuals has taken hostages on a train. The heroes must negotiate and ensure the safety of the passengers."
-        },
-        {
-            "type": "Missing Pet",
-            "description": "A beloved pet has gone missing in a busy neighborhood. The heroes must find the pet and reunite it with its owner."
-        },
-        {
-            "type": "Hacker Group",
-            "description": "A hacker group is targeting financial institutions. The heroes must find the hackers and stop their attacks."
-        },
-        {
-            "type": "Bridge Collapse",
-            "description": "A bridge has collapsed, trapping vehicles and people. The heroes must rescue the trapped individuals and ensure the area is safe."
-        },
-        {
-            "type": "High-Rise Evacuation",
-            "description": "An emergency in a high-rise building requires a rapid evacuation. The heroes must assist in the evacuation and ensure everyone's safety."
-        },
-        {
-            "type": "Rogue Scientist",
-            "description": "A scientist's experiment has gone wrong, causing havoc. The heroes must stop the experiment and contain the damage."
-        },
-        {
-            "type": "River Rescue",
-            "description": "A boat has capsized in the river, endangering lives. The heroes must rescue the people and ensure their safety."
-        },
-        {
-            "type": "Armed Bank Heist",
-            "description": "An armed bank heist is in progress. The heroes must stop the robbers and protect the hostages."
-        },
-        {
-            "type": "Suspicious Package at Airport",
-            "description": "A suspicious package has been found at the airport. The heroes must investigate and ensure it poses no threat."
-        },
-        {
-            "type": "High-Rise Fire",
-            "description": "A fire has broken out in a high-rise building. The heroes must help evacuate the residents and contain the blaze."
-        },
-        {
-            "type": "Superhuman Fight in Park",
-            "description": "A fight between superhumans has broken out in a park. The heroes must intervene and stop the fight before anyone gets hurt."
-        },
-        {
-            "type": "Riot at Concert",
-            "description": "A riot has broken out at a concert. The heroes must restore order and protect the attendees."
-        },
-        {
-            "type": "Gang War in Neighborhood",
-            "description": "A gang war has erupted in a residential neighborhood. The heroes must stop the violence and protect the residents."
-        },
-        {
-            "type": "Forest Fire",
-            "description": "A wildfire is spreading through a forest near the city. The heroes must assist in firefighting efforts and evacuate any nearby residents."
-        },
-        {
-            "type": "Train Hijacking",
-            "description": "A passenger train has been hijacked. The heroes must board the train, subdue the hijackers, and ensure the safety of the passengers."
-        },
-        {
-            "type": "Park Vandalism",
-            "description": "A group of vandals is damaging a public park. The heroes must stop them and repair the damage."
-        },
-        {
-            "type": "Chemical Leak in Residential Area",
-            "description": "A chemical leak is causing a hazard in a residential area. The heroes must contain the leak and ensure the safety of the residents."
-        },
-        {
-            "type": "Protest Turned Violent",
-            "description": "A peaceful protest has turned violent. The heroes must restore order and protect innocent bystanders."
-        },
-        {
-            "type": "Rogue Robots",
-            "description": "A group of robots has gone rogue and is causing chaos. The heroes must stop the robots and protect the civilians."
-        },
-        {
-            "type": "Zoo Escape",
-            "description": "Animals have escaped from the zoo and are roaming the city. The heroes must safely capture the animals and return them to the zoo."
-        },
-        {
-            "type": "Hostage Situation at Stadium",
-            "description": "A group of armed individuals has taken hostages at a stadium. The heroes must negotiate and ensure the safety of the hostages."
-        },
-        {
-            "type": "Collapsed Parking Garage",
-            "description": "A parking garage has collapsed, trapping vehicles and people. The heroes must rescue the trapped individuals and ensure the area is safe."
-        },
-        {
-            "type": "Toxic Gas Leak in Factory",
-            "description": "A gas leak in a factory is causing a major hazard. The heroes must evacuate workers and assist in sealing the leak."
-        },
-        {
-            "type": "Construction Accident",
-            "description": "An accident at a construction site has injured workers and caused structural instability. The heroes must assist in the rescue and stabilize the site."
-        },
-        {
-            "type": "Drug Lab Explosion",
-            "description": "An explosion has occurred in an illegal drug lab, causing a fire. The heroes must assist in the rescue and contain the blaze."
-        },
-        {
-            "type": "Arsonist on the Loose",
-            "description": "An arsonist is setting fires around the city. The heroes must catch the arsonist and prevent further fires."
-        },
-        {
-            "type": "Suspicious Activity at Docks",
-            "description": "Suspicious activity has been reported at the docks. The heroes must investigate and prevent any illegal activities."
-        },
-        {
-            "type": "Missing Persons in Forest",
-            "description": "Several people have gone missing in a forest. The heroes must find and rescue them."
-        }
-
+      {
+        "type": "Easy",
+        "description": "A small group of vandals is causing minor disruptions in the park. The heroes need to disperse them and restore order."
+      },
+      {
+        "type": "Easy",
+        "description": "A cat is stuck in a tree, causing distress to the owner. The heroes need to rescue the cat safely."
+      },
+      {
+        "type": "Easy",
+        "description": "A local event requires security to prevent any minor disruptions. The heroes should maintain peace and order."
+      },
+      {
+        "type": "Easy",
+        "description": "A peaceful protest needs protection from escalating violence. The heroes must ensure it remains peaceful."
+      },
+      {
+        "type": "Easy",
+        "description": "A lost child in a crowded area needs help finding their parents. The heroes must locate the child and reunite them with their family."
+      },
+      {
+        "type": "Easy",
+        "description": "A small kitchen fire in a residential area needs to be controlled before it spreads."
+      },
+      {
+        "type": "Easy",
+        "description": "A stray dog is causing traffic issues on a busy street. The heroes need to safely capture the dog and return it to its owner."
+      },
+      {
+        "type": "Easy",
+        "description": "A local charity event requires assistance with crowd control and security."
+      },
+      {
+        "type": "Easy",
+        "description": "A minor gas leak in a residential area has been reported. The heroes must contain it and evacuate residents if necessary."
+      },
+      {
+        "type": "Easy",
+        "description": "A small protest is blocking a road, causing traffic delays. The heroes need to negotiate with the protestors and clear the way."
+      },
+      {
+        "type": "Easy",
+        "description": "A child has lost their pet in the park. The heroes must help search for and reunite the pet with its owner."
+      },
+      {
+        "type": "Easy",
+        "description": "A group of teenagers is causing a disturbance in a local store. The heroes need to calm the situation and restore order."
+      },
+      {
+        "type": "Easy",
+        "description": "A minor car accident has occurred, causing a traffic jam. The heroes must assist in clearing the road and ensuring everyone's safety."
+      },
+      {
+        "type": "Easy",
+        "description": "A local festival needs extra security to manage the large crowd and prevent any incidents."
+      },
+      {
+        "type": "Easy",
+        "description": "A child's toy has gotten stuck on a roof. The heroes must retrieve it safely."
+      },
+      {
+        "type": "Easy",
+        "description": "A small group of protestors is causing a disturbance at a government building. The heroes must ensure the protest remains peaceful."
+      },
+      {
+        "type": "Easy",
+        "description": "A local charity event is understaffed and needs volunteers to help with organization and management."
+      },
+      {
+        "type": "Easy",
+        "description": "A cat is stuck in a tree, causing distress to the owner. The heroes need to rescue the cat safely."
+      },
+      {
+        "type": "Easy",
+        "description": "A minor roadblock is causing traffic delays. The heroes must assist in clearing the obstruction and directing traffic."
+      },
+      {
+        "type": "Easy",
+        "description": "A stray dog is causing traffic issues on a busy street. The heroes need to safely capture the dog and return it to its owner."
+      },
+      {
+        "type": "Easy",
+        "description": "A local farmer's market is experiencing larger-than-expected crowds. The heroes must help with crowd control and security."
+      },
+      {
+        "type": "Easy",
+        "description": "A small kitchen fire in a residential area needs to be controlled before it spreads."
+      },
+      {
+        "type": "Easy",
+        "description": "A child's toy has gotten stuck on a roof. The heroes must retrieve it safely."
+      },
+      {
+        "type": "Easy",
+        "description": "A minor car accident has occurred, causing a traffic jam. The heroes must assist in clearing the road and ensuring everyone's safety."
+      },
+      {
+        "type": "Easy",
+        "description": "A group of teenagers is causing a disturbance in a local store. The heroes need to calm the situation and restore order."
+      },
+      {
+        "type": "Easy",
+        "description": "A local event requires security to prevent any minor disruptions. The heroes should maintain peace and order."
+      },
+      {
+        "type": "Easy",
+        "description": "A small protest is blocking a road, causing traffic delays. The heroes need to negotiate with the protestors and clear the way."
+      },
+      {
+        "type": "Easy",
+        "description": "A lost child in a crowded area needs help finding their parents. The heroes must locate the child and reunite them with their family."
+      },
+      {
+        "type": "Easy",
+        "description": "A cat is stuck in a tree, causing distress to the owner. The heroes need to rescue the cat safely."
+      },
+      {
+        "type": "Easy",
+        "description": "A small group of vandals is causing minor disruptions in the park. The heroes need to disperse them and restore order."
+      },
+      {
+        "type": "Easy",
+        "description": "A stray dog is causing traffic issues on a busy street. The heroes need to safely capture the dog and return it to its owner."
+      },
+      {
+        "type": "Easy",
+        "description": "A peaceful protest needs protection from escalating violence. The heroes must ensure it remains peaceful."
+      },
+      {
+        "type": "Easy",
+        "description": "A minor gas leak in a residential area has been reported. The heroes must contain it and evacuate residents if necessary."
+      },
+      {
+        "type": "Easy",
+        "description": "A local charity event requires assistance with crowd control and security."
+      },
+      {
+        "type": "Easy",
+        "description": "A local farmer's market is experiencing larger-than-expected crowds. The heroes must help with crowd control and security."
+      },
+      {
+        "type": "Easy",
+        "description": "A child's toy has gotten stuck on a roof. The heroes must retrieve it safely."
+      },
+      {
+        "type": "Easy",
+        "description": "A group of teenagers is causing a disturbance in a local store. The heroes need to calm the situation and restore order."
+      },
+      {
+        "type": "Easy",
+        "description": "A minor car accident has occurred, causing a traffic jam. The heroes must assist in clearing the road and ensuring everyone's safety."
+      },
+      {
+        "type": "Easy",
+        "description": "A local charity event is understaffed and needs volunteers to help with organization and management."
+      },
+      {
+        "type": "Easy",
+        "description": "A small protest is blocking a road, causing traffic delays. The heroes need to negotiate with the protestors and clear the way."
+      },
+      {
+        "type": "Easy",
+        "description": "A small kitchen fire in a residential area needs to be controlled before it spreads."
+      },
+      {
+        "type": "Easy",
+        "description": "A lost child in a crowded area needs help finding their parents. The heroes must locate the child and reunite them with their family."
+      },
+      {
+        "type": "Easy",
+        "description": "A local event requires security to prevent any minor disruptions. The heroes should maintain peace and order."
+      },
+      {
+        "type": "Easy",
+        "description": "A small group of vandals is causing minor disruptions in the park. The heroes need to disperse them and restore order."
+      },
+      {
+        "type": "Easy",
+        "description": "A peaceful protest needs protection from escalating violence. The heroes must ensure it remains peaceful."
+      },
+      {
+        "type": "Easy",
+        "description": "A stray dog is causing traffic issues on a busy street. The heroes need to safely capture the dog and return it to its owner."
+      },
+      {
+        "type": "Easy",
+        "description": "A cat is stuck in a tree, causing distress to the owner. The heroes need to rescue the cat safely."
+      },
+      {
+        "type": "Medium",
+        "description": "A minor earthquake has caused some damage in a neighborhood. The heroes need to assist with rescue operations."
+      },
+      {
+        "type": "Medium",
+        "description": "A local bank is experiencing a robbery attempt. The heroes must intervene and prevent the robbers from escaping."
+      },
+      {
+        "type": "Medium",
+        "description": "An illegal street race is underway, endangering pedestrians. The heroes must stop the race and ensure public safety."
+      },
+      {
+        "type": "Medium",
+        "description": "A small group of hackers is attempting to breach the city's security systems. The heroes must stop them and protect vital information."
+      },
+      {
+        "type": "Medium",
+        "description": "A rogue AI has started to take control of household appliances in a neighborhood. The heroes need to shut down the AI before it causes harm."
+      },
+      {
+        "type": "Medium",
+        "description": "A group of burglars is targeting homes in a suburban area. The heroes need to apprehend them."
+      },
+      {
+        "type": "Medium",
+        "description": "A local festival is experiencing unexpected trouble with an aggressive crowd. The heroes must restore peace and prevent injuries."
+      },
+      {
+        "type": "Medium",
+        "description": "A suspicious package has been found at a busy transit station. The heroes must investigate and ensure public safety."
+      },
+      {
+        "type": "Medium",
+        "description": "A construction site has experienced a minor accident, trapping workers. The heroes need to assist with rescue efforts."
+      },
+      {
+        "type": "Medium",
+        "description": "A small protest has turned violent in front of a government building. The heroes must de-escalate the situation and ensure safety."
+      },
+      {
+        "type": "Medium",
+        "description": "A series of car thefts has been reported in a neighborhood. The heroes need to track down the culprits and recover the vehicles."
+      },
+      {
+        "type": "Medium",
+        "description": "A hacker group is attempting to disrupt the city's communication network. The heroes must stop them and secure the systems."
+      },
+      {
+        "type": "Medium",
+        "description": "A minor fire has broken out in a high-rise building. The heroes need to help evacuate residents and contain the blaze."
+      },
+      {
+        "type": "Medium",
+        "description": "A train has derailed, causing a massive wreck. The heroes need to rescue the passengers and prevent further damage."
+      },
+      {
+        "type": "Medium",
+        "description": "A rogue AI has taken control of a local factory's machinery. The heroes need to shut it down before it causes damage."
+      },
+      {
+        "type": "Medium",
+        "description": "A small cult is gathering followers for a dangerous ritual. The heroes must infiltrate and stop the ritual."
+      },
+      {
+        "type": "Medium",
+        "description": "A group of vandals is causing destruction in a public park. The heroes must stop them and repair the damage."
+      },
+      {
+        "type": "Medium",
+        "description": "A rogue AI is manipulating traffic signals, causing chaos on the roads. The heroes must stop it and restore order."
+      },
+      {
+        "type": "Medium",
+        "description": "A small-scale riot has broken out in a residential area. The heroes need to restore order and protect innocent bystanders."
+      },
+      {
+        "type": "Medium",
+        "description": "A chemical spill on a highway is causing a hazard. The heroes must contain the spill and ensure the safety of motorists."
+      },
+      {
+        "type": "Medium",
+        "description": "A group of protesters has blocked a major highway. The heroes must negotiate with them and clear the way."
+      },
+      {
+        "type": "Medium",
+        "description": "A rogue AI is manipulating traffic signals, causing chaos on the roads. The heroes must stop it and restore order."
+      },
+      {
+        "type": "Medium",
+        "description": "A series of power outages is affecting the city. The heroes must investigate the cause and restore power."
+      },
+      {
+        "type": "Medium",
+        "description": "A minor earthquake has caused some damage in a neighborhood. The heroes need to assist with rescue operations."
+      },
+      {
+        "type": "Medium",
+        "description": "A group of protesters has blocked a major highway. The heroes must negotiate with them and clear the way."
+      },
+      {
+        "type": "Medium",
+        "description": "A minor fire has broken out in a high-rise building. The heroes need to help evacuate residents and contain the blaze."
+      },
+      {
+        "type": "Medium",
+        "description": "A group of burglars is targeting homes in a suburban area. The heroes need to apprehend them."
+      },
+      {
+        "type": "Medium",
+        "description": "An illegal street race is underway, endangering pedestrians. The heroes must stop the race and ensure public safety."
+      },
+      {
+        "type": "Medium",
+        "description": "A small protest has turned violent in front of a government building. The heroes must de-escalate the situation and ensure safety."
+      },
+      {
+        "type": "Medium",
+        "description": "A hacker group is attempting to disrupt the city's communication network. The heroes must stop them and secure the systems."
+      },
+      {
+        "type": "Medium",
+        "description": "A series of car thefts has been reported in a neighborhood. The heroes need to track down the culprits and recover the vehicles."
+      },
+      {
+        "type": "Medium",
+        "description": "A local festival is experiencing unexpected trouble with an aggressive crowd. The heroes must restore peace and prevent injuries."
+      },
+      {
+        "type": "Medium",
+        "description": "A small group of hackers is attempting to breach the city's security systems. The heroes must stop them and protect vital information."
+      },
+      {
+        "type": "Medium",
+        "description": "A rogue AI has started to take control of household appliances in a neighborhood. The heroes need to shut down the AI before it causes harm."
+      },
+      {
+        "type": "Medium",
+        "description": "A local bank is experiencing a robbery attempt. The heroes must intervene and prevent the robbers from escaping."
+      },
+      {
+        "type": "Medium",
+        "description": "A suspicious package has been found at a busy transit station. The heroes must investigate and ensure public safety."
+      },
+      {
+        "type": "Medium",
+        "description": "A construction site has experienced a minor accident, trapping workers. The heroes need to assist with rescue efforts."
+      },
+      {
+        "type": "Medium",
+        "description": "A minor earthquake has caused some damage in a neighborhood. The heroes need to assist with rescue operations."
+      },
+      {
+        "type": "Medium",
+        "description": "A rogue AI has taken control of a local factory's machinery. The heroes need to shut it down before it causes damage."
+      },
+      {
+        "type": "Medium",
+        "description": "A small-scale riot has broken out in a residential area. The heroes need to restore order and protect innocent bystanders."
+      },
+      {
+        "type": "Medium",
+        "description": "A series of power outages is affecting the city. The heroes must investigate the cause and restore power."
+      },
+      {
+        "type": "Medium",
+        "description": "A small cult is gathering followers for a dangerous ritual. The heroes must infiltrate and stop the ritual."
+      },
+      {
+        "type": "Medium",
+        "description": "A chemical spill on a highway is causing a hazard. The heroes must contain the spill and ensure the safety of motorists."
+      },
+      {
+        "type": "Medium",
+        "description": "A rogue AI is manipulating traffic signals, causing chaos on the roads. The heroes must stop it and restore order."
+      },
+      {
+        "type": "Medium",
+        "description": "A series of car thefts has been reported in a neighborhood. The heroes need to track down the culprits and recover the vehicles."
+      },
+      {
+        "type": "Hard",
+        "description": "A chemical plant is experiencing a critical failure, causing potential hazards. The heroes must prevent a disaster."
+      },
+      {
+        "type": "Hard",
+        "description": "A violent gang war has erupted in a neighborhood. The heroes need to stop the violence and restore peace."
+      },
+      {
+        "type": "Hard",
+        "description": "A powerful supervillain is attacking the city center. The heroes must confront and stop them while minimizing damage."
+      },
+      {
+        "type": "Hard",
+        "description": "A train has been hijacked by armed criminals. The heroes must rescue passengers and regain control of the train."
+      },
+      {
+        "type": "Hard",
+        "description": "A series of cyber attacks are targeting the city's infrastructure. The heroes must track down the hackers and stop them."
+      },
+      {
+        "type": "Hard",
+        "description": "A notorious supervillain is wreaking havoc downtown, destroying buildings and endangering civilians. The heroes need to stop the villain and minimize collateral damage."
+      },
+      {
+        "type": "Hard",
+        "description": "A sudden earthquake has struck the city, causing widespread destruction. The heroes must assist in rescue operations, provide medical aid, and prevent further damage."
+      },
+      {
+        "type": "Hard",
+        "description": "A powerful superhuman is on a rampage through the city. The heroes need to stop them and prevent further destruction."
+      },
+      {
+        "type": "Hard",
+        "description": "A chemical spill at a nearby factory is threatening to contaminate the water supply. The heroes must contain the spill and clean up the area before it causes irreversible damage."
+      },
+      {
+        "type": "Hard",
+        "description": "A building has been taken over by armed criminals. The heroes must find a way to safely rescue the hostages."
+      },
+      {
+        "type": "Hard",
+        "description": "A rogue AI has taken control of critical infrastructure. The heroes must find a way to shut it down."
+      },
+      {
+        "type": "Hard",
+        "description": "A zombie virus has broken out in a small town. The heroes must contain the outbreak and find a cure."
+      },
+      {
+        "type": "Hard",
+        "description": "Rival gangs are causing chaos in the streets. The heroes need to intervene and restore order."
+      },
+      {
+        "type": "Hard",
+        "description": "A group of dangerous criminals has escaped from prison. The heroes must track them down and bring them back to justice."
+      },
+      {
+        "type": "Hard",
+        "description": "A portal to another dimension has opened in the park, and strange creatures are emerging from it. The heroes must close the portal and deal with the creatures."
+      },
+      {
+        "type": "Hard",
+        "description": "A notorious supervillain is wreaking havoc downtown, destroying buildings and endangering civilians. The heroes need to stop the villain and minimize collateral damage."
+      },
+      {
+        "type": "Hard",
+        "description": "A building has been taken over by armed criminals. The heroes must find a way to safely rescue the hostages."
+      },
+      {
+        "type": "Hard",
+        "description": "A notorious supervillain is wreaking havoc downtown, destroying buildings and endangering civilians. The heroes need to stop the villain and minimize collateral damage."
+      },
+      {
+        "type": "Hard",
+        "description": "A rogue AI has taken control of critical infrastructure. The heroes must find a way to shut it down."
+      },
+      {
+        "type": "Hard",
+        "description": "A rogue AI has taken control of critical infrastructure. The heroes must find a way to shut it down."
+      },
+      {
+        "type": "Hard",
+        "description": "A group of dangerous criminals has escaped from prison. The heroes must track them down and bring them back to justice."
+      },
+      {
+        "type": "Hard",
+        "description": "A notorious supervillain is wreaking havoc downtown, destroying buildings and endangering civilians. The heroes need to stop the villain and minimize collateral damage."
+      },
+      {
+        "type": "Hard",
+        "description": "A notorious supervillain is wreaking havoc downtown, destroying buildings and endangering civilians. The heroes need to stop the villain and minimize collateral damage."
+      },
+      {
+        "type": "Hard",
+        "description": "A chemical spill at a nearby factory is threatening to contaminate the water supply. The heroes must contain the spill and clean up the area before it causes irreversible damage."
+      },
+      {
+        "type": "Hard",
+        "description": "A building has been taken over by armed criminals. The heroes must find a way to safely rescue the hostages."
+      },
+      {
+        "type": "Hard",
+        "description": "A chemical spill at a nearby factory is threatening to contaminate the water supply. The heroes must contain the spill and clean up the area before it causes irreversible damage."
+      },
+      {
+        "type": "Hard",
+        "description": "A notorious supervillain is wreaking havoc downtown, destroying buildings and endangering civilians. The heroes need to stop the villain and minimize collateral damage."
+      },
+      {
+        "type": "Hard",
+        "description": "A group of dangerous criminals has escaped from prison. The heroes must track them down and bring them back to justice."
+      },
+      {
+        "type": "Hard",
+        "description": "A group of dangerous criminals has escaped from prison. The heroes must track them down and bring them back to justice."
+      },
+      {
+        "type": "Hard",
+        "description": "A rogue AI has taken control of critical infrastructure. The heroes must find a way to shut it down."
+      },
+      {
+        "type": "Hard",
+        "description": "A group of dangerous criminals has escaped from prison. The heroes must track them down and bring them back to justice."
+      },
+      {
+        "type": "Hard",
+        "description": "A group of dangerous criminals has escaped from prison. The heroes must track them down and bring them back to justice."
+      },
+      {
+        "type": "Hard",
+        "description": "A building has been taken over by armed criminals. The heroes must find a way to safely rescue the hostages."
+      },
+      {
+        "type": "Hard",
+        "description": "A building has been taken over by armed criminals. The heroes must find a way to safely rescue the hostages."
+      },
+      {
+        "type": "Hard",
+        "description": "A rogue AI has taken control of critical infrastructure. The heroes must find a way to shut it down."
+      },
+      {
+        "type": "Hard",
+        "description": "A rogue AI has taken control of critical infrastructure. The heroes must find a way to shut it down."
+      },
+      {
+        "type": "Hard",
+        "description": "A chemical spill at a nearby factory is threatening to contaminate the water supply. The heroes must contain the spill and clean up the area before it causes irreversible damage."
+      },
+      {
+        "type": "Hard",
+        "description": "A rogue AI has taken control of critical infrastructure. The heroes must find a way to shut it down."
+      },
+      {
+        "type": "Hard",
+        "description": "A group of dangerous criminals has escaped from prison. The heroes must track them down and bring them back to justice."
+      },
+      {
+        "type": "Hard",
+        "description": "A group of dangerous criminals has escaped from prison. The heroes must track them down and bring them back to justice."
+      },
+      {
+        "type": "Hard",
+        "description": "A group of dangerous criminals has escaped from prison. The heroes must track them down and bring them back to justice."
+      },
+      {
+        "type": "Hard",
+        "description": "A chemical spill at a nearby factory is threatening to contaminate the water supply. The heroes must contain the spill and clean up the area before it causes irreversible damage."
+      },
+      {
+        "type": "Heroic",
+        "description": "A massive alien invasion is targeting the entire city. The heroes must repel the invaders and protect civilians."
+      },
+      {
+        "type": "Heroic",
+        "description": "A supervillain is planning to detonate a nuclear device in the city. The heroes must locate and disarm the bomb."
+      },
+      {
+        "type": "Heroic",
+        "description": "A supervillain has launched a large-scale attack on the city, threatening mass destruction. The heroes must stop them."
+      },
+      {
+        "type": "Heroic",
+        "description": "A dark mage is using forbidden magic to summon demons. The heroes must stop the mage and send the demons back to their realm."
+      },
+      {
+        "type": "Heroic",
+        "description": "A terrorist group has acquired a nuclear weapon and is threatening to detonate it. The heroes must find and disarm the bomb."
+      },
+      {
+        "type": "Heroic",
+        "description": "A powerful villain has launched an all-out assault on the city. The heroes must defend the city and defeat the villain."
+      },
+      {
+        "type": "Heroic",
+        "description": "A powerful artifact has been stolen. The heroes must retrieve it before it is used for evil purposes."
+      },
+      {
+        "type": "Heroic",
+        "description": "A villain is using mind control to manipulate people. The heroes must find a way to stop the villain and free the victims."
+      },
+      {
+        "type": "Heroic",
+        "description": "A fleet of alien ships has appeared in the sky, and they are attacking key infrastructure points in the city. The heroes must repel the invaders and discover their motives."
+      },
+      {
+        "type": "Heroic",
+        "description": "A notorious supervillain is threatening to destroy the city. The heroes must stop them and save the day."
+      },
+      {
+        "type": "Heroic",
+        "description": "A massive earthquake has devastated the city. The heroes must assist in large-scale rescue operations and restore order."
+      },
+      {
+        "type": "Heroic",
+        "description": "A villain is attempting a hostile takeover of a major corporation. The heroes must stop the villain and protect the company's employees."
+      },
+      {
+        "type": "Heroic",
+        "description": "A villain is attempting a hostile takeover of a major corporation. The heroes must stop the villain and protect the company's employees."
+      },
+      {
+        "type": "Heroic",
+        "description": "A time traveler has come from the future with a warning. The heroes must help them prevent a future catastrophe."
+      },
+      {
+        "type": "Heroic",
+        "description": "A notorious supervillain is threatening to destroy the city. The heroes must stop them and save the day."
+      },
+      {
+        "type": "Heroic",
+        "description": "A dark mage is using forbidden magic to summon demons. The heroes must stop the mage and send the demons back to their realm."
+      },
+      {
+        "type": "Heroic",
+        "description": "A fleet of alien ships has appeared in the sky, and they are attacking key infrastructure points in the city. The heroes must repel the invaders and discover their motives."
+      },
+      {
+        "type": "Heroic",
+        "description": "A villain is using mind control to manipulate people. The heroes must find a way to stop the villain and free the victims."
+      },
+      {
+        "type": "Heroic",
+        "description": "A notorious supervillain is threatening to destroy the city. The heroes must stop them and save the day."
+      },
+      {
+        "type": "Heroic",
+        "description": "A villain is using mind control to manipulate people. The heroes must find a way to stop the villain and free the victims."
+      },
+      {
+        "type": "Heroic",
+        "description": "A powerful villain has launched an all-out assault on the city. The heroes must defend the city and defeat the villain."
+      },
+      {
+        "type": "Heroic",
+        "description": "A villain is attempting a hostile takeover of a major corporation. The heroes must stop the villain and protect the company's employees."
+      },
+      {
+        "type": "Heroic",
+        "description": "A dark mage is using forbidden magic to summon demons. The heroes must stop the mage and send the demons back to their realm."
+      },
+      {
+        "type": "Heroic",
+        "description": "A time traveler has come from the future with a warning. The heroes must help them prevent a future catastrophe."
+      },
+      {
+        "type": "Heroic",
+        "description": "A fleet of alien ships has appeared in the sky, and they are attacking key infrastructure points in the city. The heroes must repel the invaders and discover their motives."
+      },
+      {
+        "type": "Heroic",
+        "description": "A notorious supervillain is threatening to destroy the city. The heroes must stop them and save the day."
+      },
+      {
+        "type": "Heroic",
+        "description": "A powerful villain has launched an all-out assault on the city. The heroes must defend the city and defeat the villain."
+      },
+      {
+        "type": "Heroic",
+        "description": "A villain is using mind control to manipulate people. The heroes must find a way to stop the villain and free the victims."
+      },
+      {
+        "type": "Heroic",
+        "description": "A villain is using mind control to manipulate people. The heroes must find a way to stop the villain and free the victims."
+      },
+      {
+        "type": "Heroic",
+        "description": "A dark mage is using forbidden magic to summon demons. The heroes must stop the mage and send the demons back to their realm."
+      },
+      {
+        "type": "Heroic",
+        "description": "A powerful villain has launched an all-out assault on the city. The heroes must defend the city and defeat the villain."
+      },
+      {
+        "type": "Heroic",
+        "description": "A fleet of alien ships has appeared in the sky, and they are attacking key infrastructure points in the city. The heroes must repel the invaders and discover their motives."
+      },
+      {
+        "type": "Heroic",
+        "description": "A villain is attempting a hostile takeover of a major corporation. The heroes must stop the villain and protect the company's employees."
+      },
+      {
+        "type": "Heroic",
+        "description": "A powerful artifact has been stolen. The heroes must retrieve it before it is used for evil purposes."
+      },
+      {
+        "type": "Heroic",
+        "description": "A notorious supervillain is threatening to destroy the city. The heroes must stop them and save the day."
+      },
+      {
+        "type": "Heroic",
+        "description": "A villain is using mind control to manipulate people. The heroes must find a way to stop the villain and free the victims."
+      },
+      {
+        "type": "Heroic",
+        "description": "A fleet of alien ships has appeared in the sky, and they are attacking key infrastructure points in the city. The heroes must repel the invaders and discover their motives."
+      },
+      {
+        "type": "Heroic",
+        "description": "A villain is attempting a hostile takeover of a major corporation. The heroes must stop the villain and protect the company's employees."
+      },
+      {
+        "type": "Heroic",
+        "description": "A powerful villain has launched an all-out assault on the city. The heroes must defend the city and defeat the villain."
+      },
+      {
+        "type": "Heroic",
+        "description": "A powerful artifact has been stolen. The heroes must retrieve it before it is used for evil purposes."
+      },
+      {
+        "type": "Heroic",
+        "description": "A time traveler has come from the future with a warning. The heroes must help them prevent a future catastrophe."
+      },
+      {
+        "type": "Heroic",
+        "description": "A villain is attempting a hostile takeover of a major corporation. The heroes must stop the villain and protect the company's employees."
+      },
+      {
+        "type": "Heroic",
+        "description": "A time traveler has come from the future with a warning. The heroes must help them prevent a future catastrophe."
+      },
+      {
+        "type": "Heroic",
+        "description": "A powerful artifact has been stolen. The heroes must retrieve it before it is used for evil purposes."
+      },
+      {
+        "type": "Heroic",
+        "description": "A fleet of alien ships has appeared in the sky, and they are attacking key infrastructure points in the city. The heroes must repel the invaders and discover their motives."
+      },
+      {
+        "type": "Heroic",
+        "description": "A villain is using mind control to manipulate people. The heroes must find a way to stop the villain and free the victims."
+      },
+      {
+        "type": "Heroic",
+        "description": "A powerful artifact has been stolen. The heroes must retrieve it before it is used for evil purposes."
+      },
+      {
+        "type": "Heroic",
+        "description": "A villain is using mind control to manipulate people. The heroes must find a way to stop the villain and free the victims."
+      },
+      {
+        "type": "Heroic",
+        "description": "A fleet of alien ships has appeared in the sky, and they are attacking key infrastructure points in the city. The heroes must repel the invaders and discover their motives."
+      },
+      {
+        "type": "Heroic",
+        "description": "A villain is attempting a hostile takeover of a major corporation. The heroes must stop the villain and protect the company's employees."
+      }
     ]
-}
+  }
+  

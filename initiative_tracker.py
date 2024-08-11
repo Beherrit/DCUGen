@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 import json
 import random
 import settings  # Import the settings module
+import os
 
 class WrappingText(tk.Text):
     def __init__(self, parent, sort_callback, **kwargs):
@@ -221,7 +222,33 @@ def open_dice_roller():
 def roll_dice(dice_type):
     return random.randint(1, dice_type)
 
-def open_initiative_tracker():
+def sort_treeview():
+    tree_data = [(tree.set(child, "Initiative"), tree.set(child, "Awareness"), tree.set(child, "Agility"), child)
+                 for child in tree.get_children('')]
+    tree_data.sort(key=lambda t: (int(t[0]), int(t[1]), int(t[2])), reverse=True)
+
+    for index, (_, _, _, child) in enumerate(tree_data):
+        tree.move(child, '', index)
+
+def load_initiative_data():
+    if os.path.exists("initiative_data.json"):
+        with open("initiative_data.json", "r") as file:
+            data = json.load(file)
+        for row in data:
+            tree.insert("", "end", values=row)
+        sort_treeview()
+
+def save_initiative_data():
+    data = [tree.item(item)["values"] for item in tree.get_children()]
+    with open("initiative_data.json", "w") as file:
+        json.dump(data, file, indent=4)
+
+def get_character_data_from_selected_tab(notebook, characters):
+    current_tab = notebook.select()
+    tab_text = notebook.tab(current_tab, "text")
+    return characters.get(tab_text, None)
+
+def open_initiative_tracker(notebook, characters):
     conditions_dict = load_conditions()
     conditions = list(conditions_dict.keys())
 
@@ -237,6 +264,10 @@ def open_initiative_tracker():
     # Frame for input fields
     input_frame = tk.Frame(tracker_window)
     input_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nw")
+
+    # Add the "Upload Character from Tab" button
+    upload_character_button = tk.Button(input_frame, text="Upload Character from Tab", command=lambda: upload_character_from_tab(notebook, characters))
+    upload_character_button.grid(row=1, column=1, padx=5, pady=5)
 
     # Input fields for name, awareness, agility, initiative
     name_label = tk.Label(input_frame, text="Name:")
@@ -260,26 +291,32 @@ def open_initiative_tracker():
     initiative_entry.grid(row=0, column=7, padx=5, pady=5)
 
     add_button = tk.Button(input_frame, text="Add Person", command=lambda: add_person())
-    add_button.grid(row=0, column=8, padx=5, pady=5)
+    add_button.grid(row=1, column=2, padx=5, pady=5)
 
     condition_button = tk.Button(input_frame, text="Condition Lookup", command=open_condition_lookup)
-    condition_button.grid(row=0, column=9, padx=5, pady=5)
+    condition_button.grid(row=1, column=3, padx=5, pady=5)
 
     measurement_calcs_button = tk.Button(input_frame, text="Measurement Calcs", command=open_measurement_calcs)
-    measurement_calcs_button.grid(row=0, column=10, padx=5, pady=5)
+    measurement_calcs_button.grid(row=1, column=4, padx=5, pady=5)
 
     dice_roller_button = tk.Button(input_frame, text="Dice Roller", command=open_dice_roller)
-    dice_roller_button.grid(row=0, column=11, padx=5, pady=5)
+    dice_roller_button.grid(row=1, column=5, padx=5, pady=5)
 
     combat_calc_button = tk.Button(input_frame, text="Combat Calculator", command=open_combat_calculator)
-    combat_calc_button.grid(row=0, column=12, padx=5, pady=5)
+    combat_calc_button.grid(row=1, column=6, padx=5, pady=5)
 
     toggle_image_button = tk.Button(input_frame, text="Damage Degree Reference", command=open_image_window)
-    toggle_image_button.grid(row=0, column=13, padx=5, pady=5)
+    toggle_image_button.grid(row=1, column=7, padx=5, pady=5)
+
+    save_button = tk.Button(input_frame, text="Save Data", command=save_initiative_data)
+    save_button.grid(row=0, column=9, padx=5, pady=5)
+
+    load_button = tk.Button(input_frame, text="Load Data", command=load_initiative_data)
+    load_button.grid(row=0, column=10, padx=5, pady=5)
 
     # Frame for the treeview and scrollbar
     tree_frame = tk.Frame(tracker_window)
-    tree_frame.grid(row=1, column=0, columnspan=14, padx=20, pady=20, sticky="nsew")
+    tree_frame.grid(row=1, column=0, columnspan=16, padx=20, pady=20, sticky="nsew")
 
     # Adding scrollbar for the treeview
     tree_scroll_y = tk.Scrollbar(tree_frame, orient="vertical")
@@ -298,13 +335,13 @@ def open_initiative_tracker():
     tree.column("Name", width=100, stretch=True)
     
     tree.heading("Awareness", text="Awareness")
-    tree.column("Awareness", width=80, stretch=True)
+    tree.column("Awareness", width=40, stretch=True)
     
     tree.heading("Agility", text="Agility")
-    tree.column("Agility", width=80, stretch=True)
+    tree.column("Agility", width=40, stretch=True)
     
     tree.heading("Initiative", text="Initiative")
-    tree.column("Initiative", width=80, stretch=True)
+    tree.column("Initiative", width=40, stretch=True)
     
     tree.heading("Hold Action", text="Hold Action")
     tree.column("Hold Action", width=80, stretch=True)
@@ -366,14 +403,6 @@ def open_initiative_tracker():
         tree.insert("", "end", values=(name, awareness, agility, initiative, "False", "Normal", "Normal", "Normal", "", "", "False", ""))
         sort_treeview()
 
-    def sort_treeview():
-        tree_data = [(tree.set(child, "Initiative"), tree.set(child, "Awareness"), tree.set(child, "Agility"), child)
-                     for child in tree.get_children('')]
-        tree_data.sort(key=lambda t: (int(t[0]), int(t[1]), int(t[2])), reverse=True)
-
-        for index, (_, _, _, child) in enumerate(tree_data):
-            tree.move(child, '', index)
-
     def edit_cell(event):
         item = tree.selection()[0]
         column = tree.identify_column(event.x)
@@ -423,9 +452,20 @@ def open_initiative_tracker():
 
     tree.bind("<Double-1>", edit_cell)
 
-    tracker_window.mainloop()
+    def upload_character_from_tab(notebook, characters):
+        character_data = get_character_data_from_selected_tab(notebook, characters)
+        if character_data:
+            name = character_data.get("name", "")
+            awareness = character_data.get("stats", {}).get("Awareness", {}).get("value", 0)
+            agility = character_data.get("stats", {}).get("Agility", {}).get("value", 0)
+            initiative = character_data.get("initiative", 0)
+            tree.insert("", "end", values=(name, awareness, agility, initiative, "False", "Normal", "Normal", "Normal", "", "", "False", ""))
+            sort_treeview()
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    open_initiative_tracker()
-    root.mainloop()
+    # Load the initiative data when the tracker is opened
+    load_initiative_data()
+
+    # Save the initiative data when the tracker window is closed
+    tracker_window.protocol("WM_DELETE_WINDOW", lambda: [save_initiative_data(), tracker_window.destroy()])
+
+    tracker_window.mainloop()
