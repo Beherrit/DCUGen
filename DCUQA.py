@@ -1010,7 +1010,7 @@ def main():
     global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, hideout_details, logger
 
     root = tk.Tk()
-    root.title("Character Creation Version 4.1 Prod")
+    root.title("Character Creation Version 4.2 Prod")
     dark_mode = True
     include_powers = tk.BooleanVar(value=False)  # Set include_powers to False by default (unchecked)
 

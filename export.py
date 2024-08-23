@@ -250,7 +250,7 @@ def on_export_character_sheet_click(notebook, characters, text_widgets):
 
     # Calculate and write the total abilities and defenses cost to the Excel cell
     total_abilities_cost = sum(details['cost'] for details in character['stats'].values())  # Define total_abilities_cost
-    total_defense_cost = sum(details['bought_rank'] for details in character['defenses'].values())
+    total_defense_cost = sum(details['bought_rank'] for details in character['defenses'].values() if isinstance(details, dict))
     total_abilities_and_defenses_cost = total_abilities_cost + total_defense_cost
     sheet['M14'] = total_abilities_and_defenses_cost
     
