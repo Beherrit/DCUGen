@@ -1,142 +1,289 @@
 {
-    "Balanced": {
-        "with_powers": {
-            "stats": [0.2, 0.2],
-            "advantages": [0.2, 0.2],
-            "skills": [0.2, 0.2],
-            "defenses": [0.2, 0.2],
-            "powers": [0.2, 0.2],
-            "max_advantages": 10,
-            "max_powers": 8
-        },
-        "without_powers": {
-            "stats": [0.3, 0.3],
-            "advantages": [0.1, 0.1],
-            "skills": [0.3, 0.3],
-            "defenses": [0.3, 0.3],
-            "powers": [0, 0],
-            "max_advantages": 15,
-            "max_powers": 0
-        }
-    },
-    "Powerhouse": {
-        "with_powers": {
-            "stats": [0.135, 0.20],
-            "advantages": [0.045, 0.10],
-            "skills": [0.135, 0.20],
-            "defenses": [0.1, 0.2],
-            "powers": [0.45, 0.55],
-            "max_advantages": 10,
-            "max_powers": 8
-        },
-        "without_powers": {
-            "stats": [0.315, 0.40],
-            "advantages": [0.135, 0.20],
-            "skills": [0.315, 0.40],
-            "defenses": [0.1, 0.2],
-            "powers": [0, 0],
-            "max_advantages": 15,
-            "max_powers": 0
-        }
-    },
-    "JackOfAllTrades": {
-        "with_powers": {
-            "stats": [0.225, 0.30],
-            "advantages": [0.09, 0.15],
-            "skills": [0.27, 0.35],
-            "defenses": [0.1, 0.2],
-            "powers": [0.18, 0.25],
-            "max_advantages": 15,
-            "max_powers": 8
-        },
-        "without_powers": {
-            "stats": [0.315, 0.40],
-            "advantages": [0.18, 0.25],
-            "skills": [0.315, 0.40],
-            "defenses": [0.1, 0.2],
-            "powers": [0, 0],
+    "archetypes": {
+        "Default": {
+            "stat_percent": 20,
+            "advantage_percent": 20,
+            "skill_percent": 20,
+            "defense_percent": 20,
+            "power_percent": 20,
             "max_advantages": 20,
-            "max_powers": 0
+            "max_powers": 20,
+            "power_types": {
+                "Combat": {"Melee": 2, "Ranged": 2},
+                "Utility": 2,
+                "Support": 2,
+                "Movement": 2,
+                "Defensive": 2
+            }
+        },
+        "Warrior": {
+            "stat_percent": 20,
+            "advantage_percent": 20,
+            "skill_percent": 20,
+            "defense_percent": 20,
+            "power_percent": 20,
+            "max_advantages": 20,
+            "max_powers": 10,
+            "power_types": {
+                "Combat": {"Melee": 2, "Ranged": 2},
+                "Utility": 2,
+                "Support": 2,
+                "Movement": 2,
+                "Defensive": 2
+            }
+        },
+        "Mage": {
+            "stat_percent": 20,
+            "advantage_percent": 15,
+            "skill_percent": 10,
+            "defense_percent": 15,
+            "power_percent": 40,
+            "max_advantages": 10,
+            "max_powers": 10,
+            "power_types": {
+                "Combat": {"Melee": 0, "Ranged": 3},
+                "Utility": 2,
+                "Support": 1,
+                "Movement": 1,
+                "Defensive": 1
+            }
+        },
+        "Sniper": {
+            "stat_percent": 25,
+            "advantage_percent": 20,
+            "skill_percent": 15,
+            "defense_percent": 15,
+            "power_percent": 25,
+            "max_advantages": 10,
+            "max_powers": 10,
+            "power_types": {
+                "Combat": {"Melee": 0, "Ranged": 3},
+                "Utility": 1,
+                "Support": 0,
+                "Movement": 1,
+                "Defensive": 0
+            }
+        },
+        "Archer": {
+            "stat_percent": 20,
+            "advantage_percent": 25,
+            "skill_percent": 15,
+            "defense_percent": 20,
+            "power_percent": 20,
+            "max_advantages": 10,
+            "max_powers": 10,
+            "power_types": {
+                "Combat": {"Melee": 0, "Ranged": 4},
+                "Utility": 1,
+                "Support": 1,
+                "Movement": 1,
+                "Defensive": 1
+            }
+        },
+        "Gunner": {
+            "stat_percent": 25,
+            "advantage_percent": 20,
+            "skill_percent": 15,
+            "defense_percent": 20,
+            "power_percent": 20,
+            "max_advantages": 10,
+            "max_powers": 10,
+            "power_types": {
+                "Combat": {"Melee": 0, "Ranged": 4},
+                "Utility": 1,
+                "Support": 0,
+                "Movement": 1,
+                "Defensive": 1
+            }
+        },
+        "Scout": {
+            "stat_percent": 20,
+            "advantage_percent": 20,
+            "skill_percent": 20,
+            "defense_percent": 20,
+            "power_percent": 20,
+            "max_advantages": 10,
+            "max_powers": 10,
+            "power_types": {
+                "Combat": {"Melee": 2, "Ranged": 2},
+                "Utility": 2,
+                "Support": 0,
+                "Movement": 2,
+                "Defensive": 1
+            }
+        },
+        "Healer": {
+            "stat_percent": 15,
+            "advantage_percent": 20,
+            "skill_percent": 10,
+            "defense_percent": 15,
+            "power_percent": 40,
+            "max_advantages": 10,
+            "max_powers": 10,
+            "power_types": {
+                "Combat": {"Melee": 0, "Ranged": 0},
+                "Utility": 4,
+                "Support": 4,
+                "Movement": 1,
+                "Defensive": 1
+            }
+        },
+        "Buffer": {
+            "stat_percent": 15,
+            "advantage_percent": 20,
+            "skill_percent": 10,
+            "defense_percent": 15,
+            "power_percent": 40,
+            "max_advantages": 10,
+            "max_powers": 10,
+            "power_types": {
+                "Combat": {"Melee": 0, "Ranged": 0},
+                "Utility": 2,
+                "Support": 3,
+                "Movement": 1,
+                "Defensive": 1
+            }
+        },
+        "Defender": {
+            "stat_percent": 25,
+            "advantage_percent": 20,
+            "skill_percent": 10,
+            "defense_percent": 30,
+            "power_percent": 15,
+            "max_advantages": 10,
+            "max_powers": 10,
+            "power_types": {
+                "Combat": {"Melee": 2, "Ranged": 0},
+                "Utility": 1,
+                "Support": 1,
+                "Movement": 1,
+                "Defensive": 2
+            }
+        },
+        "Tactician": {
+            "stat_percent": 20,
+            "advantage_percent": 25,
+            "skill_percent": 15,
+            "defense_percent": 20,
+            "power_percent": 20,
+            "max_advantages": 10,
+            "max_powers": 10,
+            "power_types": {
+                "Combat": {"Melee": 0, "Ranged": 3},
+                "Utility": 2,
+                "Support": 1,
+                "Movement": 1,
+                "Defensive": 1
+            }
+        },
+        "Rogue": {
+            "stat_percent": 25,
+            "advantage_percent": 20,
+            "skill_percent": 20,
+            "defense_percent": 20,
+            "power_percent": 15,
+            "max_advantages": 10,
+            "max_powers": 10,
+            "power_types": {
+                "Combat": {"Melee": 1, "Ranged": 2},
+                "Utility": 1,
+                "Support": 0,
+                "Movement": 1,
+                "Defensive": 1
+            }
+        },
+        "Paladin": {
+            "stat_percent": 25,
+            "advantage_percent": 20,
+            "skill_percent": 10,
+            "defense_percent": 25,
+            "power_percent": 20,
+            "max_advantages": 10,
+            "max_powers": 10,
+            "power_types": {
+                "Combat": {"Melee": 2, "Ranged": 0},
+                "Utility": 1,
+                "Support": 1,
+                "Movement": 1,
+                "Defensive": 3
+            }
+        },
+        "Berserker": {
+            "stat_percent": 35,
+            "advantage_percent": 15,
+            "skill_percent": 10,
+            "defense_percent": 25,
+            "power_percent": 15,
+            "max_advantages": 10,
+            "max_powers": 10,
+            "power_types": {
+                "Combat": {"Melee": 3, "Ranged": 0},
+                "Utility": 1,
+                "Support": 0,
+                "Movement": 1,
+                "Defensive": 1
+            }
+        },
+        "Tank": {
+            "stat_percent": 30,
+            "advantage_percent": 20,
+            "skill_percent": 10,
+            "defense_percent": 30,
+            "power_percent": 10,
+            "max_advantages": 10,
+            "max_powers": 10,
+            "power_types": {
+                "Combat": {"Melee": 3, "Ranged": 0},
+                "Utility": 1,
+                "Support": 0,
+                "Movement": 0,
+                "Defensive": 3
+            }
+        },
+        "Monk": {
+            "stat_percent": 30,
+            "advantage_percent": 20,
+            "skill_percent": 20,
+            "defense_percent": 20,
+            "power_percent": 10,
+            "max_advantages": 10,
+            "max_powers": 10,
+            "power_types": {
+                "Combat": {"Melee": 4, "Ranged": 0},
+                "Utility": 1,
+                "Support": 1,
+                "Movement": 1,
+                "Defensive": 1
+            }
+        },
+        "Barbarian": {
+            "stat_percent": 35,
+            "advantage_percent": 15,
+            "skill_percent": 10,
+            "defense_percent": 25,
+            "power_percent": 15,
+            "max_advantages": 10,
+            "max_powers": 10,
+            "power_types": {
+                "Combat": {"Melee": 3, "Ranged": 0},
+                "Utility": 0,
+                "Support": 0,
+                "Movement": 1,
+                "Defensive": 1
+            }
         }
     },
-    "Tactician": {
-        "with_powers": {
-            "stats": [0.18, 0.25],
-            "advantages": [0.135, 0.20],
-            "skills": [0.36, 0.45],
-            "defenses": [0.1, 0.2],
-            "powers": [0.09, 0.15],
-            "max_advantages": 10,
-            "max_powers": 8
-        },
-        "without_powers": {
-            "stats": [0.27, 0.35],
-            "advantages": [0.225, 0.30],
-            "skills": [0.405, 0.50],
-            "defenses": [0.1, 0.2],
-            "powers": [0, 0],
-            "max_advantages": 15,
-            "max_powers": 0
-        }
-    },
-    "Tank": {
-        "with_powers": {
-            "stats": [0.36, 0.45],
-            "advantages": [0.09, 0.15],
-            "skills": [0.09, 0.15],
-            "defenses": [0.1, 0.2],
-            "powers": [0.225, 0.30],
-            "max_advantages": 10,
-            "max_powers": 8
-        },
-        "without_powers": {
-            "stats": [0.405, 0.50],
-            "advantages": [0.135, 0.20],
-            "skills": [0.135, 0.20],
-            "defenses": [0.1, 0.2],
-            "powers": [0, 0],
-            "max_advantages": 15,
-            "max_powers": 0
-        }
-    },
-    "GlassCannon": {
-        "with_powers": {
-            "stats": [0.09, 0.15],
-            "advantages": [0.045, 0.10],
-            "skills": [0.135, 0.20],
-            "defenses": [0.1, 0.2],
-            "powers": [0.495, 0.60],
-            "max_advantages": 10,
-            "max_powers": 8
-        },
-        "without_powers": {
-            "stats": [0.18, 0.25],
-            "advantages": [0.09, 0.15],
-            "skills": [0.27, 0.35],
-            "defenses": [0.1, 0.2],
-            "powers": [0, 0],
-            "max_advantages": 15,
-            "max_powers": 0
-        }
-    },
-    "Strategist": {
-        "with_powers": {
-            "stats": [0.18, 0.25],
-            "advantages": [0.18, 0.25],
-            "skills": [0.315, 0.40],
-            "defenses": [0.1, 0.2],
-            "powers": [0.135, 0.20],
-            "max_advantages": 10,
-            "max_powers": 8
-        },
-        "without_powers": {
-            "stats": [0.225, 0.30],
-            "advantages": [0.27, 0.35],
-            "skills": [0.36, 0.45],
-            "defenses": [0.1, 0.2],
-            "powers": [0, 0],
-            "max_advantages": 15,
-            "max_powers": 0
-        }
+    "teams": {
+        "Ranged": ["Sniper", "Archer", "Gunner", "Scout"],
+        "Support": ["Healer", "Buffer", "Defender", "Tactician"],
+        "Balanced": ["Warrior", "Mage", "Rogue", "Paladin"],
+        "Bruisers": ["Berserker", "Tank", "Monk", "Barbarian"],
+        "Stealth": ["Rogue", "Scout", "Assassin", "Spy"],
+        "Magic-Heavy": ["Mage", "Sorcerer", "Warlock", "Healer"],
+        "Speedsters": ["Scout", "Archer", "Monk", "Assassin"],
+        "Defense-Heavy": ["Defender", "Tank", "Paladin", "Guardian"],
+        "Offensive": ["Berserker", "Gunner", "Warrior", "Sniper"],
+        "Mixed Magic": ["Mage", "Buffer", "Warlock", "Paladin"],
+        "Tactical": ["Tactician", "Sniper", "Rogue", "Mage"]
     }
 }

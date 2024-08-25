@@ -3,6 +3,7 @@ import sys
 import json
 import logging
 import random
+import system
 import pandas as pd
 import tkinter as tk
 from tkinter import messagebox, ttk
@@ -23,6 +24,7 @@ gm_cheat_sheet_app = None
 from tooltip import ToolTip
 from complication import *
 from encounters import *
+from character_filter import *
 
 # Set up logging
 def get_log_file_path():
@@ -135,14 +137,32 @@ def calculate_totals(character):
     total_cost = attribute_total_cost + advantage_total_cost + skill_total_cost + power_total_cost + defense_total_cost
     return attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, total_cost
 
-def allocate_points(power_level, stat_percent, advantage_percent, skill_percent, defense_percent, power_percent):
+def allocate_points(power_level, stat_percent, advantage_percent, skill_percent, defense_percent, power_percent, max_advantages, max_powers):
     total_points = power_level * POWER_POINTS_PER_LEVEL
 
-    stat_points = int(total_points * (stat_percent / 100))
-    advantage_points = int(total_points * (advantage_percent / 100))
-    skill_points = int(total_points * (skill_percent / 100))
-    defense_points = int(total_points * (defense_percent / 100))
-    power_points = int(total_points * (power_percent / 100))
+    # Initial allocation with rounding
+    stat_points = round(total_points * (stat_percent / 100))
+    advantage_points = round(total_points * (advantage_percent / 100))
+    skill_points = round(total_points * (skill_percent / 100))
+    defense_points = round(total_points * (defense_percent / 100))
+    power_points = round(total_points * (power_percent / 100))
+
+    allocated_points = stat_points + advantage_points + skill_points + defense_points + power_points
+    remaining_points = total_points - allocated_points
+
+    # Distribute remaining points proportionally
+    while remaining_points > 0:
+        if stat_points < total_points * (stat_percent / 100):
+            stat_points += 1
+        elif advantage_points < total_points * (advantage_percent / 100):
+            advantage_points += 1
+        elif skill_points < total_points * (skill_percent / 100):
+            skill_points += 1
+        elif defense_points < total_points * (defense_percent / 100):
+            defense_points += 1
+        elif power_points < total_points * (power_percent / 100):
+            power_points += 1
+        remaining_points -= 1
 
     return stat_points, advantage_points, skill_points, defense_points, power_points
 
@@ -526,186 +546,6 @@ def update_defenses(character, stats):
                             character['defenses'][tag]['total_rank'] = character['defenses'][tag]['stat_bonus'] + character['defenses'][tag]['bought_rank']
     return character
 
-def open_character_filters_window():
-    def on_generate_character_filters():
-        try:
-            power_level = int(pl_entry.get())
-            if power_level < 1 or power_level > 20:
-                raise ValueError
-
-            include_powers_value = not exclude_powers.get()
-            villain_value = villain_var.get()
-            stat_percent = float(stat_percent_entry.get())
-            advantage_percent = float(advantage_percent_entry.get())
-            skill_percent = float(skill_percent_entry.get())
-            defense_percent = float(defense_percent_entry.get())
-            power_percent = float(power_percent_entry.get())
-            max_advantages = int(max_advantages_entry.get())
-            max_powers = int(max_powers_entry.get())
-
-            selected_power_types = []
-            if include_powers_value:
-                for power_type, power_range, entry in power_type_entries:
-                    selected_power_types.append((power_type, power_range, int(entry.get())))
-
-            logger.debug(f"Selected Power Types: {selected_power_types}")
-
-            # Generate character with the villain flag
-            character = generate_character(
-                power_level,
-                include_powers_value,
-                stat_percent,
-                advantage_percent,
-                skill_percent,
-                defense_percent,
-                power_percent,
-                max_advantages,
-                max_powers,
-                selected_power_types,
-                villain=villain_value  # Pass the villain flag
-            )
-
-            # Create a new tab with the character's name
-            character_name = character.get('name', 'Unnamed Character')
-            new_tab = ttk.Frame(notebook)
-            notebook.add(new_tab, text=character_name)
-            
-            # Create a new text widget in the new tab
-            new_character_summary_text = tk.Text(new_tab, height=15, width=50)
-            new_character_summary_text.pack(expand=True, fill='both')
-            new_character_summary_text.tag_configure("bold", font=("Helvetica", 12, "bold", "underline"))
-            new_character_summary_text.tag_configure("bold_no_underline", font=("Helvetica", 10, "bold"))
-            new_character_summary_text.tag_configure("normal_format", font=("Helvetica", 10))
-            
-            # Display the character information in the new text widget
-            pretty_print_character(character, new_character_summary_text)
-            text_widgets[new_tab] = new_character_summary_text
-            characters[character_name] = character  # Store the character in the dictionary
-            # Switch to the new tab
-            notebook.select(new_tab)
-            colors = dark_mode_colors if dark_mode else light_mode_colors
-            apply_color_scheme_to_tab(new_tab, colors)
-
-        except ValueError:
-            messagebox.showerror("Invalid Input", "Please ensure all inputs are valid.")
-            return
-
-    def generate_random_percentages():
-        stat_percent_entry.delete(0, 'end')
-        advantage_percent_entry.delete(0, 'end')
-        skill_percent_entry.delete(0, 'end')
-        defense_percent_entry.delete(0, 'end')
-        power_percent_entry.delete(0, 'end')
-
-        percentages = [random.uniform(0, 100) for _ in range(5)]
-        total = sum(percentages)
-        normalized_percentages = [round(p / total * 100, 2) for p in percentages]
-
-        stat_percent_entry.insert(0, normalized_percentages[0])
-        advantage_percent_entry.insert(0, normalized_percentages[1])
-        skill_percent_entry.insert(0, normalized_percentages[2])
-        defense_percent_entry.insert(0, normalized_percentages[3])
-        power_percent_entry.insert(0, normalized_percentages[4])
-
-        max_advantages_entry.delete(0, 'end')
-        max_powers_entry.delete(0, 'end')
-
-        max_advantages_entry.insert(0, random.randint(0, 15))
-        max_powers_entry.insert(0, random.randint(0, 8))
-
-    filters_window = tk.Toplevel(root)
-    filters_window.title("Generate Character Filters")
-
-    pl_label = ttk.Label(filters_window, text="Power Level:")
-    pl_label.grid(row=0, column=0, padx=5, pady=5)
-    pl_entry = ttk.Entry(filters_window)
-    pl_entry.grid(row=0, column=1, padx=5, pady=5)
-    pl_entry.insert(0, "10")  # Default power level
-
-    exclude_powers = tk.BooleanVar(value=False)  # Default include powers to True (exclude_powers to False)
-    exclude_powers_button = ttk.Checkbutton(filters_window, text="Exclude Powers", variable=exclude_powers)
-    exclude_powers_button.grid(row=1, column=0, padx=5, pady=5, columnspan=2)
-
-    # Add the villain checkbox
-    villain_var = tk.BooleanVar(value=False)
-    villain_checkbox = ttk.Checkbutton(filters_window, text="Villain", variable=villain_var)
-    villain_checkbox.grid(row=1, column=1, padx=5, pady=5, columnspan=2)
-
-
-    stat_percent_label = ttk.Label(filters_window, text="Stats Percent:")
-    stat_percent_label.grid(row=2, column=0, padx=5, pady=5)
-    stat_percent_entry = ttk.Entry(filters_window)
-    stat_percent_entry.grid(row=2, column=1, padx=5, pady=5)
-    stat_percent_entry.insert(0, "20")  # Default stats percent
-
-    advantage_percent_label = ttk.Label(filters_window, text="Advantages Percent:")
-    advantage_percent_label.grid(row=3, column=0, padx=5, pady=5)
-    advantage_percent_entry = ttk.Entry(filters_window)
-    advantage_percent_entry.grid(row=3, column=1, padx=5, pady=5)
-    advantage_percent_entry.insert(0, "20")  # Default advantages percent
-
-    skill_percent_label = ttk.Label(filters_window, text="Skills Percent:")
-    skill_percent_label.grid(row=4, column=0, padx=5, pady=5)
-    skill_percent_entry = ttk.Entry(filters_window)
-    skill_percent_entry.grid(row=4, column=1, padx=5, pady=5)
-    skill_percent_entry.insert(0, "20")  # Default skills percent
-
-    defense_percent_label = ttk.Label(filters_window, text="Defenses Percent:")
-    defense_percent_label.grid(row=5, column=0, padx=5, pady=5)
-    defense_percent_entry = ttk.Entry(filters_window)
-    defense_percent_entry.grid(row=5, column=1, padx=5, pady=5)
-    defense_percent_entry.insert(0, "20")  # Default defenses percent
-
-    power_percent_label = ttk.Label(filters_window, text="Powers Percent:")
-    power_percent_label.grid(row=6, column=0, padx=5, pady=5)
-    power_percent_entry = ttk.Entry(filters_window)
-    power_percent_entry.grid(row=6, column=1, padx=5, pady=5)
-    power_percent_entry.insert(0, "20")  # Default powers percent
-
-    max_advantages_label = ttk.Label(filters_window, text="Max Advantages:")
-    max_advantages_label.grid(row=7, column=0, padx=5, pady=5)
-    max_advantages_entry = ttk.Entry(filters_window)
-    max_advantages_entry.grid(row=7, column=1, padx=5, pady=5)
-    max_advantages_entry.insert(0, "20")  # Default max advantages
-
-    max_powers_label = ttk.Label(filters_window, text="Max Powers:")
-    max_powers_label.grid(row=8, column=0, padx=5, pady=5)
-    max_powers_entry = ttk.Entry(filters_window)
-    max_powers_entry.grid(row=8, column=1, padx=5, pady=5)
-    max_powers_entry.insert(0, "20")  # Default max powers
-
-    # Add power type options
-    power_type_frame = ttk.LabelFrame(filters_window, text="Power Types")
-    power_type_frame.grid(row=9, column=0, columnspan=2, padx=5, pady=5)
-
-    power_type_entries = []
-    power_types = [
-        ("Combat", "Melee"),
-        ("Combat", "Ranged"),
-        ("Utility", None),
-        ("Support", None),
-        ("Movement", None),
-        ("Defensive", None)
-    ]
-
-    for power_type, power_range in power_types:
-        frame = ttk.Frame(power_type_frame)
-        frame.pack(fill="x", padx=5, pady=2)
-
-        label = ttk.Label(frame, text=f"{power_type} ({power_range if power_range else 'Any'})")
-        label.pack(side="left")
-
-        entry = ttk.Entry(frame)
-        entry.pack(side="right")
-        entry.insert(0, "1")  # Default value for power types
-        power_type_entries.append((power_type, power_range, entry))
-
-    generate_character_button = ttk.Button(filters_window, text="Generate Character Now", command=on_generate_character_filters)
-    generate_character_button.grid(row=10, column=0, columnspan=2, padx=5, pady=5)
-
-    random_percent_button = ttk.Button(filters_window, text="Random Percentages", command=generate_random_percentages)
-    random_percent_button.grid(row=11, column=0, columnspan=2, padx=5, pady=5)
-
 def pretty_print_character(character, text_widget):
     description = character.get("description", "No description available")
     text_widget.insert("end", "Character Creation Summary\n", "bold")
@@ -880,8 +720,18 @@ def generate_character(power_level, include_powers, stat_percent, advantage_perc
     for attempt in range(max_retries):
         try:
             logger.debug(f"Starting character generation attempt {attempt + 1} with Power Level: {power_level}")
-            stat_points, advantage_points, skill_points, defense_points, power_points = allocate_points(power_level, stat_percent, advantage_percent, skill_percent, defense_percent, power_percent)
 
+                        # Allocate initial points with constraints and redistribution
+            stat_points, advantage_points, skill_points, defense_points, power_points = allocate_points(
+                power_level, 
+                stat_percent, 
+                advantage_percent, 
+                skill_percent, 
+                defense_percent, 
+                power_percent,
+                max_advantages, 
+                max_powers
+            )
             random.seed()
             random_theme = generate_random_theme() if include_powers else "Mundane"
 
@@ -1009,8 +859,12 @@ def generate_character(power_level, include_powers, stat_percent, advantage_perc
 def main():
     global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, hideout_details, logger
 
+    # Initialize system optimizations
+    log_file_path = get_log_file_path()
+    system.initialize_system(log_file_path)
+
     root = tk.Tk()
-    root.title("Character Creation Version 4.2 Prod")
+    root.title("Character Creation Version 4.3 Prod")
     dark_mode = True
     include_powers = tk.BooleanVar(value=False)  # Set include_powers to False by default (unchecked)
 
@@ -1097,9 +951,15 @@ def main():
     char_frame = CollapsibleSection(left_frame, "Character Management (Click to open/close)", start_collapsed=False)
     char_frame.pack(fill="x", pady=5)
 
-    generate_character_filters_button = ttk.Button(char_frame.body_frame, text="Generate Character Filters", command=open_character_filters_window, style='Character.TButton')
+    generate_character_filters_button = ttk.Button(
+        char_frame.body_frame, 
+        text="Generate Character Filters", 
+        command=lambda: open_character_filters_window(root, notebook, text_widgets, characters, dark_mode, logger), 
+        style='Character.TButton'
+    )
     char_frame.add_widget(generate_character_filters_button)
     ToolTip(generate_character_filters_button, "Open a window to set filters and generate a character.")
+
 
     export_character_sheet_button = ttk.Button(char_frame.body_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click(notebook, characters, text_widgets), style='Character.TButton')
     char_frame.add_widget(export_character_sheet_button)
