@@ -2,7 +2,7 @@ import os
 import random
 import json
 import tkinter as tk
-from tkinter import messagebox, filedialog, ttk
+from tkinter import messagebox, filedialog, ttk, simpledialog
 
 def load_gadgets():
     with open('./json/gadget_data.json', 'r', encoding='utf-8') as json_file:
@@ -86,18 +86,21 @@ def save_to_txt(items, filename):
                 file.write(f"- Cost: {item['cost']}, Rank: {item['rank']}, Total Cost: {item['total_cost']}\n")
             file.write("\n")
 
-def on_generate_equipment_click(equipment_points_entry, notebook, text_widgets):
-    points = int(equipment_points_entry.get())
-    gadgets = load_gadgets()
-    items, total_cost = random_gadget_generator(points, gadgets)
+def on_generate_equipment_click(notebook, text_widgets):
+    equipment_points = simpledialog.askinteger("Equipment Points", "How many Equipment Points?", minvalue=1)
+    
+    if equipment_points is not None:
+        gadgets = load_gadgets()
+        items, total_cost = random_gadget_generator(equipment_points, gadgets)
 
-    new_tab = ttk.Frame(notebook)
-    notebook.add(new_tab, text=f"Equipment")
-    equipment_text = tk.Text(new_tab, height=15, width=50)
-    equipment_text.pack(expand=True, fill='both')
-    text_widgets[new_tab] = equipment_text
+        new_tab = ttk.Frame(notebook)
+        notebook.add(new_tab, text=f"Equipment")
+        equipment_text = tk.Text(new_tab, height=15, width=50)
+        equipment_text.pack(expand=True, fill='both')
+        text_widgets[new_tab] = equipment_text
 
-    display_gadgets(items, total_cost, points, equipment_text)
+        display_gadgets(items, total_cost, equipment_points, equipment_text)
+        notebook.select(new_tab)
 
 def on_save_equipment_click(notebook, text_widgets):
     selected_tab = notebook.nametowidget(notebook.select())

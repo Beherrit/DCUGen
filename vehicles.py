@@ -2,12 +2,19 @@ import os
 import random
 import json
 import tkinter as tk
-from tkinter import messagebox, filedialog, ttk
+from tkinter import messagebox, filedialog, ttk, simpledialog
 
-# Load the vehicle data
 def load_vehicles():
     with open('./json/vehicles.json', 'r', encoding='utf-8') as json_file:
         return json.load(json_file)
+
+def calculate_vehicle_points(character):
+    vehicle_advantage = next((adv for adv in character['advantages'] if adv['name'] == 'Vehicle'), None)
+    if vehicle_advantage:
+        rank = vehicle_advantage['rank']
+        vehicle_points = rank * 5  # Each rank of Vehicle provides 5 vehicle points
+        return vehicle_points
+    return 0
 
 def get_random_feature(features, points, selected_features):
     eligible = [f for f in features if f['cost'] <= points and f['name'] not in selected_features]
@@ -63,17 +70,20 @@ def display_vehicle(vehicle, points, text_widget):
     total_spent = sum(item['cost'] for item in vehicle['Features']) + sum(item['cost'] for item in vehicle['Powers']) + vehicle['SizeCost']
     text_widget.insert(tk.END, f"\nTotal points spent: {total_spent} of {points}\n")
 
-def on_generate_vehicle_click(vehicle_points_entry, notebook, text_widgets):
-    points = int(vehicle_points_entry.get())
-    vehicle = create_vehicle(points)
+def on_generate_vehicle_click(notebook, text_widgets):
+    vehicle_points = simpledialog.askinteger("Vehicle Points", "How many Vehicle Points?", minvalue=1)
+    
+    if vehicle_points is not None:
+        vehicle = create_vehicle(vehicle_points)
 
-    new_tab = ttk.Frame(notebook)
-    notebook.add(new_tab, text=f"Vehicle")
-    vehicle_text = tk.Text(new_tab, height=15, width=50)
-    vehicle_text.pack(expand=True, fill='both')
-    text_widgets[new_tab] = vehicle_text
+        new_tab = ttk.Frame(notebook)
+        notebook.add(new_tab, text=f"Vehicle")
+        vehicle_text = tk.Text(new_tab, height=15, width=50)
+        vehicle_text.pack(expand=True, fill='both')
+        text_widgets[new_tab] = vehicle_text
 
-    display_vehicle(vehicle, points, vehicle_text)
+        display_vehicle(vehicle, vehicle_points, vehicle_text)
+        notebook.select(new_tab)
 
 def on_save_vehicle_click(notebook, text_widgets):
     selected_tab = notebook.nametowidget(notebook.select())
@@ -91,18 +101,11 @@ def on_save_vehicle_click(notebook, text_widgets):
                 file.write(content)
             messagebox.showinfo("Save Vehicle", f"Vehicle saved to {filename}")
 
-# Vehicle Management Frame
 def create_vehicle_management_frame(left_frame, notebook, text_widgets):
     vehicle_frame = CollapsibleSection(left_frame, "Vehicle Management")
     vehicle_frame.pack(fill="x", pady=5)
 
-    vehicle_points_label = ttk.Label(vehicle_frame.body_frame, text="Vehicle Points:")
-    vehicle_frame.add_widget(vehicle_points_label)
-
-    vehicle_points_entry = ttk.Entry(vehicle_frame.body_frame)
-    vehicle_frame.add_widget(vehicle_points_entry)
-
-    generate_vehicle_button = ttk.Button(vehicle_frame.body_frame, text="Generate Vehicle", command=lambda: on_generate_vehicle_click(vehicle_points_entry, notebook, text_widgets), style='Vehicle.TButton')
+    generate_vehicle_button = ttk.Button(vehicle_frame.body_frame, text="Generate Vehicle", command=lambda: on_generate_vehicle_click(notebook, text_widgets), style='Vehicle.TButton')
     vehicle_frame.add_widget(generate_vehicle_button)
 
     save_vehicle_button = ttk.Button(vehicle_frame.body_frame, text="Save Vehicle", command=lambda: on_save_vehicle_click(notebook, text_widgets), style='Vehicle.TButton')

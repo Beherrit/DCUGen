@@ -6,6 +6,8 @@ import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor
 import glob
+import ttkbootstrap as ttk
+from ttkbootstrap import Style
 
 # Initialize a thread pool executor for potential concurrency
 executor = ThreadPoolExecutor(max_workers=os.cpu_count())
@@ -44,7 +46,22 @@ def preload_files():
         preload_tasks.append(run_in_thread(load_cached_json, file_name))
 
     return preload_tasks
-# This function will be called from the main file to execute these optimizations
-def initialize_system(log_file_path):
+
+# Load theme settings from a JSON file
+def load_theme_settings():
+    theme_file = 'theme_settings.json'
+    if os.path.exists(theme_file):
+        with open(theme_file, 'r') as file:
+            return json.load(file)
+    return {"theme": "darkly"}  # Default theme
+
+def apply_theme(root, theme_name):
+    style = Style(theme=theme_name)
+    return style
+
+# Modify this function to accept a theme parameter
+def initialize_system(root, log_file_path, theme_name):
     boost_system_performance()
     preload_files()
+    style = apply_theme(root, theme_name)
+    return style

@@ -1,6 +1,9 @@
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
+from tkinter import filedialog, messagebox
 import json
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
+from ttkbootstrap.scrolled import ScrolledFrame
 
 class GMSheetApp:
     def __init__(self, master, main_notebook, characters):
@@ -8,66 +11,65 @@ class GMSheetApp:
         self.master.title("GM Cheat Sheet")
         self.main_notebook = main_notebook
         self.characters = characters  # This should be a dictionary
+        self.displayed_characters = {}  # New dictionary to track displayed characters
 
         self.style = ttk.Style()
         self.style.configure("TLabel", font=("Helvetica", 10))
         self.style.configure("TButton", font=("Helvetica", 10))
-        self.style.configure("Header.TLabel", font=("Helvetica", 12, "bold"), background="#1C1C1C", foreground="#FFFFFF")
-        self.style.configure("Body.TLabel", font=("Helvetica", 10), background="#3C3C3C", foreground="#FFFFFF")
+        self.style.configure("Header.TLabel", font=("Helvetica", 12, "bold"))
+        self.style.configure("Body.TLabel", font=("Helvetica", 10))
 
-        self.main_frame = ttk.Frame(self.master, style="TFrame")
-        self.main_frame.pack(fill=tk.BOTH, expand=True)
+        # Create a canvas with scrollbar
+        self.canvas = tk.Canvas(self.master)
+        self.scrollbar = ttk.Scrollbar(self.master, orient="vertical", command=self.canvas.yview)
+        self.scrollable_frame = ttk.Frame(self.canvas)
 
-        self.canvas = tk.Canvas(self.main_frame)
-        self.scrollbar = ttk.Scrollbar(self.main_frame, orient="vertical", command=self.canvas.yview)
+        self.scrollable_frame.bind(
+            "<Configure>",
+            lambda e: self.canvas.configure(
+                scrollregion=self.canvas.bbox("all")
+            )
+        )
+
+        self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
 
-        self.scrollable_frame = ttk.Frame(self.canvas)
-        self.canvas_window = self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
-
-        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-
-        self.canvas.bind('<Configure>', self.on_canvas_configure)
-        self.scrollable_frame.bind("<Configure>", self.update_scrollregion)
+        # Pack the canvas and scrollbar
+        self.canvas.pack(side="left", fill="both", expand=True)
+        self.scrollbar.pack(side="right", fill="y")
 
         self.setup_widgets()
 
-        self.master.bind_all("<MouseWheel>", self.on_mouse_wheel)
+        # Bind mousewheel to scrolling
+        self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
 
-    def setup_widgets(self):
-        self.button_frame = ttk.Frame(self.scrollable_frame, style="TFrame")
-        self.button_frame.pack(fill=tk.X, expand=True)
-
-        self.add_character_button = ttk.Button(self.button_frame, text="Add New Character", command=self.add_new_character)
-        self.add_character_button.pack(side=tk.LEFT, padx=5)
-
-        self.upload_character_button = ttk.Button(self.button_frame, text="Upload Character", command=self.upload_character)
-        self.upload_character_button.pack(side=tk.LEFT, padx=5)
-
-        self.save_sheet_button = ttk.Button(self.button_frame, text="Save Sheet", command=self.save_sheet)
-        self.save_sheet_button.pack(side=tk.LEFT, padx=5)
-
-        self.upload_sheet_button = ttk.Button(self.button_frame, text="Upload Sheet", command=self.upload_sheet)
-        self.upload_sheet_button.pack(side=tk.LEFT, padx=5)
-
-        self.character_frame = ttk.Frame(self.scrollable_frame, style="TFrame")
-        self.character_frame.pack(fill=tk.BOTH, expand=True)
-
-    def update_scrollregion(self, event):
-        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
-
-    def on_canvas_configure(self, event):
-        self.canvas.itemconfig(self.canvas_window, width=event.width)
-
-    def on_mouse_wheel(self, event):
+    def _on_mousewheel(self, event):
         self.canvas.yview_scroll(int(-1*(event.delta/120)), "units")
 
+    def setup_widgets(self):
+        self.button_frame = ttk.Frame(self.scrollable_frame)
+        self.button_frame.pack(fill=X, expand=YES, pady=10)
+
+        self.add_character_button = ttk.Button(self.button_frame, text="Add New Character", command=self.add_new_character, style="info.TButton")
+        self.add_character_button.pack(side=LEFT, padx=5)
+
+        self.upload_character_button = ttk.Button(self.button_frame, text="Upload Character", command=self.upload_character, style="info.TButton")
+        self.upload_character_button.pack(side=LEFT, padx=5)
+
+        self.save_sheet_button = ttk.Button(self.button_frame, text="Save Sheet", command=self.save_sheet, style="success.TButton")
+        self.save_sheet_button.pack(side=LEFT, padx=5)
+
+        self.upload_sheet_button = ttk.Button(self.button_frame, text="Upload Sheet", command=self.upload_sheet, style="success.TButton")
+        self.upload_sheet_button.pack(side=LEFT, padx=5)
+
+        self.character_frame = ttk.Frame(self.scrollable_frame)
+        self.character_frame.pack(fill=BOTH, expand=YES)
+
     def add_new_character(self):
-        new_window = tk.Toplevel(self.master)
+        new_window = ttk.Toplevel(self.master)
         new_window.title("Add New Character")
         new_character = CharacterForm(new_window, self.characters, self.display_character)
-        new_character.pack()
+        new_character.pack(fill=BOTH, expand=YES, padx=20, pady=20)
 
     def upload_character(self):
         current_tab = self.main_notebook.select()
@@ -79,11 +81,11 @@ class GMSheetApp:
             messagebox.showerror("Error", "No character data found for the current tab")
 
     def display_character(self, character_data):
-        char_frame = ttk.Frame(self.character_frame, style="TFrame")
-        char_frame.pack(side='left', fill="y", padx=10)
+        char_frame = ttk.Frame(self.character_frame)
+        char_frame.pack(side=LEFT, fill=Y, padx=10, pady=10)
 
-        delete_button = ttk.Button(char_frame, text="Delete", command=lambda: self.confirm_delete(character_data["name"]))
-        delete_button.pack()
+        delete_button = ttk.Button(char_frame, text="Delete", command=lambda: self.confirm_delete(character_data["name"]), style="danger.TButton")
+        delete_button.pack(pady=5)
 
         sections = {
             "NAME": [("Name", character_data.get("name", ""))],
@@ -116,24 +118,28 @@ class GMSheetApp:
             for name, value in items:
                 label = ttk.Label(section_frame.body_frame, text=f"{name}: {value}", style="Body.TLabel")
                 section_frame.add_widget(label)
-            section_frame.pack(fill="x", pady=5)
+            section_frame.pack(fill=X, pady=5)
+
+        # Add the character to displayed_characters
+        self.displayed_characters[character_data["name"]] = char_frame
 
     def confirm_delete(self, name):
-        response = messagebox.askyesno("Confirm Delete", "Are you sure you want to delete this character? When this character is deleted you can NOT re-load this character into the GM Cheat Sheet. Please save if you wish to retain the characters.")
+        response = messagebox.askyesno("Confirm Delete", "Are you sure you want to remove this character from the GM Cheat Sheet?")
         if response:
             self.delete_character(name)
 
     def delete_character(self, name):
-        if name in self.characters:
-            del self.characters[name]  # Remove character from dictionary
-            self.refresh_display()  # Refresh display after deletion
-            messagebox.showinfo("Success", f"Character '{name}' deleted successfully.")
+        if name in self.displayed_characters:
+            self.displayed_characters[name].destroy()  # Remove the character's frame
+            del self.displayed_characters[name]  # Remove from displayed_characters dictionary
+            messagebox.showinfo("Success", f"Character '{name}' removed from GM Cheat Sheet.")
 
     def refresh_display(self):
         for widget in self.character_frame.winfo_children():
             widget.destroy()  # Clear all widgets
+        self.displayed_characters.clear()  # Clear the displayed_characters dictionary
         for name, data in self.characters.items():
-            self.display_character(data)  # Redisplay remaining characters
+            self.display_character(data)  # Redisplay characters
 
     def save_sheet(self):
         save_path = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON files", "*.json")])
@@ -152,7 +158,7 @@ class GMSheetApp:
 
 class CharacterForm(ttk.Frame):
     def __init__(self, master, characters, display_character_callback):
-        super().__init__(master, style="TFrame")
+        super().__init__(master)
         self.characters = characters
         self.display_character_callback = display_character_callback
         self.create_form()
@@ -168,13 +174,13 @@ class CharacterForm(ttk.Frame):
         self.entries = {}
         for field in fields:
             label = ttk.Label(self, text=field, style="Body.TLabel")
-            label.pack()
+            label.pack(pady=(10, 0))
             entry = ttk.Entry(self)
-            entry.pack()
+            entry.pack(fill=X, padx=10)
             self.entries[field] = entry
 
-        save_button = ttk.Button(self, text="Save to GM Cheat Sheet", command=self.save_character)
-        save_button.pack(pady=10)
+        save_button = ttk.Button(self, text="Save to GM Cheat Sheet", command=self.save_character, style="success.TButton")
+        save_button.pack(pady=20)
 
     def save_character(self):
         character_data = {
@@ -211,34 +217,30 @@ class CharacterForm(ttk.Frame):
         else:
             messagebox.showerror("Error", "Character name is required.")
 
-class CollapsibleSection:
+class CollapsibleSection(ttk.Frame):
     def __init__(self, master, title, start_collapsed=True):
-        self.frame = ttk.Frame(master, style="TFrame")
+        super().__init__(master)
         self.title = title
         self.is_collapsed = start_collapsed
 
-        self.header = ttk.Label(self.frame, text=title, anchor="w", cursor="hand2", style="CollapsibleHeader.TLabel")
-        self.header.pack(fill="x")
-        self.header.bind("<Button-1>", self.toggle)
+        self.header = ttk.Button(self, text=title, style="secondary.TButton", command=self.toggle)
+        self.header.pack(fill=X)
 
-        self.body_frame = ttk.Frame(self.frame, style="TFrame")
+        self.body_frame = ttk.Frame(self)
         if not self.is_collapsed:
-            self.body_frame.pack(fill="x", expand=True)
+            self.body_frame.pack(fill=X, expand=YES)
 
-    def toggle(self, event=None):
+    def toggle(self):
         if self.is_collapsed:
-            self.body_frame.pack(fill="x", expand=True)
+            self.body_frame.pack(fill=X, expand=YES)
         else:
-            self.body_frame.forget()
+            self.body_frame.pack_forget()
         self.is_collapsed = not self.is_collapsed
 
     def add_widget(self, widget):
-        widget.pack(fill="x", padx=5, pady=2)
-
-    def pack(self, **kwargs):
-        self.frame.pack(**kwargs)
+        widget.pack(fill=X, padx=5, pady=2)
 
 if __name__ == "__main__":
-    root = tk.Tk()
+    root = ttk.Window(themename="darkly")
     app = GMSheetApp(root, None, {})
     root.mainloop()

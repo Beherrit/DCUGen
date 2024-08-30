@@ -1,30 +1,4 @@
-import os
-import sys
-import json
-import logging
-import random
-import system
-import pandas as pd
-import tkinter as tk
-from tkinter import messagebox, ttk
-import settings
-from initiative_tracker import *
-from calculate_powers import *
-from reference import *
-from notes import *
-from utils import *
-from hideout import *
-from equipment import *
-from database import *
-from export import *
-from vehicles import *
-from gmsheet import *
-from howto import *
-gm_cheat_sheet_app = None 
-from tooltip import ToolTip
-from complication import *
-from encounters import *
-from character_filter import *
+from imports import *
 
 # Set up logging
 def get_log_file_path():
@@ -547,50 +521,71 @@ def update_defenses(character, stats):
     return character
 
 def pretty_print_character(character, text_widget):
-    description = character.get("description", "No description available")
-    text_widget.insert("end", "Character Creation Summary\n", "bold")
+    # Set base font size
+    base_font_size = 12
+    text_widget.config(font=("Arial", base_font_size))
+
+    # Define styles
+    text_widget.tag_configure("bold", font=("Arial", base_font_size, "bold"))
+    text_widget.tag_configure("section_header", font=("Arial", base_font_size + 4, "bold"))
+    text_widget.tag_configure("subsection_header", font=("Arial", base_font_size + 2, "bold"))
+
+    text_widget.insert("end", "Character Creation Summary\n", "section_header")
     text_widget.insert("end", "-" * 40 + "\n\n")
 
-    total_cost = character.get("total_cost", 0)
+    # Basic Information
+    text_widget.insert("end", "BASIC INFORMATION\n", "section_header")
+    text_widget.insert("end", f"Name: {character.get('name', 'Unnamed Character')}\n", "bold")
+    text_widget.insert("end", f"Gender: {character.get('gender', 'N/A')}\n", "bold")
+    text_widget.insert("end", f"Age: {character.get('age', 'N/A')}\n", "bold")
+    text_widget.insert("end", f"Theme: {character.get('theme', 'N/A')}\n", "bold")
+
+    # Origin
+    text_widget.insert("end", "\nORIGIN\n", "section_header")
+    origin = character.get('origin', {})
+    text_widget.insert("end", f"Region: {origin.get('region', 'N/A')}\n")
+    text_widget.insert("end", f"Country: {origin.get('country', 'N/A')}\n")
+    text_widget.insert("end", f"Language: {origin.get('language', 'N/A')}\n")
+
+    # Character Stats
+    text_widget.insert("end", "\nCHARACTER STATS\n", "section_header")
     power_level = character.get("power_level", "N/A")
+    total_cost = character.get("total_cost", 0)
     max_points = character.get("max_points", "N/A")
+    unspent_points = character.get('unspent_points', 0)
+    text_widget.insert("end", f"Power Level: {power_level}\n", "bold")
+    text_widget.insert("end", f"Total Cost: {int(total_cost)}\n", "bold")
+    text_widget.insert("end", f"Unspent Points: {unspent_points}\n", "bold")
+    text_widget.insert("end", f"Maximum Points Allowed: {max_points}\n", "bold")
 
     attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, _ = calculate_totals(character)
-    unspent_points = character.get('unspent_points', 0)
-
-    text_widget.insert("end", f"Power Level: {power_level}\n", "bold")
-    text_widget.insert("end", f"TOTAL COST: {int(total_cost)}\n", "bold")
-    text_widget.insert("end", f"UNSPENT POINTS: {unspent_points}\n", "bold")
-    text_widget.insert("end", f"Maximum Points Allowed: {max_points}\n", "bold")
     text_widget.insert("end", f"Attribute Total Cost: {attribute_total_cost}\n", "bold")
     text_widget.insert("end", f"Advantage Total Cost: {advantage_total_cost}\n", "bold")
     text_widget.insert("end", f"Skills Total Cost: {skill_total_cost}\n", "bold")
     text_widget.insert("end", f"Powers Total Cost: {power_total_cost}\n", "bold")
     text_widget.insert("end", f"Defenses Total Cost: {defense_total_cost}\n", "bold")
 
-    text_widget.insert("end", "AI Image Generator Prompt:\n", "bold")
-    text_widget.insert("end", description + "\n\n", "normal_format")
-
-    text_widget.insert("end", "\nTHEME:\n", "bold")
-    text_widget.insert("end", f"- {character.get('theme', 'N/A')}\n")
-
-    text_widget.insert("end", "\nATTRIBUTES:\n", "bold")
+    # Attributes
+    text_widget.insert("end", "\nATTRIBUTES\n", "section_header")
     for stat in stats_data["STATS"]:
         stat_name = stat["name"]
         stat_details = character.get("stats", {}).get(stat_name, {"value": 0, "cost": 0})
-        text_widget.insert("end", f"- {stat_name}: {stat_details['value']} (Cost: {stat_details['cost']})\n")
+        text_widget.insert("end", f"{stat_name}: {stat_details['value']} (Cost: {stat_details['cost']})\n")
 
-    text_widget.insert("end", "\nDEFENSES:\n", "bold")
+    # Defenses
+    text_widget.insert("end", "\nDEFENSES\n", "section_header")
     for defense, details in character.get("defenses", {}).items():
-        if isinstance(details, dict):  # Ensure it's a dictionary before accessing keys
-            text_widget.insert("end", f"- {defense}: Stat Bonus: {details['stat_bonus']}, Bought Rank: {details['bought_rank']}, Total Rank: {details['total_rank']}\n")
+        if isinstance(details, dict):
+            text_widget.insert("end", f"{defense}: Stat Bonus: {details['stat_bonus']}, Bought Rank: {details['bought_rank']}, Total Rank: {details['total_rank']}\n")
 
-    text_widget.insert("end", "\nADVANTAGES:\n", "bold")
+    # Advantages
+    text_widget.insert("end", "\nADVANTAGES\n", "section_header")
     sorted_advantages = sorted(character.get("advantages", []), key=lambda x: x["name"])
     for advantage in sorted_advantages:
-        text_widget.insert("end", f"- {advantage['name']} (Rank: {advantage['rank']}, Cost: {advantage['cost']})\n")
+        text_widget.insert("end", f"{advantage['name']} (Rank: {advantage['rank']}, Cost: {advantage['cost']})\n")
 
-    text_widget.insert("end", "\nSKILLS:\n", "bold")
+    # Skills
+    text_widget.insert("end", "\nSKILLS\n", "section_header")
     sorted_skills = sorted(character.get("skills", []), key=lambda x: x["name"])
     for skill in sorted_skills:
         skill_name = skill["name"]
@@ -598,11 +593,12 @@ def pretty_print_character(character, text_widget):
         associated_attribute = next((s['tags'][0] for s in skills_data if s['name'] == skill_name), None)
         attribute_rank = character['stats'][associated_attribute]['value'] if associated_attribute else 0
         total = skill['rank'] + attribute_rank
-        text_widget.insert("end", f"- {skill_name}{sub_skill_display} (Rank: {skill['rank']}, Attribute Rank: {attribute_rank}, Total: {total}, Cost: {skill['cost']})\n")
+        text_widget.insert("end", f"{skill_name}{sub_skill_display} (Rank: {skill['rank']}, Attribute Rank: {attribute_rank}, Total: {total}, Cost: {skill['cost']})\n")
 
-    text_widget.insert("end", "\nPOWERS:\n", "bold")
+    # Powers
+    text_widget.insert("end", "\nPOWERS\n", "section_header")
     for power in character.get("powers", []):
-        text_widget.insert("end", f"- {power['name']} (Rank: {power['rank']}, Cost: {power['cost']})\n")
+        text_widget.insert("end", f"{power['name']} (Rank: {power['rank']}, Cost: {power['cost']})\n")
         if 'extras' in power and power['extras']:
             text_widget.insert("end", f"  Extras: {', '.join([f'{extra} (Rank: {rank})' for extra, rank in zip(power['extras'], power['extras_ranks'])])}\n")
         if 'flaws' in power and power['flaws']:
@@ -613,27 +609,25 @@ def pretty_print_character(character, text_widget):
             accuracy = next((rank for extra, rank in zip(power.get('extras', []), power.get('extras_ranks', [])) if extra == 'Accurate'), 'N/A')
             text_widget.insert("end", f"  Accuracy: {accuracy}\n")
 
-    text_widget.insert("end", "\nATTACKS:\n", "bold")
+    # Attacks
+    text_widget.insert("end", "\nATTACKS\n", "section_header")
     melee_attack_bonus, ranged_attack_bonus = calculate_attack_bonuses(character)
-    text_widget.insert("end", "Melee Attack Bonus: ", "bold_no_underline")
-    text_widget.insert("end", f"{melee_attack_bonus}\n")
-
+    text_widget.insert("end", f"Melee Attack Bonus: {melee_attack_bonus}\n", "bold")
     for power in character["powers"]:
         if power.get("range") == "Melee":
-            text_widget.insert("end", f"    - {power['name']} (Effect Rank: {power['rank']})\n")
+            text_widget.insert("end", f"  {power['name']} (Effect Rank: {power['rank']})\n")
 
-    text_widget.insert("end", "Ranged Attack Bonus: ", "bold_no_underline")
-    text_widget.insert("end", f"{ranged_attack_bonus}\n")
-
+    text_widget.insert("end", f"Ranged Attack Bonus: {ranged_attack_bonus}\n", "bold")
     for power in character["powers"]:
         if power.get("range") == "Ranged":
-            text_widget.insert("end", f"    - {power['name']} (Effect Rank: {power['rank']})\n")
+            text_widget.insert("end", f"  {power['name']} (Effect Rank: {power['rank']})\n")
             if "close_range" in power:
-                text_widget.insert("end", f"        Close Range: {power['close_range']} ft, Medium Range: {power['medium_range']} ft, Long Range: {power['long_range']} ft\n")
+                text_widget.insert("end", f"    Close Range: {power['close_range']} ft, Medium Range: {power['medium_range']} ft, Long Range: {power['long_range']} ft\n")
 
-    text_widget.insert("end", "\nEQUIPMENT:\n", "bold")
+    # Equipment
+    text_widget.insert("end", "\nEQUIPMENT\n", "section_header")
     for item in character.get('equipment', []):
-        text_widget.insert("end", f"- {item['name']}\n")
+        text_widget.insert("end", f"{item['name']}\n")
         if 'description' in item:
             text_widget.insert("end", f"  Description: {item['description']}\n")
         if 'effects' in item:
@@ -645,22 +639,15 @@ def pretty_print_character(character, text_widget):
         if 'total_cost' in item:
             text_widget.insert("end", f"  Total Cost: {item['total_cost']}\n")
 
-    text_widget.insert("end", f"\nNAME: {character.get('name', 'Unnamed Character')}\n", "bold")
-    text_widget.insert("end", f"GENDER: {character.get('gender', 'N/A')}\n", "bold")
-    text_widget.insert("end", f"AGE: {character.get('age', 'N/A')}\n", "bold")
-    text_widget.insert("end", "\nORIGIN:\n", "bold")
-    origin = character.get('origin', {})
-    text_widget.insert("end", f"Region: {origin.get('region', 'N/A')}\n")
-    text_widget.insert("end", f"Country: {origin.get('country', 'N/A')}\n")
-    text_widget.insert("end", f"Language: {origin.get('language', 'N/A')}\n")
-
-    text_widget.insert("end", "\nPHYSICAL TRAITS:\n", "bold")
+    # Physical Traits
+    text_widget.insert("end", "\nPHYSICAL TRAITS\n", "section_header")
     for trait, value in character.get("physical_traits", {}).items():
         text_widget.insert("end", f"{trait.capitalize()}: {value}\n")
     text_widget.insert("end", f"Costume Style: {character.get('costume_style', 'N/A')}\n")
     text_widget.insert("end", f"Distinctive Feature: {character.get('distinctive_feature', 'N/A')}\n")
 
-    text_widget.insert("end", "\nPERSONALITY TRAITS:\n", "bold")
+    # Personality Traits
+    text_widget.insert("end", "\nPERSONALITY TRAITS\n", "section_header")
     text_widget.insert("end", "Positive Traits:\n", "bold")
     positive_traits = " | ".join(character.get('personality_traits', {}).get('positive_traits', []))
     text_widget.insert("end", f"{positive_traits}\n")
@@ -673,47 +660,29 @@ def pretty_print_character(character, text_widget):
     quirky_traits = character.get('personality_traits', {}).get('quirky_traits', [])
     text_widget.insert("end", f"{' | '.join(quirky_traits) if quirky_traits else 'None'}\n")
 
-    text_widget.insert("end", "\nLANGUAGES:\n", "bold")
+    # Languages
+    text_widget.insert("end", "\nLANGUAGES\n", "section_header")
     for language in character.get('languages', []):
-        text_widget.insert("end", f"- {language}\n")
+        text_widget.insert("end", f"{language}\n")
 
-    text_widget.insert("end", "\nINITIATIVE:\n", "bold")
+    # Initiative
+    text_widget.insert("end", "\nINITIATIVE\n", "section_header")
     text_widget.insert("end", f"{character.get('initiative', 'N/A')}\n")
 
-    text_widget.insert("end", "\nMOTIVATION:\n", "bold")
+    # Motivation
+    text_widget.insert("end", "\nMOTIVATION\n", "section_header")
     motivation = character.get("Motivation", {})
-    text_widget.insert("end", f"- {motivation.get('name', 'N/A')}: {motivation.get('description', 'N/A')}\n")
+    text_widget.insert("end", f"{motivation.get('name', 'N/A')}: {motivation.get('description', 'N/A')}\n")
 
-    text_widget.insert("end", "\nCOMPLICATIONS:\n", "bold")
+    # Complications
+    text_widget.insert("end", "\nCOMPLICATIONS\n", "section_header")
     for complication in character.get("Complications", []):
-        text_widget.insert("end", f"- {complication['name']}: {complication['description']}\n")
+        text_widget.insert("end", f"{complication['name']}: {complication['description']}\n")
 
-class CollapsibleSection:
-    def __init__(self, master, title, start_collapsed=True):
-        self.frame = ttk.Frame(master)
-        self.title = title
-        self.is_collapsed = start_collapsed
-
-        self.header = ttk.Label(self.frame, text=title, anchor="w", cursor="hand2")
-        self.header.pack(fill="x")
-        self.header.bind("<Button-1>", self.toggle)
-
-        self.body_frame = ttk.Frame(self.frame)
-        if not self.is_collapsed:
-            self.body_frame.pack(fill="x", expand=True)
-
-    def toggle(self, event=None):
-        if self.is_collapsed:
-            self.body_frame.pack(fill="x", expand=True)
-        else:
-            self.body_frame.forget()
-        self.is_collapsed = not self.is_collapsed
-
-    def add_widget(self, widget):
-        widget.pack(fill="x", padx=5, pady=2)
-
-    def pack(self, **kwargs):
-        self.frame.pack(**kwargs)
+    # AI Image Generator Prompt
+    text_widget.insert("end", "\nAI IMAGE GENERATOR PROMPT\n", "section_header")
+    description = character.get("description", "No description available")
+    text_widget.insert("end", description + "\n")
 
 def generate_character(power_level, include_powers, stat_percent, advantage_percent, skill_percent, defense_percent, power_percent, max_advantages, max_powers, selected_power_types, random_physical_features=True, random_costume_style=True, random_distinctive_feature=True, villain=False):
     max_retries = 10
@@ -856,15 +825,54 @@ def generate_character(power_level, include_powers, stat_percent, advantage_perc
     # If all attempts fail, raise an exception
     raise ValueError("Failed to generate a valid character within the maximum number of retries.")
 
+class CollapsibleSection:
+    def __init__(self, master, title, start_collapsed=True):
+        self.frame = ttk.Frame(master)
+        self.title = title
+        self.is_collapsed = start_collapsed
+
+        self.header = ttk.Label(self.frame, text=title, anchor="w", cursor="hand2")
+        self.header.pack(fill="x")
+        self.header.bind("<Button-1>", self.toggle)
+
+        self.body_frame = ttk.Frame(self.frame)
+        if not self.is_collapsed:
+            self.body_frame.pack(fill="x", expand=True)
+
+    def toggle(self, event=None):
+        if self.is_collapsed:
+            self.body_frame.pack(fill="x", expand=True)
+        else:
+            self.body_frame.forget()
+        self.is_collapsed = not self.is_collapsed
+
+    def add_widget(self, widget):
+        widget.pack(fill="x", padx=5, pady=2)
+
+    def pack(self, **kwargs):
+        self.frame.pack(**kwargs)
+
 def main():
     global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, hideout_details, logger
 
+    # Import ttkbootstrap
+    import ttkbootstrap as ttk
+    from ttkbootstrap import Style
+
+    # Define the initial theme
+    theme_name = "darkly"
+
+    # Use ttkbootstrap for a modern look
+    root = ttk.Window(themename="darkly")
+    root.title("Character Creation Version 4.3 Prod")
+    
+    # Set base size for the main window
+    root.geometry("1024x768")  # Width x Height
+
     # Initialize system optimizations
     log_file_path = get_log_file_path()
-    system.initialize_system(log_file_path)
+    system.initialize_system(root, log_file_path, theme_name)  # Pass both root and log_file_path
 
-    root = tk.Tk()
-    root.title("Character Creation Version 4.3 Prod")
     dark_mode = True
     include_powers = tk.BooleanVar(value=False)  # Set include_powers to False by default (unchecked)
 
@@ -873,50 +881,8 @@ def main():
     create_table_if_not_exists()
 
     # Define colors for different button groups
-    equipment_button_color = "#a2d9ce"  # Soft teal
-    hideout_button_color = "#f9e79f"  # Light yellow
-    character_button_color = "#aed6f1"  # Light blue
-    encounter_button_color = "#f5b7b1"  # Light red
-    initiative_button_color = "#d7bde2"  # Light purple
-    vehicle_button_color = "#a3e4d7"  # Light green
-    reference_button_color = "#d3d3d3"  # Light grey
-
-    # Style Configuration
-    style = ttk.Style()
-    style.theme_use('clam')
-    
-    # Configure styles for frames and buttons
-    style.configure("Character.TFrame", background=character_button_color)
-    style.configure("Character.TButton", background=character_button_color, foreground="black")
-    style.map("Character.TButton", background=[("active", character_button_color)])
-
-    style.configure("Equipment.TFrame", background=equipment_button_color)
-    style.configure("Equipment.TButton", background=equipment_button_color, foreground="black")
-    style.map("Equipment.TButton", background=[("active", equipment_button_color)])
-
-    style.configure("Hideout.TFrame", background=hideout_button_color)
-    style.configure("Hideout.TButton", background=hideout_button_color, foreground="black")
-    style.map("Hideout.TButton", background=[("active", hideout_button_color)])
-
-    style.configure("Encounter.TFrame", background=encounter_button_color)
-    style.configure("Encounter.TButton", background=encounter_button_color, foreground="black")
-    style.map("Encounter.TButton", background=[("active", encounter_button_color)])
-
-    style.configure("Initiative.TFrame", background=initiative_button_color)
-    style.configure("Initiative.TButton", background=initiative_button_color, foreground="black")
-    style.map("Initiative.TButton", background=[("active", initiative_button_color)])
-
-    style.configure("Vehicle.TFrame", background=vehicle_button_color)
-    style.configure("Vehicle.TButton", background=vehicle_button_color, foreground="black")
-    style.map("Vehicle.TButton", background=[("active", vehicle_button_color)])
-
-    style.configure("Reference.TFrame", background=reference_button_color)
-    style.configure("Reference.TButton", background=reference_button_color, foreground="black")
-    style.map("Reference.TButton", background=[("active", reference_button_color)])
-
-    style.configure("TLabel", padding=2, font=("Helvetica", 8))  # Smaller padding and font size
-    style.configure("TFrame", background="#f0f0f0")
-    style.configure("TCheckbutton", padding=2, font=("Helvetica", 8))  # Smaller padding and font size
+    primary_button_color = "primary"
+    secondary_button_color = "secondary"
 
     # Main layout frames
     left_frame = ttk.Frame(root)
@@ -941,155 +907,129 @@ def main():
     search_entry = ttk.Entry(search_frame, textvariable=search_var)
     search_entry.pack(side='right')
 
+    def perform_search(*args):
+        search_term = search_var.get().lower()
+        for tab_id, text_widget in text_widgets.items():
+            content = text_widget.get("1.0", tk.END).lower()
+            if search_term in content:
+                notebook.select(tab_id)
+                start_index = content.index(search_term)
+                end_index = start_index + len(search_term)
+                text_widget.tag_remove("search", "1.0", tk.END)
+                text_widget.tag_add("search", f"1.0+{start_index}c", f"1.0+{end_index}c")
+                text_widget.tag_config("search", background="yellow" if not dark_mode else "blue", foreground="black" if not dark_mode else "white")
+                text_widget.see(f"1.0+{start_index}c")
+                break
+
     # Set up a trace on the search_var after it's defined
-    search_var.trace_add('write', lambda *args: on_search_change(search_var, text_widgets, notebook, dark_mode))
+    search_var.trace_add('write', perform_search)
 
     # Bind KeyRelease event to search function
-    search_entry.bind('<KeyRelease>', lambda event: on_search_change(search_var, text_widgets, notebook, dark_mode))
+    search_entry.bind('<KeyRelease>', lambda event: perform_search())
 
-    # Character Management Frame (start open)
-    char_frame = CollapsibleSection(left_frame, "Character Management (Click to open/close)", start_collapsed=False)
-    char_frame.pack(fill="x", pady=5)
+    # Character Creator Section
+    char_creator_frame = CollapsibleSection(left_frame, "Character Creator", start_collapsed=False)
+    char_creator_frame.pack(fill="x", pady=5)
 
     generate_character_filters_button = ttk.Button(
-        char_frame.body_frame, 
-        text="Generate Character Filters", 
+        char_creator_frame.body_frame, 
+        text="Generate Character", 
         command=lambda: open_character_filters_window(root, notebook, text_widgets, characters, dark_mode, logger), 
-        style='Character.TButton'
+        style=f'{primary_button_color}.TButton'
     )
-    char_frame.add_widget(generate_character_filters_button)
+    char_creator_frame.add_widget(generate_character_filters_button)
     ToolTip(generate_character_filters_button, "Open a window to set filters and generate a character.")
 
-
-    export_character_sheet_button = ttk.Button(char_frame.body_frame, text="Export to Character Sheet", command=lambda: on_export_character_sheet_click(notebook, characters, text_widgets), style='Character.TButton')
-    char_frame.add_widget(export_character_sheet_button)
+    export_character_sheet_button = ttk.Button(char_creator_frame.body_frame, text="Export Character Sheet", command=lambda: on_export_character_sheet_click(notebook, characters, text_widgets), style=f'{primary_button_color}.TButton')
+    char_creator_frame.add_widget(export_character_sheet_button)
     ToolTip(export_character_sheet_button, "Export the current character data to a character sheet.")
 
-    close_tab_button = ttk.Button(char_frame.body_frame, text="Close Tab", command=lambda: close_current_tab(notebook, text_widgets), style='Character.TButton')
-    char_frame.add_widget(close_tab_button)
+    close_tab_button = ttk.Button(char_creator_frame.body_frame, text="Close Tab", command=lambda: close_current_tab(notebook, text_widgets), style=f'{primary_button_color}.TButton')
+    char_creator_frame.add_widget(close_tab_button)
     ToolTip(close_tab_button, "Close the currently selected tab.")
 
-    close_all_tabs_button = ttk.Button(char_frame.body_frame, text="Close All Tabs", command=lambda: close_all_tabs(notebook, text_widgets, characters), style='Character.TButton')
-    char_frame.add_widget(close_all_tabs_button)
+    close_all_tabs_button = ttk.Button(char_creator_frame.body_frame, text="Close All Tabs", command=lambda: close_all_tabs(notebook, text_widgets, characters), style=f'{primary_button_color}.TButton')
+    char_creator_frame.add_widget(close_all_tabs_button)
     ToolTip(close_all_tabs_button, "Close all open tabs in the notebook.")
 
-    copy_prompt_button = ttk.Button(char_frame.body_frame, text="Select AI Prompt", command=lambda: copy_prompt_to_clipboard(notebook, characters), style='Character.TButton')
-    char_frame.add_widget(copy_prompt_button)
+    copy_prompt_button = ttk.Button(char_creator_frame.body_frame, text="Copy AI Prompt", command=lambda: copy_prompt_to_clipboard(notebook, characters), style=f'{primary_button_color}.TButton')
+    char_creator_frame.add_widget(copy_prompt_button)
     ToolTip(copy_prompt_button, "Copy the AI prompt for the character to the clipboard.")
 
-    # Add the Complications button under Character Management
-    complications = load_data_from_json('./json/complications.json')
-    complications_button = ttk.Button(char_frame.body_frame, text="Complications", command=lambda: open_complications_window(complications), style='Character.TButton')
-    char_frame.add_widget(complications_button)
-    ToolTip(complications_button, "Open the complications window to select and view random conflicts.")
+    # GM Tools Section
+    gm_tools_frame = CollapsibleSection(left_frame, "GM Tools", start_collapsed=False)
+    gm_tools_frame.pack(fill="x", pady=5)
 
-    # Equipment Management Frame (start collapsed)
-    equip_frame = CollapsibleSection(left_frame, "Equipment Management (Click to open/close)", start_collapsed=True)
-    equip_frame.pack(fill="x", pady=5)
+    # Equipment Generator
+    generate_equipment_button = ttk.Button(gm_tools_frame.body_frame, text="Generate Equipment", command=lambda: on_generate_equipment_click(notebook, text_widgets), style=f'{secondary_button_color}.TButton')
+    gm_tools_frame.add_widget(generate_equipment_button)
+    ToolTip(generate_equipment_button, "Generate equipment based on specified points.")
 
-    equipment_points_label = ttk.Label(equip_frame.body_frame, text="Equipment Points:")
-    equip_frame.add_widget(equipment_points_label)
-    ToolTip(equipment_points_label, "Specify the number of equipment points available.")
+    # Vehicle Generator
+    generate_vehicle_button = ttk.Button(gm_tools_frame.body_frame, text="Generate Vehicle", command=lambda: on_generate_vehicle_click(notebook, text_widgets), style=f'{secondary_button_color}.TButton')
+    gm_tools_frame.add_widget(generate_vehicle_button)
+    ToolTip(generate_vehicle_button, "Generate a vehicle using specified points.")
 
-    equipment_points_entry = ttk.Entry(equip_frame.body_frame)
-    equip_frame.add_widget(equipment_points_entry)
-    ToolTip(equipment_points_entry, "Input field for equipment points.")
-
-    generate_equipment_button = ttk.Button(equip_frame.body_frame, text="Generate Equipment", command=lambda: on_generate_equipment_click(equipment_points_entry, notebook, text_widgets), style='Equipment.TButton')
-    equip_frame.add_widget(generate_equipment_button)
-    ToolTip(generate_equipment_button, "Generate equipment based on the specified points.")
-
-    save_equipment_button = ttk.Button(equip_frame.body_frame, text="Save Equipment", command=lambda: on_save_equipment_click(notebook, text_widgets), style='Equipment.TButton')
-    equip_frame.add_widget(save_equipment_button)
-    ToolTip(save_equipment_button, "Save the generated equipment to a file.")
-
-    # Vehicle Management Frame (start collapsed)
-    vehicle_frame = CollapsibleSection(left_frame, "Vehicle Management (Click to open/close)", start_collapsed=True)
-    vehicle_frame.pack(fill="x", pady=5)
-
-    vehicle_points_label = ttk.Label(vehicle_frame.body_frame, text="Vehicle Points:")
-    vehicle_frame.add_widget(vehicle_points_label)
-    ToolTip(vehicle_points_label, "Specify the number of vehicle points available.")
-
-    vehicle_points_entry = ttk.Entry(vehicle_frame.body_frame)
-    vehicle_frame.add_widget(vehicle_points_entry)
-    ToolTip(vehicle_points_entry, "Input field for vehicle points.")
-
-    generate_vehicle_button = ttk.Button(vehicle_frame.body_frame, text="Generate Vehicle", command=lambda: on_generate_vehicle_click(vehicle_points_entry, notebook, text_widgets), style='Vehicle.TButton')
-    vehicle_frame.add_widget(generate_vehicle_button)
-    ToolTip(generate_vehicle_button, "Generate a vehicle using the specified points.")
-
-    save_vehicle_button = ttk.Button(vehicle_frame.body_frame, text="Save Vehicle", command=lambda: on_save_vehicle_click(notebook, text_widgets), style='Vehicle.TButton')
-    vehicle_frame.add_widget(save_vehicle_button)
-    ToolTip(save_vehicle_button, "Save the generated vehicle to a file.")
-
-    # Hideout Management Frame (start collapsed)
-    hideout_frame = CollapsibleSection(left_frame, "Hideout Management (Click to open/close)", start_collapsed=True)
-    hideout_frame.pack(fill="x", pady=5)
-
-    generate_hideout_button = ttk.Button(hideout_frame.body_frame, text="Generate Hideout", command=lambda: generate_hideout(notebook, text_widgets), style='Hideout.TButton')
-    hideout_frame.add_widget(generate_hideout_button)
+    # Hideout Generator
+    generate_hideout_button = ttk.Button(gm_tools_frame.body_frame, text="Generate Hideout", command=lambda: generate_hideout(notebook, text_widgets), style=f'{secondary_button_color}.TButton')
+    gm_tools_frame.add_widget(generate_hideout_button)
     ToolTip(generate_hideout_button, "Generate a hideout with random features.")
 
-    save_hideout_button = ttk.Button(hideout_frame.body_frame, text="Save Hideout", command=lambda: save_hideout(hideout_details), style='Hideout.TButton')
-    hideout_frame.add_widget(save_hideout_button)
-    ToolTip(save_hideout_button, "Save the generated hideout details to a file.")
-
-    # Miscellaneous Frame (start collapsed)
-    misc_frame = CollapsibleSection(left_frame, "Miscellaneous", start_collapsed=True)
-    misc_frame.pack(fill="x", pady=5)
-
-    generate_encounter_button = ttk.Button(misc_frame.body_frame, text="Generate Encounter", command=generate_encounter, style='Encounter.TButton')
-    misc_frame.add_widget(generate_encounter_button)
+    # Encounter Generator
+    generate_encounter_button = ttk.Button(gm_tools_frame.body_frame, text="Generate Encounter", command=generate_encounter, style=f'{secondary_button_color}.TButton')
+    gm_tools_frame.add_widget(generate_encounter_button)
     ToolTip(generate_encounter_button, "Generate a random encounter.")
 
+    # Initiative Tracker
     init_tracker_button = ttk.Button(
-        misc_frame.body_frame, 
+        gm_tools_frame.body_frame, 
         text="Initiative Tracker", 
         command=lambda: open_initiative_tracker(notebook, characters), 
-        style='Initiative.TButton'
+        style=f'{secondary_button_color}.TButton'
     )
-    misc_frame.add_widget(init_tracker_button)
+    gm_tools_frame.add_widget(init_tracker_button)
     ToolTip(init_tracker_button, "Open the initiative tracker for combat encounters.")
-
-
-    settings_button = ttk.Button(misc_frame.body_frame, text="Settings", command=lambda: settings.open_settings(root), style='Initiative.TButton')  # Add settings button
-    misc_frame.add_widget(settings_button)
-    ToolTip(settings_button, "Open application settings.")
-
-    # Reference Management Frame (start collapsed)
-    reference_frame = CollapsibleSection(left_frame, "Reference Management (Click to open/close)", start_collapsed=True)
-    reference_frame.pack(fill="x", pady=5)
-
     # Function to open GM Cheat Sheet
     def open_gm_cheat_sheet():
-        new_window = tk.Toplevel(root)
+        new_window = ttk.Toplevel(root)
         gm_app = GMSheetApp(new_window, notebook, characters)
-
+    # Complications
+    complications = load_data_from_json('./json/complications.json')
+    complications_button = ttk.Button(gm_tools_frame.body_frame, text="Complications", command=lambda: open_complications_window(complications), style=f'{secondary_button_color}.TButton')
+    gm_tools_frame.add_widget(complications_button)
+    ToolTip(complications_button, "Open the complications window to select and view random conflicts.")
     # Function to open HowTo guide
     def open_howto():
-        new_window = tk.Toplevel(root)
+        new_window = ttk.Toplevel(root)
         howto_app = HowToApp(new_window)
-
-    # Create buttons and add them to the reference frame
-    calculate_powers_button = ttk.Button(reference_frame.body_frame, text="Calculate Powers", command=open_calculate_powers_window, style='Reference.TButton')
-    reference_frame.add_widget(calculate_powers_button)
-    ToolTip(calculate_powers_button, "Open the power calculation window.")
-
-    reference_data_button = ttk.Button(reference_frame.body_frame, text="Reference Data", command=open_reference_data, style='Reference.TButton')
-    reference_frame.add_widget(reference_data_button)
-    ToolTip(reference_data_button, "Open the reference data window.")
-
-    notes_button = ttk.Button(reference_frame.body_frame, text="Notes", command=open_notes_window, style='Reference.TButton')
-    reference_frame.add_widget(notes_button)
-    ToolTip(notes_button, "Open the notes window to manage notes.")
-
-    gm_cheat_sheet_button = ttk.Button(reference_frame.body_frame, text="GM Cheat Sheet", command=open_gm_cheat_sheet, style='Reference.TButton')
-    reference_frame.add_widget(gm_cheat_sheet_button)
+    # GM Cheat Sheet
+    gm_cheat_sheet_button = ttk.Button(gm_tools_frame.body_frame, text="GM Cheat Sheet", command=open_gm_cheat_sheet, style=f'{secondary_button_color}.TButton')
+    gm_tools_frame.add_widget(gm_cheat_sheet_button)
     ToolTip(gm_cheat_sheet_button, "Open the GM Cheat Sheet for quick access to character details.")
 
-    howto_button = ttk.Button(reference_frame.body_frame, text="Guides / How To", command=open_howto, style='Reference.TButton')
-    reference_frame.add_widget(howto_button)
+    # Reference Tools
+    calculate_powers_button = ttk.Button(gm_tools_frame.body_frame, text="Calculate Powers", command=open_calculate_powers_window, style=f'{secondary_button_color}.TButton')
+    gm_tools_frame.add_widget(calculate_powers_button)
+    ToolTip(calculate_powers_button, "Open the power calculation window.")
+
+    reference_data_button = ttk.Button(gm_tools_frame.body_frame, text="Reference Data", command=open_reference_data, style=f'{secondary_button_color}.TButton')
+    gm_tools_frame.add_widget(reference_data_button)
+    ToolTip(reference_data_button, "Open the reference data window.")
+
+    notes_button = ttk.Button(gm_tools_frame.body_frame, text="Notes", command=open_notes_window, style=f'{secondary_button_color}.TButton')
+    gm_tools_frame.add_widget(notes_button)
+    ToolTip(notes_button, "Open the notes window to manage notes.")
+
+    # Settings Section
+    settings_frame = CollapsibleSection(left_frame, "Settings", start_collapsed=False)
+    settings_frame.pack(fill="x", pady=5)
+
+    settings_button = ttk.Button(settings_frame.body_frame, text="Open Settings", command=lambda: settings.open_settings(root), style=f'{primary_button_color}.TButton')
+    settings_frame.add_widget(settings_button)
+    ToolTip(settings_button, "Open application settings.")
+
+    howto_button = ttk.Button(settings_frame.body_frame, text="Guides / How To", command=open_howto, style=f'{primary_button_color}.TButton')
+    settings_frame.add_widget(howto_button)
     ToolTip(howto_button, "Access guides and instructions for using the application.")
 
     # Configure the main window to resize properly

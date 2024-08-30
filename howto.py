@@ -1,20 +1,16 @@
 import tkinter as tk
 from tkinter import ttk
 from tooltip import ToolTip
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 
 class HowToApp:
     def __init__(self, master):
         self.master = master
         self.master.title("Guides / How To")
 
-        # Create a separate style for this window
-        self.style = ttk.Style(self.master)
-        self.style.theme_use('clam')
-
-        # Configure styles specific to this window if needed
-        self.style.configure("TFrame", background="#f0f0f0")
-        self.style.configure("TButton", background="#d3d3d3", foreground="black")
-        self.style.map("TButton", background=[("active", "#d3d3d3")])
+        # Use the current theme
+        self.style = ttk.Style()
 
         self.main_frame = ttk.Frame(self.master)
         self.main_frame.pack(fill='both', expand=True)
@@ -22,31 +18,31 @@ class HowToApp:
         self.button_frame = ttk.Frame(self.main_frame)
         self.button_frame.pack(pady=10)
 
-        self.character_management_button = ttk.Button(self.button_frame, text="Character Management Guide", command=self.character_management_guide)
+        self.character_management_button = ttk.Button(self.button_frame, text="Character Management Guide", command=self.character_management_guide, style='primary.TButton')
         self.character_management_button.pack(side='top', padx=5, pady=5)
         ToolTip(self.character_management_button, "Learn how to manage characters, including creation and deletion.")
 
-        self.equipment_management_button = ttk.Button(self.button_frame, text="Equipment Management Guide", command=self.equipment_management_guide)
+        self.equipment_management_button = ttk.Button(self.button_frame, text="Equipment Management Guide", command=self.equipment_management_guide, style='primary.TButton')
         self.equipment_management_button.pack(side='top', padx=5, pady=5)
         ToolTip(self.equipment_management_button, "Guidelines for managing and allocating equipment points.")
 
-        self.vehicle_management_button = ttk.Button(self.button_frame, text="Vehicle Management Guide", command=self.vehicle_management_guide)
+        self.vehicle_management_button = ttk.Button(self.button_frame, text="Vehicle Management Guide", command=self.vehicle_management_guide, style='primary.TButton')
         self.vehicle_management_button.pack(side='top', padx=5, pady=5)
         ToolTip(self.vehicle_management_button, "Guide to creating and managing vehicles.")
 
-        self.hideout_management_button = ttk.Button(self.button_frame, text="Hideout Management Guide", command=self.hideout_management_guide)
+        self.hideout_management_button = ttk.Button(self.button_frame, text="Hideout Management Guide", command=self.hideout_management_guide, style='primary.TButton')
         self.hideout_management_button.pack(side='top', padx=5, pady=5)
         ToolTip(self.hideout_management_button, "Instructions for generating and saving hideout details.")
 
-        self.miscellaneous_guides_button = ttk.Button(self.button_frame, text="Miscellaneous Guides", command=self.miscellaneous_guides)
+        self.miscellaneous_guides_button = ttk.Button(self.button_frame, text="Miscellaneous Guides", command=self.miscellaneous_guides, style='primary.TButton')
         self.miscellaneous_guides_button.pack(side='top', padx=5, pady=5)
         ToolTip(self.miscellaneous_guides_button, "Access guides for encounters, settings, and more.")
 
-        self.reference_management_button = ttk.Button(self.button_frame, text="Reference Management", command=self.reference_management_guide)
+        self.reference_management_button = ttk.Button(self.button_frame, text="Reference Management", command=self.reference_management_guide, style='primary.TButton')
         self.reference_management_button.pack(side='top', padx=5, pady=5)
         ToolTip(self.reference_management_button, "Manage and calculate powers, reference data, and notes.")
 
-        self.gm_cheat_sheet_button = ttk.Button(self.button_frame, text="GM Cheat Sheet Guide", command=self.gm_cheat_sheet_guide)
+        self.gm_cheat_sheet_button = ttk.Button(self.button_frame, text="GM Cheat Sheet Guide", command=self.gm_cheat_sheet_guide, style='primary.TButton')
         self.gm_cheat_sheet_button.pack(side='top', padx=5, pady=5)
         ToolTip(self.gm_cheat_sheet_button, "Quick reference and tips for game masters.")
 
@@ -114,14 +110,14 @@ class HowToApp:
         """)
 
     def show_guide(self, title, content):
-        guide_window = tk.Toplevel(self.master)
+        guide_window = ttk.Toplevel(self.master)
         guide_window.title(title)
-        guide_text = tk.Text(guide_window, wrap='word', height=15, width=50)
+        guide_text = ttk.Text(guide_window, wrap='word', height=15, width=50)
         guide_text.pack(expand=True, fill='both')
         guide_text.insert('1.0', content)
-        guide_text.config(state=tk.DISABLED)
+        guide_text.config(state='disabled')
 
 if __name__ == "__main__":
-    root = tk.Tk()
+    root = ttk.Window(themename="darkly")
     app = HowToApp(root)
     root.mainloop()
