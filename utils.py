@@ -323,3 +323,37 @@ def close_all_tabs(notebook, text_widgets, characters):
         notebook.forget(tab)
         if tab in text_widgets:
             del text_widgets[tab]
+
+def generate_expanded_traits():
+    with open('json/expanded_traits.json', 'r') as file:
+        traits_data = json.load(file)
+    
+    expanded_traits = {}
+    for category in traits_data:
+        trait = random.choice(traits_data[category])
+        expanded_traits[category] = {
+            "name": trait["name"],
+            "description": trait["description"],
+            "effect": trait["effect"]
+        }
+    
+    return expanded_traits
+
+def apply_trait_effects(character, action):
+    traits = character["expanded_traits"]
+    
+    if action == "problem_solving":
+        if traits["core_traits"]["name"] == "Openness":
+            return "tries an unconventional approach"
+        elif traits["cognitive_traits"]["name"] == "Analytical":
+            return "carefully analyzes the situation"
+    
+    elif action == "social_interaction":
+        if traits["emotional_traits"]["name"] == "Empathetic":
+            return "tries to understand others' perspectives"
+        elif traits["behavioral_traits"]["name"] == "Impulsive":
+            return "speaks without thinking"
+    
+    # ... more conditions for different actions and traits ...
+    
+    return "acts normally"

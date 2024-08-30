@@ -204,27 +204,6 @@ def open_measurement_calcs():
     panel.image = img  # keep a reference!
     panel.pack(side="top", fill="both", expand=True)
 
-def open_dice_roller():
-    dice_window = ttk.Toplevel()
-    dice_window.title("Dice Roller")
-    dice_window.geometry("200x400")
-
-    def roll_and_display(dice_type):
-        result = roll_dice(dice_type)
-        result_label.config(text=f"Result: {result}")
-
-    ttk.Label(dice_window, text="Select a die to roll:").pack(pady=10)
-
-    dice_types = [20, 12, 10, 8, 6, 4, 3, 2, 100]
-    for dice in dice_types:
-        ttk.Button(dice_window, text=f"D{dice}", command=lambda dice=dice: roll_and_display(dice), style="info.TButton").pack(padx=5, pady=5)
-
-    result_label = ttk.Label(dice_window, text="Result: ")
-    result_label.pack(pady=10)
-
-def roll_dice(dice_type):
-    return random.randint(1, dice_type)
-
 def sort_treeview(tree):
     def safe_int(value):
         return int(value) if value.isdigit() else 0
@@ -333,9 +312,6 @@ def open_initiative_tracker(notebook, characters):
 
     measurement_calcs_button = ttk.Button(input_frame, text="Measurement Calcs", command=open_measurement_calcs, style="info.TButton")
     measurement_calcs_button.grid(row=1, column=4, padx=5, pady=5)
-
-    dice_roller_button = ttk.Button(input_frame, text="Dice Roller", command=open_dice_roller, style="info.TButton")
-    dice_roller_button.grid(row=1, column=5, padx=5, pady=5)
 
     combat_calc_button = ttk.Button(input_frame, text="Combat Calculator", command=open_combat_calculator, style="info.TButton")
     combat_calc_button.grid(row=1, column=6, padx=5, pady=5)

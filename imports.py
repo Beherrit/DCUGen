@@ -27,3 +27,4 @@ from tooltip import ToolTip
 from complication import *
 from encounters import *
 from character_filter import *
+from dice_roller import *

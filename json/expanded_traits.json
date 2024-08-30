@@ -1,0 +1,865 @@
+{
+    "core_traits": [
+      {
+        "name": "Openness",
+        "description": "Curious and open to new experiences",
+        "effect": "More likely to try unconventional solutions",
+        "opposite": "Closed-minded"
+      },
+      {
+        "name": "Conscientiousness",
+        "description": "Organized and responsible",
+        "effect": "Better at long-term planning and following rules",
+        "opposite": "Disorganized"
+      },
+      {
+        "name": "Agreeableness",
+        "description": "Kind and cooperative",
+        "effect": "More likely to work well in teams",
+        "opposite": "Antagonistic"
+      },
+      {
+        "name": "Extraversion",
+        "description": "Outgoing and energetic",
+        "effect": "Better in social settings",
+        "opposite": "Introverted"
+      },
+      {
+        "name": "Neuroticism",
+        "description": "Emotionally reactive and anxious",
+        "effect": "Prone to worry and stress",
+        "opposite": "Emotionally stable"
+      },
+      {
+        "name": "Ambition",
+        "description": "Driven to achieve and succeed",
+        "effect": "More likely to set and pursue goals",
+        "opposite": "Content"
+      },
+      {
+        "name": "Resilience",
+        "description": "Able to recover quickly from setbacks",
+        "effect": "Less likely to be discouraged by failures",
+        "opposite": "Fragile"
+      },
+      {
+        "name": "Independence",
+        "description": "Self-reliant and autonomous",
+        "effect": "More likely to take initiative",
+        "opposite": "Dependent"
+      },
+      {
+        "name": "Curiosity",
+        "description": "Eager to learn and explore",
+        "effect": "More likely to seek out new knowledge",
+        "opposite": "Apathetic"
+      },
+      {
+        "name": "Patience",
+        "description": "Able to tolerate delays without frustration",
+        "effect": "Better at handling long-term challenges",
+        "opposite": "Impatient"
+      },
+      {
+        "name": "Diligence",
+        "description": "Persistent and hardworking",
+        "effect": "More likely to complete tasks thoroughly",
+        "opposite": "Lazy"
+      },
+      {
+        "name": "Flexibility",
+        "description": "Able to adapt to new situations",
+        "effect": "More likely to adjust plans when necessary",
+        "opposite": "Rigid"
+      },
+      {
+        "name": "Creativity",
+        "description": "Inventive and original",
+        "effect": "More likely to think outside the box",
+        "opposite": "Unimaginative"
+      },
+      {
+        "name": "Humility",
+        "description": "Modest and unassuming",
+        "effect": "More likely to admit mistakes and learn from others",
+        "opposite": "Arrogant"
+      },
+      {
+        "name": "Assertiveness",
+        "description": "Confident in expressing opinions",
+        "effect": "More likely to stand up for oneself",
+        "opposite": "Submissive"
+      },
+      {
+        "name": "Courage",
+        "description": "Willing to face danger or difficulty",
+        "effect": "More likely to take risks",
+        "opposite": "Cowardice"
+      },
+      {
+        "name": "Optimism",
+        "description": "Tends to expect positive outcomes",
+        "effect": "More likely to remain hopeful in tough situations",
+        "opposite": "Pessimism"
+      },
+      {
+        "name": "Loyalty",
+        "description": "Faithful and committed",
+        "effect": "More likely to stay true to others",
+        "opposite": "Disloyalty"
+      },
+      {
+        "name": "Generosity",
+        "description": "Willing to give and share",
+        "effect": "More likely to help others without expecting anything in return",
+        "opposite": "Stinginess"
+      },
+      {
+        "name": "Confidence",
+        "description": "Sure of oneself and one's abilities",
+        "effect": "More likely to take decisive actions",
+        "opposite": "Insecurity"
+      },
+      {
+        "name": "Prudence",
+        "description": "Careful and wise in making decisions",
+        "effect": "More likely to avoid unnecessary risks",
+        "opposite": "Recklessness"
+      },
+      {
+        "name": "Determination",
+        "description": "Firm in purpose and resolute",
+        "effect": "More likely to achieve long-term goals",
+        "opposite": "Indecisiveness"
+      },
+      {
+        "name": "Tactfulness",
+        "description": "Sensitive in dealing with others",
+        "effect": "More likely to navigate social situations smoothly",
+        "opposite": "Bluntness"
+      },
+      {
+        "name": "Dependability",
+        "description": "Reliable and trustworthy",
+        "effect": "More likely to be counted on by others",
+        "opposite": "Unreliable"
+      },
+      {
+        "name": "Perseverance",
+        "description": "Persistent in the face of difficulty",
+        "effect": "More likely to overcome challenges",
+        "opposite": "Quitting"
+      },
+      {
+        "name": "Discipline",
+        "description": "Able to control impulses and desires",
+        "effect": "More likely to stick to plans and rules",
+        "opposite": "Undisciplined"
+      },
+      {
+        "name": "Empathy",
+        "description": "Able to understand and share others' feelings",
+        "effect": "More likely to build strong relationships",
+        "opposite": "Apathy"
+      },
+      {
+        "name": "Focus",
+        "description": "Able to concentrate on tasks",
+        "effect": "More likely to avoid distractions",
+        "opposite": "Distracted"
+      },
+      {
+        "name": "Humor",
+        "description": "Able to see the funny side of things",
+        "effect": "More likely to lighten tense situations",
+        "opposite": "Seriousness"
+      }
+    ],
+    "moral_traits": [
+      {
+        "name": "Honesty",
+        "description": "Truthful and sincere",
+        "effect": "More likely to tell the truth, even when inconvenient",
+        "opposite": "Deceptive"
+      },
+      {
+        "name": "Integrity",
+        "description": "Adheres to moral and ethical principles",
+        "effect": "More likely to do the right thing, even when no one is watching",
+        "opposite": "Corrupt"
+      },
+      {
+        "name": "Fairness",
+        "description": "Treats people equally and justly",
+        "effect": "More likely to act without favoritism",
+        "opposite": "Unfairness"
+      },
+      {
+        "name": "Compassion",
+        "description": "Shows concern for others' suffering",
+        "effect": "More likely to help those in need",
+        "opposite": "Indifference"
+      },
+      {
+        "name": "Justice",
+        "description": "Values fairness and equity",
+        "effect": "More likely to stand up against injustice",
+        "opposite": "Injustice"
+      },
+      {
+        "name": "Responsibility",
+        "description": "Takes ownership of actions and their consequences",
+        "effect": "More likely to admit mistakes and make amends",
+        "opposite": "Irresponsibility"
+      },
+      {
+        "name": "Courage",
+        "description": "Willing to stand up for what is right, even when difficult",
+        "effect": "More likely to take risks for ethical reasons",
+        "opposite": "Cowardice"
+      },
+      {
+        "name": "Loyalty",
+        "description": "Faithful to people, principles, or organizations",
+        "effect": "More likely to remain steadfast in difficult times",
+        "opposite": "Betrayal"
+      },
+      {
+        "name": "Generosity",
+        "description": "Willing to give and share without expecting anything in return",
+        "effect": "More likely to help others selflessly",
+        "opposite": "Selfishness"
+      },
+      {
+        "name": "Gratitude",
+        "description": "Appreciates and acknowledges the good in others",
+        "effect": "More likely to recognize and thank others for their help",
+        "opposite": "Ingratitude"
+      },
+      {
+        "name": "Forgiveness",
+        "description": "Willing to let go of grudges and forgive others",
+        "effect": "More likely to maintain harmonious relationships",
+        "opposite": "Vindictiveness"
+      },
+      {
+        "name": "Humility",
+        "description": "Modest about one's own achievements",
+        "effect": "More likely to value others' contributions",
+        "opposite": "Pride"
+      },
+      {
+        "name": "Respect",
+        "description": "Values the dignity and worth of others",
+        "effect": "More likely to treat others with consideration",
+        "opposite": "Disrespect"
+      },
+      {
+        "name": "Tolerance",
+        "description": "Accepts and respects different views and behaviors",
+        "effect": "More likely to coexist peacefully with others",
+        "opposite": "Intolerance"
+      },
+      {
+        "name": "Charity",
+        "description": "Generous in giving to those in need",
+        "effect": "More likely to donate time, money, or resources to help others",
+        "opposite": "Greed"
+      },
+      {
+        "name": "Altruism",
+        "description": "Selflessly concerned for the well-being of others",
+        "effect": "More likely to act for the benefit of others",
+        "opposite": "Selfishness"
+      },
+      {
+        "name": "Diligence",
+        "description": "Careful and persistent in work or duties",
+        "effect": "More likely to see tasks through to completion",
+        "opposite": "Negligence"
+      },
+      {
+        "name": "Sincerity",
+        "description": "Genuine in words and actions",
+        "effect": "More likely to be trusted by others",
+        "opposite": "Insincerity"
+      },
+      {
+        "name": "Chastity",
+        "description": "Maintains moral purity and self-control",
+        "effect": "More likely to adhere to ethical standards in personal relationships",
+        "opposite": "Lust"
+      },
+      {
+        "name": "Temperance",
+        "description": "Exercises self-control and moderation",
+        "effect": "More likely to avoid excesses and maintain balance",
+        "opposite": "Gluttony"
+      },
+      {
+        "name": "Faith",
+        "description": "Strong belief in a higher power or principles",
+        "effect": "More likely to remain hopeful and steadfast in beliefs",
+        "opposite": "Doubt"
+      },
+      {
+        "name": "Honor",
+        "description": "Adheres to a code of conduct or principles",
+        "effect": "More likely to act with dignity and respect",
+        "opposite": "Dishonor"
+      },
+      {
+        "name": "Mercy",
+        "description": "Shows compassion or forgiveness to those in one's power",
+        "effect": "More likely to offer leniency or pardon",
+        "opposite": "Cruelty"
+      },
+      {
+        "name": "Piety",
+        "description": "Devotion to religious duties or principles",
+        "effect": "More likely to follow spiritual or moral teachings",
+        "opposite": "Irreverence"
+      },
+      {
+        "name": "Virtue",
+        "description": "Conforms to moral and ethical principles",
+        "effect": "More likely to act in a morally good manner",
+        "opposite": "Vice"
+      },
+      {
+        "name": "Righteousness",
+        "description": "Morally right or justifiable",
+        "effect": "More likely to uphold justice and fairness",
+        "opposite": "Wickedness"
+      },
+      {
+        "name": "Modesty",
+        "description": "Unassuming or moderate in the estimation of one's abilities",
+        "effect": "More likely to avoid arrogance and pride",
+        "opposite": "Vanity"
+      },
+      {
+        "name": "Purity",
+        "description": "Free from immorality or corruption",
+        "effect": "More likely to adhere to ethical standards",
+        "opposite": "Corruption"
+      }
+    ],
+    "behavioral_traits": [
+      {
+        "name": "Impulsive",
+        "description": "Acts on instinct without much forethought",
+        "effect": "Quick to action but may make mistakes",
+        "opposite": "Deliberate"
+      },
+      {
+        "name": "Disciplined",
+        "description": "Able to control impulses and follow rules",
+        "effect": "More likely to stay on task and meet goals",
+        "opposite": "Undisciplined"
+      },
+      {
+        "name": "Reliable",
+        "description": "Dependable and consistent in actions",
+        "effect": "More likely to be trusted with responsibilities",
+        "opposite": "Unreliable"
+      },
+      {
+        "name": "Spontaneous",
+        "description": "Acts on sudden impulses",
+        "effect": "More likely to be flexible and adaptable",
+        "opposite": "Predictable"
+      },
+      {
+        "name": "Methodical",
+        "description": "Performs tasks in an organized, systematic way",
+        "effect": "More likely to be thorough and efficient",
+        "opposite": "Haphazard"
+      },
+      {
+        "name": "Persistent",
+        "description": "Continues firmly in a course of action despite difficulty",
+        "effect": "More likely to achieve long-term goals",
+        "opposite": "Fickle"
+      },
+      {
+        "name": "Adaptable",
+        "description": "Able to adjust to new conditions",
+        "effect": "More likely to thrive in changing environments",
+        "opposite": "Inflexible"
+      },
+      {
+        "name": "Cautious",
+        "description": "Avoids unnecessary risks",
+        "effect": "More likely to prevent mistakes and avoid danger",
+        "opposite": "Reckless"
+      },
+      {
+        "name": "Proactive",
+        "description": "Takes initiative and acts in advance",
+        "effect": "More likely to anticipate and solve problems early",
+        "opposite": "Reactive"
+      },
+      {
+        "name": "Patient",
+        "description": "Able to tolerate delays without frustration",
+        "effect": "More likely to succeed in long-term tasks",
+        "opposite": "Impatient"
+      },
+      {
+        "name": "Tolerant",
+        "description": "Accepts and respects differing views or behaviors",
+        "effect": "More likely to get along with diverse groups",
+        "opposite": "Intolerant"
+      },
+      {
+        "name": "Decisive",
+        "description": "Able to make decisions quickly and effectively",
+        "effect": "More likely to take action without hesitation",
+        "opposite": "Indecisive"
+      },
+      {
+        "name": "Resourceful",
+        "description": "Able to find quick and clever ways to overcome difficulties",
+        "effect": "More likely to solve problems creatively",
+        "opposite": "Helpless"
+      },
+      {
+        "name": "Humble",
+        "description": "Modest in behavior and attitude",
+        "effect": "More likely to value others' input",
+        "opposite": "Arrogant"
+      },
+      {
+        "name": "Aggressive",
+        "description": "Forceful and assertive in behavior",
+        "effect": "More likely to dominate situations",
+        "opposite": "Passive"
+      },
+      {
+        "name": "Cooperative",
+        "description": "Willing to work with others",
+        "effect": "More likely to succeed in team efforts",
+        "opposite": "Uncooperative"
+      },
+      {
+        "name": "Curious",
+        "description": "Eager to learn or know something",
+        "effect": "More likely to discover new information",
+        "opposite": "Indifferent"
+      },
+      {
+        "name": "Punctual",
+        "description": "Arrives or acts at the expected time",
+        "effect": "More likely to be reliable in commitments",
+        "opposite": "Late"
+      },
+      {
+        "name": "Charismatic",
+        "description": "Exudes charm and attractiveness",
+        "effect": "More likely to influence others positively",
+        "opposite": "Unimpressive"
+      },
+      {
+        "name": "Resilient",
+        "description": "Able to withstand or recover quickly from difficult conditions",
+        "effect": "More likely to bounce back from setbacks",
+        "opposite": "Fragile"
+      },
+      {
+        "name": "Meticulous",
+        "description": "Shows great attention to detail",
+        "effect": "More likely to produce high-quality work",
+        "opposite": "Careless"
+      },
+      {
+        "name": "Assertive",
+        "description": "Confident and forceful in behavior",
+        "effect": "More likely to advocate for oneself",
+        "opposite": "Submissive"
+      },
+      {
+        "name": "Efficient",
+        "description": "Works in a well-organized and competent way",
+        "effect": "More likely to complete tasks quickly and effectively",
+        "opposite": "Inefficient"
+      },
+      {
+        "name": "Polite",
+        "description": "Shows good manners toward others",
+        "effect": "More likely to maintain harmonious relationships",
+        "opposite": "Rude"
+      },
+      {
+        "name": "Daring",
+        "description": "Willing to take risks",
+        "effect": "More likely to achieve extraordinary outcomes",
+        "opposite": "Cautious"
+      },
+      {
+        "name": "Obedient",
+        "description": "Willing to comply with commands or instructions",
+        "effect": "More likely to follow rules and orders",
+        "opposite": "Defiant"
+      },
+      {
+        "name": "Sociable",
+        "description": "Enjoys interacting with others",
+        "effect": "More likely to build strong social networks",
+        "opposite": "Reserved"
+      },
+      {
+        "name": "Modest",
+        "description": "Does not boast about achievements",
+        "effect": "More likely to be liked by others",
+        "opposite": "Boastful"
+      }
+    ],
+    "emotional_traits": [
+      {
+        "name": "Empathetic",
+        "description": "Able to understand and share the feelings of others",
+        "effect": "Better at negotiation and forming alliances",
+        "opposite": "Indifferent"
+      },
+      {
+        "name": "Compassionate",
+        "description": "Shows deep concern for others",
+        "effect": "More likely to help those in distress",
+        "opposite": "Cold-hearted"
+      },
+      {
+        "name": "Optimistic",
+        "description": "Tends to expect positive outcomes",
+        "effect": "More likely to remain hopeful in tough situations",
+        "opposite": "Pessimistic"
+      },
+      {
+        "name": "Calm",
+        "description": "Maintains composure under pressure",
+        "effect": "More likely to handle stressful situations well",
+        "opposite": "Anxious"
+      },
+      {
+        "name": "Passionate",
+        "description": "Shows strong emotions and enthusiasm",
+        "effect": "More likely to inspire others",
+        "opposite": "Apathetic"
+      },
+      {
+        "name": "Grateful",
+        "description": "Appreciates what others do",
+        "effect": "More likely to build positive relationships",
+        "opposite": "Ungrateful"
+      },
+      {
+        "name": "Sensitive",
+        "description": "Easily affected by emotions",
+        "effect": "More likely to respond to others' needs",
+        "opposite": "Insensitive"
+      },
+      {
+        "name": "Forgiving",
+        "description": "Willing to let go of grudges",
+        "effect": "More likely to maintain harmonious relationships",
+        "opposite": "Resentful"
+      },
+      {
+        "name": "Cheerful",
+        "description": "Tends to be happy and positive",
+        "effect": "More likely to uplift others",
+        "opposite": "Sullen"
+      },
+      {
+        "name": "Courageous",
+        "description": "Able to face fear and adversity",
+        "effect": "More likely to take on challenges",
+        "opposite": "Fearful"
+      },
+      {
+        "name": "Resilient",
+        "description": "Able to bounce back from emotional setbacks",
+        "effect": "More likely to recover from disappointments",
+        "opposite": "Fragile"
+      },
+      {
+        "name": "Tender-hearted",
+        "description": "Easily moved by compassion or sympathy",
+        "effect": "More likely to help others in need",
+        "opposite": "Hard-hearted"
+      },
+      {
+        "name": "Romantic",
+        "description": "Expresses love and affection passionately",
+        "effect": "More likely to engage in loving relationships",
+        "opposite": "Unromantic"
+      },
+      {
+        "name": "Joyful",
+        "description": "Feels great pleasure and happiness",
+        "effect": "More likely to spread positivity",
+        "opposite": "Miserable"
+      },
+      {
+        "name": "Confident",
+        "description": "Feels sure of oneself",
+        "effect": "More likely to take decisive actions",
+        "opposite": "Insecure"
+      },
+      {
+        "name": "Loving",
+        "description": "Shows deep affection and care for others",
+        "effect": "More likely to build strong, loving relationships",
+        "opposite": "Unloving"
+      },
+      {
+        "name": "Sympathetic",
+        "description": "Shares in the feelings of others, especially in sorrow",
+        "effect": "More likely to offer support to those in need",
+        "opposite": "Unsympathetic"
+      },
+      {
+        "name": "Trusting",
+        "description": "Believes in the reliability of others",
+        "effect": "More likely to build strong, trusting relationships",
+        "opposite": "Suspicious"
+      },
+      {
+        "name": "Nurturing",
+        "description": "Cares for and encourages the growth or development of others",
+        "effect": "More likely to support others' well-being",
+        "opposite": "Neglectful"
+      },
+      {
+        "name": "Tender",
+        "description": "Shows gentleness and concern for others",
+        "effect": "More likely to be caring and compassionate",
+        "opposite": "Harsh"
+      },
+      {
+        "name": "Hopeful",
+        "description": "Has a positive outlook on the future",
+        "effect": "More likely to remain optimistic in adversity",
+        "opposite": "Despairing"
+      },
+      {
+        "name": "Humorous",
+        "description": "Able to see the funny side of things",
+        "effect": "More likely to lighten tense situations",
+        "opposite": "Serious"
+      },
+      {
+        "name": "Sentimental",
+        "description": "Strongly influenced by feelings of tenderness or nostalgia",
+        "effect": "More likely to cherish memories and relationships",
+        "opposite": "Unsentimental"
+      },
+      {
+        "name": "Zealous",
+        "description": "Passionately devoted to a cause or purpose",
+        "effect": "More likely to pursue goals with determination",
+        "opposite": "Apathetic"
+      },
+      {
+        "name": "Devoted",
+        "description": "Loyal and loving towards someone or something",
+        "effect": "More likely to stay committed in relationships",
+        "opposite": "Uncommitted"
+      },
+      {
+        "name": "Affectionate",
+        "description": "Displays warmth and affection openly",
+        "effect": "More likely to strengthen bonds with others",
+        "opposite": "Distant"
+      },
+      {
+        "name": "Tender",
+        "description": "Gentle and kind in manner",
+        "effect": "More likely to approach situations with care",
+        "opposite": "Rough"
+      },
+      {
+        "name": "Emotional",
+        "description": "Easily stirred by emotions",
+        "effect": "More likely to express feelings openly",
+        "opposite": "Stoic"
+      },
+      {
+        "name": "Vivacious",
+        "description": "Lively and full of energy",
+        "effect": "More likely to bring enthusiasm to activities",
+        "opposite": "Listless"
+      }
+    ],
+    "cognitive_traits": [
+      {
+        "name": "Analytical",
+        "description": "Likes to examine things in detail",
+        "effect": "Better at solving complex problems",
+        "opposite": "Intuitive"
+      },
+      {
+        "name": "Creative",
+        "description": "Able to think outside the box and come up with new ideas",
+        "effect": "More likely to innovate",
+        "opposite": "Conventional"
+      },
+      {
+        "name": "Intuitive",
+        "description": "Relies on gut feeling and instincts",
+        "effect": "More likely to make quick decisions",
+        "opposite": "Rational"
+      },
+      {
+        "name": "Logical",
+        "description": "Uses reason and logic to make decisions",
+        "effect": "More likely to solve problems methodically",
+        "opposite": "Illogical"
+      },
+      {
+        "name": "Curious",
+        "description": "Eager to learn and explore",
+        "effect": "More likely to seek out new knowledge",
+        "opposite": "Apathetic"
+      },
+      {
+        "name": "Inquisitive",
+        "description": "Asks questions and seeks to understand",
+        "effect": "More likely to gather information",
+        "opposite": "Uninquiring"
+      },
+      {
+        "name": "Clever",
+        "description": "Quick to understand and learn",
+        "effect": "More likely to solve problems swiftly",
+        "opposite": "Dull"
+      },
+      {
+        "name": "Reflective",
+        "description": "Takes time to think carefully about things",
+        "effect": "More likely to make well-considered decisions",
+        "opposite": "Impulsive"
+      },
+      {
+        "name": "Insightful",
+        "description": "Has deep understanding and perception",
+        "effect": "More likely to grasp the underlying causes of issues",
+        "opposite": "Shallow"
+      },
+      {
+        "name": "Open-minded",
+        "description": "Willing to consider new ideas",
+        "effect": "More likely to accept different perspectives",
+        "opposite": "Close-minded"
+      },
+      {
+        "name": "Pragmatic",
+        "description": "Deals with things sensibly and realistically",
+        "effect": "More likely to focus on practical solutions",
+        "opposite": "Idealistic"
+      },
+      {
+        "name": "Systematic",
+        "description": "Follows a fixed plan or system",
+        "effect": "More likely to achieve consistent results",
+        "opposite": "Chaotic"
+      },
+      {
+        "name": "Strategic",
+        "description": "Skilled in planning actions for a long-term goal",
+        "effect": "More likely to succeed in achieving objectives",
+        "opposite": "Tactical"
+      },
+      {
+        "name": "Innovative",
+        "description": "Able to introduce new ideas or methods",
+        "effect": "More likely to bring about change",
+        "opposite": "Traditional"
+      },
+      {
+        "name": "Rational",
+        "description": "Based on logic and reason",
+        "effect": "More likely to make decisions based on facts",
+        "opposite": "Emotional"
+      },
+      {
+        "name": "Visionary",
+        "description": "Thinks about or plans the future with imagination",
+        "effect": "More likely to inspire and lead",
+        "opposite": "Short-sighted"
+      },
+      {
+        "name": "Adaptable",
+        "description": "Able to adjust to new situations",
+        "effect": "More likely to cope with change",
+        "opposite": "Inflexible"
+      },
+      {
+        "name": "Critical",
+        "description": "Inclined to judge severely and find faults",
+        "effect": "More likely to identify weaknesses",
+        "opposite": "Forgiving"
+      },
+      {
+        "name": "Discerning",
+        "description": "Shows good judgment and insight",
+        "effect": "More likely to make wise decisions",
+        "opposite": "Indiscriminate"
+      },
+      {
+        "name": "Objective",
+        "description": "Not influenced by personal feelings",
+        "effect": "More likely to make impartial decisions",
+        "opposite": "Biased"
+      },
+      {
+        "name": "Astute",
+        "description": "Able to assess situations and people accurately",
+        "effect": "More likely to understand complex issues",
+        "opposite": "Naive"
+      },
+      {
+        "name": "Detail-oriented",
+        "description": "Pays attention to all the small aspects",
+        "effect": "More likely to produce thorough work",
+        "opposite": "Careless"
+      },
+      {
+        "name": "Organized",
+        "description": "Arranges and plans tasks in an orderly way",
+        "effect": "More likely to be efficient in completing tasks",
+        "opposite": "Disorganized"
+      },
+      {
+        "name": "Perceptive",
+        "description": "Aware of and able to interpret subtle details",
+        "effect": "More likely to notice things others miss",
+        "opposite": "Oblivious"
+      },
+      {
+        "name": "Thorough",
+        "description": "Completes tasks with attention to every detail",
+        "effect": "More likely to ensure nothing is overlooked",
+        "opposite": "Superficial"
+      },
+      {
+        "name": "Inventive",
+        "description": "Creative and good at thinking up new ideas",
+        "effect": "More likely to come up with unique solutions",
+        "opposite": "Unimaginative"
+      },
+      {
+        "name": "Precise",
+        "description": "Marked by accuracy and attention to detail",
+        "effect": "More likely to produce exact results",
+        "opposite": "Vague"
+      },
+      {
+        "name": "Savvy",
+        "description": "Shrewd and knowledgeable in practical matters",
+        "effect": "More likely to navigate complex situations effectively",
+        "opposite": "Uninformed"
+      }
+    ]
+  }
+  

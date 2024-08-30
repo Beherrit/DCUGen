@@ -44,6 +44,7 @@ advantages_data = load_json('json/advantages.json')
 powers_data = load_json('json/powers.json')
 extras_data = load_json('json/extras.json')
 flaws_data = load_json('json/flaws.json')
+expanded_traits_data = load_json('json/expanded_traits.json')
 
 def enforce_rules(character, power_level):
     max_defense_toughness = power_level * 2
@@ -522,7 +523,7 @@ def update_defenses(character, stats):
 
 def pretty_print_character(character, text_widget):
     # Set base font size
-    base_font_size = 12
+    base_font_size = 10
     text_widget.config(font=("Arial", base_font_size))
 
     # Define styles
@@ -546,6 +547,13 @@ def pretty_print_character(character, text_widget):
     text_widget.insert("end", f"Region: {origin.get('region', 'N/A')}\n")
     text_widget.insert("end", f"Country: {origin.get('country', 'N/A')}\n")
     text_widget.insert("end", f"Language: {origin.get('language', 'N/A')}\n")
+
+    text_widget.insert("end", "\nEXPANDED TRAITS\n", "section_header")
+    for category, trait in character["expanded_traits"].items():
+        text_widget.insert("end", f"{category.replace('_', ' ').title()}: {trait['name']}\n", "bold")
+        text_widget.insert("end", f"Description: {trait['description']}\n")
+        text_widget.insert("end", f"Effect: {trait['effect']}\n\n")
+    
 
     # Character Stats
     text_widget.insert("end", "\nCHARACTER STATS\n", "section_header")
@@ -747,7 +755,8 @@ def generate_character(power_level, include_powers, stat_percent, advantage_perc
                 "languages": languages,
                 "initiative": initiative,
                 "Motivation": motivations_and_complications["Motivation"],
-                "Complications": motivations_and_complications["Complications"]
+                "Complications": motivations_and_complications["Complications"],
+                "expanded_traits": generate_expanded_traits()
             }
 
             # Generate the character description for the AI image prompt
@@ -864,7 +873,7 @@ def main():
 
     # Use ttkbootstrap for a modern look
     root = ttk.Window(themename="darkly")
-    root.title("Character Creation Version 4.3 Prod")
+    root.title("Character Creation Version 4.4 Prod")
     
     # Set base size for the main window
     root.geometry("1024x768")  # Width x Height
@@ -989,10 +998,25 @@ def main():
     )
     gm_tools_frame.add_widget(init_tracker_button)
     ToolTip(init_tracker_button, "Open the initiative tracker for combat encounters.")
+
+    # Dice Roller
+    dice_roller_button = ttk.Button(
+        gm_tools_frame.body_frame,
+        text="Dice Roller",
+        command=open_dice_roller,
+        style=f'{secondary_button_color}.TButton'
+    )
+    gm_tools_frame.add_widget(dice_roller_button)
+    ToolTip(dice_roller_button, "Open the dice roller for various dice rolls.")
+
+    gm_tools_frame.add_widget(dice_roller_button)
+    ToolTip(dice_roller_button, "Open the dice roller for various dice rolls.")
+
     # Function to open GM Cheat Sheet
     def open_gm_cheat_sheet():
         new_window = ttk.Toplevel(root)
         gm_app = GMSheetApp(new_window, notebook, characters)
+    
     # Complications
     complications = load_data_from_json('./json/complications.json')
     complications_button = ttk.Button(gm_tools_frame.body_frame, text="Complications", command=lambda: open_complications_window(complications), style=f'{secondary_button_color}.TButton')
