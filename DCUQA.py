@@ -611,11 +611,16 @@ def pretty_print_character(character, text_widget):
             text_widget.insert("end", f"  Extras: {', '.join([f'{extra} (Rank: {rank})' for extra, rank in zip(power['extras'], power['extras_ranks'])])}\n")
         if 'flaws' in power and power['flaws']:
             text_widget.insert("end", f"  Flaws: {', '.join([f'{flaw} (Rank: {rank})' for flaw, rank in zip(power['flaws'], power['flaws_ranks'])])}\n")
-        if 'resisted' in power:
-            text_widget.insert("end", f"  Resisted by: {power['resisted']}\n")
+        resisted_by = power.get('resisted', 'N/A')
+        text_widget.insert("end", f"  Resisted by: {resisted_by}\n")
+        if 'failure_effects' in power:
+            text_widget.insert("end", f"  Failure Effects: {', '.join([f'{degree}: {effect}' for degree, effect in power['failure_effects'].items()])}\n")
+        # Calculate and display accuracy
+        accuracy = calculate_accuracy(character, power)
+        text_widget.insert("end", f"  Accuracy: {accuracy}\n")
+        
         if 'range' in power and power['range'] == "Ranged":
-            accuracy = next((rank for extra, rank in zip(power.get('extras', []), power.get('extras_ranks', [])) if extra == 'Accurate'), 'N/A')
-            text_widget.insert("end", f"  Accuracy: {accuracy}\n")
+            text_widget.insert("end", f"    Close Range: {power['close_range']} ft, Medium Range: {power['medium_range']} ft, Long Range: {power['long_range']} ft\n")
 
     # Attacks
     text_widget.insert("end", "\nATTACKS\n", "section_header")
@@ -1056,6 +1061,14 @@ def main():
     settings_frame.add_widget(howto_button)
     ToolTip(howto_button, "Access guides and instructions for using the application.")
 
+    # Lock Window Button
+    lock_window_var = tk.BooleanVar()
+    lock_window_button = ttk.Checkbutton(settings_frame.body_frame, text="Lock Window", variable=lock_window_var, 
+                                         command=lambda: toggle_window_lock(root, lock_window_var),
+                                         style='primary.TCheckbutton')
+    settings_frame.add_widget(lock_window_button)
+    ToolTip(lock_window_button, "Toggle window lock to keep it on top of other windows.")
+
     # Configure the main window to resize properly
     root.grid_rowconfigure(0, weight=1)
     root.grid_columnconfigure(1, weight=1)
@@ -1064,6 +1077,9 @@ def main():
 
     root.protocol("WM_DELETE_WINDOW", lambda: [save_tabs(notebook, text_widgets, characters), root.destroy()])  # Save tabs and close the program
     root.mainloop()
+
+def toggle_window_lock(window, lock_var):
+    window.attributes('-topmost', lock_var.get())
 
 if __name__ == "__main__":
     main()

@@ -15,107 +15,72 @@ class HowToApp:
         self.main_frame = ttk.Frame(self.master)
         self.main_frame.pack(fill='both', expand=True)
 
-        self.button_frame = ttk.Frame(self.main_frame)
-        self.button_frame.pack(pady=10)
+        self.create_sections()
 
-        self.character_management_button = ttk.Button(self.button_frame, text="Character Management Guide", command=self.character_management_guide, style='primary.TButton')
-        self.character_management_button.pack(side='top', padx=5, pady=5)
-        ToolTip(self.character_management_button, "Learn how to manage characters, including creation and deletion.")
+    def create_sections(self):
+        sections = [
+            ("Character Creator", self.character_creator_guide),
+            ("GM Tools", self.gm_tools_guide),
+            ("Settings", self.settings_guide)
+        ]
 
-        self.equipment_management_button = ttk.Button(self.button_frame, text="Equipment Management Guide", command=self.equipment_management_guide, style='primary.TButton')
-        self.equipment_management_button.pack(side='top', padx=5, pady=5)
-        ToolTip(self.equipment_management_button, "Guidelines for managing and allocating equipment points.")
+        for title, command in sections:
+            button = ttk.Button(self.main_frame, text=title, command=command, style='primary.TButton')
+            button.pack(side='top', padx=5, pady=5, fill='x')
+            ToolTip(button, f"Learn about the {title} features")
 
-        self.vehicle_management_button = ttk.Button(self.button_frame, text="Vehicle Management Guide", command=self.vehicle_management_guide, style='primary.TButton')
-        self.vehicle_management_button.pack(side='top', padx=5, pady=5)
-        ToolTip(self.vehicle_management_button, "Guide to creating and managing vehicles.")
+    def character_creator_guide(self):
+        content = """
+        Character Creator Guide:
+        1. Generate Character: Opens a window to set filters and generate a character with customizable options.
+        2. Export Character Sheet: Exports the generated character data to a formatted character sheet.
+        3. Close Tab: Closes the current character tab in the notebook.
+        4. Close All Tabs: Closes all open character tabs in the notebook.
+        5. Copy AI Prompt: Copies the AI-friendly character description to the clipboard for use with AI tools.
+        """
+        self.show_guide("Character Creator Guide", content)
 
-        self.hideout_management_button = ttk.Button(self.button_frame, text="Hideout Management Guide", command=self.hideout_management_guide, style='primary.TButton')
-        self.hideout_management_button.pack(side='top', padx=5, pady=5)
-        ToolTip(self.hideout_management_button, "Instructions for generating and saving hideout details.")
+    def gm_tools_guide(self):
+        content = """
+        GM Tools Guide:
+        1. Generate Equipment: Creates random equipment based on specified equipment points.
+        2. Generate Vehicle: Generates a random vehicle using vehicle points.
+        3. Generate Encounter: Creates a random encounter based on selected difficulty levels.
+        4. Initiative Tracker: Manages combat turns and tracks character conditions.
+        5. Dice Roller: Simulates various dice rolls for game mechanics.
+        6. Complications: Generates random complications for added story depth.
+        7. GM Cheat Sheet: Quick reference for character stats and important information.
+        8. Calculate Powers: Assists in calculating power effects and modifiers.
+        9. Reference Data: Provides quick access to game rules and reference information.
+        10. Notes: Allows GMs to create and manage campaign notes.
+        """
+        self.show_guide("GM Tools Guide", content)
 
-        self.miscellaneous_guides_button = ttk.Button(self.button_frame, text="Miscellaneous Guides", command=self.miscellaneous_guides, style='primary.TButton')
-        self.miscellaneous_guides_button.pack(side='top', padx=5, pady=5)
-        ToolTip(self.miscellaneous_guides_button, "Access guides for encounters, settings, and more.")
-
-        self.reference_management_button = ttk.Button(self.button_frame, text="Reference Management", command=self.reference_management_guide, style='primary.TButton')
-        self.reference_management_button.pack(side='top', padx=5, pady=5)
-        ToolTip(self.reference_management_button, "Manage and calculate powers, reference data, and notes.")
-
-        self.gm_cheat_sheet_button = ttk.Button(self.button_frame, text="GM Cheat Sheet Guide", command=self.gm_cheat_sheet_guide, style='primary.TButton')
-        self.gm_cheat_sheet_button.pack(side='top', padx=5, pady=5)
-        ToolTip(self.gm_cheat_sheet_button, "Quick reference and tips for game masters.")
-
-    def character_management_guide(self):
-        self.show_guide("Character Management Guide", """
-        Character Management Guide:
-        1. Generate Character Filters: Opens a window to set filters and generate a character.
-        2. Export to Character Sheet: Exports the generated character data to a character sheet.
-        3. Close Tab: Closes the current tab in the notebook.
-        4. Close All Tabs: Closes all open tabs in the notebook.
-        5. Select AI Prompt: Copies the AI prompt for the character to the clipboard.
-        """)
-
-    def equipment_management_guide(self):
-        self.show_guide("Equipment Management Guide", """
-        Equipment Management Guide:
-        1. Equipment Points: Input the number of equipment points available.
-        2. Generate Equipment: Generates equipment based on the specified points.
-        3. Save Equipment: Saves the generated equipment.
-        """)
-
-    def vehicle_management_guide(self):
-        self.show_guide("Vehicle Management Guide", """
-        Vehicle Management Guide:
-        1. Vehicle Points: Input the number of vehicle points available.
-        2. Generate Vehicle: Generates a vehicle based on the specified points.
-        3. Save Vehicle: Saves the generated vehicle.
-        """)
-
-    def hideout_management_guide(self):
-        self.show_guide("Hideout Management Guide", """
-        Hideout Management Guide:
-        1. Generate Hideout: Generates a hideout.
-        2. Save Hideout: Saves the generated hideout details.
-        """)
-
-    def miscellaneous_guides(self):
-        self.show_guide("Miscellaneous Guides", """
-        Miscellaneous Guides:
-        1. Generate Encounter: Generates a random encounter.
-        2. Initiative Tracker: Opens the initiative tracker for managing combat encounters.
-        3. Settings: Opens the settings window to configure application settings.
-        """)
-
-    def reference_management_guide(self):
-        self.show_guide("Reference Management Guide", """
-        Reference Management Guide:
-        1. Calculate Powers: Opens the power calculation window.
-        2. Reference Data: Opens the reference data window.
-        3. Notes: Opens the notes window to manage notes.
-        """)
-
-    def gm_cheat_sheet_guide(self):
-        self.show_guide("GM Cheat Sheet Guide", """
-        GM Cheat Sheet Guide:
-        1. Add New Character: Opens a form to manually input character data.
-        2. Upload Character: Uploads the character data from the current tab to the GM Cheat Sheet.
-        3. Save Sheet: Saves the GM Cheat Sheet to a JSON file.
-        4. Upload Sheet: Uploads a GM Cheat Sheet from a JSON file.
-
-        Adding Skills and Powers in Manual Load:
-        - To add skills, enter the skills in the following format: "SkillName:Rank" (e.g., "Acrobatics:3, Athletics:2").
-        - To add powers, enter the powers in the following format: "PowerName:Rank" (e.g., "Fly:2, Invisibility:3").
-        - Separate multiple skills or powers with a comma.
-        """)
+    def settings_guide(self):
+        content = """
+        Settings Guide:
+        1. Open Settings: Customize application preferences, including theme and default values.
+        2. Guides / How To: Access this comprehensive guide for using the application.
+        """
+        self.show_guide("Settings Guide", content)
 
     def show_guide(self, title, content):
         guide_window = ttk.Toplevel(self.master)
         guide_window.title(title)
-        guide_text = ttk.Text(guide_window, wrap='word', height=15, width=50)
-        guide_text.pack(expand=True, fill='both')
-        guide_text.insert('1.0', content)
-        guide_text.config(state='disabled')
+        
+        frame = ttk.Frame(guide_window, padding="10")
+        frame.pack(fill='both', expand=True)
+
+        text = ttk.Text(frame, wrap='word', width=60, height=20)
+        text.pack(side='left', fill='both', expand=True)
+        
+        scrollbar = ttk.Scrollbar(frame, orient='vertical', command=text.yview)
+        scrollbar.pack(side='right', fill='y')
+        
+        text['yscrollcommand'] = scrollbar.set
+        
+        text.insert('1.0', content)
+        text.config(state='disabled')
 
 if __name__ == "__main__":
     root = ttk.Window(themename="darkly")

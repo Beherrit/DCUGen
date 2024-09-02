@@ -7,6 +7,7 @@ import settings
 import os
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
+from tooltip import ToolTip
 
 global tree
 
@@ -30,19 +31,29 @@ def load_conditions():
 def open_combat_calculator():
     calc_window = ttk.Toplevel()
     calc_window.title("Combat Calculator")
-    calc_window.geometry("400x300")
+    calc_window.geometry("400x400")
+
+    notebook = ttk.Notebook(calc_window)
+    notebook.pack(expand=True, fill="both", padx=10, pady=10)
 
     # Dodge Frame
-    dodge_frame = ttk.Frame(calc_window, padding=10)
-    dodge_frame.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
+    dodge_frame = ttk.Frame(notebook, padding=10)
+    notebook.add(dodge_frame, text="Dodge")
 
-    ttk.Label(dodge_frame, text="Dodge Defense Number:").pack()
+    ttk.Label(dodge_frame, text="Dodge Defense Number:").pack(pady=5)
     dodge_entry = ttk.Entry(dodge_frame)
-    dodge_entry.pack()
+    dodge_entry.pack(pady=5)
+    ToolTip(dodge_entry, "Enter the target's Dodge defense value")
 
-    ttk.Label(dodge_frame, text="Attacker's To Hit Roll:").pack()
+    ttk.Label(dodge_frame, text="Attacker's To Hit Roll:").pack(pady=5)
     dodge_hit_entry = ttk.Entry(dodge_frame)
-    dodge_hit_entry.pack()
+    dodge_hit_entry.pack(pady=5)
+    ToolTip(dodge_hit_entry, "Enter the attacker's total attack roll")
+
+    ttk.Label(dodge_frame, text="Note: +10 is already included in the calculation").pack(pady=5)
+
+    dodge_result_label = ttk.Label(dodge_frame, text="")
+    dodge_result_label.pack(pady=10)
 
     def calculate_dodge_hit():
         dodge = dodge_entry.get()
@@ -51,22 +62,29 @@ def open_combat_calculator():
         dodge = int(dodge) + 10 if dodge else 10
         to_hit = int(to_hit) if to_hit else 0
 
-        result = "YOU HIT" if to_hit >= dodge else "YOU MISSED"
-        messagebox.showinfo("Hit Result", result)
+        result = "HIT" if to_hit >= dodge else "MISS"
+        dodge_result_label.config(text=f"Result: {result}")
 
-    ttk.Button(dodge_frame, text="Calculate Hit", command=calculate_dodge_hit, style="info.TButton").pack(pady=5)
+    ttk.Button(dodge_frame, text="Calculate Hit", command=calculate_dodge_hit, style="info.TButton").pack(pady=10)
 
     # Parry Frame
-    parry_frame = ttk.Frame(calc_window, padding=10)
-    parry_frame.grid(row=0, column=1, padx=5, pady=5, sticky="nsew")
+    parry_frame = ttk.Frame(notebook, padding=10)
+    notebook.add(parry_frame, text="Parry")
 
-    ttk.Label(parry_frame, text="Parry Defense Number:").pack()
+    ttk.Label(parry_frame, text="Parry Defense Number:").pack(pady=5)
     parry_entry = ttk.Entry(parry_frame)
-    parry_entry.pack()
+    parry_entry.pack(pady=5)
+    ToolTip(parry_entry, "Enter the target's Parry defense value")
 
-    ttk.Label(parry_frame, text="Attacker's To Hit Roll:").pack()
+    ttk.Label(parry_frame, text="Attacker's To Hit Roll:").pack(pady=5)
     parry_hit_entry = ttk.Entry(parry_frame)
-    parry_hit_entry.pack()
+    parry_hit_entry.pack(pady=5)
+    ToolTip(parry_hit_entry, "Enter the attacker's total attack roll")
+
+    ttk.Label(parry_frame, text="Note: +10 is already included in the calculation").pack(pady=5)
+
+    parry_result_label = ttk.Label(parry_frame, text="")
+    parry_result_label.pack(pady=10)
 
     def calculate_parry_hit():
         parry = parry_entry.get()
@@ -75,22 +93,29 @@ def open_combat_calculator():
         parry = int(parry) + 10 if parry else 10
         to_hit = int(to_hit) if to_hit else 0
 
-        result = "YOU HIT" if to_hit >= parry else "YOU MISSED"
-        messagebox.showinfo("Hit Result", result)
+        result = "HIT" if to_hit >= parry else "MISS"
+        parry_result_label.config(text=f"Result: {result}")
 
-    ttk.Button(parry_frame, text="Calculate Hit", command=calculate_parry_hit, style="info.TButton").pack(pady=5)
+    ttk.Button(parry_frame, text="Calculate Hit", command=calculate_parry_hit, style="info.TButton").pack(pady=10)
 
     # Toughness Damage Frame
-    toughness_frame = ttk.Frame(calc_window, padding=10)
-    toughness_frame.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
+    toughness_frame = ttk.Frame(notebook, padding=10)
+    notebook.add(toughness_frame, text="Toughness")
 
-    ttk.Label(toughness_frame, text="Attacker's Damage Value:").pack()
+    ttk.Label(toughness_frame, text="Attacker's Damage Value:").pack(pady=5)
     damage_entry = ttk.Entry(toughness_frame)
-    damage_entry.pack()
+    damage_entry.pack(pady=5)
+    ToolTip(damage_entry, "Enter the total damage value of the attack")
 
-    ttk.Label(toughness_frame, text="Defender's Toughness Roll:").pack()
+    ttk.Label(toughness_frame, text="Defender's Toughness Roll:").pack(pady=5)
     defense_entry = ttk.Entry(toughness_frame)
-    defense_entry.pack()
+    defense_entry.pack(pady=5)
+    ToolTip(defense_entry, "Enter the defender's Toughness roll result")
+
+    ttk.Label(toughness_frame, text="Note: +15 is already included in the calculation").pack(pady=5)
+
+    toughness_result_label = ttk.Label(toughness_frame, text="")
+    toughness_result_label.pack(pady=10)
 
     def calculate_toughness():
         damage_value = damage_entry.get()
@@ -101,21 +126,28 @@ def open_combat_calculator():
 
         excess = (damage_value - defense_roll) // 5
         penalty = -excess if excess > 0 else 0
-        messagebox.showinfo("Toughness Penalty", f"Penalty: {penalty}")
+        toughness_result_label.config(text=f"Penalty: {penalty}")
 
-    ttk.Button(toughness_frame, text="Calculate Toughness", command=calculate_toughness, style="info.TButton").pack(pady=5)
+    ttk.Button(toughness_frame, text="Calculate Toughness", command=calculate_toughness, style="info.TButton").pack(pady=10)
 
     # Resistance Damage Frame
-    resistance_frame = ttk.Frame(calc_window, padding=10)
-    resistance_frame.grid(row=1, column=1, padx=5, pady=5, sticky="nsew")
+    resistance_frame = ttk.Frame(notebook, padding=10)
+    notebook.add(resistance_frame, text="Resistance")
 
-    ttk.Label(resistance_frame, text="Attacker's Effect Rank:").pack()
+    ttk.Label(resistance_frame, text="Attacker's Effect Rank:").pack(pady=5)
     effect_rank_entry = ttk.Entry(resistance_frame)
-    effect_rank_entry.pack()
+    effect_rank_entry.pack(pady=5)
+    ToolTip(effect_rank_entry, "Enter the rank of the effect being resisted")
 
-    ttk.Label(resistance_frame, text="Defender's Resistance Value Rolled:").pack()
+    ttk.Label(resistance_frame, text="Defender's Resistance Value Rolled:").pack(pady=5)
     resistance_roll_entry = ttk.Entry(resistance_frame)
-    resistance_roll_entry.pack()
+    resistance_roll_entry.pack(pady=5)
+    ToolTip(resistance_roll_entry, "Enter the defender's resistance roll result")
+
+    ttk.Label(resistance_frame, text="Note: +10 is already included in the calculation").pack(pady=5)
+
+    resistance_result_label = ttk.Label(resistance_frame, text="")
+    resistance_result_label.pack(pady=10)
 
     def calculate_resistance():
         effect_rank = effect_rank_entry.get()
@@ -126,9 +158,9 @@ def open_combat_calculator():
 
         excess = (effect_rank - resistance_roll) // 5
         effect = -excess if excess > 0 else 0
-        messagebox.showinfo("Resistance Effect", f"Effect: {effect}")
+        resistance_result_label.config(text=f"Effect: {effect}")
 
-    ttk.Button(resistance_frame, text="Calculate Resistance", command=calculate_resistance, style="info.TButton").pack(pady=5)
+    ttk.Button(resistance_frame, text="Calculate Resistance", command=calculate_resistance, style="info.TButton").pack(pady=10)
 
 def open_image_window():
     def resize_image(event):
@@ -328,6 +360,14 @@ def open_initiative_tracker(notebook, characters):
     clear_button = ttk.Button(input_frame, text="Clear Table", command=lambda: clear_table(tree), style="danger.TButton")
     clear_button.grid(row=1, column=8, padx=5, pady=5)
 
+    # Add Lock Window Button
+    lock_window_var = tk.BooleanVar()
+    lock_window_button = ttk.Checkbutton(input_frame, text="Lock Window", variable=lock_window_var, 
+                                         command=lambda: toggle_window_lock(tracker_window, lock_window_var),
+                                         style='primary.TCheckbutton')
+    lock_window_button.grid(row=1, column=9, padx=5, pady=5)
+    ToolTip(lock_window_button, "Toggle window lock to keep it on top of other windows.")
+
     tree_frame = ttk.Frame(tracker_window)
     tree_frame.grid(row=1, column=0, columnspan=16, padx=20, pady=20, sticky="nsew")
 
@@ -452,6 +492,9 @@ def open_initiative_tracker(notebook, characters):
     load_initiative_data(tree)
     tracker_window.protocol("WM_DELETE_WINDOW", lambda: [save_initiative_data(tree), tracker_window.destroy()])
     tracker_window.mainloop()
+
+def toggle_window_lock(window, lock_var):
+    window.attributes('-topmost', lock_var.get())
 
 if __name__ == "__main__":
     root = tk.Tk()
