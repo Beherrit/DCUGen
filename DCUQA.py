@@ -522,78 +522,82 @@ def update_defenses(character, stats):
     return character
 
 def pretty_print_character(character, text_widget):
-    # Set base font size
-    base_font_size = 10
-    text_widget.config(font=("Arial", base_font_size))
+    # Clear existing content
+    text_widget.delete('1.0', tk.END)
 
-    # Define styles
-    text_widget.tag_configure("bold", font=("Arial", base_font_size, "bold"))
-    text_widget.tag_configure("section_header", font=("Arial", base_font_size + 4, "bold"))
-    text_widget.tag_configure("subsection_header", font=("Arial", base_font_size + 2, "bold"))
+    # Set base font and styles
+    base_font = ("Helvetica", 10)
+    text_widget.configure(font=base_font)
+    text_widget.tag_configure("header", font=("Helvetica", 12, "bold"))
+    text_widget.tag_configure("subheader", font=("Helvetica", 11, "bold"))
+    text_widget.tag_configure("bold", font=("Helvetica", 10, "bold"))
 
-    text_widget.insert("end", "Character Creation Summary\n", "section_header")
-    text_widget.insert("end", "-" * 40 + "\n\n")
+    def insert_header(text):
+        text_widget.insert(tk.END, f"\n{text}\n", "header")
+        text_widget.insert(tk.END, "="*len(text) + "\n\n")
+
+    def insert_subheader(text):
+        text_widget.insert(tk.END, f"{text}\n", "subheader")
+        text_widget.insert(tk.END, "-"*len(text) + "\n")
 
     # Basic Information
-    text_widget.insert("end", "BASIC INFORMATION\n", "section_header")
-    text_widget.insert("end", f"Name: {character.get('name', 'Unnamed Character')}\n", "bold")
-    text_widget.insert("end", f"Gender: {character.get('gender', 'N/A')}\n", "bold")
-    text_widget.insert("end", f"Age: {character.get('age', 'N/A')}\n", "bold")
-    text_widget.insert("end", f"Theme: {character.get('theme', 'N/A')}\n", "bold")
+    insert_header("Character Creation Summary")
+    
+    insert_subheader("Basic Information")
+    text_widget.insert(tk.END, f"Name: {character.get('name', 'Unnamed Character')}\n", "bold")
+    text_widget.insert(tk.END, f"Gender: {character.get('gender', 'N/A')}\n")
+    text_widget.insert(tk.END, f"Age: {character.get('age', 'N/A')}\n")
+    text_widget.insert(tk.END, f"Theme: {character.get('theme', 'N/A')}\n")
 
     # Origin
-    text_widget.insert("end", "\nORIGIN\n", "section_header")
+    insert_subheader("Origin")
     origin = character.get('origin', {})
-    text_widget.insert("end", f"Region: {origin.get('region', 'N/A')}\n")
-    text_widget.insert("end", f"Country: {origin.get('country', 'N/A')}\n")
-    text_widget.insert("end", f"Language: {origin.get('language', 'N/A')}\n")
+    text_widget.insert(tk.END, f"Region: {origin.get('region', 'N/A')}\n")
+    text_widget.insert(tk.END, f"Country: {origin.get('country', 'N/A')}\n")
+    text_widget.insert(tk.END, f"Language: {origin.get('language', 'N/A')}\n")
 
-    text_widget.insert("end", "\nEXPANDED TRAITS\n", "section_header")
+    # Expanded Traits
+    insert_subheader("Expanded Traits")
     for category, trait in character["expanded_traits"].items():
-        text_widget.insert("end", f"{category.replace('_', ' ').title()}: {trait['name']}\n", "bold")
-        text_widget.insert("end", f"Description: {trait['description']}\n")
-        text_widget.insert("end", f"Effect: {trait['effect']}\n\n")
-    
+        text_widget.insert(tk.END, f"{category.replace('_', ' ').title()}: {trait['name']}\n", "bold")
+        text_widget.insert(tk.END, f"Description: {trait['description']}\n")
+        text_widget.insert(tk.END, f"Effect: {trait['effect']}\n\n")
 
     # Character Stats
-    text_widget.insert("end", "\nCHARACTER STATS\n", "section_header")
-    power_level = character.get("power_level", "N/A")
-    total_cost = character.get("total_cost", 0)
-    max_points = character.get("max_points", "N/A")
-    unspent_points = character.get('unspent_points', 0)
-    text_widget.insert("end", f"Power Level: {power_level}\n", "bold")
-    text_widget.insert("end", f"Total Cost: {int(total_cost)}\n", "bold")
-    text_widget.insert("end", f"Unspent Points: {unspent_points}\n", "bold")
-    text_widget.insert("end", f"Maximum Points Allowed: {max_points}\n", "bold")
+    insert_header("Character Stats")
+    text_widget.insert(tk.END, f"Power Level: {character.get('power_level', 'N/A')}\n", "bold")
+    text_widget.insert(tk.END, f"Total Cost: {int(character.get('total_cost', 0))}\n")
+    text_widget.insert(tk.END, f"Unspent Points: {character.get('unspent_points', 0)}\n")
+    text_widget.insert(tk.END, f"Maximum Points Allowed: {character.get('max_points', 'N/A')}\n\n")
 
     attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, _ = calculate_totals(character)
-    text_widget.insert("end", f"Attribute Total Cost: {attribute_total_cost}\n", "bold")
-    text_widget.insert("end", f"Advantage Total Cost: {advantage_total_cost}\n", "bold")
-    text_widget.insert("end", f"Skills Total Cost: {skill_total_cost}\n", "bold")
-    text_widget.insert("end", f"Powers Total Cost: {power_total_cost}\n", "bold")
-    text_widget.insert("end", f"Defenses Total Cost: {defense_total_cost}\n", "bold")
+    text_widget.insert(tk.END, f"Attribute Total Cost: {attribute_total_cost}\n")
+    text_widget.insert(tk.END, f"Advantage Total Cost: {advantage_total_cost}\n")
+    text_widget.insert(tk.END, f"Skills Total Cost: {skill_total_cost}\n")
+    text_widget.insert(tk.END, f"Powers Total Cost: {power_total_cost}\n")
+    text_widget.insert(tk.END, f"Defenses Total Cost: {defense_total_cost}\n")
 
     # Attributes
-    text_widget.insert("end", "\nATTRIBUTES\n", "section_header")
+    insert_header("Attributes")
     for stat in stats_data["STATS"]:
         stat_name = stat["name"]
         stat_details = character.get("stats", {}).get(stat_name, {"value": 0, "cost": 0})
-        text_widget.insert("end", f"{stat_name}: {stat_details['value']} (Cost: {stat_details['cost']})\n")
+        text_widget.insert(tk.END, f"{stat_name}: {stat_details['value']} (Cost: {stat_details['cost']})\n")
 
     # Defenses
-    text_widget.insert("end", "\nDEFENSES\n", "section_header")
+    insert_header("Defenses")
     for defense, details in character.get("defenses", {}).items():
         if isinstance(details, dict):
-            text_widget.insert("end", f"{defense}: Stat Bonus: {details['stat_bonus']}, Bought Rank: {details['bought_rank']}, Total Rank: {details['total_rank']}\n")
+            text_widget.insert(tk.END, f"{defense}: Stat Bonus: {details['stat_bonus']}, Bought Rank: {details['bought_rank']}, Total Rank: {details['total_rank']}\n")
 
     # Advantages
-    text_widget.insert("end", "\nADVANTAGES\n", "section_header")
+    insert_header("Advantages")
     sorted_advantages = sorted(character.get("advantages", []), key=lambda x: x["name"])
     for advantage in sorted_advantages:
-        text_widget.insert("end", f"{advantage['name']} (Rank: {advantage['rank']}, Cost: {advantage['cost']})\n")
+        text_widget.insert(tk.END, f"{advantage['name']} (Rank: {advantage['rank']}, Cost: {advantage['cost']})\n")
 
     # Skills
-    text_widget.insert("end", "\nSKILLS\n", "section_header")
+    insert_header("Skills")
     sorted_skills = sorted(character.get("skills", []), key=lambda x: x["name"])
     for skill in sorted_skills:
         skill_name = skill["name"]
@@ -601,101 +605,103 @@ def pretty_print_character(character, text_widget):
         associated_attribute = next((s['tags'][0] for s in skills_data if s['name'] == skill_name), None)
         attribute_rank = character['stats'][associated_attribute]['value'] if associated_attribute else 0
         total = skill['rank'] + attribute_rank
-        text_widget.insert("end", f"{skill_name}{sub_skill_display} (Rank: {skill['rank']}, Attribute Rank: {attribute_rank}, Total: {total}, Cost: {skill['cost']})\n")
+        text_widget.insert(tk.END, f"{skill_name}{sub_skill_display} (Rank: {skill['rank']}, Attribute Rank: {attribute_rank}, Total: {total}, Cost: {skill['cost']})\n")
 
     # Powers
-    text_widget.insert("end", "\nPOWERS\n", "section_header")
+    insert_header("Powers")
     for power in character.get("powers", []):
-        text_widget.insert("end", f"{power['name']} (Rank: {power['rank']}, Cost: {power['cost']})\n")
+        text_widget.insert(tk.END, f"{power['name']} (Rank: {power['rank']}, Cost: {power['cost']})\n", "bold")
         if 'extras' in power and power['extras']:
-            text_widget.insert("end", f"  Extras: {', '.join([f'{extra} (Rank: {rank})' for extra, rank in zip(power['extras'], power['extras_ranks'])])}\n")
+            text_widget.insert(tk.END, f"  Extras: {', '.join([f'{extra} (Rank: {rank})' for extra, rank in zip(power['extras'], power['extras_ranks'])])}\n")
         if 'flaws' in power and power['flaws']:
-            text_widget.insert("end", f"  Flaws: {', '.join([f'{flaw} (Rank: {rank})' for flaw, rank in zip(power['flaws'], power['flaws_ranks'])])}\n")
+            text_widget.insert(tk.END, f"  Flaws: {', '.join([f'{flaw} (Rank: {rank})' for flaw, rank in zip(power['flaws'], power['flaws_ranks'])])}\n")
         resisted_by = power.get('resisted', 'N/A')
-        text_widget.insert("end", f"  Resisted by: {resisted_by}\n")
+        text_widget.insert(tk.END, f"  Resisted by: {resisted_by}\n")
         if 'failure_effects' in power:
-            text_widget.insert("end", f"  Failure Effects: {', '.join([f'{degree}: {effect}' for degree, effect in power['failure_effects'].items()])}\n")
-        # Calculate and display accuracy
+            text_widget.insert(tk.END, f"  Failure Effects: {', '.join([f'{degree}: {effect}' for degree, effect in power['failure_effects'].items()])}\n")
         accuracy = calculate_accuracy(character, power)
-        text_widget.insert("end", f"  Accuracy: {accuracy}\n")
+        text_widget.insert(tk.END, f"  Accuracy: {accuracy}\n")
         
         if 'range' in power and power['range'] == "Ranged":
-            text_widget.insert("end", f"    Close Range: {power['close_range']} ft, Medium Range: {power['medium_range']} ft, Long Range: {power['long_range']} ft\n")
+            text_widget.insert(tk.END, f"    Close Range: {power['close_range']} ft, Medium Range: {power['medium_range']} ft, Long Range: {power['long_range']} ft\n")
 
     # Attacks
-    text_widget.insert("end", "\nATTACKS\n", "section_header")
+    insert_header("Attacks")
     melee_attack_bonus, ranged_attack_bonus = calculate_attack_bonuses(character)
-    text_widget.insert("end", f"Melee Attack Bonus: {melee_attack_bonus}\n", "bold")
+    text_widget.insert(tk.END, f"Melee Attack Bonus: {melee_attack_bonus}\n", "bold")
     for power in character["powers"]:
         if power.get("range") == "Melee":
-            text_widget.insert("end", f"  {power['name']} (Effect Rank: {power['rank']})\n")
+            text_widget.insert(tk.END, f"  {power['name']} (Effect Rank: {power['rank']})\n")
 
-    text_widget.insert("end", f"Ranged Attack Bonus: {ranged_attack_bonus}\n", "bold")
+    text_widget.insert(tk.END, f"\nRanged Attack Bonus: {ranged_attack_bonus}\n", "bold")
     for power in character["powers"]:
         if power.get("range") == "Ranged":
-            text_widget.insert("end", f"  {power['name']} (Effect Rank: {power['rank']})\n")
+            text_widget.insert(tk.END, f"  {power['name']} (Effect Rank: {power['rank']})\n")
             if "close_range" in power:
-                text_widget.insert("end", f"    Close Range: {power['close_range']} ft, Medium Range: {power['medium_range']} ft, Long Range: {power['long_range']} ft\n")
+                text_widget.insert(tk.END, f"    Close Range: {power['close_range']} ft, Medium Range: {power['medium_range']} ft, Long Range: {power['long_range']} ft\n")
 
     # Equipment
-    text_widget.insert("end", "\nEQUIPMENT\n", "section_header")
+    insert_header("Equipment")
     for item in character.get('equipment', []):
-        text_widget.insert("end", f"{item['name']}\n")
+        text_widget.insert(tk.END, f"{item['name']}\n", "bold")
         if 'description' in item:
-            text_widget.insert("end", f"  Description: {item['description']}\n")
+            text_widget.insert(tk.END, f"  Description: {item['description']}\n")
         if 'effects' in item:
-            text_widget.insert("end", f"  Effects: {', '.join(item['effects'])}\n")
+            text_widget.insert(tk.END, f"  Effects: {', '.join(item['effects'])}\n")
         if 'rank' in item:
-            text_widget.insert("end", f"  Rank: {item['rank']}\n")
+            text_widget.insert(tk.END, f"  Rank: {item['rank']}\n")
         if 'cost' in item:
-            text_widget.insert("end", f"  Cost: {item['cost']}\n")
+            text_widget.insert(tk.END, f"  Cost: {item['cost']}\n")
         if 'total_cost' in item:
-            text_widget.insert("end", f"  Total Cost: {item['total_cost']}\n")
+            text_widget.insert(tk.END, f"  Total Cost: {item['total_cost']}\n")
 
     # Physical Traits
-    text_widget.insert("end", "\nPHYSICAL TRAITS\n", "section_header")
+    insert_header("Physical Traits")
     for trait, value in character.get("physical_traits", {}).items():
-        text_widget.insert("end", f"{trait.capitalize()}: {value}\n")
-    text_widget.insert("end", f"Costume Style: {character.get('costume_style', 'N/A')}\n")
-    text_widget.insert("end", f"Distinctive Feature: {character.get('distinctive_feature', 'N/A')}\n")
+        text_widget.insert(tk.END, f"{trait.capitalize()}: {value}\n")
+    text_widget.insert(tk.END, f"Costume Style: {character.get('costume_style', 'N/A')}\n")
+    text_widget.insert(tk.END, f"Distinctive Feature: {character.get('distinctive_feature', 'N/A')}\n")
 
     # Personality Traits
-    text_widget.insert("end", "\nPERSONALITY TRAITS\n", "section_header")
-    text_widget.insert("end", "Positive Traits:\n", "bold")
+    insert_header("Personality Traits")
+    text_widget.insert(tk.END, "Positive Traits:\n", "bold")
     positive_traits = " | ".join(character.get('personality_traits', {}).get('positive_traits', []))
-    text_widget.insert("end", f"{positive_traits}\n")
+    text_widget.insert(tk.END, f"{positive_traits}\n\n")
 
-    text_widget.insert("end", "Negative Traits:\n", "bold")
+    text_widget.insert(tk.END, "Negative Traits:\n", "bold")
     negative_traits = " | ".join(character.get('personality_traits', {}).get('negative_traits', []))
-    text_widget.insert("end", f"{negative_traits}\n")
+    text_widget.insert(tk.END, f"{negative_traits}\n\n")
 
-    text_widget.insert("end", "Quirky Traits:\n", "bold")
+    text_widget.insert(tk.END, "Quirky Traits:\n", "bold")
     quirky_traits = character.get('personality_traits', {}).get('quirky_traits', [])
-    text_widget.insert("end", f"{' | '.join(quirky_traits) if quirky_traits else 'None'}\n")
+    text_widget.insert(tk.END, f"{' | '.join(quirky_traits) if quirky_traits else 'None'}\n")
 
     # Languages
-    text_widget.insert("end", "\nLANGUAGES\n", "section_header")
+    insert_header("Languages")
     for language in character.get('languages', []):
-        text_widget.insert("end", f"{language}\n")
+        text_widget.insert(tk.END, f"{language}\n")
 
     # Initiative
-    text_widget.insert("end", "\nINITIATIVE\n", "section_header")
-    text_widget.insert("end", f"{character.get('initiative', 'N/A')}\n")
+    insert_header("Initiative")
+    text_widget.insert(tk.END, f"{character.get('initiative', 'N/A')}\n")
 
     # Motivation
-    text_widget.insert("end", "\nMOTIVATION\n", "section_header")
+    insert_header("Motivation")
     motivation = character.get("Motivation", {})
-    text_widget.insert("end", f"{motivation.get('name', 'N/A')}: {motivation.get('description', 'N/A')}\n")
+    text_widget.insert(tk.END, f"{motivation.get('name', 'N/A')}: {motivation.get('description', 'N/A')}\n")
 
     # Complications
-    text_widget.insert("end", "\nCOMPLICATIONS\n", "section_header")
+    insert_header("Complications")
     for complication in character.get("Complications", []):
-        text_widget.insert("end", f"{complication['name']}: {complication['description']}\n")
+        text_widget.insert(tk.END, f"{complication['name']}: {complication['description']}\n")
 
     # AI Image Generator Prompt
-    text_widget.insert("end", "\nAI IMAGE GENERATOR PROMPT\n", "section_header")
+    insert_header("AI Image Generator Prompt")
     description = character.get("description", "No description available")
-    text_widget.insert("end", description + "\n")
+    text_widget.insert(tk.END, description + "\n")
+
+    # Scroll to the top
+    text_widget.see("1.0")
 
 def generate_character(power_level, include_powers, stat_percent, advantage_percent, skill_percent, defense_percent, power_percent, max_advantages, max_powers, selected_power_types, random_physical_features=True, random_costume_style=True, random_distinctive_feature=True, villain=False):
     max_retries = 10
@@ -878,7 +884,7 @@ def main():
 
     # Use ttkbootstrap for a modern look
     root = ttk.Window(themename="darkly")
-    root.title("Character Creation Version 4.4 Prod")
+    root.title("Character Creation Version 4.5Prod")
     
     # Set base size for the main window
     root.geometry("1024x768")  # Width x Height
@@ -1004,6 +1010,16 @@ def main():
     gm_tools_frame.add_widget(init_tracker_button)
     ToolTip(init_tracker_button, "Open the initiative tracker for combat encounters.")
 
+    # Combat Calculator
+    combat_calculator_button = ttk.Button(
+        gm_tools_frame.body_frame,
+        text="Combat Calculator",
+        command=open_combat_calculator,
+        style=f'{secondary_button_color}.TButton'
+    )
+    gm_tools_frame.add_widget(combat_calculator_button)
+    ToolTip(combat_calculator_button, "Open the combat calculator for various combat-related calculations.")
+
     # Dice Roller
     dice_roller_button = ttk.Button(
         gm_tools_frame.body_frame,
@@ -1011,9 +1027,6 @@ def main():
         command=open_dice_roller,
         style=f'{secondary_button_color}.TButton'
     )
-    gm_tools_frame.add_widget(dice_roller_button)
-    ToolTip(dice_roller_button, "Open the dice roller for various dice rolls.")
-
     gm_tools_frame.add_widget(dice_roller_button)
     ToolTip(dice_roller_button, "Open the dice roller for various dice rolls.")
 

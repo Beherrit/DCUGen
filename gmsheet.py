@@ -6,10 +6,13 @@ import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from ttkbootstrap.scrolled import ScrolledFrame
 
+from initiative_tracker import open_initiative_tracker
+
 class GMSheetApp:
     def __init__(self, master: ttk.Window, main_notebook: ttk.Notebook, characters: Dict[str, Any]):
         self.master = master
         self.master.title("GM Cheat Sheet")
+        self.master.geometry("800x600")  # Increased window size
         self.main_notebook = main_notebook
         self.characters = characters
         self.displayed_characters: Dict[str, ttk.Frame] = {}
@@ -29,8 +32,8 @@ class GMSheetApp:
         self.scrolled_frame.pack(fill=BOTH, expand=YES)
 
         self.setup_buttons()
-        self.character_frame = ttk.Frame(self.scrolled_frame)
-        self.character_frame.pack(fill=BOTH, expand=YES)
+        self.character_notebook = ttk.Notebook(self.scrolled_frame)
+        self.character_notebook.pack(fill=BOTH, expand=YES)
 
     def setup_buttons(self):
         button_frame = ttk.Frame(self.scrolled_frame)
@@ -38,9 +41,11 @@ class GMSheetApp:
 
         buttons = [
             ("Add New Character", self.add_new_character, "info"),
-            ("Upload Character", self.upload_character, "info"),
+            ("Upload from Tab", self.upload_character, "info"),
+            ("Upload All Tabs", self.upload_all_characters, "info"),
             ("Save Sheet", self.save_sheet, "success"),
-            ("Upload Sheet", self.upload_sheet, "success")
+            ("Upload Sheet", self.upload_sheet, "success"),
+            ("Upload to Init Tracker", self.upload_to_init_tracker, "warning")  # New button
         ]
 
         for text, command, style in buttons:
@@ -49,6 +54,7 @@ class GMSheetApp:
     def add_new_character(self):
         new_window = ttk.Toplevel(self.master)
         new_window.title("Add New Character")
+        new_window.geometry("400x600")
         CharacterForm(new_window, self.characters, self.display_character).pack(fill=BOTH, expand=YES, padx=20, pady=20)
 
     def upload_character(self):
@@ -59,38 +65,61 @@ class GMSheetApp:
         else:
             messagebox.showerror("Error", "No character data found for the current tab")
 
-    def display_character(self, character_data: Dict[str, Any]):
-        char_frame = ttk.Frame(self.character_frame)
-        char_frame.pack(side=LEFT, fill=Y, padx=10, pady=10)
+    def upload_all_characters(self):
+        for tab in self.main_notebook.tabs():
+            tab_text = self.main_notebook.tab(tab, "text")
+            if tab_text in self.characters:
+                self.display_character(self.characters[tab_text])
+        messagebox.showinfo("Success", "All characters from tabs have been uploaded to the GM Cheat Sheet.")
 
-        ttk.Button(char_frame, text="Delete", command=lambda: self.confirm_delete(character_data["name"]), 
-                   style="danger.TButton").pack(pady=5)
+    def display_character(self, character_data: Dict[str, Any]):
+        name = character_data["name"]
+        if name in self.displayed_characters:
+            self.character_notebook.forget(self.displayed_characters[name])
+
+        char_frame = ttk.Frame(self.character_notebook)
+        self.character_notebook.add(char_frame, text=name)
 
         sections = self.get_character_sections(character_data)
 
         for section, items in sections.items():
-            section_frame = CollapsibleSection(char_frame, section, start_collapsed=False)
-            for name, value in items:
-                ttk.Label(section_frame.body_frame, text=f"{name}: {value}", style="Body.TLabel").pack(fill=X, padx=5, pady=2)
-            section_frame.pack(fill=X, pady=5)
+            section_frame = ttk.LabelFrame(char_frame, text=section)
+            section_frame.pack(fill=X, expand=YES, padx=5, pady=5)
 
-        self.displayed_characters[character_data["name"]] = char_frame
+            for name, value in items:
+                item_frame = ttk.Frame(section_frame)
+                item_frame.pack(fill=X, padx=5, pady=2)
+                ttk.Label(item_frame, text=name, width=15, style="Body.TLabel").pack(side=LEFT, anchor=N)
+                if section == "Powers":
+                    ttk.Label(item_frame, text=value, style="Body.TLabel", wraplength=400).pack(side=LEFT, fill=X, expand=YES)
+                else:
+                    ttk.Label(item_frame, text=value, style="Body.TLabel").pack(side=LEFT)
+
+        ttk.Button(char_frame, text="Delete", command=lambda: self.confirm_delete(character_data["name"]), 
+                   style="danger.TButton").pack(pady=5)
+
+        self.displayed_characters[name] = char_frame
+        self.character_notebook.select(char_frame)
 
     def get_character_sections(self, character_data: Dict[str, Any]) -> Dict[str, list]:
         return {
-            "NAME": [("Name", character_data.get("name", ""))],
-            "THEME": [("Theme", character_data.get("theme", ""))],
-            "ATTRIBUTES": [
-                (attr, character_data.get("stats", {}).get(attr, {}).get("value", ""))
-                for attr in ["Initiative", "Strength", "Agility", "Fighting", "Stamina", "Intellect", "Awareness", "Presence", "Dexterity"]
+            "Basic": [
+                ("Name", character_data.get("name", "")),
+                ("Theme", character_data.get("theme", "")),
+                ("Initiative", character_data.get("initiative", ""))
             ],
-            "DEFENSES": [
+            "Attributes": [
+                (attr, character_data.get("stats", {}).get(attr, {}).get("value", ""))
+                for attr in ["Strength", "Agility", "Fighting", "Stamina", "Intellect", "Awareness", "Presence", "Dexterity"]
+            ],
+            "Defenses": [
                 (defense, character_data.get("defenses", {}).get(defense, {}).get("total_rank", ""))
                 for defense in ["Dodge", "Fortitude", "Parry", "Will", "Toughness"]
             ],
             "Skills": [(skill["name"], skill["rank"]) for skill in character_data.get("skills", [])],
             "Advantages": [(advantage["name"], advantage["rank"]) for advantage in character_data.get("advantages", [])],
-            "Powers": [(power["name"], power["rank"]) for power in character_data.get("powers", [])],
+            "Powers": [(power['name'], f"Rank: {power['rank']}, Flaws: {power['flaws']}, Extras: {power['extras']}, Range: {power['range']}")
+                       for power in character_data.get("powers", [])],
         }
 
     def confirm_delete(self, name: str):
@@ -99,13 +128,14 @@ class GMSheetApp:
 
     def delete_character(self, name: str):
         if name in self.displayed_characters:
-            self.displayed_characters[name].destroy()
+            self.character_notebook.forget(self.displayed_characters[name])
             del self.displayed_characters[name]
+            del self.characters[name]
             messagebox.showinfo("Success", f"Character '{name}' removed from GM Cheat Sheet.")
 
     def refresh_display(self):
-        for widget in self.character_frame.winfo_children():
-            widget.destroy()
+        for tab in self.character_notebook.tabs():
+            self.character_notebook.forget(tab)
         self.displayed_characters.clear()
         for data in self.characters.values():
             self.display_character(data)
@@ -125,6 +155,19 @@ class GMSheetApp:
                 self.refresh_display()
             messagebox.showinfo("Upload Sheet", f"Sheet uploaded from {load_path}")
 
+    def upload_to_init_tracker(self):
+        init_tracker_data = []
+        for character_data in self.characters.values():
+            name = character_data.get("name", "")
+            awareness = character_data.get("stats", {}).get("Awareness", {}).get("value", 0)
+            agility = character_data.get("stats", {}).get("Agility", {}).get("value", 0)
+            initiative = character_data.get("initiative", "")
+            
+            init_tracker_data.append((name, awareness, agility, initiative))
+        
+        open_initiative_tracker(self.main_notebook, self.characters, init_tracker_data)
+        messagebox.showinfo("Success", "All characters have been uploaded to the Initiative Tracker.")
+
 class CharacterForm(ttk.Frame):
     def __init__(self, master: ttk.Toplevel, characters: Dict[str, Any], display_character_callback: Callable):
         super().__init__(master)
@@ -133,21 +176,46 @@ class CharacterForm(ttk.Frame):
         self.create_form()
 
     def create_form(self):
-        fields = [
-            "Name", "Initiative", "Theme", "Strength", "Agility", "Fighting", "Stamina",
-            "Intellect", "Awareness", "Presence", "Dexterity",
-            "Dodge", "Fortitude", "Parry", "Will", "Toughness",
-            "Skills", "Advantages", "Powers"
-        ]
+        notebook = ttk.Notebook(self)
+        notebook.pack(fill=BOTH, expand=YES)
 
-        self.entries = {field: ttk.Entry(self) for field in fields}
+        basic_frame = ttk.Frame(notebook)
+        attributes_frame = ttk.Frame(notebook)
+        defenses_frame = ttk.Frame(notebook)
+        other_frame = ttk.Frame(notebook)
 
-        for field, entry in self.entries.items():
-            ttk.Label(self, text=field, style="Body.TLabel").pack(pady=(10, 0))
-            entry.pack(fill=X, padx=10)
+        notebook.add(basic_frame, text="Basic")
+        notebook.add(attributes_frame, text="Attributes")
+        notebook.add(defenses_frame, text="Defenses")
+        notebook.add(other_frame, text="Other")
+
+        basic_fields = ["Name", "Initiative", "Theme"]
+        attribute_fields = ["Strength", "Agility", "Fighting", "Stamina", "Intellect", "Awareness", "Presence", "Dexterity"]
+        defense_fields = ["Dodge", "Fortitude", "Parry", "Will", "Toughness"]
+        other_fields = ["Skills", "Advantages", "Powers"]
+
+        self.entries = {}
+
+        self.create_fields(basic_frame, basic_fields)
+        self.create_fields(attributes_frame, attribute_fields)
+        self.create_fields(defenses_frame, defense_fields)
+        self.create_fields(other_frame, other_fields)
+
+        # Add instruction text for the "Other" tab
+        instruction_text = "For Skills and Advantages, use the format:\nname1:rank1, name2:rank2, ...\nExample: Acrobatics:5, Deception:3\n\nFor Powers, use the format:\nname:rank:flaws:extras:range, ...\nExample: Flight:5:None:None:Ranged, Blast:7:Unreliable:Penetrating:Close"
+        ttk.Label(other_frame, text=instruction_text, wraplength=350, justify="left").pack(pady=10)
 
         ttk.Button(self, text="Save to GM Cheat Sheet", command=self.save_character, 
                    style="success.TButton").pack(pady=20)
+
+    def create_fields(self, parent, fields):
+        for field in fields:
+            frame = ttk.Frame(parent)
+            frame.pack(fill=X, padx=10, pady=5)
+            ttk.Label(frame, text=field, width=15).pack(side=LEFT)
+            entry = ttk.Entry(frame)
+            entry.pack(side=LEFT, expand=YES, fill=X)
+            self.entries[field] = entry
 
     def save_character(self):
         character_data = self.get_character_data()
@@ -155,6 +223,7 @@ class CharacterForm(ttk.Frame):
             self.characters[character_data["name"]] = character_data
             self.display_character_callback(character_data)
             messagebox.showinfo("Success", f"Character '{character_data['name']}' added to GM Cheat Sheet.")
+            self.master.destroy()
         else:
             messagebox.showerror("Error", "Character name is required.")
 
@@ -175,31 +244,16 @@ class CharacterForm(ttk.Frame):
                        for skill in self.entries["Skills"].get().split(",") if ":" in skill],
             "advantages": [{"name": adv.split(":")[0].strip(), "rank": int(adv.split(":")[1].strip())} 
                            for adv in self.entries["Advantages"].get().split(",") if ":" in adv],
-            "powers": [{"name": power.split(":")[0].strip(), "rank": int(power.split(":")[1].strip())} 
-                       for power in self.entries["Powers"].get().split(",") if ":" in power],
+            "powers": [{"name": power.split(":")[0].strip(), 
+                        "rank": int(power.split(":")[1].strip()),
+                        "flaws": power.split(":")[2].strip(),
+                        "extras": power.split(":")[3].strip(),
+                        "range": power.split(":")[4].strip()} 
+                       for power in self.entries["Powers"].get().split(",") if len(power.split(":")) == 5],
         }
-
-class CollapsibleSection(ttk.Frame):
-    def __init__(self, master: ttk.Frame, title: str, start_collapsed: bool = True):
-        super().__init__(master)
-        self.title = title
-        self.is_collapsed = start_collapsed
-
-        self.header = ttk.Button(self, text=title, style="secondary.TButton", command=self.toggle)
-        self.header.pack(fill=X)
-
-        self.body_frame = ttk.Frame(self)
-        if not self.is_collapsed:
-            self.body_frame.pack(fill=X, expand=YES)
-
-    def toggle(self):
-        if self.is_collapsed:
-            self.body_frame.pack(fill=X, expand=YES)
-        else:
-            self.body_frame.pack_forget()
-        self.is_collapsed = not self.is_collapsed
 
 if __name__ == "__main__":
     root = ttk.Window(themename="darkly")
+    root.geometry("800x600")  # Set initial window size
     app = GMSheetApp(root, None, {})
     root.mainloop()

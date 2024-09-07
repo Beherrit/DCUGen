@@ -1,11 +1,11 @@
-# hideout.py
 import os
 import random
 import json
 import tkinter as tk
 from tkinter import messagebox, filedialog, ttk
+from typing import Dict, List, Any
 
-def generate_hideout(notebook, text_widgets):
+def generate_hideout(notebook: ttk.Notebook, text_widgets: Dict[Any, tk.Text]) -> Dict[str, Any]:
     with open('./json/headquarters.json', 'r') as file:
         headquarters_data = json.load(file)
 
@@ -13,7 +13,11 @@ def generate_hideout(notebook, text_widgets):
     num_traits = random.randint(10, 20)
     
     selected_feature_ids = set()
-    hideout_details = {}
+    hideout_details = {
+        'Size': hq_size,
+        'Toughness': random.choice(headquarters_data['headquarters']['toughness']),
+        'Traits': []
+    }
 
     def get_unique_feature():
         while True:
@@ -23,10 +27,6 @@ def generate_hideout(notebook, text_widgets):
                 return feature
 
     hq_traits = [get_unique_feature() for _ in range(num_traits)]
-    hq_toughness = random.choice(headquarters_data['headquarters']['toughness'])
-
-    hideout_details['Size'] = hq_size
-    hideout_details['Toughness'] = hq_toughness
     hideout_details['Traits'] = [trait['name'] for trait in hq_traits]
 
     new_tab = ttk.Frame(notebook)
@@ -34,27 +34,30 @@ def generate_hideout(notebook, text_widgets):
     
     hideout_summary_text = tk.Text(new_tab, height=15, width=50)
     hideout_summary_text.pack(expand=True, fill='both')
-    hideout_summary_text.tag_configure("bold", font=("Helvetica", 12, "bold", "underline"))
-    hideout_summary_text.tag_configure("bold_no_underline", font=("Helvetica", 10, "bold"))
-    hideout_summary_text.tag_configure("normal_format", font=("Helvetica", 10))
+    
+    for tag, font in [
+        ("title", ("Helvetica", 12, "bold", "underline")),
+        ("subtitle", ("Helvetica", 10, "bold")),
+        ("normal", ("Helvetica", 10))
+    ]:
+        hideout_summary_text.tag_configure(tag, font=font)
 
-    hideout_summary_text.insert("end", "Hideout Summary\n", "bold")
-    hideout_summary_text.insert("end", "-" * 40 + "\n")
-    hideout_summary_text.insert("end", f"\nSize: {hq_size}\n", "bold_no_underline")
-    hideout_summary_text.insert("end", f"Toughness: {hq_toughness}\n", "bold_no_underline")
-    hideout_summary_text.insert("end", "\nTraits:\n", "bold_no_underline")
+    hideout_summary_text.insert("end", "Hideout Summary\n", "title")
+    hideout_summary_text.insert("end", "-" * 40 + "\n\n")
+    hideout_summary_text.insert("end", f"Size: {hq_size}\n", "subtitle")
+    hideout_summary_text.insert("end", f"Toughness: {hideout_details['Toughness']}\n\n", "subtitle")
+    hideout_summary_text.insert("end", "Traits:\n", "subtitle")
 
     for trait in hq_traits:
-        hideout_summary_text.insert("end", f"- {trait['name']}\n", "normal_format")
-        hideout_summary_text.insert("end", f"  {trait['description']}\n\n", "normal_format")
+        hideout_summary_text.insert("end", f"- {trait['name']}\n", "normal")
+        hideout_summary_text.insert("end", f"  {trait['description']}\n\n", "normal")
     
     text_widgets[new_tab] = hideout_summary_text
     notebook.select(new_tab)
 
-    return hideout_details  # Returning the dictionary to be used later
+    return hideout_details
 
-# Function to save hideout details to a file
-def save_hideout(hideout_details):
+def save_hideout(hideout_details: Dict[str, Any]) -> None:
     filename = filedialog.asksaveasfilename(
         defaultextension=".txt",
         filetypes=[("Text files", "*.txt")],
@@ -62,14 +65,14 @@ def save_hideout(hideout_details):
     )
     
     if not filename:
-        return  # User cancelled the save dialog
+        return
 
     with open(filename, 'w') as file:
         file.write("Hideout Summary\n")
-        file.write("-" * 40 + "\n")
-        file.write(f"\nSize: {hideout_details['Size']}\n")
-        file.write(f"Toughness: {hideout_details['Toughness']}\n")
-        file.write("\nTraits:\n")
+        file.write("-" * 40 + "\n\n")
+        file.write(f"Size: {hideout_details['Size']}\n")
+        file.write(f"Toughness: {hideout_details['Toughness']}\n\n")
+        file.write("Traits:\n")
         for trait in hideout_details['Traits']:
             file.write(f"- {trait}\n")
 
