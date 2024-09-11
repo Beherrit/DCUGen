@@ -30,6 +30,7 @@ def open_reference_data():
 
     # Dictionary to hold images
     images = {}
+    original_images = {}  # To store original, full-size images
 
     def load_images():
         base_path = os.path.join(os.path.dirname(__file__), 'images')
@@ -45,13 +46,14 @@ def open_reference_data():
                         img_path = os.path.join(category_path, filename)
                         try:
                             img = Image.open(img_path)
+                            original_images[filename.lower()] = img.copy()
+                            img.thumbnail((700, 700))  # Resize for display
                             img = ImageTk.PhotoImage(img)
                             images[filename.lower()] = img
                         except Exception as e:
                             print(f"Error loading image {img_path}: {e}")
             else:
                 print(f"Category path not found: {category_path}")
-
 
     # Load images at the start
     load_images()
@@ -123,11 +125,25 @@ def open_reference_data():
             image_file = categories[selected_category][selected_item].lower()
             if image_file in images:
                 image_label.config(image=images[image_file])
+                image_label.bind("<Button-1>", lambda e: show_full_size_image(image_file))
             else:
                 messagebox.showinfo("Image Not Found", f"No image found for {selected_item}")
 
     # Bind the subcategory combobox to the handle_selection function
     subcategory_cb.bind("<<ComboboxSelected>>", handle_selection)
+
+    # Function to show full-size image
+    def show_full_size_image(image_file):
+        if image_file in original_images:
+            full_size_window = tk.Toplevel(ref_window)
+            full_size_window.title("Full Size Image")
+            
+            img = original_images[image_file]
+            img = ImageTk.PhotoImage(img)
+            
+            full_size_label = ttk.Label(full_size_window, image=img)
+            full_size_label.image = img  # Keep a reference
+            full_size_label.pack()
 
     # Search bar setup
     search_label = ttk.Label(ref_window, text="Search Image:")
@@ -160,7 +176,7 @@ def open_reference_data():
 
         all_image_maps = {k: v for d in categories.values() for k, v in d.items()}
 
-        for name, image_file in all_image_maps.items():
+        for name in sorted(all_image_maps.keys()):
             if query in name.lower():
                 search_results_listbox.insert(tk.END, name)
 
@@ -175,12 +191,16 @@ def open_reference_data():
         
         if image_file and image_file in images:
             image_label.config(image=images[image_file])
+            image_label.bind("<Button-1>", lambda e: show_full_size_image(image_file))
 
     # Bind the listbox selection to the handle_search_selection function
     search_results_listbox.bind("<<ListboxSelect>>", handle_search_selection)
 
     # Update search results in real-time as the user types
     search_var.trace_add("write", lambda name, index, mode: search_images(search_var.get()))
+
+    # Initially populate the search results with all names
+    search_images("")
 
     # Add non-core materials note
     non_core_note = ttk.Label(ref_window, text="* Are Non-core materials", font=("Arial", 8, "italic"))

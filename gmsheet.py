@@ -5,6 +5,7 @@ from typing import Dict, Any, Callable
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from ttkbootstrap.scrolled import ScrolledFrame
+import os
 
 from initiative_tracker import open_initiative_tracker
 
@@ -12,13 +13,16 @@ class GMSheetApp:
     def __init__(self, master: ttk.Window, main_notebook: ttk.Notebook, characters: Dict[str, Any]):
         self.master = master
         self.master.title("GM Cheat Sheet")
-        self.master.geometry("800x600")  # Increased window size
+        self.master.geometry("800x600")
         self.main_notebook = main_notebook
         self.characters = characters
         self.displayed_characters: Dict[str, ttk.Frame] = {}
 
+        self.auto_save_file = "gm_sheet_autosave.json"
+
         self.setup_styles()
         self.setup_ui()
+        self.load_autosave()
 
     def setup_styles(self):
         self.style = ttk.Style()
@@ -62,6 +66,7 @@ class GMSheetApp:
         tab_text = self.main_notebook.tab(current_tab, "text")
         if tab_text in self.characters:
             self.display_character(self.characters[tab_text])
+            self.auto_save()
         else:
             messagebox.showerror("Error", "No character data found for the current tab")
 
@@ -70,6 +75,7 @@ class GMSheetApp:
             tab_text = self.main_notebook.tab(tab, "text")
             if tab_text in self.characters:
                 self.display_character(self.characters[tab_text])
+        self.auto_save()
         messagebox.showinfo("Success", "All characters from tabs have been uploaded to the GM Cheat Sheet.")
 
     def display_character(self, character_data: Dict[str, Any]):
@@ -100,6 +106,7 @@ class GMSheetApp:
 
         self.displayed_characters[name] = char_frame
         self.character_notebook.select(char_frame)
+        self.auto_save()
 
     def get_character_sections(self, character_data: Dict[str, Any]) -> Dict[str, list]:
         return {
@@ -126,12 +133,15 @@ class GMSheetApp:
         if messagebox.askyesno("Confirm Delete", f"Are you sure you want to remove {name} from the GM Cheat Sheet?"):
             self.delete_character(name)
 
-    def delete_character(self, name: str):
+    def delete_character(self, name):
         if name in self.displayed_characters:
-            self.character_notebook.forget(self.displayed_characters[name])
-            del self.displayed_characters[name]
-            del self.characters[name]
-            messagebox.showinfo("Success", f"Character '{name}' removed from GM Cheat Sheet.")
+            self.displayed_characters[name].destroy()  # Remove the character's frame
+            del self.displayed_characters[name]  # Remove from displayed_characters dictionary
+        if name in self.characters:
+            del self.characters[name]  # Remove from the main characters dictionary
+        self.auto_save()
+        self.refresh_display()  # Refresh the display to reflect the changes
+        messagebox.showinfo("Success", f"Character '{name}' removed from GM Cheat Sheet.")
 
     def refresh_display(self):
         for tab in self.character_notebook.tabs():
@@ -151,8 +161,10 @@ class GMSheetApp:
         load_path = filedialog.askopenfilename(filetypes=[("JSON files", "*.json")])
         if load_path:
             with open(load_path, 'r') as file:
-                self.characters = json.load(file)
+                loaded_characters = json.load(file)
+                self.characters.update(loaded_characters)
                 self.refresh_display()
+            self.auto_save()
             messagebox.showinfo("Upload Sheet", f"Sheet uploaded from {load_path}")
 
     def upload_to_init_tracker(self):
@@ -167,6 +179,17 @@ class GMSheetApp:
         
         open_initiative_tracker(self.main_notebook, self.characters, init_tracker_data)
         messagebox.showinfo("Success", "All characters have been uploaded to the Initiative Tracker.")
+
+    def load_autosave(self):
+        if os.path.exists(self.auto_save_file):
+            with open(self.auto_save_file, 'r') as file:
+                loaded_characters = json.load(file)
+                self.characters.update(loaded_characters)
+            self.refresh_display()
+
+    def auto_save(self):
+        with open(self.auto_save_file, 'w') as file:
+            json.dump(self.characters, file)
 
 class CharacterForm(ttk.Frame):
     def __init__(self, master: ttk.Toplevel, characters: Dict[str, Any], display_character_callback: Callable):

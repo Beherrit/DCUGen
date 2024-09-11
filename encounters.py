@@ -62,7 +62,21 @@ class EncounterSelector(tk.Toplevel):
 
         if possible_encounters:
             encounter = random.choice(possible_encounters)
-            self.encounter_display.insert(tk.END, f"Encounter Type: {encounter['type']}\nDescription: {encounter['description']}\n")
+            self.encounter_display.insert(tk.END, f"Encounter Type: {encounter['type']}\nDescription: {encounter['description']}\n\n")
+            
+            # Generate random number of enemies based on difficulty
+            difficulty_index = ["Easy", "Medium", "Hard", "Heroic"].index(encounter['type'])
+            
+            henchmen = random.randint(3, 6 + difficulty_index * 2)  # Increased number of henchmen
+            generals = random.randint(0, 1 + difficulty_index // 2)
+            bosses = random.randint(0, difficulty_index // 3)
+            
+            enemy_composition = f"Enemy Composition:\n"
+            enemy_composition += f"Henchmen: {henchmen}\n"
+            enemy_composition += f"Generals: {generals}\n"
+            enemy_composition += f"Bosses: {bosses}\n"
+            
+            self.encounter_display.insert(tk.END, enemy_composition)
         else:
             self.encounter_display.insert(tk.END, "No encounters available for the selected difficulties.\n")
 
