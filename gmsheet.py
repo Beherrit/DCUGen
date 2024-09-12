@@ -9,7 +9,7 @@ import os
 from openpyxl import load_workbook
 from PIL import Image, ImageTk
 
-from initiative_tracker import open_initiative_tracker
+from initiative_tracker import open_initiative_tracker, update_initiative_tracker
 from tooltip import ToolTip
 
 class GMSheetApp:
@@ -22,6 +22,7 @@ class GMSheetApp:
         self.displayed_characters: Dict[str, ttk.Frame] = {}
 
         self.auto_save_file = "gm_sheet_autosave.json"
+        self.init_tracker_window = None  # Add this line to store the Initiative Tracker window
 
         self.setup_styles()
         self.setup_ui()
@@ -195,7 +196,10 @@ class GMSheetApp:
             
             init_tracker_data.append((name, awareness, agility, initiative))
         
-        open_initiative_tracker(self.main_notebook, self.characters, init_tracker_data)
+        if self.init_tracker_window is None or not self.init_tracker_window.winfo_exists():
+            self.init_tracker_window = open_initiative_tracker(self.main_notebook, self.characters, init_tracker_data)
+        else:
+            update_initiative_tracker(self.init_tracker_window, init_tracker_data)
         messagebox.showinfo("Success", "All characters have been uploaded to the Initiative Tracker.")
 
     def load_autosave(self):

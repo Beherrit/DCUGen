@@ -270,9 +270,45 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
     if preloaded_data:
         load_preloaded_data(tree, preloaded_data)
     
-    tracker_window.protocol("WM_DELETE_WINDOW", lambda: [save_initiative_data(tree), tracker_window.destroy()])
+    def on_closing():
+        try:
+            save_initiative_data(tree)
+        except Exception as e:
+            print(f"Error saving initiative data: {e}")
+        finally:
+            tracker_window.destroy()
+
+    tracker_window.protocol("WM_DELETE_WINDOW", on_closing)
 
     return tracker_window
+
+def update_initiative_tracker(tracker_window, preloaded_data):
+    global tree
+    if not tracker_window or not hasattr(tracker_window, 'winfo_exists') or not tracker_window.winfo_exists():
+        return False  # Return False if the window doesn't exist
+
+    try:
+        for data in preloaded_data:
+            name, awareness, agility, initiative = data
+            existing_item = find_existing_item(tree, name)
+            
+            if existing_item:
+                tree.item(existing_item, values=(name, awareness, agility, initiative, "", "False", "Normal", "Normal", "Normal", "", "", "False", ""))
+            else:
+                tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
+                tree.insert("", "end", values=(name, awareness, agility, initiative, "", "False", "Normal", "Normal", "Normal", "", "", "False", ""), tags=(tag,))
+        
+        sort_treeview(tree)
+        return True  # Return True if update was successful
+    except Exception as e:
+        print(f"Error updating initiative tracker: {e}")
+        return False  # Return False if an error occurred
+
+def find_existing_item(tree, name):
+    for item in tree.get_children():
+        if tree.item(item)['values'][0] == name:
+            return item
+    return None
 
 def right_click_action(event, tree, menu):
     try:
