@@ -7,6 +7,7 @@
       "Compelled": "Limited to a single standard action each turn, chosen by another controlling character.",
       "Controlled": "No free will. Actions dictated by another controlling character.",
       "Dazed": "Single standard action per round. Stunned supersedes Dazed.",
+      "Dead" : "Character has perished. Goodbye",
       "Debilitated": "The character has one or more abilities lowered below -5.",
       "Deaf": "Everything has auditory concealment. Interaction limited to sign-language and lip-reading.",
       "Defenseless": "Active Defense bonuses of 0. Attacks can make attacks as routine checks. If the attacker makes a normal attack, any hit is treated as a critical hit. Defenseless characters are often Prone.",

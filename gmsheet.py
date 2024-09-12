@@ -8,7 +8,6 @@ from ttkbootstrap.scrolled import ScrolledFrame
 import os
 from openpyxl import load_workbook
 from PIL import Image, ImageTk
-
 from initiative_tracker import open_initiative_tracker, update_initiative_tracker
 from tooltip import ToolTip
 
@@ -143,7 +142,11 @@ class GMSheetApp:
             ],
             "Skills": [(skill["name"], skill["rank"]) for skill in character_data.get("skills", [])],
             "Advantages": [(advantage["name"], advantage["rank"]) for advantage in character_data.get("advantages", [])],
-            "Powers": [(power['name'], f"Rank: {power['rank']}, Flaws: {power['flaws']}, Extras: {power['extras']}, Range: {power['range']}")
+            "Powers": [(power['name'], 
+                        f"Rank: {power['rank']}, "
+                        f"Flaws: {', '.join(f'{flaw} ({rank})' for flaw, rank in zip(power.get('flaws', []), power.get('flaws_ranks', [])))}, "
+                        f"Extras: {', '.join(f'{extra} ({rank})' for extra, rank in zip(power.get('extras', []), power.get('extras_ranks', [])))}, "
+                        f"Range: {power.get('range', 'Close')}")
                        for power in character_data.get("powers", [])],
         }
 
@@ -436,7 +439,33 @@ class CharacterForm(ttk.Frame):
         super().__init__(master)
         self.characters = characters
         self.display_character_callback = display_character_callback
+        self.load_json_data()
         self.create_form()
+
+    def load_json_data(self):
+        json_files = {
+            'skills': 'json/skills.json',
+            'advantages': 'json/advantages.json',
+            'powers': 'json/powers.json',
+            'extras': 'json/extras.json',
+            'flaws': 'json/flaws.json'
+        }
+
+        for attr, file_path in json_files.items():
+            try:
+                with open(file_path, 'r') as f:
+                    setattr(self, f'{attr}_data', json.load(f))
+            except FileNotFoundError:
+                messagebox.showerror("Error", f"{file_path} not found.")
+                setattr(self, f'{attr}_data', [])
+            except json.JSONDecodeError:
+                messagebox.showerror("Error", f"Invalid JSON in {file_path}.")
+                setattr(self, f'{attr}_data', [])
+
+        # Ensure all attributes are set, even if loading failed
+        for attr in json_files.keys():
+            if not hasattr(self, f'{attr}_data'):
+                setattr(self, f'{attr}_data', [])
 
     def create_form(self):
         notebook = ttk.Notebook(self)
@@ -445,28 +474,29 @@ class CharacterForm(ttk.Frame):
         basic_frame = ttk.Frame(notebook)
         attributes_frame = ttk.Frame(notebook)
         defenses_frame = ttk.Frame(notebook)
-        other_frame = ttk.Frame(notebook)
+        skills_frame = ttk.Frame(notebook)
+        advantages_frame = ttk.Frame(notebook)
+        powers_frame = ttk.Frame(notebook)
 
         notebook.add(basic_frame, text="Basic")
         notebook.add(attributes_frame, text="Attributes")
         notebook.add(defenses_frame, text="Defenses")
-        notebook.add(other_frame, text="Other")
+        notebook.add(skills_frame, text="Skills")
+        notebook.add(advantages_frame, text="Advantages")
+        notebook.add(powers_frame, text="Powers")
 
         basic_fields = ["Name", "Initiative", "Theme"]
         attribute_fields = ["Strength", "Agility", "Fighting", "Stamina", "Intellect", "Awareness", "Presence", "Dexterity"]
         defense_fields = ["Dodge", "Fortitude", "Parry", "Will", "Toughness"]
-        other_fields = ["Skills", "Advantages", "Powers"]
 
         self.entries = {}
 
         self.create_fields(basic_frame, basic_fields)
         self.create_fields(attributes_frame, attribute_fields)
         self.create_fields(defenses_frame, defense_fields)
-        self.create_fields(other_frame, other_fields)
-
-        # Add instruction text for the "Other" tab
-        instruction_text = "For Skills and Advantages, use the format:\nname1:rank1, name2:rank2, ...\nExample: Acrobatics:5, Deception:3\n\nFor Powers, use the format:\nname:rank:flaws:extras:range, ...\nExample: Flight:5:None:None:Ranged, Blast:7:Unreliable:Penetrating:Close"
-        ttk.Label(other_frame, text=instruction_text, wraplength=350, justify="left").pack(pady=10)
+        self.create_skills_section(skills_frame)
+        self.create_advantages_section(advantages_frame)
+        self.create_powers_section(powers_frame)
 
         ttk.Button(self, text="Save to GM Cheat Sheet", command=self.save_character, 
                    style="success.TButton").pack(pady=20)
@@ -480,6 +510,181 @@ class CharacterForm(ttk.Frame):
             entry.pack(side=LEFT, expand=YES, fill=X)
             self.entries[field] = entry
 
+    def create_skills_section(self, parent):
+        frame = ttk.Frame(parent)
+        frame.pack(fill=BOTH, expand=YES, padx=10, pady=5)
+
+        self.skill_var = tk.StringVar()
+        skill_dropdown = ttk.Combobox(frame, textvariable=self.skill_var)
+        skill_dropdown['values'] = [skill['name'] for skill in self.skills_data]
+        skill_dropdown.pack(side=LEFT, padx=5)
+
+        self.skill_rank_var = tk.StringVar()
+        skill_rank_entry = ttk.Entry(frame, textvariable=self.skill_rank_var, width=5)
+        skill_rank_entry.pack(side=LEFT, padx=5)
+
+        ttk.Button(frame, text="Add Skill", command=self.add_skill).pack(side=LEFT, padx=5)
+
+        self.skills_listbox = tk.Listbox(parent)
+        self.skills_listbox.pack(fill=BOTH, expand=YES, padx=10, pady=5)
+
+    def create_advantages_section(self, parent):
+        frame = ttk.Frame(parent)
+        frame.pack(fill=BOTH, expand=YES, padx=10, pady=5)
+
+        self.advantage_var = tk.StringVar()
+        advantage_dropdown = ttk.Combobox(frame, textvariable=self.advantage_var)
+        advantage_dropdown['values'] = [adv['name'] for adv in self.advantages_data]
+        advantage_dropdown.pack(side=LEFT, padx=5)
+
+        self.advantage_rank_var = tk.StringVar()
+        advantage_rank_entry = ttk.Entry(frame, textvariable=self.advantage_rank_var, width=5)
+        advantage_rank_entry.pack(side=LEFT, padx=5)
+
+        ttk.Button(frame, text="Add Advantage", command=self.add_advantage).pack(side=LEFT, padx=5)
+
+        self.advantages_listbox = tk.Listbox(parent)
+        self.advantages_listbox.pack(fill=BOTH, expand=YES, padx=10, pady=5)
+
+    def create_powers_section(self, parent):
+        frame = ttk.Frame(parent)
+        frame.pack(fill=BOTH, expand=YES, padx=10, pady=5)
+
+        # Power selection
+        power_frame = ttk.Frame(frame)
+        power_frame.pack(fill=X, pady=5)
+        ttk.Label(power_frame, text="Power:").pack(side=LEFT)
+        self.power_var = tk.StringVar()
+        power_dropdown = ttk.Combobox(power_frame, textvariable=self.power_var)
+        power_dropdown['values'] = [power['name'] for power in self.powers_data]
+        power_dropdown.pack(side=LEFT, padx=5)
+
+        # Power rank
+        rank_frame = ttk.Frame(frame)
+        rank_frame.pack(fill=X, pady=5)
+        ttk.Label(rank_frame, text="Rank:").pack(side=LEFT)
+        self.power_rank_var = tk.StringVar()
+        power_rank_entry = ttk.Entry(rank_frame, textvariable=self.power_rank_var, width=5)
+        power_rank_entry.pack(side=LEFT, padx=5)
+
+        # Extras selection
+        extras_frame = ttk.Frame(frame)
+        extras_frame.pack(fill=X, pady=5)
+        ttk.Label(extras_frame, text="Extra:").pack(side=LEFT)
+        self.extra_var = tk.StringVar()
+        extra_dropdown = ttk.Combobox(extras_frame, textvariable=self.extra_var)
+        extra_dropdown['values'] = [extra['name'] for extra in self.extras_data]
+        extra_dropdown.pack(side=LEFT, padx=5)
+        ttk.Label(extras_frame, text="Rank:").pack(side=LEFT)
+        self.extra_rank_var = tk.StringVar()
+        extra_rank_entry = ttk.Entry(extras_frame, textvariable=self.extra_rank_var, width=5)
+        extra_rank_entry.pack(side=LEFT, padx=5)
+        ttk.Button(extras_frame, text="Add Extra", command=self.add_extra).pack(side=LEFT, padx=5)
+
+        # Flaws selection
+        flaws_frame = ttk.Frame(frame)
+        flaws_frame.pack(fill=X, pady=5)
+        ttk.Label(flaws_frame, text="Flaw:").pack(side=LEFT)
+        self.flaw_var = tk.StringVar()
+        flaw_dropdown = ttk.Combobox(flaws_frame, textvariable=self.flaw_var)
+        flaw_dropdown['values'] = [flaw['name'] for flaw in self.flaws_data]
+        flaw_dropdown.pack(side=LEFT, padx=5)
+        ttk.Label(flaws_frame, text="Rank:").pack(side=LEFT)
+        self.flaw_rank_var = tk.StringVar()
+        flaw_rank_entry = ttk.Entry(flaws_frame, textvariable=self.flaw_rank_var, width=5)
+        flaw_rank_entry.pack(side=LEFT, padx=5)
+        ttk.Button(flaws_frame, text="Add Flaw", command=self.add_flaw).pack(side=LEFT, padx=5)
+
+        # Range selection
+        range_frame = ttk.Frame(frame)
+        range_frame.pack(fill=X, pady=5)
+        ttk.Label(range_frame, text="Range:").pack(side=LEFT)
+        self.range_var = tk.StringVar()
+        range_dropdown = ttk.Combobox(range_frame, textvariable=self.range_var)
+        range_dropdown['values'] = ['Close', 'Ranged']
+        range_dropdown.pack(side=LEFT, padx=5)
+
+        # Add Power button
+        ttk.Button(frame, text="Add Power", command=self.add_power).pack(pady=10)
+
+        # Listbox to display added powers
+        self.powers_listbox = tk.Listbox(frame, height=10)
+        self.powers_listbox.pack(fill=BOTH, expand=YES, pady=5)
+
+        # Store extras and flaws for each power
+        self.power_extras = {}
+        self.power_flaws = {}
+
+    def add_skill(self):
+        skill = self.skill_var.get()
+        rank = self.skill_rank_var.get()
+        if skill and rank:
+            self.skills_listbox.insert(tk.END, f"{skill} (Rank: {rank})")
+            self.skill_var.set('')
+            self.skill_rank_var.set('')
+
+    def add_advantage(self):
+        advantage = self.advantage_var.get()
+        rank = self.advantage_rank_var.get()
+        if advantage and rank:
+            self.advantages_listbox.insert(tk.END, f"{advantage} (Rank: {rank})")
+            self.advantage_var.set('')
+            self.advantage_rank_var.set('')
+
+    def add_extra(self):
+        power = self.power_var.get()
+        extra = self.extra_var.get()
+        rank = self.extra_rank_var.get()
+        if power and extra and rank:
+            if power not in self.power_extras:
+                self.power_extras[power] = []
+            self.power_extras[power].append((extra, int(rank)))
+            self.extra_var.set('')
+            self.extra_rank_var.set('')
+            self.update_power_display()
+
+    def add_flaw(self):
+        power = self.power_var.get()
+        flaw = self.flaw_var.get()
+        rank = self.flaw_rank_var.get()
+        if power and flaw and rank:
+            if power not in self.power_flaws:
+                self.power_flaws[power] = []
+            self.power_flaws[power].append((flaw, int(rank)))
+            self.flaw_var.set('')
+            self.flaw_rank_var.set('')
+            self.update_power_display()
+
+    def add_power(self):
+        power = self.power_var.get()
+        rank = self.power_rank_var.get()
+        if power and rank:
+            extras = self.power_extras.get(power, [])
+            flaws = self.power_flaws.get(power, [])
+            power_display = f"{power} (Rank: {rank})"
+            if extras:
+                power_display += f", Extras: {', '.join([f'{e[0]} ({e[1]})' for e in extras])}"
+            if flaws:
+                power_display += f", Flaws: {', '.join([f'{f[0]} ({f[1]})' for f in flaws])}"
+            power_display += f", Range: {self.range_var.get()}"
+            self.powers_listbox.insert(tk.END, power_display)
+            self.power_var.set('')
+            self.power_rank_var.set('')
+            self.power_extras.pop(power, None)
+            self.power_flaws.pop(power, None)
+
+    def update_power_display(self):
+        power = self.power_var.get()
+        if power:
+            extras = self.power_extras.get(power, [])
+            flaws = self.power_flaws.get(power, [])
+            power_display = f"{power}"
+            if extras:
+                power_display += f", Extras: {', '.join([f'{e[0]} ({e[1]})' for e in extras])}"
+            if flaws:
+                power_display += f", Flaws: {', '.join([f'{f[0]} ({f[1]})' for f in flaws])}"
+            messagebox.showinfo("Current Power", power_display)
+
     def save_character(self):
         character_data = self.get_character_data()
         if character_data["name"]:
@@ -491,7 +696,7 @@ class CharacterForm(ttk.Frame):
             messagebox.showerror("Error", "Character name is required.")
 
     def get_character_data(self) -> Dict[str, Any]:
-        return {
+        character_data = {
             "name": self.entries["Name"].get(),
             "initiative": self.entries["Initiative"].get(),
             "theme": self.entries["Theme"].get(),
@@ -503,17 +708,45 @@ class CharacterForm(ttk.Frame):
                 defense: {"total_rank": int(self.entries[defense].get() or 0)}
                 for defense in ["Dodge", "Fortitude", "Parry", "Will", "Toughness"]
             },
-            "skills": [{"name": skill.split(":")[0].strip(), "rank": int(skill.split(":")[1].strip())} 
-                       for skill in self.entries["Skills"].get().split(",") if ":" in skill],
-            "advantages": [{"name": adv.split(":")[0].strip(), "rank": int(adv.split(":")[1].strip())} 
-                           for adv in self.entries["Advantages"].get().split(",") if ":" in adv],
-            "powers": [{"name": power.split(":")[0].strip(), 
-                        "rank": int(power.split(":")[1].strip()),
-                        "flaws": power.split(":")[2].strip(),
-                        "extras": power.split(":")[3].strip(),
-                        "range": power.split(":")[4].strip()} 
-                       for power in self.entries["Powers"].get().split(",") if len(power.split(":")) == 5],
+            "skills": [{"name": skill.split(" (")[0], "rank": int(skill.split("Rank: ")[1][:-1])} 
+                       for skill in self.skills_listbox.get(0, tk.END)],
+            "advantages": [{"name": adv.split(" (")[0], "rank": int(adv.split("Rank: ")[1][:-1])} 
+                           for adv in self.advantages_listbox.get(0, tk.END)],
+            "powers": self.parse_powers(),
         }
+        return character_data
+
+    def parse_powers(self):
+        powers = []
+        for power_str in self.powers_listbox.get(0, tk.END):
+            power_parts = power_str.split(", ")
+            power_name, power_rank = power_parts[0].split(" (Rank: ")
+            power = {
+                "name": power_name,
+                "rank": int(power_rank[:-1]),
+                "extras": [],
+                "extras_ranks": [],
+                "flaws": [],
+                "flaws_ranks": [],
+                "range": "Close"  # Default range
+            }
+            for part in power_parts[1:]:
+                if part.startswith("Extras:"):
+                    extras = part[8:].split(", ")
+                    for extra in extras:
+                        extra_name, extra_rank = extra.split(" (")
+                        power["extras"].append(extra_name)
+                        power["extras_ranks"].append(int(extra_rank[:-1]))
+                elif part.startswith("Flaws:"):
+                    flaws = part[7:].split(", ")
+                    for flaw in flaws:
+                        flaw_name, flaw_rank = flaw.split(" (")
+                        power["flaws"].append(flaw_name)
+                        power["flaws_ranks"].append(int(flaw_rank[:-1]))
+                elif part.startswith("Range:"):
+                    power["range"] = part[7:]
+            powers.append(power)
+        return powers
 
 if __name__ == "__main__":
     root = ttk.Window(themename="darkly")

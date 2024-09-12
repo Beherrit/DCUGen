@@ -182,7 +182,8 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
         initiative = entries['init_bonus'].get()
         tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
 
-        tree.insert("", "end", values=(name, awareness, agility, initiative, "", "False", "Normal", "Normal", "Normal", "", "", "False", ""), tags=(tag,))
+        # Remove the Dead column from the values tuple
+        tree.insert("", "end", values=(name, awareness, agility, initiative, "", "False", "Normal", "Normal", "Normal", "", "", "", "", ""), tags=(tag,))
         sort_treeview(tree)
 
         # Clear the entry fields after adding a person
@@ -203,7 +204,8 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
             
             tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
 
-            tree.insert("", "end", values=(name, awareness, agility, initiative_bonus, "", "False", "Normal", "Normal", "Normal", "", "", "False", ""), tags=(tag,))
+            # Remove the Dead column from the values tuple
+            tree.insert("", "end", values=(name, awareness, agility, initiative_bonus, "", "False", "Normal", "Normal", "Normal", "", "", "", "", ""), tags=(tag,))
             sort_treeview(tree)
 
     # Buttons
@@ -229,7 +231,9 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
     ToolTip(lock_window_button, "Toggle window lock to keep it on top of other windows.")
 
     # Treeview
-    columns = ("Name", "Awareness", "Agility", "Init Bonus", "Rolled Init", "Hold Action", "Condition 1", "Condition 2", "Condition 3", "Toughness", "Will", "Dead", "Description")
+    # Remove the "Dead" column from the columns list
+    columns = ("Name", "Awareness", "Agility", "Init Bonus", "Rolled Init", "Hold Action", 
+               "Condition 1", "Condition 2", "Condition 3", "Toughness", "Will", "Fort", "Dodge", "Parry", "Description")
     
     style.configure("Custom.Treeview", rowheight=50)
     
@@ -258,6 +262,14 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
     tree.column("Init Bonus", width=70)
     tree.column("Rolled Init", width=70)
     tree.column("Description", width=150)
+    tree.column("Fort", width=70)
+    tree.column("Dodge", width=70)
+    tree.column("Parry", width=70)
+    tree.column("Toughness", width=70)
+    tree.column("Will", width=70)    
+    tree.column("Condition 1", width=70)
+    tree.column("Condition 2", width=70)
+    tree.column("Condition 3", width=70)
 
     # Right-click menu and bindings
     right_click_menu = ttk.Menu(tracker_window, tearoff=0)
@@ -333,7 +345,7 @@ def edit_cell(event, tree, conditions):
 
     cell_bbox = tree.bbox(item, column)
 
-    if column_index in [5, 11]:  # Hold Action and Dead columns
+    if column_index == 5:  # Hold Action column
         combobox = ttk.Combobox(tree, values=["True", "False"], style="info.TCombobox")
         setup_edit_widget(combobox, tree, item, column, cell_bbox)
     elif column_index in [6, 7, 8]:  # Condition columns
@@ -345,9 +357,13 @@ def edit_cell(event, tree, conditions):
         text_widget.focus()
         text_widget.bind("<FocusOut>", lambda e: text_widget.save_edit(item, column))
         text_widget.place(x=cell_bbox[0], y=cell_bbox[1], width=cell_bbox[2], height=cell_bbox[3])
+    elif column_index in [9, 10, 11]:  # Fort, Dodge, and Parry columns
+        entry = ttk.Entry(tree)
+        setup_edit_widget(entry, tree, item, column, cell_bbox)
     else:  # Other columns including "Rolled Init"
         entry = ttk.Entry(tree)
         setup_edit_widget(entry, tree, item, column, cell_bbox)
+
 
 def setup_edit_widget(widget, tree, item, column, cell_bbox):
     widget.insert(0, tree.set(item, column))

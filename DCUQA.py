@@ -1,6 +1,8 @@
+import display_character_sheet
 from imports import *
 
-# Set up logging
+
+
 def get_log_file_path():
     if getattr(sys, 'frozen', False):  # Check if the program is running as an executable
         application_path = os.path.dirname(sys.executable)
@@ -872,6 +874,12 @@ class CollapsibleSection:
     def pack(self, **kwargs):
         self.frame.pack(**kwargs)
 
+def open_excel_character_sheet():
+    file_path = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx")])
+    if file_path:
+        display_character_sheet.display_excel_data(file_path, notebook)
+
+
 def main():
     global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, hideout_details, logger
 
@@ -1010,6 +1018,17 @@ def main():
     gm_tools_frame.add_widget(init_tracker_button)
     ToolTip(init_tracker_button, "Open the initiative tracker for combat encounters.")
 
+    # Add new button for opening Excel character sheet
+    open_excel_sheet_button = ttk.Button(
+        gm_tools_frame.body_frame,
+        text="Open Excel Character Sheet",
+        command=open_excel_character_sheet,
+        style=f'{secondary_button_color}.TButton'
+    )
+    gm_tools_frame.add_widget(open_excel_sheet_button)
+    ToolTip(open_excel_sheet_button, "Open and view an Excel character sheet.")
+
+
     # Combat Calculator
     combat_calculator_button = ttk.Button(
         gm_tools_frame.body_frame,
@@ -1044,6 +1063,7 @@ def main():
     def open_howto():
         new_window = ttk.Toplevel(root)
         howto_app = HowToApp(new_window)
+
     # GM Cheat Sheet
     gm_cheat_sheet_button = ttk.Button(gm_tools_frame.body_frame, text="GM Cheat Sheet", command=open_gm_cheat_sheet, style=f'{secondary_button_color}.TButton')
     gm_tools_frame.add_widget(gm_cheat_sheet_button)

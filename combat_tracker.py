@@ -111,10 +111,10 @@ def open_combat_calculator():
     damage_entry.pack(pady=5)
     ToolTip(damage_entry, "Enter the total damage value of the attack")
 
-    ttk.Label(toughness_frame, text="Defender's Toughness Roll:").pack(pady=5)
+    ttk.Label(toughness_frame, text="Defender's Total Toughness (Roll + Defense):").pack(pady=5)
     defense_entry = ttk.Entry(toughness_frame)
     defense_entry.pack(pady=5)
-    ToolTip(defense_entry, "Enter the defender's Toughness roll result")
+    ToolTip(defense_entry, "(Rolled + Defense)")
 
     ttk.Label(toughness_frame, text="Note: +15 is already included in the calculation").pack(pady=5)
 
