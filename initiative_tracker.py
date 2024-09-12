@@ -18,7 +18,7 @@ class WrappingText(tk.Text):
         self.sort_callback = sort_callback
 
     def save_edit(self, item, column):
-        value = self.get("1.0", "end").strip()
+        value = self.get("1.0", "end-1c").strip()  # Get text without the final newline
         tree.set(item, column, value)
         self.destroy()
         self.sort_callback()
@@ -149,105 +149,101 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
 
     tracker_window = ttk.Toplevel()
     tracker_window.title("Initiative Tracker")
-    tracker_window.geometry("1600x600")
+    tracker_window.geometry("1600x800")
 
     style = ttk.Style()
     style.theme_use("darkly")  # You can change this to any ttkbootstrap theme
 
-    input_frame = ttk.Frame(tracker_window)
-    input_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nw")
+    main_frame = ttk.Frame(tracker_window)
+    main_frame.pack(fill=tk.BOTH, expand=tk.YES)
 
-    name_label = ttk.Label(input_frame, text="Name:")
-    name_label.grid(row=0, column=0, padx=5, pady=5, sticky="e")
-    name_entry = ttk.Entry(input_frame)
-    name_entry.grid(row=0, column=1, padx=5, pady=5)
+    input_frame = ttk.Frame(main_frame)
+    input_frame.pack(side=tk.TOP, fill=tk.X, padx=10, pady=10)
 
-    awareness_label = ttk.Label(input_frame, text="Awareness:")
-    awareness_label.grid(row=0, column=2, padx=5, pady=5, sticky="e")
-    awareness_entry = ttk.Entry(input_frame)
-    awareness_entry.grid(row=0, column=3, padx=5, pady=5)
+    tree_frame = ttk.Frame(main_frame)
+    tree_frame.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=tk.YES, padx=20, pady=20)
 
-    agility_label = ttk.Label(input_frame, text="Agility:")
-    agility_label.grid(row=0, column=4, padx=5, pady=5, sticky="e")
-    agility_entry = ttk.Entry(input_frame)
-    agility_entry.grid(row=0, column=5, padx=5, pady=5)
-
-    initiative_label = ttk.Label(input_frame, text="Init Bonus:")
-    initiative_label.grid(row=0, column=6, padx=5, pady=5, sticky="e")
-    initiative_entry = ttk.Entry(input_frame)
-    initiative_entry.grid(row=0, column=7, padx=5, pady=5)
-
-    def upload_character_from_tab(notebook, characters):
-        character_data = get_character_data_from_selected_tab(notebook, characters)
-        if character_data:
-            name = character_data.get("name", "")
-            awareness = character_data.get("stats", {}).get("Awareness", {}).get("value", 0)
-            agility = character_data.get("stats", {}).get("Agility", {}).get("value", 0)
-            initiative = ""
-            tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
-
-            tree.insert("", "end", values=(name, awareness, agility, initiative, "", "False", "Normal", "Normal", "Normal", "", "", "False", ""), tags=(tag,))
-            sort_treeview(tree)
-
-    upload_button = ttk.Button(input_frame, text="Upload from Tab", command=lambda: upload_character_from_tab(notebook, characters), style="info.TButton")
-    upload_button.grid(row=1, column=1, padx=5, pady=5)
+    # Input fields
+    fields = [
+        ("Name", 0, 0), ("Awareness", 0, 2), ("Agility", 0, 4),
+        ("Init Bonus", 0, 6)
+    ]
+    entries = {}
+    for field, row, col in fields:
+        ttk.Label(input_frame, text=f"{field}:").grid(row=row, column=col, padx=5, pady=5, sticky="e")
+        entry = ttk.Entry(input_frame)
+        entry.grid(row=row, column=col+1, padx=5, pady=5)
+        entries[field.lower().replace(" ", "_")] = entry
 
     def add_person():
-        name = name_entry.get()
-        awareness = int(awareness_entry.get()) if awareness_entry.get() else 0
-        agility = int(agility_entry.get()) if agility_entry.get() else 0
-        initiative = initiative_entry.get()
+        name = entries['name'].get()
+        awareness = int(entries['awareness'].get()) if entries['awareness'].get() else 0
+        agility = int(entries['agility'].get()) if entries['agility'].get() else 0
+        initiative = entries['init_bonus'].get()
         tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
 
         tree.insert("", "end", values=(name, awareness, agility, initiative, "", "False", "Normal", "Normal", "Normal", "", "", "False", ""), tags=(tag,))
         sort_treeview(tree)
 
-    add_button = ttk.Button(input_frame, text="Add Person", command=add_person, style="success.TButton")
-    add_button.grid(row=1, column=2, padx=5, pady=5)
+        # Clear the entry fields after adding a person
+        for entry in entries.values():
+            entry.delete(0, tk.END)
 
-    condition_button = ttk.Button(input_frame, text="Condition Lookup", command=open_condition_lookup, style="info.TButton")
-    condition_button.grid(row=1, column=3, padx=5, pady=5)
+    def upload_character_from_tab():
+        character_data = get_character_data_from_selected_tab(notebook, characters)
+        if character_data:
+            name = character_data.get("name", "")
+            awareness = character_data.get("stats", {}).get("Awareness", {}).get("value", 0)
+            agility = character_data.get("stats", {}).get("Agility", {}).get("value", 0)
+            
+            # Calculate initiative bonus
+            initiative_bonus = character_data.get("initiative", 0)
+            if isinstance(initiative_bonus, dict):
+                initiative_bonus = initiative_bonus.get("total", 0)
+            
+            tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
 
-    measurement_calcs_button = ttk.Button(input_frame, text="Measurement Calcs", command=open_measurement_calcs, style="info.TButton")
-    measurement_calcs_button.grid(row=1, column=4, padx=5, pady=5)
+            tree.insert("", "end", values=(name, awareness, agility, initiative_bonus, "", "False", "Normal", "Normal", "Normal", "", "", "False", ""), tags=(tag,))
+            sort_treeview(tree)
 
-    toggle_image_button = ttk.Button(input_frame, text="Damage Degree Reference", command=open_image_window, style="info.TButton")
-    toggle_image_button.grid(row=1, column=6, padx=5, pady=5)
+    # Buttons
+    buttons = [
+        ("Upload from Tab", upload_character_from_tab, 1, 0),
+        ("Add Person", add_person, 1, 2),
+        ("Condition Lookup", open_condition_lookup, 1, 4),
+        ("Measurement Calcs", open_measurement_calcs, 1, 6),
+        ("Damage Degree Reference", open_image_window, 2, 0),
+        ("Save Data", lambda: save_initiative_data(tree), 2, 2),
+        ("Load Data", lambda: load_initiative_data(tree), 2, 4),
+        ("Clear Table", lambda: clear_table(tree), 2, 6)
+    ]
+    for text, command, row, col in buttons:
+        ttk.Button(input_frame, text=text, command=command, style="info.TButton").grid(row=row, column=col, columnspan=2, padx=5, pady=5, sticky="ew")
 
-    save_button = ttk.Button(input_frame, text="Save Data", command=lambda: save_initiative_data(tree), style="success.TButton")
-    save_button.grid(row=0, column=9, padx=5, pady=5)
-
-    load_button = ttk.Button(input_frame, text="Load Data", command=lambda: load_initiative_data(tree), style="primary.TButton")
-    load_button.grid(row=0, column=10, padx=5, pady=5)
-
-    clear_button = ttk.Button(input_frame, text="Clear Table", command=lambda: clear_table(tree), style="danger.TButton")
-    clear_button.grid(row=1, column=8, padx=5, pady=5)
-
-    # Add Lock Window Button
+    # Lock Window Checkbox
     lock_window_var = tk.BooleanVar()
     lock_window_button = ttk.Checkbutton(input_frame, text="Lock Window", variable=lock_window_var, 
                                          command=lambda: toggle_window_lock(tracker_window, lock_window_var),
                                          style='primary.TCheckbutton')
-    lock_window_button.grid(row=1, column=9, padx=5, pady=5)
+    lock_window_button.grid(row=3, column=0, columnspan=2, padx=5, pady=5, sticky="w")
     ToolTip(lock_window_button, "Toggle window lock to keep it on top of other windows.")
 
-    tree_frame = ttk.Frame(tracker_window)
-    tree_frame.grid(row=1, column=0, columnspan=16, padx=20, pady=20, sticky="nsew")
-
-    tree_scroll_y = ttk.Scrollbar(tree_frame, orient="vertical")
-    tree_scroll_y.pack(side="right", fill="y")
-
-    tree_scroll_x = ttk.Scrollbar(tree_frame, orient="horizontal")
-    tree_scroll_x.pack(side="bottom", fill="x")
-
+    # Treeview
     columns = ("Name", "Awareness", "Agility", "Init Bonus", "Rolled Init", "Hold Action", "Condition 1", "Condition 2", "Condition 3", "Toughness", "Will", "Dead", "Description")
     
-    # Create a custom style for the Treeview
-    style.configure("Custom.Treeview", rowheight=50)  # Increase row height to 50 pixels
+    style.configure("Custom.Treeview", rowheight=50)
     
-    tree = ttk.Treeview(tree_frame, columns=columns, show="headings", yscrollcommand=tree_scroll_y.set, xscrollcommand=tree_scroll_x.set, style="Custom.Treeview")
+    tree = ttk.Treeview(tree_frame, columns=columns, show="headings", style="Custom.Treeview")
+    tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=tk.YES)
 
-    # Configure alternating row colors
+    tree_scroll_y = ttk.Scrollbar(tree_frame, orient="vertical", command=tree.yview)
+    tree_scroll_y.pack(side=tk.RIGHT, fill=tk.Y)
+
+    tree_scroll_x = ttk.Scrollbar(tree_frame, orient="horizontal", command=tree.xview)
+    tree_scroll_x.pack(side=tk.BOTTOM, fill=tk.X)
+
+    tree.configure(yscrollcommand=tree_scroll_y.set, xscrollcommand=tree_scroll_x.set)
+
     tree.tag_configure('oddrow', background='#2a3038')
     tree.tag_configure('evenrow', background='#1e2329')
 
@@ -255,116 +251,88 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
         tree.heading(col, text=col)
         tree.column(col, width=120, stretch=True)
 
-    tree.column("Name", width=180)
-    tree.column("Description", width=450)
+    # Adjust specific column widths
+    tree.column("Name", width=120)
+    tree.column("Awareness", width=70)
+    tree.column("Agility", width=70)
+    tree.column("Init Bonus", width=70)
+    tree.column("Rolled Init", width=70)
+    tree.column("Description", width=150)
 
-    tree.pack(side="left", fill="both", expand=True)
-    tree_scroll_y.config(command=tree.yview)
-    tree_scroll_x.config(command=tree.xview)
-
-    tracker_window.grid_rowconfigure(1, weight=1)
-    tracker_window.grid_columnconfigure(0, weight=1)
-
+    # Right-click menu and bindings
     right_click_menu = ttk.Menu(tracker_window, tearoff=0)
     right_click_menu.add_command(label="Remove/Delete", command=lambda: remove_selected_item(tree))
 
-    def right_click_action(event):
-        try:
-            row_id = tree.identify_row(event.y)
-            tree.selection_set(row_id)
-            right_click_menu.post(event.x_root, event.y_root)
-        finally:
-            right_click_menu.grab_release()
-
-    tree.bind("<Button-3>", right_click_action)
-
-    def remove_selected_item(tree):
-        selected_item = tree.selection()
-        if selected_item:
-            tree.delete(selected_item)
-            for index, item in enumerate(tree.get_children()):
-                tag = 'evenrow' if index % 2 == 0 else 'oddrow'
-                tree.item(item, tags=(tag,))
-
-    def edit_cell(event):
-        item = tree.selection()[0]
-        column = tree.identify_column(event.x)
-        column_index = int(column[1:]) - 1
-
-        def save_edit(item, column, value):
-            tree.set(item, column, value)
-            sort_treeview(tree)
-
-        def focus_out(event):
-            widget = event.widget
-            value = widget.get() if isinstance(widget, ttk.Entry) else widget.get("1.0", "end").strip()
-            save_edit(item, column, value)
-            tree.focus()
-            widget.destroy()
-
-        def on_key_press(event, save_edit, widget):
-            if event.keysym in ("Tab", "Return"):
-                save_edit(item, column, widget.get())
-                widget.event_generate("<FocusOut>")
-                next_column = f"#{column_index + 2}" if event.keysym == "Tab" else column
-                edit_next_cell(item, next_column)
-
-        cell_bbox = tree.bbox(item, column)
-
-        if column_index in [5, 11]:  # Hold Action and Dead columns
-            combobox = ttk.Combobox(tree, values=["True", "False"], style="info.TCombobox")
-            combobox.set(tree.set(item, column))
-            combobox.place(x=cell_bbox[0], y=cell_bbox[1], width=cell_bbox[2], height=cell_bbox[3], anchor="nw")
-            combobox.bind("<<ComboboxSelected>>", lambda e: focus_out(e))
-            combobox.bind("<FocusOut>", focus_out)
-            combobox.bind("<KeyPress>", lambda e: on_key_press(e, save_edit, combobox))
-            combobox.focus()
-        elif column_index in [6, 7, 8]:  # Condition columns
-            combobox = ttk.Combobox(tree, values=conditions, style="info.TCombobox")
-            combobox.set(tree.set(item, column))
-            combobox.place(x=cell_bbox[0], y=cell_bbox[1], width=cell_bbox[2], height=cell_bbox[3], anchor="nw")
-            combobox.bind("<<ComboboxSelected>>", lambda e: focus_out(e))
-            combobox.bind("<FocusOut>", focus_out)
-            combobox.bind("<KeyPress>", lambda e: on_key_press(e, save_edit, combobox))
-            combobox.focus()
-        elif column_index == 12:  # Description column
-            text_widget = WrappingText(tree, lambda: sort_treeview(tree), wrap="word", height=10, width=50)
-            text_widget.insert("1.0", tree.set(item, column))
-            text_widget.place(x=cell_bbox[0], y=cell_bbox[1], width=cell_bbox[2], height=cell_bbox[3], anchor="nw")
-            text_widget.bind("<FocusOut>", lambda e: text_widget.save_edit(item, column))
-            text_widget.bind("<KeyPress>", lambda e: on_key_press(e, save_edit, text_widget))
-            text_widget.focus()
-        else:  # Other columns including "Rolled Init"
-            entry = ttk.Entry(tree)
-            entry.insert(0, tree.set(item, column))
-            entry.place(x=cell_bbox[0], y=cell_bbox[1], width=cell_bbox[2], height=cell_bbox[3], anchor="nw")
-            entry.bind("<FocusOut>", focus_out)
-            entry.bind("<KeyPress>", lambda e: on_key_press(e, save_edit, entry))
-            entry.focus()
-
-    def edit_next_cell(item, next_column):
-        tree.focus(item)
-        tree.selection_set(item)
-        x = tree.bbox(item, next_column)[0] + 1
-        y = tree.bbox(item, next_column)[1] + 1
-        event = tk.Event()
-        event.x, event.y = x, y
-        edit_cell(event)
-
-    tree.bind("<Double-1>", edit_cell)
-
-    def load_preloaded_data():
-        if preloaded_data:
-            for data in preloaded_data:
-                name, awareness, agility, initiative = data
-                tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
-                tree.insert("", "end", values=(name, awareness, agility, initiative, "", "False", "Normal", "Normal", "Normal", "", "", "False", ""), tags=(tag,))
-            sort_treeview(tree)
+    tree.bind("<Button-3>", lambda event: right_click_action(event, tree, right_click_menu))
+    tree.bind("<Double-1>", lambda event: edit_cell(event, tree, conditions))
 
     load_initiative_data(tree)
-    load_preloaded_data()
+    if preloaded_data:
+        load_preloaded_data(tree, preloaded_data)
+    
     tracker_window.protocol("WM_DELETE_WINDOW", lambda: [save_initiative_data(tree), tracker_window.destroy()])
-    tracker_window.mainloop()
+
+    return tracker_window
+
+def right_click_action(event, tree, menu):
+    try:
+        row_id = tree.identify_row(event.y)
+        tree.selection_set(row_id)
+        menu.post(event.x_root, event.y_root)
+    finally:
+        menu.grab_release()
+
+def remove_selected_item(tree):
+    selected_item = tree.selection()
+    if selected_item:
+        tree.delete(selected_item)
+        for index, item in enumerate(tree.get_children()):
+            tag = 'evenrow' if index % 2 == 0 else 'oddrow'
+            tree.item(item, tags=(tag,))
+
+def edit_cell(event, tree, conditions):
+    item = tree.selection()[0]
+    column = tree.identify_column(event.x)
+    column_index = int(column[1:]) - 1
+
+    cell_bbox = tree.bbox(item, column)
+
+    if column_index in [5, 11]:  # Hold Action and Dead columns
+        combobox = ttk.Combobox(tree, values=["True", "False"], style="info.TCombobox")
+        setup_edit_widget(combobox, tree, item, column, cell_bbox)
+    elif column_index in [6, 7, 8]:  # Condition columns
+        combobox = ttk.Combobox(tree, values=conditions, style="info.TCombobox")
+        setup_edit_widget(combobox, tree, item, column, cell_bbox)
+    elif column_index == 12:  # Description column
+        text_widget = WrappingText(tree, lambda: sort_treeview(tree), wrap="word", height=3, width=20)
+        text_widget.insert("1.0", tree.set(item, column))
+        text_widget.focus()
+        text_widget.bind("<FocusOut>", lambda e: text_widget.save_edit(item, column))
+        text_widget.place(x=cell_bbox[0], y=cell_bbox[1], width=cell_bbox[2], height=cell_bbox[3])
+    else:  # Other columns including "Rolled Init"
+        entry = ttk.Entry(tree)
+        setup_edit_widget(entry, tree, item, column, cell_bbox)
+
+def setup_edit_widget(widget, tree, item, column, cell_bbox):
+    widget.insert(0, tree.set(item, column))
+    widget.select_range(0, tk.END)
+    widget.focus()
+    widget.bind("<FocusOut>", lambda e: save_edit(e.widget, tree, item, column))
+    widget.bind("<Return>", lambda e: save_edit(e.widget, tree, item, column))
+    widget.place(x=cell_bbox[0], y=cell_bbox[1], width=cell_bbox[2], height=cell_bbox[3])
+
+def save_edit(widget, tree, item, column):
+    tree.set(item, column, widget.get())
+    widget.destroy()
+    sort_treeview(tree)
+
+def load_preloaded_data(tree, preloaded_data):
+    if preloaded_data:
+        for data in preloaded_data:
+            name, awareness, agility, initiative = data
+            tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
+            tree.insert("", "end", values=(name, awareness, agility, initiative, "", "False", "Normal", "Normal", "Normal", "", "", "False", ""), tags=(tag,))
+        sort_treeview(tree)
 
 def toggle_window_lock(window, lock_var):
     window.attributes('-topmost', lock_var.get())
