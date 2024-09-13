@@ -6,3 +6,5 @@ dist/
 
 # Ignore build folders
 build/
+*.db
+gm_sheet_autosave.json

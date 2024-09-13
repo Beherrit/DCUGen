@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox
+from tkinter import filedialog
 import json
 from typing import Dict, Any, Callable
 import ttkbootstrap as ttk
@@ -17,11 +17,12 @@ class GMSheetApp:
         self.master.title("GM Cheat Sheet")
         self.master.geometry("800x600")
         self.main_notebook = main_notebook
-        self.characters = characters
-        self.displayed_characters: Dict[str, ttk.Frame] = {}
+        self.loaded_characters = characters  # Characters loaded from DCUAQA.py
+        self.displayed_characters: Dict[str, ttk.Frame] = {}  # Characters displayed in GM Sheet
+        self.gm_sheet_characters: Dict[str, Any] = {}  # Characters saved in GM Sheet
 
         self.auto_save_file = "gm_sheet_autosave.json"
-        self.init_tracker_window = None  # Add this line to store the Initiative Tracker window
+        self.init_tracker_window = None
 
         self.setup_styles()
         self.setup_ui()
@@ -66,7 +67,6 @@ class GMSheetApp:
             button.grid(row=row, column=col, padx=5, pady=5, sticky="nsew")
             ToolTip(button, tooltip_text)
 
-        # Configure grid to expand buttons evenly
         for i in range(3):
             button_frame.columnconfigure(i, weight=1)
 
@@ -74,24 +74,31 @@ class GMSheetApp:
         new_window = ttk.Toplevel(self.master)
         new_window.title("Add New Character")
         new_window.geometry("400x600")
-        CharacterForm(new_window, self.characters, self.display_character).pack(fill=BOTH, expand=YES, padx=20, pady=20)
+        CharacterForm(new_window, self.gm_sheet_characters, self.display_character, self).pack(fill=BOTH, expand=YES, padx=20, pady=20)
+
+    def load_autosave(self):
+        if os.path.exists(self.auto_save_file):
+            with open(self.auto_save_file, 'r') as file:
+                self.gm_sheet_characters = json.load(file)
+                self.refresh_display()
 
     def upload_character(self):
         current_tab = self.main_notebook.select()
         tab_text = self.main_notebook.tab(current_tab, "text")
-        if tab_text in self.characters:
-            self.display_character(self.characters[tab_text])
+        if tab_text in self.loaded_characters:
+            character_data = self.loaded_characters[tab_text]
+            self.gm_sheet_characters[tab_text] = character_data
+            self.display_character(character_data)
             self.auto_save()
-        else:
-            messagebox.showerror("Error", "No character data found for the current tab")
 
     def upload_all_characters(self):
         for tab in self.main_notebook.tabs():
             tab_text = self.main_notebook.tab(tab, "text")
-            if tab_text in self.characters:
-                self.display_character(self.characters[tab_text])
+            if tab_text in self.loaded_characters:
+                character_data = self.loaded_characters[tab_text]
+                self.gm_sheet_characters[tab_text] = character_data
+                self.display_character(character_data)
         self.auto_save()
-        messagebox.showinfo("Success", "All characters from tabs have been uploaded to the GM Cheat Sheet.")
 
     def display_character(self, character_data: Dict[str, Any]):
         name = character_data["name"]
@@ -101,7 +108,6 @@ class GMSheetApp:
         char_frame = ttk.Frame(self.character_notebook)
         self.character_notebook.add(char_frame, text=name)
 
-        # Image display
         image_frame = ttk.Frame(char_frame)
         image_frame.pack(fill=X, expand=YES, padx=5, pady=5, anchor=W)
         self.display_character_image(image_frame, character_data.get("image_path"))
@@ -123,7 +129,6 @@ class GMSheetApp:
 
         self.displayed_characters[name] = char_frame
         self.character_notebook.select(char_frame)
-        self.auto_save()
 
     def get_character_sections(self, character_data: Dict[str, Any]) -> Dict[str, list]:
         return {
@@ -142,124 +147,128 @@ class GMSheetApp:
             ],
             "Skills": [(skill["name"], skill["rank"]) for skill in character_data.get("skills", [])],
             "Advantages": [(advantage["name"], advantage["rank"]) for advantage in character_data.get("advantages", [])],
-            "Powers": [(power['name'], 
-                        f"Rank: {power['rank']}, "
-                        f"Flaws: {', '.join(f'{flaw} ({rank})' for flaw, rank in zip(power.get('flaws', []), power.get('flaws_ranks', [])))}, "
-                        f"Extras: {', '.join(f'{extra} ({rank})' for extra, rank in zip(power.get('extras', []), power.get('extras_ranks', [])))}, "
-                        f"Range: {power.get('range', 'Close')}")
-                       for power in character_data.get("powers", [])],
+            "Powers": self.format_powers(character_data.get("powers", [])),
         }
 
-    def confirm_delete(self, name: str):
-        if messagebox.askyesno("Confirm Delete", f"Are you sure you want to remove {name} from the GM Cheat Sheet?"):
-            self.delete_character(name)
+    def format_powers(self, powers):
+        formatted_powers = []
+        for power in powers:
+            if 'description' in power:
+                # This is an imported power
+                formatted_powers.append((power['name'], power['description']))
+            else:
+                # This is a manually added power
+                power_description = f"Rank: {power.get('rank', '')}, "
+                power_description += f"Flaws: {', '.join(f'{flaw} ({rank})' for flaw, rank in zip(power.get('flaws', []), power.get('flaws_ranks', [])))}, "
+                power_description += f"Extras: {', '.join(f'{extra} ({rank})' for extra, rank in zip(power.get('extras', []), power.get('extras_ranks', [])))}, "
+                power_description += f"Range: {power.get('range', 'Close')}"
+                formatted_powers.append((power['name'], power_description))
+        return formatted_powers
 
     def delete_character(self, name):
         if name in self.displayed_characters:
-            self.displayed_characters[name].destroy()  # Remove the character's frame
-            del self.displayed_characters[name]  # Remove from displayed_characters dictionary
-        if name in self.characters:
-            del self.characters[name]  # Remove from the main characters dictionary
+            self.displayed_characters[name].destroy()
+            del self.displayed_characters[name]
+        if name in self.gm_sheet_characters:
+            del self.gm_sheet_characters[name]
         self.auto_save()
-        self.refresh_display()  # Refresh the display to reflect the changes
-        self.scrolled_frame.yview_moveto(0)  # Scroll to the top
-        messagebox.showinfo("Success", f"Character '{name}' removed from GM Cheat Sheet.")
+        self.refresh_display()
+        self.scrolled_frame.yview_moveto(0)
 
     def refresh_display(self):
         for tab in self.character_notebook.tabs():
             self.character_notebook.forget(tab)
         self.displayed_characters.clear()
-        for data in self.characters.values():
+        for data in self.gm_sheet_characters.values():
             self.display_character(data)
 
     def save_sheet(self):
         save_path = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON files", "*.json")])
         if save_path:
             with open(save_path, 'w') as file:
-                json.dump(self.characters, file)
-            messagebox.showinfo("Save Sheet", f"Sheet saved to {save_path}")
+                json.dump(self.gm_sheet_characters, file)
 
     def upload_sheet(self):
         load_path = filedialog.askopenfilename(filetypes=[("JSON files", "*.json")])
         if load_path:
             with open(load_path, 'r') as file:
                 loaded_characters = json.load(file)
-                self.characters.update(loaded_characters)
+                self.gm_sheet_characters.update(loaded_characters)
                 self.refresh_display()
             self.auto_save()
-            messagebox.showinfo("Upload Sheet", f"Sheet uploaded from {load_path}")
 
     def upload_to_init_tracker(self):
         init_tracker_data = []
-        for character_data in self.characters.values():
+        for character_data in self.gm_sheet_characters.values():
             name = character_data.get("name", "")
             awareness = character_data.get("stats", {}).get("Awareness", {}).get("value", 0)
             agility = character_data.get("stats", {}).get("Agility", {}).get("value", 0)
-            initiative = character_data.get("initiative", "")
+            initiative = character_data.get("initiative", 0)
             
-            init_tracker_data.append((name, awareness, agility, initiative))
+            if isinstance(initiative, dict):
+                initiative = initiative.get("total", 0)
+            initiative = int(initiative) if isinstance(initiative, (int, str)) and str(initiative).isdigit() else 0
+            
+            init_tracker_entry = (
+                name, awareness, agility, initiative, "", initiative,
+                "False", "Normal", "Normal", "Normal", "", "", "", "", "", ""
+            )
+            
+            init_tracker_data.append(init_tracker_entry)
         
         if self.init_tracker_window is None or not self.init_tracker_window.winfo_exists():
-            self.init_tracker_window = open_initiative_tracker(self.main_notebook, self.characters, init_tracker_data)
+            self.init_tracker_window = open_initiative_tracker(self.main_notebook, self.gm_sheet_characters, init_tracker_data)
         else:
             update_initiative_tracker(self.init_tracker_window, init_tracker_data)
-        messagebox.showinfo("Success", "All characters have been uploaded to the Initiative Tracker.")
-
-    def load_autosave(self):
-        if os.path.exists(self.auto_save_file):
-            with open(self.auto_save_file, 'r') as file:
-                loaded_characters = json.load(file)
-                self.characters.update(loaded_characters)
-            self.refresh_display()
 
     def auto_save(self):
         with open(self.auto_save_file, 'w') as file:
-            json.dump(self.characters, file)
+            json.dump(self.gm_sheet_characters, file)
 
     def import_character(self):
         file_path = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx")])
         if file_path:
             try:
-                wb = load_workbook(filename=file_path)
+                wb = load_workbook(filename=file_path, data_only=True)
                 sheet = wb.active
                 
                 character_data = {
-                    "name": sheet['K2'].value,
-                    "gender": sheet['AP2'].value,
-                    "age": sheet['BD2'].value,
-                    "power_level": sheet['W33'].value,
-                    "theme": sheet['AD26'].value,
+                    "name": sheet['K2'].value or "Unknown",
+                    "gender": sheet['AP2'].value or "",
+                    "age": sheet['BD2'].value or "",
+                    "power_level": sheet['W33'].value or 0,
+                    "theme": sheet['AD26'].value or "",
                     "languages": sheet['R38'].value.split(", ") if sheet['R38'].value else [],
                     "origin": {
-                        "region": sheet['G93'].value.split(" | ")[0] if sheet['G93'].value else "",
-                        "country": sheet['G93'].value.split(" | ")[1] if sheet['G93'].value and len(sheet['G93'].value.split(" | ")) > 1 else "",
-                        "language": sheet['G93'].value.split(" | ")[2] if sheet['G93'].value and len(sheet['G93'].value.split(" | ")) > 2 else ""
+                        "region": "",
+                        "country": "",
+                        "language": ""
                     },
                     "physical_traits": {
-                        "height": sheet['BE5'].value,
-                        "weight": sheet['BE8'].value,
-                        "eye_color": sheet['AP5'].value,
-                        "hair_color": sheet['AP8'].value
+                        "height": sheet['BE5'].value or "",
+                        "weight": sheet['BE8'].value or "",
+                        "eye_color": sheet['AP5'].value or "",
+                        "hair_color": sheet['AP8'].value or ""
                     },
                     "stats": {
-                        "Strength": {"value": sheet['N18'].value},
-                        "Agility": {"value": sheet['N26'].value},
-                        "Fighting": {"value": sheet['N34'].value},
-                        "Awareness": {"value": sheet['N42'].value},
-                        "Stamina": {"value": sheet['N22'].value},
-                        "Dexterity": {"value": sheet['N30'].value},
-                        "Intellect": {"value": sheet['N38'].value},
-                        "Presence": {"value": sheet['N46'].value}
+                        "Strength": {"value": sheet['N18'].value or 0},
+                        "Agility": {"value": sheet['N26'].value or 0},
+                        "Fighting": {"value": sheet['N34'].value or 0},
+                        "Awareness": {"value": sheet['N42'].value or 0},
+                        "Stamina": {"value": sheet['N22'].value or 0},
+                        "Dexterity": {"value": sheet['N30'].value or 0},
+                        "Intellect": {"value": sheet['N38'].value or 0},
+                        "Presence": {"value": sheet['N46'].value or 0}
                     },
                     "defenses": {
-                        "Dodge": {"total_rank": sheet['Z18'].value},
-                        "Parry": {"total_rank": sheet['Z24'].value},
-                        "Fortitude": {"total_rank": sheet['Z21'].value},
-                        "Toughness": {"total_rank": sheet['Z30'].value},
-                        "Will": {"total_rank": sheet['Z27'].value}
+                        "Dodge": {"total_rank": sheet['Z18'].value or 0},
+                        "Parry": {"total_rank": sheet['Z24'].value or 0},
+                        "Fortitude": {"total_rank": sheet['Z21'].value or 0},
+                        "Toughness": {"total_rank": sheet['Z30'].value or 0},
+                        "Will": {"total_rank": sheet['Z27'].value or 0}
                     },
-                    "initiative": sheet['AK18'].value,
-                    "total_cost": int(sheet['AD33'].value) if sheet['AD33'].value else 0,
+                    "initiative": sheet['AK18'].value or 0,
+                    "total_cost": int(sheet['AD33'].value or 0),
                     "personality_traits": {
                         "positive_traits": [],
                         "negative_traits": [],
@@ -272,79 +281,62 @@ class GMSheetApp:
                     "Complications": []
                 }
 
-                # Extract personality traits
+                if sheet['G93'].value:
+                    origin_parts = sheet['G93'].value.split(" | ")
+                    character_data["origin"]["region"] = origin_parts[0] if len(origin_parts) > 0 else ""
+                    character_data["origin"]["country"] = origin_parts[1] if len(origin_parts) > 1 else ""
+                    character_data["origin"]["language"] = origin_parts[2] if len(origin_parts) > 2 else ""
+
                 all_traits = sheet['AK90'].value
                 if all_traits:
                     traits = all_traits.split("|")
-                    character_data["personality_traits"]["positive_traits"] = traits[0].strip().split(", ")
-                    character_data["personality_traits"]["negative_traits"] = traits[1].strip().split(", ")
-                    character_data["personality_traits"]["quirky_traits"] = traits[2].strip().split(", ")
+                    character_data["personality_traits"]["positive_traits"] = traits[0].strip().split(", ") if len(traits) > 0 else []
+                    character_data["personality_traits"]["negative_traits"] = traits[1].strip().split(", ") if len(traits) > 1 else []
+                    character_data["personality_traits"]["quirky_traits"] = traits[2].strip().split(", ") if len(traits) > 2 else []
 
-                # Extract powers
-                for row in range(54, 84, 3):
+                character_data["powers"] = []
+                for row in range(54, 84, 3):  # Adjust this range if needed
                     power_cell = f'B{row}'
                     if sheet[power_cell].value:
-                        power_details = sheet[power_cell].value.split("|")
-                        power_name = power_details[0].strip()
-                        power_rank = int(power_details[1].split(":")[1].strip())
-                        
-                        # Initialize extras, flaws, and range
-                        extras = ""
-                        flaws = ""
-                        power_range = "Close"  # Default to Close if not specified
-                        
-                        # Extract extras, flaws, and range from the power details
-                        for detail in power_details[2:]:
-                            if "Extras:" in detail:
-                                extras = detail.split("Extras:")[1].strip()
-                            elif "Flaws:" in detail:
-                                flaws = detail.split("Flaws:")[1].strip()
-                            elif "Range:" in detail:
-                                power_range = detail.split("Range:")[1].strip()
-                        
                         power = {
-                            "name": power_name,
-                            "rank": power_rank,
-                            "extras": extras,
-                            "flaws": flaws,
-                            "range": power_range
+                            "name": f"Power {(row-54)//3 + 1}",
+                            "description": str(sheet[power_cell].value).strip()
                         }
                         character_data["powers"].append(power)
 
-                # Extract advantages
                 for row in range(104, 142, 2):
                     name_cell = f'X{row}'
                     rank_cell = f'AE{row}'
                     if sheet[name_cell].value:
                         advantage = {
                             "name": sheet[name_cell].value,
-                            "rank": sheet[rank_cell].value
+                            "rank": sheet[rank_cell].value or 0
                         }
                         character_data["advantages"].append(advantage)
 
-                # Extract skills
                 skill_cells = {
-                    "Acrobatics": "P104", "Athletics": "P106", "Close Combat": "P110",
-                    "Deception": "P118", "Expertise": "P120", "Insight": "P130",
-                    "Intimidation": "P132", "Investigation": "P134", "Perception": "P136",
-                    "Persuasion": "P138", "Ranged Combat": "P140", "Stealth": "P150",
-                    "Technology": "P152", "Treatment": "P154", "Vehicles": "P156",
-                    "Sleight of Hand": "P148"
+                    "Acrobatics": "S104", "Athletics": "S106", "Close Combat": "S110",
+                    "Deception": "S118", "Expertise": "S120", "Insight": "S130",
+                    "Intimidation": "S132", "Investigation": "S134", "Perception": "S136",
+                    "Persuasion": "S138", "Ranged Combat": "S140", "Stealth": "S150",
+                    "Technology": "S152", "Treatment": "S154", "Vehicles": "S156",
+                    "Sleight of Hand": "S148"
                 }
+                character_data["skills"] = []
                 for skill_name, cell in skill_cells.items():
-                    if sheet[cell].value:
+                    cell_value = sheet[cell].value
+                    if cell_value is not None:
                         skill = {
                             "name": skill_name,
-                            "rank": sheet[cell].value
+                            "rank": int(cell_value) if isinstance(cell_value, (int, float)) else 0
                         }
                         character_data["skills"].append(skill)
 
-                # Extract Motivation and Complications
                 motivation = sheet['F88'].value
                 if motivation:
                     parts = motivation.split(":")
                     character_data["Motivation"]["name"] = parts[0].strip()
-                    character_data["Motivation"]["description"] = ":".join(parts[1:]).strip()
+                    character_data["Motivation"]["description"] = ":".join(parts[1:]).strip() if len(parts) > 1 else ""
 
                 for cell in ['F90', 'AK88']:
                     complication = sheet[cell].value
@@ -352,25 +344,23 @@ class GMSheetApp:
                         parts = complication.split(":")
                         character_data["Complications"].append({
                             "name": parts[0].strip(),
-                            "description": ":".join(parts[1:]).strip()
+                            "description": ":".join(parts[1:]).strip() if len(parts) > 1 else ""
                         })
 
-                # Add the imported character to the GM Cheat Sheet
-                self.characters[character_data["name"]] = character_data
+                self.gm_sheet_characters[character_data["name"]] = character_data
                 self.display_character(character_data)
                 self.auto_save()
-                messagebox.showinfo("Import Successful", f"Character '{character_data['name']}' has been imported and added to the GM Cheat Sheet.")
             
             except Exception as e:
-                messagebox.showerror("Import Error", f"An error occurred while importing the character: {str(e)}")
+                print(f"An error occurred while importing the character: {str(e)}")
 
     def display_character_image(self, frame, image_path):
         if image_path and os.path.exists(image_path):
             img = Image.open(image_path)
-            img = img.resize((100, 100), Image.LANCZOS)  # Resize image
+            img = img.resize((100, 100), Image.LANCZOS)
             photo = ImageTk.PhotoImage(img)
             img_label = ttk.Label(frame, image=photo, cursor="hand2")
-            img_label.image = photo  # Keep a reference
+            img_label.image = photo
             img_label.pack(side=LEFT, pady=5)
             img_label.bind("<Button-1>", lambda e: self.open_large_image(image_path))
         else:
@@ -379,25 +369,22 @@ class GMSheetApp:
     def upload_image(self):
         current_tab = self.character_notebook.select()
         if not current_tab:
-            messagebox.showerror("Error", "No character tab selected")
             return
 
         character_name = self.character_notebook.tab(current_tab, "text")
-        if character_name not in self.characters:
-            messagebox.showerror("Error", "Character not found")
+        if character_name not in self.gm_sheet_characters:
             return
 
         file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.png;*.jpg;*.jpeg;*.gif")])
         if file_path:
-            self.characters[character_name]["image_path"] = file_path
+            self.gm_sheet_characters[character_name]["image_path"] = file_path
             self.refresh_display()
             self.auto_save()
-            messagebox.showinfo("Success", f"Image uploaded for {character_name}")
 
     def open_large_image(self, image_path):
         if image_path and os.path.exists(image_path):
             img = Image.open(image_path)
-            max_size = (800, 600)  # Maximum size for the large image
+            max_size = (800, 600)
             img.thumbnail(max_size, Image.LANCZOS)
             
             top = ttk.Toplevel(self.master)
@@ -405,7 +392,7 @@ class GMSheetApp:
             
             photo = ImageTk.PhotoImage(img)
             label = ttk.Label(top, image=photo)
-            label.image = photo  # Keep a reference
+            label.image = photo
             label.pack(padx=10, pady=10)
 
     def show_context_menu(self, event):
@@ -416,29 +403,24 @@ class GMSheetApp:
                 character_name = self.character_notebook.tab(index, "text")
                 menu = ttk.Menu(self.master, tearoff=0)
                 menu.add_command(label=f"Delete {character_name}", 
-                                command=lambda: self.confirm_delete(character_name))
+                                command=lambda: self.delete_character(character_name))
                 menu.tk_popup(event.x_root, event.y_root)
         except Exception as e:
             print(f"Error in show_context_menu: {e}")
 
-    def confirm_delete(self, name: str):
-        if messagebox.askyesno("Confirm Delete", f"Are you sure you want to remove {name} from the GM Cheat Sheet?"):
-            self.delete_character(name)
-
     def clear_gm_screen(self):
-        if messagebox.askyesno("Confirm Clear", "Are you sure you want to clear all characters from the GM Screen?"):
-            self.characters.clear()
-            self.displayed_characters.clear()
-            for tab in self.character_notebook.tabs():
-                self.character_notebook.forget(tab)
-            self.auto_save()
-            messagebox.showinfo("Success", "GM Screen has been cleared.")
+        self.gm_sheet_characters.clear()
+        self.displayed_characters.clear()
+        for tab in self.character_notebook.tabs():
+            self.character_notebook.forget(tab)
+        self.auto_save()
 
 class CharacterForm(ttk.Frame):
-    def __init__(self, master: ttk.Toplevel, characters: Dict[str, Any], display_character_callback: Callable):
+    def __init__(self, master: ttk.Toplevel, characters: Dict[str, Any], display_character_callback: Callable, app: GMSheetApp):
         super().__init__(master)
         self.characters = characters
         self.display_character_callback = display_character_callback
+        self.app = app
         self.load_json_data()
         self.create_form()
 
@@ -456,10 +438,8 @@ class CharacterForm(ttk.Frame):
                 with open(file_path, 'r') as f:
                     setattr(self, f'{attr}_data', json.load(f))
             except FileNotFoundError:
-                messagebox.showerror("Error", f"{file_path} not found.")
                 setattr(self, f'{attr}_data', [])
             except json.JSONDecodeError:
-                messagebox.showerror("Error", f"Invalid JSON in {file_path}.")
                 setattr(self, f'{attr}_data', [])
 
         # Ensure all attributes are set, even if loading failed
@@ -683,17 +663,14 @@ class CharacterForm(ttk.Frame):
                 power_display += f", Extras: {', '.join([f'{e[0]} ({e[1]})' for e in extras])}"
             if flaws:
                 power_display += f", Flaws: {', '.join([f'{f[0]} ({f[1]})' for f in flaws])}"
-            messagebox.showinfo("Current Power", power_display)
 
     def save_character(self):
         character_data = self.get_character_data()
         if character_data["name"]:
             self.characters[character_data["name"]] = character_data
             self.display_character_callback(character_data)
-            messagebox.showinfo("Success", f"Character '{character_data['name']}' added to GM Cheat Sheet.")
+            self.app.auto_save()  # Add this line to trigger auto-save
             self.master.destroy()
-        else:
-            messagebox.showerror("Error", "Character name is required.")
 
     def get_character_data(self) -> Dict[str, Any]:
         character_data = {

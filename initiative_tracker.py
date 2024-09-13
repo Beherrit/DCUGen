@@ -258,8 +258,8 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
     tree.tag_configure('evenrow', background='#1e2329')
 
     for col in columns:
-        tree.heading(col, text=col)
-        tree.column(col, width=120, stretch=True)
+        tree.heading(col, text=col, command=lambda _col=col: sort_treeview(tree, _col, False))
+        tree.column(col, width=100)  # Adjust width as needed
 
     # Adjust specific column widths
     tree.column("Name", width=120)
@@ -406,12 +406,18 @@ def save_edit(widget, tree, item, column):
     sort_treeview(tree)
 
 def load_preloaded_data(tree, preloaded_data):
-    if preloaded_data:
-        for data in preloaded_data:
-            name, awareness, agility, initiative = data
-            tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
-            tree.insert("", "end", values=(name, awareness, agility, initiative, "", "False", "Normal", "Normal", "Normal", "", "", "False", ""), tags=(tag,))
-        sort_treeview(tree)
+    for data in preloaded_data:
+        name, awareness, agility, init_bonus, rolled_init, init_total, hold_action, condition1, condition2, condition3, toughness, will, fort, dodge, parry, description = data
+        
+        # Calculate the total initiative
+        total_init = init_bonus
+        
+        # Insert the data into the tree
+        tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
+        tree.insert("", "end", values=(name, awareness, agility, init_bonus, rolled_init, total_init, hold_action, condition1, condition2, condition3, toughness, will, fort, dodge, parry, description), tags=(tag,))
+    
+    # Sort the treeview after loading all data
+    sort_treeview(tree)
 
 def toggle_window_lock(window, lock_var):
     window.attributes('-topmost', lock_var.get())
