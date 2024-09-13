@@ -106,7 +106,7 @@ def sort_treeview(tree):
     def safe_int(value):
         return int(value) if value.isdigit() else 0
     
-    tree_data = [(safe_int(tree.set(child, "Rolled Init")),
+    tree_data = [(safe_int(tree.set(child, "Init Total")),
                   safe_int(tree.set(child, "Awareness")),
                   safe_int(tree.set(child, "Agility")),
                   child)
@@ -125,6 +125,11 @@ def load_initiative_data(tree):
         with open("initiative_data.json", "r") as file:
             data = json.load(file)
         for row in data:
+            # Ensure the row has the correct number of elements
+            while len(row) < 16:  # Adjust this number if you add more columns
+                row.append("")
+            # Ensure boolean values are strings
+            row[6] = str(row[6])  # Hold Action
             tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
             tree.insert("", "end", values=row, tags=(tag,))
         sort_treeview(tree)
@@ -179,11 +184,12 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
         name = entries['name'].get()
         awareness = int(entries['awareness'].get()) if entries['awareness'].get() else 0
         agility = int(entries['agility'].get()) if entries['agility'].get() else 0
-        initiative = entries['init_bonus'].get()
+        init_bonus = int(entries['init_bonus'].get()) if entries['init_bonus'].get() else 0
+        rolled_init = 0  # Initialize as 0, will be editable later
+        init_total = init_bonus + rolled_init
         tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
 
-        # Remove the Dead column from the values tuple
-        tree.insert("", "end", values=(name, awareness, agility, initiative, "", "False", "Normal", "Normal", "Normal", "", "", "", "", ""), tags=(tag,))
+        tree.insert("", "end", values=(name, awareness, agility, init_bonus, rolled_init, init_total, "False", "Normal", "Normal", "Normal", "", "", "", "", "", ""), tags=(tag,))
         sort_treeview(tree)
 
         # Clear the entry fields after adding a person
@@ -202,10 +208,11 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
             if isinstance(initiative_bonus, dict):
                 initiative_bonus = initiative_bonus.get("total", 0)
             
+            rolled_init = 0  # Initialize as 0, will be editable later
+            init_total = initiative_bonus + rolled_init
             tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
 
-            # Remove the Dead column from the values tuple
-            tree.insert("", "end", values=(name, awareness, agility, initiative_bonus, "", "False", "Normal", "Normal", "Normal", "", "", "", "", ""), tags=(tag,))
+            tree.insert("", "end", values=(name, awareness, agility, initiative_bonus, rolled_init, init_total, "False", "Normal", "Normal", "Normal", "", "", "", "", "", ""), tags=(tag,))
             sort_treeview(tree)
 
     # Buttons
@@ -231,8 +238,7 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
     ToolTip(lock_window_button, "Toggle window lock to keep it on top of other windows.")
 
     # Treeview
-    # Remove the "Dead" column from the columns list
-    columns = ("Name", "Awareness", "Agility", "Init Bonus", "Rolled Init", "Hold Action", 
+    columns = ("Name", "Awareness", "Agility", "Init Bonus", "Rolled Init", "Init Total", "Hold Action", 
                "Condition 1", "Condition 2", "Condition 3", "Toughness", "Will", "Fort", "Dodge", "Parry", "Description")
     
     style.configure("Custom.Treeview", rowheight=50)
@@ -261,6 +267,7 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
     tree.column("Agility", width=70)
     tree.column("Init Bonus", width=70)
     tree.column("Rolled Init", width=70)
+    tree.column("Init Total", width=70)
     tree.column("Description", width=150)
     tree.column("Fort", width=70)
     tree.column("Dodge", width=70)
@@ -291,6 +298,17 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
             tracker_window.destroy()
 
     tracker_window.protocol("WM_DELETE_WINDOW", on_closing)
+
+    def update_init_total(event):
+        item = tree.focus()
+        if item:
+            init_bonus = safe_int(tree.set(item, "Init Bonus"))
+            rolled_init = safe_int(tree.set(item, "Rolled Init"))
+            init_total = init_bonus + rolled_init
+            tree.set(item, "Init Total", str(init_total))
+            sort_treeview(tree)
+
+    tree.bind("<<TreeviewSelect>>", update_init_total)
 
     return tracker_window
 
@@ -345,28 +363,33 @@ def edit_cell(event, tree, conditions):
 
     cell_bbox = tree.bbox(item, column)
 
-    if column_index == 5:  # Hold Action column
-        combobox = ttk.Combobox(tree, values=["True", "False"], style="info.TCombobox")
+    if column_index == 5:  # Init Total column
+        return  # Make Init Total not editable
+    elif column_index == 6:  # Hold Action column
+        combobox = ttk.Combobox(tree, values=["False", "True"], style="info.TCombobox")
+        combobox.set(tree.set(item, column))
         setup_edit_widget(combobox, tree, item, column, cell_bbox)
-    elif column_index in [6, 7, 8]:  # Condition columns
+    elif column_index in [7, 8, 9]:  # Condition columns
         combobox = ttk.Combobox(tree, values=conditions, style="info.TCombobox")
+        combobox.set(tree.set(item, column))
         setup_edit_widget(combobox, tree, item, column, cell_bbox)
-    elif column_index == 12:  # Description column
-        text_widget = WrappingText(tree, lambda: sort_treeview(tree), wrap="word", height=3, width=20)
-        text_widget.insert("1.0", tree.set(item, column))
-        text_widget.focus()
-        text_widget.bind("<FocusOut>", lambda e: text_widget.save_edit(item, column))
-        text_widget.place(x=cell_bbox[0], y=cell_bbox[1], width=cell_bbox[2], height=cell_bbox[3])
-    elif column_index in [9, 10, 11]:  # Fort, Dodge, and Parry columns
+    elif column_index in [3, 4]:  # Init Bonus or Rolled Init columns
         entry = ttk.Entry(tree)
+        entry.insert(0, tree.set(item, column))
         setup_edit_widget(entry, tree, item, column, cell_bbox)
-    else:  # Other columns including "Rolled Init"
+        entry.bind("<FocusOut>", lambda e: update_init_total_on_edit(e.widget, tree, item, column))
+        entry.bind("<Return>", lambda e: update_init_total_on_edit(e.widget, tree, item, column))
+    else:  # Other columns
         entry = ttk.Entry(tree)
+        entry.insert(0, tree.set(item, column))
         setup_edit_widget(entry, tree, item, column, cell_bbox)
-
 
 def setup_edit_widget(widget, tree, item, column, cell_bbox):
-    widget.insert(0, tree.set(item, column))
+    if isinstance(widget, ttk.Combobox):
+        widget.set(tree.set(item, column))
+    else:
+        widget.delete(0, tk.END)
+        widget.insert(0, tree.set(item, column))
     widget.select_range(0, tk.END)
     widget.focus()
     widget.bind("<FocusOut>", lambda e: save_edit(e.widget, tree, item, column))
@@ -374,7 +397,11 @@ def setup_edit_widget(widget, tree, item, column, cell_bbox):
     widget.place(x=cell_bbox[0], y=cell_bbox[1], width=cell_bbox[2], height=cell_bbox[3])
 
 def save_edit(widget, tree, item, column):
-    tree.set(item, column, widget.get())
+    if isinstance(widget, ttk.Combobox):
+        value = widget.get()
+    else:
+        value = widget.get().strip()
+    tree.set(item, column, value)
     widget.destroy()
     sort_treeview(tree)
 
@@ -388,6 +415,17 @@ def load_preloaded_data(tree, preloaded_data):
 
 def toggle_window_lock(window, lock_var):
     window.attributes('-topmost', lock_var.get())
+
+def update_init_total_on_edit(widget, tree, item, column):
+    save_edit(widget, tree, item, column)
+    init_bonus = safe_int(tree.set(item, "Init Bonus"))
+    rolled_init = safe_int(tree.set(item, "Rolled Init"))
+    init_total = init_bonus + rolled_init
+    tree.set(item, "Init Total", str(init_total))
+    sort_treeview(tree)
+
+def safe_int(value):
+    return int(value) if value.isdigit() else 0
 
 if __name__ == "__main__":
     root = tk.Tk()
