@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import messagebox
 from PIL import Image, ImageTk
 import json
 import random
@@ -8,8 +7,9 @@ import os
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from tooltip import ToolTip
+from tkinter import filedialog
 
-global tree
+global tree, data_changed
 
 class WrappingText(tk.Text):
     def __init__(self, parent, sort_callback, **kwargs):
@@ -121,26 +121,38 @@ def sort_treeview(tree):
         tree.item(child, tags=(tag,))
 
 def load_initiative_data(tree):
-    if os.path.exists("initiative_data.json"):
-        with open("initiative_data.json", "r") as file:
-            data = json.load(file)
-        for row in data:
-            # Ensure the row has the correct number of elements
-            while len(row) < 16:  # Adjust this number if you add more columns
-                row.append("")
-            # Ensure boolean values are strings
-            row[6] = str(row[6])  # Hold Action
-            tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
-            tree.insert("", "end", values=row, tags=(tag,))
-        sort_treeview(tree)
+    global data_changed
+    file_path = filedialog.askopenfilename(filetypes=[("JSON files", "*.json"), ("All files", "*.*")])
+    if not file_path:  # If the user cancels the load operation
+        return
+
+    with open(file_path, "r") as file:
+        data = json.load(file)
+    
+    clear_table(tree)  # Clear existing data before loading new data
+    
+    for row in data:
+        # Ensure the row has the correct number of elements
+        while len(row) < 16:  # Adjust this number if you add more columns
+            row.append("")
+        # Ensure boolean values are strings
+        row[6] = str(row[6])  # Hold Action
+        tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
+        tree.insert("", "end", values=row, tags=(tag,))
+    sort_treeview(tree)
+    data_changed = False
 
 def save_initiative_data(tree):
-    with open("initiative_data.json", "w") as file:
-        json.dump([], file, indent=4)
+    global data_changed
+    file_path = filedialog.asksaveasfilename(defaultextension=".json",
+                                             filetypes=[("JSON files", "*.json"), ("All files", "*.*")])
+    if not file_path:  # If the user cancels the save operation
+        return
 
     data = [tree.item(item)["values"] for item in tree.get_children()]
-    with open("initiative_data.json", "w") as file:
+    with open(file_path, "w") as file:
         json.dump(data, file, indent=4)
+    data_changed = False
 
 def get_character_data_from_selected_tab(notebook, characters):
     current_tab = notebook.select()
@@ -148,7 +160,8 @@ def get_character_data_from_selected_tab(notebook, characters):
     return characters.get(tab_text, None)
 
 def open_initiative_tracker(notebook, characters, preloaded_data=None):
-    global tree
+    global tree, data_changed
+    data_changed = False
     conditions_dict = load_conditions()
     conditions = list(conditions_dict.keys())
 
@@ -181,6 +194,7 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
         entries[field.lower().replace(" ", "_")] = entry
 
     def add_person():
+        global data_changed
         name = entries['name'].get()
         awareness = int(entries['awareness'].get()) if entries['awareness'].get() else 0
         agility = int(entries['agility'].get()) if entries['agility'].get() else 0
@@ -195,6 +209,8 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
         # Clear the entry fields after adding a person
         for entry in entries.values():
             entry.delete(0, tk.END)
+
+        data_changed = True
 
     def upload_character_from_tab():
         character_data = get_character_data_from_selected_tab(notebook, characters)
@@ -222,8 +238,8 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
         ("Condition Lookup", open_condition_lookup, 1, 4),
         ("Measurement Calcs", open_measurement_calcs, 1, 6),
         ("Damage Degree Reference", open_image_window, 2, 0),
-        ("Save Data", lambda: save_initiative_data(tree), 2, 2),
-        ("Load Data", lambda: load_initiative_data(tree), 2, 4),
+        ("Save Data to JSON", lambda: save_initiative_data(tree), 2, 2),
+        ("Load Data from JSON", lambda: load_initiative_data(tree), 2, 4),
         ("Clear Table", lambda: clear_table(tree), 2, 6)
     ]
     for text, command, row, col in buttons:
@@ -285,17 +301,21 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
     tree.bind("<Button-3>", lambda event: right_click_action(event, tree, right_click_menu))
     tree.bind("<Double-1>", lambda event: edit_cell(event, tree, conditions))
 
-    load_initiative_data(tree)
+    def on_data_change(*args):
+        global data_changed
+        data_changed = True
+
+    tree.bind('<<TreeviewSelect>>', on_data_change)
+    tree.bind('<KeyRelease>', on_data_change)
+
     if preloaded_data:
         load_preloaded_data(tree, preloaded_data)
     
     def on_closing():
-        try:
+        global data_changed
+        if data_changed:
             save_initiative_data(tree)
-        except Exception as e:
-            print(f"Error saving initiative data: {e}")
-        finally:
-            tracker_window.destroy()
+        tracker_window.destroy()
 
     tracker_window.protocol("WM_DELETE_WINDOW", on_closing)
 
@@ -349,12 +369,14 @@ def right_click_action(event, tree, menu):
         menu.grab_release()
 
 def remove_selected_item(tree):
+    global data_changed
     selected_item = tree.selection()
     if selected_item:
         tree.delete(selected_item)
         for index, item in enumerate(tree.get_children()):
             tag = 'evenrow' if index % 2 == 0 else 'oddrow'
             tree.item(item, tags=(tag,))
+        data_changed = True
 
 def edit_cell(event, tree, conditions):
     item = tree.selection()[0]
@@ -397,6 +419,7 @@ def setup_edit_widget(widget, tree, item, column, cell_bbox):
     widget.place(x=cell_bbox[0], y=cell_bbox[1], width=cell_bbox[2], height=cell_bbox[3])
 
 def save_edit(widget, tree, item, column):
+    global data_changed
     if isinstance(widget, ttk.Combobox):
         value = widget.get()
     else:
@@ -404,8 +427,10 @@ def save_edit(widget, tree, item, column):
     tree.set(item, column, value)
     widget.destroy()
     sort_treeview(tree)
+    data_changed = True
 
 def load_preloaded_data(tree, preloaded_data):
+    global data_changed
     for data in preloaded_data:
         name, awareness, agility, init_bonus, rolled_init, init_total, hold_action, condition1, condition2, condition3, toughness, will, fort, dodge, parry, description = data
         
@@ -418,6 +443,7 @@ def load_preloaded_data(tree, preloaded_data):
     
     # Sort the treeview after loading all data
     sort_treeview(tree)
+    data_changed = False
 
 def toggle_window_lock(window, lock_var):
     window.attributes('-topmost', lock_var.get())

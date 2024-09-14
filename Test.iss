@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "DCUGen"
-#define MyAppVersion "4.7.0"
+#define MyAppVersion "4.8.2"
 #define MyAppPublisher "Beherrit"
 #define MyAppExeName "DCUQA.exe"
 
@@ -13,10 +13,12 @@ AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
-OutputBaseFilename=mysetup
-Compression=lzma
+OutputBaseFilename=DCUGen_Setup_{#MyAppVersion}
+Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
+; Sign your installer (optional, but recommended)
+; SignTool=signtool sign /f "path\to\your\certificate.pfx" /p YourPassword /t http://timestamp.digicert.com $f
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

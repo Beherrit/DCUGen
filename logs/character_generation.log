@@ -1,12 +1,97 @@
-2024-09-13 15:26:33,166 STREAM b'IHDR' 16 13
-2024-09-13 15:26:33,166 STREAM b'sRGB' 41 1
-2024-09-13 15:26:33,166 STREAM b'gAMA' 54 4
-2024-09-13 15:26:33,166 STREAM b'pHYs' 70 9
-2024-09-13 15:26:33,166 STREAM b'IDAT' 91 65445
-2024-09-13 15:28:08,986 STREAM b'IHDR' 16 13
-2024-09-13 15:28:08,986 STREAM b'IDAT' 41 65536
-2024-09-13 15:30:13,670 STREAM b'IHDR' 16 13
-2024-09-13 15:30:13,670 STREAM b'sRGB' 41 1
-2024-09-13 15:30:13,671 STREAM b'gAMA' 54 4
-2024-09-13 15:30:13,671 STREAM b'pHYs' 70 9
-2024-09-13 15:30:13,671 STREAM b'IDAT' 91 65445
+2024-09-13 18:22:18,177 Selected Power Types: [('Combat', 'Melee', 2), ('Combat', 'Ranged', 2), ('Utility', None, 2), ('Support', None, 2), ('Movement', None, 2), ('Defensive', None, 2)]
+2024-09-13 18:22:18,178 Starting character generation attempt 1 with Power Level: 10
+2024-09-13 18:22:18,179 Allocated Points - Stats: 30, Advantages: 30, Skills: 30, Defenses: 30, Powers: 30
+2024-09-13 18:22:18,180 Allocating 30 points to stats.
+2024-09-13 18:22:18,180 Allocated 2 points to Stamina (High).
+2024-09-13 18:22:18,180 Allocated 2 points to Presence (High).
+2024-09-13 18:22:18,180 Allocated 1 points to Awareness (High).
+2024-09-13 18:22:18,180 Allocated 0 points to Intellect (Moderate).
+2024-09-13 18:22:18,180 Allocated 1 points to Dexterity (Moderate).
+2024-09-13 18:22:18,180 Allocated 1 points to Fighting (Moderate).
+2024-09-13 18:22:18,180 Allocated 2 points to Agility (Low).
+2024-09-13 18:22:18,180 Allocated 1 points to Strength (Low).
+2024-09-13 18:22:18,180 Distributed remaining points to Stamina, adding 1 points.
+2024-09-13 18:22:18,180 Distributed remaining points to Presence, adding 1 points.
+2024-09-13 18:22:18,180 Distributed remaining points to Awareness, adding 1 points.
+2024-09-13 18:22:18,180 Distributed remaining points to Intellect, adding 1 points.
+2024-09-13 18:22:18,180 Distributed remaining points to Dexterity, adding 1 points.
+2024-09-13 18:22:18,180 Allocated Stats.
+2024-09-13 18:22:18,180 Updated Defenses.
+2024-09-13 18:22:18,180 Starting skill allocation with 30 points.
+2024-09-13 18:22:18,180 Allocated Persuasion: rank 4, cost 2, remaining points 28
+2024-09-13 18:22:18,180 Allocated Deception: rank 4, cost 2, remaining points 26
+2024-09-13 18:22:18,180 Allocated Sleight of Hand: rank 4, cost 2, remaining points 24
+2024-09-13 18:22:18,180 Allocated Technology: rank 3, cost 2, remaining points 22
+2024-09-13 18:22:18,180 Allocated Athletics: rank 3, cost 2, remaining points 20
+2024-09-13 18:22:18,180 Allocated Stealth: rank 4, cost 2, remaining points 18
+2024-09-13 18:22:18,180 Allocated Insight: rank 4, cost 2, remaining points 16
+2024-09-13 18:22:18,180 Allocated Investigation: rank 5, cost 3, remaining points 13
+2024-09-13 18:22:18,180 Allocated Ranged Combat: rank 1, cost 1, remaining points 12
+2024-09-13 18:22:18,180 Allocated Close Combat: rank 1, cost 1, remaining points 11
+2024-09-13 18:22:18,180 Allocated Perception: rank 1, cost 1, remaining points 10
+2024-09-13 18:22:18,180 Allocated Expertise: rank 1, cost 1, remaining points 9
+2024-09-13 18:22:18,180 Allocated Treatment: rank 9, cost 5, remaining points 4
+2024-09-13 18:22:18,180 Allocated Intimidation: rank 7, cost 4, remaining points 0
+2024-09-13 18:22:18,180 Skill allocation complete.
+2024-09-13 18:22:18,180 Allocated Skills.
+2024-09-13 18:22:18,180 Allocating 30 points to advantages with a max of 20 advantages.
+2024-09-13 18:22:18,180 Allocated advantage Improved Grab with rank 1 and cost 1.
+2024-09-13 18:22:18,180 Allocated advantage Improved Disarm with rank 1 and cost 1.
+2024-09-13 18:22:18,180 Allocated advantage Seize Initiative with rank 1 and cost 1.
+2024-09-13 18:22:18,180 Allocated advantage Artificer with rank 1 and cost 1.
+2024-09-13 18:22:18,180 Allocated advantage Taunt with rank 1 and cost 1.
+2024-09-13 18:22:18,180 Allocated advantage Benefit Diplomatic Immunity with rank 1 and cost 1.
+2024-09-13 18:22:18,180 Allocated advantage Beginner's Luck with rank 1 and cost 1.
+2024-09-13 18:22:18,180 Allocated advantage Improved Defense with rank 1 and cost 1.
+2024-09-13 18:22:18,180 Allocated advantage Weapon Bind with rank 1 and cost 1.
+2024-09-13 18:22:18,180 Allocated advantage Defensive Roll with rank 10 and cost 10.
+2024-09-13 18:22:18,180 Allocated advantage All-out Attack with rank 1 and cost 1.
+2024-09-13 18:22:18,180 Allocated advantage Improved Hold with rank 1 and cost 1.
+2024-09-13 18:22:18,180 Allocated advantage Luck with rank 3 and cost 3.
+2024-09-13 18:22:18,180 Allocated advantage Throwing Mastery with rank 2 and cost 2.
+2024-09-13 18:22:18,180 Allocated advantage Hide in Plain Sight with rank 1 and cost 1.
+2024-09-13 18:22:18,181 Allocated advantage Precise Attack with rank 3 and cost 3.
+2024-09-13 18:22:18,181 Remaining points after allocation: 0
+2024-09-13 18:22:18,181 Allocated Advantages.
+2024-09-13 18:22:18,181 Allocating 30 points to defenses.
+2024-09-13 18:22:18,181 Allocated 1 point to Dodge, total rank is now 3.
+2024-09-13 18:22:18,181 Allocated 1 point to Fortitude, total rank is now 4.
+2024-09-13 18:22:18,181 Allocated 1 point to Parry, total rank is now 2.
+2024-09-13 18:22:18,181 Allocated 1 point to Will, total rank is now 3.
+2024-09-13 18:22:18,181 Allocated 1 point to Toughness, total rank is now 4.
+2024-09-13 18:22:18,181 Allocated 1 point to Dodge, total rank is now 4.
+2024-09-13 18:22:18,181 Allocated 1 point to Fortitude, total rank is now 5.
+2024-09-13 18:22:18,181 Allocated 1 point to Parry, total rank is now 3.
+2024-09-13 18:22:18,181 Allocated 1 point to Will, total rank is now 4.
+2024-09-13 18:22:18,181 Allocated 1 point to Toughness, total rank is now 5.
+2024-09-13 18:22:18,181 Allocated 1 point to Dodge, total rank is now 5.
+2024-09-13 18:22:18,181 Allocated 1 point to Fortitude, total rank is now 6.
+2024-09-13 18:22:18,181 Allocated 1 point to Parry, total rank is now 4.
+2024-09-13 18:22:18,181 Allocated 1 point to Will, total rank is now 5.
+2024-09-13 18:22:18,181 Allocated 1 point to Toughness, total rank is now 6.
+2024-09-13 18:22:18,181 Allocated 1 point to Dodge, total rank is now 6.
+2024-09-13 18:22:18,181 Allocated 1 point to Fortitude, total rank is now 7.
+2024-09-13 18:22:18,181 Allocated 1 point to Parry, total rank is now 5.
+2024-09-13 18:22:18,181 Allocated 1 point to Will, total rank is now 6.
+2024-09-13 18:22:18,181 Allocated 1 point to Toughness, total rank is now 7.
+2024-09-13 18:22:18,181 Allocated 1 point to Dodge, total rank is now 7.
+2024-09-13 18:22:18,181 Allocated 1 point to Fortitude, total rank is now 8.
+2024-09-13 18:22:18,181 Allocated 1 point to Parry, total rank is now 6.
+2024-09-13 18:22:18,181 Allocated 1 point to Will, total rank is now 7.
+2024-09-13 18:22:18,181 Allocated 1 point to Toughness, total rank is now 8.
+2024-09-13 18:22:18,181 Allocated 1 point to Dodge, total rank is now 8.
+2024-09-13 18:22:18,181 Allocated 1 point to Fortitude, total rank is now 9.
+2024-09-13 18:22:18,181 Allocated 1 point to Parry, total rank is now 7.
+2024-09-13 18:22:18,181 Allocated 1 point to Will, total rank is now 8.
+2024-09-13 18:22:18,181 Allocated 1 point to Toughness, total rank is now 9.
+2024-09-13 18:22:18,181 Allocated Defenses.
+2024-09-13 18:22:18,181 Allocating 30 points to powers with a max of 20 powers.
+2024-09-13 18:22:18,181 Allocated power Strike with rank 2, total cost 4, extras [('Affects Others', 1), ('Accurate', 2)], flaws [('Sense-Dependent', 1)].
+2024-09-13 18:22:18,181 Allocated power Weaken Attack with rank 7, total cost 5, extras [('Accurate', 2)], flaws [('Grab-Based', 3), ('Uncontrolled', 1)].
+2024-09-13 18:22:18,182 Allocated power Ranged Damage with rank 8, total cost 12, extras [('Penetrating', 5), ('Accurate', 3)], flaws [].
+2024-09-13 18:22:18,182 Allocated power Elongation with rank 4, total cost 3, extras [('Affects Corporeal', 3), ('Selective', 3)], flaws [('Activation', 2), ('Fades', 4)].
+2024-09-13 18:22:18,182 Allocated power Concealment with rank 2, total cost 4, extras [], flaws [].
+2024-09-13 18:22:18,182 Allocated power Healing with rank 1, total cost 1, extras [], flaws [('Tiring', 1), ('Fades', 1)].
+2024-09-13 18:22:18,182 Allocated power Regeneration with rank 1, total cost 1, extras [('Incurable', 1)], flaws [('Quirk', 1), ('Concentration', 1)].
+2024-09-13 18:22:18,182 Allocated Powers.
+2024-09-13 18:22:18,182 Character generation completed.

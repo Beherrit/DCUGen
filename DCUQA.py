@@ -892,7 +892,7 @@ def main():
 
     # Use ttkbootstrap for a modern look
     root = ttk.Window(themename="darkly")
-    root.title("Character Creation Version 4.8.1 Prod")
+    root.title("Character Creation Version 4.8.2 Prod")
     
     # Set base size for the main window
     root.geometry("1024x768")  # Width x Height

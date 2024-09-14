@@ -50,12 +50,12 @@ class GMSheetApp:
 
         buttons = [
             ("Add New Character", self.add_new_character, "info", "Create a new character manually"),
-            ("Import Character", self.import_character, "info", "Import a character from an Excel file"),
-            ("Upload Image", self.upload_image, "info", "Upload an image for the selected character"),
+            ("Import Excel Character", self.import_character, "info", "Import a character from an Excel file"),
+            ("Upload Image To Tab", self.upload_image, "info", "Upload an image for the selected character"),
             ("Tab Upload", self.upload_character, "info", "Upload the character from the current tab"),
             ("Upload All Tabs", self.upload_all_characters, "info", "Upload all characters from all tabs"),
-            ("Export Save", self.save_sheet, "success", "Save all characters to a JSON file"),
-            ("Import Save", self.upload_sheet, "success", "Load characters from a saved JSON file"),
+            ("JSON Save File", self.save_sheet, "success", "Save all characters to a JSON file"),
+            ("JSON Import File", self.upload_sheet, "success", "Load characters from a saved JSON file"),
             ("Upload to Init Tracker", self.upload_to_init_tracker, "warning", "Send characters to the Initiative Tracker"),
             ("Clear GM Screen", self.clear_gm_screen, "danger", "Remove all characters from the GM Screen")
         ]
