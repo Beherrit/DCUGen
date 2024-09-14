@@ -6,6 +6,9 @@ from concurrent.futures import ThreadPoolExecutor
 import glob
 from ttkbootstrap import Style
 from PIL import Image, ImageTk
+import time
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 # Initialize a thread pool executor for potential concurrency
 executor = ThreadPoolExecutor(max_workers=os.cpu_count())
@@ -39,6 +42,37 @@ def load_theme_settings():
 def apply_theme(root, theme_name):
     return Style(theme=theme_name)
 
+class FileChangeHandler(FileSystemEventHandler):
+    def __init__(self, callback):
+        self.callback = callback
+
+    def on_any_event(self, event):
+        if not event.is_directory:
+            self.callback()
+
+def watch_for_changes(directories, callback):
+    event_handler = FileChangeHandler(callback)
+    observer = Observer()
+    for directory in directories:
+        observer.schedule(event_handler, directory, recursive=True)
+    observer.start()
+    return observer
+
+def create_file_watcher(root, directories_to_watch):
+    def refresh_display():
+        root.event_generate("<<RefreshDisplay>>")
+
+    observer = watch_for_changes(directories_to_watch, refresh_display)
+    return observer
+
+# Helper function to get preloaded image
+def get_preloaded_image(file_path):
+    return load_cached_image(file_path)
+
+# Helper function to get preloaded JSON
+def get_preloaded_json(file_path):
+    return load_cached_json(file_path)
+
 def initialize_system(root, log_file_path, theme_name):
     if sys.platform == 'win32':
         import psutil
@@ -49,12 +83,8 @@ def initialize_system(root, log_file_path, theme_name):
     # Preload files in the background
     executor.submit(preload_files)
     
-    return apply_theme(root, theme_name)
-
-# Helper function to get preloaded image
-def get_preloaded_image(file_path):
-    return load_cached_image(file_path)
-
-# Helper function to get preloaded JSON
-def get_preloaded_json(file_path):
-    return load_cached_json(file_path)
+    # Create file watcher
+    directories_to_watch = ['json', 'images']  # Add any other directories you want to watch
+    file_watcher = create_file_watcher(root, directories_to_watch)
+    
+    return apply_theme(root, theme_name), file_watcher

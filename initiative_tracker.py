@@ -165,6 +165,11 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
     conditions_dict = load_conditions()
     conditions = list(conditions_dict.keys())
 
+    # Close all existing Initiative Tracker windows
+    for widget in notebook.winfo_toplevel().winfo_children():
+        if isinstance(widget, ttk.Toplevel) and widget.wm_title() == "Initiative Tracker":
+            widget.destroy()
+
     tracker_window = ttk.Toplevel()
     tracker_window.title("Initiative Tracker")
     tracker_window.geometry("1600x800")

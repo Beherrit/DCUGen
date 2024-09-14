@@ -1,7 +1,7 @@
 import display_character_sheet
 from imports import *
 
-
+open_windows = {}
 
 def get_log_file_path():
     if getattr(sys, 'frozen', False):  # Check if the program is running as an executable
@@ -1051,8 +1051,14 @@ def main():
 
     # Function to open GM Cheat Sheet
     def open_gm_cheat_sheet():
-        new_window = ttk.Toplevel(root)
-        gm_app = GMSheetApp(new_window, notebook, characters)
+        if 'gm_cheat_sheet' not in open_windows or not open_windows['gm_cheat_sheet'].winfo_exists():
+            new_window = ttk.Toplevel(root)
+            gm_app = GMSheetApp(new_window, notebook, characters)
+            open_windows['gm_cheat_sheet'] = new_window
+        else:
+            open_windows['gm_cheat_sheet'].lift()
+
+
     
     # Complications
     complications = load_data_from_json('./json/complications.json')

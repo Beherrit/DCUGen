@@ -10,6 +10,8 @@ from openpyxl import load_workbook
 from PIL import Image, ImageTk
 from initiative_tracker import open_initiative_tracker, update_initiative_tracker
 from tooltip import ToolTip
+from system import initialize_system, get_preloaded_image, get_preloaded_json
+
 
 class GMSheetApp:
     def __init__(self, master: ttk.Window, main_notebook: ttk.Notebook, characters: Dict[str, Any]):
@@ -24,12 +26,17 @@ class GMSheetApp:
         self.auto_save_file = "gm_sheet_autosave.json"
         self.init_tracker_window = None
 
+        # Initialize system and get file watcher
+        self.style, self.file_watcher = initialize_system(self.master, "log.txt", "darkly")
+
         self.setup_styles()
         self.setup_ui()
         self.load_autosave()
 
+        # Bind the refresh display event
+        self.master.bind("<<RefreshDisplay>>", self.refresh_display_event)
+
     def setup_styles(self):
-        self.style = ttk.Style()
         self.style.configure("TLabel", font=("Helvetica", 10))
         self.style.configure("TButton", font=("Helvetica", 10))
         self.style.configure("Header.TLabel", font=("Helvetica", 12, "bold"))
@@ -175,6 +182,9 @@ class GMSheetApp:
         self.refresh_display()
         self.scrolled_frame.yview_moveto(0)
 
+    def refresh_display_event(self, event):
+        self.refresh_display()
+
     def refresh_display(self):
         for tab in self.character_notebook.tabs():
             self.character_notebook.forget(tab)
@@ -216,10 +226,13 @@ class GMSheetApp:
             
             init_tracker_data.append(init_tracker_entry)
         
-        if self.init_tracker_window is None or not self.init_tracker_window.winfo_exists():
-            self.init_tracker_window = open_initiative_tracker(self.main_notebook, self.gm_sheet_characters, init_tracker_data)
-        else:
-            update_initiative_tracker(self.init_tracker_window, init_tracker_data)
+        # Close all existing Initiative Tracker windows
+        for widget in self.master.winfo_children():
+            if isinstance(widget, tk.Toplevel) and widget.wm_title() == "Initiative Tracker":
+                widget.destroy()
+        
+        # Open a new Initiative Tracker window
+        self.init_tracker_window = open_initiative_tracker(self.main_notebook, self.gm_sheet_characters, init_tracker_data)
 
     def auto_save(self):
         with open(self.auto_save_file, 'w') as file:
@@ -414,6 +427,15 @@ class GMSheetApp:
         for tab in self.character_notebook.tabs():
             self.character_notebook.forget(tab)
         self.auto_save()
+
+    def run(self):
+        self.master.mainloop()
+
+    def on_closing(self):
+        if self.file_watcher:
+            self.file_watcher.stop()
+            self.file_watcher.join()
+        self.master.destroy()
 
 class CharacterForm(ttk.Frame):
     def __init__(self, master: ttk.Toplevel, characters: Dict[str, Any], display_character_callback: Callable, app: GMSheetApp):
@@ -729,4 +751,5 @@ if __name__ == "__main__":
     root = ttk.Window(themename="darkly")
     root.geometry("800x600")  # Set initial window size
     app = GMSheetApp(root, None, {})
-    root.mainloop()
+    root.protocol("WM_DELETE_WINDOW", app.on_closing)
+    app.run()
