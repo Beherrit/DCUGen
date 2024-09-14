@@ -214,6 +214,8 @@ class GMSheetApp:
             awareness = character_data.get("stats", {}).get("Awareness", {}).get("value", 0)
             agility = character_data.get("stats", {}).get("Agility", {}).get("value", 0)
             initiative = character_data.get("initiative", 0)
+            dodge = character_data.get("defenses", {}).get("Dodge", {}).get("total_rank", 0)
+            parry = character_data.get("defenses", {}).get("Parry", {}).get("total_rank", 0)
             
             if isinstance(initiative, dict):
                 initiative = initiative.get("total", 0)
@@ -221,7 +223,7 @@ class GMSheetApp:
             
             init_tracker_entry = (
                 name, awareness, agility, initiative, "", initiative,
-                "False", "Normal", "Normal", "Normal", "", "", "", "", "", ""
+                "False", "Normal", "Normal", "Normal", "", "", "", dodge, parry, ""
             )
             
             init_tracker_data.append(init_tracker_entry)

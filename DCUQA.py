@@ -512,16 +512,11 @@ def allocate_powers(character, power_points, power_level, max_powers, selected_p
     # Return remaining unspent points instead of appending as a power
     return character, power_points
 
-def update_defenses(character, stats):
-    for stat_name, stat_value in stats.items():
-        for stat_data in stats_data["STATS"]:
-            if stat_data["name"] == stat_name:
-                if 'tags' in stat_data:
-                    for tag in stat_data['tags']:
-                        if tag in character['defenses']:
-                            character['defenses'][tag]['stat_bonus'] += stat_value['value']
-                            character['defenses'][tag]['total_rank'] = character['defenses'][tag]['stat_bonus'] + character['defenses'][tag]['bought_rank']
-    return character
+def update_defense(self, defense_name):
+    value = int(self.defense_entries[defense_name].get() or 0)
+    self.character['defenses'][defense_name] = {"total_rank": value, "cost": value}
+    self.update_total_cost()
+    self.update_character_summary()
 
 def pretty_print_character(character, text_widget):
     # Clear existing content
@@ -550,13 +545,14 @@ def pretty_print_character(character, text_widget):
     text_widget.insert(tk.END, f"Gender: {character.get('gender', 'N/A')}\n")
     text_widget.insert(tk.END, f"Age: {character.get('age', 'N/A')}\n")
     text_widget.insert(tk.END, f"Theme: {character.get('theme', 'N/A')}\n")
+    text_widget.insert(tk.END, f"Occupation: {character.get('occupation', 'N/A')}\n\n\n")
 
     # Origin
     insert_subheader("Origin")
     origin = character.get('origin', {})
     text_widget.insert(tk.END, f"Region: {origin.get('region', 'N/A')}\n")
     text_widget.insert(tk.END, f"Country: {origin.get('country', 'N/A')}\n")
-    text_widget.insert(tk.END, f"Language: {origin.get('language', 'N/A')}\n")
+    text_widget.insert(tk.END, f"Language: {origin.get('language', 'N/A')}\n\n\n")
 
     # Expanded Traits
     insert_subheader("Expanded Traits")
@@ -724,6 +720,10 @@ def generate_character(power_level, include_powers, stat_percent, advantage_perc
             )
             random.seed()
             random_theme = generate_random_theme() if include_powers else "Mundane"
+            # Generate age and occupation
+            age = generate_random_age()  # Call the function to get the age
+            occupation = generate_random_occupation(age)  # Pass the age value, not the function
+
 
             # Initialize character basics
             gender, name = generate_random_gender()
@@ -760,7 +760,8 @@ def generate_character(power_level, include_powers, stat_percent, advantage_perc
                 "powers": [],
                 "total_cost": 0,
                 "power_level": power_level,
-                'age': generate_random_age(),
+                'age': age,
+                'occupation': occupation,
                 "physical_traits": physical_traits,
                 "costume_style": generate_random_costume_style() if random_costume_style else "Not Specified",
                 "distinctive_feature": generate_random_distinctive_feature() if random_distinctive_feature else "Not Specified",
@@ -792,7 +793,7 @@ def generate_character(power_level, include_powers, stat_percent, advantage_perc
             logger.debug("Allocated Stats.")
 
             # Update defenses based on stats
-            character = update_defenses(character, allocated_stats)
+            character = update_defense(character, allocated_stats)
             logger.debug("Updated Defenses.")
 
             # Allocate skills
@@ -879,7 +880,6 @@ def open_excel_character_sheet():
     if file_path:
         display_character_sheet.display_excel_data(file_path, notebook)
 
-
 def main():
     global root, notebook, dark_mode, include_powers, pl_entry, text_widgets, equipment_points_entry, search_var, hideout_details, logger
 
@@ -892,7 +892,7 @@ def main():
 
     # Use ttkbootstrap for a modern look
     root = ttk.Window(themename="darkly")
-    root.title("Character Creation Version 4.8.2 Prod")
+    root.title("Character Creation Version 4.8.4 Prod")
     
     # Set base size for the main window
     root.geometry("1024x768")  # Width x Height
@@ -999,9 +999,18 @@ def main():
     ToolTip(generate_vehicle_button, "Generate a vehicle using specified points.")
 
     # Hideout Generator
-    generate_hideout_button = ttk.Button(gm_tools_frame.body_frame, text="Generate Hideout", command=lambda: generate_hideout(notebook, text_widgets), style=f'{secondary_button_color}.TButton')
+    generate_hideout_button = ttk.Button(gm_tools_frame.body_frame, text="Generate Hideout", command=lambda: on_generate_hideout_click(notebook, text_widgets), style=f'{secondary_button_color}.TButton')
     gm_tools_frame.add_widget(generate_hideout_button)
-    ToolTip(generate_hideout_button, "Generate a hideout with random features.")
+    ToolTip(generate_hideout_button, "Generate a new hideout.")
+
+    save_as_text_button = ttk.Button(
+        gm_tools_frame.body_frame,
+        text="Save As Text",
+        command=lambda: save_file_as_text(notebook, text_widgets),
+        style=f'{secondary_button_color}.TButton'
+    )
+    gm_tools_frame.add_widget(save_as_text_button)
+    ToolTip(save_as_text_button, "Save the current content as a text file.")
 
     # Encounter Generator
     generate_encounter_button = ttk.Button(gm_tools_frame.body_frame, text="Generate Encounter", command=generate_encounter, style=f'{secondary_button_color}.TButton')

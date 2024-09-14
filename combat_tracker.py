@@ -11,7 +11,6 @@ def open_combat_calculator():
     notebook = ttk.Notebook(calc_window)
     notebook.pack(expand=True, fill="both", padx=10, pady=10)
 
-    # Dodge Frame
     dodge_frame = ttk.Frame(notebook, padding=10)
     notebook.add(dodge_frame, text="Dodge")
 
@@ -23,6 +22,13 @@ def open_combat_calculator():
     ttk.Label(dodge_frame, text="Attacker's To Hit Roll:").pack(pady=5)
     dodge_hit_entry = ttk.Entry(dodge_frame)
     dodge_hit_entry.pack(pady=5)
+    ToolTip(dodge_hit_entry, "Enter the attacker's total attack roll")
+
+    ttk.Label(dodge_frame, text="Note: +10 is already included in the calculation").pack(pady=5)
+
+    dodge_result_label = ttk.Label(dodge_frame, text="")
+    dodge_result_label.pack(pady=10)
+
     ToolTip(dodge_hit_entry, "Enter the attacker's total attack roll")
 
     ttk.Label(dodge_frame, text="Note: +10 is already included in the calculation").pack(pady=5)

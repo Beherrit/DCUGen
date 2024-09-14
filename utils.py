@@ -1,10 +1,12 @@
 import random
 import pandas as pd
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, filedialog
 from openpyxl import load_workbook
 import json
 import pyperclip
+import os
+import logging
 
 POWER_POINTS_PER_LEVEL = 15
 current_theme = None
@@ -29,6 +31,14 @@ light_mode_colors = {
     'text_background': '#FFFFFF',
     'text_foreground': '#000000'
 }
+
+def load_json(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            return json.load(file)
+    except Exception as e:
+        logging.exception(f"Error loading JSON file {file_path}: {e}")
+        raise
 
 def apply_color_scheme_to_tab(tab, colors):
     for widget in tab.winfo_children():
@@ -357,3 +367,57 @@ def apply_trait_effects(character, action):
     # ... more conditions for different actions and traits ...
     
     return "acts normally"
+
+def generate_random_occupation(age):
+    occupations = load_data_from_json('./json/occupations.json')
+    
+    if age < 18:
+        return "Student"
+    elif 18 <= age <= 22:
+        return random.choice(occupations['entry_level'])
+    elif 23 <= age <= 30:
+        return random.choice(occupations['early_career'])
+    elif 31 <= age <= 50:
+        return random.choice(occupations['mid_career'])
+    else:
+        return random.choice(occupations['late_career'])
+
+def save_file_as_text(notebook, text_widgets):
+    current_tab = notebook.select()
+    tab_name = notebook.tab(current_tab, "text")
+    
+    # First, try to get the text widget from the text_widgets dictionary
+    text_widget = text_widgets.get(current_tab)
+    
+    # If not found in text_widgets, try to find it directly in the tab
+    if text_widget is None:
+        for child in notebook.nametowidget(current_tab).winfo_children():
+            if isinstance(child, tk.Text):
+                text_widget = child
+                break
+    
+    if text_widget is None:
+        messagebox.showerror("Error", f"No text content found in the '{tab_name}' tab.")
+        return
+    
+    content = text_widget.get("1.0", tk.END).strip()
+    if not content:
+        messagebox.showerror("Error", f"No content to save in the '{tab_name}' tab.")
+        return
+
+    file_path = filedialog.asksaveasfilename(
+        defaultextension=".txt",
+        filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
+        initialfile=f"{tab_name}.txt"
+    )
+    
+    if not file_path:
+        return  # User cancelled the save operation
+    
+    try:
+        with open(file_path, "w", encoding="utf-8") as file:
+            file.write(content)
+        
+        messagebox.showinfo("Success", f"File saved successfully as {os.path.basename(file_path)}")
+    except Exception as e:
+        messagebox.showerror("Error", f"An error occurred while saving the file: {str(e)}")

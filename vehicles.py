@@ -23,6 +23,7 @@ def get_random_feature(features, points, selected_features):
     feature = random.choice(eligible)
     return feature
 
+
 def create_vehicle(points):
     data = load_vehicles()
     vehicle = {}
@@ -57,7 +58,9 @@ def create_vehicle(points):
 def display_vehicle(vehicle, points, text_widget):
     text_widget.delete("1.0", tk.END)
     text_widget.insert(tk.END, f"Size: {vehicle['Size']}\n")
-    text_widget.insert(tk.END, f"Strength: {vehicle['Attributes']['Strength']}, Toughness: {vehicle['Attributes']['Toughness']}, Defense: {vehicle['Attributes']['Defense']}\n\n")
+    text_widget.insert(tk.END, f"Strength: {vehicle['Attributes'].get('Strength', 'N/A')}, "
+                               f"Toughness: {vehicle['Attributes'].get('Toughness', 'N/A')}, "
+                               f"Defense: {vehicle['Attributes'].get('Defense', 'N/A')}\n\n")
 
     text_widget.insert(tk.END, "Features:\n")
     for feature in vehicle['Features']:
@@ -67,23 +70,159 @@ def display_vehicle(vehicle, points, text_widget):
     for power in vehicle['Powers']:
         text_widget.insert(tk.END, f"- {power['name']}: {power['description']} (Cost: {power['cost']})\n")
 
-    total_spent = sum(item['cost'] for item in vehicle['Features']) + sum(item['cost'] for item in vehicle['Powers']) + vehicle['SizeCost']
+    total_spent = sum(item['cost'] for item in vehicle['Features']) + sum(item['cost'] for item in vehicle['Powers']) + vehicle.get('SizeCost', 0)
     text_widget.insert(tk.END, f"\nTotal points spent: {total_spent} of {points}\n")
 
+class VehicleBuilderGUI:
+    def __init__(self, master, main_notebook, main_text_widgets):
+        self.master = master
+        self.main_notebook = main_notebook
+        self.main_text_widgets = main_text_widgets
+        self.vehicle_data = load_vehicles()
+        self.selected_features = set()
+        self.vehicle = {'Size': None, 'Features': [], 'Powers': []}
+        self.points = 20  # Default value
+        self.remaining_points = self.points
+
+        self.master.title("Vehicle Builder")
+        self.create_widgets()
+
+    def create_widgets(self):
+        # Points input frame
+        points_frame = ttk.Frame(self.master)
+        points_frame.pack(fill='x', padx=10, pady=5)
+
+        ttk.Label(points_frame, text="Vehicle Points:").pack(side='left')
+        self.points_entry = ttk.Entry(points_frame, width=10)
+        self.points_entry.pack(side='left', padx=5)
+        self.points_entry.insert(0, str(self.points))
+
+        update_button = ttk.Button(points_frame, text="Update", command=self.update_points)
+        update_button.pack(side='left')
+
+        self.points_label = ttk.Label(points_frame, text=f"Remaining Points: {self.remaining_points}")
+        self.points_label.pack(side='left', padx=10)
+
+        self.notebook = ttk.Notebook(self.master)
+        self.notebook.pack(expand=True, fill='both')
+
+        self.random_tab = ttk.Frame(self.notebook)
+        self.custom_tab = ttk.Frame(self.notebook)
+        self.notebook.add(self.random_tab, text="Random Vehicle")
+        self.notebook.add(self.custom_tab, text="Custom Vehicle")
+
+        self.setup_random_tab()
+        self.setup_custom_tab()
+
+    def setup_random_tab(self):
+        self.random_text = tk.Text(self.random_tab, height=20, width=60)
+        self.random_text.pack(expand=True, fill='both', padx=10, pady=10)
+
+        generate_button = ttk.Button(self.random_tab, text="Generate Random Vehicle", command=self.generate_random_vehicle)
+        generate_button.pack(pady=10)
+
+    def setup_custom_tab(self):
+        self.custom_frame = ttk.Frame(self.custom_tab)
+        self.custom_frame.pack(expand=True, fill='both', padx=10, pady=10)
+
+        # Size selection
+        ttk.Label(self.custom_frame, text="Size:").grid(row=0, column=0, sticky='w')
+        self.size_var = tk.StringVar()
+        self.size_combo = ttk.Combobox(self.custom_frame, textvariable=self.size_var, state="readonly")
+        self.size_combo['values'] = [size['name'] for size in self.vehicle_data['Sizes']]
+        self.size_combo.grid(row=0, column=1, sticky='w')
+        self.size_combo.bind("<<ComboboxSelected>>", self.on_size_selected)
+
+        # Features and Powers
+        self.feature_vars = []
+        self.power_vars = []
+
+        ttk.Label(self.custom_frame, text="Features:").grid(row=1, column=0, sticky='w')
+        for i, feature in enumerate(self.vehicle_data['Features']):
+            var = tk.BooleanVar()
+            cb = ttk.Checkbutton(self.custom_frame, text=f"{feature['name']} (Cost: {feature['cost']})", variable=var, command=self.update_custom_points)
+            cb.grid(row=i+1, column=1, sticky='w')
+            self.feature_vars.append((var, feature))
+
+        ttk.Label(self.custom_frame, text="Powers:").grid(row=len(self.vehicle_data['Features'])+2, column=0, sticky='w')
+        for i, power in enumerate(self.vehicle_data['Powers']):
+            var = tk.BooleanVar()
+            cb = ttk.Checkbutton(self.custom_frame, text=f"{power['name']} (Cost: {power['cost']})", variable=var, command=self.update_custom_points)
+            cb.grid(row=i+len(self.vehicle_data['Features'])+2, column=1, sticky='w')
+            self.power_vars.append((var, power))
+
+        # Add Generate Custom Vehicle button
+        generate_custom_button = ttk.Button(self.custom_tab, text="Generate Custom Vehicle", command=self.generate_custom_vehicle)
+        generate_custom_button.pack(pady=10)
+
+    def on_size_selected(self, event):
+        self.update_custom_points()
+
+    def update_points(self):
+        try:
+            self.points = int(self.points_entry.get())
+            self.remaining_points = self.points
+            self.update_custom_points()
+        except ValueError:
+            messagebox.showerror("Invalid Input", "Please enter a valid number for Vehicle Points.")
+
+    def update_custom_points(self):
+        total_cost = 0
+        size = next((s for s in self.vehicle_data['Sizes'] if s['name'] == self.size_var.get()), None)
+        if size:
+            total_cost += size['cost']
+
+        for var, feature in self.feature_vars + self.power_vars:
+            if var.get():
+                total_cost += feature['cost']
+
+        self.remaining_points = self.points - total_cost
+        self.points_label.config(text=f"Remaining Points: {self.remaining_points}")
+
+    def generate_random_vehicle(self):
+        try:
+            points = int(self.points_entry.get())
+            vehicle = create_vehicle(points)
+            self.add_to_main_gui(vehicle)
+            messagebox.showinfo("Vehicle Generated", "Random vehicle has been added to the main program.")
+        except ValueError:
+            messagebox.showerror("Invalid Input", "Please enter a valid number for Vehicle Points.")
+
+    def generate_custom_vehicle(self):
+        vehicle = {'Size': None, 'Features': [], 'Powers': [], 'Attributes': {}}
+        
+        size = next((s for s in self.vehicle_data['Sizes'] if s['name'] == self.size_var.get()), None)
+        if size:
+            vehicle['Size'] = size['name']
+            vehicle['Attributes'] = size['attributes']
+            vehicle['SizeCost'] = size['cost']
+
+        for var, feature in self.feature_vars:
+            if var.get():
+                vehicle['Features'].append(feature)
+        
+        for var, power in self.power_vars:
+            if var.get():
+                vehicle['Powers'].append(power)
+
+        self.add_to_main_gui(vehicle)
+        messagebox.showinfo("Vehicle Generated", "Custom vehicle has been added to the main program.")
+
+    def add_to_main_gui(self, vehicle):
+        new_tab = ttk.Frame(self.main_notebook)
+        tab_name = f"Vehicle {len(self.main_text_widgets) + 1}"
+        self.main_notebook.add(new_tab, text=tab_name)
+
+        text_widget = tk.Text(new_tab, height=20, width=60)
+        text_widget.pack(expand=True, fill='both', padx=10, pady=10)
+
+        display_vehicle(vehicle, self.points, text_widget)
+
+        self.main_text_widgets[new_tab] = text_widget
+
 def on_generate_vehicle_click(notebook, text_widgets):
-    vehicle_points = simpledialog.askinteger("Vehicle Points", "How many Vehicle Points?", minvalue=1)
-    
-    if vehicle_points is not None:
-        vehicle = create_vehicle(vehicle_points)
-
-        new_tab = ttk.Frame(notebook)
-        notebook.add(new_tab, text=f"Vehicle")
-        vehicle_text = tk.Text(new_tab, height=15, width=50)
-        vehicle_text.pack(expand=True, fill='both')
-        text_widgets[new_tab] = vehicle_text
-
-        display_vehicle(vehicle, vehicle_points, vehicle_text)
-        notebook.select(new_tab)
+    vehicle_window = tk.Toplevel()
+    VehicleBuilderGUI(vehicle_window, notebook, text_widgets)
 
 def on_save_vehicle_click(notebook, text_widgets):
     selected_tab = notebook.nametowidget(notebook.select())

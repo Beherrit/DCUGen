@@ -120,6 +120,7 @@ def sort_treeview(tree):
         tag = 'evenrow' if index % 2 == 0 else 'oddrow'
         tree.item(child, tags=(tag,))
 
+
 def load_initiative_data(tree):
     global data_changed
     file_path = filedialog.askopenfilename(filetypes=[("JSON files", "*.json"), ("All files", "*.*")])
@@ -231,9 +232,17 @@ def open_initiative_tracker(notebook, characters, preloaded_data=None):
             
             rolled_init = 0  # Initialize as 0, will be editable later
             init_total = initiative_bonus + rolled_init
+            dodge = character_data.get("defenses", {}).get("Dodge", {}).get("total_rank", 0)
+            parry = character_data.get("defenses", {}).get("Parry", {}).get("total_rank", 0)
+            toughness = character_data.get("defenses", {}).get("Toughness", {}).get("total_rank", 0)
+            fortitude = character_data.get("defenses", {}).get("Fortitude", {}).get("total_rank", 0)
+            will = character_data.get("defenses", {}).get("Will", {}).get("total_rank", 0)
+            
             tag = 'evenrow' if len(tree.get_children()) % 2 == 0 else 'oddrow'
 
-            tree.insert("", "end", values=(name, awareness, agility, initiative_bonus, rolled_init, init_total, "False", "Normal", "Normal", "Normal", "", "", "", "", "", ""), tags=(tag,))
+            tree.insert("", "end", values=(name, awareness, agility, initiative_bonus, rolled_init, init_total, 
+                                           "False", "Normal", "Normal", "Normal", toughness, will, fortitude, 
+                                           dodge, parry, ""), tags=(tag,))
             sort_treeview(tree)
 
     # Buttons
