@@ -941,7 +941,7 @@ def main():
 
     # Use ttkbootstrap for a modern look
     root = ttk.Window(themename="darkly")
-    root.title("Character Creation Version 4.8.4 Prod")
+    root.title("Character Creation Version 5.0.0 Prod")
     
     # Set base size for the main window
     root.geometry("1024x768")  # Width x Height
@@ -1135,8 +1135,6 @@ def main():
         else:
             open_windows['gm_cheat_sheet'].lift()
 
-
-    
     # Complications
     complications = load_data_from_json('./json/complications.json')
     complications_button = ttk.Button(gm_tools_frame.body_frame, text="Complications", command=lambda: open_complications_window(complications), style=f'{secondary_button_color}.TButton')
@@ -1176,6 +1174,17 @@ def main():
     howto_button = ttk.Button(settings_frame.body_frame, text="Guides / How To", command=open_howto, style=f'{primary_button_color}.TButton')
     settings_frame.add_widget(howto_button)
     ToolTip(howto_button, "Access guides and instructions for using the application.")
+
+
+    changelog_button = ttk.Button(
+        settings_frame.body_frame,
+        text="View Changelog",
+        command=lambda: open_changelog(root),  # Pass root as an argument
+        style=f'{primary_button_color}.TButton'
+    )
+    settings_frame.add_widget(changelog_button)
+    ToolTip(changelog_button, "View the changelog to see recent updates and changes.")
+
 
     # Lock Window Button
     lock_window_var = tk.BooleanVar()
