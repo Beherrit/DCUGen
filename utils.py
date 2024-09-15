@@ -261,47 +261,37 @@ def copy_prompt_to_clipboard(notebook, characters):
     messagebox.showinfo("AI Prompt Copied", "The AI prompt has been copied to the clipboard.")
 
 def generate_character_description(character):
-    gender = character.get('gender', 'person')
-    age = character.get('age', 'unknown age')
-    nationality = character['origin'].get('country', 'an unknown country')
-    origin = character['origin'].get('region', 'an unknown region')
-    height = character['physical_traits'].get('height', 'unknown height')
-    weight = character['physical_traits'].get('weight', 'unknown weight')
-    hair_color = character['physical_traits'].get('hair_color', 'unknown hair color')
-    eye_color = character['physical_traits'].get('eye_color', 'unknown eye color')
-    power_theme = character.get('theme', 'an unknown power theme')
-    costume_style = character.get('costume_style', 'unknown costume style')
-    distinctive_feature = character.get('distinctive_feature', 'no distinctive features')
-    descriptions = load_data_from_json('./json/descriptions.json')
-
-    if gender.lower() == 'male':
-        template = random.choice(descriptions['male'])
-    elif gender.lower() == 'female':
-        template = random.choice(descriptions['female'])
-    else:
-        template = (
-            "Create a full body image of a {gender} that is around the age of {age}. "
-            "They are from {nationality} in {origin}. {gender.capitalize()} has {hair_color} hair "
-            "that complements their striking features and {eye_color} eyes that seem to hold a world of secrets. "
-            "They have a {height} height and a weight of {weight} pounds. "
-            "Their abilities revolve around a {power_theme}, giving them control over specific aspects related to it. "
-            "They don a {costume_style} costume that reflects their persona and powers. "
-            "A distinctive feature of theirs is {distinctive_feature}, making them easily recognizable."
-        )
+    template = "{name} is a {gender} {age} years old. "
+    template += "They are {height} with {eye_color} eyes, {hair_color} hair, and {skin_tone} skin. "
+    template += "{name} is from {region}, {country} and speaks {language}. "
+    template += "Their theme is {theme}. "
+    template += "{name}'s positive traits include {positive_traits}. "
+    template += "Their negative traits are {negative_traits}. "
+    template += "Some quirky traits of {name} are {quirky_traits}. "
+    template += "{name} is motivated by {motivation}. "
+    template += "Their complications include {complications}."
 
     description = template.format(
-        gender=gender,
-        age=age,
-        nationality=nationality,
-        origin=origin,
-        height=height,
-        weight=weight,
-        hair_color=hair_color,
-        eye_color=eye_color,
-        power_theme=power_theme,
-        costume_style=costume_style,
-        distinctive_feature=distinctive_feature
+        name=character.get('name', 'The character'),
+        gender=character.get('gender', 'unspecified').lower(),
+        age=character.get('age', 'unspecified'),
+        height=character.get('physical_traits', {}).get('height', 'unspecified').lower(),
+        eye_color=character.get('physical_traits', {}).get('eye_color', 'unspecified').lower(),
+        hair_color=character.get('physical_traits', {}).get('hair_color', 'unspecified').lower(),
+        skin_tone=character.get('physical_traits', {}).get('skin_tone', 'unspecified').lower(),
+        region=character.get('origin', {}).get('region', 'an unspecified region'),
+        country=character.get('origin', {}).get('country', 'an unspecified country'),
+        language=character.get('origin', {}).get('language', 'an unspecified language'),
+        theme=character.get('theme', 'unspecified').lower(),
+        positive_traits=', '.join(trait.lower() for trait in character.get('personality_traits', {}).get('positive_traits', ['unspecified'])),
+        negative_traits=', '.join(trait.lower() for trait in character.get('personality_traits', {}).get('negative_traits', ['unspecified'])),
+        quirky_traits=', '.join(trait.lower() for trait in character.get('personality_traits', {}).get('quirky_traits', ['unspecified'])),
+        motivation=character.get('Motivation', {}).get('description', 'unspecified').lower(),
+        complications=', '.join(complication.get('name', 'unspecified').lower() for complication in character.get('Complications', [{'name': 'unspecified'}]))
     )
+
+    # Capitalize the first letter of each sentence
+    description = '. '.join(sentence.capitalize() for sentence in description.split('. '))
 
     return description
 

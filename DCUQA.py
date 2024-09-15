@@ -108,8 +108,8 @@ def calculate_totals(character):
     skill_total_cost = sum(skill['cost'] for skill in character['skills'])
     power_total_cost = sum(power['cost'] for power in character.get('powers', []))
     
-    # Exclude 'Unspent Points' from the defense total cost calculation
-    defense_total_cost = sum(defense['bought_rank'] for defense_name, defense in character['defenses'].items() if defense_name != 'Unspent Points')
+    # Use get() method with default value 0 for 'bought_rank'
+    defense_total_cost = sum(defense.get('bought_rank', 0) for defense_name, defense in character['defenses'].items() if defense_name != 'Unspent Points')
     
     total_cost = attribute_total_cost + advantage_total_cost + skill_total_cost + power_total_cost + defense_total_cost
     return attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, total_cost
@@ -512,11 +512,33 @@ def allocate_powers(character, power_points, power_level, max_powers, selected_p
     # Return remaining unspent points instead of appending as a power
     return character, power_points
 
-def update_defense(self, defense_name):
-    value = int(self.defense_entries[defense_name].get() or 0)
-    self.character['defenses'][defense_name] = {"total_rank": value, "cost": value}
-    self.update_total_cost()
-    self.update_character_summary()
+def update_defense(character, allocated_stats):
+    # Map stats to their corresponding defenses
+    stat_to_defense = {
+        'Agility': 'Dodge',
+        'Awareness': 'Will',
+        'Stamina': 'Fortitude',
+        'Fighting': 'Parry'
+    }
+
+    # Update defenses based on stats
+    for stat, defense in stat_to_defense.items():
+        if stat in allocated_stats:
+            stat_value = allocated_stats[stat]['value']
+            if defense not in character['defenses']:
+                character['defenses'][defense] = {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0}
+            character['defenses'][defense]['stat_bonus'] = stat_value
+            character['defenses'][defense]['total_rank'] = stat_value + character['defenses'][defense]['bought_rank']
+
+    # Update Toughness based on Stamina
+    if 'Stamina' in allocated_stats:
+        stamina_value = allocated_stats['Stamina']['value']
+        if 'Toughness' not in character['defenses']:
+            character['defenses']['Toughness'] = {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0}
+        character['defenses']['Toughness']['stat_bonus'] = stamina_value
+        character['defenses']['Toughness']['total_rank'] = stamina_value + character['defenses']['Toughness']['bought_rank']
+
+    return character
 
 def pretty_print_character(character, text_widget):
     # Clear existing content
@@ -609,6 +631,11 @@ def pretty_print_character(character, text_widget):
     insert_header("Powers")
     for power in character.get("powers", []):
         text_widget.insert(tk.END, f"{power['name']} (Rank: {power['rank']}, Cost: {power['cost']})\n", "bold")
+        text_widget.insert(tk.END, f"  Type: {power['type']}\n")
+        if 'range' in power:
+            text_widget.insert(tk.END, f"  Range: {power['range']}\n")
+        if 'resisted' in power:
+            text_widget.insert(tk.END, f"  Resisted by: {power['resisted']}\n")
         if 'extras' in power and power['extras']:
             text_widget.insert(tk.END, f"  Extras: {', '.join([f'{extra} (Rank: {rank})' for extra, rank in zip(power['extras'], power['extras_ranks'])])}\n")
         if 'flaws' in power and power['flaws']:
@@ -620,8 +647,8 @@ def pretty_print_character(character, text_widget):
         accuracy = calculate_accuracy(character, power)
         text_widget.insert(tk.END, f"  Accuracy: {accuracy}\n")
         
-        if 'range' in power and power['range'] == "Ranged":
-            text_widget.insert(tk.END, f"    Close Range: {power['close_range']} ft, Medium Range: {power['medium_range']} ft, Long Range: {power['long_range']} ft\n")
+        if all(key in power for key in ['close_range', 'medium_range', 'long_range']):
+            text_widget.insert(tk.END, f"  Close Range: {power['close_range']} ft, Medium Range: {power['medium_range']} ft, Long Range: {power['long_range']} ft\n")
 
     # Attacks
     insert_header("Attacks")
@@ -635,7 +662,7 @@ def pretty_print_character(character, text_widget):
     for power in character["powers"]:
         if power.get("range") == "Ranged":
             text_widget.insert(tk.END, f"  {power['name']} (Effect Rank: {power['rank']})\n")
-            if "close_range" in power:
+            if all(key in power for key in ['close_range', 'medium_range', 'long_range']):
                 text_widget.insert(tk.END, f"    Close Range: {power['close_range']} ft, Medium Range: {power['medium_range']} ft, Long Range: {power['long_range']} ft\n")
 
     # Equipment
@@ -774,14 +801,19 @@ def generate_character(power_level, include_powers, stat_percent, advantage_perc
             }
 
             # Generate the character description for the AI image prompt
+# Generate the character description for the AI image prompt
             character["description"] = generate_character_description({
+                'name': character.get('name', 'The character'),
                 'gender': gender,
                 'age': character['age'],
                 'origin': origin,
                 'physical_traits': physical_traits,
                 'theme': random_theme,
                 'costume_style': character['costume_style'],
-                'distinctive_feature': character['distinctive_feature']
+                'distinctive_feature': character['distinctive_feature'],
+                'personality_traits': character.get('personality_traits', {}),
+                'Motivation': character.get('Motivation', {}),
+                'Complications': character.get('Complications', [])
             })
 
             logger.debug("Allocated Points - Stats: %d, Advantages: %d, Skills: %d, Defenses: %d, Powers: %d",
@@ -967,6 +999,15 @@ def main():
     )
     char_creator_frame.add_widget(generate_character_filters_button)
     ToolTip(generate_character_filters_button, "Open a window to set filters and generate a character.")
+
+    create_custom_character_button = ttk.Button(
+        char_creator_frame.body_frame, 
+        text="Create Custom Character", 
+        command=lambda: open_custom_character_window(root, notebook, text_widgets, characters, dark_mode), 
+        style=f'{primary_button_color}.TButton'
+    )
+    char_creator_frame.add_widget(create_custom_character_button)
+    ToolTip(create_custom_character_button, "Open a window to create a fully customized character.")
 
     export_character_sheet_button = ttk.Button(char_creator_frame.body_frame, text="Export Character Sheet", command=lambda: on_export_character_sheet_click(notebook, characters, text_widgets), style=f'{primary_button_color}.TButton')
     char_creator_frame.add_widget(export_character_sheet_button)

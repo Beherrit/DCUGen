@@ -41,3 +41,4 @@ from openpyxl import load_workbook
 from PIL import Image, ImageTk
 from typing import Dict, Any, List, Callable
 from display_character_sheet import *
+from open_custom_character import *
