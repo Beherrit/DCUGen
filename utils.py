@@ -233,6 +233,11 @@ def calculate_initiative(character):
     
     return initiative
 
+def update_initiative(character):
+    new_initiative = calculate_initiative(character)
+    character["stats"]["Initiative"] = {"value": new_initiative}
+    character["defenses"]["Initiative"] = new_initiative
+
 def generate_weight():
     weights = list(range(110, 351))
     probabilities = (

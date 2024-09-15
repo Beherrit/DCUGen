@@ -23,6 +23,7 @@ class CharacterPreviewScreen:
     def __init__(self, parent, character_creator):
         self.parent = parent
         self.character_creator = character_creator
+        self.last_character = None
         self.create_widgets()
 
     def create_widgets(self):
@@ -33,17 +34,21 @@ class CharacterPreviewScreen:
     def update_preview(self):
         character = self.character_creator.get_current_character()
         
-        # Store the current position of the scrollbar
-        current_position = self.preview_text.yview()[0]
-        
-        # Clear the text widget
-        self.preview_text.delete('1.0', tk.END)
-        
-        # Update the content
-        pretty_print_character(character, self.preview_text)
-        
-        # Restore the scrollbar position
-        self.preview_text.yview_moveto(current_position)
+        # Only update if the character has changed
+        if character != self.last_character:
+            self.last_character = character
+            
+            # Store the current position of the scrollbar
+            current_position = self.preview_text.yview()[0]
+            
+            # Clear the text widget
+            self.preview_text.delete('1.0', tk.END)
+            
+            # Update the content
+            pretty_print_character(character, self.preview_text)
+            
+            # Restore the scrollbar position
+            self.preview_text.yview_moveto(current_position)
         
         # Schedule the next update
         self.parent.after(1000, self.update_preview)
@@ -207,12 +212,13 @@ class CustomCharacterCreator:
         notebook.add(preview_frame, text="Character Preview")
         self.preview_screen = CharacterPreviewScreen(preview_frame, self)
 
-        # TODO: Implement bind_update_events() method if needed
-        # self.bind_update_events()
-
         # Create Character Button
         create_button = ttk.Button(self.window, text="Create Character", command=self.create_character)
         create_button.pack(pady=10)
+
+    def update_character_preview(self):
+        if hasattr(self, 'preview_screen'):
+            self.preview_screen.update_preview()
     
     def create_basic_info_widgets(self, parent):
         ttk.Label(parent, text="Power Level:").grid(row=0, column=0, padx=5, pady=5, sticky='e')
@@ -347,15 +353,6 @@ class CustomCharacterCreator:
             spinbox = ttk.Spinbox(parent, from_=0, to=30, textvariable=var, width=5)
             spinbox.grid(row=i, column=3, padx=5, pady=5, sticky='w')
 
-        # Initiative
-        ttk.Label(parent, text="Initiative:").grid(row=len(defenses), column=2, padx=5, pady=5, sticky='e')
-        self.initiative_var = tk.StringVar(value="0")
-        self.initiative_label = ttk.Label(parent, textvariable=self.initiative_var)
-        self.initiative_label.grid(row=len(defenses), column=3, padx=5, pady=5, sticky='w')
-
-        # Bind the Agility stat to update initiative
-        self.stat_vars['Agility'].trace('w', self.update_initiative)
-
     def bind_improved_initiative(self):
         if self.advantages_tree:
             for item in self.advantages_tree.get_children():
@@ -381,11 +378,15 @@ class CustomCharacterCreator:
         self.initiative_var.set(str(initiative))
 
     def on_stat_change(self, stat_name):
-        print(f"Stat changed: {stat_name}, New value: {self.stat_vars[stat_name].get()}")
         self.update_skill_stats()
+        self.update_character_preview()
 
-    def on_stat_change(self, stat_name):
-        self.update_skill_stats()
+    def toggle_advantage(self, event):
+        item = self.advantages_tree.selection()[0]
+        advantage_name, rank = self.advantages_tree.item(item, 'values')
+        new_rank = int(rank) + 1 if int(rank) < 5 else 0
+        self.advantages_tree.item(item, values=(advantage_name, new_rank))
+        self.update_character_preview()
 
     def update_skill_stats(self):
         for item in self.skills_tree.get_children():
@@ -435,6 +436,7 @@ class CustomCharacterCreator:
         self.advantages_tree.column('Advantage', width=200)
         self.advantages_tree.column('Rank', width=50)
         self.advantages_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.advantages_tree.bind('<<TreeviewSelect>>', self.update_initiative)
 
         advantages_scrollbar = ttk.Scrollbar(advantages_frame, orient=tk.VERTICAL, command=self.advantages_tree.yview)
         advantages_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
@@ -656,6 +658,21 @@ class CustomCharacterCreator:
             self.powers_tree.delete(item)
 
     def add_power_to_character(self):
+        selected_power = self.power_var.get()
+        power_type = self.power_type_var.get()
+        power_range = self.power_range_var.get() if power_type == 'Combat' else 'N/A'
+        power_rank = self.power_rank_var.get()
+        
+        extras = list(self.modifier_lists["Extras Per Rank"].get(0, tk.END))
+        flaws = list(self.modifier_lists["Flaws Per Rank"].get(0, tk.END))
+        extra_flats = list(self.modifier_lists["Extra Flats"].get(0, tk.END))
+        flaw_flats = list(self.modifier_lists["Flaw Flats"].get(0, tk.END))
+
+        all_extras = extras + extra_flats
+        all_flaws = flaws + flaw_flats
+
+        self.powers_tree.insert('', 'end', values=(selected_power, power_rank, ', '.join(all_extras), ', '.join(all_flaws), power_type, power_range))
+
         # Clear selections
         self.power_combobox.set('')
         self.power_type_combobox.set('')
@@ -770,8 +787,7 @@ class CustomCharacterCreator:
             },
             "costume_style": self.costume_style_var.get(),
             "distinctive_feature": self.distinctive_feature_var.get(),
-            "initiative": int(self.initiative_var.get()),
-            "power_level": int(self.pl_var.get()),
+            "power_level": int(self.pl_var.get() or 0),
             "languages": [self.language_var.get()],
             "occupation": self.occupation_var.get(),
             "stats": {},
@@ -787,17 +803,18 @@ class CustomCharacterCreator:
 
         # Stats
         for stat, var in self.stat_vars.items():
-            value = int(var.get())
+            value = var.get().strip()
             character["stats"][stat] = {
-                "value": value,
-                "cost": value * 2
+                "value": int(value) if value else 0,
+                "cost": int(value) * 2 if value else 0
             }
 
         # Defenses
         for defense, var in self.defense_vars.items():
-            total_rank = int(var.get())
+            value = var.get().strip()
+            total_rank = int(value) if value else 0
             stat_bonus = character["stats"].get(self.defense_stat_mapping.get(defense, ""), {}).get("value", 0)
-            bought_rank = total_rank - stat_bonus
+            bought_rank = max(0, total_rank - stat_bonus)
             character["defenses"][defense] = {
                 "total_rank": total_rank,
                 "bought_rank": bought_rank,
@@ -808,14 +825,14 @@ class CustomCharacterCreator:
         for item in self.skills_tree.get_children():
             values = self.skills_tree.item(item, 'values')
             skill_name, rank, _, total, stat_name = values
-            rank = int(rank)
+            rank = int(rank) if rank else 0
             if rank > 0:
                 associated_attribute = next((skill['tags'][0] for skill in self.skills_data if skill['name'] == skill_name), None)
                 character["skills"].append({
                     "name": skill_name,
                     "rank": rank,
                     "cost": (rank + 1) // 2,
-                    "total": int(total),
+                    "total": int(total) if total else 0,
                     "sub_skill": None,  # Add sub-skill support if needed
                     "associated_attribute": associated_attribute
                 })
@@ -824,7 +841,7 @@ class CustomCharacterCreator:
         for item in self.advantages_tree.get_children():
             values = self.advantages_tree.item(item, 'values')
             advantage_name, rank = values
-            rank = int(rank)
+            rank = int(rank) if rank else 0
             if rank > 0:
                 character["advantages"].append({
                     "name": advantage_name,
@@ -1130,7 +1147,6 @@ class CustomCharacterCreator:
         
         self.character["costume_style"] = self.costume_style_var.get()
         self.character["distinctive_feature"] = self.distinctive_feature_var.get()
-        self.character["initiative"] = int(self.initiative_var.get())
         self.character["power_level"] = int(self.pl_var.get())
         self.character["languages"] = [self.language_var.get()]
         self.character["occupation"] = self.occupation_var.get()
@@ -1138,8 +1154,7 @@ class CustomCharacterCreator:
         # Stats and Defenses
         for stat_name, var in self.stat_vars.items():
             value = int(var.get())
-            self.character["stats"][stat_name] = {"value": value, "cost": value * 2}
-        
+            self.character["stats"][stat_name] = {"value": value, "cost": value * 2}        
         # Initialize defenses
         self.character['defenses'] = {
             'Dodge': {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0},
