@@ -1,7 +1,7 @@
 import random
 import pandas as pd
 import tkinter as tk
-from tkinter import messagebox, filedialog
+from tkinter import filedialog, messagebox
 from openpyxl import load_workbook
 import json
 import pyperclip
@@ -251,19 +251,16 @@ def generate_weight():
     return weight
 
 def copy_prompt_to_clipboard(notebook, characters):
-    # Get the name of the currently selected tab
     current_tab = notebook.tab(notebook.select(), "text")
-    
-    # Retrieve the character associated with the current_tab
     character = characters.get(current_tab)
     
     if not character:
-        messagebox.showerror("Error", "No character found for the current tab.")
+        print("Error: No character found for the current tab.")
         return
 
     prompt = generate_character_description(character)
     pyperclip.copy(prompt)
-    messagebox.showinfo("AI Prompt Copied", "The AI prompt has been copied to the clipboard.")
+    messagebox.showinfo("Prompt Copied", "The AI prompt has been copied to the clipboard.")
 
 def generate_character_description(character):
     template = "{name} is a {gender} {age} years old. "
@@ -381,10 +378,8 @@ def save_file_as_text(notebook, text_widgets):
     current_tab = notebook.select()
     tab_name = notebook.tab(current_tab, "text")
     
-    # First, try to get the text widget from the text_widgets dictionary
     text_widget = text_widgets.get(current_tab)
     
-    # If not found in text_widgets, try to find it directly in the tab
     if text_widget is None:
         for child in notebook.nametowidget(current_tab).winfo_children():
             if isinstance(child, tk.Text):

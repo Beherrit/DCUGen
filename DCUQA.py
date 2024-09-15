@@ -550,10 +550,6 @@ def edit_character(root, notebook, text_widgets, characters, dark_mode):
         character_name = notebook.tab(current_tab, "text")
         if character_name in characters:
             open_character_editor(root, notebook, text_widgets, characters, dark_mode, characters[character_name])
-        else:
-            messagebox.showwarning("Edit Character", "Please select a valid character tab to edit.")
-    else:
-        messagebox.showwarning("Edit Character", "Please select a character tab to edit.")
 
 def pretty_print_character(character, text_widget):
     # Clear existing content
@@ -962,8 +958,27 @@ def main():
     secondary_button_color = "secondary"
 
     # Main layout frames
-    left_frame = ttk.Frame(root)
+    left_frame = ttk.Frame(root, width=250)  # Set a fixed width for the left frame
     left_frame.grid(row=0, column=0, sticky="ns", padx=5, pady=5)
+    left_frame.grid_propagate(False)  # Prevent the frame from shrinking
+
+    # Create a canvas for the left frame
+    canvas = tk.Canvas(left_frame, width=230)
+    canvas.pack(side="left", fill="both", expand=True)
+
+    # Add a scrollbar to the canvas
+    scrollbar = ttk.Scrollbar(left_frame, orient="vertical", command=canvas.yview)
+    scrollbar.pack(side="right", fill="y")
+
+    # Configure the canvas
+    canvas.configure(yscrollcommand=scrollbar.set)
+    canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+
+    # Create another frame inside the canvas
+    inner_frame = ttk.Frame(canvas)
+
+    # Add that new frame to a window in the canvas
+    canvas.create_window((0, 0), window=inner_frame, anchor="nw", width=230)
 
     right_frame = ttk.Frame(root)
     right_frame.grid(row=0, column=1, sticky="nsew", padx=5, pady=5)
@@ -1005,7 +1020,7 @@ def main():
     search_entry.bind('<KeyRelease>', lambda event: perform_search())
 
     # Character Creator Section
-    char_creator_frame = CollapsibleSection(left_frame, "Character Creator", start_collapsed=False)
+    char_creator_frame = CollapsibleSection(inner_frame, "Character Creator", start_collapsed=False)
     char_creator_frame.pack(fill="x", pady=5)
 
     generate_character_filters_button = ttk.Button(
@@ -1053,7 +1068,7 @@ def main():
     ToolTip(copy_prompt_button, "Copy the AI prompt for the character to the clipboard.")
 
     # GM Tools Section
-    gm_tools_frame = CollapsibleSection(left_frame, "GM Tools", start_collapsed=False)
+    gm_tools_frame = CollapsibleSection(inner_frame, "GM Tools", start_collapsed=False)
     gm_tools_frame.pack(fill="x", pady=5)
 
     # Equipment Generator
@@ -1164,7 +1179,7 @@ def main():
     ToolTip(notes_button, "Open the notes window to manage notes.")
 
     # Settings Section
-    settings_frame = CollapsibleSection(left_frame, "Settings", start_collapsed=False)
+    settings_frame = CollapsibleSection(inner_frame, "Settings", start_collapsed=False)
     settings_frame.pack(fill="x", pady=5)
 
     settings_button = ttk.Button(settings_frame.body_frame, text="Open Settings", command=lambda: settings.open_settings(root), style=f'{primary_button_color}.TButton')
@@ -1197,6 +1212,14 @@ def main():
     # Configure the main window to resize properly
     root.grid_rowconfigure(0, weight=1)
     root.grid_columnconfigure(1, weight=1)
+
+    # Update the canvas scroll region when the size of the inner frame changes
+    inner_frame.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+
+    # Bind mousewheel to the canvas for scrolling
+    def _on_mousewheel(event):
+        canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+    canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
     update_color_scheme(dark_mode, root)
 

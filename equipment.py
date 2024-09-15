@@ -2,7 +2,7 @@ import os
 import random
 import json
 import tkinter as tk
-from tkinter import messagebox, filedialog, ttk, simpledialog
+from tkinter import filedialog, ttk, simpledialog
 
 def load_gadgets():
     with open('./json/gadget_data.json', 'r', encoding='utf-8') as json_file:
@@ -116,7 +116,6 @@ def on_save_equipment_click(notebook, text_widgets):
         if filename:
             with open(filename, 'w') as file:
                 file.write(content)
-            messagebox.showinfo("Save Equipment", f"Equipment saved to {filename}")
 
 def save_equipment(notebook, text_widgets):
     selected_tab = notebook.nametowidget(notebook.select())
@@ -131,9 +130,8 @@ def save_equipment(notebook, text_widgets):
         )
         if filename:
             save_to_txt(content, filename)
-            messagebox.showinfo("Save Equipment", f"Equipment saved to {filename}")
     else:
-        messagebox.showerror("Error", "Please generate equipment before saving.")
+        return
 
 def get_items_by_names(items_dict, names):
     return [items_dict[name] for name in names if name in items_dict]

@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk
 import random
 from DCUQA import generate_character, pretty_print_character, load_archetypes, update_color_scheme
 from utils import *
@@ -215,7 +215,7 @@ def on_generate_character_filters(
         apply_color_scheme_to_tab(new_tab, colors)
 
     except ValueError:
-        messagebox.showerror("Invalid Input", "Please ensure all inputs are valid.")
+        logger.error("Invalid Input: Please ensure all inputs are valid.")
         return
 
 def generate_team(
@@ -235,8 +235,8 @@ def generate_team(
             team_size = int(team_size_entry.get())
             if team_size < 2 or team_size > 4:
                 raise ValueError("Team size must be between 2 and 4.")
-        except ValueError as e:
-            messagebox.showerror("Invalid Team Size", str(e))
+        except ValueError:
+            logger.error("Invalid Team Size: Team size must be between 2 and 4.")
             return
 
         # Randomly select the desired number of archetypes

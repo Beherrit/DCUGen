@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import messagebox
 import random
 import json
 
@@ -22,9 +21,8 @@ def open_complications_window(complications):
         selected_complication = complication_var.get()
         if selected_complication:
             challenge = random_challenge(selected_complication, complications)
-            messagebox.showinfo("Random Challenge", f"Challenge for {selected_complication}: {challenge}")
         else:
-            messagebox.showwarning("Selection Error", "Please select a complication.")
+            pass
 
     # Create a new window
     comp_window = tk.Toplevel()

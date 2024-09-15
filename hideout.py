@@ -2,7 +2,7 @@ import os
 import random
 import json
 import tkinter as tk
-from tkinter import messagebox, filedialog, ttk, simpledialog
+from tkinter import filedialog, ttk, simpledialog
 
 def load_hideouts():
     with open('./json/headquarters.json', 'r', encoding='utf-8') as json_file:
@@ -97,9 +97,7 @@ class HideoutBuilderGUI:
 
         self.main_text_widgets[new_tab] = text_widget
         self.main_notebook.select(new_tab)
-
-        messagebox.showinfo("Hideout Generated", "Hideout has been added to the main program.")
-
+        
     def display_hideout(self, hideout, text_widget):
         text_widget.delete("1.0", tk.END)
         text_widget.insert(tk.END, f"Size: {hideout['Size']}\n")
@@ -126,7 +124,6 @@ def on_save_hideout_click(notebook, text_widgets):
         if filename:
             with open(filename, 'w') as file:
                 file.write(content)
-            messagebox.showinfo("Save Hideout", f"Hideout saved to {filename}")
 
 def create_hideout_management_frame(left_frame, notebook, text_widgets):
     hideout_frame = CollapsibleSection(left_frame, "Hideout Management")

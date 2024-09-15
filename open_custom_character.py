@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk
 from DCUQA import pretty_print_character, calculate_totals, update_defense
 from utils import load_data_from_json, generate_character_description
 from utils import calculate_range, calculate_attack_bonuses, calculate_initiative, calculate_accuracy
@@ -758,7 +758,6 @@ class CustomCharacterCreator:
     def edit_power(self):
         selected_items = self.powers_tree.selection()
         if not selected_items:
-            messagebox.showwarning("No Power Selected", "Please select a power to edit.")
             return
 
         item = selected_items[0]
@@ -1134,7 +1133,6 @@ class CustomCharacterCreator:
         self.characters[self.character["name"]] = self.character
         self.notebook.select(new_tab)
         
-        messagebox.showinfo("Character Created", f"Character '{self.character['name']}' has been created and added to the notebook.")
         self.window.destroy()
 
     def create_personality_widgets(self, parent):
@@ -1394,8 +1392,6 @@ class CustomCharacterCreator:
         self.text_widgets[new_tab] = new_character_summary_text
         self.characters[self.character["name"]] = self.character
         self.notebook.select(new_tab)
-        
-        messagebox.showinfo("Character Created", f"Character '{self.character['name']}' has been created and added to the notebook.")
         self.window.destroy()
 
 class CharacterEditor(CustomCharacterCreator):
@@ -1482,7 +1478,6 @@ class CharacterEditor(CustomCharacterCreator):
                 pretty_print_character(updated_character, text_widget)
                 break
         
-        messagebox.showinfo("Character Updated", f"Character '{updated_character['name']}' has been updated.")
         self.window.destroy()
 
 def open_custom_character_window(root, notebook, text_widgets, characters, dark_mode):
