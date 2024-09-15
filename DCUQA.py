@@ -544,6 +544,17 @@ def update_defense(character, allocated_stats):
 
     return character
 
+def edit_character(root, notebook, text_widgets, characters, dark_mode):
+    current_tab = notebook.select()
+    if current_tab:
+        character_name = notebook.tab(current_tab, "text")
+        if character_name in characters:
+            open_character_editor(root, notebook, text_widgets, characters, dark_mode, characters[character_name])
+        else:
+            messagebox.showwarning("Edit Character", "Please select a valid character tab to edit.")
+    else:
+        messagebox.showwarning("Edit Character", "Please select a character tab to edit.")
+
 def pretty_print_character(character, text_widget):
     # Clear existing content
     text_widget.delete('1.0', tk.END)
@@ -1014,6 +1025,16 @@ def main():
     )
     char_creator_frame.add_widget(create_custom_character_button)
     ToolTip(create_custom_character_button, "Open a window to create a fully customized character.")
+
+    # Edit Character button
+    edit_character_button = ttk.Button(
+        char_creator_frame.body_frame,
+        text="Edit Character (WIP)",
+        command=lambda: edit_character(root, notebook, text_widgets, characters, dark_mode),
+        style=f'{primary_button_color}.TButton'
+    )
+    char_creator_frame.add_widget(edit_character_button)
+    ToolTip(edit_character_button, "Edit the currently selected character.")
 
     export_character_sheet_button = ttk.Button(char_creator_frame.body_frame, text="Export Character Sheet", command=lambda: on_export_character_sheet_click(notebook, characters, text_widgets), style=f'{primary_button_color}.TButton')
     char_creator_frame.add_widget(export_character_sheet_button)

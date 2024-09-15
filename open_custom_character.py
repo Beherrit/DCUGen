@@ -53,6 +53,10 @@ class CharacterPreviewScreen:
         # Schedule the next update
         self.parent.after(1000, self.update_preview)
 
+def open_character_editor(root, notebook, text_widgets, characters, dark_mode, character_to_edit):
+    expanded_traits = load_data_from_json('json/expanded_traits.json')
+    CharacterEditor(root, notebook, text_widgets, characters, dark_mode, expanded_traits, character_to_edit)
+
 class CustomCharacterCreator:
     def __init__(self, master, notebook, text_widgets, characters, dark_mode, expanded_traits):
         self.master = master
@@ -1268,6 +1272,93 @@ class CustomCharacterCreator:
         self.notebook.select(new_tab)
         
         messagebox.showinfo("Character Created", f"Character '{self.character['name']}' has been created and added to the notebook.")
+        self.window.destroy()
+
+class CharacterEditor(CustomCharacterCreator):
+    def __init__(self, master, notebook, text_widgets, characters, dark_mode, expanded_traits, character_to_edit):
+        super().__init__(master, notebook, text_widgets, characters, dark_mode, expanded_traits)
+        self.character_to_edit = character_to_edit
+        self.window.title(f"Edit Character: {character_to_edit['name']}")
+        self.load_character_data()
+
+    def load_character_data(self):
+        # Load the character data into the UI
+        self.name_entry.insert(0, self.character_to_edit['name'])
+        self.gender_entry.insert(0, self.character_to_edit['gender'])
+        self.age_entry.insert(0, self.character_to_edit['age'])
+        self.theme_var.set(self.character_to_edit['theme'])
+        self.region_var.set(self.character_to_edit['origin']['region'])
+        self.country_var.set(self.character_to_edit['origin']['country'])
+        self.language_var.set(self.character_to_edit['origin']['language'])
+        
+        # Load physical traits
+        for trait, value in self.character_to_edit['physical_traits'].items():
+            getattr(self, f"{trait}_var").set(value)
+        self.weight_entry.insert(0, self.character_to_edit['physical_traits']['weight'])
+        
+        self.costume_style_var.set(self.character_to_edit['costume_style'])
+        self.distinctive_feature_var.set(self.character_to_edit['distinctive_feature'])
+        self.pl_var.set(str(self.character_to_edit['power_level']))
+        self.occupation_var.set(self.character_to_edit['occupation'])
+        
+        # Load stats and defenses
+        for stat, data in self.character_to_edit['stats'].items():
+            self.stat_vars[stat].set(str(data['value']))
+        for defense, data in self.character_to_edit['defenses'].items():
+            self.defense_vars[defense].set(str(data['total_rank']))
+        
+        # Load skills
+        for skill in self.character_to_edit['skills']:
+            for item in self.skills_tree.get_children():
+                if self.skills_tree.item(item, 'values')[0] == skill['name']:
+                    self.skills_tree.item(item, values=(skill['name'], skill['rank'], 0, skill['rank'], ''))
+        
+        # Load advantages
+        for advantage in self.character_to_edit['advantages']:
+            for item in self.advantages_tree.get_children():
+                if self.advantages_tree.item(item, 'values')[0] == advantage['name']:
+                    self.advantages_tree.item(item, values=(advantage['name'], advantage['rank']))
+        
+        # Load powers
+        for power in self.character_to_edit['powers']:
+            extras = ', '.join(power['extras'])
+            flaws = ', '.join(power['flaws'])
+            self.powers_tree.insert('', 'end', values=(power['name'], power['rank'], extras, flaws, power['type'], power['range']))
+        
+        # Load personality traits
+        for trait_type in ['positive_traits', 'negative_traits', 'quirky_traits']:
+            if self.character_to_edit['personality_traits'][trait_type]:
+                getattr(self, f"{trait_type}_var").set(self.character_to_edit['personality_traits'][trait_type][0])
+        
+        self.motivation_var.set(self.character_to_edit['Motivation']['name'])
+        if self.character_to_edit['Complications']:
+            self.complication_var.set(self.character_to_edit['Complications'][0]['name'])
+        
+        # Load expanded traits
+        for trait_type, trait_data in self.character_to_edit['expanded_traits'].items():
+            if trait_type in self.expanded_trait_vars:
+                self.expanded_trait_vars[trait_type].set(trait_data['name'])
+
+    def create_character(self):
+        # Override the create_character method to update the existing character
+        self.update_character()
+
+    def update_character(self):
+        # Update the character data
+        updated_character = self.get_current_character()
+        
+        # Update the character in the characters dictionary
+        self.characters[self.character_to_edit['name']] = updated_character
+        
+        # Update the character display in the main window
+        for tab in self.text_widgets:
+            if self.notebook.tab(tab, "text") == self.character_to_edit['name']:
+                text_widget = self.text_widgets[tab]
+                text_widget.delete('1.0', tk.END)
+                pretty_print_character(updated_character, text_widget)
+                break
+        
+        messagebox.showinfo("Character Updated", f"Character '{updated_character['name']}' has been updated.")
         self.window.destroy()
 
 def open_custom_character_window(root, notebook, text_widgets, characters, dark_mode):
