@@ -570,6 +570,13 @@ class CustomCharacterCreator:
         self.power_rank_var = tk.StringVar(value="1")
         self.power_rank_spinbox = ttk.Spinbox(left_frame, from_=1, to=20, textvariable=self.power_rank_var)
         self.power_rank_spinbox.grid(row=4, column=1, sticky='w', padx=5, pady=5)
+        self.power_rank_spinbox.bind('<KeyRelease>', self.update_power_cost)
+        self.power_rank_spinbox.bind('<<Increment>>', self.update_power_cost)
+        self.power_rank_spinbox.bind('<<Decrement>>', self.update_power_cost)
+
+        # Add a label to display the current cost
+        self.power_cost_label = ttk.Label(left_frame, text="Current Cost: 0")
+        self.power_cost_label.grid(row=5, column=0, columnspan=2, sticky='w', padx=5, pady=5)
 
         # Right column
         right_frame = ttk.Frame(powers_frame)
@@ -622,6 +629,132 @@ class CustomCharacterCreator:
         powers_frame.columnconfigure(1, weight=1)
         powers_frame.rowconfigure(1, weight=1)
 
+    def update_power_info(self, event):
+        selected_power = self.power_var.get()
+        if selected_power:
+            for power in self.powers_data:
+                if power['name'] == selected_power:
+                    info = f"Cost: {power['cost']} per rank, Max Rank: {power['max_rank']}, Type: {power['type']}"
+                    if 'range' in power:
+                        info += f", Range: {power['range']}"
+                    if 'resisted' in power:
+                        info += f", Resisted by: {power['resisted']}"
+                    self.power_info_label.config(text=info)
+                    
+                    # Set the power type
+                    self.power_type_var.set(power['type'])
+                    self.toggle_power_range(None)  # Update range visibility
+                    
+                    # Set the range if it's a combat power
+                    if power['type'] == 'Combat' and 'range' in power:
+                        self.power_range_var.set(power['range'])
+                    else:
+                        self.power_range_var.set('')
+                    
+                    # Update the power cost
+                    self.update_power_cost()
+                    break
+        else:
+            # If no power is selected, clear the info
+            self.power_info_label.config(text="")
+            self.power_type_var.set("")
+            self.power_range_var.set("")
+            self.power_cost_label.config(text="Current Cost: 0")
+
+    def create_modifier_section(self, parent, title, row):
+        frame = ttk.LabelFrame(parent, text=title)
+        frame.grid(row=row, column=0, sticky='nsew', padx=5, pady=5)
+
+        self.modifier_vars[title] = tk.StringVar()
+        modifier_combobox = ttk.Combobox(frame, textvariable=self.modifier_vars[title], state="readonly")
+        modifier_combobox['values'] = self.extras_data if 'Extra' in title else self.flaws_data
+        modifier_combobox.pack(side=tk.LEFT, padx=5, pady=5)
+
+        add_button = ttk.Button(frame, text="Add", command=lambda: self.add_modifier(title))
+        add_button.pack(side=tk.LEFT, padx=5, pady=5)
+
+        remove_button = ttk.Button(frame, text="Remove", command=lambda: self.remove_modifier(title))
+        remove_button.pack(side=tk.LEFT, padx=5, pady=5)
+
+        self.modifier_lists[title] = tk.Listbox(frame, height=3)
+        self.modifier_lists[title].pack(side=tk.LEFT, padx=5, pady=5, fill=tk.BOTH, expand=True)
+
+        # Bind the listbox selection to update the cost
+        self.modifier_lists[title].bind('<<ListboxSelect>>', self.update_power_cost)
+
+    def add_modifier(self, modifier_type):
+        selected = self.modifier_vars[modifier_type].get()
+        if selected:
+            self.modifier_lists[modifier_type].insert(tk.END, selected)
+            self.modifier_vars[modifier_type].set('')  # Clear selection
+            self.update_power_cost()
+
+    def remove_modifier(self, modifier_type):
+        selected_indices = self.modifier_lists[modifier_type].curselection()
+        for index in reversed(selected_indices):
+            self.modifier_lists[modifier_type].delete(index)
+        self.update_power_cost()
+
+    def calculate_modified_cost(self, base_cost, rank, selected_extras_with_ranks, selected_flaws_with_ranks, extras, flaws):
+        # Create dictionaries for easy access
+        extras_dict = {extra["name"]: extra for extra in extras}
+        flaws_dict = {flaw["name"]: flaw for flaw in flaws}
+
+        # Initialize variables
+        per_rank_extras = 0
+        per_rank_flaws = 0
+        flat_extras = 0
+        flat_flaws = 0
+
+        # Calculate extras
+        for extra_name, extra_rank in selected_extras_with_ranks:
+            extra_data = extras_dict.get(extra_name)
+            if extra_data:
+                extra_type = extra_data["type"]
+                extra_value = extra_data["value"]
+                if extra_type == "per_rank":
+                    per_rank_extras += extra_value * extra_rank
+                elif extra_type == "flat_per_rank":
+                    flat_extras += extra_value * extra_rank
+
+        # Calculate flaws
+        for flaw_name, flaw_rank in selected_flaws_with_ranks:
+            flaw_data = flaws_dict.get(flaw_name)
+            if flaw_data:
+                flaw_type = flaw_data["type"]
+                flaw_value = flaw_data["value"]
+                if flaw_type == "per_rank":
+                    per_rank_flaws += flaw_value * flaw_rank
+                elif flaw_type == "flat_per_rank":
+                    flat_flaws += flaw_value * flaw_rank
+
+        # Calculate the total cost
+        adjusted_cost_per_rank = base_cost + per_rank_extras - per_rank_flaws
+        total_cost = (adjusted_cost_per_rank * rank) + flat_extras - flat_flaws
+
+        return total_cost, adjusted_cost_per_rank, flat_extras - flat_flaws
+
+    def update_power_cost(self, event=None):
+        selected_power = self.power_var.get()
+        if not selected_power:
+            self.power_cost_label.config(text="Current Cost: 0")
+            return
+
+        base_cost = next((power['cost'] for power in self.powers_data if power['name'] == selected_power), 2)
+        rank = int(self.power_rank_var.get())
+
+        extras_with_ranks = [(extra, 1) for extra in self.modifier_lists["Extras Per Rank"].get(0, tk.END)]
+        flaws_with_ranks = [(flaw, 1) for flaw in self.modifier_lists["Flaws Per Rank"].get(0, tk.END)]
+        extra_flats = [(extra, 1) for extra in self.modifier_lists["Extra Flats"].get(0, tk.END)]
+        flaw_flats = [(flaw, 1) for flaw in self.modifier_lists["Flaw Flats"].get(0, tk.END)]
+
+        total_cost, adjusted_cost_per_rank, adjusted_flats = self.calculate_modified_cost(
+            base_cost, rank, extras_with_ranks + extra_flats, flaws_with_ranks + flaw_flats,
+            self.extras_data, self.flaws_data
+        )
+
+        self.power_cost_label.config(text=f"Current Cost: {total_cost}")
+
     def edit_power(self):
         selected_items = self.powers_tree.selection()
         if not selected_items:
@@ -651,8 +784,12 @@ class CustomCharacterCreator:
 
         # Remove the old power entry
         self.powers_tree.delete(item)
+        
         # Update the power info
         self.update_power_info(None)
+        
+        # Update the power cost
+        self.update_power_cost()
 
     def delete_power(self):
         selected_items = self.powers_tree.selection()
@@ -698,23 +835,35 @@ class CustomCharacterCreator:
 
     def update_power_info(self, event):
         selected_power = self.power_var.get()
-        for power in self.powers_data:
-            if power['name'] == selected_power:
-                info = f"Cost: {power['cost']} per rank, Max Rank: {power['max_rank']}, Type: {power['type']}"
-                if 'range' in power:
-                    info += f", Range: {power['range']}"
-                if 'resisted' in power:
-                    info += f", Resisted by: {power['resisted']}"
-                self.power_info_label.config(text=info)
-                
-                # Set the power type
-                self.power_type_var.set(power['type'])
-                self.toggle_power_range(None)  # Update range visibility
-                
-                # Set the range if it's a combat power
-                if power['type'] == 'Combat' and 'range' in power:
-                    self.power_range_var.set(power['range'])
-                break
+        if selected_power:
+            for power in self.powers_data:
+                if power['name'] == selected_power:
+                    info = f"Cost: {power['cost']} per rank, Max Rank: {power['max_rank']}, Type: {power['type']}"
+                    if 'range' in power:
+                        info += f", Range: {power['range']}"
+                    if 'resisted' in power:
+                        info += f", Resisted by: {power['resisted']}"
+                    self.power_info_label.config(text=info)
+                    
+                    # Set the power type
+                    self.power_type_var.set(power['type'])
+                    self.toggle_power_range(None)  # Update range visibility
+                    
+                    # Set the range if it's a combat power
+                    if power['type'] == 'Combat' and 'range' in power:
+                        self.power_range_var.set(power['range'])
+                    else:
+                        self.power_range_var.set('')
+                    
+                    # Update the power cost
+                    self.update_power_cost()
+                    break
+        else:
+            # If no power is selected, clear the info
+            self.power_info_label.config(text="")
+            self.power_type_var.set("")
+            self.power_range_var.set("")
+            self.power_cost_label.config(text="Current Cost: 0")
 
     def add_power_to_character(self):
         selected_power = self.power_var.get()
@@ -732,13 +881,17 @@ class CustomCharacterCreator:
 
         self.powers_tree.insert('', 'end', values=(selected_power, power_rank, ', '.join(all_extras), ', '.join(all_flaws), power_type, power_range))
 
-        # Clear selections
+        # Clear selections and reset cost
         self.power_combobox.set('')
         self.power_type_combobox.set('')
         self.power_range_combobox.set('')
         self.power_rank_var.set('1')
         for listbox in self.modifier_lists.values():
             listbox.delete(0, tk.END)
+        self.power_cost_label.config(text="Current Cost: 0")
+
+        # Clear the power info label
+        self.power_info_label.config(text="")
 
     def create_modifier_section(self, parent, title, row):
         frame = ttk.LabelFrame(parent, text=title)
@@ -752,8 +905,14 @@ class CustomCharacterCreator:
         add_button = ttk.Button(frame, text="Add", command=lambda: self.add_modifier(title))
         add_button.pack(side=tk.LEFT, padx=5, pady=5)
 
+        remove_button = ttk.Button(frame, text="Remove", command=lambda: self.remove_modifier(title))
+        remove_button.pack(side=tk.LEFT, padx=5, pady=5)
+
         self.modifier_lists[title] = tk.Listbox(frame, height=3)
         self.modifier_lists[title].pack(side=tk.LEFT, padx=5, pady=5, fill=tk.BOTH, expand=True)
+
+        # Bind the listbox selection to update the cost
+        self.modifier_lists[title].bind('<<ListboxSelect>>', self.update_power_cost)
 
     def get_modifier_options(self, modifier_type):
         if modifier_type == "Extras Per Rank":
@@ -770,6 +929,7 @@ class CustomCharacterCreator:
         if selected:
             self.modifier_lists[modifier_type].insert(tk.END, selected)
             self.modifier_vars[modifier_type].set('')  # Clear selection
+            self.update_power_cost()
 
     def get_current_character(self):
         character = {
@@ -936,42 +1096,6 @@ class CustomCharacterCreator:
 
         return character
 
-    def calculate_modified_cost(self, base_cost, rank, selected_extras_with_ranks, selected_flaws_with_ranks, extras, flaws):
-        # Create dictionaries for easy access
-        extras_dict = {extra["name"]: extra for extra in extras}
-        flaws_dict = {flaw["name"]: flaw for flaw in flaws}
-
-        # Calculate the total cost
-        total_cost = base_cost * rank
-        adjusted_cost_per_rank = base_cost
-        adjusted_flats = 0
-
-        for extra_name, extra_rank in selected_extras_with_ranks:
-            extra_data = extras_dict.get(extra_name)
-            if extra_data:
-                extra_type = extra_data["type"]
-                extra_value = extra_data["value"]
-                if extra_type == "per_rank":
-                    total_cost += extra_value * extra_rank * rank
-                    adjusted_cost_per_rank += extra_value
-                elif extra_type == "flat_per_rank":
-                    total_cost += extra_value * extra_rank
-                    adjusted_flats += extra_value * extra_rank
-
-        for flaw_name, flaw_rank in selected_flaws_with_ranks:
-            flaw_data = flaws_dict.get(flaw_name)
-            if flaw_data:
-                flaw_type = flaw_data["type"]
-                flaw_value = flaw_data["value"]
-                if flaw_type == "per_rank":
-                    total_cost -= flaw_value * flaw_rank * rank
-                    adjusted_cost_per_rank -= flaw_value
-                elif flaw_type == "flat_per_rank":
-                    total_cost -= flaw_value * flaw_rank
-                    adjusted_flats -= flaw_value * flaw_rank
-
-        return total_cost, adjusted_cost_per_rank, adjusted_flats
-    
     def update_preview(self):
         character = self.get_current_character()
         self.enforce_rules(character)
