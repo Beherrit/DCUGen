@@ -103,13 +103,17 @@ def calculate_modified_cost(base_cost, rank, selected_extras_with_ranks, selecte
     return total_cost, adjusted_cost_per_rank, adjusted_flats
 
 def calculate_totals(character):
-    attribute_total_cost = sum(stat['cost'] for stat in character['stats'].values())
+    attribute_total_cost = sum(stat['cost'] if isinstance(stat, dict) else stat * 2 for stat in character['stats'].values())
     advantage_total_cost = sum(advantage['cost'] for advantage in character['advantages'] if advantage['name'] != 'Unspent Points')
     skill_total_cost = sum(skill['cost'] for skill in character['skills'])
     power_total_cost = sum(power['cost'] for power in character.get('powers', []))
     
-    # Use get() method with default value 0 for 'bought_rank'
-    defense_total_cost = sum(defense.get('bought_rank', 0) for defense_name, defense in character['defenses'].items() if defense_name != 'Unspent Points')
+    # Handle both dictionary and integer values for defenses
+    defense_total_cost = sum(
+        defense['bought_rank'] if isinstance(defense, dict) else defense
+        for defense_name, defense in character['defenses'].items()
+        if defense_name != 'Unspent Points'
+    )
     
     total_cost = attribute_total_cost + advantage_total_cost + skill_total_cost + power_total_cost + defense_total_cost
     return attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, total_cost
@@ -578,10 +582,12 @@ def pretty_print_character(character, text_widget):
 
     # Expanded Traits
     insert_subheader("Expanded Traits")
-    for category, trait in character["expanded_traits"].items():
-        text_widget.insert(tk.END, f"{category.replace('_', ' ').title()}: {trait['name']}\n", "bold")
-        text_widget.insert(tk.END, f"Description: {trait['description']}\n")
-        text_widget.insert(tk.END, f"Effect: {trait['effect']}\n\n")
+    if "expanded_traits" in character and character["expanded_traits"]:
+        text_widget.insert(tk.END, "\nExpanded Traits:\n", "heading")
+        for trait_type, trait_info in character["expanded_traits"].items():
+            text_widget.insert(tk.END, f"  {trait_type.replace('_', ' ').title()}:\n", "subheading")
+            text_widget.insert(tk.END, f"    Name: {trait_info['name']}\n")
+            text_widget.insert(tk.END, f"    Description: {trait_info['description']}\n")
 
     # Character Stats
     insert_header("Character Stats")

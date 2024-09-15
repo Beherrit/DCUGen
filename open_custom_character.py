@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from DCUQA import pretty_print_character, calculate_totals, update_defense
 from utils import load_data_from_json, generate_character_description
+from utils import calculate_range, calculate_attack_bonuses, calculate_initiative, calculate_accuracy
 import random
 import importlib
 import os
@@ -30,22 +31,50 @@ class CharacterPreviewScreen:
         self.update_preview()
 
     def update_preview(self):
-        self.preview_text.delete('1.0', tk.END)
         character = self.character_creator.get_current_character()
+        
+        # Store the current position of the scrollbar
+        current_position = self.preview_text.yview()[0]
+        
+        # Clear the text widget
+        self.preview_text.delete('1.0', tk.END)
+        
+        # Update the content
         pretty_print_character(character, self.preview_text)
-        self.parent.after(1000, self.update_preview)  # Update every second
+        
+        # Restore the scrollbar position
+        self.preview_text.yview_moveto(current_position)
+        
+        # Schedule the next update
+        self.parent.after(1000, self.update_preview)
 
 class CustomCharacterCreator:
-    def __init__(self, master, notebook, text_widgets, characters, dark_mode):
+    def __init__(self, master, notebook, text_widgets, characters, dark_mode, expanded_traits):
         self.master = master
         self.notebook = notebook
         self.text_widgets = text_widgets
         self.characters = characters
         self.dark_mode = dark_mode
+        self.expanded_traits = expanded_traits
+
+        # Add this line to define the defense_stat_mapping attribute
+        self.defense_stat_mapping = {
+            "Dodge": "Agility",
+            "Parry": "Fighting",
+            "Fortitude": "Stamina",
+            "Will": "Awareness",
+            "Toughness": "Stamina"
+        }
         
         self.window = tk.Toplevel(master)
         self.window.title("Create Custom Character")
-        self.window.geometry("800x600")
+        self.window.geometry("1000x800")
+
+        # Set minimum size for the window
+        self.window.minsize(1000, 700)  # Add this line to set a minimum size
+
+        # Make the window resizable
+        self.window.resizable(True, True)  # Add this line to make the window resizable  
         
         self.character = {
             "name": "", "gender": "", "age": "", "theme": "",
@@ -90,6 +119,15 @@ class CustomCharacterCreator:
         self.observer.start()
 
         self.window.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+        # Add this line to define the defense_stat_mapping attribute
+        self.defense_stat_mapping = {
+            "Dodge": "Agility",
+            "Parry": "Fighting",
+            "Fortitude": "Stamina",
+            "Will": "Awareness",
+            "Toughness": "Stamina"
+        }
 
     def on_closing(self):
         self.observer.stop()
@@ -541,10 +579,6 @@ class CustomCharacterCreator:
         bottom_frame = ttk.Frame(powers_frame)
         bottom_frame.grid(row=1, column=0, columnspan=2, sticky='nsew', padx=5, pady=5)
 
-        # Add Power Button
-        self.add_power_button = ttk.Button(bottom_frame, text="Add Power to Character", command=self.add_power_to_character)
-        self.add_power_button.pack(pady=10)
-
         # Powers List
         self.powers_tree = ttk.Treeview(bottom_frame, columns=('Power', 'Rank', 'Extras', 'Flaws', 'Type', 'Range'), show='headings', height=5)
         self.powers_tree.heading('Power', text='Power')
@@ -561,10 +595,77 @@ class CustomCharacterCreator:
         self.powers_tree.column('Range', width=75)
         self.powers_tree.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
 
+        # Button frame
+        button_frame = ttk.Frame(bottom_frame)
+        button_frame.pack(fill=tk.X, padx=5, pady=5)
+
+        # Add Power to Character Button
+        add_power_button = ttk.Button(button_frame, text="Add Power to Character", command=self.add_power_to_character)
+        add_power_button.pack(side=tk.LEFT, padx=(0, 5))
+
+        # Edit Power Button
+        edit_power_button = ttk.Button(button_frame, text="Edit Power", command=self.edit_power)
+        edit_power_button.pack(side=tk.LEFT, padx=5)
+
+        # Delete Power Button
+        delete_power_button = ttk.Button(button_frame, text="Delete Power", command=self.delete_power)
+        delete_power_button.pack(side=tk.LEFT, padx=5)
+
         # Configure grid
         powers_frame.columnconfigure(0, weight=1)
         powers_frame.columnconfigure(1, weight=1)
         powers_frame.rowconfigure(1, weight=1)
+
+    def edit_power(self):
+        selected_items = self.powers_tree.selection()
+        if not selected_items:
+            messagebox.showwarning("No Power Selected", "Please select a power to edit.")
+            return
+
+        item = selected_items[0]
+        power_name, rank, extras, flaws, power_type, power_range = self.powers_tree.item(item, 'values')
+
+        # Set the current values in the input fields
+        self.power_var.set(power_name)
+        self.power_rank_var.set(rank)
+        self.power_type_var.set(power_type)
+        self.power_range_var.set(power_range)
+
+        # Clear and repopulate modifier lists
+        for modifier_type in ["Extras Per Rank", "Flaws Per Rank", "Extra Flats", "Flaw Flats"]:
+            self.modifier_lists[modifier_type].delete(0, tk.END)
+
+        for extra in extras.split(', '):
+            if extra:
+                self.modifier_lists["Extras Per Rank"].insert(tk.END, extra)
+
+        for flaw in flaws.split(', '):
+            if flaw:
+                self.modifier_lists["Flaws Per Rank"].insert(tk.END, flaw)
+
+        # Remove the old power entry
+        self.powers_tree.delete(item)
+        # Update the power info
+        self.update_power_info(None)
+
+    def delete_power(self):
+        selected_items = self.powers_tree.selection()
+        if not selected_items:
+            return
+        for item in selected_items:
+            self.powers_tree.delete(item)
+
+    def add_power_to_character(self):
+        # Clear selections
+        self.power_combobox.set('')
+        self.power_type_combobox.set('')
+        self.power_range_combobox.set('')
+        self.power_rank_var.set('1')
+        for listbox in self.modifier_lists.values():
+            listbox.delete(0, tk.END)
+
+        # Clear the power info label
+        self.power_info_label.config(text="")
 
     def toggle_power_range(self, event):
         if self.power_type_var.get() == 'Combat':
@@ -650,7 +751,6 @@ class CustomCharacterCreator:
             self.modifier_vars[modifier_type].set('')  # Clear selection
 
     def get_current_character(self):
-        # Collect all current character data
         character = {
             "name": self.name_entry.get(),
             "gender": self.gender_entry.get(),
@@ -685,19 +785,191 @@ class CustomCharacterCreator:
             "expanded_traits": {},
         }
 
-        # Stats and Defenses
-        for stat_name, var in self.stat_vars.items():
+        # Stats
+        for stat, var in self.stat_vars.items():
             value = int(var.get())
-            character["stats"][stat_name] = {"value": value, "cost": value * 2}
-        
-        # ... populate other sections (defenses, skills, advantages, powers, etc.) ...
+            character["stats"][stat] = {
+                "value": value,
+                "cost": value * 2
+            }
+
+        # Defenses
+        for defense, var in self.defense_vars.items():
+            total_rank = int(var.get())
+            stat_bonus = character["stats"].get(self.defense_stat_mapping.get(defense, ""), {}).get("value", 0)
+            bought_rank = total_rank - stat_bonus
+            character["defenses"][defense] = {
+                "total_rank": total_rank,
+                "bought_rank": bought_rank,
+                "stat_bonus": stat_bonus
+            }
+
+        # Skills
+        for item in self.skills_tree.get_children():
+            values = self.skills_tree.item(item, 'values')
+            skill_name, rank, _, total, stat_name = values
+            rank = int(rank)
+            if rank > 0:
+                associated_attribute = next((skill['tags'][0] for skill in self.skills_data if skill['name'] == skill_name), None)
+                character["skills"].append({
+                    "name": skill_name,
+                    "rank": rank,
+                    "cost": (rank + 1) // 2,
+                    "total": int(total),
+                    "sub_skill": None,  # Add sub-skill support if needed
+                    "associated_attribute": associated_attribute
+                })
+
+        # Advantages
+        for item in self.advantages_tree.get_children():
+            values = self.advantages_tree.item(item, 'values')
+            advantage_name, rank = values
+            rank = int(rank)
+            if rank > 0:
+                character["advantages"].append({
+                    "name": advantage_name,
+                    "rank": rank,
+                    "cost": rank
+                })
+
+        # Powers
+        for item in self.powers_tree.get_children():
+            values = self.powers_tree.item(item, 'values')
+            power_name, rank, extras, flaws, power_type, power_range = values
+            rank = int(rank)
+            if rank > 0:
+                extras_list = extras.split(', ') if extras else []
+                flaws_list = flaws.split(', ') if flaws else []
+                
+                extras_with_ranks = [(extra, 1) for extra in extras_list]  # Assume rank 1 for simplicity
+                flaws_with_ranks = [(flaw, 1) for flaw in flaws_list]  # Assume rank 1 for simplicity
+                
+                base_cost = next((power['cost'] for power in self.powers_data if power['name'] == power_name), 2)
+                
+                total_cost, adjusted_cost_per_rank, adjusted_flats = self.calculate_modified_cost(
+                    base_cost, rank, extras_with_ranks, flaws_with_ranks, self.extras_data, self.flaws_data
+                )
+                
+                power_entry = {
+                    "name": power_name,
+                    "rank": rank,
+                    "type": power_type,
+                    "base_cost": base_cost,
+                    "range": power_range,
+                    "adjusted_cost_per_rank": adjusted_cost_per_rank,
+                    "adjusted_flats": adjusted_flats,
+                    "extras": [extra[0] for extra in extras_with_ranks],
+                    "extras_ranks": [extra[1] for extra in extras_with_ranks],
+                    "flaws": [flaw[0] for flaw in flaws_with_ranks],
+                    "flaws_ranks": [flaw[1] for flaw in flaws_with_ranks],
+                    "cost": total_cost
+                }
+                
+                if power_range == "Ranged":
+                    power_entry["close_range"] = rank * 25
+                    power_entry["medium_range"] = rank * 50
+                    power_entry["long_range"] = rank * 100
+                
+                if 'Increased Range' in power_entry['extras']:
+                    increased_range_rank = power_entry['extras_ranks'][power_entry['extras'].index('Increased Range')]
+                    power_entry['increased_range'] = calculate_range(increased_range_rank)
+                
+                power_entry['accuracy'] = calculate_accuracy(character, power_entry)
+                
+                character["powers"].append(power_entry)
+
+        # Personality Traits
+        character["personality_traits"] = {
+            "positive_traits": [self.positive_traits_var.get()],
+            "negative_traits": [self.negative_traits_var.get()],
+            "quirky_traits": [self.quirky_traits_var.get()]
+        }
+
+        # Motivation
+        character["Motivation"] = {
+            "name": self.motivation_var.get(),
+            "description": self.motivations.get(self.motivation_var.get(), "")
+        }
+
+        # Complications
+        character["Complications"] = [{
+            "name": self.complication_var.get(),
+            "description": self.complications.get(self.complication_var.get(), {}).get("description", "")
+        }]
+
+        # Expanded Traits
+        for trait_type, var in self.expanded_trait_vars.items():
+            selected_trait = var.get()
+            if selected_trait:
+                trait_info = next((trait for trait in self.expanded_traits[trait_type] if trait["name"].lower() == selected_trait.lower()), None)
+                if trait_info:
+                    character["expanded_traits"][trait_type] = {
+                        "name": trait_info["name"],
+                        "description": trait_info["description"]
+                    }
+
+        character['melee_attack_bonus'], character['ranged_attack_bonus'] = calculate_attack_bonuses(character)
+
+        # Calculate initiative
+        character['initiative'] = calculate_initiative(character)
 
         return character
 
-    def create_character(self):
-        # ... (rest of the code remains unchanged)
+    def calculate_modified_cost(self, base_cost, rank, selected_extras_with_ranks, selected_flaws_with_ranks, extras, flaws):
+        # Create dictionaries for easy access
+        extras_dict = {extra["name"]: extra for extra in extras}
+        flaws_dict = {flaw["name"]: flaw for flaw in flaws}
 
-        # Add new fields to the character dictionary
+        # Calculate the total cost
+        total_cost = base_cost * rank
+        adjusted_cost_per_rank = base_cost
+        adjusted_flats = 0
+
+        for extra_name, extra_rank in selected_extras_with_ranks:
+            extra_data = extras_dict.get(extra_name)
+            if extra_data:
+                extra_type = extra_data["type"]
+                extra_value = extra_data["value"]
+                if extra_type == "per_rank":
+                    total_cost += extra_value * extra_rank * rank
+                    adjusted_cost_per_rank += extra_value
+                elif extra_type == "flat_per_rank":
+                    total_cost += extra_value * extra_rank
+                    adjusted_flats += extra_value * extra_rank
+
+        for flaw_name, flaw_rank in selected_flaws_with_ranks:
+            flaw_data = flaws_dict.get(flaw_name)
+            if flaw_data:
+                flaw_type = flaw_data["type"]
+                flaw_value = flaw_data["value"]
+                if flaw_type == "per_rank":
+                    total_cost -= flaw_value * flaw_rank * rank
+                    adjusted_cost_per_rank -= flaw_value
+                elif flaw_type == "flat_per_rank":
+                    total_cost -= flaw_value * flaw_rank
+                    adjusted_flats -= flaw_value * flaw_rank
+
+        return total_cost, adjusted_cost_per_rank, adjusted_flats
+    
+    def update_preview(self):
+        character = self.get_current_character()
+        self.enforce_rules(character)
+        self.update_character_summary(character)
+
+    def enforce_rules(self, character):
+        power_level = character['power_level']
+        max_defense_toughness = power_level * 2
+
+        # Ensure the combined defenses don't exceed the max allowed
+        if (character['defenses']['Parry']['total_rank'] + character['defenses']['Toughness']['total_rank']) > max_defense_toughness:
+            raise ValueError("Parry and Toughness exceed the allowed limit")
+        if (character['defenses']['Dodge']['total_rank'] + character['defenses']['Toughness']['total_rank']) > max_defense_toughness:
+            raise ValueError("Dodge and Toughness exceed the allowed limit")
+        if (character['defenses']['Fortitude']['total_rank'] + character['defenses']['Will']['total_rank']) > max_defense_toughness:
+            raise ValueError("Fortitude and Will exceed the allowed limit")
+
+
+    def create_character(self):
         self.character["occupation"] = self.occupation_var.get()
         self.character["costume_style"] = self.costume_style_var.get()
         self.character["distinctive_feature"] = self.distinctive_feature_var.get()
@@ -727,7 +999,8 @@ class CustomCharacterCreator:
         for trait_type in ["positive_traits", "negative_traits", "quirky_traits"]:
             ttk.Label(traits_frame, text=f"{trait_type.replace('_', ' ').title()}:").pack(anchor='w')
             trait_var = tk.StringVar()
-            trait_combobox = ttk.Combobox(traits_frame, textvariable=trait_var, values=self.personality_traits[trait_type])
+            trait_combobox = ttk.Combobox(traits_frame, textvariable=trait_var, 
+                                          values=sorted([trait.title() for trait in self.personality_traits[trait_type]]))
             trait_combobox.pack(fill='x', padx=5, pady=2)
             setattr(self, f"{trait_type}_var", trait_var)
 
@@ -736,7 +1009,8 @@ class CustomCharacterCreator:
 
         ttk.Label(motivation_frame, text="Motivation:").pack(anchor='w')
         self.motivation_var = tk.StringVar()
-        motivation_combobox = ttk.Combobox(motivation_frame, textvariable=self.motivation_var, values=list(self.motivations["Hero"].keys()))
+        motivation_combobox = ttk.Combobox(motivation_frame, textvariable=self.motivation_var, 
+                                           values=sorted([motivation.title() for motivation in self.motivations["Hero"].keys()]))
         motivation_combobox.pack(fill='x', padx=5, pady=2)
 
         complications_frame = ttk.LabelFrame(parent, text="Complications")
@@ -744,7 +1018,8 @@ class CustomCharacterCreator:
 
         ttk.Label(complications_frame, text="Complication:").pack(anchor='w')
         self.complication_var = tk.StringVar()
-        complication_combobox = ttk.Combobox(complications_frame, textvariable=self.complication_var, values=list(self.complications.keys()))
+        complication_combobox = ttk.Combobox(complications_frame, textvariable=self.complication_var, 
+                                             values=sorted([complication.title() for complication in self.complications.keys()]))
         complication_combobox.pack(fill='x', padx=5, pady=2)
 
         # Bind events to update descriptions when selections change
@@ -762,14 +1037,15 @@ class CustomCharacterCreator:
         expanded_traits_frame = ttk.LabelFrame(parent, text="Expanded Traits")
         expanded_traits_frame.pack(fill='x', padx=5, pady=5)
 
+        self.expanded_trait_vars = {}
         for trait_type in ["core_traits", "emotional_traits", "cognitive_traits"]:
             if trait_type in self.expanded_traits:
                 ttk.Label(expanded_traits_frame, text=f"{trait_type.replace('_', ' ').title()}:").pack(anchor='w')
                 trait_var = tk.StringVar()
                 trait_combobox = ttk.Combobox(expanded_traits_frame, textvariable=trait_var, 
-                                              values=[trait["name"] for trait in self.expanded_traits[trait_type]])
+                                              values=sorted([trait["name"].title() for trait in self.expanded_traits[trait_type]]))
                 trait_combobox.pack(fill='x', padx=5, pady=2)
-                setattr(self, f"{trait_type}_var", trait_var)
+                self.expanded_trait_vars[trait_type] = trait_var
 
     def update_motivation_description(self, event):
         selected_motivation = self.motivation_var.get()
@@ -949,12 +1225,15 @@ class CustomCharacterCreator:
         
         # Add expanded traits
         self.character["expanded_traits"] = {}
-        for trait_type in ["core_traits", "emotional_traits", "cognitive_traits"]:
-            if trait_type in self.expanded_traits:
-                selected_trait = getattr(self, f"{trait_type}_var", tk.StringVar()).get()
-                trait_info = next((trait for trait in self.expanded_traits[trait_type] if trait["name"] == selected_trait), None)
+        for trait_type, var in self.expanded_trait_vars.items():
+            selected_trait = var.get()
+            if selected_trait:
+                trait_info = next((trait for trait in self.expanded_traits[trait_type] if trait["name"].lower() == selected_trait.lower()), None)
                 if trait_info:
-                    self.character["expanded_traits"][trait_type] = trait_info
+                    self.character["expanded_traits"][trait_type] = {
+                        "name": trait_info["name"],
+                        "description": trait_info["description"]
+                    }
         
         # Generate character description
         self.character["description"] = generate_character_description(self.character)
@@ -977,4 +1256,5 @@ class CustomCharacterCreator:
         self.window.destroy()
 
 def open_custom_character_window(root, notebook, text_widgets, characters, dark_mode):
-    CustomCharacterCreator(root, notebook, text_widgets, characters, dark_mode)
+    expanded_traits = load_data_from_json('json/expanded_traits.json')
+    CustomCharacterCreator(root, notebook, text_widgets, characters, dark_mode, expanded_traits)
