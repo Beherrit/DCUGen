@@ -14,6 +14,11 @@
 # - Fixed the Skill Cost display to show the correct cost based on the rank of the skill
 # - Fixed the Power Cost display to show the correct cost based on the rank of the power in the character preview
 # - Fixed extras and flaws ranks
+# - Improved character loading functionality to handle expanded traits and personality traits
+# - Enhanced power updating process to correctly handle extras, flaws, and costs
+# - Added support for loading and displaying personality traits in the character editor
+# - Implemented handling of expanded traits in character loading and updating
+# - Refined the process of updating existing characters with new information
 
 # =======WIP========
 # - Fixing Toughness for the Character Creator
@@ -22,5 +27,6 @@
 # - Create Validation for the Character Creator
 # - Fix defenses for the Character Creator
 # - Force Field needs to be added to toughness
+# - Implement power cost recalculation based on extras and flaws
 
 """

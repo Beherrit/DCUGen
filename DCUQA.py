@@ -3,8 +3,13 @@ from imports import *
 from validation import enforce_rules, validate_character, validate_luck_advantage, enforce_luck_advantage_rule
 from validation import calculate_accuracy, calculate_attack_bonuses, calculate_initiative, update_initiative, calculate_range, assign_languages
 import math
+from map import MapEditor
 
 open_windows = {}
+
+def open_gm_map():
+    gm_window = tk.Toplevel()
+    MapEditor(gm_window)
 
 def get_log_file_path():
     if getattr(sys, 'frozen', False):  # Check if the program is running as an executable
@@ -1001,7 +1006,7 @@ def main():
     # Edit Character button
     edit_character_button = ttk.Button(
         char_creator_frame.body_frame,
-        text="Edit Character (WIP)",
+        text="Edit Character",
         command=lambda: edit_character(root, notebook, text_widgets, characters, dark_mode),
         style=f'{primary_button_color}.TButton'
     )
@@ -1121,6 +1126,17 @@ def main():
     gm_cheat_sheet_button = ttk.Button(gm_tools_frame.body_frame, text="GM Cheat Sheet", command=open_gm_cheat_sheet, style=f'{secondary_button_color}.TButton')
     gm_tools_frame.add_widget(gm_cheat_sheet_button)
     ToolTip(gm_cheat_sheet_button, "Open the GM Cheat Sheet for quick access to character details.")
+
+    # Map Editor Button
+    map_editor_button = ttk.Button(
+        gm_tools_frame.body_frame,
+        text="Open Map Editor",
+        command=open_gm_map,
+        style=f'{secondary_button_color}.TButton'
+    )
+    gm_tools_frame.add_widget(map_editor_button)
+    ToolTip(map_editor_button, "Open the Map Editor for creating and managing game maps.")
+
 
     # Reference Tools
     calculate_powers_button = ttk.Button(gm_tools_frame.body_frame, text="Calculate Powers", command=open_calculate_powers_window, style=f'{secondary_button_color}.TButton')

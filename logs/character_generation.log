@@ -1,100 +1,50 @@
-2024-09-15 21:32:26,632 Selected Power Types: [('Combat', 'Melee', 2), ('Combat', 'Ranged', 2), ('Utility', None, 2), ('Support', None, 2), ('Movement', None, 2), ('Defensive', None, 2)]
-2024-09-15 21:32:26,632 Starting character generation attempt 1 with Power Level: 10
-2024-09-15 21:32:26,634 Allocated Points - Stats: 30, Advantages: 30, Skills: 30, Defenses: 30, Powers: 30
-2024-09-15 21:32:26,634 Allocating 30 points to stats.
-2024-09-15 21:32:26,634 Allocated 1 points to Intellect (High).
-2024-09-15 21:32:26,634 Allocated 2 points to Strength (High).
-2024-09-15 21:32:26,634 Allocated 2 points to Agility (High).
-2024-09-15 21:32:26,634 Allocated 0 points to Fighting (Moderate).
-2024-09-15 21:32:26,634 Allocated 1 points to Awareness (Moderate).
-2024-09-15 21:32:26,634 Allocated 0 points to Presence (Moderate).
-2024-09-15 21:32:26,634 Allocated 1 points to Dexterity (Low).
-2024-09-15 21:32:26,634 Allocated 2 points to Stamina (Low).
-2024-09-15 21:32:26,634 Distributed remaining points to Intellect, adding 1 points.
-2024-09-15 21:32:26,634 Distributed remaining points to Strength, adding 1 points.
-2024-09-15 21:32:26,634 Distributed remaining points to Agility, adding 1 points.
-2024-09-15 21:32:26,634 Distributed remaining points to Fighting, adding 1 points.
-2024-09-15 21:32:26,634 Distributed remaining points to Awareness, adding 1 points.
-2024-09-15 21:32:26,634 Distributed remaining points to Presence, adding 1 points.
-2024-09-15 21:32:26,634 Allocated Stats.
-2024-09-15 21:32:26,634 Updated Defenses.
-2024-09-15 21:32:26,634 Starting skill allocation with 30 points.
-2024-09-15 21:32:26,634 Allocated Ranged Combat: rank 1, remaining ranks 59
-2024-09-15 21:32:26,634 Allocated Insight: rank 1, remaining ranks 58
-2024-09-15 21:32:26,634 Allocated Expertise: rank 1, remaining ranks 57
-2024-09-15 21:32:26,634 Allocated Athletics: rank 1, remaining ranks 56
-2024-09-15 21:32:26,634 Allocated Acrobatics: rank 6, remaining ranks 50
-2024-09-15 21:32:26,634 Allocated Close Combat: rank 6, remaining ranks 44
-2024-09-15 21:32:26,634 Allocated Technology: rank 9, remaining ranks 35
-2024-09-15 21:32:26,634 Allocated Vehicles: rank 9, remaining ranks 26
-2024-09-15 21:32:26,634 Allocated Persuasion: rank 3, remaining ranks 23
-2024-09-15 21:32:26,634 Allocated Deception: rank 4, remaining ranks 19
-2024-09-15 21:32:26,634 Allocated Sleight of Hand: rank 3, remaining ranks 16
-2024-09-15 21:32:26,634 Allocated Treatment: rank 5, remaining ranks 11
-2024-09-15 21:32:26,634 Allocated Investigation: rank 4, remaining ranks 7
-2024-09-15 21:32:26,634 Allocated Perception: rank 5, remaining ranks 2
-2024-09-15 21:32:26,634 Allocated Stealth: rank 2, remaining ranks 0
-2024-09-15 21:32:26,634 Skill allocation complete. Total ranks: 60, Power points spent: 30
-2024-09-15 21:32:26,634 Allocated Skills.
-2024-09-15 21:32:26,634 Allocating 30 points to advantages with a max of 20 advantages.
-2024-09-15 21:32:26,634 Allocated advantage Eidetic Memory with rank 1 and cost 1.
-2024-09-15 21:32:26,634 Allocated advantage Improved Critical with rank 4 and cost 4.
-2024-09-15 21:32:26,634 Allocated advantage Minion with rank 2 and cost 2.
-2024-09-15 21:32:26,634 Allocated advantage Improved Defense with rank 1 and cost 1.
-2024-09-15 21:32:26,634 Allocated advantage Leadership with rank 1 and cost 1.
-2024-09-15 21:32:26,634 Allocated advantage Taunt with rank 1 and cost 1.
-2024-09-15 21:32:26,635 Allocated advantage Startle with rank 1 and cost 1.
-2024-09-15 21:32:26,635 Allocated advantage Interpose with rank 1 and cost 1.
-2024-09-15 21:32:26,635 Allocated advantage Weapon Bind with rank 1 and cost 1.
-2024-09-15 21:32:26,635 Allocated advantage Second Chance with rank 1 and cost 1.
-2024-09-15 21:32:26,635 Allocated advantage Seize Initiative with rank 1 and cost 1.
-2024-09-15 21:32:26,635 Allocated advantage Fearless with rank 1 and cost 1.
-2024-09-15 21:32:26,635 Allocated advantage Close Attack with rank 8 and cost 8.
-2024-09-15 21:32:26,635 Allocated advantage Well-informed with rank 1 and cost 1.
-2024-09-15 21:32:26,635 Allocated advantage Daze with rank 2 and cost 2.
-2024-09-15 21:32:26,635 Allocated advantage Favored Environment with rank 1 and cost 1.
-2024-09-15 21:32:26,635 Allocated advantage Agile Feint with rank 1 and cost 1.
-2024-09-15 21:32:26,635 Allocated advantage Uncanny Dodge with rank 1 and cost 1.
-2024-09-15 21:32:26,635 Remaining points after allocation: 0
-2024-09-15 21:32:26,635 Allocated Advantages.
-2024-09-15 21:32:26,635 Allocating 30 points to defenses.
-2024-09-15 21:32:26,635 Allocated 1 point to Dodge, total rank is now 4.
-2024-09-15 21:32:26,635 Allocated 1 point to Fortitude, total rank is now 3.
-2024-09-15 21:32:26,635 Allocated 1 point to Parry, total rank is now 2.
-2024-09-15 21:32:26,635 Allocated 1 point to Will, total rank is now 3.
-2024-09-15 21:32:26,635 Allocated 1 point to Toughness, total rank is now 3.
-2024-09-15 21:32:26,635 Allocated 1 point to Dodge, total rank is now 5.
-2024-09-15 21:32:26,635 Allocated 1 point to Fortitude, total rank is now 4.
-2024-09-15 21:32:26,635 Allocated 1 point to Parry, total rank is now 3.
-2024-09-15 21:32:26,635 Allocated 1 point to Will, total rank is now 4.
-2024-09-15 21:32:26,635 Allocated 1 point to Toughness, total rank is now 4.
-2024-09-15 21:32:26,635 Allocated 1 point to Dodge, total rank is now 6.
-2024-09-15 21:32:26,635 Allocated 1 point to Fortitude, total rank is now 5.
-2024-09-15 21:32:26,635 Allocated 1 point to Parry, total rank is now 4.
-2024-09-15 21:32:26,635 Allocated 1 point to Will, total rank is now 5.
-2024-09-15 21:32:26,635 Allocated 1 point to Toughness, total rank is now 5.
-2024-09-15 21:32:26,635 Allocated 1 point to Dodge, total rank is now 7.
-2024-09-15 21:32:26,635 Allocated 1 point to Fortitude, total rank is now 6.
-2024-09-15 21:32:26,635 Allocated 1 point to Parry, total rank is now 5.
-2024-09-15 21:32:26,635 Allocated 1 point to Will, total rank is now 6.
-2024-09-15 21:32:26,635 Allocated 1 point to Toughness, total rank is now 6.
-2024-09-15 21:32:26,635 Allocated 1 point to Dodge, total rank is now 8.
-2024-09-15 21:32:26,635 Allocated 1 point to Fortitude, total rank is now 7.
-2024-09-15 21:32:26,635 Allocated 1 point to Parry, total rank is now 6.
-2024-09-15 21:32:26,635 Allocated 1 point to Will, total rank is now 7.
-2024-09-15 21:32:26,635 Allocated 1 point to Toughness, total rank is now 7.
-2024-09-15 21:32:26,635 Allocated 1 point to Dodge, total rank is now 9.
-2024-09-15 21:32:26,635 Allocated 1 point to Fortitude, total rank is now 8.
-2024-09-15 21:32:26,635 Allocated 1 point to Parry, total rank is now 7.
-2024-09-15 21:32:26,635 Allocated 1 point to Will, total rank is now 8.
-2024-09-15 21:32:26,635 Allocated 1 point to Toughness, total rank is now 8.
-2024-09-15 21:32:26,635 Allocated Defenses.
-2024-09-15 21:32:26,635 Allocating 30 points to powers with a max of 20 powers.
-2024-09-15 21:32:26,635 Allocated power Weaken Attack with rank 20, total cost 19, extras [('Subtle', 1), ('Reversible', 1), ('Accurate', 0)], flaws [].
-2024-09-15 21:32:26,635 Allocated power Ranged Affliction with rank 1, total cost 2, extras [('Accurate', 2)], flaws [('Resistible', 1)].
-2024-09-15 21:32:26,635 Allocated power Enhanced Trait Will with rank 1, total cost 1, extras [('Split', 1)], flaws [('Removable', 1), ('Permanent', 1), ('Tiring', 1)].
-2024-09-15 21:32:26,635 Allocated power Environment Control with rank 2, total cost 1, extras [('Area Line', 1)], flaws [('Diminished Range', 1), ('Resistible', 1)].
-2024-09-15 21:32:26,635 Allocated power Regeneration with rank 2, total cost 1, extras [], flaws [('Uncontrolled', 1), ('Distracting', 1), ('Limited', 1)].
-2024-09-15 21:32:26,636 Allocated power Swimming with rank 5, total cost 6, extras [('Split', 4), ('Dimensional', 1)], flaws [('Quirk', 3)].
-2024-09-15 21:32:26,636 Allocated Powers.
-2024-09-15 21:32:26,636 Character generation completed.
+2024-09-15 23:22:47,298 Importing BlpImagePlugin
+2024-09-15 23:22:47,299 Importing BmpImagePlugin
+2024-09-15 23:22:47,299 Importing BufrStubImagePlugin
+2024-09-15 23:22:47,299 Importing CurImagePlugin
+2024-09-15 23:22:47,299 Importing DcxImagePlugin
+2024-09-15 23:22:47,300 Importing DdsImagePlugin
+2024-09-15 23:22:47,301 Importing EpsImagePlugin
+2024-09-15 23:22:47,302 Importing FitsImagePlugin
+2024-09-15 23:22:47,302 Importing FliImagePlugin
+2024-09-15 23:22:47,302 Importing FpxImagePlugin
+2024-09-15 23:22:47,302 Image: failed to import FpxImagePlugin: No module named 'olefile'
+2024-09-15 23:22:47,302 Importing FtexImagePlugin
+2024-09-15 23:22:47,303 Importing GbrImagePlugin
+2024-09-15 23:22:47,303 Importing GifImagePlugin
+2024-09-15 23:22:47,303 Importing GribStubImagePlugin
+2024-09-15 23:22:47,303 Importing Hdf5StubImagePlugin
+2024-09-15 23:22:47,303 Importing IcnsImagePlugin
+2024-09-15 23:22:47,304 Importing IcoImagePlugin
+2024-09-15 23:22:47,305 Importing ImImagePlugin
+2024-09-15 23:22:47,305 Importing ImtImagePlugin
+2024-09-15 23:22:47,305 Importing IptcImagePlugin
+2024-09-15 23:22:47,305 Importing JpegImagePlugin
+2024-09-15 23:22:47,306 Importing Jpeg2KImagePlugin
+2024-09-15 23:22:47,306 Importing McIdasImagePlugin
+2024-09-15 23:22:47,306 Importing MicImagePlugin
+2024-09-15 23:22:47,306 Image: failed to import MicImagePlugin: No module named 'olefile'
+2024-09-15 23:22:47,306 Importing MpegImagePlugin
+2024-09-15 23:22:47,306 Importing MpoImagePlugin
+2024-09-15 23:22:47,308 Importing MspImagePlugin
+2024-09-15 23:22:47,309 Importing PalmImagePlugin
+2024-09-15 23:22:47,309 Importing PcdImagePlugin
+2024-09-15 23:22:47,309 Importing PcxImagePlugin
+2024-09-15 23:22:47,309 Importing PdfImagePlugin
+2024-09-15 23:22:47,312 Importing PixarImagePlugin
+2024-09-15 23:22:47,312 Importing PngImagePlugin
+2024-09-15 23:22:47,312 Importing PpmImagePlugin
+2024-09-15 23:22:47,312 Importing PsdImagePlugin
+2024-09-15 23:22:47,312 Importing QoiImagePlugin
+2024-09-15 23:22:47,312 Importing SgiImagePlugin
+2024-09-15 23:22:47,313 Importing SpiderImagePlugin
+2024-09-15 23:22:47,313 Importing SunImagePlugin
+2024-09-15 23:22:47,313 Importing TgaImagePlugin
+2024-09-15 23:22:47,313 Importing TiffImagePlugin
+2024-09-15 23:22:47,313 Importing WebPImagePlugin
+2024-09-15 23:22:47,314 Importing WmfImagePlugin
+2024-09-15 23:22:47,314 Importing XbmImagePlugin
+2024-09-15 23:22:47,315 Importing XpmImagePlugin
+2024-09-15 23:22:47,315 Importing XVThumbImagePlugin
+2024-09-15 23:23:13,543 STREAM b'IHDR' 16 13
+2024-09-15 23:23:13,543 STREAM b'IDAT' 41 32768
