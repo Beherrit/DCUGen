@@ -7,7 +7,7 @@ class MapEditor:
     def __init__(self, master):
         self.master = master
         self.master.title("GM Map")
-        self.master.attributes('-topmost', True)  # Make the window stay on top
+        self.master.attributes('-topmost', False)  # Start with not always on top
         
         self.grid_size = 50  # Initial size of each grid cell in pixels
         self.tokens = {}
@@ -15,8 +15,11 @@ class MapEditor:
         self.grid_locked = False
         self.map_locked = False
         
-        self.frame = tk.Frame(self.master)
-        self.frame.pack(fill=tk.BOTH, expand=True)
+        self.main_frame = tk.Frame(self.master)
+        self.main_frame.pack(fill=tk.BOTH, expand=True)
+        
+        self.frame = tk.Frame(self.main_frame)
+        self.frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         
         self.canvas = tk.Canvas(self.frame)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -29,8 +32,12 @@ class MapEditor:
         self.canvas.configure(xscrollcommand=self.scrollbar_x.set, yscrollcommand=self.scrollbar_y.set)
         
         self.zoom_factor = 1.0
+        self.range_start = None
+        self.range_line = None
+        self.range_text = None
         self.setup_ui()
         self.setup_bindings()
+        self.create_notes_window()
         
     def setup_ui(self):
         toolbar = tk.Frame(self.master)
@@ -38,7 +45,6 @@ class MapEditor:
         
         tk.Button(toolbar, text="Upload Map", command=self.upload_map).pack(side=tk.LEFT)
         tk.Button(toolbar, text="Add Token", command=self.add_token).pack(side=tk.LEFT)
-        tk.Button(toolbar, text="Calculate Range", command=self.calculate_range).pack(side=tk.LEFT)
         tk.Button(toolbar, text="Fit to Screen", command=self.fit_to_screen).pack(side=tk.LEFT)
         tk.Button(toolbar, text="Save", command=self.save_map).pack(side=tk.LEFT)
         
@@ -55,7 +61,7 @@ class MapEditor:
         self.lock_map_var = tk.BooleanVar()
         tk.Checkbutton(toolbar, text="Lock Map", variable=self.lock_map_var, command=self.toggle_map_lock).pack(side=tk.LEFT)
         
-        self.always_on_top_var = tk.BooleanVar(value=True)
+        self.always_on_top_var = tk.BooleanVar(value=False)
         tk.Checkbutton(toolbar, text="Always on Top", variable=self.always_on_top_var, command=self.toggle_always_on_top).pack(side=tk.LEFT)
         
     def setup_bindings(self):
@@ -65,6 +71,9 @@ class MapEditor:
         self.canvas.bind("<MouseWheel>", self.on_mousewheel)  # For Windows and MacOS
         self.canvas.bind("<Button-4>", self.on_mousewheel)  # For Linux
         self.canvas.bind("<Button-5>", self.on_mousewheel)  # For Linux
+        self.canvas.bind("<B3-Motion>", self.on_right_drag)
+        self.canvas.bind("<ButtonPress-3>", self.on_right_click)
+        self.canvas.bind("<ButtonRelease-3>", self.on_right_release)
         
     def on_click(self, event):
         self.start_x = self.canvas.canvasx(event.x)
@@ -196,7 +205,7 @@ class MapEditor:
             self.center_map()
 
     def calculate_range(self):
-        messagebox.showinfo("Range Calculation", "Range calculation tool not implemented yet.")
+        messagebox.showinfo("Range Calculation", "Right-click and drag to measure distance.")
         
     def save_map(self):
         data = {
@@ -210,7 +219,11 @@ class MapEditor:
             messagebox.showinfo("Save", "Map saved successfully!")
 
     def toggle_always_on_top(self):
-        self.master.attributes('-topmost', self.always_on_top_var.get())
+        new_state = self.always_on_top_var.get()
+        self.master.attributes('-topmost', new_state)
+        self.master.update()  # Force update of window attributes
+        print(f"Toggled topmost to: {new_state}")
+        print(f"Actual topmost state: {self.master.attributes('-topmost')}")
 
     def update_grid_size(self, value):
         self.grid_size = int(value)
@@ -309,8 +322,53 @@ class MapEditor:
 
         self.redraw()
 
+    def on_right_click(self, event):
+        self.range_start = (self.canvas.canvasx(event.x), self.canvas.canvasy(event.y))
+        self.remove_range_elements()
+
+    def on_right_drag(self, event):
+        if self.range_start:
+            end = (self.canvas.canvasx(event.x), self.canvas.canvasy(event.y))
+            self.draw_range_line(self.range_start, end)
+
+    def on_right_release(self, event):
+        self.range_start = None
+
+    def draw_range_line(self, start, end):
+        self.remove_range_elements()
+        self.range_line = self.canvas.create_line(start[0], start[1], end[0], end[1], fill="red", width=2, tags="range")
+        
+        dx = (end[0] - start[0]) / (self.grid_size * self.zoom_factor)
+        dy = (end[1] - start[1]) / (self.grid_size * self.zoom_factor)
+        distance = round(((dx ** 2 + dy ** 2) ** 0.5), 1)
+        
+        midx = (start[0] + end[0]) / 2
+        midy = (start[1] + end[1]) / 2
+        self.range_text = self.canvas.create_text(midx, midy, text=f"{distance} squares", fill="red", font=("Arial", 12, "bold"), tags="range")
+
+    def remove_range_elements(self):
+        if self.range_line:
+            self.canvas.delete(self.range_line)
+        if self.range_text:
+            self.canvas.delete(self.range_text)
+
+    def create_notes_window(self):
+        self.notes_frame = tk.Frame(self.main_frame, width=200, bg='white')
+        self.notes_frame.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        self.notes_label = tk.Label(self.notes_frame, text="Notes", font=("Arial", 14, "bold"))
+        self.notes_label.pack(pady=10)
+        
+        self.notes_text = tk.Text(self.notes_frame, wrap=tk.WORD, width=25, height=20)
+        self.notes_text.pack(padx=5, pady=5)
+        
+        # Add the range-finding instruction
+        self.notes_text.insert(tk.END, "Right click and drag to measure distance between two points.")
+        self.notes_text.config(state=tk.DISABLED)  # Make it read-only
+
 if __name__ == "__main__":
     root = tk.Tk()
-    root.attributes('-topmost', True)  # Set the initial state to always on top
+    root.geometry("1000x600")  # Set an initial size for the window
+    root.attributes('-topmost', False)  # Set the initial state to always on top
     map_app = MapEditor(root)
     root.mainloop()
