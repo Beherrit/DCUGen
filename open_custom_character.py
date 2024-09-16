@@ -400,13 +400,53 @@ class CustomCharacterCreator:
             spinbox.bind('<Tab>', lambda event, s=stat['name']: self.on_stat_change(s))
         
         self.defense_vars = {}
-        defenses = ["Dodge", "Fortitude", "Parry", "Toughness", "Will"]
+        defenses = ["Dodge", "Fortitude", "Parry", "Will"]  # Remove Toughness from this list
         for i, defense in enumerate(defenses):
             ttk.Label(parent, text=f"{defense}:").grid(row=i, column=2, padx=5, pady=5, sticky='e')
             var = tk.StringVar(value="0")
             self.defense_vars[defense] = var
             spinbox = ttk.Spinbox(parent, from_=0, to=30, textvariable=var, width=5)
             spinbox.grid(row=i, column=3, padx=5, pady=5, sticky='w')
+            spinbox.bind('<<Increment>>', lambda event, d=defense: self.update_defense(d))
+            spinbox.bind('<<Decrement>>', lambda event, d=defense: self.update_defense(d))
+            spinbox.bind('<KeyRelease>', lambda event, d=defense: self.update_defense(d))
+
+        # Add a label for Toughness
+        ttk.Label(parent, text="Toughness:").grid(row=len(defenses), column=2, padx=5, pady=5, sticky='e')
+        self.toughness_label = ttk.Label(parent, text="0")
+        self.toughness_label.grid(row=len(defenses), column=3, padx=5, pady=5, sticky='w')
+
+        # Add a method to update Toughness when Stamina changes
+        self.stat_vars['Stamina'].trace_add('write', self.update_toughness)
+
+    def update_toughness(self, *args):
+        stamina = int(self.stat_vars['Stamina'].get())
+        toughness = stamina
+        # Add any additional toughness calculations here (e.g., from powers or advantages)
+        self.toughness_label.config(text=str(toughness))
+
+    def on_stat_change(self, stat_name):
+        self.update_skill_stats()
+        if stat_name == 'Stamina':
+            self.update_toughness()
+        self.update_character_preview()
+
+    def update_defense(self, defense):
+        # This method will be called when a defense value is changed
+        # You can add any additional logic here if needed
+        pass
+
+    def update_toughness(self, *args):
+        stamina = int(self.stat_vars['Stamina'].get())
+        toughness = stamina
+        # Add any additional toughness calculations here (e.g., from powers or advantages)
+        self.toughness_label.config(text=str(toughness))
+
+    def on_stat_change(self, stat_name):
+        self.update_skill_stats()
+        if stat_name == 'Stamina':
+            self.update_toughness()
+        self.update_character_preview()
 
     def bind_improved_initiative(self):
         if self.advantages_tree:
@@ -431,10 +471,6 @@ class CustomCharacterCreator:
         
         initiative = agility + (improved_initiative * 4)
         self.initiative_var.set(str(initiative))
-
-    def on_stat_change(self, stat_name):
-        self.update_skill_stats()
-        self.update_character_preview()
 
     def toggle_advantage(self, event):
         item = self.advantages_tree.selection()[0]
@@ -1059,6 +1095,14 @@ class CustomCharacterCreator:
                 "stat_bonus": stat_bonus
             }
 
+        # Handle Toughness separately
+        stamina_value = character["stats"].get("Stamina", {}).get("value", 0)
+        character["defenses"]["Toughness"] = {
+            "total_rank": stamina_value,
+            "bought_rank": 0,
+            "stat_bonus": stamina_value
+        }
+
         # Skills
         total_skill_ranks = 0
         character["skills"] = []
@@ -1337,9 +1381,27 @@ class CustomCharacterCreator:
 
         # Update bought ranks for defenses
         for defense, var in self.defense_vars.items():
-            bought_rank = int(var.get())
-            self.character['defenses'][defense]['bought_rank'] = bought_rank
-            self.character['defenses'][defense]['total_rank'] = self.character['defenses'][defense]['stat_bonus'] + bought_rank
+            if defense != 'Toughness':
+                bought_rank = int(var.get())
+                self.character['defenses'][defense]['bought_rank'] = bought_rank
+                self.character['defenses'][defense]['total_rank'] = self.character['defenses'][defense]['stat_bonus'] + bought_rank
+        
+        # Calculate Toughness
+        stamina_value = int(self.stat_vars['Stamina'].get())
+        self.character['defenses']['Toughness']['stat_bonus'] = stamina_value
+        self.character['defenses']['Toughness']['total_rank'] = stamina_value
+        
+        # Apply Defensive Roll to Toughness
+        defensive_roll = 0
+        for advantage in self.character.get('advantages', []):
+            if advantage['name'] == 'Defensive Roll':
+                defensive_roll = advantage['rank']
+                break
+        self.character['defenses']['Toughness']['defensive_roll'] = defensive_roll
+        self.character['defenses']['Toughness']['total_rank'] += defensive_roll
+        
+        # Validate toughness (this will add any power bonuses as well)
+        self.character = validate_toughness(self.character)
         
         # Skills
         total_skill_ranks = 0

@@ -183,7 +183,7 @@ def on_export_character_sheet_click(notebook, characters, text_widgets):
             print(f"Skill {skill_name} not found in the cell mapping. Skipping.")
 
     # Directly calculate and write the total skills cost to the Excel cell
-    total_skills_cost = sum(skill['cost'] for skill in character['skills'])
+    total_skills_cost = sum(skill.get('cost', 0) for skill in character['skills'])
     sheet['BF14'] = total_skills_cost
 
     # Write Motivation

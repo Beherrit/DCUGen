@@ -1,7 +1,6 @@
 import display_character_sheet
 from imports import *
-from validation import enforce_rules, validate_character, validate_luck_advantage, enforce_luck_advantage_rule, validate_toughness
-from validation import calculate_accuracy, calculate_attack_bonuses, calculate_initiative, update_initiative, calculate_range, assign_languages
+from validation import *
 import math
 from map import MapEditor
 
@@ -586,15 +585,22 @@ def pretty_print_character(character, text_widget):
         if defense != 'Unspent Points':
             stat_bonus = values.get('stat_bonus', 0)
             bought_rank = values.get('bought_rank', 0)
-            total_rank = values.get('total_rank', 0)
+            stored_total_rank = values.get('total_rank', 0)
             
             if defense == 'Toughness':
                 power_bonus = values.get('power_bonus', 0)
                 defensive_roll = values.get('defensive_roll', 0)
-                text_widget.insert(tk.END, f"{defense}: Stat Bonus: {stat_bonus}, Bought Rank: {bought_rank}, Power Bonus: {power_bonus}, Defensive Roll: {defensive_roll}, Total Rank: {total_rank}\n")
+                calculated_total_rank = stat_bonus + power_bonus + defensive_roll
             else:
-                text_widget.insert(tk.END, f"{defense}: Stat Bonus: {stat_bonus}, Bought Rank: {bought_rank}, Total Rank: {total_rank}\n")
-
+                calculated_total_rank = stat_bonus + bought_rank
+            
+            if calculated_total_rank != stored_total_rank:
+                print(f"Warning: Calculated total rank for {defense} ({calculated_total_rank}) does not match stored value ({stored_total_rank})")
+            
+            if defense == 'Toughness':
+                text_widget.insert(tk.END, f"{defense}: Stat Bonus: {stat_bonus}, Power Bonus: {power_bonus}, Defensive Roll: {defensive_roll}, Total Rank: {calculated_total_rank}\n")
+            else:
+                text_widget.insert(tk.END, f"{defense}: Stat Bonus: {stat_bonus}, Bought Rank: {bought_rank}, Total Rank: {calculated_total_rank}\n")
     # Advantages
     insert_header("Advantages")
     sorted_advantages = sorted(character.get("advantages", []), key=lambda x: x["name"])

@@ -191,8 +191,8 @@ def validate_toughness(character):
     character['defenses']['Toughness']['defensive_roll'] = defensive_roll
     character['defenses']['Toughness']['total_rank'] = (
         character['defenses']['Toughness']['stat_bonus'] +
-        character['defenses']['Toughness']['bought_rank'] +
-        additional_toughness
+        additional_toughness +
+        defensive_roll  # Add defensive_roll to the total
     )
 
     # Validate against the rules
@@ -202,3 +202,22 @@ def validate_toughness(character):
         raise ValueError("Dodge and Toughness (including Protection/Force Field) exceed the allowed limit")
 
     return character
+
+def validate_defensive_roll(character):
+    defensive_roll = 0
+    for advantage in character.get('advantages', []):
+        if advantage['name'] == 'Defensive Roll':
+            defensive_roll = advantage['rank']
+            break
+    
+    # Update the Toughness defense with the Defensive Roll value
+    if 'defenses' in character and 'Toughness' in character['defenses']:
+        character['defenses']['Toughness']['defensive_roll'] = defensive_roll
+        character['defenses']['Toughness']['total_rank'] = (
+            character['defenses']['Toughness'].get('stat_bonus', 0) +
+            character['defenses']['Toughness'].get('bought_rank', 0) +
+            character['defenses']['Toughness'].get('power_bonus', 0) +
+            defensive_roll
+        )
+    
+    return defensive_roll

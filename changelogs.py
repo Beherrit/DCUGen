@@ -1,4 +1,17 @@
 """
+# v5.2.0
+#
+# ======FIXES/IMPROVEMENTS/NEW FEATURES======
+
+# - Export Fix - Due to skills being a dictionary instead of a list, the export would crash
+# - Fixed the issue with the Toughness defense not being calculated properly
+# - Toughness now also includes the Defensive Roll as a bonus to the total
+# - Can no longer purchase Toughness at all
+
+
+
+
+
 # v5.1.0
 # 
 # ======FIXES/IMPROVEMENTS/NEW FEATURES======
