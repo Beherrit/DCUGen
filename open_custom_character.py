@@ -430,6 +430,10 @@ class CustomCharacterCreator:
         ttk.Button(skill_buttons_frame, text="Increase Skill Rank", command=self.increase_skill_rank).pack(side=tk.LEFT, padx=5)
         ttk.Button(skill_buttons_frame, text="Decrease Skill Rank", command=self.decrease_skill_rank).pack(side=tk.LEFT, padx=5)
 
+        # Add this line to create the skill cost label
+        self.skill_cost_label = ttk.Label(skills_frame, text="Total Skill Cost: 0")
+        self.skill_cost_label.pack()
+
         # Advantages
         advantages_frame = ttk.Frame(parent)
         advantages_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
@@ -464,6 +468,46 @@ class CustomCharacterCreator:
         # Now that advantages_tree is created, we can bind Improved Initiative
         self.bind_improved_initiative()
 
+    def increase_skill_rank(self):
+        selected_item = self.skills_tree.selection()
+        if selected_item:
+            item = selected_item[0]
+            values = self.skills_tree.item(item, 'values')
+            skill_name, rank, stat_value, _, stat_name = values
+            new_rank = int(rank) + 1
+            new_total = int(stat_value) + new_rank
+            self.skills_tree.item(item, values=(skill_name, new_rank, stat_value, new_total, stat_name))
+        self.update_skill_cost()
+
+    def decrease_skill_rank(self):
+        selected_item = self.skills_tree.selection()
+        if selected_item:
+            item = selected_item[0]
+            values = self.skills_tree.item(item, 'values')
+            skill_name, rank, stat_value, _, stat_name = values
+            new_rank = max(0, int(rank) - 1)
+            new_total = int(stat_value) + new_rank
+            self.skills_tree.item(item, values=(skill_name, new_rank, stat_value, new_total, stat_name))
+        self.update_skill_cost()
+
+    def update_skill_cost(self):
+        total_ranks = sum(int(self.skills_tree.item(item, 'values')[1]) for item in self.skills_tree.get_children())
+        total_cost = total_ranks / 2  # Use floating-point division
+        
+        # Format the cost to always show one decimal place
+        formatted_cost = f"{total_cost:.1f}"
+        
+        if total_cost % 1 == 0:
+            self.skill_cost_label.config(text=f"Total Skill Cost: {int(total_cost)}")
+        else:
+            self.skill_cost_label.config(text=f"Total Skill Cost: {formatted_cost} (Can spend 1 more point)")
+        
+        # Add a note under the skill cost label
+        note = "Note: Skill costs are rounded up to the nearest whole number."
+        if not hasattr(self, 'skill_cost_note'):
+            self.skill_cost_note = ttk.Label(self.skill_cost_label.master, text=note, wraplength=300, font=('TkDefaultFont', 8, 'italic'))
+            self.skill_cost_note.pack(pady=(0, 5))
+
     def update_advantage_description(self, event):
         selected_items = self.advantages_tree.selection()
         if selected_items:
@@ -476,26 +520,6 @@ class CustomCharacterCreator:
                     break
         else:
             self.advantage_description_label.config(text="")
-
-    def increase_skill_rank(self):
-        selected_item = self.skills_tree.selection()
-        if selected_item:
-            item = selected_item[0]
-            values = self.skills_tree.item(item, 'values')
-            skill_name, rank, stat_value, _, stat_name = values
-            new_rank = int(rank) + 1
-            new_total = int(stat_value) + new_rank
-            self.skills_tree.item(item, values=(skill_name, new_rank, stat_value, new_total, stat_name))
-
-    def decrease_skill_rank(self):
-        selected_item = self.skills_tree.selection()
-        if selected_item:
-            item = selected_item[0]
-            values = self.skills_tree.item(item, 'values')
-            skill_name, rank, stat_value, _, stat_name = values
-            new_rank = max(0, int(rank) - 1)
-            new_total = int(stat_value) + new_rank
-            self.skills_tree.item(item, values=(skill_name, new_rank, stat_value, new_total, stat_name))
 
     def increase_advantage_rank(self):
         selected_item = self.advantages_tree.selection()
@@ -985,20 +1009,26 @@ class CustomCharacterCreator:
             }
 
         # Skills
+        total_skill_ranks = 0
+        character["skills"] = []
         for item in self.skills_tree.get_children():
             values = self.skills_tree.item(item, 'values')
             skill_name, rank, _, total, stat_name = values
             rank = int(rank) if rank else 0
             if rank > 0:
+                total_skill_ranks += rank
                 associated_attribute = next((skill['tags'][0] for skill in self.skills_data if skill['name'] == skill_name), None)
                 character["skills"].append({
                     "name": skill_name,
                     "rank": rank,
-                    "cost": (rank + 1) // 2,
+                    "cost": rank / 2,  # Use floating-point division for more precise cost
                     "total": int(total) if total else 0,
                     "sub_skill": None,  # Add sub-skill support if needed
                     "associated_attribute": associated_attribute
                 })
+        
+        # Calculate the total skill cost
+        total_skill_cost = total_skill_ranks / 2  # Use floating-point division
 
         # Advantages
         for item in self.advantages_tree.get_children():
@@ -1301,16 +1331,26 @@ class CustomCharacterCreator:
             self.character['defenses'][defense]['total_rank'] = self.character['defenses'][defense]['stat_bonus'] + bought_rank
         
         # Skills
+        total_skill_ranks = 0
         self.character["skills"] = []
         for item in self.skills_tree.get_children():
             values = self.skills_tree.item(item, 'values')
-            skill_name, rank, _, _, _ = values
-            if int(rank) > 0:
+            skill_name, rank, _, total, stat_name = values
+            rank = int(rank) if rank else 0
+            if rank > 0:
+                total_skill_ranks += rank
+                associated_attribute = next((skill['tags'][0] for skill in self.skills_data if skill['name'] == skill_name), None)
                 self.character["skills"].append({
                     "name": skill_name,
-                    "rank": int(rank),
-                    "cost": int(rank)
+                    "rank": rank,
+                    "total": int(total) if total else 0,
+                    "sub_skill": None,  # Add sub-skill support if needed
+                    "associated_attribute": associated_attribute
                 })
+        
+        # Calculate the total skill cost
+        total_skill_cost = total_skill_ranks // 2
+
         
         # Advantages
         self.character["advantages"] = []
@@ -1403,61 +1443,75 @@ class CharacterEditor(CustomCharacterCreator):
 
     def load_character_data(self):
         # Load the character data into the UI
-        self.name_entry.insert(0, self.character_to_edit['name'])
-        self.gender_entry.insert(0, self.character_to_edit['gender'])
-        self.age_entry.insert(0, self.character_to_edit['age'])
-        self.theme_var.set(self.character_to_edit['theme'])
-        self.region_var.set(self.character_to_edit['origin']['region'])
-        self.country_var.set(self.character_to_edit['origin']['country'])
-        self.language_var.set(self.character_to_edit['origin']['language'])
+        self.name_entry.insert(0, self.character_to_edit.get('name', ''))
+        self.gender_entry.insert(0, self.character_to_edit.get('gender', ''))
+        self.age_entry.insert(0, str(self.character_to_edit.get('age', '')))
+        self.theme_var.set(self.character_to_edit.get('theme', ''))
+        
+        origin = self.character_to_edit.get('origin', {})
+        self.region_var.set(origin.get('region', ''))
+        self.country_var.set(origin.get('country', ''))
+        self.language_var.set(origin.get('language', ''))
         
         # Load physical traits
-        for trait, value in self.character_to_edit['physical_traits'].items():
-            getattr(self, f"{trait}_var").set(value)
-        self.weight_entry.insert(0, self.character_to_edit['physical_traits']['weight'])
+        physical_traits = self.character_to_edit.get('physical_traits', {})
+        for trait in ['height', 'eye_color', 'hair_color', 'skin_tone']:
+            getattr(self, f"{trait}_var").set(physical_traits.get(trait, ''))
+        self.weight_entry.insert(0, str(physical_traits.get('weight', '')))
         
-        self.costume_style_var.set(self.character_to_edit['costume_style'])
-        self.distinctive_feature_var.set(self.character_to_edit['distinctive_feature'])
-        self.pl_var.set(str(self.character_to_edit['power_level']))
-        self.occupation_var.set(self.character_to_edit['occupation'])
+        self.costume_style_var.set(self.character_to_edit.get('costume_style', ''))
+        self.distinctive_feature_var.set(self.character_to_edit.get('distinctive_feature', ''))
+        self.pl_var.set(str(self.character_to_edit.get('power_level', '')))
+        self.occupation_var.set(self.character_to_edit.get('occupation', ''))
         
         # Load stats and defenses
-        for stat, data in self.character_to_edit['stats'].items():
-            self.stat_vars[stat].set(str(data['value']))
-        for defense, data in self.character_to_edit['defenses'].items():
-            self.defense_vars[defense].set(str(data['total_rank']))
+        for stat, data in self.character_to_edit.get('stats', {}).items():
+            if isinstance(data, dict):
+                self.stat_vars[stat].set(str(data.get('value', 0)))
+            else:
+                self.stat_vars[stat].set(str(data))
+        
+        for defense, data in self.character_to_edit.get('defenses', {}).items():
+            if isinstance(data, dict):
+                self.defense_vars[defense].set(str(data.get('total_rank', 0)))
+            else:
+                self.defense_vars[defense].set(str(data))
         
         # Load skills
-        for skill in self.character_to_edit['skills']:
+        for skill in self.character_to_edit.get('skills', []):
             for item in self.skills_tree.get_children():
                 if self.skills_tree.item(item, 'values')[0] == skill['name']:
                     self.skills_tree.item(item, values=(skill['name'], skill['rank'], 0, skill['rank'], ''))
         
         # Load advantages
-        for advantage in self.character_to_edit['advantages']:
+        for advantage in self.character_to_edit.get('advantages', []):
             for item in self.advantages_tree.get_children():
                 if self.advantages_tree.item(item, 'values')[0] == advantage['name']:
                     self.advantages_tree.item(item, values=(advantage['name'], advantage['rank']))
         
         # Load powers
-        for power in self.character_to_edit['powers']:
-            extras = ', '.join(power['extras'])
-            flaws = ', '.join(power['flaws'])
-            self.powers_tree.insert('', 'end', values=(power['name'], power['rank'], extras, flaws, power['type'], power['range']))
+        for power in self.character_to_edit.get('powers', []):
+            extras = ', '.join(power.get('extras', []))
+            flaws = ', '.join(power.get('flaws', []))
+            self.powers_tree.insert('', 'end', values=(power['name'], power['rank'], extras, flaws, power.get('type', ''), power.get('range', '')))
         
         # Load personality traits
+        personality_traits = self.character_to_edit.get('personality_traits', {})
         for trait_type in ['positive_traits', 'negative_traits', 'quirky_traits']:
-            if self.character_to_edit['personality_traits'][trait_type]:
-                getattr(self, f"{trait_type}_var").set(self.character_to_edit['personality_traits'][trait_type][0])
+            traits = personality_traits.get(trait_type, [])
+            if traits:
+                getattr(self, f"{trait_type}_var").set(traits[0] if isinstance(traits, list) else traits)
         
-        self.motivation_var.set(self.character_to_edit['Motivation']['name'])
-        if self.character_to_edit['Complications']:
-            self.complication_var.set(self.character_to_edit['Complications'][0]['name'])
+        self.motivation_var.set(self.character_to_edit.get('Motivation', {}).get('name', ''))
+        complications = self.character_to_edit.get('Complications', [])
+        if complications:
+            self.complication_var.set(complications[0].get('name', '') if isinstance(complications[0], dict) else complications[0])
         
         # Load expanded traits
-        for trait_type, trait_data in self.character_to_edit['expanded_traits'].items():
+        expanded_traits = self.character_to_edit.get('expanded_traits', {})
+        for trait_type, trait_data in expanded_traits.items():
             if trait_type in self.expanded_trait_vars:
-                self.expanded_trait_vars[trait_type].set(trait_data['name'])
+                self.expanded_trait_vars[trait_type].set(trait_data.get('name', '') if isinstance(trait_data, dict) else trait_data)
 
     def create_character(self):
         # Override the create_character method to update the existing character
@@ -1466,6 +1520,15 @@ class CharacterEditor(CustomCharacterCreator):
     def update_character(self):
         # Update the character data
         updated_character = self.get_current_character()
+        
+        # Ensure consistent format for stats and defenses
+        for stat, data in updated_character['stats'].items():
+            if not isinstance(data, dict):
+                updated_character['stats'][stat] = {'value': data, 'cost': 0}
+        
+        for defense, data in updated_character['defenses'].items():
+            if not isinstance(data, dict):
+                updated_character['defenses'][defense] = {'total_rank': data, 'stat_bonus': 0, 'bought_rank': 0}
         
         # Update the character in the characters dictionary
         self.characters[self.character_to_edit['name']] = updated_character
