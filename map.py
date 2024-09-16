@@ -1,10 +1,13 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageDraw
 import json
 import os
 import shutil
 from ttkbootstrap import Style
+import pygame  # For music playback
+import mutagen  # For getting music metadata
+import math
 
 class MapEditor:
     def __init__(self, master):
@@ -18,11 +21,11 @@ class MapEditor:
         self.tokens = {}
         self.image_locked = False
         self.grid_locked = False
-        self.map_locked = True  # Set map_locked to True by default
+        self.map_locked = False  # We can keep this for future use
         self.main_frame = ttk.Frame(self.master)
         self.main_frame.pack(fill=tk.BOTH, expand=True)
         self.setup_ui()
-        self.add_resize_grip()  # Add this line
+        self.add_resize_grip()
         self.frame = ttk.Frame(self.main_frame)
         self.frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         
@@ -45,7 +48,7 @@ class MapEditor:
         
         self.library_visible = False
         self.library_frame = None
-        self.library_data = {"maps": [], "tokens": []}
+        self.library_data = {"maps": [], "tokens": [], "music": []}
         self.setup_library()
         self.load_library_data()
         
@@ -53,6 +56,9 @@ class MapEditor:
         self.drag_item = None
         self.drag_token = None
         self.drag_token_image = None
+        
+        self.setup_music_library()
+        self.setup_music_player()
 
     def add_resize_grip(self):
         sizegrip = ttk.Sizegrip(self.master)
@@ -88,7 +94,12 @@ class MapEditor:
         self.always_on_top_var = tk.BooleanVar(value=False)
         ttk.Checkbutton(control_frame, text="Always on Top", variable=self.always_on_top_var, command=self.toggle_always_on_top).pack(side=tk.LEFT, padx=5)
         
-        self.master.bind("<Configure>", lambda e: self.center_map())
+        # Add music control buttons
+        ttk.Button(button_frame1, text="Play/Pause", command=self.toggle_music, style='info.TButton').pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame1, text="Next Track", command=self.next_track, style='info.TButton').pack(side=tk.LEFT, padx=5)
+        
+        # Add a new button for Token Creator
+        ttk.Button(button_frame1, text="Token Creator", command=self.create_token, style='info.TButton').pack(side=tk.LEFT, padx=5)
 
     def setup_bindings(self):
         self.canvas.bind("<ButtonPress-1>", self.on_click)
@@ -123,11 +134,6 @@ class MapEditor:
     def toggle_grid_lock(self):
         self.grid_locked = self.lock_grid_var.get()
         
-    def toggle_map_lock(self):
-        self.map_locked = self.lock_map_var.get()
-        if self.map_locked:
-            self.center_map()
-
     def center_map(self):
         if hasattr(self, 'map_image'):
             canvas_width = self.canvas.winfo_width()
@@ -200,7 +206,26 @@ class MapEditor:
             file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.png *.jpg *.jpeg")])
         if file_path:
             self.map_image = Image.open(file_path)
+            self.original_map_image = self.map_image.copy()  # Store original image
             self.fit_to_screen()
+
+    def fit_to_screen(self):
+        if hasattr(self, 'map_image'):
+            canvas_width = self.canvas.winfo_width()
+            canvas_height = self.canvas.winfo_height()
+            image_width, image_height = self.original_map_image.size
+            
+            width_ratio = canvas_width / image_width
+            height_ratio = canvas_height / image_height
+            scale = min(width_ratio, height_ratio)
+            
+            new_width = int(image_width * scale)
+            new_height = int(image_height * scale)
+            
+            self.map_image = self.original_map_image.resize((new_width, new_height), Image.LANCZOS)
+            self.zoom_factor = scale
+            self.redraw()
+            self.center_map()
 
     def add_token(self, file_path=None, x=None, y=None):
         if file_path is None:
@@ -211,29 +236,16 @@ class MapEditor:
             else:
                 center_x, center_y = self.canvas.canvasx(x), self.canvas.canvasy(y)
             
-            token_image = Image.open(file_path).resize((self.grid_size, self.grid_size))
-            token_tk_image = ImageTk.PhotoImage(token_image)
+            token_image = Image.open(file_path)
+            token_tk_image = self.resize_token_image(token_image)
             token_id = self.canvas.create_image(center_x, center_y, image=token_tk_image, tags=("token",))
             self.tokens[token_id] = {"image": token_tk_image, "file_path": file_path, "last_position": (center_x, center_y)}
             self.canvas.tag_raise(token_id)
 
-    def fit_to_screen(self):
-        if hasattr(self, 'map_image'):
-            canvas_width = self.canvas.winfo_width()
-            canvas_height = self.canvas.winfo_height()
-            image_width, image_height = self.map_image.size
-            
-            width_ratio = canvas_width / image_width
-            height_ratio = canvas_height / image_height
-            scale = min(width_ratio, height_ratio)
-            
-            new_width = int(image_width * scale)
-            new_height = int(image_height * scale)
-            
-            self.map_image = self.map_image.resize((new_width, new_height), Image.LANCZOS)
-            self.zoom_factor = scale
-            self.redraw()
-            self.center_map()  # Add this line to center the map after fitting
+    def resize_token_image(self, image):
+        token_size = int(self.grid_size * self.zoom_factor)
+        resized_image = image.resize((token_size, token_size), Image.LANCZOS)
+        return ImageTk.PhotoImage(resized_image)
 
     def calculate_range(self):
         messagebox.showinfo("Range Calculation", "Right-click and drag to measure distance.")
@@ -256,6 +268,8 @@ class MapEditor:
         self.grid_size = int(float(value))
         if hasattr(self, 'map_image'):
             self.redraw()  # Always redraw when grid size changes
+        if self.tokens:  # Only resize tokens if there are any
+            self.resize_all_tokens()
 
     def redraw(self):
         if hasattr(self, 'map_image'):
@@ -278,6 +292,48 @@ class MapEditor:
             
             self.canvas.config(scrollregion=(0, 0, canvas_width, canvas_height))
 
+    def resize_all_tokens(self):
+        if hasattr(self, 'canvas') and hasattr(self, 'map_image'):
+            map_width, map_height = self.map_image.size
+            canvas_width = self.canvas.winfo_width()
+            canvas_height = self.canvas.winfo_height()
+            
+            x_offset = max(0, (canvas_width - map_width) // 2)
+            y_offset = max(0, (canvas_height - map_height) // 2)
+            
+            for token_id, token_data in self.tokens.items():
+                last_x, last_y = token_data["last_position"]
+                
+                # Calculate relative position
+                rel_x = last_x / map_width
+                rel_y = last_y / map_height
+                
+                # Calculate new position based on current map size
+                new_x = int(rel_x * map_width) + x_offset
+                new_y = int(rel_y * map_height) + y_offset
+                
+                token_image = Image.open(token_data["file_path"])
+                token_tk_image = self.resize_token_image(token_image)
+                self.tokens[token_id]["image"] = token_tk_image
+                
+                # Update token position and image
+                self.canvas.coords(token_id, new_x, new_y)
+                self.canvas.itemconfig(token_id, image=token_tk_image)
+                
+                # Update last_position
+                self.tokens[token_id]["last_position"] = (new_x - x_offset, new_y - y_offset)
+            
+            self.canvas.update()
+        else:
+            print("Warning: Canvas or map image not initialized")
+
+    def update_grid_size(self, value):
+        self.grid_size = int(float(value))
+        if hasattr(self, 'map_image'):
+            self.redraw()  # Always redraw when grid size changes
+        if self.tokens:  # Only resize tokens if there are any
+            self.resize_all_tokens()
+
     def draw_grid(self, x_offset=0, y_offset=0):
         if hasattr(self, 'map_image'):
             width, height = self.map_image.size
@@ -299,20 +355,36 @@ class MapEditor:
 
     def redraw_tokens(self, x_offset=0, y_offset=0):
         new_tokens = {}
-        for token_id, token_data in self.tokens.items():
-            coords = token_data.get("last_position", self.get_map_center())
-            x, y = coords
-            
-            token_image = Image.open(token_data["file_path"]).resize((self.grid_size, self.grid_size))
-            token_tk_image = ImageTk.PhotoImage(token_image)
-            new_id = self.canvas.create_image(x + x_offset, y + y_offset, image=token_tk_image, tags=("token",))
-            new_tokens[new_id] = {
-                "image": token_tk_image,
-                "file_path": token_data["file_path"],
-                "last_position": (x, y)
-            }
+        if hasattr(self, 'map_image'):
+            map_width, map_height = self.map_image.size
+            for token_id, token_data in self.tokens.items():
+                last_x, last_y = token_data.get("last_position", self.get_map_center())
+                
+                # Calculate relative position
+                rel_x, rel_y = self.calculate_relative_position(last_x, last_y, map_width, map_height)
+                
+                # Calculate new position based on current map size
+                new_x = int(rel_x * map_width)
+                new_y = int(rel_y * map_height)
+                
+                zoomed_x = int(new_x * self.zoom_factor) + x_offset
+                zoomed_y = int(new_y * self.zoom_factor) + y_offset
+                
+                token_image = Image.open(token_data["file_path"])
+                token_tk_image = self.resize_token_image(token_image)
+                new_id = self.canvas.create_image(zoomed_x, zoomed_y, image=token_tk_image, tags=("token",))
+                new_tokens[new_id] = {
+                    "image": token_tk_image,
+                    "file_path": token_data["file_path"],
+                    "last_position": (new_x, new_y)
+                }
         
         self.tokens = new_tokens
+
+    def calculate_relative_position(self, x, y, width, height):
+        rel_x = x / width if width > 0 else 0
+        rel_y = y / height if height > 0 else 0
+        return rel_x, rel_y
 
     def on_right_click(self, event):
         self.range_start = (self.canvas.canvasx(event.x), self.canvas.canvasy(event.y))
@@ -375,12 +447,15 @@ class MapEditor:
         
         self.maps_frame = ttk.Frame(self.library_notebook)
         self.tokens_frame = ttk.Frame(self.library_notebook)
+        self.music_frame = ttk.Frame(self.library_notebook)
         
         self.library_notebook.add(self.maps_frame, text='Maps')
         self.library_notebook.add(self.tokens_frame, text='Tokens')
+        self.library_notebook.add(self.music_frame, text='Music')
         
         ttk.Button(self.maps_frame, text="Upload Map", command=self.upload_to_library).pack()
         ttk.Button(self.tokens_frame, text="Upload Token", command=self.upload_to_library).pack()
+        ttk.Button(self.music_frame, text="Add Music", command=self.add_music_to_library).pack()
         
         self.maps_listbox = tk.Listbox(self.maps_frame, selectmode=tk.SINGLE)
         self.maps_listbox.pack(fill=tk.BOTH, expand=True)
@@ -389,6 +464,10 @@ class MapEditor:
         self.tokens_listbox = tk.Listbox(self.tokens_frame, selectmode=tk.SINGLE)
         self.tokens_listbox.pack(fill=tk.BOTH, expand=True)
         self.tokens_listbox.bind('<ButtonPress-1>', self.on_library_item_click)
+        
+        self.music_listbox = tk.Listbox(self.music_frame, selectmode=tk.SINGLE)
+        self.music_listbox.pack(fill=tk.BOTH, expand=True)
+        self.music_listbox.bind('<Double-1>', self.on_music_double_click)
 
     def toggle_library(self):
         if self.library_visible:
@@ -469,15 +548,167 @@ class MapEditor:
     def load_library_data(self):
         try:
             with open("library_data.json", "r") as f:
-                self.library_data = json.load(f)
+                library_data = json.load(f)
             
-            for map_path in self.library_data["maps"]:
+            self.library_data = library_data
+            
+            for map_path in self.library_data.get("maps", []):
                 self.maps_listbox.insert(tk.END, os.path.basename(map_path))
             
-            for token_path in self.library_data["tokens"]:
+            for token_path in self.library_data.get("tokens", []):
                 self.tokens_listbox.insert(tk.END, os.path.basename(token_path))
+            
+            for music_path in self.library_data.get("music", []):
+                self.music_listbox.insert(tk.END, os.path.basename(music_path))
         except FileNotFoundError:
-            pass
+            self.library_data = {"maps": [], "tokens": [], "music": []}  # Initialize with empty lists if file not found
+        except json.JSONDecodeError:
+            print("Error decoding JSON. The library_data.json file may be corrupted.")
+            self.library_data = {"maps": [], "tokens": [], "music": []}  # Initialize with empty lists on error
+
+    def setup_music_library(self):
+        self.music_library = []
+        if "music" not in self.library_data:
+            self.library_data["music"] = []
+
+    def setup_music_player(self):
+        pygame.mixer.init()
+        self.current_track = None
+        self.is_playing = False
+
+    def add_music_to_library(self):
+        file_path = filedialog.askopenfilename(filetypes=[("Audio files", "*.mp3 *.wav *.ogg")])
+        if file_path:
+            file_name = os.path.basename(file_path)
+            destination = os.path.join("library", "music", file_name)
+            
+            os.makedirs(os.path.dirname(destination), exist_ok=True)
+            shutil.copy2(file_path, destination)
+            
+            self.library_data["music"].append(destination)
+            self.music_listbox.insert(tk.END, file_name)
+            self.save_library_data()
+
+    def on_music_double_click(self, event):
+        selection = self.music_listbox.curselection()
+        if selection:
+            index = selection[0]
+            self.play_music(index)
+
+    def play_music(self, index):
+        if 0 <= index < len(self.library_data["music"]):
+            self.current_track = self.library_data["music"][index]
+            pygame.mixer.music.load(self.current_track)
+            pygame.mixer.music.play()
+            self.is_playing = True
+
+    def toggle_music(self):
+        if self.is_playing:
+            pygame.mixer.music.pause()
+            self.is_playing = False
+        else:
+            pygame.mixer.music.unpause()
+            self.is_playing = True
+
+    def next_track(self):
+        if self.current_track:
+            current_index = self.library_data["music"].index(self.current_track)
+            next_index = (current_index + 1) % len(self.library_data["music"])
+            self.play_music(next_index)
+
+    def create_token(self):
+        self.token_creator_window = tk.Toplevel(self.master)
+        self.token_creator_window.title("Token Creator")
+        self.token_creator_window.geometry("400x600")
+
+        self.token_image = None
+        self.token_photo = None
+
+        ttk.Button(self.token_creator_window, text="Upload Image", command=self.upload_token_image).pack(pady=10)
+
+        self.token_canvas = tk.Canvas(self.token_creator_window, width=300, height=300, bg="lightgray")
+        self.token_canvas.pack(pady=10)
+
+        self.token_size_var = tk.IntVar(value=self.grid_size)
+        ttk.Label(self.token_creator_window, text="Token Size:").pack()
+        ttk.Scale(self.token_creator_window, from_=20, to=100, orient=tk.HORIZONTAL, variable=self.token_size_var, command=self.update_token_preview).pack()
+
+        self.border_color_var = tk.StringVar(value="black")
+        ttk.Label(self.token_creator_window, text="Border Color:").pack(pady=(10, 0))
+        ttk.Combobox(self.token_creator_window, textvariable=self.border_color_var, values=["black", "white", "red", "green", "blue", "yellow"], state="readonly").pack()
+        self.border_color_var.trace("w", self.update_token_preview)
+
+        self.border_width_var = tk.IntVar(value=2)
+        ttk.Label(self.token_creator_window, text="Border Width:").pack(pady=(10, 0))
+        ttk.Scale(self.token_creator_window, from_=0, to=10, orient=tk.HORIZONTAL, variable=self.border_width_var, command=self.update_token_preview).pack()
+
+        ttk.Button(self.token_creator_window, text="Create Token", command=self.finalize_token).pack(pady=10)
+
+    def upload_token_image(self):
+        file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.png *.jpg *.jpeg")])
+        if file_path:
+            self.token_image = Image.open(file_path)
+            self.update_token_preview()
+
+    def update_token_preview(self, *args):
+        if self.token_image:
+            size = self.token_size_var.get()
+            border_color = self.border_color_var.get()
+            border_width = self.border_width_var.get()
+            preview = self.create_round_token(self.token_image, size, border_color, border_width)
+            self.token_photo = ImageTk.PhotoImage(preview)
+            self.token_canvas.delete("all")
+            self.token_canvas.create_image(150, 150, image=self.token_photo)
+
+    def create_round_token(self, image, size, border_color, border_width):
+        # Create a square image with a transparent background
+        image = image.copy()
+        image.thumbnail((size, size))
+        square_img = Image.new('RGBA', (size, size), (0, 0, 0, 0))
+        
+        # Paste the original image centered
+        paste_x = (size - image.width) // 2
+        paste_y = (size - image.height) // 2
+        square_img.paste(image, (paste_x, paste_y))
+        
+        # Create a circular mask
+        mask = Image.new('L', (size, size), 0)
+        draw = ImageDraw.Draw(mask)
+        draw.ellipse((0, 0, size, size), fill=255)
+        
+        # Apply the mask to create a circular image
+        output = Image.new('RGBA', (size, size), (0, 0, 0, 0))
+        output.paste(square_img, (0, 0), mask)
+        
+        # Add border
+        if border_width > 0:
+            draw = ImageDraw.Draw(output)
+            draw.ellipse((0, 0, size, size), outline=border_color, width=border_width)
+        
+        return output
+    
+    def finalize_token(self):
+        if self.token_image:
+            size = self.token_size_var.get()
+            border_color = self.border_color_var.get()
+            border_width = self.border_width_var.get()
+            final_token = self.create_round_token(self.token_image, size, border_color, border_width)
+            
+            # Save the token
+            file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG files", "*.png")])
+            if file_path:
+                final_token.save(file_path)
+                
+                # Add the token to the library
+                destination = os.path.join("library", "tokens", os.path.basename(file_path))
+                os.makedirs(os.path.dirname(destination), exist_ok=True)
+                shutil.copy2(file_path, destination)
+                self.library_data["tokens"].append(destination)
+                self.tokens_listbox.insert(tk.END, os.path.basename(file_path))
+                self.save_library_data()
+                
+                messagebox.showinfo("Success", "Token created and added to the library!")
+                self.token_creator_window.destroy()
 
     def open_gm_map():
         gm_window = tk.Toplevel()
