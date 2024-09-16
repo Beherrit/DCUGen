@@ -1545,33 +1545,38 @@ class CharacterEditor(CustomCharacterCreator):
         updated_powers = []
         for item in self.powers_tree.get_children():
             values = self.powers_tree.item(item, 'values')
-            power_name, rank, extras_str, flaws_str, power_type, power_range, resisted_by, cost = values
+            power_name, rank_str, extras_str, flaws_str, power_type, power_range, resisted_by, cost = values
+            
+            # Clean and parse the rank
+            rank = int(rank_str.strip().split(')')[0])
             
             extras = []
             extras_ranks = []
             for extra in extras_str.split(', '):
-                if '(Rank:' in extra:
-                    name, rank = extra.split(' (Rank:')
-                    extras.append(name)
-                    extras_ranks.append(int(rank.strip(')').strip()))
-                else:
-                    extras.append(extra)
-                    extras_ranks.append(1)
+                if extra:
+                    if '(Rank:' in extra:
+                        name, extra_rank = extra.split(' (Rank:')
+                        extras.append(name)
+                        extras_ranks.append(int(extra_rank.strip(')').strip()))
+                    else:
+                        extras.append(extra)
+                        extras_ranks.append(1)
             
             flaws = []
             flaws_ranks = []
             for flaw in flaws_str.split(', '):
-                if '(Rank:' in flaw:
-                    name, rank = flaw.split(' (Rank:')
-                    flaws.append(name)
-                    flaws_ranks.append(int(rank.strip(')').strip()))
-                else:
-                    flaws.append(flaw)
-                    flaws_ranks.append(1)
+                if flaw:
+                    if '(Rank:' in flaw:
+                        name, flaw_rank = flaw.split(' (Rank:')
+                        flaws.append(name)
+                        flaws_ranks.append(int(flaw_rank.strip(')').strip()))
+                    else:
+                        flaws.append(flaw)
+                        flaws_ranks.append(1)
             
             power = {
                 'name': power_name,
-                'rank': int(rank),
+                'rank': rank,
                 'extras': extras,
                 'extras_ranks': extras_ranks,
                 'flaws': flaws,
@@ -1585,7 +1590,7 @@ class CharacterEditor(CustomCharacterCreator):
             # Recalculate power cost
             base_cost = next((p['cost'] for p in self.powers_data if p['name'] == power_name), 2)
             total_cost, adjusted_cost_per_rank, adjusted_flats = self.calculate_modified_cost(
-                base_cost, int(rank),
+                base_cost, rank,
                 list(zip(extras, extras_ranks)),
                 list(zip(flaws, flaws_ranks)),
                 self.extras_data, self.flaws_data
@@ -1599,11 +1604,11 @@ class CharacterEditor(CustomCharacterCreator):
         # Ensure consistent format for stats and defenses
         for stat, data in updated_character['stats'].items():
             if not isinstance(data, dict):
-                updated_character['stats'][stat] = {'value': data, 'cost': 0}
+                updated_character['stats'][stat] = {'value': data, 'cost': data * 2}
         
         for defense, data in updated_character['defenses'].items():
             if not isinstance(data, dict):
-                updated_character['defenses'][defense] = {'total_rank': data, 'stat_bonus': 0, 'bought_rank': 0}
+                updated_character['defenses'][defense] = {'total_rank': data, 'stat_bonus': 0, 'bought_rank': data}
         
         # Calculate totals and add to the character
         attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, total_cost = calculate_totals(updated_character)
