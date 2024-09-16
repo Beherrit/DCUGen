@@ -1,8 +1,9 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from DCUQA import pretty_print_character, calculate_totals, update_defense
 from utils import load_data_from_json, generate_character_description
 from validation import validate_character, calculate_range, calculate_attack_bonuses, calculate_initiative, calculate_accuracy
+from validation import enforce_rules, validate_toughness
 import random
 import importlib
 import os
@@ -1426,23 +1427,31 @@ class CustomCharacterCreator:
                         "description": trait_info["description"]
                     }
         
-        # Generate character description
-        self.character["description"] = generate_character_description(self.character)
-        
-        # Calculate totals
-        attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, total_cost = calculate_totals(self.character)
-        self.character['total_cost'] = total_cost
-        
-        # Display the character
-        new_tab = ttk.Frame(self.notebook)
-        self.notebook.add(new_tab, text=self.character["name"])
-        new_character_summary_text = tk.Text(new_tab, height=15, width=50)
-        new_character_summary_text.pack(expand=True, fill='both')
-        pretty_print_character(self.character, new_character_summary_text)
-        self.text_widgets[new_tab] = new_character_summary_text
-        self.characters[self.character["name"]] = self.character
-        self.notebook.select(new_tab)
-        self.window.destroy()
+        try:
+            # Enforce rules and validate toughness
+            self.character = enforce_rules(self.character, self.character['power_level'])
+            self.character = validate_toughness(self.character)
+
+            # Generate character description
+            self.character["description"] = generate_character_description(self.character)
+            
+            # Calculate totals
+            attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, total_cost = calculate_totals(self.character)
+            self.character['total_cost'] = total_cost
+            
+            # Display the character
+            new_tab = ttk.Frame(self.notebook)
+            self.notebook.add(new_tab, text=self.character["name"])
+            new_character_summary_text = tk.Text(new_tab, height=15, width=50)
+            new_character_summary_text.pack(expand=True, fill='both')
+            pretty_print_character(self.character, new_character_summary_text)
+            self.text_widgets[new_tab] = new_character_summary_text
+            self.characters[self.character["name"]] = self.character
+            self.notebook.select(new_tab)
+            self.window.destroy()
+        except ValueError as e:
+            messagebox.showerror("Validation Error", str(e))
+            return
 
 class CharacterEditor(CustomCharacterCreator):
     def __init__(self, master, notebook, text_widgets, characters, dark_mode, expanded_traits, character_to_edit):

@@ -4,31 +4,34 @@ from PIL import Image, ImageTk
 import json
 import os
 import shutil
+from ttkbootstrap import Style
 
 class MapEditor:
     def __init__(self, master):
         self.master = master
         self.master.title("GM Map")
-        self.master.attributes('-topmost', False)
-        
+        self.master.overrideredirect(False)
+        self.master.resizable(True, True)
+        self.master.grab_set()
+        self.style = Style(theme='darkly')
         self.grid_size = 50
         self.tokens = {}
         self.image_locked = False
         self.grid_locked = False
-        self.map_locked = False
-        
-        self.main_frame = tk.Frame(self.master)
+        self.map_locked = True  # Set map_locked to True by default
+        self.main_frame = ttk.Frame(self.master)
         self.main_frame.pack(fill=tk.BOTH, expand=True)
-        
-        self.frame = tk.Frame(self.main_frame)
+        self.setup_ui()
+        self.add_resize_grip()  # Add this line
+        self.frame = ttk.Frame(self.main_frame)
         self.frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         
         self.canvas = tk.Canvas(self.frame)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         
-        self.scrollbar_x = tk.Scrollbar(self.frame, orient=tk.HORIZONTAL, command=self.canvas.xview)
+        self.scrollbar_x = ttk.Scrollbar(self.frame, orient=tk.HORIZONTAL, command=self.canvas.xview)
         self.scrollbar_x.pack(side=tk.BOTTOM, fill=tk.X)
-        self.scrollbar_y = tk.Scrollbar(self.frame, orient=tk.VERTICAL, command=self.canvas.yview)
+        self.scrollbar_y = ttk.Scrollbar(self.frame, orient=tk.VERTICAL, command=self.canvas.yview)
         self.scrollbar_y.pack(side=tk.RIGHT, fill=tk.Y)
         
         self.canvas.configure(xscrollcommand=self.scrollbar_x.set, yscrollcommand=self.scrollbar_y.set)
@@ -37,7 +40,6 @@ class MapEditor:
         self.range_start = None
         self.range_line = None
         self.range_text = None
-        self.setup_ui()
         self.setup_bindings()
         self.create_notes_window()
         
@@ -52,41 +54,46 @@ class MapEditor:
         self.drag_token = None
         self.drag_token_image = None
 
+    def add_resize_grip(self):
+        sizegrip = ttk.Sizegrip(self.master)
+        sizegrip.pack(side='right', anchor='se')
+
     def setup_ui(self):
-        toolbar = tk.Frame(self.master)
-        toolbar.pack(side=tk.TOP, fill=tk.X)
+        toolbar = ttk.Frame(self.master)
+        toolbar.pack(side=tk.TOP, fill=tk.X, padx=10, pady=10)
         
-        tk.Button(toolbar, text="Upload Map", command=self.upload_map).pack(side=tk.LEFT)
-        tk.Button(toolbar, text="Add Token", command=self.add_token).pack(side=tk.LEFT)
-        tk.Button(toolbar, text="Fit to Screen", command=self.fit_to_screen).pack(side=tk.LEFT)
-        tk.Button(toolbar, text="Save", command=self.save_map).pack(side=tk.LEFT)
+        # Create a style for the buttons
+        self.style.configure('TButton', font=('Helvetica', 10))
         
-        self.grid_size_slider = tk.Scale(toolbar, from_=20, to=100, resolution=5, orient=tk.HORIZONTAL, label="Grid Size", command=self.update_grid_size)
+        # First row of buttons
+        button_frame1 = ttk.Frame(toolbar)
+        button_frame1.pack(fill=tk.X, pady=5)
+        
+        ttk.Button(button_frame1, text="Upload Map", command=self.upload_map, style='primary.TButton').pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame1, text="Add Token", command=self.add_token, style='primary.TButton').pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame1, text="Delete Token", command=self.delete_token, style='danger.TButton').pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame1, text="Fit to Screen", command=self.fit_to_screen, style='primary.TButton').pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame1, text="Save", command=self.save_map, style='primary.TButton').pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame1, text="Clear Map", command=self.clear_map, style='danger.TButton').pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame1, text="Toggle Library", command=self.toggle_library, style='info.TButton').pack(side=tk.LEFT, padx=5)
+        
+        # Second row with grid size slider and checkboxes
+        control_frame = ttk.Frame(toolbar)
+        control_frame.pack(fill=tk.X, pady=5)
+        
+        self.grid_size_slider = ttk.Scale(control_frame, from_=20, to=100, orient=tk.HORIZONTAL, command=self.update_grid_size)
         self.grid_size_slider.set(self.grid_size)
-        self.grid_size_slider.pack(side=tk.LEFT)
-        
-        self.lock_image_var = tk.BooleanVar()
-        tk.Checkbutton(toolbar, text="Lock Image", variable=self.lock_image_var, command=self.toggle_image_lock).pack(side=tk.LEFT)
-        
-        self.lock_grid_var = tk.BooleanVar()
-        tk.Checkbutton(toolbar, text="Lock Grid", variable=self.lock_grid_var, command=self.toggle_grid_lock).pack(side=tk.LEFT)
-        
-        self.lock_map_var = tk.BooleanVar()
-        tk.Checkbutton(toolbar, text="Lock Map", variable=self.lock_map_var, command=self.toggle_map_lock).pack(side=tk.LEFT)
-        
+        self.grid_size_slider.pack(side=tk.LEFT, padx=5)
+        ttk.Label(control_frame, text="Grid Size").pack(side=tk.LEFT, padx=5)
         self.always_on_top_var = tk.BooleanVar(value=False)
-        tk.Checkbutton(toolbar, text="Always on Top", variable=self.always_on_top_var, command=self.toggle_always_on_top).pack(side=tk.LEFT)
+        ttk.Checkbutton(control_frame, text="Always on Top", variable=self.always_on_top_var, command=self.toggle_always_on_top).pack(side=tk.LEFT, padx=5)
         
-        tk.Button(toolbar, text="Clear Map", command=self.clear_map).pack(side=tk.LEFT)
-        tk.Button(toolbar, text="Toggle Library", command=self.toggle_library).pack(side=tk.LEFT)
+        self.master.bind("<Configure>", lambda e: self.center_map())
 
     def setup_bindings(self):
         self.canvas.bind("<ButtonPress-1>", self.on_click)
         self.canvas.bind("<B1-Motion>", self.on_drag)
         self.canvas.bind("<ButtonRelease-1>", self.on_release)
-        self.canvas.bind("<MouseWheel>", self.on_mousewheel)
-        self.canvas.bind("<Button-4>", self.on_mousewheel)
-        self.canvas.bind("<Button-5>", self.on_mousewheel)
         self.canvas.bind("<B3-Motion>", self.on_right_drag)
         self.canvas.bind("<ButtonPress-3>", self.on_right_click)
         self.canvas.bind("<ButtonRelease-3>", self.on_right_release)
@@ -106,8 +113,6 @@ class MapEditor:
             new_pos = self.canvas.coords(self.clicked_token)
             if new_pos:
                 self.tokens[self.clicked_token[0]]["last_position"] = new_pos
-        elif not self.map_locked:
-            self.canvas.scan_dragto(event.x, event.y, gain=1)
         
     def on_release(self, event):
         self.clicked_token = None
@@ -125,8 +130,6 @@ class MapEditor:
 
     def center_map(self):
         if hasattr(self, 'map_image'):
-            self.canvas.delete("all")
-            
             canvas_width = self.canvas.winfo_width()
             canvas_height = self.canvas.winfo_height()
             image_width, image_height = self.map_image.size
@@ -134,6 +137,7 @@ class MapEditor:
             x_offset = max(0, (canvas_width - image_width) // 2)
             y_offset = max(0, (canvas_height - image_height) // 2)
             
+            self.canvas.delete("all")
             self.tk_image = ImageTk.PhotoImage(self.map_image)
             self.canvas.create_image(x_offset, y_offset, anchor=tk.NW, image=self.tk_image, tags="map")
             
@@ -142,10 +146,7 @@ class MapEditor:
             
             self.redraw_tokens(x_offset, y_offset)
             
-            self.canvas.config(scrollregion=(0, 0, max(canvas_width, image_width), max(canvas_height, image_height)))
-            
-            self.canvas.xview_moveto((image_width - canvas_width) / (2 * image_width) if image_width > canvas_width else 0)
-            self.canvas.yview_moveto((image_height - canvas_height) / (2 * image_height) if image_height > canvas_height else 0)
+            self.canvas.config(scrollregion=(0, 0, canvas_width, canvas_height))
 
     def draw_grid(self, x_offset=0, y_offset=0):
         if hasattr(self, 'map_image'):
@@ -159,6 +160,14 @@ class MapEditor:
             for y in range(y_offset, zoomed_height + y_offset, zoomed_grid_size):
                 self.canvas.create_line(x_offset, y, zoomed_width + x_offset, y, fill="gray", tags="grid")
                 
+
+    def delete_token(self):
+        if self.clicked_token and "token" in self.canvas.gettags(self.clicked_token):
+            self.canvas.delete(self.clicked_token)
+            del self.tokens[self.clicked_token[0]]
+            self.clicked_token = None
+
+
     def redraw_tokens(self, x_offset=0, y_offset=0):
         new_tokens = {}
         for token_id, token_data in self.tokens.items():
@@ -218,9 +227,13 @@ class MapEditor:
             height_ratio = canvas_height / image_height
             scale = min(width_ratio, height_ratio)
             
-            new_size = (int(image_width * scale), int(image_height * scale))
-            self.map_image = self.map_image.resize(new_size, Image.LANCZOS)
-            self.center_map()
+            new_width = int(image_width * scale)
+            new_height = int(image_height * scale)
+            
+            self.map_image = self.map_image.resize((new_width, new_height), Image.LANCZOS)
+            self.zoom_factor = scale
+            self.redraw()
+            self.center_map()  # Add this line to center the map after fitting
 
     def calculate_range(self):
         messagebox.showinfo("Range Calculation", "Right-click and drag to measure distance.")
@@ -240,12 +253,9 @@ class MapEditor:
         self.master.attributes('-topmost', self.always_on_top_var.get())
 
     def update_grid_size(self, value):
-        self.grid_size = int(value)
+        self.grid_size = int(float(value))
         if hasattr(self, 'map_image'):
-            if not self.map_locked:
-                self.redraw()
-            else:
-                self.redraw_tokens()
+            self.redraw()  # Always redraw when grid size changes
 
     def redraw(self):
         if hasattr(self, 'map_image'):
@@ -255,31 +265,37 @@ class MapEditor:
             canvas_height = self.canvas.winfo_height()
             image_width, image_height = self.map_image.size
             
-            zoomed_width = int(image_width * self.zoom_factor)
-            zoomed_height = int(image_height * self.zoom_factor)
+            x_offset = max(0, (canvas_width - image_width) // 2)
+            y_offset = max(0, (canvas_height - image_height) // 2)
             
-            zoomed_image = self.map_image.resize((zoomed_width, zoomed_height), Image.LANCZOS)
-            self.tk_image = ImageTk.PhotoImage(zoomed_image)
-            self.canvas.create_image(0, 0, anchor=tk.NW, image=self.tk_image, tags="map")
+            self.tk_image = ImageTk.PhotoImage(self.map_image)
+            self.canvas.create_image(x_offset, y_offset, anchor=tk.NW, image=self.tk_image, tags="map")
             
             if not self.grid_locked:
-                self.draw_grid()
+                self.draw_grid(x_offset, y_offset)
             
-            self.redraw_tokens()
+            self.redraw_tokens(x_offset, y_offset)
             
-            self.canvas.config(scrollregion=(0, 0, zoomed_width, zoomed_height))
+            self.canvas.config(scrollregion=(0, 0, canvas_width, canvas_height))
 
     def draw_grid(self, x_offset=0, y_offset=0):
         if hasattr(self, 'map_image'):
             width, height = self.map_image.size
-            zoomed_width = int(width * self.zoom_factor)
-            zoomed_height = int(height * self.zoom_factor)
             zoomed_grid_size = int(self.grid_size * self.zoom_factor)
             
-            for x in range(int(x_offset), int(zoomed_width + x_offset), zoomed_grid_size):
-                self.canvas.create_line(x, y_offset, x, zoomed_height + y_offset, fill="gray", tags="grid")
-            for y in range(int(y_offset), int(zoomed_height + y_offset), zoomed_grid_size):
-                self.canvas.create_line(x_offset, y, zoomed_width + x_offset, y, fill="gray", tags="grid")
+            # Calculate the number of grid lines
+            num_x_lines = width // zoomed_grid_size + 1
+            num_y_lines = height // zoomed_grid_size + 1
+            
+            # Draw vertical lines
+            for i in range(num_x_lines):
+                x = i * zoomed_grid_size + x_offset
+                self.canvas.create_line(x, y_offset, x, height + y_offset, fill="gray", tags="grid")
+            
+            # Draw horizontal lines
+            for i in range(num_y_lines):
+                y = i * zoomed_grid_size + y_offset
+                self.canvas.create_line(x_offset, y, width + x_offset, y, fill="gray", tags="grid")
 
     def redraw_tokens(self, x_offset=0, y_offset=0):
         new_tokens = {}
@@ -287,13 +303,9 @@ class MapEditor:
             coords = token_data.get("last_position", self.get_map_center())
             x, y = coords
             
-            zoomed_x = int(x * self.zoom_factor) + x_offset
-            zoomed_y = int(y * self.zoom_factor) + y_offset
-            
-            zoomed_size = int(self.grid_size * self.zoom_factor)
-            token_image = Image.open(token_data["file_path"]).resize((zoomed_size, zoomed_size))
+            token_image = Image.open(token_data["file_path"]).resize((self.grid_size, self.grid_size))
             token_tk_image = ImageTk.PhotoImage(token_image)
-            new_id = self.canvas.create_image(zoomed_x, zoomed_y, image=token_tk_image, tags=("token",))
+            new_id = self.canvas.create_image(x + x_offset, y + y_offset, image=token_tk_image, tags=("token",))
             new_tokens[new_id] = {
                 "image": token_tk_image,
                 "file_path": token_data["file_path"],
@@ -301,35 +313,6 @@ class MapEditor:
             }
         
         self.tokens = new_tokens
-
-    def on_mousewheel(self, event):
-        if not hasattr(self, 'map_image'):
-            return
-
-        mouse_x = self.canvas.canvasx(event.x)
-        mouse_y = self.canvas.canvasy(event.y)
-
-        old_zoom = self.zoom_factor
-        if event.num == 5 or event.delta < 0:
-            self.zoom_factor *= 0.9
-        if event.num == 4 or event.delta > 0:
-            self.zoom_factor *= 1.1
-        self.zoom_factor = max(0.1, min(self.zoom_factor, 5.0))
-
-        canvas_width = self.canvas.winfo_width()
-        canvas_height = self.canvas.winfo_height()
-        image_width, image_height = self.map_image.size
-        
-        x_ratio = mouse_x / (image_width * old_zoom)
-        y_ratio = mouse_y / (image_height * old_zoom)
-
-        new_mouse_x = x_ratio * image_width * self.zoom_factor
-        new_mouse_y = y_ratio * image_height * self.zoom_factor
-
-        self.canvas.xview_moveto((new_mouse_x - canvas_width / 2) / (image_width * self.zoom_factor))
-        self.canvas.yview_moveto((new_mouse_y - canvas_height / 2) / (image_height * self.zoom_factor))
-
-        self.redraw()
 
     def on_right_click(self, event):
         self.range_start = (self.canvas.canvasx(event.x), self.canvas.canvasy(event.y))
@@ -349,11 +332,12 @@ class MapEditor:
         
         dx = (end[0] - start[0]) / (self.grid_size * self.zoom_factor)
         dy = (end[1] - start[1]) / (self.grid_size * self.zoom_factor)
-        distance = round(((dx ** 2 + dy ** 2) ** 0.5), 1)
+        distance_squares = ((dx ** 2 + dy ** 2) ** 0.5)
+        distance_feet = round(distance_squares * 5, 1)  # 1 square = 5 feet
         
         midx = (start[0] + end[0]) / 2
         midy = (start[1] + end[1]) / 2
-        self.range_text = self.canvas.create_text(midx, midy, text=f"{distance} squares", fill="red", font=("Arial", 12, "bold"), tags="range")
+        self.range_text = self.canvas.create_text(midx, midy, text=f"{distance_feet} feet", fill="red", font=("Arial", 12, "bold"), tags="range")
 
     def remove_range_elements(self):
         if self.range_line:
@@ -362,20 +346,29 @@ class MapEditor:
             self.canvas.delete(self.range_text)
 
     def create_notes_window(self):
-        self.notes_frame = tk.Frame(self.main_frame, width=200, bg='white')
+        self.notes_frame = ttk.Frame(self.main_frame, width=200)
         self.notes_frame.pack(side=tk.RIGHT, fill=tk.Y)
         
-        self.notes_label = tk.Label(self.notes_frame, text="Notes", font=("Arial", 14, "bold"))
+        self.notes_label = ttk.Label(self.notes_frame, text="Notes", font=("Arial", 14, "bold"))
         self.notes_label.pack(pady=10)
         
         self.notes_text = tk.Text(self.notes_frame, wrap=tk.WORD, width=25, height=20)
         self.notes_text.pack(padx=5, pady=5)
         
-        self.notes_text.insert(tk.END, "Right click and drag to measure distance between two points.")
+        notes = [
+           "To Start, Upload a Map and Tokens into the Library",
+           "Click on the map and select use this map to set the map",
+           "Click on the tokens and select use this token to set the token",
+           "Click on the grid size to set the grid size",
+        ]
+        
+        for note in notes:
+            self.notes_text.insert(tk.END, note + "\n\n")
+        
         self.notes_text.config(state=tk.DISABLED)
 
     def setup_library(self):
-        self.library_frame = tk.Frame(self.main_frame, width=200, bg='lightgray')
+        self.library_frame = ttk.Frame(self.main_frame, width=200)
         
         self.library_notebook = ttk.Notebook(self.library_frame)
         self.library_notebook.pack(fill=tk.BOTH, expand=True)
@@ -386,8 +379,8 @@ class MapEditor:
         self.library_notebook.add(self.maps_frame, text='Maps')
         self.library_notebook.add(self.tokens_frame, text='Tokens')
         
-        tk.Button(self.maps_frame, text="Upload Map", command=self.upload_to_library).pack()
-        tk.Button(self.tokens_frame, text="Upload Token", command=self.upload_to_library).pack()
+        ttk.Button(self.maps_frame, text="Upload Map", command=self.upload_to_library).pack()
+        ttk.Button(self.tokens_frame, text="Upload Token", command=self.upload_to_library).pack()
         
         self.maps_listbox = tk.Listbox(self.maps_frame, selectmode=tk.SINGLE)
         self.maps_listbox.pack(fill=tk.BOTH, expand=True)
@@ -422,6 +415,10 @@ class MapEditor:
             shutil.copy2(file_path, destination)
         
         self.save_library_data()
+        
+        # Ensure the Map Editor window stays on top after file dialog
+        self.master.lift()
+        self.master.focus_force()
 
     def on_library_item_click(self, event):
         widget = event.widget
@@ -442,12 +439,12 @@ class MapEditor:
         
         self.preview_window = tk.Toplevel(self.master)
         self.preview_window.title("Preview")
-        tk.Label(self.preview_window, image=self.preview_tk_image).pack()
+        ttk.Label(self.preview_window, image=self.preview_tk_image).pack()
         
         if is_map:
-            tk.Button(self.preview_window, text="Use This Map", command=lambda: self.use_map(file_path)).pack()
+            ttk.Button(self.preview_window, text="Use This Map", command=lambda: self.use_map(file_path)).pack()
         else:
-            tk.Button(self.preview_window, text="Use This Token", command=lambda: self.use_token(file_path)).pack()
+            ttk.Button(self.preview_window, text="Use This Token", command=lambda: self.use_token(file_path)).pack()
 
     def use_map(self, file_path):
         self.upload_map(file_path)
@@ -482,10 +479,19 @@ class MapEditor:
         except FileNotFoundError:
             pass
 
+    def open_gm_map():
+        gm_window = tk.Toplevel()
+        map_editor = MapEditor(gm_window)
+        
+        # Release the grab when the Map Editor window is closed
+        gm_window.protocol("WM_DELETE_WINDOW", lambda: [map_editor.save_library_data(), gm_window.grab_release(), gm_window.destroy()])
+
 if __name__ == "__main__":
     root = tk.Tk()
     root.geometry("1000x600")
-    root.attributes('-topmost', False)
-    map_app = MapEditor(root)
-    root.protocol("WM_DELETE_WINDOW", map_app.save_library_data)
+    
+    # Ensure the window has all control buttons
+    root.overrideredirect(False)
+    root.resizable(True, True)
+    
     root.mainloop()

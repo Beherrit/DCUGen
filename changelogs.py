@@ -1,5 +1,5 @@
 """
-# v5.0.1
+# v5.1.0
 # 
 # ======FIXES/IMPROVEMENTS/NEW FEATURES======
 
@@ -19,14 +19,14 @@
 # - Added support for loading and displaying personality traits in the character editor
 # - Implemented handling of expanded traits in character loading and updating
 # - Refined the process of updating existing characters with new information
+# - Added new MAP editor for GMs to upload maps to the game
+# - Implemented power cost recalculation based on extras and flaws
+# - Fixing Toughness for the Character Creator. Now calculates Defensive Roll and Protection / Force Field into the value
+# - A lot of Validation implemented for character creation
 
 # =======WIP========
-# - Fixing Toughness for the Character Creator
 # - Add Jack of All Trades Def to handle Skills properly
 # - Add Skill Expertise Def to handle skill expertise properly
-# - Create Validation for the Character Creator
-# - Fix defenses for the Character Creator
-# - Force Field needs to be added to toughness
-# - Implement power cost recalculation based on extras and flaws
-
+# - Fix defenses for the Custom Character Creator
+# - Need to fix traits for the Custom Character Creator / Edit Character Screen
 """

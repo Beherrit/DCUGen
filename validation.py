@@ -58,6 +58,9 @@ def enforce_rules(character, power_level):
         'Toughness': {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0}
     })
 
+    # Validate Toughness including Protection, Force Field, and Defensive Roll
+    character = validate_toughness(character)
+
     # Ensure the combined defenses don't exceed the max allowed
     if (character['defenses']['Parry']['total_rank'] + character['defenses']['Toughness']['total_rank']) > max_defense_toughness:
         raise ValueError("Parry and Toughness exceed the allowed limit")
@@ -167,3 +170,35 @@ def enforce_luck_advantage_rule(character):
     return character
 
 
+def validate_toughness(character):
+    power_level = character['power_level']
+    max_defense_toughness = power_level * 2
+
+    # Calculate additional toughness from Protection, Force Field, or Toughness powers
+    additional_toughness = 0
+    for power in character.get('powers', []):
+        if power['name'] in ['Protection', 'Force Field']:
+            additional_toughness += power['rank']
+
+    # Check for Defensive Roll advantage
+    defensive_roll = 0
+    for advantage in character.get('advantages', []):
+        if advantage['name'] == 'Defensive Roll':
+            defensive_roll = advantage['rank']
+
+    # Update the total Toughness rank
+    character['defenses']['Toughness']['power_bonus'] = additional_toughness
+    character['defenses']['Toughness']['defensive_roll'] = defensive_roll
+    character['defenses']['Toughness']['total_rank'] = (
+        character['defenses']['Toughness']['stat_bonus'] +
+        character['defenses']['Toughness']['bought_rank'] +
+        additional_toughness
+    )
+
+    # Validate against the rules
+    if (character['defenses']['Parry']['total_rank'] + character['defenses']['Toughness']['total_rank']) > max_defense_toughness:
+        raise ValueError("Parry and Toughness (including Protection/Force Field) exceed the allowed limit")
+    if (character['defenses']['Dodge']['total_rank'] + character['defenses']['Toughness']['total_rank']) > max_defense_toughness:
+        raise ValueError("Dodge and Toughness (including Protection/Force Field) exceed the allowed limit")
+
+    return character

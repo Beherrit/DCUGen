@@ -1,52 +1,100 @@
-2024-09-16 08:58:12,647 Importing BlpImagePlugin
-2024-09-16 08:58:12,648 Importing BmpImagePlugin
-2024-09-16 08:58:12,648 Importing BufrStubImagePlugin
-2024-09-16 08:58:12,649 Importing CurImagePlugin
-2024-09-16 08:58:12,649 Importing DcxImagePlugin
-2024-09-16 08:58:12,649 Importing DdsImagePlugin
-2024-09-16 08:58:12,651 Importing EpsImagePlugin
-2024-09-16 08:58:12,651 Importing FitsImagePlugin
-2024-09-16 08:58:12,652 Importing FliImagePlugin
-2024-09-16 08:58:12,652 Importing FpxImagePlugin
-2024-09-16 08:58:12,653 Image: failed to import FpxImagePlugin: No module named 'olefile'
-2024-09-16 08:58:12,653 Importing FtexImagePlugin
-2024-09-16 08:58:12,654 Importing GbrImagePlugin
-2024-09-16 08:58:12,654 Importing GifImagePlugin
-2024-09-16 08:58:12,654 Importing GribStubImagePlugin
-2024-09-16 08:58:12,654 Importing Hdf5StubImagePlugin
-2024-09-16 08:58:12,654 Importing IcnsImagePlugin
-2024-09-16 08:58:12,655 Importing IcoImagePlugin
-2024-09-16 08:58:12,656 Importing ImImagePlugin
-2024-09-16 08:58:12,656 Importing ImtImagePlugin
-2024-09-16 08:58:12,656 Importing IptcImagePlugin
-2024-09-16 08:58:12,657 Importing JpegImagePlugin
-2024-09-16 08:58:12,657 Importing Jpeg2KImagePlugin
-2024-09-16 08:58:12,657 Importing McIdasImagePlugin
-2024-09-16 08:58:12,657 Importing MicImagePlugin
-2024-09-16 08:58:12,657 Image: failed to import MicImagePlugin: No module named 'olefile'
-2024-09-16 08:58:12,658 Importing MpegImagePlugin
-2024-09-16 08:58:12,658 Importing MpoImagePlugin
-2024-09-16 08:58:12,660 Importing MspImagePlugin
-2024-09-16 08:58:12,660 Importing PalmImagePlugin
-2024-09-16 08:58:12,661 Importing PcdImagePlugin
-2024-09-16 08:58:12,661 Importing PcxImagePlugin
-2024-09-16 08:58:12,661 Importing PdfImagePlugin
-2024-09-16 08:58:12,663 Importing PixarImagePlugin
-2024-09-16 08:58:12,663 Importing PngImagePlugin
-2024-09-16 08:58:12,663 Importing PpmImagePlugin
-2024-09-16 08:58:12,663 Importing PsdImagePlugin
-2024-09-16 08:58:12,664 Importing QoiImagePlugin
-2024-09-16 08:58:12,664 Importing SgiImagePlugin
-2024-09-16 08:58:12,664 Importing SpiderImagePlugin
-2024-09-16 08:58:12,664 Importing SunImagePlugin
-2024-09-16 08:58:12,665 Importing TgaImagePlugin
-2024-09-16 08:58:12,665 Importing TiffImagePlugin
-2024-09-16 08:58:12,665 Importing WebPImagePlugin
-2024-09-16 08:58:12,666 Importing WmfImagePlugin
-2024-09-16 08:58:12,666 Importing XbmImagePlugin
-2024-09-16 08:58:12,667 Importing XpmImagePlugin
-2024-09-16 08:58:12,667 Importing XVThumbImagePlugin
-2024-09-16 08:58:20,858 STREAM b'IHDR' 16 13
-2024-09-16 08:58:20,858 STREAM b'IDAT' 41 32768
-2024-09-16 08:58:22,235 STREAM b'IHDR' 16 13
-2024-09-16 08:58:22,235 STREAM b'IDAT' 41 32768
+2024-09-16 11:53:10,690 Selected Power Types: [('Combat', 'Melee', 2), ('Combat', 'Ranged', 2), ('Utility', None, 2), ('Support', None, 2), ('Movement', None, 2), ('Defensive', None, 2)]
+2024-09-16 11:53:10,691 Starting character generation attempt 1 with Power Level: 10
+2024-09-16 11:53:10,693 Allocated Points - Stats: 30, Advantages: 30, Skills: 30, Defenses: 30, Powers: 30
+2024-09-16 11:53:10,693 Allocating 30 points to stats.
+2024-09-16 11:53:10,693 Allocated 1 points to Agility (High).
+2024-09-16 11:53:10,693 Allocated 2 points to Intellect (High).
+2024-09-16 11:53:10,693 Allocated 1 points to Stamina (High).
+2024-09-16 11:53:10,693 Allocated 1 points to Dexterity (Moderate).
+2024-09-16 11:53:10,693 Allocated 1 points to Awareness (Moderate).
+2024-09-16 11:53:10,693 Allocated 1 points to Fighting (Moderate).
+2024-09-16 11:53:10,693 Allocated 2 points to Presence (Low).
+2024-09-16 11:53:10,693 Allocated 1 points to Strength (Low).
+2024-09-16 11:53:10,693 Distributed remaining points to Agility, adding 1 points.
+2024-09-16 11:53:10,693 Distributed remaining points to Intellect, adding 1 points.
+2024-09-16 11:53:10,693 Distributed remaining points to Stamina, adding 1 points.
+2024-09-16 11:53:10,693 Distributed remaining points to Dexterity, adding 1 points.
+2024-09-16 11:53:10,693 Distributed remaining points to Awareness, adding 1 points.
+2024-09-16 11:53:10,693 Allocated Stats.
+2024-09-16 11:53:10,693 Updated Defenses.
+2024-09-16 11:53:10,693 Starting skill allocation with 30 points.
+2024-09-16 11:53:10,693 Allocated Vehicles: rank 9, remaining ranks 51
+2024-09-16 11:53:10,693 Allocated Expertise: rank 6, remaining ranks 45
+2024-09-16 11:53:10,693 Allocated Persuasion: rank 10, remaining ranks 35
+2024-09-16 11:53:10,693 Allocated Ranged Combat: rank 9, remaining ranks 26
+2024-09-16 11:53:10,693 Allocated Close Combat: rank 1, remaining ranks 25
+2024-09-16 11:53:10,693 Allocated Investigation: rank 1, remaining ranks 24
+2024-09-16 11:53:10,693 Allocated Perception: rank 2, remaining ranks 22
+2024-09-16 11:53:10,693 Allocated Technology: rank 1, remaining ranks 21
+2024-09-16 11:53:10,693 Allocated Athletics: rank 5, remaining ranks 16
+2024-09-16 11:53:10,693 Allocated Acrobatics: rank 4, remaining ranks 12
+2024-09-16 11:53:10,693 Allocated Sleight of Hand: rank 3, remaining ranks 9
+2024-09-16 11:53:10,693 Allocated Intimidation: rank 5, remaining ranks 4
+2024-09-16 11:53:10,694 Allocated Treatment: rank 3, remaining ranks 1
+2024-09-16 11:53:10,694 Allocated Insight: rank 1, remaining ranks 0
+2024-09-16 11:53:10,694 Skill allocation complete. Total ranks: 60, Power points spent: 30
+2024-09-16 11:53:10,694 Allocated Skills.
+2024-09-16 11:53:10,694 Allocating 30 points to advantages with a max of 20 advantages.
+2024-09-16 11:53:10,694 Allocated advantage Fast Grab with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Hide in Plain Sight with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Agile Feint with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Contacts with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Move-by Action with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Improved Grab with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Favored Environment with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Fearless with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Benefit Alternate Identity with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Quick Draw with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Improved Defense with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Benefit Cipher with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Benefit Security Clearance with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Evasion with rank 2 and cost 2.
+2024-09-16 11:53:10,694 Allocated advantage Favored Foe with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Great Endurance with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Assessment with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Seize Initiative with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Leadership with rank 1 and cost 1.
+2024-09-16 11:53:10,694 Allocated advantage Defensive Roll with rank 4 and cost 4.
+2024-09-16 11:53:10,694 Remaining points after allocation: 6
+2024-09-16 11:53:10,694 Allocated Advantages.
+2024-09-16 11:53:10,694 Allocating 30 points to defenses.
+2024-09-16 11:53:10,694 Allocated 1 point to Dodge, total rank is now 3.
+2024-09-16 11:53:10,694 Allocated 1 point to Fortitude, total rank is now 3.
+2024-09-16 11:53:10,694 Allocated 1 point to Parry, total rank is now 2.
+2024-09-16 11:53:10,694 Allocated 1 point to Will, total rank is now 3.
+2024-09-16 11:53:10,694 Allocated 1 point to Toughness, total rank is now 3.
+2024-09-16 11:53:10,694 Allocated 1 point to Dodge, total rank is now 4.
+2024-09-16 11:53:10,694 Allocated 1 point to Fortitude, total rank is now 4.
+2024-09-16 11:53:10,694 Allocated 1 point to Parry, total rank is now 3.
+2024-09-16 11:53:10,694 Allocated 1 point to Will, total rank is now 4.
+2024-09-16 11:53:10,694 Allocated 1 point to Toughness, total rank is now 4.
+2024-09-16 11:53:10,694 Allocated 1 point to Dodge, total rank is now 5.
+2024-09-16 11:53:10,694 Allocated 1 point to Fortitude, total rank is now 5.
+2024-09-16 11:53:10,694 Allocated 1 point to Parry, total rank is now 4.
+2024-09-16 11:53:10,694 Allocated 1 point to Will, total rank is now 5.
+2024-09-16 11:53:10,694 Allocated 1 point to Toughness, total rank is now 5.
+2024-09-16 11:53:10,694 Allocated 1 point to Dodge, total rank is now 6.
+2024-09-16 11:53:10,694 Allocated 1 point to Fortitude, total rank is now 6.
+2024-09-16 11:53:10,694 Allocated 1 point to Parry, total rank is now 5.
+2024-09-16 11:53:10,694 Allocated 1 point to Will, total rank is now 6.
+2024-09-16 11:53:10,694 Allocated 1 point to Toughness, total rank is now 6.
+2024-09-16 11:53:10,694 Allocated 1 point to Dodge, total rank is now 7.
+2024-09-16 11:53:10,694 Allocated 1 point to Fortitude, total rank is now 7.
+2024-09-16 11:53:10,694 Allocated 1 point to Parry, total rank is now 6.
+2024-09-16 11:53:10,694 Allocated 1 point to Will, total rank is now 7.
+2024-09-16 11:53:10,694 Allocated 1 point to Toughness, total rank is now 7.
+2024-09-16 11:53:10,694 Allocated 1 point to Dodge, total rank is now 8.
+2024-09-16 11:53:10,694 Allocated 1 point to Fortitude, total rank is now 8.
+2024-09-16 11:53:10,694 Allocated 1 point to Parry, total rank is now 7.
+2024-09-16 11:53:10,694 Allocated 1 point to Will, total rank is now 8.
+2024-09-16 11:53:10,694 Allocated 1 point to Toughness, total rank is now 8.
+2024-09-16 11:53:10,694 Allocated Defenses.
+2024-09-16 11:53:10,694 Allocating 30 points to powers with a max of 20 powers.
+2024-09-16 11:53:10,695 Allocated power Nullify with rank 12, total cost 14, extras [('Ricochet', 2), ('Accurate', 3)], flaws [].
+2024-09-16 11:53:10,695 Allocated power Strike with rank 2, total cost 4, extras [('Insidious', 1), ('Area Cylinder', 1), ('Accurate', 2)], flaws [('Concentration', 1)].
+2024-09-16 11:53:10,695 Allocated power Blast with rank 7, total cost 8, extras [('Accurate', 4)], flaws [].
+2024-09-16 11:53:10,695 Allocated power Regeneration with rank 2, total cost 1, extras [], flaws [('Increased Action', 1), ('Check Required', 2), ('Activation', 2)].
+2024-09-16 11:53:10,695 Allocated power Leaping with rank 1, total cost 1, extras [('Affects Insubstantial', 1), ('Selective', 1), ('Sustained', 1)], flaws [('Unreliable', 1), ('Uncontrolled', 1), ('Quirk', 1)].
+2024-09-16 11:53:10,695 Allocated power Protection with rank 1, total cost 2, extras [('Alternate Resistance Toughness', 1)], flaws [].
+2024-09-16 11:53:10,695 Allocated Powers.
+2024-09-16 11:53:10,695 Character generation completed.

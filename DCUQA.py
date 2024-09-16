@@ -1,6 +1,6 @@
 import display_character_sheet
 from imports import *
-from validation import enforce_rules, validate_character, validate_luck_advantage, enforce_luck_advantage_rule
+from validation import enforce_rules, validate_character, validate_luck_advantage, enforce_luck_advantage_rule, validate_toughness
 from validation import calculate_accuracy, calculate_attack_bonuses, calculate_initiative, update_initiative, calculate_range, assign_languages
 import math
 from map import MapEditor
@@ -582,9 +582,18 @@ def pretty_print_character(character, text_widget):
 
     # Defenses
     insert_header("Defenses")
-    for defense, details in character.get("defenses", {}).items():
-        if isinstance(details, dict):
-            text_widget.insert(tk.END, f"{defense}: Stat Bonus: {details['stat_bonus']}, Bought Rank: {details['bought_rank']}, Total Rank: {details['total_rank']}\n")
+    for defense, values in character['defenses'].items():
+        if defense != 'Unspent Points':
+            stat_bonus = values.get('stat_bonus', 0)
+            bought_rank = values.get('bought_rank', 0)
+            total_rank = values.get('total_rank', 0)
+            
+            if defense == 'Toughness':
+                power_bonus = values.get('power_bonus', 0)
+                defensive_roll = values.get('defensive_roll', 0)
+                text_widget.insert(tk.END, f"{defense}: Stat Bonus: {stat_bonus}, Bought Rank: {bought_rank}, Power Bonus: {power_bonus}, Defensive Roll: {defensive_roll}, Total Rank: {total_rank}\n")
+            else:
+                text_widget.insert(tk.END, f"{defense}: Stat Bonus: {stat_bonus}, Bought Rank: {bought_rank}, Total Rank: {total_rank}\n")
 
     # Advantages
     insert_header("Advantages")
@@ -702,14 +711,13 @@ def pretty_print_character(character, text_widget):
     description = character.get("description", "No description available")
     text_widget.insert(tk.END, description + "\n")
 
-
 def generate_character(power_level, include_powers, stat_percent, advantage_percent, skill_percent, defense_percent, power_percent, max_advantages, max_powers, selected_power_types, random_physical_features=True, random_costume_style=True, random_distinctive_feature=True, villain=False):
     max_retries = 10
     for attempt in range(max_retries):
         try:
             logger.debug(f"Starting character generation attempt {attempt + 1} with Power Level: {power_level}")
 
-                        # Allocate initial points with constraints and redistribution
+            # Allocate initial points with constraints and redistribution
             stat_points, advantage_points, skill_points, defense_points, power_points = allocate_points(
                 power_level, 
                 stat_percent, 
@@ -776,7 +784,6 @@ def generate_character(power_level, include_powers, stat_percent, advantage_perc
             }
 
             # Generate the character description for the AI image prompt
-# Generate the character description for the AI image prompt
             character["description"] = generate_character_description({
                 'name': character.get('name', 'The character'),
                 'gender': gender,
@@ -832,8 +839,9 @@ def generate_character(power_level, include_powers, stat_percent, advantage_perc
             character['languages'] = assign_languages(character)
             character['initiative'] = calculate_initiative(character)
 
-            # Enforce rules
+            # Enforce rules and validate toughness
             character = enforce_rules(character, power_level)
+            character = validate_toughness(character)
 
             # Calculate total cost
             attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, total_cost = calculate_totals(character)
@@ -899,7 +907,7 @@ def main():
 
     # Use ttkbootstrap for a modern look
     root = ttk.Window(themename="darkly")
-    root.title("Character Creation Version 5.0.0 Prod")
+    root.title("Character Creation Version 5.1.0 Prod")
     
     # Set base size for the main window
     root.geometry("1024x768")  # Width x Height
