@@ -108,34 +108,6 @@ def generate_random_origin():
             "language": language
         }
     
-def calculate_range(rank):
-    range_chart = [
-        60, 120, 250, 500, 900, 1800, 2640, 5280, 10560, 21120, 42240,
-        84480, 158400, 316800, 633600, 1320000, 2640000, 5280000, 10560000, 21120000
-    ]
-    return range_chart[rank - 1] if rank <= len(range_chart) else "Beyond chart"
-
-def assign_languages(character):
-    all_languages = load_data_from_json('./json/languages.json')
-    base_language = "English"
-    language_list = all_languages
-    assigned_languages = [base_language]  # English is the base language
-
-    # Check if character has the "Languages" advantage
-    for advantage in character.get("advantages", []):
-        if advantage["name"] == "Languages":
-            rank = advantage["rank"]
-            
-            # Calculate the number of additional languages based on the original rank
-            num_additional_languages = 2 ** (rank - 1) - 1
-            # Ensure the number of languages does not exceed available languages
-            num_additional_languages = min(num_additional_languages, len(language_list) - 1)
-            selectable_languages = [lang for lang in language_list if lang != base_language]
-            selected_languages = random.sample(selectable_languages, k=num_additional_languages)
-            assigned_languages.extend(selected_languages)
-    
-    return assigned_languages
-
 def generate_motivations_and_complications(villain=False):
     motivations = load_data_from_json('./json/motivations.json')  # Load the data from JSON file
     complications = load_data_from_json('./json/complications.json')
@@ -203,41 +175,6 @@ def generate_random_distinctive_feature():
     physical_traits = load_data_from_json('./json/physical_traits.json')
     return random.choice(physical_traits["DISTINCTIVE_FEATURES"])
 
-def calculate_attack_bonuses(character):
-    melee_attack_bonus = character["stats"].get("Fighting", {}).get("value", 0)
-    ranged_attack_bonus = character["stats"].get("Dexterity", {}).get("value", 0)
-
-    for advantage in character.get("advantages", []):
-        if advantage["name"] == "Close Attack":
-            melee_attack_bonus += advantage.get("rank", 0)
-        elif advantage["name"] == "Ranged Attack":
-            ranged_attack_bonus += advantage.get("rank", 0)
-
-    for skill in character.get("skills", []):
-        if skill["name"] == "Close Combat":
-            melee_attack_bonus += skill.get("rank", 0)
-        elif skill["name"] == "Ranged Combat":
-            ranged_attack_bonus += skill.get("rank", 0)
-
-    return melee_attack_bonus, ranged_attack_bonus
-
-def calculate_initiative(character):
-    initiative = character["stats"].get("Agility", {}).get("value", 0)
-    
-    for advantage in character.get("advantages", []):
-        if advantage["name"] == "Improved Initiative":
-            initiative_bonus_per_rank = 4
-            initiative += advantage.get("rank", 0) * initiative_bonus_per_rank
-        elif "Initiative" in advantage.get("tags", []):
-            initiative += advantage.get("rank", 0)
-    
-    return initiative
-
-def update_initiative(character):
-    new_initiative = calculate_initiative(character)
-    character["stats"]["Initiative"] = {"value": new_initiative}
-    character["defenses"]["Initiative"] = new_initiative
-
 def generate_weight():
     weights = list(range(110, 351))
     probabilities = (
@@ -296,25 +233,6 @@ def generate_character_description(character):
     description = '. '.join(sentence.capitalize() for sentence in description.split('. '))
 
     return description
-
-def calculate_accuracy(character, power):
-    accuracy = 0
-    extras = {extra: rank for extra, rank in zip(power.get('extras', []), power.get('extras_ranks', []))}
-    
-    if power['type'] == 'Combat':
-        if power['range'] == 'Ranged':
-            dex_stat = character['stats'].get('Dexterity', {}).get('value', 0)
-            ranged_attack_bonus = sum(adv['rank'] for adv in character['advantages'] if adv['name'] == 'Ranged Attack')
-            accurate_bonus = extras.get('Accurate', 0) * 2  # Each rank of Accurate provides a +2 bonus
-            accuracy = dex_stat + ranged_attack_bonus + accurate_bonus
-        
-        elif power['range'] == 'Melee':
-            fighting_stat = character['stats'].get('Fighting', {}).get('value', 0)
-            close_attack_bonus = sum(adv['rank'] for adv in character['advantages'] if adv['name'] == 'Close Attack')
-            accurate_bonus = extras.get('Accurate', 0) * 2
-            accuracy = fighting_stat + close_attack_bonus + accurate_bonus
-    
-    return accuracy
 
 def close_all_tabs(notebook, text_widgets, characters):
     tabs = notebook.tabs()
@@ -387,12 +305,10 @@ def save_file_as_text(notebook, text_widgets):
                 break
     
     if text_widget is None:
-        messagebox.showerror("Error", f"No text content found in the '{tab_name}' tab.")
         return
     
     content = text_widget.get("1.0", tk.END).strip()
     if not content:
-        messagebox.showerror("Error", f"No content to save in the '{tab_name}' tab.")
         return
 
     file_path = filedialog.asksaveasfilename(
@@ -403,11 +319,8 @@ def save_file_as_text(notebook, text_widgets):
     
     if not file_path:
         return  # User cancelled the save operation
-    
     try:
         with open(file_path, "w", encoding="utf-8") as file:
             file.write(content)
-        
-        messagebox.showinfo("Success", f"File saved successfully as {os.path.basename(file_path)}")
-    except Exception as e:
-        messagebox.showerror("Error", f"An error occurred while saving the file: {str(e)}")
+    except IOError:
+        pass

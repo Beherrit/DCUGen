@@ -5,6 +5,7 @@ from tkinter import filedialog, messagebox
 from openpyxl import load_workbook
 from openpyxl.styles import Font
 from utils import *
+from validation import calculate_accuracy, calculate_attack_bonuses, calculate_initiative, update_initiative
 
 def on_export_character_sheet_click(notebook, characters, text_widgets):
     # Get the name of the currently selected tab

@@ -9,13 +9,18 @@
 # - Removed messagebox messages for the user in most of the code
 # - Modified the Skill Cost display to show 1 decimal place and added a note
 # - Fixed a lot of backward compatibility issues with the code - Can more easily upload a character from a Random Generated Character
-
+# - Fixed a lot of JSON issues with Extras and Flaws being the wrong values (Flat vs rank)
+# - Fixed a lot of JSON data and added more excluded_extras and excluded_flaws to powers
+# - Fixed the Skill Cost display to show the correct cost based on the rank of the skill
+# - Fixed the Power Cost display to show the correct cost based on the rank of the power in the character preview
+# - Fixed extras and flaws ranks
 
 # =======WIP========
 # - Fixing Toughness for the Character Creator
-# - Add rules for Luck Advantage
 # - Add Jack of All Trades Def to handle Skills properly
 # - Add Skill Expertise Def to handle skill expertise properly
-
+# - Create Validation for the Character Creator
+# - Fix defenses for the Character Creator
+# - Force Field needs to be added to toughness
 
 """

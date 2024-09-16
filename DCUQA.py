@@ -1,5 +1,8 @@
 import display_character_sheet
 from imports import *
+from validation import enforce_rules, validate_character, validate_luck_advantage, enforce_luck_advantage_rule
+from validation import calculate_accuracy, calculate_attack_bonuses, calculate_initiative, update_initiative, calculate_range, assign_languages
+import math
 
 open_windows = {}
 
@@ -30,45 +33,15 @@ characters = {}
 current_theme = None
 gm_cheat_sheet_app = None  # Store the GM Cheat Sheet app instance
 
-def load_json(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            return json.load(file)
-    except Exception as e:
-        logger.exception(f"Error loading JSON file {file_path}: {e}")
-        raise
-
 # Load JSON files
-stats_data = load_json('json/stats.json')
-skills_data = load_json('json/skills.json')
-defenses_data = load_json('json/defenses.json')
-advantages_data = load_json('json/advantages.json')
-powers_data = load_json('json/powers.json')
-extras_data = load_json('json/extras.json')
-flaws_data = load_json('json/flaws.json')
-expanded_traits_data = load_json('json/expanded_traits.json')
-
-def enforce_rules(character, power_level):
-    max_defense_toughness = power_level * 2
-
-    # Ensure defenses are initialized
-    character['defenses'] = character.get('defenses', {
-        'Dodge': {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0},
-        'Fortitude': {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0},
-        'Parry': {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0},
-        'Will': {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0},
-        'Toughness': {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0}
-    })
-
-    # Ensure the combined defenses don't exceed the max allowed
-    if (character['defenses']['Parry']['total_rank'] + character['defenses']['Toughness']['total_rank']) > max_defense_toughness:
-        raise ValueError("Parry and Toughness exceed the allowed limit")
-    if (character['defenses']['Dodge']['total_rank'] + character['defenses']['Toughness']['total_rank']) > max_defense_toughness:
-        raise ValueError("Dodge and Toughness exceed the allowed limit")
-    if (character['defenses']['Fortitude']['total_rank'] + character['defenses']['Will']['total_rank']) > max_defense_toughness:
-        raise ValueError("Fortitude and Will exceed the allowed limit")
-
-    return character
+stats_data = load_data_from_json('json/stats.json')
+skills_data = load_data_from_json('json/skills.json')
+defenses_data = load_data_from_json('json/defenses.json')
+advantages_data = load_data_from_json('json/advantages.json')
+powers_data = load_data_from_json('json/powers.json')
+extras_data = load_data_from_json('json/extras.json')
+flaws_data = load_data_from_json('json/flaws.json')
+expanded_traits_data = load_data_from_json('json/expanded_traits.json')
 
 def calculate_modified_cost(base_cost, rank, selected_extras_with_ranks, selected_flaws_with_ranks, extras, flaws):
     # Create dictionaries for easy access
@@ -105,7 +78,11 @@ def calculate_modified_cost(base_cost, rank, selected_extras_with_ranks, selecte
 def calculate_totals(character):
     attribute_total_cost = sum(stat['cost'] if isinstance(stat, dict) else stat * 2 for stat in character['stats'].values())
     advantage_total_cost = sum(advantage['cost'] for advantage in character['advantages'] if advantage['name'] != 'Unspent Points')
-    skill_total_cost = sum(skill['cost'] for skill in character['skills'])
+    
+    # Calculate skill total cost based on ranks
+    total_skill_ranks = sum(skill['rank'] for skill in character['skills'])
+    skill_total_cost = math.ceil(total_skill_ranks / 2)
+    
     power_total_cost = sum(power['cost'] for power in character.get('powers', []))
     
     # Handle both dictionary and integer values for defenses
@@ -270,9 +247,11 @@ def allocate_skills(skill_points, character):
     skills = []
     selected_skills = set()
 
-    remaining_points = skill_points
+    remaining_points = skill_points * 2  # Convert power points to skill ranks
     categories = list(skill_allocation.keys())
     random.shuffle(categories)
+
+    total_skill_ranks = 0
 
     for category in categories:
         for _ in range(skill_allocation[category]):
@@ -293,12 +272,10 @@ def allocate_skills(skill_points, character):
             elif category == "moderate":
                 rank = random.randint(3, 5)
             elif category == "low":
-                rank = random.randint(0, 2)
+                rank = random.randint(1, 2)
 
-            cost = (rank + 1) // 2  # Ensuring costs are always whole numbers
-            if remaining_points < cost:
-                rank = (remaining_points * 2) - 1  # Adjust rank to fit remaining points
-                cost = remaining_points
+            if remaining_points < rank:
+                rank = remaining_points
 
             associated_attribute = skill['tags'][0]
             if associated_attribute not in character['stats']:
@@ -309,59 +286,28 @@ def allocate_skills(skill_points, character):
             skills.append({
                 "name": skill_name,
                 "rank": rank,
-                "cost": cost,
                 "total": total,
                 "sub_skill": random.choice(skill.get('sub_skills', [None]))
             })
 
-            remaining_points -= cost
+            remaining_points -= rank
+            total_skill_ranks += rank
 
-            logger.debug(f"Allocated {skill_name}: rank {rank}, cost {cost}, remaining points {remaining_points}")
+            logger.debug(f"Allocated {skill_name}: rank {rank}, remaining ranks {remaining_points}")
 
         if remaining_points <= 0:
             break
 
-    # Loop to spend any remaining points
-    while remaining_points > 0:
-        skill = random.choice(skills_data)
-        skill_name = skill['name']
-        selected_skill = next((s for s in skills if s['name'] == skill_name), None)
-
-        if selected_skill:
-            rank = selected_skill['rank']
-            cost = (rank + 2) // 2  # Cost to increase rank by 1
-            if remaining_points >= cost:
-                selected_skill['rank'] += 1
-                selected_skill['cost'] += cost
-                selected_skill['total'] += 1
-                remaining_points -= cost
-                logger.debug(f"Increased {skill_name} rank to {selected_skill['rank']} at cost of {cost}, remaining points {remaining_points}")
-        else:
-            rank = 0
-            cost = (rank + 1) // 2
-            if remaining_points >= cost:
-                selected_skills.add(skill_name)
-                associated_attribute = skill['tags'][0]
-                if associated_attribute not in character['stats']:
-                    character['stats'][associated_attribute] = {'value': 0, 'cost': 0}
-                total = rank + character['stats'][associated_attribute]['value']
-                skills.append({
-                    "name": skill_name,
-                    "rank": rank,
-                    "cost": cost,
-                    "total": total,
-                    "sub_skill": random.choice(skill.get('sub_skills', [None]))
-                })
-                remaining_points -= cost
-                logger.debug(f"Allocated {skill_name} initially: rank {rank}, cost {cost}, remaining points {remaining_points}")
-
     # Ensure all skills from skills_data are present and sorted
-    all_skills = {skill['name']: {"name": skill['name'], "rank": 0, "cost": 0, "total": 0, "sub_skill": None} for skill in skills_data}
+    all_skills = {skill['name']: {"name": skill['name'], "rank": 0, "total": 0, "sub_skill": None} for skill in skills_data}
     for skill in skills:
         all_skills[skill['name']] = skill
 
-    logger.debug("Skill allocation complete.")
-    return sorted(list(all_skills.values()), key=lambda x: x["name"]), remaining_points
+    # Calculate the actual power points spent
+    power_points_spent = math.ceil(total_skill_ranks / 2)
+    
+    logger.debug(f"Skill allocation complete. Total ranks: {total_skill_ranks}, Power points spent: {power_points_spent}")
+    return sorted(list(all_skills.values()), key=lambda x: x["name"]), skill_points - power_points_spent
 
 def allocate_advantages(max_advantages, total_points):
     logger.debug(f"Allocating {total_points} points to advantages with a max of {max_advantages} advantages.")
@@ -549,7 +495,12 @@ def edit_character(root, notebook, text_widgets, characters, dark_mode):
     if current_tab:
         character_name = notebook.tab(current_tab, "text")
         if character_name in characters:
-            open_character_editor(root, notebook, text_widgets, characters, dark_mode, characters[character_name])
+            expanded_traits = load_data_from_json('json/expanded_traits.json')
+            CharacterEditor(root, notebook, text_widgets, characters, dark_mode, expanded_traits, characters[character_name])
+        else:
+            messagebox.showerror("Error", "No character selected to edit.")
+    else:
+        messagebox.showerror("Error", "No character selected to edit.")
 
 def pretty_print_character(character, text_widget):
     # Clear existing content
@@ -569,6 +520,13 @@ def pretty_print_character(character, text_widget):
     def insert_subheader(text):
         text_widget.insert(tk.END, f"{text}\n", "subheader")
         text_widget.insert(tk.END, "-"*len(text) + "\n")
+
+    # Character Stats
+    insert_header("Character Stats")
+    text_widget.insert(tk.END, f"Power Level: {character['power_level']}\n")
+    text_widget.insert(tk.END, f"Total Cost: {character['total_cost']}\n")
+    text_widget.insert(tk.END, f"Unspent Points: {character['unspent_points']}\n")
+    text_widget.insert(tk.END, f"Maximum Points Allowed: {character['max_points']}\n\n")
 
     # Basic Information
     insert_header("Character Creation Summary")
@@ -638,7 +596,8 @@ def pretty_print_character(character, text_widget):
         associated_attribute = next((s['tags'][0] for s in skills_data if s['name'] == skill_name), None)
         attribute_rank = character['stats'][associated_attribute]['value'] if associated_attribute else 0
         total = skill['rank'] + attribute_rank
-        text_widget.insert(tk.END, f"{skill_name}{sub_skill_display} (Rank: {skill['rank']}, Attribute Rank: {attribute_rank}, Total: {total}, Cost: {skill['cost']})\n")
+        cost = math.ceil(skill['rank'] / 2)  # Calculate cost based on rank
+        text_widget.insert(tk.END, f"{skill_name}{sub_skill_display} (Rank: {skill['rank']}, Attribute Rank: {attribute_rank}, Total: {total}, Cost: {cost})\n")
 
     # Powers
     insert_header("Powers")
@@ -738,8 +697,6 @@ def pretty_print_character(character, text_widget):
     description = character.get("description", "No description available")
     text_widget.insert(tk.END, description + "\n")
 
-    # Scroll to the top
-    text_widget.see("1.0")
 
 def generate_character(power_level, include_powers, stat_percent, advantage_percent, skill_percent, defense_percent, power_percent, max_advantages, max_powers, selected_power_types, random_physical_features=True, random_costume_style=True, random_distinctive_feature=True, villain=False):
     max_retries = 10

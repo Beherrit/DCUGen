@@ -37,5 +37,6 @@ from combat_tracker import *
 from display_character_sheet import *
 from open_custom_character import *
 from changelog import *
+from validation import *
 
 gm_cheat_sheet_app = None

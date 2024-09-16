@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from DCUQA import pretty_print_character, calculate_totals, update_defense
 from utils import load_data_from_json, generate_character_description
-from utils import calculate_range, calculate_attack_bonuses, calculate_initiative, calculate_accuracy
+from validation import validate_character, calculate_range, calculate_attack_bonuses, calculate_initiative, calculate_accuracy
 import random
 import importlib
 import os
@@ -24,32 +24,72 @@ class CharacterPreviewScreen:
         self.parent = parent
         self.character_creator = character_creator
         self.last_character = None
+        self.last_known_position = 0.0  # Initialize here
         self.create_widgets()
 
     def create_widgets(self):
         self.preview_text = scrolledtext.ScrolledText(self.parent, wrap=tk.WORD, width=60, height=30)
         self.preview_text.pack(expand=True, fill='both', padx=10, pady=10)
+
+        # Bind the scrollbar movement to save the last known position
+        self.preview_text.vbar.bind("<ButtonRelease-1>", self.save_scroll_position)
+
+        # Bind mousewheel and arrow keys
+        self.preview_text.bind("<MouseWheel>", self.on_mousewheel)
+        self.preview_text.bind("<Up>", self.on_up_arrow)
+        self.preview_text.bind("<Down>", self.on_down_arrow)
+
         self.update_preview()
+
+    def save_scroll_position(self, event=None):
+        self.last_known_position = self.preview_text.yview()[0]
+
+    def on_mousewheel(self, event):
+        self.preview_text.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        self.save_scroll_position()
+        return "break"
+
+    def on_up_arrow(self, event):
+        self.preview_text.yview_scroll(-1, "units")
+        self.save_scroll_position()
+        return "break"
+
+    def on_down_arrow(self, event):
+        self.preview_text.yview_scroll(1, "units")
+        self.save_scroll_position()
+        return "break"
 
     def update_preview(self):
         character = self.character_creator.get_current_character()
-        
+
         # Only update if the character has changed
         if character != self.last_character:
             self.last_character = character
-            
-            # Store the current position of the scrollbar
-            current_position = self.preview_text.yview()[0]
-            
+
+            # Calculate totals
+            attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, total_cost = calculate_totals(character)
+            character['total_cost'] = total_cost
+
+            # Calculate maximum points and unspent points
+            power_level = character.get('power_level', 10)  # Default to 10 if not set
+            character['max_points'] = power_level * 15
+            character['unspent_points'] = character['max_points'] - total_cost
+
+            # Temporarily disable text widget updates to avoid unwanted scrolling
+            self.preview_text.config(state=tk.NORMAL)
+
             # Clear the text widget
             self.preview_text.delete('1.0', tk.END)
-            
+
             # Update the content
             pretty_print_character(character, self.preview_text)
-            
-            # Restore the scrollbar position
-            self.preview_text.yview_moveto(current_position)
-        
+
+            # Restore the last known scroll position
+            self.preview_text.yview_moveto(self.last_known_position)
+
+            # Make the text widget read-only again
+            self.preview_text.config(state=tk.DISABLED)
+
         # Schedule the next update
         self.parent.after(1000, self.update_preview)
 
@@ -1125,11 +1165,6 @@ class CustomCharacterCreator:
 
         return character
 
-    def update_preview(self):
-        character = self.get_current_character()
-        self.enforce_rules(character)
-        self.update_character_summary(character)
-
     def enforce_rules(self, character):
         power_level = character['power_level']
         max_defense_toughness = power_level * 2
@@ -1229,50 +1264,6 @@ class CustomCharacterCreator:
         selected_complication = self.complication_var.get()
         description = self.complications.get(selected_complication, {}).get("description", "")
         self.complication_description.config(text=description)
-
-    def validate_character(self):
-        power_level = int(self.pl_var.get())
-        validation_messages = []
-
-        # Validate stats
-        stat_total = sum(int(var.get()) for var in self.stat_vars.values())
-        if stat_total > power_level * 7:
-            validation_messages.append(f"Total stats ({stat_total}) exceed PL limit ({power_level * 7})")
-
-        # Validate defenses
-        for defense, var in self.defense_vars.items():
-            defense_value = int(var.get())
-            if defense_value > power_level + 10:
-                validation_messages.append(f"{defense} ({defense_value}) exceeds PL limit ({power_level + 10})")
-
-        # Validate attack/effect and defense/toughness trade-offs
-        attack_bonus = max(int(self.stat_vars['Fighting'].get()), int(self.stat_vars['Dexterity'].get()))
-        effect_rank = max(int(self.stat_vars['Strength'].get()), max(int(self.powers_tree.item(item)['values'][1]) for item in self.powers_tree.get_children()))
-
-        if attack_bonus + effect_rank > power_level * 2:
-            validation_messages.append(f"Attack bonus ({attack_bonus}) + effect rank ({effect_rank}) exceeds PL limit ({power_level * 2})")
-
-        dodge = int(self.defense_vars['Dodge'].get())
-        toughness = int(self.defense_vars['Toughness'].get())
-        if dodge + toughness > power_level * 2:
-            validation_messages.append(f"Dodge ({dodge}) + Toughness ({toughness}) exceeds PL limit ({power_level * 2})")
-
-        parry = int(self.defense_vars['Parry'].get())
-        if parry + toughness > power_level * 2:
-            validation_messages.append(f"Parry ({parry}) + Toughness ({toughness}) exceeds PL limit ({power_level * 2})")
-
-        # Calculate total point cost
-        stat_cost = sum(int(var.get()) * 2 for var in self.stat_vars.values())
-        defense_cost = sum(int(var.get()) for var in self.defense_vars.values())
-        skill_cost = sum(int(self.skills_tree.item(item)['values'][1]) // 2 for item in self.skills_tree.get_children())
-        advantage_cost = sum(int(self.advantages_tree.item(item)['values'][1]) for item in self.advantages_tree.get_children())
-        power_cost = sum(int(self.powers_tree.item(item)['values'][1]) * 2 for item in self.powers_tree.get_children())
-
-        total_cost = stat_cost + defense_cost + skill_cost + advantage_cost + power_cost
-        if total_cost > power_level * 15:
-            validation_messages.append(f"Total point cost ({total_cost}) exceeds PL limit ({power_level * 15})")
-
-        return validation_messages, total_cost
 
     def create_character(self):
         validation_messages, total_cost = self.validate_character()
