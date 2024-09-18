@@ -1,7 +1,14 @@
 import display_character_sheet
 from imports import *
+from validation import *
+import math
+from map import MapEditor
 
 open_windows = {}
+
+def open_gm_map():
+    gm_window = tk.Toplevel()
+    MapEditor(gm_window)
 
 def get_log_file_path():
     if getattr(sys, 'frozen', False):  # Check if the program is running as an executable
@@ -30,45 +37,15 @@ characters = {}
 current_theme = None
 gm_cheat_sheet_app = None  # Store the GM Cheat Sheet app instance
 
-def load_json(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            return json.load(file)
-    except Exception as e:
-        logger.exception(f"Error loading JSON file {file_path}: {e}")
-        raise
-
 # Load JSON files
-stats_data = load_json('json/stats.json')
-skills_data = load_json('json/skills.json')
-defenses_data = load_json('json/defenses.json')
-advantages_data = load_json('json/advantages.json')
-powers_data = load_json('json/powers.json')
-extras_data = load_json('json/extras.json')
-flaws_data = load_json('json/flaws.json')
-expanded_traits_data = load_json('json/expanded_traits.json')
-
-def enforce_rules(character, power_level):
-    max_defense_toughness = power_level * 2
-
-    # Ensure defenses are initialized
-    character['defenses'] = character.get('defenses', {
-        'Dodge': {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0},
-        'Fortitude': {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0},
-        'Parry': {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0},
-        'Will': {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0},
-        'Toughness': {"stat_bonus": 0, "bought_rank": 0, "total_rank": 0}
-    })
-
-    # Ensure the combined defenses don't exceed the max allowed
-    if (character['defenses']['Parry']['total_rank'] + character['defenses']['Toughness']['total_rank']) > max_defense_toughness:
-        raise ValueError("Parry and Toughness exceed the allowed limit")
-    if (character['defenses']['Dodge']['total_rank'] + character['defenses']['Toughness']['total_rank']) > max_defense_toughness:
-        raise ValueError("Dodge and Toughness exceed the allowed limit")
-    if (character['defenses']['Fortitude']['total_rank'] + character['defenses']['Will']['total_rank']) > max_defense_toughness:
-        raise ValueError("Fortitude and Will exceed the allowed limit")
-
-    return character
+stats_data = load_data_from_json('json/stats.json')
+skills_data = load_data_from_json('json/skills.json')
+defenses_data = load_data_from_json('json/defenses.json')
+advantages_data = load_data_from_json('json/advantages.json')
+powers_data = load_data_from_json('json/powers.json')
+extras_data = load_data_from_json('json/extras.json')
+flaws_data = load_data_from_json('json/flaws.json')
+expanded_traits_data = load_data_from_json('json/expanded_traits.json')
 
 def calculate_modified_cost(base_cost, rank, selected_extras_with_ranks, selected_flaws_with_ranks, extras, flaws):
     # Create dictionaries for easy access
@@ -103,13 +80,21 @@ def calculate_modified_cost(base_cost, rank, selected_extras_with_ranks, selecte
     return total_cost, adjusted_cost_per_rank, adjusted_flats
 
 def calculate_totals(character):
-    attribute_total_cost = sum(stat['cost'] for stat in character['stats'].values())
+    attribute_total_cost = sum(stat['cost'] if isinstance(stat, dict) else stat * 2 for stat in character['stats'].values())
     advantage_total_cost = sum(advantage['cost'] for advantage in character['advantages'] if advantage['name'] != 'Unspent Points')
-    skill_total_cost = sum(skill['cost'] for skill in character['skills'])
+    
+    # Calculate skill total cost based on ranks
+    total_skill_ranks = sum(skill['rank'] for skill in character['skills'])
+    skill_total_cost = math.ceil(total_skill_ranks / 2)
+    
     power_total_cost = sum(power['cost'] for power in character.get('powers', []))
     
-    # Exclude 'Unspent Points' from the defense total cost calculation
-    defense_total_cost = sum(defense['bought_rank'] for defense_name, defense in character['defenses'].items() if defense_name != 'Unspent Points')
+    # Handle both dictionary and integer values for defenses
+    defense_total_cost = sum(
+        defense['bought_rank'] if isinstance(defense, dict) else defense
+        for defense_name, defense in character['defenses'].items()
+        if defense_name != 'Unspent Points'
+    )
     
     total_cost = attribute_total_cost + advantage_total_cost + skill_total_cost + power_total_cost + defense_total_cost
     return attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, total_cost
@@ -266,9 +251,11 @@ def allocate_skills(skill_points, character):
     skills = []
     selected_skills = set()
 
-    remaining_points = skill_points
+    remaining_points = skill_points * 2  # Convert power points to skill ranks
     categories = list(skill_allocation.keys())
     random.shuffle(categories)
+
+    total_skill_ranks = 0
 
     for category in categories:
         for _ in range(skill_allocation[category]):
@@ -289,12 +276,10 @@ def allocate_skills(skill_points, character):
             elif category == "moderate":
                 rank = random.randint(3, 5)
             elif category == "low":
-                rank = random.randint(0, 2)
+                rank = random.randint(1, 2)
 
-            cost = (rank + 1) // 2  # Ensuring costs are always whole numbers
-            if remaining_points < cost:
-                rank = (remaining_points * 2) - 1  # Adjust rank to fit remaining points
-                cost = remaining_points
+            if remaining_points < rank:
+                rank = remaining_points
 
             associated_attribute = skill['tags'][0]
             if associated_attribute not in character['stats']:
@@ -305,59 +290,28 @@ def allocate_skills(skill_points, character):
             skills.append({
                 "name": skill_name,
                 "rank": rank,
-                "cost": cost,
                 "total": total,
                 "sub_skill": random.choice(skill.get('sub_skills', [None]))
             })
 
-            remaining_points -= cost
+            remaining_points -= rank
+            total_skill_ranks += rank
 
-            logger.debug(f"Allocated {skill_name}: rank {rank}, cost {cost}, remaining points {remaining_points}")
+            logger.debug(f"Allocated {skill_name}: rank {rank}, remaining ranks {remaining_points}")
 
         if remaining_points <= 0:
             break
 
-    # Loop to spend any remaining points
-    while remaining_points > 0:
-        skill = random.choice(skills_data)
-        skill_name = skill['name']
-        selected_skill = next((s for s in skills if s['name'] == skill_name), None)
-
-        if selected_skill:
-            rank = selected_skill['rank']
-            cost = (rank + 2) // 2  # Cost to increase rank by 1
-            if remaining_points >= cost:
-                selected_skill['rank'] += 1
-                selected_skill['cost'] += cost
-                selected_skill['total'] += 1
-                remaining_points -= cost
-                logger.debug(f"Increased {skill_name} rank to {selected_skill['rank']} at cost of {cost}, remaining points {remaining_points}")
-        else:
-            rank = 0
-            cost = (rank + 1) // 2
-            if remaining_points >= cost:
-                selected_skills.add(skill_name)
-                associated_attribute = skill['tags'][0]
-                if associated_attribute not in character['stats']:
-                    character['stats'][associated_attribute] = {'value': 0, 'cost': 0}
-                total = rank + character['stats'][associated_attribute]['value']
-                skills.append({
-                    "name": skill_name,
-                    "rank": rank,
-                    "cost": cost,
-                    "total": total,
-                    "sub_skill": random.choice(skill.get('sub_skills', [None]))
-                })
-                remaining_points -= cost
-                logger.debug(f"Allocated {skill_name} initially: rank {rank}, cost {cost}, remaining points {remaining_points}")
-
     # Ensure all skills from skills_data are present and sorted
-    all_skills = {skill['name']: {"name": skill['name'], "rank": 0, "cost": 0, "total": 0, "sub_skill": None} for skill in skills_data}
+    all_skills = {skill['name']: {"name": skill['name'], "rank": 0, "total": 0, "sub_skill": None} for skill in skills_data}
     for skill in skills:
         all_skills[skill['name']] = skill
 
-    logger.debug("Skill allocation complete.")
-    return sorted(list(all_skills.values()), key=lambda x: x["name"]), remaining_points
+    # Calculate the actual power points spent
+    power_points_spent = math.ceil(total_skill_ranks / 2)
+    
+    logger.debug(f"Skill allocation complete. Total ranks: {total_skill_ranks}, Power points spent: {power_points_spent}")
+    return sorted(list(all_skills.values()), key=lambda x: x["name"]), skill_points - power_points_spent
 
 def allocate_advantages(max_advantages, total_points):
     logger.debug(f"Allocating {total_points} points to advantages with a max of {max_advantages} advantages.")
@@ -512,11 +466,45 @@ def allocate_powers(character, power_points, power_level, max_powers, selected_p
     # Return remaining unspent points instead of appending as a power
     return character, power_points
 
-def update_defense(self, defense_name):
-    value = int(self.defense_entries[defense_name].get() or 0)
-    self.character['defenses'][defense_name] = {"total_rank": value, "cost": value}
-    self.update_total_cost()
-    self.update_character_summary()
+def update_defense(character, allocated_stats):
+    # Map stats to their corresponding defenses
+    stat_to_defense = {
+        'Agility': 'Dodge',
+        'Awareness': 'Will',
+        'Stamina': 'Fortitude',
+        'Fighting': 'Parry'
+    }
+
+    # Update defenses based on stats
+    for stat, defense in stat_to_defense.items():
+        if stat in allocated_stats:
+            stat_value = allocated_stats[stat]['value']
+            if defense not in character['defenses']:
+                character['defenses'][defense] = {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0}
+            character['defenses'][defense]['stat_bonus'] = stat_value
+            character['defenses'][defense]['total_rank'] = stat_value + character['defenses'][defense]['bought_rank']
+
+    # Update Toughness based on Stamina
+    if 'Stamina' in allocated_stats:
+        stamina_value = allocated_stats['Stamina']['value']
+        if 'Toughness' not in character['defenses']:
+            character['defenses']['Toughness'] = {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0}
+        character['defenses']['Toughness']['stat_bonus'] = stamina_value
+        character['defenses']['Toughness']['total_rank'] = stamina_value + character['defenses']['Toughness']['bought_rank']
+
+    return character
+
+def edit_character(root, notebook, text_widgets, characters, dark_mode):
+    current_tab = notebook.select()
+    if current_tab:
+        character_name = notebook.tab(current_tab, "text")
+        if character_name in characters:
+            expanded_traits = load_data_from_json('json/expanded_traits.json')
+            CharacterEditor(root, notebook, text_widgets, characters, dark_mode, expanded_traits, characters[character_name])
+        else:
+            messagebox.showerror("Error", "No character selected to edit.")
+    else:
+        messagebox.showerror("Error", "No character selected to edit.")
 
 def pretty_print_character(character, text_widget):
     # Clear existing content
@@ -537,6 +525,13 @@ def pretty_print_character(character, text_widget):
         text_widget.insert(tk.END, f"{text}\n", "subheader")
         text_widget.insert(tk.END, "-"*len(text) + "\n")
 
+    # Character Stats
+    insert_header("Character Stats")
+    text_widget.insert(tk.END, f"Power Level: {character['power_level']}\n")
+    text_widget.insert(tk.END, f"Total Cost: {character['total_cost']}\n")
+    text_widget.insert(tk.END, f"Unspent Points: {character['unspent_points']}\n")
+    text_widget.insert(tk.END, f"Maximum Points Allowed: {character['max_points']}\n\n")
+
     # Basic Information
     insert_header("Character Creation Summary")
     
@@ -556,10 +551,12 @@ def pretty_print_character(character, text_widget):
 
     # Expanded Traits
     insert_subheader("Expanded Traits")
-    for category, trait in character["expanded_traits"].items():
-        text_widget.insert(tk.END, f"{category.replace('_', ' ').title()}: {trait['name']}\n", "bold")
-        text_widget.insert(tk.END, f"Description: {trait['description']}\n")
-        text_widget.insert(tk.END, f"Effect: {trait['effect']}\n\n")
+    if "expanded_traits" in character and character["expanded_traits"]:
+        text_widget.insert(tk.END, "\nExpanded Traits:\n", "heading")
+        for trait_type, trait_info in character["expanded_traits"].items():
+            text_widget.insert(tk.END, f"  {trait_type.replace('_', ' ').title()}:\n", "subheading")
+            text_widget.insert(tk.END, f"    Name: {trait_info['name']}\n")
+            text_widget.insert(tk.END, f"    Description: {trait_info['description']}\n")
 
     # Character Stats
     insert_header("Character Stats")
@@ -584,10 +581,23 @@ def pretty_print_character(character, text_widget):
 
     # Defenses
     insert_header("Defenses")
-    for defense, details in character.get("defenses", {}).items():
-        if isinstance(details, dict):
-            text_widget.insert(tk.END, f"{defense}: Stat Bonus: {details['stat_bonus']}, Bought Rank: {details['bought_rank']}, Total Rank: {details['total_rank']}\n")
-
+    for defense, values in character['defenses'].items():
+        if defense != 'Unspent Points':
+            stat_bonus = values.get('stat_bonus', 0)
+            bought_rank = values.get('bought_rank', 0)
+            stored_total_rank = values.get('total_rank', 0)
+            
+            if defense == 'Toughness':
+                power_bonus = values.get('power_bonus', 0)
+                defensive_roll = values.get('defensive_roll', 0)
+                calculated_total_rank = stat_bonus + power_bonus + defensive_roll
+            else:
+                calculated_total_rank = stat_bonus + bought_rank
+            
+            if defense == 'Toughness':
+                text_widget.insert(tk.END, f"{defense}: Stat Bonus: {stat_bonus}, Power Bonus: {power_bonus}, Defensive Roll: {defensive_roll}, Total Rank: {calculated_total_rank}\n")
+            else:
+                text_widget.insert(tk.END, f"{defense}: Stat Bonus: {stat_bonus}, Bought Rank: {bought_rank}, Total Rank: {calculated_total_rank}\n")
     # Advantages
     insert_header("Advantages")
     sorted_advantages = sorted(character.get("advantages", []), key=lambda x: x["name"])
@@ -603,12 +613,18 @@ def pretty_print_character(character, text_widget):
         associated_attribute = next((s['tags'][0] for s in skills_data if s['name'] == skill_name), None)
         attribute_rank = character['stats'][associated_attribute]['value'] if associated_attribute else 0
         total = skill['rank'] + attribute_rank
-        text_widget.insert(tk.END, f"{skill_name}{sub_skill_display} (Rank: {skill['rank']}, Attribute Rank: {attribute_rank}, Total: {total}, Cost: {skill['cost']})\n")
+        cost = math.ceil(skill['rank'] / 2)  # Calculate cost based on rank
+        text_widget.insert(tk.END, f"{skill_name}{sub_skill_display} (Rank: {skill['rank']}, Attribute Rank: {attribute_rank}, Total: {total}, Cost: {cost})\n")
 
     # Powers
     insert_header("Powers")
     for power in character.get("powers", []):
         text_widget.insert(tk.END, f"{power['name']} (Rank: {power['rank']}, Cost: {power['cost']})\n", "bold")
+        text_widget.insert(tk.END, f"  Type: {power['type']}\n")
+        if 'range' in power:
+            text_widget.insert(tk.END, f"  Range: {power['range']}\n")
+        if 'resisted' in power:
+            text_widget.insert(tk.END, f"  Resisted by: {power['resisted']}\n")
         if 'extras' in power and power['extras']:
             text_widget.insert(tk.END, f"  Extras: {', '.join([f'{extra} (Rank: {rank})' for extra, rank in zip(power['extras'], power['extras_ranks'])])}\n")
         if 'flaws' in power and power['flaws']:
@@ -620,8 +636,8 @@ def pretty_print_character(character, text_widget):
         accuracy = calculate_accuracy(character, power)
         text_widget.insert(tk.END, f"  Accuracy: {accuracy}\n")
         
-        if 'range' in power and power['range'] == "Ranged":
-            text_widget.insert(tk.END, f"    Close Range: {power['close_range']} ft, Medium Range: {power['medium_range']} ft, Long Range: {power['long_range']} ft\n")
+        if all(key in power for key in ['close_range', 'medium_range', 'long_range']):
+            text_widget.insert(tk.END, f"  Close Range: {power['close_range']} ft, Medium Range: {power['medium_range']} ft, Long Range: {power['long_range']} ft\n")
 
     # Attacks
     insert_header("Attacks")
@@ -635,7 +651,7 @@ def pretty_print_character(character, text_widget):
     for power in character["powers"]:
         if power.get("range") == "Ranged":
             text_widget.insert(tk.END, f"  {power['name']} (Effect Rank: {power['rank']})\n")
-            if "close_range" in power:
+            if all(key in power for key in ['close_range', 'medium_range', 'long_range']):
                 text_widget.insert(tk.END, f"    Close Range: {power['close_range']} ft, Medium Range: {power['medium_range']} ft, Long Range: {power['long_range']} ft\n")
 
     # Equipment
@@ -698,16 +714,13 @@ def pretty_print_character(character, text_widget):
     description = character.get("description", "No description available")
     text_widget.insert(tk.END, description + "\n")
 
-    # Scroll to the top
-    text_widget.see("1.0")
-
 def generate_character(power_level, include_powers, stat_percent, advantage_percent, skill_percent, defense_percent, power_percent, max_advantages, max_powers, selected_power_types, random_physical_features=True, random_costume_style=True, random_distinctive_feature=True, villain=False):
     max_retries = 10
     for attempt in range(max_retries):
         try:
             logger.debug(f"Starting character generation attempt {attempt + 1} with Power Level: {power_level}")
 
-                        # Allocate initial points with constraints and redistribution
+            # Allocate initial points with constraints and redistribution
             stat_points, advantage_points, skill_points, defense_points, power_points = allocate_points(
                 power_level, 
                 stat_percent, 
@@ -775,13 +788,17 @@ def generate_character(power_level, include_powers, stat_percent, advantage_perc
 
             # Generate the character description for the AI image prompt
             character["description"] = generate_character_description({
+                'name': character.get('name', 'The character'),
                 'gender': gender,
                 'age': character['age'],
                 'origin': origin,
                 'physical_traits': physical_traits,
                 'theme': random_theme,
                 'costume_style': character['costume_style'],
-                'distinctive_feature': character['distinctive_feature']
+                'distinctive_feature': character['distinctive_feature'],
+                'personality_traits': character.get('personality_traits', {}),
+                'Motivation': character.get('Motivation', {}),
+                'Complications': character.get('Complications', [])
             })
 
             logger.debug("Allocated Points - Stats: %d, Advantages: %d, Skills: %d, Defenses: %d, Powers: %d",
@@ -825,8 +842,9 @@ def generate_character(power_level, include_powers, stat_percent, advantage_perc
             character['languages'] = assign_languages(character)
             character['initiative'] = calculate_initiative(character)
 
-            # Enforce rules
+            # Enforce rules and validate toughness
             character = enforce_rules(character, power_level)
+            character = validate_toughness(character)
 
             # Calculate total cost
             attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, total_cost = calculate_totals(character)
@@ -892,7 +910,7 @@ def main():
 
     # Use ttkbootstrap for a modern look
     root = ttk.Window(themename="darkly")
-    root.title("Character Creation Version 4.8.4 Prod")
+    root.title("Character Creation Version 5.2.0 Prod")
     
     # Set base size for the main window
     root.geometry("1024x768")  # Width x Height
@@ -913,8 +931,49 @@ def main():
     secondary_button_color = "secondary"
 
     # Main layout frames
-    left_frame = ttk.Frame(root)
+    left_frame = ttk.Frame(root, width=250)  # Set a fixed width for the left frame
     left_frame.grid(row=0, column=0, sticky="ns", padx=5, pady=5)
+    left_frame.grid_propagate(False)  # Prevent the frame from shrinking
+
+    # Create a canvas for the left frame
+    canvas = tk.Canvas(left_frame, width=230)
+    canvas.pack(side="left", fill="both", expand=True)
+
+    # Add a scrollbar to the canvas
+    scrollbar = ttk.Scrollbar(left_frame, orient="vertical", command=canvas.yview)
+    scrollbar.pack(side="right", fill="y")
+
+    # Configure the canvas
+    canvas.configure(yscrollcommand=scrollbar.set)
+
+    # Create a frame inside the canvas
+    inner_frame = ttk.Frame(canvas)
+
+    # Add that new frame to a window in the canvas
+    canvas.create_window((0, 0), window=inner_frame, anchor="nw")
+
+    def _on_mousewheel(event):
+        canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
+    # Bind mousewheel event to the left frame and its children
+    left_frame.bind_all("<MouseWheel>", _on_mousewheel, add="+")
+
+    def _bound_to_mousewheel(event):
+        left_frame.bind_all("<MouseWheel>", _on_mousewheel)
+
+    def _unbound_to_mousewheel(event):
+        left_frame.unbind_all("<MouseWheel>")
+
+    # Bind the functions to enter and leave events
+    left_frame.bind('<Enter>', _bound_to_mousewheel)
+    left_frame.bind('<Leave>', _unbound_to_mousewheel)
+
+    # Update the scroll region when the inner frame changes
+    inner_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+
+        
+    # Add that new frame to a window in the canvas
+    canvas.create_window((0, 0), window=inner_frame, anchor="nw", width=230)
 
     right_frame = ttk.Frame(root)
     right_frame.grid(row=0, column=1, sticky="nsew", padx=5, pady=5)
@@ -956,7 +1015,7 @@ def main():
     search_entry.bind('<KeyRelease>', lambda event: perform_search())
 
     # Character Creator Section
-    char_creator_frame = CollapsibleSection(left_frame, "Character Creator", start_collapsed=False)
+    char_creator_frame = CollapsibleSection(inner_frame, "Character Creator", start_collapsed=False)
     char_creator_frame.pack(fill="x", pady=5)
 
     generate_character_filters_button = ttk.Button(
@@ -967,6 +1026,25 @@ def main():
     )
     char_creator_frame.add_widget(generate_character_filters_button)
     ToolTip(generate_character_filters_button, "Open a window to set filters and generate a character.")
+
+    create_custom_character_button = ttk.Button(
+        char_creator_frame.body_frame, 
+        text="Create Custom Character", 
+        command=lambda: open_custom_character_window(root, notebook, text_widgets, characters, dark_mode), 
+        style=f'{primary_button_color}.TButton'
+    )
+    char_creator_frame.add_widget(create_custom_character_button)
+    ToolTip(create_custom_character_button, "Open a window to create a fully customized character.")
+
+    # Edit Character button
+    edit_character_button = ttk.Button(
+        char_creator_frame.body_frame,
+        text="Edit Character",
+        command=lambda: edit_character(root, notebook, text_widgets, characters, dark_mode),
+        style=f'{primary_button_color}.TButton'
+    )
+    char_creator_frame.add_widget(edit_character_button)
+    ToolTip(edit_character_button, "Edit the currently selected character.")
 
     export_character_sheet_button = ttk.Button(char_creator_frame.body_frame, text="Export Character Sheet", command=lambda: on_export_character_sheet_click(notebook, characters, text_widgets), style=f'{primary_button_color}.TButton')
     char_creator_frame.add_widget(export_character_sheet_button)
@@ -985,7 +1063,7 @@ def main():
     ToolTip(copy_prompt_button, "Copy the AI prompt for the character to the clipboard.")
 
     # GM Tools Section
-    gm_tools_frame = CollapsibleSection(left_frame, "GM Tools", start_collapsed=False)
+    gm_tools_frame = CollapsibleSection(inner_frame, "GM Tools", start_collapsed=False)
     gm_tools_frame.pack(fill="x", pady=5)
 
     # Equipment Generator
@@ -1067,8 +1145,6 @@ def main():
         else:
             open_windows['gm_cheat_sheet'].lift()
 
-
-    
     # Complications
     complications = load_data_from_json('./json/complications.json')
     complications_button = ttk.Button(gm_tools_frame.body_frame, text="Complications", command=lambda: open_complications_window(complications), style=f'{secondary_button_color}.TButton')
@@ -1084,6 +1160,17 @@ def main():
     gm_tools_frame.add_widget(gm_cheat_sheet_button)
     ToolTip(gm_cheat_sheet_button, "Open the GM Cheat Sheet for quick access to character details.")
 
+    # Map Editor Button
+    map_editor_button = ttk.Button(
+        gm_tools_frame.body_frame,
+        text="Open Map Editor",
+        command=open_gm_map,
+        style=f'{secondary_button_color}.TButton'
+    )
+    gm_tools_frame.add_widget(map_editor_button)
+    ToolTip(map_editor_button, "Open the Map Editor for creating and managing game maps.")
+
+
     # Reference Tools
     calculate_powers_button = ttk.Button(gm_tools_frame.body_frame, text="Calculate Powers", command=open_calculate_powers_window, style=f'{secondary_button_color}.TButton')
     gm_tools_frame.add_widget(calculate_powers_button)
@@ -1093,12 +1180,12 @@ def main():
     gm_tools_frame.add_widget(reference_data_button)
     ToolTip(reference_data_button, "Open the reference data window.")
 
-    notes_button = ttk.Button(gm_tools_frame.body_frame, text="Notes", command=open_notes_window, style=f'{secondary_button_color}.TButton')
+    notes_button = ttk.Button(gm_tools_frame.body_frame, text="GM Notes", command=lambda: NotesApp(ttk.Toplevel(root)), style=f'{secondary_button_color}.TButton')
     gm_tools_frame.add_widget(notes_button)
-    ToolTip(notes_button, "Open the notes window to manage notes.")
+    ToolTip(notes_button, "Open the GM Notes window to manage and organize your game notes.")
 
     # Settings Section
-    settings_frame = CollapsibleSection(left_frame, "Settings", start_collapsed=False)
+    settings_frame = CollapsibleSection(inner_frame, "Settings", start_collapsed=False)
     settings_frame.pack(fill="x", pady=5)
 
     settings_button = ttk.Button(settings_frame.body_frame, text="Open Settings", command=lambda: settings.open_settings(root), style=f'{primary_button_color}.TButton')
@@ -1108,6 +1195,17 @@ def main():
     howto_button = ttk.Button(settings_frame.body_frame, text="Guides / How To", command=open_howto, style=f'{primary_button_color}.TButton')
     settings_frame.add_widget(howto_button)
     ToolTip(howto_button, "Access guides and instructions for using the application.")
+
+
+    changelog_button = ttk.Button(
+        settings_frame.body_frame,
+        text="View Changelog",
+        command=lambda: open_changelog(root),  # Pass root as an argument
+        style=f'{primary_button_color}.TButton'
+    )
+    settings_frame.add_widget(changelog_button)
+    ToolTip(changelog_button, "View the changelog to see recent updates and changes.")
+
 
     # Lock Window Button
     lock_window_var = tk.BooleanVar()
@@ -1120,6 +1218,9 @@ def main():
     # Configure the main window to resize properly
     root.grid_rowconfigure(0, weight=1)
     root.grid_columnconfigure(1, weight=1)
+
+    # Update the canvas scroll region when the size of the inner frame changes
+    inner_frame.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
 
     update_color_scheme(dark_mode, root)
 

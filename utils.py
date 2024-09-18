@@ -1,7 +1,7 @@
 import random
 import pandas as pd
 import tkinter as tk
-from tkinter import messagebox, filedialog
+from tkinter import filedialog, messagebox
 from openpyxl import load_workbook
 import json
 import pyperclip
@@ -108,34 +108,6 @@ def generate_random_origin():
             "language": language
         }
     
-def calculate_range(rank):
-    range_chart = [
-        60, 120, 250, 500, 900, 1800, 2640, 5280, 10560, 21120, 42240,
-        84480, 158400, 316800, 633600, 1320000, 2640000, 5280000, 10560000, 21120000
-    ]
-    return range_chart[rank - 1] if rank <= len(range_chart) else "Beyond chart"
-
-def assign_languages(character):
-    all_languages = load_data_from_json('./json/languages.json')
-    base_language = "English"
-    language_list = all_languages
-    assigned_languages = [base_language]  # English is the base language
-
-    # Check if character has the "Languages" advantage
-    for advantage in character.get("advantages", []):
-        if advantage["name"] == "Languages":
-            rank = advantage["rank"]
-            
-            # Calculate the number of additional languages based on the original rank
-            num_additional_languages = 2 ** (rank - 1) - 1
-            # Ensure the number of languages does not exceed available languages
-            num_additional_languages = min(num_additional_languages, len(language_list) - 1)
-            selectable_languages = [lang for lang in language_list if lang != base_language]
-            selected_languages = random.sample(selectable_languages, k=num_additional_languages)
-            assigned_languages.extend(selected_languages)
-    
-    return assigned_languages
-
 def generate_motivations_and_complications(villain=False):
     motivations = load_data_from_json('./json/motivations.json')  # Load the data from JSON file
     complications = load_data_from_json('./json/complications.json')
@@ -203,36 +175,6 @@ def generate_random_distinctive_feature():
     physical_traits = load_data_from_json('./json/physical_traits.json')
     return random.choice(physical_traits["DISTINCTIVE_FEATURES"])
 
-def calculate_attack_bonuses(character):
-    melee_attack_bonus = character["stats"].get("Fighting", {}).get("value", 0)
-    ranged_attack_bonus = character["stats"].get("Dexterity", {}).get("value", 0)
-
-    for advantage in character.get("advantages", []):
-        if advantage["name"] == "Close Attack":
-            melee_attack_bonus += advantage.get("rank", 0)
-        elif advantage["name"] == "Ranged Attack":
-            ranged_attack_bonus += advantage.get("rank", 0)
-
-    for skill in character.get("skills", []):
-        if skill["name"] == "Close Combat":
-            melee_attack_bonus += skill.get("rank", 0)
-        elif skill["name"] == "Ranged Combat":
-            ranged_attack_bonus += skill.get("rank", 0)
-
-    return melee_attack_bonus, ranged_attack_bonus
-
-def calculate_initiative(character):
-    initiative = character["stats"].get("Agility", {}).get("value", 0)
-    
-    for advantage in character.get("advantages", []):
-        if advantage["name"] == "Improved Initiative":
-            initiative_bonus_per_rank = 4
-            initiative += advantage.get("rank", 0) * initiative_bonus_per_rank
-        elif "Initiative" in advantage.get("tags", []):
-            initiative += advantage.get("rank", 0)
-    
-    return initiative
-
 def generate_weight():
     weights = list(range(110, 351))
     probabilities = (
@@ -246,83 +188,51 @@ def generate_weight():
     return weight
 
 def copy_prompt_to_clipboard(notebook, characters):
-    # Get the name of the currently selected tab
     current_tab = notebook.tab(notebook.select(), "text")
-    
-    # Retrieve the character associated with the current_tab
     character = characters.get(current_tab)
     
     if not character:
-        messagebox.showerror("Error", "No character found for the current tab.")
+        print("Error: No character found for the current tab.")
         return
 
     prompt = generate_character_description(character)
     pyperclip.copy(prompt)
-    messagebox.showinfo("AI Prompt Copied", "The AI prompt has been copied to the clipboard.")
+    messagebox.showinfo("Prompt Copied", "The AI prompt has been copied to the clipboard.")
 
 def generate_character_description(character):
-    gender = character.get('gender', 'person')
-    age = character.get('age', 'unknown age')
-    nationality = character['origin'].get('country', 'an unknown country')
-    origin = character['origin'].get('region', 'an unknown region')
-    height = character['physical_traits'].get('height', 'unknown height')
-    weight = character['physical_traits'].get('weight', 'unknown weight')
-    hair_color = character['physical_traits'].get('hair_color', 'unknown hair color')
-    eye_color = character['physical_traits'].get('eye_color', 'unknown eye color')
-    power_theme = character.get('theme', 'an unknown power theme')
-    costume_style = character.get('costume_style', 'unknown costume style')
-    distinctive_feature = character.get('distinctive_feature', 'no distinctive features')
-    descriptions = load_data_from_json('./json/descriptions.json')
-
-    if gender.lower() == 'male':
-        template = random.choice(descriptions['male'])
-    elif gender.lower() == 'female':
-        template = random.choice(descriptions['female'])
-    else:
-        template = (
-            "Create a full body image of a {gender} that is around the age of {age}. "
-            "They are from {nationality} in {origin}. {gender.capitalize()} has {hair_color} hair "
-            "that complements their striking features and {eye_color} eyes that seem to hold a world of secrets. "
-            "They have a {height} height and a weight of {weight} pounds. "
-            "Their abilities revolve around a {power_theme}, giving them control over specific aspects related to it. "
-            "They don a {costume_style} costume that reflects their persona and powers. "
-            "A distinctive feature of theirs is {distinctive_feature}, making them easily recognizable."
-        )
+    template = "{name} is a {gender} {age} years old. "
+    template += "They are {height} with {eye_color} eyes, {hair_color} hair, and {skin_tone} skin. "
+    template += "{name} is from {region}, {country} and speaks {language}. "
+    template += "Their theme is {theme}. "
+    template += "{name}'s positive traits include {positive_traits}. "
+    template += "Their negative traits are {negative_traits}. "
+    template += "Some quirky traits of {name} are {quirky_traits}. "
+    template += "{name} is motivated by {motivation}. "
+    template += "Their complications include {complications}."
 
     description = template.format(
-        gender=gender,
-        age=age,
-        nationality=nationality,
-        origin=origin,
-        height=height,
-        weight=weight,
-        hair_color=hair_color,
-        eye_color=eye_color,
-        power_theme=power_theme,
-        costume_style=costume_style,
-        distinctive_feature=distinctive_feature
+        name=character.get('name', 'The character'),
+        gender=character.get('gender', 'unspecified').lower(),
+        age=character.get('age', 'unspecified'),
+        height=character.get('physical_traits', {}).get('height', 'unspecified').lower(),
+        eye_color=character.get('physical_traits', {}).get('eye_color', 'unspecified').lower(),
+        hair_color=character.get('physical_traits', {}).get('hair_color', 'unspecified').lower(),
+        skin_tone=character.get('physical_traits', {}).get('skin_tone', 'unspecified').lower(),
+        region=character.get('origin', {}).get('region', 'an unspecified region'),
+        country=character.get('origin', {}).get('country', 'an unspecified country'),
+        language=character.get('origin', {}).get('language', 'an unspecified language'),
+        theme=character.get('theme', 'unspecified').lower(),
+        positive_traits=', '.join(trait.lower() for trait in character.get('personality_traits', {}).get('positive_traits', ['unspecified'])),
+        negative_traits=', '.join(trait.lower() for trait in character.get('personality_traits', {}).get('negative_traits', ['unspecified'])),
+        quirky_traits=', '.join(trait.lower() for trait in character.get('personality_traits', {}).get('quirky_traits', ['unspecified'])),
+        motivation=character.get('Motivation', {}).get('description', 'unspecified').lower(),
+        complications=', '.join(complication.get('name', 'unspecified').lower() for complication in character.get('Complications', [{'name': 'unspecified'}]))
     )
 
-    return description
+    # Capitalize the first letter of each sentence
+    description = '. '.join(sentence.capitalize() for sentence in description.split('. '))
 
-def calculate_accuracy(character, power):
-    accuracy = 0
-    extras = {extra: rank for extra, rank in zip(power.get('extras', []), power.get('extras_ranks', []))}
-    
-    if power['type'] == 'Combat':
-        if power['range'] == 'Ranged':
-            dex_stat = character['stats'].get('Dexterity', {}).get('value', 0)
-            ranged_attack_bonus = sum(adv['rank'] for adv in character['advantages'] if adv['name'] == 'Ranged Attack')
-            accurate_bonus = extras.get('Accurate', 0) * 2  # Each rank of Accurate provides a +2 bonus
-            accuracy = dex_stat + ranged_attack_bonus + accurate_bonus
-        
-        elif power['range'] == 'Melee':
-            fighting_stat = character['stats'].get('Fighting', {}).get('value', 0)
-            close_attack_bonus = sum(adv['rank'] for adv in character['advantages'] if adv['name'] == 'Close Attack')
-            accurate_bonus = extras.get('Accurate', 0) * 2
-            accuracy = fighting_stat + close_attack_bonus + accurate_bonus
-    
-    return accuracy
+    return description
 
 def close_all_tabs(notebook, text_widgets, characters):
     tabs = notebook.tabs()
@@ -386,10 +296,8 @@ def save_file_as_text(notebook, text_widgets):
     current_tab = notebook.select()
     tab_name = notebook.tab(current_tab, "text")
     
-    # First, try to get the text widget from the text_widgets dictionary
     text_widget = text_widgets.get(current_tab)
     
-    # If not found in text_widgets, try to find it directly in the tab
     if text_widget is None:
         for child in notebook.nametowidget(current_tab).winfo_children():
             if isinstance(child, tk.Text):
@@ -397,12 +305,10 @@ def save_file_as_text(notebook, text_widgets):
                 break
     
     if text_widget is None:
-        messagebox.showerror("Error", f"No text content found in the '{tab_name}' tab.")
         return
     
     content = text_widget.get("1.0", tk.END).strip()
     if not content:
-        messagebox.showerror("Error", f"No content to save in the '{tab_name}' tab.")
         return
 
     file_path = filedialog.asksaveasfilename(
@@ -413,11 +319,8 @@ def save_file_as_text(notebook, text_widgets):
     
     if not file_path:
         return  # User cancelled the save operation
-    
     try:
         with open(file_path, "w", encoding="utf-8") as file:
             file.write(content)
-        
-        messagebox.showinfo("Success", f"File saved successfully as {os.path.basename(file_path)}")
-    except Exception as e:
-        messagebox.showerror("Error", f"An error occurred while saving the file: {str(e)}")
+    except IOError:
+        pass

@@ -60,6 +60,7 @@
     },
     "COSTUME_STYLES": [
         "Classic Hero",
+        "None",
         "Armored",
         "Stealth",
         "Formal",
@@ -103,6 +104,7 @@
         "Demoniac"
     ],
     "DISTINCTIVE_FEATURES": [
+        "None",
         "Scar",
         "Tattoo",
         "Glowing Eyes",

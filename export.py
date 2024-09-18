@@ -1,10 +1,11 @@
 # export.py
 import os
 import tkinter as tk
-from tkinter import messagebox, filedialog
+from tkinter import filedialog, messagebox
 from openpyxl import load_workbook
 from openpyxl.styles import Font
 from utils import *
+from validation import calculate_accuracy, calculate_attack_bonuses, calculate_initiative, update_initiative
 
 def on_export_character_sheet_click(notebook, characters, text_widgets):
     # Get the name of the currently selected tab
@@ -14,7 +15,6 @@ def on_export_character_sheet_click(notebook, characters, text_widgets):
     character = characters.get(current_tab)
     
     if not character:
-        messagebox.showerror("Error", "No character found for the current tab.")
         return
 
     # Retrieve origin details from character
@@ -23,7 +23,6 @@ def on_export_character_sheet_click(notebook, characters, text_widgets):
     origin_language = character['origin']['language']
     # Retrieve equipment from character
     equipment = character.get('equipment', [])
-
     # Retrieve languages from character and format them
     languages = character['languages']  # Assuming this is a list of language names
     formatted_languages = ", ".join(languages)
@@ -31,7 +30,6 @@ def on_export_character_sheet_click(notebook, characters, text_widgets):
     selected_tab = notebook.nametowidget(notebook.select())
     text_widget = text_widgets.get(selected_tab)
     if not text_widget or not text_widget.get("1.0", tk.END).strip():
-        messagebox.showerror("Error", "Please generate a character before exporting.")
         return
     
     # Open the existing character sheet
@@ -185,7 +183,7 @@ def on_export_character_sheet_click(notebook, characters, text_widgets):
             print(f"Skill {skill_name} not found in the cell mapping. Skipping.")
 
     # Directly calculate and write the total skills cost to the Excel cell
-    total_skills_cost = sum(skill['cost'] for skill in character['skills'])
+    total_skills_cost = sum(skill.get('cost', 0) for skill in character['skills'])
     sheet['BF14'] = total_skills_cost
 
     # Write Motivation

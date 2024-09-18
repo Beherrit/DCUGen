@@ -164,7 +164,7 @@ class VehicleBuilderGUI:
             self.remaining_points = self.points
             self.update_custom_points()
         except ValueError:
-            messagebox.showerror("Invalid Input", "Please enter a valid number for Vehicle Points.")
+            pass  # Removed messagebox.showerror
 
     def update_custom_points(self):
         total_cost = 0
@@ -184,9 +184,9 @@ class VehicleBuilderGUI:
             points = int(self.points_entry.get())
             vehicle = create_vehicle(points)
             self.add_to_main_gui(vehicle)
-            messagebox.showinfo("Vehicle Generated", "Random vehicle has been added to the main program.")
+            # Removed messagebox.showinfo
         except ValueError:
-            messagebox.showerror("Invalid Input", "Please enter a valid number for Vehicle Points.")
+            pass  # Removed messagebox.showerror
 
     def generate_custom_vehicle(self):
         vehicle = {'Size': None, 'Features': [], 'Powers': [], 'Attributes': {}}
@@ -206,7 +206,7 @@ class VehicleBuilderGUI:
                 vehicle['Powers'].append(power)
 
         self.add_to_main_gui(vehicle)
-        messagebox.showinfo("Vehicle Generated", "Custom vehicle has been added to the main program.")
+        # Removed messagebox.showinfo
 
     def add_to_main_gui(self, vehicle):
         new_tab = ttk.Frame(self.main_notebook)

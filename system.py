@@ -60,7 +60,8 @@ def watch_for_changes(directories, callback):
 
 def create_file_watcher(root, directories_to_watch):
     def refresh_display():
-        root.event_generate("<<RefreshDisplay>>")
+        if root.winfo_exists():
+            root.event_generate("<<RefreshDisplay>>")
 
     observer = watch_for_changes(directories_to_watch, refresh_display)
     return observer
@@ -72,6 +73,10 @@ def get_preloaded_image(file_path):
 # Helper function to get preloaded JSON
 def get_preloaded_json(file_path):
     return load_cached_json(file_path)
+
+def stop_file_watcher(observer):
+    observer.stop()
+    observer.join()
 
 def initialize_system(root, log_file_path, theme_name):
     if sys.platform == 'win32':
@@ -86,5 +91,8 @@ def initialize_system(root, log_file_path, theme_name):
     # Create file watcher
     directories_to_watch = ['json', 'images']  # Add any other directories you want to watch
     file_watcher = create_file_watcher(root, directories_to_watch)
+    
+    # Ensure the file watcher is stopped when the root window is destroyed
+    root.protocol("WM_DELETE_WINDOW", lambda: (stop_file_watcher(file_watcher), root.destroy()))
     
     return apply_theme(root, theme_name), file_watcher

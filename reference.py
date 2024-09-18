@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk
 from PIL import Image, ImageTk
 import os
 import json
@@ -126,8 +126,6 @@ def open_reference_data():
             if image_file in images:
                 image_label.config(image=images[image_file])
                 image_label.bind("<Button-1>", lambda e: show_full_size_image(image_file))
-            else:
-                messagebox.showinfo("Image Not Found", f"No image found for {selected_item}")
 
     # Bind the subcategory combobox to the handle_selection function
     subcategory_cb.bind("<<ComboboxSelected>>", handle_selection)

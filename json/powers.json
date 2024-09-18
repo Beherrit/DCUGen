@@ -219,7 +219,7 @@
       "name": "Force Field",
       "cost": 1,
       "max_rank": 20,
-      "excluded_extras": ["Accurate", "Homing", "Multiattack", "Penetrating", "Reach", "Contagious"],
+      "excluded_extras": ["Accurate", "Homing", "Multiattack", "Penetrating", "Reach", "Contagious", "Reversible"],
       "excluded_flaws": ["Grab-Based", "Permanent", "Reduced Range"],
       "type": "Defensive"
     },

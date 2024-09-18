@@ -1,13 +1,13 @@
 [
     {
         "name": "Accurate",
-        "type": "per_rank",
+        "type": "flat_per_rank",
         "value": 1,
         "max_rank": 5
     },
     {
         "name": "Affects Corporeal",
-        "type": "flat_per_rank",
+        "type": "per_rank",
         "value": 1,
         "max_rank": 5
     },
@@ -249,7 +249,7 @@
         "name": "Selective",
         "type": "per_rank",
         "value": 1,
-        "max_rank": 5
+        "max_rank": 1
     },
     {
         "name": "Sleep",
