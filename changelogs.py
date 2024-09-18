@@ -7,9 +7,15 @@
 # - Fixed the issue with the Toughness defense not being calculated properly
 # - Toughness now also includes the Defensive Roll as a bonus to the total
 # - Can no longer purchase Toughness at all
-
-
-
+# - Modified advantages to include skill mastery for each skill it made sense for
+# - Added a new scrollable frame for the main window
+# - Fixed scrolling issues with the main window
+# - Added music to the Map Editor
+# - Token Creator functionality added to the MAP Editor
+# - Fixed the issue with the Reference Data not loading properly
+# - Fixed complications not being displayed properly
+# - notes.py (GM Notes button) got rewritten to be more user friendly
+# - Some tooltips added to the app
 
 
 # v5.1.0

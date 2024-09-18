@@ -21,8 +21,9 @@ def open_complications_window(complications):
         selected_complication = complication_var.get()
         if selected_complication:
             challenge = random_challenge(selected_complication, complications)
+            challenge_label.config(text=challenge)
         else:
-            pass
+            challenge_label.config(text="Please select a complication first.")
 
     # Create a new window
     comp_window = tk.Toplevel()
@@ -38,3 +39,7 @@ def open_complications_window(complications):
     # Button to get a random conflict
     random_button = ttk.Button(comp_window, text="Random Conflict", command=on_random_conflict)
     random_button.pack(pady=10)
+
+    # Label to display the challenge
+    challenge_label = ttk.Label(comp_window, text="", wraplength=300)
+    challenge_label.pack(pady=10)

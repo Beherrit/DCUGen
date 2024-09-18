@@ -594,9 +594,6 @@ def pretty_print_character(character, text_widget):
             else:
                 calculated_total_rank = stat_bonus + bought_rank
             
-            if calculated_total_rank != stored_total_rank:
-                print(f"Warning: Calculated total rank for {defense} ({calculated_total_rank}) does not match stored value ({stored_total_rank})")
-            
             if defense == 'Toughness':
                 text_widget.insert(tk.END, f"{defense}: Stat Bonus: {stat_bonus}, Power Bonus: {power_bonus}, Defensive Roll: {defensive_roll}, Total Rank: {calculated_total_rank}\n")
             else:
@@ -913,7 +910,7 @@ def main():
 
     # Use ttkbootstrap for a modern look
     root = ttk.Window(themename="darkly")
-    root.title("Character Creation Version 5.1.0 Prod")
+    root.title("Character Creation Version 5.2.0 Prod")
     
     # Set base size for the main window
     root.geometry("1024x768")  # Width x Height
@@ -948,11 +945,33 @@ def main():
 
     # Configure the canvas
     canvas.configure(yscrollcommand=scrollbar.set)
-    canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
 
-    # Create another frame inside the canvas
+    # Create a frame inside the canvas
     inner_frame = ttk.Frame(canvas)
 
+    # Add that new frame to a window in the canvas
+    canvas.create_window((0, 0), window=inner_frame, anchor="nw")
+
+    def _on_mousewheel(event):
+        canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
+    # Bind mousewheel event to the left frame and its children
+    left_frame.bind_all("<MouseWheel>", _on_mousewheel, add="+")
+
+    def _bound_to_mousewheel(event):
+        left_frame.bind_all("<MouseWheel>", _on_mousewheel)
+
+    def _unbound_to_mousewheel(event):
+        left_frame.unbind_all("<MouseWheel>")
+
+    # Bind the functions to enter and leave events
+    left_frame.bind('<Enter>', _bound_to_mousewheel)
+    left_frame.bind('<Leave>', _unbound_to_mousewheel)
+
+    # Update the scroll region when the inner frame changes
+    inner_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+
+        
     # Add that new frame to a window in the canvas
     canvas.create_window((0, 0), window=inner_frame, anchor="nw", width=230)
 
@@ -1161,9 +1180,9 @@ def main():
     gm_tools_frame.add_widget(reference_data_button)
     ToolTip(reference_data_button, "Open the reference data window.")
 
-    notes_button = ttk.Button(gm_tools_frame.body_frame, text="Notes", command=open_notes_window, style=f'{secondary_button_color}.TButton')
+    notes_button = ttk.Button(gm_tools_frame.body_frame, text="GM Notes", command=lambda: NotesApp(ttk.Toplevel(root)), style=f'{secondary_button_color}.TButton')
     gm_tools_frame.add_widget(notes_button)
-    ToolTip(notes_button, "Open the notes window to manage notes.")
+    ToolTip(notes_button, "Open the GM Notes window to manage and organize your game notes.")
 
     # Settings Section
     settings_frame = CollapsibleSection(inner_frame, "Settings", start_collapsed=False)
@@ -1202,11 +1221,6 @@ def main():
 
     # Update the canvas scroll region when the size of the inner frame changes
     inner_frame.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-
-    # Bind mousewheel to the canvas for scrolling
-    def _on_mousewheel(event):
-        canvas.yview_scroll(int(-1*(event.delta/120)), "units")
-    canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
     update_color_scheme(dark_mode, root)
 

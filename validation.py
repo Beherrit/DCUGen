@@ -221,3 +221,4 @@ def validate_defensive_roll(character):
         )
     
     return defensive_roll
+

@@ -437,7 +437,8 @@ class CustomCharacterCreator:
         pass
 
     def update_toughness(self, *args):
-        stamina = int(self.stat_vars['Stamina'].get())
+        stamina_value = self.stat_vars['Stamina'].get().strip()
+        stamina = int(stamina_value) if stamina_value else 0
         toughness = stamina
         # Add any additional toughness calculations here (e.g., from powers or advantages)
         self.toughness_label.config(text=str(toughness))
