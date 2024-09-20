@@ -7,6 +7,7 @@ import shutil
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 import pygame
+from operator import itemgetter
 
 # Main Application Class
 class MainApplication:
@@ -17,35 +18,6 @@ class MainApplication:
         self.root.resizable(True, True)
         self.map_editor = MapEditor(self.root)
         self.root.mainloop()
-
-    def open_initiative_tracker(self):
-        # Create a new tab for the initiative tracker
-        self.initiative_tracker_tab = ttk.Frame(self.root)
-        self.notebook.add(self.initiative_tracker_tab, text="Initiative Tracker")
-
-        # Create a Treeview to display combatants
-        columns = ("Character Name", "Initiative Total")
-        self.combat_tree = ttk.Treeview(self.initiative_tracker_tab, columns=columns, show="headings")
-        self.combat_tree.pack(fill=tk.BOTH, expand=True)
-
-        for col in columns:
-            self.combat_tree.heading(col, text=col)
-
-        # Button to refresh combat tracker data
-        refresh_button = ttk.Button(self.initiative_tracker_tab, text="Refresh Combatants", command=self.update_combat_tracker)
-        refresh_button.pack(pady=10)
-
-        # Initially populate the combat tracker
-        self.update_combat_tracker()
-
-    def update_combat_tracker(self):
-        self.combat_tree.delete(*self.combat_tree.get_children())  # Clear existing data
-        # Assuming you have a reference to the initiative tracker tree
-        for item in self.initiative_tracker.tree.get_children():
-            name = self.initiative_tracker.tree.item(item)["values"][0]  # Get character name
-            init_total = self.initiative_tracker.tree.item(item)["values"][5]  # Get initiative total
-            self.combat_tree.insert("", "end", values=(name, init_total))
-
 
 # Map Editor Class
 class MapEditor:
@@ -232,6 +204,7 @@ class MapCanvas:
 
             self.current_tokens[token_id] = token_name
             self.editor.sidebar.current_tokens_tab.update_tokens_list()
+            self.editor.sidebar.initiative_tracker_tab.add_token(token_name)
 
             # Bind mouse events for tooltip
             self.canvas.tag_bind(token_id, "<Enter>", lambda e, tid=token_id: self.show_token_tooltip(e, tid))
@@ -444,6 +417,8 @@ class MapCanvas:
     def clear_map(self):
         self.canvas.delete("all")
         self.tokens.clear()
+        self.current_tokens.clear()
+        self.editor.sidebar.initiative_tracker_tab.clear_initiatives()
         if hasattr(self, 'map_image'):
             delattr(self, 'map_image')
         self.redraw()
@@ -482,13 +457,17 @@ class Sidebar:
         self.create_sidebar()
 
     def create_sidebar(self):
-        self.sidebar = ttk.Notebook(self.master)
+        self.sidebar = ttk.Notebook(self.master, width=250)  # Set a fixed width for the sidebar
         self.sidebar.grid(row=1, column=1, sticky="ns")
 
         self.library_tab = LibraryTab(self.sidebar, self.editor)
         self.notes_tab = NotesTab(self.sidebar)
         self.music_tab = MusicTab(self.sidebar, self.editor)
         self.current_tokens_tab = CurrentTokensTab(self.sidebar, self.editor)
+        self.initiative_tracker_tab = InitiativeTrackerTab(self.sidebar, self.editor)
+
+        # Configure column weight to make the sidebar stay at its fixed width
+        self.master.grid_columnconfigure(1, weight=0)
 
 # Library Manager Class
 class LibraryManager:
@@ -737,6 +716,54 @@ class CurrentTokensTab:
                 del self.editor.map_canvas.current_tokens[token_id]
 
                 self.current_tokens_listbox.delete(index)
+                self.editor.sidebar.initiative_tracker_tab.remove_token(token_name)
+
+# New InitiativeTrackerTab class
+class InitiativeTrackerTab:
+    def __init__(self, notebook, editor):
+        self.editor = editor
+        self.initiatives = []
+        self.create_tab(notebook)
+
+    def create_tab(self, notebook):
+        initiative_frame = ttk.Frame(notebook)
+        notebook.add(initiative_frame, text="Initiative Tracker")
+
+        self.initiative_tree = ttk.Treeview(initiative_frame, columns=('Name', 'Initiative'), show='headings')
+        self.initiative_tree.heading('Name', text='Name')
+        self.initiative_tree.heading('Initiative', text='Initiative')
+        self.initiative_tree.pack(fill=BOTH, expand=True, padx=5, pady=5)
+
+        self.initiative_tree.bind('<Double-1>', self.on_double_click)
+
+    def add_token(self, token_name):
+        self.initiatives.append((token_name, ''))
+        self.update_initiative_list()
+
+    def remove_token(self, token_name):
+        self.initiatives = [init for init in self.initiatives if init[0] != token_name]
+        self.update_initiative_list()
+
+    def update_initiative_list(self):
+        self.initiative_tree.delete(*self.initiative_tree.get_children())
+        sorted_initiatives = sorted(self.initiatives, key=lambda x: (x[1] != '', x[1]), reverse=True)
+        for name, initiative in sorted_initiatives:
+            self.initiative_tree.insert('', 'end', values=(name, initiative))
+
+    def on_double_click(self, event):
+        item = self.initiative_tree.selection()[0]
+        column = self.initiative_tree.identify_column(event.x)
+        if column == '#2':  # Initiative column
+            current_value = self.initiative_tree.item(item, 'values')[1]
+            new_value = simpledialog.askstring("Initiative", "Enter initiative value:", initialvalue=current_value)
+            if new_value is not None:
+                name = self.initiative_tree.item(item, 'values')[0]
+                self.initiatives = [(n, i if n != name else new_value) for n, i in self.initiatives]
+                self.update_initiative_list()
+
+    def clear_initiatives(self):
+        self.initiatives.clear()
+        self.update_initiative_list()
 
 # Run the application
 if __name__ == "__main__":
