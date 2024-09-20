@@ -6,31 +6,46 @@ def validate_character(power_level, stats, defenses, skills, advantages, powers)
     total_cost = 0
 
     # Validate stats
-    stat_total = sum(stats.values())
+    stat_total = sum(stat['value'] if isinstance(stat, dict) else stat for stat in stats.values())
     if stat_total > power_level * 7:
         validation_messages.append(f"Total stats ({stat_total}) exceed PL limit ({power_level * 7})")
 
     # Validate defenses
     for defense, value in defenses.items():
-        if value > power_level + 10:
-            validation_messages.append(f"{defense} ({value}) exceeds PL limit ({power_level + 10})")
+        defense_value = value['total_rank'] if isinstance(value, dict) else value
+        if defense_value > power_level + 10:
+            validation_messages.append(f"{defense} ({defense_value}) exceeds PL limit ({power_level + 10})")
 
     # Validate attack/effect and defense/toughness trade-offs
-    attack_bonus = max(stats['Fighting'], stats['Dexterity'])
-    effect_rank = max(stats['Strength'], max(power['rank'] for power in powers if power['type'] == 'Offensive'))
+    attack_bonus = max(
+        stats['Fighting']['value'] if isinstance(stats['Fighting'], dict) else stats['Fighting'],
+        stats['Dexterity']['value'] if isinstance(stats['Dexterity'], dict) else stats['Dexterity']
+    )
+    effect_rank = max(
+        stats['Strength']['value'] if isinstance(stats['Strength'], dict) else stats['Strength'],
+        max(power['rank'] for power in powers if power['type'] == 'Offensive')
+    )
 
     if attack_bonus + effect_rank > power_level * 2:
         validation_messages.append(f"Attack bonus ({attack_bonus}) + effect rank ({effect_rank}) exceeds PL limit ({power_level * 2})")
 
-    dodge = defenses['Dodge']
-    toughness = defenses['Toughness']
-    parry = defenses['Parry']
+    dodge = defenses['Dodge']['total_rank'] if isinstance(defenses['Dodge'], dict) else defenses['Dodge']
+    toughness = defenses['Toughness']['total_rank'] if isinstance(defenses['Toughness'], dict) else defenses['Toughness']
+    parry = defenses['Parry']['total_rank'] if isinstance(defenses['Parry'], dict) else defenses['Parry']
 
     if dodge + toughness > power_level * 2:
         validation_messages.append(f"Dodge ({dodge}) + Toughness ({toughness}) exceeds PL limit ({power_level * 2})")
 
     if parry + toughness > power_level * 2:
         validation_messages.append(f"Parry ({parry}) + Toughness ({toughness}) exceeds PL limit ({power_level * 2})")
+
+    # Validate Accuracy + Effect Rank for combat powers
+    for power in powers:
+        if power['type'] == 'Combat':
+            accuracy = calculate_accuracy(stats, advantages, power)
+            effect_rank = power['rank']
+            if accuracy + effect_rank > power_level * 2:
+                validation_messages.append(f"{power['name']}: Accuracy ({accuracy}) + Effect Rank ({effect_rank}) exceeds PL limit ({power_level * 2})")
 
     # Calculate total point cost
     stat_cost = sum(value * 2 for value in stats.values())
@@ -69,6 +84,14 @@ def enforce_rules(character, power_level):
     if (character['defenses']['Fortitude']['total_rank'] + character['defenses']['Will']['total_rank']) > max_defense_toughness:
         raise ValueError("Fortitude and Will exceed the allowed limit")
 
+    # Check Accuracy + Effect Rank for combat powers
+    for power in character.get('powers', []):
+        if power['type'] == 'Combat':
+            accuracy = calculate_accuracy(character, power)
+            effect_rank = power['rank']
+            if accuracy + effect_rank > power_level * 2:
+                raise ValueError(f"{power['name']}: Accuracy ({accuracy}) + Effect Rank ({effect_rank}) exceeds PL limit ({power_level * 2})")
+
     return character
 
 def calculate_accuracy(character, power):
@@ -87,6 +110,12 @@ def calculate_accuracy(character, power):
             close_attack_bonus = sum(adv['rank'] for adv in character['advantages'] if adv['name'] == 'Close Attack')
             accurate_bonus = extras.get('Accurate', 0) * 2
             accuracy = fighting_stat + close_attack_bonus + accurate_bonus
+    
+    # Ensure accuracy doesn't exceed PL * 2 - effect_rank
+    power_level = character['power_level']
+    effect_rank = power['rank']
+    max_accuracy = (power_level * 2) - effect_rank
+    accuracy = min(accuracy, max_accuracy)
     
     return accuracy
 

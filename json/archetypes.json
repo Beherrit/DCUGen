@@ -284,6 +284,8 @@
         "Defense-Heavy": ["Defender", "Tank", "Paladin", "Guardian"],
         "Offensive": ["Berserker", "Gunner", "Warrior", "Sniper"],
         "Mixed Magic": ["Mage", "Buffer", "Warlock", "Paladin"],
-        "Tactical": ["Tactician", "Sniper", "Rogue", "Mage"]
+        "Tactical": ["Tactician", "Sniper", "Rogue", "Mage"],
+        "Balanced Overall": ["Sniper", "Tank", "Buffer", "Healer"]
     }
 }
+

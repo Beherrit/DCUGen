@@ -3,6 +3,7 @@ from imports import *
 from validation import *
 import math
 from map import MapEditor
+from tkinter import messagebox
 
 open_windows = {}
 
@@ -638,6 +639,13 @@ def pretty_print_character(character, text_widget):
         
         if all(key in power for key in ['close_range', 'medium_range', 'long_range']):
             text_widget.insert(tk.END, f"  Close Range: {power['close_range']} ft, Medium Range: {power['medium_range']} ft, Long Range: {power['long_range']} ft\n")
+        
+        if power['type'] == 'Combat':
+            accuracy = calculate_accuracy(character, power)
+            effect_rank = power['rank']
+            total = accuracy + effect_rank
+            max_total = character['power_level'] * 2
+            text_widget.insert(tk.END, f"  Accuracy + Effect: {total}/{max_total} (Accuracy: {accuracy}, Effect: {effect_rank})\n")
 
     # Attacks
     insert_header("Attacks")
@@ -715,6 +723,9 @@ def pretty_print_character(character, text_widget):
     text_widget.insert(tk.END, description + "\n")
 
 def generate_character(power_level, include_powers, stat_percent, advantage_percent, skill_percent, defense_percent, power_percent, max_advantages, max_powers, selected_power_types, random_physical_features=True, random_costume_style=True, random_distinctive_feature=True, villain=False):
+    # Load the stats data at the beginning of the function
+    stats_data = load_data_from_json('json/stats.json')
+
     max_retries = 10
     for attempt in range(max_retries):
         try:
@@ -910,7 +921,7 @@ def main():
 
     # Use ttkbootstrap for a modern look
     root = ttk.Window(themename="darkly")
-    root.title("Character Creation Version 5.2.0 Prod")
+    root.title("Character Creation Version 5.3.0 Prod")
     
     # Set base size for the main window
     root.geometry("1024x768")  # Width x Height
@@ -1205,7 +1216,6 @@ def main():
     )
     settings_frame.add_widget(changelog_button)
     ToolTip(changelog_button, "View the changelog to see recent updates and changes.")
-
 
     # Lock Window Button
     lock_window_var = tk.BooleanVar()

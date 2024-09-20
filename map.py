@@ -449,6 +449,34 @@ class MapCanvas:
 
             self.canvas.config(scrollregion=(0, 0, canvas_width, canvas_height))
 
+    def blink_token(self, token_id):
+        if token_id in self.tokens:
+            original_state = self.canvas.itemcget(token_id, 'state')
+            for _ in range(6):  # Blink 3 times
+                self.canvas.itemconfig(token_id, state='hidden')
+                self.canvas.update()
+                self.canvas.after(200)
+                self.canvas.itemconfig(token_id, state='normal')
+                self.canvas.update()
+                self.canvas.after(200)
+            self.canvas.itemconfig(token_id, state=original_state)
+
+    def open_token_editor(self, token_id):
+        if token_id in self.tokens:
+            token_data = self.tokens[token_id]
+            new_name = simpledialog.askstring("Edit Token", "Enter new name for the token:", initialvalue=token_data['name'])
+            if new_name is not None:
+                old_name = token_data['name']
+                token_data['name'] = new_name
+                self.current_tokens[token_id] = new_name
+                self.editor.sidebar.current_tokens_tab.update_tokens_list()
+                self.editor.sidebar.initiative_tracker_tab.update_token_name(old_name, new_name)
+                
+                # Update the token name on the canvas
+                if 'name_id' in token_data:
+                    self.canvas.itemconfig(token_data['name_id'], text=new_name)
+
+
 # Sidebar Class
 class Sidebar:
     def __init__(self, master, editor):
@@ -604,6 +632,15 @@ class NotesTab:
             "Double-click on a map in the library to set it as the current map",
             "Double-click on a token in the library to add it to the map",
             "Adjust the grid size using the slider in the toolbar",
+            "Use the Blink Token button to blink the selected token",
+            "Use the Edit Token button to edit the selected token",
+            "Use the Delete Token button to delete the selected token",
+            "Use the Play/Pause button to play or pause the current music",
+            "Use the Next Track button to play the next track in the music library",
+            "Use the Add Music button to add a new music file to the library",
+            "Use the Current Tokens tab to manage the current tokens on the map",
+            "Use the Initiative Tracker tab to manage the initiative order of the tokens",
+            "Double-click on a token in the initiative tracker to edit its initiative value",
         ]
 
         for note in notes:
@@ -763,6 +800,13 @@ class InitiativeTrackerTab:
 
     def clear_initiatives(self):
         self.initiatives.clear()
+        self.update_initiative_list()
+
+    def update_token_name(self, old_name, new_name):
+        for i, (name, initiative) in enumerate(self.initiatives):
+            if name == old_name:
+                self.initiatives[i] = (new_name, initiative)
+                break
         self.update_initiative_list()
 
 # Run the application

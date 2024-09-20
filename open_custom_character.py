@@ -170,6 +170,10 @@ class CustomCharacterCreator:
         self.modifier_lists = {}
         
         self.advantages_tree = None  # Initialize it as None
+
+        # Initialize all variables here
+        self.initialize_variables()
+        
         self.create_widgets()
         
         # Set up watchdog
@@ -188,6 +192,42 @@ class CustomCharacterCreator:
             "Will": "Awareness",
             "Toughness": "Stamina"
         }
+        
+    def initialize_variables(self):
+        # Initialize all variables here
+        self.name_var = tk.StringVar()
+        self.gender_var = tk.StringVar()
+        self.age_var = tk.StringVar()
+        self.theme_var = tk.StringVar()
+        self.region_var = tk.StringVar()
+        self.country_var = tk.StringVar()
+        self.language_var = tk.StringVar()
+        self.height_var = tk.StringVar()
+        self.weight_var = tk.StringVar()
+        self.eye_color_var = tk.StringVar()
+        self.hair_color_var = tk.StringVar()
+        self.skin_tone_var = tk.StringVar()
+        self.costume_style_var = tk.StringVar()
+        self.distinctive_feature_var = tk.StringVar()
+        self.pl_var = tk.StringVar(value="10")
+        self.occupation_var = tk.StringVar()
+        self.initiative_var = tk.StringVar(value="0")
+
+        # Initialize stat and defense variables
+        self.stat_vars = {stat['name']: tk.StringVar(value="0") for stat in self.stats_data['STATS']}
+        self.defense_vars = {defense: tk.StringVar(value="0") for defense in ["Dodge", "Fortitude", "Parry", "Will"]}
+        
+    def validate_character(self):
+        character = self.get_current_character()
+        power_level = int(self.pl_var.get())
+        return validate_character(
+            power_level,
+            character['stats'],
+            character['defenses'],
+            character['skills'],
+            character['advantages'],
+            character['powers']
+        )
 
     def on_closing(self):
         self.observer.stop()
@@ -277,27 +317,23 @@ class CustomCharacterCreator:
     
     def create_basic_info_widgets(self, parent):
         ttk.Label(parent, text="Power Level:").grid(row=0, column=0, padx=5, pady=5, sticky='e')
-        self.pl_var = tk.StringVar(value="10")
         self.pl_spinbox = ttk.Spinbox(parent, from_=1, to=20, textvariable=self.pl_var, width=5)
         self.pl_spinbox.grid(row=0, column=1, padx=5, pady=5, sticky='w')
 
         fields = ["Name", "Gender", "Age"]
         for i, field in enumerate(fields):
             ttk.Label(parent, text=f"{field}:").grid(row=i+1, column=0, padx=5, pady=5, sticky='e')
-            entry = ttk.Entry(parent)
+            entry = ttk.Entry(parent, textvariable=getattr(self, f"{field.lower()}_var"))
             entry.grid(row=i+1, column=1, padx=5, pady=5, sticky='w')
-            setattr(self, f"{field.lower()}_entry", entry)
 
         # Theme dropdown
         ttk.Label(parent, text="Theme:").grid(row=len(fields)+1, column=0, padx=5, pady=5, sticky='e')
-        self.theme_var = tk.StringVar()
         self.theme_combobox = ttk.Combobox(parent, textvariable=self.theme_var, state="readonly")
         self.theme_combobox['values'] = self.themes['theme']
         self.theme_combobox.grid(row=len(fields)+1, column=1, padx=5, pady=5, sticky='w')
 
         # Region dropdown
         ttk.Label(parent, text="Region:").grid(row=len(fields)+2, column=0, padx=5, pady=5, sticky='e')
-        self.region_var = tk.StringVar()
         self.region_combobox = ttk.Combobox(parent, textvariable=self.region_var, state="readonly")
         self.region_combobox['values'] = [region['region'] for region in self.character_origins]
         self.region_combobox.grid(row=len(fields)+2, column=1, padx=5, pady=5, sticky='w')
@@ -305,14 +341,12 @@ class CustomCharacterCreator:
 
         # Country dropdown
         ttk.Label(parent, text="Country:").grid(row=len(fields)+3, column=0, padx=5, pady=5, sticky='e')
-        self.country_var = tk.StringVar()
         self.country_combobox = ttk.Combobox(parent, textvariable=self.country_var, state="readonly")
         self.country_combobox.grid(row=len(fields)+3, column=1, padx=5, pady=5, sticky='w')
         self.country_combobox.bind('<<ComboboxSelected>>', self.update_language_options)
 
         # Language dropdown
         ttk.Label(parent, text="Language:").grid(row=len(fields)+4, column=0, padx=5, pady=5, sticky='e')
-        self.language_var = tk.StringVar()
         self.language_combobox = ttk.Combobox(parent, textvariable=self.language_var, state="readonly")
         self.language_combobox.grid(row=len(fields)+4, column=1, padx=5, pady=5, sticky='w')
 
@@ -320,34 +354,28 @@ class CustomCharacterCreator:
         physical_traits = ["Height", "Eye Color", "Hair Color", "Skin Tone"]
         for i, trait in enumerate(physical_traits):
             ttk.Label(parent, text=f"{trait}:").grid(row=i+len(fields)+5, column=0, padx=5, pady=5, sticky='e')
-            var = tk.StringVar()
-            combobox = ttk.Combobox(parent, textvariable=var, state="readonly")
+            combobox = ttk.Combobox(parent, textvariable=getattr(self, f"{trait.lower().replace(' ', '_')}_var"), state="readonly")
             combobox['values'] = self.physical_traits['PHYSICAL_TRAITS'][trait.upper().replace(' ', '_')]
             combobox.grid(row=i+len(fields)+5, column=1, padx=5, pady=5, sticky='w')
-            setattr(self, f"{trait.lower().replace(' ', '_')}_var", var)
 
         # Weight (as it's numeric, we'll keep it as an Entry)
         ttk.Label(parent, text="Weight:").grid(row=len(fields)+9, column=0, padx=5, pady=5, sticky='e')
-        self.weight_entry = ttk.Entry(parent)
-        self.weight_entry.grid(row=len(fields)+9, column=1, padx=5, pady=5, sticky='w')
+        ttk.Entry(parent, textvariable=self.weight_var).grid(row=len(fields)+9, column=1, padx=5, pady=5, sticky='w')
 
         # Occupation dropdown
         ttk.Label(parent, text="Occupation:").grid(row=len(fields)+10, column=0, padx=5, pady=5, sticky='e')
-        self.occupation_var = tk.StringVar()
         self.occupation_combobox = ttk.Combobox(parent, textvariable=self.occupation_var, state="readonly")
         self.occupation_combobox['values'] = self.get_all_occupations()
         self.occupation_combobox.grid(row=len(fields)+10, column=1, padx=5, pady=5, sticky='w')
 
         # Costume Style dropdown
         ttk.Label(parent, text="Costume Style:").grid(row=len(fields)+11, column=0, padx=5, pady=5, sticky='e')
-        self.costume_style_var = tk.StringVar()
         self.costume_style_combobox = ttk.Combobox(parent, textvariable=self.costume_style_var, state="readonly")
         self.costume_style_combobox['values'] = self.physical_traits['COSTUME_STYLES']
         self.costume_style_combobox.grid(row=len(fields)+11, column=1, padx=5, pady=5, sticky='w')
 
         # Distinctive Feature dropdown
         ttk.Label(parent, text="Distinctive Feature:").grid(row=len(fields)+12, column=0, padx=5, pady=5, sticky='e')
-        self.distinctive_feature_var = tk.StringVar()
         self.distinctive_feature_combobox = ttk.Combobox(parent, textvariable=self.distinctive_feature_var, state="readonly")
         self.distinctive_feature_combobox['values'] = self.physical_traits['DISTINCTIVE_FEATURES']
         self.distinctive_feature_combobox.grid(row=len(fields)+12, column=1, padx=5, pady=5, sticky='w')
@@ -631,7 +659,11 @@ class CustomCharacterCreator:
         for item in self.skills_tree.get_children():
             values = self.skills_tree.item(item, 'values')
             skill_name, rank, _, _, stat_name = values
-            stat_value = int(self.stat_vars[stat_name].get())
+            if stat_name and stat_name in self.stat_vars:
+                stat_value = int(self.stat_vars[stat_name].get())
+            else:
+                # If stat_name is empty or not found, default to 0
+                stat_value = 0
             total = int(rank) + stat_value
             self.skills_tree.item(item, values=(skill_name, rank, stat_value, total, stat_name))
 
@@ -740,6 +772,10 @@ class CustomCharacterCreator:
         powers_frame.columnconfigure(0, weight=1)
         powers_frame.columnconfigure(1, weight=1)
         powers_frame.rowconfigure(1, weight=1)
+
+        # Add these lines to create the styles
+        self.window.tk.call("ttk::style", "configure", "Error.TLabel", "-foreground", "red")
+        self.window.tk.call("ttk::style", "configure", "TLabel", "-foreground", "white")
 
     def update_power_info(self, event):
         selected_power = self.power_var.get()
@@ -852,8 +888,18 @@ class CustomCharacterCreator:
             self.power_cost_label.config(text="Current Cost: 0")
             return
 
+        rank_value = self.power_rank_var.get().strip()
+        if not rank_value:
+            self.power_cost_label.config(text="Current Cost: 0")
+            return
+
+        try:
+            rank = int(rank_value)
+        except ValueError:
+            self.power_cost_label.config(text="Invalid Rank")
+            return
+
         base_cost = next((power['cost'] for power in self.powers_data if power['name'] == selected_power), 2)
-        rank = int(self.power_rank_var.get())
 
         extras_with_ranks = [(extra, 1) for extra in self.modifier_lists["Extras Per Rank"].get(0, tk.END)]
         flaws_with_ranks = [(flaw, 1) for flaw in self.modifier_lists["Flaws Per Rank"].get(0, tk.END)]
@@ -865,7 +911,31 @@ class CustomCharacterCreator:
             self.extras_data, self.flaws_data
         )
 
-        self.power_cost_label.config(text=f"Current Cost: {total_cost}")
+        # Create a temporary power entry for accuracy calculation
+        temp_power = {
+            'name': selected_power,
+            'type': self.power_type_var.get(),
+            'range': self.power_range_var.get(),
+            'rank': rank,
+            'extras': [extra for extra, _ in extras_with_ranks + extra_flats],
+            'extras_ranks': [r for _, r in extras_with_ranks + extra_flats]
+        }
+
+        # Create a temporary character dictionary for accuracy calculation
+        temp_character = self.get_current_character()
+
+        # Calculate accuracy
+        accuracy = calculate_accuracy(temp_character, temp_power)
+
+        cost_text = f"Current Cost: {total_cost} | Effect Rank: {rank} | Accuracy: {accuracy}"
+        
+        # Update PL validation
+        power_level = int(self.pl_var.get())
+        max_total = power_level * 2
+        if rank + accuracy > max_total:
+            self.power_cost_label.config(text=cost_text + " | EXCEEDS PL LIMIT", style="Error.TLabel")
+        else:
+            self.power_cost_label.config(text=cost_text, style="TLabel")
 
     def edit_power(self):
         selected_items = self.powers_tree.selection()
@@ -913,7 +983,7 @@ class CustomCharacterCreator:
         selected_power = self.power_var.get()
         power_type = self.power_type_var.get()
         power_range = self.power_range_var.get() if power_type == 'Combat' else 'N/A'
-        power_rank = self.power_rank_var.get()
+        power_rank = int(self.power_rank_var.get())
         
         extras = list(self.modifier_lists["Extras Per Rank"].get(0, tk.END))
         flaws = list(self.modifier_lists["Flaws Per Rank"].get(0, tk.END))
@@ -923,72 +993,33 @@ class CustomCharacterCreator:
         all_extras = extras + extra_flats
         all_flaws = flaws + flaw_flats
 
-        self.powers_tree.insert('', 'end', values=(selected_power, power_rank, ', '.join(all_extras), ', '.join(all_flaws), power_type, power_range))
-
-        # Clear selections
-        self.power_combobox.set('')
-        self.power_type_combobox.set('')
-        self.power_range_combobox.set('')
-        self.power_rank_var.set('1')
-        for listbox in self.modifier_lists.values():
-            listbox.delete(0, tk.END)
-
-        # Clear the power info label
-        self.power_info_label.config(text="")
-
-    def toggle_power_range(self, event):
-        if self.power_type_var.get() == 'Combat':
-            self.power_range_label.grid()
-            self.power_range_combobox.grid()
-        else:
-            self.power_range_label.grid_remove()
-            self.power_range_combobox.grid_remove()
-
-    def update_power_info(self, event):
-        selected_power = self.power_var.get()
-        if selected_power:
-            for power in self.powers_data:
-                if power['name'] == selected_power:
-                    info = f"Cost: {power['cost']} per rank, Max Rank: {power['max_rank']}, Type: {power['type']}"
-                    if 'range' in power:
-                        info += f", Range: {power['range']}"
-                    if 'resisted' in power:
-                        info += f", Resisted by: {power['resisted']}"
-                    self.power_info_label.config(text=info)
-                    
-                    # Set the power type
-                    self.power_type_var.set(power['type'])
-                    self.toggle_power_range(None)  # Update range visibility
-                    
-                    # Set the range if it's a combat power
-                    if power['type'] == 'Combat' and 'range' in power:
-                        self.power_range_var.set(power['range'])
-                    else:
-                        self.power_range_var.set('')
-                    
-                    # Update the power cost
-                    self.update_power_cost()
-                    break
-        else:
-            # If no power is selected, clear the info
-            self.power_info_label.config(text="")
-            self.power_type_var.set("")
-            self.power_range_var.set("")
-            self.power_cost_label.config(text="Current Cost: 0")
-
-    def add_power_to_character(self):
-        selected_power = self.power_var.get()
-        power_type = self.power_type_var.get()
-        power_range = self.power_range_var.get() if power_type == 'Combat' else 'N/A'
-        power_rank = self.power_rank_var.get()
+        power_level = int(self.pl_var.get())
+        max_total = power_level * 2
         
-        extras = list(self.modifier_lists["Extras Per Rank"].get(0, tk.END))
-        flaws = list(self.modifier_lists["Flaws Per Rank"].get(0, tk.END))
-        extra_flats = list(self.modifier_lists["Extra Flats"].get(0, tk.END))
-        flaw_flats = list(self.modifier_lists["Flaw Flats"].get(0, tk.END))
-
-        all_extras = extras + extra_flats
-        all_flaws = flaws + flaw_flats
+        # Create a temporary character dictionary with the necessary information
+        temp_character = {
+            'power_level': power_level,
+            'stats': {stat: {'value': int(self.stat_vars[stat].get())} for stat in self.stat_vars},
+            'advantages': [{'name': adv, 'rank': int(rank)} for adv, rank in [self.advantages_tree.item(item, 'values') for item in self.advantages_tree.get_children()]]
+        }
+        
+        # Create the power entry
+        power_entry = {
+            'name': selected_power,
+            'type': power_type,
+            'range': power_range,
+            'rank': power_rank,
+            'extras': extras,
+            'extras_ranks': [1] * len(extras),  # Assuming rank 1 for all extras
+        }
+        
+        # Calculate accuracy
+        accuracy = calculate_accuracy(temp_character, power_entry)
+        
+        # Validate the power
+        if power_rank + accuracy > max_total:
+            messagebox.showerror("Validation Error", f"The sum of Effect Rank ({power_rank}) and Accuracy ({accuracy}) exceeds the allowed limit of {max_total}.")
+            return
 
         self.powers_tree.insert('', 'end', values=(selected_power, power_rank, ', '.join(all_extras), ', '.join(all_flaws), power_type, power_range))
 
@@ -1044,9 +1075,9 @@ class CustomCharacterCreator:
 
     def get_current_character(self):
         character = {
-            "name": self.name_entry.get(),
-            "gender": self.gender_entry.get(),
-            "age": self.age_entry.get(),
+            "name": self.name_var.get(),
+            "gender": self.gender_var.get(),
+            "age": self.age_var.get(),
             "theme": self.theme_var.get(),
             "origin": {
                 "region": self.region_var.get(),
@@ -1055,7 +1086,7 @@ class CustomCharacterCreator:
             },
             "physical_traits": {
                 "height": self.height_var.get(),
-                "weight": self.weight_entry.get(),
+                "weight": self.weight_var.get(),
                 "eye_color": self.eye_color_var.get(),
                 "hair_color": self.hair_color_var.get(),
                 "skin_tone": self.skin_tone_var.get(),
@@ -1198,9 +1229,7 @@ class CustomCharacterCreator:
             "positive_traits": [self.positive_traits_var.get()],
             "negative_traits": [self.negative_traits_var.get()],
             "quirky_traits": [self.quirky_traits_var.get()]
-        }
-
-        # Motivation
+        }        # Motivation
         character["Motivation"] = {
             "name": self.motivation_var.get(),
             "description": self.motivations.get(self.motivation_var.get(), "")
@@ -1331,173 +1360,15 @@ class CustomCharacterCreator:
         self.complication_description.config(text=description)
 
     def create_character(self):
-        validation_messages, total_cost = self.validate_character()
-
-        if validation_messages:
-            self.validation_text.delete('1.0', tk.END)
-            self.validation_text.insert(tk.END, "Validation Errors:\n\n")
-            for message in validation_messages:
-                self.validation_text.insert(tk.END, f"- {message}\n")
-            self.validation_text.insert(tk.END, f"\nTotal Point Cost: {total_cost}")
-            self.notebook.select(self.notebook.index('end') - 1)  # Switch to the Validation tab
-            return
-
-        # Populate character dictionary with entered data
-        self.character["name"] = self.name_entry.get()
-        self.character["gender"] = self.gender_entry.get()
-        self.character["age"] = self.age_entry.get()
-        self.character["theme"] = self.theme_var.get()
-        self.character["origin"]["region"] = self.region_var.get()
-        self.character["origin"]["country"] = self.country_var.get()
-        self.character["origin"]["language"] = self.language_var.get()
-        
-        self.character["physical_traits"]["height"] = self.height_var.get()
-        self.character["physical_traits"]["weight"] = self.weight_entry.get()
-        self.character["physical_traits"]["eye_color"] = self.eye_color_var.get()
-        self.character["physical_traits"]["hair_color"] = self.hair_color_var.get()
-        self.character["physical_traits"]["skin_tone"] = self.skin_tone_var.get()
-        
-        self.character["costume_style"] = self.costume_style_var.get()
-        self.character["distinctive_feature"] = self.distinctive_feature_var.get()
-        self.character["power_level"] = int(self.pl_var.get())
-        self.character["languages"] = [self.language_var.get()]
-        self.character["occupation"] = self.occupation_var.get()
-        
-        # Stats and Defenses
-        for stat_name, var in self.stat_vars.items():
-            value = int(var.get())
-            self.character["stats"][stat_name] = {"value": value, "cost": value * 2}        
-        # Initialize defenses
-        self.character['defenses'] = {
-            'Dodge': {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0},
-            'Fortitude': {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0},
-            'Parry': {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0},
-            'Toughness': {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0},
-            'Will': {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0}
-        }
-
-        # Update defenses based on stats
-        allocated_stats = {stat['name']: {'value': int(self.stat_vars[stat['name']].get())} for stat in self.stats_data['STATS']}
-        self.character = update_defense(self.character, allocated_stats)
-
-        # Update bought ranks for defenses
-        for defense, var in self.defense_vars.items():
-            if defense != 'Toughness':
-                bought_rank = int(var.get())
-                self.character['defenses'][defense]['bought_rank'] = bought_rank
-                self.character['defenses'][defense]['total_rank'] = self.character['defenses'][defense]['stat_bonus'] + bought_rank
-        
-        # Calculate Toughness
-        stamina_value = int(self.stat_vars['Stamina'].get())
-        self.character['defenses']['Toughness']['stat_bonus'] = stamina_value
-        self.character['defenses']['Toughness']['total_rank'] = stamina_value
-        
-        # Apply Defensive Roll to Toughness
-        defensive_roll = 0
-        for advantage in self.character.get('advantages', []):
-            if advantage['name'] == 'Defensive Roll':
-                defensive_roll = advantage['rank']
-                break
-        self.character['defenses']['Toughness']['defensive_roll'] = defensive_roll
-        self.character['defenses']['Toughness']['total_rank'] += defensive_roll
-        
-        # Validate toughness (this will add any power bonuses as well)
-        self.character = validate_toughness(self.character)
-        
-        # Skills
-        total_skill_ranks = 0
-        self.character["skills"] = []
-        for item in self.skills_tree.get_children():
-            values = self.skills_tree.item(item, 'values')
-            skill_name, rank, _, total, stat_name = values
-            rank = int(rank) if rank else 0
-            if rank > 0:
-                total_skill_ranks += rank
-                associated_attribute = next((skill['tags'][0] for skill in self.skills_data if skill['name'] == skill_name), None)
-                self.character["skills"].append({
-                    "name": skill_name,
-                    "rank": rank,
-                    "total": int(total) if total else 0,
-                    "sub_skill": None,  # Add sub-skill support if needed
-                    "associated_attribute": associated_attribute
-                })
-        
-        # Calculate the total skill cost
-        total_skill_cost = total_skill_ranks // 2
-
-        
-        # Advantages
-        self.character["advantages"] = []
-        for item in self.advantages_tree.get_children():
-            values = self.advantages_tree.item(item, 'values')
-            advantage_name, rank = values
-            if int(rank) > 0:
-                self.character["advantages"].append({
-                    "name": advantage_name,
-                    "rank": int(rank),
-                    "cost": int(rank)
-                })
-        
-        # Powers
-        self.character["powers"] = []
-        for item in self.powers_tree.get_children():
-            values = self.powers_tree.item(item, 'values')
-            power_name, rank, extras, flaws, power_type, power_range = values
-            extras_list = extras.split(', ') if extras else []
-            flaws_list = flaws.split(', ') if flaws else []
-            
-            # Find the power in the powers_data to get the 'resisted by' information
-            power_info = next((p for p in self.powers_data if p['name'] == power_name), None)
-            resisted_by = power_info['resisted'] if power_info and 'resisted' in power_info else 'N/A'
-            
-            self.character["powers"].append({
-                "name": power_name,
-                "rank": int(rank),
-                "extras": extras_list,
-                "extras_ranks": [1] * len(extras_list),  # Assuming rank 1 for all extras
-                "flaws": flaws_list,
-                "flaws_ranks": [1] * len(flaws_list),  # Assuming rank 1 for all flaws
-                "cost": int(rank) * 2,
-                "type": power_type,
-                "range": power_range,
-                "resisted": resisted_by
-            })
-        
-        # Personality and Background
-        self.character["personality_traits"] = {
-            "positive_traits": [self.positive_traits_var.get()],
-            "negative_traits": [self.negative_traits_var.get()],
-            "quirky_traits": [self.quirky_traits_var.get()]
-        }
-        self.character["Motivation"] = {
-            "name": self.motivation_var.get(),
-            "description": self.motivations["Hero"].get(self.motivation_var.get(), "")
-        }
-        self.character["Complications"] = [{
-            "name": self.complication_var.get(),
-            "description": self.complications.get(self.complication_var.get(), {}).get("description", "")
-        }]
-        
-        # Add expanded traits
-        self.character["expanded_traits"] = {}
-        for trait_type, var in self.expanded_trait_vars.items():
-            selected_trait = var.get()
-            if selected_trait:
-                trait_info = next((trait for trait in self.expanded_traits[trait_type] if trait["name"].lower() == selected_trait.lower()), None)
-                if trait_info:
-                    self.character["expanded_traits"][trait_type] = {
-                        "name": trait_info["name"],
-                        "description": trait_info["description"]
-                    }
-        
         try:
-            # Enforce rules and validate toughness
-            self.character = enforce_rules(self.character, self.character['power_level'])
-            self.character = validate_toughness(self.character)
+            validation_messages, total_cost = self.validate_character()
+            if validation_messages:
+                messagebox.showwarning("Validation Warnings", "\n".join(validation_messages))
+                return  # Don't create the character if there are validation issues
 
-            # Generate character description
-            self.character["description"] = generate_character_description(self.character)
-            
+            self.character = self.get_current_character()
+            self.character['total_cost'] = total_cost
+
             # Calculate totals
             attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, total_cost = calculate_totals(self.character)
             self.character['total_cost'] = total_cost
@@ -1511,10 +1382,200 @@ class CustomCharacterCreator:
             self.text_widgets[new_tab] = new_character_summary_text
             self.characters[self.character["name"]] = self.character
             self.notebook.select(new_tab)
+            
             self.window.destroy()
         except ValueError as e:
             messagebox.showerror("Validation Error", str(e))
-            return
+
+    def validate_character(self):
+        character = self.get_current_character()
+        power_level = int(self.pl_var.get())
+        return validate_character(
+            power_level,
+            character['stats'],
+            character['defenses'],
+            character['skills'],
+            character['advantages'],
+            character['powers']
+        )
+
+    def get_current_character(self):
+        character = {}
+        character["name"] = self.name_var.get()
+        character["gender"] = self.gender_var.get()
+        character["age"] = self.age_var.get()
+        character["theme"] = self.theme_var.get()
+        character["origin"] = {
+            "region": self.region_var.get(),
+            "country": self.country_var.get(),
+            "language": self.language_var.get()
+        }
+        
+        character["physical_traits"] = {
+            "height": self.height_var.get(),
+            "weight": self.weight_var.get(),
+            "eye_color": self.eye_color_var.get(),
+            "hair_color": self.hair_color_var.get(),
+            "skin_tone": self.skin_tone_var.get()
+        }
+        
+        character["costume_style"] = self.costume_style_var.get()
+        character["distinctive_feature"] = self.distinctive_feature_var.get()
+        character["power_level"] = int(self.pl_var.get())
+        character["languages"] = [self.language_var.get()]
+        character["occupation"] = self.occupation_var.get()
+        
+        # Stats and Defenses
+        character["stats"] = {}
+        for stat_name, var in self.stat_vars.items():
+            value = int(var.get())
+            character["stats"][stat_name] = {"value": value, "cost": value * 2}
+        
+        character['defenses'] = {
+            'Dodge': {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0},
+            'Fortitude': {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0},
+            'Parry': {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0},
+            'Toughness': {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0},
+            'Will': {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0}
+        }
+
+        # Update defenses based on stats
+        allocated_stats = {stat['name']: {'value': int(self.stat_vars[stat['name']].get())} for stat in self.stats_data['STATS']}
+        character = update_defense(character, allocated_stats)
+
+        # Update bought ranks for defenses
+        for defense, var in self.defense_vars.items():
+            if defense != 'Toughness':
+                bought_rank = int(var.get())
+                character['defenses'][defense]['bought_rank'] = bought_rank
+                character['defenses'][defense]['total_rank'] = character['defenses'][defense]['stat_bonus'] + bought_rank
+        
+        # Calculate Toughness
+        stamina_value = int(self.stat_vars['Stamina'].get())
+        character['defenses']['Toughness']['stat_bonus'] = stamina_value
+        character['defenses']['Toughness']['total_rank'] = stamina_value
+        
+        # Apply Defensive Roll to Toughness
+        defensive_roll = 0
+        for advantage in character.get('advantages', []):
+            if advantage['name'] == 'Defensive Roll':
+                defensive_roll = advantage['rank']
+                break
+        character['defenses']['Toughness']['defensive_roll'] = defensive_roll
+        character['defenses']['Toughness']['total_rank'] += defensive_roll
+        
+        # Validate toughness (this will add any power bonuses as well)
+        character = validate_toughness(character)
+        
+        # Skills
+        character["skills"] = []
+        for item in self.skills_tree.get_children():
+            values = self.skills_tree.item(item, 'values')
+            skill_name, rank, _, total, stat_name = values
+            rank = int(rank) if rank else 0
+            if rank > 0:
+                associated_attribute = next((skill['tags'][0] for skill in self.skills_data if skill['name'] == skill_name), None)
+                character["skills"].append({
+                    "name": skill_name,
+                    "rank": rank,
+                    "total": int(total) if total else 0,
+                    "sub_skill": None,  # Add sub-skill support if needed
+                    "associated_attribute": associated_attribute
+                })
+        
+        # Advantages
+        character["advantages"] = []
+        for item in self.advantages_tree.get_children():
+            values = self.advantages_tree.item(item, 'values')
+            advantage_name, rank = values
+            if int(rank) > 0:
+                character["advantages"].append({
+                    "name": advantage_name,
+                    "rank": int(rank),
+                    "cost": int(rank)
+                })
+        
+        # Powers
+        character["powers"] = []
+        for item in self.powers_tree.get_children():
+            values = self.powers_tree.item(item, 'values')
+            power_name = values[0]
+            rank = int(values[1])
+            extras = values[2].split(', ') if values[2] else []
+            flaws = values[3].split(', ') if values[3] else []
+            power_type = values[4] if len(values) > 4 else ''
+            power_range = values[5] if len(values) > 5 else ''
+            resisted_by = values[6] if len(values) > 6 else 'N/A'
+            cost = int(values[7]) if len(values) > 7 and values[7] else 0
+
+            character["powers"].append({
+                "name": power_name,
+                "rank": rank,
+                "extras": extras,
+                "extras_ranks": [1] * len(extras),  # Assuming rank 1 for all extras
+                "flaws": flaws,
+                "flaws_ranks": [1] * len(flaws),  # Assuming rank 1 for all flaws
+                "cost": cost,
+                "type": power_type,
+                "range": power_range,
+                "resisted": resisted_by
+            })
+        
+        # Personality and Background
+        character["personality_traits"] = {
+            "positive_traits": [self.positive_traits_var.get()],
+            "negative_traits": [self.negative_traits_var.get()],
+            "quirky_traits": [self.quirky_traits_var.get()]
+        }
+        character["Motivation"] = {
+            "name": self.motivation_var.get(),
+            "description": self.motivations["Hero"].get(self.motivation_var.get(), "")
+        }
+        character["Complications"] = [{
+            "name": self.complication_var.get(),
+            "description": self.complications.get(self.complication_var.get(), {}).get("description", "")
+        }]
+        
+        # Add expanded traits
+        character["expanded_traits"] = {}
+        for trait_type, var in self.expanded_trait_vars.items():
+            selected_trait = var.get()
+            if selected_trait:
+                trait_info = next((trait for trait in self.expanded_traits[trait_type] if trait["name"].lower() == selected_trait.lower()), None)
+                if trait_info:
+                    character["expanded_traits"][trait_type] = {
+                        "name": trait_info["name"],
+                        "description": trait_info["description"]
+                    }
+        
+        # Generate character description
+        character["description"] = generate_character_description(character)
+        
+        return character
+
+    def toggle_power_range(self, event=None):
+        if self.power_type_var.get() == 'Combat':
+            self.power_range_label.grid()
+            self.power_range_combobox.grid()
+        else:
+            self.power_range_label.grid_remove()
+            self.power_range_combobox.grid_remove()
+
+class CharacterEditor(CustomCharacterCreator):
+    def __init__(self, master, notebook, text_widgets, characters, dark_mode, expanded_traits, character_to_edit):
+        super().__init__(master, notebook, text_widgets, characters, dark_mode, expanded_traits)
+        self.character_to_edit = character_to_edit
+        self.window.title(f"Edit Character: {character_to_edit['name']}")
+        self.load_character_data()
+
+    # ... existing methods ...
+
+    def toggle_power_range(self, event=None):
+        # Call the parent class method
+        super().toggle_power_range(event)
+        # Add any additional functionality specific to CharacterEditor if needed
+
+    # ... rest of the class methods ...
 
 class CharacterEditor(CustomCharacterCreator):
     def __init__(self, master, notebook, text_widgets, characters, dark_mode, expanded_traits, character_to_edit):
@@ -1525,9 +1586,9 @@ class CharacterEditor(CustomCharacterCreator):
 
     def load_character_data(self):
         # Load the character data into the UI
-        self.name_entry.insert(0, self.character_to_edit.get('name', ''))
-        self.gender_entry.insert(0, self.character_to_edit.get('gender', ''))
-        self.age_entry.insert(0, str(self.character_to_edit.get('age', '')))
+        self.name_var.set(self.character_to_edit.get('name', ''))
+        self.gender_var.set(self.character_to_edit.get('gender', ''))
+        self.age_var.set(str(self.character_to_edit.get('age', '')))
         self.theme_var.set(self.character_to_edit.get('theme', ''))
         
         origin = self.character_to_edit.get('origin', {})
@@ -1539,7 +1600,7 @@ class CharacterEditor(CustomCharacterCreator):
         physical_traits = self.character_to_edit.get('physical_traits', {})
         for trait in ['height', 'eye_color', 'hair_color', 'skin_tone']:
             getattr(self, f"{trait}_var").set(physical_traits.get(trait, ''))
-        self.weight_entry.insert(0, str(physical_traits.get('weight', '')))
+        self.weight_var.set(str(physical_traits.get('weight', '')))
         
         self.costume_style_var.set(self.character_to_edit.get('costume_style', ''))
         self.distinctive_feature_var.set(self.character_to_edit.get('distinctive_feature', ''))
@@ -1554,10 +1615,19 @@ class CharacterEditor(CustomCharacterCreator):
                 self.stat_vars[stat].set(str(data))
         
         for defense, data in self.character_to_edit.get('defenses', {}).items():
-            if isinstance(data, dict):
-                self.defense_vars[defense].set(str(data.get('total_rank', 0)))
-            else:
-                self.defense_vars[defense].set(str(data))
+            if defense != 'Toughness':  # Handle Toughness separately
+                if isinstance(data, dict):
+                    self.defense_vars[defense].set(str(data.get('total_rank', 0)))
+                else:
+                    self.defense_vars[defense].set(str(data))
+        
+        # Handle Toughness separately
+        toughness_data = self.character_to_edit.get('defenses', {}).get('Toughness', {})
+        if isinstance(toughness_data, dict):
+            toughness_value = toughness_data.get('total_rank', 0)
+        else:
+            toughness_value = toughness_data
+        self.toughness_label.config(text=str(toughness_value))
         
         # Load skills
         for skill in self.character_to_edit.get('skills', []):
@@ -1606,8 +1676,11 @@ class CharacterEditor(CustomCharacterCreator):
             if trait_type in self.expanded_trait_vars:
                 self.expanded_trait_vars[trait_type].set(trait_data.get('name', '') if isinstance(trait_data, dict) else trait_data)
 
+        # Load initiative
+        initiative = self.character_to_edit.get('initiative', 0)
+        self.initiative_var.set(str(initiative))
+
     def create_character(self):
-        # Override the create_character method to update the existing character
         self.update_character()
 
     def update_character(self):
@@ -1691,6 +1764,9 @@ class CharacterEditor(CustomCharacterCreator):
         updated_character['max_points'] = power_level * 15
         updated_character['unspent_points'] = updated_character['max_points'] - total_cost
         
+        # Ensure initiative is included in the updated character
+        updated_character['initiative'] = int(self.initiative_var.get()) if self.initiative_var.get() else 0
+        
         # Update the character in the characters dictionary
         self.characters[self.character_to_edit['name']] = updated_character
         
@@ -1703,6 +1779,19 @@ class CharacterEditor(CustomCharacterCreator):
                 break
         
         self.window.destroy()
+
+    def get_current_character(self):
+        character = super().get_current_character()
+        
+        # Ensure initiative is included
+        character['initiative'] = int(self.initiative_var.get()) if self.initiative_var.get() else 0
+        
+        return character
+
+    def toggle_power_range(self, event=None):
+        # Call the parent class method
+        super().toggle_power_range(event)
+        # Add any additional functionality specific to CharacterEditor if needed
 
 def open_custom_character_window(root, notebook, text_widgets, characters, dark_mode):
     expanded_traits = load_data_from_json('json/expanded_traits.json')
