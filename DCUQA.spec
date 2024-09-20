@@ -38,9 +38,10 @@ a = Analysis(['DCUQA.py'],
                   ('images/flaws/flaw_*', 'images/flaws'),
                   ('images/maneuvers/man_*', 'images/maneuvers'),
                   ('images/bmt_skills/BMT_*', 'images/bmt_skills'),
-                  ('images/skills/skills_*', 'images/skills')
+                  ('images/skills/skills_*', 'images/skills'),
+                  ('library/music/*', 'library/music'),  # Add this line to include music files
              ],
-             hiddenimports=[],
+             hiddenimports=['pygame'],  # Add pygame to hidden imports
              hookspath=[],
              runtime_hooks=[],
              excludes=[],

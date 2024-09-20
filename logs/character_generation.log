@@ -1,4 +1,50 @@
-2024-09-17 23:16:10,762 STREAM b'IHDR' 16 13
-2024-09-17 23:16:10,762 STREAM b'IDAT' 41 7271
-2024-09-17 23:16:27,425 STREAM b'IHDR' 16 13
-2024-09-17 23:16:27,425 STREAM b'IDAT' 41 11096
+2024-09-19 18:36:07,654 Importing BlpImagePlugin
+2024-09-19 18:36:07,654 Importing BmpImagePlugin
+2024-09-19 18:36:07,654 Importing BufrStubImagePlugin
+2024-09-19 18:36:07,655 Importing CurImagePlugin
+2024-09-19 18:36:07,655 Importing DcxImagePlugin
+2024-09-19 18:36:07,655 Importing DdsImagePlugin
+2024-09-19 18:36:07,657 Importing EpsImagePlugin
+2024-09-19 18:36:07,658 Importing FitsImagePlugin
+2024-09-19 18:36:07,658 Importing FliImagePlugin
+2024-09-19 18:36:07,658 Importing FpxImagePlugin
+2024-09-19 18:36:07,658 Image: failed to import FpxImagePlugin: No module named 'olefile'
+2024-09-19 18:36:07,658 Importing FtexImagePlugin
+2024-09-19 18:36:07,659 Importing GbrImagePlugin
+2024-09-19 18:36:07,659 Importing GifImagePlugin
+2024-09-19 18:36:07,659 Importing GribStubImagePlugin
+2024-09-19 18:36:07,659 Importing Hdf5StubImagePlugin
+2024-09-19 18:36:07,660 Importing IcnsImagePlugin
+2024-09-19 18:36:07,661 Importing IcoImagePlugin
+2024-09-19 18:36:07,661 Importing ImImagePlugin
+2024-09-19 18:36:07,662 Importing ImtImagePlugin
+2024-09-19 18:36:07,662 Importing IptcImagePlugin
+2024-09-19 18:36:07,662 Importing JpegImagePlugin
+2024-09-19 18:36:07,662 Importing Jpeg2KImagePlugin
+2024-09-19 18:36:07,662 Importing McIdasImagePlugin
+2024-09-19 18:36:07,662 Importing MicImagePlugin
+2024-09-19 18:36:07,663 Image: failed to import MicImagePlugin: No module named 'olefile'
+2024-09-19 18:36:07,663 Importing MpegImagePlugin
+2024-09-19 18:36:07,663 Importing MpoImagePlugin
+2024-09-19 18:36:07,665 Importing MspImagePlugin
+2024-09-19 18:36:07,665 Importing PalmImagePlugin
+2024-09-19 18:36:07,666 Importing PcdImagePlugin
+2024-09-19 18:36:07,666 Importing PcxImagePlugin
+2024-09-19 18:36:07,666 Importing PdfImagePlugin
+2024-09-19 18:36:07,668 Importing PixarImagePlugin
+2024-09-19 18:36:07,668 Importing PngImagePlugin
+2024-09-19 18:36:07,668 Importing PpmImagePlugin
+2024-09-19 18:36:07,668 Importing PsdImagePlugin
+2024-09-19 18:36:07,670 Importing QoiImagePlugin
+2024-09-19 18:36:07,670 Importing SgiImagePlugin
+2024-09-19 18:36:07,670 Importing SpiderImagePlugin
+2024-09-19 18:36:07,671 Importing SunImagePlugin
+2024-09-19 18:36:07,671 Importing TgaImagePlugin
+2024-09-19 18:36:07,671 Importing TiffImagePlugin
+2024-09-19 18:36:07,671 Importing WebPImagePlugin
+2024-09-19 18:36:07,672 Importing WmfImagePlugin
+2024-09-19 18:36:07,672 Importing XbmImagePlugin
+2024-09-19 18:36:07,673 Importing XpmImagePlugin
+2024-09-19 18:36:07,673 Importing XVThumbImagePlugin
+2024-09-19 18:36:10,483 STREAM b'IHDR' 16 13
+2024-09-19 18:36:10,484 STREAM b'IDAT' 41 7271
