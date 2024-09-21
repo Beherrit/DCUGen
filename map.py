@@ -18,7 +18,6 @@ class MainApplication:
         self.root.resizable(True, True)
         self.map_editor = MapEditor(self.root)
         self.root.mainloop()
-
 # Map Editor Class
 class MapEditor:
     def __init__(self, master):
@@ -71,14 +70,12 @@ class MapEditor:
     def toggle_grid(self):
         self.variables.grid_visible = self.toolbar.toggle_grid_var.get()
         self.map_canvas.redraw()
-
 # Variables Class
 class EditorVariables:
     def __init__(self):
         self.grid_size = 50
         self.grid_visible = True
         self.zoom_factor = 1.0
-
 # Toolbar Class
 class Toolbar:
     def __init__(self, master, editor):
@@ -105,7 +102,6 @@ class Toolbar:
 
         self.toggle_grid_var = tk.BooleanVar(value=self.editor.variables.grid_visible)
         ttk.Checkbutton(toolbar, text="Show Grid", variable=self.toggle_grid_var, command=self.editor.toggle_grid).pack(side=LEFT, padx=2)
-
 # Map Canvas Class
 class MapCanvas:
     def __init__(self, master, editor):
@@ -475,8 +471,6 @@ class MapCanvas:
                 # Update the token name on the canvas
                 if 'name_id' in token_data:
                     self.canvas.itemconfig(token_data['name_id'], text=new_name)
-
-
 # Sidebar Class
 class Sidebar:
     def __init__(self, master, editor):
@@ -496,7 +490,6 @@ class Sidebar:
 
         # Configure column weight to make the sidebar stay at its fixed width
         self.master.grid_columnconfigure(1, weight=0)
-
 # Library Manager Class
 class LibraryManager:
     def __init__(self):
@@ -513,7 +506,6 @@ class LibraryManager:
     def save_library_data(self):
         with open("library_data.json", "w") as f:
             json.dump(self.library_data, f)
-
 # Music Player Class
 class MusicPlayer:
     def __init__(self):
@@ -554,6 +546,8 @@ class MusicPlayer:
             next_track = library_data["music"][next_index]
             self.play_music(next_track)
 
+    def set_volume(self, volume):
+        pygame.mixer.music.set_volume(volume)
 # Library Tab Class
 class LibraryTab:
     def __init__(self, notebook, editor):
@@ -614,7 +608,6 @@ class LibraryTab:
                 file_path = self.editor.library_manager.library_data["tokens"][index]
                 center_x, center_y = self.editor.map_canvas.get_map_center()
                 self.editor.add_token(file_path, center_x, center_y)
-
 # Notes Tab Class
 class NotesTab:
     def __init__(self, notebook):
@@ -646,7 +639,6 @@ class NotesTab:
         for note in notes:
             notes_text.insert(END, note + "\n\n")
         notes_text.config(state=DISABLED)
-
 # Music Tab Class
 class MusicTab:
     def __init__(self, notebook, editor):
@@ -669,7 +661,19 @@ class MusicTab:
         ttk.Button(controls_frame, text="Play/Pause", command=self.editor.music_player.toggle_music).pack(side=LEFT, padx=2)
         ttk.Button(controls_frame, text="Next Track", command=lambda: self.editor.music_player.next_track(self.editor.library_manager.library_data)).pack(side=LEFT, padx=2)
 
+        # Add volume control
+        volume_frame = ttk.Frame(music_frame)
+        volume_frame.pack(fill=X, padx=5, pady=2)
+        ttk.Label(volume_frame, text="Volume:").pack(side=LEFT)
+        self.volume_slider = ttk.Scale(volume_frame, from_=0, to=1, orient=HORIZONTAL, command=self.set_volume)
+        self.volume_slider.set(1)  # Set default volume to maximum
+        self.volume_slider.pack(side=LEFT, expand=True, fill=X)
+
         self.populate_music()
+
+    def set_volume(self, value):
+        volume = float(value)
+        self.editor.music_player.set_volume(volume)
 
     def populate_music(self):
         for item in self.editor.library_manager.library_data["music"]:
@@ -695,7 +699,6 @@ class MusicTab:
             index = selection[0]
             file_path = self.editor.library_manager.library_data["music"][index]
             self.editor.music_player.play_music(file_path)
-
 # Current Tokens Tab Class
 class CurrentTokensTab:
     def __init__(self, notebook, editor):
@@ -754,7 +757,6 @@ class CurrentTokensTab:
 
                 self.current_tokens_listbox.delete(index)
                 self.editor.sidebar.initiative_tracker_tab.remove_token(token_name)
-
 # New InitiativeTrackerTab class
 class InitiativeTrackerTab:
     def __init__(self, notebook, editor):
@@ -808,7 +810,6 @@ class InitiativeTrackerTab:
                 self.initiatives[i] = (new_name, initiative)
                 break
         self.update_initiative_list()
-
 # Run the application
 if __name__ == "__main__":
     MainApplication()

@@ -71,13 +71,13 @@ class CharacterPreviewScreen:
         except tk.TclError:
             pass  # No text selected
         return "break"
-
+    
     def update_preview(self):
         character = self.character_creator.get_current_character()
 
         # Only update if the character has changed
         if character != self.last_character:
-            self.last_character = character
+            self.last_character = character.copy()  # Create a deep copy
 
             # Calculate totals
             attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, total_cost = calculate_totals(character)
@@ -98,11 +98,8 @@ class CharacterPreviewScreen:
             self.preview_text.config(state=tk.NORMAL)
             self.preview_text.bind("<Key>", lambda e: "break")
 
-            # Restore the last known scroll position
-            self.preview_text.yview_moveto(self.last_known_position)
-
-        # Schedule the next update
-        self.parent.after(1000, self.update_preview)
+    def trigger_update(self):
+        self.update_preview()
 
 def open_character_editor(root, notebook, text_widgets, characters, dark_mode, character_to_edit):
     expanded_traits = load_data_from_json('json/expanded_traits.json')
@@ -116,6 +113,7 @@ class CustomCharacterCreator:
         self.characters = characters
         self.dark_mode = dark_mode
         self.expanded_traits = expanded_traits
+        self.modifier_rank_vars = {}
 
         # Add this line to define the defense_stat_mapping attribute
         self.defense_stat_mapping = {
@@ -311,7 +309,7 @@ class CustomCharacterCreator:
         create_button = ttk.Button(self.window, text="Create Character", command=self.create_character)
         create_button.pack(pady=10)
 
-    def update_character_preview(self):
+    def trigger_preview_update(self):
         if hasattr(self, 'preview_screen'):
             self.preview_screen.update_preview()
     
@@ -457,7 +455,7 @@ class CustomCharacterCreator:
         self.update_skill_stats()
         if stat_name == 'Stamina':
             self.update_toughness()
-        self.update_character_preview()
+        self.trigger_preview_update()
 
     def update_defense(self, defense):
         # This method will be called when a defense value is changed
@@ -475,7 +473,7 @@ class CustomCharacterCreator:
         self.update_skill_stats()
         if stat_name == 'Stamina':
             self.update_toughness()
-        self.update_character_preview()
+        self.trigger_preview_update()
 
     def bind_improved_initiative(self):
         if self.advantages_tree:
@@ -901,15 +899,44 @@ class CustomCharacterCreator:
 
         base_cost = next((power['cost'] for power in self.powers_data if power['name'] == selected_power), 2)
 
-        extras_with_ranks = [(extra, 1) for extra in self.modifier_lists["Extras Per Rank"].get(0, tk.END)]
-        flaws_with_ranks = [(flaw, 1) for flaw in self.modifier_lists["Flaws Per Rank"].get(0, tk.END)]
-        extra_flats = [(extra, 1) for extra in self.modifier_lists["Extra Flats"].get(0, tk.END)]
-        flaw_flats = [(flaw, 1) for flaw in self.modifier_lists["Flaw Flats"].get(0, tk.END)]
+        extras_cost = 0
+        flaws_cost = 0
+        flat_modifiers = 0
 
-        total_cost, adjusted_cost_per_rank, adjusted_flats = self.calculate_modified_cost(
-            base_cost, rank, extras_with_ranks + extra_flats, flaws_with_ranks + flaw_flats,
-            self.extras_data, self.flaws_data
-        )
+        # Calculate extras cost
+        for i in range(self.modifier_lists["Extras Per Rank"].size()):
+            extra = self.modifier_lists["Extras Per Rank"].get(i)
+            extra_name, extra_rank = extra.split(" (Rank: ")
+            extra_rank = int(extra_rank.strip(")"))
+            extra_value = next((e['value'] for e in self.extras_data if e['name'] == extra_name), 0)
+            extras_cost += extra_value * extra_rank
+
+        # Calculate flaws cost
+        for i in range(self.modifier_lists["Flaws Per Rank"].size()):
+            flaw = self.modifier_lists["Flaws Per Rank"].get(i)
+            flaw_name, flaw_rank = flaw.split(" (Rank: ")
+            flaw_rank = int(flaw_rank.strip(")"))
+            flaw_value = next((f['value'] for f in self.flaws_data if f['name'] == flaw_name), 0)
+            flaws_cost += flaw_value * flaw_rank
+
+        # Calculate flat modifiers
+        for i in range(self.modifier_lists["Extra Flats"].size()):
+            extra_flat = self.modifier_lists["Extra Flats"].get(i)
+            extra_flat_name, extra_flat_rank = extra_flat.split(" (Rank: ")
+            extra_flat_rank = int(extra_flat_rank.strip(")"))
+            extra_flat_value = next((e['value'] for e in self.extras_data if e['name'] == extra_flat_name), 0)
+            flat_modifiers += extra_flat_value * extra_flat_rank
+
+        for i in range(self.modifier_lists["Flaw Flats"].size()):
+            flaw_flat = self.modifier_lists["Flaw Flats"].get(i)
+            flaw_flat_name, flaw_flat_rank = flaw_flat.split(" (Rank: ")
+            flaw_flat_rank = int(flaw_flat_rank.strip(")"))
+            flaw_flat_value = next((f['value'] for f in self.flaws_data if f['name'] == flaw_flat_name), 0)
+            flat_modifiers -= flaw_flat_value * flaw_flat_rank
+
+        # Calculate total cost
+        effect_cost = ((base_cost + extras_cost - flaws_cost) * rank) + flat_modifiers
+        total_cost = max(1, effect_cost)  # Ensure minimum cost of 1
 
         # Create a temporary power entry for accuracy calculation
         temp_power = {
@@ -917,8 +944,8 @@ class CustomCharacterCreator:
             'type': self.power_type_var.get(),
             'range': self.power_range_var.get(),
             'rank': rank,
-            'extras': [extra for extra, _ in extras_with_ranks + extra_flats],
-            'extras_ranks': [r for _, r in extras_with_ranks + extra_flats]
+            'extras': [extra.split(" (Rank: ")[0] for extra in self.modifier_lists["Extras Per Rank"].get(0, tk.END)],
+            'extras_ranks': [int(extra.split(" (Rank: ")[1].strip(")")) for extra in self.modifier_lists["Extras Per Rank"].get(0, tk.END)]
         }
 
         # Create a temporary character dictionary for accuracy calculation
@@ -985,10 +1012,10 @@ class CustomCharacterCreator:
         power_range = self.power_range_var.get() if power_type == 'Combat' else 'N/A'
         power_rank = int(self.power_rank_var.get())
         
-        extras = list(self.modifier_lists["Extras Per Rank"].get(0, tk.END))
-        flaws = list(self.modifier_lists["Flaws Per Rank"].get(0, tk.END))
-        extra_flats = list(self.modifier_lists["Extra Flats"].get(0, tk.END))
-        flaw_flats = list(self.modifier_lists["Flaw Flats"].get(0, tk.END))
+        extras = [self.modifier_lists["Extras Per Rank"].get(i) for i in range(self.modifier_lists["Extras Per Rank"].size())]
+        flaws = [self.modifier_lists["Flaws Per Rank"].get(i) for i in range(self.modifier_lists["Flaws Per Rank"].size())]
+        extra_flats = [self.modifier_lists["Extra Flats"].get(i) for i in range(self.modifier_lists["Extra Flats"].size())]
+        flaw_flats = [self.modifier_lists["Flaw Flats"].get(i) for i in range(self.modifier_lists["Flaw Flats"].size())]
 
         all_extras = extras + extra_flats
         all_flaws = flaws + flaw_flats
@@ -1035,14 +1062,22 @@ class CustomCharacterCreator:
         # Clear the power info label
         self.power_info_label.config(text="")
 
+        # Trigger preview update
+        self.trigger_preview_update()
+
     def create_modifier_section(self, parent, title, row):
         frame = ttk.LabelFrame(parent, text=title)
         frame.grid(row=row, column=0, sticky='nsew', padx=5, pady=5)
 
         self.modifier_vars[title] = tk.StringVar()
-        combobox = ttk.Combobox(frame, textvariable=self.modifier_vars[title], state="readonly")
-        combobox['values'] = self.get_modifier_options(title)
-        combobox.pack(side=tk.LEFT, padx=5, pady=5)
+        modifier_combobox = ttk.Combobox(frame, textvariable=self.modifier_vars[title], state="readonly")
+        modifier_combobox['values'] = self.get_modifier_options(title)
+        modifier_combobox.pack(side=tk.LEFT, padx=5, pady=5)
+
+        # Add a Spinbox for rank
+        self.modifier_rank_vars[title] = tk.StringVar(value="1")
+        rank_spinbox = ttk.Spinbox(frame, from_=1, to=20, textvariable=self.modifier_rank_vars[title], width=5)
+        rank_spinbox.pack(side=tk.LEFT, padx=5, pady=5)
 
         add_button = ttk.Button(frame, text="Add", command=lambda: self.add_modifier(title))
         add_button.pack(side=tk.LEFT, padx=5, pady=5)
@@ -1068,9 +1103,12 @@ class CustomCharacterCreator:
 
     def add_modifier(self, modifier_type):
         selected = self.modifier_vars[modifier_type].get()
+        rank = self.modifier_rank_vars[modifier_type].get()
         if selected:
-            self.modifier_lists[modifier_type].insert(tk.END, selected)
+            modifier_with_rank = f"{selected} (Rank: {rank})"
+            self.modifier_lists[modifier_type].insert(tk.END, modifier_with_rank)
             self.modifier_vars[modifier_type].set('')  # Clear selection
+            self.modifier_rank_vars[modifier_type].set("1")  # Reset rank to 1
             self.update_power_cost()
 
     def get_current_character(self):
@@ -1499,27 +1537,45 @@ class CustomCharacterCreator:
         character["powers"] = []
         for item in self.powers_tree.get_children():
             values = self.powers_tree.item(item, 'values')
-            power_name = values[0]
-            rank = int(values[1])
-            extras = values[2].split(', ') if values[2] else []
-            flaws = values[3].split(', ') if values[3] else []
-            power_type = values[4] if len(values) > 4 else ''
-            power_range = values[5] if len(values) > 5 else ''
-            resisted_by = values[6] if len(values) > 6 else 'N/A'
-            cost = int(values[7]) if len(values) > 7 and values[7] else 0
-
-            character["powers"].append({
+            power_name, rank_str, extras, flaws, power_type, power_range, resisted_by, cost = values
+            
+            # Clean and parse the rank
+            rank = int(rank_str.strip().split(')')[0])
+            
+            extras_list = extras.split(', ') if extras else []
+            flaws_list = flaws.split(', ') if flaws else []
+            
+            extras_with_ranks = []
+            flaws_with_ranks = []
+            
+            for extra in extras_list:
+                if '(Rank:' in extra:
+                    name, extra_rank = extra.split(' (Rank:')
+                    extras_with_ranks.append((name, int(extra_rank.strip(')'))))
+                else:
+                    extras_with_ranks.append((extra, 1))
+            
+            for flaw in flaws_list:
+                if '(Rank:' in flaw:
+                    name, flaw_rank = flaw.split(' (Rank:')
+                    flaws_with_ranks.append((name, int(flaw_rank.strip(')'))))
+                else:
+                    flaws_with_ranks.append((flaw, 1))
+            
+            power_entry = {
                 "name": power_name,
                 "rank": rank,
-                "extras": extras,
-                "extras_ranks": [1] * len(extras),  # Assuming rank 1 for all extras
-                "flaws": flaws,
-                "flaws_ranks": [1] * len(flaws),  # Assuming rank 1 for all flaws
-                "cost": cost,
+                "extras": [extra[0] for extra in extras_with_ranks],
+                "extras_ranks": [extra[1] for extra in extras_with_ranks],
+                "flaws": [flaw[0] for flaw in flaws_with_ranks],
+                "flaws_ranks": [flaw[1] for flaw in flaws_with_ranks],
                 "type": power_type,
                 "range": power_range,
-                "resisted": resisted_by
-            })
+                "resisted": resisted_by,
+                "cost": int(cost)
+            }
+            
+            character["powers"].append(power_entry)
         
         # Personality and Background
         character["personality_traits"] = {
@@ -1567,22 +1623,28 @@ class CharacterEditor(CustomCharacterCreator):
         self.character_to_edit = character_to_edit
         self.window.title(f"Edit Character: {character_to_edit['name']}")
         self.load_character_data()
+        
+        # Bind update methods to relevant widgets
+        self.bind_update_methods()
 
-    # ... existing methods ...
+    def bind_update_methods(self):
+        # Bind update methods to all relevant widgets
+        for var in [self.name_var, self.gender_var, self.age_var, self.theme_var, 
+                    self.region_var, self.country_var, self.language_var,
+                    self.height_var, self.weight_var, self.eye_color_var, 
+                    self.hair_color_var, self.skin_tone_var, self.costume_style_var, 
+                    self.distinctive_feature_var, self.pl_var, self.occupation_var]:
+            var.trace_add('write', self.update_character)
 
-    def toggle_power_range(self, event=None):
-        # Call the parent class method
-        super().toggle_power_range(event)
-        # Add any additional functionality specific to CharacterEditor if needed
+        for stat, var in self.stat_vars.items():
+            var.trace_add('write', lambda *args, s=stat: self.update_stat(s))
 
-    # ... rest of the class methods ...
+        for defense, var in self.defense_vars.items():
+            var.trace_add('write', lambda *args, d=defense: self.update_defense(d))
 
-class CharacterEditor(CustomCharacterCreator):
-    def __init__(self, master, notebook, text_widgets, characters, dark_mode, expanded_traits, character_to_edit):
-        super().__init__(master, notebook, text_widgets, characters, dark_mode, expanded_traits)
-        self.character_to_edit = character_to_edit
-        self.window.title(f"Edit Character: {character_to_edit['name']}")
-        self.load_character_data()
+        self.skills_tree.bind('<<TreeviewSelect>>', self.update_skills)
+        self.advantages_tree.bind('<<TreeviewSelect>>', self.update_advantages)
+        self.powers_tree.bind('<<TreeviewSelect>>', self.update_powers)
 
     def load_character_data(self):
         # Load the character data into the UI
@@ -1680,102 +1742,108 @@ class CharacterEditor(CustomCharacterCreator):
         initiative = self.character_to_edit.get('initiative', 0)
         self.initiative_var.set(str(initiative))
 
-    def create_character(self):
-        self.update_character()
+    def update_character(self, *args):
+        # Update the character with the current values
+        self.character_to_edit = self.get_current_character()
+        self.trigger_preview_update()
 
-    def update_character(self):
-        updated_character = self.get_current_character()
-        
-        # Update powers with correct extras, flaws, and costs
-        updated_powers = []
+    def update_stat(self, stat):
+        value = int(self.stat_vars[stat].get())
+        self.character_to_edit['stats'][stat] = {"value": value, "cost": value * 2}
+        self.update_defenses()
+        self.trigger_preview_update()
+
+    def update_defense(self, defense):
+        value = int(self.defense_vars[defense].get())
+        self.character_to_edit['defenses'][defense]['total_rank'] = value
+        self.character_to_edit['defenses'][defense]['bought_rank'] = value - self.character_to_edit['defenses'][defense]['stat_bonus']
+        self.trigger_preview_update()
+
+    def update_skills(self, event):
+        self.character_to_edit['skills'] = []
+        for item in self.skills_tree.get_children():
+            values = self.skills_tree.item(item, 'values')
+            skill_name, rank, _, total, stat_name = values
+            if int(rank) > 0:
+                self.character_to_edit['skills'].append({
+                    "name": skill_name,
+                    "rank": int(rank),
+                    "total": int(total),
+                    "associated_attribute": stat_name
+                })
+        self.trigger_preview_update()
+
+    def update_advantages(self, event):
+        self.character_to_edit['advantages'] = []
+        for item in self.advantages_tree.get_children():
+            values = self.advantages_tree.item(item, 'values')
+            advantage_name, rank = values
+            if int(rank) > 0:
+                self.character_to_edit['advantages'].append({
+                    "name": advantage_name,
+                    "rank": int(rank),
+                    "cost": int(rank)
+                })
+        self.trigger_preview_update()
+
+    def update_powers(self, event):
+        self.character_to_edit['powers'] = []
         for item in self.powers_tree.get_children():
             values = self.powers_tree.item(item, 'values')
-            power_name, rank_str, extras_str, flaws_str, power_type, power_range, resisted_by, cost = values
+            power_name, rank_str, extras, flaws, power_type, power_range, resisted_by, cost = values
             
-            # Clean and parse the rank
             rank = int(rank_str.strip().split(')')[0])
             
-            extras = []
-            extras_ranks = []
-            for extra in extras_str.split(', '):
-                if extra:
-                    if '(Rank:' in extra:
-                        name, extra_rank = extra.split(' (Rank:')
-                        extras.append(name)
-                        extras_ranks.append(int(extra_rank.strip(')').strip()))
-                    else:
-                        extras.append(extra)
-                        extras_ranks.append(1)
+            extras_list = extras.split(', ') if extras else []
+            flaws_list = flaws.split(', ') if flaws else []
             
-            flaws = []
-            flaws_ranks = []
-            for flaw in flaws_str.split(', '):
-                if flaw:
-                    if '(Rank:' in flaw:
-                        name, flaw_rank = flaw.split(' (Rank:')
-                        flaws.append(name)
-                        flaws_ranks.append(int(flaw_rank.strip(')').strip()))
-                    else:
-                        flaws.append(flaw)
-                        flaws_ranks.append(1)
+            extras_with_ranks = []
+            flaws_with_ranks = []
             
-            power = {
-                'name': power_name,
-                'rank': rank,
-                'extras': extras,
-                'extras_ranks': extras_ranks,
-                'flaws': flaws,
-                'flaws_ranks': flaws_ranks,
-                'type': power_type,
-                'range': power_range,
-                'resisted': resisted_by,
-                'cost': int(cost)
+            for extra in extras_list:
+                if '(Rank:' in extra:
+                    name, extra_rank = extra.split(' (Rank:')
+                    extras_with_ranks.append((name, int(extra_rank.strip(')'))))
+                else:
+                    extras_with_ranks.append((extra, 1))
+            
+            for flaw in flaws_list:
+                if '(Rank:' in flaw:
+                    name, flaw_rank = flaw.split(' (Rank:')
+                    flaws_with_ranks.append((name, int(flaw_rank.strip(')'))))
+                else:
+                    flaws_with_ranks.append((flaw, 1))
+            
+            power_entry = {
+                "name": power_name,
+                "rank": rank,
+                "extras": [extra[0] for extra in extras_with_ranks],
+                "extras_ranks": [extra[1] for extra in extras_with_ranks],
+                "flaws": [flaw[0] for flaw in flaws_with_ranks],
+                "flaws_ranks": [flaw[1] for flaw in flaws_with_ranks],
+                "type": power_type,
+                "range": power_range,
+                "resisted": resisted_by,
+                "cost": int(cost)
             }
             
-            # Recalculate power cost
-            base_cost = next((p['cost'] for p in self.powers_data if p['name'] == power_name), 2)
-            total_cost, adjusted_cost_per_rank, adjusted_flats = self.calculate_modified_cost(
-                base_cost, rank,
-                list(zip(extras, extras_ranks)),
-                list(zip(flaws, flaws_ranks)),
-                self.extras_data, self.flaws_data
-            )
-            power['cost'] = total_cost
-            
-            updated_powers.append(power)
-        
-        updated_character['powers'] = updated_powers
-        
-        # Ensure consistent format for stats and defenses
-        for stat, data in updated_character['stats'].items():
-            if not isinstance(data, dict):
-                updated_character['stats'][stat] = {'value': data, 'cost': data * 2}
-        
-        for defense, data in updated_character['defenses'].items():
-            if not isinstance(data, dict):
-                updated_character['defenses'][defense] = {'total_rank': data, 'stat_bonus': 0, 'bought_rank': data}
-        
-        # Calculate totals and add to the character
-        attribute_total_cost, advantage_total_cost, skill_total_cost, power_total_cost, defense_total_cost, total_cost = calculate_totals(updated_character)
-        updated_character['total_cost'] = total_cost
-        
-        # Calculate maximum points and unspent points
-        power_level = updated_character.get('power_level', 10)  # Default to 10 if not set
-        updated_character['max_points'] = power_level * 15
-        updated_character['unspent_points'] = updated_character['max_points'] - total_cost
-        
-        # Ensure initiative is included in the updated character
-        updated_character['initiative'] = int(self.initiative_var.get()) if self.initiative_var.get() else 0
-        
-        # Update the character in the characters dictionary
-        self.characters[self.character_to_edit['name']] = updated_character
+            self.character_to_edit['powers'].append(power_entry)
+        self.trigger_preview_update()
+
+    def trigger_preview_update(self):
+        if hasattr(self, 'preview_screen'):
+            self.preview_screen.update_preview()
+
+    def create_character(self):
+        # Update the character in the main application
+        self.characters[self.character_to_edit['name']] = self.character_to_edit
         
         # Update the character display in the main window
-        for tab in self.text_widgets:
+        for tab in self.notebook.tabs():
             if self.notebook.tab(tab, "text") == self.character_to_edit['name']:
                 text_widget = self.text_widgets[tab]
                 text_widget.delete('1.0', tk.END)
-                pretty_print_character(updated_character, text_widget)
+                pretty_print_character(self.character_to_edit, text_widget)
                 break
         
         self.window.destroy()
