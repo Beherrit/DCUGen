@@ -4,6 +4,7 @@ from validation import *
 import math
 from map import MapEditor
 from tkinter import messagebox
+from beasts import open_beastiary
 
 open_windows = {}
 
@@ -1181,6 +1182,10 @@ def main():
     gm_tools_frame.add_widget(map_editor_button)
     ToolTip(map_editor_button, "Open the Map Editor for creating and managing game maps.")
 
+    # Add a button in the main window setup
+    beastiary_button = ttk.Button(gm_tools_frame.body_frame, text="Beastiary", command=open_beastiary, style=f'{secondary_button_color}.TButton')
+    gm_tools_frame.add_widget(beastiary_button)
+    ToolTip(beastiary_button, "Open the Beastiary to view and manage creature information.")
 
     # Reference Tools
     calculate_powers_button = ttk.Button(gm_tools_frame.body_frame, text="Calculate Powers", command=open_calculate_powers_window, style=f'{secondary_button_color}.TButton')
