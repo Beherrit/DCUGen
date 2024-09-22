@@ -4,25 +4,7 @@ from openpyxl import load_workbook
 import sqlite3
 import json
 from openpyxl.styles import Font
-
-dark_mode_colors = {
-    'background': '#2E2E2E',
-    'foreground': '#FFFFFF',
-    'button_background': '#333333',
-    'button_foreground': '#FFFFFF',
-    'text_background': '#333333',
-    'text_foreground': '#FFFFFF',
-    'highlight': '#5C5C5C'
-}
-
-light_mode_colors = {
-    'background': '#F0F0F0',
-    'foreground': '#000000',
-    'button_background': '#E0E0E0',
-    'button_foreground': '#000000',
-    'text_background': '#FFFFFF',
-    'text_foreground': '#000000'
-}
+from utils import dark_mode_colors, light_mode_colors
 
 def load_data_from_json(file_name):
     with open(file_name, 'r', encoding='utf-8') as file:
@@ -114,4 +96,3 @@ def close_current_tab(notebook, text_widgets):
         notebook.forget(current_tab)
         # Remove the associated text widget from the dictionary
         text_widgets.pop(current_tab, None)
-

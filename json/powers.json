@@ -19,7 +19,7 @@
     },
     {
       "name": "Blast",
-      "cost": 1,
+      "cost": 2,
       "max_rank": 20,
       "excluded_extras": ["Affects Corporeal", "Affects Insubstantial", "Reach", "Impervious", "Increased Mass"],
       "excluded_flaws": ["Grab-Based", "Permanent", "Removable"],

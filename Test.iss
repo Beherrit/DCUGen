@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "DCUGen"
-#define MyAppVersion "5.2.0"
+#define MyAppVersion "5.3.1"
 #define MyAppPublisher "Beherrit"
 #define MyAppExeName "DCUQA.exe"
 
@@ -40,6 +40,8 @@ Source: "C:\Users\Lawre\Documents\GitHub\DCUGenChar\dist\images\flaws\flaw_*"; D
 Source: "C:\Users\Lawre\Documents\GitHub\DCUGenChar\dist\images\maneuvers\man_*"; DestDir: "{app}\images\maneuvers"; Flags: recursesubdirs createallsubdirs ignoreversion
 Source: "C:\Users\Lawre\Documents\GitHub\DCUGenChar\dist\images\skills\skills_*"; DestDir: "{app}\images\skills"; Flags: recursesubdirs createallsubdirs ignoreversion
 Source: "C:\Users\Lawre\Documents\GitHub\DCUGenChar\dist\images\bmt_skills\bmt_*"; DestDir: "{app}\images\bmt_skills"; Flags: recursesubdirs createallsubdirs ignoreversion
+Source: "C:\Users\Lawre\Documents\GitHub\DCUGenChar\dist\library\music\*"; DestDir: "{app}\library\music"; Flags: recursesubdirs createallsubdirs ignoreversion
+
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

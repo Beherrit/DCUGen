@@ -40,3 +40,4 @@ from changelog import *
 from validation import *
 
 gm_cheat_sheet_app = None
+

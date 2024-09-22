@@ -1,4 +1,19 @@
 """
+
+# v5.3.0
+#
+# ======FIXES/IMPROVEMENTS/NEW FEATURES======
+# - Added a new scrollable frame for the main window
+# - Fixed scrolling issues with the main window
+# - Added music to the Map Editor
+# - Token Creator functionality added to the MAP Editor
+# - Fixed the issue with the Reference Data not loading properly
+# - Fixed complications not being displayed properly
+# - notes.py (GM Notes button) got rewritten to be more user friendly
+# - Some tooltips added to the app
+
+
+
 # v5.2.0
 #
 # ======FIXES/IMPROVEMENTS/NEW FEATURES======
