@@ -6,6 +6,7 @@ from map import MapEditor
 from tkinter import messagebox
 from beasts import open_beastiary
 from migration import update_program
+VERSION = "5.4.0"
 
 
 open_windows = {}
@@ -928,8 +929,9 @@ def main():
     theme_name = "darkly"
 
     # Use ttkbootstrap for a modern look
+    # Use ttkbootstrap for a modern look
     root = ttk.Window(themename="darkly")
-    root.title("Character Creation Version 5.3.1 Prod")
+    root.title(f"Character Creation Version {VERSION}")
     
     # Set base size for the main window
     root.geometry("1024x768")  # Width x Height
@@ -1216,9 +1218,8 @@ def main():
 
     howto_button = ttk.Button(settings_frame.body_frame, text="Guides / How To", command=open_howto, style=f'{primary_button_color}.TButton')
     settings_frame.add_widget(howto_button)
+    
     ToolTip(howto_button, "Access guides and instructions for using the application.")
-
-
     changelog_button = ttk.Button(
         settings_frame.body_frame,
         text="View Changelog",
@@ -1227,9 +1228,6 @@ def main():
     )
     settings_frame.add_widget(changelog_button)
     ToolTip(changelog_button, "View the changelog to see recent updates and changes.")
-
-    settings_frame = CollapsibleSection(inner_frame, "Settings", start_collapsed=False)
-    settings_frame.pack(fill="x", pady=5)
 
     update_program_button = ttk.Button(
         settings_frame.body_frame,
@@ -1241,8 +1239,7 @@ def main():
     ToolTip(update_program_button, "Check for and apply program updates.")
 
     def update_program_action():
-        current_version = "5.3.1"  # Replace with your version tracking method
-        update_program(current_version)
+        update_program(VERSION)
 
     # Lock Window Button
     lock_window_var = tk.BooleanVar()
