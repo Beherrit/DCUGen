@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 def check_for_updates(current_version):
     """Check GitHub for the latest release version."""
-    api_url = "https://api.github.com/repos/yourusername/yourrepository/releases/latest"
+    api_url = "https://api.github.com/repos/Beherrit/DCUGen/releases/latest"
     
     try:
         response = requests.get(api_url)
@@ -92,7 +92,7 @@ def create_update_button(parent, current_version):
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Update Test")
-    current_version = "5.3.1"  # Replace with your current version
+    current_version = "5.3.2"  # Replace with your current version
     update_button = create_update_button(root, current_version)
     update_button.pack()
     root.mainloop()
