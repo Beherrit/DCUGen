@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox, simpledialog
+from tkinter import filedialog, messagebox, simpledialog, colorchooser
 from PIL import Image, ImageTk, ImageDraw
 import json
 import os
@@ -8,6 +8,10 @@ import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 import pygame
 from operator import itemgetter
+from PIL import Image, ImageTk, ImageDraw, ImageOps, ImageChops
+import math
+
+
 
 # Main Application Class
 class MainApplication:
@@ -460,6 +464,9 @@ class MapCanvas:
     def open_token_editor(self, token_id):
         if token_id in self.tokens:
             token_data = self.tokens[token_id]
+            self.editor.sidebar.token_editor_tab.current_token = Image.open(token_data['file_path'])
+            self.editor.sidebar.token_editor_tab.display_image()
+            self.editor.sidebar.sidebar.select(self.editor.sidebar.sidebar.index(self.editor.sidebar.token_editor_tab))
             new_name = simpledialog.askstring("Edit Token", "Enter new name for the token:", initialvalue=token_data['name'])
             if new_name is not None:
                 old_name = token_data['name']
@@ -487,6 +494,7 @@ class Sidebar:
         self.music_tab = MusicTab(self.sidebar, self.editor)
         self.current_tokens_tab = CurrentTokensTab(self.sidebar, self.editor)
         self.initiative_tracker_tab = InitiativeTrackerTab(self.sidebar, self.editor)
+        self.token_editor_tab = TokenEditorTab(self.sidebar, self.editor)  # Add this line
 
         # Configure column weight to make the sidebar stay at its fixed width
         self.master.grid_columnconfigure(1, weight=0)
@@ -810,6 +818,193 @@ class InitiativeTrackerTab:
                 self.initiatives[i] = (new_name, initiative)
                 break
         self.update_initiative_list()
+# New TokenEditorTab class
+class TokenEditorTab:
+    def __init__(self, notebook, editor):
+        self.editor = editor
+        self.current_token = None
+        self.cropped_image = None
+        self.border_color = "#FFFFFF"  # Default border color (white)
+        self.border_width = 5  # Default border width
+        self.create_tab(notebook)
+
+    def create_tab(self, notebook):
+        token_editor_frame = ttk.Frame(notebook)
+        notebook.add(token_editor_frame, text="Token Editor")
+
+        self.canvas = tk.Canvas(token_editor_frame, width=200, height=200)
+        self.canvas.pack(pady=10)
+
+        controls_frame = ttk.Frame(token_editor_frame)
+        controls_frame.pack(fill=tk.X, padx=5, pady=5)
+
+        ttk.Button(controls_frame, text="Load Image", command=self.load_image).pack(side=tk.LEFT, padx=2)
+        ttk.Button(controls_frame, text="Crop", command=self.crop_image).pack(side=tk.LEFT, padx=2)
+
+        # Border controls
+        border_frame = ttk.LabelFrame(token_editor_frame, text="Border Options")
+        border_frame.pack(fill=tk.X, padx=5, pady=5)
+
+        ttk.Label(border_frame, text="Border Type:").grid(row=0, column=0, padx=2, pady=2)
+        self.border_type = ttk.Combobox(border_frame, values=["Circle", "Square", "Hexagon"])
+        self.border_type.set("Circle")
+        self.border_type.grid(row=0, column=1, padx=2, pady=2)
+
+        ttk.Button(border_frame, text="Border Color", command=self.choose_border_color).grid(row=1, column=0, padx=2, pady=2)
+        self.color_preview = tk.Canvas(border_frame, width=20, height=20, bg=self.border_color)
+        self.color_preview.grid(row=1, column=1, padx=2, pady=2)
+
+        ttk.Label(border_frame, text="Border Width:").grid(row=2, column=0, padx=2, pady=2)
+        self.border_width_scale = ttk.Scale(border_frame, from_=1, to=20, orient=tk.HORIZONTAL, command=self.update_border_width)
+        self.border_width_scale.set(self.border_width)
+        self.border_width_scale.grid(row=2, column=1, padx=2, pady=2, sticky="ew")
+
+        ttk.Button(border_frame, text="Add Border", command=self.add_border).grid(row=3, column=0, columnspan=2, padx=2, pady=2)
+
+        ttk.Button(controls_frame, text="Save", command=self.save_token).pack(side=tk.LEFT, padx=2)
+
+    def load_image(self):
+        file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.png *.jpg *.jpeg")])
+        if file_path:
+            self.current_token = Image.open(file_path)
+            self.display_image()
+
+    def display_image(self):
+        if self.current_token:
+            resized = self.current_token.copy()
+            resized.thumbnail((200, 200))
+            self.tk_image = ImageTk.PhotoImage(resized)
+            self.canvas.delete("all")
+            self.canvas.create_image(100, 100, image=self.tk_image)
+
+    def crop_image(self):
+        if self.current_token:
+            crop_window = tk.Toplevel(self.editor.master)
+            crop_window.title("Crop Image")
+            
+            canvas = tk.Canvas(crop_window, width=400, height=400)
+            canvas.pack()
+
+            resized = self.current_token.copy()
+            resized.thumbnail((400, 400))
+            self.crop_tk_image = ImageTk.PhotoImage(resized)
+            canvas.create_image(200, 200, image=self.crop_tk_image)
+
+            crop_rect = None
+            start_x = start_y = 0
+
+            def start_crop(event):
+                nonlocal crop_rect, start_x, start_y
+                if crop_rect:
+                    canvas.delete(crop_rect)
+                start_x, start_y = event.x, event.y
+                crop_rect = canvas.create_rectangle(start_x, start_y, start_x, start_y, outline="red")
+
+            def drag_crop(event):
+                nonlocal crop_rect
+                if crop_rect:
+                    canvas.coords(crop_rect, start_x, start_y, event.x, event.y)
+
+            def end_crop(event):
+                nonlocal crop_rect
+                if crop_rect:
+                    x1, y1, x2, y2 = canvas.coords(crop_rect)
+                    x1, x2 = min(x1, x2), max(x1, x2)
+                    y1, y2 = min(y1, y2), max(y1, y2)
+                    ratio = self.current_token.width / 400
+                    crop_box = (int(x1 * ratio), int(y1 * ratio), int(x2 * ratio), int(y2 * ratio))
+                    self.cropped_image = self.current_token.crop(crop_box)
+                    self.current_token = self.cropped_image
+                    self.display_image()
+                    crop_window.destroy()
+
+            canvas.bind("<ButtonPress-1>", start_crop)
+            canvas.bind("<B1-Motion>", drag_crop)
+            canvas.bind("<ButtonRelease-1>", end_crop)
+
+    def choose_border_color(self):
+        color = colorchooser.askcolor(self.border_color)
+        if color[1]:
+            self.border_color = color[1]
+            self.color_preview.config(bg=self.border_color)
+
+    def update_border_width(self, value):
+        self.border_width = int(float(value))
+
+    def add_border(self):
+        if self.current_token:
+            if self.current_token.mode != 'RGBA':
+                self.current_token = self.current_token.convert('RGBA')
+            
+            size = min(self.current_token.size)
+            new_size = size + 2 * self.border_width
+            border_type = self.border_type.get()
+
+            # Create a new square image with a transparent background
+            bordered = Image.new('RGBA', (new_size, new_size), (0, 0, 0, 0))
+
+            # Create mask based on border type
+            mask = Image.new('L', (new_size, new_size), 0)
+            draw = ImageDraw.Draw(mask)
+
+            if border_type == "Circle":
+                draw.ellipse((self.border_width, self.border_width, new_size - self.border_width, new_size - self.border_width), fill=255)
+            elif border_type == "Square":
+                draw.rectangle((self.border_width, self.border_width, new_size - self.border_width, new_size - self.border_width), fill=255)
+            elif border_type == "Hexagon":
+                # Draw a hexagon
+                width, height = new_size - 2 * self.border_width, new_size - 2 * self.border_width
+                center = new_size // 2
+                points = [
+                    (center, self.border_width),
+                    (center + width//2, center - height//4),
+                    (center + width//2, center + height//4),
+                    (center, new_size - self.border_width),
+                    (center - width//2, center + height//4),
+                    (center - width//2, center - height//4)
+                ]
+                draw.polygon(points, fill=255)
+
+            # Resize and center the original image
+            resized_token = self.current_token.copy()
+            resized_token.thumbnail((new_size - 2*self.border_width, new_size - 2*self.border_width), Image.LANCZOS)
+            offset = ((new_size - resized_token.width) // 2, (new_size - resized_token.height) // 2)
+            bordered.paste(resized_token, offset, resized_token)
+
+            # Apply the mask to the image
+            bordered.putalpha(ImageChops.multiply(bordered.split()[3], mask))
+
+            # Create the border image
+            border_image = Image.new('RGBA', (new_size, new_size), (0, 0, 0, 0))
+            border_draw = ImageDraw.Draw(border_image)
+            if border_type == "Circle":
+                border_draw.ellipse((0, 0, new_size-1, new_size-1), outline=self.border_color, width=self.border_width)
+            elif border_type == "Square":
+                border_draw.rectangle((0, 0, new_size-1, new_size-1), outline=self.border_color, width=self.border_width)
+            elif border_type == "Hexagon":
+                border_draw.polygon(points, outline=self.border_color, width=self.border_width)
+
+            # Composite the border and the image
+            self.current_token = Image.alpha_composite(bordered, border_image)
+            self.display_image()
+
+    def save_token(self):
+        if self.current_token:
+            # Create the library directory if it doesn't exist
+            library_dir = os.path.join(os.getcwd(), "library", "tokens")
+            os.makedirs(library_dir, exist_ok=True)
+
+            # Open the file dialog with the library directory as the initial directory
+            file_path = filedialog.asksaveasfilename(
+                initialdir=library_dir,
+                defaultextension=".png",
+                filetypes=[("PNG files", "*.png")]
+            )
+            if file_path:
+                self.current_token.save(file_path)
+                self.editor.library_manager.library_data["tokens"].append(file_path)
+                self.editor.library_manager.save_library_data()
+                self.editor.sidebar.library_tab.populate_library()
 # Run the application
 if __name__ == "__main__":
     MainApplication()

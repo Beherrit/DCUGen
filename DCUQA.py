@@ -5,6 +5,8 @@ import math
 from map import MapEditor
 from tkinter import messagebox
 from beasts import open_beastiary
+from migration import update_program
+
 
 open_windows = {}
 
@@ -383,37 +385,20 @@ def allocate_powers(character, power_points, power_level, max_powers, selected_p
                 selected_extras_with_ranks = [(extra["name"], random.randint(1, min(extra["max_rank"], rank))) for extra in selected_extras]
                 selected_flaws_with_ranks = [(flaw["name"], random.randint(1, min(flaw["max_rank"], rank))) for flaw in selected_flaws]
 
-                if power_level <= 3:
-                    accurate_rank_range = (0, 0)
-                elif power_level <= 7:
-                    accurate_rank_range = (1, 2)
-                elif power_level <= 12:
-                    accurate_rank_range = (2, 4)
-                else:
-                    accurate_rank_range = (3, 5)
+                # Calculate total extras and flaws costs
+                extras_cost = sum(extra["value"] * extra_rank for extra, extra_rank in zip(selected_extras, [r for _, r in selected_extras_with_ranks]))
+                flaws_cost = sum(flaw["value"] * flaw_rank for flaw, flaw_rank in zip(selected_flaws, [r for _, r in selected_flaws_with_ranks]))
 
-                if power["type"] == "Combat":
-                    accurate_rank = random.randint(*accurate_rank_range)
-                    if accurate_rank > 0:
-                        selected_extras_with_ranks.append(("Accurate", accurate_rank))
+                # Calculate flat modifiers
+                flat_modifiers = sum(extra["value"] for extra in selected_extras if extra["type"] == "flat") - \
+                                 sum(flaw["value"] for flaw in selected_flaws if flaw["type"] == "flat")
 
-                has_area_extra = any("Area" in extra for extra, _ in selected_extras_with_ranks)
-                if has_area_extra:
-                    selected_extras_with_ranks = [(extra, rank) for extra, rank in selected_extras_with_ranks if "Accuracy" not in extra]
-                    max_rank = min(max_rank, power_level)  # Limit max rank to PL
+                # Calculate total cost using the provided formula
+                total_cost = ((base_cost + extras_cost - flaws_cost) * rank) + flat_modifiers
 
-                total_cost, adjusted_cost_per_rank, adjusted_flats = calculate_modified_cost(
-                    base_cost, rank, selected_extras_with_ranks, selected_flaws_with_ranks, extras_data, flaws_data
-                )
-
-                max_total = power_level * 2
-                for i, (extra_name, extra_rank) in enumerate(selected_extras_with_ranks):
-                    if extra_name == "Accurate" and extra_rank + rank > max_total:
-                        adjusted_accurate_rank = max_total - rank
-                        selected_extras_with_ranks[i] = (extra_name, adjusted_accurate_rank)
-                        total_cost += adjusted_accurate_rank - extra_rank
-
+                # Ensure the total cost is at least 1
                 total_cost = max(total_cost, 1)
+
                 if total_cost <= power_points:
                     power_entry = {
                         "name": power["name"],
@@ -421,8 +406,6 @@ def allocate_powers(character, power_points, power_level, max_powers, selected_p
                         "type": power["type"],
                         "base_cost": base_cost,
                         "range": power.get("range"),
-                        "adjusted_cost_per_rank": adjusted_cost_per_rank,
-                        "adjusted_flats": adjusted_flats,
                         "extras": [extra[0] for extra in selected_extras_with_ranks],
                         "extras_ranks": [extra[1] for extra in selected_extras_with_ranks],
                         "flaws": [flaw[0] for flaw in selected_flaws_with_ranks],
@@ -621,20 +604,44 @@ def pretty_print_character(character, text_widget):
     # Powers
     insert_header("Powers")
     for power in character.get("powers", []):
-        text_widget.insert(tk.END, f"{power['name']} (Rank: {power['rank']}, Cost: {power['cost']})\n", "bold")
+        # Calculate the correct cost
+        base_cost = power.get('base_cost', power.get('cost', 1))  # Default to 'cost' or 1 if 'base_cost' is missing
+        
+        
+        # Helper function to find extra/flaw data
+        def find_in_data(name, data_list):
+            return next((item for item in data_list if item['name'] == name), None)
+
+        extras_cost = sum(find_in_data(extra, extras_data)['value'] * rank 
+                          for extra, rank in zip(power['extras'], power['extras_ranks']) 
+                          if find_in_data(extra, extras_data))
+        
+        flaws_cost = sum(find_in_data(flaw, flaws_data)['value'] * rank 
+                         for flaw, rank in zip(power['flaws'], power['flaws_ranks']) 
+                         if find_in_data(flaw, flaws_data))
+        
+        flat_modifiers = sum(find_in_data(extra, extras_data)['value'] 
+                             for extra in power['extras'] 
+                             if find_in_data(extra, extras_data) and find_in_data(extra, extras_data)['type'] == 'flat') - \
+                         sum(find_in_data(flaw, flaws_data)['value'] 
+                             for flaw in power['flaws'] 
+                             if find_in_data(flaw, flaws_data) and find_in_data(flaw, flaws_data)['type'] == 'flat')
+        
+        total_cost = ((base_cost + extras_cost - flaws_cost) * power['rank']) + flat_modifiers
+        total_cost = max(total_cost, 1)  # Ensure minimum cost of 1
+
+        text_widget.insert(tk.END, f"{power['name']} (Rank: {power['rank']}, Cost: {total_cost})\n", "bold")
         text_widget.insert(tk.END, f"  Type: {power['type']}\n")
         if 'range' in power:
             text_widget.insert(tk.END, f"  Range: {power['range']}\n")
-        if 'resisted' in power:
-            text_widget.insert(tk.END, f"  Resisted by: {power['resisted']}\n")
-        if 'extras' in power and power['extras']:
-            text_widget.insert(tk.END, f"  Extras: {', '.join([f'{extra} (Rank: {rank})' for extra, rank in zip(power['extras'], power['extras_ranks'])])}\n")
-        if 'flaws' in power and power['flaws']:
-            text_widget.insert(tk.END, f"  Flaws: {', '.join([f'{flaw} (Rank: {rank})' for flaw, rank in zip(power['flaws'], power['flaws_ranks'])])}\n")
+        if power['extras']:
+            extras_str = ', '.join([f"{extra} (Rank: {rank})" for extra, rank in zip(power['extras'], power['extras_ranks'])])
+            text_widget.insert(tk.END, f"  Extras: {extras_str}\n")
+        if power['flaws']:
+            flaws_str = ', '.join([f"{flaw} (Rank: {rank})" for flaw, rank in zip(power['flaws'], power['flaws_ranks'])])
+            text_widget.insert(tk.END, f"  Flaws: {flaws_str}\n")
         resisted_by = power.get('resisted', 'N/A')
         text_widget.insert(tk.END, f"  Resisted by: {resisted_by}\n")
-        if 'failure_effects' in power:
-            text_widget.insert(tk.END, f"  Failure Effects: {', '.join([f'{degree}: {effect}' for degree, effect in power['failure_effects'].items()])}\n")
         accuracy = calculate_accuracy(character, power)
         text_widget.insert(tk.END, f"  Accuracy: {accuracy}\n")
         
@@ -922,7 +929,7 @@ def main():
 
     # Use ttkbootstrap for a modern look
     root = ttk.Window(themename="darkly")
-    root.title("Character Creation Version 5.3.0 Prod")
+    root.title("Character Creation Version 5.3.1 Prod")
     
     # Set base size for the main window
     root.geometry("1024x768")  # Width x Height
@@ -1107,15 +1114,15 @@ def main():
     gm_tools_frame.add_widget(generate_encounter_button)
     ToolTip(generate_encounter_button, "Generate a random encounter.")
 
-    # Initiative Tracker
-    init_tracker_button = ttk.Button(
-        gm_tools_frame.body_frame, 
-        text="Initiative Tracker", 
-        command=lambda: open_initiative_tracker(notebook, characters), 
+    # When setting up your menu or button:
+    initiative_tracker_button = ttk.Button(
+        gm_tools_frame.body_frame,
+        text="Initiative Tracker",
+        command=lambda: open_initiative_tracker(notebook, characters, []),
         style=f'{secondary_button_color}.TButton'
     )
-    gm_tools_frame.add_widget(init_tracker_button)
-    ToolTip(init_tracker_button, "Open the initiative tracker for combat encounters.")
+    gm_tools_frame.add_widget(initiative_tracker_button)
+    ToolTip(initiative_tracker_button, "Open the Initiative Tracker to manage combat order.")
 
     # Add new button for opening Excel character sheet
     open_excel_sheet_button = ttk.Button(
@@ -1126,7 +1133,6 @@ def main():
     )
     gm_tools_frame.add_widget(open_excel_sheet_button)
     ToolTip(open_excel_sheet_button, "Open and view an Excel character sheet.")
-
 
     # Combat Calculator
     combat_calculator_button = ttk.Button(
@@ -1221,6 +1227,22 @@ def main():
     )
     settings_frame.add_widget(changelog_button)
     ToolTip(changelog_button, "View the changelog to see recent updates and changes.")
+
+    settings_frame = CollapsibleSection(inner_frame, "Settings", start_collapsed=False)
+    settings_frame.pack(fill="x", pady=5)
+
+    update_program_button = ttk.Button(
+        settings_frame.body_frame,
+        text="Update Program",
+        command=lambda: update_program_action(),
+        style=f'{primary_button_color}.TButton'
+    )
+    settings_frame.add_widget(update_program_button)
+    ToolTip(update_program_button, "Check for and apply program updates.")
+
+    def update_program_action():
+        current_version = "5.3.1"  # Replace with your version tracking method
+        update_program(current_version)
 
     # Lock Window Button
     lock_window_var = tk.BooleanVar()

@@ -970,9 +970,16 @@ class CustomCharacterCreator:
             return
 
         item = selected_items[0]
-        power_name, rank, extras, flaws, power_type, power_range = self.powers_tree.item(item, 'values')
+        values = self.powers_tree.item(item, 'values')
+
+        # Ensure we have at least 8 values, pad with empty strings if necessary
+        values = values + ('',) * (8 - len(values))
+        
+        # Unpack the values
+        power_name, rank, extras, flaws, power_type, power_range, resisted_by, cost = values[:8]
 
         # Set the current values in the input fields
+
         self.power_var.set(power_name)
         self.power_rank_var.set(rank)
         self.power_type_var.set(power_type)
@@ -1207,11 +1214,18 @@ class CustomCharacterCreator:
                     "cost": rank
                 })
 
-        # Powers
+    # Powers
         character["powers"] = []
         for item in self.powers_tree.get_children():
             values = self.powers_tree.item(item, 'values')
-            power_name, rank_str, extras, flaws, power_type, power_range, resisted_by, cost = values
+            # Unpack only the values we're sure exist
+            power_name, rank_str = values[:2]
+            extras = values[2] if len(values) > 2 else ''
+            flaws = values[3] if len(values) > 3 else ''
+            power_type = values[4] if len(values) > 4 else ''
+            power_range = values[5] if len(values) > 5 else ''
+            resisted_by = values[6] if len(values) > 6 else ''
+            cost = values[7] if len(values) > 7 else '0'
             
             # Clean and parse the rank
             rank = int(rank_str.strip().split(')')[0])
@@ -1436,179 +1450,6 @@ class CustomCharacterCreator:
             character['advantages'],
             character['powers']
         )
-
-    def get_current_character(self):
-        character = {}
-        character["name"] = self.name_var.get()
-        character["gender"] = self.gender_var.get()
-        character["age"] = self.age_var.get()
-        character["theme"] = self.theme_var.get()
-        character["origin"] = {
-            "region": self.region_var.get(),
-            "country": self.country_var.get(),
-            "language": self.language_var.get()
-        }
-        
-        character["physical_traits"] = {
-            "height": self.height_var.get(),
-            "weight": self.weight_var.get(),
-            "eye_color": self.eye_color_var.get(),
-            "hair_color": self.hair_color_var.get(),
-            "skin_tone": self.skin_tone_var.get()
-        }
-        
-        character["costume_style"] = self.costume_style_var.get()
-        character["distinctive_feature"] = self.distinctive_feature_var.get()
-        character["power_level"] = int(self.pl_var.get())
-        character["languages"] = [self.language_var.get()]
-        character["occupation"] = self.occupation_var.get()
-        
-        # Stats and Defenses
-        character["stats"] = {}
-        for stat_name, var in self.stat_vars.items():
-            value = int(var.get())
-            character["stats"][stat_name] = {"value": value, "cost": value * 2}
-        
-        character['defenses'] = {
-            'Dodge': {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0},
-            'Fortitude': {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0},
-            'Parry': {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0},
-            'Toughness': {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0},
-            'Will': {'stat_bonus': 0, 'bought_rank': 0, 'total_rank': 0}
-        }
-
-        # Update defenses based on stats
-        allocated_stats = {stat['name']: {'value': int(self.stat_vars[stat['name']].get())} for stat in self.stats_data['STATS']}
-        character = update_defense(character, allocated_stats)
-
-        # Update bought ranks for defenses
-        for defense, var in self.defense_vars.items():
-            if defense != 'Toughness':
-                bought_rank = int(var.get())
-                character['defenses'][defense]['bought_rank'] = bought_rank
-                character['defenses'][defense]['total_rank'] = character['defenses'][defense]['stat_bonus'] + bought_rank
-        
-        # Calculate Toughness
-        stamina_value = int(self.stat_vars['Stamina'].get())
-        character['defenses']['Toughness']['stat_bonus'] = stamina_value
-        character['defenses']['Toughness']['total_rank'] = stamina_value
-        
-        # Apply Defensive Roll to Toughness
-        defensive_roll = 0
-        for advantage in character.get('advantages', []):
-            if advantage['name'] == 'Defensive Roll':
-                defensive_roll = advantage['rank']
-                break
-        character['defenses']['Toughness']['defensive_roll'] = defensive_roll
-        character['defenses']['Toughness']['total_rank'] += defensive_roll
-        
-        # Validate toughness (this will add any power bonuses as well)
-        character = validate_toughness(character)
-        
-        # Skills
-        character["skills"] = []
-        for item in self.skills_tree.get_children():
-            values = self.skills_tree.item(item, 'values')
-            skill_name, rank, _, total, stat_name = values
-            rank = int(rank) if rank else 0
-            if rank > 0:
-                associated_attribute = next((skill['tags'][0] for skill in self.skills_data if skill['name'] == skill_name), None)
-                character["skills"].append({
-                    "name": skill_name,
-                    "rank": rank,
-                    "total": int(total) if total else 0,
-                    "sub_skill": None,  # Add sub-skill support if needed
-                    "associated_attribute": associated_attribute
-                })
-        
-        # Advantages
-        character["advantages"] = []
-        for item in self.advantages_tree.get_children():
-            values = self.advantages_tree.item(item, 'values')
-            advantage_name, rank = values
-            if int(rank) > 0:
-                character["advantages"].append({
-                    "name": advantage_name,
-                    "rank": int(rank),
-                    "cost": int(rank)
-                })
-        
-        # Powers
-        character["powers"] = []
-        for item in self.powers_tree.get_children():
-            values = self.powers_tree.item(item, 'values')
-            power_name, rank_str, extras, flaws, power_type, power_range, resisted_by, cost = values
-            
-            # Clean and parse the rank
-            rank = int(rank_str.strip().split(')')[0])
-            
-            extras_list = extras.split(', ') if extras else []
-            flaws_list = flaws.split(', ') if flaws else []
-            
-            extras_with_ranks = []
-            flaws_with_ranks = []
-            
-            for extra in extras_list:
-                if '(Rank:' in extra:
-                    name, extra_rank = extra.split(' (Rank:')
-                    extras_with_ranks.append((name, int(extra_rank.strip(')'))))
-                else:
-                    extras_with_ranks.append((extra, 1))
-            
-            for flaw in flaws_list:
-                if '(Rank:' in flaw:
-                    name, flaw_rank = flaw.split(' (Rank:')
-                    flaws_with_ranks.append((name, int(flaw_rank.strip(')'))))
-                else:
-                    flaws_with_ranks.append((flaw, 1))
-            
-            power_entry = {
-                "name": power_name,
-                "rank": rank,
-                "extras": [extra[0] for extra in extras_with_ranks],
-                "extras_ranks": [extra[1] for extra in extras_with_ranks],
-                "flaws": [flaw[0] for flaw in flaws_with_ranks],
-                "flaws_ranks": [flaw[1] for flaw in flaws_with_ranks],
-                "type": power_type,
-                "range": power_range,
-                "resisted": resisted_by,
-                "cost": int(cost)
-            }
-            
-            character["powers"].append(power_entry)
-        
-        # Personality and Background
-        character["personality_traits"] = {
-            "positive_traits": [self.positive_traits_var.get()],
-            "negative_traits": [self.negative_traits_var.get()],
-            "quirky_traits": [self.quirky_traits_var.get()]
-        }
-        character["Motivation"] = {
-            "name": self.motivation_var.get(),
-            "description": self.motivations["Hero"].get(self.motivation_var.get(), "")
-        }
-        character["Complications"] = [{
-            "name": self.complication_var.get(),
-            "description": self.complications.get(self.complication_var.get(), {}).get("description", "")
-        }]
-        
-        # Add expanded traits
-        character["expanded_traits"] = {}
-        for trait_type, var in self.expanded_trait_vars.items():
-            selected_trait = var.get()
-            if selected_trait:
-                trait_info = next((trait for trait in self.expanded_traits[trait_type] if trait["name"].lower() == selected_trait.lower()), None)
-                if trait_info:
-                    character["expanded_traits"][trait_type] = {
-                        "name": trait_info["name"],
-                        "description": trait_info["description"]
-                    }
-        
-        # Generate character description
-        character["description"] = generate_character_description(character)
-        
-        return character
-
     def toggle_power_range(self, event=None):
         if self.power_type_var.get() == 'Combat':
             self.power_range_label.grid()

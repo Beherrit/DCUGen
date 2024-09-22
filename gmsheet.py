@@ -8,7 +8,7 @@ from ttkbootstrap.scrolled import ScrolledFrame
 import os
 from openpyxl import load_workbook
 from PIL import Image, ImageTk
-from initiative_tracker import open_initiative_tracker, update_initiative_tracker
+from initiative_tracker import open_initiative_tracker
 from tooltip import ToolTip
 from system import initialize_system, get_preloaded_image, get_preloaded_json
 

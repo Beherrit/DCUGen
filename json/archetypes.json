@@ -153,7 +153,7 @@
             "max_advantages": 10,
             "max_powers": 10,
             "power_types": {
-                "Combat": {"Melee": 2, "Ranged": 0},
+                "Combat": {"Melee": 1, "Ranged": 0},
                 "Utility": 1,
                 "Support": 1,
                 "Movement": 1,

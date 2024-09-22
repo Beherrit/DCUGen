@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "DCUGen"
-#define MyAppVersion "5.3.0"
+#define MyAppVersion "5.3.1"
 #define MyAppPublisher "Beherrit"
 #define MyAppExeName "DCUQA.exe"
 
