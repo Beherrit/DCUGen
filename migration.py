@@ -7,34 +7,56 @@ import os
 import logging
 from tkinter import messagebox
 import tkinter as tk
+from packaging.version import parse as parse_version
 
 # Set up logging
 logging.basicConfig(filename='update_log.txt', level=logging.INFO, 
                     format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+# Personal Access Token for GitHub
+GITHUB_TOKEN = "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"  # Replace with your GitHub PAT
+
 def check_for_updates(current_version):
     """Check GitHub for the latest release version."""
-    api_url = "https://api.github.com/repos/Beherrit/DCUGen/releases/latest"
+    api_url = "https://api.github.com/repos/Beherrit/DCUGen/releases/latest"  # Adjust with your repo
     
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
     try:
-        response = requests.get(api_url)
+        response = requests.get(api_url, headers=headers)
         response.raise_for_status()
         latest_release = response.json()
         
-        if latest_release['tag_name'] > current_version:
-            return latest_release['zipball_url'], latest_release['tag_name']
+        # Extract the latest version and download URL
+        latest_version = latest_release['tag_name'].lstrip('v')
+        if parse_version(latest_version) > parse_version(current_version):
+            download_url = latest_release['zipball_url']
+            return download_url, latest_version
         else:
             return None, None
+    except requests.HTTPError as e:
+        logger.error(f"HTTP error occurred while checking for updates: {e}")
+        messagebox.showerror("Update Check Failed", f"An error occurred while checking for updates: {e}")
     except requests.RequestException as e:
         logger.error(f"Failed to check for updates: {e}")
-        return None, None
+        messagebox.showerror("Update Check Failed", f"Failed to check for updates: {e}")
+    except (KeyError, IndexError) as e:
+        logger.error(f"Error parsing release information: {e}")
+        messagebox.showerror("Update Check Failed", "Error parsing release information. Please try again later.")
+    return None, None
 
 def download_and_apply_update(update_url):
     """Download and apply the update."""
     try:
+        headers = {
+            "Authorization": f"token {GITHUB_TOKEN}"
+        }
         # Download the update
-        response = requests.get(update_url)
+        response = requests.get(update_url, headers=headers)
         response.raise_for_status()
         
         # Extract the update

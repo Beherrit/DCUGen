@@ -2,3 +2,13 @@
 2024-09-22 00:23:15,026 - INFO - No updates available
 2024-09-22 00:27:34,757 - ERROR - Failed to check for updates: 404 Client Error: Not Found for url: https://api.github.com/repos/Beherrit/DCUGen/releases/latest
 2024-09-22 00:27:36,008 - INFO - No updates available
+2024-09-22 00:32:32,426 - ERROR - Failed to check for updates: 404 Client Error: Not Found for url: https://api.github.com/repos/Beherrit/DCUGen/releases/latest
+2024-09-22 00:32:33,417 - INFO - No updates available
+2024-09-22 00:35:15,117 - ERROR - Repository or latest release not found: https://api.github.com/repos/Beherrit/DCUGen/releases/latest
+2024-09-22 00:37:00,016 - INFO - No updates available
+2024-09-22 00:37:15,886 - ERROR - HTTP error occurred while checking for updates: 404 Client Error: Not Found for url: https://api.github.com/repos/Beherrit/DCUGen/releases
+2024-09-22 00:37:20,194 - INFO - No updates available
+2024-09-22 00:37:39,669 - ERROR - HTTP error occurred while checking for updates: 404 Client Error: Not Found for url: https://github.com/Beherrit/DCUGen/releases/latest
+2024-09-22 00:37:44,977 - INFO - No updates available
+2024-09-22 00:44:45,728 - INFO - Successfully updated to version 5.3.4
+2024-09-22 00:45:00,558 - INFO - Successfully updated to version 5.3.4
