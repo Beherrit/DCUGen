@@ -920,8 +920,15 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 .portrait-status.bad { background: color-mix(in srgb, var(--hero) 70%, #000); }
 .portrait-frame:has(.portrait-status.bad) .portrait-img { visibility: hidden; }
 .portrait-tools { display: flex; flex-wrap: wrap; gap: 3px; align-items: center; }
-.portrait-tools .btn { padding: 3px 7px; font-size: 11.5px; background: rgba(0, 0, 0, .25); border-color: rgba(255, 255, 255, .35); color: var(--hero-ink); }
-.portrait-tools .x { color: var(--hero-ink); opacity: .8; }
+.portrait-tools { padding: 4px; border-radius: 6px; background: var(--surface); box-shadow: 0 1px 4px rgba(0, 0, 0, .25); }
+.portrait-tools .btn { padding: 3px 7px; font-size: 11.5px; background: var(--surface-2); border-color: var(--line); color: var(--ink); }
+.portrait-tools .x { color: var(--ink-2); }
+.portrait-frame.builtin .portrait-img { visibility: visible; }
+.portrait-frame.builtin .portrait-status { inset: auto 0 0 0; font-size: 10.5px; padding: 4px 6px; background: rgba(0, 0, 0, .6); }
+.wd-card-head.has-img { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 10px; align-items: center; }
+.wd-card-img { display: block; width: 56px; height: 70px; border-radius: 6px; overflow: hidden; box-shadow: 0 0 0 2px rgba(255, 255, 255, .5); }
+.wd-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wd-card-titles { display: grid; min-width: 0; }
 .portrait.hidden { position: absolute; top: 72px; right: 20px; width: auto; }
 .wd-head-glyph.has-img { position: relative; overflow: hidden; width: 96px; height: 96px; }
 .wd-head-glyph.has-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
