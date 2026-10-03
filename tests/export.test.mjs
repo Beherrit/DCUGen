@@ -72,3 +72,25 @@ test('DCUGen Excel exports import back exactly (character and roster)', async ()
   assert.equal(roster[1].identity.codename, team[1].identity.codename);
   assert.equal(await readWorkbookCharacters(template, inflate), null);
 });
+
+test('a portrait PNG is embedded in the Excel sheet as a picture', async () => {
+  const { embedImage, fillCharacterSheet, unzip } = await import('../src/engine/xlsx.js');
+  const fs = await import('node:fs');
+  const zlib = await import('node:zlib');
+  const inflateRaw = async (bytes) => new Uint8Array(zlib.inflateRawSync(Buffer.from(bytes)));
+  const template = new Uint8Array(fs.readFileSync(new URL('../data/sheet_template.xlsx', import.meta.url)));
+  const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0]);
+  const ch = generateCharacter(R, { seed: 'xlsx-portrait' });
+  const bytes = await fillCharacterSheet(template, ch, R, inflateRaw, { portraitPng: png });
+  const files = await unzip(bytes, inflateRaw);
+  assert.ok(files['xl/media/image1.png'], 'media part');
+  const dec = new TextDecoder();
+  assert.ok(dec.decode(files['xl/drawings/drawing1.xml']).includes('<xdr:pic>'));
+  assert.ok(dec.decode(files['xl/drawings/_rels/drawing1.xml.rels']).includes('media/image1.png'));
+  assert.ok(dec.decode(files['[Content_Types].xml']).includes('Extension="png"'));
+  // a workbook without a drawing gets one
+  const plain = { '[Content_Types].xml': new TextEncoder().encode('<Types><Default Extension="rels" ContentType="x"/></Types>'), 'xl/worksheets/sheet1.xml': new TextEncoder().encode('<worksheet><sheetData/><pageMargins/></worksheet>') };
+  embedImage(plain, png, { col: 0, row: 0 });
+  assert.ok(dec.decode(plain['xl/worksheets/sheet1.xml']).includes('<drawing r:id="rId1"/>'));
+  assert.ok(plain['xl/drawings/drawing1.xml'] && plain['xl/worksheets/_rels/sheet1.xml.rels']);
+});

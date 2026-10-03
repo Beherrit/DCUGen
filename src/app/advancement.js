@@ -22,7 +22,7 @@ export function advancementSection(ch, R, { change, onSpend, editing }) {
   }
 
   const pts = h('input', { type: 'number', id: 'adv-award-pts', min: -20, max: 50, value: 1, 'aria-label': 'Points awarded', style: { maxWidth: '76px' } });
-  const note = h('input', { type: 'text', id: 'adv-award-note', placeholder: 'Why (e.g. "Session 4: stopped the Royal Flush Gang")', 'aria-label': 'Award note' });
+  const note = h('input', { type: 'text', id: 'adv-award-note', placeholder: 'Why (e.g. "Session 4: stopped the Clockwork Gang")', 'aria-label': 'Award note' });
   const award = h('div', { class: 'add-row no-print' }, pts, note,
     h('button', { class: 'btn primary', type: 'button', onClick: () => {
       const n = Math.trunc(Number(pts.value));

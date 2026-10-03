@@ -1954,7 +1954,7 @@
       "energy",
       "willpower"
     ],
-    "origin_hint": "a power ring chosen by an alien Corps, a cosmic storm, or a dying alien's gift",
+    "origin_hint": "a ring of power from a dying alien, a cosmic storm, or a star-born gift",
     "environment": "Space",
     "weakness": [
       "a color or element the energy can't affect",
@@ -2699,15 +2699,15 @@
   },
   {
     "id": "speed",
-    "name": "Speed Force",
+    "name": "Super-Speed",
     "color": "#f2a23a",
     "attack_skill": "Speed Strikes",
     "descriptors": [
       "speed",
       "kinetic",
-      "Speed Force"
+      "Pure Motion"
     ],
-    "origin_hint": "a lightning bolt into a shelf of chemicals, a stolen speed formula, or a link to the Speed Force",
+    "origin_hint": "a lightning bolt into a shelf of chemicals, a stolen speed formula, or a link to a dimension of pure motion",
     "environment": "Urban",
     "weakness": [
       "friction and slick ground",
@@ -3084,7 +3084,7 @@
         "Lynx",
         "Kodiak",
         "Raptor",
-        "Wildcat",
+        "Alley Cat",
         "Fang"
       ],
       "adjectives": [
@@ -4044,7 +4044,7 @@
       "ki",
       "discipline"
     ],
-    "origin_hint": "years in a mountain monastery, a League of assassins, or a family of fighters",
+    "origin_hint": "years in a mountain monastery, a guild of assassins, or a family of fighters",
     "environment": "Urban",
     "weakness": [
       "broken focus",

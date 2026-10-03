@@ -63,10 +63,14 @@ export function upsert(ch) {
   const i = state.roster.findIndex((x) => x.rosterId === copy.rosterId);
   if (i >= 0) state.roster[i] = copy; else state.roster.unshift(copy);
   saveRoster();
+  state.lastUpsert = copy;
+  emit('roster-upsert');
   return copy;
 }
 
 export function removeFromRoster(rosterId) {
   state.roster = state.roster.filter((x) => x.rosterId !== rosterId);
   saveRoster();
+  state.lastRemoved = rosterId;
+  emit('roster-remove');
 }

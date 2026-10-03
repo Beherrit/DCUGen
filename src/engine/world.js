@@ -2,7 +2,7 @@
 // a vault (saved world data) that the user extends by hand.
 //
 // Entities: people, factions, locations, events and items. Links are typed and directed; each
-// relation has an inverse, so "Wildcat is Nightfang's mentor" also reads "Nightfang is Wildcat's
+// relation has an inverse, so "Alleycat is Nightfang's mentor" also reads "Nightfang is Alleycat's
 // student" on the other page. Everything from the roster and the bios is rebuilt on every build
 // (so it is always current) and merged with what the user wrote by hand.
 //

@@ -99,7 +99,7 @@ export const DEVICE_TYPES = {
     label: 'Gadget (tech)', themes: ['tech', 'electric', 'gravity', 'light', 'magnetism', 'sonic', 'arsenal'],
     forms: ['Gauntlet', 'Rifle', 'Belt', 'Visor', 'Harness', 'Boots', 'Wrist Unit', 'Drone', 'Staff', 'Backpack'],
     prefixes: ['Mk-II', 'Mk-IV', 'Prototype', 'X-9', 'Omega', 'Kinetic', 'Quantum', 'Tactical', 'Hard-Light', 'Ion'],
-    makers: ['Kord Industries', 'S.T.A.R. Labs', 'Wayne Tech', 'Lexcorp', 'Ferris Aircraft', 'a garage workshop', 'a black-budget lab'],
+    makers: ['Argent Dynamics', 'NOVA Labs', 'Sterling Tech', 'Helix Corp', 'Meridian Aerospace', 'a garage workshop', 'a black-budget lab'],
     blurbs: ['Built to take punishment and keep working.', 'Its battery indicator is always a little too low.', 'Covered in warning labels nobody reads.', 'Hums when it powers up.'],
   },
   magic: {

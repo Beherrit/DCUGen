@@ -5,6 +5,7 @@ import { state, saveRoster, upsert, removeFromRoster, newId } from './store.js';
 import { exportExcel, exportJson, exportRosterExcel, exportRosterJson } from './exporters.js';
 import { importDialog as importAndOpen } from './importer.js';
 import { sheet as makeSheet } from '../engine/render.js';
+import { backupMenuItems } from './backup.js';
 let R;
 let root;
 let hooks = {};
@@ -78,6 +79,7 @@ export function renderRoster() {
     h('div', null, h('h1', null, 'Roster'), h('p', null, 'Characters you save live here, in this browser. Export to Excel or JSON to keep a copy, move them to another computer or send them to your group. Import brings back DCUGen Excel sheets, .json files and share codes.')),
     h('span', { class: 'spacer' }),
     h('div', { class: 'btn-row' },
+      backupMenu(),
       h('button', { class: 'btn', type: 'button', onClick: importDialog }, 'Import'),
       h('button', { class: 'btn', type: 'button', disabled: !list.length, onClick: () => exportRosterExcel(list, R) }, 'Export to Excel'),
       h('button', { class: 'btn', type: 'button', disabled: !list.length, onClick: () => exportRosterJson(list) }, 'Export JSON'))));
@@ -122,6 +124,14 @@ function renderRosterList() {
     if (teams.size) host.append(h('div', { class: 'group-title' }, 'Solo'));
     host.append(h('div', { class: 'cards' }, solo.map(card)));
   }
+}
+
+function backupMenu() {
+  const list = h('div', { class: 'menu-list', hidden: true, role: 'menu' });
+  const btn = h('button', { class: 'btn', type: 'button', 'aria-haspopup': 'menu', 'aria-expanded': 'false', onClick: (e) => { e.stopPropagation(); const open = list.hidden; document.querySelectorAll('.menu-list').forEach((m) => { m.hidden = true; }); list.hidden = !open; btn.setAttribute('aria-expanded', String(open)); } }, 'Backup ▾');
+  for (const it of backupMenuItems()) list.append(h('button', { type: 'button', role: 'menuitem', onClick: () => { list.hidden = true; it.run(); } }, it.label, it.hint ? h('small', null, it.hint) : null));
+  if (window.dcugenDesktop) list.append(h('button', { type: 'button', role: 'menuitem', onClick: () => { list.hidden = true; window.dcugenDesktop.openDataFolder(); } }, 'Open the data folder', h('small', null, 'Where the desktop app keeps everything')));
+  return h('div', { class: 'menu' }, btn, list);
 }
 
 export { saveRoster };

@@ -980,7 +980,7 @@
       "id": "hazard-zero-g",
       "title": "Zero gravity",
       "group": "Environment & hazards",
-      "text": "People who are not adapted to free fall suffer -2 circumstance penalties to attack checks and to Acrobatics, Athletics and other physical skill checks, and move at speed rank -1 when they have something to push off from; without a surface, thrusters or a tether they simply drift. Pushing off accurately toward a target is an Athletics check (DC 10). Movement (Environmental Adaptation: zero-g), 1 rank, removes these penalties, as the book shows on the Lantern rings. Artificial Gravity aboard a ship removes them indoors.",
+      "text": "People who are not adapted to free fall suffer -2 circumstance penalties to attack checks and to Acrobatics, Athletics and other physical skill checks, and move at speed rank -1 when they have something to push off from; without a surface, thrusters or a tether they simply drift. Pushing off accurately toward a target is an Athletics check (DC 10). Movement (Environmental Adaptation: zero-g), 1 rank, removes these penalties, as the book shows for alien power rings. Artificial Gravity aboard a ship removes them indoors.",
       "source": "DCA 15, 109, 223; DCUGen (penalties)"
     },
     {

@@ -258,7 +258,7 @@ export function notesTool(rerender) {
   const editor = current ? h('div', { style: { display: 'grid', gap: '10px', minWidth: 0 } },
     h('input', { type: 'text', id: 'note-title', value: current.title, 'aria-label': 'Note title', style: { font: '800 22px/1.1 var(--font-display)', textTransform: 'uppercase' },
       onInput: (e) => { current.title = e.target.value; current.updated = new Date().toISOString(); save(); } }),
-    h('input', { type: 'text', id: 'note-tags', value: current.tags, placeholder: 'Tags: session 3, villains, Gotham', 'aria-label': 'Tags', onInput: (e) => { current.tags = e.target.value; save(); } }),
+    h('input', { type: 'text', id: 'note-tags', value: current.tags, placeholder: 'Tags: session 3, villains, downtown', 'aria-label': 'Tags', onInput: (e) => { current.tags = e.target.value; save(); } }),
     h('textarea', { id: 'note-body', style: { minHeight: '320px' }, 'aria-label': 'Note', onInput: (e) => { current.body = e.target.value; current.updated = new Date().toISOString(); save(); } }, current.body),
     h('div', { class: 'btn-row' },
       h('button', { class: 'btn sm', type: 'button', onClick: () => { current.pinned = !current.pinned; save(); rerender(); } }, current.pinned ? 'Unpin' : 'Pin to top'),

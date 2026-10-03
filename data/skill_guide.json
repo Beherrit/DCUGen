@@ -644,7 +644,7 @@
       }
     ],
     "opposed_by": null,
-    "examples": "Hacking a LexCorp lock, patching a damaged Batmobile mid-chase, rigging a bomb to drop a bridge support, defusing a Joker device.",
+    "examples": "Hacking a corporate lock, patching the team's car mid-chase, rigging a bomb to drop a bridge support, defusing a madman's device.",
     "source": "DCA 65-67"
   },
   {
@@ -726,7 +726,7 @@
       }
     ],
     "opposed_by": null,
-    "examples": "Car chases through Gotham, flying the Javelin through an asteroid field, outrunning a pursuing helicopter.",
+    "examples": "Car chases through the city, flying the team jet through an asteroid field, outrunning a pursuing helicopter.",
     "source": "DCA 67"
   }
 ]

@@ -906,7 +906,7 @@
     },
     {
       "id": "book-batcave",
-      "name": "The Batcave",
+      "name": "The Cave Beneath the Manor",
       "setting": "Modern",
       "size": "Huge",
       "toughness": 10,
@@ -954,8 +954,8 @@
           "name": "Workshop"
         }
       ],
-      "crew": "Batman and allies",
-      "summary": "The cave beneath Wayne Manor.",
+      "crew": "A masked vigilante and allies",
+      "summary": "A cavern under an old family manor, fitted out as a secret base.",
       "cost": 19,
       "book_cost": 20,
       "book_cost_note": "Book lists 20 (and spells Hangar \"Hanger\"). Huge 3 + Toughness 10 (2) + 14 features = 19; the Stately Manor sample, same size and Toughness with 14 features, is 19.",
@@ -963,7 +963,7 @@
     },
     {
       "id": "book-fortress-of-solitude",
-      "name": "Fortress of Solitude",
+      "name": "Polar Fortress",
       "setting": "Cosmic",
       "size": "Huge",
       "toughness": 20,
@@ -1009,7 +1009,7 @@
           "name": "Security System"
         }
       ],
-      "crew": "Superman",
+      "crew": "A lone paragon",
       "summary": "A crystal citadel in the Arctic wastes.",
       "cost": 25,
       "book_cost": 25,
@@ -1146,7 +1146,7 @@
     },
     {
       "id": "orbital-watchtower",
-      "name": "Orbital Watchtower",
+      "name": "Orbital Station",
       "setting": "Cosmic",
       "size": "Colossal",
       "toughness": 20,
