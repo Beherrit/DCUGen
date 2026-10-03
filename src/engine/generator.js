@@ -520,11 +520,20 @@ function tplKey(tpl) {
   return `${tpl.effect}|${(tpl.names || [])[0]}`;
 }
 
+// Effects that can repeat on one character (everything else is bought once: two Flights is a mistake).
+const STACKABLE = new Set(['Enhanced Trait', 'Feature', 'Immunity', 'Senses', 'Movement', 'Damage', 'Affliction']);
+function usedEffects(ch) {
+  const out = new Set();
+  for (const p of [...(ch.powers || []), ...(ch.devices || []).flatMap((d) => d.powers)]) if (!STACKABLE.has(p.effect)) out.add(p.effect);
+  return out;
+}
+
 function addUtilityPower(ch, R, ctx, room) {
   const { rng, themes } = ctx;
   if (ctx.arch.powerless) return false;
   const used = usedTemplates(ch);
-  const choices = themeTemplates(themes, (t) => ['utility', 'sense', 'support', 'movement', 'control'].includes(t.role) && t.rank !== 'toughness' && !used.has(tplKey(t)));
+  const have = usedEffects(ch);
+  const choices = themeTemplates(themes, (t) => ['utility', 'sense', 'support', 'movement', 'control'].includes(t.role) && t.rank !== 'toughness' && !used.has(tplKey(t)) && !have.has(t.effect));
   const pick = rng.weighted(choices);
   if (!pick) return false;
   const p = instantiate(pick.tpl, rankFor(pick.tpl, ctx, R, 'utility'), pick.theme, rng);
@@ -773,7 +782,8 @@ function buildMechanics(R, ctx) {
     const placeIn = () => (ctx.device && rng.chance(arch.id === 'battlesuit' ? 0.95 : 0.5) ? ctx.device.powers : ch.powers);
     const addRole = (role) => {
       const used = usedTemplates(ch);
-      const pick = rng.weighted(themeTemplates(themes, (t) => t.role === role && t.rank !== 'toughness' && !used.has(tplKey(t))));
+      const have = usedEffects(ch);
+      const pick = rng.weighted(themeTemplates(themes, (t) => t.role === role && t.rank !== 'toughness' && !used.has(tplKey(t)) && !have.has(t.effect)));
       if (!pick) return;
       const p = instantiate(pick.tpl, rankFor(pick.tpl, ctx, R, role), pick.theme, rng);
       p.tpl = tplKey(pick.tpl);

@@ -1,8 +1,8 @@
 // The campaign journal on the Bio page: sessions played, who was met, what the points bought,
 // and what happened between adventures.
 
-import { h, toast, copyText } from './dom.js';
-import { addJournalEntry, updateJournalEntry, removeJournalEntry, journalEntries, journalPoints, unlinkedSpends, linkPoints, journalText, JOURNAL_RELATIONS } from '../engine/journal.js';
+import { h, toast, copyText, openDialog } from './dom.js';
+import { addJournalEntry, updateJournalEntry, removeJournalEntry, journalEntries, journalPoints, unlinkedSpends, linkPoints, journalText, JOURNAL_RELATIONS, addEnemy, ENEMY_LEVELS } from '../engine/journal.js';
 import { rollDowntimeEvent } from '../engine/lifepath.js';
 import { randomSeed } from '../engine/rng.js';
 
@@ -109,8 +109,32 @@ export function journalSection(ch, R, { change, onOpenPerson } = {}) {
     h('p', { class: 'hint', style: { margin: '0 0 8px' } }, 'Each session joins the life timeline as "In play". People you name are added to their life, or have their status updated. Points the GM awards for a session are tied to it, and so is whatever they bought.'),
     change && editing !== 'new' ? h('div', { class: 'btn-row no-print', style: { marginBottom: '8px' } },
       h('button', { class: 'btn primary', type: 'button', id: 'jr-new', onClick: () => { editing = 'new'; change(() => {}); } }, '+ New session'),
+      h('button', { class: 'btn', type: 'button', id: 'jr-enemy', title: 'Roll a villain who has it in for them', onClick: () => enemyDialog(ch, R, change) }, '😈 Add an enemy'),
       entries.length ? h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(journalText(ch))) ? 'Journal copied' : 'Copy failed') }, 'Copy journal') : null) : null,
     editing === 'new' ? form(null) : null,
     linkRow,
     entries.length ? h('div', { class: 'jr-list' }, entries.map(card)) : (editing !== 'new' ? h('p', { class: 'hint', style: { margin: 0 } }, 'No sessions yet. After a game, add what happened: it becomes part of their story.') : null));
+}
+
+async function enemyDialog(ch, R, change) {
+  const hero = ch.identity?.codename || 'them';
+  const level = h('select', { id: 'enemy-level', 'aria-label': 'How dangerous' }, Object.entries(ENEMY_LEVELS).map(([k, v]) => h('option', { value: k, selected: k === 'threat' }, `${v.label} · ${v.blurb}`)));
+  const name = h('input', { type: 'text', id: 'enemy-name', placeholder: 'Leave blank for a rolled name', 'aria-label': 'Codename' });
+  const themes = (R.raw.themes || []).slice().sort((a, b) => a.name.localeCompare(b.name));
+  const theme = h('select', { id: 'enemy-theme', 'aria-label': 'Power theme' }, h('option', { value: '' }, 'Any power theme'), themes.map((t) => h('option', { value: t.id }, t.name)));
+  const comp = h('input', { type: 'checkbox', id: 'enemy-comp', checked: true });
+  const ok = await openDialog({
+    title: `An enemy for ${hero}`,
+    body: [
+      h('p', { style: { margin: 0 } }, 'A full villain, rolled at a power level that fits the threat, added to "People in their life" and the timeline. Tap their name to open them as a character of their own.'),
+      h('label', { class: 'field' }, h('span', null, 'How dangerous'), level),
+      h('div', { class: 'grid2' }, h('label', { class: 'field' }, h('span', null, 'Codename (optional)'), name), h('label', { class: 'field' }, h('span', null, 'Power theme'), theme)),
+      h('label', { class: 'check' }, comp, ' Add an Enemy complication to the sheet'),
+    ],
+    buttons: [{ label: 'Cancel', value: false }, { label: 'Roll the enemy', value: true, primary: true }],
+  });
+  if (!ok) return;
+  let made = null;
+  change((c) => { made = addEnemy(c, R, { level: level.value, name: name.value.trim() || undefined, theme: theme.value || null, complication: comp.checked }); });
+  if (made) toast(`${made.person.name} (PL ${made.person.enemy.pl}) now has it in for ${hero}`);
 }

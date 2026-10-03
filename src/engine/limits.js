@@ -105,10 +105,18 @@ export function checkLimits(ch, R) {
   // PL 0 is for ordinary people: anything up to 14 points is fine, and nothing is "unspent".
   if (pl === 0 && !ch.advancement) {
     if (cost.total > 14) out.push(issue('budget', `Spent ${cost.total} power points; an ordinary person (PL 0) has 14 or fewer. Raise the power level or trim the build.`));
+  } else if (cost.total > cost.budget && isNpc(ch)) {
+    // Supporting characters and creatures are stat blocks, not player builds: points over PL x 15 are fine (DCA 194).
+    out.push(issue('budget', `${cost.total} power points for a PL ${pl} supporting character (player characters get ${cost.budget}).`, 'info'));
   } else if (cost.total > cost.budget) out.push(issue('budget', ch.advancement ? `Spent ${cost.total} power points; starting points plus GM awards give ${cost.budget}.` : `Spent ${cost.total} power points; PL ${pl} allows ${cost.budget}.`));
   else if (cost.total < cost.budget) out.push(issue('budget', `${cost.budget - cost.total} power points unspent.`, 'info'));
 
   return out;
+}
+
+/** Supporting characters, minions and creatures: built as stat blocks, so the point budget is advisory. */
+export function isNpc(ch) {
+  return !!(ch.npc || ch.minion || ch.catalogId || /^npc-/.test(ch.archetype?.id || '') || ['creature', 'animal', 'monster', 'construct'].includes(String(ch.kind || '').toLowerCase()));
 }
 
 export function isLegal(ch, R) {

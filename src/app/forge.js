@@ -410,6 +410,7 @@ function status(ch) {
   const errs = s.issues.filter((i) => i.severity === 'error');
   if (errs.length) return h('span', { class: 'status bad', title: errs.map((e) => e.message).join('\n') }, `✕ ${errs.length} rule issue${errs.length > 1 ? 's' : ''}`);
   if (ch.pl === 0 && !ch.advancement) return h('span', { class: 'status ok', title: 'PL 0 is for ordinary people: up to 14 points, no limits to check' }, `✓ Ordinary person · ${s.cost.total} pp`);
+  if (s.cost.total > s.cost.budget) return h('span', { class: 'status ok', title: 'A supporting character: built as a stat block, so points over PL x 15 are allowed (DCA 194)' }, `✓ Legal · ${s.cost.total} pp (supporting character)`);
   if (s.cost.total < s.cost.budget) return h('span', { class: 'status warn' }, `Legal · ${s.cost.budget - s.cost.total} pp unspent`);
   return h('span', { class: 'status ok' }, `✓ Legal · ${s.cost.total}/${s.cost.budget} pp`);
 }
