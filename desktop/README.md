@@ -15,20 +15,36 @@ The same DCUGen Hero Forge, in its own window, with three things the web version
 
 ## Run it from source
 
-Needs Node 18 or newer.
+Needs Node 18 or newer and a copy of the repository:
 
-```bash
-cd desktop
-npm install          # downloads Electron (about 100 MB)
-npm start            # copies ../DCUGen.html next to main.js and opens the app
+```
+git clone https://github.com/Beherrit/DCUGen.git
+cd DCUGen
+npm run desktop
 ```
 
-Build the app first if `DCUGen.html` is out of date: `npm run build` in the repository root.
+`npm run desktop` rebuilds `DCUGen.html`, installs Electron (about 100 MB, first time only) and opens the app.
+It works the same in PowerShell, cmd and a Mac or Linux shell.
+
+Step by step, if you prefer (one line at a time; Windows PowerShell 5 does not accept `&&` between commands):
+
+```
+cd DCUGen
+npm run build
+cd desktop
+npm install
+npm start
+```
 
 ## Make installers
 
-```bash
-cd desktop
+```
+npm run desktop:dist   # from the repository root: installers for this platform in desktop/dist/
+```
+
+or inside `desktop/`:
+
+```
 npm run dist         # installers for this platform in desktop/dist/
 npm run dist:win     # Windows: NSIS installer and a portable .exe
 npm run dist:mac     # macOS: .dmg

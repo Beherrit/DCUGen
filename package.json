@@ -9,6 +9,8 @@
     "build": "node tools/build.mjs all",
     "test": "node tools/build.mjs data && node --test \"tests/**/*.test.mjs\"",
     "dev": "node tools/serve.mjs",
-    "validate": "node tools/validate-catalog.mjs"
+    "validate": "node tools/validate-catalog.mjs",
+    "desktop": "node tools/build.mjs all && cd desktop && npm install && npm start",
+    "desktop:dist": "node tools/build.mjs all && cd desktop && npm install && npm run dist"
   }
 }
