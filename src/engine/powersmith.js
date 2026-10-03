@@ -40,7 +40,8 @@ export function powerTags(p, R) {
   const area = (p.extras || []).some((m) => m.name === 'Area');
   const tags = new Set();
   if ((eff.attack || eff.type === 'Attack') && !area && (range === 'Close' || range === 'Ranged')) tags.add('attack');
-  if (eff.resistance) tags.add('resisted');
+  // The Attack extra turns a personal effect (Concealment, Insubstantial...) into a resisted one.
+  if (eff.resistance || (p.extras || []).some((m) => m.name === 'Attack')) tags.add('resisted');
   if (range === 'Ranged') tags.add('ranged');
   if (range === 'Close') tags.add('close');
   if (range === 'Personal') tags.add('personal');

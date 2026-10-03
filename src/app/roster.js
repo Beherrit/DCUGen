@@ -2,8 +2,8 @@
 
 import { h, clear, toast, openDialog, inkFor } from './dom.js';
 import { state, saveRoster, upsert, removeFromRoster, newId } from './store.js';
-import { exportExcel, exportJson, exportRosterExcel, exportRosterJson, readCharactersFile } from './exporters.js';
-import { decodeCharacter } from './share.js';
+import { exportExcel, exportJson, exportRosterExcel, exportRosterJson } from './exporters.js';
+import { importDialog as importAndOpen } from './importer.js';
 import { sheet as makeSheet } from '../engine/render.js';
 let R;
 let root;
@@ -62,25 +62,7 @@ function card(ch) {
 }
 
 async function importDialog() {
-  const area = h('textarea', { id: 'import-code', placeholder: 'Paste a share code (DCU1....), a share link, or character JSON' });
-  const file = h('input', { type: 'file', id: 'import-file', accept: '.json,application/json', multiple: true });
-  const res = await openDialog({
-    title: 'Import characters',
-    body: [
-      h('label', { class: 'field' }, h('span', null, 'Share code or link'), area),
-      h('label', { class: 'field' }, h('span', null, 'Or character / roster files (.json)'), file),
-    ],
-    buttons: [{ label: 'Cancel', value: false }, { label: 'Import', value: true, primary: true }],
-  });
-  if (!res) return;
-  let added = 0;
-  try {
-    if (area.value.trim()) { upsert(await decodeCharacter(area.value)); added++; }
-    for (const f of file.files || []) for (const ch of await readCharactersFile(f)) { const c = { ...ch }; delete c.rosterId; upsert(c); added++; }
-    toast(added ? `Imported ${added} character${added === 1 ? '' : 's'}` : 'Nothing to import');
-  } catch (e) {
-    toast(`Import failed: ${e.message}`);
-  }
+  await importAndOpen({ open: false });
   renderRoster();
 }
 
@@ -92,7 +74,7 @@ export function renderRoster() {
   if (count) count.textContent = state.roster.length;
 
   root.append(h('div', { class: 'page-head' },
-    h('div', null, h('h1', null, 'Roster'), h('p', null, 'Characters you save live here, in this browser. Export them to Excel or JSON to keep a copy or move them to another computer.')),
+    h('div', null, h('h1', null, 'Roster'), h('p', null, 'Characters you save live here, in this browser. Export to Excel or JSON to keep a copy, move them to another computer or send them to your group. Import brings back DCUGen Excel sheets, .json files and share codes.')),
     h('span', { class: 'spacer' }),
     h('div', { class: 'btn-row' },
       h('button', { class: 'btn', type: 'button', onClick: importDialog }, 'Import'),

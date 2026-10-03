@@ -9,9 +9,12 @@ import { initLab, openInLab, renderLab } from './lab.js';
 import { initGm, renderGm, addToInitiative } from './gm.js';
 import { initWorkshop, renderWorkshop } from './workshop.js';
 import { initRules, renderRules } from './rules.js';
+import { initBestiary, renderBestiary } from './bestiary.js';
+import { initGarage, renderGarage } from './garage.js';
 import { decodeCharacter } from './share.js';
+import { setImportHooks, enableDropImport } from './importer.js';
 const R = RULES;
-const views = ['forge', 'roster', 'lab', 'workshop', 'gm', 'rules'];
+const views = ['forge', 'roster', 'lab', 'bestiary', 'workshop', 'garage', 'gm', 'rules'];
 
 function showTab(name) {
   if (!views.includes(name)) name = 'forge';
@@ -24,6 +27,8 @@ function showTab(name) {
   if (name === 'gm') renderGm();
   if (name === 'lab') renderLab();
   if (name === 'workshop') renderWorkshop();
+  if (name === 'bestiary') renderBestiary();
+  if (name === 'garage') renderGarage();
   if (name === 'rules') renderRules();
   try { localStorage.setItem('dcugen.tab', name); } catch { /* storage unavailable */ }
   window.scrollTo({ top: 0 });
@@ -82,6 +87,16 @@ async function boot() {
     applyToCurrent: (ch) => { setCurrent(ch); },
   });
   initRules(R, document.getElementById('view-rules'));
+  initGarage(R, document.getElementById('view-garage'), { applyToCurrent: (ch) => setCurrent(ch) });
+  initBestiary(R, document.getElementById('view-bestiary'), {
+    openInForge: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
+    addToInitiative: (ch) => { addToInitiative(ch); toast(`${ch.identity?.codename || 'Creature'} joins the initiative (GM Tools)`); },
+  });
+  setImportHooks({
+    open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
+    afterSave: () => renderRoster(),
+  });
+  enableDropImport();
 
   onChange((what) => {
     if (what === 'roster') {

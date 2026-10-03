@@ -201,11 +201,71 @@ export function buildWorkbook(sheets) {
   const files = {};
   files['[Content_Types].xml'] = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((_, i) => `<Override PartName="/xl/worksheets/sheet${i + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}</Types>`;
   files['_rels/.rels'] = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`;
-  files['xl/workbook.xml'] = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets.map((s, i) => `<sheet name="${esc(safeSheetName(s.name, i))}" sheetId="${i + 1}" r:id="rId${i + 1}"/>`).join('')}</sheets></workbook>`;
+  files['xl/workbook.xml'] = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets.map((s, i) => `<sheet name="${esc(safeSheetName(s.name, i))}" sheetId="${i + 1}"${s.hidden ? ' state="hidden"' : ''} r:id="rId${i + 1}"/>`).join('')}</sheets></workbook>`;
   files['xl/_rels/workbook.xml.rels'] = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((_, i) => `<Relationship Id="rId${i + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i + 1}.xml"/>`).join('')}<Relationship Id="rId${sheets.length + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`;
   files['xl/styles.xml'] = STYLES_XML;
   sheets.forEach((s, i) => { files[`xl/worksheets/sheet${i + 1}.xml`] = worksheetXml(s.rows, s); });
   return zip(files);
+}
+
+// ---- Embedded app data: lets DCUGen re-import its own Excel exports -----------------------------
+
+export const DATA_SHEET = 'DCUGen Data';
+const CHUNK = 30000; // Excel cells hold up to 32,767 characters
+
+/** Rows for the hidden data sheet: a marker, then the JSON split across cells. */
+export function dataSheetRows(payload) {
+  const json = JSON.stringify(payload);
+  const rows = [['DCUGen character data. Import this workbook into DCUGen to get the character back. Do not edit.']];
+  for (let i = 0; i < json.length; i += CHUNK) rows.push([json.slice(i, i + CHUNK)]);
+  return rows;
+}
+
+const unesc = (s) => s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, '&');
+
+/**
+ * Read the characters embedded in a DCUGen workbook. Returns an array of characters, or null when the
+ * workbook has no DCUGen data sheet (e.g. an older export or a hand-made sheet).
+ */
+export async function readWorkbookCharacters(bytes, inflateRaw) {
+  const files = await unzip(bytes, inflateRaw);
+  const wb = files['xl/workbook.xml'] ? dec.decode(files['xl/workbook.xml']) : '';
+  const m = new RegExp(`<sheet[^>]*name="${DATA_SHEET}"[^>]*r:id="([^"]+)"`).exec(wb) || new RegExp(`<sheet[^>]*r:id="([^"]+)"[^>]*name="${DATA_SHEET}"`).exec(wb);
+  if (!m) return null;
+  const rels = dec.decode(files['xl/_rels/workbook.xml.rels']);
+  const t = new RegExp(`<Relationship[^>]*Id="${m[1]}"[^>]*Target="([^"]+)"`).exec(rels) || new RegExp(`<Relationship[^>]*Target="([^"]+)"[^>]*Id="${m[1]}"`).exec(rels);
+  if (!t) return null;
+  const path = t[1].startsWith('/') ? t[1].slice(1) : `xl/${t[1]}`;
+  const xml = dec.decode(files[path]);
+  // Cells in row order; Excel may re-save inline strings as shared strings, so handle both.
+  const shared = files['xl/sharedStrings.xml'] ? [...dec.decode(files['xl/sharedStrings.xml']).matchAll(/<si>([\s\S]*?)<\/si>/g)].map((x) => [...x[1].matchAll(/<t[^>]*>([\s\S]*?)<\/t>/g)].map((y) => unesc(y[1])).join('')) : [];
+  const cells = [...xml.matchAll(/<c ([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g)].map((c) => {
+    const body = c[2] || '';
+    if (/t="s"/.test(c[1])) return shared[Number(/<v>(\d+)<\/v>/.exec(body)?.[1])] || '';
+    return [...body.matchAll(/<t[^>]*>([\s\S]*?)<\/t>/g)].map((y) => unesc(y[1])).join('');
+  });
+  const json = cells.slice(1).join('');
+  if (!json) return null;
+  const data = JSON.parse(json);
+  return Array.isArray(data) ? data : Array.isArray(data.characters) ? data.characters : [data];
+}
+
+/** Append a worksheet to an unzipped workbook. */
+function addSheet(files, name, xml, { hidden = false } = {}) {
+  const n = Object.keys(files).filter((f) => /^xl\/worksheets\/sheet\d+\.xml$/.test(f)).length + 1;
+  files[`xl/worksheets/sheet${n}.xml`] = enc.encode(xml);
+  let wb = dec.decode(files['xl/workbook.xml']);
+  let rels = dec.decode(files['xl/_rels/workbook.xml.rels']);
+  const ids = [...rels.matchAll(/Id="rId(\d+)"/g)].map((m) => Number(m[1]));
+  const rid = `rId${Math.max(0, ...ids) + 1}`;
+  const sheetIds = [...wb.matchAll(/sheetId="(\d+)"/g)].map((m) => Number(m[1]));
+  wb = wb.replace('</sheets>', `<sheet name="${esc(name)}" sheetId="${Math.max(0, ...sheetIds) + 1}"${hidden ? ' state="hidden"' : ''} r:id="${rid}"/></sheets>`);
+  rels = rels.replace('</Relationships>', `<Relationship Id="${rid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${n}.xml"/></Relationships>`);
+  files['xl/workbook.xml'] = enc.encode(wb);
+  files['xl/_rels/workbook.xml.rels'] = enc.encode(rels);
+  let types = dec.decode(files['[Content_Types].xml']);
+  types = types.replace('</Types>', `<Override PartName="/xl/worksheets/sheet${n}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>`);
+  files['[Content_Types].xml'] = enc.encode(types);
 }
 
 function safeSheetName(name, i) {
@@ -264,8 +324,15 @@ export function statBlockRows(ch, R) {
   rows.push(['Advantages', c.advantages, '']);
   rows.push(['Skills', c.skills, `${c.skillRanks} ranks`]);
   rows.push(['Defenses', c.defenses, '']);
-  rows.push(['Total', c.total, `of ${c.budget} (PL ${ch.pl} x 15)`]);
+  rows.push(['Total', c.total, ch.advancement ? `of ${c.budget} (starting ${ch.advancement.startPoints} + earned)` : `of ${c.budget} (PL ${ch.pl} x 15)`]);
   rows.push([]);
+  if (ch.advancement) {
+    rows.push(['ADVANCEMENT', 'Points', 'What for']);
+    for (const e of ch.advancement.log || []) {
+      rows.push([`${e.date || ''} ${{ award: 'Earned', spend: 'Spent', refund: 'Refund', pl: 'Power level' }[e.type] || e.type}`, e.type === 'award' ? e.points : -e.points, [e.note, ...(e.changes || [])].filter(Boolean).join('; ')]);
+    }
+    rows.push([]);
+  }
   rows.push(['COMPLICATIONS', '', '']);
   for (const x of ch.complications || []) rows.push([x.type, '', x.text]);
   rows.push([]);
@@ -400,22 +467,11 @@ export async function fillCharacterSheet(templateBytes, ch, R, inflateRaw) {
   }
   files[sheetPath] = enc.encode(xml);
 
-  // Add "Full Stat Block" as sheet 2
+  // Add "Full Stat Block" as sheet 2, and the character data (hidden) so DCUGen can import the file
   const { rows, boldRows } = statBlockRows(ch, R);
-  const n = Object.keys(files).filter((f) => /^xl\/worksheets\/sheet\d+\.xml$/.test(f)).length + 1;
-  files[`xl/worksheets/sheet${n}.xml`] = enc.encode(worksheetXml(rows, { widths: [34, 10, 110], boldRows, wrapCols: [2] }));
-  let wb = dec.decode(files['xl/workbook.xml']);
-  let rels = dec.decode(files['xl/_rels/workbook.xml.rels']);
-  const ids = [...rels.matchAll(/Id="rId(\d+)"/g)].map((m) => Number(m[1]));
-  const rid = `rId${Math.max(0, ...ids) + 1}`;
-  const sheetIds = [...wb.matchAll(/sheetId="(\d+)"/g)].map((m) => Number(m[1]));
-  wb = wb.replace('</sheets>', `<sheet name="Full Stat Block" sheetId="${Math.max(0, ...sheetIds) + 1}" r:id="${rid}"/></sheets>`);
-  rels = rels.replace('</Relationships>', `<Relationship Id="${rid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${n}.xml"/></Relationships>`);
-  files['xl/workbook.xml'] = enc.encode(wb);
-  files['xl/_rels/workbook.xml.rels'] = enc.encode(rels);
-  let types = dec.decode(files['[Content_Types].xml']);
-  types = types.replace('</Types>', `<Override PartName="/xl/worksheets/sheet${n}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>`);
-  files['[Content_Types].xml'] = enc.encode(types);
+  addSheet(files, 'Full Stat Block', worksheetXml(rows, { widths: [34, 10, 110], boldRows, wrapCols: [2] }));
+  const { rosterId, savedAt, ...data } = ch;
+  addSheet(files, DATA_SHEET, worksheetXml(dataSheetRows({ app: 'DCUGen', version: 1, characters: [data] })), { hidden: true });
   // Rename the first sheet to the character's codename.
   const title = safeSheetName(ch.identity?.codename || 'Character', 0);
   files['xl/workbook.xml'] = enc.encode(dec.decode(files['xl/workbook.xml']).replace(/<sheet name="[^"]*" sheetId="1"/, `<sheet name="${esc(title)}" sheetId="1"`));
@@ -451,5 +507,6 @@ export function rosterWorkbook(characters, R) {
     if (seen.has(k)) { seen.set(k, seen.get(k) + 1); n = `${n.slice(0, 27)} (${seen.get(k)})`; } else seen.set(k, 1);
     s.name = n;
   }
+  sheets.push({ name: DATA_SHEET, rows: dataSheetRows({ app: 'DCUGen', version: 1, characters: characters.map(({ rosterId, savedAt, ...c }) => c) }), hidden: true });
   return buildWorkbook(sheets);
 }

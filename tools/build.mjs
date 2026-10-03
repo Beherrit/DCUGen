@@ -39,6 +39,7 @@ function buildData() {
     flavor: jsonFolder('flavor'),
     catalog: jsonFolder('catalog'),
     reference: opt('reference.json', null),
+    vehicles: opt('vehicles.json', null), headquarters: opt('headquarters.json', null),
     gm: jsonFolder('gm'),
   };
   const out = path.join(SRC, 'generated');

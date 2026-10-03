@@ -23,9 +23,19 @@ players and they can use it too. No install, works offline (fonts fall back to s
   - *Animals and creatures*: the DC Adventures animals plus 142 stat blocks of everyday animals, wild beasts,
     monsters and people, with templates (young, alpha, dire, giant, mutant, cybernetic, undead, spectral).
   - *Monster maker*: new monsters built to any PL.
+- **Bestiary** – 429 stat blocks, all legal for their PL: fantasy (dragons, giants, fey, elementals, dungeon
+  aberrations), horror and undead, world myth and cryptids, aliens and cosmic entities, robots, mechs, clockwork and
+  golems, kaiju, everyday animals and people. Each has tactics, habitat and a weakness; open it as a full sheet, apply
+  a template, save it, or throw a random encounter into initiative.
+- **Vehicles & HQs** – 107 vehicles (modern, military, sci-fi starships, fantasy galleons and sky-ships, steampunk) and
+  51 headquarters, all priced with the DC Adventures equipment rules (DCA 155-163), plus the vehicle, spaceship and
+  headquarters rules. Hand any of them to the open character; the Equipment advantage updates itself.
+- **Advancement** – track the power points the GM awards (DCA 190): earned, spent and unspent, with a history log
+  that records exactly what each point bought.
 - **Roster** – save characters, teams and creatures in the browser; search, duplicate, delete.
 - **Export** – your Excel character sheet filled in (plus a *Full Stat Block* tab), a whole roster or team to one
-  workbook, JSON files, book-style text and print/PDF. **Share** codes import on any copy of the app.
+  workbook, JSON files, book-style text and print/PDF. **Import** brings characters back from DCUGen Excel sheets, .json
+  files, share codes or links (Forge > Import, or drag files onto the page).
 - **GM Tools** – dice with the book's coloured degrees-of-success chart, initiative with conditions, a combat
   calculator (hit and outcome odds, or roll it), the book's Damage Resistance Matrix, a GM screen with live hero point / Toughness /
   condition trackers, GM notes, and encounter, hideout and vehicle generators.

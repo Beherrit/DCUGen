@@ -1,0 +1,2886 @@
+{
+  "rules": [
+    {
+      "title": "Headquarters",
+      "text": "Heroes and villains keep bases: a cave, the top floors of a tower, an orbital satellite, a moon base. A headquarters is bought with equipment points like any other gear. If it is destroyed, the owner can rebuild it or put the same points into a new base with different features; villains often burn through several lairs.",
+      "source": "DCA 159"
+    },
+    {
+      "title": "Headquarters traits",
+      "text": "A headquarters has two traits, Size and Toughness, plus any number of Features. All three cost equipment points.",
+      "source": "DCA 159"
+    },
+    {
+      "title": "Size",
+      "text": "Size works like vehicle size and tells how much room the base has. Small (a house) is the free starting size. Each category larger costs 1 point; each category smaller refunds 1 point to spend on the base's other traits. Sizes run Miniscule (a room, -4), Fine (a loft, -3), Diminutive (an apartment, -2), Tiny (a townhouse, -1), Small (a house, 0), Medium (a warehouse, 1), Large (a mansion or cave complex, 2), Huge (a castle, 3), Gargantuan (a skyscraper, 4), Colossal (a city block or private estate, 5), Awesome (a small town or sprawling installation, 6).",
+      "source": "DCA 159"
+    },
+    {
+      "title": "Toughness",
+      "text": "Toughness measures the outer structure: walls, roof, hull. A base starts at Toughness 6 for free, and each +2 Toughness costs 1 point (Toughness 10 costs 2, Toughness 20 costs 7).",
+      "source": "DCA 159"
+    },
+    {
+      "title": "Features",
+      "text": "Doors, windows, power outlets and utilities come free. Every other feature costs 1 point, and some can be taken several times for a bigger effect (Concealed, Secret and Security System raise their DCs; a second Workshop handles a specialty; Self-Repairing twice rebuilds the base). With GM approval you can invent new features modeled on the book's.",
+      "source": "DCA 159"
+    },
+    {
+      "title": "Headquarters power level",
+      "text": "Some features scale with the base's power level. For heroes it is the series power level; for villains it is the owner's effective power level or whatever the GM sets.",
+      "source": "DCA 159"
+    },
+    {
+      "title": "Cost formula (as DCUGen computes it)",
+      "text": "Cost = size cost (Small 0, +1 per category up, -1 per category down; Dual Size pays for the interior size) + ceil((Toughness - 6) / 2) + 1 per feature taken (count repeats). A base never costs less than 0, since size refunds can only pay for its own features.",
+      "source": "DCA 159-160"
+    },
+    {
+      "title": "Shared headquarters",
+      "text": "A team usually shares one base and splits its equipment point cost as the members like, usually as evenly as possible. With most bases, no member needs more than one rank of Equipment (5 points) for it, and leftover points can cover team vehicles or gear like commlinks.",
+      "source": "DCA 162"
+    },
+    {
+      "title": "Alternate headquarters",
+      "text": "Extra bases (safe houses around the world, back-up lairs) are Alternate Equipment: pay full price for the most expensive and 1 point for each other base of the same or lower cost. A shared team base is the exception: each member pays a share of it and also pays separately for any personal base.",
+      "source": "DCA 162-163"
+    },
+    {
+      "title": "Book sample inconsistencies",
+      "text": "Four of the book's nine sample headquarters (and the hero Batcave sample on DCA 213) do not add up under the book's own cost rules. DCUGen stores the computed cost and keeps the printed number as book_cost with an explanation.",
+      "source": "DCUGen"
+    },
+    {
+      "title": "House features (DCUGen)",
+      "text": "Features marked DCUGen come from the user's own headquarters sheet (BaseHQ.xlsx) and follow the book's rule that invented features cost 1 point each with GM approval: Armory, Countermeasures, Dimensional Cells, Food Supply, Game Room, Magic Detection, Motor Pool, Sovereign Territory, Stables, Untraceable, Vault, Shrine.",
+      "source": "DCUGen"
+    }
+  ],
+  "sizes": [
+    {
+      "name": "Miniscule",
+      "cost": -4,
+      "examples": "Room"
+    },
+    {
+      "name": "Fine",
+      "cost": -3,
+      "examples": "Loft"
+    },
+    {
+      "name": "Diminutive",
+      "cost": -2,
+      "examples": "Apartment"
+    },
+    {
+      "name": "Tiny",
+      "cost": -1,
+      "examples": "Townhouse"
+    },
+    {
+      "name": "Small",
+      "cost": 0,
+      "examples": "House"
+    },
+    {
+      "name": "Medium",
+      "cost": 1,
+      "examples": "Warehouse"
+    },
+    {
+      "name": "Large",
+      "cost": 2,
+      "examples": "Mansion, cave complex"
+    },
+    {
+      "name": "Huge",
+      "cost": 3,
+      "examples": "Castle"
+    },
+    {
+      "name": "Gargantuan",
+      "cost": 4,
+      "examples": "Skyscraper"
+    },
+    {
+      "name": "Colossal",
+      "cost": 5,
+      "examples": "City block, private estate"
+    },
+    {
+      "name": "Awesome",
+      "cost": 6,
+      "examples": "Small town, sprawling installation"
+    }
+  ],
+  "toughness": {
+    "start": 6,
+    "text": "Starts at Toughness 6 for 0 points; each +2 Toughness costs 1 equipment point.",
+    "table": [
+      {
+        "toughness": 6,
+        "cost": 0
+      },
+      {
+        "toughness": 8,
+        "cost": 1
+      },
+      {
+        "toughness": 10,
+        "cost": 2
+      },
+      {
+        "toughness": 12,
+        "cost": 3
+      },
+      {
+        "toughness": 14,
+        "cost": 4
+      },
+      {
+        "toughness": 16,
+        "cost": 5
+      },
+      {
+        "toughness": 18,
+        "cost": 6
+      },
+      {
+        "toughness": 20,
+        "cost": 7
+      },
+      {
+        "toughness": 22,
+        "cost": 8
+      },
+      {
+        "toughness": 24,
+        "cost": 9
+      },
+      {
+        "toughness": 26,
+        "cost": 10
+      },
+      {
+        "toughness": 28,
+        "cost": 11
+      },
+      {
+        "toughness": 30,
+        "cost": 12
+      }
+    ],
+    "source": "DCA 159"
+  },
+  "features": [
+    {
+      "name": "Combat Simulator",
+      "cost": 1,
+      "text": "A training room whose equipment can simulate any suitable attack effect up to the base's power level, and project illusions to recreate almost any setting. Good for drills and war games, and a classic way to trap intruders, or for intruders to trap the heroes.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Communications",
+      "cost": 1,
+      "text": "Receives and transmits across radio and TV bands, monitors police and emergency channels and links team members. Restricted bands depend on clearance; Technology DC 25 cracks them illegally.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Computer",
+      "cost": 1,
+      "text": "A state-of-the-art system for the whole base: full use of Technology, and it can run routine functions like monitoring channels and defenses. A thinking computer is bought as a minion or sidekick instead.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Concealed",
+      "cost": 1,
+      "per_rank": true,
+      "max_ranks": 5,
+      "text": "The base is hidden (false front, buried, camouflaged): +10 to the DC of checks to find it. Each extra time it is taken adds +5, to a maximum of +30. Separate from Isolated, which makes it hard to reach rather than hard to find.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Defense System",
+      "cost": 1,
+      "text": "Weapon emplacements inside and out. Each can have any attack effect costing up to twice the base's power level, with an attack bonus equal to the power level.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Deathtraps",
+      "cost": 1,
+      "text": "The villain's version of a Defense System: fiendish traps to keep heroes out or dispose of captured ones (auto-guns, flame walls, rooms that flood with water or sand). Not every deathtrap kills; some just capture.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Dimensional Portal",
+      "cost": 1,
+      "text": "A gateway, from a plain door to a humming machine, with two-way travel to another dimension and perhaps several related ones. The GM may require an Expertise or Technology check to work it.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Dock",
+      "cost": 1,
+      "text": "Berths and dry-dock for water vehicles, with an airlock or lock system and access to a nearby waterway. The base must be near water.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Dual Size",
+      "cost": 1,
+      "needs_detail": true,
+      "text": "Bigger inside than out. Pay for the interior size, then set the exterior to any smaller size, no smaller than Miniscule (a phone booth or wardrobe). The GM may allow interiors beyond Awesome, each step doubling, up to pocket universes. Bases with no outside at all use Dimensional Portal, Isolated or Sealed instead.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Effect",
+      "cost": 1,
+      "needs_detail": true,
+      "text": "Any suitable power effect for the base, with GM approval, costing no more than twice the base's power level and within power level limits. It affects the base or its occupants; for both, apply Affects Others or take two features.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Fire Prevention System",
+      "cost": 1,
+      "text": "Automatic detection and suppression: any large open flame triggers a Nullify Fire 5 effect. A computer can be told to ignore certain fires, or the system put on manual.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Garage",
+      "cost": 1,
+      "text": "Houses ground vehicles, with a ramp or elevator, repair facilities and a sliding door.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Grounds",
+      "cost": 1,
+      "text": "Land around the buildings up to three size categories larger than the structure (a base gets one size larger free). Defense and Security Systems cover the grounds too.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Gym",
+      "cost": 1,
+      "text": "Weights, exercise machines, space to train and the usual lockers and showers; can include a pool, even one linked to open water or the dock.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Hangar",
+      "cost": 1,
+      "text": "Houses air and space vehicles, with a launch hatch or runway (maybe via a long tunnel) and maintenance facilities.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Holding Cells",
+      "cost": 1,
+      "per_rank": true,
+      "max_ranks": 2,
+      "text": "Cells for prisoners, fitted either with Nullify devices at the base's power level or with +50% Toughness, as player and GM agree. Taking it twice gives both.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Infirmary",
+      "cost": 1,
+      "text": "Hospital beds and gear for full use of Treatment, handling up to the base's power level in patients at once, including the owners' unusual physiology.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Isolated",
+      "cost": 1,
+      "text": "Far from anywhere: Antarctica, the sea floor, a mountain peak, orbit, the Moon. Life support for the location is included, but not a way to get there.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Laboratory",
+      "cost": 1,
+      "text": "Scientific equipment (and computers if the base has none) for research and for studying odd phenomena, including powers. Some Expertise, Investigation or Technology checks need one or gain a bonus from it.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Library",
+      "cost": 1,
+      "text": "Books, archives and databases for research with Expertise; may be required for, or grant a circumstance bonus to, certain checks.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Living Space",
+      "cost": 1,
+      "text": "Bedrooms, kitchen, dining and common rooms for about as many residents as the base's power level (more at the GM's option).",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Personnel",
+      "cost": 1,
+      "text": "A staff sized to the base, run by the GM, who maintain the place and may defend it, but are not minions and do not go on missions. They can be robots, golems, skeletons or trained apes as suits the owner.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Power System",
+      "cost": 1,
+      "text": "Generators of any kind make the base independent of outside power, with back-up power for hours equal to the base's power level.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Sealed",
+      "cost": 1,
+      "text": "Cut off from the outside: no doors or windows, or behind a barrier. Only the owner and invited guests enter, short of effects like Dimensional Travel, Insubstantial, Permeate or Teleport.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Secret",
+      "cost": 1,
+      "per_rank": true,
+      "max_ranks": 5,
+      "text": "Hiding in plain sight (the abandoned house, the closed factory): +10 to the DC to discover it is a base (usually DC 10), +5 per extra time taken, to a maximum of +30.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Security System",
+      "cost": 1,
+      "per_rank": true,
+      "max_ranks": 5,
+      "text": "Locks and alarms: Technology DC 20 to bypass, +5 per extra time taken, to a maximum of DC 40. Can trigger the Defense System.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Self-Repairing",
+      "cost": 1,
+      "per_rank": true,
+      "max_ranks": 2,
+      "text": "The structure heals damage over time like a character recovers. Taken twice, it rebuilds itself within a week even if destroyed, in the nearest suitable place if it must.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Temporal Limbo",
+      "cost": 1,
+      "per_rank": true,
+      "text": "Time inside runs at half or double the outside rate; each extra time taken doubles the ratio again (quarter or four times, and so on). Good for crash projects or long exiles.",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Workshop",
+      "cost": 1,
+      "per_rank": true,
+      "text": "Tools, benches and supplies for building things: wood, metal, machining. Specialties such as magical inventions need a separate dedicated workshop (take the feature again).",
+      "source": "DCA 160-162"
+    },
+    {
+      "name": "Teleport",
+      "cost": 1,
+      "source": "DCA 160, 163",
+      "text": "A teleporter as an Effect feature (usually Teleport with Affects Others) linking the base to the field. Listed this way in the book's Moon-Base and Orbiting Satellite."
+    },
+    {
+      "name": "Armory",
+      "cost": 1,
+      "source": "DCUGen",
+      "text": "Racks of weapons and armor for the base's residents and staff; lets residents re-arm with their own equipment between scenes without a trip elsewhere."
+    },
+    {
+      "name": "Countermeasures",
+      "cost": 1,
+      "source": "DCUGen",
+      "text": "Jammers, scramblers and anti-scrying wards; -2 to remote sensing and electronic surveillance aimed at the base, and helps it stay Untraceable."
+    },
+    {
+      "name": "Dimensional Cells",
+      "cost": 1,
+      "source": "DCUGen",
+      "text": "Holding cells for beings who would slip normal bars: phasers, teleporters and extradimensional entities."
+    },
+    {
+      "name": "Food Supply",
+      "cost": 1,
+      "source": "DCUGen",
+      "text": "Stores, hydroponics or a pantry to keep the residents fed through a long siege or isolation."
+    },
+    {
+      "name": "Game Room",
+      "cost": 1,
+      "source": "DCUGen",
+      "text": "Lounge, games and screens: a place to unwind that helps the team recover from stress and build morale."
+    },
+    {
+      "name": "Magic Detection",
+      "cost": 1,
+      "source": "DCUGen",
+      "text": "Wards and sensors that sense spells cast in or aimed at the base and sound an alarm."
+    },
+    {
+      "name": "Motor Pool",
+      "cost": 1,
+      "source": "DCUGen",
+      "text": "A pool of ordinary cars, vans or boats for residents' everyday use, beyond any vehicles bought with equipment points."
+    },
+    {
+      "name": "Sovereign Territory",
+      "cost": 1,
+      "source": "DCUGen",
+      "text": "The base has embassy or treaty status; local authorities need permission to enter."
+    },
+    {
+      "name": "Stables",
+      "cost": 1,
+      "source": "DCUGen",
+      "text": "Stalls, tack and grooms for mounts and draft animals; the fantasy equivalent of a Garage."
+    },
+    {
+      "name": "Untraceable",
+      "cost": 1,
+      "source": "DCUGen",
+      "text": "Signals, deliveries and power usage cannot be traced back to the base; -8 to Perception and Investigation checks to track them."
+    },
+    {
+      "name": "Vault",
+      "cost": 1,
+      "source": "DCUGen",
+      "text": "A strong room for valuables and dangerous artifacts, Technology DC 40 to crack."
+    },
+    {
+      "name": "Shrine",
+      "cost": 1,
+      "source": "DCUGen",
+      "text": "A consecrated chapel or altar; rituals and Expertise: Magic or religion checks made there gain a +2 circumstance bonus."
+    }
+  ],
+  "premade": [
+    {
+      "id": "book-abandoned-warehouse",
+      "name": "Abandoned Warehouse",
+      "setting": "Modern",
+      "size": "Medium",
+      "toughness": 8,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Garage"
+        },
+        {
+          "name": "Gym"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System"
+        }
+      ],
+      "crew": "A small team",
+      "summary": "A derelict dockside warehouse quietly converted into a working base.",
+      "cost": 10,
+      "book_cost": 10,
+      "source": "DCA 163"
+    },
+    {
+      "id": "book-moon-base",
+      "name": "Moon-Base",
+      "setting": "Cosmic",
+      "size": "Awesome",
+      "toughness": 20,
+      "features": [
+        {
+          "name": "Combat Simulator"
+        },
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Fire Prevention System"
+        },
+        {
+          "name": "Gym"
+        },
+        {
+          "name": "Hangar"
+        },
+        {
+          "name": "Holding Cells"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Laboratory"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System",
+          "ranks": 2,
+          "detail": "DC 25"
+        },
+        {
+          "name": "Teleport",
+          "detail": "Affects Others"
+        },
+        {
+          "name": "Workshop"
+        }
+      ],
+      "crew": "A full super-team",
+      "summary": "A sprawling lunar installation linked to Earth by teleporter.",
+      "cost": 30,
+      "book_cost": 28,
+      "book_cost_note": "Book lists 28. Awesome 6 + Toughness 20 (+14 = 7) + 16 features, Security System counted twice for DC 25 = 17, total 30. Even counting Security System once it is 29. The Orbiting Satellite, with the same features minus Workshop and the extra Security rank, is 2 off in the same way.",
+      "source": "DCA 163"
+    },
+    {
+      "id": "book-orbiting-satellite",
+      "name": "Orbiting Satellite",
+      "setting": "Cosmic",
+      "size": "Colossal",
+      "toughness": 20,
+      "features": [
+        {
+          "name": "Combat Simulator"
+        },
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Fire Prevention System"
+        },
+        {
+          "name": "Gym"
+        },
+        {
+          "name": "Hangar"
+        },
+        {
+          "name": "Holding Cells"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Laboratory"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System"
+        },
+        {
+          "name": "Teleport",
+          "detail": "Affects Others"
+        }
+      ],
+      "crew": "A full super-team",
+      "summary": "A watchtower in orbit with a teleporter down to the surface.",
+      "cost": 27,
+      "book_cost": 25,
+      "book_cost_note": "Book lists 25. Colossal 5 + Toughness 20 (7) + 15 features = 27. The Fortress of Solitude sample (Huge, Toughness 20, 15 feature points, 25) shows the book itself pricing Toughness 20 at 7.",
+      "source": "DCA 163"
+    },
+    {
+      "id": "book-sea-base",
+      "name": "Sea-Base",
+      "setting": "Modern",
+      "size": "Gargantuan",
+      "toughness": 14,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Dock"
+        },
+        {
+          "name": "Fire Prevention System"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System"
+        }
+      ],
+      "crew": "Team and support staff",
+      "summary": "A pressurized complex on the sea floor with a submarine dock.",
+      "cost": 17,
+      "book_cost": 16,
+      "book_cost_note": "Book lists 16. Gargantuan 4 + Toughness 14 (4) + 9 features = 17. The Underground Lair (Huge, Toughness 14, 12 features, 19) prices Toughness 14 at 4, so the Sea-Base is 1 short.",
+      "source": "DCA 163"
+    },
+    {
+      "id": "book-skyscraper",
+      "name": "Skyscraper (5 Floors)",
+      "setting": "Modern",
+      "size": "Large",
+      "toughness": 10,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Fire Prevention System"
+        },
+        {
+          "name": "Gym"
+        },
+        {
+          "name": "Hangar"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Laboratory"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System"
+        },
+        {
+          "name": "Workshop"
+        }
+      ],
+      "crew": "A public team",
+      "summary": "The top five floors of a downtown tower, with a rooftop hangar.",
+      "cost": 17,
+      "book_cost": 17,
+      "source": "DCA 163"
+    },
+    {
+      "id": "book-stately-manor",
+      "name": "Stately Manor",
+      "setting": "Modern",
+      "size": "Huge",
+      "toughness": 10,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Dock"
+        },
+        {
+          "name": "Garage"
+        },
+        {
+          "name": "Gym"
+        },
+        {
+          "name": "Hangar"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Laboratory"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System"
+        },
+        {
+          "name": "Workshop"
+        }
+      ],
+      "crew": "A wealthy hero and household",
+      "summary": "An old-money estate hiding a high-tech headquarters behind the portraits.",
+      "cost": 19,
+      "book_cost": 19,
+      "source": "DCA 163"
+    },
+    {
+      "id": "book-underground-lair",
+      "name": "Underground Lair",
+      "setting": "Villain",
+      "size": "Huge",
+      "toughness": 14,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Garage"
+        },
+        {
+          "name": "Holding Cells"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Laboratory"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System"
+        }
+      ],
+      "crew": "A villain and henchmen",
+      "summary": "A cavern fortress far below the surface, with cells for captured heroes.",
+      "cost": 19,
+      "book_cost": 19,
+      "source": "DCA 163"
+    },
+    {
+      "id": "book-urban-fortress",
+      "name": "Urban Fortress",
+      "setting": "Modern",
+      "size": "Large",
+      "toughness": 12,
+      "features": [
+        {
+          "name": "Combat Simulator"
+        },
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Fire Prevention System"
+        },
+        {
+          "name": "Garage"
+        },
+        {
+          "name": "Gym"
+        },
+        {
+          "name": "Holding Cells"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System"
+        },
+        {
+          "name": "Workshop"
+        }
+      ],
+      "crew": "A street-level team",
+      "summary": "A hardened city building with a training room, cells and a garage.",
+      "cost": 19,
+      "book_cost": 22,
+      "book_cost_note": "Book lists 22. Large 2 + Toughness 12 (3) + 14 features = 19. The Skyscraper (Large, Toughness 10, 13 features) is 17, which the formula reproduces, so the Urban Fortress's 22 is 3 too high.",
+      "source": "DCA 163"
+    },
+    {
+      "id": "book-wizards-tower",
+      "name": "Wizard's Tower",
+      "setting": "Mystic",
+      "size": "Medium",
+      "interior_size": "Huge",
+      "toughness": 10,
+      "features": [
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Dual Size",
+          "detail": "Huge inside"
+        },
+        {
+          "name": "Laboratory"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Sealed"
+        },
+        {
+          "name": "Security System"
+        },
+        {
+          "name": "Workshop"
+        }
+      ],
+      "crew": "A sorcerer and apprentice",
+      "summary": "A modest tower on the outside, a castle's worth of halls within.",
+      "cost": 13,
+      "book_cost": 13,
+      "source": "DCA 163"
+    },
+    {
+      "id": "book-batcave",
+      "name": "The Batcave",
+      "setting": "Modern",
+      "size": "Huge",
+      "toughness": 10,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Dock"
+        },
+        {
+          "name": "Garage"
+        },
+        {
+          "name": "Gym"
+        },
+        {
+          "name": "Hangar"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Laboratory"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Workshop"
+        }
+      ],
+      "crew": "Batman and allies",
+      "summary": "The cave beneath Wayne Manor.",
+      "cost": 19,
+      "book_cost": 20,
+      "book_cost_note": "Book lists 20 (and spells Hangar \"Hanger\"). Huge 3 + Toughness 10 (2) + 14 features = 19; the Stately Manor sample, same size and Toughness with 14 features, is 19.",
+      "source": "DCA 213"
+    },
+    {
+      "id": "book-fortress-of-solitude",
+      "name": "Fortress of Solitude",
+      "setting": "Cosmic",
+      "size": "Huge",
+      "toughness": 20,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Concealed",
+          "ranks": 3
+        },
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Hangar"
+        },
+        {
+          "name": "Holding Cells"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Laboratory"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System"
+        }
+      ],
+      "crew": "Superman",
+      "summary": "A crystal citadel in the Arctic wastes.",
+      "cost": 25,
+      "book_cost": 25,
+      "source": "DCA 233"
+    },
+    {
+      "id": "ravenhall-manor",
+      "name": "Ravenhall Manor and the Cave Below",
+      "setting": "Modern",
+      "size": "Huge",
+      "toughness": 12,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Concealed",
+          "ranks": 2
+        },
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Dock"
+        },
+        {
+          "name": "Garage"
+        },
+        {
+          "name": "Grounds"
+        },
+        {
+          "name": "Gym"
+        },
+        {
+          "name": "Hangar"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Laboratory"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Personnel",
+          "detail": "a loyal butler"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System",
+          "ranks": 2
+        },
+        {
+          "name": "Workshop"
+        }
+      ],
+      "crew": "1 vigilante, 1-3 partners, the butler",
+      "summary": "A gothic mansion on the bluffs; behind the grandfather clock, stairs lead down to a cavern of computers, trophies and a turbine-driven car.",
+      "cost": 25,
+      "source": "DCUGen"
+    },
+    {
+      "id": "vanguard-tower",
+      "name": "Vanguard Tower",
+      "setting": "Modern",
+      "size": "Gargantuan",
+      "toughness": 14,
+      "features": [
+        {
+          "name": "Combat Simulator"
+        },
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Fire Prevention System"
+        },
+        {
+          "name": "Gym"
+        },
+        {
+          "name": "Hangar"
+        },
+        {
+          "name": "Holding Cells"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Laboratory"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Personnel"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System",
+          "ranks": 2
+        },
+        {
+          "name": "Workshop"
+        }
+      ],
+      "crew": "A public super-team and 40 staff",
+      "summary": "A gleaming tower in the shape of the team's emblem, with a rooftop hangar and a museum lobby for tourists.",
+      "cost": 25,
+      "source": "DCUGen"
+    },
+    {
+      "id": "orbital-watchtower",
+      "name": "Orbital Watchtower",
+      "setting": "Cosmic",
+      "size": "Colossal",
+      "toughness": 20,
+      "features": [
+        {
+          "name": "Combat Simulator"
+        },
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Fire Prevention System"
+        },
+        {
+          "name": "Gym"
+        },
+        {
+          "name": "Hangar"
+        },
+        {
+          "name": "Holding Cells",
+          "ranks": 2
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Laboratory"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System",
+          "ranks": 3
+        },
+        {
+          "name": "Self-Repairing"
+        },
+        {
+          "name": "Teleport",
+          "detail": "Affects Others"
+        },
+        {
+          "name": "Workshop"
+        }
+      ],
+      "crew": "A world-class team on rotating monitor duty",
+      "summary": "A ring station 22,000 miles up that watches the whole planet and beams heroes wherever they are needed.",
+      "cost": 33,
+      "source": "DCUGen"
+    },
+    {
+      "id": "abyssal-station",
+      "name": "Abyssal Station",
+      "setting": "Modern",
+      "size": "Huge",
+      "toughness": 16,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Dock"
+        },
+        {
+          "name": "Fire Prevention System"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Laboratory"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Sealed"
+        },
+        {
+          "name": "Security System"
+        }
+      ],
+      "crew": "6 heroes or aquanauts",
+      "summary": "Linked domes on the edge of an ocean trench, lit by bioluminescent gardens.",
+      "cost": 20,
+      "source": "DCUGen"
+    },
+    {
+      "id": "selene-outpost",
+      "name": "Selene Outpost",
+      "setting": "Cosmic",
+      "size": "Large",
+      "toughness": 18,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Hangar"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Laboratory"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Sealed"
+        }
+      ],
+      "crew": "4-8 astronauts or heroes",
+      "summary": "A compact moon base buried under regolith in a crater's permanent shadow.",
+      "cost": 17,
+      "source": "DCUGen"
+    },
+    {
+      "id": "caldera-keep",
+      "name": "Caldera Keep",
+      "setting": "Villain",
+      "size": "Gargantuan",
+      "toughness": 18,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Concealed",
+          "ranks": 2
+        },
+        {
+          "name": "Deathtraps",
+          "ranks": 2
+        },
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Hangar"
+        },
+        {
+          "name": "Holding Cells",
+          "ranks": 2
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Laboratory"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Personnel",
+          "detail": "jumpsuited henchmen"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System",
+          "ranks": 3
+        },
+        {
+          "name": "Workshop"
+        }
+      ],
+      "crew": "A mastermind and 200 henchmen",
+      "summary": "A volcano lair with a retractable crater lid, a lava moat and a monorail through the magma chamber.",
+      "cost": 29,
+      "source": "DCUGen"
+    },
+    {
+      "id": "site-nine",
+      "name": "Site Nine Bunker",
+      "setting": "Military",
+      "size": "Large",
+      "toughness": 20,
+      "features": [
+        {
+          "name": "Armory"
+        },
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Fire Prevention System"
+        },
+        {
+          "name": "Holding Cells"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Laboratory"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Personnel"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Sealed"
+        },
+        {
+          "name": "Secret",
+          "ranks": 2
+        },
+        {
+          "name": "Security System",
+          "ranks": 4
+        }
+      ],
+      "crew": "60 agents and scientists",
+      "summary": "A government black site under a decommissioned missile silo, where captured superhumans are studied.",
+      "cost": 28,
+      "source": "DCUGen"
+    },
+    {
+      "id": "ninefold-sanctum",
+      "name": "Sanctum of the Ninefold Door",
+      "setting": "Mystic",
+      "size": "Medium",
+      "interior_size": "Huge",
+      "toughness": 10,
+      "features": [
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Dimensional Portal"
+        },
+        {
+          "name": "Dual Size",
+          "detail": "Huge inside"
+        },
+        {
+          "name": "Library",
+          "ranks": 2
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Magic Detection"
+        },
+        {
+          "name": "Sealed"
+        },
+        {
+          "name": "Security System",
+          "ranks": 2,
+          "detail": "mystic wards"
+        },
+        {
+          "name": "Self-Repairing"
+        },
+        {
+          "name": "Workshop",
+          "detail": "magical"
+        }
+      ],
+      "crew": "A sorcerer supreme, an apprentice, a few spirits",
+      "summary": "A narrow brownstone whose nine doors open onto halls, gardens and other worlds.",
+      "cost": 17,
+      "source": "DCUGen"
+    },
+    {
+      "id": "interstitial-library",
+      "name": "The Interstitial Library",
+      "setting": "Mystic",
+      "size": "Miniscule",
+      "interior_size": "Gargantuan",
+      "toughness": 12,
+      "features": [
+        {
+          "name": "Dimensional Portal"
+        },
+        {
+          "name": "Dual Size",
+          "detail": "Gargantuan inside"
+        },
+        {
+          "name": "Library",
+          "ranks": 3
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Personnel",
+          "detail": "spectral librarians"
+        },
+        {
+          "name": "Sealed"
+        },
+        {
+          "name": "Self-Repairing"
+        },
+        {
+          "name": "Temporal Limbo",
+          "detail": "time runs twice as fast inside"
+        }
+      ],
+      "crew": "The Librarian and her ghosts",
+      "summary": "A pocket-dimension library reached through any library door at midnight; its stacks hold every book never written.",
+      "cost": 17,
+      "source": "DCUGen"
+    },
+    {
+      "id": "street-safe-house",
+      "name": "Street Safe House",
+      "setting": "Modern",
+      "size": "Diminutive",
+      "toughness": 6,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Secret"
+        },
+        {
+          "name": "Security System"
+        }
+      ],
+      "crew": "1-2 vigilantes",
+      "summary": "A walk-up apartment above a laundromat with a police scanner, a cot and a med kit.",
+      "cost": 4,
+      "source": "DCUGen"
+    },
+    {
+      "id": "hidden-dojo",
+      "name": "Hidden Dojo",
+      "setting": "Modern",
+      "size": "Small",
+      "toughness": 8,
+      "features": [
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Gym",
+          "ranks": 2
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Secret"
+        }
+      ],
+      "crew": "A martial arts master and students",
+      "summary": "Behind a tea shop, a training hall of paper screens, practice dummies and ancient scrolls.",
+      "cost": 8,
+      "source": "DCUGen"
+    },
+    {
+      "id": "subway-lair",
+      "name": "Abandoned Subway Lair",
+      "setting": "Modern",
+      "size": "Large",
+      "toughness": 12,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Concealed",
+          "ranks": 2
+        },
+        {
+          "name": "Garage"
+        },
+        {
+          "name": "Holding Cells"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System"
+        },
+        {
+          "name": "Workshop"
+        }
+      ],
+      "crew": "A vigilante crew or a gang",
+      "summary": "A sealed-off station from 1904, its tiled platforms turned into workshops and a garage on the old tracks.",
+      "cost": 15,
+      "source": "DCUGen"
+    },
+    {
+      "id": "skycarrier-bastion",
+      "name": "Skycarrier Bastion",
+      "setting": "Military",
+      "size": "Gargantuan",
+      "toughness": 14,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Effect",
+          "detail": "Flight 6: the base flies"
+        },
+        {
+          "name": "Hangar",
+          "ranks": 2
+        },
+        {
+          "name": "Holding Cells"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Personnel"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System"
+        }
+      ],
+      "crew": "800 agents and pilots",
+      "summary": "A flying aircraft carrier held aloft by giant rotors; a mobile headquarters that can be anywhere in a day.",
+      "cost": 21,
+      "source": "DCUGen"
+    },
+    {
+      "id": "meridian-station",
+      "name": "Meridian Station",
+      "setting": "Cosmic",
+      "size": "Colossal",
+      "toughness": 16,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Fire Prevention System"
+        },
+        {
+          "name": "Hangar",
+          "ranks": 2
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Laboratory"
+        },
+        {
+          "name": "Living Space",
+          "ranks": 2
+        },
+        {
+          "name": "Personnel"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Sealed"
+        },
+        {
+          "name": "Security System"
+        }
+      ],
+      "crew": "300 residents",
+      "summary": "A spinning wheel station at a jump point, part port, part embassy, part frontier town.",
+      "cost": 24,
+      "source": "DCUGen"
+    },
+    {
+      "id": "ironrock-fortress",
+      "name": "Ironrock Asteroid Fortress",
+      "setting": "Cosmic",
+      "size": "Awesome",
+      "toughness": 22,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Defense System",
+          "ranks": 2
+        },
+        {
+          "name": "Hangar"
+        },
+        {
+          "name": "Holding Cells",
+          "ranks": 2
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Personnel"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System",
+          "ranks": 3
+        },
+        {
+          "name": "Self-Repairing"
+        },
+        {
+          "name": "Workshop"
+        }
+      ],
+      "crew": "A warlord and 2,000 troops",
+      "summary": "A hollowed nickel-iron asteroid bristling with guns, drifting in a debris field that hides it.",
+      "cost": 31,
+      "source": "DCUGen"
+    },
+    {
+      "id": "mothership-interior",
+      "name": "Alien Mothership Interior",
+      "setting": "Cosmic",
+      "size": "Awesome",
+      "toughness": 20,
+      "features": [
+        {
+          "name": "Combat Simulator"
+        },
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Defense System",
+          "ranks": 2
+        },
+        {
+          "name": "Hangar",
+          "ranks": 2
+        },
+        {
+          "name": "Holding Cells",
+          "ranks": 2
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Laboratory",
+          "ranks": 2
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Personnel"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Sealed"
+        },
+        {
+          "name": "Security System",
+          "ranks": 2
+        },
+        {
+          "name": "Teleport",
+          "detail": "Affects Others"
+        }
+      ],
+      "crew": "10,000 alien crew",
+      "summary": "Organic corridors, specimen labs and abduction bays inside a city-sized ship.",
+      "cost": 33,
+      "source": "DCUGen"
+    },
+    {
+      "id": "harbor-lighthouse",
+      "name": "Harbor Lighthouse",
+      "setting": "Modern",
+      "size": "Small",
+      "toughness": 10,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Dock"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Secret"
+        },
+        {
+          "name": "Workshop"
+        }
+      ],
+      "crew": "1-2 heroes",
+      "summary": "A working lighthouse whose keeper's cottage hides a boat dock in the sea cave below.",
+      "cost": 8,
+      "source": "DCUGen"
+    },
+    {
+      "id": "penthouse-loft",
+      "name": "Penthouse Command Loft",
+      "setting": "Modern",
+      "size": "Fine",
+      "toughness": 8,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Secret"
+        },
+        {
+          "name": "Security System"
+        }
+      ],
+      "crew": "1 hero",
+      "summary": "A glass-walled loft whose coffee table opens into a command console.",
+      "cost": 3,
+      "source": "DCUGen"
+    },
+    {
+      "id": "research-campus",
+      "name": "Corporate Research Campus",
+      "setting": "Modern",
+      "size": "Colossal",
+      "toughness": 10,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Fire Prevention System"
+        },
+        {
+          "name": "Garage"
+        },
+        {
+          "name": "Grounds"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Laboratory",
+          "ranks": 3
+        },
+        {
+          "name": "Personnel"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System",
+          "ranks": 2
+        },
+        {
+          "name": "Workshop",
+          "ranks": 2
+        }
+      ],
+      "crew": "2,000 employees",
+      "summary": "A landscaped tech campus where a hero's company builds tomorrow, and a villain's builds weapons.",
+      "cost": 22,
+      "source": "DCUGen"
+    },
+    {
+      "id": "polar-citadel",
+      "name": "Polar Citadel",
+      "setting": "Cosmic",
+      "size": "Huge",
+      "toughness": 20,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Concealed",
+          "ranks": 2
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Laboratory"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Sealed"
+        },
+        {
+          "name": "Vault"
+        }
+      ],
+      "crew": "1 hero and robot servants",
+      "summary": "A fortress of ice crystals at the top of the world, keeping the relics of a dead planet.",
+      "cost": 22,
+      "source": "DCUGen"
+    },
+    {
+      "id": "sewer-warren",
+      "name": "Sewer Warren",
+      "setting": "Villain",
+      "size": "Medium",
+      "toughness": 8,
+      "features": [
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Secret"
+        },
+        {
+          "name": "Security System"
+        },
+        {
+          "name": "Workshop"
+        }
+      ],
+      "crew": "A mutant gang",
+      "summary": "Storm drains and forgotten cisterns turned into a damp, sprawling hideout.",
+      "cost": 7,
+      "source": "DCUGen"
+    },
+    {
+      "id": "midway-of-mayhem",
+      "name": "Midway of Mayhem",
+      "setting": "Villain",
+      "size": "Large",
+      "toughness": 8,
+      "features": [
+        {
+          "name": "Deathtraps",
+          "ranks": 2
+        },
+        {
+          "name": "Garage"
+        },
+        {
+          "name": "Grounds"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Personnel",
+          "detail": "carnies and clowns"
+        },
+        {
+          "name": "Secret"
+        },
+        {
+          "name": "Workshop"
+        }
+      ],
+      "crew": "A clown prince of crime and his troupe",
+      "summary": "An abandoned amusement park where every ride has been rebuilt as a deathtrap.",
+      "cost": 11,
+      "source": "DCUGen"
+    },
+    {
+      "id": "the-pit",
+      "name": "The Pit Superhuman Prison",
+      "setting": "Military",
+      "size": "Gargantuan",
+      "toughness": 22,
+      "features": [
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Dimensional Cells"
+        },
+        {
+          "name": "Holding Cells",
+          "ranks": 2
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Personnel"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Sealed"
+        },
+        {
+          "name": "Security System",
+          "ranks": 5
+        }
+      ],
+      "crew": "400 guards, 150 inmates",
+      "summary": "A maximum-security prison sunk into a desert mesa, built to hold the worst the world has.",
+      "cost": 28,
+      "source": "DCUGen"
+    },
+    {
+      "id": "forward-operating-base",
+      "name": "Forward Operating Base",
+      "setting": "Military",
+      "size": "Colossal",
+      "toughness": 12,
+      "features": [
+        {
+          "name": "Armory"
+        },
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Garage"
+        },
+        {
+          "name": "Grounds"
+        },
+        {
+          "name": "Hangar"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Motor Pool"
+        },
+        {
+          "name": "Personnel"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Security System"
+        }
+      ],
+      "crew": "1,500 soldiers",
+      "summary": "Blast walls, hangars and tents behind razor wire: a military base for superhuman operations.",
+      "cost": 21,
+      "source": "DCUGen"
+    },
+    {
+      "id": "commonwealth-hall",
+      "name": "Commonwealth Hall",
+      "setting": "Modern",
+      "size": "Gargantuan",
+      "interior_size": "Colossal",
+      "toughness": 20,
+      "features": [
+        {
+          "name": "Combat Simulator",
+          "ranks": 3
+        },
+        {
+          "name": "Communications"
+        },
+        {
+          "name": "Computer"
+        },
+        {
+          "name": "Concealed",
+          "ranks": 3
+        },
+        {
+          "name": "Dimensional Cells"
+        },
+        {
+          "name": "Dimensional Portal"
+        },
+        {
+          "name": "Dual Size",
+          "detail": "a city block inside"
+        },
+        {
+          "name": "Fire Prevention System"
+        },
+        {
+          "name": "Food Supply"
+        },
+        {
+          "name": "Game Room"
+        },
+        {
+          "name": "Garage",
+          "ranks": 2
+        },
+        {
+          "name": "Grounds"
+        },
+        {
+          "name": "Gym"
+        },
+        {
+          "name": "Hangar"
+        },
+        {
+          "name": "Holding Cells",
+          "ranks": 2
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Laboratory",
+          "ranks": 2,
+          "detail": "inventor's lab and medical lab"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Magic Detection"
+        },
+        {
+          "name": "Personnel"
+        },
+        {
+          "name": "Power System"
+        },
+        {
+          "name": "Sealed"
+        },
+        {
+          "name": "Secret",
+          "ranks": 2
+        },
+        {
+          "name": "Security System",
+          "ranks": 5
+        },
+        {
+          "name": "Untraceable"
+        },
+        {
+          "name": "Vault"
+        },
+        {
+          "name": "Workshop",
+          "ranks": 3,
+          "detail": "incl. an artificer's lab"
+        }
+      ],
+      "crew": "The whole team (all of us!)",
+      "summary": "Modeled on the user's own team base sheet: a skyscraper that holds a city block inside, with a portal to a remote dimensional annex.",
+      "cost": 54,
+      "source": "DCUGen"
+    },
+    {
+      "id": "haunted-house",
+      "name": "Blackwood House",
+      "setting": "Mystic",
+      "size": "Large",
+      "toughness": 10,
+      "features": [
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Dimensional Portal"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Magic Detection"
+        },
+        {
+          "name": "Personnel",
+          "detail": "a ghostly housekeeper"
+        },
+        {
+          "name": "Secret",
+          "ranks": 2
+        },
+        {
+          "name": "Security System",
+          "detail": "poltergeist wards"
+        },
+        {
+          "name": "Shrine"
+        }
+      ],
+      "crew": "A team of occult investigators",
+      "summary": "A rambling haunted mansion whose resident ghosts have agreed to guard the living who now share it.",
+      "cost": 14,
+      "source": "DCUGen"
+    },
+    {
+      "id": "kings-castle",
+      "name": "Royal Castle",
+      "setting": "Fantasy",
+      "size": "Huge",
+      "toughness": 16,
+      "features": [
+        {
+          "name": "Armory"
+        },
+        {
+          "name": "Defense System",
+          "detail": "archers and ballistae"
+        },
+        {
+          "name": "Grounds"
+        },
+        {
+          "name": "Holding Cells",
+          "detail": "dungeon"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Personnel"
+        },
+        {
+          "name": "Shrine"
+        },
+        {
+          "name": "Stables"
+        },
+        {
+          "name": "Vault"
+        }
+      ],
+      "crew": "The royal court and 300 men-at-arms",
+      "summary": "Curtain walls, a moat and a keep that has never fallen, ruled from a hall of banners.",
+      "cost": 19,
+      "source": "DCUGen"
+    },
+    {
+      "id": "wizards-spire",
+      "name": "Wizard's Spire",
+      "setting": "Fantasy",
+      "size": "Small",
+      "interior_size": "Large",
+      "toughness": 12,
+      "features": [
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Dual Size",
+          "detail": "Large inside"
+        },
+        {
+          "name": "Laboratory",
+          "detail": "alchemy"
+        },
+        {
+          "name": "Library",
+          "ranks": 2
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Magic Detection"
+        },
+        {
+          "name": "Security System",
+          "ranks": 2,
+          "detail": "arcane wards"
+        },
+        {
+          "name": "Workshop",
+          "detail": "enchanting"
+        }
+      ],
+      "crew": "An archmage, 2 apprentices, a homunculus",
+      "summary": "A crooked stone spire whose stairs climb far higher than the tower is tall.",
+      "cost": 15,
+      "source": "DCUGen"
+    },
+    {
+      "id": "dwarven-hold",
+      "name": "Dwarven Hold",
+      "setting": "Fantasy",
+      "size": "Colossal",
+      "toughness": 22,
+      "features": [
+        {
+          "name": "Armory"
+        },
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Food Supply"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Personnel"
+        },
+        {
+          "name": "Power System",
+          "detail": "geothermal forges"
+        },
+        {
+          "name": "Security System",
+          "ranks": 2
+        },
+        {
+          "name": "Vault"
+        },
+        {
+          "name": "Workshop",
+          "ranks": 3
+        }
+      ],
+      "crew": "A dwarf clan of 3,000",
+      "summary": "Halls carved into the roots of a mountain, lit by forge-fire and guarded by rune-doors.",
+      "cost": 27,
+      "source": "DCUGen"
+    },
+    {
+      "id": "elven-treehold",
+      "name": "Elven Treehold",
+      "setting": "Fantasy",
+      "size": "Large",
+      "toughness": 10,
+      "features": [
+        {
+          "name": "Concealed",
+          "ranks": 2
+        },
+        {
+          "name": "Grounds"
+        },
+        {
+          "name": "Infirmary",
+          "detail": "healing glade"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Magic Detection"
+        },
+        {
+          "name": "Personnel"
+        },
+        {
+          "name": "Shrine"
+        }
+      ],
+      "crew": "50 elves",
+      "summary": "Silver-barked platforms and bridges high in an ancient forest canopy.",
+      "cost": 13,
+      "source": "DCUGen"
+    },
+    {
+      "id": "thieves-warren",
+      "name": "Thieves' Guild Warren",
+      "setting": "Fantasy",
+      "size": "Medium",
+      "toughness": 8,
+      "features": [
+        {
+          "name": "Concealed",
+          "ranks": 2
+        },
+        {
+          "name": "Deathtraps"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Secret",
+          "ranks": 2
+        },
+        {
+          "name": "Security System",
+          "ranks": 2
+        },
+        {
+          "name": "Vault"
+        },
+        {
+          "name": "Workshop",
+          "detail": "forgery"
+        }
+      ],
+      "crew": "A guildmaster and 40 cutpurses",
+      "summary": "Cellars beneath the market linked by secret doors, trapped corridors and a counting-house vault.",
+      "cost": 12,
+      "source": "DCUGen"
+    },
+    {
+      "id": "sun-temple",
+      "name": "Temple of the Dawn",
+      "setting": "Fantasy",
+      "size": "Large",
+      "toughness": 12,
+      "features": [
+        {
+          "name": "Grounds"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Personnel",
+          "detail": "acolytes"
+        },
+        {
+          "name": "Security System"
+        },
+        {
+          "name": "Shrine",
+          "ranks": 2
+        },
+        {
+          "name": "Vault"
+        }
+      ],
+      "crew": "A high priestess and 30 clergy",
+      "summary": "A white-marble temple whose dome lights up at sunrise, a sanctuary for the hurt and hunted.",
+      "cost": 14,
+      "source": "DCUGen"
+    },
+    {
+      "id": "dragons-lair",
+      "name": "Dragon's Lair",
+      "setting": "Fantasy",
+      "size": "Huge",
+      "toughness": 20,
+      "features": [
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Deathtraps"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Security System"
+        },
+        {
+          "name": "Vault",
+          "ranks": 2
+        }
+      ],
+      "crew": "One ancient dragon and kobold servants",
+      "summary": "A cavern in a volcanic peak where an ancient wyrm sleeps on a mountain of gold.",
+      "cost": 17,
+      "source": "DCUGen"
+    },
+    {
+      "id": "lich-necropolis",
+      "name": "Lich's Necropolis",
+      "setting": "Fantasy",
+      "size": "Colossal",
+      "toughness": 18,
+      "features": [
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Deathtraps",
+          "ranks": 2
+        },
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Holding Cells"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Laboratory",
+          "detail": "necromancy"
+        },
+        {
+          "name": "Library",
+          "ranks": 2
+        },
+        {
+          "name": "Magic Detection"
+        },
+        {
+          "name": "Personnel",
+          "detail": "skeletal servants"
+        },
+        {
+          "name": "Sealed"
+        },
+        {
+          "name": "Self-Repairing"
+        },
+        {
+          "name": "Temporal Limbo",
+          "detail": "time runs at half speed"
+        },
+        {
+          "name": "Workshop"
+        }
+      ],
+      "crew": "A lich and its undead legion",
+      "summary": "A city of tombs beneath a dead marsh, where the lich has waited a thousand years.",
+      "cost": 26,
+      "source": "DCUGen"
+    },
+    {
+      "id": "pirate-cove",
+      "name": "Pirate Cove",
+      "setting": "Fantasy",
+      "size": "Medium",
+      "toughness": 8,
+      "features": [
+        {
+          "name": "Concealed",
+          "ranks": 2
+        },
+        {
+          "name": "Dock"
+        },
+        {
+          "name": "Food Supply"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Secret"
+        },
+        {
+          "name": "Vault"
+        }
+      ],
+      "crew": "A pirate crew of 80",
+      "summary": "A sea cave hidden by a waterfall, with a hidden anchorage, a tavern and buried treasure.",
+      "cost": 9,
+      "source": "DCUGen"
+    },
+    {
+      "id": "sky-citadel",
+      "name": "Floating Sky-Citadel",
+      "setting": "Fantasy",
+      "size": "Gargantuan",
+      "toughness": 18,
+      "features": [
+        {
+          "name": "Defense System"
+        },
+        {
+          "name": "Effect",
+          "detail": "Flight 4: the citadel drifts"
+        },
+        {
+          "name": "Grounds"
+        },
+        {
+          "name": "Hangar",
+          "detail": "griffon roosts and airship docks"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Personnel"
+        },
+        {
+          "name": "Power System",
+          "detail": "levitation crystal"
+        },
+        {
+          "name": "Security System",
+          "ranks": 2
+        },
+        {
+          "name": "Shrine"
+        },
+        {
+          "name": "Stables"
+        }
+      ],
+      "crew": "A sky-mage order and 500 citizens",
+      "summary": "A walled city on a floating island, its waterfalls pouring into empty sky.",
+      "cost": 23,
+      "source": "DCUGen"
+    },
+    {
+      "id": "adventurers-guildhall",
+      "name": "Adventurers' Guildhall",
+      "setting": "Fantasy",
+      "size": "Medium",
+      "toughness": 10,
+      "features": [
+        {
+          "name": "Armory"
+        },
+        {
+          "name": "Game Room",
+          "detail": "taproom"
+        },
+        {
+          "name": "Gym",
+          "detail": "training yard"
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Library",
+          "detail": "map room"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Stables"
+        }
+      ],
+      "crew": "A guildmaster, staff and wandering heroes",
+      "summary": "A rowdy timber hall with a job board, a training yard and rooms above the tavern.",
+      "cost": 10,
+      "source": "DCUGen"
+    },
+    {
+      "id": "druid-grove",
+      "name": "Druid's Grove",
+      "setting": "Fantasy",
+      "size": "Large",
+      "toughness": 8,
+      "features": [
+        {
+          "name": "Concealed",
+          "ranks": 2
+        },
+        {
+          "name": "Food Supply"
+        },
+        {
+          "name": "Grounds"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Magic Detection"
+        },
+        {
+          "name": "Shrine"
+        }
+      ],
+      "crew": "A circle of druids",
+      "summary": "A ring of standing stones in a hidden valley where the old powers still answer.",
+      "cost": 10,
+      "source": "DCUGen"
+    },
+    {
+      "id": "mountain-monastery",
+      "name": "Mountain Monastery",
+      "setting": "Fantasy",
+      "size": "Large",
+      "toughness": 14,
+      "features": [
+        {
+          "name": "Food Supply"
+        },
+        {
+          "name": "Gym",
+          "ranks": 2
+        },
+        {
+          "name": "Infirmary"
+        },
+        {
+          "name": "Isolated"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Personnel"
+        },
+        {
+          "name": "Shrine"
+        }
+      ],
+      "crew": "60 monks",
+      "summary": "A cliffside monastery above the clouds where martial disciplines are taught in silence.",
+      "cost": 15,
+      "source": "DCUGen"
+    },
+    {
+      "id": "witch-cottage",
+      "name": "Witch's Cottage",
+      "setting": "Fantasy",
+      "size": "Small",
+      "interior_size": "Medium",
+      "toughness": 6,
+      "features": [
+        {
+          "name": "Concealed"
+        },
+        {
+          "name": "Dual Size",
+          "detail": "Medium inside"
+        },
+        {
+          "name": "Laboratory",
+          "detail": "potions"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Living Space"
+        },
+        {
+          "name": "Magic Detection"
+        }
+      ],
+      "crew": "A hedge witch and her familiar",
+      "summary": "A thatched cottage in the deep wood, roomier inside than it looks, smelling of herbs.",
+      "cost": 7,
+      "source": "DCUGen"
+    }
+  ]
+}

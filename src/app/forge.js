@@ -5,9 +5,11 @@ import { state, emit, savePrefs, upsert } from './store.js';
 import { renderFile } from './sheetview.js';
 import { exportExcel, exportJson, exportText } from './exporters.js';
 import { encodeCharacter, shareLink } from './share.js';
+import { importDialog } from './importer.js';
 import { generateCharacter, rerollIdentity, generateTeam } from '../engine/generator.js';
 import { randomSeed } from '../engine/rng.js';
 import { statBlockText, sheet as makeSheet } from '../engine/render.js';
+import { recordChanges } from '../engine/advancement.js';
 let R;
 let root;
 let fileHost;
@@ -196,6 +198,7 @@ function build() {
       h('button', { class: 'btn', type: 'button', onClick: surprise }, 'Surprise me'),
       h('button', { class: 'btn', type: 'button', onClick: rollTeam }, 'Roll a team'),
       h('button', { class: 'btn', type: 'button', id: 'build-scratch', onClick: buildFromScratch }, 'Build from scratch')),
+    h('button', { class: 'btn import-btn', type: 'button', id: 'forge-import', title: 'Open a character your GM or another player sent you', onClick: () => importDialog() }, '⇪ Import a character (.xlsx, .json, share code)'),
     h('p', { class: 'hint' }, 'Press R to roll. Every rolled character is legal for its power level and spends exactly 15 points per PL. Build from scratch starts a blank sheet you fill in yourself.'),
     h('div', { class: 'field' }, h('span', null, 'Recent rolls'), historyEl));
 
@@ -300,7 +303,7 @@ export function renderCurrent() {
     h('button', { class: 'btn primary', type: 'button', onClick: () => {
       const saved = upsert(ch); state.current = saved; state.tabs[state.active] = saved; saveTabs(); renderCurrent(); toast(inRoster ? 'Roster updated' : 'Saved to your roster');
     } }, inRoster ? 'Update in roster' : 'Save to roster'),
-    h('button', { class: 'btn', type: 'button', 'aria-pressed': String(state.editing), onClick: () => { state.editing = !state.editing; renderCurrent(); } }, state.editing ? 'Done editing' : 'Edit'),
+    h('button', { class: 'btn', type: 'button', 'aria-pressed': String(state.editing), onClick: () => toggleEditing() }, state.editing ? 'Done editing' : 'Edit'),
     h('button', { class: 'btn ghost', type: 'button', title: 'Keep the build, roll a new name and story', onClick: () => {
       const c = rerollIdentity(R, ch, randomSeed()); c.rosterId = ch.rosterId; setCurrent(c, { fresh: true });
     } }, 'New name'),
@@ -309,8 +312,8 @@ export function renderCurrent() {
     status(ch),
     h('button', { class: 'btn', type: 'button', onClick: async () => { const ok = await copyText(statBlockText(ch, R)); toast(ok ? 'Stat block copied' : 'Copy failed. Use Export > Text instead.'); } }, 'Copy stat block'),
     menu('Export', [
-      { label: 'Excel character sheet (.xlsx)', hint: 'Your classic sheet, filled in, plus a full stat block tab', run: () => exportExcel(ch, R) },
-      { label: 'Character file (.json)', hint: 'Re-import later, or share the file', run: () => exportJson(ch) },
+      { label: 'Excel character sheet (.xlsx)', hint: 'Your classic sheet, filled in. DCUGen can import it back, too', run: () => exportExcel(ch, R) },
+      { label: 'Character file (.json)', hint: 'Small file to send to your GM or players; they Import it', run: () => exportJson(ch) },
       { label: 'Stat block (.txt)', hint: 'Book-style text', run: () => exportText(ch, R) },
       { label: 'Print or save as PDF', hint: 'Uses your browser\'s print dialog', run: () => window.print() },
     ]),
@@ -322,9 +325,26 @@ export function renderCurrent() {
     onChange: (c) => { state.current = c; state.tabs[state.active] = c; saveTabs(); fresh = false; renderCurrent(); },
     onEditPower: (path) => api.editPower?.(path),
     onAddPower: () => api.addPower?.(),
+    onSpend: () => { state.editing = true; renderCurrent(); toast('Edit mode: buy what you want, then press Done editing to log it'); },
   });
   fresh = false;
   fileHost.append(el);
+}
+
+/** Leaving edit mode records any spending in the advancement log (when it's switched on). */
+function toggleEditing() {
+  if (state.editing && state.current?.advancement) {
+    const c = JSON.parse(JSON.stringify(state.current));
+    const before = c.advancement.log.length;
+    recordChanges(c, R);
+    if (c.advancement.log.length !== before) {
+      state.current = c; state.tabs[state.active] = c; saveTabs();
+      const e = c.advancement.log[c.advancement.log.length - 1];
+      toast(e.points > 0 ? `Logged: ${e.points} point${e.points === 1 ? '' : 's'} spent` : e.points < 0 ? `Logged: ${-e.points} points back` : 'Logged the change');
+    }
+  }
+  state.editing = !state.editing;
+  renderCurrent();
 }
 
 function status(ch) {
@@ -357,7 +377,7 @@ async function share(ch) {
   await openDialog({
     title: `Share ${ch.identity?.codename || 'character'}`,
     body: [
-      h('p', { style: { margin: 0 } }, 'Send the share code to anyone with DCUGen. They paste it into Roster > Import. The link opens the character directly when the app is hosted or opened from the same file.'),
+      h('p', { style: { margin: 0 } }, 'Send the share code to anyone with DCUGen. They paste it into Import (Forge or Roster). The link opens the character directly when the app is hosted or opened from the same file.'),
       h('label', { class: 'field' }, h('span', null, 'Share code'), codeBox),
       h('div', { class: 'btn-row' }, h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(code)) ? 'Code copied' : 'Select the code and copy it') }, 'Copy code')),
       h('label', { class: 'field' }, h('span', null, 'Link'), linkBox),

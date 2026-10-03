@@ -2,7 +2,7 @@
 
 import { download, slug, toast } from './dom.js';
 import { inflateRaw } from './share.js';
-import { fillCharacterSheet, rosterWorkbook } from '../engine/xlsx.js';
+import { fillCharacterSheet, rosterWorkbook, readWorkbookCharacters } from '../engine/xlsx.js';
 import { statBlockText } from '../engine/render.js';
 const XLSX_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
@@ -49,10 +49,14 @@ export function exportText(ch, R) {
   toast('Stat block saved');
 }
 
-/** Read characters from a .json file (a single character or a roster file). */
+/** Read characters from a DCUGen file: a character or roster .json, or a DCUGen Excel export (.xlsx). */
 export async function readCharactersFile(file) {
-  const text = await file.text();
-  const data = JSON.parse(text);
-  const list = Array.isArray(data) ? data : Array.isArray(data.characters) ? data.characters : [data];
-  return list.filter((c) => c && c.abilities && c.pl);
+  const valid = (list) => list.filter((c) => c && c.abilities && c.pl);
+  if (/\.xlsx$/i.test(file.name) || file.type === XLSX_TYPE) {
+    const list = await readWorkbookCharacters(new Uint8Array(await file.arrayBuffer()), inflateRaw);
+    if (!list) throw new Error(`${file.name} has no DCUGen data. Only sheets exported from DCUGen can be imported.`);
+    return valid(list);
+  }
+  const data = JSON.parse(await file.text());
+  return valid(Array.isArray(data) ? data : Array.isArray(data.characters) ? data.characters : [data]);
 }

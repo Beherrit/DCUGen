@@ -2,6 +2,7 @@
 
 import { h } from './dom.js';
 import { guideFor, skillGuideBody } from './skillguide.js';
+import { advancementSection } from './advancement.js';
 import { inkFor } from './dom.js';
 import { sheet as makeSheet, describeEffect, explainPower } from '../engine/render.js';
 import { costMath } from '../engine/powersmith.js';
@@ -302,7 +303,8 @@ export function renderFile(ch, R, opts = {}) {
     opts.toolbar || null,
     h('div', { class: 'file-body' },
       h('div', { class: 'col' }, abilities, defenses, offense, powers),
-      h('div', { class: 'col' }, advantages, skills, equipment, story, points)));
+      h('div', { class: 'col' }, advantages, skills, equipment, story, points,
+        opts.onChange && !opts.noAdvancement ? advancementSection(ch, R, { change, onSpend: opts.onSpend, editing }) : null)));
   file.style.setProperty('--hero', hero);
   file.style.setProperty('--hero-ink', inkFor(hero));
   return { el: file, sheet: s };

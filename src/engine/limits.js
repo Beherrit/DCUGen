@@ -102,7 +102,7 @@ export function checkLimits(ch, R) {
 
   // Budget
   const cost = costBreakdown(ch, R);
-  if (cost.total > cost.budget) out.push(issue('budget', `Spent ${cost.total} power points; PL ${pl} allows ${cost.budget}.`));
+  if (cost.total > cost.budget) out.push(issue('budget', ch.advancement ? `Spent ${cost.total} power points; starting points plus GM awards give ${cost.budget}.` : `Spent ${cost.total} power points; PL ${pl} allows ${cost.budget}.`));
   else if (cost.total < cost.budget) out.push(issue('budget', `${cost.budget - cost.total} power points unspent.`, 'info'));
 
   return out;

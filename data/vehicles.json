@@ -1,0 +1,3917 @@
+{
+  "rules": [
+    {
+      "title": "Vehicle traits",
+      "text": "A vehicle has five traits: Size, Strength, Speed, Defense and Toughness. Each costs equipment points to improve, much like a character trait. Size sets the starting Strength, Toughness and Defense; Strength sets how much the vehicle can haul; Speed is a movement effect; Defense is how hard it is to hit; Toughness is how much punishment it shrugs off.",
+      "source": "DCA 155"
+    },
+    {
+      "title": "Vehicle trait costs",
+      "text": "Size: 1 point per size category above Medium (Medium is the free default). Strength: 1 point per +1 over the base for its size. Speed: the normal cost of the movement effect bought (Speed, Swimming and Burrowing 1 point per rank, Flight 2 points per rank). Defense: 1 point per point of size penalty bought off. Toughness: 1 point per +1 over the base for its size. Features: 1 point each. Powers: their normal power cost.",
+      "source": "DCA 155"
+    },
+    {
+      "title": "Size categories",
+      "text": "Medium (motorcycle): Str 0, Tou 5, Defense penalty 0. Large (car, truck): Str 4, Tou 7, -2. Huge (stretch limo, SUV, tank): Str 8, Tou 9, -4. Gargantuan (semi, yacht, fighter jet): Str 12, Tou 11, -6. Colossal (passenger jet): Str 16, Tou 13, -8. Awesome (space transport): Str 20, Tou 15, -10. The book's vehicle list shows Defense as 10 plus this penalty (Medium 10, Large 8, Huge 6, Gargantuan 4, Colossal 2, Awesome 0).",
+      "source": "DCA 155"
+    },
+    {
+      "title": "Cost formula (as DCUGen computes it)",
+      "text": "Cost = size cost (Medium 0, Large 1, Huge 2, Gargantuan 3, Colossal 4, Awesome 5) + (Strength - size base Strength) + movement effect cost x Speed rank + (Defense - (10 + size penalty)) + (Toughness - size base Toughness) + feature costs + power costs. Traits below the size baseline give no refund (the book's Bomber, with Strength 13 on a Colossal frame, is priced that way). Extra movement modes are Alternate Effects: +1 point each.",
+      "source": "DCA 155-156"
+    },
+    {
+      "title": "Speed and movement modes",
+      "text": "A vehicle buys the movement effect that matches how it travels and pays its normal cost. A vehicle with several modes (land, sea and air, say) pays full price for the most expensive one and takes the rest as Alternate Effects for 1 point each. Speed rank converts to miles per hour the usual way (rank 5 is about 60 mph, rank 10 about 2,000 mph).",
+      "source": "DCA 156"
+    },
+    {
+      "title": "Defense",
+      "text": "Bigger vehicles are easier to hit: size larger than Medium applies a penalty to the Defense attackers roll against, and the largest vessels can be hit with a routine check. Each -1 of that penalty can be bought off for 1 equipment point.",
+      "source": "DCA 156"
+    },
+    {
+      "title": "Toughness and armor",
+      "text": "Size gives a base Toughness used for the vehicle's resistance checks; each +1 over it costs 1 point. Armor is Protection added to the vehicle at 1 point per +1 Toughness, and may be Impervious (as on tanks) or Sustained (force screens) instead of Permanent. Impervious Toughness costs 1 point per rank it covers.",
+      "source": "DCA 156-157"
+    },
+    {
+      "title": "Standard equipment and features",
+      "text": "Seats, belts, climate control, a radio, lights and similar touches with no game effect come free. Features are optional extras at 1 point each, and the GM decides what counts as standard. Some features are really powers and cost what the power costs.",
+      "source": "DCA 156"
+    },
+    {
+      "title": "Powers on vehicles",
+      "text": "Vehicle systems can be bought as power effects: attack effects for mounted weapons, defenses for armor and screens, sensory effects for cloaks and sensors. A vehicle power costs its normal power cost in equipment points, which is effectively one-fifth the power-point price for the owner. A partial modifier such as \"Damage 10, Burst Area 8\" adds +1 per rank for only the listed ranks.",
+      "source": "DCA 156"
+    },
+    {
+      "title": "Environmental immunity",
+      "text": "A vehicle protects its occupants from the normal hazards of the medium it is built for (underwater, vacuum) at no extra cost. Pay for Immunity only for unusual protection, such as a sealed air supply in a car.",
+      "source": "DCA 156"
+    },
+    {
+      "title": "Weapons",
+      "text": "Vehicle weapons are usually Damage with modifiers: machine guns are Ranged Multiattack Damage 6, a tank cannon Ranged Damage 10 with Burst Area on 6 ranks, air-to-air missiles add Homing. Weapons usable only one at a time can be Alternate Effects of the biggest (+1 point each), which is how the book prices military copters, fighter jets and space cruisers.",
+      "source": "DCA 156-158"
+    },
+    {
+      "title": "Vehicles skill",
+      "text": "Vehicles (Dexterity, trained only) covers driving and piloting cars, boats, aircraft and spacecraft. Ordinary driving needs no check; roll only under pressure: chases, combat, or racing a deadline. Riding animals uses Expertise: Riding (Agility) with the same difficulties.",
+      "source": "DCA 67"
+    },
+    {
+      "title": "Maneuvers",
+      "text": "Vehicles check DCs: 5 easy (a low-speed turn), 10 average (a sudden reverse, dodging obstacles), 15 difficult (tight turns), 20 challenging (bootlegger reverse, loop, barrel roll), 25 formidable (high-speed maneuvers, jumping or weaving around obstacles).",
+      "source": "DCA 67"
+    },
+    {
+      "title": "Chases",
+      "text": "The book has no separate chase subsystem: run a chase as a series of opposed or DC-based Vehicles checks using the maneuver table, with Speed deciding who can catch whom. Features such as Oil Slick (pursuer makes DC 15 Vehicles check to keep control), Caltrops and Smokescreen exist to shake pursuers.",
+      "source": "DCA 67, 156"
+    },
+    {
+      "title": "Vehicle combat",
+      "text": "A driver uses the vehicle's weapons with his or her own attack check against the target's Defense; attackers roll against the vehicle's Defense (with its size penalty). Driving a vehicle normally takes a move action, including by Remote Control. Hits are resisted with the vehicle's Toughness like any object; an inanimate vehicle can be hit with a routine check or a normal check that counts as an automatic critical (+5).",
+      "source": "DCA 94, 156"
+    },
+    {
+      "title": "Ramming and collisions",
+      "text": "Treat ramming as a slam attack made with the vehicle: charge into the target, using damage equal to the vehicle's speed rank or its normal damage +1, whichever is higher, +1 more if it moved its full speed first. The rammer resists half that damage (rounded down) with its own Toughness. Slam damage is capped by power level. DCUGen applies the book's slam rules to vehicles, since the vehicle section has no separate collision table.",
+      "source": "DCA 178"
+    },
+    {
+      "title": "Damaged vehicles",
+      "text": "Vehicles are equipment and take damage like objects, using their Toughness. Each time a vehicle is damaged it loses 1 feature or takes a -1 circumstance penalty on checks with it until repaired. Two degrees of failure against an attack meant to break it leaves a hole or breach; three or more wrecks it.",
+      "source": "DCA 94, 147"
+    },
+    {
+      "title": "Repairs",
+      "text": "Repairs use Technology. A vehicle is an advanced item (build DC 30, time rank 16 or about 4 days); repairing is DC 5 lower with time 2 ranks shorter (DC 25, about 1 day). A jury-rig is DC 10 below the build DC (DC 20), takes a standard action, fixes one problem and lasts until the end of the scene. Take -5 on the check to cut the time by one rank. A lost vehicle can be replaced with time and resources, since it is part of the owner's equipment.",
+      "source": "DCA 66, 147"
+    },
+    {
+      "title": "Equipment points",
+      "text": "Vehicles are bought with equipment points from the Equipment advantage: 5 points per rank. A shared team vehicle is paid for by the members in whatever split they agree, each devoting Equipment ranks to it.",
+      "source": "DCA 147, 156"
+    },
+    {
+      "title": "Alternate vehicles",
+      "text": "Since you can only drive one at a time, a character's vehicles are Alternate Equipment: pay full price for the most expensive and 1 point for each other vehicle of the same or lower cost. A hero point can produce a fitting spare vehicle for one scene.",
+      "source": "DCA 157"
+    },
+    {
+      "title": "Book table inconsistencies",
+      "text": "Several printed costs on the DCA 158 table do not follow the book's own trait costs (for example the Police Cruiser is listed at 11 though it beats the 10-point Car by +1 Strength, +1 Speed and +1 Toughness). DCUGen keeps the printed price as book_cost, explains the gap in book_cost_note, and stores the cost the formula gives.",
+      "source": "DCUGen"
+    },
+    {
+      "title": "Spaceships: drives",
+      "text": "Buy in-system speed as Flight (2 points per rank; Flight 12 is roughly 8,000 mph). Faster-than-light travel is a separate Movement power: Space Travel 1 reaches other planets in the system, 2 reaches other star systems, 3 reaches distant stars or other galaxies (2 points per rank). It only works in vacuum, so ships also need Flight for atmosphere and orbit.",
+      "source": "DCUGen"
+    },
+    {
+      "title": "Spaceships: life support",
+      "text": "A spacecraft protects its crew from vacuum for free, because space is its normal environment. Buy Immunity only for extra protection: Immunity 10 (Life Support) for a lifeboat that must keep passengers alive anywhere, or a few ranks against radiation storms or alien atmospheres.",
+      "source": "DCUGen"
+    },
+    {
+      "title": "Spaceships: shields and hulls",
+      "text": "Hull plating is the Toughness trait (1 point per +1), optionally Impervious Toughness. Energy shields are Protection with the Sustained extra (no cost change, but they can be switched off or nullified), or Impervious if the shields shrug off small arms. Keep total Toughness within what the series allows for vehicles.",
+      "source": "DCUGen"
+    },
+    {
+      "title": "Spaceships: crews",
+      "text": "The vehicle sheet only prices the hull. Gunners, engineers and pilots are minions or ordinary NPCs; a large crew can be the Personnel of a mobile headquarters. Each weapon needs someone to fire it; one gunner per Alternate Effect array is a good rule of thumb.",
+      "source": "DCUGen"
+    },
+    {
+      "title": "Spaceships: weapons",
+      "text": "Fighter blasters: Ranged Damage 10. Cruiser beams: Ranged Damage 12. Torpedoes: Ranged Damage 12-15 with Burst Area on 10-12 ranks and Homing 8. Point-defense: Ranged Multiattack Damage 6-8. Put weapons that one gunner fires into one array (Alternate Effects, +1 each).",
+      "source": "DCUGen"
+    },
+    {
+      "title": "Spaceships: tractor beams",
+      "text": "A tractor beam is Move Object (2 points per rank, ranged): rank 10 hauls 25 tons, rank 14 about 400 tons. Add Limited (only toward the ship) to halve the price for a pure docking beam.",
+      "source": "DCUGen"
+    },
+    {
+      "title": "Fantasy vessels: propulsion",
+      "text": "Rowed and animal-drawn craft just buy Speed or Swimming. Sails that need wind take Limited (needs wind) on their movement, halving its cost. Magical lift (a carpet, a sky-galleon's keel crystal, a witch's broom) is Flight, often with a flaw: Unreliable for temperamental magic, Limited (not over running water, only by night) for magic with a taboo.",
+      "source": "DCUGen"
+    },
+    {
+      "title": "Fantasy vessels: enchantments",
+      "text": "Spells woven into a vessel are powers: a ghost ship's spectral form is Insubstantial 4, an elven skiff's silence is Concealment with Blending, a dragon team's fire is a Cone Area Damage. A ship that comes when called has Remote Control. A flying castle is an Awesome vehicle that can also serve as a headquarters bought separately.",
+      "source": "DCUGen"
+    },
+    {
+      "title": "Fantasy vessels: crews and mounts",
+      "text": "Steeds that pull a vehicle are part of its Speed or Flight; if the beasts fight on their own, buy them as minions. Galley rowers, deckhands and ghostly crews are NPCs. Piloting a ship uses Vehicles; driving a team of animals can use Expertise: Riding at the same DCs.",
+      "source": "DCUGen"
+    },
+    {
+      "title": "Steampunk vehicles",
+      "text": "Steam carriages, zeppelins, clockwork walkers and land ironclads use the normal rules. Boilers that need stoking can take Limited or Unreliable on movement; legged walkers add Leaping as a second movement mode (+1 point). Heavy riveted plate is Impervious Toughness, and gun decks are Ranged Damage with partial Burst Area.",
+      "source": "DCUGen"
+    }
+  ],
+  "sizes": [
+    {
+      "name": "Medium",
+      "rank": -2,
+      "strength": 0,
+      "toughness": 5,
+      "defense": 0,
+      "base_defense": 10,
+      "cost": 0,
+      "examples": "Motorcycle"
+    },
+    {
+      "name": "Large",
+      "rank": -1,
+      "strength": 4,
+      "toughness": 7,
+      "defense": -2,
+      "base_defense": 8,
+      "cost": 1,
+      "examples": "Car, truck"
+    },
+    {
+      "name": "Huge",
+      "rank": 0,
+      "strength": 8,
+      "toughness": 9,
+      "defense": -4,
+      "base_defense": 6,
+      "cost": 2,
+      "examples": "Stretch limo, SUV, tank"
+    },
+    {
+      "name": "Gargantuan",
+      "rank": 1,
+      "strength": 12,
+      "toughness": 11,
+      "defense": -6,
+      "base_defense": 4,
+      "cost": 3,
+      "examples": "Semi, yacht, fighter jet"
+    },
+    {
+      "name": "Colossal",
+      "rank": 2,
+      "strength": 16,
+      "toughness": 13,
+      "defense": -8,
+      "base_defense": 2,
+      "cost": 4,
+      "examples": "Passenger jet"
+    },
+    {
+      "name": "Awesome",
+      "rank": 3,
+      "strength": 20,
+      "toughness": 15,
+      "defense": -10,
+      "base_defense": 0,
+      "cost": 5,
+      "examples": "Space transport"
+    }
+  ],
+  "features": [
+    {
+      "name": "Alarm",
+      "cost": 1,
+      "per_rank": true,
+      "kind": "feature",
+      "text": "Sounds off at any unauthorized entry or start-up attempt. Technology DC 20 to defeat; each extra point raises the DC by 5.",
+      "source": "DCA 156"
+    },
+    {
+      "name": "Caltrops",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "text": "Spike dispenser (standard action). Ordinary vehicles that drive over them lose their tires; a hero's or villain's vehicle makes a DC 13 Toughness check with tire Toughness 3: one degree of failure slows it, two immobilize it.",
+      "source": "DCA 156"
+    },
+    {
+      "name": "Hidden Compartments",
+      "cost": 1,
+      "per_rank": true,
+      "kind": "feature",
+      "text": "Concealed cargo space for up to a tenth of the vehicle's medium load. Perception DC 20 to find; each extra point raises the DC by 5.",
+      "source": "DCA 156"
+    },
+    {
+      "name": "Navigation System",
+      "cost": 1,
+      "per_rank": true,
+      "kind": "feature",
+      "text": "+5 circumstance bonus to navigation-related checks. The book's sample hero car takes it twice for +10 (DCA 213).",
+      "source": "DCA 156"
+    },
+    {
+      "name": "Oil Slick",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "text": "Dumps a 20 by 20 ft. slick (standard action); a pursuing driver must make a DC 15 Vehicles check to keep control.",
+      "source": "DCA 156"
+    },
+    {
+      "name": "Remote Control",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "text": "The owner can drive the vehicle by remote, using the same action as driving it from the seat (usually a move action).",
+      "source": "DCA 156"
+    },
+    {
+      "name": "Vehicle Armor",
+      "cost": 1,
+      "per_rank": true,
+      "kind": "power",
+      "effect": "Protection",
+      "text": "Protection on top of the vehicle's Toughness, 1 point per +1. DCUGen folds bought armor into the Toughness trait at the same price; use this entry for armor you want listed separately (for instance Sustained force screens).",
+      "source": "DCA 156"
+    },
+    {
+      "name": "Impervious Toughness",
+      "cost": 1,
+      "per_rank": true,
+      "kind": "power",
+      "effect": "Protection (Impervious)",
+      "text": "The Impervious extra on that many ranks of the vehicle's Toughness: damage of half that rank or less has no effect. 1 point per rank, no more ranks than its Toughness. Tanks have 6, APCs 4.",
+      "source": "DCA 156-157"
+    },
+    {
+      "name": "Cloaking Device (One Sense)",
+      "cost": 4,
+      "per_rank": false,
+      "kind": "power",
+      "effect": "Concealment 2",
+      "text": "Concealment from normal vision, or from all of one other sense type such as radar or hearing (a stealth mode). 4 points. (The gear list in equipment.json calls this Concealment 4; the 4-point price is Concealment 2 at 2 points per rank.)",
+      "source": "DCA 156"
+    },
+    {
+      "name": "Cloaking Device (All Visual)",
+      "cost": 8,
+      "per_rank": false,
+      "kind": "power",
+      "effect": "Concealment 4",
+      "text": "Concealment from all visual senses. 8 points. (The gear list in equipment.json calls this Concealment 8; the 8-point price is Concealment 4.)",
+      "source": "DCA 156"
+    },
+    {
+      "name": "Smokescreen",
+      "cost": 12,
+      "per_rank": false,
+      "kind": "power",
+      "effect": "Cloud Area visual Concealment Attack 4",
+      "text": "Releases thick smoke or mist that hides the vehicle and blinds pursuers: a Cloud Area visual Concealment Attack, priced by the book at 12 points like a smoke grenade.",
+      "source": "DCA 156"
+    },
+    {
+      "name": "Towing Cables",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "text": "Cables or a winch to tow another vehicle or object up to the vehicle's Strength. Seen on a villain's submarine in the book.",
+      "source": "DCA 241"
+    },
+    {
+      "name": "Autopilot",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "text": "Drives or flies itself on a set course with no check, freeing the pilot for other actions. Makes Vehicles checks with a +0 bonus if forced to.",
+      "source": "DCUGen"
+    },
+    {
+      "name": "Cargo Hold",
+      "cost": 1,
+      "per_rank": true,
+      "kind": "feature",
+      "text": "Large secured cargo space; carries its full Strength in freight. Take again for a second bay or refrigeration.",
+      "source": "DCUGen"
+    },
+    {
+      "name": "Communications Suite",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "text": "Radio, police-band scanner, encrypted team channel and video link; like the Communications headquarters feature in miniature.",
+      "source": "DCUGen"
+    },
+    {
+      "name": "Crew Quarters",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "text": "Bunks, galley and stores for the crew to live aboard for weeks.",
+      "source": "DCUGen"
+    },
+    {
+      "name": "Ejection System",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "text": "Ejector seats or escape capsules let everyone aboard bail out safely as a reaction when the vehicle is wrecked.",
+      "source": "DCUGen"
+    },
+    {
+      "name": "Laboratory Module",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "text": "A compact lab: allows Expertise, Investigation and Technology checks that need a laboratory while on the move.",
+      "source": "DCUGen"
+    },
+    {
+      "name": "Luxury Quarters",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "text": "Staterooms, a bar, fine furnishings: impresses passengers and grants a +2 circumstance bonus to Persuasion with guests aboard.",
+      "source": "DCUGen"
+    },
+    {
+      "name": "Medical Bay",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "text": "Stretchers and trauma gear for full use of Treatment aboard; stabilizes passengers in transit.",
+      "source": "DCUGen"
+    },
+    {
+      "name": "Rescue Gear",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "text": "Ladders, winches, hydraulic cutters and searchlights; +2 circumstance bonus to rescue-related checks.",
+      "source": "DCUGen"
+    }
+  ],
+  "premade": [
+    {
+      "id": "book-motorcycle",
+      "name": "Motorcycle",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Medium",
+      "strength": 1,
+      "speed": 6,
+      "movement": "Speed",
+      "defense": 10,
+      "toughness": 8,
+      "powers": [],
+      "features": [],
+      "crew": "1 rider, 1 passenger",
+      "summary": "A fast two-wheeler that slips through traffic and weaves around wrecks.",
+      "cost": 10,
+      "book_cost": 10,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-car",
+      "name": "Car",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Large",
+      "strength": 5,
+      "speed": 5,
+      "movement": "Speed",
+      "defense": 8,
+      "toughness": 8,
+      "powers": [],
+      "features": [],
+      "crew": "1 driver, 4 passengers",
+      "summary": "An everyday sedan with the usual comforts. Add +1 or +2 Strength for a full-size car, or +1 or +2 Speed for a sports or racing model.",
+      "cost": 8,
+      "book_cost": 10,
+      "book_cost_note": "Book lists 10. By its own table: Large 1 + Strength 5 vs base 4 (+1) + Speed 5 (5) + Defense 8 (base) + Toughness 8 vs base 7 (+1) = 8. The Police Cruiser, which has +1 Strength, +1 Speed and +1 Toughness more, is listed at only 11, so the Car's 10 cannot be right.",
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-police-cruiser",
+      "name": "Police Cruiser",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Large",
+      "strength": 6,
+      "speed": 6,
+      "movement": "Speed",
+      "defense": 8,
+      "toughness": 9,
+      "powers": [],
+      "features": [],
+      "crew": "2 officers, 2 in the back seat",
+      "summary": "A beefed-up patrol car with a reinforced frame and a big engine.",
+      "cost": 11,
+      "book_cost": 11,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-limousine",
+      "name": "Limousine",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 5,
+      "movement": "Speed",
+      "defense": 6,
+      "toughness": 9,
+      "powers": [],
+      "features": [],
+      "crew": "1 driver, 8 passengers",
+      "summary": "A stretch limo: plush, slow to turn and very conspicuous.",
+      "cost": 7,
+      "book_cost": 6,
+      "book_cost_note": "Book lists 6. Huge 2 + Speed 5 with every other trait at the Huge base = 7. The Helicopter (Huge, same base traits, Flight 7 = 14) is listed at 16 = 2 + 14, so the book does charge 2 for Huge; the Limousine is 1 short.",
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-truck",
+      "name": "Truck",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Huge",
+      "strength": 9,
+      "speed": 5,
+      "movement": "Speed",
+      "defense": 6,
+      "toughness": 9,
+      "powers": [],
+      "features": [],
+      "crew": "1 driver, 2 passengers",
+      "summary": "Pick-ups, SUVs and vans: roomy, rugged and ready to haul.",
+      "cost": 8,
+      "book_cost": 7,
+      "book_cost_note": "Book lists 7. Huge 2 + Strength +1 + Speed 5 = 8; the same 1-point shortfall as the Limousine.",
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-armored-car",
+      "name": "Armored Car",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 5,
+      "movement": "Speed",
+      "defense": 6,
+      "toughness": 12,
+      "powers": [],
+      "features": [],
+      "crew": "2 guards, cargo",
+      "summary": "A bank truck or VIP transport with bullet-resistant plating.",
+      "cost": 10,
+      "book_cost": 8,
+      "book_cost_note": "Book lists 8. Huge 2 + Speed 5 + Toughness 12 vs base 9 (+3) = 10; it is listed only 2 above the Limousine although it has +3 Toughness.",
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-tank",
+      "name": "Tank",
+      "category": "Ground",
+      "setting": "Military",
+      "size": "Huge",
+      "strength": 10,
+      "speed": 4,
+      "movement": "Speed",
+      "defense": 6,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Cannon",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 6
+            }
+          ]
+        },
+        {
+          "name": "Heavy Machine Gun",
+          "effect": "Damage",
+          "rank": 6,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 6
+        }
+      ],
+      "crew": "4 crew; a move action to get in or out, another to start it",
+      "summary": "A main battle tank: heavy armor, a big gun and a coaxial machine gun.",
+      "cost": 61,
+      "book_cost": 59,
+      "book_cost_note": "Book lists 59. Huge 2 + Strength +2 + Speed 4 + Toughness +3 + Impervious 6 + cannon (Ranged Damage 10 = 20, Burst Area on 6 ranks +6 = 26) + heavy machine gun (Ranged Multiattack Damage 6 = 18) = 61. The APC is 2 points short in exactly the same way, which points to the shared Huge Toughness 12 chassis being underpriced by 2.",
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-apc",
+      "name": "APC",
+      "category": "Ground",
+      "setting": "Military",
+      "size": "Huge",
+      "strength": 12,
+      "speed": 4,
+      "movement": "Speed",
+      "defense": 6,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Cannon",
+          "effect": "Damage",
+          "rank": 6,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 4
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 4
+        }
+      ],
+      "crew": "2 crew, 8-10 troops who can fire from cover",
+      "summary": "An armored personnel carrier that delivers a squad under fire.",
+      "cost": 33,
+      "book_cost": 31,
+      "book_cost_note": "Book lists 31. Huge 2 + Strength +4 + Speed 4 + Toughness +3 + Impervious 4 + cannon (Ranged Damage 6 = 12, Burst Area 4 = +4) = 33. Same 2-point gap as the Tank and Armored Car.",
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-bus",
+      "name": "Bus",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Gargantuan",
+      "strength": 12,
+      "speed": 5,
+      "movement": "Speed",
+      "defense": 4,
+      "toughness": 11,
+      "powers": [],
+      "features": [],
+      "crew": "1 driver, 40-60 passengers",
+      "summary": "A city or school bus: big, slow and full of bystanders.",
+      "cost": 8,
+      "book_cost": 8,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-semi",
+      "name": "Semi",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Gargantuan",
+      "strength": 13,
+      "speed": 5,
+      "movement": "Speed",
+      "defense": 4,
+      "toughness": 11,
+      "powers": [],
+      "features": [],
+      "crew": "1 driver, 1 passenger",
+      "summary": "A tractor-trailer rig hauling tons of freight down the interstate.",
+      "cost": 9,
+      "book_cost": 9,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-train-engine",
+      "name": "Train Engine",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Huge",
+      "strength": 10,
+      "speed": 5,
+      "movement": "Speed",
+      "defense": 6,
+      "toughness": 10,
+      "powers": [],
+      "features": [],
+      "crew": "1 engineer, 1 assistant",
+      "summary": "A locomotive that pulls a whole train, as long as it stays on the rails.",
+      "cost": 10,
+      "book_cost": 10,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-jet-ski",
+      "name": "Jet-ski",
+      "category": "Water",
+      "setting": "Modern",
+      "size": "Medium",
+      "strength": 1,
+      "speed": 5,
+      "movement": "Swimming",
+      "defense": 10,
+      "toughness": 7,
+      "powers": [],
+      "features": [],
+      "crew": "1 rider, 1 passenger",
+      "summary": "A nimble personal watercraft for harbor chases.",
+      "cost": 8,
+      "book_cost": 8,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-speedboat",
+      "name": "Speedboat",
+      "category": "Water",
+      "setting": "Modern",
+      "size": "Large",
+      "strength": 6,
+      "speed": 6,
+      "movement": "Swimming",
+      "defense": 8,
+      "toughness": 7,
+      "powers": [],
+      "features": [],
+      "crew": "1 pilot, 5 passengers",
+      "summary": "A fast powerboat, popular with smugglers and harbor patrol alike.",
+      "cost": 9,
+      "book_cost": 8,
+      "book_cost_note": "Book lists 8. Large 1 + Strength +2 + Swimming 6 (6) + Toughness 7 (base) = 9. Compare the Jet-ski (Medium, Str +1, Swimming 5, Tou +2 = 8, which the book gets right).",
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-yacht",
+      "name": "Yacht",
+      "category": "Water",
+      "setting": "Modern",
+      "size": "Huge",
+      "strength": 10,
+      "speed": 5,
+      "movement": "Swimming",
+      "defense": 6,
+      "toughness": 9,
+      "powers": [],
+      "features": [],
+      "crew": "2-4 crew, 10 guests",
+      "summary": "A luxury motor yacht for millionaires and crime lords.",
+      "cost": 9,
+      "book_cost": 9,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-cutter",
+      "name": "Cutter",
+      "category": "Water",
+      "setting": "Military",
+      "size": "Gargantuan",
+      "strength": 13,
+      "speed": 5,
+      "movement": "Swimming",
+      "defense": 4,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Light Machine Guns",
+          "effect": "Damage",
+          "rank": 6,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        }
+      ],
+      "features": [],
+      "crew": "20-40 crew",
+      "summary": "A Coast Guard or Navy patrol vessel with deck-mounted machine guns.",
+      "cost": 28,
+      "book_cost": 27,
+      "book_cost_note": "Book lists 27. Gargantuan 3 + Strength +1 + Swimming 5 + Toughness +1 + machine guns (Ranged Multiattack Damage 6 = 18) = 28. The Destroyer and Battleship, built the same way, match exactly, so the Cutter is 1 short.",
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-destroyer",
+      "name": "Destroyer",
+      "category": "Water",
+      "setting": "Military",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 5,
+      "movement": "Swimming",
+      "defense": 2,
+      "toughness": 14,
+      "powers": [
+        {
+          "name": "Heavy Guns",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 8
+            }
+          ]
+        }
+      ],
+      "features": [],
+      "crew": "250-300 crew",
+      "summary": "A front-line warship bristling with heavy guns.",
+      "cost": 38,
+      "book_cost": 38,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-cruise-ship",
+      "name": "Cruise Ship",
+      "category": "Water",
+      "setting": "Modern",
+      "size": "Awesome",
+      "strength": 20,
+      "speed": 5,
+      "movement": "Swimming",
+      "defense": 0,
+      "toughness": 15,
+      "powers": [],
+      "features": [],
+      "crew": "1,000 crew, 3,000 passengers",
+      "summary": "A floating resort: an enormous target with thousands of civilians aboard.",
+      "cost": 10,
+      "book_cost": 10,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-battleship",
+      "name": "Battleship",
+      "category": "Water",
+      "setting": "Military",
+      "size": "Awesome",
+      "strength": 20,
+      "speed": 5,
+      "movement": "Swimming",
+      "defense": 0,
+      "toughness": 16,
+      "powers": [
+        {
+          "name": "Gun Batteries",
+          "effect": "Damage",
+          "rank": 13,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 9
+            }
+          ]
+        }
+      ],
+      "features": [],
+      "crew": "1,500+ crew",
+      "summary": "A heavily armored dreadnought with massive gun batteries.",
+      "cost": 46,
+      "book_cost": 46,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-submarine",
+      "name": "Submarine",
+      "category": "Water",
+      "setting": "Military",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 5,
+      "movement": "Swimming",
+      "defense": 2,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Torpedoes",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 5
+            }
+          ]
+        }
+      ],
+      "features": [],
+      "crew": "130 crew",
+      "summary": "A military submarine with torpedoes; ballistic missiles (Ranged Burst Area Damage 15 or more) are extra and not in the listed cost.",
+      "cost": 30,
+      "book_cost": 30,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-helicopter",
+      "name": "Helicopter",
+      "category": "Air",
+      "setting": "Modern",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 7,
+      "movement": "Flight",
+      "defense": 6,
+      "toughness": 9,
+      "powers": [],
+      "features": [],
+      "crew": "1 pilot, 4-6 passengers",
+      "summary": "A civilian chopper that can hover, land on rooftops and pluck people from danger.",
+      "cost": 16,
+      "book_cost": 16,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-military-copter",
+      "name": "Military Copter",
+      "category": "Air",
+      "setting": "Military",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 8,
+      "movement": "Flight",
+      "defense": 6,
+      "toughness": 11,
+      "powers": [
+        {
+          "name": "Rockets",
+          "effect": "Damage",
+          "rank": 9,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 6
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Machine Guns",
+              "effect": "Damage",
+              "rank": 6,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Multiattack"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "features": [],
+      "crew": "2 crew",
+      "summary": "A helicopter gunship with rocket pods and machine guns.",
+      "cost": 45,
+      "book_cost": 45,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-private-jet",
+      "name": "Private Jet",
+      "category": "Air",
+      "setting": "Modern",
+      "size": "Gargantuan",
+      "strength": 12,
+      "speed": 8,
+      "movement": "Flight",
+      "defense": 4,
+      "toughness": 11,
+      "powers": [],
+      "features": [],
+      "crew": "2 pilots, 8-12 passengers",
+      "summary": "A sleek business jet for executives on the move.",
+      "cost": 19,
+      "book_cost": 19,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-jumbo-jet",
+      "name": "Jumbo-jet",
+      "category": "Air",
+      "setting": "Modern",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 7,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 13,
+      "powers": [],
+      "features": [],
+      "crew": "3 flight crew, 15 cabin crew, 400 passengers",
+      "summary": "A wide-body airliner: the classic disaster in the making for heroes to catch.",
+      "cost": 18,
+      "book_cost": 18,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-fighter-jet",
+      "name": "Fighter Jet",
+      "category": "Air",
+      "setting": "Military",
+      "size": "Huge",
+      "strength": 10,
+      "speed": 12,
+      "movement": "Flight",
+      "defense": 6,
+      "toughness": 10,
+      "powers": [
+        {
+          "name": "Air-to-Air Missiles",
+          "effect": "Damage",
+          "rank": 11,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 8
+            },
+            {
+              "name": "Homing",
+              "steps": 6
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Machine Guns",
+              "effect": "Damage",
+              "rank": 6,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Multiattack"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "features": [],
+      "crew": "1-2 pilots",
+      "summary": "A supersonic air-superiority fighter with guns and homing missiles.",
+      "cost": 66,
+      "book_cost": 66,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-bomber",
+      "name": "Bomber",
+      "category": "Air",
+      "setting": "Military",
+      "size": "Colossal",
+      "strength": 13,
+      "speed": 9,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Missiles",
+          "effect": "Damage",
+          "rank": 11,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 8
+            },
+            {
+              "name": "Homing",
+              "steps": 6
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Bombs",
+              "effect": "Damage",
+              "rank": 12,
+              "extras": [
+                {
+                  "name": "Area",
+                  "option": "Burst"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "features": [],
+      "crew": "2-4 crew",
+      "summary": "A strategic bomber carrying missiles and a bay of Burst Area Damage 12 bombs. Its Strength is below the Colossal base, which the book does not refund.",
+      "cost": 59,
+      "book_cost": 59,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-space-shuttle",
+      "name": "Space Shuttle",
+      "category": "Space",
+      "setting": "Modern",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 12,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 13,
+      "powers": [],
+      "features": [],
+      "crew": "2 pilots, 5 specialists",
+      "summary": "A reusable orbiter. It is starred in the book's table but has no extra description.",
+      "cost": 28,
+      "book_cost": 28,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-space-fighter",
+      "name": "Space Fighter",
+      "category": "Space",
+      "setting": "Sci-Fi",
+      "size": "Huge",
+      "strength": 10,
+      "speed": 14,
+      "movement": "Flight",
+      "defense": 6,
+      "toughness": 11,
+      "powers": [
+        {
+          "name": "Blaster Cannons",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged"
+        }
+      ],
+      "features": [],
+      "crew": "1 pilot",
+      "summary": "An alien or future starfighter armed with blaster cannons.",
+      "cost": 54,
+      "book_cost": 56,
+      "book_cost_note": "Book lists 56. Huge 2 + Strength +2 + Flight 14 (28) + Toughness +2 + blaster cannons (Ranged Damage 10 = 20) = 54. The Space Cruiser and Space Battleship, priced the same way, match exactly; the Fighter is 2 over.",
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-space-cruiser",
+      "name": "Space Cruiser",
+      "category": "Space",
+      "setting": "Sci-Fi",
+      "size": "Colossal",
+      "strength": 18,
+      "speed": 14,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 15,
+      "powers": [
+        {
+          "name": "Energy Torpedoes",
+          "effect": "Damage",
+          "rank": 12,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 10
+            },
+            {
+              "name": "Homing",
+              "steps": 8
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Beam Weapons",
+              "effect": "Damage",
+              "rank": 12,
+              "range": "Ranged"
+            }
+          ]
+        }
+      ],
+      "features": [],
+      "crew": "50-200 crew",
+      "summary": "A warship with beam weapons and homing energy torpedoes.",
+      "cost": 79,
+      "book_cost": 79,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-space-battleship",
+      "name": "Space Battleship",
+      "category": "Space",
+      "setting": "Sci-Fi",
+      "size": "Awesome",
+      "strength": 22,
+      "speed": 16,
+      "movement": "Flight",
+      "defense": 0,
+      "toughness": 18,
+      "powers": [
+        {
+          "name": "Energy Torpedoes",
+          "effect": "Damage",
+          "rank": 15,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 12
+            },
+            {
+              "name": "Homing",
+              "steps": 8
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Blaster Cannons",
+              "effect": "Damage",
+              "rank": 15,
+              "range": "Ranged"
+            }
+          ]
+        }
+      ],
+      "features": [],
+      "crew": "1,000+ crew",
+      "summary": "A capital ship with the most massive blasters and high-powered torpedoes.",
+      "cost": 93,
+      "book_cost": 93,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-dimension-hopper",
+      "name": "Dimension Hopper",
+      "category": "Exotic",
+      "setting": "Exotic",
+      "size": "Huge",
+      "strength": 8,
+      "speed": null,
+      "movement": null,
+      "defense": 6,
+      "toughness": 9,
+      "powers": [
+        {
+          "name": "Dimensional Drive",
+          "effect": "Movement",
+          "rank": 3,
+          "detail": "Dimensional Travel 3"
+        }
+      ],
+      "features": [],
+      "crew": "1 pilot, 3 passengers",
+      "summary": "A van-sized craft that skips between dimensions.",
+      "cost": 8,
+      "book_cost": 8,
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-mole-machine",
+      "name": "Mole Machine",
+      "category": "Exotic",
+      "setting": "Exotic",
+      "size": "Huge",
+      "strength": 11,
+      "speed": 4,
+      "movement": "Burrowing",
+      "defense": 6,
+      "toughness": 12,
+      "powers": [],
+      "features": [],
+      "crew": "1-2 operators",
+      "summary": "A treaded metal cylinder with a giant drill, beloved of underground villains.",
+      "cost": 12,
+      "book_cost": 10,
+      "book_cost_note": "Book lists 10. Huge 2 + Strength +3 + Burrowing 4 (4) + Toughness +3 = 12. Same 2-point gap as the other Huge Toughness 12 vehicles (Armored Car, Tank, APC).",
+      "source": "DCA 158"
+    },
+    {
+      "id": "book-time-machine",
+      "name": "Time Machine",
+      "category": "Exotic",
+      "setting": "Exotic",
+      "size": "Huge",
+      "strength": 8,
+      "speed": null,
+      "movement": null,
+      "defense": 6,
+      "toughness": 9,
+      "powers": [
+        {
+          "name": "Chrono Drive",
+          "effect": "Movement",
+          "rank": 3,
+          "detail": "Time Travel 3"
+        }
+      ],
+      "features": [],
+      "crew": "1 traveler, 2 companions",
+      "summary": "A cube, sphere, pod on legs or police box that travels through time (rank 2 or 3; some only reach one fixed point).",
+      "cost": 8,
+      "book_cost": 8,
+      "source": "DCA 158"
+    },
+    {
+      "id": "muscle-car",
+      "name": "Muscle Car",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Large",
+      "strength": 6,
+      "speed": 6,
+      "movement": "Speed",
+      "defense": 8,
+      "toughness": 8,
+      "powers": [],
+      "features": [],
+      "crew": "1 driver, 3 passengers",
+      "summary": "A rumbling V8 classic with chrome bumpers and more horsepower than sense.",
+      "cost": 10,
+      "source": "DCUGen"
+    },
+    {
+      "id": "sports-car",
+      "name": "Sports Car",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Large",
+      "strength": 4,
+      "speed": 7,
+      "movement": "Speed",
+      "defense": 9,
+      "toughness": 7,
+      "powers": [],
+      "features": [
+        {
+          "name": "Navigation System"
+        }
+      ],
+      "crew": "1 driver, 1 passenger",
+      "summary": "A low-slung European supercar that corners like it is on rails.",
+      "cost": 10,
+      "source": "DCUGen"
+    },
+    {
+      "id": "police-interceptor",
+      "name": "Police Interceptor",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Large",
+      "strength": 6,
+      "speed": 7,
+      "movement": "Speed",
+      "defense": 8,
+      "toughness": 9,
+      "powers": [],
+      "features": [
+        {
+          "name": "Communications Suite"
+        },
+        {
+          "name": "Navigation System"
+        }
+      ],
+      "crew": "2 officers, 2 detainees",
+      "summary": "A pursuit-rated cruiser with a push bar, light bar and a radio that never sleeps.",
+      "cost": 14,
+      "source": "DCUGen"
+    },
+    {
+      "id": "ambulance",
+      "name": "Ambulance",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 5,
+      "movement": "Speed",
+      "defense": 6,
+      "toughness": 9,
+      "powers": [],
+      "features": [
+        {
+          "name": "Medical Bay"
+        },
+        {
+          "name": "Communications Suite"
+        }
+      ],
+      "crew": "1 driver, 2 paramedics, 1 patient",
+      "summary": "A boxy rescue rig that clears traffic with sirens and keeps patients alive on the way.",
+      "cost": 9,
+      "source": "DCUGen"
+    },
+    {
+      "id": "fire-truck",
+      "name": "Fire Truck",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Gargantuan",
+      "strength": 13,
+      "speed": 5,
+      "movement": "Speed",
+      "defense": 4,
+      "toughness": 11,
+      "powers": [
+        {
+          "name": "Water Cannon",
+          "effect": "Move Object",
+          "rank": 6,
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "pushing with a jet of water"
+            }
+          ]
+        },
+        {
+          "name": "Fire Suppression",
+          "effect": "Nullify",
+          "rank": 6,
+          "detail": "Fire effects",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Line"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Rescue Gear"
+        },
+        {
+          "name": "Communications Suite"
+        }
+      ],
+      "crew": "1 driver, 5 firefighters",
+      "summary": "A hook-and-ladder engine with a deck gun that can knock a thug off his feet or drown a fire elemental.",
+      "cost": 29,
+      "source": "DCUGen"
+    },
+    {
+      "id": "sport-bike",
+      "name": "Sport Bike",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Medium",
+      "strength": 1,
+      "speed": 7,
+      "movement": "Speed",
+      "defense": 11,
+      "toughness": 6,
+      "powers": [],
+      "features": [],
+      "crew": "1 rider",
+      "summary": "A crotch-rocket that hits 200 on the straightaway and slips between lanes.",
+      "cost": 10,
+      "source": "DCUGen"
+    },
+    {
+      "id": "police-motorcycle",
+      "name": "Police Motorcycle",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Medium",
+      "strength": 1,
+      "speed": 6,
+      "movement": "Speed",
+      "defense": 10,
+      "toughness": 8,
+      "powers": [],
+      "features": [
+        {
+          "name": "Communications Suite"
+        }
+      ],
+      "crew": "1 officer",
+      "summary": "A heavy patrol bike with saddlebags, sirens and a radio.",
+      "cost": 11,
+      "source": "DCUGen"
+    },
+    {
+      "id": "dirt-bike",
+      "name": "Dirt Bike",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Medium",
+      "strength": 1,
+      "speed": 5,
+      "movement": "Speed",
+      "alt_movement": [
+        {
+          "effect": "Leaping",
+          "rank": 2
+        }
+      ],
+      "defense": 11,
+      "toughness": 6,
+      "powers": [],
+      "features": [],
+      "crew": "1 rider",
+      "summary": "A light trail bike that jumps ditches and climbs stairs.",
+      "cost": 9,
+      "source": "DCUGen"
+    },
+    {
+      "id": "armored-assault-cycle",
+      "name": "Armored Assault Cycle",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Medium",
+      "strength": 2,
+      "speed": 7,
+      "movement": "Speed",
+      "defense": 11,
+      "toughness": 10,
+      "powers": [
+        {
+          "name": "Fairing Guns",
+          "effect": "Damage",
+          "rank": 4,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 4
+        },
+        {
+          "name": "Oil Slick"
+        }
+      ],
+      "crew": "1 rider",
+      "summary": "A vigilante's armored bike with guns hidden in the fairing and an oil sprayer at the back.",
+      "cost": 32,
+      "source": "DCUGen"
+    },
+    {
+      "id": "nightrunner",
+      "name": "Nightrunner",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 7,
+      "movement": "Speed",
+      "defense": 7,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Grapnel Launcher",
+          "effect": "Move Object",
+          "rank": 6,
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "pulling the car around corners or toward an anchor"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 8
+        },
+        {
+          "name": "Alarm",
+          "ranks": 3
+        },
+        {
+          "name": "Caltrops"
+        },
+        {
+          "name": "Hidden Compartments"
+        },
+        {
+          "name": "Navigation System",
+          "ranks": 2
+        },
+        {
+          "name": "Oil Slick"
+        },
+        {
+          "name": "Remote Control"
+        },
+        {
+          "name": "Smokescreen"
+        }
+      ],
+      "crew": "1 driver, 1 partner",
+      "summary": "A matte-black armored night-car with a jet turbine, a cockpit canopy and a trick for every chase.",
+      "cost": 48,
+      "source": "DCUGen"
+    },
+    {
+      "id": "armored-suv",
+      "name": "Armored SUV",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Huge",
+      "strength": 9,
+      "speed": 5,
+      "movement": "Speed",
+      "defense": 6,
+      "toughness": 11,
+      "powers": [],
+      "features": [
+        {
+          "name": "Alarm"
+        },
+        {
+          "name": "Communications Suite"
+        }
+      ],
+      "crew": "1 driver, 6 passengers",
+      "summary": "A black government SUV with run-flat tires and armored doors.",
+      "cost": 12,
+      "source": "DCUGen"
+    },
+    {
+      "id": "swat-van",
+      "name": "SWAT Van",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Huge",
+      "strength": 9,
+      "speed": 5,
+      "movement": "Speed",
+      "defense": 6,
+      "toughness": 11,
+      "powers": [],
+      "features": [
+        {
+          "name": "Communications Suite"
+        },
+        {
+          "name": "Cargo Hold"
+        }
+      ],
+      "crew": "1 driver, 10 officers",
+      "summary": "A rolling command post with a ram, gun racks and a battering crew.",
+      "cost": 12,
+      "source": "DCUGen"
+    },
+    {
+      "id": "monster-truck",
+      "name": "Monster Truck",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Huge",
+      "strength": 10,
+      "speed": 5,
+      "movement": "Speed",
+      "alt_movement": [
+        {
+          "effect": "Leaping",
+          "rank": 3
+        }
+      ],
+      "defense": 6,
+      "toughness": 10,
+      "powers": [],
+      "features": [],
+      "crew": "1 driver",
+      "summary": "Six-foot tires, a roll cage and a talent for crushing parked cars.",
+      "cost": 11,
+      "source": "DCUGen"
+    },
+    {
+      "id": "armored-limousine",
+      "name": "Armored Limousine",
+      "category": "Ground",
+      "setting": "Modern",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 5,
+      "movement": "Speed",
+      "defense": 6,
+      "toughness": 11,
+      "powers": [],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 4
+        },
+        {
+          "name": "Communications Suite"
+        },
+        {
+          "name": "Luxury Quarters"
+        }
+      ],
+      "crew": "1 driver, 6 passengers",
+      "summary": "A crime boss's limo with bulletproof glass and a minibar.",
+      "cost": 15,
+      "source": "DCUGen"
+    },
+    {
+      "id": "hovercraft",
+      "name": "Hovercraft",
+      "category": "Water",
+      "setting": "Modern",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 5,
+      "movement": "Swimming",
+      "alt_movement": [
+        {
+          "effect": "Speed",
+          "rank": 5
+        }
+      ],
+      "defense": 6,
+      "toughness": 9,
+      "powers": [],
+      "features": [],
+      "crew": "1 pilot, 12 passengers",
+      "summary": "An air-cushion craft that roars from swamp to beach to ice without slowing.",
+      "cost": 8,
+      "source": "DCUGen"
+    },
+    {
+      "id": "seaplane",
+      "name": "Seaplane",
+      "category": "Air",
+      "setting": "Modern",
+      "size": "Large",
+      "strength": 5,
+      "speed": 7,
+      "movement": "Flight",
+      "alt_movement": [
+        {
+          "effect": "Swimming",
+          "rank": 4
+        }
+      ],
+      "defense": 8,
+      "toughness": 7,
+      "powers": [],
+      "features": [],
+      "crew": "1 pilot, 6 passengers",
+      "summary": "A floatplane that lands on lakes and harbors where there is no runway.",
+      "cost": 17,
+      "source": "DCUGen"
+    },
+    {
+      "id": "news-helicopter",
+      "name": "News Helicopter",
+      "category": "Air",
+      "setting": "Modern",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 7,
+      "movement": "Flight",
+      "defense": 6,
+      "toughness": 9,
+      "powers": [
+        {
+          "name": "Sensor Suite",
+          "effect": "Senses",
+          "rank": 2,
+          "detail": "Extended vision (telephoto camera), Infravision"
+        }
+      ],
+      "features": [
+        {
+          "name": "Communications Suite"
+        }
+      ],
+      "crew": "1 pilot, 1 camera operator, 1 reporter",
+      "summary": "Channel 6 in the sky: first on the scene and broadcasting live.",
+      "cost": 19,
+      "source": "DCUGen"
+    },
+    {
+      "id": "blimp",
+      "name": "Advertising Blimp",
+      "category": "Air",
+      "setting": "Modern",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 4,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 13,
+      "powers": [],
+      "features": [
+        {
+          "name": "Communications Suite"
+        }
+      ],
+      "crew": "2 pilots, 10 passengers",
+      "summary": "A slow, gentle airship with a giant video screen on its flank, and a frequent hostage target.",
+      "cost": 13,
+      "source": "DCUGen"
+    },
+    {
+      "id": "cargo-plane",
+      "name": "Cargo Plane",
+      "category": "Air",
+      "setting": "Modern",
+      "size": "Colossal",
+      "strength": 18,
+      "speed": 8,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 13,
+      "powers": [],
+      "features": [
+        {
+          "name": "Cargo Hold",
+          "ranks": 2
+        }
+      ],
+      "crew": "3 crew, cargo",
+      "summary": "A four-engine freighter whose rear ramp drops open over drop zones.",
+      "cost": 24,
+      "source": "DCUGen"
+    },
+    {
+      "id": "skyhawk",
+      "name": "Skyhawk Team Jet",
+      "category": "Air",
+      "setting": "Modern",
+      "size": "Gargantuan",
+      "strength": 12,
+      "speed": 11,
+      "movement": "Flight",
+      "alt_movement": [
+        {
+          "effect": "Swimming",
+          "rank": 5
+        }
+      ],
+      "defense": 5,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Stun Cannons",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged",
+          "alternates": [
+            {
+              "name": "Tractor Beam",
+              "effect": "Move Object",
+              "rank": 8
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Navigation System"
+        },
+        {
+          "name": "Communications Suite"
+        },
+        {
+          "name": "Medical Bay"
+        },
+        {
+          "name": "Autopilot"
+        },
+        {
+          "name": "Remote Control"
+        }
+      ],
+      "crew": "2 pilots, 8 heroes",
+      "summary": "A VTOL super-team jet with a medical bay, a landing ramp and stun cannons.",
+      "cost": 50,
+      "source": "DCUGen"
+    },
+    {
+      "id": "crimson-comet",
+      "name": "Crimson Comet Rocket-Cycle",
+      "category": "Air",
+      "setting": "Modern",
+      "size": "Medium",
+      "strength": 1,
+      "speed": 9,
+      "movement": "Flight",
+      "alt_movement": [
+        {
+          "effect": "Speed",
+          "rank": 7
+        }
+      ],
+      "defense": 12,
+      "toughness": 8,
+      "powers": [],
+      "features": [
+        {
+          "name": "Remote Control"
+        },
+        {
+          "name": "Ejection System"
+        }
+      ],
+      "crew": "1 rider",
+      "summary": "A hero's chrome rocket-bike that flips its wheels sideways and takes off.",
+      "cost": 27,
+      "source": "DCUGen"
+    },
+    {
+      "id": "tidewatch",
+      "name": "Tidewatch Hero Sub",
+      "category": "Water",
+      "setting": "Modern",
+      "size": "Gargantuan",
+      "strength": 13,
+      "speed": 7,
+      "movement": "Swimming",
+      "defense": 5,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Torpedoes",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 5
+            }
+          ]
+        },
+        {
+          "name": "Sensor Suite",
+          "effect": "Senses",
+          "rank": 3,
+          "detail": "Sonar: accurate, extended hearing"
+        }
+      ],
+      "features": [
+        {
+          "name": "Navigation System"
+        },
+        {
+          "name": "Communications Suite"
+        },
+        {
+          "name": "Crew Quarters"
+        }
+      ],
+      "crew": "2 pilots, 6 heroes",
+      "summary": "A teardrop hero submarine with sonar, torpedoes and a lock-out hatch for divers.",
+      "cost": 40,
+      "source": "DCUGen"
+    },
+    {
+      "id": "doomdrill",
+      "name": "Doomdrill Assault Borer",
+      "category": "Ground",
+      "setting": "Villain",
+      "size": "Huge",
+      "strength": 12,
+      "speed": 8,
+      "movement": "Burrowing",
+      "defense": 6,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Spiral Drill",
+          "effect": "Damage",
+          "rank": 10,
+          "extras": [
+            {
+              "name": "Penetrating",
+              "steps": 10
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 6
+        }
+      ],
+      "crew": "2 operators, 6 henchmen",
+      "summary": "A villain's drill-tank that tunnels under bank vaults and erupts in the lobby.",
+      "cost": 44,
+      "source": "DCUGen"
+    },
+    {
+      "id": "viper-gunship",
+      "name": "Viper Gunship",
+      "category": "Air",
+      "setting": "Villain",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 9,
+      "movement": "Flight",
+      "defense": 7,
+      "toughness": 10,
+      "powers": [
+        {
+          "name": "Missile Pods",
+          "effect": "Damage",
+          "rank": 9,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 6
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Chin Guns",
+              "effect": "Damage",
+              "rank": 6,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Multiattack"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Cloaking Device (All Visual)"
+        }
+      ],
+      "crew": "1 pilot, 1 gunner, 6 troopers",
+      "summary": "A serpent-headed VTOL that appears out of nowhere over the target.",
+      "cost": 55,
+      "source": "DCUGen"
+    },
+    {
+      "id": "escape-rocket",
+      "name": "Villain Escape Rocket",
+      "category": "Air",
+      "setting": "Villain",
+      "size": "Large",
+      "strength": 4,
+      "speed": 12,
+      "movement": "Flight",
+      "defense": 8,
+      "toughness": 7,
+      "powers": [
+        {
+          "name": "Sealed Life Support",
+          "effect": "Immunity",
+          "rank": 10,
+          "detail": "Life support"
+        }
+      ],
+      "features": [
+        {
+          "name": "Autopilot"
+        },
+        {
+          "name": "Ejection System"
+        }
+      ],
+      "crew": "1 mastermind, 1 hostage",
+      "summary": "Hidden in every lair's silo: the rocket that carries the villain away as the base explodes.",
+      "cost": 37,
+      "source": "DCUGen"
+    },
+    {
+      "id": "kraken-minisub",
+      "name": "Kraken Mini-Sub",
+      "category": "Water",
+      "setting": "Villain",
+      "size": "Large",
+      "strength": 6,
+      "speed": 6,
+      "movement": "Swimming",
+      "defense": 8,
+      "toughness": 10,
+      "powers": [
+        {
+          "name": "Grappling Claws",
+          "effect": "Damage",
+          "rank": 7
+        }
+      ],
+      "features": [
+        {
+          "name": "Towing Cables"
+        },
+        {
+          "name": "Smokescreen",
+          "detail": "ink cloud"
+        }
+      ],
+      "crew": "1 pilot, 2 divers",
+      "summary": "A squid-shaped submersible with crushing claws and an ink cloud.",
+      "cost": 32,
+      "source": "DCUGen"
+    },
+    {
+      "id": "attack-helicopter",
+      "name": "Attack Helicopter",
+      "category": "Air",
+      "setting": "Military",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 8,
+      "movement": "Flight",
+      "defense": 7,
+      "toughness": 11,
+      "powers": [
+        {
+          "name": "Hellfire Rockets",
+          "effect": "Damage",
+          "rank": 9,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 6
+            },
+            {
+              "name": "Homing",
+              "steps": 4
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Chain Gun",
+              "effect": "Damage",
+              "rank": 7,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Multiattack"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Sensor Suite",
+          "effect": "Senses",
+          "rank": 2,
+          "detail": "Darkvision targeting, Infravision"
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 4
+        }
+      ],
+      "crew": "1 pilot, 1 gunner",
+      "summary": "A tandem-seat gunship with night-vision targeting and a nose-mounted chain gun.",
+      "cost": 56,
+      "source": "DCUGen"
+    },
+    {
+      "id": "stealth-bomber",
+      "name": "Stealth Bomber",
+      "category": "Air",
+      "setting": "Military",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 10,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Bomb Bay",
+          "effect": "Damage",
+          "rank": 14,
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Cloaking Device (One Sense)",
+          "detail": "radar"
+        }
+      ],
+      "crew": "2 pilots",
+      "summary": "A flying wing invisible to radar, carrying a bay of heavy bombs.",
+      "cost": 56,
+      "source": "DCUGen"
+    },
+    {
+      "id": "aircraft-carrier",
+      "name": "Aircraft Carrier",
+      "category": "Water",
+      "setting": "Military",
+      "size": "Awesome",
+      "strength": 22,
+      "speed": 5,
+      "movement": "Swimming",
+      "defense": 0,
+      "toughness": 18,
+      "powers": [
+        {
+          "name": "Point Defense Guns",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Medical Bay"
+        },
+        {
+          "name": "Communications Suite"
+        },
+        {
+          "name": "Cargo Hold",
+          "ranks": 2
+        }
+      ],
+      "crew": "5,000 sailors and air wing",
+      "summary": "A floating city and airfield; its fighters are bought separately as alternate vehicles.",
+      "cost": 44,
+      "source": "DCUGen"
+    },
+    {
+      "id": "mech-walker",
+      "name": "Mech Walker",
+      "category": "Ground",
+      "setting": "Military",
+      "size": "Huge",
+      "strength": 12,
+      "speed": 4,
+      "movement": "Speed",
+      "alt_movement": [
+        {
+          "effect": "Leaping",
+          "rank": 4
+        }
+      ],
+      "defense": 7,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Shoulder Missiles",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 6
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Autocannon",
+              "effect": "Damage",
+              "rank": 8,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Multiattack"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 6
+        }
+      ],
+      "crew": "1 pilot",
+      "summary": "A two-legged battle mech with shoulder missile racks and an arm autocannon.",
+      "cost": 49,
+      "source": "DCUGen"
+    },
+    {
+      "id": "amphibious-assault",
+      "name": "Amphibious Assault Vehicle",
+      "category": "Ground",
+      "setting": "Military",
+      "size": "Huge",
+      "strength": 11,
+      "speed": 4,
+      "movement": "Speed",
+      "alt_movement": [
+        {
+          "effect": "Swimming",
+          "rank": 3
+        }
+      ],
+      "defense": 6,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Turret Gun",
+          "effect": "Damage",
+          "rank": 6,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 4
+        }
+      ],
+      "crew": "3 crew, 20 marines",
+      "summary": "An armored tracked boat that swims ashore and rolls up the beach.",
+      "cost": 35,
+      "source": "DCUGen"
+    },
+    {
+      "id": "transport-helicopter",
+      "name": "Transport Helicopter",
+      "category": "Air",
+      "setting": "Military",
+      "size": "Gargantuan",
+      "strength": 12,
+      "speed": 7,
+      "movement": "Flight",
+      "defense": 4,
+      "toughness": 11,
+      "powers": [],
+      "features": [
+        {
+          "name": "Cargo Hold"
+        },
+        {
+          "name": "Medical Bay"
+        }
+      ],
+      "crew": "3 crew, 30 troops",
+      "summary": "A twin-rotor heavy lifter that can sling a truck underneath.",
+      "cost": 19,
+      "source": "DCUGen"
+    },
+    {
+      "id": "patrol-boat",
+      "name": "Patrol Boat",
+      "category": "Water",
+      "setting": "Military",
+      "size": "Large",
+      "strength": 6,
+      "speed": 6,
+      "movement": "Swimming",
+      "defense": 8,
+      "toughness": 9,
+      "powers": [
+        {
+          "name": "Twin Machine Guns",
+          "effect": "Damage",
+          "rank": 6,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        }
+      ],
+      "features": [],
+      "crew": "4 crew",
+      "summary": "A fast river boat with twin guns, for smugglers and insurgents.",
+      "cost": 29,
+      "source": "DCUGen"
+    },
+    {
+      "id": "recon-drone",
+      "name": "Recon Drone",
+      "category": "Air",
+      "setting": "Military",
+      "size": "Medium",
+      "strength": 0,
+      "speed": 8,
+      "movement": "Flight",
+      "defense": 12,
+      "toughness": 5,
+      "powers": [
+        {
+          "name": "Sensor Suite",
+          "effect": "Senses",
+          "rank": 4,
+          "detail": "Extended vision 2, Infravision, Radio"
+        }
+      ],
+      "features": [
+        {
+          "name": "Remote Control"
+        },
+        {
+          "name": "Autopilot"
+        }
+      ],
+      "crew": "Unmanned",
+      "summary": "A quiet unmanned aircraft that watches for hours and streams to a distant operator.",
+      "cost": 24,
+      "source": "DCUGen"
+    },
+    {
+      "id": "gunship-aircraft",
+      "name": "Heavy Gunship Aircraft",
+      "category": "Air",
+      "setting": "Military",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 7,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Howitzer",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 4
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Gatling Cannon",
+              "effect": "Damage",
+              "rank": 8,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Multiattack"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "features": [],
+      "crew": "13 crew",
+      "summary": "A cargo plane converted into a flying artillery battery that circles its target.",
+      "cost": 43,
+      "source": "DCUGen"
+    },
+    {
+      "id": "shuttlecraft",
+      "name": "Shuttlecraft",
+      "category": "Space",
+      "setting": "Sci-Fi",
+      "size": "Large",
+      "strength": 5,
+      "speed": 10,
+      "movement": "Flight",
+      "defense": 8,
+      "toughness": 9,
+      "powers": [
+        {
+          "name": "Interplanetary Drive",
+          "effect": "Movement",
+          "rank": 1,
+          "detail": "Space Travel 1"
+        }
+      ],
+      "features": [
+        {
+          "name": "Communications Suite"
+        }
+      ],
+      "crew": "1 pilot, 6 passengers",
+      "summary": "A boxy short-range shuttle for ship-to-surface hops and system jaunts.",
+      "cost": 27,
+      "source": "DCUGen"
+    },
+    {
+      "id": "scout-ship",
+      "name": "Scout Ship",
+      "category": "Space",
+      "setting": "Sci-Fi",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 14,
+      "movement": "Flight",
+      "defense": 7,
+      "toughness": 10,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Sensor Suite",
+          "effect": "Senses",
+          "rank": 5,
+          "detail": "Long-range sensors: extended, accurate radio and radiation awareness"
+        }
+      ],
+      "features": [
+        {
+          "name": "Navigation System",
+          "ranks": 2
+        },
+        {
+          "name": "Crew Quarters"
+        }
+      ],
+      "crew": "2-4 explorers",
+      "summary": "A long-legged explorer packed with sensors and very little armor.",
+      "cost": 44,
+      "source": "DCUGen"
+    },
+    {
+      "id": "freighter",
+      "name": "Tramp Freighter",
+      "category": "Space",
+      "setting": "Sci-Fi",
+      "size": "Gargantuan",
+      "strength": 14,
+      "speed": 12,
+      "movement": "Flight",
+      "defense": 4,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Dorsal Laser Turret",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged"
+        }
+      ],
+      "features": [
+        {
+          "name": "Cargo Hold",
+          "ranks": 2
+        },
+        {
+          "name": "Hidden Compartments",
+          "ranks": 2
+        },
+        {
+          "name": "Crew Quarters"
+        }
+      ],
+      "crew": "4-6 crew",
+      "summary": "A battered cargo hauler with smuggling holds and one stubborn laser turret.",
+      "cost": 55,
+      "source": "DCUGen"
+    },
+    {
+      "id": "corsair-raider",
+      "name": "Corsair Raider",
+      "category": "Space",
+      "setting": "Sci-Fi",
+      "size": "Huge",
+      "strength": 10,
+      "speed": 14,
+      "movement": "Flight",
+      "defense": 7,
+      "toughness": 11,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Laser Cannons",
+          "effect": "Damage",
+          "rank": 9,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Tractor Beam",
+              "effect": "Move Object",
+              "rank": 10
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Hidden Compartments"
+        },
+        {
+          "name": "Towing Cables",
+          "detail": "boarding grapples"
+        }
+      ],
+      "crew": "8 pirates",
+      "summary": "A pirate ship with a ram prow, grapples and a crew that wants your cargo.",
+      "cost": 69,
+      "source": "DCUGen"
+    },
+    {
+      "id": "interceptor",
+      "name": "Space Interceptor",
+      "category": "Space",
+      "setting": "Sci-Fi",
+      "size": "Large",
+      "strength": 4,
+      "speed": 15,
+      "movement": "Flight",
+      "defense": 10,
+      "toughness": 9,
+      "powers": [
+        {
+          "name": "Pulse Lasers",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Accurate",
+              "steps": 2
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Ejection System"
+        }
+      ],
+      "crew": "1 pilot",
+      "summary": "A needle-nosed point-defense fighter built to catch anything that flies.",
+      "cost": 58,
+      "source": "DCUGen"
+    },
+    {
+      "id": "dreadnought",
+      "name": "Star Dreadnought",
+      "category": "Space",
+      "setting": "Sci-Fi",
+      "size": "Awesome",
+      "strength": 24,
+      "speed": 14,
+      "movement": "Flight",
+      "defense": 0,
+      "toughness": 20,
+      "powers": [
+        {
+          "name": "Hyperdrive",
+          "effect": "Movement",
+          "rank": 3,
+          "detail": "Space Travel 3"
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Protection",
+          "rank": 4,
+          "extras": [
+            {
+              "name": "Sustained"
+            }
+          ]
+        },
+        {
+          "name": "Main Battery",
+          "effect": "Damage",
+          "rank": 16,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 12
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Point Defense",
+              "effect": "Damage",
+              "rank": 10,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Multiattack"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Tractor Beam",
+          "effect": "Move Object",
+          "rank": 14
+        }
+      ],
+      "features": [
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Medical Bay"
+        },
+        {
+          "name": "Communications Suite"
+        }
+      ],
+      "crew": "5,000 crew",
+      "summary": "A mile-long capital ship whose main battery can crack a moon.",
+      "cost": 128,
+      "source": "DCUGen"
+    },
+    {
+      "id": "colony-ark",
+      "name": "Colony Ark",
+      "category": "Space",
+      "setting": "Sci-Fi",
+      "size": "Awesome",
+      "strength": 30,
+      "speed": 10,
+      "movement": "Flight",
+      "defense": 0,
+      "toughness": 18,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        }
+      ],
+      "features": [
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Medical Bay"
+        },
+        {
+          "name": "Laboratory Module"
+        },
+        {
+          "name": "Cargo Hold",
+          "ranks": 3
+        }
+      ],
+      "crew": "200 crew, 20,000 colonists in cold sleep",
+      "summary": "A slow generation ship carrying a whole civilization to a new world.",
+      "cost": 48,
+      "source": "DCUGen"
+    },
+    {
+      "id": "escape-pod",
+      "name": "Escape Pod",
+      "category": "Space",
+      "setting": "Sci-Fi",
+      "size": "Medium",
+      "strength": 0,
+      "speed": 8,
+      "movement": "Flight",
+      "defense": 10,
+      "toughness": 7,
+      "powers": [
+        {
+          "name": "Sealed Life Support",
+          "effect": "Immunity",
+          "rank": 10,
+          "detail": "Life support"
+        }
+      ],
+      "features": [
+        {
+          "name": "Autopilot"
+        },
+        {
+          "name": "Communications Suite",
+          "detail": "distress beacon"
+        }
+      ],
+      "crew": "1-4 survivors",
+      "summary": "A cramped lifeboat that keeps its passengers alive on any world it lands on.",
+      "cost": 30,
+      "source": "DCUGen"
+    },
+    {
+      "id": "alien-saucer",
+      "name": "Alien Saucer",
+      "category": "Space",
+      "setting": "Sci-Fi",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 13,
+      "movement": "Flight",
+      "defense": 8,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Disintegrator Ray",
+          "effect": "Damage",
+          "rank": 12,
+          "range": "Ranged",
+          "alternates": [
+            {
+              "name": "Abduction Beam",
+              "effect": "Move Object",
+              "rank": 10
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Cloaking Device (All Visual)"
+        }
+      ],
+      "crew": "3-6 grey aliens",
+      "summary": "A silent flying disc with a cloaking field and a beam that lifts cattle, or people.",
+      "cost": 70,
+      "source": "DCUGen"
+    },
+    {
+      "id": "living-ship",
+      "name": "Organic Living Ship",
+      "category": "Space",
+      "setting": "Sci-Fi",
+      "size": "Gargantuan",
+      "strength": 14,
+      "speed": 13,
+      "movement": "Flight",
+      "defense": 4,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Self-Healing Hull",
+          "effect": "Regeneration",
+          "rank": 5
+        },
+        {
+          "name": "Sensor Suite",
+          "effect": "Senses",
+          "rank": 4,
+          "detail": "Awareness of nearby life, extended vision"
+        },
+        {
+          "name": "Bio-Plasma Spit",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged"
+        }
+      ],
+      "features": [],
+      "crew": "1 bonded pilot, 10 passengers",
+      "summary": "A grown, breathing starship that heals its wounds and shares its pilot's feelings.",
+      "cost": 66,
+      "source": "DCUGen"
+    },
+    {
+      "id": "hyperspace-yacht",
+      "name": "Hyperspace Yacht",
+      "category": "Space",
+      "setting": "Sci-Fi",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 13,
+      "movement": "Flight",
+      "defense": 7,
+      "toughness": 10,
+      "powers": [
+        {
+          "name": "Hyperdrive",
+          "effect": "Movement",
+          "rank": 3,
+          "detail": "Space Travel 3"
+        }
+      ],
+      "features": [
+        {
+          "name": "Luxury Quarters"
+        },
+        {
+          "name": "Autopilot"
+        },
+        {
+          "name": "Navigation System"
+        }
+      ],
+      "crew": "2 crew, 8 guests",
+      "summary": "A gleaming pleasure craft for galactic royalty, faster than most warships.",
+      "cost": 39,
+      "source": "DCUGen"
+    },
+    {
+      "id": "mining-barge",
+      "name": "Asteroid Mining Barge",
+      "category": "Space",
+      "setting": "Sci-Fi",
+      "size": "Colossal",
+      "strength": 18,
+      "speed": 8,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 14,
+      "powers": [
+        {
+          "name": "Interplanetary Drive",
+          "effect": "Movement",
+          "rank": 1,
+          "detail": "Space Travel 1"
+        },
+        {
+          "name": "Mining Laser",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Penetrating",
+              "steps": 10
+            }
+          ],
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "to stationary targets"
+            }
+          ]
+        },
+        {
+          "name": "Tractor Beam",
+          "effect": "Move Object",
+          "rank": 12
+        }
+      ],
+      "features": [
+        {
+          "name": "Cargo Hold",
+          "ranks": 2
+        },
+        {
+          "name": "Crew Quarters"
+        }
+      ],
+      "crew": "30 miners",
+      "summary": "A slab-sided ore hauler with a cutting laser that can slice a rock, or a ship, in half.",
+      "cost": 72,
+      "source": "DCUGen"
+    },
+    {
+      "id": "station-tug",
+      "name": "Space Station Tug",
+      "category": "Space",
+      "setting": "Sci-Fi",
+      "size": "Gargantuan",
+      "strength": 14,
+      "speed": 8,
+      "movement": "Flight",
+      "defense": 4,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Interplanetary Drive",
+          "effect": "Movement",
+          "rank": 1,
+          "detail": "Space Travel 1"
+        },
+        {
+          "name": "Tractor Beam",
+          "effect": "Move Object",
+          "rank": 14
+        }
+      ],
+      "features": [
+        {
+          "name": "Towing Cables"
+        }
+      ],
+      "crew": "3 crew",
+      "summary": "A stubby workhorse that drags crippled ships and station modules into place.",
+      "cost": 53,
+      "source": "DCUGen"
+    },
+    {
+      "id": "grav-bike",
+      "name": "Grav-Bike",
+      "category": "Ground",
+      "setting": "Sci-Fi",
+      "size": "Medium",
+      "strength": 1,
+      "speed": 8,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "within 30 ft. of a surface"
+        }
+      ],
+      "defense": 11,
+      "toughness": 7,
+      "powers": [],
+      "features": [],
+      "crew": "1 rider",
+      "summary": "A repulsor-lift speeder that skims a few feet above the ground.",
+      "cost": 12,
+      "source": "DCUGen"
+    },
+    {
+      "id": "boarding-shuttle",
+      "name": "Boarding Shuttle",
+      "category": "Space",
+      "setting": "Sci-Fi",
+      "size": "Huge",
+      "strength": 10,
+      "speed": 11,
+      "movement": "Flight",
+      "defense": 6,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Breaching Drill",
+          "effect": "Damage",
+          "rank": 8,
+          "extras": [
+            {
+              "name": "Penetrating",
+              "steps": 8
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 4
+        }
+      ],
+      "crew": "1 pilot, 12 marines",
+      "summary": "An armored wedge that rams a hull, drills through and disgorges marines.",
+      "cost": 49,
+      "source": "DCUGen"
+    },
+    {
+      "id": "sailing-galleon",
+      "name": "Sailing Galleon",
+      "category": "Water",
+      "setting": "Fantasy",
+      "size": "Colossal",
+      "strength": 18,
+      "speed": 4,
+      "movement": "Swimming",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "needs wind"
+        }
+      ],
+      "defense": 2,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Broadside Cannons",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 4
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Cargo Hold"
+        }
+      ],
+      "crew": "200 sailors",
+      "summary": "A towering three-masted treasure ship with two decks of cannon.",
+      "cost": 30,
+      "source": "DCUGen"
+    },
+    {
+      "id": "longship",
+      "name": "Longship",
+      "category": "Water",
+      "setting": "Fantasy",
+      "size": "Huge",
+      "strength": 9,
+      "speed": 4,
+      "movement": "Swimming",
+      "defense": 6,
+      "toughness": 9,
+      "powers": [],
+      "features": [],
+      "crew": "40 rowers and raiders",
+      "summary": "A dragon-prowed raiding ship, shallow enough to beach anywhere.",
+      "cost": 7,
+      "source": "DCUGen"
+    },
+    {
+      "id": "war-galley",
+      "name": "War Galley",
+      "category": "Water",
+      "setting": "Fantasy",
+      "size": "Gargantuan",
+      "strength": 13,
+      "speed": 4,
+      "movement": "Swimming",
+      "defense": 4,
+      "toughness": 11,
+      "powers": [
+        {
+          "name": "Bronze Ram",
+          "effect": "Damage",
+          "rank": 10,
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "only against ships and structures"
+            }
+          ]
+        },
+        {
+          "name": "Deck Ballista",
+          "effect": "Damage",
+          "rank": 6,
+          "range": "Ranged"
+        }
+      ],
+      "features": [],
+      "crew": "150 rowers, 50 marines",
+      "summary": "An oared warship that drives its bronze beak through enemy hulls.",
+      "cost": 25,
+      "source": "DCUGen"
+    },
+    {
+      "id": "elven-skiff",
+      "name": "Elven Skiff",
+      "category": "Water",
+      "setting": "Fantasy",
+      "size": "Large",
+      "strength": 4,
+      "speed": 6,
+      "movement": "Swimming",
+      "defense": 9,
+      "toughness": 7,
+      "powers": [
+        {
+          "name": "Silverwood Hull",
+          "effect": "Concealment",
+          "rank": 2,
+          "detail": "Normal sight",
+          "flaws": [
+            {
+              "name": "Blending"
+            }
+          ]
+        }
+      ],
+      "features": [],
+      "crew": "2 elves, 4 passengers",
+      "summary": "A swan-necked boat of pale wood that glides without a ripple and fades into river mist.",
+      "cost": 10,
+      "source": "DCUGen"
+    },
+    {
+      "id": "dwarven-drill-engine",
+      "name": "Dwarven Drill-Engine",
+      "category": "Ground",
+      "setting": "Fantasy",
+      "size": "Huge",
+      "strength": 12,
+      "speed": 8,
+      "movement": "Burrowing",
+      "defense": 6,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Runic Drill",
+          "effect": "Damage",
+          "rank": 9,
+          "extras": [
+            {
+              "name": "Penetrating",
+              "steps": 9
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 4
+        }
+      ],
+      "crew": "3 dwarf engineers",
+      "summary": "A rune-etched steam borer that chews through granite to reach the deep halls.",
+      "cost": 40,
+      "source": "DCUGen"
+    },
+    {
+      "id": "airship",
+      "name": "Fantasy Airship",
+      "category": "Air",
+      "setting": "Fantasy",
+      "size": "Gargantuan",
+      "strength": 12,
+      "speed": 6,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "not in storms"
+        }
+      ],
+      "defense": 4,
+      "toughness": 11,
+      "powers": [
+        {
+          "name": "Ballistae",
+          "effect": "Damage",
+          "rank": 6,
+          "range": "Ranged"
+        }
+      ],
+      "features": [
+        {
+          "name": "Crew Quarters"
+        }
+      ],
+      "crew": "20 crew",
+      "summary": "A wooden hull hung beneath a gasbag of enchanted silk, steered by great fins.",
+      "cost": 22,
+      "source": "DCUGen"
+    },
+    {
+      "id": "sky-galleon",
+      "name": "Sky-Galleon",
+      "category": "Air",
+      "setting": "Fantasy",
+      "size": "Colossal",
+      "strength": 18,
+      "speed": 7,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "needs wind in its sails"
+        }
+      ],
+      "defense": 2,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Broadside Cannons",
+          "effect": "Damage",
+          "rank": 9,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 5
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Cargo Hold"
+        }
+      ],
+      "crew": "120 sky-sailors",
+      "summary": "A full-rigged warship that sails the clouds on a keel of levitation crystal.",
+      "cost": 38,
+      "source": "DCUGen"
+    },
+    {
+      "id": "magic-carpet",
+      "name": "Magic Carpet",
+      "category": "Air",
+      "setting": "Fantasy",
+      "size": "Medium",
+      "strength": 0,
+      "speed": 6,
+      "movement": "Flight",
+      "defense": 10,
+      "toughness": 5,
+      "powers": [],
+      "features": [
+        {
+          "name": "Remote Control",
+          "detail": "comes when called"
+        }
+      ],
+      "crew": "1 rider, 1 passenger",
+      "summary": "A woven rug of the old sultans that flies at a whispered word.",
+      "cost": 13,
+      "source": "DCUGen"
+    },
+    {
+      "id": "flying-broom",
+      "name": "Flying Broom",
+      "category": "Air",
+      "setting": "Fantasy",
+      "size": "Medium",
+      "strength": 0,
+      "speed": 5,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "not over running water"
+        }
+      ],
+      "defense": 11,
+      "toughness": 5,
+      "powers": [],
+      "features": [],
+      "crew": "1 witch, 1 cat",
+      "summary": "A witch's besom: quick, quiet, and helpless over a river.",
+      "cost": 6,
+      "source": "DCUGen"
+    },
+    {
+      "id": "dragon-chariot",
+      "name": "Dragon-Drawn War Chariot",
+      "category": "Air",
+      "setting": "Fantasy",
+      "size": "Large",
+      "strength": 8,
+      "speed": 7,
+      "movement": "Flight",
+      "defense": 8,
+      "toughness": 9,
+      "powers": [
+        {
+          "name": "Dragonfire",
+          "effect": "Damage",
+          "rank": 10,
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Cone"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 4
+        }
+      ],
+      "crew": "1 charioteer, 1 archer, 2 harnessed drakes",
+      "summary": "A gilded war chariot pulled through the sky by two fire-breathing drakes.",
+      "cost": 45,
+      "source": "DCUGen"
+    },
+    {
+      "id": "pegasus-carriage",
+      "name": "Pegasus Carriage",
+      "category": "Air",
+      "setting": "Fantasy",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 6,
+      "movement": "Flight",
+      "alt_movement": [
+        {
+          "effect": "Speed",
+          "rank": 4
+        }
+      ],
+      "defense": 6,
+      "toughness": 9,
+      "powers": [],
+      "features": [
+        {
+          "name": "Luxury Quarters"
+        }
+      ],
+      "crew": "1 driver, 4 passengers, 4 winged horses",
+      "summary": "A royal coach drawn by winged horses, as at home on a road as above the clouds.",
+      "cost": 16,
+      "source": "DCUGen"
+    },
+    {
+      "id": "ghost-ship",
+      "name": "Ghost Ship",
+      "category": "Water",
+      "setting": "Fantasy",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 5,
+      "movement": "Swimming",
+      "alt_movement": [
+        {
+          "effect": "Flight",
+          "rank": 4
+        }
+      ],
+      "defense": 2,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Spectral Hull",
+          "effect": "Insubstantial",
+          "rank": 4
+        },
+        {
+          "name": "Phantom Cannons",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 4
+            }
+          ]
+        }
+      ],
+      "features": [],
+      "crew": "A cursed crew of the drowned",
+      "summary": "A rotting man-o'-war that sails through fog, cliffs and other ships alike.",
+      "cost": 53,
+      "source": "DCUGen"
+    },
+    {
+      "id": "walking-hut",
+      "name": "Witch's Walking Hut",
+      "category": "Ground",
+      "setting": "Fantasy",
+      "size": "Huge",
+      "strength": 10,
+      "speed": 4,
+      "movement": "Speed",
+      "alt_movement": [
+        {
+          "effect": "Leaping",
+          "rank": 3
+        }
+      ],
+      "defense": 6,
+      "toughness": 10,
+      "powers": [
+        {
+          "name": "Taloned Kick",
+          "effect": "Damage",
+          "rank": 8
+        }
+      ],
+      "features": [
+        {
+          "name": "Crew Quarters",
+          "detail": "hearth, larder and bed"
+        },
+        {
+          "name": "Remote Control",
+          "detail": "turns at her command"
+        }
+      ],
+      "crew": "1 witch, her familiar, 2 guests",
+      "summary": "A crooked cottage on giant chicken legs that stalks the forest and kicks down doors.",
+      "cost": 20,
+      "source": "DCUGen"
+    },
+    {
+      "id": "flying-castle",
+      "name": "Flying Castle",
+      "category": "Air",
+      "setting": "Fantasy",
+      "size": "Awesome",
+      "strength": 25,
+      "speed": 4,
+      "movement": "Flight",
+      "defense": 0,
+      "toughness": 20,
+      "powers": [
+        {
+          "name": "Battlement Catapults",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 6
+            }
+          ]
+        },
+        {
+          "name": "Cloud Veil",
+          "effect": "Concealment",
+          "rank": 4,
+          "detail": "All visual senses",
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "in clouds or fog"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 10
+        },
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Luxury Quarters"
+        },
+        {
+          "name": "Cargo Hold"
+        },
+        {
+          "name": "Medical Bay"
+        }
+      ],
+      "crew": "300 courtiers and guards",
+      "summary": "A sorcerer-king's fortress torn from the earth, drifting in a shroud of cloud. Buy its halls separately as a headquarters.",
+      "cost": 67,
+      "source": "DCUGen"
+    },
+    {
+      "id": "gnomish-ornithopter",
+      "name": "Gnomish Ornithopter",
+      "category": "Air",
+      "setting": "Fantasy",
+      "size": "Large",
+      "strength": 4,
+      "speed": 6,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Unreliable"
+        }
+      ],
+      "defense": 8,
+      "toughness": 7,
+      "powers": [],
+      "features": [
+        {
+          "name": "Hidden Compartments"
+        },
+        {
+          "name": "Ejection System",
+          "detail": "parachute umbrellas"
+        }
+      ],
+      "crew": "1 gnome pilot, 1 passenger",
+      "summary": "A flapping contraption of brass and canvas that mostly stays aloft.",
+      "cost": 9,
+      "source": "DCUGen"
+    },
+    {
+      "id": "leviathan-sub",
+      "name": "Leviathan-Shell Submarine",
+      "category": "Water",
+      "setting": "Fantasy",
+      "size": "Gargantuan",
+      "strength": 14,
+      "speed": 6,
+      "movement": "Swimming",
+      "defense": 4,
+      "toughness": 14,
+      "powers": [
+        {
+          "name": "Sensor Suite",
+          "effect": "Senses",
+          "rank": 3,
+          "detail": "Echo-sense: accurate, extended hearing underwater"
+        },
+        {
+          "name": "Shell Ram",
+          "effect": "Damage",
+          "rank": 10
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 6
+        },
+        {
+          "name": "Crew Quarters"
+        }
+      ],
+      "crew": "12 merfolk and sailors",
+      "summary": "The hollowed shell of a slain sea-leviathan, driven by enchanted fins through the deeps.",
+      "cost": 34,
+      "source": "DCUGen"
+    },
+    {
+      "id": "steam-carriage",
+      "name": "Steam Carriage",
+      "category": "Ground",
+      "setting": "Steampunk",
+      "size": "Large",
+      "strength": 5,
+      "speed": 4,
+      "movement": "Speed",
+      "defense": 8,
+      "toughness": 8,
+      "powers": [],
+      "features": [],
+      "crew": "1 driver, 1 stoker, 4 passengers",
+      "summary": "A brass-bound horseless carriage that chuffs, whistles and leaves a trail of soot.",
+      "cost": 7,
+      "source": "DCUGen"
+    },
+    {
+      "id": "steam-velocipede",
+      "name": "Steam Velocipede",
+      "category": "Ground",
+      "setting": "Steampunk",
+      "size": "Medium",
+      "strength": 1,
+      "speed": 5,
+      "movement": "Speed",
+      "movement_flaws": [
+        {
+          "name": "Unreliable"
+        }
+      ],
+      "defense": 10,
+      "toughness": 6,
+      "powers": [],
+      "features": [],
+      "crew": "1 rider",
+      "summary": "A boiler on two wheels: thrilling, scalding, and liable to stall.",
+      "cost": 5,
+      "source": "DCUGen"
+    },
+    {
+      "id": "zeppelin",
+      "name": "War Zeppelin",
+      "category": "Air",
+      "setting": "Steampunk",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 5,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Gatling Gondolas",
+          "effect": "Damage",
+          "rank": 5,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Cargo Hold"
+        }
+      ],
+      "crew": "40 aeronauts",
+      "summary": "A rigid airship with armored gondolas and gatling guns, the pride of an imperial fleet.",
+      "cost": 31,
+      "source": "DCUGen"
+    },
+    {
+      "id": "clockwork-walker",
+      "name": "Clockwork Walker",
+      "category": "Ground",
+      "setting": "Steampunk",
+      "size": "Huge",
+      "strength": 10,
+      "speed": 3,
+      "movement": "Speed",
+      "alt_movement": [
+        {
+          "effect": "Leaping",
+          "rank": 2
+        }
+      ],
+      "defense": 6,
+      "toughness": 11,
+      "powers": [
+        {
+          "name": "Steam Cannon",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged"
+        }
+      ],
+      "features": [
+        {
+          "name": "Remote Control",
+          "detail": "wound-key orders"
+        }
+      ],
+      "crew": "1 pilot",
+      "summary": "A ticking, hissing iron giant that walks on spring-steel legs.",
+      "cost": 27,
+      "source": "DCUGen"
+    },
+    {
+      "id": "land-ironclad",
+      "name": "Land Ironclad",
+      "category": "Ground",
+      "setting": "Steampunk",
+      "size": "Gargantuan",
+      "strength": 16,
+      "speed": 4,
+      "movement": "Speed",
+      "defense": 4,
+      "toughness": 14,
+      "powers": [
+        {
+          "name": "Broadside Guns",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 5
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 6
+        },
+        {
+          "name": "Crew Quarters"
+        }
+      ],
+      "crew": "60 crew",
+      "summary": "A battleship on caterpillar treads, riveted plate and smokestacks rolling over the trenches.",
+      "cost": 46,
+      "source": "DCUGen"
+    },
+    {
+      "id": "brass-submersible",
+      "name": "Brass Submersible",
+      "category": "Water",
+      "setting": "Steampunk",
+      "size": "Gargantuan",
+      "strength": 13,
+      "speed": 5,
+      "movement": "Swimming",
+      "defense": 4,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Electric Ram",
+          "effect": "Damage",
+          "rank": 10
+        }
+      ],
+      "features": [
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Luxury Quarters",
+          "detail": "organ and library"
+        }
+      ],
+      "crew": "20 crew",
+      "summary": "A riveted brass undersea boat with a velvet salon and a crackling electric ram.",
+      "cost": 23,
+      "source": "DCUGen"
+    },
+    {
+      "id": "time-sled",
+      "name": "Time Sled",
+      "category": "Exotic",
+      "setting": "Exotic",
+      "size": "Medium",
+      "strength": 1,
+      "speed": 4,
+      "movement": "Flight",
+      "defense": 10,
+      "toughness": 7,
+      "powers": [
+        {
+          "name": "Chronal Runners",
+          "effect": "Movement",
+          "rank": 3,
+          "detail": "Time Travel 3"
+        }
+      ],
+      "features": [
+        {
+          "name": "Autopilot",
+          "detail": "return-home circuit"
+        }
+      ],
+      "crew": "1 rider, 1 passenger",
+      "summary": "An open hover-sled with a time drive, so you arrive in the Jurassic exposed to the weather.",
+      "cost": 18,
+      "source": "DCUGen"
+    },
+    {
+      "id": "dimension-bridge-ship",
+      "name": "Dimension Bridge-Ship",
+      "category": "Exotic",
+      "setting": "Exotic",
+      "size": "Gargantuan",
+      "strength": 12,
+      "speed": 10,
+      "movement": "Flight",
+      "defense": 4,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Bridge Engine",
+          "effect": "Movement",
+          "rank": 3,
+          "detail": "Dimensional Travel 3"
+        },
+        {
+          "name": "Interplanetary Drive",
+          "effect": "Movement",
+          "rank": 1,
+          "detail": "Space Travel 1"
+        }
+      ],
+      "features": [
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Navigation System",
+          "ranks": 2,
+          "detail": "multiversal charts"
+        }
+      ],
+      "crew": "6 crew, 20 passengers",
+      "summary": "A crystal-hulled vessel that builds a bridge of light between universes and sails across it.",
+      "cost": 35,
+      "source": "DCUGen"
+    },
+    {
+      "id": "micro-craft",
+      "name": "Shrinking Micro-Craft",
+      "category": "Exotic",
+      "setting": "Exotic",
+      "size": "Medium",
+      "strength": 0,
+      "speed": 6,
+      "movement": "Flight",
+      "defense": 10,
+      "toughness": 6,
+      "powers": [
+        {
+          "name": "Size Reducer",
+          "effect": "Shrinking",
+          "rank": 16
+        }
+      ],
+      "features": [
+        {
+          "name": "Remote Control"
+        }
+      ],
+      "crew": "1 pilot, 2 passengers",
+      "summary": "A bubble-canopy pod that shrinks to insect size, or smaller, for missions inside machines and bodies.",
+      "cost": 30,
+      "source": "DCUGen"
+    }
+  ]
+}

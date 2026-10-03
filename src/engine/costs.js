@@ -125,6 +125,10 @@ export function costBreakdown(ch, R) {
   const skills = Math.ceil(ranks / 2);
   const defenses = Object.values(ch.defenses || {}).reduce((s, v) => s + (v || 0), 0);
   const total = abilities + powers + advantages + skills + defenses;
-  const budget = (ch.pl || 0) * PP_PER_PL;
+  // With advancement on (GM-awarded points, DCA 190), the budget is the starting points plus every award.
+  const adv = ch.advancement;
+  const budget = adv
+    ? (adv.startPoints ?? (adv.startPl ?? ch.pl) * PP_PER_PL) + (adv.log || []).filter((e) => e.type === 'award').reduce((s, e) => s + (e.points || 0), 0)
+    : (ch.pl || 0) * PP_PER_PL;
   return { abilities, powers, advantages, skills, skillRanks: ranks, defenses, total, budget, unspent: budget - total };
 }

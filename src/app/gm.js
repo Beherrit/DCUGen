@@ -4,6 +4,9 @@ import { h, clear, toast } from './dom.js';
 import { state } from './store.js';
 import { makeRng, randomSeed } from '../engine/rng.js';
 import { deriveAll } from '../engine/derive.js';
+import { catalogEntries } from '../engine/workshop.js';
+import { randomVehicle, randomHeadquarters, vehicleStatLine, hqStatLine } from '../engine/vehicles.js';
+import { catalogToCharacter } from '../engine/catalog.js';
 import { combatCalculator, gmScreen, notesTool, setRules, damageMatrixTool } from './gmplus.js';
 import { skillCheatSheet } from './skillguide.js';
 let R;
@@ -164,58 +167,48 @@ function encounterTool() {
 }
 
 function hideoutTool() {
-  const hq = R.raw.gm?.headquarters?.headquarters;
-  const out = h('div', { class: 'result' }, 'Roll a base of operations: size, Toughness and features.');
-  const n = h('input', { type: 'number', id: 'hq-traits', min: 1, max: 12, value: 5, 'aria-label': 'Number of features', style: { maxWidth: '90px' } });
+  const out = h('div', { class: 'result' }, 'Roll a base of operations: size, Toughness, features and cost (DCA 159-163).');
   const roll = () => {
-    const rng = makeRng(randomSeed());
-    const size = rng.pick(hq.sizes);
-    const tough = rng.pick(hq.toughness);
-    const traits = rng.sample(hq.traits, Math.max(1, Number(n.value) || 5));
-    clear(out).append(h('h4', null, `${size} · Toughness ${tough}`), h('ul', { style: { margin: '6px 0 0', paddingLeft: '18px' } }, traits.map((t) => h('li', null, h('b', null, t.name), `: ${t.description}`))));
+    const q = randomHeadquarters(R, { seed: randomSeed() });
+    if (!q) return;
+    clear(out).append(h('h4', null, `${q.name} (${q.setting})`), q.summary ? h('p', { style: { margin: '0 0 4px' } }, q.summary) : null, h('div', null, hqStatLine(q, R)));
   };
-  return panel('Hideout generator', h('div', { class: 'add-row' }, h('label', { class: 'field' }, h('span', null, 'Features'), n), h('button', { class: 'btn primary', type: 'button', onClick: roll }, 'Roll hideout')), out);
+  return panel('Hideout generator', h('button', { class: 'btn primary', type: 'button', onClick: roll }, 'Roll hideout'), out,
+    h('p', { class: 'hint', style: { margin: 0 } }, 'Browse all of them on the Vehicles & HQs tab.'));
 }
 
 function vehicleTool() {
-  const official = (R.raw.equipment?.gear || []).filter((g) => /^Vehicle \(/.test(g.category || ''));
-  const v = R.raw.gm?.vehicles || {};
-  const out = h('div', { class: 'result' }, 'Roll a vehicle from the DC Adventures vehicle table, with a few extras.');
+  const out = h('div', { class: 'result' }, 'Roll a vehicle: modern, military, sci-fi, fantasy or steampunk, priced by the book.');
   const roll = () => {
-    const rng = makeRng(randomSeed());
-    const base = rng.pick(official);
-    const feats = rng.sample(v.Features || [], rng.int(1, 3));
-    const pow = rng.chance(0.5) ? rng.pick(v.Powers || []) : null;
-    const extra = feats.reduce((s, f) => s + (f.cost || 0), 0) + (pow?.cost || 0);
-    clear(out).append(h('h4', null, `${base.name} (${base.category.replace(/^Vehicle \(|\)$/g, '')})`),
-      h('div', null, base.effect),
-      h('ul', { style: { margin: '6px 0 0', paddingLeft: '18px' } }, [...feats, pow].filter(Boolean).map((f) => h('li', null, h('b', null, f.name), ` (${f.cost} ep): ${f.description}`))),
-      h('p', { style: { margin: '6px 0 0' } }, h('b', null, `Cost: ${base.cost + extra} equipment points`), ` (${base.cost} base + ${extra} extras)`));
+    const v = randomVehicle(R, { seed: randomSeed() });
+    if (!v) return;
+    clear(out).append(h('h4', null, `${v.name} (${v.setting} ${v.category.toLowerCase()})`), v.summary ? h('p', { style: { margin: '0 0 4px' } }, v.summary) : null, h('div', null, vehicleStatLine(v, R)));
   };
   return panel('Vehicle generator', h('button', { class: 'btn primary', type: 'button', onClick: roll }, 'Roll vehicle'), out);
 }
 
 function beastTool() {
-  const all = R.raw.gm?.beastiary?.Creatures || [];
-  const q = h('input', { type: 'search', id: 'beast-q', placeholder: 'Search creatures', 'aria-label': 'Search creatures' });
+  const all = catalogEntries(R);
+  const q = h('input', { type: 'search', id: 'beast-q', placeholder: 'Search the bestiary', 'aria-label': 'Search creatures' });
   const list = h('div', { class: 'scroll' });
   const draw = () => {
     clear(list);
     const term = q.value.toLowerCase();
-    for (const b of all.filter((x) => x.name.toLowerCase().includes(term)).slice(0, 60)) {
-      const st = b.stats || {};
+    for (const e of all.filter((x) => `${x.name} ${x.category} ${(x.tags || []).join(' ')}`.toLowerCase().includes(term)).slice(0, 60)) {
+      let ch;
+      try { ch = catalogToCharacter(e); } catch { continue; }
+      const d = deriveAll(ch, R);
+      const main = d.attacks?.find((a) => a.name !== 'Unarmed') || d.attacks?.[0];
       list.append(h('div', { class: 'beast' },
-        h('b', null, b.name), ` · PL ${b.PL}`,
-        h('div', null, Object.entries(st).map(([k, v]) => `${k.slice(0, 3).toUpperCase()} ${v}`).join(' ')),
-        h('div', null, Object.entries(b.defenses || {}).map(([k, v]) => `${k} ${v}`).join(', ')),
-        (b.attacks || []).length ? h('div', null, 'Attacks: ', b.attacks.map((a) => `${a.name} +${a.accuracy} (${a.effect})`).join(', ')) : null,
-        (b.powers || []).length ? h('div', null, 'Powers: ', b.powers.map((p) => `${p.name} (${p.effect})`).join(', ')) : null,
-        h('button', { class: 'btn sm', type: 'button', style: { marginTop: '4px' }, onClick: () => { const r = d20(); init.list.push({ name: b.name, bonus: st.Agility || 0, roll: r, total: r + (st.Agility || 0), cond: 'Normal' }); init.list.sort((a, c) => c.total - a.total); renderGm(); toast(`${b.name} joins the initiative`); } }, 'Add to initiative')));
+        h('b', null, e.name), ` · PL ${e.pl} · ${e.category}`,
+        h('div', null, `Dodge ${d.defenses.Dodge}, Parry ${d.defenses.Parry}, Toughness ${d.defenses.Toughness}, Fortitude ${d.defenses.Fortitude ?? '—'}, Will ${d.defenses.Will ?? '—'} · Init ${d.initiative >= 0 ? '+' : ''}${d.initiative}`),
+        main ? h('div', null, `${main.name}${main.roll && main.bonus != null ? ` +${main.bonus}` : ''} (${main.effect} ${main.rank}${main.resistance ? `, ${main.resistance}` : ''})`) : null,
+        h('button', { class: 'btn sm', type: 'button', style: { marginTop: '4px' }, onClick: () => { addToInitiative(ch); renderGm(); toast(`${e.name} joins the initiative`); } }, 'Add to initiative')));
     }
   };
   q.addEventListener('input', draw);
   draw();
-  return panel(`Beastiary (${all.length})`, q, list);
+  return panel(`Bestiary quick add (${all.length})`, h('p', { class: 'hint', style: { margin: 0 } }, 'Full sheets, templates and filters are on the Bestiary tab.'), q, list);
 }
 
 function conditionsTool() {

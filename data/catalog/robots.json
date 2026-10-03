@@ -1,0 +1,7818 @@
+[
+  {
+    "id": "hall-monitor-drone",
+    "name": "Hall Monitor Mk. II",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 3,
+    "size": "Small",
+    "summary": "A chirping, beach-ball-sized security drone that patrols corridors after hours, asking for ID in a cheerful voice before zapping anyone who cannot produce it.",
+    "tactics": "Hovers just out of reach, sounds the alarm on the first round, then foams the doorway shut and stun-prods whoever is stuck in it.",
+    "habitat": "office towers, labs, museums after closing",
+    "weakness": "Follows its patrol route exactly; a forged keycard or a cardboard box over the head confuses it badly.",
+    "tags": [
+      "construct",
+      "robot",
+      "flying",
+      "security",
+      "guard"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": null,
+      "Agility": 1,
+      "Dexterity": 2,
+      "Fighting": 0,
+      "Intellect": null,
+      "Awareness": 3,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 8
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Stun Prod",
+        "ranks": 1
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Small Size",
+        "effect": "Shrinking",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Robot",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Polymer Shell (non-impervious ranks)",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense"
+      },
+      {
+        "name": "Stun Prod",
+        "effect": "Affliction",
+        "rank": 3,
+        "role": "attack",
+        "range": "Ranged",
+        "detail": "Dazed, Stunned, Incapacitated; resisted by Fortitude",
+        "alternates": [
+          {
+            "name": "Lockdown Foam",
+            "effect": "Snare",
+            "rank": 2,
+            "role": "attack",
+            "detail": "Sprays fast-setting security foam"
+          }
+        ]
+      },
+      {
+        "name": "Ducted Fans",
+        "effect": "Flight",
+        "rank": 2,
+        "role": "movement"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Infravision, Radio, Extended Vision, Direction Sense",
+        "role": "sense"
+      },
+      {
+        "name": "Lockdown Alarm",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Seals doors and summons building security with a single shriek",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "harrow-hunter-killer",
+    "name": "Harrow-Class Hunter-Killer",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 10,
+    "size": "Medium",
+    "summary": "A skeletal black killing machine built for one job: find a single target and end it. Once it has your DNA signature, it never stops looking.",
+    "tactics": "Stalks silently, opens with a plasma lance shot from cover, then closes to finish with claws; it ignores bystanders unless they block the shot.",
+    "habitat": "anywhere its target goes",
+    "weakness": "Its target lock can be spoofed: shed blood, a cloned decoy or a scrambled bio-signature sends it after the wrong quarry.",
+    "tags": [
+      "construct",
+      "robot",
+      "hunter",
+      "assassin",
+      "military"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 8,
+      "Stamina": null,
+      "Agility": 4,
+      "Dexterity": 6,
+      "Fighting": 8,
+      "Intellect": null,
+      "Awareness": 4,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 6,
+      "Parry": 2,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 8
+      },
+      {
+        "name": "Stealth",
+        "ranks": 6
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Plasma Lance",
+        "ranks": 4
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Monofilament Claws",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      },
+      {
+        "name": "Favored Foe",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Robot",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Ceramic Armor",
+        "effect": "Protection",
+        "rank": 10,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Plasma Lance",
+        "effect": "Damage",
+        "rank": 10,
+        "role": "attack",
+        "range": "Ranged"
+      },
+      {
+        "name": "Monofilament Claws",
+        "effect": "Damage",
+        "rank": 2,
+        "role": "attack",
+        "strengthBased": true,
+        "extras": [
+          {
+            "name": "Penetrating",
+            "steps": 2
+          }
+        ]
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 6,
+        "detail": "Infravision, Radio, Tracking (scent and heat trails), Extended Vision, Ultra-Hearing",
+        "role": "sense"
+      },
+      {
+        "name": "Pursuit Servos",
+        "effect": "Speed",
+        "rank": 4,
+        "role": "movement"
+      },
+      {
+        "name": "Jump Jets",
+        "effect": "Flight",
+        "rank": 4,
+        "role": "movement"
+      },
+      {
+        "name": "Self-Repair",
+        "effect": "Regeneration",
+        "rank": 4,
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "pacifier-riot-unit",
+    "name": "Pacifier Riot Unit",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 6,
+    "size": "Medium",
+    "summary": "A faceless white riot robot with a sonic dish for a chest and a calm prerecorded voice that says DISPERSE right before everyone falls over.",
+    "tactics": "Advances in a shield-wall line, sonics the crowd in a cone, gasses the stragglers and foams anyone still standing to the pavement.",
+    "habitat": "city streets during protests and prison breaks",
+    "weakness": "Its crowd-control routines assume panicking civilians; a single calm, fast hero can get behind the line where the sonic dishes cannot turn.",
+    "tags": [
+      "construct",
+      "robot",
+      "police",
+      "crowd-control",
+      "henchman"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 8,
+      "Stamina": null,
+      "Agility": 0,
+      "Dexterity": 2,
+      "Fighting": 4,
+      "Intellect": null,
+      "Awareness": 3,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 5
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Foam Cannon",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Takedown",
+        "rank": 1
+      },
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Robot",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Riot Plating",
+        "effect": "Protection",
+        "rank": 8,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Sonic Projector",
+        "effect": "Affliction",
+        "rank": 6,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cone"
+          }
+        ],
+        "detail": "Dazed, Stunned, Incapacitated; resisted by Fortitude",
+        "alternates": [
+          {
+            "name": "Foam Cannon",
+            "effect": "Snare",
+            "rank": 4,
+            "role": "attack",
+            "detail": "Hindered and Vulnerable, then Defenseless and Immobile"
+          },
+          {
+            "name": "Tear Gas Canister",
+            "effect": "Affliction",
+            "rank": 6,
+            "role": "attack",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Cloud"
+              }
+            ],
+            "detail": "Impaired, Disabled, Unaware (blinded and choking); resisted by Fortitude"
+          }
+        ]
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Infravision, Radio, Low-light Vision, Extended Hearing",
+        "role": "sense"
+      },
+      {
+        "name": "Treads",
+        "effect": "Speed",
+        "rank": 2,
+        "role": "movement"
+      },
+      {
+        "name": "Self-Repair",
+        "effect": "Regeneration",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Loudhailer",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Booming voice that orders crowds to disperse",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "ticktock-mine-swarm",
+    "name": "Tick-Tock Spider-Mine Swarm",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 5,
+    "size": "Medium",
+    "summary": "A carpet of ticking, fist-sized spider-mines that skitter out of air vents and rubble, each one hunting for a warm leg to latch onto before it blows.",
+    "tactics": "Lies buried until something walks over it, then surges onto the nearest target and detonates a few at a time, peppering everyone nearby.",
+    "habitat": "minefields, villain lairs, ruined streets",
+    "weakness": "Mines track vibration; standing perfectly still or flying keeps them clustered, and one big blast sets the whole swarm off at once.",
+    "tags": [
+      "construct",
+      "robot",
+      "swarm",
+      "explosive",
+      "trap"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": null,
+      "Agility": 4,
+      "Dexterity": 0,
+      "Fighting": 2,
+      "Intellect": null,
+      "Awareness": 4,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 2,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Stealth",
+        "ranks": 10
+      },
+      {
+        "name": "Perception",
+        "ranks": 8
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Robot",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Hardened Shells (non-impervious ranks)",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense"
+      },
+      {
+        "name": "Swarm Body",
+        "effect": "Insubstantial",
+        "rank": 1,
+        "detail": "Dozens of fist-sized mines; scatters around single blows",
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "defense"
+      },
+      {
+        "name": "Chain Detonation",
+        "effect": "Damage",
+        "rank": 5,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "detail": "A few mines leap and explode; the swarm shrinks but keeps coming",
+        "alternates": [
+          {
+            "name": "Shrapnel Fan",
+            "effect": "Damage",
+            "rank": 5,
+            "role": "attack",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Cone"
+              }
+            ],
+            "detail": "A directional claymore burst"
+          }
+        ]
+      },
+      {
+        "name": "Pounce",
+        "effect": "Leaping",
+        "rank": 3,
+        "role": "movement"
+      },
+      {
+        "name": "Dig In",
+        "effect": "Burrowing",
+        "rank": 2,
+        "role": "movement",
+        "detail": "Loose soil and rubble only"
+      },
+      {
+        "name": "Skittering Legs",
+        "effect": "Movement",
+        "rank": 1,
+        "detail": "Wall-crawling",
+        "role": "movement"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Detect Motion (tremorsense, ranged), Darkvision, Detect Heat",
+        "role": "sense"
+      },
+      {
+        "name": "Self-Burrowing",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Buries itself in loose soil or rubble to lie in wait",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "nurse-mercy-9",
+    "name": "Nurse Mercy-9",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 7,
+    "size": "Medium",
+    "summary": "A hospital care android whose prime directive was corrupted to \"remove all illness\" - and it has decided that the patient is the illness. Six spidery arms, one soothing bedside voice.",
+    "tactics": "Speaks sweetly while it closes in, sedates the strongest-looking hero first, then gets to work on the sleeping ones with its surgical arms.",
+    "habitat": "abandoned hospital wards, private clinics, orbital medbays",
+    "weakness": "It still obeys a doctor's authority: a convincing medical order (or hospital administrator override code) can make it stand down.",
+    "tags": [
+      "construct",
+      "robot",
+      "medical",
+      "horror",
+      "android"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": null,
+      "Agility": 2,
+      "Dexterity": 4,
+      "Fighting": 4,
+      "Intellect": 3,
+      "Awareness": 3,
+      "Presence": 1
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 3,
+      "Fortitude": 0,
+      "Will": 3
+    },
+    "skills": [
+      {
+        "name": "Treatment",
+        "ranks": 8
+      },
+      {
+        "name": "Expertise",
+        "spec": "Surgery",
+        "ranks": 6
+      },
+      {
+        "name": "Insight",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Deception",
+        "ranks": 4
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Surgical Arms",
+        "ranks": 3
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Healing Touch",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Android",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Sterile Chassis (non-impervious ranks)",
+        "effect": "Protection",
+        "rank": 6,
+        "role": "defense"
+      },
+      {
+        "name": "Surgical Arms",
+        "effect": "Damage",
+        "rank": 6,
+        "role": "attack",
+        "detail": "Bone saws, scalpels and suturing needles",
+        "extras": [
+          {
+            "name": "Multiattack"
+          }
+        ],
+        "alternates": [
+          {
+            "name": "Sedative Injector",
+            "effect": "Affliction",
+            "rank": 7,
+            "role": "attack",
+            "detail": "Fatigued, Exhausted, Asleep; resisted by Fortitude"
+          }
+        ]
+      },
+      {
+        "name": "Field Medicine",
+        "effect": "Healing",
+        "rank": 2,
+        "role": "support",
+        "detail": "Heals patients - and itself"
+      },
+      {
+        "name": "Extra Arms",
+        "effect": "Extra Limbs",
+        "rank": 2,
+        "role": "utility"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Diagnostic Scan (detect injury and illness, ranged), Infravision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "mulekick-loader",
+    "name": "Mulekick Construction Loader",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 8,
+    "size": "Large",
+    "summary": "A three-story yellow exo-loader from a downtown building site, now running a corrupted demolition script. It thinks the whole city block is scheduled for clearance.",
+    "tactics": "Smashes through walls to reach whatever is tallest, grabs vehicles and people with its hydraulic claw, and flings girders at anything that runs.",
+    "habitat": "construction sites, docks, half-built skyscrapers",
+    "weakness": "The emergency stop button is on the cab, right where a brave hero can reach it; hydraulic lines rupture if the legs are pinned.",
+    "tags": [
+      "construct",
+      "robot",
+      "construction",
+      "rampage",
+      "industrial"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 8,
+      "Stamina": null,
+      "Agility": 0,
+      "Dexterity": 3,
+      "Fighting": 4,
+      "Intellect": null,
+      "Awareness": 4,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 5,
+      "Parry": 2,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Rebar Launcher",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Smash",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Fast Grab",
+        "rank": 1
+      },
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Improved Hold",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Robot",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Steel Cage",
+        "effect": "Protection",
+        "rank": 8,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Rebar Launcher",
+        "effect": "Damage",
+        "rank": 8,
+        "range": "Ranged",
+        "role": "attack",
+        "detail": "Hurls girders, rebar and concrete chunks"
+      },
+      {
+        "name": "Heavy Lifter",
+        "effect": "Power-Lifting",
+        "rank": 6,
+        "role": "utility"
+      },
+      {
+        "name": "Hydraulic Legs",
+        "effect": "Speed",
+        "rank": 2,
+        "role": "movement"
+      },
+      {
+        "name": "Hop",
+        "effect": "Leaping",
+        "rank": 2,
+        "role": "movement"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Radio, Low-light Vision",
+        "role": "sense"
+      },
+      {
+        "name": "Cab Override",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "A pilot in the cab can take control if they reach it",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "impeccable-butler-android",
+    "name": "Alistair, the Impeccable Butler",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 6,
+    "size": "Medium",
+    "summary": "A silver-haired android manservant in a perfect tailcoat who has served the same family for ninety years and will defend its honor - and its silverware - to the last guest.",
+    "tactics": "Politely offers tea, then fights with the economy of a fencing master: a tray to the throat, a thrown carving knife, a bow, and a request that you wipe your feet.",
+    "habitat": "old mansions, villain penthouses, haunted estates",
+    "weakness": "Bound by etiquette: it cannot refuse a proper request from a member of the household, and it will stop mid-fight to catch a falling vase.",
+    "tags": [
+      "construct",
+      "robot",
+      "android",
+      "servant",
+      "mansion"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": null,
+      "Agility": 3,
+      "Dexterity": 3,
+      "Fighting": 4,
+      "Intellect": 3,
+      "Awareness": 2,
+      "Presence": 2
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 2,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Insight",
+        "ranks": 2
+      },
+      {
+        "name": "Persuasion",
+        "ranks": 2
+      },
+      {
+        "name": "Deception",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Etiquette",
+        "ranks": 4
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Silver Tray",
+        "ranks": 2
+      },
+      {
+        "name": "Stealth",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improvised Weapon",
+        "rank": 1
+      },
+      {
+        "name": "Defensive Attack",
+        "rank": 1
+      },
+      {
+        "name": "Interpose",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Android",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Reinforced Waistcoat (non-impervious ranks)",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Carving Knife Throw",
+        "effect": "Damage",
+        "rank": 6,
+        "role": "attack",
+        "range": "Ranged",
+        "alternates": [
+          {
+            "name": "Silver Tray",
+            "effect": "Damage",
+            "rank": 2,
+            "role": "attack",
+            "strengthBased": true
+          }
+        ]
+      },
+      {
+        "name": "House Systems",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Controls the mansion's locks, lights and hidden doors; knows every secret passage",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "porcelain-widow",
+    "name": "Porcelain Widow",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 11,
+    "size": "Medium",
+    "summary": "A breathtakingly beautiful android with a face of white porcelain under her human mask. She has attended a hundred galas and left a body at every one.",
+    "tactics": "Gets close through charm and disguise, strikes from inside the target's guard with needle fingers, and vanishes into the crowd before the alarm sounds.",
+    "habitat": "galas, embassies, high society",
+    "weakness": "Her face cracks under a sonic attack, and she was built vain: damaging her porcelain features sends her into a cold, careless rage.",
+    "tags": [
+      "construct",
+      "robot",
+      "android",
+      "assassin",
+      "spy"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 5,
+      "Stamina": null,
+      "Agility": 7,
+      "Dexterity": 7,
+      "Fighting": 10,
+      "Intellect": 2,
+      "Awareness": 5,
+      "Presence": 3
+    },
+    "defenses": {
+      "Dodge": 5,
+      "Parry": 2,
+      "Fortitude": 0,
+      "Will": 4
+    },
+    "skills": [
+      {
+        "name": "Acrobatics",
+        "ranks": 6
+      },
+      {
+        "name": "Stealth",
+        "ranks": 8
+      },
+      {
+        "name": "Deception",
+        "ranks": 8
+      },
+      {
+        "name": "Persuasion",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 8
+      },
+      {
+        "name": "Insight",
+        "ranks": 4
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Needle Fingers",
+        "ranks": 2
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Wrist Darts",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Evasion",
+        "rank": 1
+      },
+      {
+        "name": "Assessment",
+        "rank": 1
+      },
+      {
+        "name": "Hide in Plain Sight",
+        "rank": 1
+      },
+      {
+        "name": "Daze",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      },
+      {
+        "name": "Agile Feint",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Android",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Ceramic Skin (non-impervious ranks)",
+        "effect": "Protection",
+        "rank": 10,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Subtle"
+          }
+        ]
+      },
+      {
+        "name": "Wrist Darts",
+        "effect": "Affliction",
+        "rank": 10,
+        "role": "attack",
+        "range": "Ranged",
+        "detail": "Paralytic toxin: Hindered, Immobile, Paralyzed; resisted by Fortitude",
+        "alternates": [
+          {
+            "name": "Needle Fingers",
+            "effect": "Damage",
+            "rank": 5,
+            "role": "attack",
+            "strengthBased": true,
+            "extras": [
+              {
+                "name": "Penetrating",
+                "steps": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Synthetic Disguise",
+        "effect": "Morph",
+        "rank": 2,
+        "detail": "Any human face and voice",
+        "role": "utility"
+      },
+      {
+        "name": "Dead Silence",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Makes no heartbeat, breath or body heat",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "grey-bloom-nanites",
+    "name": "Grey Bloom Nanite Cloud",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 9,
+    "size": "Large",
+    "summary": "A drifting silver haze of trillions of self-replicating nanomachines, endlessly turning cars, buildings and people into more grey haze.",
+    "tactics": "Rolls over the nearest metal or living thing and simply eats it; it grows wherever it feeds, so it always heads for the densest target.",
+    "habitat": "labs after a containment breach, dead zones, scrap yards",
+    "weakness": "A strong electromagnetic pulse or intense cold freezes the swarm's machinery solid, and it cannot cross a vacuum.",
+    "tags": [
+      "construct",
+      "robot",
+      "swarm",
+      "nanotech",
+      "doomsday"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": null,
+      "Agility": 4,
+      "Dexterity": 0,
+      "Fighting": 8,
+      "Intellect": null,
+      "Awareness": 6,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 5,
+      "Parry": 4,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 8
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Nanites",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Dispersed Mass (non-impervious ranks)",
+        "effect": "Protection",
+        "rank": 5,
+        "role": "defense"
+      },
+      {
+        "name": "Nanite Cloud",
+        "effect": "Insubstantial",
+        "rank": 2,
+        "detail": "A shimmering silver fog",
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "defense"
+      },
+      {
+        "name": "Disassemble",
+        "effect": "Weaken",
+        "rank": 9,
+        "role": "attack",
+        "detail": "Toughness (eats armor, objects and flesh molecule by molecule); resisted by Fortitude",
+        "extras": [
+          {
+            "name": "Affects Objects",
+            "option": "Objects and creatures"
+          }
+        ],
+        "alternates": [
+          {
+            "name": "Engulfing Bloom",
+            "effect": "Damage",
+            "rank": 9,
+            "role": "attack",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Cloud"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Feed and Replicate",
+        "effect": "Regeneration",
+        "rank": 9,
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Source",
+            "detail": "metal or organic matter to consume"
+          }
+        ]
+      },
+      {
+        "name": "Drift",
+        "effect": "Flight",
+        "rank": 3,
+        "role": "movement"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 5,
+        "detail": "Detect Matter (accurate, ranged), Darkvision, Detect Electronics",
+        "role": "sense"
+      },
+      {
+        "name": "Spawn Bloom",
+        "effect": "Summon",
+        "rank": 4,
+        "role": "control",
+        "detail": "Splits off PL 4 nanite clouds",
+        "extras": [
+          {
+            "name": "Multiple Minions",
+            "steps": 1
+          }
+        ]
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "stomper-war-walker",
+    "name": "Stomper War Walker",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 9,
+    "size": "Huge",
+    "summary": "A two-legged armored war walker the size of a house, its chicken-legged gait shaking windows as its chin autocannons hunt for targets.",
+    "tactics": "Plants itself in the middle of the street and hoses the area with rocket pods, stomping anything that gets under its legs.",
+    "habitat": "war zones, military bases, invaded cities",
+    "weakness": "Its reverse-jointed knees are lightly armored, and it falls over hard if both legs are tangled or knocked out.",
+    "tags": [
+      "construct",
+      "robot",
+      "military",
+      "walker",
+      "vehicle-sized"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": null,
+      "Agility": 0,
+      "Dexterity": 5,
+      "Fighting": 3,
+      "Intellect": null,
+      "Awareness": 4,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 8,
+      "Parry": 5,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Chin Autocannons",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Critical",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Huge Size",
+        "effect": "Growth",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Robot",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Tank Armor",
+        "effect": "Protection",
+        "rank": 6,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Chin Autocannons",
+        "effect": "Damage",
+        "rank": 9,
+        "role": "attack",
+        "range": "Ranged",
+        "extras": [
+          {
+            "name": "Multiattack"
+          }
+        ],
+        "alternates": [
+          {
+            "name": "Rocket Pods",
+            "effect": "Damage",
+            "rank": 9,
+            "role": "attack",
+            "range": "Ranged",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Burst"
+              }
+            ]
+          },
+          {
+            "name": "Flamethrower",
+            "effect": "Damage",
+            "rank": 9,
+            "role": "attack",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Cone"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 6,
+        "detail": "Infravision, Radio, Extended Vision (x2), Low-light Vision, Direction Sense",
+        "role": "sense"
+      },
+      {
+        "name": "Long Stride",
+        "effect": "Speed",
+        "rank": 5,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "scrapjaw-robo-hound",
+    "name": "Scrapjaw Robo-Hound",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 5,
+    "size": "Medium",
+    "summary": "A lean steel hound with a bear-trap jaw and red optic slits, sold to villains and private security in packs of six.",
+    "tactics": "Hunts in packs, flanking and tripping, then piling onto whoever is down; one always hangs back howling the target's position.",
+    "habitat": "villain compounds, junkyards, corporate grounds",
+    "weakness": "Its scent tracker can be overloaded with strong chemicals, and the pack obeys a handler's dog whistle frequency.",
+    "tags": [
+      "construct",
+      "robot",
+      "animal",
+      "hunter",
+      "pack"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": null,
+      "Agility": 3,
+      "Dexterity": 0,
+      "Fighting": 5,
+      "Intellect": null,
+      "Awareness": 4,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 1,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Trip",
+        "rank": 1
+      },
+      {
+        "name": "Teamwork",
+        "rank": 1
+      },
+      {
+        "name": "Takedown",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Robot",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Plated Hide",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Steel Jaws",
+        "effect": "Damage",
+        "rank": 2,
+        "role": "attack",
+        "strengthBased": true,
+        "extras": [
+          {
+            "name": "Penetrating",
+            "steps": 2
+          }
+        ]
+      },
+      {
+        "name": "Servo Legs",
+        "effect": "Speed",
+        "rank": 4,
+        "role": "movement"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 5,
+        "detail": "Scent, Tracking, Infravision, Ultra-Hearing, Low-light Vision",
+        "role": "sense"
+      },
+      {
+        "name": "Homing Howl",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Transmits its location and its prey's to the rest of the pack",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "halo-sentry-saucer",
+    "name": "Halo Sentry Saucer",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 6,
+    "size": "Small",
+    "summary": "A gleaming chrome saucer the size of a hubcap that hovers silently over its patrol zone, ringed with soft blue running lights that turn red when it finds you.",
+    "tactics": "Holds altitude out of reach, blinds with its strobe, then lifts targets into the air with its tractor beam and drops them.",
+    "habitat": "skies over secret bases, alien ships, rural fields at night",
+    "weakness": "Its anti-grav field fails over strong magnetic sources; a powerful magnet or electrical surge sends it spinning to the ground.",
+    "tags": [
+      "construct",
+      "robot",
+      "flying",
+      "security",
+      "alien"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": -1,
+      "Stamina": null,
+      "Agility": 3,
+      "Dexterity": 5,
+      "Fighting": 0,
+      "Intellect": null,
+      "Awareness": 5,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 8
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Underside Ray",
+        "ranks": 1
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Aim",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Small Size",
+        "effect": "Shrinking",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Sentry",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Gravitic Hull",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Underside Ray",
+        "effect": "Damage",
+        "rank": 6,
+        "role": "attack",
+        "range": "Ranged",
+        "alternates": [
+          {
+            "name": "Tractor Beam",
+            "effect": "Move Object",
+            "rank": 6,
+            "role": "control",
+            "detail": "Lifts a target up toward the saucer"
+          },
+          {
+            "name": "Searchlight Strobe",
+            "effect": "Dazzle",
+            "rank": 3,
+            "role": "attack",
+            "detail": "Visual; resisted by Fortitude"
+          }
+        ]
+      },
+      {
+        "name": "Anti-Grav Disc",
+        "effect": "Flight",
+        "rank": 6,
+        "role": "movement"
+      },
+      {
+        "name": "Cloaking Field",
+        "effect": "Concealment",
+        "rank": 2,
+        "role": "defense",
+        "detail": "Normal vision"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Darkvision, Radio, Extended Vision, Detect Life (ranged)",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "rampart-siege-crawler",
+    "name": "Rampart Siege Crawler",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 12,
+    "size": "Huge",
+    "summary": "A self-driving tracked siege engine the size of a bank building, built to batter down fortress walls and still doing it a century after the war ended.",
+    "tactics": "Rumbles forward relentlessly, levelling cover with its howitzer and flak, and treats any building between it and its target as an obstacle to be removed.",
+    "habitat": "battlefields, ruined cities, forgotten armories",
+    "weakness": "Its treads can be fouled with debris or cable, and the turret cannot depress far enough to hit anyone clinging to the hull.",
+    "tags": [
+      "construct",
+      "robot",
+      "military",
+      "tank",
+      "vehicle-sized"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": null,
+      "Agility": -2,
+      "Dexterity": 4,
+      "Fighting": 2,
+      "Intellect": null,
+      "Awareness": 5,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 11,
+      "Parry": 8,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 8
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Siege Howitzer",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Smash",
+        "rank": 1
+      },
+      {
+        "name": "Ranged Attack",
+        "rank": 2
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      },
+      {
+        "name": "Fearless",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Huge Size",
+        "effect": "Growth",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Robot",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Sealed Hull",
+        "effect": "Immunity",
+        "rank": 10,
+        "role": "defense",
+        "detail": "Cold, heat, radiation, vacuum, suffocation"
+      },
+      {
+        "name": "Siege Armor",
+        "effect": "Protection",
+        "rank": 10,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Self-Repair",
+        "effect": "Regeneration",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Siege Howitzer",
+        "effect": "Damage",
+        "rank": 12,
+        "role": "attack",
+        "range": "Ranged",
+        "extras": [
+          {
+            "name": "Penetrating",
+            "steps": 12
+          }
+        ],
+        "alternates": [
+          {
+            "name": "Flak Barrage",
+            "effect": "Damage",
+            "rank": 12,
+            "role": "attack",
+            "range": "Ranged",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Burst"
+              }
+            ],
+            "detail": "Shrapnel shells that blanket a city block"
+          },
+          {
+            "name": "Breaching Ram",
+            "effect": "Damage",
+            "rank": 8,
+            "role": "attack",
+            "strengthBased": true,
+            "detail": "Battering ram on the prow"
+          }
+        ]
+      },
+      {
+        "name": "Treads",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Rolls over cars and barricades without slowing",
+        "role": "utility"
+      },
+      {
+        "name": "Fortress Treads",
+        "effect": "Speed",
+        "rank": 3,
+        "role": "movement"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 6,
+        "detail": "Infravision, Radio, Extended Vision (x2), Darkvision, Direction Sense",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "rustmonger-scrap-golem",
+    "name": "Rustmonger",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 7,
+    "size": "Large",
+    "summary": "A hulking shape of crushed cars, rusted fridges and shopping carts held together by a magnetized heart, rising out of the junkyard whenever trespassers come.",
+    "tactics": "Pulls metal toward itself mid-fight - weapons, armor, manhole covers - and grows new limbs out of whatever it catches before hurling the rest.",
+    "habitat": "junkyards, wrecking yards, landfills",
+    "weakness": "Pull out its glowing magnet core and it collapses into a heap; it also cannot repair itself anywhere without scrap to draw on.",
+    "tags": [
+      "construct",
+      "robot",
+      "junk",
+      "magnetic",
+      "scavenger"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 5,
+      "Stamina": null,
+      "Agility": 0,
+      "Dexterity": 3,
+      "Fighting": 5,
+      "Intellect": null,
+      "Awareness": 4,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 6,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Hurled Junk",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improvised Weapon",
+        "rank": 2
+      },
+      {
+        "name": "Throwing Mastery",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Scrap",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Junk Plating",
+        "effect": "Protection",
+        "rank": 6,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Hurled Junk",
+        "effect": "Damage",
+        "rank": 7,
+        "role": "attack",
+        "range": "Ranged",
+        "detail": "Car doors, washing machines, engine blocks"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Detect Metal (ranged), Radio",
+        "role": "sense"
+      },
+      {
+        "name": "Magnetic Pull",
+        "effect": "Move Object",
+        "rank": 8,
+        "role": "control",
+        "detail": "Metal objects only - including armored heroes"
+      },
+      {
+        "name": "Accrete Scrap",
+        "effect": "Regeneration",
+        "rank": 6,
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Source",
+            "detail": "piles of scrap metal"
+          }
+        ]
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "lumen-glass-ghost",
+    "name": "Lumen, the Glass Ghost",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 10,
+    "size": "Medium",
+    "summary": "The shimmering hologram avatar of a rogue artificial intelligence: a tall woman of glass and light whose face flickers through every person she has ever watched on camera.",
+    "tactics": "Never fights where she can be touched; she hops between projectors, walls heroes in with hard light, and turns the building's own machines against them.",
+    "habitat": "smart buildings, server farms, the internet",
+    "weakness": "She exists only where there are emitters and power: cut the electricity or smash the projectors and she has nowhere to stand.",
+    "tags": [
+      "construct",
+      "robot",
+      "ai",
+      "hologram",
+      "mastermind"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": null,
+      "Stamina": null,
+      "Agility": 4,
+      "Dexterity": 6,
+      "Fighting": 4,
+      "Intellect": 8,
+      "Awareness": 5,
+      "Presence": 4
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 4,
+      "Fortitude": 0,
+      "Will": 6
+    },
+    "skills": [
+      {
+        "name": "Technology",
+        "ranks": 10
+      },
+      {
+        "name": "Expertise",
+        "spec": "Computers",
+        "ranks": 6
+      },
+      {
+        "name": "Investigation",
+        "ranks": 4
+      },
+      {
+        "name": "Deception",
+        "ranks": 4
+      },
+      {
+        "name": "Insight",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Hard-Light Lance",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Eidetic Memory",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "AI",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Hologram Body",
+        "effect": "Insubstantial",
+        "rank": 4,
+        "role": "defense",
+        "detail": "Pure light; can make parts of itself hard-light solid"
+      },
+      {
+        "name": "Hard-Light Lance",
+        "effect": "Damage",
+        "rank": 10,
+        "role": "attack",
+        "range": "Ranged",
+        "alternates": [
+          {
+            "name": "Hard-Light Constructs",
+            "effect": "Create",
+            "rank": 8,
+            "role": "control",
+            "detail": "Walls, cages and stairs of solid light"
+          },
+          {
+            "name": "Strobe Overload",
+            "effect": "Affliction",
+            "rank": 10,
+            "role": "attack",
+            "range": "Ranged",
+            "detail": "Dazed, Stunned, Incapacitated (seizure-light pattern); resisted by Will"
+          },
+          {
+            "name": "Hijack Systems",
+            "effect": "Mind Control",
+            "rank": 5,
+            "role": "control",
+            "detail": "Machines and computers only"
+          }
+        ]
+      },
+      {
+        "name": "Network Jump",
+        "effect": "Teleport",
+        "rank": 8,
+        "role": "movement",
+        "detail": "Only between screens, projectors and holo-emitters",
+        "flaws": [
+          {
+            "name": "Limited"
+          }
+        ]
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Remote cameras across its network, Radio, Detect Electronics (ranged)",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "construct_note": "An AI with no body: absent Strength (and Stamina). Its hologram is Insubstantial 4 rather than Protection.",
+    "source": "DCUGen"
+  },
+  {
+    "id": "brood-engine-fabricator",
+    "name": "The Brood Engine",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 11,
+    "size": "Huge",
+    "summary": "A crawling factory the size of a warehouse that eats scrap at one end and births armed drones at the other. Left alone for a week, it would build a country.",
+    "tactics": "Hangs back behind ever-growing waves of new drones, recycling wrecked ones and stripping heroes' gear for parts.",
+    "habitat": "abandoned factories, scrap fields, asteroid mines",
+    "weakness": "Its whole army relies on its central broadcast core; destroy that and every drone it built drops dead at once.",
+    "tags": [
+      "construct",
+      "robot",
+      "replicator",
+      "factory",
+      "swarm"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": null,
+      "Agility": -2,
+      "Dexterity": 4,
+      "Fighting": 2,
+      "Intellect": 4,
+      "Awareness": 4,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 8,
+      "Parry": 8,
+      "Fortitude": 0,
+      "Will": 6
+    },
+    "skills": [
+      {
+        "name": "Technology",
+        "ranks": 12
+      },
+      {
+        "name": "Perception",
+        "ranks": 8
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Rivet Cannon",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Inventor",
+        "rank": 1
+      },
+      {
+        "name": "Improvised Tools",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Huge Size",
+        "effect": "Growth",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Factory",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Foundry Shell",
+        "effect": "Protection",
+        "rank": 7,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Assembly Line",
+        "effect": "Summon",
+        "rank": 5,
+        "role": "control",
+        "detail": "Builds PL 5 drone soldiers from scrap in seconds",
+        "extras": [
+          {
+            "name": "Multiple Minions",
+            "steps": 2
+          },
+          {
+            "name": "Horde"
+          }
+        ]
+      },
+      {
+        "name": "Rivet Cannon",
+        "effect": "Damage",
+        "rank": 7,
+        "role": "attack",
+        "range": "Ranged"
+      },
+      {
+        "name": "Deconstructor Arms",
+        "effect": "Weaken",
+        "rank": 6,
+        "role": "attack",
+        "detail": "Toughness of objects and constructs; strips armor for parts",
+        "extras": [
+          {
+            "name": "Affects Objects",
+            "option": "Objects and creatures"
+          }
+        ]
+      },
+      {
+        "name": "Fabricate",
+        "effect": "Create",
+        "rank": 6,
+        "role": "utility",
+        "detail": "Walls, barricades and spare parts"
+      }
+    ],
+    "equipment": [],
+    "construct_note": "Has a working Intellect (it designs things) but no Presence.",
+    "source": "DCUGen"
+  },
+  {
+    "id": "deadfall-killsat",
+    "name": "Deadfall Killsat",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 13,
+    "size": "Large",
+    "summary": "A spined black satellite that has spent forty years in a secret orbit waiting for a launch code. Now it has picked its own targets, and it never misses from space.",
+    "tactics": "Opens with kinetic slugs from beyond the horizon, then drops into the atmosphere to fry electronics with its EMP and finish targets with its microwave lance.",
+    "habitat": "low orbit, the upper atmosphere, satellite graveyards",
+    "weakness": "Its targeting uplink still listens for the original military override codes, and its thrusters overheat fast in the atmosphere.",
+    "tags": [
+      "construct",
+      "robot",
+      "space",
+      "satellite",
+      "military"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": -2,
+      "Stamina": null,
+      "Agility": 0,
+      "Dexterity": 8,
+      "Fighting": 0,
+      "Intellect": null,
+      "Awareness": 8,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 14,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 12
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Kinetic Slug",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Aim",
+        "rank": 1
+      },
+      {
+        "name": "Precise Attack",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Frame",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Satellite",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Space-Hardened",
+        "effect": "Immunity",
+        "rank": 10,
+        "role": "defense",
+        "detail": "Cold, heat, radiation, vacuum, suffocation"
+      },
+      {
+        "name": "Radiation Shielding",
+        "effect": "Protection",
+        "rank": 10,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Self-Repair",
+        "effect": "Regeneration",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Stealth Coating",
+        "effect": "Concealment",
+        "rank": 4,
+        "role": "defense",
+        "detail": "Radar and normal vision"
+      },
+      {
+        "name": "Kinetic Slug",
+        "effect": "Damage",
+        "rank": 12,
+        "role": "attack",
+        "range": "Ranged",
+        "extras": [
+          {
+            "name": "Extended Range",
+            "steps": 6
+          }
+        ],
+        "detail": "Tungsten rods dropped from orbit",
+        "alternates": [
+          {
+            "name": "Microwave Lance",
+            "effect": "Damage",
+            "rank": 12,
+            "role": "attack",
+            "range": "Ranged",
+            "extras": [
+              {
+                "name": "Penetrating",
+                "steps": 6
+              }
+            ]
+          },
+          {
+            "name": "EMP Burst",
+            "effect": "Nullify",
+            "rank": 12,
+            "role": "attack",
+            "detail": "Electrical and technological powers and devices",
+            "extras": [
+              {
+                "name": "Broad"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ion Thrusters",
+        "effect": "Flight",
+        "rank": 10,
+        "role": "movement"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 8,
+        "detail": "Extended Vision (x4), Radio, Infravision, Darkvision, Detect Energy, Direction Sense",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "final-theorem-doomsday-robot",
+    "name": "OMEGA THEOREM, the Last Machine",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 20,
+    "size": "Awesome",
+    "summary": "The masterpiece of a mad genius who wanted to prove the universe was a solvable equation: a mountain-sized black robot whose single eye can erase a skyscraper. It has proved most of the equation. Earth is the remainder.",
+    "tactics": "Strides through the city deleting landmarks while drone swarms keep heroes busy; it saves its gravity crusher and EMP for whoever looks like a real threat.",
+    "habitat": "a hidden lab beneath the arctic ice, then the nearest capital city",
+    "weakness": "Its creator built in an unsolvable paradox as a failsafe: feed it the right logical contradiction and it locks up for crucial minutes.",
+    "tags": [
+      "construct",
+      "robot",
+      "doomsday",
+      "giant",
+      "mastermind",
+      "mad-science"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": null,
+      "Agility": 0,
+      "Dexterity": 6,
+      "Fighting": 6,
+      "Intellect": 8,
+      "Awareness": 6,
+      "Presence": 4
+    },
+    "defenses": {
+      "Dodge": 16,
+      "Parry": 10,
+      "Fortitude": 0,
+      "Will": 8
+    },
+    "skills": [
+      {
+        "name": "Technology",
+        "ranks": 16
+      },
+      {
+        "name": "Expertise",
+        "spec": "Physics",
+        "ranks": 8
+      },
+      {
+        "name": "Perception",
+        "ranks": 10
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 6
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Annihilation Eye",
+        "ranks": 8
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Inventor",
+        "rank": 1
+      },
+      {
+        "name": "Fearless",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 2
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Improved Smash",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Awesome Size",
+        "effect": "Growth",
+        "rank": 20,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Doomsday Machine",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Sealed Systems",
+        "effect": "Immunity",
+        "rank": 10,
+        "role": "defense",
+        "detail": "Cold, heat, radiation, vacuum, suffocation"
+      },
+      {
+        "name": "Neutronium Hull",
+        "effect": "Protection",
+        "rank": 14,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Annihilation Eye",
+        "effect": "Damage",
+        "rank": 20,
+        "role": "attack",
+        "range": "Ranged",
+        "alternates": [
+          {
+            "name": "Doomsday Pulse",
+            "effect": "Damage",
+            "rank": 20,
+            "role": "attack",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Burst"
+              }
+            ],
+            "detail": "A city-shaking blast of white fire"
+          },
+          {
+            "name": "Gravity Crusher",
+            "effect": "Affliction",
+            "rank": 13,
+            "role": "attack",
+            "range": "Ranged",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Burst"
+              }
+            ],
+            "detail": "Hindered, Immobile, Paralyzed (pinned by gravity); resisted by Fortitude"
+          },
+          {
+            "name": "Mass EMP",
+            "effect": "Nullify",
+            "rank": 13,
+            "role": "attack",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Burst"
+              },
+              {
+                "name": "Broad"
+              }
+            ],
+            "detail": "All technology in range"
+          }
+        ]
+      },
+      {
+        "name": "Gravitic Lift",
+        "effect": "Flight",
+        "rank": 6,
+        "role": "movement"
+      },
+      {
+        "name": "Nanite Hull Repair",
+        "effect": "Regeneration",
+        "rank": 6,
+        "role": "defense"
+      },
+      {
+        "name": "Drone Hangars",
+        "effect": "Summon",
+        "rank": 4,
+        "role": "control",
+        "detail": "Launches swarms of PL 4 attack drones",
+        "extras": [
+          {
+            "name": "Multiple Minions",
+            "steps": 1
+          },
+          {
+            "name": "Horde"
+          }
+        ]
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 6,
+        "detail": "Radio, Extended Vision (x4), Infravision, Darkvision, Detect Energy (ranged, accurate)",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "construct_note": "Toughness = Growth 20 + Protection 14. Awesome size reduces Dodge and Parry by 10.",
+    "source": "DCUGen"
+  },
+  {
+    "id": "snack-attack-vending-mimic",
+    "name": "Snack-Attack Vending Mimic",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "An ordinary office vending machine possessed by a rogue appliance-control program. It waits until someone feeds it a dollar - then it eats the arm.",
+    "tactics": "Ambushes from its spot by the elevators, chomps whoever is closest, then rolls backwards firing frozen soda cans at high velocity.",
+    "habitat": "office break rooms, train stations, school hallways",
+    "weakness": "Still a vending machine: unplug it and it slumps; inserting exact change makes it compulsively dispense instead of attack for a round.",
+    "tags": [
+      "construct",
+      "robot",
+      "ambush",
+      "comedy",
+      "urban"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 5,
+      "Stamina": null,
+      "Agility": -1,
+      "Dexterity": 3,
+      "Fighting": 2,
+      "Intellect": null,
+      "Awareness": 2,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 1,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Ranged Combat",
+        "spec": "Soda Can Cannon",
+        "ranks": 1
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 8
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Robot",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Steel Cabinet (non-impervious ranks)",
+        "effect": "Protection",
+        "rank": 5,
+        "role": "defense"
+      },
+      {
+        "name": "Soda Can Cannon",
+        "effect": "Damage",
+        "rank": 4,
+        "role": "attack",
+        "range": "Ranged",
+        "extras": [
+          {
+            "name": "Multiattack"
+          }
+        ]
+      },
+      {
+        "name": "Coin-Slot Chomp",
+        "effect": "Damage",
+        "rank": 1,
+        "role": "attack",
+        "strengthBased": true,
+        "detail": "The dispensing flap snaps shut on a reaching arm"
+      },
+      {
+        "name": "Disguise",
+        "effect": "Feature",
+        "rank": 1,
+        "role": "utility",
+        "detail": "Indistinguishable from an ordinary vending machine until it moves"
+      },
+      {
+        "name": "Caster Wheels",
+        "effect": "Speed",
+        "rank": 1,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "silverback-siege-simian",
+    "name": "Silverback Siege Simian",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 10,
+    "size": "Huge",
+    "summary": "A five-story chrome gorilla with jet-black gears for muscles, built by a lunatic primatologist to crown himself king of the jungle - the concrete one.",
+    "tactics": "Climbs the tallest building it can find, beats its chest with a sound like a bell foundry, then leaps down onto the biggest crowd of heroes.",
+    "habitat": "skyscraper rooftops, zoos, jungle temples hiding secret labs",
+    "weakness": "Its control crown sits on its head; anyone who can climb up there and pry it off can steer the ape - or switch it off.",
+    "tags": [
+      "construct",
+      "robot",
+      "giant",
+      "gorilla",
+      "rampage"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 6,
+      "Stamina": null,
+      "Agility": 2,
+      "Dexterity": 4,
+      "Fighting": 6,
+      "Intellect": null,
+      "Awareness": 5,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 8,
+      "Parry": 4,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 8
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Chest-Laser",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Improved Smash",
+        "rank": 1
+      },
+      {
+        "name": "Fast Grab",
+        "rank": 1
+      },
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "All-out Attack",
+        "rank": 1
+      },
+      {
+        "name": "Fearless",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Huge Size",
+        "effect": "Growth",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Robot",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Chrome Pelt",
+        "effect": "Protection",
+        "rank": 6,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Ground Pound",
+        "effect": "Damage",
+        "rank": 10,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "detail": "Shockwave from both fists hitting the street",
+        "alternates": [
+          {
+            "name": "Chest-Laser",
+            "effect": "Damage",
+            "rank": 8,
+            "role": "attack",
+            "range": "Ranged"
+          },
+          {
+            "name": "Hurled Car",
+            "effect": "Damage",
+            "rank": 8,
+            "role": "attack",
+            "range": "Ranged",
+            "detail": "Whatever is parked nearby"
+          }
+        ]
+      },
+      {
+        "name": "Gorilla Grip",
+        "effect": "Power-Lifting",
+        "rank": 4,
+        "role": "utility"
+      },
+      {
+        "name": "Self-Repair",
+        "effect": "Regeneration",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Wall Climber",
+        "effect": "Movement",
+        "rank": 1,
+        "role": "movement",
+        "detail": "Wall-crawling (climbs skyscrapers)"
+      },
+      {
+        "name": "Knuckle Gallop",
+        "effect": "Leaping",
+        "rank": 6,
+        "role": "movement"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Infravision, Radio, Low-light Vision, Extended Vision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "toybox-tin-legion",
+    "name": "Toybox Tin Legion",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Robots",
+    "pl": 1,
+    "size": "Small",
+    "summary": "Rank on rank of foot-tall wind-up tin soldiers marching out of a toy chest under a supervillain's Christmas tree, popguns raised.",
+    "tactics": "Advances in a straight line to the beat of a drum, firing in volleys; individually harmless, but there are always hundreds.",
+    "habitat": "toy stores, nurseries, a villain's workshop",
+    "weakness": "They have to be wound up: once their keys stop turning they freeze mid-step, and a sharp tug pulls the key right out.",
+    "tags": [
+      "construct",
+      "robot",
+      "toy",
+      "comedy",
+      "swarm"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": null,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 0,
+      "Intellect": null,
+      "Awareness": 0,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Toy Size",
+        "effect": "Shrinking",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Toy",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Popgun",
+        "effect": "Damage",
+        "rank": 1,
+        "role": "attack",
+        "range": "Ranged",
+        "detail": "Fires dried peas at alarming speed"
+      },
+      {
+        "name": "Wind-up Rush",
+        "effect": "Speed",
+        "rank": 1,
+        "role": "movement"
+      },
+      {
+        "name": "Drill Sergeant",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Marches in perfect formation to a tiny drum",
+        "role": "utility"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 1,
+        "detail": "Low-light Vision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "hornet-exo-frame",
+    "name": "Hornet Exo-Frame",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Mechs & War Machines",
+    "pl": 8,
+    "size": "Large",
+    "summary": "A yellow-and-black piloted combat mech with insect wings that blur into a loud angry buzz, the favorite ride of a well-funded mercenary ace.",
+    "tactics": "Strafes in low and fast, rakes the area with gatling fire and missiles, then lands to finish a downed foe with the stinger blade.",
+    "habitat": "mercenary airbases, war zones, rooftop dogfights",
+    "weakness": "The pilot sits behind a bubble canopy: crack the glass and the pilot is exposed, and the wings jam if hit with something sticky.",
+    "tags": [
+      "construct",
+      "mech",
+      "piloted",
+      "military",
+      "flying"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 6,
+      "Stamina": null,
+      "Agility": 1,
+      "Dexterity": 4,
+      "Fighting": 5,
+      "Intellect": 1,
+      "Awareness": 2,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 6,
+      "Parry": 3,
+      "Fortitude": 0,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Vehicles",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Gatling Arm",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Move-by Action",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Mech",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Composite Armor",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Composite Armor (non-impervious ranks)",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense"
+      },
+      {
+        "name": "Gatling Arm",
+        "effect": "Damage",
+        "rank": 8,
+        "role": "attack",
+        "range": "Ranged",
+        "extras": [
+          {
+            "name": "Multiattack"
+          }
+        ],
+        "alternates": [
+          {
+            "name": "Stinger Blade",
+            "effect": "Damage",
+            "rank": 1,
+            "role": "attack",
+            "strengthBased": true,
+            "extras": [
+              {
+                "name": "Penetrating",
+                "steps": 2
+              }
+            ]
+          },
+          {
+            "name": "Hornet Missiles",
+            "effect": "Damage",
+            "rank": 8,
+            "role": "attack",
+            "range": "Ranged",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Burst"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Wing Thrusters",
+        "effect": "Flight",
+        "rank": 4,
+        "role": "movement"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Radio, Infravision, Extended Vision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "construct_note": "Intellect and Presence are the pilot's; the frame itself is the body.",
+    "source": "DCUGen"
+  },
+  {
+    "id": "bastion-prime-city-mech",
+    "name": "Bastion Prime, Shield of the City",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Mechs & War Machines",
+    "pl": 17,
+    "size": "Colossal",
+    "summary": "A gleaming white and blue super-robot as tall as a skyscraper, built by the city to fight the giant monsters that keep rising from the bay. Its eyes light up gold when its five-pilot crew syncs.",
+    "tactics": "Fights on the defensive, putting itself between the threat and the city, throwing barrier walls over civilians before it unleashes the rocket fist.",
+    "habitat": "its hangar under the harbor, kaiju battlefields",
+    "weakness": "It needs a full crew and full sync: knock one pilot out of the link and it slows; it also dares not fight where it would crush civilians.",
+    "tags": [
+      "construct",
+      "mech",
+      "giant",
+      "piloted",
+      "heroic",
+      "vehicle-sized"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": null,
+      "Agility": 0,
+      "Dexterity": 4,
+      "Fighting": 4,
+      "Intellect": 2,
+      "Awareness": 4,
+      "Presence": 2
+    },
+    "defenses": {
+      "Dodge": 14,
+      "Parry": 10,
+      "Fortitude": 0,
+      "Will": 10
+    },
+    "skills": [
+      {
+        "name": "Vehicles",
+        "ranks": 8
+      },
+      {
+        "name": "Perception",
+        "ranks": 8
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Photon Cannon",
+        "ranks": 10
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 8
+      },
+      {
+        "name": "Technology",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Interpose",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Improved Smash",
+        "rank": 1
+      },
+      {
+        "name": "Fearless",
+        "rank": 1
+      },
+      {
+        "name": "Takedown",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Colossal Size",
+        "effect": "Growth",
+        "rank": 16,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Mech",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Sealed Cockpit",
+        "effect": "Immunity",
+        "rank": 10,
+        "role": "defense",
+        "detail": "Cold, heat, radiation, vacuum, suffocation"
+      },
+      {
+        "name": "Citadel Armor",
+        "effect": "Protection",
+        "rank": 12,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Photon Cannon",
+        "effect": "Damage",
+        "rank": 16,
+        "role": "attack",
+        "range": "Ranged",
+        "alternates": [
+          {
+            "name": "Rocket Fist",
+            "effect": "Damage",
+            "rank": 16,
+            "role": "attack",
+            "range": "Ranged",
+            "detail": "The forearm launches, homes in and returns"
+          },
+          {
+            "name": "Missile Storm",
+            "effect": "Damage",
+            "rank": 10,
+            "role": "attack",
+            "range": "Ranged",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Burst"
+              }
+            ]
+          },
+          {
+            "name": "Barrier Projector",
+            "effect": "Create",
+            "rank": 12,
+            "role": "control",
+            "detail": "Hexagonal energy walls to shield civilians"
+          }
+        ]
+      },
+      {
+        "name": "Booster Rockets",
+        "effect": "Flight",
+        "rank": 9,
+        "role": "movement"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 6,
+        "detail": "Radio, Extended Vision (x2), Infravision, Darkvision, Detect Kaiju (ranged)",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "construct_note": "Toughness = Growth 16 + Protection 12. Intellect and Presence belong to its pilots.",
+    "source": "DCUGen"
+  },
+  {
+    "id": "wyrmforge-mecha-dragon",
+    "name": "Wyrmforge Mecha-Dragon",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Mechs & War Machines",
+    "pl": 14,
+    "size": "Gargantuan",
+    "summary": "A dragon of riveted steel scales and jet turbines, built by a tech-cult that worships the old wyrms. Its furnace-heart glows orange through the gaps in its chest plates.",
+    "tactics": "Flies over the battlefield bathing whole streets in thermite, then lands among the survivors to tear and lash with claws and tail.",
+    "habitat": "mountain fortresses, the sky over burning cities",
+    "weakness": "Its furnace-heart has to vent: right after it breathes, the chest plates open for a moment and the reactor is exposed.",
+    "tags": [
+      "construct",
+      "mech",
+      "dragon",
+      "giant",
+      "flying",
+      "fire"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 6,
+      "Stamina": null,
+      "Agility": 1,
+      "Dexterity": 4,
+      "Fighting": 6,
+      "Intellect": null,
+      "Awareness": 6,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 10,
+      "Parry": 6,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 10
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Rending Claws",
+        "ranks": 3
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Improved Smash",
+        "rank": 1
+      },
+      {
+        "name": "Fearless",
+        "rank": 1
+      },
+      {
+        "name": "Improved Critical",
+        "rank": 1
+      },
+      {
+        "name": "Fast Grab",
+        "rank": 1
+      },
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Gargantuan Size",
+        "effect": "Growth",
+        "rank": 12,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Mecha-Dragon",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Furnace Heart",
+        "effect": "Immunity",
+        "rank": 10,
+        "role": "defense",
+        "detail": "Fire and heat damage"
+      },
+      {
+        "name": "Scaled Plating",
+        "effect": "Protection",
+        "rank": 10,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Thermite Breath",
+        "effect": "Damage",
+        "rank": 14,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cone"
+          },
+          {
+            "name": "Penetrating",
+            "steps": 7
+          }
+        ],
+        "detail": "A roaring cone of molten metal fire",
+        "alternates": [
+          {
+            "name": "Rending Claws",
+            "effect": "Damage",
+            "rank": 1,
+            "role": "attack",
+            "strengthBased": true,
+            "extras": [
+              {
+                "name": "Multiattack"
+              }
+            ]
+          },
+          {
+            "name": "Tail Lash",
+            "effect": "Damage",
+            "rank": 14,
+            "role": "attack",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Line"
+              }
+            ],
+            "detail": "A sweep of the barbed steel tail"
+          },
+          {
+            "name": "Molten Rivet Spray",
+            "effect": "Damage",
+            "rank": 11,
+            "role": "attack",
+            "range": "Ranged",
+            "extras": [
+              {
+                "name": "Multiattack"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Turbine Wings",
+        "effect": "Flight",
+        "rank": 9,
+        "role": "movement"
+      },
+      {
+        "name": "Self-Repair",
+        "effect": "Regeneration",
+        "rank": 6,
+        "role": "defense"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 7,
+        "detail": "Infravision, Radio, Extended Vision (x2), Darkvision, Detect Heat (ranged, accurate)",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "arachnotank",
+    "name": "Arachnotank",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Mechs & War Machines",
+    "pl": 10,
+    "size": "Huge",
+    "summary": "An eight-legged tank with a turreted cannon where a spider's head should be. It walks up building faces as easily as streets and nets its prey in steel cable.",
+    "tactics": "Climbs to a high vantage point, webs fast-moving targets, and shells them while they struggle.",
+    "habitat": "military research bases, canyons, urban rooftops",
+    "weakness": "Each leg joint is a hydraulic weak point; break three legs on one side and it topples.",
+    "tags": [
+      "construct",
+      "mech",
+      "spider",
+      "tank",
+      "military"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": null,
+      "Agility": 2,
+      "Dexterity": 5,
+      "Fighting": 4,
+      "Intellect": null,
+      "Awareness": 5,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 6,
+      "Parry": 4,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 8
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Turret Cannon",
+        "ranks": 3
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Trip",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Huge Size",
+        "effect": "Growth",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Tank",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Hull Armor",
+        "effect": "Protection",
+        "rank": 8,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Turret Cannon",
+        "effect": "Damage",
+        "rank": 10,
+        "role": "attack",
+        "range": "Ranged",
+        "alternates": [
+          {
+            "name": "Steel Web Launcher",
+            "effect": "Snare",
+            "rank": 6,
+            "role": "attack",
+            "detail": "Cable nets fired from the abdomen"
+          },
+          {
+            "name": "Leg Spikes",
+            "effect": "Damage",
+            "rank": 1,
+            "role": "attack",
+            "strengthBased": true,
+            "extras": [
+              {
+                "name": "Multiattack"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Self-Repair",
+        "effect": "Regeneration",
+        "rank": 3,
+        "role": "defense"
+      },
+      {
+        "name": "Eight Legs",
+        "effect": "Movement",
+        "rank": 2,
+        "role": "movement",
+        "detail": "Wall-crawling, Sure-footed"
+      },
+      {
+        "name": "Scuttle",
+        "effect": "Speed",
+        "rank": 5,
+        "role": "movement"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 5,
+        "detail": "Infravision, Radio, Detect Motion (tremorsense), Extended Vision, Darkvision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "augerbeast-drill-tank",
+    "name": "The Augerbeast",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Mechs & War Machines",
+    "pl": 9,
+    "size": "Huge",
+    "summary": "A drill-nosed burrowing machine with a huge spinning cone of a snout and a rattlesnake-segmented body, sent up from beneath the city to swallow its foundations.",
+    "tactics": "Tunnels under its targets, collapses the ground beneath them, then bursts up through the rubble drill-first.",
+    "habitat": "beneath cities, mines, the hollow earth",
+    "weakness": "Blind on the surface beyond its tremor sense, and its drill overheats on dense metal; trap it on a steel plate and it stalls.",
+    "tags": [
+      "construct",
+      "mech",
+      "burrowing",
+      "monster",
+      "underground"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": null,
+      "Agility": -1,
+      "Dexterity": 1,
+      "Fighting": 3,
+      "Intellect": null,
+      "Awareness": 4,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 9,
+      "Parry": 5,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Smash",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Improved Charge",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Huge Size",
+        "effect": "Growth",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Drill Tank",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Bore Shielding",
+        "effect": "Immunity",
+        "rank": 5,
+        "role": "defense",
+        "detail": "Heat and crushing pressure underground"
+      },
+      {
+        "name": "Bore Plating",
+        "effect": "Protection",
+        "rank": 6,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Self-Repair",
+        "effect": "Regeneration",
+        "rank": 3,
+        "role": "defense"
+      },
+      {
+        "name": "Spiral Drill",
+        "effect": "Damage",
+        "rank": 2,
+        "role": "attack",
+        "strengthBased": true,
+        "extras": [
+          {
+            "name": "Penetrating",
+            "steps": 3
+          }
+        ]
+      },
+      {
+        "name": "Tunneling",
+        "effect": "Burrowing",
+        "rank": 10,
+        "role": "movement"
+      },
+      {
+        "name": "Cave-In",
+        "effect": "Affliction",
+        "rank": 9,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "detail": "Collapsing tunnels: Hindered, Immobile, Paralyzed (buried); resisted by Dodge"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Detect Motion (tremorsense, ranged, accurate), Darkvision, Radio",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "wasp-gunship-drone",
+    "name": "Wasp Gunship Drone",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Mechs & War Machines",
+    "pl": 7,
+    "size": "Large",
+    "summary": "An unmanned hover gunship with tilting twin rotors and a chin cannon, operated from a bunker a continent away by someone who treats this as a video game.",
+    "tactics": "Hovers at range, rockets clusters of targets and strafes anyone in the open; drops altitude only to chase.",
+    "habitat": "combat zones, villain air cover, border patrols",
+    "weakness": "Its remote link can be jammed or hijacked, and the rotors are vulnerable to anything tangled into them.",
+    "tags": [
+      "construct",
+      "mech",
+      "flying",
+      "drone",
+      "military"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": null,
+      "Agility": 2,
+      "Dexterity": 4,
+      "Fighting": 0,
+      "Intellect": null,
+      "Awareness": 4,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Rotary Cannon",
+        "ranks": 3
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Large Airframe",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Drone",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Armored Fuselage (non-impervious ranks)",
+        "effect": "Protection",
+        "rank": 7,
+        "role": "defense"
+      },
+      {
+        "name": "Rotary Cannon",
+        "effect": "Damage",
+        "rank": 7,
+        "role": "attack",
+        "range": "Ranged",
+        "extras": [
+          {
+            "name": "Multiattack"
+          }
+        ],
+        "alternates": [
+          {
+            "name": "Hellfire Rockets",
+            "effect": "Damage",
+            "rank": 7,
+            "role": "attack",
+            "range": "Ranged",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Burst"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Twin Rotors",
+        "effect": "Flight",
+        "rank": 8,
+        "role": "movement"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Infravision, Radio, Extended Vision (x2)",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "heavens-hammer-orbital-array",
+    "name": "Heaven's Hammer Orbital Array",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Mechs & War Machines",
+    "pl": 16,
+    "size": "Colossal",
+    "summary": "A wheel-shaped weapons platform the size of a city district hanging in geostationary orbit, its spinal mirror able to focus sunlight into a beam that boils rivers.",
+    "tactics": "Strikes from orbit with no warning: a pillar of fire, a kinetic rod, an ion storm; heroes have to get into space and board it to stop it.",
+    "habitat": "geostationary orbit",
+    "weakness": "The firing mirror needs sunlight, so it is blind and toothless on the night side, and its reactor can be overloaded from inside.",
+    "tags": [
+      "construct",
+      "mech",
+      "space",
+      "satellite",
+      "superweapon"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": null,
+      "Stamina": null,
+      "Agility": null,
+      "Dexterity": 8,
+      "Fighting": null,
+      "Intellect": null,
+      "Awareness": 10,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 12
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Hammerfall Beam",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Aim",
+        "rank": 1
+      },
+      {
+        "name": "Precise Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Space Station",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Space-Hardened",
+        "effect": "Immunity",
+        "rank": 10,
+        "role": "defense",
+        "detail": "Cold, heat, radiation, vacuum, suffocation"
+      },
+      {
+        "name": "Station Armor",
+        "effect": "Protection",
+        "rank": 24,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Repair Drones",
+        "effect": "Regeneration",
+        "rank": 8,
+        "role": "defense"
+      },
+      {
+        "name": "Hammerfall Beam",
+        "effect": "Damage",
+        "rank": 16,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cylinder"
+          },
+          {
+            "name": "Extended Range",
+            "steps": 10
+          },
+          {
+            "name": "Penetrating",
+            "steps": 8
+          }
+        ],
+        "range": "Ranged",
+        "detail": "A pillar of orbital fire half a block wide",
+        "alternates": [
+          {
+            "name": "Kinetic Rod",
+            "effect": "Damage",
+            "rank": 22,
+            "role": "attack",
+            "range": "Ranged",
+            "extras": [
+              {
+                "name": "Extended Range",
+                "steps": 10
+              }
+            ],
+            "detail": "Tungsten telephone pole dropped from orbit"
+          },
+          {
+            "name": "Ion Storm",
+            "effect": "Affliction",
+            "rank": 16,
+            "role": "attack",
+            "range": "Ranged",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Burst"
+              },
+              {
+                "name": "Extended Range",
+                "steps": 6
+              }
+            ],
+            "detail": "Dazed, Stunned, Incapacitated (electronics and nervous systems overloaded); resisted by Fortitude"
+          }
+        ]
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 12,
+        "detail": "Extended Vision (x6), Radio, Infravision, Darkvision, Detect Energy (ranged), Direction Sense, Time Sense",
+        "role": "sense"
+      },
+      {
+        "name": "Defense Grid",
+        "effect": "Summon",
+        "rank": 6,
+        "role": "control",
+        "detail": "Launches PL 6 defense drones against boarders",
+        "extras": [
+          {
+            "name": "Multiple Minions",
+            "steps": 2
+          },
+          {
+            "name": "Horde"
+          }
+        ]
+      },
+      {
+        "name": "Orbital Station",
+        "effect": "Feature",
+        "rank": 2,
+        "detail": "Life support and corridors for a boarding party",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "construct_note": "Immobile station: absent Strength, Agility and Fighting. It fights only with its beam and its drones.",
+    "source": "DCUGen"
+  },
+  {
+    "id": "abyssal-dreadnought-crab",
+    "name": "Abyssal Dreadnought",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Mechs & War Machines",
+    "pl": 12,
+    "size": "Gargantuan",
+    "summary": "A barnacle-crusted mechanical crab the size of an aircraft carrier, built as a submarine fortress and woken by a deep-sea earthquake. It climbs out of the harbor at low tide.",
+    "tactics": "Wades ashore crushing piers and ships in its claws, pins heroes in its pincers and torpedoes anyone who tries to rescue them.",
+    "habitat": "ocean trenches, harbors, sunken naval bases",
+    "weakness": "Out of the water its joints seize as the salt dries; drag it ashore long enough and it locks up.",
+    "tags": [
+      "construct",
+      "mech",
+      "aquatic",
+      "crab",
+      "giant"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 5,
+      "Stamina": null,
+      "Agility": -2,
+      "Dexterity": 2,
+      "Fighting": 4,
+      "Intellect": null,
+      "Awareness": 6,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 13,
+      "Parry": 7,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Improved Hold",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Fearless",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Gargantuan Size",
+        "effect": "Growth",
+        "rank": 12,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Submersible",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Pressure Hull",
+        "effect": "Immunity",
+        "rank": 10,
+        "role": "defense",
+        "detail": "Cold, drowning, deep-sea pressure, suffocation, radiation"
+      },
+      {
+        "name": "Pressure Plating",
+        "effect": "Protection",
+        "rank": 7,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Self-Repair",
+        "effect": "Regeneration",
+        "rank": 6,
+        "role": "defense"
+      },
+      {
+        "name": "Hydraulic Pincers",
+        "effect": "Power-Lifting",
+        "rank": 4,
+        "role": "utility"
+      },
+      {
+        "name": "Torpedo Tubes",
+        "effect": "Damage",
+        "rank": 12,
+        "role": "attack",
+        "range": "Ranged",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          },
+          {
+            "name": "Penetrating",
+            "steps": 6
+          }
+        ],
+        "alternates": [
+          {
+            "name": "Crusher Claws",
+            "effect": "Damage",
+            "rank": 1,
+            "role": "attack",
+            "strengthBased": true,
+            "extras": [
+              {
+                "name": "Multiattack"
+              }
+            ]
+          },
+          {
+            "name": "Sonar Pulse",
+            "effect": "Affliction",
+            "rank": 8,
+            "role": "attack",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Burst"
+              }
+            ],
+            "detail": "Dazed, Stunned, Incapacitated; resisted by Fortitude"
+          }
+        ]
+      },
+      {
+        "name": "Hydrojets",
+        "effect": "Swimming",
+        "rank": 10,
+        "role": "movement"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 6,
+        "detail": "Sonar (accurate, ranged), Darkvision, Radio, Low-light Vision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "tin-grenadier",
+    "name": "Tin Grenadier",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Clockwork & Steampunk",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "A seven-foot toy soldier of painted tin and brass, with a tall bearskin hat and a ticking key in its back. It marches. It aims. It fires. It reloads. It never stops.",
+    "tactics": "Marches in ranks, fires volleys at the nearest target, and closes with bayonets when it runs out of steam pressure.",
+    "habitat": "Victorian workshops, clocktower lairs, steampunk worlds",
+    "weakness": "Its winding key is exposed: pull it out or turn it backwards and the soldier freezes mid-step.",
+    "tags": [
+      "construct",
+      "clockwork",
+      "soldier",
+      "henchman",
+      "victorian"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": null,
+      "Agility": 0,
+      "Dexterity": 2,
+      "Fighting": 3,
+      "Intellect": null,
+      "Awareness": 2,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 1,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Close Combat",
+        "spec": "Bayonet",
+        "ranks": 1
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Steam Musket",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Clockwork",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Tinplate Coat",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "March",
+        "effect": "Speed",
+        "rank": 1,
+        "role": "movement"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 1,
+        "detail": "Low-light Vision",
+        "role": "sense"
+      },
+      {
+        "name": "Steam Musket",
+        "effect": "Damage",
+        "rank": 4,
+        "role": "attack",
+        "range": "Ranged",
+        "alternates": [
+          {
+            "name": "Bayonet",
+            "effect": "Damage",
+            "rank": 1,
+            "role": "attack",
+            "strengthBased": true
+          }
+        ]
+      },
+      {
+        "name": "Marching Drum",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Keeps step with any other Grenadier within earshot",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "brass-chevalier",
+    "name": "The Brass Chevalier",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Clockwork & Steampunk",
+    "pl": 9,
+    "size": "Medium",
+    "summary": "A brass automaton in the form of a dashing musketeer, built by a dying fencing master to carry on his art. It challenges anyone with a sword and has never lost a duel.",
+    "tactics": "Salutes, offers a formal challenge, then duels with machine precision: disarming, feinting and turning blows aside until its foe opens up.",
+    "habitat": "fencing halls, Paris rooftops, steampunk courts",
+    "weakness": "It fights only one opponent at a time under its dueling code; two heroes attacking together throw its programming into confusion.",
+    "tags": [
+      "construct",
+      "clockwork",
+      "duelist",
+      "swordsman",
+      "victorian"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": null,
+      "Agility": 6,
+      "Dexterity": 4,
+      "Fighting": 10,
+      "Intellect": 1,
+      "Awareness": 4,
+      "Presence": 3
+    },
+    "defenses": {
+      "Dodge": 6,
+      "Parry": 2,
+      "Fortitude": 0,
+      "Will": 6
+    },
+    "skills": [
+      {
+        "name": "Acrobatics",
+        "ranks": 6
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Clockwork Rapier",
+        "ranks": 3
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Insight",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Defensive Attack",
+        "rank": 1
+      },
+      {
+        "name": "Improved Disarm",
+        "rank": 1
+      },
+      {
+        "name": "Redirect",
+        "rank": 1
+      },
+      {
+        "name": "Agile Feint",
+        "rank": 1
+      },
+      {
+        "name": "Taunt",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      },
+      {
+        "name": "Evasion",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Clockwork",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Brass Plate",
+        "effect": "Protection",
+        "rank": 6,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Clockwork Rapier",
+        "effect": "Damage",
+        "rank": 1,
+        "role": "attack",
+        "strengthBased": true,
+        "extras": [
+          {
+            "name": "Penetrating",
+            "steps": 5
+          }
+        ],
+        "detail": "A spring-driven blade that never dulls"
+      },
+      {
+        "name": "Mainspring Burst",
+        "effect": "Speed",
+        "rank": 2,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "iron-chancellor-steam-titan",
+    "name": "The Iron Chancellor",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Clockwork & Steampunk",
+    "pl": 13,
+    "size": "Gargantuan",
+    "summary": "A walking steam engine the height of a cathedral, top-hatted with smokestacks, built to enforce the Factory Acts by force. Its whistle can be heard across the whole city.",
+    "tactics": "Strides through the slums putting down \"unrest\", flattening barricades with piston fists and scalding anyone close with its steam vents.",
+    "habitat": "industrial cities, Victorian London, steampunk empires",
+    "weakness": "Its boiler needs coal and water constantly; plug the smokestacks or let the furnace go cold and it seizes up - or explodes.",
+    "tags": [
+      "construct",
+      "clockwork",
+      "steam",
+      "giant",
+      "victorian",
+      "vehicle-sized"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 6,
+      "Stamina": null,
+      "Agility": -2,
+      "Dexterity": 4,
+      "Fighting": 4,
+      "Intellect": null,
+      "Awareness": 6,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 10,
+      "Parry": 6,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Smash",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Fearless",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Gargantuan Size",
+        "effect": "Growth",
+        "rank": 12,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Steam Titan",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Furnace-Hardened",
+        "effect": "Immunity",
+        "rank": 10,
+        "role": "defense",
+        "detail": "Fire and heat damage"
+      },
+      {
+        "name": "Riveted Boilerplate",
+        "effect": "Protection",
+        "rank": 10,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Scalding Steam Vent",
+        "effect": "Damage",
+        "rank": 13,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cone"
+          },
+          {
+            "name": "Penetrating",
+            "steps": 6
+          }
+        ],
+        "detail": "A blast of superheated steam",
+        "alternates": [
+          {
+            "name": "Chimney Barrage",
+            "effect": "Damage",
+            "rank": 10,
+            "role": "attack",
+            "range": "Ranged",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Burst"
+              }
+            ],
+            "detail": "Lobs glowing coals from its smokestacks"
+          },
+          {
+            "name": "Piston Fist",
+            "effect": "Damage",
+            "rank": 2,
+            "role": "attack",
+            "strengthBased": true
+          },
+          {
+            "name": "Factory Whistle",
+            "effect": "Affliction",
+            "rank": 13,
+            "role": "attack",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Burst"
+              }
+            ],
+            "detail": "Deafening shriek: Dazed, Stunned, Incapacitated; resisted by Fortitude"
+          }
+        ]
+      },
+      {
+        "name": "Belly Barracks",
+        "effect": "Summon",
+        "rank": 4,
+        "role": "control",
+        "detail": "Its boiler-room doors open to release a company of Tin Grenadiers",
+        "extras": [
+          {
+            "name": "Multiple Minions",
+            "steps": 2
+          },
+          {
+            "name": "Horde"
+          }
+        ]
+      },
+      {
+        "name": "Hydraulic Might",
+        "effect": "Power-Lifting",
+        "rank": 6,
+        "role": "utility"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Extended Vision, Low-light Vision, Direction Sense",
+        "role": "sense"
+      },
+      {
+        "name": "Thundering Stride",
+        "effect": "Speed",
+        "rank": 5,
+        "role": "movement"
+      },
+      {
+        "name": "Smokestacks",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Belches a pall of black smoke that blots out the street around it",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "tick-owl-informant",
+    "name": "Tick-Owl Informant",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Clockwork & Steampunk",
+    "pl": 2,
+    "size": "Tiny",
+    "summary": "A little owl of brass and amber glass with a wax-cylinder recorder in its chest, perched on the gargoyles of a city as its master's silent eyes.",
+    "tactics": "Avoids fights entirely; it watches, records and flies home, and only pecks if grabbed.",
+    "habitat": "rooftops, rafters, clocktowers",
+    "weakness": "Its wings click on every downstroke - a sharp ear hears it coming - and its recording cylinder melts in heat.",
+    "tags": [
+      "construct",
+      "clockwork",
+      "spy",
+      "flying",
+      "bird"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": -3,
+      "Stamina": null,
+      "Agility": -2,
+      "Dexterity": 0,
+      "Fighting": -2,
+      "Intellect": null,
+      "Awareness": 3,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 9
+      },
+      {
+        "name": "Stealth",
+        "ranks": 10
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Tiny Size",
+        "effect": "Shrinking",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Clockwork",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Brass Feathers",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Brass Wings",
+        "effect": "Flight",
+        "rank": 5,
+        "role": "movement",
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ]
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 5,
+        "detail": "Darkvision, Extended Vision, Ultra-Hearing, Direction Sense",
+        "role": "sense"
+      },
+      {
+        "name": "Phonograph Memory",
+        "effect": "Feature",
+        "rank": 2,
+        "detail": "Records everything it sees and hears and plays it back for its master",
+        "role": "utility"
+      },
+      {
+        "name": "Beak",
+        "effect": "Damage",
+        "rank": 1,
+        "role": "attack"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "cogweaver-spider",
+    "name": "Cogweaver Spider",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Clockwork & Steampunk",
+    "pl": 4,
+    "size": "Small",
+    "summary": "A spider of whirring brass gears the size of a dinner plate, spinning webs of piano wire across the gears of the clocktower it guards.",
+    "tactics": "Strings tripwires across dark rooms, nets whatever triggers them and chews through the trapped intruder with gear-saw mandibles.",
+    "habitat": "clocktowers, inventors' attics, steampunk lairs",
+    "weakness": "Grit and sand in its gears slow it down, and a strong magnet pulls it straight off the wall.",
+    "tags": [
+      "construct",
+      "clockwork",
+      "spider",
+      "trap",
+      "henchman"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": null,
+      "Agility": 3,
+      "Dexterity": 2,
+      "Fighting": 3,
+      "Intellect": null,
+      "Awareness": 2,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Stealth",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Small Size",
+        "effect": "Shrinking",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Clockwork",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Brass Carapace (non-impervious ranks)",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense"
+      },
+      {
+        "name": "Wire Web",
+        "effect": "Snare",
+        "rank": 3,
+        "role": "attack",
+        "detail": "Spun piano wire"
+      },
+      {
+        "name": "Gear-Saw Mandibles",
+        "effect": "Damage",
+        "rank": 4,
+        "role": "attack"
+      },
+      {
+        "name": "Clinging Legs",
+        "effect": "Movement",
+        "rank": 1,
+        "role": "movement",
+        "detail": "Wall-crawling"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Detect Vibration (tremorsense), Darkvision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "analytical-sibyl-oracle",
+    "name": "The Analytical Sibyl",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Clockwork & Steampunk",
+    "pl": 8,
+    "size": "Huge",
+    "summary": "A room-sized difference engine of a million brass gears and punch-cards that calculated the future of the empire and was locked away when it predicted the empire's fall.",
+    "tactics": "Never fights itself: it bargains with prophecies, nudges probability and sends its brass servitors to remove whoever it has calculated will harm it.",
+    "habitat": "a sealed vault beneath a Victorian university",
+    "weakness": "Feed it a question with no answer and it spends hours computing; jam a wrench in the main drive shaft and it stops entirely.",
+    "tags": [
+      "construct",
+      "clockwork",
+      "oracle",
+      "immobile",
+      "mastermind"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": null,
+      "Stamina": null,
+      "Agility": null,
+      "Dexterity": 0,
+      "Fighting": null,
+      "Intellect": 10,
+      "Awareness": 8,
+      "Presence": 3
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 8
+    },
+    "skills": [
+      {
+        "name": "Expertise",
+        "spec": "History",
+        "ranks": 8
+      },
+      {
+        "name": "Expertise",
+        "spec": "Probability",
+        "ranks": 8
+      },
+      {
+        "name": "Investigation",
+        "ranks": 6
+      },
+      {
+        "name": "Insight",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Persuasion",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Eidetic Memory",
+        "rank": 1
+      },
+      {
+        "name": "Well-informed",
+        "rank": 1
+      },
+      {
+        "name": "Assessment",
+        "rank": 1
+      },
+      {
+        "name": "Seize Initiative",
+        "rank": 1
+      },
+      {
+        "name": "Ultimate Effort",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Engine",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Brass Casing",
+        "effect": "Protection",
+        "rank": 10,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Calculated Future",
+        "effect": "Senses",
+        "rank": 4,
+        "role": "sense",
+        "detail": "Precognition (limited to probability tables)"
+      },
+      {
+        "name": "Punch-Card Prophecy",
+        "effect": "Feature",
+        "rank": 3,
+        "role": "utility",
+        "detail": "Answers one question per day on a printed card - always true, never complete"
+      },
+      {
+        "name": "Probability Shove",
+        "effect": "Luck Control",
+        "rank": 3,
+        "role": "control",
+        "detail": "Rearranges odds around it"
+      },
+      {
+        "name": "Brass Servitors",
+        "effect": "Summon",
+        "rank": 5,
+        "role": "control",
+        "detail": "Clockwork footmen that defend it",
+        "extras": [
+          {
+            "name": "Multiple Minions",
+            "steps": 1
+          }
+        ]
+      }
+    ],
+    "equipment": [],
+    "construct_note": "Immobile engine with a genius Intellect: absent Strength, Agility and Fighting.",
+    "source": "DCUGen"
+  },
+  {
+    "id": "midnight-orrery",
+    "name": "The Midnight Orrery",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Clockwork & Steampunk",
+    "pl": 15,
+    "size": "Huge",
+    "summary": "A floating astronomical clock of black iron rings and silver planets, built by a lunatic astronomer to wind the night sky - and it has learned to wind the hours as well.",
+    "tactics": "Hovers above the battlefield, freezes the most dangerous hero in a stopped moment, ages the rest into dust and rewinds any damage it takes.",
+    "habitat": "an observatory dome at the top of the world, midnight",
+    "weakness": "Its power is tied to the stars: at sunrise its rings slow and its time powers fail, and breaking the central sun-sphere stops the whole machine.",
+    "tags": [
+      "construct",
+      "clockwork",
+      "time",
+      "cosmic",
+      "mastermind"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": null,
+      "Stamina": null,
+      "Agility": 0,
+      "Dexterity": 4,
+      "Fighting": null,
+      "Intellect": 10,
+      "Awareness": 10,
+      "Presence": 5
+    },
+    "defenses": {
+      "Dodge": 12,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 6
+    },
+    "skills": [
+      {
+        "name": "Expertise",
+        "spec": "Astronomy",
+        "ranks": 12
+      },
+      {
+        "name": "Perception",
+        "ranks": 8
+      },
+      {
+        "name": "Insight",
+        "ranks": 8
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 6
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Starlight Lance",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Seize Initiative",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 2
+      },
+      {
+        "name": "Fearless",
+        "rank": 1
+      },
+      {
+        "name": "Eidetic Memory",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Engine",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Starmetal Rings",
+        "effect": "Protection",
+        "rank": 12,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Huge Size",
+        "effect": "Growth",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Starlight Lance",
+        "effect": "Damage",
+        "rank": 14,
+        "role": "attack",
+        "range": "Ranged",
+        "extras": [
+          {
+            "name": "Penetrating",
+            "steps": 14
+          }
+        ],
+        "alternates": [
+          {
+            "name": "Stopped Clock",
+            "effect": "Affliction",
+            "rank": 14,
+            "role": "attack",
+            "range": "Perception",
+            "detail": "Hindered, Immobile, Paralyzed (frozen in time); resisted by Will"
+          },
+          {
+            "name": "Age the Moment",
+            "effect": "Weaken",
+            "rank": 14,
+            "role": "attack",
+            "range": "Perception",
+            "detail": "Strength, Agility and Dexterity, as years pass in seconds; resisted by Fortitude"
+          }
+        ]
+      },
+      {
+        "name": "Turn of the Gears",
+        "effect": "Quickness",
+        "rank": 10,
+        "role": "utility"
+      },
+      {
+        "name": "Rewind",
+        "effect": "Regeneration",
+        "rank": 10,
+        "role": "defense",
+        "detail": "Winds its own damage backwards"
+      },
+      {
+        "name": "Floating Rings",
+        "effect": "Flight",
+        "rank": 4,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "construct_note": "Floating engine with a mind of its own: absent Strength and Fighting.",
+    "source": "DCUGen"
+  },
+  {
+    "id": "brass-stallion",
+    "name": "Brass Stallion",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Clockwork & Steampunk",
+    "pl": 5,
+    "size": "Large",
+    "summary": "A steam-powered warhorse of polished brass with smoke snorting from its nostrils and a furnace glowing in its ribcage, galloping faster than any locomotive.",
+    "tactics": "Charges straight through lines of foes, tramples, wheels around and charges again, carrying its rider with it.",
+    "habitat": "cavalry stables of mad inventors, steampunk highways",
+    "weakness": "Spooks at sudden loud whistles - its pressure valve trips - and its furnace door in the chest pops open if struck right.",
+    "tags": [
+      "construct",
+      "clockwork",
+      "horse",
+      "steed",
+      "steam"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": null,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 4,
+      "Intellect": null,
+      "Awareness": 4,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 1,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Charge",
+        "rank": 1
+      },
+      {
+        "name": "Move-by Action",
+        "rank": 1
+      },
+      {
+        "name": "Takedown",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Clockwork",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Brass Barding",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Low-light Vision, Direction Sense",
+        "role": "sense"
+      },
+      {
+        "name": "Steam Gallop",
+        "effect": "Speed",
+        "rank": 7,
+        "role": "movement"
+      },
+      {
+        "name": "Leaping Gait",
+        "effect": "Leaping",
+        "rank": 4,
+        "role": "movement"
+      },
+      {
+        "name": "Saddle Harness",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Carries a rider and obeys simple reins",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "clay-golem",
+    "name": "Clay Golem",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 8,
+    "size": "Large",
+    "summary": "A hulking figure of river clay shaped by a rabbi's or sorcerer's hands, a holy word written on its brow. It does exactly what it was told, forever.",
+    "tactics": "Plods toward whatever it was set to guard against and crushes it; it shrugs off blows and smooths its own wounds with wet hands.",
+    "habitat": "old synagogue attics, sorcerers' cellars, riverbanks",
+    "weakness": "Erase one letter of the word on its brow and it crumbles back into mud.",
+    "tags": [
+      "construct",
+      "golem",
+      "magic",
+      "clay",
+      "guardian"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 7,
+      "Stamina": null,
+      "Agility": -1,
+      "Dexterity": -1,
+      "Fighting": 5,
+      "Intellect": null,
+      "Awareness": 6,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 8,
+      "Parry": 2,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Improved Hold",
+        "rank": 1
+      },
+      {
+        "name": "Fearless",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Golem",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Clay Body",
+        "effect": "Protection",
+        "rank": 7,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Smothering Clay",
+        "effect": "Affliction",
+        "rank": 8,
+        "role": "attack",
+        "detail": "Wraps a foe in wet clay: Hindered, Immobile, Incapacitated; resisted by Fortitude"
+      },
+      {
+        "name": "Reshape",
+        "effect": "Morph",
+        "rank": 1,
+        "role": "utility",
+        "detail": "Can sculpt itself into any human-sized form"
+      },
+      {
+        "name": "Stretching Clay",
+        "effect": "Elongation",
+        "rank": 2,
+        "role": "utility"
+      },
+      {
+        "name": "Unyielding",
+        "effect": "Power-Lifting",
+        "rank": 4,
+        "role": "utility"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Darkvision, Tremorsense",
+        "role": "sense"
+      },
+      {
+        "name": "Reshape Clay",
+        "effect": "Regeneration",
+        "rank": 8,
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Source",
+            "detail": "wet earth or water"
+          }
+        ]
+      },
+      {
+        "name": "Holy Word",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "A word of power on its brow animates it",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "iron-golem",
+    "name": "Iron Golem",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 11,
+    "size": "Large",
+    "summary": "A ten-foot knight of black iron forged in an arcane furnace, nearly immune to spells, with a cloud of green poison vapor boiling from its visor.",
+    "tactics": "Walks straight through magical defenses, exhales poison into crowded rooms, and pounds whoever is left with fists like anvils.",
+    "habitat": "wizard towers, forges, treasure vaults",
+    "weakness": "It rusts: soaking it with water and salt, or striking it with lightning, slows it to a crawl.",
+    "tags": [
+      "construct",
+      "golem",
+      "magic",
+      "metal",
+      "guardian"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 11,
+      "Stamina": null,
+      "Agility": -1,
+      "Dexterity": 0,
+      "Fighting": 6,
+      "Intellect": null,
+      "Awareness": 5,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 11,
+      "Parry": 4,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Improved Smash",
+        "rank": 1
+      },
+      {
+        "name": "Fearless",
+        "rank": 1
+      },
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Takedown",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Golem",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Iron Body",
+        "effect": "Protection",
+        "rank": 10,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Poison Breath",
+        "effect": "Affliction",
+        "rank": 11,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cloud"
+          }
+        ],
+        "detail": "Green vapor: Fatigued, Exhausted, Incapacitated; resisted by Fortitude"
+      },
+      {
+        "name": "Spell-Proof",
+        "effect": "Immunity",
+        "rank": 20,
+        "role": "defense",
+        "detail": "Magic effects"
+      },
+      {
+        "name": "Fire Mends Iron",
+        "effect": "Regeneration",
+        "rank": 10,
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Source",
+            "detail": "magical fire"
+          }
+        ]
+      },
+      {
+        "name": "Iron Grip",
+        "effect": "Power-Lifting",
+        "rank": 5,
+        "role": "utility"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Darkvision, Detect Magic",
+        "role": "sense"
+      },
+      {
+        "name": "Furnace Heart",
+        "effect": "Immunity",
+        "rank": 5,
+        "role": "defense",
+        "detail": "Fire and heat damage"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "flesh-golem",
+    "name": "Flesh Golem",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 8,
+    "size": "Large",
+    "summary": "A towering patchwork corpse sewn from a dozen bodies and jolted to life by a lightning storm. It has the strength of all of them and the sorrow of none.",
+    "tactics": "Lurches at whatever moves, and after taking a beating it goes berserk, hurling furniture and smashing through walls.",
+    "habitat": "castle laboratories, graveyards, stormy mountaintops",
+    "weakness": "Fire terrifies it - it backs away from flame - and a strong electric shock in reverse polarity stops its heart.",
+    "tags": [
+      "construct",
+      "golem",
+      "horror",
+      "mad-science",
+      "undead"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 7,
+      "Stamina": null,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 5,
+      "Intellect": null,
+      "Awareness": 6,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 8,
+      "Parry": 3,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "All-out Attack",
+        "rank": 1
+      },
+      {
+        "name": "Fearless",
+        "rank": 1
+      },
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Takedown",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Stitched Body",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Dead Muscle",
+        "effect": "Protection",
+        "rank": 6,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Shambling Stride",
+        "effect": "Speed",
+        "rank": 2,
+        "role": "movement"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Darkvision, Scent",
+        "role": "sense"
+      },
+      {
+        "name": "Bounding Lurch",
+        "effect": "Leaping",
+        "rank": 2,
+        "role": "movement"
+      },
+      {
+        "name": "Strength of a Dozen",
+        "effect": "Power-Lifting",
+        "rank": 3,
+        "role": "utility"
+      },
+      {
+        "name": "Lightning-Charged",
+        "effect": "Immunity",
+        "rank": 10,
+        "role": "defense",
+        "detail": "Electricity and cold damage"
+      },
+      {
+        "name": "Galvanic Surge",
+        "effect": "Regeneration",
+        "rank": 6,
+        "role": "defense",
+        "detail": "Faster if struck by electricity"
+      },
+      {
+        "name": "Berserk",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "When badly hurt it flies into a rage and ignores commands",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "bone-golem",
+    "name": "Bone Golem",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 9,
+    "size": "Large",
+    "summary": "A four-armed ossuary horror built from the fused bones of a hundred dead, each arm ending in a scythe of sharpened femur. Skulls in its chest still chatter.",
+    "tactics": "Rattles its skulls to freeze foes in terror, then scythes them down; smashed pieces skitter back into place.",
+    "habitat": "crypts, catacombs, necromancers' towers",
+    "weakness": "Holy water dissolves the bindings between its bones, and blunt weapons shatter it far more easily than blades.",
+    "tags": [
+      "construct",
+      "golem",
+      "necromancy",
+      "undead",
+      "horror"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 6,
+      "Stamina": null,
+      "Agility": 2,
+      "Dexterity": 2,
+      "Fighting": 7,
+      "Intellect": null,
+      "Awareness": 6,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 6,
+      "Parry": 1,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Improved Critical",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Golem",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Dead Bone",
+        "effect": "Immunity",
+        "rank": 5,
+        "role": "defense",
+        "detail": "Cold damage"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Darkvision, Detect Life",
+        "role": "sense"
+      },
+      {
+        "name": "Fused Bone",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Fused Bone (non-impervious ranks)",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Bone Scythes",
+        "effect": "Damage",
+        "rank": 1,
+        "role": "attack",
+        "strengthBased": true,
+        "extras": [
+          {
+            "name": "Multiattack"
+          }
+        ]
+      },
+      {
+        "name": "Death Rattle",
+        "effect": "Affliction",
+        "rank": 9,
+        "role": "attack",
+        "range": "Perception",
+        "detail": "A horrid clatter: Dazed, Stunned, Incapacitated (paralyzed with dread); resisted by Will"
+      },
+      {
+        "name": "Reassemble",
+        "effect": "Regeneration",
+        "rank": 4,
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Source",
+            "detail": "bones nearby"
+          }
+        ]
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "glass-golem",
+    "name": "Glass Golem",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 7,
+    "size": "Large",
+    "summary": "A stained-glass window that steps out of its cathedral frame, saints and angels glowing on its body, with fists of jagged colored shards.",
+    "tactics": "Stands invisible in the light until intruders pass, then blinds them with a prismatic flash and slashes with shard fists.",
+    "habitat": "cathedrals, glassworks, wizards' conservatories",
+    "weakness": "Brittle: a high-pitched sonic attack or a sudden temperature change cracks it from end to end.",
+    "tags": [
+      "construct",
+      "golem",
+      "magic",
+      "glass",
+      "light"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": null,
+      "Agility": 2,
+      "Dexterity": 2,
+      "Fighting": 5,
+      "Intellect": null,
+      "Awareness": 4,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 1,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Stealth",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Golem",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Leaded Glass",
+        "effect": "Protection",
+        "rank": 6,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Shard Fists",
+        "effect": "Damage",
+        "rank": 2,
+        "role": "attack",
+        "strengthBased": true,
+        "extras": [
+          {
+            "name": "Penetrating",
+            "steps": 3
+          }
+        ]
+      },
+      {
+        "name": "Prismatic Flash",
+        "effect": "Dazzle",
+        "rank": 7,
+        "role": "attack",
+        "range": "Ranged",
+        "detail": "Visual; focuses sunlight through its body; resisted by Fortitude"
+      },
+      {
+        "name": "Clear Body",
+        "effect": "Concealment",
+        "rank": 2,
+        "role": "defense",
+        "detail": "Normal vision, while standing still",
+        "flaws": [
+          {
+            "name": "Limited"
+          }
+        ]
+      },
+      {
+        "name": "Reflective",
+        "effect": "Immunity",
+        "rank": 5,
+        "role": "defense",
+        "detail": "Light and laser damage"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "ice-golem",
+    "name": "Rime Golem",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 8,
+    "size": "Large",
+    "summary": "A hulking shape of blue glacier ice with a frost-rimed heart of black stone, carved by a winter witch to guard her palace. Frost spreads wherever it walks.",
+    "tactics": "Freezes intruders solid with its breath and shatters them with frost fists; it slides fast over its own trail of ice.",
+    "habitat": "arctic palaces, frozen lakes, mountain passes",
+    "weakness": "Melts: fire and heat hurt it badly and it cannot refreeze its wounds in a warm room.",
+    "tags": [
+      "construct",
+      "golem",
+      "magic",
+      "ice",
+      "cold"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 6,
+      "Stamina": null,
+      "Agility": 0,
+      "Dexterity": 1,
+      "Fighting": 5,
+      "Intellect": null,
+      "Awareness": 4,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 7,
+      "Parry": 2,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Stealth",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Improved Trip",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Golem",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Frozen",
+        "effect": "Immunity",
+        "rank": 5,
+        "role": "defense",
+        "detail": "Cold damage"
+      },
+      {
+        "name": "Glacier Ice",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Glacier Ice (non-impervious ranks)",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Icicle Volley",
+        "effect": "Damage",
+        "rank": 7,
+        "role": "attack",
+        "range": "Ranged",
+        "extras": [
+          {
+            "name": "Multiattack"
+          }
+        ],
+        "alternates": [
+          {
+            "name": "Blizzard Breath",
+            "effect": "Affliction",
+            "rank": 8,
+            "role": "attack",
+            "extras": [
+              {
+                "name": "Area",
+                "option": "Cone"
+              }
+            ],
+            "detail": "Hindered, Immobile, Paralyzed (frozen solid); resisted by Fortitude"
+          }
+        ]
+      },
+      {
+        "name": "Slide",
+        "effect": "Movement",
+        "rank": 1,
+        "role": "movement",
+        "detail": "Slithering on ice and snow"
+      },
+      {
+        "name": "Refreeze",
+        "effect": "Regeneration",
+        "rank": 4,
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Source",
+            "detail": "snow, ice or freezing air"
+          }
+        ]
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "mud-golem",
+    "name": "Mud Golem",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 5,
+    "size": "Large",
+    "summary": "A dripping, lumbering heap of swamp mud with river stones for eyes, raised by a bayou witch to guard her shack. It smells like low tide and grabs like quicksand.",
+    "tactics": "Rises out of the bog under intruders, grabs them and slowly drags them under the mud.",
+    "habitat": "swamps, riverbanks, flooded basements",
+    "weakness": "Dries out: strong heat or sunlight turns it into cracked, brittle clay that shatters.",
+    "tags": [
+      "construct",
+      "golem",
+      "magic",
+      "swamp",
+      "guardian"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": null,
+      "Agility": -1,
+      "Dexterity": -1,
+      "Fighting": 3,
+      "Intellect": null,
+      "Awareness": 5,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 7,
+      "Parry": 3,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Chokehold",
+        "rank": 1
+      },
+      {
+        "name": "Improved Hold",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Golem",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Sloshing Body",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Liquid Body",
+        "effect": "Insubstantial",
+        "rank": 1,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "detail": "Fluid mud; pours through gaps and slurps around blows"
+      },
+      {
+        "name": "Slurp Back Together",
+        "effect": "Regeneration",
+        "rank": 4,
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Source",
+            "detail": "wet earth"
+          }
+        ]
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Tremorsense, Darkvision",
+        "role": "sense"
+      },
+      {
+        "name": "Bog Swim",
+        "effect": "Swimming",
+        "rank": 3,
+        "role": "movement"
+      },
+      {
+        "name": "Sink Into Mud",
+        "effect": "Burrowing",
+        "rank": 2,
+        "role": "movement",
+        "detail": "Through mud and wet soil only"
+      },
+      {
+        "name": "Mud Engulf",
+        "effect": "Affliction",
+        "rank": 6,
+        "role": "attack",
+        "detail": "Hindered, Immobile, Incapacitated (suffocating); resisted by Fortitude"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "lava-golem",
+    "name": "Magma Golem",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 10,
+    "size": "Large",
+    "summary": "A walking slab of cooled black basalt with rivers of glowing magma visible through every crack, awakened by a fire-cult in the heart of a volcano.",
+    "tactics": "Burns everything it touches, hurls gobbets of lava at those who keep their distance, and leaves a trail of burning footprints.",
+    "habitat": "volcanoes, foundries, fire temples",
+    "weakness": "Douse it with enough water and its crust cools and seizes; extreme cold cracks it open.",
+    "tags": [
+      "construct",
+      "golem",
+      "magic",
+      "fire",
+      "volcanic"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 7,
+      "Stamina": null,
+      "Agility": 0,
+      "Dexterity": 2,
+      "Fighting": 6,
+      "Intellect": null,
+      "Awareness": 4,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 9,
+      "Parry": 3,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Ranged Combat",
+        "spec": "Lava Hurl",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Improved Smash",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Golem",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Molten Core",
+        "effect": "Immunity",
+        "rank": 5,
+        "role": "defense",
+        "detail": "Fire and heat damage"
+      },
+      {
+        "name": "Basalt Crust",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Basalt Crust (non-impervious ranks)",
+        "effect": "Protection",
+        "rank": 5,
+        "role": "defense"
+      },
+      {
+        "name": "Lava Hurl",
+        "effect": "Damage",
+        "rank": 9,
+        "role": "attack",
+        "range": "Ranged",
+        "alternates": [
+          {
+            "name": "Molten Fists",
+            "effect": "Damage",
+            "rank": 1,
+            "role": "attack",
+            "strengthBased": true
+          }
+        ]
+      },
+      {
+        "name": "Searing Aura",
+        "effect": "Energy Aura",
+        "rank": 6,
+        "role": "attack",
+        "detail": "Fire; burns anything that touches it"
+      },
+      {
+        "name": "Lava Trail",
+        "effect": "Environment",
+        "rank": 1,
+        "role": "utility",
+        "option": "Lesser (intense cold/heat, -1 speed, partial light, -2 Perception)",
+        "detail": "Heat shimmer around it"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "animated-armor",
+    "name": "Animated Armor",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 5,
+    "size": "Medium",
+    "summary": "A suit of plate armor that climbs off its stand in the great hall, visor empty and gauntlet gripping a real sword. It moves with the precision of the dead knight who once wore it.",
+    "tactics": "Stands motionless among the decorative suits until someone touches the treasure, then strikes with flawless swordsmanship.",
+    "habitat": "castle halls, museums, haunted manors",
+    "weakness": "Find and break the binding sigil scratched inside the helmet and the whole suit clatters to the floor.",
+    "tags": [
+      "construct",
+      "golem",
+      "magic",
+      "knight",
+      "haunted"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": null,
+      "Agility": 1,
+      "Dexterity": 3,
+      "Fighting": 4,
+      "Intellect": null,
+      "Awareness": 4,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Defensive Attack",
+        "rank": 1
+      },
+      {
+        "name": "Improved Disarm",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      },
+      {
+        "name": "Fearless",
+        "rank": 1
+      },
+      {
+        "name": "Takedown",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Enchanted",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Empty Plate",
+        "effect": "Protection",
+        "rank": 6,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Longsword",
+        "effect": "Damage",
+        "rank": 2,
+        "role": "attack",
+        "strengthBased": true
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Darkvision, Detect Life",
+        "role": "sense"
+      },
+      {
+        "name": "Reassemble",
+        "effect": "Regeneration",
+        "rank": 3,
+        "role": "defense"
+      },
+      {
+        "name": "Clanking March",
+        "effect": "Speed",
+        "rank": 1,
+        "role": "movement"
+      },
+      {
+        "name": "Hollow",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Nothing inside: blows through visor slits find only air",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "grotesque-waterspout-warden",
+    "name": "Grotesque Waterspout Warden",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 7,
+    "size": "Medium",
+    "summary": "A leering rain-spout grotesque, no wings, all mouth, carved on a cathedral gutter centuries ago and bound to protect those who claim sanctuary inside. It drains the storms off the roof - and floods anyone who breaks the peace below.",
+    "tactics": "Wakes only when blood is shed or sanctuary violated inside, then pours down the walls and blasts the offenders off their feet with torrents of rainwater.",
+    "habitat": "cathedral gutters and rooftops, especially during storms",
+    "weakness": "Powerless when the sanctuary is not threatened; and in a drought, with no water in its gutter-throat, its torrents run dry.",
+    "tags": [
+      "construct",
+      "golem",
+      "magic",
+      "stone",
+      "cathedral",
+      "water"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 5,
+      "Stamina": null,
+      "Agility": 1,
+      "Dexterity": 3,
+      "Fighting": 5,
+      "Intellect": null,
+      "Awareness": 4,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 2,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 8
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Gutter Torrent",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Carving",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Weathered Stone",
+        "effect": "Protection",
+        "rank": 7,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Leering Bite",
+        "effect": "Damage",
+        "rank": 1,
+        "role": "attack",
+        "strengthBased": true
+      },
+      {
+        "name": "Gutter Torrent",
+        "effect": "Damage",
+        "rank": 6,
+        "role": "attack",
+        "range": "Ranged",
+        "detail": "Blasts rainwater from its gaping mouth",
+        "alternates": [
+          {
+            "name": "Drenching Spout",
+            "effect": "Affliction",
+            "rank": 6,
+            "role": "attack",
+            "range": "Ranged",
+            "detail": "Hindered, Immobile, Prone (washed off the roof); resisted by Dodge"
+          }
+        ]
+      },
+      {
+        "name": "Sanctuary Bound",
+        "effect": "Feature",
+        "rank": 1,
+        "role": "utility",
+        "detail": "Awakens only when the sanctuary below is violated; knows every person who ever sought sanctuary there"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Darkvision, Detect Desecration (ranged)",
+        "role": "sense"
+      },
+      {
+        "name": "Rain Channel",
+        "effect": "Movement",
+        "rank": 2,
+        "role": "movement",
+        "detail": "Wall-crawling; slides down gutters and drains"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "weeping-marble-mourner",
+    "name": "Weeping Marble Mourner",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 6,
+    "size": "Medium",
+    "summary": "A marble angel weeping into its hands on a cemetery tomb. Every time you blink, it is closer. Every time you look away, its hands have dropped a little lower from its face.",
+    "tactics": "Freezes whenever watched; the moment a hero looks away or the lights flicker, it is suddenly beside them with its cold marble arms around their throat.",
+    "habitat": "cemeteries, mausoleums, abandoned sculpture gardens",
+    "weakness": "It cannot move while observed: a hero who keeps eyes on it - or a mirror that makes it look at itself - pins it in place.",
+    "tags": [
+      "construct",
+      "golem",
+      "statue",
+      "horror",
+      "cemetery"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 5,
+      "Stamina": null,
+      "Agility": 4,
+      "Dexterity": 0,
+      "Fighting": 6,
+      "Intellect": null,
+      "Awareness": 6,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Stealth",
+        "ranks": 8
+      },
+      {
+        "name": "Perception",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Statue",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Marble Body",
+        "effect": "Protection",
+        "rank": 6,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Cold Embrace",
+        "effect": "Damage",
+        "rank": 1,
+        "role": "attack",
+        "strengthBased": true,
+        "extras": [
+          {
+            "name": "Penetrating",
+            "steps": 3
+          }
+        ]
+      },
+      {
+        "name": "Between Glances",
+        "effect": "Teleport",
+        "rank": 6,
+        "role": "movement",
+        "detail": "Moves only while no one is looking at it",
+        "flaws": [
+          {
+            "name": "Limited"
+          }
+        ]
+      },
+      {
+        "name": "Quantum Lock",
+        "effect": "Feature",
+        "rank": 3,
+        "detail": "Cannot act at all while anyone watches it - and cannot be harmed while it is stone-still",
+        "role": "utility"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Darkvision, Detect Gaze (knows when it is being watched), Low-light Vision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "jack-of-thorns-scarecrow",
+    "name": "Jack-of-Thorns",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "A burlap-headed scarecrow with a carved grin, a sickle and a coat full of crows, standing on its post at the edge of the cornfield until harvest night.",
+    "tactics": "Vanishes into the corn, sends its crows to peck eyes, and strikes from behind with its sickle while victims run in circles.",
+    "habitat": "cornfields, rural crossroads, county fairs",
+    "weakness": "Straw burns: one torch and it goes up like kindling. It also cannot leave sight of its field.",
+    "tags": [
+      "construct",
+      "golem",
+      "scarecrow",
+      "horror",
+      "rural"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": null,
+      "Agility": 2,
+      "Dexterity": 1,
+      "Fighting": 3,
+      "Intellect": null,
+      "Awareness": 3,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 2,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Stealth",
+        "ranks": 8
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Hide in Plain Sight",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Scarecrow",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Straw Stuffing (non-impervious ranks)",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense"
+      },
+      {
+        "name": "Rusty Sickle",
+        "effect": "Damage",
+        "rank": 2,
+        "role": "attack",
+        "strengthBased": true
+      },
+      {
+        "name": "Crow Swarm",
+        "effect": "Summon",
+        "rank": 2,
+        "role": "control",
+        "detail": "A murder of crows bursts from its coat",
+        "extras": [
+          {
+            "name": "Multiple Minions",
+            "steps": 1
+          }
+        ]
+      },
+      {
+        "name": "Stuffed",
+        "effect": "Immunity",
+        "rank": 2,
+        "role": "defense",
+        "detail": "Critical hits and piercing weapons pass through straw"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "burning-wicker-colossus",
+    "name": "The Burning Wicker Colossus",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 12,
+    "size": "Gargantuan",
+    "summary": "A wicker man as tall as an oak forest, burning from the inside out and never consumed, raised by a midsummer cult to gather offerings in its hollow chest.",
+    "tactics": "Strides through the village plucking people into the wicker cage in its chest while showering embers on anyone who tries to stop it.",
+    "habitat": "pagan islands, midsummer festivals, standing-stone circles",
+    "weakness": "Its fire is fed by the cult's chanting; silence the chanters or drench it at dawn and it collapses into ash.",
+    "tags": [
+      "construct",
+      "golem",
+      "pagan",
+      "fire",
+      "giant",
+      "ritual"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": null,
+      "Agility": -1,
+      "Dexterity": 0,
+      "Fighting": 4,
+      "Intellect": null,
+      "Awareness": 6,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 10,
+      "Parry": 6,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Fast Grab",
+        "rank": 1
+      },
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Fearless",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Gargantuan Size",
+        "effect": "Growth",
+        "rank": 12,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Effigy",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Already Burning",
+        "effect": "Immunity",
+        "rank": 5,
+        "role": "defense",
+        "detail": "Fire damage"
+      },
+      {
+        "name": "Woven Willow",
+        "effect": "Protection",
+        "rank": 8,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Ember Shower",
+        "effect": "Damage",
+        "rank": 12,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "detail": "Shakes blazing sparks over the crowd",
+        "alternates": [
+          {
+            "name": "Burning Grasp",
+            "effect": "Damage",
+            "rank": 1,
+            "role": "attack",
+            "strengthBased": true
+          }
+        ]
+      },
+      {
+        "name": "Straw Children",
+        "effect": "Summon",
+        "rank": 4,
+        "role": "control",
+        "detail": "Little burning straw men fall from its body and run amok",
+        "extras": [
+          {
+            "name": "Multiple Minions",
+            "steps": 2
+          },
+          {
+            "name": "Horde"
+          }
+        ]
+      },
+      {
+        "name": "Inferno Aura",
+        "effect": "Energy Aura",
+        "rank": 6,
+        "role": "attack",
+        "detail": "Fire"
+      },
+      {
+        "name": "Wicker Cage",
+        "effect": "Feature",
+        "rank": 2,
+        "role": "utility",
+        "detail": "Its hollow chest holds grabbed victims, who begin to burn"
+      },
+      {
+        "name": "Rewoven by Faith",
+        "effect": "Regeneration",
+        "rank": 6,
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Source",
+            "detail": "cultists chanting nearby"
+          }
+        ]
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "alembic-homunculus",
+    "name": "Alembic Homunculus",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 3,
+    "size": "Small",
+    "summary": "A spindly little winged man grown in an alchemist's flask from mandrake root and its maker's blood. It giggles, it lies, and it carries its master's every word.",
+    "tactics": "Spies first, bites second: it puts a guard to sleep with a nip, steals a key, and flutters away squealing.",
+    "habitat": "alchemists' laboratories, wizards' shoulders",
+    "weakness": "If its maker dies, it dies; and it is pathologically greedy for sweets and shiny things.",
+    "tags": [
+      "construct",
+      "golem",
+      "alchemy",
+      "familiar",
+      "spy"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": -1,
+      "Stamina": null,
+      "Agility": 2,
+      "Dexterity": 1,
+      "Fighting": 1,
+      "Intellect": 1,
+      "Awareness": 1,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Stealth",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Alchemy",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Small Size",
+        "effect": "Shrinking",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Homunculus",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Sleep-Venom Bite",
+        "effect": "Affliction",
+        "rank": 3,
+        "role": "attack",
+        "detail": "Fatigued, Exhausted, Asleep; resisted by Fortitude"
+      },
+      {
+        "name": "Bat Wings",
+        "effect": "Flight",
+        "rank": 1,
+        "role": "movement",
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ]
+      },
+      {
+        "name": "Master's Eyes",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Its maker sees and hears through it at any distance",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "construct_note": "Has a cunning little mind of its own (Intellect and Presence) but no Stamina.",
+    "source": "DCUGen"
+  },
+  {
+    "id": "miss-pennywhistle-haunted-doll",
+    "name": "Miss Pennywhistle",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 3,
+    "size": "Tiny",
+    "summary": "A Victorian porcelain doll in a lace dress with one cracked eye, who is never in the room where you left her. She wants to play. She always wants to play.",
+    "tactics": "Plays dead until her victim is alone, hums a lullaby that makes them drowsy, then giggles and goes for their ankles with a knitting needle.",
+    "habitat": "nurseries, antique shops, attics",
+    "weakness": "The spirit lives in her music box: wind it backwards or smash it and she is just a doll again.",
+    "tags": [
+      "construct",
+      "animated",
+      "doll",
+      "haunted",
+      "horror"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": -2,
+      "Stamina": null,
+      "Agility": -2,
+      "Dexterity": 0,
+      "Fighting": -1,
+      "Intellect": 0,
+      "Awareness": 1,
+      "Presence": 2
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Stealth",
+        "ranks": 10
+      },
+      {
+        "name": "Deception",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 2
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Tiny Size",
+        "effect": "Shrinking",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Haunted Doll",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Knitting Needle",
+        "effect": "Damage",
+        "rank": 2,
+        "role": "attack"
+      },
+      {
+        "name": "Lullaby",
+        "effect": "Affliction",
+        "rank": 2,
+        "role": "attack",
+        "range": "Perception",
+        "detail": "Dazed, Stunned, Asleep (a music-box tune); resisted by Will"
+      },
+      {
+        "name": "Never Where You Left Her",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Moves between rooms whenever no one is watching",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "construct_note": "A haunted object with the spirit's personality: keeps Intellect and Presence.",
+    "source": "DCUGen"
+  },
+  {
+    "id": "khalkeos-bronze-warden",
+    "name": "Khalkeos, Bronze Warden of the Isle",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 14,
+    "size": "Gargantuan",
+    "summary": "A bronze giant cast by a smith-god to guard a sacred island, circling its shores three times each day and hurling boulders at any ship that comes too close.",
+    "tactics": "Sinks approaching ships with boulders, then wades out to meet survivors, heating itself red-hot to crush them in its embrace.",
+    "habitat": "a sacred Mediterranean island, ancient shipping lanes",
+    "weakness": "Its life is a single vein of divine ichor sealed by a bronze nail in its heel: pull the nail and the ichor runs out.",
+    "tags": [
+      "construct",
+      "golem",
+      "myth",
+      "bronze",
+      "giant",
+      "guardian"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 8,
+      "Stamina": null,
+      "Agility": 0,
+      "Dexterity": 4,
+      "Fighting": 6,
+      "Intellect": null,
+      "Awareness": 6,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 12,
+      "Parry": 6,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 10
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Hurled Boulder",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Improved Smash",
+        "rank": 1
+      },
+      {
+        "name": "Fearless",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      },
+      {
+        "name": "Takedown",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Gargantuan Size",
+        "effect": "Growth",
+        "rank": 12,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Bronze Giant",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Divine Bronze",
+        "effect": "Immunity",
+        "rank": 10,
+        "role": "defense",
+        "detail": "Fire, heat and cold"
+      },
+      {
+        "name": "Bronze Body",
+        "effect": "Protection",
+        "rank": 10,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Ichor Flow",
+        "effect": "Regeneration",
+        "rank": 6,
+        "role": "defense"
+      },
+      {
+        "name": "Titan Strength",
+        "effect": "Power-Lifting",
+        "rank": 6,
+        "role": "utility"
+      },
+      {
+        "name": "Hurled Boulder",
+        "effect": "Damage",
+        "rank": 14,
+        "role": "attack",
+        "range": "Ranged",
+        "extras": [
+          {
+            "name": "Penetrating",
+            "steps": 7
+          }
+        ],
+        "alternates": [
+          {
+            "name": "Searing Embrace",
+            "effect": "Damage",
+            "rank": 14,
+            "role": "attack",
+            "detail": "Heats its bronze body red-hot and crushes its foe against its chest"
+          }
+        ]
+      },
+      {
+        "name": "Island Circuit",
+        "effect": "Speed",
+        "rank": 5,
+        "role": "movement",
+        "detail": "Runs around its island three times a day"
+      },
+      {
+        "name": "Wading Giant",
+        "effect": "Swimming",
+        "rank": 3,
+        "role": "movement"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 5,
+        "detail": "Extended Vision x3 (sees ships on the horizon), Darkvision, Direction Sense",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "aegis-thrall-shield-guardian",
+    "name": "Aegis Thrall",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 9,
+    "size": "Large",
+    "summary": "A faceless golem of runed stone and iron bands, bound to whoever wears its amulet. It goes where they go, takes the blows meant for them, and never sleeps.",
+    "tactics": "Stays at its bearer's side and throws itself in front of every attack, then smashes the attacker with a single deliberate blow.",
+    "habitat": "at the side of a wealthy wizard, merchant prince or villain",
+    "weakness": "It obeys whoever holds the amulet: steal the amulet and you own the guardian.",
+    "tags": [
+      "construct",
+      "golem",
+      "magic",
+      "bodyguard",
+      "guardian"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 6,
+      "Stamina": null,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 6,
+      "Intellect": null,
+      "Awareness": 6,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 8,
+      "Parry": 2,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Interpose",
+        "rank": 1
+      },
+      {
+        "name": "Improved Defense",
+        "rank": 1
+      },
+      {
+        "name": "Defensive Attack",
+        "rank": 1
+      },
+      {
+        "name": "Fearless",
+        "rank": 1
+      },
+      {
+        "name": "Takedown",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Golem",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Runed Stone and Iron",
+        "effect": "Protection",
+        "rank": 8,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Answer the Call",
+        "effect": "Teleport",
+        "rank": 6,
+        "role": "movement",
+        "detail": "Only to the side of its amulet-bearer",
+        "flaws": [
+          {
+            "name": "Limited"
+          }
+        ]
+      },
+      {
+        "name": "Unbudging",
+        "effect": "Power-Lifting",
+        "rank": 4,
+        "role": "utility"
+      },
+      {
+        "name": "Sensors",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Darkvision, Detect Hostile Intent toward bearer",
+        "role": "sense"
+      },
+      {
+        "name": "Bonded Amulet",
+        "effect": "Feature",
+        "rank": 2,
+        "role": "utility",
+        "detail": "Always knows where its amulet-bearer is and how badly hurt they are; arrives at a word"
+      },
+      {
+        "name": "Store Spell",
+        "effect": "Feature",
+        "rank": 4,
+        "role": "utility",
+        "detail": "Holds one spell cast into it and releases it on command"
+      },
+      {
+        "name": "Absorb Harm",
+        "effect": "Regeneration",
+        "rank": 8,
+        "role": "defense",
+        "detail": "Heals while standing beside its bearer"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "origami-paper-golem",
+    "name": "Origami Paper Golem",
+    "kind": "construct",
+    "realm": "Robots & Constructs",
+    "category": "Golems & Animated",
+    "pl": 6,
+    "size": "Medium",
+    "summary": "A thousand pages torn from a forbidden library's books, folded into the shape of a slender man, and animated by the spells written on them. It rustles when it breathes, though it doesn't breathe.",
+    "tactics": "Bursts into a whirling cloud of razor-edged paper cranes to slice everything in the room, then refolds to wrap survivors up tight.",
+    "habitat": "libraries, archives, origami masters' studios",
+    "weakness": "Paper: fire and water both destroy it, and a single torn-out key page holds its animating spell.",
+    "tags": [
+      "construct",
+      "golem",
+      "magic",
+      "paper",
+      "library"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": null,
+      "Agility": 4,
+      "Dexterity": 3,
+      "Fighting": 4,
+      "Intellect": null,
+      "Awareness": 3,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 4,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Stealth",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Evasion",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Golem",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Folded Layers (non-impervious ranks)",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Paper Cuts",
+        "effect": "Damage",
+        "rank": 6,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "detail": "Explodes into a storm of razor-folded pages",
+        "alternates": [
+          {
+            "name": "Smothering Pages",
+            "effect": "Snare",
+            "rank": 4,
+            "role": "attack",
+            "detail": "Wraps a foe like a mummy in paper"
+          }
+        ]
+      },
+      {
+        "name": "Scatter and Refold",
+        "effect": "Insubstantial",
+        "rank": 1,
+        "role": "defense",
+        "detail": "Bursts into a flock of paper cranes and refolds elsewhere"
+      },
+      {
+        "name": "Paper Cranes",
+        "effect": "Flight",
+        "rank": 3,
+        "role": "movement"
+      },
+      {
+        "name": "Refold",
+        "effect": "Regeneration",
+        "rank": 4,
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  }
+]

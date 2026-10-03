@@ -4,7 +4,8 @@ import fs from 'node:fs';
 import zlib from 'node:zlib';
 import { RULES as R } from '../src/engine/index.js';
 import { generateCharacter, generateTeam } from '../src/engine/generator.js';
-import { fillCharacterSheet, rosterWorkbook, unzip, setCell, templateCells } from '../src/engine/xlsx.js';
+import { fillCharacterSheet, rosterWorkbook, unzip, setCell, templateCells, readWorkbookCharacters } from '../src/engine/xlsx.js';
+import { awardPoints } from '../src/engine/advancement.js';
 import { statBlockText } from '../src/engine/render.js';
 
 const template = new Uint8Array(fs.readFileSync(new URL('../data/sheet_template.xlsx', import.meta.url)));
@@ -21,7 +22,7 @@ test('filled character sheet keeps the template and adds a Full Stat Block sheet
   assert.match(wb, /name="Full Stat Block"/);
   assert.ok(files['xl/drawings/drawing1.xml'], 'template drawing kept');
   const full = Object.keys(files).filter((f) => /^xl\/worksheets\/sheet\d+\.xml$/.test(f));
-  assert.equal(full.length, 2);
+  assert.equal(full.length, 3); // sheet, Full Stat Block, hidden DCUGen Data
   assert.match(text(files['[Content_Types].xml']), /sheet2\.xml/);
 });
 
@@ -48,7 +49,7 @@ test('roster workbook has a summary sheet and one sheet per character', async ()
   const team = generateTeam(R, { seed: 'wb-team', size: 3 });
   const files = await unzip(rosterWorkbook(team.members, R), inflate);
   const wb = text(files['xl/workbook.xml']);
-  assert.equal((wb.match(/<sheet /g) || []).length, 4);
+  assert.equal((wb.match(/<sheet /g) || []).length, 5); // + hidden DCUGen Data
   assert.match(text(files['xl/worksheets/sheet1.xml']), /Codename/);
 });
 
@@ -56,4 +57,18 @@ test('stat block text follows the book layout', () => {
   const ch = generateCharacter(R, { seed: 'text-1' });
   const t = statBlockText(ch, R);
   for (const part of ['STR ', 'Offense:', 'Defense:', 'Power Points: Abilities', `= ${ch.pl * 15}`]) assert.ok(t.includes(part), part);
+});
+
+test('DCUGen Excel exports import back exactly (character and roster)', async () => {
+  const ch = generateCharacter(R, { seed: 'roundtrip-1', pl: 9 });
+  ch.notes = 'Quotes "and" <tags> & ampersands';
+  awardPoints(ch, R, 2, 'Session 1');
+  const back = await readWorkbookCharacters(await fillCharacterSheet(template, ch, R, inflate), inflate);
+  assert.equal(back.length, 1);
+  assert.deepEqual(back[0], JSON.parse(JSON.stringify(ch)));
+  const team = generateTeam(R, { seed: 'roundtrip-team', size: 3, pl: 8 }).members;
+  const roster = await readWorkbookCharacters(rosterWorkbook(team, R), inflate);
+  assert.equal(roster.length, team.length);
+  assert.equal(roster[1].identity.codename, team[1].identity.codename);
+  assert.equal(await readWorkbookCharacters(template, inflate), null);
 });
