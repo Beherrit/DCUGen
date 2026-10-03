@@ -74,10 +74,15 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
   sheet and the exports. **Share the whole world as one key** (Vault page or the 🔑 button): pages, ties, moments
   and the roster in a `DCUW1.` string that players paste into the Forge's "Open a key" box and choose merge or
   replace.
+- **Life stories by hand** – every part of the Bio (story, family, people, timeline, sections, personality, inner
+  life, GM hooks) can be edited, or written from a blank page ("Write your own" / "start blank").
 - **Portraits** – every character gets a portrait on the case file, the Bio page and the World: built-in comic art
   drawn by the app (offline, instant) or an AI painting from a free, open-source service (one at a time, with the
   built-in art standing in while it paints), or a picture you upload. New portrait, edit or copy the prompt, delete.
   The portrait goes into the Excel character sheet's PORTRAIT box.
+  AI paintings come from AI Horde by default (free, open source, volunteer GPUs; anonymous works, a free key from
+  aihorde.net/register skips the queue) in four styles: comic book, semi-realistic, anime, painted. Pollinations.ai
+  remains as the other painter.
 - **Enemies** – "Add an enemy" on the Bio page rolls a full villain (nuisance, threat or nemesis) with a reason and a
   status, puts them in the character's life with a key so they open as a character, and on the sheet as a complication.
 - **The Table** – a shared feed of dice. Every sheet has a "Roll" menu (initiative, attacks, resistance checks,

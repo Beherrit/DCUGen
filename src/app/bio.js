@@ -8,6 +8,9 @@ import { journalSection } from './journal.js';
 import { factionsSection } from './factions.js';
 import { state } from './store.js';
 import { portraitBlock } from './portrait.js';
+import { bioEditor, blankBio } from './bioedit.js';
+
+let editingBio = false; // the Bio page shows the editor instead of the story
 
 const SIDE_LABEL = { light: 'Lightside', dark: 'Darkside', neutral: 'Neutral', exotic: 'Exotic' };
 
@@ -32,11 +35,21 @@ export function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
 
   const journal = journalSection(ch, R, { change, onOpenPerson: open });
   const factions = factionsSection(ch, { change, roster: state.roster });
+  const writeOwn = () => { editingBio = true; change?.((c) => { c.bio = blankBio(c); }); };
+  // one change() per leave: the Forge's change clones the character as it was when the page rendered
+  const onSave = (out) => { editingBio = false; change((c) => { c.bio = out; }); };
+  const onCancel = () => { editingBio = false; change((c) => c); };
+  if (editingBio && change) {
+    const file = h('article', { class: 'file bio' }, head, toolbar || null, h('div', { class: 'file-body' }, h('div', { class: 'col', style: { gridColumn: '1 / -1' } }, bioEditor(ch, { onSave, onCancel }))));
+    file.style.setProperty('--hero', hero);
+    file.style.setProperty('--hero-ink', inkFor(hero));
+    return file;
+  }
   if (!bio) {
     const file = h('article', { class: 'file bio' }, head, toolbar || null,
       h('div', { class: 'bio-empty' },
-        h('p', null, 'No life story yet. Roll one: family, childhood, the events that made them, the people in their life, personality, secrets and story hooks for the GM.'),
-        change ? h('button', { class: 'btn primary big', type: 'button', id: 'bio-generate', onClick: regen }, 'Roll a life story') : null),
+        h('p', null, 'No life story yet. Roll one: family, childhood, the events that made them, the people in their life, personality, secrets and story hooks for the GM. Or write your own from a blank page.'),
+        change ? h('div', { class: 'btn-row', style: { justifyContent: 'center' } }, h('button', { class: 'btn primary big', type: 'button', id: 'bio-generate', onClick: regen }, 'Roll a life story'), h('button', { class: 'btn big', type: 'button', id: 'bio-write', onClick: writeOwn }, '✎ Write your own')) : null),
       h('div', { class: 'file-body' }, h('div', { class: 'col', style: { gridColumn: '1 / -1' } }, factions, journal)));
     file.style.setProperty('--hero', hero);
     file.style.setProperty('--hero-ink', inkFor(hero));
@@ -48,7 +61,7 @@ export function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
   });
 
   const summary = h('section', { class: 'sec bio-summary' },
-    h('h3', null, 'Their story', change ? h('span', { class: 'pts no-print' }, h('button', { class: 'linkish', type: 'button', onClick: regen }, bio.manual ? 'Roll a life story' : 'Roll a new life')) : null),
+    h('h3', null, 'Their story', change ? h('span', { class: 'pts no-print' }, h('button', { class: 'linkish', type: 'button', id: 'bio-edit', title: 'Change any part of the life story by hand', onClick: () => { editingBio = true; change((c) => c); } }, '✎ Edit the whole bio'), ' · ', h('button', { class: 'linkish', type: 'button', id: 'bio-blank', title: 'Throw the rolled story away and write one from a blank page', onClick: writeOwn }, 'start blank'), ' · ', h('button', { class: 'linkish', type: 'button', onClick: regen }, bio.manual ? 'Roll a life story' : 'Roll a new life')) : null),
     change
       ? h('textarea', { class: 'bio-summary-edit', id: 'bio-summary', 'aria-label': 'Biography summary', onChange: (e) => change((c) => { c.bio = { ...c.bio, summary: e.target.value, edited: true }; }) }, bio.summary || '')
       : h('p', null, bio.summary));

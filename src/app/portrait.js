@@ -5,9 +5,21 @@
 // stands in), the built-in comic art drawn by the app, or a picture you upload yourself.
 
 import { h, toast, copyText, openDialog } from './dom.js';
-import { portraitOf, setPortrait, clearPortrait, newPortraitSeed, portraitPrompt, PORTRAIT_SERVICE, PORTRAIT_SOURCES } from '../engine/portrait.js';
+import { portraitOf, setPortrait, clearPortrait, newPortraitSeed, portraitPrompt, PORTRAIT_SERVICE, PORTRAIT_SERVICES, PORTRAIT_SOURCES, PORTRAIT_STYLES, PORTRAIT_NEGATIVE, setPortraitDefaults, portraitDefaults } from '../engine/portrait.js';
 
-const CREDIT = `AI portraits come from ${PORTRAIT_SERVICE.name}: free and open source, no account. Only the prompt is sent; the image lives in your browser's cache. The free tier allows ${PORTRAIT_SERVICE.limit}, so portraits load one at a time and keep trying while the built-in art stands in. Built-in comic art is drawn by the app itself and works offline.`;
+const CREDIT = `AI portraits come from a free, open source service (AI Horde by default: volunteers' GPUs running real Stable Diffusion models, so semi-realistic and anime styles work; or ${PORTRAIT_SERVICE.name}). Only the prompt is sent. Portraits paint one at a time while the built-in art stands in. Built-in comic art is drawn by the app itself and works offline.`;
+
+// ---- preferences: service, default style, AI Horde key ---------------------------------------------------
+const PREFS_KEY = 'dcugen.portrait.prefs';
+export const prefs = (() => { try { return { service: 'horde', style: 'comic', hordeKey: '', ...(JSON.parse(localStorage.getItem(PREFS_KEY) || 'null') || {}) }; } catch { return { service: 'horde', style: 'comic', hordeKey: '' }; } })();
+if (!PORTRAIT_SERVICES[prefs.service]) prefs.service = 'horde';
+if (!PORTRAIT_STYLES[prefs.style]) prefs.style = 'comic';
+setPortraitDefaults({ service: prefs.service, style: prefs.style });
+export function savePortraitPrefs(patch = {}) {
+  Object.assign(prefs, patch);
+  setPortraitDefaults({ service: prefs.service, style: prefs.style });
+  try { localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); } catch { /* full */ }
+}
 
 // ---- one-at-a-time painter ----------------------------------------------------------------------------
 // Fetches the painting (so the service's answer is known), shrinks it to the portrait size and hands
@@ -98,18 +110,74 @@ async function paintOnce(url) {
   return { ok: false, why: why || 'no connection, or the service refused the browser', retry };
 }
 
+// ---- AI Horde: submit, wait in the queue, collect -------------------------------------------------------------
+const HORDE = 'https://aihorde.net/api/v2';
+const hordeHeaders = () => ({ 'Content-Type': 'application/json', apikey: (prefs.hordeKey || '').trim() || '0000000000', 'Client-Agent': 'DCUGen:7:https://github.com/Beherrit/DCUGen' });
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+/** fetch that gives up: a blocked network should fail fast, not hang the queue. */
+function fetchT(url, opts = {}, ms = 25000) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), ms);
+  return fetch(url, { ...opts, signal: ctrl.signal }).finally(() => clearTimeout(t));
+}
+
+async function paintHorde(job, { onStatus, cancelled } = {}) {
+  const body = {
+    prompt: `${job.prompt} ### ${PORTRAIT_NEGATIVE}`,
+    params: { width: 512, height: 640, steps: 24, cfg_scale: 6.5, sampler_name: 'k_euler_a', karras: true, n: 1, seed: String(job.seed ?? 1) },
+    nsfw: false, censor_nsfw: true, r2: false, shared: true, slow_workers: true,
+    models: job.models && job.models.length ? job.models : undefined,
+  };
+  let res;
+  try { res = await fetchT(`${HORDE}/generate/async`, { method: 'POST', headers: hordeHeaders(), body: JSON.stringify(body) }); } catch (e) { return { ok: false, why: e.name === 'AbortError' ? 'AI Horde did not answer (network blocked?)' : 'no connection to AI Horde (or the browser blocked it)', retry: 20 }; }
+  let data = {};
+  try { data = await res.json(); } catch { /* empty */ }
+  if (!res.ok) {
+    const msg = data.message || `HTTP ${res.status}`;
+    if (res.status === 429) return { ok: false, why: `AI Horde: ${msg}`, retry: 30 };
+    if (res.status === 403 && /anonymous|kudos/i.test(msg) && body.models) { return { ok: false, why: `AI Horde: ${msg}`, retry: 20, anyModel: true }; }
+    return { ok: false, why: `AI Horde: ${msg}`, fatal: /invalid api key|not allowed/i.test(msg) };
+  }
+  const id = data.id;
+  if (!id) return { ok: false, why: 'AI Horde gave no job id' };
+  const started = Date.now();
+  let askedAnyModel = false;
+  while (Date.now() - started < 20 * 60 * 1000) {
+    if (cancelled?.()) { fetch(`${HORDE}/generate/status/${id}`, { method: 'DELETE', headers: hordeHeaders() }).catch(() => {}); return { ok: false, why: 'cancelled' }; }
+    let c = {};
+    try { c = await (await fetchT(`${HORDE}/generate/check/${id}`, { headers: hordeHeaders() })).json(); } catch { await sleep(5000); continue; }
+    if (c.faulted) return { ok: false, why: 'AI Horde: the job faulted' };
+    if (c.is_possible === false && !askedAnyModel) { askedAnyModel = true; if (body.models) return { ok: false, why: 'no AI Horde worker runs those models right now', retry: 5, anyModel: true }; }
+    if (c.done) break;
+    const pos = c.queue_position ?? 0; const wait = c.wait_time ?? 0;
+    onStatus?.(c.processing ? 'Painting on AI Horde…' : `Queued at AI Horde${pos ? ` (${pos} ahead` : ' ('}${wait ? `${pos ? ', ' : ''}~${Math.max(5, wait)}s` : ''})…`);
+    await sleep(Math.min(20000, Math.max(3000, (wait || 6) * 1000 / 2)));
+  }
+  let st = {};
+  try { st = await (await fetchT(`${HORDE}/generate/status/${id}`, { headers: hordeHeaders() })).json(); } catch { return { ok: false, why: 'could not collect the picture from AI Horde', retry: 10 }; }
+  const g = st.generations?.[0];
+  if (!g?.img) return { ok: false, why: 'AI Horde took too long: trying again later', retry: 30 };
+  if (g.censored) return { ok: false, why: 'AI Horde censored that one: new dice', retry: 2 };
+  const src = /^https?:/.test(g.img) ? g.img : `data:image/webp;base64,${g.img}`;
+  try {
+    if (/^data:/.test(src)) { const img = await loadImage(src); return { ok: true, image: imageToPortrait(img), model: g.model }; }
+    const img = await loadImage(src, { cors: true }); return { ok: true, image: imageToPortrait(img), model: g.model };
+  } catch { return { ok: false, why: 'the picture came back unreadable', retry: 5 }; }
+}
+
 function pump() {
   if (busy) return;
   const job = queue.shift();
   if (!job) { notify(); return; }
   if (job.cancelled?.()) { pump(); return; }
   busy = true; notify();
-  const wait = Math.max(0, lastRequest + GAP - Date.now());
+  const gap = job.service === 'horde' ? 2000 : GAP;
+  const wait = Math.max(0, lastRequest + gap - Date.now());
   job.onWait?.(wait);
   setTimeout(async () => {
     if (job.cancelled?.()) { busy = false; pump(); return; }
     lastRequest = Date.now();
-    const r = await paintOnce(job.url);
+    const r = job.service === 'horde' ? await paintHorde(job, { onStatus: job.onStatus, cancelled: job.cancelled }) : await paintOnce(job.url);
     busy = false;
     job.onDone?.(r);
     setTimeout(pump, 50);
@@ -117,8 +185,9 @@ function pump() {
 }
 
 /** Queue a painting. Resolves { ok, image?, why?, retry?, fatal? }. */
-export function requestPainting(url, { onWait, cancelled } = {}) {
-  return new Promise((resolve) => { queue.push({ url, onWait, cancelled, onDone: resolve }); pump(); });
+export function requestPainting(job, { onWait, onStatus, cancelled } = {}) {
+  const j = typeof job === 'string' ? { url: job, service: 'pollinations' } : job;
+  return new Promise((resolve) => { queue.push({ ...j, onWait, onStatus, cancelled, onDone: resolve }); pump(); });
 }
 
 let fatalNote = null;
@@ -133,13 +202,18 @@ export function paintingAvailable() { return !fatalNote; }
 export async function paintCharacter(ch, save, { onStatus, cancelled, tries = 40 } = {}) {
   const p = portraitOf(ch);
   if (p.hidden || p.source !== 'ai') return false;
+  let models = p.models;
   for (let i = 0; i < tries; i++) {
     if (cancelled?.()) return false;
-    const r = await requestPainting(p.url, { onWait: (ms) => onStatus?.(ms > 800 ? `Painting in ${Math.ceil(ms / 1000)}s…` : 'Painting…'), cancelled });
-    if (r.ok) { save({ image: r.image || null, live: !!r.live, url: p.url }); return true; }
+    const job = p.service === 'horde' ? { service: 'horde', prompt: p.prompt, seed: p.seed, models } : { service: 'pollinations', url: p.url };
+    const r = await requestPainting(job, { onWait: (ms) => onStatus?.(ms > 800 ? `Painting in ${Math.ceil(ms / 1000)}s…` : p.service === 'horde' ? 'Sending to AI Horde…' : 'Painting…'), onStatus, cancelled });
+    if (r.ok) { save({ image: r.image || null, live: !!r.live, url: p.url, model: r.model || null }); return true; }
+    if (r.why === 'cancelled') return false;
+    if (r.anyModel) models = null;
     if (r.fatal) { fatalNote = r.why; onStatus?.(`AI portraits unavailable: ${r.why}.`); return false; }
-    onStatus?.(`${r.why}; trying again in ${Math.max(15, r.retry || 0)}s (${i + 1})…`);
-    await new Promise((res) => setTimeout(res, Math.max(GAP, (r.retry || 0) * 1000)));
+    const again = Math.max(p.service === 'horde' ? 5 : 15, r.retry || 0);
+    onStatus?.(`${r.why}; trying again in ${again}s (${i + 1})…`);
+    await new Promise((res) => setTimeout(res, again * 1000));
   }
   onStatus?.('The service kept refusing. Re-roll to try again later.');
   return false;
@@ -229,19 +303,39 @@ export function portraitBlock(ch, { change, size = 'file' } = {}) {
   }
 
   const settings = async () => {
-    const ta = h('textarea', { style: { minHeight: '120px' } }, p.prompt);
+    const ta = h('textarea', { style: { minHeight: '110px' } }, p.prompt);
     const src = h('select', null, Object.entries(PORTRAIT_SOURCES).filter(([k]) => k !== 'upload' || p.image).map(([k, v]) => h('option', { value: k, selected: k === p.source }, k === 'upload' && ch.portrait?.aiSaved ? 'The saved AI painting' : v)));
+    const style = h('select', null, Object.entries(PORTRAIT_STYLES).map(([k, v]) => h('option', { value: k, selected: k === p.style }, v.label)));
+    const asDefault = h('input', { type: 'checkbox', checked: true });
+    const service = h('select', null, Object.entries(PORTRAIT_SERVICES).map(([k, v]) => h('option', { value: k, selected: k === prefs.service }, v.name)));
+    const key = h('input', { type: 'password', value: prefs.hordeKey || '', placeholder: 'Optional: your AI Horde API key (faster queue)', autocomplete: 'off' });
+    const blurb = h('p', { class: 'hint', style: { margin: 0 } });
+    const refresh = () => { blurb.textContent = PORTRAIT_SERVICES[service.value].blurb; key.parentElement.hidden = service.value !== 'horde'; };
+    service.addEventListener('change', refresh);
+    setTimeout(refresh, 0);
+    // the prompt follows the style unless the user wrote their own
+    style.addEventListener('change', () => { if (!p.custom) ta.value = portraitPrompt(ch, { style: style.value }); });
     const ok = await openDialog({
       title: 'Portrait',
       body: [
-        h('label', { class: 'field' }, h('span', null, 'Source'), src),
-        h('label', { class: 'field' }, h('span', null, 'Prompt (for the AI painting; built from the sheet, the looks and the bio)'), ta),
+        h('div', { class: 'jr-row' }, h('label', { class: 'field', style: { flex: 1 } }, h('span', null, 'Style'), style), h('label', { class: 'field', style: { flex: 1 } }, h('span', null, 'Source'), src)),
+        h('label', { class: 'wd-inline', style: { fontWeight: 500 } }, asDefault, ' Use this style for every new portrait'),
+        h('label', { class: 'field' }, h('span', null, 'Prompt (built from the sheet, the looks and the bio)'), ta),
+        h('div', { class: 'label', style: { marginTop: '6px' } }, 'Painter (for all characters)'),
+        h('label', { class: 'field' }, h('span', null, 'Service'), service),
+        h('label', { class: 'field' }, h('span', null, 'AI Horde key'), key, h('small', { class: 'hint' }, 'Anonymous works but waits longer. A key is free: ', h('a', { href: PORTRAIT_SERVICES.horde.register, target: '_blank', rel: 'noopener' }, 'aihorde.net/register'), '. It is kept in this browser only.')),
+        blurb,
         h('p', { class: 'hint', style: { margin: 0 } }, CREDIT),
       ],
       buttons: [{ label: 'Cancel', value: null }, { label: 'Reset prompt', value: 'reset' }, { label: 'Save', value: 'save', primary: true }],
     });
-    if (ok === 'save') change((c) => setPortrait(c, { prompt: ta.value.trim(), source: src.value, seed: ta.value.trim() !== p.prompt ? newPortraitSeed() : undefined, image: src.value === 'upload' ? undefined : null }));
-    if (ok === 'reset') change((c) => setPortrait(c, { prompt: '', source: src.value === 'upload' ? 'ai' : src.value, seed: newPortraitSeed(), image: null }));
+    if (!ok) return;
+    const serviceChanged = service.value !== prefs.service;
+    savePortraitPrefs({ service: service.value, hordeKey: key.value.trim(), ...(asDefault.checked ? { style: style.value } : {}) });
+    const styleChanged = style.value !== p.style;
+    if (ok === 'save') change((c) => setPortrait(c, { style: style.value, prompt: ta.value.trim(), source: src.value, seed: ta.value.trim() !== p.prompt || styleChanged ? newPortraitSeed() : undefined, image: src.value === 'upload' ? undefined : null, live: false }));
+    if (ok === 'reset') change((c) => setPortrait(c, { style: style.value, prompt: '', source: src.value === 'upload' ? 'ai' : src.value, seed: newPortraitSeed(), image: null, live: false }));
+    if (ok === 'save' && !styleChanged && ta.value.trim() === p.prompt && serviceChanged) change((c) => setPortrait(c, { live: false }));
   };
   const fileIn = h('input', { type: 'file', accept: 'image/*', hidden: true, onChange: async (e) => {
     const f = e.target.files?.[0];
@@ -256,7 +350,7 @@ export function portraitBlock(ch, { change, size = 'file' } = {}) {
       : [
         h('button', { class: 'btn sm', type: 'button', title: 'A new AI painting with the same prompt and new dice', onClick: newPortrait }, '🎲 New portrait'),
         h('button', { class: 'btn sm', type: 'button', title: 'Use a picture of your own', onClick: () => fileIn.click() }, 'Upload…'),
-        h('button', { class: 'btn sm', type: 'button', title: 'Source and prompt', onClick: settings }, p.source === 'upload' ? (ch.portrait?.aiSaved ? 'AI painting ✓' : 'Your picture') : p.source === 'builtin' ? 'Built-in art' : p.custom ? 'AI · edited prompt' : p.live ? 'AI painting' : 'AI prompt'),
+        h('button', { class: 'btn sm', type: 'button', title: 'Source and prompt', onClick: settings }, p.source === 'upload' ? (ch.portrait?.aiSaved ? 'AI painting ✓' : 'Your picture') : p.source === 'builtin' ? 'Built-in art' : `${PORTRAIT_STYLES[p.style]?.label || 'AI'} · ${p.custom ? 'edited prompt' : 'style & painter'}`),
         h('button', { class: 'btn sm ghost', type: 'button', title: 'Copy the prompt to use in any other image tool', onClick: async () => toast((await copyText(p.prompt)) ? 'Prompt copied' : 'Copy failed') }, 'Copy prompt'),
         h('button', { class: 'btn sm ghost danger', type: 'button', title: 'Remove the portrait from this character', onClick: () => change((c) => clearPortrait(c)) }, '🗑 Delete portrait'),
         fileIn,
