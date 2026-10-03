@@ -120,13 +120,35 @@ function build() {
     h('button', { class: 'btn primary big', type: 'button', id: 'roll', onClick: () => roll(seedIn.value.trim() || undefined) }, 'Roll a character'),
     h('div', { class: 'btn-row' },
       h('button', { class: 'btn', type: 'button', onClick: surprise }, 'Surprise me'),
-      h('button', { class: 'btn', type: 'button', onClick: rollTeam }, 'Roll a team')),
-    h('p', { class: 'hint' }, 'Press R to roll. Every character is legal for its power level and spends exactly 15 points per PL.'),
+      h('button', { class: 'btn', type: 'button', onClick: rollTeam }, 'Roll a team'),
+      h('button', { class: 'btn', type: 'button', id: 'build-scratch', onClick: buildFromScratch }, 'Build from scratch')),
+    h('p', { class: 'hint' }, 'Press R to roll. Every rolled character is legal for its power level and spends exactly 15 points per PL. Build from scratch starts a blank sheet you fill in yourself.'),
     h('div', { class: 'field' }, h('span', null, 'Recent rolls'), historyEl));
 
   fileHost = h('div', { class: 'file-host', style: { minWidth: 0 } });
   root.append(h('div', { class: 'forge' }, rail, fileHost));
   renderHistory();
+}
+
+/** A blank, legal-to-edit character at the chosen PL, opened in edit mode. */
+function buildFromScratch() {
+  const pl = state.prefs.plRandom ? 10 : state.prefs.pl;
+  const ch = {
+    id: `c-custom-${Date.now().toString(36)}`,
+    version: 1,
+    pl,
+    abilities: { Strength: 0, Stamina: 0, Agility: 0, Dexterity: 0, Fighting: 0, Intellect: 0, Awareness: 0, Presence: 0 },
+    defenses: { Dodge: 0, Parry: 0, Fortitude: 0, Will: 0 },
+    skills: [], advantages: [], powers: [], devices: [], equipment: [],
+    archetype: { id: 'custom', name: 'Custom' },
+    theme: { id: 'custom', name: 'Custom', color: '#4a5d7a' },
+    alignment: state.prefs.alignment === 'villain' ? 'villain' : 'hero',
+    identity: { codename: 'New Hero', realName: '', languages: ['English'] },
+    origin: null, complications: [], notes: '',
+    createdAt: new Date().toISOString(),
+  };
+  setCurrent(ch, { fresh: true, editing: true });
+  toast(`Blank PL ${pl} character: ${pl * 15} points to spend. Use + and − to build, and "Add a power" for the Power Lab.`);
 }
 
 function chaosWord(c) {
