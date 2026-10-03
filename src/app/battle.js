@@ -15,7 +15,7 @@ let root;
 let hooks = {};
 let battle;
 let timer = null;
-let ui = { speed: 700, filter: 'all', bestiaryQ: '', team: 'A', mc: null, mcBusy: false, showHelp: false };
+let ui = { speed: 700, filter: 'all', bestiaryQ: '', team: 'A', copies: 1, mc: null, mcBusy: false, showHelp: false };
 const TEAM_COLORS = { A: '#1f4fbf', B: '#c8202f', C: '#1a7f4b', D: '#a8670b' };
 const TEAMS = ['A', 'B', 'C', 'D'];
 
@@ -36,6 +36,39 @@ export function initBattle(rules, el, h2 = {}) {
   root = el;
   hooks = h2;
   battle = load();
+  document.addEventListener('keydown', (e) => {
+    if (!root || root.hidden || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName)) return;
+    if (document.querySelector('dialog[open]')) return;
+    const k = e.key.toLowerCase();
+    if (k === ' ' && battle.status === 'running') { e.preventDefault(); if (timer) { stopTimer(); renderBattle(); } else play(); }
+    else if (k === 'n' && battle.status === 'running') doStep();
+    else if (k === 'r' && battle.status === 'running') doRound();
+    else if (k === 'e' && battle.status === 'running') doEnd();
+    else if (k === 'enter' && battle.status === 'setup' && battle.combatants.length >= 2) { e.preventDefault(); begin(); }
+  });
+}
+
+function begin() {
+  if (!readyToFight().ok) { toast(readyToFight().why); return; }
+  try { stopTimer(); startBattle(battle, R); save(); renderBattle(); } catch (e) { toast(e.message); }
+}
+
+/** Can the fight start? Needs fighters on at least two sides. */
+function readyToFight() {
+  const teams = new Set(battle.combatants.map((c) => c.team));
+  if (!battle.combatants.length) return { ok: false, why: 'The arena is empty: throw someone in first.' };
+  if (teams.size < 2) return { ok: false, why: `Everyone is on team ${[...teams][0]}. Move someone to another team (click a team letter on their card).` };
+  return { ok: true, why: '' };
+}
+
+/** Power on each side: total and average PL, for the balance readout. */
+function sidePower() {
+  const out = {};
+  // minions count for a third: five PL 8 thugs are not a PL 40 side
+  for (const c of battle.combatants) { out[c.team] = out[c.team] || { n: 0, pl: 0, w: 0, standing: 0 }; out[c.team].n++; out[c.team].pl += c.pl; out[c.team].w += c.minion ? c.pl / 3 : c.pl; if (!c.out && !c.fled) out[c.team].standing++; }
+  for (const t of Object.keys(out)) { out[t].avg = out[t].pl / out[t].n; out[t].w = Math.round(out[t].w); }
+  return out;
 }
 
 /** Throw any character into the battle (from the Forge, Roster, Bestiary or Workshop). */
@@ -107,14 +140,13 @@ function fighterCard(c) {
   const dmg = h('div', { class: 'bt-track', title: `${c.bruises} bruise${c.bruises === 1 ? '' : 's'}${c.dazed ? ', dazed' : ''}${c.staggered ? ', staggered' : ''}` },
     Array.from({ length: 4 }, (_, i) => h('i', { class: i < c.bruises ? 'on' : '' })),
     c.staggered ? h('span', { class: 'bt-flag stag' }, 'STAGGERED') : c.dazed ? h('span', { class: 'bt-flag dazed' }, 'DAZED') : null);
-  const conds = c.out || c.fled ? [] : conditionLabels(c).filter((x) => !['Dazed', 'Staggered'].includes(x));
+  const conds = c.out || c.fled ? [] : conditionLabels(c).filter((x) => !['Dazed', 'Staggered', 'Fatigued', 'Exhausted'].includes(x));
   const main = c.attacks.filter((a) => !a.unarmed).sort((a, b) => b.rank - a.rank)[0] || c.attacks[0];
   const styleSel = h('select', { class: 'bt-mini', 'aria-label': `${c.name} fighting style`, onChange: (e) => { c.style = e.target.value; rebuildCombatant(c, R); save(); renderBattle(); } },
     Object.entries(STYLES).map(([k, v]) => h('option', { value: k, selected: k === c.style }, `${v.glyph} ${v.label}`)));
   const tacSel = h('select', { class: 'bt-mini', 'aria-label': `${c.name} target choice`, onChange: (e) => { c.tactics = e.target.value; save(); } },
     Object.entries(TACTICS).map(([k, v]) => h('option', { value: k, selected: k === c.tactics }, k === 'auto' ? `Target: ${S.target === 'lowWill' ? 'weakest will' : TACTICS[S.target]?.toLowerCase() || 'by style'}` : v)));
-  const teamSel = h('select', { class: 'bt-mini', 'aria-label': `${c.name} team`, onChange: (e) => { c.team = e.target.value; placeAll(battle); save(); renderBattle(); } },
-    TEAMS.map((t) => h('option', { value: t, selected: t === c.team }, `Team ${t}`)));
+  const teamSel = h('div', { class: 'bt-sides', role: 'group', 'aria-label': `${c.name} team` }, TEAMS.map((t) => h('button', { type: 'button', class: `bt-side ${t === c.team ? 'on' : ''}`, style: { '--t': teamColor(t) }, title: `Move to team ${t}`, 'aria-pressed': String(t === c.team), onClick: () => { c.team = t; placeAll(battle); save(); renderBattle(); } }, t)));
   const hp = h('input', { type: 'number', class: 'bt-hp', min: 0, max: 9, value: c.heroPoints, 'aria-label': `${c.name} hero points`, title: 'Hero points', onChange: (e) => { c.heroPoints = Math.max(0, Number(e.target.value) || 0); save(); } });
   return h('article', { class: `bt-card ${c.out ? 'out' : ''} ${c.fled ? 'fled' : ''}`, style: { '--c': c.color, '--t': teamColor(c.team), '--c-ink': inkFor(c.color) } },
     h('div', { class: 'bt-card-head' },
@@ -127,7 +159,7 @@ function fighterCard(c) {
     h('div', { class: 'bt-stats' },
       [['DOD', d.defenses.Dodge], ['PAR', d.defenses.Parry], ['TOU', d.defenses.Toughness - c.bruises], ['FOR', d.defenses.immune?.Fortitude ? '—' : d.defenses.Fortitude], ['WIL', d.defenses.immune?.Will ? '—' : d.defenses.Will], ['INI', (d.initiative >= 0 ? '+' : '') + d.initiative]].map(([k, v]) => h('div', null, h('b', { class: 'num' }, v), h('span', null, k)))),
     main ? h('div', { class: 'bt-main' }, `${main.name}: ${main.roll ? `+${main.bonus}, ` : `${main.area ? `${main.area} area` : 'perception'}, `}${main.effect} ${main.rank} (${main.resistance})`, c.attacks.length > 2 ? h('small', null, ` +${c.attacks.length - 1} more`) : null) : null,
-    setup ? h('div', { class: 'bt-opts' }, teamSel, styleSel, tacSel, h('label', { class: 'bt-hp-wrap', title: 'Hero points' }, '★', hp)) : null,
+    setup ? h('div', { class: 'bt-opts' }, teamSel, styleSel, h('details', { class: 'bt-more' }, h('summary', null, 'More'), h('div', { class: 'bt-more-body' }, tacSel, h('label', { class: 'bt-hp-wrap', title: 'Hero points: re-roll a miss or shake off a daze' }, '★ Hero points', hp)))) : null,
     !setup ? h('div', { class: 'bt-state' }, dmg,
       h('div', { class: 'bt-conds' },
         c.fled ? h('span', { class: 'bt-cond fled' }, 'Fled') : c.out ? h('span', { class: 'bt-cond ko' }, statusLine(c)) : null,
@@ -160,7 +192,19 @@ function logEntry(e) {
   return el;
 }
 
-let logHost; let liveHost; let arenaHost; let cardsHost;
+let logHost; let liveHost; let arenaHost; let cardsHost; let nowHost;
+
+/** What just happened and who is up, in big type, so you need not read the log. */
+function nowBanner() {
+  if (battle.status === 'setup') return [];
+  const last = [...battle.log].reverse().find((e) => e.kind !== 'round' && e.kind !== 'init') || battle.log[battle.log.length - 1];
+  const next = battle.status === 'running' ? battle.combatants.find((c) => c.id === battle.order[battle.turn]) : null;
+  const actor = last?.actor ? battle.combatants.find((c) => c.id === last.actor) : null;
+  return [
+    last ? h('div', { class: `bt-now-line ${KIND_CLASS[last.kind] || ''}`, style: actor ? { '--t': teamColor(actor.team) } : null }, h('span', { class: 'bt-now-label' }, 'Just now'), h('span', null, last.text)) : null,
+    next ? h('div', { class: 'bt-now-next', style: { '--t': teamColor(next.team) } }, h('span', { class: 'bt-now-label' }, 'Up next'), h('b', null, next.name), h('span', { class: 'hint' }, ` · round ${battle.round}`)) : null,
+  ].filter(Boolean);
+}
 
 function renderLog() {
   if (!logHost) return;
@@ -185,14 +229,15 @@ function renderLive() {
   if (arenaHost) { clear(arenaHost); arenaHost.append(arena()); }
   if (cardsHost) { clear(cardsHost); cardsHost.append(...teamColumns()); }
   if (liveHost) { clear(liveHost); liveHost.append(...statusBar()); }
+  if (nowHost) { clear(nowHost); nowHost.append(...nowBanner()); }
   renderLog();
 }
 
 function teamColumns() {
   const teams = [...new Set(battle.combatants.map((c) => c.team))].sort();
-  if (!teams.length) return [h('div', { class: 'empty bt-empty' }, h('h2', null, 'The arena is empty'), h('p', null, 'Throw in fighters from the panel on the left, or press "Throw in Battle Room" on any character sheet, roster card or Bestiary creature.'))];
+  if (!teams.length) return [h('div', { class: 'empty bt-empty' }, h('h2', null, 'The arena is empty'), h('p', null, 'Pick fighters on the left, or use a quick start:'), h('div', { class: 'bt-quicks' }, quickStarts()), h('p', { class: 'hint' }, 'Every character sheet, roster card and Bestiary creature also has a "Throw in Battle Room" button.'))];
   return teams.map((t) => h('section', { class: 'bt-team-col', style: { '--t': teamColor(t) } },
-    h('div', { class: 'bt-team-head' }, h('span', { class: 'bt-team', style: { background: teamColor(t) } }, t), h('b', null, `Team ${t}`), h('span', { class: 'hint' }, `${battle.combatants.filter((c) => c.team === t && !c.out && !c.fled).length} of ${battle.combatants.filter((c) => c.team === t).length} standing`)),
+    h('div', { class: 'bt-team-head' }, h('span', { class: 'bt-team', style: { background: teamColor(t) } }, t), h('b', null, `Team ${t}`), h('span', { class: 'hint' }, (() => { const p = sidePower()[t]; return battle.status === 'setup' ? `${p.n} fighter${p.n === 1 ? '' : 's'} · PL ${p.avg.toFixed(p.avg % 1 ? 1 : 0)} avg · ${p.pl} total` : `${p.standing} of ${p.n} standing`; })())),
     battle.combatants.filter((c) => c.team === t).map(fighterCard)));
 }
 
@@ -211,11 +256,44 @@ function statusBar() {
 
 // ---- adding fighters ------------------------------------------------------------------------------------
 
+/** One-click set-ups: the roster, a foe, a squad, an even match. */
+function quickStarts() {
+  const all = catalogEntries(R);
+  const heroes = state.roster.filter((c) => c.alignment !== 'villain' && !c.minion);
+  const villains = state.roster.filter((c) => c.alignment === 'villain');
+  const foe = (team, { minion = false, near = null } = {}) => {
+    const pl = near ?? (Math.round(battle.combatants.filter((c) => c.team !== team).reduce((s, c) => s + c.pl, 0) / Math.max(1, battle.combatants.filter((c) => c.team !== team).length)) || 8);
+    const pool = all.filter((e) => Math.abs(e.pl - pl) <= 2 && !!e.minion === minion);
+    const e = pool[Math.floor(Math.random() * pool.length)] || all[Math.floor(Math.random() * all.length)];
+    const ch = catalogToCharacter(e); ch.alignment = 'villain';
+    return { ch, name: e.name };
+  };
+  const evenUp = () => {
+    const p = sidePower();
+    const a = p.A?.w || 0; const b = p.B?.w || 0;
+    if (!a && !b) { toast('Add fighters first'); return; }
+    const weak = a <= b ? 'A' : 'B';
+    const gap = Math.abs(a - b);
+    if (gap < 3) { toast('The sides are already close'); return; }
+    let added = 0; let left = gap;
+    while (left > 2 && added < 6) { const f = foe(weak, { near: Math.min(left, Math.max(4, Math.round(p[weak]?.avg || p[weak === 'A' ? 'B' : 'A']?.avg || 8))) }); throwIn(f.ch, { team: weak, name: f.name }); left -= f.ch.pl; added++; }
+    toast(`Evened up: ${added} more on team ${weak}`);
+  };
+  const btn = (label, hint, fn, disabled = false) => h('button', { type: 'button', class: 'btn sm', title: hint, disabled, onClick: () => { try { fn(); } catch (e) { toast(e.message); } } }, label);
+  return [
+    btn(`My heroes → A${heroes.length ? ` (${heroes.length})` : ''}`, 'Everyone on the roster who is not a villain', () => { for (const c of heroes) throwIn(c, { team: 'A' }); toast(`${heroes.length} heroes on team A`); }, !heroes.length),
+    btn(`My villains → B${villains.length ? ` (${villains.length})` : ''}`, 'Every villain on the roster', () => { for (const c of villains) throwIn(c, { team: 'B' }); toast(`${villains.length} villains on team B`); }, !villains.length),
+    btn('🎲 Random foe → B', 'A creature or villain from the Bestiary near side A\'s power level', () => { const f = foe('B'); throwIn(f.ch, { team: 'B', name: f.name }); toast(`${f.name} steps in on team B`); }),
+    btn('👥 Squad of 5 minions → B', 'Five of the same minion from the Bestiary', () => { const f = foe('B', { minion: true }); throwIn(f.ch, { team: 'B', copies: 5, name: f.name }); toast(`5 × ${f.name} on team B`); }),
+    btn('⚖ Even it up', 'Adds Bestiary fighters to the weaker team until the power levels are close', evenUp, battle.combatants.length < 1),
+  ];
+}
+
 function addPanel() {
-  const teamSel = h('select', { id: 'bt-team', 'aria-label': 'Team to add to', onChange: (e) => { ui.team = e.target.value; } }, TEAMS.map((t) => h('option', { value: t, selected: t === ui.team }, `Team ${t}`)));
-  const copies = h('input', { type: 'number', id: 'bt-copies', min: 1, max: 20, value: 1, 'aria-label': 'How many copies', title: 'Copies (for squads of minions)', style: { maxWidth: '64px' } });
+  const teamSel = h('div', { class: 'bt-sides big', role: 'group', 'aria-label': 'Team to add to' }, TEAMS.map((t) => h('button', { type: 'button', class: `bt-side ${t === ui.team ? 'on' : ''}`, style: { '--t': teamColor(t) }, 'aria-pressed': String(t === ui.team), onClick: () => { ui.team = t; renderBattle(); } }, t)));
+  const copies = h('input', { type: 'number', id: 'bt-copies', min: 1, max: 20, value: ui.copies || 1, 'aria-label': 'How many copies', title: 'Copies (for squads of minions)', style: { maxWidth: '64px' }, onChange: (e) => { ui.copies = Number(e.target.value) || 1; } });
   const add = (ch, name) => {
-    const r = throwIn(ch, { team: teamSel.value, copies: Number(copies.value) || 1, name });
+    const r = throwIn(ch, { team: ui.team, copies: Number(copies.value) || 1, name });
     toast(`${r.count > 1 ? `${r.count} × ` : ''}${name || ch.identity?.codename} join${r.count > 1 ? '' : 's'} team ${r.team}`);
   };
   // open tabs and roster
@@ -250,17 +328,19 @@ function addPanel() {
     const e = pool[Math.floor(Math.random() * pool.length)] || all[Math.floor(Math.random() * all.length)];
     try { const ch = catalogToCharacter(e); ch.alignment = 'villain'; add(ch, e.name); } catch (err) { toast(err.message); }
   };
+  void randomFoe;
   return h('aside', { class: 'rail bt-rail', 'aria-label': 'Add fighters' },
-    h('h2', null, 'Throw in'),
-    h('div', { class: 'add-row', style: { marginTop: 0 } }, teamSel, copies),
-    h('div', { class: 'label' }, 'Your characters'),
+    h('h2', null, '1 · Throw in'),
+    h('div', { class: 'label' }, 'Add to team'),
+    h('div', { class: 'add-row', style: { marginTop: 0, alignItems: 'center' } }, teamSel, h('label', { class: 'bt-copies' }, '×', copies)),
+    h('div', { class: 'label' }, 'Quick starts'),
+    h('div', { class: 'bt-quicks' }, quickStarts()),
+    h('div', { class: 'label' }, 'Your characters (click to add)'),
     mineList,
     h('div', { class: 'label' }, 'Bestiary'),
     q, beastList,
-    h('div', { class: 'btn-row' },
-      h('button', { class: 'btn sm', type: 'button', title: 'A random creature near the other side\'s power level', onClick: randomFoe }, '🎲 Random foe'),
-      h('button', { class: 'btn sm', type: 'button', onClick: () => hooks.goBestiary?.() }, 'Open Bestiary')),
-    h('p', { class: 'hint' }, 'Heroes default to team A, villains and creatures to team B. Change teams, styles and targeting on the cards before the fight starts.'));
+    h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', type: 'button', onClick: () => hooks.goBestiary?.() }, 'Open the Bestiary')),
+    h('p', { class: 'hint' }, 'Team A is the heroes by default, B the villains and creatures. Click a team letter on any card to move them.'));
 }
 
 // ---- odds -----------------------------------------------------------------------------------------------
@@ -314,12 +394,21 @@ export function renderBattle() {
   const over = battle.status === 'over';
   const nameIn = h('input', { type: 'text', value: battle.name || 'Battle', 'aria-label': 'Battle name', class: 'bt-name', onChange: (e) => { battle.name = e.target.value.trim() || 'Battle'; save(); } });
   const speed = h('input', { type: 'range', min: 100, max: 2000, step: 100, value: 2100 - ui.speed, 'aria-label': 'Playback speed', style: { width: '120px' }, onInput: (e) => { ui.speed = 2100 - Number(e.target.value); if (timer) play(); } });
+  const ready = readyToFight();
+  const p = sidePower();
+  const sides = Object.keys(p).sort();
+  const lopsided = setup && sides.length >= 2 && Math.max(...sides.map((t) => p[t].w)) >= Math.min(...sides.map((t) => p[t].w)) * 1.6 + 4;
+  const stepN = setup ? (battle.combatants.length ? 2 : 1) : over ? 4 : 3;
+  const steps = h('ol', { class: 'bt-steps', 'aria-label': 'Where you are' },
+    [['Throw in', 'Pick fighters on the left'], ['Pick teams', 'A vs B, styles, hero points'], ['Fight', 'Play, step, or run to the end'], ['Result', 'Odds, rematch, record it']].map(([t, hint], i) => h('li', { class: i + 1 < stepN ? 'done' : i + 1 === stepN ? 'now' : '' }, h('b', null, `${i + 1}`), h('span', null, t), h('small', null, hint))));
   const controls = h('div', { class: 'bt-controls' },
-    setup ? h('button', { class: 'btn primary', type: 'button', disabled: battle.combatants.length < 2, onClick: () => { try { stopTimer(); startBattle(battle, R); save(); renderBattle(); } catch (e) { toast(e.message); } } }, '⚔ Roll initiative') : null,
-    !setup && !over ? h('button', { class: 'btn primary', type: 'button', onClick: () => (timer ? (stopTimer(), renderBattle()) : play()) }, timer ? '❚❚ Pause' : '▶ Play') : null,
-    !setup && !over ? h('button', { class: 'btn', type: 'button', onClick: doStep }, 'Step') : null,
-    !setup && !over ? h('button', { class: 'btn', type: 'button', onClick: doRound }, 'Round') : null,
-    !setup && !over ? h('button', { class: 'btn', type: 'button', onClick: doEnd }, 'Run to the end') : null,
+    setup ? h('button', { class: 'btn primary big', type: 'button', disabled: !ready.ok, title: ready.ok ? 'Roll initiative and start (Enter)' : ready.why, onClick: begin }, '⚔ Start the fight') : null,
+    setup && !ready.ok ? h('span', { class: 'hint' }, ready.why) : null,
+    setup && ready.ok && lopsided ? h('span', { class: 'bt-warn' }, `Looks one-sided: ${sides.map((t) => `${t} ${p[t].w}`).join(' vs ')} (PL, minions count a third). `, h('button', { type: 'button', class: 'linkish', onClick: () => quickStarts()[4].click() }, 'Even it up')) : null,
+    !setup && !over ? h('button', { class: 'btn primary big', type: 'button', title: 'Space', onClick: () => (timer ? (stopTimer(), renderBattle()) : play()) }, timer ? '❚❚ Pause' : '▶ Play') : null,
+    !setup && !over ? h('button', { class: 'btn', type: 'button', title: 'One action (N)', onClick: doStep }, 'Step') : null,
+    !setup && !over ? h('button', { class: 'btn', type: 'button', title: 'One round (R)', onClick: doRound }, 'Round') : null,
+    !setup && !over ? h('button', { class: 'btn', type: 'button', title: 'Finish it (E)', onClick: doEnd }, 'Run to the end') : null,
     !setup && !over ? h('label', { class: 'bt-speed' }, h('span', null, 'Speed'), speed) : null,
     !setup ? h('button', { class: 'btn', type: 'button', title: 'Same fighters, same seed: replays this exact fight', onClick: () => reset() }, '↺ Replay') : null,
     !setup ? h('button', { class: 'btn', type: 'button', title: 'Same fighters, new dice', onClick: () => reset({ newSeed: true }) }, '🎲 Rematch') : null,
@@ -342,16 +431,19 @@ export function renderBattle() {
   const result = over ? resultPanel() : null;
 
   root.append(h('div', { class: 'page-head' },
-    h('div', null, h('h1', null, 'Battle Room'), h('p', null, 'Throw anyone in: heroes, villains, your roster, the whole Bestiary. Each fighter fights in its own style, and the log shows every roll as it happens. Pause, step through, or run a hundred fights for the odds.')),
+    h('div', null, h('h1', null, 'Battle Room'), h('p', null, 'Throw anyone in, pick teams, press Start. Each fighter fights in its own style and the log shows every roll. Space plays and pauses, N steps, R runs a round, E runs to the end.')),
     h('span', { class: 'spacer' }),
     h('button', { class: 'btn sm ghost', type: 'button', 'aria-pressed': String(ui.showHelp), onClick: () => { ui.showHelp = !ui.showHelp; renderBattle(); } }, ui.showHelp ? 'Hide the rules used' : 'What\'s simulated?')));
   if (ui.showHelp) root.append(helpPanel());
+  nowHost = h('div', { class: 'bt-now' }); nowHost.append(...nowBanner());
   root.append(h('div', { class: 'bt-layout' },
     addPanel(),
     h('div', { class: 'bt-main-col' },
+      steps,
       h('section', { class: 'panel bt-panel' },
         h('div', { class: 'bt-top' }, nameIn, liveHost),
         controls,
+        nowHost,
         arenaHost,
         result,
         cardsHost),
