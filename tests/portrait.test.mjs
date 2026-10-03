@@ -57,3 +57,22 @@ test('people from a bio are supporting characters: no budget error, limits still
   assert.ok(n > 20);
   assert.ok(isNpc({ npc: true }) && isNpc({ minion: true }) && !isNpc({ pl: 10 }));
 });
+
+test('built-in avatars are valid SVG, deterministic, and reflect the looks', async () => {
+  const { avatarSvg } = await import('../src/engine/avatar.js');
+  for (let i = 0; i < 40; i++) {
+    const ch = generateCharacter(R, { seed: `avatar-${i}` });
+    const a = avatarSvg(ch, { seed: i });
+    assert.ok(a.svg.startsWith('<svg xmlns="http://www.w3.org/2000/svg"') && a.svg.endsWith('</svg>'));
+    assert.ok(!/undefined|NaN/.test(a.svg), ch.seed);
+    assert.equal(a.svg, avatarSvg(ch, { seed: i }).svg);
+    assert.ok(a.dataUrl.startsWith('data:image/svg+xml'));
+    assert.ok(a.svg.includes((ch.identity.codename || '').toUpperCase().slice(0, 10).replace(/[<>&"]/g, '')));
+  }
+  const ch = generateCharacter(R, { seed: 'avatar-x', archetype: 'android' });
+  assert.ok(avatarSvg(ch).svg.includes('#b8c0cc'), 'constructs get a metal face');
+  assert.equal(portraitOf(ch).source, 'ai');
+  setPortrait(ch, { source: 'builtin' });
+  assert.equal(portraitOf(ch).source, 'builtin');
+  assert.ok(portraitOf(ch).avatar.length > 1000);
+});

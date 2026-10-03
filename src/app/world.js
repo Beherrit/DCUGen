@@ -9,7 +9,7 @@ import { buildWorld, emptyWorld, ENTITY_TYPES, RELATIONS, RELATION_GROUPS, group
 import { zip } from '../engine/xlsx.js';
 import { sheet as makeSheet } from '../engine/render.js';
 import { fromKeySync } from '../engine/keys.js';
-import { portraitOf } from '../engine/portrait.js';
+import { portraitImg } from './portrait.js';
 
 const KEY = 'dcugen.world.v1';
 let R; let root; let hooks = {};
@@ -137,8 +137,9 @@ function personCard(e) {
   let s = null;
   try { s = ch ? makeSheet(ch, R) : null; } catch { s = null; }
   const color = e.color || typeMeta(e.type).color;
+  const img = ch ? portraitImg(ch) : null;
   return h('article', { class: 'wd-card', style: { '--c': color, '--c-ink': inkFor(color) } },
-    h('button', { type: 'button', class: 'wd-card-head', onClick: () => go(e.id) }, h('span', { class: 'wd-card-name' }, e.name), h('span', { class: 'wd-card-sub' }, [e.aliases[0], ch ? `PL ${ch.pl}` : null, e.fields?.Side].filter(Boolean).join(' · '))),
+    h('button', { type: 'button', class: `wd-card-head ${img ? 'has-img' : ''}`, onClick: () => go(e.id) }, img ? h('span', { class: 'wd-card-img' }, img) : null, h('span', { class: 'wd-card-titles' }, h('span', { class: 'wd-card-name' }, e.name), h('span', { class: 'wd-card-sub' }, [e.aliases[0], ch ? `PL ${ch.pl}` : null, e.fields?.Side].filter(Boolean).join(' · ')))),
     h('div', { class: 'wd-card-body' },
       e.summary ? h('p', null, String(e.summary).length > 160 ? `${String(e.summary).slice(0, 157)}…` : e.summary) : null,
       s ? h('div', { class: 'card-stats' }, [['Dodge', s.d.defenses.Dodge], ['Parry', s.d.defenses.Parry], ['Tough', s.d.defenses.Toughness], ['Will', s.d.defenses.Will]].map(([k, v]) => h('div', null, h('b', { class: 'num' }, v), h('span', null, k.toUpperCase())))) : null,
@@ -237,9 +238,9 @@ function entityPage(e) {
       if (ok) { deleteEntity(saved, e.id); save(); go('home'); }
     } }, 'Remove'));
 
-  const por = ch && !ch.portrait?.hidden ? portraitOf(ch) : null;
+  const por = ch ? portraitImg(ch) : null;
   const head = h('header', { class: 'wd-head', style: { '--c': color, '--c-ink': inkFor(color) } },
-    por ? h('div', { class: 'wd-head-glyph has-img' }, h('img', { src: por.url, alt: '', loading: 'lazy', referrerpolicy: 'no-referrer', onError: (ev) => { ev.target.remove(); } }), h('span', null, initialsOf(e.name))) : h('div', { class: 'wd-head-glyph' }, e.type === 'person' ? initialsOf(e.name) : meta.glyph),
+    por ? h('div', { class: 'wd-head-glyph has-img' }, por, h('span', null, initialsOf(e.name))) : h('div', { class: 'wd-head-glyph' }, e.type === 'person' ? initialsOf(e.name) : meta.glyph),
     h('div', { class: 'wd-head-text' },
       h('div', { class: 'eyebrow' }, `${meta.one}${ch ? ` · PL ${ch.pl} ${ch.archetype?.name || ''}` : ''}${e.fields?.Side ? ` · ${e.fields.Side}` : ''}`),
       h('h1', null, e.name),
