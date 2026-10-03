@@ -93,3 +93,19 @@ test('a live AI picture is remembered until the prompt, the seed or the picture 
   assert.equal(portraitOf(ch).live, false, 'a copied picture replaces the live one');
   assert.equal(portraitOf(ch).source, 'upload');
 });
+
+test('portrait styles shape the prompt and pick AI Horde models; a style change means a new picture', async () => {
+  const { PORTRAIT_STYLES, setPortraitDefaults } = await import('../src/engine/portrait.js');
+  const ch = generateCharacter(R, { seed: 'style-portrait', pl: 10 });
+  assert.match(portraitOf(ch).prompt, /^comic book (superhero|supervillain) portrait/);
+  setPortrait(ch, { style: 'anime', live: true });
+  assert.equal(portraitOf(ch).live, true);
+  assert.match(portraitOf(ch).prompt, /^anime .* portrait/);
+  assert.equal(portraitOf(ch).models[0], PORTRAIT_STYLES.anime.horde[0]);
+  setPortrait(ch, { style: 'semi' });
+  assert.equal(portraitOf(ch).live, false, 'a new style is a new painting');
+  assert.match(portraitOf(ch).prompt, /semi-realistic digital painting/);
+  setPortraitDefaults({ style: 'painted' });
+  assert.equal(portraitOf(generateCharacter(R, { seed: 'style-2', pl: 10 })).style, 'painted');
+  setPortraitDefaults({ style: 'comic' });
+});
