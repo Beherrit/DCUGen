@@ -55,20 +55,34 @@ export function joinLobby(key, { name, role = 'player', address = null } = {}) {
   const info = parseLobbyKey(key);
   leaveLobby({ silent: true });
   lobby.status = 'connecting'; lobby.role = role; lobby.name = name || (role === 'host' ? 'Host' : 'Player'); lobby.key = key; lobby.info = info; lobby.error = null; lobby.hostGone = false;
-  const addr = address || info.addresses[0];
-  const url = /^wss?:\/\//.test(addr) ? addr : `ws://${addr}:${info.port}`;
-  let ws;
-  try { ws = new WebSocket(url); } catch (e) { lobby.status = 'error'; lobby.error = e.message; emit('status'); return; }
-  lobby.ws = ws;
-  ws.onopen = () => { send({ t: 'hello', name: lobby.name, token: info.token, role }); };
-  ws.onclose = () => { if (lobby.ws === ws) { lobby.status = lobby.error ? 'error' : 'off'; lobby.ws = null; emit('status'); } };
-  ws.onerror = () => { lobby.error = `Could not reach ${url}. Is the host's app open, and are you on the same network (or is the port forwarded)?`; lobby.status = 'error'; emit('status'); };
-  ws.onmessage = (ev) => {
-    let msg;
-    try { msg = JSON.parse(ev.data); } catch { return; }
-    handle(msg);
+  // Try each address the host listed (real network first, virtual adapters later) until one answers.
+  const candidates = address ? [address] : [...info.addresses].sort((a, b) => virtualScore(a) - virtualScore(b));
+  const tried = [];
+  const attempt = (i) => {
+    if (i >= candidates.length) { lobby.status = 'error'; lobby.error = `Could not reach the host at ${tried.join(', ')}. Is the host's app open, and are you on the same network (or is the port forwarded)?`; lobby.ws = null; emit('status'); return; }
+    const addr = candidates[i];
+    const url = /^wss?:\/\//.test(addr) ? addr : `ws://${addr}:${info.port}`;
+    tried.push(addr);
+    let ws;
+    try { ws = new WebSocket(url); } catch { attempt(i + 1); return; }
+    lobby.ws = ws;
+    let opened = false;
+    const timer = setTimeout(() => { if (!opened) { try { ws.close(); } catch { /* ignore */ } } }, 6000);
+    ws.onopen = () => { opened = true; clearTimeout(timer); send({ t: 'hello', name: lobby.name, token: info.token, role }); };
+    ws.onclose = () => { clearTimeout(timer); if (lobby.ws !== ws) return; if (!opened) { attempt(i + 1); return; } lobby.status = lobby.error ? 'error' : 'off'; lobby.ws = null; emit('status'); };
+    ws.onerror = () => { /* onclose follows and moves to the next address */ };
+    ws.onmessage = (ev) => { let msg; try { msg = JSON.parse(ev.data); } catch { return; } handle(msg); };
+    emit('status');
   };
-  emit('status');
+  attempt(0);
+}
+
+/** Addresses that are usually virtual adapters (WSL, Hyper-V, VPNs, Docker) go last. */
+function virtualScore(addr) {
+  if (/^172\.(1[6-9]|2\d|3[01])\./.test(addr)) return 2;
+  if (/^(10\.|169\.254\.)/.test(addr)) return 1;
+  if (/^192\.168\./.test(addr)) return 0;
+  return 1;
 }
 
 export function leaveLobby({ silent = false } = {}) {
