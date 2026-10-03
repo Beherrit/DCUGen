@@ -5,6 +5,8 @@ import { h, toast, copyText, inkFor } from './dom.js';
 import { generateBio, rerollSection, bioText } from '../engine/lifepath.js';
 import { randomSeed } from '../engine/rng.js';
 import { journalSection } from './journal.js';
+import { factionsSection } from './factions.js';
+import { state } from './store.js';
 import { portraitBlock } from './portrait.js';
 
 const SIDE_LABEL = { light: 'Lightside', dark: 'Darkside', neutral: 'Neutral', exotic: 'Exotic' };
@@ -29,12 +31,13 @@ export function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
   const regen = () => change?.((c) => { c.bio = generateBio(R, c, { seed: randomSeed() }); });
 
   const journal = journalSection(ch, R, { change, onOpenPerson: open });
+  const factions = factionsSection(ch, { change, roster: state.roster });
   if (!bio) {
     const file = h('article', { class: 'file bio' }, head, toolbar || null,
       h('div', { class: 'bio-empty' },
         h('p', null, 'No life story yet. Roll one: family, childhood, the events that made them, the people in their life, personality, secrets and story hooks for the GM.'),
         change ? h('button', { class: 'btn primary big', type: 'button', id: 'bio-generate', onClick: regen }, 'Roll a life story') : null),
-      h('div', { class: 'file-body' }, h('div', { class: 'col', style: { gridColumn: '1 / -1' } }, journal)));
+      h('div', { class: 'file-body' }, h('div', { class: 'col', style: { gridColumn: '1 / -1' } }, factions, journal)));
     file.style.setProperty('--hero', hero);
     file.style.setProperty('--hero-ink', inkFor(hero));
     return file;
@@ -101,7 +104,7 @@ export function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
 
   const file = h('article', { class: 'file bio' }, head, toolbar || null,
     h('div', { class: 'file-body' },
-      h('div', { class: 'col' }, summary, journal, timeline, family, people),
+      h('div', { class: 'col' }, summary, factions, journal, timeline, family, people),
       h('div', { class: 'col' }, personality, inner, sections, gm, actions)));
   file.style.setProperty('--hero', hero);
   file.style.setProperty('--hero-ink', inkFor(hero));

@@ -66,6 +66,12 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
   student, parent / child, member of / member, based in / base of...). Add factions, locations, items and events by
   hand, link anything to anything, draw the relationship graph, read the campaign timeline, and export the whole
   thing as a Markdown vault with [[wikilinks]] or a JSON vault that also carries the roster.
+  **What happened** records history in one line ("these two became enemies", "she joined the Court", "he died",
+  "they moved to Ravensport": 60-odd kinds across people, loves, factions, places, fates and things). Each one starts
+  the new tie at that session, ends the tie it replaces (kept on the pages as "formerly"), marks a fate on the page,
+  lands on both timelines and the campaign timeline, and can be undone. The graph has an "as of session" slider to
+  wind the world back. Factions live on the character too (Bio > Factions: role, kind, since) and travel with the
+  sheet and the exports.
 - **Portraits** – every character gets a portrait on the case file, the Bio page and the World: built-in comic art
   drawn by the app (offline, instant) or an AI painting from a free, open-source service (one at a time, with the
   built-in art standing in while it paints), or a picture you upload. New portrait, edit or copy the prompt, delete.
