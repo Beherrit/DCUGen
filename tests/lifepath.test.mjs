@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { RULES as R } from '../src/engine/index.js';
 import { generateCharacter } from '../src/engine/generator.js';
 import { generateBio, rerollSection, bioText, DCA_COMPLICATIONS, BIO_RELATIONS } from '../src/engine/lifepath.js';
+import { rollPerson } from '../src/engine/lifepath.js';
 
 const LEAK = /\{[^{}]*\}|\[\[|undefined|null|NaN|\[object Object\]/;
 const constructs = R.raw.archetypes.filter((a) => a.construct).map((a) => a.id);
@@ -139,4 +140,20 @@ test('works with sparse or hand-made characters', () => {
   assert.ok(old.timeline.every((t) => t.age <= 900));
   const beast = generateBio(R, { kind: 'creature', identity: { codename: 'Grax' } }, { seed: 'beast' });
   assert.ok(beast.summary.includes('Grax'));
+});
+
+test('rollPerson fills in a hand-typed person, parent or sibling and keeps what was typed', () => {
+  const ch = generateCharacter(R, { seed: 'roll-person', pl: 10 });
+  const rival = rollPerson(R, ch, { kind: 'person', name: 'Marisol Vega', relation: 'Rival' }, { seed: 'a' });
+  assert.equal(rival.name, 'Marisol Vega'); assert.equal(rival.relation, 'Rival');
+  assert.ok(rival.who.length > 10 && rival.status.length > 3);
+  assert.ok(!/\{/.test(rival.who + rival.status), 'no stray placeholders');
+  assert.deepEqual(rollPerson(R, ch, { kind: 'person', name: 'Marisol Vega', relation: 'Rival' }, { seed: 'a' }), rival, 'deterministic');
+  const mum = rollPerson(R, ch, { kind: 'parent', name: 'Dolores Quinn', role: 'Mother' }, { seed: 'c' });
+  assert.equal(mum.role, 'Mother'); assert.ok(mum.occupation && mum.trait && mum.status);
+  assert.ok(!/Deceased; Deceased/.test(mum.status));
+  const sib = rollPerson(R, ch, { kind: 'sibling', relation: 'Younger brother' }, { seed: 'e' });
+  assert.equal(sib.relation, 'Younger brother'); assert.ok(sib.name && sib.note && sib.age < (ch.identity.age || 30));
+  const anyone = rollPerson(R, ch, { kind: 'person' }, { seed: 'z' });
+  assert.ok(anyone.name && anyone.relation && anyone.who);
 });

@@ -40,7 +40,7 @@ export function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
   const onSave = (out) => { editingBio = false; change((c) => { c.bio = out; }); };
   const onCancel = () => { editingBio = false; change((c) => c); };
   if (editingBio && change) {
-    const file = h('article', { class: 'file bio' }, head, toolbar || null, h('div', { class: 'file-body' }, h('div', { class: 'col', style: { gridColumn: '1 / -1' } }, bioEditor(ch, { onSave, onCancel }))));
+    const file = h('article', { class: 'file bio' }, head, toolbar || null, h('div', { class: 'file-body' }, h('div', { class: 'col', style: { gridColumn: '1 / -1' } }, bioEditor(ch, R, { onSave, onCancel }))));
     file.style.setProperty('--hero', hero);
     file.style.setProperty('--hero-ink', inkFor(hero));
     return file;
