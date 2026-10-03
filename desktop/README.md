@@ -13,6 +13,18 @@ The same DCUGen Hero Forge, in its own window, with three things the web version
   elsewhere, forward the lobby port (7777 by default) on your router or run a tunnel, and the key works as is.
 - **No browser storage limits.**
 
+## Install it (no Node needed)
+
+Every push to `main` makes GitHub build installers and publish them as a release:
+[Windows installer](https://github.com/Beherrit/DCUGen/releases/latest/download/DCUGen-Setup.exe),
+[Windows portable](https://github.com/Beherrit/DCUGen/releases/latest/download/DCUGen-Portable.exe),
+[macOS](https://github.com/Beherrit/DCUGen/releases/latest/download/DCUGen.dmg),
+[Linux](https://github.com/Beherrit/DCUGen/releases/latest/download/DCUGen.AppImage).
+The website's "Get the app" button points at the same files. Installed apps check for a new release on start and
+every four hours, download it in the background and offer a restart (`Help > Check for updates…` does it by hand).
+The builds are not code-signed, so Windows shows an "unknown publisher" warning the first time (More info > Run
+anyway) and macOS needs right-click > Open the first time; macOS apps also do not self-update without signing.
+
 ## Run it from source
 
 Needs Node 18 or newer and a copy of the repository:

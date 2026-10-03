@@ -6,6 +6,9 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { startLobbyServer } from './lobby-server.js';
+import updaterPkg from 'electron-updater';
+
+const { autoUpdater } = updaterPkg;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const APP_HTML = fs.existsSync(path.join(__dirname, 'DCUGen.html')) ? path.join(__dirname, 'DCUGen.html') : path.join(__dirname, '..', 'DCUGen.html');
@@ -60,6 +63,26 @@ ipcMain.handle('lobby:stop', async () => { if (lobbyServer) { await lobbyServer.
 ipcMain.handle('lobby:info', () => (lobbyServer ? { port: lobbyServer.port, members: lobbyServer.members() } : null));
 ipcMain.handle('app:version', () => app.getVersion());
 
+// ---- updates: every push to the site makes a new release; installed apps pick it up ------------------
+let updateCheckByHand = false;
+function setupUpdates() {
+  if (!app.isPackaged) return;
+  autoUpdater.autoDownload = true;
+  autoUpdater.on('update-downloaded', async (info) => {
+    const r = await dialog.showMessageBox({ type: 'info', buttons: ['Restart now', 'Later'], defaultId: 0, title: 'Update ready', message: `DCUGen ${info.version} is downloaded.`, detail: 'Restart to use it. Your data stays where it is.' });
+    if (r.response === 0) autoUpdater.quitAndInstall();
+  });
+  autoUpdater.on('update-not-available', () => { if (updateCheckByHand) { updateCheckByHand = false; dialog.showMessageBox({ type: 'info', message: `You have the latest DCUGen (${app.getVersion()}).` }); } });
+  autoUpdater.on('error', (err) => { if (updateCheckByHand) { updateCheckByHand = false; dialog.showMessageBox({ type: 'warning', message: 'Could not check for updates.', detail: String(err?.message || err) }); } });
+  autoUpdater.checkForUpdates().catch(() => {});
+  setInterval(() => autoUpdater.checkForUpdates().catch(() => {}), 4 * 60 * 60 * 1000);
+}
+function checkForUpdatesByHand() {
+  if (!app.isPackaged) { dialog.showMessageBox({ type: 'info', message: 'Updates apply to the installed app, not to a copy run from source.' }); return; }
+  updateCheckByHand = true;
+  autoUpdater.checkForUpdates().catch(() => {});
+}
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 1440, height: 920, minWidth: 900, minHeight: 600,
@@ -78,11 +101,11 @@ app.whenReady().then(() => {
     ...(isMac ? [{ role: 'appMenu' }] : []),
     { label: 'File', submenu: [{ label: 'Open the data folder', click: () => shell.openPath(app.getPath('userData')) }, { type: 'separator' }, { role: isMac ? 'close' : 'quit' }] },
     { role: 'editMenu' }, { role: 'viewMenu' }, { role: 'windowMenu' },
-    { label: 'Help', submenu: [{ label: 'DCUGen on GitHub', click: () => shell.openExternal('https://github.com/Beherrit/DCUGen') }] },
+    { label: 'Help', submenu: [{ label: 'Check for updates…', click: checkForUpdatesByHand }, { label: `Version ${app.getVersion()}`, enabled: false }, { type: 'separator' }, { label: 'DCUGen on GitHub', click: () => shell.openExternal('https://github.com/Beherrit/DCUGen') }] },
   ]));
   createWindow();
+  setupUpdates();
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });
 app.on('window-all-closed', async () => { if (lobbyServer) await lobbyServer.close(); if (process.platform !== 'darwin') app.quit(); });
 app.on('before-quit', async () => { if (lobbyServer) await lobbyServer.close(); });
-void dialog;
