@@ -1,0 +1,16 @@
+{
+  "_about": "Name parts for invented organizations and places used by lifepath placeholders. All names invented for DCUGen.",
+  "company": ["Halvorsen Biotech", "Merriwether Dynamics", "Stagg & Pell Industries", "Coldwater Holdings", "Ardent Robotics", "Vantage Petrochemical", "Lumen Systems", "Brightwell Pharmaceuticals", "Keswick Aerospace", "Orrin-Tate Logistics", "Bluewater Shipping", "Northgate Security", "Pallas Genomics", "Tessaract Data", "Hollis Steel", "Crane & Daughters", "Meridian Energy", "Sable Point Mining", "Vireo Foods", "Corvane Arms", "Albright Media Group", "Quillon Labs", "Dunmore Insurance", "Kestrel Motors", "Apex Urban Development"],
+  "lab": ["the Halvorsen Institute", "Site Nine", "the Prometheus Annex", "Brightwell's Clinic 4", "the Ardent Robotics skunkworks", "the old Thornfield Research Station", "the university's sealed sub-basement lab", "Project Gemini Root", "the Kepler Deep Lab", "the Coldwater Medical Annex", "the Vashti Foundation clinic", "Laboratory 17"],
+  "gang": ["the Ninth Street Saints", "the Rattlers", "the Dockside Kings", "the Gray Hands", "the Lucky Sevens", "the Rook Boys", "the Velvet Knives", "the Southside Crowns", "the Burned Men", "the Tin Angels", "the Hatpin crew", "the Iron Bridge Mob"],
+  "school": ["Roosevelt High", "St. Brendan's Academy", "Eastfield Middle School", "Washington Prep", "Hawthorne Charter School", "Lincoln Magnet High", "Our Lady of Sorrows", "Kingsley Day School", "Harbor Vocational High", "Westbrook Academy"],
+  "college": ["Riverbend State University", "Halden College", "Elm Ridge University", "the State Polytechnic Institute", "Marlow Community College", "Carrow University", "the Wexley School of Law", "Saint Augustin College", "Pacifica Tech", "Thornbury Medical School"],
+  "bar": ["the Rusty Anchor", "Mulligan's", "the Blue Heron Lounge", "the Last Call", "Dooley's Tap", "the Copper Pot", "the Gilded Lily", "the Night Owl"],
+  "street": ["Kessler Avenue", "Dock Street", "Ninth and Vine", "Arbor Lane", "Rook Street", "Old Mill Road", "Canal Street", "Fairmount Boulevard", "Hollow Street", "Garnet Way"],
+  "paper": ["the Daily Clarion", "the Evening Sentinel", "the Weekly Lamp", "the Courier-Dispatch", "the Bulletin", "the Morning Herald-Ledger"],
+  "team": ["the Paragon Patrol", "the Midnight Watch", "the Liberty Circle", "the Starlight Brigade", "the Vanguard Seven", "the Nightshift", "the Brass Knights", "the Torch Society"],
+  "villainGroup": ["the Ruin Syndicate", "the Crimson Order", "the Black Mirror Society", "the Gallows Club", "the Cobalt Cabal", "the Sixfold Hand", "the Night Market", "the Iron Choir"],
+  "prison": ["Blackwater Correctional", "Ironwood Supermax", "the county lockup", "Stillwater Penitentiary", "the state juvenile facility", "a metahuman holding facility"],
+  "church": ["St. Jude's", "the Riverside Baptist church", "the neighborhood mosque", "Temple Beth Shalom", "the storefront Pentecostal chapel", "the Buddhist center on {street}"],
+  "unit": ["the 82nd Engineers", "a combat medic company", "a forward reconnaissance team", "an air cavalry squadron", "a naval salvage crew", "a peacekeeping battalion", "a special operations detachment", "a military police company"]
+}

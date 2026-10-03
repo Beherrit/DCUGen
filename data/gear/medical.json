@@ -1,0 +1,674 @@
+[
+ {
+  "id": "first-aid-kit",
+  "name": "First-Aid Kit",
+  "genre": "Medical",
+  "category": "Kits",
+  "effect": "Feature 1 (tools for Treatment)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "tools for Treatment"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "medical",
+   "kit",
+   "treatment"
+  ],
+  "summary": "Bandages, splints and antiseptic.",
+  "source": "GG 114"
+ },
+ {
+  "id": "trauma-kit",
+  "name": "Trauma Kit",
+  "genre": "Medical",
+  "category": "Kits",
+  "effect": "Feature 2 (tools for Treatment; +2 to stabilize dying characters)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "tools for Treatment; +2 to stabilize dying characters"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "medical",
+   "kit",
+   "trauma"
+  ],
+  "summary": "Tourniquets, hemostatic gauze, chest seals.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "surgical-kit",
+  "name": "Surgical Kit",
+  "genre": "Medical",
+  "category": "Kits",
+  "effect": "Feature 2 (tools for surgery (Treatment))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "tools for surgery (Treatment)"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "medical",
+   "kit",
+   "surgery"
+  ],
+  "summary": "Scalpels, clamps and sutures.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "paramedic-jump-bag",
+  "name": "Paramedic Jump Bag",
+  "genre": "Medical",
+  "category": "Kits",
+  "effect": "Feature 3 (tools for Treatment; +2 to stabilize; oxygen)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 3,
+    "detail": "tools for Treatment; +2 to stabilize; oxygen"
+   }
+  ],
+  "cost": 3,
+  "tags": [
+   "medical",
+   "kit",
+   "ems"
+  ],
+  "summary": "Everything an EMT carries.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "veterinary-kit",
+  "name": "Veterinary Kit",
+  "genre": "Medical",
+  "category": "Kits",
+  "effect": "Feature 1 (tools for Treatment on animals)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "tools for Treatment on animals"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "kit",
+   "animal"
+  ],
+  "summary": "Field kit for treating animals.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "stethoscope",
+  "name": "Stethoscope",
+  "genre": "Medical",
+  "category": "Diagnostics",
+  "effect": "Feature 1 (+2 Treatment to diagnose)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Treatment to diagnose"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "diagnostic"
+  ],
+  "summary": "Listen to heart and lungs.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "portable-ultrasound",
+  "name": "Portable Ultrasound",
+  "genre": "Medical",
+  "category": "Diagnostics",
+  "effect": "Feature 2 (+5 Treatment to diagnose internal injuries)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "+5 Treatment to diagnose internal injuries"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "medical",
+   "diagnostic",
+   "electronics"
+  ],
+  "summary": "Handheld imaging probe.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "blood-test-kit",
+  "name": "Blood Test Kit",
+  "genre": "Medical",
+  "category": "Diagnostics",
+  "effect": "Feature 1 (identify toxins and diseases in an hour)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "identify toxins and diseases in an hour"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "diagnostic",
+   "toxin"
+  ],
+  "summary": "Rapid assay strips.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "pulse-oximeter",
+  "name": "Pulse Oximeter",
+  "genre": "Medical",
+  "category": "Diagnostics",
+  "effect": "Feature 1 (monitors vitals)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "monitors vitals"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "diagnostic"
+  ],
+  "summary": "Finger clip for oxygen and pulse.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "defibrillator-aed",
+  "name": "Defibrillator (AED)",
+  "genre": "Medical",
+  "category": "Equipment",
+  "effect": "Feature 2 (restart a heart: Treatment +5 vs. dying)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "restart a heart: Treatment +5 vs. dying"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "medical",
+   "electronics",
+   "resuscitation"
+  ],
+  "summary": "Automated external defibrillator.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "oxygen-mask",
+  "name": "Oxygen Mask",
+  "genre": "Medical",
+  "category": "Equipment",
+  "effect": "Immunity 2 (suffocation)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 2,
+    "detail": "suffocation"
+   }
+  ],
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "medical",
+   "breathing"
+  ],
+  "summary": "Mask with its own oxygen supply for an hour.",
+  "source": "GG 18"
+ },
+ {
+  "id": "stretcher",
+  "name": "Stretcher",
+  "genre": "Medical",
+  "category": "Equipment",
+  "effect": "Feature 1 (move a helpless patient safely)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "move a helpless patient safely"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "rescue"
+  ],
+  "summary": "Folding litter.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "wheelchair",
+  "name": "Wheelchair",
+  "genre": "Medical",
+  "category": "Equipment",
+  "effect": "Feature 1 (mobility (descriptor for a disability))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "mobility (descriptor for a disability)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "mobility"
+  ],
+  "summary": "Manual chair; motorized versions add Speed.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "crutches",
+  "name": "Crutches",
+  "genre": "Medical",
+  "category": "Equipment",
+  "effect": "Feature 1 (walk on an injured leg at half speed)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "walk on an injured leg at half speed"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "mobility"
+  ],
+  "summary": "Adjustable crutches.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "splint-and-brace-set",
+  "name": "Splint and Brace Set",
+  "genre": "Medical",
+  "category": "Equipment",
+  "effect": "Feature 1 (immobilize fractures)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "immobilize fractures"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "trauma"
+  ],
+  "summary": "Air splints and braces.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "antitoxin",
+  "name": "Antitoxin",
+  "genre": "Medical",
+  "category": "Pharmaceutical",
+  "effect": "Feature 1 (+5 on resistance checks against toxins)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 on resistance checks against toxins"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "medical",
+   "drug",
+   "toxin"
+  ],
+  "summary": "Broad-spectrum antidote injector.",
+  "source": "GG 112"
+ },
+ {
+  "id": "antivenom",
+  "name": "Antivenom",
+  "genre": "Medical",
+  "category": "Pharmaceutical",
+  "effect": "Feature 1 (cures one snake or spider envenomation)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "cures one snake or spider envenomation"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "drug",
+   "toxin"
+  ],
+  "summary": "Specific antivenom vial.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "epinephrine-autoinjector",
+  "name": "Epinephrine Autoinjector",
+  "genre": "Medical",
+  "category": "Pharmaceutical",
+  "effect": "Feature 1 (removes Dazed from allergy or shock; +2 vs. Fatigue for a scene)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "removes Dazed from allergy or shock; +2 vs. Fatigue for a scene"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "drug"
+  ],
+  "summary": "Epi-pen.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "painkillers",
+  "name": "Painkillers",
+  "genre": "Medical",
+  "category": "Pharmaceutical",
+  "effect": "Feature 1 (ignore one Impaired condition from injury for an hour)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "ignore one Impaired condition from injury for an hour"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "drug"
+  ],
+  "summary": "Strong analgesics.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "stimulants",
+  "name": "Stimulants",
+  "genre": "Medical",
+  "category": "Pharmaceutical",
+  "effect": "Feature 1 (remove Fatigued once per scene; crash later)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "remove Fatigued once per scene; crash later"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "drug"
+  ],
+  "summary": "Combat stims that keep you on your feet.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "sedative-injector",
+  "name": "Sedative Injector",
+  "genre": "Medical",
+  "category": "Pharmaceutical",
+  "effect": "Feature 1 (puts a willing or helpless subject to sleep)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "puts a willing or helpless subject to sleep"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "drug",
+   "sleep"
+  ],
+  "summary": "Hypodermic of fast-acting sedative.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "tranquilizer-syringe",
+  "name": "Tranquilizer Syringe",
+  "genre": "Medical",
+  "category": "Pharmaceutical",
+  "effect": "Affliction 4 (Resisted and Overcome by Fortitude; Fatigued, Exhausted, Asleep), Unreliable (one dose)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Unreliable",
+      "detail": "one dose"
+     }
+    ],
+    "effect": "Affliction",
+    "rank": 4,
+    "detail": "Resisted and Overcome by Fortitude; Fatigued, Exhausted, Asleep"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "medical",
+   "drug",
+   "sleep",
+   "less-lethal"
+  ],
+  "summary": "Knockout injection (needs a close attack).",
+  "source": "DCUGen"
+ },
+ {
+  "id": "antibiotics",
+  "name": "Antibiotics",
+  "genre": "Medical",
+  "category": "Pharmaceutical",
+  "effect": "Feature 1 (+5 to resist infection and disease for a week)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist infection and disease for a week"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "drug",
+   "disease"
+  ],
+  "summary": "Course of broad-spectrum antibiotics.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "radiation-pills",
+  "name": "Radiation Pills",
+  "genre": "Medical",
+  "category": "Pharmaceutical",
+  "effect": "Feature 1 (+5 to resist radiation sickness)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist radiation sickness"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "drug",
+   "radiation"
+  ],
+  "summary": "Potassium iodide tablets.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "blood-bag-cooler",
+  "name": "Blood Bag Cooler",
+  "genre": "Medical",
+  "category": "Equipment",
+  "effect": "Feature 1 (transfusion supplies for surgery)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "transfusion supplies for surgery"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "surgery"
+  ],
+  "summary": "Insulated case with blood and plasma.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "field-hospital-tent",
+  "name": "Field Hospital Tent",
+  "genre": "Medical",
+  "category": "Equipment",
+  "effect": "Feature 3 (surgery and recovery away from a hospital (+2 Treatment))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 3,
+    "detail": "surgery and recovery away from a hospital (+2 Treatment)"
+   }
+  ],
+  "cost": 3,
+  "tags": [
+   "medical",
+   "shelter"
+  ],
+  "summary": "Deployable aid station.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "hazmat-suit",
+  "name": "Hazmat Suit",
+  "genre": "Medical",
+  "category": "Protective",
+  "effect": "Immunity 5 (disease, poison, radiation, eye and lung irritants, suffocation (2 hours))",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 5,
+    "detail": "disease, poison, radiation, eye and lung irritants, suffocation (2 hours)"
+   }
+  ],
+  "cost": 5,
+  "tags": [
+   "protective",
+   "hazmat",
+   "medical"
+  ],
+  "summary": "Level A sealed suit with air tanks.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "surgical-mask-and-gloves",
+  "name": "Surgical Mask and Gloves",
+  "genre": "Medical",
+  "category": "Protective",
+  "effect": "Feature 1 (+5 to resist airborne and contact disease)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist airborne and contact disease"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "protective",
+   "medical",
+   "disease"
+  ],
+  "summary": "Personal protective equipment.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "medical-reference-tablet",
+  "name": "Medical Reference Tablet",
+  "genre": "Medical",
+  "category": "Diagnostics",
+  "effect": "Feature 1 (+2 Expertise (medicine) checks)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Expertise (medicine) checks"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "research",
+   "electronics"
+  ],
+  "summary": "Drug database and diagnostic software.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "hyperbaric-chamber-portable",
+  "name": "Hyperbaric Chamber (Portable)",
+  "genre": "Medical",
+  "category": "Equipment",
+  "effect": "Healing 2, Limited to decompression sickness and burns, Activation (Standard action)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "decompression sickness and burns"
+     },
+     {
+      "name": "Activation",
+      "option": "Standard action"
+     }
+    ],
+    "effect": "Healing",
+    "rank": 2
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "healing"
+  ],
+  "summary": "Inflatable pressure chamber.",
+  "source": "DCUGen"
+ }
+]

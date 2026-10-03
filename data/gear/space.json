@@ -1,0 +1,718 @@
+[
+ {
+  "id": "space-suit",
+  "name": "Space Suit",
+  "genre": "Space",
+  "category": "Vacuum Suit",
+  "effect": "Immunity 5 (pressure, radiation, suffocation, vacuum, cold)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 5,
+    "detail": "pressure, radiation, suffocation, vacuum, cold"
+   }
+  ],
+  "cost": 5,
+  "bookCost": 5,
+  "tags": [
+   "vacuum",
+   "environment",
+   "suit"
+  ],
+  "summary": "Self-contained suit for vacuum and airless worlds.",
+  "source": "GG 18"
+ },
+ {
+  "id": "environment-suit",
+  "name": "Environment Suit",
+  "genre": "Space",
+  "category": "Vacuum Suit",
+  "effect": "Immunity 7 (cold, heat, pressure, radiation, suffocation, vacuum)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 7,
+    "detail": "cold, heat, pressure, radiation, suffocation, vacuum"
+   }
+  ],
+  "cost": 7,
+  "bookCost": 7,
+  "tags": [
+   "vacuum",
+   "environment",
+   "suit"
+  ],
+  "summary": "Sealed suit for hostile worlds and space.",
+  "source": "GG 5"
+ },
+ {
+  "id": "armored-vacuum-suit",
+  "name": "Armored Vacuum Suit",
+  "genre": "Space",
+  "category": "Vacuum Suit",
+  "effect": "Immunity 5 (pressure, radiation, suffocation, vacuum, cold), Protection 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 5,
+    "detail": "pressure, radiation, suffocation, vacuum, cold"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 4
+   }
+  ],
+  "protection": 4,
+  "cost": 9,
+  "tags": [
+   "vacuum",
+   "armor",
+   "suit"
+  ],
+  "summary": "Marine vacsuit with armor plating.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "emergency-vac-bag",
+  "name": "Emergency Vac Bag",
+  "genre": "Space",
+  "category": "Vacuum Suit",
+  "effect": "Immunity 4 (suffocation, vacuum), Limited only 30 minutes; cannot act",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "only 30 minutes; cannot act"
+     }
+    ],
+    "effect": "Immunity",
+    "rank": 4,
+    "detail": "suffocation, vacuum"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "vacuum",
+   "emergency"
+  ],
+  "summary": "Inflatable rescue bubble.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "skinsuit",
+  "name": "Skinsuit",
+  "genre": "Space",
+  "category": "Vacuum Suit",
+  "effect": "Immunity 4 (pressure, suffocation, vacuum), Protection 1",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 4,
+    "detail": "pressure, suffocation, vacuum"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 1
+   }
+  ],
+  "protection": 1,
+  "cost": 5,
+  "tags": [
+   "vacuum",
+   "suit"
+  ],
+  "summary": "Form-fitting mechanical-counterpressure suit.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "mag-boots",
+  "name": "Mag Boots",
+  "genre": "Space",
+  "category": "Movement",
+  "effect": "Movement 1 (Wall-crawling), Limited to metal surfaces, Movement 1 (Environmental Adaptation (zero-g))",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "metal surfaces"
+     }
+    ],
+    "effect": "Movement",
+    "rank": 1,
+    "detail": "Wall-crawling"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Movement",
+    "rank": 1,
+    "detail": "Environmental Adaptation (zero-g)"
+   }
+  ],
+  "cost": 3,
+  "tags": [
+   "movement",
+   "zero-g",
+   "boots"
+  ],
+  "summary": "Walk on hulls and ceilings.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "jetpack",
+  "name": "Jetpack",
+  "genre": "Space",
+  "category": "Movement",
+  "effect": "Flight 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Flight",
+    "rank": 4
+   }
+  ],
+  "cost": 8,
+  "tags": [
+   "movement",
+   "flight",
+   "jetpack"
+  ],
+  "summary": "Rocket pack (60 MPH).",
+  "source": "DCUGen"
+ },
+ {
+  "id": "eva-thruster-pack",
+  "name": "EVA Thruster Pack",
+  "genre": "Space",
+  "category": "Movement",
+  "effect": "Flight 3, Limited only in zero-g",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "only in zero-g"
+     }
+    ],
+    "effect": "Flight",
+    "rank": 3
+   }
+  ],
+  "cost": 3,
+  "tags": [
+   "movement",
+   "zero-g",
+   "eva"
+  ],
+  "summary": "Cold-gas maneuvering pack.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "zero-g-harness",
+  "name": "Zero-G Harness",
+  "genre": "Space",
+  "category": "Movement",
+  "effect": "Movement 1 (Environmental Adaptation (zero-g))",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Movement",
+    "rank": 1,
+    "detail": "Environmental Adaptation (zero-g)"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "movement",
+   "zero-g"
+  ],
+  "summary": "Harness, handholds and drills that make free-fall natural.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "safety-tether",
+  "name": "Safety Tether",
+  "genre": "Space",
+  "category": "EVA Tools",
+  "effect": "Feature 1 (cannot drift away; +5 to grab hold)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "cannot drift away; +5 to grab hold"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "eva",
+   "safety"
+  ],
+  "summary": "Reel line clipped to the hull.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "hull-patch-kit",
+  "name": "Hull Patch Kit",
+  "genre": "Space",
+  "category": "EVA Tools",
+  "effect": "Feature 1 (seal a breach as a standard action)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "seal a breach as a standard action"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "eva",
+   "repair"
+  ],
+  "summary": "Quick-set sealant patches.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "vacuum-toolkit",
+  "name": "Vacuum Toolkit",
+  "genre": "Space",
+  "category": "EVA Tools",
+  "effect": "Feature 1 (tools for Technology in vacuum)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "tools for Technology in vacuum"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "eva",
+   "tools",
+   "technology"
+  ],
+  "summary": "Tools sized for gloved hands.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "plasma-cutter",
+  "name": "Plasma Cutter",
+  "genre": "Space",
+  "category": "EVA Tools",
+  "effect": "Damage 4 (objects), Penetrating 4, Limited to objects",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Penetrating",
+      "steps": 4
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "to objects"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 4,
+    "strengthBased": false,
+    "detail": "objects"
+   }
+  ],
+  "cost": 6,
+  "tags": [
+   "tools",
+   "cutting"
+  ],
+  "summary": "Cuts hull plating.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "rivet-gun",
+  "name": "Rivet Gun",
+  "genre": "Space",
+  "category": "EVA Tools",
+  "effect": "Ranged Damage 3, Diminished Range 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Diminished Range",
+      "steps": 2
+     }
+    ],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 4,
+  "tags": [
+   "tools",
+   "improvised"
+  ],
+  "summary": "Construction tool that doubles as a weapon.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "oxygen-candle",
+  "name": "Oxygen Candle",
+  "genre": "Space",
+  "category": "Life Support",
+  "effect": "Feature 1 (24 hours of air for a sealed room)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "24 hours of air for a sealed room"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "air",
+   "emergency"
+  ],
+  "summary": "Chemical oxygen generator.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "radiation-badge",
+  "name": "Radiation Badge",
+  "genre": "Space",
+  "category": "Life Support",
+  "effect": "Senses 1 (detect radiation)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 1,
+    "detail": "detect radiation"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "radiation",
+   "sensor"
+  ],
+  "summary": "Dosimeter with alarm.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "rad-shielding-cloak",
+  "name": "Rad Shielding Cloak",
+  "genre": "Space",
+  "category": "Life Support",
+  "effect": "Immunity 1 (radiation)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 1,
+    "detail": "radiation"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "radiation",
+   "protective"
+  ],
+  "summary": "Lead-polymer cloak.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "space-rations",
+  "name": "Space Rations",
+  "genre": "Space",
+  "category": "Life Support",
+  "effect": "Feature 1 (a week of food in zero-g)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "a week of food in zero-g"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "food"
+  ],
+  "summary": "Squeeze tubes and bars.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "suit-beacon",
+  "name": "Suit Beacon",
+  "genre": "Space",
+  "category": "Navigation",
+  "effect": "Feature 1 (locator beacon for rescue)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "locator beacon for rescue"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "rescue",
+   "signal"
+  ],
+  "summary": "Shoulder-mounted distress beacon.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "star-charts",
+  "name": "Star Charts",
+  "genre": "Space",
+  "category": "Navigation",
+  "effect": "Senses 1 (Direction Sense (space))",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 1,
+    "detail": "Direction Sense (space)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "navigation",
+   "astrogation"
+  ],
+  "summary": "Astrogation computer and charts.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "gravity-belt",
+  "name": "Gravity Belt",
+  "genre": "Space",
+  "category": "Movement",
+  "effect": "Flight 2, Limited only in low gravity, Movement 1 (Environmental Adaptation (high gravity))",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "only in low gravity"
+     }
+    ],
+    "effect": "Flight",
+    "rank": 2
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Movement",
+    "rank": 1,
+    "detail": "Environmental Adaptation (high gravity)"
+   }
+  ],
+  "cost": 4,
+  "tags": [
+   "gravity",
+   "movement"
+  ],
+  "summary": "Compensates for gravity shifts.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "gyrojet-pistol",
+  "name": "Gyrojet Pistol",
+  "genre": "Space",
+  "category": "Weapon",
+  "effect": "Ranged Damage 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 8,
+  "tags": [
+   "firearm",
+   "rocket",
+   "zero-g"
+  ],
+  "summary": "Recoilless rocket-round pistol for zero-g.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "frangible-carbine",
+  "name": "Frangible Carbine",
+  "genre": "Space",
+  "category": "Weapon",
+  "effect": "Ranged Damage 4, Multiattack",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 12,
+  "tags": [
+   "firearm",
+   "safe ammo"
+  ],
+  "summary": "Hull-safe frangible rounds.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "boarding-shield",
+  "name": "Boarding Shield",
+  "genre": "Space",
+  "category": "Weapon",
+  "effect": "Enhanced Dodge 2, Enhanced Parry 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 2,
+    "option": "Dodge"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 2,
+    "option": "Parry"
+   }
+  ],
+  "cost": 4,
+  "tags": [
+   "shield",
+   "boarding"
+  ],
+  "summary": "Magnetically anchored corridor shield.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "helmet-camera-and-lamp",
+  "name": "Helmet Camera and Lamp",
+  "genre": "Space",
+  "category": "Vacuum Suit",
+  "effect": "Feature 2 (video recording; negates darkness penalties)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Feature",
+    "rank": 2,
+    "detail": "video recording; negates darkness penalties"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "light",
+   "recording"
+  ],
+  "summary": "Suit-mounted light and camera.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "suit-radio",
+  "name": "Suit Radio",
+  "genre": "Space",
+  "category": "Vacuum Suit",
+  "effect": "Communication 1 (radio, short range)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Communication",
+    "rank": 1,
+    "detail": "radio, short range"
+   }
+  ],
+  "cost": 4,
+  "tags": [
+   "communication",
+   "radio"
+  ],
+  "summary": "Short-range helmet radio.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "teleport-beacon",
+  "name": "Teleport Beacon",
+  "genre": "Space",
+  "category": "Movement",
+  "effect": "Teleport 11, Extended, Limited to Extended; to and from a ship in orbit",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Extended"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "to Extended; to and from a ship in orbit"
+     }
+    ],
+    "effect": "Teleport",
+    "rank": 11
+   }
+  ],
+  "cost": 22,
+  "tags": [
+   "teleport",
+   "transport"
+  ],
+  "summary": "Beam-down transporter that reaches low orbit (rank 11).",
+  "source": "GG 7"
+ }
+]

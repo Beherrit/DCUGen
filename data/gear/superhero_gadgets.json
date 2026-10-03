@@ -1,0 +1,1135 @@
+[
+ {
+  "id": "utility-belt-sample",
+  "name": "Utility Belt (Sample)",
+  "genre": "Superhero Gadgets",
+  "category": "Utility Belt",
+  "effect": "Alternate Equipment array: Tear Gas Pellets (Ranged Cloud Area Affliction 4) at full cost, +1 per additional item (Bolos, Boomerangs, Explosives, Cutting Torch, Flash-Bangs, Pepper Spray, Power Knuckles, Sleep Gas Pellets, Smoke Pellets)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Cloud"
+     },
+     {
+      "name": "Extra Condition"
+     }
+    ],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 4,
+    "range": "Ranged",
+    "detail": "Resisted by Fortitude; Dazed and Vision Impaired, Stunned and Vision Disabled, Incapacitated",
+    "name": "Tear Gas Pellets",
+    "alternates": [
+     {
+      "extras": [
+       {
+        "name": "Extra Condition"
+       }
+      ],
+      "flaws": [
+       {
+        "name": "Limited Degree"
+       }
+      ],
+      "effect": "Affliction",
+      "rank": 3,
+      "range": "Ranged",
+      "detail": "Snare; Resisted by Dodge; Hindered and Vulnerable, Defenseless and Immobilized",
+      "name": "Bolos"
+     },
+     {
+      "extras": [],
+      "flaws": [],
+      "effect": "Damage",
+      "rank": 1,
+      "range": "Ranged",
+      "name": "Boomerangs",
+      "strengthBased": true
+     },
+     {
+      "extras": [
+       {
+        "name": "Area",
+        "option": "Burst"
+       }
+      ],
+      "flaws": [],
+      "effect": "Damage",
+      "rank": 5,
+      "range": "Ranged",
+      "name": "Explosives"
+     },
+     {
+      "extras": [],
+      "flaws": [],
+      "effect": "Damage",
+      "rank": 1,
+      "strengthBased": false,
+      "name": "Cutting Torch",
+      "linked": [
+       {
+        "extras": [],
+        "flaws": [],
+        "effect": "Weaken",
+        "rank": 1,
+        "detail": "Toughness"
+       }
+      ]
+     },
+     {
+      "extras": [
+       {
+        "name": "Area",
+        "option": "Burst"
+       }
+      ],
+      "flaws": [],
+      "effect": "Affliction",
+      "rank": 4,
+      "range": "Ranged",
+      "detail": "Resisted by Fortitude; Vision Impaired, Vision Disabled, Vision Unaware",
+      "name": "Flash-Bangs"
+     },
+     {
+      "extras": [],
+      "flaws": [
+       {
+        "name": "Limited",
+        "detail": "one sense (vision)"
+       }
+      ],
+      "effect": "Affliction",
+      "rank": 4,
+      "detail": "visual Dazzle, chemical",
+      "name": "Pepper Spray"
+     },
+     {
+      "extras": [],
+      "flaws": [],
+      "effect": "Damage",
+      "rank": 4,
+      "strengthBased": true,
+      "name": "Power Knuckles"
+     },
+     {
+      "extras": [
+       {
+        "name": "Area",
+        "option": "Cloud"
+       }
+      ],
+      "flaws": [],
+      "effect": "Sleep",
+      "rank": 4,
+      "name": "Sleep Gas Pellets"
+     },
+     {
+      "extras": [
+       {
+        "name": "Area",
+        "option": "Cloud"
+       }
+      ],
+      "flaws": [],
+      "effect": "Concealment",
+      "rank": 4,
+      "detail": "all visual; Attack",
+      "name": "Smoke Pellets"
+     }
+    ]
+   }
+  ],
+  "cost": 25,
+  "bookCost": 25,
+  "tags": [
+   "utility belt",
+   "array",
+   "gadgets"
+  ],
+  "summary": "Tear gas at full cost plus nine 1-point alternates.",
+  "notes": "Each extra Alternate Equipment item adds 1 ep; hero points can add a one-time item.",
+  "source": "DCA 150"
+ },
+ {
+  "id": "bolos",
+  "name": "Bolos",
+  "genre": "Superhero Gadgets",
+  "category": "Thrown Weapon",
+  "effect": "Ranged Snare 3",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Extra Condition"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited Degree"
+     }
+    ],
+    "effect": "Affliction",
+    "rank": 3,
+    "range": "Ranged",
+    "detail": "Snare; Resisted by Dodge; Hindered and Vulnerable, Defenseless and Immobilized"
+   }
+  ],
+  "cost": 6,
+  "bookCost": 6,
+  "tags": [
+   "thrown",
+   "capture",
+   "entangling"
+  ],
+  "summary": "Weighted cords that entangle.",
+  "notes": "Affliction resisted by Dodge: hindered and vulnerable, then defenseless and immobilized.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "boomerang",
+  "name": "Boomerang",
+  "genre": "Superhero Gadgets",
+  "category": "Thrown Weapon",
+  "effect": "Ranged Damage 1",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "range": "Ranged",
+    "strengthBased": true
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 1,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "thrown",
+   "returning"
+  ],
+  "summary": "Returns to the thrower.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "capture-foam-grenade",
+  "name": "Capture Foam Grenade",
+  "genre": "Superhero Gadgets",
+  "category": "Offensive Utility",
+  "effect": "Ranged Affliction 5 (Resisted by Dodge, Overcome by Damage; Hindered and Vulnerable, Defenseless and Immobilized), Extra Condition, Limited Degree",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Extra Condition"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited Degree"
+     }
+    ],
+    "effect": "Affliction",
+    "rank": 5,
+    "range": "Ranged",
+    "detail": "Resisted by Dodge, Overcome by Damage; Hindered and Vulnerable, Defenseless and Immobilized"
+   }
+  ],
+  "cost": 10,
+  "tags": [
+   "capture",
+   "grenade",
+   "entangling"
+  ],
+  "summary": "Expanding glue foam (2 per rank).",
+  "source": "GG 111"
+ },
+ {
+  "id": "collapsible-truncheon",
+  "name": "Collapsible Truncheon",
+  "genre": "Superhero Gadgets",
+  "category": "Offensive Utility",
+  "effect": "Damage 2 (bludgeoning), Strength-based, Subtle",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "melee",
+   "concealable",
+   "bludgeoning"
+  ],
+  "summary": "Palm-sized baton that snaps out.",
+  "source": "GG 111"
+ },
+ {
+  "id": "explosive-pellets",
+  "name": "Explosive Pellets",
+  "genre": "Superhero Gadgets",
+  "category": "Offensive Utility",
+  "effect": "Ranged Burst Area Damage 4",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "cost": 12,
+  "tags": [
+   "explosive",
+   "pellets"
+  ],
+  "summary": "Thumb-sized charges (3 per rank).",
+  "source": "GG 111"
+ },
+ {
+  "id": "flash-bang-pellets",
+  "name": "Flash-Bang Pellets",
+  "genre": "Superhero Gadgets",
+  "category": "Offensive Utility",
+  "effect": "Ranged Burst Area Affliction 4 (Resisted by Dodge, Overcome by Fortitude; Impaired, Disabled, Unaware)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     }
+    ],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 4,
+    "range": "Ranged",
+    "detail": "Resisted by Dodge, Overcome by Fortitude; Impaired, Disabled, Unaware"
+   }
+  ],
+  "cost": 12,
+  "tags": [
+   "dazzle",
+   "pellets",
+   "less-lethal"
+  ],
+  "summary": "Blinding pellets (3 per rank).",
+  "source": "GG 111"
+ },
+ {
+  "id": "knockout-gas-pellets",
+  "name": "Knockout Gas Pellets",
+  "genre": "Superhero Gadgets",
+  "category": "Offensive Utility",
+  "effect": "Ranged Cloud Area Affliction 4 (Resisted and Overcome by Fortitude; Dazed, Stunned, Incapacitated)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Cloud"
+     }
+    ],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 4,
+    "range": "Ranged",
+    "detail": "Resisted and Overcome by Fortitude; Dazed, Stunned, Incapacitated"
+   }
+  ],
+  "cost": 12,
+  "tags": [
+   "gas",
+   "pellets",
+   "less-lethal"
+  ],
+  "summary": "Gas capsules (3 per rank).",
+  "source": "GG 111"
+ },
+ {
+  "id": "throwing-disc",
+  "name": "Throwing Disc",
+  "genre": "Superhero Gadgets",
+  "category": "Offensive Utility",
+  "effect": "Ranged Damage 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 6,
+  "tags": [
+   "thrown",
+   "signature"
+  ],
+  "summary": "Signature thrown emblem (2 per rank).",
+  "source": "GG 112"
+ },
+ {
+  "id": "bat-shaped-shuriken",
+  "name": "Bat-Shaped Shuriken",
+  "genre": "Superhero Gadgets",
+  "category": "Offensive Utility",
+  "effect": "Ranged Damage 2, Multiattack",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 2,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 6,
+  "tags": [
+   "thrown",
+   "signature"
+  ],
+  "summary": "Emblem-shaped throwing blades.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "trick-boomerang",
+  "name": "Trick Boomerang",
+  "genre": "Superhero Gadgets",
+  "category": "Offensive Utility",
+  "effect": "Ranged Damage 2, Strength-based, Ricochet",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Ricochet",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "range": "Ranged",
+    "strengthBased": true
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 5,
+  "tags": [
+   "thrown",
+   "returning"
+  ],
+  "summary": "Banks off walls to hit from odd angles.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "swing-line",
+  "name": "Swing Line",
+  "genre": "Superhero Gadgets",
+  "category": "Movement Utility",
+  "effect": "Movement 1 (Swinging)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Movement",
+    "rank": 1,
+    "detail": "Swinging"
+   }
+  ],
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "movement",
+   "grapnel"
+  ],
+  "summary": "Line launcher for swinging between buildings.",
+  "source": "GG 113"
+ },
+ {
+  "id": "grapnel-gun",
+  "name": "Grapnel Gun",
+  "genre": "Superhero Gadgets",
+  "category": "Movement Utility",
+  "effect": "Movement 1 (Swinging), Elongation 2 (reel-in line), Limited to pulling self or objects",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Movement",
+    "rank": 1,
+    "detail": "Swinging"
+   },
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "pulling self or objects"
+     }
+    ],
+    "effect": "Elongation",
+    "rank": 2,
+    "detail": "reel-in line"
+   }
+  ],
+  "cost": 3,
+  "tags": [
+   "movement",
+   "grapnel"
+  ],
+  "summary": "Fires a grapnel and winches you up.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "zip-line",
+  "name": "Zip Line",
+  "genre": "Superhero Gadgets",
+  "category": "Movement Utility",
+  "effect": "Flight 3, Limited to gliding, Limited to between two points, Platform",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "gliding"
+     },
+     {
+      "name": "Limited",
+      "detail": "between two points"
+     },
+     {
+      "name": "Platform"
+     }
+    ],
+    "effect": "Flight",
+    "rank": 3
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "movement"
+  ],
+  "summary": "Slide from rooftop to rooftop.",
+  "source": "GG 113"
+ },
+ {
+  "id": "glider-cape",
+  "name": "Glider Cape",
+  "genre": "Superhero Gadgets",
+  "category": "Movement Utility",
+  "effect": "Flight 3, Limited to gliding",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "gliding"
+     }
+    ],
+    "effect": "Flight",
+    "rank": 3
+   }
+  ],
+  "cost": 3,
+  "tags": [
+   "movement",
+   "glider",
+   "cape"
+  ],
+  "summary": "Cape that stiffens into a wing (1 per rank).",
+  "source": "GG 112"
+ },
+ {
+  "id": "gecko-gloves",
+  "name": "Gecko Gloves",
+  "genre": "Superhero Gadgets",
+  "category": "Movement Utility",
+  "effect": "Movement 1 (Wall-crawling)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Movement",
+    "rank": 1,
+    "detail": "Wall-crawling"
+   }
+  ],
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "movement",
+   "climbing"
+  ],
+  "summary": "Adhesive gloves and kneepads.",
+  "source": "GG 96"
+ },
+ {
+  "id": "utility-parachute",
+  "name": "Utility Parachute",
+  "genre": "Superhero Gadgets",
+  "category": "Movement Utility",
+  "effect": "Movement 1 (Safe Fall)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Movement",
+    "rank": 1,
+    "detail": "Safe Fall"
+   }
+  ],
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "movement"
+  ],
+  "summary": "Compact emergency chute.",
+  "source": "GG 112"
+ },
+ {
+  "id": "smoke-pellets",
+  "name": "Smoke Pellets",
+  "genre": "Superhero Gadgets",
+  "category": "Defensive Utility",
+  "effect": "Enhanced Hide in Plain Sight 1",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 1,
+    "option": "Hide in Plain Sight"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "smoke",
+   "stealth",
+   "pellets"
+  ],
+  "summary": "Vanish even while watched.",
+  "source": "GG 113"
+ },
+ {
+  "id": "utility-gas-mask",
+  "name": "Utility Gas Mask",
+  "genre": "Superhero Gadgets",
+  "category": "Defensive Utility",
+  "effect": "Immunity 1 (gases)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 1,
+    "detail": "gases"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "breathing",
+   "gas"
+  ],
+  "summary": "Cowl-integrated filters.",
+  "source": "GG 112"
+ },
+ {
+  "id": "utility-rebreather",
+  "name": "Utility Rebreather",
+  "genre": "Superhero Gadgets",
+  "category": "Defensive Utility",
+  "effect": "Immunity 2 (suffocation)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 2,
+    "detail": "suffocation"
+   }
+  ],
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "breathing",
+   "underwater"
+  ],
+  "summary": "Mouthpiece air supply.",
+  "source": "GG 112"
+ },
+ {
+  "id": "cutting-torch",
+  "name": "Cutting Torch",
+  "genre": "Superhero Gadgets",
+  "category": "General Utility",
+  "effect": "Damage 1, Precise; Linked Weaken 1 (Toughness)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Precise"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "strengthBased": false,
+    "linked": [
+     {
+      "extras": [],
+      "flaws": [],
+      "effect": "Weaken",
+      "rank": 1,
+      "detail": "Toughness"
+     }
+    ]
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 1,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "tool",
+   "cutting"
+  ],
+  "summary": "Torch or thermite paste for locks and bars.",
+  "source": "GG 114"
+ },
+ {
+  "id": "utility-flashlight",
+  "name": "Utility Flashlight",
+  "genre": "Superhero Gadgets",
+  "category": "General Utility",
+  "effect": "Environment 1 (light)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Environment",
+    "rank": 1,
+    "detail": "light"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "light"
+  ],
+  "summary": "Penlight or emblem spotlight.",
+  "source": "GG 114"
+ },
+ {
+  "id": "utility-lockpicks",
+  "name": "Utility Lockpicks",
+  "genre": "Superhero Gadgets",
+  "category": "General Utility",
+  "effect": "Feature 1 (tools for Technology)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "tools for Technology"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "lock",
+   "tools"
+  ],
+  "summary": "Slim picks in the belt.",
+  "source": "GG 114"
+ },
+ {
+  "id": "paint-tag-bomb",
+  "name": "Paint Tag Bomb",
+  "genre": "Superhero Gadgets",
+  "category": "General Utility",
+  "effect": "Feature 1 (marks a target with UV paint)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "marks a target with UV paint"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "tracking",
+   "marking"
+  ],
+  "summary": "Splatters invisible tracking paint.",
+  "source": "GG 114"
+ },
+ {
+  "id": "tracer-bug",
+  "name": "Tracer Bug",
+  "genre": "Superhero Gadgets",
+  "category": "General Utility",
+  "effect": "Feature 1 (tracking signal)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "tracking signal"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "tracking",
+   "bug"
+  ],
+  "summary": "Tiny homing beacon.",
+  "source": "GG 114"
+ },
+ {
+  "id": "digital-recorder",
+  "name": "Digital Recorder",
+  "genre": "Superhero Gadgets",
+  "category": "General Utility",
+  "effect": "Feature 1 (audio or photographs)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "audio or photographs"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "recording"
+  ],
+  "summary": "Belt-buckle camera and recorder.",
+  "source": "GG 114"
+ },
+ {
+  "id": "wrist-comp",
+  "name": "Wrist-Comp",
+  "genre": "Superhero Gadgets",
+  "category": "General Utility",
+  "effect": "Feature 1 (tools for Technology; network access)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "tools for Technology; network access"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "computer",
+   "hacking"
+  ],
+  "summary": "Glove-mounted computer.",
+  "source": "GG 114"
+ },
+ {
+  "id": "costume-commlink",
+  "name": "Costume Commlink",
+  "genre": "Superhero Gadgets",
+  "category": "General Utility",
+  "effect": "Feature 1 (communication link with the team)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "communication link with the team"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "communication",
+   "radio"
+  ],
+  "summary": "Earpiece in the cowl.",
+  "source": "GG 113"
+ },
+ {
+  "id": "emergency-medkit-pouch",
+  "name": "Emergency Medkit Pouch",
+  "genre": "Superhero Gadgets",
+  "category": "General Utility",
+  "effect": "Feature 1 (tools for Treatment)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "tools for Treatment"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical"
+  ],
+  "summary": "Belt pouch of first aid.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "explosive-gel",
+  "name": "Explosive Gel",
+  "genre": "Superhero Gadgets",
+  "category": "General Utility",
+  "effect": "Feature 1 (blows open a door or wall (Damage 6 vs. objects))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "blows open a door or wall (Damage 6 vs. objects)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "explosive",
+   "breaching"
+  ],
+  "summary": "Spray-on breaching foam.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "mini-camera-drone",
+  "name": "Mini Camera Drone",
+  "genre": "Superhero Gadgets",
+  "category": "General Utility",
+  "effect": "Feature 1 (remote camera with a short range)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "remote camera with a short range"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "drone",
+   "surveillance"
+  ],
+  "summary": "Palm-sized flying camera.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "ultrasonic-signal",
+  "name": "Ultrasonic Signal",
+  "genre": "Superhero Gadgets",
+  "category": "General Utility",
+  "effect": "Feature 1 (summons trained animals or signals allies)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "summons trained animals or signals allies"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "signal",
+   "animal"
+  ],
+  "summary": "Whistle beyond human hearing.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "domino-mask",
+  "name": "Domino Mask",
+  "genre": "Superhero Gadgets",
+  "category": "Costume",
+  "effect": "Feature 1 (+5 to resist facial recognition of your secret identity)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist facial recognition of your secret identity"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "costume",
+   "identity"
+  ],
+  "summary": "Hides your face just enough.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "armored-costume",
+  "name": "Armored Costume",
+  "genre": "Superhero Gadgets",
+  "category": "Costume",
+  "effect": "Protection 3, Subtle",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 3
+   }
+  ],
+  "protection": 3,
+  "cost": 4,
+  "tags": [
+   "costume",
+   "armor"
+  ],
+  "summary": "Kevlar weave under the spandex.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "fireproof-costume",
+  "name": "Fireproof Costume",
+  "genre": "Superhero Gadgets",
+  "category": "Costume",
+  "effect": "Feature 1 (costume immune to the wearer's powers (DCA 145))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "costume immune to the wearer's powers (DCA 145)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "costume"
+  ],
+  "summary": "Unstable molecules: never burns or tears.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "insulated-gloves",
+  "name": "Insulated Gloves",
+  "genre": "Superhero Gadgets",
+  "category": "Costume",
+  "effect": "Feature 1 (+5 to resist electrical attacks through the hands)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist electrical attacks through the hands"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "costume",
+   "electricity"
+  ],
+  "summary": "Rubberized gauntlets.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "sonic-earplugs",
+  "name": "Sonic Earplugs",
+  "genre": "Superhero Gadgets",
+  "category": "Costume",
+  "effect": "Feature 1 (+5 to resist auditory attacks), Subtle",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist auditory attacks"
+   },
+   {
+    "name": "Subtle",
+    "ranks": 1
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "costume",
+   "ears",
+   "sonic"
+  ],
+  "summary": "Hidden noise-cancelling plugs.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "infrared-lenses",
+  "name": "Infrared Lenses",
+  "genre": "Superhero Gadgets",
+  "category": "Costume",
+  "effect": "Senses 1 (infravision)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 1,
+    "detail": "infravision"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "costume",
+   "vision"
+  ],
+  "summary": "Cowl lenses that see heat.",
+  "source": "DCUGen"
+ }
+]

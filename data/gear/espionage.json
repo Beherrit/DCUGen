@@ -1,0 +1,947 @@
+[
+ {
+  "id": "lock-release-gun",
+  "name": "Lock Release Gun",
+  "genre": "Espionage",
+  "category": "Criminal Gear",
+  "effect": "Feature 1 (opens cheap and average mechanical locks as a routine check)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "opens cheap and average mechanical locks as a routine check"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "lock",
+   "infiltration"
+  ],
+  "summary": "Pistol-shaped pick that pops ordinary locks.",
+  "source": "DCA 149"
+ },
+ {
+  "id": "concealable-microphone",
+  "name": "Concealable Microphone",
+  "genre": "Espionage",
+  "category": "Surveillance Gear",
+  "effect": "Feature 1 (hidden listening device, about 1 mile range)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "hidden listening device, about 1 mile range"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "surveillance",
+   "bug",
+   "audio"
+  ],
+  "summary": "Tiny bug; finding it opposes your Sleight of Hand.",
+  "source": "DCA 149"
+ },
+ {
+  "id": "mini-tracer",
+  "name": "Mini-Tracer",
+  "genre": "Espionage",
+  "category": "Surveillance Gear",
+  "effect": "Feature 1 (tracking transmitter, about 2 miles range; needs attack or Sleight of Hand to plant)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "tracking transmitter, about 2 miles range"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "surveillance",
+   "tracking"
+  ],
+  "summary": "Adhesive radio tracer.",
+  "source": "DCA 149"
+ },
+ {
+  "id": "night-vision-goggles",
+  "name": "Night Vision Goggles",
+  "genre": "Espionage",
+  "category": "Surveillance Gear",
+  "effect": "Feature 1 (darkvision; -2 Perception while worn; needs some ambient light)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "darkvision; -2 Perception while worn"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "vision",
+   "night",
+   "surveillance"
+  ],
+  "summary": "Light-amplifying goggles with IR illuminator.",
+  "source": "DCA 149"
+ },
+ {
+  "id": "parabolic-microphone",
+  "name": "Parabolic Microphone",
+  "genre": "Espionage",
+  "category": "Surveillance Gear",
+  "effect": "Feature 1 (+5 to hearing Perception at a distance or through walls)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to hearing Perception at a distance or through walls"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "surveillance",
+   "audio"
+  ],
+  "summary": "Dish microphone with headphones.",
+  "source": "DCA 149"
+ },
+ {
+  "id": "electronic-lockpick",
+  "name": "Electronic Lockpick",
+  "genre": "Espionage",
+  "category": "Infiltration",
+  "effect": "Feature 2 (+5 Technology to open electronic locks)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "+5 Technology to open electronic locks"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "lock",
+   "infiltration",
+   "electronics"
+  ],
+  "summary": "Code-cracker for keypads and card readers (2 ranks for a major bonus).",
+  "source": "GG 96"
+ },
+ {
+  "id": "climbing-cable",
+  "name": "Climbing Cable",
+  "genre": "Espionage",
+  "category": "Infiltration",
+  "effect": "Movement 1 (Wall-crawling), Limited when anchored",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "when anchored"
+     }
+    ],
+    "effect": "Movement",
+    "rank": 1,
+    "detail": "Wall-crawling"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "climbing",
+   "infiltration",
+   "movement"
+  ],
+  "summary": "Thin cable and harness for scaling walls.",
+  "source": "GG 96"
+ },
+ {
+  "id": "suspension-harness",
+  "name": "Suspension Harness",
+  "genre": "Espionage",
+  "category": "Infiltration",
+  "effect": "Movement 2 (Safe Fall, Swinging), Limited to range of movement",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "range of movement"
+     }
+    ],
+    "effect": "Movement",
+    "rank": 2,
+    "detail": "Safe Fall, Swinging"
+   }
+  ],
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "infiltration",
+   "movement"
+  ],
+  "summary": "Rig for dropping into vaults from above.",
+  "source": "GG 96"
+ },
+ {
+  "id": "stealth-suit",
+  "name": "Stealth Suit",
+  "genre": "Espionage",
+  "category": "Infiltration",
+  "effect": "Feature 2 (+5 Stealth)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "+5 Stealth"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "stealth",
+   "clothing"
+  ],
+  "summary": "Matte, sound-dampening infiltration suit.",
+  "source": "GG 96"
+ },
+ {
+  "id": "ir-cloaking-suit",
+  "name": "IR Cloaking Suit",
+  "genre": "Espionage",
+  "category": "Infiltration",
+  "effect": "Concealment 1 (infravision)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Concealment",
+    "rank": 1,
+    "detail": "infravision"
+   }
+  ],
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "stealth",
+   "concealment"
+  ],
+  "summary": "Masks body heat from thermal sensors.",
+  "source": "GG 96"
+ },
+ {
+  "id": "tracking-bug-receiver",
+  "name": "Tracking Bug Receiver",
+  "genre": "Espionage",
+  "category": "Surveillance Gear",
+  "effect": "Senses 1 (Tracking (bugged target))",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 1,
+    "detail": "Tracking (bugged target)"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "surveillance",
+   "tracking"
+  ],
+  "summary": "Follow a tagged target by signal.",
+  "source": "GG 97"
+ },
+ {
+  "id": "laser-microphone",
+  "name": "Laser Microphone",
+  "genre": "Espionage",
+  "category": "Surveillance Gear",
+  "effect": "Senses 2 (Extended Hearing 2), Limited when it has line of sight to a window",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "when it has line of sight to a window"
+     }
+    ],
+    "effect": "Senses",
+    "rank": 2,
+    "detail": "Extended Hearing 2"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "surveillance",
+   "audio"
+  ],
+  "summary": "Reads speech from window vibrations.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "disguise-kit",
+  "name": "Disguise Kit",
+  "genre": "Espionage",
+  "category": "Disguise",
+  "effect": "Feature 2 (+5 Deception for disguises)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "+5 Deception for disguises"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "disguise",
+   "kit"
+  ],
+  "summary": "Makeup, prosthetics and wigs (2 ranks for a major bonus).",
+  "source": "GG 98"
+ },
+ {
+  "id": "latex-mask",
+  "name": "Latex Mask",
+  "genre": "Espionage",
+  "category": "Disguise",
+  "effect": "Feature 1 (+2 Deception to impersonate one specific face)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Deception to impersonate one specific face"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "disguise"
+  ],
+  "summary": "Custom-cast face of a real person.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "voice-changer",
+  "name": "Voice Changer",
+  "genre": "Espionage",
+  "category": "Disguise",
+  "effect": "Illusion 2 (One sense type; aural, voices only)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Illusion",
+    "rank": 2,
+    "option": "One sense type",
+    "detail": "aural, voices only"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "disguise",
+   "audio"
+  ],
+  "summary": "Throat mic that mimics recorded voices.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "forgery-kit",
+  "name": "Forgery Kit",
+  "genre": "Espionage",
+  "category": "Forgery",
+  "effect": "Feature 1 (tools for Deception (forgery))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "tools for Deception (forgery)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "forgery",
+   "kit"
+  ],
+  "summary": "Paper stocks, seals and a document printer.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "fake-passport",
+  "name": "Fake Passport",
+  "genre": "Espionage",
+  "category": "Forgery",
+  "effect": "Feature 1 (a cover identity that passes routine checks)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "a cover identity that passes routine checks"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "forgery",
+   "identity"
+  ],
+  "summary": "Quality forged travel papers.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "cover-identity-package",
+  "name": "Cover Identity Package",
+  "genre": "Espionage",
+  "category": "Forgery",
+  "effect": "Feature 2 (full cover identity with history)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "full cover identity with history"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "forgery",
+   "identity"
+  ],
+  "summary": "Papers, bank account and social media legend.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "pen-gun",
+  "name": "Pen Gun",
+  "genre": "Espionage",
+  "category": "Concealed Weapon",
+  "effect": "Ranged Damage 2, Subtle, Unreliable (one shot)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Unreliable",
+      "detail": "one shot"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 2,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 2,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 3,
+  "tags": [
+   "firearm",
+   "concealable",
+   "assassination"
+  ],
+  "summary": "Single-shot pistol disguised as a fountain pen.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "lipstick-gun",
+  "name": "Lipstick Gun",
+  "genre": "Espionage",
+  "category": "Concealed Weapon",
+  "effect": "Ranged Damage 1, Subtle, Unreliable (one shot)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Unreliable",
+      "detail": "one shot"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 1,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 1,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 2,
+  "tags": [
+   "firearm",
+   "concealable"
+  ],
+  "summary": "Single-shot 4.5mm in a lipstick tube.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "umbrella-dart-gun",
+  "name": "Umbrella Dart Gun",
+  "genre": "Espionage",
+  "category": "Concealed Weapon",
+  "effect": "Ranged Affliction 4 (poison; Resisted and Overcome by Fortitude; Impaired, Disabled, Incapacitated), Subtle, Resistible (Toughness)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Resistible",
+      "detail": "Toughness"
+     }
+    ],
+    "effect": "Affliction",
+    "rank": 4,
+    "range": "Ranged",
+    "detail": "poison; Resisted and Overcome by Fortitude; Impaired, Disabled, Incapacitated"
+   }
+  ],
+  "cost": 5,
+  "tags": [
+   "concealable",
+   "poison",
+   "assassination"
+  ],
+  "summary": "Air-powered poison dart in the umbrella tip.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "poison-ring",
+  "name": "Poison Ring",
+  "genre": "Espionage",
+  "category": "Concealed Weapon",
+  "effect": "Affliction 4 (poison; Resisted and Overcome by Fortitude; Dazed, Stunned, Incapacitated), Subtle",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 4,
+    "detail": "poison; Resisted and Overcome by Fortitude; Dazed, Stunned, Incapacitated"
+   }
+  ],
+  "cost": 5,
+  "tags": [
+   "concealable",
+   "poison"
+  ],
+  "summary": "Hidden needle in a signet ring.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "garrote",
+  "name": "Garrote",
+  "genre": "Espionage",
+  "category": "Concealed Weapon",
+  "effect": "Grabbing (no damage), Chokehold",
+  "features": [
+   {
+    "name": "Grabbing",
+    "ranks": 1,
+    "detail": "no damage"
+   },
+   {
+    "name": "Chokehold",
+    "ranks": 1
+   }
+  ],
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "assassination",
+   "grab"
+  ],
+  "summary": "Wire with handles for silent chokeholds.",
+  "source": "GG 23"
+ },
+ {
+  "id": "boot-knife",
+  "name": "Boot Knife",
+  "genre": "Espionage",
+  "category": "Concealed Weapon",
+  "effect": "Damage 1 (piercing), Strength-based, Subtle, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "strengthBased": true,
+    "detail": "piercing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 1,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 3,
+  "tags": [
+   "blade",
+   "concealable"
+  ],
+  "summary": "Slim blade hidden in a boot sheath.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "suppressed-pistol",
+  "name": "Suppressed Pistol",
+  "genre": "Espionage",
+  "category": "Concealed Weapon",
+  "effect": "Ranged Damage 3, Subtle",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 7,
+  "tags": [
+   "firearm",
+   "pistol",
+   "stealth"
+  ],
+  "summary": "Integrally silenced pistol.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "wristwatch-laser",
+  "name": "Wristwatch Laser",
+  "genre": "Espionage",
+  "category": "Concealed Weapon",
+  "effect": "Ranged Damage 2 (light), Subtle, Unreliable (5 shots)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Unreliable",
+      "detail": "5 shots"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 2,
+    "range": "Ranged",
+    "detail": "light"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 2,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 3,
+  "tags": [
+   "concealable",
+   "energy",
+   "gadget"
+  ],
+  "summary": "Cutting beam in a dress watch.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "bug-detector",
+  "name": "Bug Detector",
+  "genre": "Espionage",
+  "category": "Countermeasures",
+  "effect": "Feature 1 (+5 Perception to find bugs and cameras)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 Perception to find bugs and cameras"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "countermeasure",
+   "electronics"
+  ],
+  "summary": "RF sweeper.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "signal-jammer",
+  "name": "Signal Jammer",
+  "genre": "Espionage",
+  "category": "Countermeasures",
+  "effect": "Feature 2 (blocks radio and phones within 50 ft.)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "blocks radio and phones within 50 ft."
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "countermeasure",
+   "electronics",
+   "jamming"
+  ],
+  "summary": "Pocket jammer.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "encrypted-phone",
+  "name": "Encrypted Phone",
+  "genre": "Espionage",
+  "category": "Electronics",
+  "effect": "Feature 2 (secure communication; DC 25 to intercept)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "secure communication; DC 25 to intercept"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "communication",
+   "phone",
+   "encryption"
+  ],
+  "summary": "Hardened handset with end-to-end crypto.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "micro-camera",
+  "name": "Micro Camera",
+  "genre": "Espionage",
+  "category": "Surveillance Gear",
+  "effect": "Feature 1 (hidden still and video camera)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "hidden still and video camera"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "surveillance",
+   "recording",
+   "concealable"
+  ],
+  "summary": "Camera hidden in a button or tie pin.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "hidden-holster",
+  "name": "Hidden Holster",
+  "genre": "Espionage",
+  "category": "Concealment",
+  "effect": "Feature 1 (+5 Sleight of Hand to conceal a pistol)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 Sleight of Hand to conceal a pistol"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "concealable",
+   "holster"
+  ],
+  "summary": "Deep-concealment holster.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "smugglers-briefcase",
+  "name": "Smuggler's Briefcase",
+  "genre": "Espionage",
+  "category": "Concealment",
+  "effect": "Feature 1 (hidden compartment; Perception DC 20 to find)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "hidden compartment; Perception DC 20 to find"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "concealable",
+   "storage"
+  ],
+  "summary": "Case with a false bottom.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "truth-serum",
+  "name": "Truth Serum",
+  "genre": "Espionage",
+  "category": "Pharmaceutical",
+  "effect": "Feature 1 (-5 to Will checks against interrogation for a scene)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "-5 to Will checks against interrogation for a scene"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "drug",
+   "interrogation"
+  ],
+  "summary": "Injected disinhibitor.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "cyanide-capsule",
+  "name": "Cyanide Capsule",
+  "genre": "Espionage",
+  "category": "Pharmaceutical",
+  "effect": "Feature 1 (last resort)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "last resort"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "poison"
+  ],
+  "summary": "Hollow tooth for agents who cannot be taken alive.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "dead-drop-spike",
+  "name": "Dead Drop Spike",
+  "genre": "Espionage",
+  "category": "Tradecraft",
+  "effect": "Feature 1 (waterproof hidden cache)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "waterproof hidden cache"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "tradecraft",
+   "storage"
+  ],
+  "summary": "Hollow spike pushed into the ground to pass messages.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "one-time-pad",
+  "name": "One-Time Pad",
+  "genre": "Espionage",
+  "category": "Tradecraft",
+  "effect": "Feature 1 (unbreakable written cipher)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "unbreakable written cipher"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "tradecraft",
+   "encryption"
+  ],
+  "summary": "Cipher sheets for secure messages.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "biometric-spoofer",
+  "name": "Biometric Spoofer",
+  "genre": "Espionage",
+  "category": "Infiltration",
+  "effect": "Morph 2 (biometric access data), Precise, Limited to biometrics, Check Required 5 (Technology DC 15)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Precise"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "biometrics"
+     },
+     {
+      "name": "Check Required",
+      "detail": "Technology DC 15",
+      "steps": 5
+     }
+    ],
+    "effect": "Morph",
+    "rank": 2,
+    "detail": "biometric access data"
+   }
+  ],
+  "cost": 4,
+  "tags": [
+   "infiltration",
+   "biometrics"
+  ],
+  "summary": "Fakes fingerprints and retina scans.",
+  "source": "GG 95"
+ }
+]

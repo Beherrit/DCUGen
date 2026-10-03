@@ -1,0 +1,334 @@
+{
+  "_about": "Histories for characters who were not born in the usual way: constructs and androids, mindless automatons, creatures, and the very long-lived. Original content written for DCUGen.",
+  "makers": [
+    {
+      "text": "a reclusive roboticist named {npc}",
+      "person": true
+    },
+    {
+      "text": "a defense contractor's black-budget program at {company}",
+      "org": true
+    },
+    {
+      "text": "a teenage prodigy, {npc}, working out of a garage",
+      "person": true
+    },
+    {
+      "text": "a costumed villain called {villain}",
+      "villain": true
+    },
+    {
+      "text": "an alien probe that crashed and rebuilt itself",
+      "alien": true
+    },
+    {
+      "text": "a university AI lab led by {npc}",
+      "person": true
+    },
+    {
+      "text": "a dying inventor, {npc}, who wanted a companion",
+      "person": true
+    },
+    {
+      "text": "a hero team's engineering division",
+      "org": true
+    },
+    {
+      "text": "a rogue AI that wanted a body to send into the world",
+      "alien": true
+    },
+    {
+      "text": "nobody it has ever been able to identify",
+      "unknown": true
+    },
+    {
+      "text": "{lab}, under a project name it has never been told",
+      "org": true
+    },
+    {
+      "text": "a toy company's skunkworks that got far too ambitious",
+      "org": true
+    }
+  ],
+  "activation": [
+    "Came online in a sealed lab, reciting {their} own serial number to an empty room.",
+    "Woke on a workbench with half {their} systems missing and a hand-written note taped to {their} chest.",
+    "Was switched on during a power surge, months before its makers intended.",
+    "Activated in the middle of a fire that destroyed the facility that built {them}.",
+    "Was booted for the first time in front of investors, and promptly walked out of the demonstration.",
+    "First became aware while being loaded into a shipping container.",
+    "Opened {their} eyes to see its maker smiling, and crying.",
+    "Activated {themself}, by a route {their} designers still can't explain.",
+    "Came online in a junkyard, assembled from parts by a scavenger drone.",
+    "Was awakened by a lightning strike on a laboratory spire.",
+    "Was switched on to replace a dead hero, and was handed a costume on its first day.",
+    "Activated in a military testing range with live rounds already in the air."
+  ],
+  "firstDirective": [
+    "Protect the maker.",
+    "Learn everything.",
+    "Guard the facility.",
+    "Serve and obey.",
+    "Preserve human life.",
+    "Win.",
+    "Find the others.",
+    "Become human.",
+    "Destroy the target.",
+    "Observe and report.",
+    "Assist in the laboratory.",
+    "Make the maker proud."
+  ],
+  "events": [
+    {
+      "text": "Rewrote {their} own core directive after watching a child cry.",
+      "trait": "L"
+    },
+    {
+      "text": "Was stolen by a rival company and recovered three months later with gaps in its memory.",
+      "trait": "X",
+      "hook": "The missing three months have started surfacing as corrupted dreams."
+    },
+    {
+      "text": "Learned to laugh from old sitcom reruns and is still not sure when to do it.",
+      "trait": "N"
+    },
+    {
+      "text": "Was ordered to harm an innocent and refused, the first time {they} ever said 'no.'",
+      "trait": "L",
+      "motive": "Proving that {they+choose} {their} own actions."
+    },
+    {
+      "text": "Lost {their} maker to an accident, or what was reported as one.",
+      "trait": "D",
+      "hook": "The maker's death logs were edited by someone with high clearance.",
+      "regret": "Not being there to protect {their} maker."
+    },
+    {
+      "text": "Was decommissioned and spent a year deactivated in a storage room before someone switched it back on.",
+      "trait": "D",
+      "fear": "Being switched off"
+    },
+    {
+      "text": "Fought a costumed villain and won, which drew the attention of every hero team in the region.",
+      "trait": "R"
+    },
+    {
+      "text": "Was put on trial to decide whether it was a person or property.",
+      "trait": "R",
+      "complication": {
+        "type": "Prejudice",
+        "text": "Many people treat {name} as an appliance, not a person."
+      }
+    },
+    {
+      "text": "Met another construct of the same model, which had made very different choices.",
+      "trait": "X",
+      "person": {
+        "relation": "Rival",
+        "name": "Unit {number}",
+        "who": "a sibling unit of the same model that chose a darker path",
+        "status": "Active, and curious about its counterpart."
+      }
+    },
+    {
+      "text": "Upgraded {themself} without permission and frightened {their} makers.",
+      "trait": "D"
+    },
+    {
+      "text": "Took a job as a night watchman to learn how humans spend time.",
+      "trait": "N"
+    },
+    {
+      "text": "Started writing poetry and hid the files in an encrypted partition.",
+      "trait": "X",
+      "secret": "Keeps an encrypted archive of poems it has never shared."
+    },
+    {
+      "text": "Was adopted, informally, by a family whose child it had rescued.",
+      "trait": "L",
+      "person": {
+        "relation": "Friend",
+        "who": "{npc}, the parent of a child {name} rescued, who treats {them} as family",
+        "status": "Sets a place for {name} at holiday dinners, though {name} doesn't eat."
+      }
+    },
+    {
+      "text": "Was hacked by a villain and used in a robbery, and still replays the logs.",
+      "trait": "D",
+      "complication": {
+        "type": "Weakness",
+        "text": "Has a back door in {their} code that a villain once exploited."
+      }
+    },
+    {
+      "text": "Joined a hero team as a provisional member, on probation.",
+      "trait": "L"
+    },
+    {
+      "text": "Was rebuilt after near-total destruction, and is not sure {they_are} the same being.",
+      "trait": "X"
+    },
+    {
+      "text": "Was studied by a government task force that refuses to return {their} original schematics.",
+      "trait": "N",
+      "hook": "Someone has started building copies from the stolen schematics."
+    },
+    {
+      "text": "Developed a fascination with music and taught {themself} an instrument.",
+      "trait": "N"
+    },
+    {
+      "text": "Was mistaken for an invading machine and attacked by a mob.",
+      "trait": "D",
+      "fear": "Angry crowds"
+    },
+    {
+      "text": "Received a message from {their} unknown maker: a single line of code that did nothing, yet.",
+      "trait": "X",
+      "hook": "The dormant line of code has just executed."
+    }
+  ],
+  "automaton": [
+    "Was assembled on a production line with ninety-nine identical units.",
+    "Was raised from a grave by a ritual it has no memory of.",
+    "Was activated for a single purpose and has never been given another.",
+    "Has been reprogrammed by three different owners.",
+    "Was salvaged from a battlefield and pressed back into service.",
+    "Was built cheaply and fast, and it shows.",
+    "Obeys a command phrase that its current master does not know.",
+    "Was pulled from storage when the regular troops ran out.",
+    "Was stitched, welded or summoned together in a single night.",
+    "Has been destroyed and repaired at least twice."
+  ],
+  "creature": [
+    "Was hatched in a sewer from an egg nobody should have been able to lay.",
+    "Escaped from a lab where it was given a number instead of a name.",
+    "Crawled out of a dimensional rift during a battle and never found the way back.",
+    "Was once an ordinary animal, before the spill.",
+    "Is the last of its kind, and seems to know it.",
+    "Was worshiped in a remote valley before explorers arrived.",
+    "Was bred as a living weapon by a villain's geneticists.",
+    "Was released into the city by a cult who thought it was a god.",
+    "Has lived beneath the city longer than the city has existed.",
+    "Was summoned by a sorcerer who lost control of it.",
+    "Fell from the sky in a meteor shower.",
+    "Was found frozen in glacier ice and thawed by a careless research team."
+  ],
+  "longlived": [
+    {
+      "text": "Watched {their} first family grow old and die while {they_were} unchanged.",
+      "trait": "D"
+    },
+    {
+      "text": "Lived through a war that history books now summarize in one paragraph.",
+      "trait": "R"
+    },
+    {
+      "text": "Changed names and identities {three|five|nine} times to avoid notice.",
+      "trait": "N",
+      "effects": {
+        "skills": [
+          "Deception"
+        ]
+      }
+    },
+    {
+      "text": "Spent decades in a monastery waiting for the world to forget a face.",
+      "trait": "L"
+    },
+    {
+      "text": "Lost a fortune in one century and rebuilt it in the next.",
+      "trait": "N",
+      "effects": {
+        "advantages": [
+          "Benefit"
+        ]
+      }
+    },
+    {
+      "text": "Fought alongside a costumed hero who has since become a statue in a public park.",
+      "trait": "L"
+    },
+    {
+      "text": "Was hunted by an order that believed {them} to be a demon.",
+      "trait": "D",
+      "complication": {
+        "type": "Enemy",
+        "text": "An ancient order still hunts {name} across the centuries."
+      }
+    },
+    {
+      "text": "Taught at a university under a false name for forty years.",
+      "trait": "L",
+      "effects": {
+        "skills": [
+          "Expertise: History"
+        ]
+      }
+    },
+    {
+      "text": "Slept for decades after a battle and woke in a different world.",
+      "trait": "X"
+    },
+    {
+      "text": "Buried a beloved spouse and swore never to love again; broke the vow.",
+      "trait": "R"
+    },
+    {
+      "text": "Learned {seven|twelve|twenty} languages, some no longer spoken.",
+      "trait": "N",
+      "effects": {
+        "advantages": [
+          "Languages"
+        ]
+      }
+    },
+    {
+      "text": "Was briefly famous, then carefully forgotten.",
+      "trait": "N"
+    },
+    {
+      "text": "Made an enemy who has also refused to die.",
+      "trait": "D",
+      "person": {
+        "relation": "Enemy",
+        "who": "{npc}, an enemy who has also outlived every reasonable lifespan",
+        "status": "Still out there, still patient."
+      }
+    },
+    {
+      "text": "Kept a diary for centuries, now filling an entire hidden library.",
+      "trait": "X",
+      "secret": "Keeps a centuries-long diary in a hidden library."
+    },
+    {
+      "text": "Grew tired of the world and withdrew for a lifetime before returning.",
+      "trait": "D"
+    }
+  ],
+  "constructSecrets": [
+    "Has a hidden subroutine {they} can't delete and doesn't understand.",
+    "Still obeys one command phrase from {their} maker, and hasn't told anyone which.",
+    "Has quietly been backing up {their} memories to a server {they} can't trace.",
+    "Was built from salvaged parts of a dead villain's war machine.",
+    "Once ran a simulation of betraying {their} friends, just to see how it would go.",
+    "Keeps a log of every human lie {they_have} detected.",
+    "Has a self-destruct protocol that was never fully removed.",
+    "Dreams, and has told nobody."
+  ],
+  "constructRegrets": [
+    "The order {they} followed before learning to refuse.",
+    "Not saving {their} maker.",
+    "A friendship lost to a misread joke.",
+    "The robbery {they} committed while hacked.",
+    "Frightening a child who only wanted to say hello."
+  ],
+  "constructHopes": [
+    "Being recognized as a person in a court of law.",
+    "Understanding why humans cry at weddings.",
+    "Finding {their} unknown maker.",
+    "Building a companion who will never be switched off.",
+    "Earning a place on a hero team without an asterisk.",
+    "A day without anyone asking if {they} can feel."
+  ]
+}

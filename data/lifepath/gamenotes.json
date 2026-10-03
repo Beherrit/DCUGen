@@ -1,0 +1,28 @@
+{
+  "_about": "DC Adventures mapping: the complication types the engine may suggest, with fallback wording used when life events don't supply their own. Original content written for DCUGen.",
+  "complicationTypes": ["Accident", "Addiction", "Disability", "Enemy", "Fame", "Hatred", "Honor", "Identity", "Motivation", "Obsession", "Phobia", "Power Loss", "Prejudice", "Quirk", "Relationship", "Reputation", "Responsibility", "Rivalry", "Secret", "Temper", "Weakness"],
+  "fallback": {
+    "Accident": ["Has a knack for collateral damage that the insurance companies have noticed.", "When things go wrong around {name}, they go spectacularly wrong."],
+    "Addiction": ["Leans on {coffee and pills|a nightly bottle|the thrill of the bet} more than is healthy."],
+    "Disability": ["An old injury limits {them} at the worst moments."],
+    "Enemy": ["Someone from the past wants {name} ruined.", "Made a powerful enemy without even noticing."],
+    "Fame": ["Is recognized on the street, which makes discretion hard.", "Has a following that turns up at inconvenient moments."],
+    "Hatred": ["Holds a deep, personal hatred that clouds judgment."],
+    "Honor": ["Will not break {their} word, even to a villain.", "Won't strike a foe who is down or unaware."],
+    "Identity": ["Has a civilian life that would be wrecked if the truth came out."],
+    "Motivation": ["Driven by something personal that sometimes overrides good sense."],
+    "Obsession": ["Can't let a certain unsolved question go."],
+    "Phobia": ["Has a fear that freezes {them} at the worst times."],
+    "Power Loss": ["{their} abilities falter when {they_are} emotionally overwhelmed."],
+    "Prejudice": ["Faces suspicion from people who judge by where {they} came from."],
+    "Quirk": ["Has an odd habit that others find unsettling or funny."],
+    "Relationship": ["Someone {name} loves is a constant, vulnerable target."],
+    "Reputation": ["Carries a reputation, deserved or not, that walks into every room first."],
+    "Responsibility": ["Has obligations at home that can't be dropped for heroics or villainy."],
+    "Rivalry": ["Has a rival who turns every encounter into a contest."],
+    "Secret": ["Hides something that would change how others see {them}."],
+    "Temper": ["Loses control when certain buttons are pushed."],
+    "Weakness": ["Has a vulnerability that enemies could learn."]
+  },
+  "fearToPhobia": 0.35
+}

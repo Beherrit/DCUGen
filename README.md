@@ -27,9 +27,16 @@ players and they can use it too. No install, works offline (fonts fall back to s
   aberrations), horror and undead, world myth and cryptids, aliens and cosmic entities, robots, mechs, clockwork and
   golems, kaiju, everyday animals and people. Each has tactics, habitat and a weakness; open it as a full sheet, apply
   a template, save it, or throw a random encounter into initiative.
-- **Vehicles & HQs** – 107 vehicles (modern, military, sci-fi starships, fantasy galleons and sky-ships, steampunk) and
+- **Vehicles & HQs** (in Gear & Vehicles) – 107 vehicles (modern, military, sci-fi starships, fantasy galleons and sky-ships, steampunk) and
   51 headquarters, all priced with the DC Adventures equipment rules (DCA 155-163), plus the vehicle, spaceship and
   headquarters rules. Hand any of them to the open character; the Equipment advantage updates itself.
+- **Bio** – every rolled character gets a full life story: family and siblings, a life timeline, the people in their
+  life (mentors, rivals, enemies, exes), personality, secrets, regrets, hopes, GM hooks, and complications you can add
+  to the sheet. Re-roll any part. The tables are original, inspired by the structure of Central Casting: Heroes Now!
+- **Gear & Vehicles** – 712 items across 18 genres (modern, military, espionage, fantasy, magic items, sci-fi, space,
+  steampunk, wild west, pulp, cyberpunk, post-apocalyptic, occult, superhero gadgets...), a custom item maker, 169
+  vehicles including 80 starships, headquarters, a builder for your own vehicles and bases, and space-game rules:
+  travel times, sensors, ship combat, hazards and a random planet generator.
 - **Advancement** – track the power points the GM awards (DCA 190): earned, spent and unspent, with a history log
   that records exactly what each point bought.
 - **Roster** – save characters, teams and creatures in the browser; search, duplicate, delete.

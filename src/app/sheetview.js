@@ -8,6 +8,7 @@ import { sheet as makeSheet, describeEffect, explainPower } from '../engine/rend
 import { costMath } from '../engine/powersmith.js';
 import { ABILITIES, BUYABLE_DEFENSES } from '../engine/rules.js';
 import { powerCost } from '../engine/costs.js';
+import { gearCatalog, gearToEquipment, gearToDevice } from '../engine/gear.js';
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const clone = (x) => JSON.parse(JSON.stringify(x));
 
@@ -228,7 +229,10 @@ export function renderFile(ch, R, opts = {}) {
     })() : null);
 
   // ---- equipment ----
-  const eqItems = [...(R.raw.equipment?.weapons || []), ...(R.raw.equipment?.armor || []), ...(R.raw.equipment?.gear || []).filter((g) => !/Vehicle/.test(g.category || ''))];
+  // Any item from the gear catalog (every genre, plus your own items), searchable by name.
+  let eqItems = [];
+  try { eqItems = gearCatalog(R); } catch { eqItems = []; }
+  try { eqItems = [...JSON.parse(localStorage.getItem('dcugen.mygear.v1') || '[]'), ...eqItems]; } catch { /* ignore */ }
   const equipment = (ch.equipment?.length || editing) ? h('section', { class: 'sec' },
     h('h3', null, 'Equipment', h('span', { class: 'pts' }, `${(ch.equipment || []).reduce((t, e) => t + (e.cost || 0), 0)} ep`)),
     (ch.equipment || []).map((e, i) => h('div', { class: 'power' },
@@ -236,21 +240,24 @@ export function renderFile(ch, R, opts = {}) {
         editing ? h('button', { class: 'x no-print', type: 'button', 'aria-label': `Remove ${e.name}`, onClick: () => change((c) => { c.equipment.splice(i, 1); }) }, '✕') : null),
       e.effect ? h('div', { class: 'power-text' }, e.effect) : null)),
     editing ? (() => {
-      const sel = h('select', { id: 'add-equip', 'aria-label': 'Equipment to add' }, eqItems.map((it, i) => h('option', { value: i }, `${it.name} (${it.cost} ep)`)));
-      return h('div', { class: 'add-row no-print' }, sel,
-        h('button', { class: 'btn', type: 'button', onClick: () => change((c) => {
-          const it = eqItems[Number(sel.value)];
-          const item = { name: it.name, cost: it.cost, effect: it.effect };
-          const prot = /Protection (\d+)/.exec(it.effect || '');
-          if (prot && /Armor/.test(it.category || '')) item.protection = Number(prot[1]);
-          const dmg = /(Ranged )?(?:Multiattack )?Damage (\d+)/.exec(it.effect || '');
-          if (dmg && !/Area/.test(it.effect)) item.attack = { kind: dmg[1] ? 'ranged' : 'close', rank: Number(dmg[2]), strengthBased: !!it.strength_based, crit: it.crit };
-          c.equipment = [...(c.equipment || []), item];
+      const input = h('input', { type: 'search', list: 'eq-list', id: 'add-equip', placeholder: `Search ${eqItems.length} items: rifle, rope, chainmail, blaster...`, 'aria-label': 'Equipment to add' });
+      const add = () => {
+        const it = eqItems.find((x) => x.name.toLowerCase() === input.value.trim().toLowerCase());
+        if (!it) { input.setCustomValidity('Pick an item from the list'); input.reportValidity(); return; }
+        change((c) => {
+          if (it.device) { c.devices = [...(c.devices || []), gearToDevice(it)]; return; }
+          c.equipment = [...(c.equipment || []), gearToEquipment(it)];
           const ep = c.equipment.reduce((t, e) => t + (e.cost || 0), 0);
           const need = Math.ceil(ep / 5);
           const adv = c.advantages.find((a) => a.name === 'Equipment');
           if (adv) adv.rank = Math.max(adv.rank, need); else c.advantages.push({ name: 'Equipment', rank: need });
-        }) }, 'Add (raises Equipment if needed)'));
+        });
+      };
+      return h('div', { class: 'no-print' },
+        h('datalist', { id: 'eq-list' }, eqItems.map((it) => h('option', { value: it.name }, `${it.cost} ${it.device ? 'pp device' : 'ep'} · ${it.genre || ''} · ${it.effect || ''}`))),
+        h('div', { class: 'add-row' }, input,
+          h('button', { class: 'btn', type: 'button', onClick: add }, 'Add (raises Equipment if needed)')),
+        opts.onBrowseGear ? h('button', { class: 'linkish', type: 'button', style: { fontSize: '13px' }, onClick: () => opts.onBrowseGear() }, 'Browse all gear, vehicles and HQs, or make your own item') : null);
     })() : null) : null;
 
   // ---- story ----

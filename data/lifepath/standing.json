@@ -1,0 +1,106 @@
+{
+  "_about": "Social standing of the household a character grew up in. 'level' 0-6 feeds weighting elsewhere (entries with bias 'low' favor levels 0-2, 'high' favor 4-6). Written for DCUGen; original content.",
+  "tiers": [
+    {
+      "id": "destitute", "level": 0, "label": "Destitute", "weight": 6,
+      "home": ["a shelter cot", "a car parked behind a laundromat", "a condemned row house", "an encampment under an overpass", "a single motel room rented by the week", "a squat above a closed bakery"],
+      "shaped": [
+        "Learned early that a promise is worth exactly what is in your hand right now.",
+        "Still eats fast, hunched over the plate, as if someone might take it away.",
+        "Can read a room for danger in two seconds and can never quite switch that off.",
+        "Carries a quiet fury at people who waste food, money or kindness.",
+        "Feels like a fraud in any building with a doorman.",
+        "Knows every free clinic, soup line and warm library in three neighborhoods."
+      ],
+      "effects": { "skills": ["Insight", "Stealth", "Expertise: Streetwise"], "advantages": ["Improvised Tools"] }
+    },
+    {
+      "id": "poor", "level": 1, "label": "Poor", "weight": 14,
+      "home": ["a crowded apartment in the projects", "a trailer on cinder blocks", "a walk-up with a broken buzzer", "a shared house with two other families", "rooms above the family's failing shop"],
+      "shaped": [
+        "Grew up counting coins at the register before every grocery run and still does the math in {their} head.",
+        "Treats a full refrigerator as a small miracle.",
+        "Is fiercely proud of anything earned and suspicious of anything given.",
+        "Learned to fix things rather than replace them, from shoes to car engines.",
+        "Distrusts landlords, bill collectors and anyone in a nice suit with a clipboard.",
+        "Knows that a neighbor with a casserole can matter more than a bank."
+      ],
+      "effects": { "skills": ["Athletics", "Technology", "Insight"], "advantages": ["Improvised Tools"] }
+    },
+    {
+      "id": "working", "level": 2, "label": "Working class", "weight": 26,
+      "home": ["a narrow row house", "a duplex near the rail yard", "a small rental bungalow", "a company-town cottage", "a second-floor apartment over a hardware store"],
+      "shaped": [
+        "Believes in clocking in, doing the job and not making a fuss about it.",
+        "Respects calloused hands more than diplomas.",
+        "Thinks of overtime, layoffs and strikes as weather: something you plan around.",
+        "Has a deep loyalty to the block, the union hall and the team {they} grew up cheering for.",
+        "Is quietly embarrassed by people who complain about small problems.",
+        "Can talk to anyone on a loading dock or a factory floor as an equal."
+      ],
+      "effects": { "skills": ["Athletics", "Technology", "Vehicles"], "advantages": ["Great Endurance"] }
+    },
+    {
+      "id": "comfortable", "level": 3, "label": "Middle class", "weight": 28,
+      "home": ["a split-level house on a cul-de-sac", "a suburban ranch house with a basketball hoop", "a condo near a decent school", "a brick colonial with a mortgage the parents worried about", "a tidy apartment in a safe neighborhood"],
+      "shaped": [
+        "Assumes, a little too easily, that the system mostly works.",
+        "Was expected to get good grades, go to college and have a backup plan for the backup plan.",
+        "Feels guilty about having had it easy and sometimes overcorrects.",
+        "Knows how to fill out forms, talk to teachers and navigate an office without fear.",
+        "Was sheltered enough that the first real danger came as a shock.",
+        "Has a soft spot for barbecues, minivans and other ordinary comforts."
+      ],
+      "effects": { "skills": ["Persuasion", "Expertise: Current Events"], "advantages": [] }
+    },
+    {
+      "id": "affluent", "level": 4, "label": "Affluent", "weight": 14,
+      "home": ["a large house in a gated suburb", "a renovated brownstone", "a lake house that became the family's main home", "a doctor's colonial with a three-car garage", "a modern glass home on a hill"],
+      "shaped": [
+        "Grew up with tutors, music lessons and a summer camp for every interest.",
+        "Is good at sounding confident in rooms full of important people.",
+        "Learned that most problems can be solved with a phone call to the right person.",
+        "Is still figuring out which friendships were real and which were about the pool.",
+        "Feels the weight of parents who expected a return on their investment.",
+        "Has never had to choose between rent and medicine, and sometimes forgets that others do."
+      ],
+      "effects": { "skills": ["Persuasion", "Expertise: Culture"], "advantages": ["Benefit"] }
+    },
+    {
+      "id": "wealthy", "level": 5, "label": "Wealthy", "weight": 8,
+      "home": ["a country estate with stables", "a penthouse spanning two floors", "an oceanfront compound", "a historic mansion with a staff wing", "a family townhouse in the most expensive part of the city"],
+      "shaped": [
+        "Was raised partly by nannies, drivers and household staff, and remembers their birthdays better than the parents'.",
+        "Is used to being recognized, photographed and flattered.",
+        "Knows the difference between old money and new money and pretends not to care.",
+        "Can order in four languages, sail a boat and ski, and has never done laundry.",
+        "Has a nagging fear of being liked only for the family name.",
+        "Treats money as a tool, not a goal, which only the rich can afford to do."
+      ],
+      "effects": { "skills": ["Persuasion", "Expertise: Business"], "advantages": ["Benefit", "Connected"] }
+    },
+    {
+      "id": "elite", "level": 6, "label": "Elite", "weight": 4,
+      "home": ["an ancestral estate with its own chapel", "a private island compound", "a skyscraper whose top floors belong to the family", "a guarded embassy residence", "a palace-sized mansion with a museum wing"],
+      "shaped": [
+        "Grew up among heads of state, tech founders and royalty as ordinary dinner guests.",
+        "Has never in their life waited in a line that wasn't optional.",
+        "Was groomed from birth to inherit a business, a title or a dynasty.",
+        "Has bodyguards in their earliest memories.",
+        "Sees cities as chessboards and people as pieces, and fights that instinct daily.",
+        "Knows that every scandal is survivable with enough lawyers, and that terrifies {them} a little."
+      ],
+      "effects": { "skills": ["Persuasion", "Insight", "Expertise: Business"], "advantages": ["Benefit", "Connected", "Languages"] }
+    }
+  ],
+  "shifts": [
+    { "text": "The family's fortunes {rose|swelled} when a {small business|patent|lawsuit settlement|lottery ticket} paid off.", "delta": 1 },
+    { "text": "The family lost nearly everything in a market crash and never fully recovered.", "delta": -1 },
+    { "text": "A parent's medical bills ate the savings, one envelope at a time.", "delta": -1 },
+    { "text": "A plant closing took the family's main paycheck and the town's with it.", "delta": -1 },
+    { "text": "A distant relative's will moved the family into a nicer part of town.", "delta": 1 },
+    { "text": "A parent was promoted into management, and dinner conversations changed overnight.", "delta": 1 },
+    { "text": "A villain's rampage leveled the family business, and the insurance company called it an act of god.", "delta": -1 },
+    { "text": "A parent's gambling quietly drained what little the family had.", "delta": -1 }
+  ]
+}

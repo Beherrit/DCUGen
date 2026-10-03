@@ -1,0 +1,862 @@
+[
+ {
+  "id": "pipe-rifle",
+  "name": "Pipe Rifle",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Weapon",
+  "effect": "Ranged Damage 3, Unreliable (jams)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Unreliable",
+      "detail": "jams"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 3,
+  "tags": [
+   "firearm",
+   "improvised",
+   "scrap"
+  ],
+  "summary": "Single-shot rifle from plumbing parts.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "junk-revolver",
+  "name": "Junk Revolver",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Weapon",
+  "effect": "Ranged Damage 3, Inaccurate",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Inaccurate",
+      "steps": 1
+     }
+    ],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 5,
+  "tags": [
+   "firearm",
+   "pistol",
+   "scrap"
+  ],
+  "summary": "Rebuilt from three broken guns.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "rebar-crossbow",
+  "name": "Rebar Crossbow",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Weapon",
+  "effect": "Ranged Damage 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 8,
+  "tags": [
+   "crossbow",
+   "scrap"
+  ],
+  "summary": "Car-spring crossbow firing sharpened rebar.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "nail-gun-rifle",
+  "name": "Nail Gun Rifle",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Weapon",
+  "effect": "Ranged Damage 2, Multiattack",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 2,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 6,
+  "tags": [
+   "improvised",
+   "automatic"
+  ],
+  "summary": "Modified pneumatic nailer.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "harpoon-gun",
+  "name": "Harpoon Gun",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Weapon",
+  "effect": "Ranged Damage 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 8,
+  "tags": [
+   "harpoon",
+   "fishing"
+  ],
+  "summary": "Spear gun that reels prey in.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "scrap-shotgun",
+  "name": "Scrap Shotgun",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Weapon",
+  "effect": "Ranged Damage 5, Diminished Range 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Diminished Range",
+      "steps": 2
+     }
+    ],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 8,
+  "tags": [
+   "firearm",
+   "shotgun",
+   "scrap"
+  ],
+  "summary": "Double-barrel of welded pipe.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "jury-rigged-flamer",
+  "name": "Jury-Rigged Flamer",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Weapon",
+  "effect": "Line Area Damage 5 (fire), Side Effect (On failure) (tank may burst)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Line"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Side Effect",
+      "option": "On failure",
+      "detail": "tank may burst"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 5,
+    "strengthBased": false,
+    "detail": "fire"
+   }
+  ],
+  "cost": 5,
+  "tags": [
+   "fire",
+   "area",
+   "scrap"
+  ],
+  "summary": "Leaky flamethrower from a crop sprayer.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "molotov-cocktail",
+  "name": "Molotov Cocktail",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Explosive",
+  "effect": "Ranged Burst Area Damage 3 (fire), Secondary Effect, Unreliable (single use)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     },
+     {
+      "name": "Secondary Effect"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Unreliable",
+      "detail": "single use"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged",
+    "detail": "fire"
+   }
+  ],
+  "cost": 9,
+  "tags": [
+   "fire",
+   "grenade",
+   "improvised"
+  ],
+  "summary": "Bottle of fuel with a burning rag.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "pipe-bomb",
+  "name": "Pipe Bomb",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Explosive",
+  "effect": "Ranged Burst Area Damage 4, Unreliable (single use)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Unreliable",
+      "detail": "single use"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "cost": 8,
+  "tags": [
+   "explosive",
+   "improvised"
+  ],
+  "summary": "Capped pipe of powder.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "nail-bomb",
+  "name": "Nail Bomb",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Explosive",
+  "effect": "Ranged Burst Area Damage 4, Unreliable (single use), Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Unreliable",
+      "detail": "single use"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "cost": 9,
+  "tags": [
+   "explosive",
+   "improvised"
+  ],
+  "summary": "Shrapnel bomb packed with nails.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "spiked-bat",
+  "name": "Spiked Bat",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Weapon",
+  "effect": "Damage 3 (bludgeoning and piercing), Strength-based",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "bludgeoning and piercing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "tags": [
+   "melee",
+   "bludgeoning",
+   "scrap"
+  ],
+  "summary": "Bat studded with nails.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "scrap-axe",
+  "name": "Scrap Axe",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Weapon",
+  "effect": "Damage 3 (slashing), Strength-based",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "tags": [
+   "melee",
+   "axe",
+   "scrap"
+  ],
+  "summary": "Stop sign sharpened into an axe.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "lead-pipe",
+  "name": "Lead Pipe",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Weapon",
+  "effect": "Damage 2 (bludgeoning), Strength-based",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 2,
+  "tags": [
+   "melee",
+   "improvised"
+  ],
+  "summary": "Heavy length of pipe.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "rebar-spear",
+  "name": "Rebar Spear",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Weapon",
+  "effect": "Damage 2 (piercing), Strength-based, Reach",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Reach",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "piercing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "tags": [
+   "melee",
+   "polearm",
+   "scrap"
+  ],
+  "summary": "Sharpened rebar on a pole.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "power-fist-scrap",
+  "name": "Power Fist (Scrap)",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Weapon",
+  "effect": "Damage 4 (bludgeoning), Strength-based, Unreliable (fuel runs dry)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Unreliable",
+      "detail": "fuel runs dry"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 4,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 4,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 2,
+  "tags": [
+   "melee",
+   "gauntlet",
+   "scrap"
+  ],
+  "summary": "Piston-driven gauntlet.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "tire-armor",
+  "name": "Tire Armor",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Armor",
+  "effect": "Protection 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 2
+   }
+  ],
+  "protection": 2,
+  "cost": 2,
+  "tags": [
+   "armor",
+   "scrap"
+  ],
+  "summary": "Rubber plates cut from truck tires.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "scrap-plate-armor",
+  "name": "Scrap Plate Armor",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Armor",
+  "effect": "Protection 4, Quirk (loud and heavy: -2 Stealth)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Quirk",
+      "detail": "loud and heavy: -2 Stealth",
+      "steps": 1
+     }
+    ],
+    "effect": "Protection",
+    "rank": 4
+   }
+  ],
+  "protection": 4,
+  "cost": 3,
+  "tags": [
+   "armor",
+   "scrap"
+  ],
+  "summary": "Car doors and road signs bolted together.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "football-pads-and-hockey-mask",
+  "name": "Football Pads and Hockey Mask",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Armor",
+  "effect": "Protection 1",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 1
+   }
+  ],
+  "protection": 1,
+  "cost": 1,
+  "tags": [
+   "armor",
+   "scrap"
+  ],
+  "summary": "Sports gear repurposed for raiding.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "junk-shield",
+  "name": "Junk Shield",
+  "genre": "Post-Apocalyptic",
+  "category": "Scrap Armor",
+  "effect": "Enhanced Dodge 1, Enhanced Parry 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 1,
+    "option": "Dodge"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 2,
+    "option": "Parry"
+   }
+  ],
+  "cost": 3,
+  "tags": [
+   "shield",
+   "scrap"
+  ],
+  "summary": "Manhole cover with a handle.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "rad-suit",
+  "name": "Rad Suit",
+  "genre": "Post-Apocalyptic",
+  "category": "Survival",
+  "effect": "Immunity 1 (radiation), Immunity 1 (eye and lung irritants)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 1,
+    "detail": "radiation"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 1,
+    "detail": "eye and lung irritants"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "radiation",
+   "protective",
+   "hazmat"
+  ],
+  "summary": "Patched yellow hazmat suit.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "scavenged-respirator",
+  "name": "Scavenged Respirator",
+  "genre": "Post-Apocalyptic",
+  "category": "Survival",
+  "effect": "Feature 1 (immunity to dust and spores; filters fail on a complication)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "immunity to dust and spores; filters fail on a complication"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "breathing",
+   "protective"
+  ],
+  "summary": "Mismatched filters taped to a mask.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "geiger-counter",
+  "name": "Geiger Counter",
+  "genre": "Post-Apocalyptic",
+  "category": "Survival",
+  "effect": "Senses 1 (detect radiation (ranged))",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 1,
+    "detail": "detect radiation (ranged)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "radiation",
+   "sensor"
+  ],
+  "summary": "Clicking radiation detector.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "rad-pills",
+  "name": "Rad Pills",
+  "genre": "Post-Apocalyptic",
+  "category": "Survival",
+  "effect": "Feature 1 (+5 to resist radiation sickness for a day)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist radiation sickness for a day"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "radiation",
+   "drug"
+  ],
+  "summary": "Scavenged iodide tablets.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "water-still",
+  "name": "Water Still",
+  "genre": "Post-Apocalyptic",
+  "category": "Survival",
+  "effect": "Feature 1 (clean water from anything wet)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "clean water from anything wet"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "water"
+  ],
+  "summary": "Solar still and filters.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "scavengers-kit",
+  "name": "Scavenger's Kit",
+  "genre": "Post-Apocalyptic",
+  "category": "Survival",
+  "effect": "Feature 1 (tools to strip salvage; +2 Technology for jury-rigging)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "tools to strip salvage; +2 Technology for jury-rigging"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "tools",
+   "salvage",
+   "kit"
+  ],
+  "summary": "Pry bar, cutters, sacks and wire.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "barter-goods",
+  "name": "Barter Goods",
+  "genre": "Post-Apocalyptic",
+  "category": "Survival",
+  "effect": "Feature 1 (+2 Persuasion to trade)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Persuasion to trade"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "trade",
+   "social"
+  ],
+  "summary": "Bottle caps, ammo and batteries.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "wasteland-map",
+  "name": "Wasteland Map",
+  "genre": "Post-Apocalyptic",
+  "category": "Survival",
+  "effect": "Feature 1 (+2 navigation; marks safe water and raider turf)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 navigation; marks safe water and raider turf"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "navigation"
+  ],
+  "summary": "Hand-drawn survival map.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "signal-fire-kit",
+  "name": "Signal Fire Kit",
+  "genre": "Post-Apocalyptic",
+  "category": "Survival",
+  "effect": "Feature 1 (smoke signals seen for miles)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "smoke signals seen for miles"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "signal",
+   "fire"
+  ],
+  "summary": "Flares, tinder and green wood.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "salvaged-night-scope",
+  "name": "Salvaged Night Scope",
+  "genre": "Post-Apocalyptic",
+  "category": "Survival",
+  "effect": "Senses 1 (low-light vision), Unreliable (flickers)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Unreliable",
+      "detail": "flickers"
+     }
+    ],
+    "effect": "Senses",
+    "rank": 1,
+    "detail": "low-light vision"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "vision",
+   "night",
+   "salvage"
+  ],
+  "summary": "Half-working light amplifier.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "dog-whistle",
+  "name": "Dog Whistle",
+  "genre": "Post-Apocalyptic",
+  "category": "Survival",
+  "effect": "Feature 1 (call and command a trained dog)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "call and command a trained dog"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "animal"
+  ],
+  "summary": "For your four-legged companion.",
+  "source": "DCUGen"
+ }
+]

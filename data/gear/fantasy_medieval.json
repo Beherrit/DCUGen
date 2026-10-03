@@ -1,0 +1,2187 @@
+[
+ {
+  "id": "battleaxe",
+  "name": "Battleaxe",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Melee Weapon",
+  "effect": "Damage 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "melee",
+   "axe",
+   "slashing"
+  ],
+  "summary": "Heavy axe for one or two hands.",
+  "source": "DCA 151"
+ },
+ {
+  "id": "sword",
+  "name": "Sword",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Melee Weapon",
+  "effect": "Damage 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "melee",
+   "sword",
+   "blade",
+   "slashing"
+  ],
+  "summary": "Longsword, saber, scimitar or similar blade.",
+  "source": "DCA 151"
+ },
+ {
+  "id": "spear",
+  "name": "Spear",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Melee Weapon",
+  "effect": "Damage 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "piercing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "melee",
+   "polearm",
+   "piercing"
+  ],
+  "summary": "Bladed polearm; can be thrown.",
+  "notes": "Can also be thrown as a ranged attack.",
+  "source": "DCA 151"
+ },
+ {
+  "id": "warhammer",
+  "name": "Warhammer",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Melee Weapon",
+  "effect": "Damage 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "melee",
+   "hammer",
+   "bludgeoning"
+  ],
+  "summary": "Heavy hammer or mace; can be thrown.",
+  "notes": "Can also be thrown as a ranged attack.",
+  "source": "DCA 151"
+ },
+ {
+  "id": "bow",
+  "name": "Bow",
+  "genre": "Fantasy & Medieval",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 6,
+  "bookCost": 6,
+  "tags": [
+   "bow",
+   "archery"
+  ],
+  "summary": "Longbow or shortbow.",
+  "notes": "Trick arrows are usually handled as devices.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "crossbow",
+  "name": "Crossbow",
+  "genre": "Fantasy & Medieval",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 19
+  },
+  "cost": 7,
+  "bookCost": 7,
+  "tags": [
+   "crossbow",
+   "archery"
+  ],
+  "summary": "Trigger-fired bow with a wider critical range.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "leather",
+  "name": "Leather",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Armor",
+  "effect": "Protection 1",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 1
+   }
+  ],
+  "protection": 1,
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "armor",
+   "light armor"
+  ],
+  "summary": "Boiled leather or a heavy leather jacket.",
+  "source": "DCA 154"
+ },
+ {
+  "id": "chain-mail",
+  "name": "Chain Mail",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Armor",
+  "effect": "Protection 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 3
+   }
+  ],
+  "protection": 3,
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "armor",
+   "medium armor"
+  ],
+  "summary": "Shirt of interlocking rings, often with a coif.",
+  "source": "DCA 154"
+ },
+ {
+  "id": "plate-mail",
+  "name": "Plate Mail",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Armor",
+  "effect": "Protection 5",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 5
+   }
+  ],
+  "protection": 5,
+  "cost": 5,
+  "bookCost": 5,
+  "tags": [
+   "armor",
+   "heavy armor"
+  ],
+  "summary": "Chain with breastplate, greaves and arm-guards.",
+  "source": "DCA 154"
+ },
+ {
+  "id": "full-plate",
+  "name": "Full Plate",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Armor",
+  "effect": "Protection 6",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 6
+   }
+  ],
+  "protection": 6,
+  "cost": 6,
+  "bookCost": 6,
+  "tags": [
+   "armor",
+   "heavy armor"
+  ],
+  "summary": "Articulated knightly plate.",
+  "source": "DCA 154"
+ },
+ {
+  "id": "small-shield",
+  "name": "Small Shield",
+  "genre": "Fantasy & Medieval",
+  "category": "Shield",
+  "effect": "+1 Active Defenses (Enhanced Dodge 1, Enhanced Parry 1)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 1,
+    "option": "Dodge"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 1,
+    "option": "Parry"
+   }
+  ],
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "shield"
+  ],
+  "summary": "Buckler covering the forearm.",
+  "source": "DCA 154"
+ },
+ {
+  "id": "medium-shield",
+  "name": "Medium Shield",
+  "genre": "Fantasy & Medieval",
+  "category": "Shield",
+  "effect": "+2 Active Defenses (Enhanced Dodge 2, Enhanced Parry 2)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 2,
+    "option": "Dodge"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 2,
+    "option": "Parry"
+   }
+  ],
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "shield"
+  ],
+  "summary": "Shield covering arm and much of the torso.",
+  "source": "DCA 154"
+ },
+ {
+  "id": "large-shield",
+  "name": "Large Shield",
+  "genre": "Fantasy & Medieval",
+  "category": "Shield",
+  "effect": "+3 Active Defenses (Enhanced Dodge 3, Enhanced Parry 3)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 3,
+    "option": "Dodge"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 3,
+    "option": "Parry"
+   }
+  ],
+  "cost": 6,
+  "bookCost": 6,
+  "tags": [
+   "shield"
+  ],
+  "summary": "Kite shield covering more than half the body.",
+  "source": "DCA 154"
+ },
+ {
+  "id": "dagger",
+  "name": "Dagger",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Melee Weapon",
+  "effect": "Damage 1 (piercing), Strength-based, Dangerous",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "strengthBased": true,
+    "detail": "piercing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Dangerous",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 1,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "melee",
+   "blade",
+   "piercing"
+  ],
+  "summary": "Short double-edged blade.",
+  "source": "GG 13"
+ },
+ {
+  "id": "hand-axe",
+  "name": "Hand Axe",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Melee Weapon",
+  "effect": "Damage 3 (slashing), Strength-based, Dangerous, Breaking",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Dangerous",
+    "ranks": 1
+   },
+   {
+    "name": "Breaking",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 5,
+  "bookCost": 5,
+  "tags": [
+   "melee",
+   "axe",
+   "slashing"
+  ],
+  "summary": "Axe that is Dangerous and Breaking.",
+  "source": "GG 13"
+ },
+ {
+  "id": "war-hammer-smashing",
+  "name": "War Hammer (Smashing)",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Melee Weapon",
+  "effect": "Damage 3 (bludgeoning), Strength-based, Smashing",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "features": [
+   {
+    "name": "Smashing",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "melee",
+   "hammer",
+   "bludgeoning"
+  ],
+  "summary": "Hammer that smashes held objects.",
+  "source": "GG 13"
+ },
+ {
+  "id": "mace",
+  "name": "Mace",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Melee Weapon",
+  "effect": "Damage 2 (bludgeoning), Strength-based, Dangerous",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "features": [
+   {
+    "name": "Dangerous",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "melee",
+   "bludgeoning"
+  ],
+  "summary": "Flanged or spiked club.",
+  "source": "GG 13"
+ },
+ {
+  "id": "flail",
+  "name": "Flail",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Melee Weapon",
+  "effect": "Damage 2 (bludgeoning), Strength-based, Reach, Dangerous, Disarming",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Reach",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "features": [
+   {
+    "name": "Dangerous",
+    "ranks": 1
+   },
+   {
+    "name": "Disarming",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 5,
+  "bookCost": 5,
+  "tags": [
+   "melee",
+   "bludgeoning",
+   "reach"
+  ],
+  "summary": "Spiked weight on a chain.",
+  "source": "GG 13"
+ },
+ {
+  "id": "quarterstaff",
+  "name": "Quarterstaff",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Melee Weapon",
+  "effect": "Damage 2 (bludgeoning), Strength-based, Double",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "features": [
+   {
+    "name": "Double",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "melee",
+   "staff",
+   "bludgeoning"
+  ],
+  "summary": "Hardwood staff that strikes with either end.",
+  "source": "GG 13"
+ },
+ {
+  "id": "long-spear",
+  "name": "Long Spear",
+  "genre": "Fantasy & Medieval",
+  "category": "Polearm",
+  "effect": "Damage 2 (piercing), Strength-based, Reach, Dangerous",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Reach",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "piercing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Dangerous",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "melee",
+   "polearm",
+   "reach"
+  ],
+  "summary": "Spear with reach.",
+  "source": "GG 13"
+ },
+ {
+  "id": "trident",
+  "name": "Trident",
+  "genre": "Fantasy & Medieval",
+  "category": "Polearm",
+  "effect": "Damage 3 (piercing), Strength-based, Reach, Dangerous, Disarming",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Reach",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "piercing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Dangerous",
+    "ranks": 1
+   },
+   {
+    "name": "Disarming",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 6,
+  "tags": [
+   "melee",
+   "polearm",
+   "reach",
+   "aquatic"
+  ],
+  "summary": "Three-tined spear for reach and disarms.",
+  "notes": "GG 13 prints 5 points, but its listed qualities (Damage 3, Dangerous, Disarming, Reach) add up to 6.",
+  "source": "GG 13"
+ },
+ {
+  "id": "net",
+  "name": "Net",
+  "genre": "Fantasy & Medieval",
+  "category": "Entangling Weapon",
+  "effect": "Grabbing 2 (no damage), Entangling",
+  "features": [
+   {
+    "name": "Grabbing",
+    "ranks": 2,
+    "detail": "no damage"
+   },
+   {
+    "name": "Entangling",
+    "ranks": 1
+   }
+  ],
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "entangling",
+   "capture"
+  ],
+  "summary": "Weighted net cast over a foe.",
+  "source": "GG 13"
+ },
+ {
+  "id": "bullwhip",
+  "name": "Bullwhip",
+  "genre": "Fantasy & Medieval",
+  "category": "Entangling Weapon",
+  "effect": "Damage 1, Strength-based, Reach 2, Disarming, Grabbing",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Reach",
+      "steps": 2
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "strengthBased": true
+   }
+  ],
+  "features": [
+   {
+    "name": "Disarming",
+    "ranks": 1
+   },
+   {
+    "name": "Grabbing",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 1,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 5,
+  "bookCost": 5,
+  "tags": [
+   "entangling",
+   "reach",
+   "whip"
+  ],
+  "summary": "Braided leather whip that cracks and wraps.",
+  "source": "GG 13"
+ },
+ {
+  "id": "sling",
+  "name": "Sling",
+  "genre": "Fantasy & Medieval",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 1",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 1,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "sling",
+   "ranged"
+  ],
+  "summary": "Cord pouch for hurling stones.",
+  "source": "GG 13"
+ },
+ {
+  "id": "katana",
+  "name": "Katana",
+  "genre": "Fantasy & Medieval",
+  "category": "Asian Weapon",
+  "effect": "Damage 3 (slashing), Strength-based, Dangerous",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Dangerous",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "melee",
+   "sword",
+   "blade",
+   "martial arts"
+  ],
+  "summary": "Curved samurai sword.",
+  "source": "GG 23"
+ },
+ {
+  "id": "wakizashi",
+  "name": "Wakizashi",
+  "genre": "Fantasy & Medieval",
+  "category": "Asian Weapon",
+  "effect": "Damage 2 (slashing), Strength-based, Dangerous",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Dangerous",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "melee",
+   "sword",
+   "blade"
+  ],
+  "summary": "Short companion blade to the katana.",
+  "source": "GG 23"
+ },
+ {
+  "id": "ninja-to",
+  "name": "Ninja-to",
+  "genre": "Fantasy & Medieval",
+  "category": "Asian Weapon",
+  "effect": "Damage 2 (slashing), Strength-based",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "melee",
+   "sword",
+   "ninja"
+  ],
+  "summary": "Straight short sword of the ninja.",
+  "source": "GG 23"
+ },
+ {
+  "id": "kama",
+  "name": "Kama",
+  "genre": "Fantasy & Medieval",
+  "category": "Asian Weapon",
+  "effect": "Damage 2 (slashing), Strength-based, Dangerous",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Dangerous",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "melee",
+   "blade",
+   "martial arts"
+  ],
+  "summary": "Sickle turned weapon.",
+  "source": "GG 23"
+ },
+ {
+  "id": "kris",
+  "name": "Kris",
+  "genre": "Fantasy & Medieval",
+  "category": "Asian Weapon",
+  "effect": "Damage 2 (piercing or slashing), Strength-based, Dangerous 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "piercing or slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Dangerous",
+    "ranks": 2
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 18
+  },
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "melee",
+   "blade"
+  ],
+  "summary": "Wavy-bladed Indonesian dagger.",
+  "source": "GG 23"
+ },
+ {
+  "id": "kukri",
+  "name": "Kukri",
+  "genre": "Fantasy & Medieval",
+  "category": "Asian Weapon",
+  "effect": "Damage 2 (slashing), Strength-based, Dangerous",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Dangerous",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "melee",
+   "blade"
+  ],
+  "summary": "Heavy inward-curved Nepalese knife.",
+  "source": "GG 23"
+ },
+ {
+  "id": "hook-sword",
+  "name": "Hook Sword",
+  "genre": "Fantasy & Medieval",
+  "category": "Asian Weapon",
+  "effect": "Damage 3 (slashing), Strength-based, Double, Tripping",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Double",
+    "ranks": 1
+   },
+   {
+    "name": "Tripping",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 5,
+  "bookCost": 5,
+  "tags": [
+   "melee",
+   "sword",
+   "martial arts"
+  ],
+  "summary": "Hooked blade that trips and catches.",
+  "source": "GG 23"
+ },
+ {
+  "id": "sai",
+  "name": "Sai",
+  "genre": "Fantasy & Medieval",
+  "category": "Asian Weapon",
+  "effect": "Damage 1 (piercing), Strength-based, Defensive, Disarming",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "strengthBased": true,
+    "detail": "piercing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Defensive",
+    "ranks": 1
+   },
+   {
+    "name": "Disarming",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 1,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "melee",
+   "martial arts"
+  ],
+  "summary": "Prong-guarded baton that catches blades.",
+  "source": "GG 23"
+ },
+ {
+  "id": "war-fan",
+  "name": "War Fan",
+  "genre": "Fantasy & Medieval",
+  "category": "Asian Weapon",
+  "effect": "Damage 1 (slashing), Strength-based, Concealable, Defensive",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Concealable",
+    "ranks": 1
+   },
+   {
+    "name": "Defensive",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 1,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "melee",
+   "concealable",
+   "martial arts"
+  ],
+  "summary": "Iron-ribbed fan that blocks and slashes.",
+  "source": "GG 23"
+ },
+ {
+  "id": "bo-staff",
+  "name": "Bo Staff",
+  "genre": "Fantasy & Medieval",
+  "category": "Asian Weapon",
+  "effect": "Damage 2 (bludgeoning), Strength-based, Reach, Double",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Reach",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "features": [
+   {
+    "name": "Double",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "melee",
+   "staff",
+   "martial arts"
+  ],
+  "summary": "Long staff with reach.",
+  "source": "GG 23"
+ },
+ {
+  "id": "naginata",
+  "name": "Naginata",
+  "genre": "Fantasy & Medieval",
+  "category": "Polearm",
+  "effect": "Damage 3 (slashing), Strength-based, Reach",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Reach",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "melee",
+   "polearm",
+   "reach"
+  ],
+  "summary": "Curved blade on a long haft.",
+  "source": "GG 23"
+ },
+ {
+  "id": "kusarigama",
+  "name": "Kusarigama",
+  "genre": "Fantasy & Medieval",
+  "category": "Entangling Weapon",
+  "effect": "Damage 2, Strength-based, Reach, Disarming, Grabbing",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Reach",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true
+   }
+  ],
+  "features": [
+   {
+    "name": "Disarming",
+    "ranks": 1
+   },
+   {
+    "name": "Grabbing",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 5,
+  "bookCost": 5,
+  "tags": [
+   "entangling",
+   "reach",
+   "martial arts"
+  ],
+  "summary": "Sickle on a weighted chain.",
+  "source": "GG 23"
+ },
+ {
+  "id": "daikyu",
+  "name": "Daikyu",
+  "genre": "Fantasy & Medieval",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 6,
+  "tags": [
+   "bow",
+   "archery"
+  ],
+  "summary": "Tall asymmetrical Japanese bow.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "bodkin-arrows-bow",
+  "name": "Bodkin Arrows Bow",
+  "genre": "Fantasy & Medieval",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 3, Penetrating",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Penetrating",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 7,
+  "bookCost": 7,
+  "tags": [
+   "bow",
+   "archery",
+   "armor-piercing"
+  ],
+  "summary": "Bow loaded with armor-piercing \"dragon's tongue\" heads.",
+  "source": "GG 23"
+ },
+ {
+  "id": "chakram",
+  "name": "Chakram",
+  "genre": "Fantasy & Medieval",
+  "category": "Thrown Weapon",
+  "effect": "Ranged Damage 3, Dangerous",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "features": [
+   {
+    "name": "Dangerous",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 19
+  },
+  "cost": 7,
+  "bookCost": 7,
+  "tags": [
+   "thrown",
+   "blade"
+  ],
+  "summary": "Bladed throwing ring.",
+  "source": "GG 23"
+ },
+ {
+  "id": "greatsword",
+  "name": "Greatsword",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Melee Weapon",
+  "effect": "Damage 4 (slashing), Strength-based, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 4,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 5,
+  "tags": [
+   "melee",
+   "sword",
+   "two-handed"
+  ],
+  "summary": "Two-handed blade.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "greataxe",
+  "name": "Greataxe",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Melee Weapon",
+  "effect": "Damage 4 (slashing), Strength-based, Breaking",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Breaking",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 4,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 5,
+  "tags": [
+   "melee",
+   "axe",
+   "two-handed"
+  ],
+  "summary": "Huge two-handed axe.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "rapier",
+  "name": "Rapier",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Melee Weapon",
+  "effect": "Damage 2 (piercing), Strength-based, Improved Critical 1 (19-20), Defensive",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "piercing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   },
+   {
+    "name": "Defensive",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 4,
+  "tags": [
+   "melee",
+   "sword",
+   "fencing"
+  ],
+  "summary": "Slim thrusting sword.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "scimitar",
+  "name": "Scimitar",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Melee Weapon",
+  "effect": "Damage 3 (slashing), Strength-based, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 4,
+  "tags": [
+   "melee",
+   "sword"
+  ],
+  "summary": "Curved desert saber.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "morningstar",
+  "name": "Morningstar",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Melee Weapon",
+  "effect": "Damage 3 (bludgeoning and piercing), Strength-based",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "bludgeoning and piercing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "tags": [
+   "melee",
+   "bludgeoning"
+  ],
+  "summary": "Spiked ball on a haft.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "halberd",
+  "name": "Halberd",
+  "genre": "Fantasy & Medieval",
+  "category": "Polearm",
+  "effect": "Damage 3 (slashing or piercing), Strength-based, Reach, Tripping",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Reach",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "slashing or piercing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Tripping",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 5,
+  "tags": [
+   "melee",
+   "polearm",
+   "reach"
+  ],
+  "summary": "Axe-blade, spike and hook on a pole.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "glaive",
+  "name": "Glaive",
+  "genre": "Fantasy & Medieval",
+  "category": "Polearm",
+  "effect": "Damage 3 (slashing), Strength-based, Reach",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Reach",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 4,
+  "tags": [
+   "melee",
+   "polearm",
+   "reach"
+  ],
+  "summary": "Blade on a long pole.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "lance",
+  "name": "Lance",
+  "genre": "Fantasy & Medieval",
+  "category": "Polearm",
+  "effect": "Damage 4 (piercing), Strength-based, Reach, Limited when mounted and charging",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Reach",
+      "steps": 1
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "when mounted and charging"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 4,
+    "strengthBased": true,
+    "detail": "piercing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 4,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "tags": [
+   "melee",
+   "polearm",
+   "mounted"
+  ],
+  "summary": "Cavalry lance; full damage only on a charge.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "pike",
+  "name": "Pike",
+  "genre": "Fantasy & Medieval",
+  "category": "Polearm",
+  "effect": "Damage 3 (piercing), Strength-based, Reach 2",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Reach",
+      "steps": 2
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "piercing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 5,
+  "tags": [
+   "melee",
+   "polearm",
+   "reach"
+  ],
+  "summary": "Very long infantry spear.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "longbow",
+  "name": "Longbow",
+  "genre": "Fantasy & Medieval",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 8,
+  "tags": [
+   "bow",
+   "archery"
+  ],
+  "summary": "Tall war bow with great range.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "heavy-crossbow",
+  "name": "Heavy Crossbow",
+  "genre": "Fantasy & Medieval",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 4, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 19
+  },
+  "cost": 9,
+  "tags": [
+   "crossbow",
+   "archery"
+  ],
+  "summary": "Windlass crossbow.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "throwing-axe",
+  "name": "Throwing Axe",
+  "genre": "Fantasy & Medieval",
+  "category": "Thrown Weapon",
+  "effect": "Ranged Damage 2, Strength-based",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "range": "Ranged",
+    "strengthBased": true
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 4,
+  "tags": [
+   "thrown",
+   "axe"
+  ],
+  "summary": "Balanced axe for throwing.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "studded-leather",
+  "name": "Studded Leather",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Armor",
+  "effect": "Protection 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 2
+   }
+  ],
+  "protection": 2,
+  "cost": 2,
+  "tags": [
+   "armor",
+   "light armor"
+  ],
+  "summary": "Leather set with close-spaced studs.",
+  "source": "GG 16"
+ },
+ {
+  "id": "scale-mail",
+  "name": "Scale Mail",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Armor",
+  "effect": "Protection 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 3
+   }
+  ],
+  "protection": 3,
+  "cost": 3,
+  "tags": [
+   "armor",
+   "medium armor"
+  ],
+  "summary": "Overlapping metal scales on leather.",
+  "source": "GG 16"
+ },
+ {
+  "id": "laminate-armor",
+  "name": "Laminate Armor",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Armor",
+  "effect": "Protection 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 3
+   }
+  ],
+  "protection": 3,
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "armor",
+   "medium armor"
+  ],
+  "summary": "Layered lamellar like samurai armor.",
+  "source": "GG 18"
+ },
+ {
+  "id": "breastplate-and-chain",
+  "name": "Breastplate and Chain",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Armor",
+  "effect": "Protection 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 4
+   }
+  ],
+  "protection": 4,
+  "cost": 4,
+  "tags": [
+   "armor",
+   "medium armor"
+  ],
+  "summary": "Chain mail with a solid breastplate.",
+  "source": "GG 16"
+ },
+ {
+  "id": "padded-gambeson",
+  "name": "Padded Gambeson",
+  "genre": "Fantasy & Medieval",
+  "category": "Archaic Armor",
+  "effect": "Protection 1",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 1
+   }
+  ],
+  "protection": 1,
+  "cost": 1,
+  "tags": [
+   "armor",
+   "light armor"
+  ],
+  "summary": "Quilted cloth armor.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "tower-shield",
+  "name": "Tower Shield",
+  "genre": "Fantasy & Medieval",
+  "category": "Shield",
+  "effect": "Enhanced Dodge 5, Enhanced Parry 5",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 5,
+    "option": "Dodge"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 5,
+    "option": "Parry"
+   }
+  ],
+  "cost": 10,
+  "tags": [
+   "shield",
+   "heavy"
+  ],
+  "summary": "Body-covering shield (+5 active defenses).",
+  "notes": "GG prices it at 9 with a -1 speed quirk; that quirk is a complication here, so it costs the full 10.",
+  "source": "GG 18"
+ },
+ {
+  "id": "bracers",
+  "name": "Bracers",
+  "genre": "Fantasy & Medieval",
+  "category": "Shield",
+  "effect": "Improved Defense",
+  "features": [
+   {
+    "name": "Improved Defense",
+    "ranks": 1
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "shield",
+   "bracer"
+  ],
+  "summary": "Arm guards: +2 to active defenses when you defend.",
+  "source": "GG 18"
+ },
+ {
+  "id": "thieves-tools",
+  "name": "Thieves' Tools",
+  "genre": "Fantasy & Medieval",
+  "category": "Kits",
+  "effect": "Feature 1 (tools for Sleight of Hand and lockpicking)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "tools for Sleight of Hand and lockpicking"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "kit",
+   "lock",
+   "infiltration"
+  ],
+  "summary": "Picks, probes and a tiny saw.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "healers-satchel",
+  "name": "Healer's Satchel",
+  "genre": "Fantasy & Medieval",
+  "category": "Kits",
+  "effect": "Feature 1 (tools for Treatment)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "tools for Treatment"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "kit",
+   "medical"
+  ],
+  "summary": "Herbs, poultices and linen.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "lantern",
+  "name": "Lantern",
+  "genre": "Fantasy & Medieval",
+  "category": "Gear",
+  "effect": "Feature 1 (negates darkness penalties within 30 ft.)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "negates darkness penalties within 30 ft."
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "light"
+  ],
+  "summary": "Hooded oil lantern.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "torch",
+  "name": "Torch",
+  "genre": "Fantasy & Medieval",
+  "category": "Gear",
+  "effect": "Feature 1 (light; Damage 1 fire in a pinch)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "light; Damage 1 fire in a pinch"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "light",
+   "fire"
+  ],
+  "summary": "Pitch-soaked torch.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "caltrops",
+  "name": "Caltrops",
+  "genre": "Fantasy & Medieval",
+  "category": "Gear",
+  "effect": "Feature 1 (hinders anyone crossing a 10-ft. square)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "hinders anyone crossing a 10-ft. square"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "trap"
+  ],
+  "summary": "Scattered iron spikes.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "spyglass",
+  "name": "Spyglass",
+  "genre": "Fantasy & Medieval",
+  "category": "Gear",
+  "effect": "Feature 1 (+5 to visual Perception at a distance)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to visual Perception at a distance"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "optics"
+  ],
+  "summary": "Brass telescope.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "riding-tack",
+  "name": "Riding Tack",
+  "genre": "Fantasy & Medieval",
+  "category": "Gear",
+  "effect": "Feature 1 (+2 Expertise (riding) checks)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Expertise (riding) checks"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "mount"
+  ],
+  "summary": "Saddle, bridle and saddlebags.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "bedroll-and-rations",
+  "name": "Bedroll and Rations",
+  "genre": "Fantasy & Medieval",
+  "category": "Gear",
+  "effect": "Feature 1 (a week on the road)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "a week on the road"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "camping",
+   "travel"
+  ],
+  "summary": "Traveler's pack.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "grappling-iron",
+  "name": "Grappling Iron",
+  "genre": "Fantasy & Medieval",
+  "category": "Gear",
+  "effect": "Feature 1 (+5 Athletics to climb with a rope)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 Athletics to climb with a rope"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "climbing"
+  ],
+  "summary": "Iron hook and knotted rope.",
+  "source": "DCUGen"
+ }
+]

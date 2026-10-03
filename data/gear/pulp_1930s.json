@@ -1,0 +1,854 @@
+[
+ {
+  "id": "tommy-gun",
+  "name": "Tommy Gun",
+  "genre": "Pulp 1930s",
+  "category": "Pulp Firearm",
+  "effect": "Ranged Damage 4, Multiattack",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 12,
+  "tags": [
+   "firearm",
+   "automatic",
+   "gangster"
+  ],
+  "summary": "Drum-fed Thompson submachine gun.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "45-automatic",
+  "name": ".45 Automatic",
+  "genre": "Pulp 1930s",
+  "category": "Pulp Firearm",
+  "effect": "Ranged Damage 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 8,
+  "tags": [
+   "firearm",
+   "pistol"
+  ],
+  "summary": "Model 1911 service pistol.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "luger-pistol",
+  "name": "Luger Pistol",
+  "genre": "Pulp 1930s",
+  "category": "Pulp Firearm",
+  "effect": "Ranged Damage 3, Accurate",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Accurate",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 7,
+  "tags": [
+   "firearm",
+   "pistol"
+  ],
+  "summary": "Precise German pistol.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "broomhandle-mauser",
+  "name": "Broomhandle Mauser",
+  "genre": "Pulp 1930s",
+  "category": "Pulp Firearm",
+  "effect": "Ranged Damage 3, Extended Range",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Extended Range",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 7,
+  "tags": [
+   "firearm",
+   "pistol"
+  ],
+  "summary": "Long-range pistol with a stock-holster.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "snub-nose-38",
+  "name": "Snub-Nose .38",
+  "genre": "Pulp 1930s",
+  "category": "Pulp Firearm",
+  "effect": "Ranged Damage 3, Subtle, Diminished Range",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Diminished Range",
+      "steps": 1
+     }
+    ],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 6,
+  "tags": [
+   "firearm",
+   "pistol",
+   "concealable"
+  ],
+  "summary": "Detective's pocket revolver.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "twin-45s",
+  "name": "Twin .45s",
+  "genre": "Pulp 1930s",
+  "category": "Pulp Firearm",
+  "effect": "Ranged Damage 4, Split",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Split",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 9,
+  "tags": [
+   "firearm",
+   "pistol",
+   "paired"
+  ],
+  "summary": "A matched pair that can split fire between targets.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "browning-automatic-rifle",
+  "name": "Browning Automatic Rifle",
+  "genre": "Pulp 1930s",
+  "category": "Pulp Firearm",
+  "effect": "Ranged Damage 5, Multiattack",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 15,
+  "tags": [
+   "firearm",
+   "rifle",
+   "automatic"
+  ],
+  "summary": "Heavy automatic rifle.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "elephant-rifle-safari",
+  "name": "Elephant Rifle (Safari)",
+  "genre": "Pulp 1930s",
+  "category": "Pulp Firearm",
+  "effect": "Ranged Damage 6",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 6,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 6,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 12,
+  "tags": [
+   "firearm",
+   "rifle",
+   "big game"
+  ],
+  "summary": "Big-bore express rifle for safaris.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "gas-pistol",
+  "name": "Gas Pistol",
+  "genre": "Pulp 1930s",
+  "category": "Mystery Man Gadget",
+  "effect": "Ranged Affliction 4 (knockout gas; Resisted by Fortitude; Dazed, Stunned, Incapacitated)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 4,
+    "range": "Ranged",
+    "detail": "knockout gas; Resisted by Fortitude; Dazed, Stunned, Incapacitated"
+   }
+  ],
+  "cost": 8,
+  "tags": [
+   "less-lethal",
+   "gas",
+   "pistol"
+  ],
+  "summary": "Pulp hero's knockout-gas gun.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "death-ray",
+  "name": "Death Ray",
+  "genre": "Pulp 1930s",
+  "category": "Mad Science",
+  "effect": "Ranged Damage 8 (disintegration)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 8,
+    "range": "Ranged",
+    "detail": "disintegration"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 8,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 16,
+  "tags": [
+   "energy",
+   "mad science",
+   "ray gun"
+  ],
+  "summary": "Crackling ray of a mad scientist.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "paralysis-ray",
+  "name": "Paralysis Ray",
+  "genre": "Pulp 1930s",
+  "category": "Mad Science",
+  "effect": "Ranged Affliction 6 (Resisted by Fortitude; Hindered, Immobilized, Paralyzed)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 6,
+    "range": "Ranged",
+    "detail": "Resisted by Fortitude; Hindered, Immobilized, Paralyzed"
+   }
+  ],
+  "cost": 12,
+  "tags": [
+   "energy",
+   "mad science",
+   "ray gun"
+  ],
+  "summary": "Freezes victims in place.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "rocket-pack",
+  "name": "Rocket Pack",
+  "genre": "Pulp 1930s",
+  "category": "Mad Science",
+  "effect": "Flight 5, Quirk (needs open sky; flaming exhaust)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Quirk",
+      "detail": "needs open sky; flaming exhaust",
+      "steps": 1
+     }
+    ],
+    "effect": "Flight",
+    "rank": 5
+   }
+  ],
+  "cost": 9,
+  "tags": [
+   "flight",
+   "jetpack",
+   "rocket"
+  ],
+  "summary": "Finned rocket pack and bullet helmet.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "gyro-belt",
+  "name": "Gyro-Belt",
+  "genre": "Pulp 1930s",
+  "category": "Mad Science",
+  "effect": "Movement 2 (Safe Fall, Environmental Adaptation (heights))",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Movement",
+    "rank": 2,
+    "detail": "Safe Fall, Environmental Adaptation (heights)"
+   }
+  ],
+  "cost": 4,
+  "tags": [
+   "movement"
+  ],
+  "summary": "Gyroscopic belt that keeps you upright.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "shadow-cloak",
+  "name": "Shadow Cloak",
+  "genre": "Pulp 1930s",
+  "category": "Mystery Man Gadget",
+  "effect": "Concealment 2 (normal sight), Blending, Limited to shadows",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Blending"
+     },
+     {
+      "name": "Limited",
+      "detail": "shadows"
+     }
+    ],
+    "effect": "Concealment",
+    "rank": 2,
+    "detail": "normal sight"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "stealth",
+   "cloak"
+  ],
+  "summary": "Black cloak that drinks the light.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "infra-red-spectacles",
+  "name": "Infra-Red Spectacles",
+  "genre": "Pulp 1930s",
+  "category": "Mystery Man Gadget",
+  "effect": "Senses 1 (infravision)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 1,
+    "detail": "infravision"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "vision",
+   "goggles"
+  ],
+  "summary": "Red-lensed glasses that see heat.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "signet-ring-seal",
+  "name": "Signet Ring Seal",
+  "genre": "Pulp 1930s",
+  "category": "Mystery Man Gadget",
+  "effect": "Feature 1 (leaves a calling-card mark; +2 Intimidation vs. criminals)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "leaves a calling-card mark; +2 Intimidation vs. criminals"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "intimidation"
+  ],
+  "summary": "Ring that leaves your sign.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "bulletproof-trench-coat",
+  "name": "Bulletproof Trench Coat",
+  "genre": "Pulp 1930s",
+  "category": "Pulp Armor",
+  "effect": "Protection 3, Subtle, Limited to ballistic",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "ballistic"
+     }
+    ],
+    "effect": "Protection",
+    "rank": 3
+   }
+  ],
+  "protection": 3,
+  "cost": 3,
+  "tags": [
+   "armor",
+   "clothing",
+   "concealable"
+  ],
+  "summary": "Lined trench coat that stops slugs.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "aviator-jacket",
+  "name": "Aviator Jacket",
+  "genre": "Pulp 1930s",
+  "category": "Pulp Armor",
+  "effect": "Protection 1",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 1
+   }
+  ],
+  "protection": 1,
+  "cost": 1,
+  "tags": [
+   "armor",
+   "clothing",
+   "pilot"
+  ],
+  "summary": "Sheepskin flight jacket.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "fedora-and-trench-coat",
+  "name": "Fedora and Trench Coat",
+  "genre": "Pulp 1930s",
+  "category": "Clothing",
+  "effect": "Feature 1 (+2 Intimidation in the city at night)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Intimidation in the city at night"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "clothing"
+  ],
+  "summary": "The look of a hardboiled detective.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "pith-helmet",
+  "name": "Pith Helmet",
+  "genre": "Pulp 1930s",
+  "category": "Clothing",
+  "effect": "Feature 1 (+5 to resist heatstroke)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist heatstroke"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "clothing",
+   "heat",
+   "explorer"
+  ],
+  "summary": "Explorer's sun helmet.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "aviator-goggles",
+  "name": "Aviator Goggles",
+  "genre": "Pulp 1930s",
+  "category": "Clothing",
+  "effect": "Feature 1 (+5 to resist wind, dust and glare)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist wind, dust and glare"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "goggles",
+   "pilot"
+  ],
+  "summary": "Leather-strapped flying goggles.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "explorers-kit",
+  "name": "Explorer's Kit",
+  "genre": "Pulp 1930s",
+  "category": "Expedition",
+  "effect": "Feature 2 (rope, machete, compass, lantern: +2 Expertise (survival))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "rope, machete, compass, lantern: +2 Expertise (survival)"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "kit",
+   "explorer",
+   "survival"
+  ],
+  "summary": "Everything for a lost-city expedition.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "archaeologists-tools",
+  "name": "Archaeologist's Tools",
+  "genre": "Pulp 1930s",
+  "category": "Expedition",
+  "effect": "Feature 1 (tools for Expertise (archaeology))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "tools for Expertise (archaeology)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "kit",
+   "research"
+  ],
+  "summary": "Brushes, trowels and notebooks.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "adventurers-bullwhip",
+  "name": "Adventurer's Bullwhip",
+  "genre": "Pulp 1930s",
+  "category": "Expedition",
+  "effect": "Damage 1, Strength-based, Reach 3, Improved Grab",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Reach",
+      "steps": 3
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "strengthBased": true
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Grab",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 1,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 5,
+  "tags": [
+   "whip",
+   "reach"
+  ],
+  "summary": "Swing across chasms and snatch idols.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "aviators-parachute",
+  "name": "Aviator's Parachute",
+  "genre": "Pulp 1930s",
+  "category": "Expedition",
+  "effect": "Movement 1 (Safe Fall)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Movement",
+    "rank": 1,
+    "detail": "Safe Fall"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "movement",
+   "pilot"
+  ],
+  "summary": "Seat-pack chute.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "speed-graphic-camera",
+  "name": "Speed Graphic Camera",
+  "genre": "Pulp 1930s",
+  "category": "Press",
+  "effect": "Feature 1 (flash photography; flashbulb can dazzle (stunt))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "flash photography; flashbulb can dazzle (stunt)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "camera",
+   "journalism"
+  ],
+  "summary": "Newsman's press camera.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "two-way-wrist-radio",
+  "name": "Two-Way Wrist Radio",
+  "genre": "Pulp 1930s",
+  "category": "Mad Science",
+  "effect": "Feature 1 (radio communication, about 1 mile)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "radio communication, about 1 mile"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "communication",
+   "radio"
+  ],
+  "summary": "Wristwatch radio years ahead of its time.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "safecrackers-stethoscope",
+  "name": "Safecracker's Stethoscope",
+  "genre": "Pulp 1930s",
+  "category": "Criminal Gear",
+  "effect": "Feature 1 (+5 Technology to crack combination safes)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 Technology to crack combination safes"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "lock",
+   "crime"
+  ],
+  "summary": "Listen to the tumblers fall.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "speakeasy-password-book",
+  "name": "Speakeasy Password Book",
+  "genre": "Pulp 1930s",
+  "category": "Criminal Gear",
+  "effect": "Feature 1 (access to the underworld; +2 Investigation among gangsters)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "access to the underworld; +2 Investigation among gangsters"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "crime",
+   "social"
+  ],
+  "summary": "Little black book of contacts.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "knockout-drops",
+  "name": "Knockout Drops",
+  "genre": "Pulp 1930s",
+  "category": "Criminal Gear",
+  "effect": "Affliction 5 (Resisted by Fortitude; Fatigued, Exhausted, Asleep), Unreliable (one dose), Limited to ingestion",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Unreliable",
+      "detail": "one dose"
+     },
+     {
+      "name": "Limited",
+      "detail": "ingestion"
+     }
+    ],
+    "effect": "Affliction",
+    "rank": 5,
+    "detail": "Resisted by Fortitude; Fatigued, Exhausted, Asleep"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "poison",
+   "sleep"
+  ],
+  "summary": "Mickey Finn slipped into a drink.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "blackjack",
+  "name": "Blackjack",
+  "genre": "Pulp 1930s",
+  "category": "Criminal Gear",
+  "effect": "Damage 2 (bludgeoning), Strength-based, Subtle",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "tags": [
+   "melee",
+   "bludgeoning",
+   "concealable"
+  ],
+  "summary": "Leather sap for quiet knockouts.",
+  "source": "DCUGen"
+ }
+]

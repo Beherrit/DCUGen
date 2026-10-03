@@ -1,0 +1,1752 @@
+{
+  "_note": "Space-game rules for DC Adventures. Sources: DCA page numbers are the Hero's Handbook; \"DCUGen (built on DCA nn)\" marks extensions. Tables are computed from the Measurements Table (DCA 11) with src/engine/space.js.",
+  "space_travel_speed": {
+    "1": 30,
+    "2": 40,
+    "3": 50
+  },
+  "routes": [
+    {
+      "id": "earth-orbit",
+      "name": "Earth surface to low orbit",
+      "miles": 250,
+      "distance_rank": 16,
+      "scope": "planetary",
+      "note": "About 250 miles straight up."
+    },
+    {
+      "id": "earth-geo",
+      "name": "Earth to geostationary orbit",
+      "miles": 22236,
+      "distance_rank": 23,
+      "scope": "planetary",
+      "note": "Where communication satellites hang."
+    },
+    {
+      "id": "earth-moon",
+      "name": "Earth to the Moon",
+      "miles": 238900,
+      "distance_rank": 26,
+      "scope": "planetary",
+      "note": "Average distance."
+    },
+    {
+      "id": "earth-sun",
+      "name": "Earth to the Sun",
+      "miles": 93000000,
+      "distance_rank": 35,
+      "scope": "system",
+      "note": "One astronomical unit (AU)."
+    },
+    {
+      "id": "earth-mars-close",
+      "name": "Earth to Mars (closest approach)",
+      "miles": 34000000,
+      "distance_rank": 34,
+      "scope": "system",
+      "note": "The best launch window."
+    },
+    {
+      "id": "earth-mars",
+      "name": "Earth to Mars (typical)",
+      "miles": 140000000,
+      "distance_rank": 36,
+      "scope": "system",
+      "note": "An average separation."
+    },
+    {
+      "id": "earth-jupiter",
+      "name": "Earth to Jupiter",
+      "miles": 500000000,
+      "distance_rank": 37,
+      "scope": "system",
+      "note": "Typical separation."
+    },
+    {
+      "id": "earth-saturn",
+      "name": "Earth to Saturn",
+      "miles": 900000000,
+      "distance_rank": 38,
+      "scope": "system",
+      "note": "Typical separation."
+    },
+    {
+      "id": "earth-neptune",
+      "name": "Earth to the outer system (Neptune)",
+      "miles": 2700000000,
+      "distance_rank": 40,
+      "scope": "system",
+      "note": "The edge of the major planets."
+    },
+    {
+      "id": "earth-oort",
+      "name": "Earth to the Oort cloud",
+      "miles": 5878625373184,
+      "distance_rank": 51,
+      "scope": "system",
+      "note": "The comet halo at the very edge of the Sun's reach, about a light-year out."
+    },
+    {
+      "id": "nearest-star",
+      "name": "Sun to the nearest star",
+      "miles": 24925371582300.16,
+      "distance_rank": 53,
+      "scope": "interstellar",
+      "note": "About 4.2 light-years."
+    },
+    {
+      "id": "near-star-20",
+      "name": "To a star 20 light-years away",
+      "miles": 117572507463680,
+      "distance_rank": 55,
+      "scope": "interstellar",
+      "note": "The local stellar neighborhood."
+    },
+    {
+      "id": "sector-1000",
+      "name": "Across a 1,000 light-year sector",
+      "miles": 5878625373184000,
+      "distance_rank": 61,
+      "scope": "interstellar",
+      "note": "DCUGen treats this as the far limit of Space Travel 2."
+    },
+    {
+      "id": "galactic-core",
+      "name": "Earth to the galactic core",
+      "miles": 152844259702784000,
+      "distance_rank": 66,
+      "scope": "galactic",
+      "note": "About 26,000 light-years."
+    },
+    {
+      "id": "across-galaxy",
+      "name": "Across the galaxy",
+      "miles": 587862537318400000,
+      "distance_rank": 68,
+      "scope": "galactic",
+      "note": "Rim to rim, about 100,000 light-years."
+    },
+    {
+      "id": "andromeda",
+      "name": "To the Andromeda galaxy",
+      "miles": 14696563432960000000,
+      "distance_rank": 72,
+      "scope": "intergalactic",
+      "note": "About 2.5 million light-years."
+    }
+  ],
+  "rules": [
+    {
+      "id": "space-rank-math",
+      "title": "Ranks at astronomical scale",
+      "group": "Distances & travel",
+      "text": "The Measurements Table stops at rank 30 (4 million miles, 200 years), but every rank above it simply doubles the one before, so it reaches the stars without any new rules. Find a distance's rank by rounding up to the next listed value, then use the book's two formulas: distance rank = time rank + speed rank, and time rank = distance rank - speed rank. Never add ranks together; convert to measures, add those, and convert back.",
+      "source": "DCA 10-12"
+    },
+    {
+      "id": "space-distances",
+      "title": "Space distance ranks",
+      "group": "Distances & travel",
+      "text": "Distance ranks for common trips, computed from the extended Measurements Table. The scope column says which rank of Space Travel can make the trip: planetary and system trips need rank 1, interstellar trips rank 2, galactic and intergalactic trips rank 3.",
+      "table": {
+        "columns": [
+          "Route",
+          "Distance",
+          "Distance rank",
+          "Rank covers",
+          "Scope"
+        ],
+        "rows": [
+          [
+            "Earth surface to low orbit",
+            "250 miles",
+            "16",
+            "up to 250 miles",
+            "planetary"
+          ],
+          [
+            "Earth to geostationary orbit",
+            "22,236 miles",
+            "23",
+            "up to 32,000 miles",
+            "planetary"
+          ],
+          [
+            "Earth to the Moon",
+            "238,900 miles",
+            "26",
+            "up to 250,000 miles",
+            "planetary"
+          ],
+          [
+            "Earth to the Sun",
+            "93 million miles (1 AU)",
+            "35",
+            "up to 128 million miles (1.4 AU)",
+            "system"
+          ],
+          [
+            "Earth to Mars (closest approach)",
+            "34 million miles (0.37 AU)",
+            "34",
+            "up to 64 million miles (0.69 AU)",
+            "system"
+          ],
+          [
+            "Earth to Mars (typical)",
+            "140 million miles (1.5 AU)",
+            "36",
+            "up to 256 million miles (2.8 AU)",
+            "system"
+          ],
+          [
+            "Earth to Jupiter",
+            "500 million miles (5.4 AU)",
+            "37",
+            "up to 512 million miles (5.5 AU)",
+            "system"
+          ],
+          [
+            "Earth to Saturn",
+            "900 million miles (9.7 AU)",
+            "38",
+            "up to 1 billion miles (11 AU)",
+            "system"
+          ],
+          [
+            "Earth to the outer system (Neptune)",
+            "2.7 billion miles (29 AU)",
+            "40",
+            "up to 4.1 billion miles (44 AU)",
+            "system"
+          ],
+          [
+            "Earth to the Oort cloud",
+            "1 light-year",
+            "51",
+            "up to 1.4 light-years",
+            "system"
+          ],
+          [
+            "Sun to the nearest star",
+            "4.2 light-years",
+            "53",
+            "up to 5.7 light-years",
+            "interstellar"
+          ],
+          [
+            "To a star 20 light-years away",
+            "20 light-years",
+            "55",
+            "up to 23 light-years",
+            "interstellar"
+          ],
+          [
+            "Across a 1,000 light-year sector",
+            "1,000 light-years",
+            "61",
+            "up to 1,500 light-years",
+            "interstellar"
+          ],
+          [
+            "Earth to the galactic core",
+            "26,000 light-years",
+            "66",
+            "up to 47,000 light-years",
+            "galactic"
+          ],
+          [
+            "Across the galaxy",
+            "100,000 light-years",
+            "68",
+            "up to 190,000 light-years",
+            "galactic"
+          ],
+          [
+            "To the Andromeda galaxy",
+            "2,500,000 light-years",
+            "72",
+            "up to 3,000,000 light-years",
+            "intergalactic"
+          ]
+        ]
+      },
+      "source": "DCUGen (built on DCA 11, 110)"
+    },
+    {
+      "id": "space-speed",
+      "title": "Sublight speed in space",
+      "group": "Distances & travel",
+      "text": "A ship's Flight rank is its speed in normal space as well as in the air. Each round (6 seconds, time rank 0) it covers its speed rank in distance; an hour adds 9 ranks and a day adds 14. The book's own example: Flight 12 covers 8,000 miles (rank 21) in an hour. Light covers about a million miles every 6 seconds, which makes the speed of light roughly speed rank 28; Flight above that is faster than light and should be bought as Space Travel instead.",
+      "table": {
+        "columns": [
+          "Speed rank",
+          "Per round",
+          "Per hour",
+          "Per day"
+        ],
+        "rows": [
+          [
+            "10",
+            "4 miles per round",
+            "2,000 miles per hour",
+            "64,000 miles per day"
+          ],
+          [
+            "12",
+            "16 miles per round",
+            "8,000 miles per hour",
+            "250,000 miles per day"
+          ],
+          [
+            "14",
+            "60 miles per round",
+            "32,000 miles per hour",
+            "1 million miles per day"
+          ],
+          [
+            "16",
+            "250 miles per round",
+            "125,000 miles per hour",
+            "4 million miles per day"
+          ],
+          [
+            "20",
+            "4,000 miles per round",
+            "2 million miles per hour",
+            "64 million miles (0.69 AU) per day"
+          ],
+          [
+            "24",
+            "64,000 miles per round",
+            "32 million miles (0.34 AU) per hour",
+            "1 billion miles (11 AU) per day"
+          ],
+          [
+            "28",
+            "1 million miles per round",
+            "512 million miles (5.5 AU) per hour",
+            "16 billion miles (180 AU) per day"
+          ]
+        ]
+      },
+      "source": "DCA 11-12; DCUGen (light speed)"
+    },
+    {
+      "id": "space-travel-effect",
+      "title": "Movement (Space Travel)",
+      "group": "Distances & travel",
+      "text": "Space Travel is a Movement option (2 points per rank) that crosses the void faster than light, but never inside a planet's atmosphere. Rank 1 reaches the other planets of one solar system; rank 2 reaches other star systems; rank 3 reaches distant stars and possibly other galaxies. It gives no protection from vacuum: that takes Immunity. The book deliberately gives it no speed: what matters is how far a hero can get between scenes.",
+      "source": "DCA 109-110"
+    },
+    {
+      "id": "space-travel-time",
+      "title": "Space Travel times",
+      "group": "Distances & travel",
+      "text": "To put a clock on the plot, DCUGen gives each Space Travel rank an effective speed rank and uses the normal time math: rank 1 is speed 30 (about four times light speed), rank 2 is speed 40 (about four thousand times light), rank 3 is speed 50 (about four million times light). Time rank = distance rank - that speed. So Space Travel 1 reaches Mars in minutes and Neptune in a couple of hours, Space Travel 2 reaches the nearest star in under a day, and Space Travel 3 crosses the galaxy in a couple of weeks. A trip beyond a rank's reach is impossible with that rank, however long you wait. Engage the drive only outside the atmosphere (Flight to orbit first); the GM may also forbid jumping deep inside a gravity well.",
+      "table": {
+        "columns": [
+          "Space Travel rank",
+          "Effective speed rank",
+          "Reach",
+          "Example"
+        ],
+        "rows": [
+          [
+            "1",
+            "30",
+            "Planets of one solar system",
+            "Earth to Neptune: 2 hours"
+          ],
+          [
+            "2",
+            "40",
+            "Other star systems (up to about 1,000 light-years)",
+            "Nearest star: 16 hours"
+          ],
+          [
+            "3",
+            "50",
+            "Anywhere in the galaxy, perhaps other galaxies",
+            "Across the galaxy: 2 weeks"
+          ]
+        ]
+      },
+      "source": "DCUGen (built on DCA 11, 110)"
+    },
+    {
+      "id": "space-travel-table",
+      "title": "Travel-time table",
+      "group": "Distances & travel",
+      "text": "Time to make each trip at common Flight ranks (sublight) and at each Space Travel rank, all from time rank = distance rank - speed rank. Flight times past a few years are a reminder that real space is big: buy Space Travel. \"Out of reach\" means that Space Travel rank cannot make the trip at all.",
+      "table": {
+        "columns": [
+          "Route",
+          "Distance",
+          "Distance rank",
+          "Flight 12",
+          "Flight 14",
+          "Flight 16",
+          "Flight 20",
+          "Space Travel 1",
+          "Space Travel 2",
+          "Space Travel 3"
+        ],
+        "rows": [
+          [
+            "Earth surface to low orbit",
+            "250 miles",
+            "16",
+            "2 minutes",
+            "30 seconds",
+            "6 seconds",
+            "1/4 second",
+            "an instant (under 1/8 second)",
+            "an instant (under 1/8 second)",
+            "an instant (under 1/8 second)"
+          ],
+          [
+            "Earth to the Moon",
+            "238,900 miles",
+            "26",
+            "1 day",
+            "8 hours",
+            "2 hours",
+            "8 minutes",
+            "1/4 second",
+            "an instant (under 1/8 second)",
+            "an instant (under 1/8 second)"
+          ],
+          [
+            "Earth to Mars (typical)",
+            "140 million miles (1.5 AU)",
+            "36",
+            "3 years",
+            "8 months",
+            "2 months",
+            "4 days",
+            "8 minutes",
+            "1/4 second",
+            "an instant (under 1/8 second)"
+          ],
+          [
+            "Earth to Jupiter",
+            "500 million miles (5.4 AU)",
+            "37",
+            "6 years",
+            "1.5 years",
+            "4 months",
+            "1 week",
+            "15 minutes",
+            "1/2 second",
+            "an instant (under 1/8 second)"
+          ],
+          [
+            "Earth to the outer system (Neptune)",
+            "2.7 billion miles (29 AU)",
+            "40",
+            "50 years",
+            "12 years",
+            "3 years",
+            "2 months",
+            "2 hours",
+            "6 seconds",
+            "an instant (under 1/8 second)"
+          ],
+          [
+            "Earth to the Oort cloud",
+            "1 light-year",
+            "51",
+            "102,400 years",
+            "25,600 years",
+            "6,400 years",
+            "400 years",
+            "4 months",
+            "4 hours",
+            "12 seconds"
+          ],
+          [
+            "Sun to the nearest star",
+            "4.2 light-years",
+            "53",
+            "409,600 years",
+            "102,400 years",
+            "25,600 years",
+            "1,600 years",
+            "out of reach",
+            "16 hours",
+            "1 minute"
+          ],
+          [
+            "Earth to the galactic core",
+            "26,000 light-years",
+            "66",
+            "3.4 billion years",
+            "839 million years",
+            "210 million years",
+            "13 million years",
+            "out of reach",
+            "out of reach",
+            "4 days"
+          ],
+          [
+            "Across the galaxy",
+            "100,000 light-years",
+            "68",
+            "13 billion years",
+            "3.4 billion years",
+            "839 million years",
+            "52 million years",
+            "out of reach",
+            "out of reach",
+            "2 weeks"
+          ],
+          [
+            "To the Andromeda galaxy",
+            "2,500,000 light-years",
+            "72",
+            "215 billion years",
+            "54 billion years",
+            "13 billion years",
+            "839 million years",
+            "out of reach",
+            "out of reach",
+            "8 months"
+          ]
+        ]
+      },
+      "source": "DCUGen (built on DCA 11, 110)"
+    },
+    {
+      "id": "space-teleport",
+      "title": "Teleporting and transporters",
+      "group": "Distances & travel",
+      "text": "Teleport moves you a distance rank equal to its rank as a move action (Extended adds 8 ranks for two move actions, leaving you dazed and vulnerable for a round). It is meant for use on or around a planet: Teleport 16 reaches low orbit, 23 reaches geostationary orbit, 26 the Moon. To hop between planets or stars, buy Space Travel described as a jump or hyperspace gate instead. A ship's transporter is Teleport with Affects Others and Increased Mass; it needs the destination sensed accurately or known well.",
+      "source": "DCA 120; DCUGen (orbital ranks)"
+    },
+    {
+      "id": "space-communication",
+      "title": "Talking across space",
+      "group": "Distances & travel",
+      "text": "Communication is instant within its range. Rank 4 covers a planet; rank 5 is unlimited, which is what interstellar subspace radio needs. Normal radio crawls at light speed: a message to the Moon takes about a second, to Mars minutes, to another star years, so a ship with only a Communications Suite talks in real time only within a planet's neighborhood. Radio Communication can be overheard by anyone with the Radio sense.",
+      "source": "DCA 89, 116; DCUGen (light lag)"
+    },
+    {
+      "id": "sensors-as-senses",
+      "title": "Ship sensors are Senses",
+      "group": "Sensors & detection",
+      "text": "Build a ship's sensors from the Senses effect (1 point per rank): Radio (1) gives radar and lets it hear radio traffic, and is ranged, radius and acute; Accurate (2 for one sense, 4 for a type) lets gunners target what it senses; Acute (1-2) tells ships apart; Analytical (1-2, needs Acute) reads composition, mass and power output; Extended (1 per rank) multiplies range by 10 each time; Detect (1, or 2 at range) senses one thing such as life signs, radiation or FTL jumps; Penetrates Concealment (4) sees through hulls, dust clouds and planets; Counters Concealment (2 for one kind such as cloaks, 5 for all); Radius (1-2) removes blind spots; Tracking (1, 2 at full speed) follows drive trails; Rapid (1) speeds up data analysis; Infravision (1) shows heat; Direction and Distance Sense (1 each) help navigation.",
+      "source": "DCA 113-116"
+    },
+    {
+      "id": "sensor-range",
+      "title": "How far a ship can see",
+      "group": "Sensors & detection",
+      "text": "Perception takes -1 per 10 feet of distance, and each Extended rank multiplies that interval by 10. The table shows the interval and two practical limits: where the penalty reaches -10 (a +10 sensor operator still spots an obvious target such as a ship under power, DC 0, on a routine check) and where it reaches -20. Visual sensors (telescopes) and Radio sensors (radar) each need their own Extended ranks. Out to the horizon of a planet, distance is the limit; in space, nothing blocks the view but planets, dust and Concealment.",
+      "table": {
+        "columns": [
+          "Extended rank",
+          "-1 per",
+          "Penalty -10 at",
+          "Penalty -20 at"
+        ],
+        "rows": [
+          [
+            "0",
+            "10 feet",
+            "100 feet",
+            "200 feet"
+          ],
+          [
+            "1",
+            "100 feet",
+            "1,000 feet",
+            "2,000 feet"
+          ],
+          [
+            "2",
+            "1,000 feet",
+            "1.9 miles",
+            "3.8 miles"
+          ],
+          [
+            "3",
+            "1.9 miles",
+            "19 miles",
+            "38 miles"
+          ],
+          [
+            "4",
+            "19 miles",
+            "189 miles",
+            "379 miles"
+          ],
+          [
+            "5",
+            "189 miles",
+            "1,894 miles",
+            "3,788 miles"
+          ],
+          [
+            "6",
+            "1,894 miles",
+            "18,939 miles",
+            "37,879 miles"
+          ],
+          [
+            "7",
+            "18,939 miles",
+            "189,394 miles",
+            "378,788 miles"
+          ],
+          [
+            "8",
+            "189,394 miles",
+            "1.9 million miles",
+            "3.8 million miles"
+          ],
+          [
+            "9",
+            "1.9 million miles",
+            "19 million miles (0.2 AU)",
+            "38 million miles (0.41 AU)"
+          ],
+          [
+            "10",
+            "19 million miles (0.2 AU)",
+            "189 million miles (2 AU)",
+            "379 million miles (4.1 AU)"
+          ],
+          [
+            "11",
+            "189 million miles (2 AU)",
+            "1.9 billion miles (20 AU)",
+            "3.8 billion miles (41 AU)"
+          ],
+          [
+            "12",
+            "1.9 billion miles (20 AU)",
+            "19 billion miles (200 AU)",
+            "38 billion miles (410 AU)"
+          ],
+          [
+            "13",
+            "19 billion miles (200 AU)",
+            "189 billion miles (2000 AU)",
+            "379 billion miles (4100 AU)"
+          ],
+          [
+            "14",
+            "189 billion miles (2000 AU)",
+            "0.32 light-years",
+            "0.64 light-years"
+          ],
+          [
+            "16",
+            "3.2 light-years",
+            "32 light-years",
+            "64 light-years"
+          ]
+        ]
+      },
+      "source": "DCA 62, 115; DCUGen (practical limits)"
+    },
+    {
+      "id": "sensor-checks",
+      "title": "Spotting ships: Perception vs Stealth",
+      "group": "Sensors & detection",
+      "text": "A ship burning its drive or broadcasting is obvious (DC 0 plus distance). A ship running silent hides: the pilot makes a Vehicles check in place of Stealth, applying the ship's size Defense penalty to it (the bigger the hull, the harder it is to hide), opposed by the sensor operator's Perception check with the range penalty. Moving faster than speed rank -1 while hiding is -5. Cover and concealment are needed to hide, but deep space counts as concealment against an observer who is not already looking your way. A failed check can be retried as a move action.",
+      "source": "DCA 62, 65; DCUGen (ship Stealth)"
+    },
+    {
+      "id": "sensor-active-passive",
+      "title": "Active and passive scanning",
+      "group": "Sensors & detection",
+      "text": "Passive sensors only listen (Radio, Infravision, visual telescopes) and give nothing away. Active scanning (a radar ping, a lidar sweep) grants +2 to the sensor operator's Perception and is needed for an accurate weapons lock with a Radio sense, but every ship with a Radio sense within twice the scanner's practical range automatically notices the pinging ship (DC 0). A full active sweep with Analytical sensors (a standard action) reads a target's weapons, shields and crew count with three degrees of success.",
+      "source": "DCUGen (built on DCA 15, 62, 113)"
+    },
+    {
+      "id": "sensor-jamming",
+      "title": "Jamming and spoofing",
+      "group": "Sensors & detection",
+      "text": "Jamming is a sensory attack. A blanket jammer is a Concealment Attack against the Radio sense type with Area (everything inside is hidden from radar); a targeted jammer is Dazzle against radio senses, which leaves the sensors impaired (-2), disabled (-5) or blind with one, two or three degrees. Since sensors have no Will, DCUGen lets the target resist with the sensor operator's Technology check in place of the usual resistance. Counter-jamming is a Technology check opposed by the jammer's rank + 10; Counters Concealment (jamming) on the sensors ignores it completely. Spoofing (false images on radar) is Illusion limited to radio senses.",
+      "source": "DCA 91, 95-96, 114; DCUGen (Technology resistance)"
+    },
+    {
+      "id": "sensor-cloaking",
+      "title": "Cloaking devices",
+      "group": "Sensors & detection",
+      "text": "A cloak is Concealment: the book prices a one-sense cloak at 4 points and an all-visual cloak at 8. To vanish from eyes and radar, take Concealment 6 (all visual 4 + all radio 2); Concealment 10 hides from everything but touch. Common flaws: Limited (not while firing or burning hard), Partial (only partial concealment), Blending (only while drifting). A cloaked ship can still be found by elimination: a Perception check against the pilot's Vehicles check with -5 for total concealment tells the searcher roughly where it is, which allows area attacks or attacks at -5. Sensors that Counter Concealment (cloaks) see it plainly.",
+      "source": "DCA 91, 114, 156, 173; DCUGen (finding a cloak)"
+    },
+    {
+      "id": "combat-scale",
+      "title": "Ship scale and character scale",
+      "group": "Space combat",
+      "text": "One damage scale covers everything: a space battleship's Damage 15 blaster is the same Damage 15 a hero resists with Toughness. Only distances change. When ships fight ships, use ship scale: read every \"feet\" in ranges and areas as \"miles\". When characters are involved (a hero fighting a ship, a boarding action, a strafing run on a squad), drop to character scale and use the book's feet. A ship-scale weapon firing at a Medium-size target (a person, a missile, a jetpack) takes -5 to the attack unless it is a point-defense weapon (Multiattack or Accurate); a hero can only shoot a ship that is within the hero's own character-scale range.",
+      "source": "DCUGen (built on DCA 85, 156, 173)"
+    },
+    {
+      "id": "combat-ranges",
+      "title": "Ship weapon ranges",
+      "group": "Space combat",
+      "text": "Ranged attacks have short range (rank x 25), medium range (rank x 50, -2 to hit) and long range (rank x 100, -5); nothing beyond long range can be attacked. Extended Range doubles all three per rank. At ship scale the same numbers are in miles.",
+      "table": {
+        "columns": [
+          "Weapon rank",
+          "Character scale (short / medium / long)",
+          "Ship scale (short / medium / long)"
+        ],
+        "rows": [
+          [
+            "6",
+            "150 / 300 / 600 ft",
+            "150 miles / 300 miles / 600 miles"
+          ],
+          [
+            "8",
+            "200 / 400 / 800 ft",
+            "200 miles / 400 miles / 800 miles"
+          ],
+          [
+            "10",
+            "250 / 500 / 1,000 ft",
+            "250 miles / 500 miles / 1,000 miles"
+          ],
+          [
+            "12",
+            "300 / 600 / 1,200 ft",
+            "300 miles / 600 miles / 1,200 miles"
+          ],
+          [
+            "14",
+            "350 / 700 / 1,400 ft",
+            "350 miles / 700 miles / 1,400 miles"
+          ],
+          [
+            "16",
+            "400 / 800 / 1,600 ft",
+            "400 miles / 800 miles / 1,600 miles"
+          ],
+          [
+            "18",
+            "450 / 900 / 1,800 ft",
+            "450 miles / 900 miles / 1,800 miles"
+          ],
+          [
+            "20",
+            "500 / 1,000 / 2,000 ft",
+            "500 miles / 1,000 miles / 2,000 miles"
+          ]
+        ]
+      },
+      "source": "DCA 85, 129, 173; DCUGen (ship scale)"
+    },
+    {
+      "id": "combat-initiative",
+      "title": "Initiative and crew stations",
+      "group": "Space combat",
+      "text": "Everyone aboard rolls initiative normally (d20 + Agility + Improved Initiative). To speed things up, the GM can roll once for a whole ship's NPC crew, using the pilot's bonus, as the book allows for groups of minions. Each crew member acts on their own turn at a station: Pilot: flies the ship (a move action, DCA 156) and makes Vehicles checks for maneuvers and evasion. Gunner: fires one weapon or array (standard action) with a Ranged Combat skill or Dexterity, against the target ship's Defense. Sensors: Perception checks to find and lock targets (move action to re-check), Technology for analysis and jamming. Engineer: Technology to jury-rig damage (standard action) or to support another station with a team check (DC 10: +2, or +5 with three total degrees). Captain: Expertise (Tactics) team checks to aid a gunner or pilot, Leadership (spend a hero point to clear dazed, fatigued or stunned from a crew member), Persuasion or Intimidation to rally a shaken crew.",
+      "source": "DCA 16, 51, 76, 156, 167, 175; DCUGen (stations)"
+    },
+    {
+      "id": "combat-maneuvers",
+      "title": "Piloting maneuvers",
+      "group": "Space combat",
+      "text": "Use the Vehicles skill difficulties for space flying. Failing a maneuver means it does not happen; failing by two or more degrees means a mishap: a collision, a spin that costs the next action, or a strain that gives the ship -1 on its next Toughness check.",
+      "table": {
+        "columns": [
+          "DC",
+          "Book difficulty",
+          "In space"
+        ],
+        "rows": [
+          [
+            "5",
+            "Easy (low-speed turn)",
+            "Docking approach with guidance, matching orbit"
+          ],
+          [
+            "10",
+            "Average (sudden reverse, dodging obstacles)",
+            "Evasive weave, sparse asteroid field, hard braking burn"
+          ],
+          [
+            "15",
+            "Difficult (tight turns)",
+            "Getting on an enemy's tail, skimming a gas giant, landing on a moving ship"
+          ],
+          [
+            "20",
+            "Challenging (bootlegger reverse, loop, barrel roll)",
+            "Flip-and-burn, threading a dense asteroid field, flying through a hangar under fire"
+          ],
+          [
+            "25",
+            "Formidable (high-speed maneuvers, flying around obstacles)",
+            "Trench run along a capital ship's hull, slingshot around a star, flying inside a collapsing station"
+          ]
+        ]
+      },
+      "source": "DCA 67; DCUGen (space examples, mishaps)"
+    },
+    {
+      "id": "combat-evasion",
+      "title": "Evasive action",
+      "group": "Space combat",
+      "text": "A ship's Defense is fixed by its size and bought-off penalty, but a pilot can throw it around. As a standard action, the pilot makes a Vehicles check (DC 15): success gives the ship +2 Defense until the pilot's next turn, three or more degrees +5; two or more degrees of failure give -2 instead. Gunners aboard an evading ship take -2 to their own attacks that round. A pilot can instead take the book's defensive attack maneuver with a ship's forward guns (-2 attack, +2 Defense).",
+      "source": "DCUGen (built on DCA 15-16, 175, 178)"
+    },
+    {
+      "id": "combat-dogfight",
+      "title": "Dogfighting",
+      "group": "Space combat",
+      "text": "When two small craft maneuver for position, the pilots make opposed Vehicles checks each round (part of flying, a move action). The winner is on the loser's tail: +2 circumstance bonus to attacks against the loser this round (+5 with three or more degrees of difference), and the loser can only fire back with turrets or rear guns. A tie means a head-on pass: both may attack normally. The faster ship adds +1 per Speed rank of difference, up to +5.",
+      "source": "DCUGen (built on DCA 15-16, 67)"
+    },
+    {
+      "id": "combat-area",
+      "title": "Capital weapons and Area",
+      "group": "Space combat",
+      "text": "Torpedoes and main batteries usually have Area. No attack check is needed; every ship in the area resists with a Dodge check (DC 10 + effect rank) to take half. A ship has no Dodge, so its pilot makes a Vehicles check instead, applying the ship's size Defense penalty; a ship with no pilot at the helm, or one that is immobile, fails automatically. A partial Area (Damage 15, Burst Area 12) affects the area with the listed ranks and a single target with the rest. At ship scale a Burst covers a 30-mile radius: perfect against fighter swarms, dangerous to your own wingmen.",
+      "source": "DCA 126-127, 156; DCUGen (ship Dodge)"
+    },
+    {
+      "id": "combat-shields",
+      "title": "Shields",
+      "group": "Space combat",
+      "text": "Deflector shields are Force Field (Protection with the Sustained extra): they add to Toughness while switched on, and can be Impervious, so attacks of half that rank or less bounce off. Being sustained, shields can be shut off, Nullified by an ion or disruptor weapon, or knocked out by a critical system hit. Most transporters cannot pass through raised shields (a Limited flaw on the Teleport), so lowering them to beam a party aboard is a classic dramatic moment.",
+      "source": "DCA 100, 156; DCUGen (transporter flaw)"
+    },
+    {
+      "id": "combat-boarding",
+      "title": "Boarding actions",
+      "group": "Space combat",
+      "text": "To board, first get alongside: a disabled, immobilized or grabbed ship (a tractor beam is a Move Object grab) can be docked with a DC 15 Vehicles check, DC 10 with a Docking Collar. Against a ship still under power, the pilots make opposed Vehicles checks; three degrees of success lock on. Then breach the hull: an attack against the hull meant to break it causes a hole with two degrees of failure on its Toughness check. Marines go through at character scale, the breached compartment decompresses (see Decompression), and a transporter can skip all of this if the target's shields are down.",
+      "source": "DCA 94, 108, 176; DCUGen (docking under fire)"
+    },
+    {
+      "id": "combat-ramming",
+      "title": "Ramming",
+      "group": "Space combat",
+      "text": "Ramming is a slam attack with the ship. The pilot makes a close attack using Vehicles skill ranks + Dexterity against the target's Defense. Damage is the ship's speed rank or its normal damage +1, whichever is higher, +1 more if it moved its full speed first, and the base damage is capped by the series power level. The rammer resists half that damage (rounded down) with its own Toughness. A ram prow (a close Damage power) counts as the ship's normal damage.",
+      "source": "DCA 178; DCUGen (Vehicles skill as the attack)"
+    },
+    {
+      "id": "combat-hull-damage",
+      "title": "Hull damage and the damage track",
+      "group": "Space combat",
+      "text": "Ships are objects: a damaged ship resists with Toughness against the damage rank + 15. Objects ignore dazed and staggered, and attacks on a defenseless or unmanned ship can be routine checks or count as automatic criticals (+5). For a fight between ships, DCUGen uses the full damage track, reading each condition for a hull. One degree of failure: -1 to further Toughness checks (cumulative). Two degrees: -1, and a system is damaged: the ship loses a feature or takes -1 on checks with it (the book's rule for damaged equipment). Three degrees: -1, and the ship is crippled: its Speed drops 2 ranks and only one station can act each round; a second crippling result counts as four degrees. Four degrees: the ship is disabled: dead in space, no weapons or drive, life support on reserve. A disabled ship that fails again is breaking up (everyone aboard has a few rounds to escape), and one more failure destroys it. An attack meant to break the ship instead of disable it uses the book's object rule: two degrees punch a hole, three or more destroy it.",
+      "source": "DCA 93-94, 147; DCUGen (hull reading of the track)"
+    },
+    {
+      "id": "combat-critical-systems",
+      "title": "Critical system hits (GM option)",
+      "group": "Space combat",
+      "text": "When an attack against a ship is a critical hit, or the ship fails its Toughness check by two or more degrees, the attacker may roll d20 on this table instead of taking the usual +5 or other critical effect. Repairs follow the Technology rules; a jury-rig gets one system back until the end of the scene.",
+      "table": {
+        "columns": [
+          "d20",
+          "System",
+          "Effect"
+        ],
+        "rows": [
+          [
+            "1-3",
+            "Drive",
+            "Speed -2 ranks; Space Travel offline"
+          ],
+          [
+            "4-6",
+            "Weapons",
+            "One weapon or array offline"
+          ],
+          [
+            "7-9",
+            "Shields",
+            "Force Field or Protection power offline"
+          ],
+          [
+            "10-11",
+            "Sensors",
+            "Senses lost; gunners take -2 against anything beyond close range"
+          ],
+          [
+            "12-13",
+            "Life support",
+            "Air for 10 minutes, then the crew follows the suffocation rules"
+          ],
+          [
+            "14-15",
+            "Bridge",
+            "Everyone on the bridge resists Damage equal to half the attack rank"
+          ],
+          [
+            "16",
+            "Hangar or cargo",
+            "Launches impossible or cargo lost; a feature lost"
+          ],
+          [
+            "17-18",
+            "Hull breach",
+            "One section decompresses"
+          ],
+          [
+            "19",
+            "Crew casualties",
+            "One NPC station is incapacitated; its checks fail until crewed again"
+          ],
+          [
+            "20",
+            "Reactor",
+            "Engineer makes a Technology check (DC 20) each round or the ship takes its own Toughness rank as Damage at the end of the round"
+          ]
+        ]
+      },
+      "source": "DCUGen (built on DCA 66, 93, 147)"
+    },
+    {
+      "id": "hazard-vacuum",
+      "title": "Vacuum",
+      "group": "Environment & hazards",
+      "text": "Exposure to vacuum is deadly in three ways. From the third round, a Fortitude check (DC 20) every round or the bends set in: stunned until back at normal pressure, incapacitated with two or more degrees of failure. Holding your breath means a Fortitude check every round starting at DC 15 and rising by 1 a round, and each success still costs 1 rank of Stamina; on a failure (or once you let the air go) you are incapacitated the next round and dying the round after, and cannot stabilize until you are back in air. And unfiltered radiation hits anyone unprotected (see Radiation). Surviving deep space takes at least Immunity to suffocation, vacuum and radiation.",
+      "source": "DCA 172"
+    },
+    {
+      "id": "hazard-cold",
+      "title": "Cold and heat in space",
+      "group": "Environment & hazards",
+      "text": "Vacuum does not freeze you instantly, since there is no air to carry heat away, but it is never comfortable. In shadow or deep space, treat exposure as intense cold: a Fortitude check every 10 minutes (DC 10, +1 per previous check), failing through fatigued, exhausted, incapacitated and dying. In direct sunlight near Earth's orbit, treat it as intense heat on the same schedule; close to a star it becomes extreme (every minute) and then direct damage. Immunity (cold) and Immunity (heat), 1 rank each, end the checks.",
+      "source": "DCA 170; DCUGen (vacuum temperatures)"
+    },
+    {
+      "id": "hazard-decompression",
+      "title": "Decompression",
+      "group": "Environment & hazards",
+      "text": "When a breach opens a compartment, everyone in it makes a Strength or Athletics check (DC 15, or DC 10 with a handhold) or is blown toward the hole; two degrees of failure means out of it, into vacuum. The air in a breached compartment lasts a number of rounds equal to its volume rank - 5 (a 1,000 cubic-foot cabin, volume rank 10, empties in 5 rounds; a million cubic-foot hold, rank 20, in 15), and then the vacuum rules apply. Sealing a hatch or slapping on a patch is a Technology check (DC 15) as a standard action; ships close automatic bulkheads on their own turn.",
+      "source": "DCUGen (built on DCA 11, 172)"
+    },
+    {
+      "id": "hazard-radiation",
+      "title": "Radiation",
+      "group": "Environment & hazards",
+      "text": "Treat radiation like disease: a Fortitude check (DC 10 + the radiation's rank) when first exposed and again every day; radiation sickness usually Weakens Stamina, sometimes with Damage resisted by Fortitude, and in the comics it may also trigger mutations or alter powers. A ship's hull shields its crew from normal space radiation at no cost; only unusual bursts (flares, reactor leaks, exotic stars) reach inside.",
+      "table": {
+        "columns": [
+          "Rank",
+          "Source"
+        ],
+        "rows": [
+          [
+            "1",
+            "Lingering irradiation (DCA 171)"
+          ],
+          [
+            "2-5",
+            "Nuclear fallout (DCA 171)"
+          ],
+          [
+            "5-10",
+            "Exposure to radioactive materials (DCA 171)"
+          ],
+          [
+            "6-8",
+            "Radiation belts around a planet (DCUGen)"
+          ],
+          [
+            "10-12",
+            "Stellar radiation in deep space (DCA 171)"
+          ],
+          [
+            "13-14",
+            "Nuclear reactor (DCA 171); a strong solar flare (DCUGen)"
+          ],
+          [
+            "15+",
+            "Nuclear blast (DCA 171); pulsar beam, neutron star or a ship's breached drive core (DCUGen)"
+          ]
+        ]
+      },
+      "source": "DCA 156, 170-171"
+    },
+    {
+      "id": "hazard-solar-flare",
+      "title": "Solar flares and stellar storms",
+      "group": "Environment & hazards",
+      "text": "A flare is a radiation burst of rank 13-15 that reaches unshielded ships too: crews of ships without Immunity (radiation damage, 5 ranks) or a raised Force Field make the radiation check. A sensor operator watching the star gets warning with a Perception check (DC 15): one degree gives a few minutes, three degrees an hour. The flare also dazzles radio senses (Dazzle rank equal to the flare's rank) for the duration, typically time rank 9 (an hour).",
+      "source": "DCUGen (built on DCA 95, 170-171)"
+    },
+    {
+      "id": "hazard-zero-g",
+      "title": "Zero gravity",
+      "group": "Environment & hazards",
+      "text": "People who are not adapted to free fall suffer -2 circumstance penalties to attack checks and to Acrobatics, Athletics and other physical skill checks, and move at speed rank -1 when they have something to push off from; without a surface, thrusters or a tether they simply drift. Pushing off accurately toward a target is an Athletics check (DC 10). Movement (Environmental Adaptation: zero-g), 1 rank, removes these penalties, as the book shows on the Lantern rings. Artificial Gravity aboard a ship removes them indoors.",
+      "source": "DCA 15, 109, 223; DCUGen (penalties)"
+    },
+    {
+      "id": "hazard-gravity",
+      "title": "High and low gravity",
+      "group": "Environment & hazards",
+      "text": "Gravity changes how much things weigh, so use mass ranks. Each doubling of gravity over 1 g adds 1 to the mass rank of everything, yourself included: -1 effective Strength for lifting, -1 to Leaping and ground speed ranks, and falls deal +2 damage. At 3 g and above, an unadapted person makes a Fortitude check (DC 10, +1 per previous check) every hour against fatigue, like uncomfortable heat; at 5 g every 10 minutes, at 10 g every minute. Each halving of gravity does the reverse: +1 effective Strength for lifting, +1 Leaping, and falls count as one distance rank shorter. Treat high gravity as one environmental condition for Immunity (1 rank); Environmental Adaptation removes the movement penalties.",
+      "source": "DCUGen (built on DCA 11, 109, 170)"
+    },
+    {
+      "id": "hazard-asteroids",
+      "title": "Asteroid fields",
+      "group": "Environment & hazards",
+      "text": "Flying through a field at more than half speed needs a Vehicles check each round: DC 10 for a sparse field, 15 dense, 20 very dense, 25 for a collapsing or churning field. One degree of failure is a glancing hit (Damage 8); two or more is a collision (Damage equal to the ship's speed rank, as a slam, up to 16). Inside a field everything has partial cover against attacks (-2) and sensors take -5; a ship that stops among the rocks can hide with total cover.",
+      "source": "DCA 67, 173, 178; DCUGen"
+    },
+    {
+      "id": "hazard-nebulae",
+      "title": "Nebulae and dust clouds",
+      "group": "Environment & hazards",
+      "text": "A nebula hides what is inside it: partial concealment (-2) against visual and radio senses in a thin cloud, total concealment (-5) in a dense one. Ionized clouds also act as a radio Dazzle of rank 8-12 against sensors and communications. Extended senses stop at the cloud's edge unless they Penetrate Concealment. The GM may rule that Space Travel cannot be engaged inside a dense nebula, which makes them favorite pirate hideouts.",
+      "source": "DCA 95, 114-115, 173; DCUGen"
+    },
+    {
+      "id": "hazard-spacewalk",
+      "title": "Spacewalks",
+      "group": "Environment & hazards",
+      "text": "Going outside needs a sealed suit (the book's life support system is Immunity 10: 10 points as a power, or 10 equipment points (two ranks of the Equipment advantage) as gear) and ideally a tether and magnetic boots. Moving along a hull with handholds is routine; working on it under fire or while the ship maneuvers needs an Athletics check (DC 10, 15 if the ship is evading). Someone knocked loose drifts away at speed rank 0 and can grab a line or hull with an Athletics or Dexterity check (DC 15); a maneuvering pack gives Flight 2-4.",
+      "source": "DCA 170, 257; DCUGen"
+    },
+    {
+      "id": "immunity-space",
+      "title": "Immunity ranks for space",
+      "group": "Environment & hazards",
+      "text": "Immunity costs 1 point per rank, and the book prices protection by how broad it is. Pick the cheapest package that covers what the hero faces.",
+      "table": {
+        "columns": [
+          "Ranks",
+          "Covers",
+          "Notes"
+        ],
+        "rows": [
+          [
+            "1",
+            "One environmental condition: cold, heat, high pressure, radiation or vacuum",
+            "Each condition is a separate rank (DCA 102)"
+          ],
+          [
+            "1",
+            "One kind of suffocation (breathe an alien atmosphere, or underwater)",
+            ""
+          ],
+          [
+            "2",
+            "All suffocation: no need to breathe",
+            ""
+          ],
+          [
+            "3",
+            "Aquatic example: cold, drowning, pressure",
+            "Book example (DCA 211)"
+          ],
+          [
+            "4",
+            "Bare deep-space minimum: suffocation (2), vacuum (1), radiation (1)",
+            "The book's minimum for surviving deep space (DCA 172)"
+          ],
+          [
+            "6",
+            "Space-hardy: the minimum plus cold and heat",
+            "DCUGen suggestion"
+          ],
+          [
+            "5",
+            "Radiation damage (resist radiation Damage effects, solar flares)",
+            "Not the same as the 1-rank environmental immunity"
+          ],
+          [
+            "10",
+            "Life support: disease, poison, all environmental conditions, suffocation, starvation and thirst",
+            "The usual choice for space heroes and suits (DCA 103, 223, 257)"
+          ],
+          [
+            "10",
+            "All effects with the radiation descriptor",
+            ""
+          ]
+        ]
+      },
+      "source": "DCA 102-103, 172"
+    },
+    {
+      "id": "crew-npc",
+      "title": "NPC crews as minions",
+      "group": "Ships & crews",
+      "text": "Most crew are minions: attacks against them are routine, they suffer the worst outcome of a failed resistance check, and they cannot score critical hits against heroes. Give a whole crew one quality and use the bonus for every station. A ship's crew can be the Personnel feature of a mobile headquarters if the heroes own it.",
+      "table": {
+        "columns": [
+          "Crew quality",
+          "Skill bonus (Vehicles, Perception, Technology)",
+          "Attack bonus",
+          "Typical"
+        ],
+        "rows": [
+          [
+            "Green",
+            "+4",
+            "+3",
+            "Colonists, merchant hands, conscripts"
+          ],
+          [
+            "Trained",
+            "+6",
+            "+5",
+            "Navy crews, patrol officers"
+          ],
+          [
+            "Veteran",
+            "+8",
+            "+7",
+            "Elite fleet crews, career smugglers"
+          ],
+          [
+            "Ace",
+            "+10",
+            "+9",
+            "Squadron leaders, legendary pirates"
+          ],
+          [
+            "Legendary",
+            "+12",
+            "+11",
+            "Cosmic honor guards; usually named characters instead"
+          ]
+        ]
+      },
+      "source": "DCA 174; DCUGen (crew bonuses)"
+    },
+    {
+      "id": "crew-repairs",
+      "title": "Repairs",
+      "group": "Ships & crews",
+      "text": "A spaceship is an advanced item: building one is Technology DC 30 with time rank 16 (4 days); repairing costs 5 less and 2 time ranks less, so DC 25 in about a day (time rank 14). Each -5 taken on the check cuts one time rank. A jury-rig drops the DC by another 5 (DC 20), takes a standard action, fixes one problem and lasts until the end of the scene; that system cannot be jury-rigged again until properly repaired. Without tools take -5 (makeshift tools -2). For big ships, DCUGen adds time ranks for size: +1 for Gargantuan, +2 Colossal, +3 Awesome, and crews can help with team checks. Objects do not heal on their own; a living ship's Regeneration is the exception.",
+      "source": "DCA 15, 65-66, 147, 179; DCUGen (size time)"
+    },
+    {
+      "id": "crew-supplies",
+      "title": "Supplies and fuel",
+      "group": "Ships & crews",
+      "text": "Fuel and food are plot devices, but running out makes a good complication. A ship without Crew Quarters carries consumables for time rank 14 (a day); with Crew Quarters for time rank 19 (a month); Recycling Life Support makes them effectively endless. A ship can make a number of FTL jumps equal to its size rank + 3 (Medium 1, Huge 3, Awesome 6) before refueling, and sublight fuel lasts as long as its supplies. Refueling at a port takes time rank 10 (2 hours); a Fuel Scoop can skim a gas giant (Vehicles DC 15, time rank 12). Once supplies run out, use the starvation and thirst rules.",
+      "source": "DCA 170; DCUGen"
+    },
+    {
+      "id": "crew-docking",
+      "title": "Docking and landing",
+      "group": "Ships & crews",
+      "text": "Docking at a port with traffic control is routine. Manual docking is DC 10, with a tumbling or damaged target DC 15, under fire DC 20. Landing: DC 5 at a spaceport, 10 on a rough field, 15 on unprepared ground or at night, 20 under fire, 25 for a controlled crash. Failing a landing by two or more degrees damages the ship as a fall (Damage 4 + twice the distance rank fallen, up to 16) or a slam at its speed rank, whichever the GM thinks fits. Ships whose Flight is Limited to space cannot land at all and use shuttles.",
+      "source": "DCA 67, 170, 178; DCUGen"
+    },
+    {
+      "id": "crew-atmosphere",
+      "title": "Atmospheric entry",
+      "group": "Ships & crews",
+      "text": "Entering an atmosphere is a Vehicles check: DC 10 normally, 15 in a storm or a damaged ship, 20 coming in steep and fast (to save time, or under fire). Autopilot lets it be routine when no one is shooting. One degree of failure: a rough ride, the ship resists Damage 8 from heat and buffeting. Two or more: Damage 12 and the ship lands far off course. Space Travel never works inside an atmosphere; drop to Flight first.",
+      "source": "DCA 67, 110; DCUGen"
+    },
+    {
+      "id": "crew-ftl-jump",
+      "title": "FTL jump checks",
+      "group": "Ships & crews",
+      "text": "Plotting a jump is a Technology check (or Expertise: astrogation) taking time rank 5 (4 minutes); the pilot then engages the drive as a move action. Taking -5 on the check plots it one time rank faster, as the Technology rules allow. Navigation System gives +5; a Jump Computer lets it be routine when the ship is not under pressure.",
+      "table": {
+        "columns": [
+          "DC",
+          "Jump"
+        ],
+        "rows": [
+          [
+            "10",
+            "Space Travel 1 within a charted system"
+          ],
+          [
+            "15",
+            "Space Travel 2 to a charted neighboring star"
+          ],
+          [
+            "20",
+            "Uncharted star, or a jump from inside a nebula or debris field"
+          ],
+          [
+            "25",
+            "Space Travel 3 across the galaxy"
+          ],
+          [
+            "30",
+            "Intergalactic jump, or a jump with a damaged drive"
+          ],
+          [
+            "+5",
+            "Jumping from deep in a gravity well, or with the drive jury-rigged"
+          ]
+        ]
+      },
+      "source": "DCA 13, 65-66, 156; DCUGen"
+    },
+    {
+      "id": "crew-lost",
+      "title": "Misjumps and getting lost",
+      "group": "Ships & crews",
+      "text": "A failed jump check still jumps, but the ship arrives off course: add 2 time ranks to the trip. Two or more degrees of failure is a misjump: the ship arrives somewhere unexpected (the GM picks, or roll on the planet tables) and is lost. Finding your position takes a Perception or Technology check (DC 15, DC 20 in an unknown region of space) with time rank 9 (an hour) of star-sighting; Navigation System adds +5. Each failure costs another hour. Direction Sense lets a navigator retrace a misjump: a new jump check at the original DC brings the ship back to where it started.",
+      "source": "DCA 13, 115, 156; DCUGen"
+    },
+    {
+      "id": "planet-type",
+      "title": "World type",
+      "group": "Alien worlds",
+      "text": "Roll d20 for the kind of world, or pick one.",
+      "table": {
+        "columns": [
+          "d20",
+          "World type",
+          "Notes"
+        ],
+        "rows": [
+          [
+            "1-2",
+            "Barren rock",
+            "Cratered, airless or nearly so; old mining claims"
+          ],
+          [
+            "3-4",
+            "Desert",
+            "Dunes, mesas, rare water; deep caverns"
+          ],
+          [
+            "5-6",
+            "Ocean",
+            "Little or no land; floating or submerged cities"
+          ],
+          [
+            "7-8",
+            "Jungle",
+            "Dense canopy, huge predators, constant rain"
+          ],
+          [
+            "9-10",
+            "Ice",
+            "Glaciers over a buried ocean; geysers"
+          ],
+          [
+            "11",
+            "Gas giant moon",
+            "Huge planet filling the sky; radiation belts (rank 6-8)"
+          ],
+          [
+            "12",
+            "Volcanic",
+            "Lava plains, ash storms, rich ores"
+          ],
+          [
+            "13-14",
+            "Garden",
+            "Earthlike and welcoming, suspiciously so"
+          ],
+          [
+            "15",
+            "Tidally locked",
+            "Endless day on one side, endless night on the other, habitable twilight band"
+          ],
+          [
+            "16",
+            "Crystal",
+            "Glassy forests, singing winds, refracted light"
+          ],
+          [
+            "17",
+            "Fungal",
+            "Giant mushrooms, spore clouds, a planet-wide network"
+          ],
+          [
+            "18",
+            "City-world",
+            "One continuous city, layers deep"
+          ],
+          [
+            "19",
+            "Shattered",
+            "Broken into floating fragments held by old technology"
+          ],
+          [
+            "20",
+            "Artificial",
+            "A built world: hollow shell, machine core, or a ring around a star"
+          ]
+        ]
+      },
+      "source": "DCUGen"
+    },
+    {
+      "id": "planet-gravity",
+      "title": "Gravity",
+      "group": "Alien worlds",
+      "text": "Roll d20. Mass rank shift is how many ranks everything's mass changes (see High and low gravity).",
+      "table": {
+        "columns": [
+          "d20",
+          "Gravity",
+          "Mass rank shift",
+          "Game effect"
+        ],
+        "rows": [
+          [
+            "1-2",
+            "Microgravity",
+            "-4 or more",
+            "Treat as zero gravity"
+          ],
+          [
+            "3-5",
+            "Low",
+            "-2 (1/4 g)",
+            "+2 lifting Strength, +2 Leaping, falls 2 ranks shorter"
+          ],
+          [
+            "6-8",
+            "Light",
+            "-1 (1/2 g)",
+            "+1 lifting Strength, +1 Leaping"
+          ],
+          [
+            "9-14",
+            "Standard",
+            "0 (about 1 g)",
+            "None"
+          ],
+          [
+            "15-17",
+            "Heavy",
+            "+1 (2 g)",
+            "-1 lifting Strength, -1 ground speed and Leaping"
+          ],
+          [
+            "18-19",
+            "Crushing",
+            "+2 (4 g)",
+            "-2 lifting, -2 speed; hourly Fortitude checks against fatigue"
+          ],
+          [
+            "20",
+            "Extreme",
+            "+3 (8 g)",
+            "-3 lifting, -3 speed; Fortitude checks every 10 minutes"
+          ]
+        ]
+      },
+      "source": "DCUGen (built on DCA 11)"
+    },
+    {
+      "id": "planet-atmosphere",
+      "title": "Atmosphere",
+      "group": "Alien worlds",
+      "text": "Roll d20. Immunity to one kind of suffocation (1 rank) covers a single unbreathable atmosphere; life support covers all of them.",
+      "table": {
+        "columns": [
+          "d20",
+          "Atmosphere",
+          "Game effect"
+        ],
+        "rows": [
+          [
+            "1-2",
+            "None",
+            "Vacuum rules apply"
+          ],
+          [
+            "3-4",
+            "Trace",
+            "Hold your breath (suffocation rules) or wear a mask; no bends"
+          ],
+          [
+            "5-7",
+            "Thin",
+            "Breathable; unadapted visitors make hourly Fortitude checks (DC 10, +1 per check) against fatigue"
+          ],
+          [
+            "8-13",
+            "Breathable",
+            "No effect"
+          ],
+          [
+            "14-15",
+            "Dense",
+            "Breathable but heavy: -1 speed for flyers and runners; Immunity (high pressure) for the deepest lowlands"
+          ],
+          [
+            "16-17",
+            "Toxic",
+            "A poison of rank 6-12 for every minute breathed (Affliction or Fortitude Damage)"
+          ],
+          [
+            "18",
+            "Corrosive",
+            "Damage 4-8 each round to unprotected people and gear"
+          ],
+          [
+            "19",
+            "Exotic",
+            "Methane, chlorine or ammonia: suffocation unless adapted; may burn or freeze"
+          ],
+          [
+            "20",
+            "Strange",
+            "Psychoactive or alive: an Affliction or Illusion effect of rank 6-10 resisted by Will"
+          ]
+        ]
+      },
+      "source": "DCUGen (built on DCA 102, 170-172)"
+    },
+    {
+      "id": "planet-temperature",
+      "title": "Temperature",
+      "group": "Alien worlds",
+      "text": "Roll d20. Exposure checks follow the book's heat and cold rules.",
+      "table": {
+        "columns": [
+          "d20",
+          "Temperature",
+          "Fortitude check (DC 10, +1 per previous check)"
+        ],
+        "rows": [
+          [
+            "1",
+            "Frozen",
+            "Extreme cold: every minute"
+          ],
+          [
+            "2-4",
+            "Frigid",
+            "Intense cold: every 10 minutes"
+          ],
+          [
+            "5-7",
+            "Cold",
+            "Uncomfortable cold: every hour"
+          ],
+          [
+            "8-13",
+            "Temperate",
+            "None"
+          ],
+          [
+            "14-16",
+            "Hot",
+            "Uncomfortable heat: every hour"
+          ],
+          [
+            "17-18",
+            "Scorching",
+            "Intense heat: every 10 minutes"
+          ],
+          [
+            "19",
+            "Searing",
+            "Extreme heat: every minute"
+          ],
+          [
+            "20",
+            "Wild swings",
+            "Frigid nights, scorching days: intense checks at both extremes"
+          ]
+        ]
+      },
+      "source": "DCA 170; DCUGen (table)"
+    },
+    {
+      "id": "planet-hazard",
+      "title": "Hazards",
+      "group": "Alien worlds",
+      "text": "Roll d20 for the main danger beyond the climate.",
+      "table": {
+        "columns": [
+          "d20",
+          "Hazard",
+          "Notes"
+        ],
+        "rows": [
+          [
+            "1-2",
+            "None to speak of",
+            "A deceptively easy world"
+          ],
+          [
+            "3-4",
+            "Storms",
+            "Lightning and winds: Damage 8-12, flyers make Vehicles DC 15 checks"
+          ],
+          [
+            "5",
+            "Quakes",
+            "Falling debris (Damage 6-10), ground splits open"
+          ],
+          [
+            "6-7",
+            "Predators",
+            "Apex beasts hunting anything warm"
+          ],
+          [
+            "8",
+            "Radiation",
+            "Background radiation rank 5-10"
+          ],
+          [
+            "9",
+            "Spores",
+            "Airborne disease rank 4-8"
+          ],
+          [
+            "10",
+            "Gravity flux",
+            "Gravity shifts a step up or down without warning"
+          ],
+          [
+            "11",
+            "Toxic water",
+            "Poison rank 6-10; supplies matter"
+          ],
+          [
+            "12",
+            "Volcanism",
+            "Lava (Damage 10+), ash clouds that blind sensors"
+          ],
+          [
+            "13",
+            "Quicksand or sinkholes",
+            "Snare-like traps; Athletics DC 15 to escape"
+          ],
+          [
+            "14",
+            "Electromagnetic storms",
+            "Radio Dazzle 10 on sensors and comms"
+          ],
+          [
+            "15",
+            "Carnivorous plants",
+            "Grab and Damage 6-8"
+          ],
+          [
+            "16",
+            "Automated defenses",
+            "Old guns and drones still guarding something"
+          ],
+          [
+            "17",
+            "Psychic resonance",
+            "Nightmares or compulsion, Will DC 15 nightly"
+          ],
+          [
+            "18",
+            "Unstable crust",
+            "The surface collapses into tunnels"
+          ],
+          [
+            "19",
+            "Stellar flares",
+            "The star flares every few days (radiation rank 13-15)"
+          ],
+          [
+            "20",
+            "Doomed",
+            "The world will be destroyed soon: impact, nova or planet-killer"
+          ]
+        ]
+      },
+      "source": "DCUGen"
+    },
+    {
+      "id": "planet-inhabitants",
+      "title": "Inhabitants",
+      "group": "Alien worlds",
+      "text": "Roll d20 for who (or what) lives there.",
+      "table": {
+        "columns": [
+          "d20",
+          "Inhabitants",
+          "Notes"
+        ],
+        "rows": [
+          [
+            "1-3",
+            "None",
+            "Untouched, or emptied long ago"
+          ],
+          [
+            "4-5",
+            "Microbes and plants only",
+            "A biologist's dream, and a quarantine risk"
+          ],
+          [
+            "6-7",
+            "Wild beasts",
+            "Rich ecology without intelligence"
+          ],
+          [
+            "8-9",
+            "Primitive natives",
+            "Tribes or early kingdoms; contact rules matter"
+          ],
+          [
+            "10-11",
+            "Industrial civilization",
+            "Cities and factories, not yet spacefaring"
+          ],
+          [
+            "12",
+            "Human colonists",
+            "A struggling settlement or a thriving one"
+          ],
+          [
+            "13",
+            "Mining or corporate outpost",
+            "Company town with private security"
+          ],
+          [
+            "14",
+            "Imperial garrison",
+            "An empire's base, fortress and starport"
+          ],
+          [
+            "15",
+            "Spacefaring natives",
+            "A local power with its own fleet"
+          ],
+          [
+            "16",
+            "Pirates or smugglers",
+            "A hidden haven"
+          ],
+          [
+            "17",
+            "Refugees",
+            "Survivors of a war or a dead world"
+          ],
+          [
+            "18",
+            "Robots",
+            "Machines tending a world for long-gone makers"
+          ],
+          [
+            "19",
+            "Hive",
+            "A single collective mind across the planet"
+          ],
+          [
+            "20",
+            "Energy beings",
+            "Bodiless natives who may not notice matter at all"
+          ]
+        ]
+      },
+      "source": "DCUGen"
+    },
+    {
+      "id": "planet-interest",
+      "title": "Points of interest",
+      "group": "Alien worlds",
+      "text": "Roll d20 for what brings heroes here.",
+      "table": {
+        "columns": [
+          "d20",
+          "Point of interest",
+          "Hook"
+        ],
+        "rows": [
+          [
+            "1-2",
+            "Ancient ruins",
+            "A vanished civilization's city, half buried"
+          ],
+          [
+            "3-4",
+            "Crashed starship",
+            "Survivors, salvage, or something that walked away"
+          ],
+          [
+            "5",
+            "Distress beacon",
+            "Still calling after centuries"
+          ],
+          [
+            "6",
+            "Rich mine",
+            "Rare ore everyone wants"
+          ],
+          [
+            "7",
+            "Temple or shrine",
+            "Worshipping something that is real"
+          ],
+          [
+            "8",
+            "Portal",
+            "A gate to another world, time or dimension"
+          ],
+          [
+            "9",
+            "Prison",
+            "Someone was locked away here for a reason"
+          ],
+          [
+            "10",
+            "Battlefield",
+            "Wrecks of a war fleet in orbit and on the ground"
+          ],
+          [
+            "11",
+            "Hidden base",
+            "A villain's lair or a secret lab"
+          ],
+          [
+            "12",
+            "Living landmark",
+            "A mountain-sized creature, sleeping"
+          ],
+          [
+            "13",
+            "Trade hub",
+            "A market where anything is for sale"
+          ],
+          [
+            "14",
+            "Strange signal",
+            "A pattern from deep underground"
+          ],
+          [
+            "15",
+            "Derelict station",
+            "Abandoned in orbit, power still on"
+          ],
+          [
+            "16",
+            "Lost colony",
+            "Descendants who forgot where they came from"
+          ],
+          [
+            "17",
+            "Natural wonder",
+            "Rings, aurora, crystal canyons, a sky with two suns"
+          ],
+          [
+            "18",
+            "Contested claim",
+            "Two powers about to go to war over it"
+          ],
+          [
+            "19",
+            "Cosmic artifact",
+            "An object of incredible power, buried or guarded"
+          ],
+          [
+            "20",
+            "Terraforming engine",
+            "Still running, still changing the world"
+          ]
+        ]
+      },
+      "source": "DCUGen"
+    }
+  ]
+}

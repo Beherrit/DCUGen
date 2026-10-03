@@ -1,0 +1,482 @@
+{
+  "_about": "What kind of place the character grew up in. 'urban' entries may reuse the character's current base city. Original content written for DCUGen.",
+  "kinds": [
+    {
+      "text": "a rust-belt mill town where the smokestacks went cold one by one",
+      "weight": 4,
+      "tags": [
+        "town",
+        "industrial"
+      ],
+      "bias": "low",
+      "effects": {
+        "skills": [
+          "Technology"
+        ]
+      },
+      "us": true
+    },
+    {
+      "text": "a sprawling suburb of identical houses and cul-de-sacs",
+      "weight": 6,
+      "tags": [
+        "suburb"
+      ]
+    },
+    {
+      "text": "a dense inner-city neighborhood where everyone knew everyone's business",
+      "weight": 6,
+      "tags": [
+        "urban"
+      ],
+      "urban": true,
+      "effects": {
+        "skills": [
+          "Insight"
+        ]
+      }
+    },
+    {
+      "text": "a housing project where the elevators worked about half the time",
+      "weight": 3,
+      "tags": [
+        "urban"
+      ],
+      "urban": true,
+      "bias": "low",
+      "effects": {
+        "skills": [
+          "Expertise: Streetwise"
+        ]
+      }
+    },
+    {
+      "text": "a fishing village where the tides set the clock",
+      "weight": 3,
+      "tags": [
+        "coastal",
+        "rural"
+      ],
+      "effects": {
+        "skills": [
+          "Athletics",
+          "Vehicles"
+        ]
+      }
+    },
+    {
+      "text": "a farming county where the nearest movie theater was forty minutes away",
+      "weight": 4,
+      "tags": [
+        "rural"
+      ],
+      "effects": {
+        "skills": [
+          "Athletics"
+        ],
+        "advantages": [
+          "Animal Empathy"
+        ]
+      }
+    },
+    {
+      "text": "a desert town built around a military base",
+      "weight": 2,
+      "tags": [
+        "military",
+        "desert"
+      ],
+      "effects": {
+        "skills": [
+          "Expertise: Military"
+        ]
+      }
+    },
+    {
+      "text": "a mountain town where winter lasted half the year",
+      "weight": 2,
+      "tags": [
+        "mountain",
+        "rural"
+      ],
+      "effects": {
+        "skills": [
+          "Athletics",
+          "Expertise: Survival"
+        ]
+      }
+    },
+    {
+      "text": "a college town that emptied out every summer",
+      "weight": 3,
+      "tags": [
+        "town",
+        "academic"
+      ],
+      "effects": {
+        "skills": [
+          "Expertise: Academics"
+        ]
+      }
+    },
+    {
+      "text": "an oil-boom town that boomed, busted and boomed again",
+      "weight": 2,
+      "tags": [
+        "town",
+        "industrial"
+      ],
+      "us": true
+    },
+    {
+      "text": "a company town owned, practically, by {company}",
+      "weight": 2,
+      "tags": [
+        "town",
+        "corporate"
+      ],
+      "hook": "{company} still owns half the town and is hiding something under the old plant.",
+      "us": true
+    },
+    {
+      "text": "a gentrifying neighborhood where the corner bodega became a juice bar",
+      "weight": 3,
+      "tags": [
+        "urban"
+      ],
+      "urban": true
+    },
+    {
+      "text": "a tourist beach town that was magical in July and desolate in February",
+      "weight": 2,
+      "tags": [
+        "coastal",
+        "town"
+      ]
+    },
+    {
+      "text": "an immigrant enclave where three languages were spoken on every block",
+      "weight": 4,
+      "tags": [
+        "urban"
+      ],
+      "urban": true,
+      "effects": {
+        "advantages": [
+          "Languages"
+        ]
+      }
+    },
+    {
+      "text": "a border town with family on both sides of the line",
+      "weight": 2,
+      "tags": [
+        "town"
+      ],
+      "effects": {
+        "advantages": [
+          "Languages"
+        ]
+      }
+    },
+    {
+      "text": "a river port with barges, bars and a long history of smuggling",
+      "weight": 2,
+      "tags": [
+        "town",
+        "coastal"
+      ],
+      "effects": {
+        "skills": [
+          "Vehicles"
+        ]
+      }
+    },
+    {
+      "text": "a wealthy gated enclave with private security on every corner",
+      "weight": 2,
+      "tags": [
+        "suburb"
+      ],
+      "bias": "high"
+    },
+    {
+      "text": "an old-money neighborhood of brownstones and private schools",
+      "weight": 2,
+      "tags": [
+        "urban"
+      ],
+      "urban": true,
+      "bias": "high"
+    },
+    {
+      "text": "a shrinking prairie town with more grain elevators than people",
+      "weight": 2,
+      "tags": [
+        "rural"
+      ],
+      "us": true
+    },
+    {
+      "text": "a swampy bayou parish where the roads flooded every spring",
+      "weight": 2,
+      "tags": [
+        "rural",
+        "wetland"
+      ],
+      "effects": {
+        "skills": [
+          "Expertise: Survival"
+        ]
+      },
+      "us": true
+    },
+    {
+      "text": "a mining town where the mountain had been hollowed out for a century",
+      "weight": 2,
+      "tags": [
+        "town",
+        "mountain",
+        "industrial"
+      ]
+    },
+    {
+      "text": "a high-crime waterfront district the tourist maps leave blank",
+      "weight": 3,
+      "tags": [
+        "urban",
+        "coastal"
+      ],
+      "urban": true,
+      "bias": "low",
+      "effects": {
+        "skills": [
+          "Stealth"
+        ]
+      }
+    },
+    {
+      "text": "a planned 'city of tomorrow' that never quite arrived",
+      "weight": 1,
+      "tags": [
+        "suburb",
+        "strange"
+      ]
+    },
+    {
+      "text": "a sleepy town that made national news when something crashed in a nearby field",
+      "weight": 2,
+      "tags": [
+        "town",
+        "cosmic"
+      ],
+      "hook": "Whatever crashed outside {hometown} was never fully recovered."
+    },
+    {
+      "text": "a town that was rebuilt after a villain's weather machine flattened it",
+      "weight": 2,
+      "tags": [
+        "town",
+        "super"
+      ]
+    },
+    {
+      "text": "a neighborhood in the shadow of a hero team's headquarters, where capes overhead were normal",
+      "weight": 2,
+      "tags": [
+        "urban",
+        "super"
+      ],
+      "urban": true
+    },
+    {
+      "text": "a reservation community with deep roots and few jobs",
+      "weight": 2,
+      "tags": [
+        "rural"
+      ],
+      "us": true
+    },
+    {
+      "text": "an island community reachable only by ferry",
+      "weight": 2,
+      "tags": [
+        "coastal",
+        "rural"
+      ],
+      "effects": {
+        "skills": [
+          "Vehicles"
+        ]
+      }
+    },
+    {
+      "text": "a downtown loft district of artists and abandoned warehouses",
+      "weight": 2,
+      "tags": [
+        "urban"
+      ],
+      "urban": true
+    },
+    {
+      "text": "a commuter town where the parents left before dawn and got home after dark",
+      "weight": 3,
+      "tags": [
+        "suburb"
+      ]
+    },
+    {
+      "text": "a military housing district that changed faces every year",
+      "weight": 2,
+      "tags": [
+        "military"
+      ]
+    },
+    {
+      "text": "a ski-resort town full of seasonal workers and absentee owners",
+      "weight": 1,
+      "tags": [
+        "mountain",
+        "town"
+      ]
+    },
+    {
+      "text": "a crumbling industrial port being slowly bought up by developers",
+      "weight": 2,
+      "tags": [
+        "urban",
+        "industrial"
+      ],
+      "urban": true
+    },
+    {
+      "text": "a megacity district so large it felt like its own country",
+      "weight": 3,
+      "tags": [
+        "urban"
+      ],
+      "urban": true
+    },
+    {
+      "text": "a quiet town with an unusually high number of unsolved disappearances",
+      "weight": 1,
+      "tags": [
+        "town",
+        "strange"
+      ],
+      "hook": "The disappearances in {hometown} have started again."
+    },
+    {
+      "text": "a religious community that kept apart from the outside world",
+      "weight": 1,
+      "tags": [
+        "rural",
+        "faith"
+      ]
+    },
+    {
+      "text": "a trailer park on the edge of an interstate",
+      "weight": 3,
+      "tags": [
+        "rural"
+      ],
+      "bias": "low",
+      "us": true
+    },
+    {
+      "text": "a tech-boom suburb where every parent worked at a startup",
+      "weight": 2,
+      "tags": [
+        "suburb"
+      ],
+      "bias": "high",
+      "effects": {
+        "skills": [
+          "Technology"
+        ]
+      }
+    },
+    {
+      "text": "a town next to a sprawling chemical plant that glowed faintly at night",
+      "weight": 1,
+      "tags": [
+        "town",
+        "industrial",
+        "lab"
+      ],
+      "hook": "The chemical plant outside {hometown} is reopening under new management."
+    },
+    {
+      "text": "a capital city full of embassies, motorcades and protests",
+      "weight": 2,
+      "tags": [
+        "urban"
+      ],
+      "urban": true,
+      "effects": {
+        "skills": [
+          "Expertise: Politics"
+        ]
+      }
+    }
+  ],
+  "townFirst": [
+    "Ash",
+    "Bright",
+    "Cedar",
+    "Clear",
+    "Cold",
+    "Copper",
+    "Crown",
+    "Deer",
+    "Elk",
+    "Fair",
+    "Glen",
+    "Gray",
+    "Haven",
+    "Iron",
+    "Lake",
+    "Linden",
+    "Marsh",
+    "Mill",
+    "North",
+    "Oak",
+    "Pine",
+    "Red",
+    "Rock",
+    "Salt",
+    "Shell",
+    "Silver",
+    "Stone",
+    "Thorn",
+    "West",
+    "Willow",
+    "Wolf",
+    "Harlow",
+    "Kessel",
+    "Marlow",
+    "Easton"
+  ],
+  "townLast": [
+    "brook",
+    "burg",
+    "field",
+    "ford",
+    "haven",
+    "ridge",
+    "ton",
+    "ville",
+    "wood",
+    "dale",
+    " Falls",
+    " Hollow",
+    " Springs",
+    " Junction",
+    " Crossing",
+    " Harbor",
+    "port",
+    " Point",
+    " Bend",
+    "water"
+  ]
+}

@@ -1,0 +1,867 @@
+[
+ {
+  "id": "peacemaker-revolver",
+  "name": "Peacemaker Revolver",
+  "genre": "Wild West",
+  "category": "Frontier Firearm",
+  "effect": "Ranged Damage 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 6,
+  "tags": [
+   "firearm",
+   "pistol",
+   "revolver"
+  ],
+  "summary": "Single-action Army six-shooter.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "schofield-revolver",
+  "name": "Schofield Revolver",
+  "genre": "Wild West",
+  "category": "Frontier Firearm",
+  "effect": "Ranged Damage 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 6,
+  "tags": [
+   "firearm",
+   "pistol",
+   "revolver"
+  ],
+  "summary": "Fast-reloading top-break revolver.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "buntline-special",
+  "name": "Buntline Special",
+  "genre": "Wild West",
+  "category": "Frontier Firearm",
+  "effect": "Ranged Damage 3, Accurate",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Accurate",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 7,
+  "tags": [
+   "firearm",
+   "pistol",
+   "revolver"
+  ],
+  "summary": "Long-barreled revolver.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "lemat-revolver",
+  "name": "LeMat Revolver",
+  "genre": "Wild West",
+  "category": "Frontier Firearm",
+  "effect": "Ranged Damage 3; AE: Shotgun barrel: Ranged Damage 5, Unreliable (one shot)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged",
+    "alternates": [
+     {
+      "extras": [],
+      "flaws": [
+       {
+        "name": "Unreliable",
+        "detail": "one shot"
+       }
+      ],
+      "effect": "Damage",
+      "rank": 5,
+      "range": "Ranged",
+      "name": "Shotgun barrel"
+     }
+    ]
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 7,
+  "tags": [
+   "firearm",
+   "pistol",
+   "shotgun"
+  ],
+  "summary": "Nine-shot revolver with a shotgun barrel.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "pocket-derringer",
+  "name": "Pocket Derringer",
+  "genre": "Wild West",
+  "category": "Frontier Firearm",
+  "effect": "Ranged Damage 2, Subtle, Unreliable (two shots)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Unreliable",
+      "detail": "two shots"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 2,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 2,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 3,
+  "tags": [
+   "firearm",
+   "concealable",
+   "pistol"
+  ],
+  "summary": "Gambler's hideout gun.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "lever-action-rifle",
+  "name": "Lever-Action Rifle",
+  "genre": "Wild West",
+  "category": "Frontier Firearm",
+  "effect": "Ranged Damage 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 8,
+  "tags": [
+   "firearm",
+   "rifle"
+  ],
+  "summary": "The gun that won the West.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "buffalo-rifle",
+  "name": "Buffalo Rifle",
+  "genre": "Wild West",
+  "category": "Frontier Firearm",
+  "effect": "Ranged Damage 5, Extended Range, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Extended Range",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 19
+  },
+  "cost": 12,
+  "tags": [
+   "firearm",
+   "rifle",
+   "long range"
+  ],
+  "summary": "Heavy single-shot Sharps.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "coach-gun",
+  "name": "Coach Gun",
+  "genre": "Wild West",
+  "category": "Frontier Firearm",
+  "effect": "Ranged Damage 5",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 10,
+  "tags": [
+   "firearm",
+   "shotgun"
+  ],
+  "summary": "Double-barrel shotgun of stagecoach guards.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "cavalry-carbine",
+  "name": "Cavalry Carbine",
+  "genre": "Wild West",
+  "category": "Frontier Firearm",
+  "effect": "Ranged Damage 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 8,
+  "tags": [
+   "firearm",
+   "rifle"
+  ],
+  "summary": "Short saddle carbine.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "gatling-gun",
+  "name": "Gatling Gun",
+  "genre": "Wild West",
+  "category": "Frontier Firearm",
+  "effect": "Ranged Damage 6, Multiattack, Quirk (must be mounted or braced)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Quirk",
+      "detail": "must be mounted or braced",
+      "steps": 1
+     }
+    ],
+    "effect": "Damage",
+    "rank": 6,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 6,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 17,
+  "tags": [
+   "firearm",
+   "automatic",
+   "heavy"
+  ],
+  "summary": "Hand-cranked rotary gun.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "bowie-knife",
+  "name": "Bowie Knife",
+  "genre": "Wild West",
+  "category": "Frontier Blade",
+  "effect": "Damage 2 (slashing), Strength-based, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 3,
+  "tags": [
+   "melee",
+   "blade"
+  ],
+  "summary": "Big clip-point fighting knife.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "tomahawk",
+  "name": "Tomahawk",
+  "genre": "Wild West",
+  "category": "Frontier Blade",
+  "effect": "Damage 2 (slashing), Strength-based, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 3,
+  "tags": [
+   "melee",
+   "axe",
+   "thrown"
+  ],
+  "summary": "Light axe, often thrown.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "cavalry-sword",
+  "name": "Cavalry Sword",
+  "genre": "Wild West",
+  "category": "Frontier Blade",
+  "effect": "Damage 3 (slashing), Strength-based, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 4,
+  "tags": [
+   "melee",
+   "sword"
+  ],
+  "summary": "Trooper's saber.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "pick-handle",
+  "name": "Pick Handle",
+  "genre": "Wild West",
+  "category": "Improvised Weapon",
+  "effect": "Damage 2 (bludgeoning), Strength-based",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 2,
+  "tags": [
+   "melee",
+   "bludgeoning",
+   "improvised"
+  ],
+  "summary": "Hickory handle from the general store.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "lariat",
+  "name": "Lariat",
+  "genre": "Wild West",
+  "category": "Ranch Gear",
+  "effect": "Ranged Affliction 3 (Resisted by Dodge, Overcome by Strength; Hindered and Vulnerable, Defenseless and Immobilized), Extra Condition, Limited Degree",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Extra Condition"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited Degree"
+     }
+    ],
+    "effect": "Affliction",
+    "rank": 3,
+    "range": "Ranged",
+    "detail": "Resisted by Dodge, Overcome by Strength; Hindered and Vulnerable, Defenseless and Immobilized"
+   }
+  ],
+  "cost": 6,
+  "tags": [
+   "entangling",
+   "capture",
+   "rope"
+  ],
+  "summary": "Rope loop for catching cattle and outlaws.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "drovers-whip",
+  "name": "Drover's Whip",
+  "genre": "Wild West",
+  "category": "Ranch Gear",
+  "effect": "Improved Trip, Reach 3 (cracks at 15 ft.)",
+  "features": [
+   {
+    "name": "Improved Trip",
+    "ranks": 1
+   },
+   {
+    "name": "Reach",
+    "ranks": 3,
+    "detail": "cracks at 15 ft."
+   }
+  ],
+  "cost": 4,
+  "tags": [
+   "whip",
+   "reach"
+  ],
+  "summary": "Long stock whip.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "saddle-and-tack",
+  "name": "Saddle and Tack",
+  "genre": "Wild West",
+  "category": "Ranch Gear",
+  "effect": "Feature 1 (+2 Expertise (riding))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Expertise (riding)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "mount",
+   "riding"
+  ],
+  "summary": "Western saddle and bridle.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "branding-iron",
+  "name": "Branding Iron",
+  "genre": "Wild West",
+  "category": "Ranch Gear",
+  "effect": "Feature 1 (marks livestock; Damage 1 fire in a pinch)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "marks livestock; Damage 1 fire in a pinch"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "tool",
+   "fire"
+  ],
+  "summary": "Ranch brand on an iron rod.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "spurs",
+  "name": "Spurs",
+  "genre": "Wild West",
+  "category": "Ranch Gear",
+  "effect": "Feature 1 (+2 to urge a mount to greater speed)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 to urge a mount to greater speed"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "riding"
+  ],
+  "summary": "Jingling rowel spurs.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "sheriffs-badge",
+  "name": "Sheriff's Badge",
+  "genre": "Wild West",
+  "category": "Credentials",
+  "effect": "Feature 1 (+2 Intimidation and Persuasion as the law)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Intimidation and Persuasion as the law"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "law",
+   "social"
+  ],
+  "summary": "Tin star.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "wanted-posters",
+  "name": "Wanted Posters",
+  "genre": "Wild West",
+  "category": "Credentials",
+  "effect": "Feature 1 (+2 Investigation to identify outlaws)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Investigation to identify outlaws"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "law",
+   "investigation"
+  ],
+  "summary": "Sheaf of bounty notices.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "thick-duster",
+  "name": "Thick Duster",
+  "genre": "Wild West",
+  "category": "Clothing",
+  "effect": "Protection 1",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 1
+   }
+  ],
+  "protection": 1,
+  "cost": 1,
+  "tags": [
+   "clothing",
+   "armor"
+  ],
+  "summary": "Heavy canvas long coat.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "iron-breastplate",
+  "name": "Iron Breastplate",
+  "genre": "Wild West",
+  "category": "Clothing",
+  "effect": "Protection 3, Limited to attacks from the front",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "attacks from the front"
+     }
+    ],
+    "effect": "Protection",
+    "rank": 3
+   }
+  ],
+  "protection": 3,
+  "cost": 2,
+  "tags": [
+   "armor",
+   "improvised"
+  ],
+  "summary": "Stove-iron plate worn under a coat, like a famous outlaw.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "canteen-and-bedroll",
+  "name": "Canteen and Bedroll",
+  "genre": "Wild West",
+  "category": "Trail Gear",
+  "effect": "Feature 1 (a week on the trail)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "a week on the trail"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "travel",
+   "camping"
+  ],
+  "summary": "Trail essentials.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "gold-pan-and-pick",
+  "name": "Gold Pan and Pick",
+  "genre": "Wild West",
+  "category": "Trail Gear",
+  "effect": "Feature 1 (tools for prospecting)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "tools for prospecting"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "tool",
+   "mining"
+  ],
+  "summary": "Prospector's outfit.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "kerosene-lamp",
+  "name": "Kerosene Lamp",
+  "genre": "Wild West",
+  "category": "Trail Gear",
+  "effect": "Feature 1 (negates darkness penalties within 30 ft.)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "negates darkness penalties within 30 ft."
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "light"
+  ],
+  "summary": "Glass-chimney lamp.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "bandolier",
+  "name": "Bandolier",
+  "genre": "Wild West",
+  "category": "Trail Gear",
+  "effect": "Feature 1 (quick reload: reloading is a free action once per scene)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "quick reload: reloading is a free action once per scene"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "ammo",
+   "accessory"
+  ],
+  "summary": "Cartridge belt across the chest.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "marked-deck",
+  "name": "Marked Deck",
+  "genre": "Wild West",
+  "category": "Saloon Gear",
+  "effect": "Feature 1 (+5 Sleight of Hand to cheat at cards)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 Sleight of Hand to cheat at cards"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "gambling",
+   "deception"
+  ],
+  "summary": "Cards only you can read.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "snake-oil-kit",
+  "name": "Snake Oil Kit",
+  "genre": "Wild West",
+  "category": "Saloon Gear",
+  "effect": "Feature 1 (+2 Persuasion when selling cures)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Persuasion when selling cures"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "deception",
+   "social"
+  ],
+  "summary": "Bottles, labels and a patter.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "pocket-watch",
+  "name": "Pocket Watch",
+  "genre": "Wild West",
+  "category": "Saloon Gear",
+  "effect": "Feature 1 (always know the time)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "always know the time"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "time"
+  ],
+  "summary": "Engraved railroad watch.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "field-telescope",
+  "name": "Field Telescope",
+  "genre": "Wild West",
+  "category": "Trail Gear",
+  "effect": "Feature 1 (+5 visual Perception at a distance)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 visual Perception at a distance"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "optics"
+  ],
+  "summary": "Cavalry scout's glass.",
+  "source": "DCUGen"
+ }
+]

@@ -1,0 +1,1420 @@
+[
+ {
+  "id": "cybereyes",
+  "name": "Cybereyes",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Senses 3 (low-light vision, infravision, extended vision)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 3,
+    "detail": "low-light vision, infravision, extended vision"
+   }
+  ],
+  "cost": 3,
+  "tags": [
+   "cyberware",
+   "eyes",
+   "senses"
+  ],
+  "summary": "Replacement eyes with thermal and zoom.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 38"
+ },
+ {
+  "id": "flare-compensators",
+  "name": "Flare Compensators",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Immunity 5 (vision-dependent attacks), Limited to bright light only",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "bright light only"
+     }
+    ],
+    "effect": "Immunity",
+    "rank": 5,
+    "detail": "vision-dependent attacks"
+   }
+  ],
+  "cost": 3,
+  "tags": [
+   "cyberware",
+   "eyes",
+   "defense"
+  ],
+  "summary": "Eye shutters against flash attacks.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 38"
+ },
+ {
+  "id": "cyberears",
+  "name": "Cyberears",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Senses 2 (ultra-hearing, extended hearing)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 2,
+    "detail": "ultra-hearing, extended hearing"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "cyberware",
+   "ears",
+   "senses"
+  ],
+  "summary": "Implants that hear dog whistles and distant whispers.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 38"
+ },
+ {
+  "id": "headlink",
+  "name": "Headlink",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Communication 1 (radio), Subtle",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [],
+    "effect": "Communication",
+    "rank": 1,
+    "detail": "radio"
+   }
+  ],
+  "cost": 5,
+  "tags": [
+   "cyberware",
+   "communication",
+   "radio"
+  ],
+  "summary": "Subvocal encrypted radio in the skull.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 39"
+ },
+ {
+  "id": "interface-jack",
+  "name": "Interface Jack",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Comprehend 2 (machines)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Comprehend",
+    "rank": 2,
+    "detail": "machines"
+   }
+  ],
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "cyberware",
+   "computer",
+   "hacking"
+  ],
+  "summary": "Neural port for jacking into computers.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 39"
+ },
+ {
+  "id": "cerebral-cache",
+  "name": "Cerebral Cache",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Enhanced Eidetic Memory 1, Quickness 4, Limited to mental tasks",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 1,
+    "option": "Eidetic Memory"
+   },
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "mental tasks"
+     }
+    ],
+    "effect": "Quickness",
+    "rank": 4
+   }
+  ],
+  "cost": 3,
+  "tags": [
+   "cyberware",
+   "brain",
+   "memory"
+  ],
+  "summary": "Slaved memory and processing.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 38"
+ },
+ {
+  "id": "neural-boosters",
+  "name": "Neural Boosters",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Enhanced Improved Initiative 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 2,
+    "option": "Improved Initiative"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "cyberware",
+   "reflexes",
+   "initiative"
+  ],
+  "summary": "Superconducting nerves (+8 initiative).",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 39"
+ },
+ {
+  "id": "wired-reflexes",
+  "name": "Wired Reflexes",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Enhanced Improved Initiative 1, Enhanced Dodge 2, Enhanced Seize Initiative 1",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 1,
+    "option": "Improved Initiative"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 2,
+    "option": "Dodge"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 1,
+    "option": "Seize Initiative"
+   }
+  ],
+  "cost": 4,
+  "tags": [
+   "cyberware",
+   "reflexes"
+  ],
+  "summary": "Spinal accelerator.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "DCUGen"
+ },
+ {
+  "id": "targeting-system",
+  "name": "Targeting System",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Enhanced Ranged Attack 2, Senses 1 (distance sense)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 2,
+    "option": "Ranged Attack"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 1,
+    "detail": "distance sense"
+   }
+  ],
+  "cost": 3,
+  "tags": [
+   "cyberware",
+   "targeting",
+   "combat"
+  ],
+  "summary": "Range finder linked to your gun hand.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 39"
+ },
+ {
+  "id": "mind-shield-implant",
+  "name": "Mind Shield Implant",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Immunity 10 (mental powers)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 10,
+    "detail": "mental powers"
+   }
+  ],
+  "cost": 10,
+  "bookCost": 10,
+  "tags": [
+   "cyberware",
+   "brain",
+   "mental",
+   "defense"
+  ],
+  "summary": "Blocks telepathy and mind control.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 39"
+ },
+ {
+  "id": "skill-wires",
+  "name": "Skill Wires",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Variable 1 (skills and advantages (5 points))",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Variable",
+    "rank": 1,
+    "detail": "skills and advantages (5 points)"
+   }
+  ],
+  "cost": 7,
+  "tags": [
+   "cyberware",
+   "brain",
+   "skills"
+  ],
+  "summary": "Slot in downloaded skills.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 39"
+ },
+ {
+  "id": "filter-lungs",
+  "name": "Filter Lungs",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Immunity 2 (airborne gases and toxins)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 2,
+    "detail": "airborne gases and toxins"
+   }
+  ],
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "cyberware",
+   "lungs",
+   "defense"
+  ],
+  "summary": "Implanted air filters.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 37"
+ },
+ {
+  "id": "gill-implants",
+  "name": "Gill Implants",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Immunity 1 (drowning)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 1,
+    "detail": "drowning"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "cyberware",
+   "lungs",
+   "underwater"
+  ],
+  "summary": "Breathe water.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 37"
+ },
+ {
+  "id": "redundant-organs",
+  "name": "Redundant Organs",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Enhanced Diehard 1, Immunity 2 (critical hits)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 1,
+    "option": "Diehard"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 2,
+    "detail": "critical hits"
+   }
+  ],
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "cyberware",
+   "body",
+   "defense"
+  ],
+  "summary": "Backup heart and kidneys.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 37"
+ },
+ {
+  "id": "skeletal-reinforcement",
+  "name": "Skeletal Reinforcement",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Immunity 20 (bludgeoning damage), Limited to Half Effect",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited to Half Effect"
+     }
+    ],
+    "effect": "Immunity",
+    "rank": 20,
+    "detail": "bludgeoning damage"
+   }
+  ],
+  "cost": 10,
+  "bookCost": 10,
+  "tags": [
+   "cyberware",
+   "body",
+   "defense"
+  ],
+  "summary": "Diamond-laced bones.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 38"
+ },
+ {
+  "id": "dermal-plating",
+  "name": "Dermal Plating",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Protection 3, Noticeable",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Noticeable"
+     }
+    ],
+    "effect": "Protection",
+    "rank": 3
+   }
+  ],
+  "protection": 3,
+  "cost": 2,
+  "tags": [
+   "cyberware",
+   "body",
+   "armor"
+  ],
+  "summary": "Visible armor plates under the skin.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 36"
+ },
+ {
+  "id": "subdermal-armor",
+  "name": "Subdermal Armor",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Protection 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 2
+   }
+  ],
+  "protection": 2,
+  "cost": 2,
+  "tags": [
+   "cyberware",
+   "body",
+   "armor"
+  ],
+  "summary": "Hidden ballistic mesh.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 36"
+ },
+ {
+  "id": "skinmorph",
+  "name": "Skinmorph",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Morph 2 (people of your size and gender)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Morph",
+    "rank": 2,
+    "detail": "people of your size and gender"
+   }
+  ],
+  "cost": 10,
+  "bookCost": 10,
+  "tags": [
+   "cyberware",
+   "disguise",
+   "body"
+  ],
+  "summary": "Programmable artificial skin.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 38"
+ },
+ {
+  "id": "body-compartment",
+  "name": "Body Compartment",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Feature 1 (hidden cavity, about 1 cubic foot)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Feature",
+    "rank": 1,
+    "detail": "hidden cavity, about 1 cubic foot"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "cyberware",
+   "body",
+   "storage"
+  ],
+  "summary": "Smuggler's pocket in your abdomen.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 37"
+ },
+ {
+  "id": "drug-injector",
+  "name": "Drug Injector",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Regeneration 2, Fades",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Fades"
+     }
+    ],
+    "effect": "Regeneration",
+    "rank": 2
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "cyberware",
+   "body",
+   "drug"
+  ],
+  "summary": "Implanted gland that pumps healing stims.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 37"
+ },
+ {
+  "id": "finger-blades",
+  "name": "Finger Blades",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Damage 2 (slashing), Strength-based, Subtle",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "tags": [
+   "cyberware",
+   "weapon",
+   "blade",
+   "hand"
+  ],
+  "summary": "Razors that slide from the fingertips.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 35"
+ },
+ {
+  "id": "mantis-blades",
+  "name": "Mantis Blades",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Damage 4 (slashing), Strength-based, Penetrating 2, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Penetrating",
+      "steps": 2
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 4,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 7,
+  "tags": [
+   "cyberware",
+   "weapon",
+   "blade",
+   "arm"
+  ],
+  "summary": "Forearm blades that unfold for the kill.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "DCUGen"
+ },
+ {
+  "id": "gorilla-arms",
+  "name": "Gorilla Arms",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Enhanced Strength 2, Limited to arms: lifting and punching, Damage 2 (bludgeoning), Strength-based",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "arms: lifting and punching"
+     }
+    ],
+    "effect": "Enhanced Trait",
+    "rank": 2,
+    "option": "Strength"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 4,
+  "tags": [
+   "cyberware",
+   "weapon",
+   "arm",
+   "strength"
+  ],
+  "summary": "Hydraulic cyberarms.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 36"
+ },
+ {
+  "id": "projectile-launcher-arm",
+  "name": "Projectile Launcher Arm",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Ranged Burst Area Damage 5, Unreliable (three shots)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Unreliable",
+      "detail": "three shots"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "cost": 10,
+  "tags": [
+   "cyberware",
+   "weapon",
+   "arm",
+   "explosive"
+  ],
+  "summary": "Mini-grenade launcher in the forearm.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "DCUGen"
+ },
+ {
+  "id": "monowire-implant",
+  "name": "Monowire Implant",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Damage 4 (slashing), Penetrating 4, Reach 2",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Penetrating",
+      "steps": 4
+     },
+     {
+      "name": "Reach",
+      "steps": 2
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "strengthBased": false,
+    "detail": "slashing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 10,
+  "tags": [
+   "cyberware",
+   "weapon",
+   "wire"
+  ],
+  "summary": "Glowing wire whip from the wrist.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "DCUGen"
+ },
+ {
+  "id": "grappler-hand",
+  "name": "Grappler Hand",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Elongation 2, Limited to one arm, Movement 1 (Swinging)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "one arm"
+     }
+    ],
+    "effect": "Elongation",
+    "rank": 2
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Movement",
+    "rank": 1,
+    "detail": "Swinging"
+   }
+  ],
+  "cost": 3,
+  "tags": [
+   "cyberware",
+   "arm",
+   "movement"
+  ],
+  "summary": "Hand launches on a cable.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 35"
+ },
+ {
+  "id": "cyberlegs",
+  "name": "Cyberlegs",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Speed 3, Leaping 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Speed",
+    "rank": 3
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Leaping",
+    "rank": 3
+   }
+  ],
+  "cost": 6,
+  "tags": [
+   "cyberware",
+   "legs",
+   "movement"
+  ],
+  "summary": "Sprinting, jumping cyberlegs.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "GG 36"
+ },
+ {
+  "id": "reflex-tuned-muscles",
+  "name": "Reflex Tuned Muscles",
+  "genre": "Cyberpunk",
+  "category": "Cyberware",
+  "effect": "Enhanced Agility 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 2,
+    "option": "Agility"
+   }
+  ],
+  "cost": 4,
+  "tags": [
+   "cyberware",
+   "body",
+   "reflexes"
+  ],
+  "summary": "Synthetic fast-twitch muscle.",
+  "notes": "Cyberware: priced at full power cost; by the book implants are powers (GG 35).",
+  "source": "DCUGen"
+ },
+ {
+  "id": "smartgun-pistol",
+  "name": "Smartgun Pistol",
+  "genre": "Cyberpunk",
+  "category": "Smart Weapon",
+  "effect": "Ranged Damage 4, Accurate 2",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Accurate",
+      "steps": 2
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 10,
+  "tags": [
+   "firearm",
+   "pistol",
+   "smart"
+  ],
+  "summary": "Pistol linked to your HUD.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "smartgun-smg",
+  "name": "Smartgun SMG",
+  "genre": "Cyberpunk",
+  "category": "Smart Weapon",
+  "effect": "Ranged Damage 4, Multiattack, Accurate",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     },
+     {
+      "name": "Accurate",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 13,
+  "tags": [
+   "firearm",
+   "automatic",
+   "smart"
+  ],
+  "summary": "Smartlinked submachine gun.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "tracking-rifle",
+  "name": "Tracking Rifle",
+  "genre": "Cyberpunk",
+  "category": "Smart Weapon",
+  "effect": "Ranged Damage 6, Homing 2",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Homing",
+      "steps": 2
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 6,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 6,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 14,
+  "tags": [
+   "firearm",
+   "rifle",
+   "smart",
+   "homing"
+  ],
+  "summary": "Fires bullets that curve around cover.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "flechette-pistol",
+  "name": "Flechette Pistol",
+  "genre": "Cyberpunk",
+  "category": "Weapon",
+  "effect": "Ranged Damage 3, Improved Critical 2 (18-20)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 2
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 18
+  },
+  "cost": 8,
+  "tags": [
+   "firearm",
+   "pistol"
+  ],
+  "summary": "Shreds unarmored flesh.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "railgun-rifle",
+  "name": "Railgun Rifle",
+  "genre": "Cyberpunk",
+  "category": "Weapon",
+  "effect": "Ranged Damage 8, Penetrating 6",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Penetrating",
+      "steps": 6
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 8,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 8,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 22,
+  "tags": [
+   "firearm",
+   "rifle",
+   "kinetic"
+  ],
+  "summary": "Wall-piercing magnetic rifle.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "mono-katana",
+  "name": "Mono-Katana",
+  "genre": "Cyberpunk",
+  "category": "Weapon",
+  "effect": "Damage 3 (slashing), Strength-based, Penetrating 6, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Penetrating",
+      "steps": 6
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 10,
+  "tags": [
+   "melee",
+   "sword",
+   "monofilament"
+  ],
+  "summary": "Monomolecular-edged sword.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "stun-gloves",
+  "name": "Stun Gloves",
+  "genre": "Cyberpunk",
+  "category": "Weapon",
+  "effect": "Affliction 5 (electricity; Resisted by Fortitude; Dazed, Stunned, Incapacitated)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 5,
+    "detail": "electricity; Resisted by Fortitude; Dazed, Stunned, Incapacitated"
+   }
+  ],
+  "cost": 5,
+  "tags": [
+   "less-lethal",
+   "electricity",
+   "gloves"
+  ],
+  "summary": "Knuckles that deliver a jolt.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "armored-jacket",
+  "name": "Armored Jacket",
+  "genre": "Cyberpunk",
+  "category": "Armor",
+  "effect": "Protection 3, Subtle",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 3
+   }
+  ],
+  "protection": 3,
+  "cost": 4,
+  "tags": [
+   "armor",
+   "clothing"
+  ],
+  "summary": "Street-fashion ballistic jacket.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "corporate-security-armor",
+  "name": "Corporate Security Armor",
+  "genre": "Cyberpunk",
+  "category": "Armor",
+  "effect": "Protection 6",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 6
+   }
+  ],
+  "protection": 6,
+  "cost": 6,
+  "tags": [
+   "armor",
+   "corporate"
+  ],
+  "summary": "Full armor of corp strike teams.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "cyberdeck",
+  "name": "Cyberdeck",
+  "genre": "Cyberpunk",
+  "category": "Deck",
+  "effect": "Feature 3 (portable hacking computer: +5 Technology to hack; runs programs)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 3,
+    "detail": "portable hacking computer: +5 Technology to hack; runs programs"
+   }
+  ],
+  "cost": 3,
+  "tags": [
+   "computer",
+   "hacking",
+   "deck"
+  ],
+  "summary": "Netrunner's console.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "military-cyberdeck",
+  "name": "Military Cyberdeck",
+  "genre": "Cyberpunk",
+  "category": "Deck",
+  "effect": "Feature 5 (hacking computer: +10 Technology to hack; hardened against feedback)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 5,
+    "detail": "hacking computer: +10 Technology to hack; hardened against feedback"
+   }
+  ],
+  "cost": 5,
+  "tags": [
+   "computer",
+   "hacking",
+   "deck"
+  ],
+  "summary": "Top-tier spec-ops deck.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "ice-breaker-program",
+  "name": "ICE Breaker Program",
+  "genre": "Cyberpunk",
+  "category": "Software",
+  "effect": "Feature 1 (+2 Technology to bypass security software)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Technology to bypass security software"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "hacking",
+   "software"
+  ],
+  "summary": "Cracks intrusion countermeasures.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "trace-spoofer",
+  "name": "Trace Spoofer",
+  "genre": "Cyberpunk",
+  "category": "Software",
+  "effect": "Feature 1 (+5 to avoid being traced online)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to avoid being traced online"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "hacking",
+   "software",
+   "stealth"
+  ],
+  "summary": "Bounces your signal around the globe.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "fake-sin",
+  "name": "Fake SIN",
+  "genre": "Cyberpunk",
+  "category": "Identity",
+  "effect": "Feature 1 (false identity that passes routine scans)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "false identity that passes routine scans"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "identity",
+   "forgery"
+  ],
+  "summary": "Forged system ID.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "holo-mask",
+  "name": "Holo-Mask",
+  "genre": "Cyberpunk",
+  "category": "Identity",
+  "effect": "Morph 1 (one face), Limited to visual disguise",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "visual disguise"
+     }
+    ],
+    "effect": "Morph",
+    "rank": 1,
+    "detail": "one face"
+   }
+  ],
+  "cost": 4,
+  "tags": [
+   "disguise",
+   "hologram"
+  ],
+  "summary": "Projects a different face.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "ripperdoc-kit",
+  "name": "Ripperdoc Kit",
+  "genre": "Cyberpunk",
+  "category": "Medical",
+  "effect": "Feature 2 (tools for Treatment and cyberware surgery)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "tools for Treatment and cyberware surgery"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "medical",
+   "cyberware",
+   "kit"
+  ],
+  "summary": "Back-alley surgery tools.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "trauma-patch",
+  "name": "Trauma Patch",
+  "genre": "Cyberpunk",
+  "category": "Medical",
+  "effect": "Healing 3, Activation (Standard action), Unreliable (one use)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Activation",
+      "option": "Standard action"
+     },
+     {
+      "name": "Unreliable",
+      "detail": "one use"
+     }
+    ],
+    "effect": "Healing",
+    "rank": 3
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "medical",
+   "healing"
+  ],
+  "summary": "Auto-injecting trauma dermal.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "spy-drone",
+  "name": "Spy Drone",
+  "genre": "Cyberpunk",
+  "category": "Drone",
+  "effect": "Remote Sensing 4 (Two sense types; visual and auditory, via drone)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Remote Sensing",
+    "rank": 4,
+    "option": "Two sense types",
+    "detail": "visual and auditory, via drone"
+   }
+  ],
+  "cost": 8,
+  "tags": [
+   "drone",
+   "surveillance"
+  ],
+  "summary": "Insect-sized recon drone.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "ar-glasses",
+  "name": "AR Glasses",
+  "genre": "Cyberpunk",
+  "category": "Electronics",
+  "effect": "Feature 2 (HUD, facial recognition, maps)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "HUD, facial recognition, maps"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "electronics",
+   "augmented reality"
+  ],
+  "summary": "Smart glasses that overlay data.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "optical-camo-suit",
+  "name": "Optical Camo Suit",
+  "genre": "Cyberpunk",
+  "category": "Stealth",
+  "effect": "Concealment 4 (visual), Limited while moving at half speed or less",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "while moving at half speed or less"
+     }
+    ],
+    "effect": "Concealment",
+    "rank": 4,
+    "detail": "visual"
+   }
+  ],
+  "cost": 4,
+  "tags": [
+   "stealth",
+   "invisibility"
+  ],
+  "summary": "Thermoptic camouflage.",
+  "source": "DCUGen"
+ }
+]

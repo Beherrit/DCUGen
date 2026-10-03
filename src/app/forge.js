@@ -6,6 +6,7 @@ import { renderFile } from './sheetview.js';
 import { exportExcel, exportJson, exportText } from './exporters.js';
 import { encodeCharacter, shareLink } from './share.js';
 import { importDialog } from './importer.js';
+import { renderBio } from './bio.js';
 import { generateCharacter, rerollIdentity, generateTeam } from '../engine/generator.js';
 import { randomSeed } from '../engine/rng.js';
 import { statBlockText, sheet as makeSheet } from '../engine/render.js';
@@ -318,17 +319,35 @@ export function renderCurrent() {
       { label: 'Print or save as PDF', hint: 'Uses your browser\'s print dialog', run: () => window.print() },
     ]),
     h('button', { class: 'btn', type: 'button', onClick: () => share(ch) }, 'Share'));
+  const onChange = (c) => { state.current = c; state.tabs[state.active] = c; saveTabs(); fresh = false; renderCurrent(); };
+  fileHost.append(viewSwitch(ch));
+  if (sheetView === 'bio') {
+    fileHost.append(renderBio(ch, R, { toolbar, change: (fn) => { const c = JSON.parse(JSON.stringify(ch)); fn(c); onChange(c); } }));
+    fresh = false;
+    return;
+  }
   const { el } = renderFile(ch, R, {
     editing: state.editing,
     fresh,
     toolbar,
-    onChange: (c) => { state.current = c; state.tabs[state.active] = c; saveTabs(); fresh = false; renderCurrent(); },
+    onChange,
     onEditPower: (path) => api.editPower?.(path),
     onAddPower: () => api.addPower?.(),
+    onBrowseGear: () => api.browseGear?.(),
     onSpend: () => { state.editing = true; renderCurrent(); toast('Edit mode: buy what you want, then press Done editing to log it'); },
   });
   fresh = false;
   fileHost.append(el);
+}
+
+// Character sheet or Bio page, remembered between visits.
+let sheetView = (() => { try { return localStorage.getItem('dcugen.sheetview') || 'sheet'; } catch { return 'sheet'; } })();
+
+function viewSwitch(ch) {
+  const set = (v) => { sheetView = v; try { localStorage.setItem('dcugen.sheetview', v); } catch { /* ignore */ } renderCurrent(); };
+  return h('div', { class: 'view-switch no-print', role: 'group', 'aria-label': 'Show' },
+    h('button', { type: 'button', 'aria-pressed': String(sheetView !== 'bio'), onClick: () => set('sheet') }, 'Character sheet'),
+    h('button', { type: 'button', 'aria-pressed': String(sheetView === 'bio'), onClick: () => set('bio') }, ch.bio ? 'Bio' : 'Bio (roll one)'));
 }
 
 /** Leaving edit mode records any spending in the advancement log (when it's switched on). */

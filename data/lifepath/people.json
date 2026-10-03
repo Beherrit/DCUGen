@@ -1,0 +1,179 @@
+{
+  "_about": "People in a character's life. 'who' entries are noun phrases (use {npc} for their generated name). 'status' says where things stand now. Rivals add a reason and an intensity ladder. Original content written for DCUGen.",
+  "Mentor": {
+    "who": [
+      "{npc}, a retired cop who still keeps a police scanner on the kitchen table",
+      "{npc}, a disgraced scientist who taught {name} to question every assumption",
+      "{npc}, a boxing coach with a crooked nose and a soft heart",
+      "{npc}, a veteran emergency-room nurse who has seen everything twice",
+      "{npc}, an aging stage magician who taught misdirection as a life skill",
+      "{npc}, a former spy who runs a quiet bookshop",
+      "{npc}, a public defender who never lost faith in second chances",
+      "{npc}, an old-school newspaper editor with a red pen and a long memory",
+      "{npc}, a mechanic who could fix anything with wire and patience",
+      "{npc}, a monk who teaches stillness to troubled kids",
+      "{npc}, a retired costumed hero who once went by {hero}",
+      "{npc}, a professor who spotted {name}'s potential before anyone else",
+      "{npc}, a gym owner who took in kids nobody else wanted",
+      "{npc}, a gruff sergeant who made {name} into someone dependable",
+      "{npc}, a grandmotherly hacker who learned on mainframes",
+      "{npc}, a war photographer who taught that some pictures matter more than safety",
+      "{npc}, a pastor who believed in {name} when {name} didn't",
+      "{npc}, a mob accountant who taught {name} how money really moves"
+    ],
+    "status": [
+      "Still teaching; calls when something feels wrong.", "Retired and lonely; would love a visit.", "Died last year; the lessons remain.", "Missing for months; the trail is cold.", "Disapproves of {name}'s recent choices and says so.", "In the hospital, failing slowly.", "Has gone back to an old dangerous line of work.", "Proud, though never in so many words.", "Estranged after a bitter argument about methods.", "Being blackmailed and too proud to ask for help."
+    ]
+  },
+  "Rival": {
+    "who": [
+      "{npc}, a classmate who always finished one place ahead",
+      "{npc}, a coworker gunning for the same promotion",
+      "{npc}, a cousin the family never stopped comparing {name} to",
+      "{npc}, a rival investigator who keeps beating {name} to the scene",
+      "{npc}, a former best friend",
+      "{npc}, a sports rival from high school who went pro",
+      "{npc}, a reporter at a competing paper",
+      "{npc}, an ex's new partner",
+      "{npc}, a fellow student of the same mentor",
+      "{npc}, a self-promoting costumed hero who goes by {hero}",
+      "{npc}, a neighbor locked in an absurd decade-long feud with {name}",
+      "{npc}, a businessperson competing for the same contracts",
+      "{npc}, a fellow officer who resents {name}'s methods",
+      "{npc}, a younger prodigy who makes {name} feel old"
+    ],
+    "why": [
+      "They wanted the same job.", "They loved the same person.", "A perceived insult, years ago, that neither will drop.", "Their families have been feuding for two generations.", "Both want to be the best at the same thing.", "The rival thinks {name} cheated to win once.", "{name} got the credit the rival felt was theirs.", "The rival is jealous of {name}'s reputation.", "They are mirror images, and that is unbearable.", "Neither remembers how it started anymore."
+    ],
+    "intensity": [
+      { "text": "Friendly: they push each other and secretly enjoy it.", "weight": 4 },
+      { "text": "Jealous: the rival enjoys every small humiliation.", "weight": 3 },
+      { "text": "Bitter: the rival goes out of the way to make things harder.", "weight": 2 },
+      { "text": "Vicious: the rival would happily see {name} ruined.", "weight": 1 },
+      { "text": "Obsessive: the rival's whole life orbits beating {name}.", "weight": 1, "complication": "Obsession" }
+    ],
+    "status": [
+      "Still competing.", "Recently pulled ahead, and gloating.", "Fell on hard times and blames {name}.", "Has started to become a friend, warily.", "Now works for someone dangerous.", "Is about to be {name}'s boss."
+    ]
+  },
+  "Enemy": {
+    "who": [
+      "{npc}, a crooked cop {name} once reported",
+      "{npc}, a gang lieutenant from {gang}",
+      "{npc}, a loan shark with a long memory",
+      "{npc}, a con artist {name} exposed",
+      "{npc}, a corporate fixer for {company}",
+      "{npc}, a stalker who has never been charged",
+      "{npc}, a former friend who took a betrayal very personally",
+      "{npc}, a cult leader who wants a lost sheep back",
+      "{npc}, a politician with plenty to hide",
+      "{villain}, a costumed villain with a personal grudge",
+      "{npc}, a mercenary who was paid once to end {name} and failed",
+      "{npc}, a hacker who has doxxed {name} twice",
+      "{npc}, a mob heir who blames {name} for a parent's arrest",
+      "{npc}, an agent of {villainGroup}",
+      "{npc}, a rival scientist who stole {name}'s work and fears exposure",
+      "{npc}, a vigilante who considers {name} a criminal"
+    ],
+    "why": [
+      "{name} cost them money, a lot of it.", "{name} testified against them.", "{name} humiliated them in public.", "{name} knows something that could put them away.", "They believe {name} killed someone they loved.", "{name} stopped them once.", "They simply enjoy tormenting {name}.", "{name} turned down an offer that 'couldn't be refused.'", "They mistake {name} for someone else, and won't be convinced.", "{name} stole from them, or they believe so."
+    ],
+    "status": [
+      "Free and actively plotting.", "In prison, with friends outside.", "Laying low after a recent setback.", "Recently rose to real power.", "Thought dead; isn't.", "Has offered a truce that nobody believes.", "Has found out where {name} lives."
+    ]
+  },
+  "Ally": {
+    "who": [
+      "{npc}, a beat cop who looks the other way when it counts",
+      "{npc}, an ER doctor who stitches people up without asking questions",
+      "{npc}, a reporter at {paper} who trades favors for scoops",
+      "{npc}, a fence who knows every stolen thing in the city",
+      "{npc}, a city clerk who can find any record",
+      "{npc}, a taxi driver who knows every shortcut",
+      "{npc}, a hacker who works for pizza and principle",
+      "{npc}, a lawyer who takes {name}'s calls at 3 a.m.",
+      "{npc}, a bartender at {bar} who hears everything",
+      "{npc}, a priest at {church} who offers sanctuary, no questions asked",
+      "{npc}, a junkyard owner with an eye for useful parts",
+      "{npc}, a forensic tech in the police lab",
+      "{npc}, a homeless veteran who watches the street",
+      "{hero}, a costumed hero who trusts {name}, mostly",
+      "{npc}, a lab tech at {company} with access and a conscience",
+      "{npc}, a pilot who can get anyone anywhere, discreetly"
+    ],
+    "status": [
+      "Reliable, within limits.", "Owes {name} a favor.", "Is owed a favor by {name}, and remembers.", "Under pressure from people who want {name}.", "Getting nervous about the risks.", "Has just been compromised and doesn't know it.", "Ready to help at a moment's notice."
+    ]
+  },
+  "Ex": {
+    "who": [
+      "{npc}, a former partner who is now a police detective",
+      "{npc}, a first love who married someone else",
+      "{npc}, an ex who still has a key",
+      "{npc}, a college sweetheart who became a famous {author|chef|surgeon|news anchor}",
+      "{npc}, a former fiancé who never got a real explanation",
+      "{npc}, an ex who works for {company}",
+      "{npc}, a former partner who knows {name}'s secret",
+      "{npc}, an ex who is now dating {name}'s rival",
+      "{npc}, a summer romance that refuses to fade",
+      "{npc}, a former spouse"
+    ],
+    "status": [
+      "Friendly; they still meet for coffee.", "Bitter; avoid at all costs.", "Remarried, with kids.", "In trouble and has called for help.", "Still in love, though neither says it.", "Recently moved back to {city}.", "Holding something over {name}."
+    ]
+  },
+  "Love": {
+    "who": [
+      "{npc}, a public defender with a fierce sense of justice",
+      "{npc}, a paramedic who works the night shift",
+      "{npc}, a bookshop owner who notices too much",
+      "{npc}, a firefighter with a laugh that fills rooms",
+      "{npc}, a reporter who keeps getting too close to the truth",
+      "{npc}, a schoolteacher who thinks {name} is just clumsy",
+      "{npc}, a musician who plays at {bar} on weekends",
+      "{npc}, a scientist at {company}",
+      "{npc}, a single parent from down the hall",
+      "{npc}, a police officer who disapproves of vigilantes",
+      "{npc}, a chef who runs a tiny restaurant",
+      "{npc}, a nurse who has patched {name} up more than once"
+    ],
+    "status": [
+      "Together and happy, for now.", "Together, but the secrets are taking a toll.", "Newly in love.", "Engaged.", "Married.", "On a break.", "Unaware of {name}'s double life.", "Knows everything and stays anyway."
+    ]
+  },
+  "Dependent": {
+    "who": [
+      "{npc}, a younger cousin {name} is raising",
+      "{npc}, an elderly neighbor who depends on {name} for groceries",
+      "{npc}, a kid from the old neighborhood {name} looks out for",
+      "{npc}, a disabled cousin",
+      "{npc}, an aging aunt with failing health",
+      "{npc}, a teenage runaway {name} took in",
+      "{npc}, a former informant who needs protection",
+      "{npc}, a godchild",
+      "{npc}, the young child of a friend who died"
+    ],
+    "status": [
+      "Doing fine, for now.", "Struggling at school.", "In the hospital.", "Getting into trouble.", "Asking too many questions about where {name} goes at night.", "Thriving, and proud of {name}."
+    ]
+  },
+  "Friend": {
+    "who": [
+      "{npc}, a childhood friend who still lives in {hometown}",
+      "{npc}, a roommate from {college}",
+      "{npc}, a coworker who covers for {name}'s absences",
+      "{npc}, a gym buddy with terrible jokes",
+      "{npc}, a conspiracy-theorist podcaster who is right more often than is comfortable",
+      "{npc}, a fellow veteran",
+      "{npc}, a neighbor who brings soup and gossip",
+      "{npc}, a comic-shop owner who knows hero trivia cold",
+      "{npc}, a support-group friend",
+      "{npc}, a drinking buddy from {bar}",
+      "{npc}, a friend from the old crew who went straight",
+      "{npc}, an online friend {name} has never met in person"
+    ],
+    "status": [
+      "Still close.", "Drifting apart.", "Getting suspicious about {name}'s secrets.", "In need of help and too proud to ask.", "Recently married; less available.", "Steady as ever."
+    ]
+  }
+}

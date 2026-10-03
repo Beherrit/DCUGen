@@ -1,0 +1,1531 @@
+[
+ {
+  "id": "flame-tongue-sword",
+  "name": "Flame Tongue Sword",
+  "genre": "Fantasy Magic",
+  "category": "Magic Weapon",
+  "effect": "Damage 5 (slashing and fire), Strength-based, Improved Critical 1 (19-20), Aura (fire)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "strengthBased": true,
+    "detail": "slashing and fire"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   },
+   {
+    "name": "Aura",
+    "ranks": 1,
+    "detail": "fire"
+   }
+  ],
+  "device": "easily",
+  "cost": 5,
+  "costUnit": "pp",
+  "rawCost": 7,
+  "tags": [
+   "magic",
+   "sword",
+   "fire"
+  ],
+  "summary": "Blade wreathed in flame on command.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "frost-brand",
+  "name": "Frost Brand",
+  "genre": "Fantasy Magic",
+  "category": "Magic Weapon",
+  "effect": "Damage 5 (slashing and cold), Strength-based, Secondary Effect, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Secondary Effect"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "strengthBased": true,
+    "detail": "slashing and cold"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "device": "easily",
+  "cost": 7,
+  "costUnit": "pp",
+  "rawCost": 11,
+  "tags": [
+   "magic",
+   "sword",
+   "cold"
+  ],
+  "summary": "Icy blade whose chill keeps biting.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "vorpal-blade",
+  "name": "Vorpal Blade",
+  "genre": "Fantasy Magic",
+  "category": "Magic Weapon",
+  "effect": "Damage 4 (slashing), Strength-based, Penetrating 8, Improved Critical 3 (17-20)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Penetrating",
+      "steps": 8
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 3
+   }
+  ],
+  "device": "easily",
+  "cost": 9,
+  "costUnit": "pp",
+  "rawCost": 15,
+  "tags": [
+   "magic",
+   "sword"
+  ],
+  "summary": "Uncannily sharp sword with a wide critical range.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "holy-avenger",
+  "name": "Holy Avenger",
+  "genre": "Fantasy Magic",
+  "category": "Magic Weapon",
+  "effect": "Damage 6 (slashing, holy), Strength-based, Affects Insubstantial (Full rank), Enhanced Will 4, Immunity 5 (possession and fear), Indestructible",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Affects Insubstantial",
+      "option": "Full rank"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 6,
+    "strengthBased": true,
+    "detail": "slashing, holy"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 4,
+    "option": "Will"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 5,
+    "detail": "possession and fear"
+   }
+  ],
+  "features": [
+   {
+    "name": "Indestructible",
+    "ranks": 1
+   }
+  ],
+  "device": "removable",
+  "cost": 15,
+  "costUnit": "pp",
+  "rawCost": 18,
+  "tags": [
+   "magic",
+   "sword",
+   "holy"
+  ],
+  "summary": "Paladin's blade that strikes spirits and guards the mind.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "giant-slayer-axe",
+  "name": "Giant-Slayer Axe",
+  "genre": "Fantasy Magic",
+  "category": "Magic Weapon",
+  "effect": "Damage 4 (slashing), Strength-based, Damage 3 (vs. giants), Limited to giants",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "strengthBased": true,
+    "detail": "slashing"
+   },
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "to giants"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": false,
+    "detail": "vs. giants"
+   }
+  ],
+  "device": "easily",
+  "cost": 4,
+  "costUnit": "pp",
+  "rawCost": 6,
+  "tags": [
+   "magic",
+   "axe",
+   "bane"
+  ],
+  "summary": "Rune axe that bites deep into giants.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "returning-hammer",
+  "name": "Returning Hammer",
+  "genre": "Fantasy Magic",
+  "category": "Magic Weapon",
+  "effect": "Ranged Damage 5 (bludgeoning, thrown), Strength-based, Indestructible",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged",
+    "strengthBased": true,
+    "detail": "bludgeoning, thrown"
+   }
+  ],
+  "features": [
+   {
+    "name": "Indestructible",
+    "ranks": 1
+   }
+  ],
+  "device": "easily",
+  "cost": 7,
+  "costUnit": "pp",
+  "rawCost": 11,
+  "tags": [
+   "magic",
+   "hammer",
+   "thrown"
+  ],
+  "summary": "Dwarven hammer that flies back to the hand.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "elven-longbow",
+  "name": "Elven Longbow",
+  "genre": "Fantasy Magic",
+  "category": "Magic Weapon",
+  "effect": "Ranged Damage 5, Accurate 2, Extended Range",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Accurate",
+      "steps": 2
+     },
+     {
+      "name": "Extended Range",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "device": "easily",
+  "cost": 9,
+  "costUnit": "pp",
+  "rawCost": 13,
+  "tags": [
+   "magic",
+   "bow"
+  ],
+  "summary": "Silvery bow of uncanny accuracy and range.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "quiver-of-seeking-arrows",
+  "name": "Quiver of Seeking Arrows",
+  "genre": "Fantasy Magic",
+  "category": "Magic Weapon",
+  "effect": "Ranged Damage 4, Homing 2",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Homing",
+      "steps": 2
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "device": "easily",
+  "cost": 6,
+  "costUnit": "pp",
+  "rawCost": 10,
+  "tags": [
+   "magic",
+   "bow",
+   "arrows"
+  ],
+  "summary": "Arrows that curve to find their mark.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "wand-of-lightning",
+  "name": "Wand of Lightning",
+  "genre": "Fantasy Magic",
+  "category": "Wand",
+  "effect": "Ranged Damage 8 (electricity); AE: Line Area Damage 6 (electricity)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 8,
+    "range": "Ranged",
+    "detail": "electricity",
+    "alternates": [
+     {
+      "extras": [
+       {
+        "name": "Area",
+        "option": "Line"
+       }
+      ],
+      "flaws": [],
+      "effect": "Damage",
+      "rank": 6,
+      "strengthBased": false,
+      "detail": "electricity"
+     }
+    ]
+   }
+  ],
+  "device": "easily",
+  "cost": 11,
+  "costUnit": "pp",
+  "rawCost": 17,
+  "tags": [
+   "magic",
+   "wand",
+   "electricity"
+  ],
+  "summary": "Bolt or line of lightning.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "wand-of-sleep",
+  "name": "Wand of Sleep",
+  "genre": "Fantasy Magic",
+  "category": "Wand",
+  "effect": "Burst Area Sleep 6",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     }
+    ],
+    "flaws": [],
+    "effect": "Sleep",
+    "rank": 6
+   }
+  ],
+  "device": "easily",
+  "cost": 12,
+  "costUnit": "pp",
+  "rawCost": 18,
+  "tags": [
+   "magic",
+   "wand",
+   "sleep"
+  ],
+  "summary": "Puffs of drowsy enchantment.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "wand-of-binding",
+  "name": "Wand of Binding",
+  "genre": "Fantasy Magic",
+  "category": "Wand",
+  "effect": "Ranged Affliction 6 (magic chains; Resisted by Dodge; Hindered and Vulnerable, Defenseless and Immobilized), Extra Condition, Limited Degree",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Extra Condition"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited Degree"
+     }
+    ],
+    "effect": "Affliction",
+    "rank": 6,
+    "range": "Ranged",
+    "detail": "magic chains; Resisted by Dodge; Hindered and Vulnerable, Defenseless and Immobilized"
+   }
+  ],
+  "device": "easily",
+  "cost": 8,
+  "costUnit": "pp",
+  "rawCost": 12,
+  "tags": [
+   "magic",
+   "wand",
+   "capture"
+  ],
+  "summary": "Conjures glowing chains.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "staff-of-fire",
+  "name": "Staff of Fire",
+  "genre": "Fantasy Magic",
+  "category": "Staff",
+  "effect": "Ranged Damage 8 (fire); AE: Ranged Burst Area Damage 6 (fire); AE: Cone Area Damage 6 (fire), Immunity 2 (heat and fire), Limited to half effect",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 8,
+    "range": "Ranged",
+    "detail": "fire",
+    "alternates": [
+     {
+      "extras": [
+       {
+        "name": "Area",
+        "option": "Burst"
+       }
+      ],
+      "flaws": [],
+      "effect": "Damage",
+      "rank": 6,
+      "range": "Ranged",
+      "detail": "fire"
+     },
+     {
+      "extras": [
+       {
+        "name": "Area",
+        "option": "Cone"
+       }
+      ],
+      "flaws": [],
+      "effect": "Damage",
+      "rank": 6,
+      "strengthBased": false,
+      "detail": "fire"
+     }
+    ]
+   },
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "half effect"
+     }
+    ],
+    "effect": "Immunity",
+    "rank": 2,
+    "detail": "heat and fire"
+   }
+  ],
+  "device": "removable",
+  "cost": 16,
+  "costUnit": "pp",
+  "rawCost": 19,
+  "tags": [
+   "magic",
+   "staff",
+   "fire"
+  ],
+  "summary": "Fire bolt, fireball or cone of flame.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "healing-staff",
+  "name": "Healing Staff",
+  "genre": "Fantasy Magic",
+  "category": "Staff",
+  "effect": "Healing 6, Restorative",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Restorative"
+     }
+    ],
+    "flaws": [],
+    "effect": "Healing",
+    "rank": 6
+   }
+  ],
+  "device": "removable",
+  "cost": 15,
+  "costUnit": "pp",
+  "rawCost": 18,
+  "tags": [
+   "magic",
+   "staff",
+   "healing"
+  ],
+  "summary": "Mends wounds and restores drained vigor.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "ring-of-invisibility",
+  "name": "Ring of Invisibility",
+  "genre": "Fantasy Magic",
+  "category": "Ring",
+  "effect": "Invisibility (All visual senses; invisible)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Invisibility",
+    "rank": 0,
+    "option": "All visual senses",
+    "detail": "invisible"
+   }
+  ],
+  "device": "easily",
+  "cost": 6,
+  "costUnit": "pp",
+  "rawCost": 8,
+  "tags": [
+   "magic",
+   "ring",
+   "stealth"
+  ],
+  "summary": "Turns the wearer invisible to all sight.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "ring-of-protection",
+  "name": "Ring of Protection",
+  "genre": "Fantasy Magic",
+  "category": "Ring",
+  "effect": "Protection 4, Sustained, Enhanced Dodge 2",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Sustained"
+     }
+    ],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 4
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 2,
+    "option": "Dodge"
+   }
+  ],
+  "device": "easily",
+  "cost": 4,
+  "costUnit": "pp",
+  "rawCost": 6,
+  "tags": [
+   "magic",
+   "ring",
+   "defense"
+  ],
+  "summary": "Shimmering ward around the wearer.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "ring-of-warmth",
+  "name": "Ring of Warmth",
+  "genre": "Fantasy Magic",
+  "category": "Ring",
+  "effect": "Immunity 2 (cold and heat)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 2,
+    "detail": "cold and heat"
+   }
+  ],
+  "device": "easily",
+  "cost": 2,
+  "costUnit": "pp",
+  "rawCost": 2,
+  "tags": [
+   "magic",
+   "ring",
+   "environment"
+  ],
+  "summary": "Comfortable in any weather.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "ring-of-water-breathing",
+  "name": "Ring of Water Breathing",
+  "genre": "Fantasy Magic",
+  "category": "Ring",
+  "effect": "Immunity 2 (drowning), Swimming 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 2,
+    "detail": "drowning"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Swimming",
+    "rank": 2
+   }
+  ],
+  "device": "easily",
+  "cost": 4,
+  "costUnit": "pp",
+  "rawCost": 4,
+  "tags": [
+   "magic",
+   "ring",
+   "underwater"
+  ],
+  "summary": "Breathe and swim like a fish.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "cloak-of-elvenkind",
+  "name": "Cloak of Elvenkind",
+  "genre": "Fantasy Magic",
+  "category": "Cloak",
+  "effect": "Enhanced Stealth 10, Concealment 1 (blends with surroundings), Blending",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 10,
+    "option": "Stealth"
+   },
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Blending"
+     }
+    ],
+    "effect": "Concealment",
+    "rank": 1,
+    "detail": "blends with surroundings"
+   }
+  ],
+  "device": "removable",
+  "cost": 5,
+  "costUnit": "pp",
+  "rawCost": 6,
+  "tags": [
+   "magic",
+   "cloak",
+   "stealth"
+  ],
+  "summary": "Grey cloak that melts into shadow and leaf.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "levitation-cloak",
+  "name": "Levitation Cloak",
+  "genre": "Fantasy Magic",
+  "category": "Cloak",
+  "effect": "Flight 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Flight",
+    "rank": 4
+   }
+  ],
+  "device": "removable",
+  "cost": 7,
+  "costUnit": "pp",
+  "rawCost": 8,
+  "tags": [
+   "magic",
+   "cloak",
+   "flight"
+  ],
+  "summary": "High-collared cape that flies at the wearer's will (Flight 2 pp per rank).",
+  "source": "GG 65"
+ },
+ {
+  "id": "magic-carpet",
+  "name": "Magic Carpet",
+  "genre": "Fantasy Magic",
+  "category": "Wondrous Item",
+  "effect": "Line Area Flight 5, Affects Others (Self and others), Platform",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Affects Others",
+      "option": "Self and others"
+     },
+     {
+      "name": "Area",
+      "option": "Line"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Platform"
+     }
+    ],
+    "effect": "Flight",
+    "rank": 5
+   }
+  ],
+  "device": "removable",
+  "cost": 12,
+  "costUnit": "pp",
+  "rawCost": 15,
+  "tags": [
+   "magic",
+   "flight",
+   "vehicle"
+  ],
+  "summary": "Flying rug for a few passengers (3 pp per rank).",
+  "source": "GG 65"
+ },
+ {
+  "id": "seven-league-boots",
+  "name": "Seven-League Boots",
+  "genre": "Fantasy Magic",
+  "category": "Boots",
+  "effect": "Teleport 6, Accurate, Easy",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Accurate"
+     },
+     {
+      "name": "Easy"
+     }
+    ],
+    "flaws": [],
+    "effect": "Teleport",
+    "rank": 6
+   }
+  ],
+  "device": "removable",
+  "cost": 20,
+  "costUnit": "pp",
+  "rawCost": 24,
+  "tags": [
+   "magic",
+   "boots",
+   "teleport"
+  ],
+  "summary": "Cross great distances in a single step (4 pp per rank).",
+  "source": "GG 65"
+ },
+ {
+  "id": "boots-of-speed",
+  "name": "Boots of Speed",
+  "genre": "Fantasy Magic",
+  "category": "Boots",
+  "effect": "Speed 6, Quickness 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Speed",
+    "rank": 6
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Quickness",
+    "rank": 2
+   }
+  ],
+  "device": "removable",
+  "cost": 7,
+  "costUnit": "pp",
+  "rawCost": 8,
+  "tags": [
+   "magic",
+   "boots",
+   "speed"
+  ],
+  "summary": "Run like the wind.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "winged-boots",
+  "name": "Winged Boots",
+  "genre": "Fantasy Magic",
+  "category": "Boots",
+  "effect": "Flight 3, Wings",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Wings"
+     }
+    ],
+    "effect": "Flight",
+    "rank": 3
+   }
+  ],
+  "device": "removable",
+  "cost": 3,
+  "costUnit": "pp",
+  "rawCost": 3,
+  "tags": [
+   "magic",
+   "boots",
+   "flight"
+  ],
+  "summary": "Little wings sprout at the heels.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "boots-of-springing",
+  "name": "Boots of Springing",
+  "genre": "Fantasy Magic",
+  "category": "Boots",
+  "effect": "Leaping 6",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Leaping",
+    "rank": 6
+   }
+  ],
+  "device": "easily",
+  "cost": 4,
+  "costUnit": "pp",
+  "rawCost": 6,
+  "tags": [
+   "magic",
+   "boots",
+   "leaping"
+  ],
+  "summary": "Bound over walls.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "gauntlets-of-ogre-power",
+  "name": "Gauntlets of Ogre Power",
+  "genre": "Fantasy Magic",
+  "category": "Gloves",
+  "effect": "Enhanced Strength 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 4,
+    "option": "Strength"
+   }
+  ],
+  "device": "removable",
+  "cost": 7,
+  "costUnit": "pp",
+  "rawCost": 8,
+  "tags": [
+   "magic",
+   "strength"
+  ],
+  "summary": "Iron gauntlets granting brute strength.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "belt-of-giant-strength",
+  "name": "Belt of Giant Strength",
+  "genre": "Fantasy Magic",
+  "category": "Belt",
+  "effect": "Enhanced Strength 6, Power-Lifting 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 6,
+    "option": "Strength"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Power-Lifting",
+    "rank": 2
+   }
+  ],
+  "device": "removable",
+  "cost": 12,
+  "costUnit": "pp",
+  "rawCost": 14,
+  "tags": [
+   "magic",
+   "strength"
+  ],
+  "summary": "Girdle of titanic might.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "mithril-shirt",
+  "name": "Mithril Shirt",
+  "genre": "Fantasy Magic",
+  "category": "Magic Armor",
+  "effect": "Protection 5, Impervious, Subtle",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Impervious"
+     },
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 5
+   }
+  ],
+  "device": "removable",
+  "cost": 9,
+  "costUnit": "pp",
+  "rawCost": 11,
+  "tags": [
+   "magic",
+   "armor",
+   "light armor"
+  ],
+  "summary": "Feather-light ring shirt that turns blades.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "dragonscale-armor",
+  "name": "Dragonscale Armor",
+  "genre": "Fantasy Magic",
+  "category": "Magic Armor",
+  "effect": "Protection 7, Impervious, Immunity 5 (fire)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Impervious"
+     }
+    ],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 7
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 5,
+    "detail": "fire"
+   }
+  ],
+  "device": "removable",
+  "cost": 16,
+  "costUnit": "pp",
+  "rawCost": 19,
+  "tags": [
+   "magic",
+   "armor",
+   "fire"
+  ],
+  "summary": "Scales of a slain wyrm; shrugs off flame.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "ghost-shirt",
+  "name": "Ghost Shirt",
+  "genre": "Fantasy Magic",
+  "category": "Magic Armor",
+  "effect": "Protection 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 4
+   }
+  ],
+  "device": "easily",
+  "cost": 4,
+  "costUnit": "pp",
+  "rawCost": 4,
+  "tags": [
+   "magic",
+   "armor",
+   "concealable"
+  ],
+  "summary": "Plain garment enchanted to turn weapons (Protection 1 pp per rank).",
+  "source": "GG 64"
+ },
+ {
+  "id": "warding-bracer",
+  "name": "Warding Bracer",
+  "genre": "Fantasy Magic",
+  "category": "Magic Armor",
+  "effect": "Enhanced Parry 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 4,
+    "option": "Parry"
+   }
+  ],
+  "device": "easily",
+  "cost": 4,
+  "costUnit": "pp",
+  "rawCost": 4,
+  "tags": [
+   "magic",
+   "bracer",
+   "defense"
+  ],
+  "summary": "Wrist-guard that blocks better than its wearer could.",
+  "source": "GG 65"
+ },
+ {
+  "id": "shield-of-the-sun",
+  "name": "Shield of the Sun",
+  "genre": "Fantasy Magic",
+  "category": "Magic Armor",
+  "effect": "Enhanced Dodge 3, Enhanced Parry 3, Cone Area Dazzle 5 (blinding flare), Diminished Range",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 3,
+    "option": "Dodge"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 3,
+    "option": "Parry"
+   },
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Cone"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Diminished Range",
+      "steps": 1
+     }
+    ],
+    "effect": "Dazzle",
+    "rank": 5,
+    "detail": "blinding flare"
+   }
+  ],
+  "device": "removable",
+  "cost": 16,
+  "costUnit": "pp",
+  "rawCost": 20,
+  "tags": [
+   "magic",
+   "shield",
+   "light"
+  ],
+  "summary": "Polished shield that flashes with sunlight.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "second-chance-ring",
+  "name": "Second Chance Ring",
+  "genre": "Fantasy Magic",
+  "category": "Ring",
+  "effect": "Immortality 1 (returns from death in a week)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immortality",
+    "rank": 1,
+    "detail": "returns from death in a week"
+   }
+  ],
+  "device": "easily",
+  "cost": 2,
+  "costUnit": "pp",
+  "rawCost": 2,
+  "tags": [
+   "magic",
+   "ring",
+   "death"
+  ],
+  "summary": "Cheats death while worn (Immortality 2 pp per rank).",
+  "source": "GG 65"
+ },
+ {
+  "id": "amulet-of-life-protection",
+  "name": "Amulet of Life Protection",
+  "genre": "Fantasy Magic",
+  "category": "Amulet",
+  "effect": "Immunity 10 (life support)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 10,
+    "detail": "life support"
+   }
+  ],
+  "device": "removable",
+  "cost": 8,
+  "costUnit": "pp",
+  "rawCost": 10,
+  "tags": [
+   "magic",
+   "amulet",
+   "environment"
+  ],
+  "summary": "Breathe and endure anywhere.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "amulet-of-mind-shielding",
+  "name": "Amulet of Mind Shielding",
+  "genre": "Fantasy Magic",
+  "category": "Amulet",
+  "effect": "Immunity 10 (mental powers)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 10,
+    "detail": "mental powers"
+   }
+  ],
+  "device": "easily",
+  "cost": 6,
+  "costUnit": "pp",
+  "rawCost": 10,
+  "tags": [
+   "magic",
+   "amulet",
+   "mental"
+  ],
+  "summary": "Blocks scrying and mind control.",
+  "source": "GG 19"
+ },
+ {
+  "id": "bag-of-holding",
+  "name": "Bag of Holding",
+  "genre": "Fantasy Magic",
+  "category": "Wondrous Item",
+  "effect": "Feature 4 (dimensional pocket, holds up to mass rank 4)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Feature",
+    "rank": 4,
+    "detail": "dimensional pocket, holds up to mass rank 4"
+   }
+  ],
+  "device": "removable",
+  "cost": 4,
+  "costUnit": "pp",
+  "rawCost": 4,
+  "tags": [
+   "magic",
+   "storage"
+  ],
+  "summary": "Bag far larger inside.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "crystal-ball",
+  "name": "Crystal Ball",
+  "genre": "Fantasy Magic",
+  "category": "Wondrous Item",
+  "effect": "Remote Sensing 10 (Two sense types; visual and auditory scrying), Check Required 2 (Expertise: Magic)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Check Required",
+      "detail": "Expertise: Magic",
+      "steps": 2
+     }
+    ],
+    "effect": "Remote Sensing",
+    "rank": 10,
+    "option": "Two sense types",
+    "detail": "visual and auditory scrying"
+   }
+  ],
+  "device": "removable",
+  "cost": 15,
+  "costUnit": "pp",
+  "rawCost": 18,
+  "tags": [
+   "magic",
+   "scrying",
+   "divination"
+  ],
+  "summary": "Scry distant places by sight and sound.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "helm-of-tongues",
+  "name": "Helm of Tongues",
+  "genre": "Fantasy Magic",
+  "category": "Wondrous Item",
+  "effect": "Comprehend 3 (languages: speak, understand, read)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Comprehend",
+    "rank": 3,
+    "detail": "languages: speak, understand, read"
+   }
+  ],
+  "device": "removable",
+  "cost": 5,
+  "costUnit": "pp",
+  "rawCost": 6,
+  "tags": [
+   "magic",
+   "language"
+  ],
+  "summary": "Speak and read every mortal tongue.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "lantern-of-revealing",
+  "name": "Lantern of Revealing",
+  "genre": "Fantasy Magic",
+  "category": "Wondrous Item",
+  "effect": "Senses 4 (Vision Counters Concealment and Illusion), Limited to within the lantern light",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "within the lantern light"
+     }
+    ],
+    "effect": "Senses",
+    "rank": 4,
+    "detail": "Vision Counters Concealment and Illusion"
+   }
+  ],
+  "device": "removable",
+  "cost": 2,
+  "costUnit": "pp",
+  "rawCost": 2,
+  "tags": [
+   "magic",
+   "light",
+   "senses"
+  ],
+  "summary": "Its light shows the invisible and the false.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "horn-of-blasting",
+  "name": "Horn of Blasting",
+  "genre": "Fantasy Magic",
+  "category": "Wondrous Item",
+  "effect": "Cone Area Damage 8 (sonic), Unreliable (five blasts a day)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Cone"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Unreliable",
+      "detail": "five blasts a day"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 8,
+    "strengthBased": false,
+    "detail": "sonic"
+   }
+  ],
+  "device": "removable",
+  "cost": 7,
+  "costUnit": "pp",
+  "rawCost": 8,
+  "tags": [
+   "magic",
+   "sonic",
+   "area"
+  ],
+  "summary": "Shattering blast of sound.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "rope-of-climbing",
+  "name": "Rope of Climbing",
+  "genre": "Fantasy Magic",
+  "category": "Wondrous Item",
+  "effect": "Elongation 4 (animated rope), Movement 1 (Wall-crawling), Limited to climbing the rope",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Elongation",
+    "rank": 4,
+    "detail": "animated rope"
+   },
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "climbing the rope"
+     }
+    ],
+    "effect": "Movement",
+    "rank": 1,
+    "detail": "Wall-crawling"
+   }
+  ],
+  "device": "easily",
+  "cost": 3,
+  "costUnit": "pp",
+  "rawCost": 5,
+  "tags": [
+   "magic",
+   "climbing"
+  ],
+  "summary": "Rope that ties and climbs on command.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "eversmoking-bottle",
+  "name": "Eversmoking Bottle",
+  "genre": "Fantasy Magic",
+  "category": "Wondrous Item",
+  "effect": "Cloud Area Concealment 4 (all visual)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Cloud"
+     }
+    ],
+    "flaws": [],
+    "effect": "Concealment",
+    "rank": 4,
+    "detail": "all visual"
+   }
+  ],
+  "device": "easily",
+  "cost": 8,
+  "costUnit": "pp",
+  "rawCost": 12,
+  "tags": [
+   "magic",
+   "smoke",
+   "concealment"
+  ],
+  "summary": "Uncorked, it pours out endless smoke.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "potion-bandolier",
+  "name": "Potion Bandolier",
+  "genre": "Fantasy Magic",
+  "category": "Potions",
+  "effect": "Healing 4; AE: Giant's Brew: Enhanced Strength 3; AE: Feather Tonic: Flight 2; AE: Antidote: Immunity 5 (poison and disease)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Healing",
+    "rank": 4,
+    "name": "Healing Draught",
+    "alternates": [
+     {
+      "extras": [],
+      "flaws": [],
+      "effect": "Enhanced Trait",
+      "rank": 3,
+      "option": "Strength",
+      "name": "Giant's Brew"
+     },
+     {
+      "extras": [],
+      "flaws": [],
+      "effect": "Flight",
+      "rank": 2,
+      "name": "Feather Tonic"
+     },
+     {
+      "extras": [],
+      "flaws": [],
+      "effect": "Immunity",
+      "rank": 5,
+      "detail": "poison and disease",
+      "name": "Antidote"
+     }
+    ]
+   }
+  ],
+  "device": "easily",
+  "cost": 7,
+  "costUnit": "pp",
+  "rawCost": 11,
+  "tags": [
+   "magic",
+   "potion",
+   "healing"
+  ],
+  "summary": "Restocking vials: healing, strength, flight or antidote (an array).",
+  "source": "DCUGen"
+ },
+ {
+  "id": "moonslayer",
+  "name": "Moonslayer",
+  "genre": "Fantasy Magic",
+  "category": "Magic Weapon",
+  "effect": "Ranged Damage 8 (ballistic, magic), Affects Insubstantial (Full rank), Feature 1 (silver bullets)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Affects Insubstantial",
+      "option": "Full rank"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 8,
+    "range": "Ranged",
+    "detail": "ballistic, magic"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Feature",
+    "rank": 1,
+    "detail": "silver bullets"
+   }
+  ],
+  "device": "removable",
+  "cost": 16,
+  "costUnit": "pp",
+  "rawCost": 19,
+  "tags": [
+   "magic",
+   "firearm",
+   "silver"
+  ],
+  "summary": "Rune-engraved six-shooter with silver bullets.",
+  "notes": "GG 64 lists 19 points without the Removable flaw; as a Removable device it costs 16.",
+  "source": "GG 64"
+ },
+ {
+  "id": "the-philosophers-stone",
+  "name": "The Philosopher's Stone",
+  "genre": "Fantasy Magic",
+  "category": "Artifact",
+  "effect": "Transform 11 (Anything into anything; any element into any other)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Transform",
+    "rank": 11,
+    "option": "Anything into anything",
+    "detail": "any element into any other"
+   }
+  ],
+  "device": "easily",
+  "cost": 33,
+  "costUnit": "pp",
+  "rawCost": 55,
+  "bookCost": 33,
+  "tags": [
+   "magic",
+   "alchemy",
+   "artifact"
+  ],
+  "summary": "Transmutes lead to gold and air to chlorine.",
+  "source": "GG 66"
+ }
+]

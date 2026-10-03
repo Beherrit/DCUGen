@@ -253,7 +253,7 @@ const matches = (value, want) => !want || lc(value).includes(lc(want));
 
 function extraFeatures(rng, entity, list, avoid) {
   const have = new Set((entity.features || []).map((f) => lc(f.name)));
-  const pool = list.filter((f) => (f.cost ?? 1) === 1 && !f.needs_detail && !avoid.test(f.name) && !have.has(lc(f.name)));
+  const pool = list.filter((f) => (f.cost ?? 1) === 1 && !f.needs_detail && !avoid.test(f.name) && !have.has(lc(f.name)) && (!f.space_only || entity.category === 'Space'));
   const n = rng.int(0, 2);
   const added = [];
   for (let i = 0; i < n && pool.length; i++) {

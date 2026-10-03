@@ -1,0 +1,945 @@
+[
+ {
+  "id": "audio-recorder",
+  "name": "Audio Recorder",
+  "genre": "Everyday",
+  "category": "Electronics",
+  "effect": "Feature 1 (records up to 8 hours of audio)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "records up to 8 hours of audio"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "electronics",
+   "recording"
+  ],
+  "summary": "Deck-of-cards sized digital recorder.",
+  "source": "DCA 148"
+ },
+ {
+  "id": "camera",
+  "name": "Camera",
+  "genre": "Everyday",
+  "category": "Electronics",
+  "effect": "Feature 1 (still photography)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "still photography"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "electronics",
+   "recording",
+   "photography"
+  ],
+  "summary": "Digital or film still camera.",
+  "source": "DCA 148"
+ },
+ {
+  "id": "cell-phone",
+  "name": "Cell Phone",
+  "genre": "Everyday",
+  "category": "Electronics",
+  "effect": "Feature 1 (communication)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "communication"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "electronics",
+   "communication",
+   "phone"
+  ],
+  "summary": "Basic handset; battery lasts about a day.",
+  "source": "DCA 148"
+ },
+ {
+  "id": "cell-phone-smartphone",
+  "name": "Cell Phone (Smartphone)",
+  "genre": "Everyday",
+  "category": "Electronics",
+  "effect": "Feature 2 (communication, internet/computer functions)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "communication, internet/computer functions"
+   }
+  ],
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "electronics",
+   "communication",
+   "phone",
+   "computer"
+  ],
+  "summary": "Phone that doubles as a pocket computer.",
+  "source": "DCA 148"
+ },
+ {
+  "id": "commlink",
+  "name": "Commlink",
+  "genre": "Everyday",
+  "category": "Electronics",
+  "effect": "Feature 1 (radio communication, about 1 mile)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "radio communication, about 1 mile"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "electronics",
+   "communication",
+   "radio"
+  ],
+  "summary": "Button-sized team radio.",
+  "source": "DCA 148"
+ },
+ {
+  "id": "computer",
+  "name": "Computer",
+  "genre": "Everyday",
+  "category": "Electronics",
+  "effect": "Feature 1 (computer with standard peripherals)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "computer with standard peripherals"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "electronics",
+   "computer"
+  ],
+  "summary": "Desktop or laptop with peripherals.",
+  "source": "DCA 148"
+ },
+ {
+  "id": "video-camera",
+  "name": "Video Camera",
+  "genre": "Everyday",
+  "category": "Electronics",
+  "effect": "Feature 2 (video and audio recording)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "video and audio recording"
+   }
+  ],
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "electronics",
+   "recording",
+   "video"
+  ],
+  "summary": "Handheld camera; about 6 hours of footage.",
+  "source": "DCA 148"
+ },
+ {
+  "id": "multi-tool",
+  "name": "Multi-tool",
+  "genre": "Everyday",
+  "category": "Tools",
+  "effect": "Feature 1 (no-tools penalty reduced from -5 to -2)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "no-tools penalty reduced from -5 to -2"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "tools"
+  ],
+  "summary": "Folding pliers with blades, drivers and cutters.",
+  "source": "DCA 149"
+ },
+ {
+  "id": "flashlight",
+  "name": "Flashlight",
+  "genre": "Everyday",
+  "category": "Tools",
+  "effect": "Feature 1 (negates darkness penalties in its beam)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "negates darkness penalties in its beam"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "light",
+   "tools"
+  ],
+  "summary": "30-foot beam that cancels darkness penalties.",
+  "source": "DCA 149"
+ },
+ {
+  "id": "fire-extinguisher",
+  "name": "Fire Extinguisher",
+  "genre": "Everyday",
+  "category": "Tools",
+  "effect": "Feature 1 (puts out a 10x10 ft. fire as a move action; two uses)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "puts out a 10x10 ft. fire as a move action; two uses"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "fire",
+   "safety"
+  ],
+  "summary": "Chemical extinguisher good for two small fires.",
+  "source": "DCA 149"
+ },
+ {
+  "id": "laptop",
+  "name": "Laptop",
+  "genre": "Everyday",
+  "category": "Electronics",
+  "effect": "Feature 1 (portable computer)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "portable computer"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "electronics",
+   "computer"
+  ],
+  "summary": "Battery-powered portable computer.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "tablet",
+  "name": "Tablet",
+  "genre": "Everyday",
+  "category": "Electronics",
+  "effect": "Feature 1 (touchscreen computer, camera)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "touchscreen computer, camera"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "electronics",
+   "computer"
+  ],
+  "summary": "Slim touchscreen computer with a camera.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "smartwatch",
+  "name": "Smartwatch",
+  "genre": "Everyday",
+  "category": "Electronics",
+  "effect": "Feature 1 (notifications, time, fitness sensors)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "notifications, time, fitness sensors"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "electronics",
+   "communication"
+  ],
+  "summary": "Wrist display paired with a phone.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "satellite-phone",
+  "name": "Satellite Phone",
+  "genre": "Everyday",
+  "category": "Electronics",
+  "effect": "Feature 2 (communication anywhere with sky view)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "communication anywhere with sky view"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "electronics",
+   "communication",
+   "phone"
+  ],
+  "summary": "Phone that works far from any cell tower.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "walkie-talkie-pair",
+  "name": "Walkie-Talkie Pair",
+  "genre": "Everyday",
+  "category": "Electronics",
+  "effect": "Feature 1 (two-way radio, about 2 miles)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "two-way radio, about 2 miles"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "electronics",
+   "communication",
+   "radio"
+  ],
+  "summary": "Pair of handheld radios.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "police-scanner",
+  "name": "Police Scanner",
+  "genre": "Everyday",
+  "category": "Electronics",
+  "effect": "Feature 1 (listen to emergency radio bands)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "listen to emergency radio bands"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "electronics",
+   "radio",
+   "investigation"
+  ],
+  "summary": "Receiver tuned to police and fire channels.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "portable-power-bank",
+  "name": "Portable Power Bank",
+  "genre": "Everyday",
+  "category": "Electronics",
+  "effect": "Feature 1 (recharges devices for a day)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "recharges devices for a day"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "electronics",
+   "power"
+  ],
+  "summary": "Pocket battery for phones and gadgets.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "drone-camera",
+  "name": "Drone (Camera)",
+  "genre": "Everyday",
+  "category": "Electronics",
+  "effect": "Feature 2 (remote aerial camera, about 1/2 mile)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "remote aerial camera, about 1/2 mile"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "electronics",
+   "recording",
+   "drone"
+  ],
+  "summary": "Quadcopter with a live video feed.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "dash-camera",
+  "name": "Dash Camera",
+  "genre": "Everyday",
+  "category": "Electronics",
+  "effect": "Feature 1 (records the road ahead)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "records the road ahead"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "electronics",
+   "recording",
+   "vehicle"
+  ],
+  "summary": "Always-on camera for a car.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "toolbox",
+  "name": "Toolbox",
+  "genre": "Everyday",
+  "category": "Tools",
+  "effect": "Feature 1 (mechanical tools, avoids no-tools penalty for Technology)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "mechanical tools, avoids no-tools penalty for Technology"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "tools",
+   "technology"
+  ],
+  "summary": "Wrenches, drivers and sockets for repairs.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "electronics-toolkit",
+  "name": "Electronics Toolkit",
+  "genre": "Everyday",
+  "category": "Tools",
+  "effect": "Feature 1 (electronics tools, avoids no-tools penalty for Technology)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "electronics tools, avoids no-tools penalty for Technology"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "tools",
+   "technology",
+   "electronics"
+  ],
+  "summary": "Soldering iron, meters and precision drivers.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "crowbar",
+  "name": "Crowbar",
+  "genre": "Everyday",
+  "category": "Tools",
+  "effect": "Feature 1 (+2 Strength checks to pry)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Strength checks to pry"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "tools"
+  ],
+  "summary": "Steel pry bar.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "duct-tape",
+  "name": "Duct Tape",
+  "genre": "Everyday",
+  "category": "Tools",
+  "effect": "Feature 1 (quick repairs and makeshift bindings)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "quick repairs and makeshift bindings"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "tools",
+   "restraint"
+  ],
+  "summary": "Fixes nearly anything for a while.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "bolt-cutters",
+  "name": "Bolt Cutters",
+  "genre": "Everyday",
+  "category": "Tools",
+  "effect": "Feature 1 (cuts chains and padlocks (Damage 4 vs. objects))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "cuts chains and padlocks (Damage 4 vs. objects)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "tools",
+   "breaking"
+  ],
+  "summary": "Long-handled cutters for chain and locks.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "lighter",
+  "name": "Lighter",
+  "genre": "Everyday",
+  "category": "Tools",
+  "effect": "Feature 1 (fire and dim light)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "fire and dim light"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "fire",
+   "light"
+  ],
+  "summary": "Pocket flame.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "pocket-knife",
+  "name": "Pocket Knife",
+  "genre": "Everyday",
+  "category": "Tools",
+  "effect": "Feature 1 (cutting tool)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "cutting tool"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "tools",
+   "blade"
+  ],
+  "summary": "Folding utility blade (as a weapon, use Knife).",
+  "source": "DCUGen"
+ },
+ {
+  "id": "sewing-kit",
+  "name": "Sewing Kit",
+  "genre": "Everyday",
+  "category": "Tools",
+  "effect": "Feature 1 (clothing and costume repairs)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "clothing and costume repairs"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "tools",
+   "costume"
+  ],
+  "summary": "Needles, thread and patches for torn costumes.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "business-suit",
+  "name": "Business Suit",
+  "genre": "Everyday",
+  "category": "Clothing",
+  "effect": "Feature 1 (+2 Persuasion in formal settings)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Persuasion in formal settings"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "clothing",
+   "social"
+  ],
+  "summary": "Sharp, well-tailored suit.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "formal-wear",
+  "name": "Formal Wear",
+  "genre": "Everyday",
+  "category": "Clothing",
+  "effect": "Feature 1 (fits in at galas; +2 Deception to blend in)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "fits in at galas; +2 Deception to blend in"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "clothing",
+   "social"
+  ],
+  "summary": "Tuxedo or evening gown.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "motorcycle-leathers",
+  "name": "Motorcycle Leathers",
+  "genre": "Everyday",
+  "category": "Clothing",
+  "effect": "Feature 1 (Protection 1 vs. scrapes; looks tough)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "Protection 1 vs. scrapes; looks tough"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "clothing",
+   "armor"
+  ],
+  "summary": "Heavy riding jacket and pants (as armor, see Leathers).",
+  "source": "DCUGen"
+ },
+ {
+  "id": "work-uniform",
+  "name": "Work Uniform",
+  "genre": "Everyday",
+  "category": "Clothing",
+  "effect": "Feature 1 (+2 Deception to pass as staff)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Deception to pass as staff"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "clothing",
+   "disguise"
+  ],
+  "summary": "Coveralls or delivery uniform that makes you invisible to the public.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "winter-coat",
+  "name": "Winter Coat",
+  "genre": "Everyday",
+  "category": "Clothing",
+  "effect": "Feature 1 (+5 to resist cold weather)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist cold weather"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "clothing",
+   "cold"
+  ],
+  "summary": "Insulated parka.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "rain-gear",
+  "name": "Rain Gear",
+  "genre": "Everyday",
+  "category": "Clothing",
+  "effect": "Feature 1 (stays dry in storms)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "stays dry in storms"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "clothing",
+   "weather"
+  ],
+  "summary": "Poncho or slicker and boots.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "sunglasses",
+  "name": "Sunglasses",
+  "genre": "Everyday",
+  "category": "Clothing",
+  "effect": "Feature 1 (+2 to resist bright-light visual Dazzle)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 to resist bright-light visual Dazzle"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "clothing",
+   "eyes"
+  ],
+  "summary": "Dark lenses; also hide where you are looking.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "backpack",
+  "name": "Backpack",
+  "genre": "Everyday",
+  "category": "Kits",
+  "effect": "Feature 1 (carry gear hands-free)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "carry gear hands-free"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "kit",
+   "storage"
+  ],
+  "summary": "Sturdy pack for everyday carry.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "first-aid-kit-home",
+  "name": "First Aid Kit (Home)",
+  "genre": "Everyday",
+  "category": "Kits",
+  "effect": "Feature 1 (avoids no-tools penalty for Treatment)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "avoids no-tools penalty for Treatment"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "kit",
+   "medical"
+  ],
+  "summary": "Bandages, antiseptic and painkillers.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "car-emergency-kit",
+  "name": "Car Emergency Kit",
+  "genre": "Everyday",
+  "category": "Kits",
+  "effect": "Feature 1 (jumper cables, flares, tire tools)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "jumper cables, flares, tire tools"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "kit",
+   "vehicle"
+  ],
+  "summary": "Roadside repair and signaling kit.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "lockpick-set",
+  "name": "Lockpick Set",
+  "genre": "Everyday",
+  "category": "Kits",
+  "effect": "Feature 1 (avoids no-tools penalty for Technology on locks)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "avoids no-tools penalty for Technology on locks"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "kit",
+   "infiltration",
+   "lock"
+  ],
+  "summary": "Picks and tension wrenches.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "art-supplies",
+  "name": "Art Supplies",
+  "genre": "Everyday",
+  "category": "Kits",
+  "effect": "Feature 1 (tools for Expertise (art) and sketching suspects)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "tools for Expertise (art) and sketching suspects"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "kit",
+   "art"
+  ],
+  "summary": "Sketchbook, pencils and paints.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "press-pass",
+  "name": "Press Pass",
+  "genre": "Everyday",
+  "category": "Credentials",
+  "effect": "Feature 1 (+2 Persuasion to get access as a journalist)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Persuasion to get access as a journalist"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "social",
+   "journalism"
+  ],
+  "summary": "Credentials that open doors at crime scenes and press events.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "library-card-archive-access",
+  "name": "Library Card & Archive Access",
+  "genre": "Everyday",
+  "category": "Credentials",
+  "effect": "Feature 1 (research tools for Expertise and Investigation)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "research tools for Expertise and Investigation"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "research",
+   "investigation"
+  ],
+  "summary": "Access to stacks, microfilm and databases.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "bicycle",
+  "name": "Bicycle",
+  "genre": "Everyday",
+  "category": "Transport",
+  "effect": "Feature 1 (Speed 2 ground travel)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "Speed 2 ground travel"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "transport"
+  ],
+  "summary": "Pedal bike for getting around the city.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "skateboard",
+  "name": "Skateboard",
+  "genre": "Everyday",
+  "category": "Transport",
+  "effect": "Feature 1 (Speed 2 on pavement; tricks with Acrobatics)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "Speed 2 on pavement; tricks with Acrobatics"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "transport"
+  ],
+  "summary": "Board for rolling through the streets.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "electric-scooter",
+  "name": "Electric Scooter",
+  "genre": "Everyday",
+  "category": "Transport",
+  "effect": "Feature 1 (Speed 3 on pavement for an hour)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "Speed 3 on pavement for an hour"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "transport",
+   "electronics"
+  ],
+  "summary": "Folding battery scooter.",
+  "source": "DCUGen"
+ }
+]

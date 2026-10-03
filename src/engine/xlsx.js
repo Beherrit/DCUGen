@@ -340,6 +340,16 @@ export function statBlockRows(ch, R) {
   rows.push(['GOAL', '', ch.goal || '']);
   if (ch.notes) rows.push(['NOTES', '', ch.notes]);
   rows.push([]);
+  if (ch.bio) {
+    rows.push([]);
+    rows.push(['BIOGRAPHY', '', ch.bio.summary || '']);
+    for (const t of ch.bio.timeline || []) rows.push([`Age ${t.age ?? ''}`, '', t.text]);
+    for (const p of ch.bio.people || []) rows.push([p.relation || 'Person', '', `${p.name}: ${p.who || ''}${p.status ? ` (${p.status})` : ''}`]);
+    for (const [label, list] of [['Motivation', ch.bio.motivations], ['Secret', ch.bio.secrets], ['Regret', ch.bio.regrets], ['Hope', ch.bio.hopes], ['GM hook', ch.bio.hooks]]) {
+      for (const x of list || []) rows.push([label, '', x]);
+    }
+  }
+  rows.push([]);
   rows.push(['STAT BLOCK (text)', '', statBlockText(ch, R)]);
   const boldRows = rows.map((r, i) => (r.length && typeof r[0] === 'string' && r[0] === r[0].toUpperCase() && r[0].length > 3 ? i : -1)).filter((i) => i >= 0);
   return { rows, boldRows };

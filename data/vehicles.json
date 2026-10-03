@@ -391,6 +391,105 @@
       "kind": "feature",
       "text": "Ladders, winches, hydraulic cutters and searchlights; +2 circumstance bonus to rescue-related checks.",
       "source": "DCUGen"
+    },
+    {
+      "name": "Artificial Gravity",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "space_only": true,
+      "text": "Gravity plating keeps the decks at about 1 g, so people aboard suffer none of the zero-g penalties and need no Environmental Adaptation inside the ship.",
+      "source": "DCUGen"
+    },
+    {
+      "name": "Armory",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "space_only": true,
+      "text": "Weapon lockers and vacuum-rated armor for a boarding or landing party. The gear itself is bought as the characters' own equipment; this just means it is aboard and maintained.",
+      "source": "DCUGen"
+    },
+    {
+      "name": "Brig",
+      "cost": 1,
+      "per_rank": true,
+      "kind": "feature",
+      "space_only": true,
+      "text": "Secure holding cells for prisoners (Technology DC 25 to break out of the locks, like a high-security vault). Take again for +5 DC each time or for a larger cell block.",
+      "source": "DCUGen (built on DCA 67)"
+    },
+    {
+      "name": "Cold Sleep Bay",
+      "cost": 1,
+      "per_rank": true,
+      "kind": "feature",
+      "space_only": true,
+      "text": "Suspended-animation pods: sleepers do not age, eat or breathe during the voyage. Waking takes a minute and leaves a sleeper fatigued for an hour. Take again for more pods (one rank per tenth of the ship's complement).",
+      "source": "DCUGen"
+    },
+    {
+      "name": "Docking Collar",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "space_only": true,
+      "text": "Universal docking clamps and an extendable pressurized tube. Docking with a cooperating ship or station is routine; docking with a disabled one is DC 10 instead of 15.",
+      "source": "DCUGen (built on DCA 67)"
+    },
+    {
+      "name": "Engineering Workshop",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "space_only": true,
+      "text": "Machine shop, spare parts and fabricators: Technology checks to repair the ship (or build gear) aboard never suffer the -5 penalty for missing tools.",
+      "source": "DCUGen (built on DCA 65)"
+    },
+    {
+      "name": "Fuel Scoop",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "space_only": true,
+      "text": "Lets the ship refuel by skimming a gas giant, comet or star corona: a DC 15 Vehicles check and time rank 12 (8 hours) of skimming.",
+      "source": "DCUGen"
+    },
+    {
+      "name": "Hangar Bay",
+      "cost": 1,
+      "per_rank": true,
+      "kind": "feature",
+      "space_only": true,
+      "text": "A launch bay for small craft: one rank holds a flight of up to four Huge or smaller craft (or one Gargantuan); take again for more. The craft are separate vehicles, bought on their own or run as minions.",
+      "source": "DCUGen"
+    },
+    {
+      "name": "Jump Computer",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "space_only": true,
+      "text": "An astrogation computer that plots FTL jumps: jump checks can be made as routine checks (take 10) when not under pressure, and plotting never suffers the -5 no-tools penalty.",
+      "source": "DCUGen (built on DCA 13)"
+    },
+    {
+      "name": "Recycling Life Support",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "space_only": true,
+      "text": "Closed-loop air, water and food systems: the ship never runs out of consumables for its normal crew. Without it, a ship carries supplies for its endurance (see Supplies and fuel in the space rules).",
+      "source": "DCUGen"
+    },
+    {
+      "name": "Self-Destruct",
+      "cost": 1,
+      "per_rank": false,
+      "kind": "feature",
+      "space_only": true,
+      "text": "A coded overload that destroys the ship after a countdown the captain sets. Anyone close enough when it blows faces a Burst Area Damage effect of the ship's Toughness rank.",
+      "source": "DCUGen (built on DCA 159)"
     }
   ],
   "premade": [
@@ -1073,6 +1172,7 @@
       "id": "book-space-shuttle",
       "name": "Space Shuttle",
       "category": "Space",
+      "class": "Shuttle",
       "setting": "Modern",
       "size": "Colossal",
       "strength": 16,
@@ -1092,6 +1192,7 @@
       "id": "book-space-fighter",
       "name": "Space Fighter",
       "category": "Space",
+      "class": "Fighter",
       "setting": "Sci-Fi",
       "size": "Huge",
       "strength": 10,
@@ -1119,6 +1220,7 @@
       "id": "book-space-cruiser",
       "name": "Space Cruiser",
       "category": "Space",
+      "class": "Cruiser",
       "setting": "Sci-Fi",
       "size": "Colossal",
       "strength": 18,
@@ -1164,6 +1266,7 @@
       "id": "book-space-battleship",
       "name": "Space Battleship",
       "category": "Space",
+      "class": "Dreadnought",
       "setting": "Sci-Fi",
       "size": "Awesome",
       "strength": 22,
@@ -2454,6 +2557,7 @@
       "id": "shuttlecraft",
       "name": "Shuttlecraft",
       "category": "Space",
+      "class": "Shuttle",
       "setting": "Sci-Fi",
       "size": "Large",
       "strength": 5,
@@ -2483,6 +2587,7 @@
       "id": "scout-ship",
       "name": "Scout Ship",
       "category": "Space",
+      "class": "Scout",
       "setting": "Sci-Fi",
       "size": "Huge",
       "strength": 8,
@@ -2522,6 +2627,7 @@
       "id": "freighter",
       "name": "Tramp Freighter",
       "category": "Space",
+      "class": "Freighter",
       "setting": "Sci-Fi",
       "size": "Gargantuan",
       "strength": 14,
@@ -2565,6 +2671,7 @@
       "id": "corsair-raider",
       "name": "Corsair Raider",
       "category": "Space",
+      "class": "Pirate Raider",
       "setting": "Sci-Fi",
       "size": "Huge",
       "strength": 10,
@@ -2616,6 +2723,7 @@
       "id": "interceptor",
       "name": "Space Interceptor",
       "category": "Space",
+      "class": "Interceptor",
       "setting": "Sci-Fi",
       "size": "Large",
       "strength": 4,
@@ -2651,6 +2759,7 @@
       "id": "dreadnought",
       "name": "Star Dreadnought",
       "category": "Space",
+      "class": "Dreadnought",
       "setting": "Sci-Fi",
       "size": "Awesome",
       "strength": 24,
@@ -2727,6 +2836,7 @@
       "id": "colony-ark",
       "name": "Colony Ark",
       "category": "Space",
+      "class": "Colony Ship",
       "setting": "Sci-Fi",
       "size": "Awesome",
       "strength": 30,
@@ -2766,6 +2876,7 @@
       "id": "escape-pod",
       "name": "Escape Pod",
       "category": "Space",
+      "class": "Escape Pod",
       "setting": "Sci-Fi",
       "size": "Medium",
       "strength": 0,
@@ -2799,6 +2910,7 @@
       "id": "alien-saucer",
       "name": "Alien Saucer",
       "category": "Space",
+      "class": "Alien Saucer",
       "setting": "Sci-Fi",
       "size": "Huge",
       "strength": 8,
@@ -2841,6 +2953,7 @@
       "id": "living-ship",
       "name": "Organic Living Ship",
       "category": "Space",
+      "class": "Living Ship",
       "setting": "Sci-Fi",
       "size": "Gargantuan",
       "strength": 14,
@@ -2883,6 +2996,7 @@
       "id": "hyperspace-yacht",
       "name": "Hyperspace Yacht",
       "category": "Space",
+      "class": "Yacht",
       "setting": "Sci-Fi",
       "size": "Huge",
       "strength": 8,
@@ -2918,6 +3032,7 @@
       "id": "mining-barge",
       "name": "Asteroid Mining Barge",
       "category": "Space",
+      "class": "Mining Ship",
       "setting": "Sci-Fi",
       "size": "Colossal",
       "strength": 18,
@@ -2974,6 +3089,7 @@
       "id": "station-tug",
       "name": "Space Station Tug",
       "category": "Space",
+      "class": "Salvage Tug",
       "setting": "Sci-Fi",
       "size": "Gargantuan",
       "strength": 14,
@@ -3032,6 +3148,7 @@
       "id": "boarding-shuttle",
       "name": "Boarding Shuttle",
       "category": "Space",
+      "class": "Dropship",
       "setting": "Sci-Fi",
       "size": "Huge",
       "strength": 10,
@@ -3911,6 +4028,4229 @@
       "crew": "1 pilot, 2 passengers",
       "summary": "A bubble-canopy pod that shrinks to insect size, or smaller, for missions inside machines and bodies.",
       "cost": 30,
+      "source": "DCUGen"
+    },
+    {
+      "id": "arrowhawk-starfighter",
+      "name": "Arrowhawk Starfighter",
+      "category": "Space",
+      "class": "Fighter",
+      "setting": "Sci-Fi",
+      "size": "Huge",
+      "strength": 9,
+      "speed": 14,
+      "movement": "Flight",
+      "defense": 8,
+      "toughness": 11,
+      "powers": [
+        {
+          "name": "Twin Blasters",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged",
+          "alternates": [
+            {
+              "name": "Seeker Missiles",
+              "effect": "Damage",
+              "rank": 10,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Area",
+                  "option": "Burst",
+                  "ranks": 4
+                },
+                {
+                  "name": "Homing",
+                  "steps": 4
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Targeting Sensors",
+          "effect": "Senses",
+          "rank": 6,
+          "detail": "Radio (radar), Accurate radio, Extended radio 3"
+        }
+      ],
+      "features": [
+        {
+          "name": "Ejection System"
+        }
+      ],
+      "crew": "1 pilot",
+      "passengers": "None",
+      "summary": "A swept-wing space-superiority fighter: twin blasters, a rack of seeker missiles and a pilot who never brakes.",
+      "cost": 63,
+      "source": "DCUGen"
+    },
+    {
+      "id": "ironjaw-heavy-fighter",
+      "name": "Ironjaw Heavy Fighter",
+      "category": "Space",
+      "class": "Fighter",
+      "setting": "Sci-Fi",
+      "size": "Huge",
+      "strength": 10,
+      "speed": 13,
+      "movement": "Flight",
+      "defense": 7,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 2
+        },
+        {
+          "name": "Laser Cannons",
+          "effect": "Damage",
+          "rank": 9,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Proton Torpedoes",
+              "effect": "Damage",
+              "rank": 11,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Area",
+                  "option": "Burst",
+                  "ranks": 6
+                },
+                {
+                  "name": "Homing",
+                  "steps": 4
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 4
+        },
+        {
+          "name": "Ejection System"
+        }
+      ],
+      "crew": "1 pilot, 1 tail gunner",
+      "passengers": "None",
+      "summary": "A brick with engines: armored, shielded and slow to turn, it soaks up flak while its torpedoes go for the capital ships.",
+      "cost": 69,
+      "source": "DCUGen"
+    },
+    {
+      "id": "longbow-jump-fighter",
+      "name": "Longbow Jump Fighter",
+      "category": "Space",
+      "class": "Fighter",
+      "setting": "Sci-Fi",
+      "size": "Huge",
+      "strength": 9,
+      "speed": 14,
+      "movement": "Flight",
+      "defense": 7,
+      "toughness": 11,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Pulse Cannons",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged"
+        },
+        {
+          "name": "Sensor Suite",
+          "effect": "Senses",
+          "rank": 7,
+          "detail": "Radio (radar), Accurate radio, Extended radio 4"
+        }
+      ],
+      "features": [
+        {
+          "name": "Jump Computer"
+        },
+        {
+          "name": "Ejection System"
+        }
+      ],
+      "crew": "1 pilot",
+      "passengers": "None",
+      "summary": "A long-range fighter with its own star drive, sent ahead of the fleet to strike where nobody expects a fighter.",
+      "cost": 67,
+      "source": "DCUGen"
+    },
+    {
+      "id": "kestrel-interceptor",
+      "name": "Kestrel Interceptor",
+      "category": "Space",
+      "class": "Interceptor",
+      "setting": "Sci-Fi",
+      "size": "Large",
+      "strength": 4,
+      "speed": 16,
+      "movement": "Flight",
+      "defense": 11,
+      "toughness": 9,
+      "powers": [
+        {
+          "name": "Rapid Pulse Guns",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            },
+            {
+              "name": "Accurate",
+              "steps": 2
+            }
+          ]
+        },
+        {
+          "name": "Pursuit Sensors",
+          "effect": "Senses",
+          "rank": 8,
+          "detail": "Radio (radar), Accurate radio, Extended radio 4, Tracking (drive trails)"
+        }
+      ],
+      "features": [
+        {
+          "name": "Ejection System"
+        }
+      ],
+      "crew": "1 pilot",
+      "passengers": "None",
+      "summary": "All engine and no armor: a dart that runs down anything in the system and shreds it with rapid pulse guns.",
+      "cost": 73,
+      "source": "DCUGen"
+    },
+    {
+      "id": "thunderhead-torpedo-bomber",
+      "name": "Thunderhead Torpedo Bomber",
+      "category": "Space",
+      "class": "Bomber",
+      "setting": "Sci-Fi",
+      "size": "Gargantuan",
+      "strength": 12,
+      "speed": 12,
+      "movement": "Flight",
+      "defense": 5,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Heavy Torpedoes",
+          "effect": "Damage",
+          "rank": 14,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 10
+            },
+            {
+              "name": "Homing",
+              "steps": 6
+            }
+          ]
+        },
+        {
+          "name": "Tail Turret",
+          "effect": "Damage",
+          "rank": 6,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 4
+        }
+      ],
+      "crew": "1 pilot, 1 bombardier, 1 tail gunner",
+      "passengers": "None",
+      "summary": "A heavy strike craft built to carry two ship-killer torpedoes through a wall of point-defense fire.",
+      "cost": 96,
+      "source": "DCUGen"
+    },
+    {
+      "id": "mauler-siege-bomber",
+      "name": "Mauler Siege Bomber",
+      "category": "Space",
+      "class": "Bomber",
+      "setting": "Sci-Fi",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 11,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 14,
+      "powers": [
+        {
+          "name": "Interplanetary Drive",
+          "effect": "Movement",
+          "rank": 1,
+          "detail": "Space Travel 1"
+        },
+        {
+          "name": "Orbital Bombs",
+          "effect": "Damage",
+          "rank": 14,
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst"
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Torpedoes",
+              "effect": "Damage",
+              "rank": 12,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Area",
+                  "option": "Burst",
+                  "ranks": 8
+                },
+                {
+                  "name": "Homing",
+                  "steps": 6
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Point-Defense Turrets",
+          "effect": "Damage",
+          "rank": 7,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 6
+        },
+        {
+          "name": "Cargo Hold",
+          "detail": "bomb bay"
+        }
+      ],
+      "crew": "6 crew",
+      "passengers": "None",
+      "summary": "An orbital bombardment craft: it parks above a fortified target and drops kinetic bombs through the clouds.",
+      "cost": 86,
+      "source": "DCUGen"
+    },
+    {
+      "id": "pelican-orbital-shuttle",
+      "name": "Pelican Orbital Shuttle",
+      "category": "Space",
+      "class": "Shuttle",
+      "setting": "Sci-Fi",
+      "size": "Huge",
+      "strength": 9,
+      "speed": 11,
+      "movement": "Flight",
+      "alt_movement": [
+        {
+          "effect": "Swimming",
+          "rank": 3
+        }
+      ],
+      "defense": 6,
+      "toughness": 10,
+      "powers": [],
+      "features": [
+        {
+          "name": "Communications Suite"
+        },
+        {
+          "name": "Cargo Hold"
+        },
+        {
+          "name": "Docking Collar"
+        }
+      ],
+      "crew": "1-2 pilots",
+      "passengers": "12 passengers or 2 tons of cargo",
+      "summary": "A stubby, reliable surface-to-orbit lifter that can splash down at sea and taxi to shore.",
+      "cost": 30,
+      "source": "DCUGen"
+    },
+    {
+      "id": "envoy-diplomatic-shuttle",
+      "name": "Envoy Diplomatic Shuttle",
+      "category": "Space",
+      "class": "Shuttle",
+      "setting": "Sci-Fi",
+      "size": "Gargantuan",
+      "strength": 12,
+      "speed": 12,
+      "movement": "Flight",
+      "defense": 5,
+      "toughness": 11,
+      "powers": [
+        {
+          "name": "Interplanetary Drive",
+          "effect": "Movement",
+          "rank": 1,
+          "detail": "Space Travel 1"
+        },
+        {
+          "name": "Courtesy Shields",
+          "effect": "Force Field",
+          "rank": 3
+        }
+      ],
+      "features": [
+        {
+          "name": "Luxury Quarters"
+        },
+        {
+          "name": "Communications Suite"
+        },
+        {
+          "name": "Artificial Gravity"
+        },
+        {
+          "name": "Docking Collar"
+        }
+      ],
+      "crew": "2 pilots, 2 stewards",
+      "passengers": "8 dignitaries",
+      "summary": "A gleaming state shuttle with a conference salon, flags on the hull and shields thick enough to survive an assassination attempt.",
+      "cost": 37,
+      "source": "DCUGen"
+    },
+    {
+      "id": "ironclad-dropship",
+      "name": "Ironclad Assault Dropship",
+      "category": "Space",
+      "class": "Dropship",
+      "setting": "Sci-Fi",
+      "size": "Gargantuan",
+      "strength": 14,
+      "speed": 11,
+      "movement": "Flight",
+      "defense": 4,
+      "toughness": 14,
+      "powers": [
+        {
+          "name": "Chin Guns",
+          "effect": "Damage",
+          "rank": 7,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Rocket Pods",
+              "effect": "Damage",
+              "rank": 9,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Area",
+                  "option": "Burst",
+                  "ranks": 5
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 6
+        },
+        {
+          "name": "Cargo Hold",
+          "detail": "vehicle bay"
+        },
+        {
+          "name": "Medical Bay"
+        },
+        {
+          "name": "Armory"
+        }
+      ],
+      "crew": "2 pilots, 1 gunner",
+      "passengers": "30 troopers and a light vehicle",
+      "summary": "An armored brick that drops through flak, slams down hard and drops its ramp in the middle of the fight.",
+      "cost": 61,
+      "source": "DCUGen"
+    },
+    {
+      "id": "hailstorm-pod-carrier",
+      "name": "Hailstorm Drop-Pod Carrier",
+      "category": "Space",
+      "class": "Dropship",
+      "setting": "Sci-Fi",
+      "size": "Colossal",
+      "strength": 17,
+      "speed": 12,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 14,
+      "powers": [
+        {
+          "name": "Interplanetary Drive",
+          "effect": "Movement",
+          "rank": 1,
+          "detail": "Space Travel 1"
+        },
+        {
+          "name": "Point-Defense Turrets",
+          "effect": "Damage",
+          "rank": 7,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 2
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 4
+        },
+        {
+          "name": "Hangar Bay",
+          "ranks": 2,
+          "detail": "drop pods"
+        },
+        {
+          "name": "Armory"
+        },
+        {
+          "name": "Medical Bay"
+        }
+      ],
+      "crew": "8 crew",
+      "passengers": "120 troopers in single drop pods",
+      "summary": "A low-orbit carrier that fires its troopers at the planet in armored pods, a hundred meteors with soldiers inside.",
+      "cost": 63,
+      "source": "DCUGen"
+    },
+    {
+      "id": "farsight-pathfinder",
+      "name": "Farsight Pathfinder",
+      "category": "Space",
+      "class": "Scout",
+      "setting": "Sci-Fi",
+      "size": "Large",
+      "strength": 4,
+      "speed": 14,
+      "movement": "Flight",
+      "defense": 10,
+      "toughness": 8,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Deep-Range Sensors",
+          "effect": "Senses",
+          "rank": 20,
+          "detail": "Radio (radar), Accurate radio, Analytical radio, Extended radio 8, Extended vision 6, Detect energy signatures (ranged)"
+        }
+      ],
+      "features": [
+        {
+          "name": "Jump Computer"
+        },
+        {
+          "name": "Navigation System"
+        },
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Laboratory Module"
+        }
+      ],
+      "crew": "2 explorers",
+      "passengers": "1 specialist",
+      "summary": "A cramped survey craft that is mostly antenna: it maps a star system from the edge and slips away before anyone sees it.",
+      "cost": 60,
+      "source": "DCUGen"
+    },
+    {
+      "id": "whisper-stealth-scout",
+      "name": "Whisper Stealth Scout",
+      "category": "Space",
+      "class": "Scout",
+      "setting": "Sci-Fi",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 13,
+      "movement": "Flight",
+      "defense": 8,
+      "toughness": 10,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Cloaking Field",
+          "effect": "Concealment",
+          "rank": 6,
+          "detail": "All visual and radio senses",
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "not while the drive burns hard or weapons fire"
+            }
+          ]
+        },
+        {
+          "name": "Sensor Suite",
+          "effect": "Senses",
+          "rank": 9,
+          "detail": "Radio (radar), Accurate radio, Extended radio 6"
+        }
+      ],
+      "features": [
+        {
+          "name": "Jump Computer"
+        },
+        {
+          "name": "Ejection System"
+        }
+      ],
+      "crew": "2 crew",
+      "passengers": "2 agents",
+      "summary": "A matte-black spy ship whose cloak hides it from eyes and radar, as long as it drifts quietly and never fires.",
+      "cost": 52,
+      "source": "DCUGen"
+    },
+    {
+      "id": "quicksilver-courier",
+      "name": "Quicksilver Courier",
+      "category": "Space",
+      "class": "Courier",
+      "setting": "Sci-Fi",
+      "size": "Large",
+      "strength": 4,
+      "speed": 16,
+      "movement": "Flight",
+      "defense": 10,
+      "toughness": 8,
+      "powers": [
+        {
+          "name": "Hyperdrive",
+          "effect": "Movement",
+          "rank": 3,
+          "detail": "Space Travel 3"
+        },
+        {
+          "name": "Subspace Radio",
+          "effect": "Communication",
+          "rank": 5,
+          "detail": "Radio"
+        }
+      ],
+      "features": [
+        {
+          "name": "Autopilot"
+        },
+        {
+          "name": "Jump Computer"
+        },
+        {
+          "name": "Hidden Compartments"
+        }
+      ],
+      "crew": "1 pilot",
+      "passengers": "1 passenger or a sealed dispatch case",
+      "summary": "The fastest hull money can buy: a silver needle that carries one message, or one person, across the galaxy before the news gets there.",
+      "cost": 65,
+      "source": "DCUGen"
+    },
+    {
+      "id": "celestine-pleasure-yacht",
+      "name": "Celestine Pleasure Yacht",
+      "category": "Space",
+      "class": "Yacht",
+      "setting": "Sci-Fi",
+      "size": "Gargantuan",
+      "strength": 12,
+      "speed": 13,
+      "movement": "Flight",
+      "defense": 5,
+      "toughness": 11,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Privacy Shields",
+          "effect": "Force Field",
+          "rank": 3
+        }
+      ],
+      "features": [
+        {
+          "name": "Luxury Quarters",
+          "ranks": 2
+        },
+        {
+          "name": "Artificial Gravity"
+        },
+        {
+          "name": "Autopilot"
+        },
+        {
+          "name": "Medical Bay"
+        },
+        {
+          "name": "Docking Collar"
+        }
+      ],
+      "crew": "4 crew, 4 stewards",
+      "passengers": "10 guests",
+      "summary": "A pearl-white yacht with a ballroom under a crystal dome, built for heiresses, royals and the occasional galactic crime lord.",
+      "cost": 43,
+      "source": "DCUGen"
+    },
+    {
+      "id": "bulkhauler-container-ship",
+      "name": "Bulkhauler Container Ship",
+      "category": "Space",
+      "class": "Freighter",
+      "setting": "Sci-Fi",
+      "size": "Colossal",
+      "strength": 22,
+      "speed": 9,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        }
+      ],
+      "features": [
+        {
+          "name": "Cargo Hold",
+          "ranks": 4
+        },
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Docking Collar"
+        },
+        {
+          "name": "Autopilot"
+        }
+      ],
+      "crew": "8 crew",
+      "passengers": "4 passengers",
+      "summary": "A spine of stacked cargo containers with an engine at one end and a cramped bridge at the other.",
+      "cost": 39,
+      "source": "DCUGen"
+    },
+    {
+      "id": "longhaul-merchant",
+      "name": "Longhaul Merchantman",
+      "category": "Space",
+      "class": "Freighter",
+      "setting": "Sci-Fi",
+      "size": "Gargantuan",
+      "strength": 15,
+      "speed": 11,
+      "movement": "Flight",
+      "defense": 4,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Defense Turret",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Cargo Hold",
+          "ranks": 2
+        },
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Engineering Workshop"
+        }
+      ],
+      "crew": "5 crew",
+      "passengers": "6 passengers",
+      "summary": "A family-run trader with a patched hull, a turret for pirates and a galley that smells of three different worlds.",
+      "cost": 61,
+      "source": "DCUGen"
+    },
+    {
+      "id": "ore-mule-hauler",
+      "name": "Ore Mule Hauler",
+      "category": "Space",
+      "class": "Hauler",
+      "setting": "Sci-Fi",
+      "size": "Gargantuan",
+      "strength": 18,
+      "speed": 8,
+      "movement": "Flight",
+      "defense": 4,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Interplanetary Drive",
+          "effect": "Movement",
+          "rank": 1,
+          "detail": "Space Travel 1"
+        },
+        {
+          "name": "Tractor Beam",
+          "effect": "Move Object",
+          "rank": 12
+        }
+      ],
+      "features": [
+        {
+          "name": "Cargo Hold",
+          "ranks": 3
+        },
+        {
+          "name": "Towing Cables"
+        }
+      ],
+      "crew": "3 crew",
+      "passengers": "None",
+      "summary": "A tug-sized engine block that drags whole strings of ore barges from the asteroid belt to the inner-system smelters.",
+      "cost": 56,
+      "source": "DCUGen"
+    },
+    {
+      "id": "brimstone-tanker",
+      "name": "Brimstone Fuel Tanker",
+      "category": "Space",
+      "class": "Tanker",
+      "setting": "Sci-Fi",
+      "size": "Colossal",
+      "strength": 20,
+      "speed": 8,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        }
+      ],
+      "features": [
+        {
+          "name": "Cargo Hold",
+          "ranks": 2,
+          "detail": "fuel tanks"
+        },
+        {
+          "name": "Fuel Scoop"
+        },
+        {
+          "name": "Docking Collar"
+        },
+        {
+          "name": "Crew Quarters"
+        }
+      ],
+      "crew": "10 crew",
+      "passengers": "None",
+      "summary": "A pot-bellied fuel ship that skims gas giants and refuels whole fleets; one good hit and it lights up the sky.",
+      "cost": 33,
+      "source": "DCUGen"
+    },
+    {
+      "id": "deepcore-prospector",
+      "name": "Deepcore Prospector",
+      "category": "Space",
+      "class": "Mining Ship",
+      "setting": "Sci-Fi",
+      "size": "Huge",
+      "strength": 10,
+      "speed": 10,
+      "movement": "Flight",
+      "defense": 6,
+      "toughness": 11,
+      "powers": [
+        {
+          "name": "Interplanetary Drive",
+          "effect": "Movement",
+          "rank": 1,
+          "detail": "Space Travel 1"
+        },
+        {
+          "name": "Core Drill Laser",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Penetrating",
+              "steps": 10
+            }
+          ],
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "to stationary targets"
+            }
+          ]
+        },
+        {
+          "name": "Tractor Beam",
+          "effect": "Move Object",
+          "rank": 10
+        },
+        {
+          "name": "Assay Sensors",
+          "effect": "Senses",
+          "rank": 8,
+          "detail": "Detect ore and minerals (ranged), Acute, Analytical, Penetrates Concealment (rock)"
+        }
+      ],
+      "features": [
+        {
+          "name": "Cargo Hold"
+        },
+        {
+          "name": "Engineering Workshop"
+        }
+      ],
+      "crew": "3 miners",
+      "passengers": "None",
+      "summary": "A one-crew-shift prospecting boat that reads an asteroid down to its core, then cuts out the good part.",
+      "cost": 78,
+      "source": "DCUGen"
+    },
+    {
+      "id": "grapple-jack-salvage-tug",
+      "name": "Grapple Jack Salvage Tug",
+      "category": "Space",
+      "class": "Salvage Tug",
+      "setting": "Sci-Fi",
+      "size": "Gargantuan",
+      "strength": 16,
+      "speed": 9,
+      "movement": "Flight",
+      "defense": 4,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Interplanetary Drive",
+          "effect": "Movement",
+          "rank": 1,
+          "detail": "Space Travel 1"
+        },
+        {
+          "name": "Tractor Beam",
+          "effect": "Move Object",
+          "rank": 14
+        },
+        {
+          "name": "Cutting Torches",
+          "effect": "Damage",
+          "rank": 8,
+          "extras": [
+            {
+              "name": "Penetrating",
+              "steps": 8
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Towing Cables"
+        },
+        {
+          "name": "Engineering Workshop"
+        },
+        {
+          "name": "Docking Collar"
+        },
+        {
+          "name": "Cargo Hold"
+        }
+      ],
+      "crew": "4 salvagers",
+      "passengers": "None",
+      "summary": "A battered claw-armed tug that tows wrecks, cuts them open and argues salvage law with anyone who objects.",
+      "cost": 76,
+      "source": "DCUGen"
+    },
+    {
+      "id": "mercy-medical-frigate",
+      "name": "Mercy Medical Frigate",
+      "category": "Space",
+      "class": "Medical Frigate",
+      "setting": "Sci-Fi",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 12,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 14,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 4
+        },
+        {
+          "name": "Transporter",
+          "effect": "Teleport",
+          "rank": 14,
+          "extras": [
+            {
+              "name": "Affects Others"
+            },
+            {
+              "name": "Increased Mass",
+              "steps": 4
+            }
+          ],
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "needs a sensor lock and lowered shields at both ends"
+            }
+          ]
+        },
+        {
+          "name": "Regeneration Tanks",
+          "effect": "Healing",
+          "rank": 6,
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "patients in the medical bay"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Medical Bay",
+          "ranks": 3
+        },
+        {
+          "name": "Laboratory Module"
+        },
+        {
+          "name": "Artificial Gravity"
+        },
+        {
+          "name": "Hangar Bay",
+          "detail": "ambulance shuttles"
+        },
+        {
+          "name": "Docking Collar"
+        }
+      ],
+      "crew": "40 crew, 60 medical staff",
+      "passengers": "200 patients",
+      "summary": "A white-hulled hospital ship with red crosses on the shields; it beams the wounded off a battlefield faster than they can bleed.",
+      "cost": 82,
+      "source": "DCUGen"
+    },
+    {
+      "id": "sabre-corvette",
+      "name": "Sabre Corvette",
+      "category": "Space",
+      "class": "Corvette",
+      "setting": "Sci-Fi",
+      "size": "Gargantuan",
+      "strength": 13,
+      "speed": 14,
+      "movement": "Flight",
+      "defense": 5,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 2
+        },
+        {
+          "name": "Laser Batteries",
+          "effect": "Damage",
+          "rank": 9,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Torpedoes",
+              "effect": "Damage",
+              "rank": 12,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Area",
+                  "option": "Burst",
+                  "ranks": 8
+                },
+                {
+                  "name": "Homing",
+                  "steps": 6
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Sensor Suite",
+          "effect": "Senses",
+          "rank": 8,
+          "detail": "Radio (radar), Accurate radio, Extended radio 5"
+        }
+      ],
+      "features": [
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Jump Computer"
+        }
+      ],
+      "crew": "20 crew",
+      "passengers": "10 marines",
+      "summary": "The smallest ship with a navy captain: fast, nimble and sent wherever a fleet would be overkill.",
+      "cost": 79,
+      "source": "DCUGen"
+    },
+    {
+      "id": "lantern-customs-cutter",
+      "name": "Lantern Customs Cutter",
+      "category": "Space",
+      "class": "Corvette",
+      "setting": "Sci-Fi",
+      "size": "Gargantuan",
+      "strength": 13,
+      "speed": 14,
+      "movement": "Flight",
+      "defense": 5,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Interplanetary Drive",
+          "effect": "Movement",
+          "rank": 1,
+          "detail": "Space Travel 1"
+        },
+        {
+          "name": "Ion Cannon",
+          "effect": "Affliction",
+          "rank": 10,
+          "range": "Ranged",
+          "detail": "Resisted by Toughness; impaired, disabled, immobilized (systems shut down)",
+          "extras": [
+            {
+              "name": "Alternate Resistance"
+            }
+          ],
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "only vehicles and machines"
+            }
+          ]
+        },
+        {
+          "name": "Tractor Beam",
+          "effect": "Move Object",
+          "rank": 12
+        },
+        {
+          "name": "Warning Lasers",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        },
+        {
+          "name": "Inspection Scanners",
+          "effect": "Senses",
+          "rank": 12,
+          "detail": "Radio (radar), Accurate radio, Extended radio 5, Penetrates Concealment (hulls)"
+        }
+      ],
+      "features": [
+        {
+          "name": "Brig"
+        },
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Communications Suite"
+        }
+      ],
+      "crew": "15 crew",
+      "passengers": "6 prisoners",
+      "summary": "A system patrol cutter that scans every hold, disables runners with its ion cannon and tows them home.",
+      "cost": 119,
+      "source": "DCUGen"
+    },
+    {
+      "id": "vigilant-frigate",
+      "name": "Vigilant Escort Frigate",
+      "category": "Space",
+      "class": "Frigate",
+      "setting": "Sci-Fi",
+      "size": "Colossal",
+      "strength": 17,
+      "speed": 13,
+      "movement": "Flight",
+      "defense": 3,
+      "toughness": 15,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 3
+        },
+        {
+          "name": "Beam Batteries",
+          "effect": "Damage",
+          "rank": 11,
+          "range": "Ranged",
+          "alternates": [
+            {
+              "name": "Torpedoes",
+              "effect": "Damage",
+              "rank": 12,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Area",
+                  "option": "Burst",
+                  "ranks": 9
+                },
+                {
+                  "name": "Homing",
+                  "steps": 6
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Point-Defense Turrets",
+          "effect": "Damage",
+          "rank": 7,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        },
+        {
+          "name": "Sensor Suite",
+          "effect": "Senses",
+          "rank": 9,
+          "detail": "Radio (radar), Accurate radio, Extended radio 6"
+        }
+      ],
+      "features": [
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Medical Bay"
+        },
+        {
+          "name": "Hangar Bay"
+        }
+      ],
+      "crew": "90 crew",
+      "passengers": "20 marines",
+      "summary": "A workhorse escort that screens convoys, fields a flight of fighters and shoots down incoming torpedoes.",
+      "cost": 97,
+      "source": "DCUGen"
+    },
+    {
+      "id": "picket-frigate",
+      "name": "Picket Frigate",
+      "category": "Space",
+      "class": "Frigate",
+      "setting": "Sci-Fi",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 14,
+      "movement": "Flight",
+      "defense": 4,
+      "toughness": 14,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Subspace Radio",
+          "effect": "Communication",
+          "rank": 5,
+          "detail": "Radio"
+        },
+        {
+          "name": "Beam Batteries",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged",
+          "alternates": [
+            {
+              "name": "Torpedoes",
+              "effect": "Damage",
+              "rank": 11,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Area",
+                  "option": "Burst",
+                  "ranks": 8
+                },
+                {
+                  "name": "Homing",
+                  "steps": 6
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Early-Warning Array",
+          "effect": "Senses",
+          "rank": 16,
+          "detail": "Radio (radar), Accurate radio, Extended radio 10, Radius, Detect FTL jumps (ranged)"
+        }
+      ],
+      "features": [
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Communications Suite"
+        },
+        {
+          "name": "Jump Computer"
+        }
+      ],
+      "crew": "70 crew",
+      "passengers": "None",
+      "summary": "A frontier sentry posted at the edge of a system, listening for jump flashes and calling the fleet the moment one appears.",
+      "cost": 99,
+      "source": "DCUGen"
+    },
+    {
+      "id": "harrier-destroyer",
+      "name": "Harrier Destroyer",
+      "category": "Space",
+      "class": "Destroyer",
+      "setting": "Sci-Fi",
+      "size": "Colossal",
+      "strength": 18,
+      "speed": 14,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 16,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 4
+        },
+        {
+          "name": "Particle Cannons",
+          "effect": "Damage",
+          "rank": 12,
+          "range": "Ranged",
+          "alternates": [
+            {
+              "name": "Torpedoes",
+              "effect": "Damage",
+              "rank": 13,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Area",
+                  "option": "Burst",
+                  "ranks": 10
+                },
+                {
+                  "name": "Homing",
+                  "steps": 8
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Point-Defense Turrets",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        },
+        {
+          "name": "Sensor Suite",
+          "effect": "Senses",
+          "rank": 9,
+          "detail": "Radio (radar), Accurate radio, Extended radio 6"
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 6
+        },
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Medical Bay"
+        }
+      ],
+      "crew": "180 crew",
+      "passengers": "40 marines",
+      "summary": "A lean hunter that runs ahead of the battle line, gutting enemy escorts with particle cannons.",
+      "cost": 111,
+      "source": "DCUGen"
+    },
+    {
+      "id": "stormcaller-missile-destroyer",
+      "name": "Stormcaller Missile Destroyer",
+      "category": "Space",
+      "class": "Destroyer",
+      "setting": "Sci-Fi",
+      "size": "Colossal",
+      "strength": 18,
+      "speed": 13,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 15,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 3
+        },
+        {
+          "name": "Missile Swarm",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            },
+            {
+              "name": "Homing",
+              "steps": 6
+            },
+            {
+              "name": "Extended Range",
+              "steps": 2
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Long-Range Torpedoes",
+              "effect": "Damage",
+              "rank": 13,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Area",
+                  "option": "Burst",
+                  "ranks": 10
+                },
+                {
+                  "name": "Homing",
+                  "steps": 8
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Point-Defense Turrets",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 4
+        },
+        {
+          "name": "Crew Quarters"
+        }
+      ],
+      "crew": "150 crew",
+      "passengers": "None",
+      "summary": "A launch-tube ship that empties its magazines at extreme range and lets the homing missiles sort out the targets.",
+      "cost": 109,
+      "source": "DCUGen"
+    },
+    {
+      "id": "aegis-heavy-cruiser",
+      "name": "Aegis Heavy Cruiser",
+      "category": "Space",
+      "class": "Cruiser",
+      "setting": "Sci-Fi",
+      "size": "Awesome",
+      "strength": 22,
+      "speed": 14,
+      "movement": "Flight",
+      "defense": 0,
+      "toughness": 17,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 5
+        },
+        {
+          "name": "Beam Batteries",
+          "effect": "Damage",
+          "rank": 13,
+          "range": "Ranged",
+          "alternates": [
+            {
+              "name": "Energy Torpedoes",
+              "effect": "Damage",
+              "rank": 13,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Area",
+                  "option": "Burst",
+                  "ranks": 10
+                },
+                {
+                  "name": "Homing",
+                  "steps": 8
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Point-Defense Turrets",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        },
+        {
+          "name": "Tractor Beam",
+          "effect": "Move Object",
+          "rank": 14
+        },
+        {
+          "name": "Transporter",
+          "effect": "Teleport",
+          "rank": 15,
+          "extras": [
+            {
+              "name": "Affects Others"
+            },
+            {
+              "name": "Increased Mass",
+              "steps": 4
+            }
+          ],
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "needs a sensor lock and lowered shields at both ends"
+            }
+          ]
+        },
+        {
+          "name": "Sensor Suite",
+          "effect": "Senses",
+          "rank": 10,
+          "detail": "Radio (radar), Accurate radio, Extended radio 7"
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 8
+        },
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Medical Bay"
+        },
+        {
+          "name": "Hangar Bay"
+        },
+        {
+          "name": "Brig"
+        },
+        {
+          "name": "Artificial Gravity"
+        }
+      ],
+      "crew": "400 crew",
+      "passengers": "100 marines",
+      "summary": "The backbone of a battle fleet: beams, torpedoes, a fighter flight and a transporter room for boarding parties.",
+      "cost": 182,
+      "source": "DCUGen"
+    },
+    {
+      "id": "meridian-explorer-cruiser",
+      "name": "Meridian Explorer Cruiser",
+      "category": "Space",
+      "class": "Cruiser",
+      "setting": "Sci-Fi",
+      "size": "Awesome",
+      "strength": 22,
+      "speed": 14,
+      "movement": "Flight",
+      "defense": 0,
+      "toughness": 16,
+      "powers": [
+        {
+          "name": "Hyperdrive",
+          "effect": "Movement",
+          "rank": 3,
+          "detail": "Space Travel 3"
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 4
+        },
+        {
+          "name": "Phase Beams",
+          "effect": "Damage",
+          "rank": 12,
+          "range": "Ranged",
+          "alternates": [
+            {
+              "name": "Photon Torpedoes",
+              "effect": "Damage",
+              "rank": 12,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Area",
+                  "option": "Burst",
+                  "ranks": 8
+                },
+                {
+                  "name": "Homing",
+                  "steps": 8
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Tractor Beam",
+          "effect": "Move Object",
+          "rank": 14
+        },
+        {
+          "name": "Transporter",
+          "effect": "Teleport",
+          "rank": 16,
+          "extras": [
+            {
+              "name": "Affects Others"
+            },
+            {
+              "name": "Increased Mass",
+              "steps": 4
+            }
+          ],
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "needs a sensor lock and lowered shields at both ends"
+            }
+          ]
+        },
+        {
+          "name": "Subspace Radio",
+          "effect": "Communication",
+          "rank": 5,
+          "detail": "Radio"
+        },
+        {
+          "name": "Survey Sensors",
+          "effect": "Senses",
+          "rank": 21,
+          "detail": "Radio (radar), Accurate radio, Analytical radio, Extended radio 9, Detect life signs (ranged), Extended life signs 6"
+        }
+      ],
+      "features": [
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Medical Bay"
+        },
+        {
+          "name": "Laboratory Module",
+          "ranks": 2
+        },
+        {
+          "name": "Hangar Bay"
+        },
+        {
+          "name": "Artificial Gravity"
+        },
+        {
+          "name": "Recycling Life Support"
+        },
+        {
+          "name": "Jump Computer"
+        }
+      ],
+      "crew": "500 crew",
+      "passengers": "200 scientists and families",
+      "summary": "A five-year-mission ship: a city of explorers with labs, shuttles, a transporter and guns it hopes never to use.",
+      "cost": 184,
+      "source": "DCUGen"
+    },
+    {
+      "id": "tempest-battlecruiser",
+      "name": "Tempest Battlecruiser",
+      "category": "Space",
+      "class": "Battlecruiser",
+      "setting": "Sci-Fi",
+      "size": "Awesome",
+      "strength": 24,
+      "speed": 16,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "in space only; cannot enter an atmosphere"
+        }
+      ],
+      "defense": 0,
+      "toughness": 19,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 5,
+          "extras": [
+            {
+              "name": "Impervious"
+            }
+          ]
+        },
+        {
+          "name": "Main Guns",
+          "effect": "Damage",
+          "rank": 15,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 12
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Lance Beams",
+              "effect": "Damage",
+              "rank": 15,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Penetrating",
+                  "steps": 6
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Point-Defense Turrets",
+          "effect": "Damage",
+          "rank": 9,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        },
+        {
+          "name": "Sensor Suite",
+          "effect": "Senses",
+          "rank": 11,
+          "detail": "Radio (radar), Accurate radio, Extended radio 8"
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 10
+        },
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Medical Bay"
+        },
+        {
+          "name": "Hangar Bay",
+          "ranks": 2
+        },
+        {
+          "name": "Artificial Gravity"
+        }
+      ],
+      "crew": "1,200 crew",
+      "passengers": "200 marines",
+      "summary": "Battleship guns on a cruiser's engines: it outruns what it cannot outgun and outguns everything else.",
+      "cost": 139,
+      "source": "DCUGen"
+    },
+    {
+      "id": "bastion-fleet-carrier",
+      "name": "Bastion Fleet Carrier",
+      "category": "Space",
+      "class": "Carrier",
+      "setting": "Sci-Fi",
+      "size": "Awesome",
+      "strength": 26,
+      "speed": 12,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "in space only; cannot enter an atmosphere"
+        }
+      ],
+      "defense": 0,
+      "toughness": 18,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 4
+        },
+        {
+          "name": "Flak Batteries",
+          "effect": "Damage",
+          "rank": 9,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        },
+        {
+          "name": "Fleet Command Net",
+          "effect": "Communication",
+          "rank": 5,
+          "detail": "Radio"
+        },
+        {
+          "name": "Sensor Suite",
+          "effect": "Senses",
+          "rank": 11,
+          "detail": "Radio (radar), Accurate radio, Extended radio 8"
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 8
+        },
+        {
+          "name": "Hangar Bay",
+          "ranks": 4
+        },
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Medical Bay",
+          "ranks": 2
+        },
+        {
+          "name": "Engineering Workshop"
+        },
+        {
+          "name": "Artificial Gravity"
+        },
+        {
+          "name": "Communications Suite"
+        }
+      ],
+      "crew": "3,000 crew and pilots",
+      "passengers": "64 fighters and bombers (bought separately)",
+      "summary": "A floating airfield wrapped in flak guns: on its own it can barely fight, but its sixty-four fighters can.",
+      "cost": 110,
+      "source": "DCUGen"
+    },
+    {
+      "id": "swarmhold-drone-carrier",
+      "name": "Swarmhold Drone Carrier",
+      "category": "Space",
+      "class": "Carrier",
+      "setting": "Sci-Fi",
+      "size": "Colossal",
+      "strength": 18,
+      "speed": 12,
+      "movement": "Flight",
+      "defense": 2,
+      "toughness": 15,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 3
+        },
+        {
+          "name": "Point-Defense Turrets",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        },
+        {
+          "name": "Drone Control Link",
+          "effect": "Communication",
+          "rank": 3,
+          "detail": "Radio"
+        }
+      ],
+      "features": [
+        {
+          "name": "Hangar Bay",
+          "ranks": 3,
+          "detail": "combat drones"
+        },
+        {
+          "name": "Remote Control"
+        },
+        {
+          "name": "Engineering Workshop"
+        }
+      ],
+      "crew": "60 crew and drone controllers",
+      "passengers": "48 remote-piloted drones (minions)",
+      "summary": "A lean carrier with no pilots aboard: its drone wings fly by remote from a dark control room.",
+      "cost": 80,
+      "source": "DCUGen"
+    },
+    {
+      "id": "sovereign-dreadnought",
+      "name": "Sovereign Dreadnought",
+      "category": "Space",
+      "class": "Dreadnought",
+      "setting": "Sci-Fi",
+      "size": "Awesome",
+      "strength": 28,
+      "speed": 13,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "in space only; cannot enter an atmosphere"
+        }
+      ],
+      "defense": 0,
+      "toughness": 22,
+      "powers": [
+        {
+          "name": "Hyperdrive",
+          "effect": "Movement",
+          "rank": 3,
+          "detail": "Space Travel 3"
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 6,
+          "extras": [
+            {
+              "name": "Impervious"
+            }
+          ]
+        },
+        {
+          "name": "Spinal Lance",
+          "effect": "Damage",
+          "rank": 18,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Penetrating",
+              "steps": 10
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Heavy Torpedoes",
+              "effect": "Damage",
+              "rank": 16,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Area",
+                  "option": "Burst",
+                  "ranks": 12
+                },
+                {
+                  "name": "Homing",
+                  "steps": 8
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Point-Defense Turrets",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        },
+        {
+          "name": "Tractor Beam",
+          "effect": "Move Object",
+          "rank": 16
+        },
+        {
+          "name": "Sensor Suite",
+          "effect": "Senses",
+          "rank": 12,
+          "detail": "Radio (radar), Accurate radio, Extended radio 9"
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 12
+        },
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Medical Bay",
+          "ranks": 2
+        },
+        {
+          "name": "Hangar Bay",
+          "ranks": 3
+        },
+        {
+          "name": "Brig",
+          "ranks": 2
+        },
+        {
+          "name": "Artificial Gravity"
+        },
+        {
+          "name": "Engineering Workshop"
+        }
+      ],
+      "crew": "8,000 crew",
+      "passengers": "2,000 troops",
+      "summary": "An empire's flagship, miles long, built around a spinal lance that punches through planetary shields.",
+      "cost": 194,
+      "source": "DCUGen"
+    },
+    {
+      "id": "celestial-throne-dreadnought",
+      "name": "Celestial Throne",
+      "category": "Space",
+      "class": "Dreadnought",
+      "setting": "Cosmic",
+      "size": "Awesome",
+      "strength": 35,
+      "speed": 18,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "in space only; cannot enter an atmosphere"
+        }
+      ],
+      "defense": 0,
+      "toughness": 25,
+      "powers": [
+        {
+          "name": "Hyperdrive",
+          "effect": "Movement",
+          "rank": 3,
+          "detail": "Space Travel 3"
+        },
+        {
+          "name": "Throne Aegis",
+          "effect": "Force Field",
+          "rank": 8,
+          "extras": [
+            {
+              "name": "Impervious"
+            }
+          ]
+        },
+        {
+          "name": "Star Lance",
+          "effect": "Damage",
+          "rank": 20,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 15
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Sunfire Batteries",
+              "effect": "Damage",
+              "rank": 18,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Multiattack"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Tractor Beam",
+          "effect": "Move Object",
+          "rank": 20
+        },
+        {
+          "name": "Transporter",
+          "effect": "Teleport",
+          "rank": 20,
+          "extras": [
+            {
+              "name": "Affects Others"
+            },
+            {
+              "name": "Increased Mass",
+              "steps": 4
+            }
+          ],
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "needs a sensor lock and lowered shields at both ends"
+            }
+          ]
+        },
+        {
+          "name": "Throne Sight",
+          "effect": "Senses",
+          "rank": 26,
+          "detail": "Radio (radar), Accurate radio, Extended radio 14, Counters Concealment (all), Penetrates Concealment"
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 20
+        },
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Luxury Quarters",
+          "ranks": 2
+        },
+        {
+          "name": "Hangar Bay",
+          "ranks": 4
+        },
+        {
+          "name": "Brig",
+          "ranks": 3
+        },
+        {
+          "name": "Artificial Gravity"
+        }
+      ],
+      "crew": "50,000 servants and soldiers",
+      "passengers": "A cosmic emperor's court",
+      "summary": "The seat of a galactic empire, a gilded war-palace the size of a city that sees through every cloak in a hundred light-years.",
+      "cost": 267,
+      "source": "DCUGen"
+    },
+    {
+      "id": "new-dawn-colony-ship",
+      "name": "New Dawn Colony Ship",
+      "category": "Space",
+      "class": "Colony Ship",
+      "setting": "Sci-Fi",
+      "size": "Awesome",
+      "strength": 26,
+      "speed": 10,
+      "movement": "Flight",
+      "defense": 0,
+      "toughness": 16,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        }
+      ],
+      "features": [
+        {
+          "name": "Cold Sleep Bay",
+          "ranks": 3
+        },
+        {
+          "name": "Cargo Hold",
+          "ranks": 3
+        },
+        {
+          "name": "Hangar Bay",
+          "ranks": 2,
+          "detail": "landers"
+        },
+        {
+          "name": "Laboratory Module"
+        },
+        {
+          "name": "Medical Bay"
+        },
+        {
+          "name": "Recycling Life Support"
+        }
+      ],
+      "crew": "120 crew",
+      "passengers": "10,000 colonists in cold sleep",
+      "summary": "A frozen town on a star drive: ten thousand sleepers, seed vaults, prefab houses and the landers to set them all down.",
+      "cost": 47,
+      "source": "DCUGen"
+    },
+    {
+      "id": "homestead-colony-tender",
+      "name": "Homestead Colony Tender",
+      "category": "Space",
+      "class": "Colony Ship",
+      "setting": "Sci-Fi",
+      "size": "Colossal",
+      "strength": 20,
+      "speed": 11,
+      "movement": "Flight",
+      "alt_movement": [
+        {
+          "effect": "Speed",
+          "rank": 3
+        }
+      ],
+      "defense": 2,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Interplanetary Drive",
+          "effect": "Movement",
+          "rank": 1,
+          "detail": "Space Travel 1"
+        }
+      ],
+      "features": [
+        {
+          "name": "Cargo Hold",
+          "ranks": 2
+        },
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Engineering Workshop"
+        },
+        {
+          "name": "Medical Bay"
+        }
+      ],
+      "crew": "20 crew",
+      "passengers": "300 settlers",
+      "summary": "A colony starter kit that lands once, unbolts its own hull and becomes the first town on a new world.",
+      "cost": 38,
+      "source": "DCUGen"
+    },
+    {
+      "id": "long-voyage-worldship",
+      "name": "Long Voyage Worldship",
+      "category": "Space",
+      "class": "Generation Ship",
+      "setting": "Sci-Fi",
+      "size": "Awesome",
+      "strength": 30,
+      "speed": 8,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "in space only; cannot enter an atmosphere"
+        }
+      ],
+      "defense": 0,
+      "toughness": 18,
+      "powers": [],
+      "features": [
+        {
+          "name": "Recycling Life Support"
+        },
+        {
+          "name": "Artificial Gravity"
+        },
+        {
+          "name": "Crew Quarters",
+          "ranks": 2
+        },
+        {
+          "name": "Medical Bay",
+          "ranks": 2
+        },
+        {
+          "name": "Laboratory Module",
+          "ranks": 2
+        },
+        {
+          "name": "Engineering Workshop"
+        },
+        {
+          "name": "Cargo Hold",
+          "ranks": 2
+        }
+      ],
+      "crew": "40,000 inhabitants",
+      "passengers": "Generations yet unborn",
+      "summary": "A hollowed-out spindle with farms, forests and towns inside, centuries into a voyage at sublight speed; its people have forgotten it is a ship.",
+      "cost": 37,
+      "source": "DCUGen"
+    },
+    {
+      "id": "verdant-ark-habitat",
+      "name": "Verdant Ark",
+      "category": "Space",
+      "class": "Generation Ship",
+      "setting": "Sci-Fi",
+      "size": "Awesome",
+      "strength": 28,
+      "speed": 9,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "in space only; cannot enter an atmosphere"
+        }
+      ],
+      "defense": 0,
+      "toughness": 17,
+      "powers": [
+        {
+          "name": "Biosphere Domes",
+          "effect": "Immunity",
+          "rank": 10,
+          "detail": "Life support for the whole ship, even with the hull breached"
+        }
+      ],
+      "features": [
+        {
+          "name": "Recycling Life Support"
+        },
+        {
+          "name": "Artificial Gravity"
+        },
+        {
+          "name": "Cold Sleep Bay",
+          "ranks": 2
+        },
+        {
+          "name": "Laboratory Module"
+        },
+        {
+          "name": "Medical Bay"
+        }
+      ],
+      "crew": "6,000 inhabitants",
+      "passengers": "Seed banks of a dead world",
+      "summary": "A string of glass biodomes carrying the last forests of a lost homeworld toward a star it will reach in four hundred years.",
+      "cost": 40,
+      "source": "DCUGen"
+    },
+    {
+      "id": "curie-research-vessel",
+      "name": "Curie Research Vessel",
+      "category": "Space",
+      "class": "Science Vessel",
+      "setting": "Sci-Fi",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 13,
+      "movement": "Flight",
+      "defense": 3,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 3
+        },
+        {
+          "name": "Subspace Radio",
+          "effect": "Communication",
+          "rank": 5,
+          "detail": "Radio"
+        },
+        {
+          "name": "Research Array",
+          "effect": "Senses",
+          "rank": 22,
+          "detail": "Radio (radar), Accurate radio, Analytical radio, Extended radio 10, Penetrates Concealment (radio), Detect radiation (ranged), Microscopic vision 2"
+        }
+      ],
+      "features": [
+        {
+          "name": "Laboratory Module",
+          "ranks": 3
+        },
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Medical Bay"
+        },
+        {
+          "name": "Hangar Bay",
+          "detail": "probes"
+        },
+        {
+          "name": "Jump Computer"
+        }
+      ],
+      "crew": "60 crew",
+      "passengers": "40 scientists",
+      "summary": "A floating university of telescopes, probes and arguing scientists, with sensors that can read a star's mood.",
+      "cost": 87,
+      "source": "DCUGen"
+    },
+    {
+      "id": "horizon-anomaly-hunter",
+      "name": "Horizon Anomaly Hunter",
+      "category": "Space",
+      "class": "Science Vessel",
+      "setting": "Sci-Fi",
+      "size": "Gargantuan",
+      "strength": 13,
+      "speed": 14,
+      "movement": "Flight",
+      "defense": 5,
+      "toughness": 12,
+      "powers": [
+        {
+          "name": "Hyperdrive",
+          "effect": "Movement",
+          "rank": 3,
+          "detail": "Space Travel 3"
+        },
+        {
+          "name": "Anomaly Shielding",
+          "effect": "Force Field",
+          "rank": 4
+        },
+        {
+          "name": "Hardened Hull",
+          "effect": "Immunity",
+          "rank": 5,
+          "detail": "Radiation damage"
+        },
+        {
+          "name": "Anomaly Sensors",
+          "effect": "Senses",
+          "rank": 15,
+          "detail": "Radio (radar), Analytical radio, Extended radio 8, Detect spatial anomalies (ranged), Counters Concealment (dimensional), Time Sense"
+        }
+      ],
+      "features": [
+        {
+          "name": "Laboratory Module",
+          "ranks": 2
+        },
+        {
+          "name": "Jump Computer"
+        },
+        {
+          "name": "Navigation System"
+        }
+      ],
+      "crew": "12 crew",
+      "passengers": "6 scientists",
+      "summary": "A rugged little science ship built to fly into wormholes, radiation storms and time rifts and come back with data.",
+      "cost": 68,
+      "source": "DCUGen"
+    },
+    {
+      "id": "iron-cradle-prison-barge",
+      "name": "Iron Cradle Prison Barge",
+      "category": "Space",
+      "class": "Prison Barge",
+      "setting": "Sci-Fi",
+      "size": "Awesome",
+      "strength": 22,
+      "speed": 9,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "in space only; cannot enter an atmosphere"
+        }
+      ],
+      "defense": 0,
+      "toughness": 18,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 4
+        },
+        {
+          "name": "Perimeter Guns",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        },
+        {
+          "name": "Power Dampeners",
+          "effect": "Nullify",
+          "rank": 12,
+          "detail": "Superhuman powers",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst"
+            }
+          ],
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "only inside the cell blocks"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 8
+        },
+        {
+          "name": "Brig",
+          "ranks": 4
+        },
+        {
+          "name": "Alarm",
+          "ranks": 3
+        },
+        {
+          "name": "Medical Bay"
+        },
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Self-Destruct"
+        }
+      ],
+      "crew": "300 guards",
+      "passengers": "1,000 prisoners, many superhuman",
+      "summary": "A slab-sided prison hulk that dampens powers in its cell blocks and drifts far from any world worth escaping to.",
+      "cost": 81,
+      "source": "DCUGen"
+    },
+    {
+      "id": "red-maw-raider",
+      "name": "Red Maw Raider",
+      "category": "Space",
+      "class": "Pirate Raider",
+      "setting": "Sci-Fi",
+      "size": "Gargantuan",
+      "strength": 14,
+      "speed": 14,
+      "movement": "Flight",
+      "defense": 5,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Scavenged Cannons",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Ion Cannon",
+              "effect": "Affliction",
+              "rank": 10,
+              "range": "Ranged",
+              "detail": "Resisted by Toughness; impaired, disabled, immobilized (systems shut down)",
+              "extras": [
+                {
+                  "name": "Alternate Resistance"
+                }
+              ],
+              "flaws": [
+                {
+                  "name": "Limited",
+                  "detail": "only vehicles and machines"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Ram Prow",
+          "effect": "Damage",
+          "rank": 12,
+          "extras": [
+            {
+              "name": "Penetrating",
+              "steps": 6
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 4
+        },
+        {
+          "name": "Hidden Compartments"
+        },
+        {
+          "name": "Towing Cables",
+          "detail": "boarding grapples"
+        },
+        {
+          "name": "Armory"
+        }
+      ],
+      "crew": "30 pirates",
+      "passengers": "Captives",
+      "summary": "A pirate ship with a fanged ram prow and a hull painted with the flags of its victims; it disables first, boards second.",
+      "cost": 96,
+      "source": "DCUGen"
+    },
+    {
+      "id": "blackflag-reaver",
+      "name": "Blackflag Reaver",
+      "category": "Space",
+      "class": "Pirate Raider",
+      "setting": "Sci-Fi",
+      "size": "Colossal",
+      "strength": 18,
+      "speed": 13,
+      "movement": "Flight",
+      "defense": 3,
+      "toughness": 15,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 2
+        },
+        {
+          "name": "Broadside Lasers",
+          "effect": "Damage",
+          "rank": 11,
+          "range": "Ranged",
+          "alternates": [
+            {
+              "name": "Tractor Beam",
+              "effect": "Move Object",
+              "rank": 12
+            }
+          ]
+        },
+        {
+          "name": "Cloaking Field",
+          "effect": "Concealment",
+          "rank": 4,
+          "detail": "All visual senses",
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "not while firing"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 4
+        },
+        {
+          "name": "Hangar Bay",
+          "detail": "boarding pinnaces"
+        },
+        {
+          "name": "Brig"
+        },
+        {
+          "name": "Cargo Hold",
+          "ranks": 2
+        },
+        {
+          "name": "Armory"
+        }
+      ],
+      "crew": "120 pirates",
+      "passengers": "Plunder and prisoners",
+      "summary": "A captured warship turned pirate flagship, with a stolen cloak and a pirate queen who never leaves witnesses.",
+      "cost": 77,
+      "source": "DCUGen"
+    },
+    {
+      "id": "nightjar-smuggler",
+      "name": "Nightjar Smuggler",
+      "category": "Space",
+      "class": "Smuggler",
+      "setting": "Sci-Fi",
+      "size": "Huge",
+      "strength": 9,
+      "speed": 15,
+      "movement": "Flight",
+      "defense": 7,
+      "toughness": 10,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Belly Turret",
+          "effect": "Damage",
+          "rank": 9,
+          "range": "Ranged"
+        }
+      ],
+      "features": [
+        {
+          "name": "Hidden Compartments",
+          "ranks": 3
+        },
+        {
+          "name": "Cargo Hold"
+        },
+        {
+          "name": "Crew Quarters"
+        },
+        {
+          "name": "Cloaking Device (One Sense)",
+          "detail": "radar baffles"
+        }
+      ],
+      "crew": "2 crew",
+      "passengers": "4 passengers who ask no questions",
+      "summary": "A scuffed light freighter with more hidden holds than legal ones, radar baffles and an engine that was never stock.",
+      "cost": 66,
+      "source": "DCUGen"
+    },
+    {
+      "id": "quickfox-blockade-runner",
+      "name": "Quickfox Blockade Runner",
+      "category": "Space",
+      "class": "Smuggler",
+      "setting": "Sci-Fi",
+      "size": "Gargantuan",
+      "strength": 12,
+      "speed": 16,
+      "movement": "Flight",
+      "defense": 6,
+      "toughness": 11,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 3
+        },
+        {
+          "name": "Jammer Pods",
+          "effect": "Concealment",
+          "rank": 2,
+          "detail": "Radio senses (sensor jamming)",
+          "extras": [
+            {
+              "name": "Attack"
+            },
+            {
+              "name": "Increased Range",
+              "detail": "ranged"
+            },
+            {
+              "name": "Area",
+              "option": "Cloud"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Hidden Compartments",
+          "ranks": 2
+        },
+        {
+          "name": "Cargo Hold"
+        },
+        {
+          "name": "Jump Computer"
+        }
+      ],
+      "crew": "4 crew",
+      "passengers": "8 refugees",
+      "summary": "A sleek runner that dives through blockades behind a cloud of sensor-jamming chaff and jumps before anyone gets a lock.",
+      "cost": 58,
+      "source": "DCUGen"
+    },
+    {
+      "id": "comet-tail-racer",
+      "name": "Comet Tail Racer",
+      "category": "Space",
+      "class": "Racer",
+      "setting": "Sci-Fi",
+      "size": "Medium",
+      "strength": 0,
+      "speed": 17,
+      "movement": "Flight",
+      "defense": 12,
+      "toughness": 6,
+      "powers": [],
+      "features": [
+        {
+          "name": "Ejection System"
+        }
+      ],
+      "crew": "1 pilot",
+      "passengers": "None",
+      "summary": "A cockpit strapped to a fusion torch, built for the asteroid-belt races where half the field never finishes.",
+      "cost": 38,
+      "source": "DCUGen"
+    },
+    {
+      "id": "shellback-survival-pod",
+      "name": "Shellback Survival Pod",
+      "category": "Space",
+      "class": "Escape Pod",
+      "setting": "Sci-Fi",
+      "size": "Medium",
+      "strength": 0,
+      "speed": 6,
+      "movement": "Flight",
+      "defense": 10,
+      "toughness": 8,
+      "powers": [
+        {
+          "name": "Sealed Life Support",
+          "effect": "Immunity",
+          "rank": 10,
+          "detail": "Life support"
+        }
+      ],
+      "features": [
+        {
+          "name": "Cold Sleep Bay"
+        },
+        {
+          "name": "Autopilot"
+        },
+        {
+          "name": "Communications Suite",
+          "detail": "distress beacon"
+        }
+      ],
+      "crew": "None",
+      "passengers": "2 sleepers",
+      "summary": "A clamshell pod that freezes its occupants and drifts, beacon blinking, until someone finds it, even decades later.",
+      "cost": 28,
+      "source": "DCUGen"
+    },
+    {
+      "id": "harbor-light-lifeboat",
+      "name": "Harbor Light Lifeboat",
+      "category": "Space",
+      "class": "Lifeboat",
+      "setting": "Sci-Fi",
+      "size": "Large",
+      "strength": 5,
+      "speed": 10,
+      "movement": "Flight",
+      "alt_movement": [
+        {
+          "effect": "Swimming",
+          "rank": 3
+        }
+      ],
+      "defense": 8,
+      "toughness": 9,
+      "powers": [
+        {
+          "name": "Interplanetary Drive",
+          "effect": "Movement",
+          "rank": 1,
+          "detail": "Space Travel 1"
+        },
+        {
+          "name": "Sealed Life Support",
+          "effect": "Immunity",
+          "rank": 10,
+          "detail": "Life support"
+        }
+      ],
+      "features": [
+        {
+          "name": "Autopilot"
+        },
+        {
+          "name": "Communications Suite",
+          "detail": "distress beacon"
+        },
+        {
+          "name": "Medical Bay"
+        },
+        {
+          "name": "Recycling Life Support"
+        }
+      ],
+      "crew": "1 pilot",
+      "passengers": "20 survivors",
+      "summary": "A rugged lifeboat with a short-jump drive, a month of air and a beacon that never stops calling for help.",
+      "cost": 41,
+      "source": "DCUGen"
+    },
+    {
+      "id": "wayfarer-mobile-station",
+      "name": "Wayfarer Mobile Station",
+      "category": "Space",
+      "class": "Mobile Station",
+      "setting": "Sci-Fi",
+      "size": "Awesome",
+      "strength": 30,
+      "speed": 4,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "in space only; cannot enter an atmosphere"
+        }
+      ],
+      "defense": 0,
+      "toughness": 18,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 4
+        },
+        {
+          "name": "Point-Defense Turrets",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Hangar Bay",
+          "ranks": 3
+        },
+        {
+          "name": "Crew Quarters",
+          "ranks": 2
+        },
+        {
+          "name": "Cargo Hold",
+          "ranks": 3
+        },
+        {
+          "name": "Medical Bay"
+        },
+        {
+          "name": "Engineering Workshop"
+        },
+        {
+          "name": "Docking Collar"
+        },
+        {
+          "name": "Artificial Gravity"
+        },
+        {
+          "name": "Recycling Life Support"
+        }
+      ],
+      "crew": "2,000 crew and traders",
+      "passengers": "5,000 visitors",
+      "summary": "A trading post with an engine: it jumps to a new system every season and opens its docks to anyone with cargo.",
+      "cost": 67,
+      "source": "DCUGen"
+    },
+    {
+      "id": "citadel-starbase",
+      "name": "Citadel Starbase",
+      "category": "Space",
+      "class": "Starbase",
+      "setting": "Sci-Fi",
+      "size": "Awesome",
+      "strength": 35,
+      "speed": 1,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "in space only; cannot enter an atmosphere"
+        }
+      ],
+      "defense": 0,
+      "toughness": 22,
+      "powers": [
+        {
+          "name": "Station Shields",
+          "effect": "Force Field",
+          "rank": 6,
+          "extras": [
+            {
+              "name": "Impervious"
+            }
+          ]
+        },
+        {
+          "name": "Fortress Batteries",
+          "effect": "Damage",
+          "rank": 16,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 10
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Torpedoes",
+              "effect": "Damage",
+              "rank": 16,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Area",
+                  "option": "Burst",
+                  "ranks": 12
+                },
+                {
+                  "name": "Homing",
+                  "steps": 8
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Point-Defense Turrets",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        },
+        {
+          "name": "Tractor Beam",
+          "effect": "Move Object",
+          "rank": 18
+        },
+        {
+          "name": "Transporter",
+          "effect": "Teleport",
+          "rank": 16,
+          "extras": [
+            {
+              "name": "Affects Others"
+            },
+            {
+              "name": "Increased Mass",
+              "steps": 4
+            }
+          ],
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "needs a sensor lock and lowered shields at both ends"
+            }
+          ]
+        },
+        {
+          "name": "Subspace Radio",
+          "effect": "Communication",
+          "rank": 5,
+          "detail": "Radio"
+        },
+        {
+          "name": "Station Sensors",
+          "effect": "Senses",
+          "rank": 15,
+          "detail": "Radio (radar), Accurate radio, Extended radio 11, Radius"
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 12
+        },
+        {
+          "name": "Hangar Bay",
+          "ranks": 4
+        },
+        {
+          "name": "Docking Collar"
+        },
+        {
+          "name": "Crew Quarters",
+          "ranks": 2
+        },
+        {
+          "name": "Medical Bay",
+          "ranks": 2
+        },
+        {
+          "name": "Engineering Workshop"
+        },
+        {
+          "name": "Brig",
+          "ranks": 2
+        },
+        {
+          "name": "Artificial Gravity"
+        },
+        {
+          "name": "Recycling Life Support"
+        }
+      ],
+      "crew": "10,000 crew",
+      "passengers": "20,000 residents and visitors",
+      "summary": "A fortified star-port anchoring a whole sector: shipyards, docks, a garrison and guns no raider wants to test.",
+      "cost": 246,
+      "source": "DCUGen"
+    },
+    {
+      "id": "skyhook-defense-platform",
+      "name": "Skyhook Defense Platform",
+      "category": "Space",
+      "class": "Orbital Platform",
+      "setting": "Sci-Fi",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 2,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "in space only; cannot enter an atmosphere"
+        }
+      ],
+      "defense": 2,
+      "toughness": 16,
+      "powers": [
+        {
+          "name": "Orbital Lance",
+          "effect": "Damage",
+          "rank": 16,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 8
+            },
+            {
+              "name": "Extended Range",
+              "steps": 4
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Point-Defense Turrets",
+              "effect": "Damage",
+              "rank": 9,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Multiattack"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Deflector Shields",
+          "effect": "Force Field",
+          "rank": 4
+        },
+        {
+          "name": "Planet-Watch Sensors",
+          "effect": "Senses",
+          "rank": 11,
+          "detail": "Radio (radar), Accurate radio, Extended radio 8"
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 8
+        },
+        {
+          "name": "Remote Control"
+        },
+        {
+          "name": "Crew Quarters"
+        }
+      ],
+      "crew": "30 crew (or remote)",
+      "passengers": "None",
+      "summary": "A gun platform in high orbit whose lance can hit a ship at the edge of orbit or a tank on the ground below.",
+      "cost": 79,
+      "source": "DCUGen"
+    },
+    {
+      "id": "hollowstone-asteroid-fortress",
+      "name": "Hollowstone Asteroid Fortress",
+      "category": "Space",
+      "class": "Asteroid Fortress",
+      "setting": "Sci-Fi",
+      "size": "Awesome",
+      "strength": 40,
+      "speed": 3,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "in space only; cannot enter an atmosphere"
+        }
+      ],
+      "defense": 0,
+      "toughness": 24,
+      "powers": [
+        {
+          "name": "Interplanetary Drive",
+          "effect": "Movement",
+          "rank": 1,
+          "detail": "Space Travel 1"
+        },
+        {
+          "name": "Mass Drivers",
+          "effect": "Damage",
+          "rank": 16,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 10
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Point-Defense Turrets",
+              "effect": "Damage",
+              "rank": 10,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Multiattack"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Cloaking Field",
+          "effect": "Concealment",
+          "rank": 2,
+          "detail": "Normal vision (looks like any other rock)",
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "while its engines and guns are cold"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 16
+        },
+        {
+          "name": "Hangar Bay",
+          "ranks": 3
+        },
+        {
+          "name": "Crew Quarters",
+          "ranks": 2
+        },
+        {
+          "name": "Cargo Hold",
+          "ranks": 3
+        },
+        {
+          "name": "Engineering Workshop"
+        },
+        {
+          "name": "Brig"
+        },
+        {
+          "name": "Recycling Life Support"
+        }
+      ],
+      "crew": "5,000 soldiers and miners",
+      "passengers": "None",
+      "summary": "A mountain-sized asteroid bored full of tunnels and gun ports, pushed into a choke point by its own engines.",
+      "cost": 111,
+      "source": "DCUGen"
+    },
+    {
+      "id": "vyrr-scout-disc",
+      "name": "Vyrr Scout Disc",
+      "category": "Space",
+      "class": "Alien Saucer",
+      "setting": "Alien",
+      "size": "Large",
+      "strength": 4,
+      "speed": 15,
+      "movement": "Flight",
+      "defense": 11,
+      "toughness": 10,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Paralysis Ray",
+          "effect": "Damage",
+          "rank": 8,
+          "range": "Ranged",
+          "alternates": [
+            {
+              "name": "Lifting Beam",
+              "effect": "Move Object",
+              "rank": 8
+            }
+          ]
+        },
+        {
+          "name": "Inertial Field",
+          "effect": "Immunity",
+          "rank": 5,
+          "detail": "Slam and collision damage"
+        }
+      ],
+      "features": [
+        {
+          "name": "Cloaking Device (All Visual)"
+        }
+      ],
+      "crew": "2 grey Vyrr",
+      "passengers": "2 specimens",
+      "summary": "A silver disc that hovers without a sound, darts at impossible angles and vanishes when a camera points its way.",
+      "cost": 71,
+      "source": "DCUGen"
+    },
+    {
+      "id": "ninefold-mothersaucer",
+      "name": "Ninefold Mothersaucer",
+      "category": "Space",
+      "class": "Alien Saucer",
+      "setting": "Alien",
+      "size": "Awesome",
+      "strength": 30,
+      "speed": 12,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "hovers no lower than the clouds in an atmosphere"
+        }
+      ],
+      "defense": 0,
+      "toughness": 20,
+      "powers": [
+        {
+          "name": "Hyperdrive",
+          "effect": "Movement",
+          "rank": 3,
+          "detail": "Space Travel 3"
+        },
+        {
+          "name": "Gravitic Shield",
+          "effect": "Force Field",
+          "rank": 6,
+          "extras": [
+            {
+              "name": "Impervious"
+            }
+          ]
+        },
+        {
+          "name": "City-Burner Ray",
+          "effect": "Damage",
+          "rank": 18,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst"
+            }
+          ]
+        },
+        {
+          "name": "Abduction Beam",
+          "effect": "Move Object",
+          "rank": 14,
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Cylinder"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Hangar Bay",
+          "ranks": 4,
+          "detail": "scout discs"
+        },
+        {
+          "name": "Laboratory Module",
+          "ranks": 2
+        },
+        {
+          "name": "Cold Sleep Bay",
+          "ranks": 2,
+          "detail": "specimen pods"
+        },
+        {
+          "name": "Cloaking Device (All Visual)"
+        }
+      ],
+      "crew": "3,000 drones",
+      "passengers": "Abductees",
+      "summary": "A disc fifteen miles across that parks over a capital city, opens its central eye and waits for the world to answer.",
+      "cost": 162,
+      "source": "DCUGen"
+    },
+    {
+      "id": "thalassian-leviathan",
+      "name": "Thalassian Leviathan",
+      "category": "Space",
+      "class": "Living Ship",
+      "setting": "Alien",
+      "size": "Awesome",
+      "strength": 28,
+      "speed": 12,
+      "movement": "Flight",
+      "alt_movement": [
+        {
+          "effect": "Swimming",
+          "rank": 8
+        }
+      ],
+      "defense": 0,
+      "toughness": 18,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Living Hull",
+          "effect": "Regeneration",
+          "rank": 10
+        },
+        {
+          "name": "Plasma Breath",
+          "effect": "Damage",
+          "rank": 14,
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Cone"
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Spore Barbs",
+              "effect": "Damage",
+              "rank": 10,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Multiattack"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Whale-Song",
+          "effect": "Senses",
+          "rank": 13,
+          "detail": "Radio, Extended radio 8, Detect life (ranged), Accurate radio"
+        }
+      ],
+      "features": [
+        {
+          "name": "Crew Quarters",
+          "detail": "grown chambers"
+        }
+      ],
+      "crew": "1 bonded singer",
+      "passengers": "300 riders in its body cavities",
+      "summary": "A star-whale a mile long that swims between worlds, carries its riders inside and heals any wound in hours.",
+      "cost": 98,
+      "source": "DCUGen"
+    },
+    {
+      "id": "void-manta",
+      "name": "Void Manta",
+      "category": "Space",
+      "class": "Living Ship",
+      "setting": "Alien",
+      "size": "Gargantuan",
+      "strength": 14,
+      "speed": 15,
+      "movement": "Flight",
+      "defense": 6,
+      "toughness": 13,
+      "powers": [
+        {
+          "name": "Hyperdrive",
+          "effect": "Movement",
+          "rank": 3,
+          "detail": "Space Travel 3"
+        },
+        {
+          "name": "Living Hull",
+          "effect": "Regeneration",
+          "rank": 5
+        },
+        {
+          "name": "Stinger Bolt",
+          "effect": "Damage",
+          "rank": 11,
+          "range": "Ranged"
+        },
+        {
+          "name": "Skin Shift",
+          "effect": "Concealment",
+          "rank": 4,
+          "detail": "All visual senses",
+          "flaws": [
+            {
+              "name": "Blending"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Crew Quarters",
+          "detail": "a warm, breathing cabin"
+        }
+      ],
+      "crew": "1 bonded pilot",
+      "passengers": "4 passengers",
+      "summary": "A ray-winged living ship that fades against the starfield and flies wherever its bonded pilot dreams.",
+      "cost": 77,
+      "source": "DCUGen"
+    },
+    {
+      "id": "prism-song-crystal-ship",
+      "name": "Prism-Song Crystal Ship",
+      "category": "Space",
+      "class": "Crystal Ship",
+      "setting": "Alien",
+      "size": "Gargantuan",
+      "strength": 14,
+      "speed": 14,
+      "movement": "Flight",
+      "defense": 5,
+      "toughness": 15,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Refraction Field",
+          "effect": "Force Field",
+          "rank": 5,
+          "extras": [
+            {
+              "name": "Impervious"
+            }
+          ]
+        },
+        {
+          "name": "Light Lance",
+          "effect": "Damage",
+          "rank": 13,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Line"
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Dazzling Facets",
+              "effect": "Dazzle",
+              "rank": 10,
+              "range": "Ranged",
+              "detail": "Visual and radio senses",
+              "extras": [
+                {
+                  "name": "Area",
+                  "option": "Burst"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 8
+        }
+      ],
+      "crew": "6 crystalline Sh'aa",
+      "passengers": "20 guests",
+      "summary": "A singing ship of living crystal that bends starlight into lances and splits enemy targeting into a thousand reflections.",
+      "cost": 100,
+      "source": "DCUGen"
+    },
+    {
+      "id": "locust-swarm-ship",
+      "name": "Locust Swarm Ship",
+      "category": "Space",
+      "class": "Swarm Ship",
+      "setting": "Alien",
+      "size": "Colossal",
+      "strength": 18,
+      "speed": 13,
+      "movement": "Flight",
+      "defense": 3,
+      "toughness": 14,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Devourer Cloud",
+          "effect": "Damage",
+          "rank": 10,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Cloud"
+            },
+            {
+              "name": "Penetrating",
+              "steps": 6
+            }
+          ]
+        },
+        {
+          "name": "Swarm Regrowth",
+          "effect": "Regeneration",
+          "rank": 6
+        }
+      ],
+      "features": [
+        {
+          "name": "Hangar Bay",
+          "ranks": 3,
+          "detail": "boarding swarmers"
+        }
+      ],
+      "crew": "A million chittering drones",
+      "passengers": "None",
+      "summary": "Not one ship but a cloud of hull-eating drones that flows over its prey and leaves a stripped skeleton behind.",
+      "cost": 83,
+      "source": "DCUGen"
+    },
+    {
+      "id": "hive-queen-brood-vessel",
+      "name": "Hive Queen Brood Vessel",
+      "category": "Space",
+      "class": "Hive Ship",
+      "setting": "Alien",
+      "size": "Awesome",
+      "strength": 32,
+      "speed": 11,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "in space only; cannot enter an atmosphere"
+        }
+      ],
+      "defense": 0,
+      "toughness": 20,
+      "powers": [
+        {
+          "name": "Star Drive",
+          "effect": "Movement",
+          "rank": 2,
+          "detail": "Space Travel 2"
+        },
+        {
+          "name": "Chitin Regrowth",
+          "effect": "Regeneration",
+          "rank": 10
+        },
+        {
+          "name": "Acid Batteries",
+          "effect": "Damage",
+          "rank": 14,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "ranks": 10
+            }
+          ],
+          "alternates": [
+            {
+              "name": "Spine Launchers",
+              "effect": "Damage",
+              "rank": 9,
+              "range": "Ranged",
+              "extras": [
+                {
+                  "name": "Multiattack"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hive Mind Link",
+          "effect": "Communication",
+          "rank": 5,
+          "detail": "Radio"
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 10
+        },
+        {
+          "name": "Hangar Bay",
+          "ranks": 4,
+          "detail": "bio-fighters"
+        },
+        {
+          "name": "Cold Sleep Bay",
+          "ranks": 3,
+          "detail": "brood chambers"
+        }
+      ],
+      "crew": "A hive queen and ten thousand drones",
+      "passengers": "Brood for a new world",
+      "summary": "A pulsing organic hive the size of a moon whose queen directs every fighter and drone with a single thought.",
+      "cost": 123,
+      "source": "DCUGen"
+    },
+    {
+      "id": "genesis-seedship",
+      "name": "Genesis Seedship",
+      "category": "Space",
+      "class": "Seedship",
+      "setting": "Cosmic",
+      "size": "Awesome",
+      "strength": 30,
+      "speed": 10,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "in space only; cannot enter an atmosphere"
+        }
+      ],
+      "defense": 0,
+      "toughness": 20,
+      "powers": [
+        {
+          "name": "Hyperdrive",
+          "effect": "Movement",
+          "rank": 3,
+          "detail": "Space Travel 3"
+        },
+        {
+          "name": "World-Seeding",
+          "effect": "Environment",
+          "rank": 20,
+          "detail": "Heat or cold to make a world temperate",
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "takes a month of seeding"
+            }
+          ]
+        },
+        {
+          "name": "Terraforming Bloom",
+          "effect": "Transform",
+          "rank": 12,
+          "detail": "Barren rock and ice into soil, water and air",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "steps": 8
+            }
+          ],
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "takes weeks"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Laboratory Module",
+          "ranks": 3
+        },
+        {
+          "name": "Cold Sleep Bay",
+          "ranks": 3,
+          "detail": "gene vaults"
+        }
+      ],
+      "crew": "Ancient gardener intelligences",
+      "passengers": "The genetic library of a thousand worlds",
+      "summary": "An ancient seed-pod the size of a moon that drifts between dead worlds and leaves oceans and forests in its wake.",
+      "cost": 160,
+      "source": "DCUGen"
+    },
+    {
+      "id": "silent-monolith-derelict",
+      "name": "Silent Monolith",
+      "category": "Space",
+      "class": "Ancient Derelict",
+      "setting": "Cosmic",
+      "size": "Awesome",
+      "strength": 35,
+      "speed": 2,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Unreliable"
+        }
+      ],
+      "defense": 0,
+      "toughness": 24,
+      "powers": [
+        {
+          "name": "Hyperdrive",
+          "effect": "Movement",
+          "rank": 3,
+          "detail": "Space Travel 3"
+        },
+        {
+          "name": "Dormant Guardians",
+          "effect": "Damage",
+          "rank": 14,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Line"
+            }
+          ],
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "only against intruders inside the hull"
+            }
+          ]
+        },
+        {
+          "name": "Cloaking Field",
+          "effect": "Concealment",
+          "rank": 10,
+          "detail": "All senses but touch",
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "while dormant"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 16
+        },
+        {
+          "name": "Brig",
+          "ranks": 2,
+          "detail": "stasis vaults"
+        },
+        {
+          "name": "Self-Destruct"
+        },
+        {
+          "name": "Alarm",
+          "ranks": 4
+        }
+      ],
+      "crew": "None living",
+      "passengers": "Things in stasis vaults",
+      "summary": "A black slab older than the stars around it, adrift and silent, until someone docks and the corridors start to rearrange.",
+      "cost": 98,
+      "source": "DCUGen"
+    },
+    {
+      "id": "eclipse-engine",
+      "name": "Eclipse Engine",
+      "category": "Space",
+      "class": "Planet-killer",
+      "setting": "Cosmic",
+      "size": "Awesome",
+      "strength": 50,
+      "speed": 16,
+      "movement": "Flight",
+      "movement_flaws": [
+        {
+          "name": "Limited",
+          "detail": "in space only; cannot enter an atmosphere"
+        }
+      ],
+      "defense": 0,
+      "toughness": 30,
+      "powers": [
+        {
+          "name": "Hyperdrive",
+          "effect": "Movement",
+          "rank": 3,
+          "detail": "Space Travel 3"
+        },
+        {
+          "name": "Event Shield",
+          "effect": "Force Field",
+          "rank": 10,
+          "extras": [
+            {
+              "name": "Impervious"
+            }
+          ]
+        },
+        {
+          "name": "World-Cracker",
+          "effect": "Damage",
+          "rank": 25,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Area",
+              "option": "Burst",
+              "steps": 20,
+              "detail": "4,000-mile radius"
+            }
+          ],
+          "flaws": [
+            {
+              "name": "Limited",
+              "detail": "an hour to charge; only against planets and stations"
+            }
+          ]
+        },
+        {
+          "name": "Defense Lances",
+          "effect": "Damage",
+          "rank": 18,
+          "range": "Ranged",
+          "extras": [
+            {
+              "name": "Multiattack"
+            }
+          ]
+        },
+        {
+          "name": "Tractor Beam",
+          "effect": "Move Object",
+          "rank": 25
+        }
+      ],
+      "features": [
+        {
+          "name": "Impervious Toughness",
+          "ranks": 30
+        }
+      ],
+      "crew": "A machine mind",
+      "passengers": "None",
+      "summary": "A planet-killing machine the size of a moon that eats worlds for fuel; its main gun needs an hour to charge and a planet to aim at.",
+      "cost": 751,
       "source": "DCUGen"
     }
   ]

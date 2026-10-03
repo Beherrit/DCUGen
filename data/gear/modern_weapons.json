@@ -1,0 +1,1651 @@
+[
+ {
+  "id": "brass-knuckles",
+  "name": "Brass Knuckles",
+  "genre": "Modern Weapons",
+  "category": "Simple Melee Weapon",
+  "effect": "Damage 1",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 1,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "melee",
+   "unarmed",
+   "bludgeoning"
+  ],
+  "summary": "Adds +1 damage to unarmed strikes.",
+  "source": "DCA 151"
+ },
+ {
+  "id": "club",
+  "name": "Club",
+  "genre": "Modern Weapons",
+  "category": "Simple Melee Weapon",
+  "effect": "Damage 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "melee",
+   "bludgeoning"
+  ],
+  "summary": "Nightstick, baton, light mace or quarterstaff.",
+  "notes": "A very light club may be only Damage 1.",
+  "source": "DCA 151"
+ },
+ {
+  "id": "knife",
+  "name": "Knife",
+  "genre": "Modern Weapons",
+  "category": "Simple Melee Weapon",
+  "effect": "Damage 1",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "strengthBased": true,
+    "detail": "piercing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 1,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "melee",
+   "blade",
+   "piercing"
+  ],
+  "summary": "Dagger, stiletto, switchblade or hunting knife.",
+  "source": "DCA 151"
+ },
+ {
+  "id": "pepper-spray",
+  "name": "Pepper Spray",
+  "genre": "Modern Weapons",
+  "category": "Simple Melee Weapon",
+  "effect": "Close Visual Dazzle 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "one sense (vision)"
+     }
+    ],
+    "effect": "Affliction",
+    "rank": 4,
+    "detail": "visual Dazzle, chemical; Resisted by Fortitude; Vision Impaired, Disabled, Unaware"
+   }
+  ],
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "less-lethal",
+   "chemical",
+   "dazzle"
+  ],
+  "summary": "Spray to the eyes that blinds at close range.",
+  "source": "DCA 151"
+ },
+ {
+  "id": "stun-gun",
+  "name": "Stun Gun",
+  "genre": "Modern Weapons",
+  "category": "Simple Melee Weapon",
+  "effect": "Affliction 5",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 5,
+    "detail": "electrical; Resisted by Fortitude; Dazed, Stunned, Incapacitated"
+   }
+  ],
+  "cost": 5,
+  "bookCost": 5,
+  "tags": [
+   "less-lethal",
+   "electrical"
+  ],
+  "summary": "Contact shocker that can daze, stun and incapacitate.",
+  "source": "DCA 151"
+ },
+ {
+  "id": "chain",
+  "name": "Chain",
+  "genre": "Modern Weapons",
+  "category": "Exotic Melee Weapon",
+  "effect": "Damage 2, Improved Grab, Improved Trip, Reach 2",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Reach",
+      "steps": 2
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Grab"
+   },
+   {
+    "name": "Improved Trip"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 6,
+  "bookCost": 6,
+  "tags": [
+   "melee",
+   "entangling",
+   "reach"
+  ],
+  "summary": "Length of chain that grabs and trips at 10 ft.",
+  "source": "DCA 151"
+ },
+ {
+  "id": "chainsaw",
+  "name": "Chainsaw",
+  "genre": "Modern Weapons",
+  "category": "Exotic Melee Weapon",
+  "effect": "Damage 6",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 6,
+    "strengthBased": false,
+    "detail": "slashing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 6,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 6,
+  "bookCost": 6,
+  "tags": [
+   "melee",
+   "tool",
+   "slashing"
+  ],
+  "summary": "Roaring saw; not Strength-based.",
+  "source": "DCA 151"
+ },
+ {
+  "id": "nunchaku",
+  "name": "Nunchaku",
+  "genre": "Modern Weapons",
+  "category": "Exotic Melee Weapon",
+  "effect": "Damage 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "melee",
+   "martial arts",
+   "bludgeoning"
+  ],
+  "summary": "Two sticks joined by cord or chain.",
+  "source": "DCA 151"
+ },
+ {
+  "id": "whip",
+  "name": "Whip",
+  "genre": "Modern Weapons",
+  "category": "Exotic Melee Weapon",
+  "effect": "Improved Grab, Improved Trip, Reach 3",
+  "features": [
+   {
+    "name": "Improved Grab",
+    "ranks": 1
+   },
+   {
+    "name": "Improved Trip",
+    "ranks": 1
+   },
+   {
+    "name": "Reach",
+    "ranks": 3,
+    "detail": "strikes up to 15 ft. away"
+   }
+  ],
+  "cost": 5,
+  "bookCost": 5,
+  "tags": [
+   "melee",
+   "entangling",
+   "reach"
+  ],
+  "summary": "No damage of its own; grabs and trips at 15 ft.",
+  "source": "DCA 151"
+ },
+ {
+  "id": "holdout-pistol",
+  "name": "Holdout Pistol",
+  "genre": "Modern Weapons",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 2,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "firearm",
+   "pistol",
+   "concealable"
+  ],
+  "summary": "Low-caliber backup gun.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "light-pistol",
+  "name": "Light Pistol",
+  "genre": "Modern Weapons",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 6,
+  "bookCost": 6,
+  "tags": [
+   "firearm",
+   "pistol"
+  ],
+  "summary": "Common handgun of cops and crooks.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "heavy-pistol",
+  "name": "Heavy Pistol",
+  "genre": "Modern Weapons",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 8,
+  "bookCost": 8,
+  "tags": [
+   "firearm",
+   "pistol"
+  ],
+  "summary": "High-caliber handgun with stopping power.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "machine-pistol",
+  "name": "Machine Pistol",
+  "genre": "Modern Weapons",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Multiattack Damage 3",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 9,
+  "bookCost": 9,
+  "tags": [
+   "firearm",
+   "pistol",
+   "automatic"
+  ],
+  "summary": "One-handed automatic weapon.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "submachine-gun",
+  "name": "Submachine Gun",
+  "genre": "Modern Weapons",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Multiattack Damage 4",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 12,
+  "bookCost": 12,
+  "tags": [
+   "firearm",
+   "automatic"
+  ],
+  "summary": "Compact automatic firing pistol rounds.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "shotgun",
+  "name": "Shotgun",
+  "genre": "Modern Weapons",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 5",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 10,
+  "bookCost": 10,
+  "tags": [
+   "firearm",
+   "shotgun"
+  ],
+  "summary": "Fires shot or slugs.",
+  "notes": "Shot gains Accurate 1 but is Limited to Damage 3 vs. targets with Protection; slugs have neither modifier.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "sniper-rifle",
+  "name": "Sniper Rifle",
+  "genre": "Modern Weapons",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 5",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 19
+  },
+  "cost": 11,
+  "bookCost": 11,
+  "tags": [
+   "firearm",
+   "rifle",
+   "long range"
+  ],
+  "summary": "Long-range rifle, usually scoped.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "shuriken",
+  "name": "Shuriken",
+  "genre": "Modern Weapons",
+  "category": "Thrown Weapon",
+  "effect": "Ranged Multiattack Damage 1",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "range": "Ranged",
+    "detail": "not Strength-based"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 1,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "thrown",
+   "martial arts"
+  ],
+  "summary": "Throwing stars hurled in groups.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "javelin",
+  "name": "Javelin",
+  "genre": "Modern Weapons",
+  "category": "Thrown Weapon",
+  "effect": "Ranged Damage 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "range": "Ranged",
+    "strengthBased": true
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "thrown",
+   "spear"
+  ],
+  "summary": "Light throwing spear; usable in melee.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "laser-sight",
+  "name": "Laser Sight",
+  "genre": "Modern Weapons",
+  "category": "Weapon Accessory",
+  "effect": "Accurate 1 (+2 attack)",
+  "features": [
+   {
+    "name": "Accurate",
+    "ranks": 1,
+    "detail": "+2 attack with the weapon"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "accessory",
+   "firearm"
+  ],
+  "summary": "Red dot that grants Accurate 1.",
+  "source": "DCA 153"
+ },
+ {
+  "id": "stun-ammo",
+  "name": "Stun Ammo",
+  "genre": "Modern Weapons",
+  "category": "Weapon Accessory",
+  "effect": "Feature: non-lethal ammunition",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "non-lethal ammunition"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "accessory",
+   "ammo",
+   "less-lethal"
+  ],
+  "summary": "Rubber bullets or blunt arrows; swap as a move action.",
+  "source": "DCA 153"
+ },
+ {
+  "id": "suppressor",
+  "name": "Suppressor",
+  "genre": "Modern Weapons",
+  "category": "Weapon Accessory",
+  "effect": "Subtle 1 (DC 20 to hear)",
+  "features": [
+   {
+    "name": "Subtle",
+    "ranks": 1,
+    "detail": "DC 20 to hear"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "accessory",
+   "firearm",
+   "stealth"
+  ],
+  "summary": "Muffles gunshots.",
+  "source": "DCA 153"
+ },
+ {
+  "id": "targeting-scope",
+  "name": "Targeting Scope",
+  "genre": "Modern Weapons",
+  "category": "Weapon Accessory",
+  "effect": "Improved Aim",
+  "features": [
+   {
+    "name": "Improved Aim",
+    "ranks": 1
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "accessory",
+   "firearm"
+  ],
+  "summary": "Doubles the benefit of aiming.",
+  "source": "DCA 153"
+ },
+ {
+  "id": "hunting-rifle",
+  "name": "Hunting Rifle",
+  "genre": "Modern Weapons",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 8,
+  "bookCost": 8,
+  "tags": [
+   "firearm",
+   "rifle"
+  ],
+  "summary": "Bolt-action or semi-auto long gun.",
+  "source": "GG 49"
+ },
+ {
+  "id": "high-power-rifle",
+  "name": "High-Power Rifle",
+  "genre": "Modern Weapons",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 5",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 10,
+  "bookCost": 10,
+  "tags": [
+   "firearm",
+   "rifle"
+  ],
+  "summary": "Big-game or battle rifle.",
+  "source": "GG 49"
+ },
+ {
+  "id": "long-range-sniper-rifle",
+  "name": "Long-Range Sniper Rifle",
+  "genre": "Modern Weapons",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 5, Extended Range",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Extended Range",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 11,
+  "bookCost": 11,
+  "tags": [
+   "firearm",
+   "rifle",
+   "long range"
+  ],
+  "summary": "Precision rifle with Extended Range.",
+  "source": "GG 49"
+ },
+ {
+  "id": "combat-shotgun",
+  "name": "Combat Shotgun",
+  "genre": "Modern Weapons",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 5; AE: Shot: Ranged Damage 5, Accurate, Limited to 2 ranks to targets without Protection",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged",
+    "alternates": [
+     {
+      "extras": [
+       {
+        "name": "Accurate",
+        "steps": 1
+       }
+      ],
+      "flaws": [
+       {
+        "name": "Limited",
+        "detail": "2 ranks to targets without Protection"
+       }
+      ],
+      "effect": "Damage",
+      "rank": 5,
+      "range": "Ranged",
+      "name": "Shot"
+     }
+    ]
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 11,
+  "bookCost": 11,
+  "tags": [
+   "firearm",
+   "shotgun"
+  ],
+  "summary": "Slugs or shot as Alternate Effects.",
+  "notes": "GG prices the shot load at +1 as an Alternate Effect.",
+  "source": "GG 49"
+ },
+ {
+  "id": "air-gun",
+  "name": "Air Gun",
+  "genre": "Modern Weapons",
+  "category": "Less-Lethal Weapon",
+  "effect": "Ranged Affliction 4 (Resisted and Overcome by Fortitude; Dazed, Prone, Incapacitated)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 4,
+    "range": "Ranged",
+    "detail": "Resisted and Overcome by Fortitude; Dazed, Prone, Incapacitated"
+   }
+  ],
+  "cost": 8,
+  "tags": [
+   "less-lethal",
+   "pneumatic"
+  ],
+  "summary": "Compressed-air blast that knocks targets down.",
+  "source": "GG 49"
+ },
+ {
+  "id": "dart-gun",
+  "name": "Dart Gun",
+  "genre": "Modern Weapons",
+  "category": "Less-Lethal Weapon",
+  "effect": "Ranged Affliction 5 (Resisted and Overcome by Fortitude; Impaired, Disabled, Incapacitated; Resistible by Toughness), Resistible (Toughness)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Resistible",
+      "detail": "Toughness"
+     }
+    ],
+    "effect": "Affliction",
+    "rank": 5,
+    "range": "Ranged",
+    "detail": "Resisted and Overcome by Fortitude; Impaired, Disabled, Incapacitated; Resistible by Toughness"
+   }
+  ],
+  "cost": 5,
+  "tags": [
+   "less-lethal",
+   "tranquilizer"
+  ],
+  "summary": "Fires tranquilizer darts.",
+  "source": "GG 49"
+ },
+ {
+  "id": "flare-gun",
+  "name": "Flare Gun",
+  "genre": "Modern Weapons",
+  "category": "Signal",
+  "effect": "Environment 2 (light)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Environment",
+    "rank": 2,
+    "detail": "light"
+   }
+  ],
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "signal",
+   "light"
+  ],
+  "summary": "Signal flare that lights the area; Damage 1 in a pinch.",
+  "source": "GG 49"
+ },
+ {
+  "id": "paintball-gun",
+  "name": "Paintball Gun",
+  "genre": "Modern Weapons",
+  "category": "Signal",
+  "effect": "Feature 1 (marks targets with paint)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Feature",
+    "rank": 1,
+    "detail": "marks targets with paint"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "marking",
+   "sport"
+  ],
+  "summary": "Tags targets for tracking or training.",
+  "source": "GG 49"
+ },
+ {
+  "id": "armor-piercing-rounds",
+  "name": "Armor-Piercing Rounds",
+  "genre": "Modern Weapons",
+  "category": "Weapon Accessory",
+  "effect": "Penetrating 3",
+  "features": [
+   {
+    "name": "Penetrating",
+    "ranks": 3
+   }
+  ],
+  "cost": 3,
+  "tags": [
+   "accessory",
+   "ammo"
+  ],
+  "summary": "Penetrating 3 for the loaded weapon (1 ep per rank).",
+  "source": "GG 50"
+ },
+ {
+  "id": "hollow-point-rounds",
+  "name": "Hollow-Point Rounds",
+  "genre": "Modern Weapons",
+  "category": "Weapon Accessory",
+  "effect": "Improved Critical 1 (19-20)",
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1,
+    "detail": "loaded weapon"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "accessory",
+   "ammo"
+  ],
+  "summary": "Expanding rounds: +1 critical threat range.",
+  "source": "GG 50"
+ },
+ {
+  "id": "tracer-rounds",
+  "name": "Tracer Rounds",
+  "genre": "Modern Weapons",
+  "category": "Weapon Accessory",
+  "effect": "Accurate (+2 attack with the loaded weapon)",
+  "features": [
+   {
+    "name": "Accurate",
+    "ranks": 1,
+    "detail": "+2 attack with the loaded weapon"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "accessory",
+   "ammo"
+  ],
+  "summary": "Glowing rounds that help walk fire onto targets.",
+  "source": "GG 50"
+ },
+ {
+  "id": "bayonet",
+  "name": "Bayonet",
+  "genre": "Modern Weapons",
+  "category": "Weapon Accessory",
+  "effect": "Alternate Effect (Strength-based Damage 2, piercing)",
+  "features": [
+   {
+    "name": "Alternate Effect",
+    "ranks": 1,
+    "detail": "Strength-based Damage 2, piercing"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "accessory",
+   "blade"
+  ],
+  "summary": "Turns a rifle into a spear.",
+  "source": "GG 50"
+ },
+ {
+  "id": "biometric-gun-lock",
+  "name": "Biometric Gun Lock",
+  "genre": "Modern Weapons",
+  "category": "Weapon Accessory",
+  "effect": "Restricted (only authorized users can fire)",
+  "features": [
+   {
+    "name": "Restricted",
+    "ranks": 1,
+    "detail": "only authorized users can fire"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "accessory",
+   "security"
+  ],
+  "summary": "Grip scanner that locks out thieves.",
+  "source": "GG 50"
+ },
+ {
+  "id": "iron-sights",
+  "name": "Iron Sights",
+  "genre": "Modern Weapons",
+  "category": "Weapon Accessory",
+  "effect": "Improved Aim",
+  "features": [
+   {
+    "name": "Improved Aim",
+    "ranks": 1
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "accessory",
+   "firearm"
+  ],
+  "summary": "Aiming bonus raised from +2 to +5.",
+  "source": "GG 50"
+ },
+ {
+  "id": "weapon-light",
+  "name": "Weapon Light",
+  "genre": "Modern Weapons",
+  "category": "Weapon Accessory",
+  "effect": "Feature 1 (eliminates darkness penalties along the barrel)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "eliminates darkness penalties along the barrel"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "accessory",
+   "light"
+  ],
+  "summary": "Barrel-mounted spotlight.",
+  "source": "GG 50"
+ },
+ {
+  "id": "ceramic-frame",
+  "name": "Ceramic Frame",
+  "genre": "Modern Weapons",
+  "category": "Weapon Accessory",
+  "effect": "Subtle (invisible to metal detectors)",
+  "features": [
+   {
+    "name": "Subtle",
+    "ranks": 1,
+    "detail": "invisible to metal detectors"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "accessory",
+   "concealable"
+  ],
+  "summary": "Scan-proof non-metal construction.",
+  "source": "GG 50"
+ },
+ {
+  "id": "revolver",
+  "name": "Revolver",
+  "genre": "Modern Weapons",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 6,
+  "tags": [
+   "firearm",
+   "pistol"
+  ],
+  "summary": "Six-shot wheel gun.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "magnum-revolver",
+  "name": "Magnum Revolver",
+  "genre": "Modern Weapons",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 4, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 19
+  },
+  "cost": 9,
+  "tags": [
+   "firearm",
+   "pistol"
+  ],
+  "summary": "Hand cannon with brutal hits.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "service-carbine",
+  "name": "Service Carbine",
+  "genre": "Modern Weapons",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 4, Multiattack",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 12,
+  "tags": [
+   "firearm",
+   "rifle",
+   "automatic"
+  ],
+  "summary": "Short automatic rifle.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "sawed-off-shotgun",
+  "name": "Sawed-Off Shotgun",
+  "genre": "Modern Weapons",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 5, Diminished Range",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Diminished Range",
+      "steps": 1
+     }
+    ],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 9,
+  "tags": [
+   "firearm",
+   "shotgun",
+   "concealable"
+  ],
+  "summary": "Short, brutal and short-ranged.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "compound-bow",
+  "name": "Compound Bow",
+  "genre": "Modern Weapons",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 6,
+  "tags": [
+   "bow"
+  ],
+  "summary": "Modern pulley bow.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "slingshot",
+  "name": "Slingshot",
+  "genre": "Modern Weapons",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 1",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 1,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 2,
+  "tags": [
+   "improvised"
+  ],
+  "summary": "Wrist-braced hunting slingshot.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "baseball-bat",
+  "name": "Baseball Bat",
+  "genre": "Modern Weapons",
+  "category": "Improvised Weapon",
+  "effect": "Damage 2 (bludgeoning), Strength-based",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 2,
+  "tags": [
+   "melee",
+   "bludgeoning",
+   "improvised"
+  ],
+  "summary": "Aluminum or wood slugger.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "tire-iron",
+  "name": "Tire Iron",
+  "genre": "Modern Weapons",
+  "category": "Improvised Weapon",
+  "effect": "Damage 2 (bludgeoning), Strength-based",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 2,
+  "tags": [
+   "melee",
+   "improvised"
+  ],
+  "summary": "Lug wrench turned weapon.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "machete",
+  "name": "Machete",
+  "genre": "Modern Weapons",
+  "category": "Melee Weapon",
+  "effect": "Damage 2 (slashing), Strength-based, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 3,
+  "tags": [
+   "melee",
+   "blade",
+   "slashing"
+  ],
+  "summary": "Heavy chopping blade.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "switchblade",
+  "name": "Switchblade",
+  "genre": "Modern Weapons",
+  "category": "Melee Weapon",
+  "effect": "Damage 1 (piercing), Strength-based, Subtle, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "strengthBased": true,
+    "detail": "piercing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 1,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 3,
+  "tags": [
+   "melee",
+   "blade",
+   "concealable"
+  ],
+  "summary": "Spring-loaded folding knife.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "combat-knife",
+  "name": "Combat Knife",
+  "genre": "Modern Weapons",
+  "category": "Melee Weapon",
+  "effect": "Damage 2 (slashing), Strength-based, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 3,
+  "tags": [
+   "melee",
+   "blade"
+  ],
+  "summary": "Heavy fighting knife.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "collapsible-baton",
+  "name": "Collapsible Baton",
+  "genre": "Modern Weapons",
+  "category": "Melee Weapon",
+  "effect": "Damage 2 (bludgeoning), Strength-based, Subtle",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "tags": [
+   "melee",
+   "bludgeoning",
+   "concealable"
+  ],
+  "summary": "Snaps out to full length.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "sledgehammer",
+  "name": "Sledgehammer",
+  "genre": "Modern Weapons",
+  "category": "Improvised Weapon",
+  "effect": "Damage 4 (bludgeoning), Strength-based, Inaccurate",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Inaccurate",
+      "steps": 1
+     }
+    ],
+    "effect": "Damage",
+    "rank": 4,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 4,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "tags": [
+   "melee",
+   "tool",
+   "bludgeoning"
+  ],
+  "summary": "Wall-breaker; heavy and clumsy (-2 to hit).",
+  "source": "DCUGen"
+ },
+ {
+  "id": "fire-axe",
+  "name": "Fire Axe",
+  "genre": "Modern Weapons",
+  "category": "Improvised Weapon",
+  "effect": "Damage 3 (slashing), Strength-based, Breaking",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Breaking",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 4,
+  "tags": [
+   "melee",
+   "tool",
+   "slashing"
+  ],
+  "summary": "Firefighter axe that chops doors and weapons.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "katar",
+  "name": "Katar",
+  "genre": "Modern Weapons",
+  "category": "Melee Weapon",
+  "effect": "Damage 2 (piercing), Strength-based, Penetrating",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Penetrating",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "piercing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "melee",
+   "blade",
+   "martial arts"
+  ],
+  "summary": "Punch dagger that drives through armor.",
+  "source": "GG 23"
+ },
+ {
+  "id": "throwing-knives",
+  "name": "Throwing Knives",
+  "genre": "Modern Weapons",
+  "category": "Thrown Weapon",
+  "effect": "Ranged Damage 1 (set of five), Strength-based, Unreliable (5 throws)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Unreliable",
+      "detail": "5 throws"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 1,
+    "range": "Ranged",
+    "strengthBased": true,
+    "detail": "set of five"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 1,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 1,
+  "tags": [
+   "thrown",
+   "blade"
+  ],
+  "summary": "A brace of balanced knives; Ranged at no extra cost (Unreliable).",
+  "source": "GG 11"
+ }
+]

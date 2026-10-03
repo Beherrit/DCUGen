@@ -1,0 +1,1263 @@
+{
+  "_about": "Adult life events, age 20+ (age gives [min,max]). Each has a category tag first. 'redemptive' events are favored for heroes, 'dark' for villains. Original content written for DCUGen.",
+  "events": [
+    {
+      "text": "Was promoted ahead of more senior colleagues and made enemies doing it.",
+      "tags": [
+        "career"
+      ],
+      "trait": "R",
+      "person": {
+        "relation": "Rival",
+        "who": "{npc}, a coworker passed over when {name} got the promotion",
+        "status": "Still at the company, smiling in meetings and keeping notes."
+      }
+    },
+    {
+      "text": "Was laid off when {company} 'restructured' and spent a hard year looking for work.",
+      "tags": [
+        "career"
+      ],
+      "trait": "D",
+      "standing": -1
+    },
+    {
+      "text": "Blew the whistle on safety violations at {company} and lost the job but won the lawsuit.",
+      "tags": [
+        "career",
+        "redemptive"
+      ],
+      "trait": "L",
+      "person": {
+        "relation": "Enemy",
+        "who": "{npc}, the {company} executive whose career ended because of {name}'s whistleblowing",
+        "status": "Now consulting for people who don't ask questions."
+      },
+      "complication": {
+        "type": "Enemy",
+        "text": "A disgraced executive blames {name} for everything."
+      }
+    },
+    {
+      "text": "Started a small business that {thrived|barely survived|collapsed after two years}.",
+      "tags": [
+        "career"
+      ],
+      "trait": "N",
+      "effects": {
+        "skills": [
+          "Expertise: Business"
+        ]
+      }
+    },
+    {
+      "text": "Was hired by a rival firm to dig into {company}'s secrets.",
+      "tags": [
+        "career",
+        "crime"
+      ],
+      "trait": "R",
+      "effects": {
+        "skills": [
+          "Investigation",
+          "Deception"
+        ]
+      }
+    },
+    {
+      "text": "Took a night-shift job at {lab} and noticed that the 'cleaning crew' wore sidearms.",
+      "tags": [
+        "career",
+        "lab"
+      ],
+      "trait": "X",
+      "hook": "{lab} is hiring again, and asking specifically for {name}."
+    },
+    {
+      "text": "Worked under a brilliant, impossible boss who taught more in a year than school did in four.",
+      "tags": [
+        "career",
+        "mentor"
+      ],
+      "trait": "L",
+      "person": {
+        "relation": "Mentor",
+        "who": "{npc}, a demanding former boss and the best teacher {name} ever had",
+        "status": "Recently retired; calls when something in the news smells wrong."
+      }
+    },
+    {
+      "text": "Went freelance and learned to live on irregular paychecks and caffeine.",
+      "tags": [
+        "career"
+      ],
+      "trait": "N"
+    },
+    {
+      "text": "Won an industry award that still sits in a box somewhere.",
+      "tags": [
+        "career",
+        "fame"
+      ],
+      "trait": "L",
+      "complication": {
+        "type": "Fame",
+        "text": "Is recognized in professional circles, which makes discretion harder."
+      }
+    },
+    {
+      "text": "Took the blame for a boss's mistake and was quietly pushed out.",
+      "tags": [
+        "career"
+      ],
+      "trait": "D",
+      "regret": "Taking the fall for someone who never said thank you."
+    },
+    {
+      "text": "Fell in love with {npc} and moved across the country to be together.",
+      "tags": [
+        "romance"
+      ],
+      "trait": "L",
+      "person": {
+        "relation": "Love",
+        "who": "{npc}, the partner {name} crossed a country for",
+        "status": "Still together, though the secrets are starting to show."
+      }
+    },
+    {
+      "text": "Got married young; it lasted {two|three|four} years.",
+      "tags": [
+        "romance"
+      ],
+      "trait": "R",
+      "person": {
+        "relation": "Ex",
+        "who": "{npc}, {name}'s former spouse",
+        "status": "Remarried; cordial at weddings and funerals."
+      }
+    },
+    {
+      "text": "Was left at the altar by {npc}, who sent a text from the airport.",
+      "tags": [
+        "romance"
+      ],
+      "trait": "D",
+      "person": {
+        "relation": "Ex",
+        "who": "{npc}, who left {name} at the altar",
+        "status": "Back in town and wants to talk."
+      }
+    },
+    {
+      "text": "Had a whirlwind affair with someone who turned out to be a costumed vigilante.",
+      "tags": [
+        "romance",
+        "super"
+      ],
+      "trait": "X",
+      "person": {
+        "relation": "Ex",
+        "who": "{npc}, a former lover who was secretly the vigilante known as {hero}",
+        "status": "Still active under the mask; still calls on bad nights."
+      }
+    },
+    {
+      "text": "Dated a charming stranger who turned out to be working for a villain.",
+      "tags": [
+        "romance",
+        "super",
+        "crime"
+      ],
+      "trait": "D",
+      "person": {
+        "relation": "Enemy",
+        "who": "{npc}, a former lover who was a plant for {villain}",
+        "status": "Disappeared after the truth came out."
+      }
+    },
+    {
+      "text": "Had a child with {npc}; co-parenting has been {easy|rough|a slow-motion war}.",
+      "tags": [
+        "romance",
+        "family"
+      ],
+      "trait": "L",
+      "age": [
+        20,
+        45
+      ],
+      "child": true,
+      "person": {
+        "relation": "Ex",
+        "who": "{npc}, the other parent of {name}'s child",
+        "status": "Co-parenting, with mixed results."
+      }
+    },
+    {
+      "text": "Fell for a coworker, {npc}, and has never said a word about it.",
+      "tags": [
+        "romance"
+      ],
+      "trait": "N",
+      "person": {
+        "relation": "Love",
+        "who": "{npc}, a coworker {name} has quietly loved for years",
+        "status": "Has no idea. Probably."
+      }
+    },
+    {
+      "text": "Went through a messy, public divorce that drained savings and friendships alike.",
+      "tags": [
+        "romance",
+        "scandal"
+      ],
+      "trait": "D",
+      "standing": -1,
+      "person": {
+        "relation": "Ex",
+        "who": "{npc}, {name}'s bitter ex-spouse",
+        "status": "Still fighting over the house, the dog and the record collection."
+      }
+    },
+    {
+      "text": "Reconnected with a high-school sweetheart at a reunion.",
+      "tags": [
+        "romance"
+      ],
+      "trait": "L",
+      "person": {
+        "relation": "Love",
+        "who": "{npc}, a high-school sweetheart found again",
+        "status": "Together, and very worried about {name}'s late nights."
+      }
+    },
+    {
+      "text": "Was engaged to {npc}, who died before the wedding.",
+      "tags": [
+        "romance",
+        "tragedy"
+      ],
+      "trait": "D",
+      "follow": "tragedy",
+      "regret": "Never getting to say goodbye to {npc}."
+    },
+    {
+      "text": "Got mixed up with a crew pulling {warehouse jobs|insurance scams|armored-car heists} and walked away with a cut and a conscience.",
+      "tags": [
+        "crime"
+      ],
+      "trait": "D",
+      "follow": "underworld",
+      "align": "villain"
+    },
+    {
+      "text": "Was arrested on a charge {they_were} innocent of and spent {four|eight|eighteen} months awaiting trial.",
+      "tags": [
+        "crime",
+        "injustice"
+      ],
+      "trait": "D",
+      "follow": "prison",
+      "motive": "Distrusts a justice system that once got it badly wrong."
+    },
+    {
+      "text": "Was mugged at gunpoint, and something hardened afterward.",
+      "tags": [
+        "crime",
+        "trauma"
+      ],
+      "trait": "D",
+      "fear": "Being unarmed in a dark street"
+    },
+    {
+      "text": "Testified against {npc}, a crime boss, and lived under police protection for a year.",
+      "tags": [
+        "crime"
+      ],
+      "trait": "L",
+      "person": {
+        "relation": "Enemy",
+        "who": "{npc}, a crime boss who went to prison on {name}'s testimony",
+        "status": "Running things from a cell and remembers every name."
+      },
+      "complication": {
+        "type": "Enemy",
+        "text": "A jailed crime boss has a standing bounty on the witness who put them away."
+      }
+    },
+    {
+      "text": "Laundered money for a cousin's business without asking questions, then asked them.",
+      "tags": [
+        "crime"
+      ],
+      "trait": "D",
+      "secret": "Laundered money for organized crime and still has the ledgers."
+    },
+    {
+      "text": "Was a getaway driver for one job, just one, and never told anyone.",
+      "tags": [
+        "crime"
+      ],
+      "trait": "D",
+      "effects": {
+        "skills": [
+          "Vehicles"
+        ]
+      },
+      "secret": "Drove the getaway car on an unsolved robbery."
+    },
+    {
+      "text": "Was robbed of everything in a home invasion and moved twice afterward.",
+      "tags": [
+        "crime",
+        "trauma"
+      ],
+      "trait": "D",
+      "standing": -1
+    },
+    {
+      "text": "Went undercover as a volunteer to expose a fraudulent charity.",
+      "tags": [
+        "crime",
+        "redemptive"
+      ],
+      "trait": "L",
+      "effects": {
+        "skills": [
+          "Deception",
+          "Investigation"
+        ]
+      }
+    },
+    {
+      "text": "Ran an online scam that made good money until a victim's suicide made the news.",
+      "tags": [
+        "crime"
+      ],
+      "trait": "D",
+      "align": "villain",
+      "secret": "Ran a scam that ended in someone's death.",
+      "regret": "The scam victim whose name {name} still looks up."
+    },
+    {
+      "text": "Stole a car to get a dying friend to the hospital and was never charged.",
+      "tags": [
+        "crime",
+        "redemptive"
+      ],
+      "trait": "L"
+    },
+    {
+      "text": "Lost {their} home in a {fire|flood|gas explosion|building collapse}.",
+      "tags": [
+        "tragedy"
+      ],
+      "trait": "D",
+      "follow": "tragedy"
+    },
+    {
+      "text": "Was the only survivor of a {bus crash|train derailment|factory explosion|boat capsizing}.",
+      "tags": [
+        "tragedy",
+        "survivor"
+      ],
+      "trait": "X",
+      "complication": {
+        "type": "Obsession",
+        "text": "Survivor's guilt: needs to understand why only {name} walked away."
+      }
+    },
+    {
+      "text": "Lost a close friend in a costumed battle downtown, crushed by debris from a fight that lasted ninety seconds.",
+      "tags": [
+        "tragedy",
+        "super"
+      ],
+      "trait": "D",
+      "motive": "Believes the people who fight in the streets owe the bystanders more."
+    },
+    {
+      "text": "Watched {their} {parent} slowly forget everyone, including {name}.",
+      "tags": [
+        "tragedy",
+        "family"
+      ],
+      "trait": "D",
+      "needs": [
+        "parent"
+      ],
+      "age": [
+        28,
+        99
+      ]
+    },
+    {
+      "text": "Suffered a miscarriage or a stillbirth in the family, and grief cracked the household.",
+      "tags": [
+        "tragedy",
+        "family"
+      ],
+      "trait": "D",
+      "age": [
+        22,
+        45
+      ]
+    },
+    {
+      "text": "Was diagnosed with a serious illness and fought it into remission.",
+      "tags": [
+        "tragedy",
+        "health",
+        "redemptive"
+      ],
+      "trait": "L",
+      "effects": {
+        "advantages": [
+          "Diehard"
+        ]
+      }
+    },
+    {
+      "text": "Lost a beloved pet in a way that still hurts to think about.",
+      "tags": [
+        "tragedy"
+      ],
+      "trait": "N"
+    },
+    {
+      "text": "Was declared legally dead by mistake and spent a year proving otherwise.",
+      "tags": [
+        "tragedy",
+        "strange"
+      ],
+      "trait": "X"
+    },
+    {
+      "text": "Won a {modest|surprisingly large} lottery prize.",
+      "tags": [
+        "windfall"
+      ],
+      "trait": "R",
+      "follow": "windfall",
+      "standing": 1
+    },
+    {
+      "text": "Inherited a {house|bar|boat|warehouse|bookstore} from a relative {they_were} barely aware of.",
+      "tags": [
+        "windfall",
+        "mystery"
+      ],
+      "trait": "N",
+      "hook": "The inherited property has a locked room nobody can account for."
+    },
+    {
+      "text": "Found a bag of cash in an abandoned car and has never decided what to do with it.",
+      "tags": [
+        "windfall",
+        "crime"
+      ],
+      "trait": "X",
+      "secret": "Has a bag of someone else's money hidden in a storage unit.",
+      "hook": "The owner of the bag of cash is still looking for it."
+    },
+    {
+      "text": "Received a large anonymous gift with a note that said simply, 'For what you will do.'",
+      "tags": [
+        "windfall",
+        "mystery",
+        "super"
+      ],
+      "trait": "X",
+      "follow": "patron"
+    },
+    {
+      "text": "Got a lucky break on a {patent|startup|real-estate flip} that set up the next decade.",
+      "tags": [
+        "windfall",
+        "career"
+      ],
+      "trait": "N",
+      "standing": 1,
+      "effects": {
+        "advantages": [
+          "Benefit"
+        ]
+      }
+    },
+    {
+      "text": "Backpacked across {three continents|South America|Southeast Asia|Africa} for a year on almost no money.",
+      "tags": [
+        "travel"
+      ],
+      "trait": "N",
+      "follow": "travel"
+    },
+    {
+      "text": "Lived abroad for {two|three|five} years teaching English.",
+      "tags": [
+        "travel"
+      ],
+      "trait": "L",
+      "effects": {
+        "advantages": [
+          "Languages"
+        ]
+      }
+    },
+    {
+      "text": "Was stranded in a country during a coup and smuggled out in a truck of oranges.",
+      "tags": [
+        "travel",
+        "danger"
+      ],
+      "trait": "X",
+      "effects": {
+        "skills": [
+          "Stealth"
+        ]
+      }
+    },
+    {
+      "text": "Spent a season working at a research station in Antarctica.",
+      "tags": [
+        "travel",
+        "career"
+      ],
+      "trait": "N",
+      "effects": {
+        "skills": [
+          "Expertise: Survival",
+          "Expertise: Science"
+        ]
+      }
+    },
+    {
+      "text": "Followed a {band|circus|rodeo circuit} around the country for a year.",
+      "tags": [
+        "travel"
+      ],
+      "trait": "N"
+    },
+    {
+      "text": "Enlisted in the military.",
+      "tags": [
+        "military"
+      ],
+      "trait": "R",
+      "follow": "military",
+      "age": [
+        18,
+        35
+      ]
+    },
+    {
+      "text": "Was called up from the reserves for a deployment {they_were} not ready for.",
+      "tags": [
+        "military"
+      ],
+      "trait": "D",
+      "follow": "military",
+      "age": [
+        20,
+        45
+      ]
+    },
+    {
+      "text": "Joined a private military contractor for the money.",
+      "tags": [
+        "military"
+      ],
+      "trait": "D",
+      "follow": "military",
+      "align": "villain",
+      "age": [
+        21,
+        50
+      ]
+    },
+    {
+      "text": "Had a religious awakening after a near-death moment.",
+      "tags": [
+        "faith",
+        "redemptive"
+      ],
+      "trait": "L",
+      "follow": "faith"
+    },
+    {
+      "text": "Lost faith entirely after a tragedy that no prayer could explain.",
+      "tags": [
+        "faith"
+      ],
+      "trait": "D"
+    },
+    {
+      "text": "Joined a meditation retreat that turned out to be a recruiting front for a cult.",
+      "tags": [
+        "faith",
+        "cult"
+      ],
+      "trait": "X",
+      "person": {
+        "relation": "Enemy",
+        "who": "{npc}, the soft-spoken leader of a cult {name} escaped",
+        "status": "Still preaching; still sends messages on {name}'s birthday."
+      }
+    },
+    {
+      "text": "Was badly hurt in a {car crash|workplace accident|fall from scaffolding} and went through a long rehabilitation.",
+      "tags": [
+        "injury"
+      ],
+      "trait": "R",
+      "follow": "injury"
+    },
+    {
+      "text": "Took a bullet meant for someone else and has the scar as a reminder.",
+      "tags": [
+        "injury",
+        "brave",
+        "redemptive"
+      ],
+      "trait": "L",
+      "effects": {
+        "advantages": [
+          "Interpose"
+        ]
+      }
+    },
+    {
+      "text": "Was hospitalized after a beating by {gang}, and the police never followed up.",
+      "tags": [
+        "injury",
+        "crime"
+      ],
+      "trait": "D",
+      "complication": {
+        "type": "Hatred",
+        "text": "Hates {gang} with a cold, patient hatred."
+      }
+    },
+    {
+      "text": "Was caught in a lab accident at {lab}; the official report calls it a minor spill.",
+      "tags": [
+        "injury",
+        "lab",
+        "super"
+      ],
+      "trait": "X",
+      "hook": "Others exposed in the {lab} accident are dying, or changing."
+    },
+    {
+      "text": "Was the subject of a viral video that made {them} briefly famous for all the wrong reasons.",
+      "tags": [
+        "scandal",
+        "fame"
+      ],
+      "trait": "D",
+      "complication": {
+        "type": "Reputation",
+        "text": "Strangers still recognize {name} from an embarrassing viral video."
+      }
+    },
+    {
+      "text": "Was accused of {plagiarism|embezzlement|misconduct} and cleared, though the headlines lasted longer than the verdict.",
+      "tags": [
+        "scandal"
+      ],
+      "trait": "D",
+      "complication": {
+        "type": "Reputation",
+        "text": "An old accusation still follows {name}, cleared or not."
+      }
+    },
+    {
+      "text": "Leaked a document that brought down a corrupt official.",
+      "tags": [
+        "scandal",
+        "redemptive"
+      ],
+      "trait": "L",
+      "person": {
+        "relation": "Enemy",
+        "who": "{npc}, the official whose career {name}'s leak destroyed",
+        "status": "Out of office and very, very patient."
+      }
+    },
+    {
+      "text": "Had an affair that ended a marriage and a friendship in the same week.",
+      "tags": [
+        "scandal",
+        "romance"
+      ],
+      "trait": "D",
+      "regret": "The affair, and the people it hurt."
+    },
+    {
+      "text": "Was taken under the wing of a retired detective who taught how to really read a crime scene.",
+      "tags": [
+        "mentor"
+      ],
+      "trait": "L",
+      "effects": {
+        "skills": [
+          "Investigation",
+          "Perception"
+        ]
+      },
+      "person": {
+        "relation": "Mentor",
+        "who": "{npc}, a retired detective who taught {name} to see what others miss",
+        "status": "Retired, bored and always willing to look at a case file."
+      }
+    },
+    {
+      "text": "Apprenticed with an eccentric inventor who kept a workshop full of patents nobody would fund.",
+      "tags": [
+        "mentor"
+      ],
+      "trait": "N",
+      "effects": {
+        "skills": [
+          "Technology"
+        ],
+        "advantages": [
+          "Inventor"
+        ]
+      },
+      "person": {
+        "relation": "Mentor",
+        "who": "{npc}, an eccentric inventor with a workshop of unfunded wonders",
+        "status": "Missing since a break-in at the workshop."
+      }
+    },
+    {
+      "text": "Trained under a reclusive martial-arts master who accepted one student a decade.",
+      "tags": [
+        "mentor"
+      ],
+      "trait": "L",
+      "effects": {
+        "skills": [
+          "Close Combat: Unarmed",
+          "Acrobatics"
+        ]
+      },
+      "person": {
+        "relation": "Mentor",
+        "who": "{npc}, a reclusive martial-arts master",
+        "status": "Has gone silent; the dojo is shuttered."
+      }
+    },
+    {
+      "text": "Was mentored by a veteran journalist who said the truth is always one more phone call away.",
+      "tags": [
+        "mentor"
+      ],
+      "trait": "L",
+      "effects": {
+        "skills": [
+          "Investigation",
+          "Persuasion"
+        ]
+      },
+      "person": {
+        "relation": "Mentor",
+        "who": "{npc}, a veteran journalist at {paper}",
+        "status": "Still filing stories, still making enemies."
+      }
+    },
+    {
+      "text": "Was taught the art of the con by a grifter who called it 'applied psychology.'",
+      "tags": [
+        "mentor",
+        "crime"
+      ],
+      "trait": "D",
+      "effects": {
+        "skills": [
+          "Deception",
+          "Insight"
+        ]
+      },
+      "person": {
+        "relation": "Mentor",
+        "who": "{npc}, a silver-tongued grifter who taught {name} the con",
+        "status": "Doing a stretch in {prison} and expects a visit."
+      }
+    },
+    {
+      "text": "Became the legal guardian of {sibling}'s kids after a family crisis.",
+      "tags": [
+        "family"
+      ],
+      "trait": "L",
+      "needs": [
+        "sibling"
+      ],
+      "dependent": "{sibling}'s children",
+      "complication": {
+        "type": "Responsibility",
+        "text": "Is raising a sibling's children and can't afford to get hurt."
+      }
+    },
+    {
+      "text": "Reconnected with {their} estranged {parent} just before the end.",
+      "tags": [
+        "family",
+        "redemptive"
+      ],
+      "trait": "L",
+      "needs": [
+        "parent"
+      ],
+      "age": [
+        25,
+        99
+      ],
+      "parentDies": true
+    },
+    {
+      "text": "Had a falling-out with {sibling} over money that neither will apologize for.",
+      "tags": [
+        "family"
+      ],
+      "trait": "D",
+      "needs": [
+        "sibling"
+      ]
+    },
+    {
+      "text": "Took in an elderly relative with nowhere else to go.",
+      "tags": [
+        "family"
+      ],
+      "trait": "L",
+      "dependent": "an elderly relative",
+      "complication": {
+        "type": "Responsibility",
+        "text": "Cares for an elderly relative who can't be left alone for long."
+      }
+    },
+    {
+      "text": "Discovered a sibling {they_were} never told about.",
+      "tags": [
+        "family",
+        "mystery"
+      ],
+      "trait": "X",
+      "person": {
+        "relation": "Friend",
+        "who": "{npc}, a half-sibling discovered late in life",
+        "status": "Getting to know each other; it's awkward and kind of wonderful."
+      }
+    },
+    {
+      "text": "Was blackmailed over an old mistake and paid for {two|three} years.",
+      "tags": [
+        "crime"
+      ],
+      "trait": "D",
+      "person": {
+        "relation": "Enemy",
+        "who": "{npc}, a blackmailer who knows about {name}'s past",
+        "status": "Quiet for now. That never lasts."
+      }
+    },
+    {
+      "text": "Volunteered for years at a shelter and ended up running it.",
+      "tags": [
+        "community",
+        "redemptive"
+      ],
+      "trait": "L",
+      "effects": {
+        "advantages": [
+          "Contacts"
+        ]
+      }
+    },
+    {
+      "text": "Ran for city council on a reform platform and lost by eleven votes.",
+      "tags": [
+        "community",
+        "politics"
+      ],
+      "trait": "L",
+      "effects": {
+        "skills": [
+          "Persuasion"
+        ]
+      }
+    },
+    {
+      "text": "Became a regular at {bar}, where the bartender knows everyone's secrets.",
+      "tags": [
+        "community"
+      ],
+      "trait": "N",
+      "person": {
+        "relation": "Ally",
+        "who": "{npc}, the bartender at {bar} who hears everything",
+        "status": "Pours the first drink free and the information cheap."
+      },
+      "effects": {
+        "advantages": [
+          "Well-informed"
+        ]
+      }
+    },
+    {
+      "text": "Organized the neighborhood to fight a developer's eviction plan, and won.",
+      "tags": [
+        "community",
+        "redemptive"
+      ],
+      "trait": "L",
+      "effects": {
+        "advantages": [
+          "Inspire"
+        ]
+      },
+      "person": {
+        "relation": "Enemy",
+        "who": "{npc}, the developer whose project the neighborhood blocked",
+        "status": "Bought the building next door instead."
+      }
+    },
+    {
+      "text": "Started coaching a youth {boxing|basketball|robotics} program.",
+      "tags": [
+        "community",
+        "redemptive"
+      ],
+      "trait": "L",
+      "dependent": "the kids in the youth program"
+    },
+    {
+      "text": "Struggled with {drinking|painkillers|gambling} for years before getting clean.",
+      "tags": [
+        "health",
+        "redemptive"
+      ],
+      "trait": "R",
+      "complication": {
+        "type": "Addiction",
+        "text": "In recovery; one bad week away from a relapse."
+      }
+    },
+    {
+      "text": "Went through a long depression that friends only recognized in hindsight.",
+      "tags": [
+        "health"
+      ],
+      "trait": "R"
+    },
+    {
+      "text": "Ran a marathon after being told {they'd} never walk normally again.",
+      "tags": [
+        "health",
+        "redemptive"
+      ],
+      "trait": "L",
+      "effects": {
+        "advantages": [
+          "Great Endurance"
+        ]
+      }
+    },
+    {
+      "text": "Was sued into near-bankruptcy by a former business partner.",
+      "tags": [
+        "career",
+        "legal"
+      ],
+      "trait": "D",
+      "standing": -1,
+      "person": {
+        "relation": "Enemy",
+        "who": "{npc}, a former business partner turned courtroom nemesis",
+        "status": "Still filing motions."
+      }
+    },
+    {
+      "text": "Was held hostage during a bank robbery and talked the robbers into letting the children go.",
+      "tags": [
+        "crime",
+        "brave",
+        "redemptive"
+      ],
+      "trait": "L",
+      "effects": {
+        "skills": [
+          "Persuasion",
+          "Insight"
+        ]
+      }
+    },
+    {
+      "text": "Saved a stranger's life and was named in the paper as a 'good Samaritan.'",
+      "tags": [
+        "brave",
+        "redemptive",
+        "fame"
+      ],
+      "trait": "L",
+      "person": {
+        "relation": "Ally",
+        "who": "{npc}, a stranger whose life {name} saved",
+        "status": "Insists on repaying the debt and won't take no for an answer."
+      }
+    },
+    {
+      "text": "Was framed for a crime and cleared only after a costumed detective found the real culprit.",
+      "tags": [
+        "crime",
+        "super",
+        "injustice"
+      ],
+      "trait": "R",
+      "person": {
+        "relation": "Ally",
+        "who": "{hero}, the masked detective who cleared {name}'s name",
+        "status": "Drops by unannounced to ask for favors."
+      }
+    },
+    {
+      "text": "Got a job working for a costumed hero's civilian front company without knowing it.",
+      "tags": [
+        "career",
+        "super"
+      ],
+      "trait": "X"
+    },
+    {
+      "text": "Took a job as a 'consultant' for {villainGroup} and learned too much to quit.",
+      "tags": [
+        "career",
+        "super",
+        "crime"
+      ],
+      "trait": "D",
+      "align": "villain",
+      "person": {
+        "relation": "Enemy",
+        "who": "{npc}, a recruiter for {villainGroup}",
+        "status": "Expects {name} to come back to work."
+      },
+      "complication": {
+        "type": "Secret",
+        "text": "Once worked for {villainGroup}, and they don't accept resignations."
+      }
+    },
+    {
+      "text": "Turned state's evidence against former associates.",
+      "tags": [
+        "crime",
+        "redemptive"
+      ],
+      "trait": "L",
+      "align": "hero",
+      "complication": {
+        "type": "Enemy",
+        "text": "Former associates want the informant who sold them out."
+      }
+    },
+    {
+      "text": "Broke with a criminal past after a {child|priest|cop|stranger} showed unexpected mercy.",
+      "tags": [
+        "crime",
+        "redemptive"
+      ],
+      "trait": "L",
+      "align": "hero"
+    },
+    {
+      "text": "Crossed a line during a job and decided it was easier to keep walking.",
+      "tags": [
+        "crime",
+        "dark"
+      ],
+      "trait": "D",
+      "align": "villain"
+    },
+    {
+      "text": "Was betrayed by a partner and left for dead; survival turned into ambition.",
+      "tags": [
+        "crime",
+        "dark"
+      ],
+      "trait": "D",
+      "align": "villain",
+      "person": {
+        "relation": "Enemy",
+        "who": "{npc}, the partner who left {name} for dead",
+        "status": "Prospering, and unaware {name} survived."
+      },
+      "motive": "Settling accounts with the partner who left {them} for dead."
+    },
+    {
+      "text": "Was humiliated by a costumed hero on live television and has replayed it ever since.",
+      "tags": [
+        "super",
+        "dark"
+      ],
+      "trait": "D",
+      "align": "villain",
+      "person": {
+        "relation": "Enemy",
+        "who": "{hero}, the hero who humiliated {name} on live television",
+        "status": "Has probably forgotten the whole thing, which is worse."
+      },
+      "complication": {
+        "type": "Hatred",
+        "text": "Burning hatred for the hero who humiliated {them} in public."
+      }
+    },
+    {
+      "text": "Lost everything to a corporation that faced no consequences, and decided rules were for the weak.",
+      "tags": [
+        "career",
+        "dark"
+      ],
+      "trait": "D",
+      "align": "villain",
+      "standing": -1
+    },
+    {
+      "text": "Moved to {city} with one suitcase and no plan.",
+      "tags": [
+        "travel"
+      ],
+      "trait": "N"
+    },
+    {
+      "text": "Spent a year caring for {their} dying {parent}.",
+      "tags": [
+        "family",
+        "tragedy"
+      ],
+      "trait": "L",
+      "needs": [
+        "parent"
+      ],
+      "age": [
+        22,
+        99
+      ],
+      "parentDies": true
+    },
+    {
+      "text": "Went back to school at night and earned a degree while working full time.",
+      "tags": [
+        "career",
+        "education"
+      ],
+      "trait": "L",
+      "effects": {
+        "skills": [
+          "Expertise: Academics"
+        ]
+      }
+    },
+    {
+      "text": "Joined a search-and-rescue team after a disaster in {hometown}.",
+      "tags": [
+        "community",
+        "brave",
+        "redemptive"
+      ],
+      "trait": "L",
+      "effects": {
+        "skills": [
+          "Perception",
+          "Treatment"
+        ]
+      }
+    },
+    {
+      "text": "Lost a fortune in a crypto scheme and a friendship with the friend who pitched it.",
+      "tags": [
+        "career",
+        "windfall"
+      ],
+      "trait": "D",
+      "standing": -1
+    },
+    {
+      "text": "Was a juror on a high-profile metahuman trial and received threats afterward.",
+      "tags": [
+        "super",
+        "legal"
+      ],
+      "trait": "R",
+      "hook": "The defendant from the metahuman trial is up for parole."
+    },
+    {
+      "text": "Became a parent through adoption after years of trying.",
+      "tags": [
+        "family"
+      ],
+      "trait": "L",
+      "age": [
+        26,
+        55
+      ],
+      "child": true
+    },
+    {
+      "text": "Was mistaken for a costumed hero's civilian identity and hounded by reporters for a month.",
+      "tags": [
+        "super",
+        "fame"
+      ],
+      "trait": "X"
+    },
+    {
+      "text": "Fostered a string of kids from the system and is still in touch with most of them.",
+      "tags": [
+        "family",
+        "redemptive"
+      ],
+      "trait": "L",
+      "age": [
+        28,
+        70
+      ]
+    },
+    {
+      "text": "Retired, tried to enjoy it, and lasted six months before going back to work.",
+      "tags": [
+        "career"
+      ],
+      "trait": "N",
+      "age": [
+        55,
+        99
+      ]
+    },
+    {
+      "text": "Buried more friends than {they'd} like to count.",
+      "tags": [
+        "tragedy"
+      ],
+      "trait": "D",
+      "age": [
+        50,
+        99
+      ]
+    },
+    {
+      "text": "Became a grandparent and was startled to find {themself} sentimental about it.",
+      "tags": [
+        "family"
+      ],
+      "trait": "L",
+      "age": [
+        45,
+        99
+      ]
+    }
+  ]
+}

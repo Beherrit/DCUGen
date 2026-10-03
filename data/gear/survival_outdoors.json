@@ -1,0 +1,981 @@
+[
+ {
+  "id": "binoculars",
+  "name": "Binoculars",
+  "genre": "Survival & Outdoors",
+  "category": "Surveillance Gear",
+  "effect": "Feature 1 (+5 to visual Perception at a distance)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to visual Perception at a distance"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "optics",
+   "vision"
+  ],
+  "summary": "Overcomes some or all of the distance penalty.",
+  "source": "DCA 149"
+ },
+ {
+  "id": "camo-clothing",
+  "name": "Camo Clothing",
+  "genre": "Survival & Outdoors",
+  "category": "Survival Gear",
+  "effect": "Feature 1 (+5 Stealth in matching environment)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 Stealth in matching environment"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "camouflage",
+   "stealth",
+   "clothing"
+  ],
+  "summary": "Foliage, desert, urban or arctic patterns.",
+  "source": "DCA 149"
+ },
+ {
+  "id": "flash-goggles",
+  "name": "Flash Goggles",
+  "genre": "Survival & Outdoors",
+  "category": "Survival Gear",
+  "effect": "Feature 1 (+5 to resist bright-light visual Dazzle)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist bright-light visual Dazzle"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "eyes",
+   "protective"
+  ],
+  "summary": "Tinted goggles against blinding light.",
+  "source": "DCA 149"
+ },
+ {
+  "id": "gas-mask",
+  "name": "Gas Mask",
+  "genre": "Survival & Outdoors",
+  "category": "Survival Gear",
+  "effect": "Feature 1 (immunity to eye and lung irritants; 12-hour filter)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "immunity to eye and lung irritants; 12-hour filter"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "protective",
+   "gas",
+   "breathing"
+  ],
+  "summary": "Filter mask with integral goggles.",
+  "source": "DCA 149"
+ },
+ {
+  "id": "gps",
+  "name": "GPS",
+  "genre": "Survival & Outdoors",
+  "category": "Survival Gear",
+  "effect": "Feature 1 (+5 to navigation checks outdoors)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to navigation checks outdoors"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "navigation",
+   "electronics"
+  ],
+  "summary": "Satellite position receiver.",
+  "source": "DCA 149"
+ },
+ {
+  "id": "rebreather",
+  "name": "Rebreather",
+  "genre": "Survival & Outdoors",
+  "category": "Survival Gear",
+  "effect": "Feature 1 (20 rounds of air; no suffocation checks)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "20 rounds of air; no suffocation checks"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "breathing",
+   "underwater"
+  ],
+  "summary": "Mouthpiece cylinder with two minutes of air.",
+  "source": "DCA 149"
+ },
+ {
+  "id": "scuba-gear",
+  "name": "SCUBA Gear",
+  "genre": "Survival & Outdoors",
+  "category": "Survival Gear",
+  "effect": "Feature 1 (2 hours of air underwater)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "2 hours of air underwater"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "breathing",
+   "underwater",
+   "diving"
+  ],
+  "summary": "Tank, regulator and mask.",
+  "source": "DCA 149"
+ },
+ {
+  "id": "diving-suit",
+  "name": "Diving Suit",
+  "genre": "Survival & Outdoors",
+  "category": "Survival Gear",
+  "effect": "Immunity 3 (pressure, suffocation)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 3,
+    "detail": "pressure, suffocation"
+   }
+  ],
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "underwater",
+   "diving",
+   "pressure"
+  ],
+  "summary": "Deep-dive suit with pressure support.",
+  "source": "GG 18"
+ },
+ {
+  "id": "climbing-gear",
+  "name": "Climbing Gear",
+  "genre": "Survival & Outdoors",
+  "category": "Climbing",
+  "effect": "Feature 1 (+5 Athletics to climb)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 Athletics to climb"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "climbing"
+  ],
+  "summary": "Rope, harness, carabiners and pitons.",
+  "source": "GG 112"
+ },
+ {
+  "id": "paraglider",
+  "name": "Paraglider",
+  "genre": "Survival & Outdoors",
+  "category": "Movement",
+  "effect": "Flight 2, Limited to gliding; must descend",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "gliding; must descend"
+     }
+    ],
+    "effect": "Flight",
+    "rank": 2
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "movement",
+   "flight",
+   "glider"
+  ],
+  "summary": "Foot-launched wing.",
+  "source": "GG 112"
+ },
+ {
+  "id": "earplugs",
+  "name": "Earplugs",
+  "genre": "Survival & Outdoors",
+  "category": "Protective",
+  "effect": "Feature 1 (+5 to resist auditory attacks), Subtle",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist auditory attacks"
+   },
+   {
+    "name": "Subtle",
+    "ranks": 1
+   }
+  ],
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "protective",
+   "ears"
+  ],
+  "summary": "Foam plugs against deafening noise.",
+  "source": "GG 18"
+ },
+ {
+  "id": "earmuffs",
+  "name": "Earmuffs",
+  "genre": "Survival & Outdoors",
+  "category": "Protective",
+  "effect": "Feature 1 (+5 to resist auditory attacks)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist auditory attacks"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "protective",
+   "ears"
+  ],
+  "summary": "Hearing protection.",
+  "source": "GG 18"
+ },
+ {
+  "id": "safety-goggles",
+  "name": "Safety Goggles",
+  "genre": "Survival & Outdoors",
+  "category": "Protective",
+  "effect": "Feature 1 (+5 to resist visual attacks)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist visual attacks"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "protective",
+   "eyes"
+  ],
+  "summary": "Sealed goggles against liquids and gases.",
+  "source": "GG 18"
+ },
+ {
+  "id": "tent",
+  "name": "Tent",
+  "genre": "Survival & Outdoors",
+  "category": "Camping",
+  "effect": "Feature 1 (shelter for two; +5 to resist weather)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "shelter for two; +5 to resist weather"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "camping",
+   "shelter"
+  ],
+  "summary": "Lightweight backpacking tent.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "sleeping-bag",
+  "name": "Sleeping Bag",
+  "genre": "Survival & Outdoors",
+  "category": "Camping",
+  "effect": "Feature 1 (rest comfortably in cold weather)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "rest comfortably in cold weather"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "camping",
+   "cold"
+  ],
+  "summary": "Mummy bag rated below freezing.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "camp-stove",
+  "name": "Camp Stove",
+  "genre": "Survival & Outdoors",
+  "category": "Camping",
+  "effect": "Feature 1 (cook and melt snow)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "cook and melt snow"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "camping",
+   "fire"
+  ],
+  "summary": "Compact gas stove.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "water-filter",
+  "name": "Water Filter",
+  "genre": "Survival & Outdoors",
+  "category": "Camping",
+  "effect": "Feature 1 (safe water from streams)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "safe water from streams"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "camping",
+   "water"
+  ],
+  "summary": "Pump filter.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "survival-kit",
+  "name": "Survival Kit",
+  "genre": "Survival & Outdoors",
+  "category": "Kits",
+  "effect": "Feature 2 (fire, shelter, signaling and fishing; +2 Expertise (survival))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "fire, shelter, signaling and fishing; +2 Expertise (survival)"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "kit",
+   "survival"
+  ],
+  "summary": "Tin with everything to get through a night.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "compass-and-map",
+  "name": "Compass and Map",
+  "genre": "Survival & Outdoors",
+  "category": "Navigation",
+  "effect": "Feature 1 (+2 to navigation)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 to navigation"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "navigation"
+  ],
+  "summary": "Old-school orienteering kit.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "signal-mirror-and-whistle",
+  "name": "Signal Mirror and Whistle",
+  "genre": "Survival & Outdoors",
+  "category": "Navigation",
+  "effect": "Feature 1 (signal searchers miles away)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "signal searchers miles away"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "signal",
+   "rescue"
+  ],
+  "summary": "Rescue signaling kit.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "emergency-beacon",
+  "name": "Emergency Beacon",
+  "genre": "Survival & Outdoors",
+  "category": "Navigation",
+  "effect": "Feature 1 (transmits position to rescue satellites)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "transmits position to rescue satellites"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "signal",
+   "rescue",
+   "electronics"
+  ],
+  "summary": "Personal locator beacon.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "rope-100-ft",
+  "name": "Rope (100 ft.)",
+  "genre": "Survival & Outdoors",
+  "category": "Climbing",
+  "effect": "Feature 1 (climbing, binding and hauling)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "climbing, binding and hauling"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "climbing",
+   "restraint"
+  ],
+  "summary": "Dynamic nylon rope.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "grappling-hook-and-line",
+  "name": "Grappling Hook and Line",
+  "genre": "Survival & Outdoors",
+  "category": "Climbing",
+  "effect": "Movement 1 (Swinging), Limited when thrown and anchored",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "when thrown and anchored"
+     }
+    ],
+    "effect": "Movement",
+    "rank": 1,
+    "detail": "Swinging"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "climbing",
+   "movement"
+  ],
+  "summary": "Hook thrown to anchor a climbing line.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "ice-climbing-gear",
+  "name": "Ice Climbing Gear",
+  "genre": "Survival & Outdoors",
+  "category": "Climbing",
+  "effect": "Movement 1 (Wall-crawling), Limited to ice and snow",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "ice and snow"
+     }
+    ],
+    "effect": "Movement",
+    "rank": 1,
+    "detail": "Wall-crawling"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "climbing",
+   "cold"
+  ],
+  "summary": "Crampons and ice axes.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "snowshoes",
+  "name": "Snowshoes",
+  "genre": "Survival & Outdoors",
+  "category": "Movement",
+  "effect": "Movement 1 (Environmental Adaptation (snow)), Limited to half speed",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "half speed"
+     }
+    ],
+    "effect": "Movement",
+    "rank": 1,
+    "detail": "Environmental Adaptation (snow)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "movement",
+   "cold"
+  ],
+  "summary": "Walk on deep snow.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "cross-country-skis",
+  "name": "Cross-Country Skis",
+  "genre": "Survival & Outdoors",
+  "category": "Movement",
+  "effect": "Speed 2, Limited to snow",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "snow"
+     }
+    ],
+    "effect": "Speed",
+    "rank": 2
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "movement",
+   "cold"
+  ],
+  "summary": "Skis and poles.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "swim-fins",
+  "name": "Swim Fins",
+  "genre": "Survival & Outdoors",
+  "category": "Movement",
+  "effect": "Swimming 1",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Swimming",
+    "rank": 1
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "movement",
+   "underwater"
+  ],
+  "summary": "Faster swimming.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "wetsuit",
+  "name": "Wetsuit",
+  "genre": "Survival & Outdoors",
+  "category": "Survival Gear",
+  "effect": "Immunity 1 (cold water)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 1,
+    "detail": "cold water"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "underwater",
+   "cold"
+  ],
+  "summary": "Neoprene suit.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "arctic-parka",
+  "name": "Arctic Parka",
+  "genre": "Survival & Outdoors",
+  "category": "Survival Gear",
+  "effect": "Immunity 1 (cold)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 1,
+    "detail": "cold"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "clothing",
+   "cold"
+  ],
+  "summary": "Expedition parka; immune to normal cold.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "desert-gear",
+  "name": "Desert Gear",
+  "genre": "Survival & Outdoors",
+  "category": "Survival Gear",
+  "effect": "Immunity 1 (heat)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 1,
+    "detail": "heat"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "clothing",
+   "heat"
+  ],
+  "summary": "Cooling robes, goggles and water bladder.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "avalanche-transceiver",
+  "name": "Avalanche Transceiver",
+  "genre": "Survival & Outdoors",
+  "category": "Navigation",
+  "effect": "Senses 1 (detect buried transceivers)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 1,
+    "detail": "detect buried transceivers"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "rescue",
+   "cold",
+   "electronics"
+  ],
+  "summary": "Find buried companions.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "hunting-bow",
+  "name": "Hunting Bow",
+  "genre": "Survival & Outdoors",
+  "category": "Hunting",
+  "effect": "Ranged Damage 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 6,
+  "tags": [
+   "bow",
+   "hunting"
+  ],
+  "summary": "Recurve for game.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "deer-rifle",
+  "name": "Deer Rifle",
+  "genre": "Survival & Outdoors",
+  "category": "Hunting",
+  "effect": "Ranged Damage 4, Extended Range",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Extended Range",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 9,
+  "tags": [
+   "firearm",
+   "rifle",
+   "hunting"
+  ],
+  "summary": "Scoped bolt-action.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "hatchet",
+  "name": "Hatchet",
+  "genre": "Survival & Outdoors",
+  "category": "Tools",
+  "effect": "Damage 2 (slashing), Strength-based",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 2,
+  "tags": [
+   "tool",
+   "melee",
+   "slashing"
+  ],
+  "summary": "Camp axe; can be thrown.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "survival-knife",
+  "name": "Survival Knife",
+  "genre": "Survival & Outdoors",
+  "category": "Tools",
+  "effect": "Damage 1 (slashing), Strength-based, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 1,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 2,
+  "tags": [
+   "tool",
+   "blade"
+  ],
+  "summary": "Saw-backed knife with hollow handle.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "bear-spray",
+  "name": "Bear Spray",
+  "genre": "Survival & Outdoors",
+  "category": "Hunting",
+  "effect": "Feature 1 (drives off animals: +5 Intimidation vs. animals)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "drives off animals: +5 Intimidation vs. animals"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "animal",
+   "chemical"
+  ],
+  "summary": "High-capacity capsaicin fogger.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "fishing-kit",
+  "name": "Fishing Kit",
+  "genre": "Survival & Outdoors",
+  "category": "Camping",
+  "effect": "Feature 1 (catch food)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "catch food"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "food",
+   "survival"
+  ],
+  "summary": "Line, hooks and lures.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "snare-wire",
+  "name": "Snare Wire",
+  "genre": "Survival & Outdoors",
+  "category": "Hunting",
+  "effect": "Feature 1 (trap small game)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "trap small game"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "trap",
+   "survival"
+  ],
+  "summary": "Brass wire for snares.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "inflatable-raft",
+  "name": "Inflatable Raft",
+  "genre": "Survival & Outdoors",
+  "category": "Movement",
+  "effect": "Swimming 3, Limited to the surface; carries 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "the surface; carries 4"
+     }
+    ],
+    "effect": "Swimming",
+    "rank": 3
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "water",
+   "boat"
+  ],
+  "summary": "Packable raft with paddles.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "mosquito-netting",
+  "name": "Mosquito Netting",
+  "genre": "Survival & Outdoors",
+  "category": "Camping",
+  "effect": "Feature 1 (+5 to resist insect-borne disease)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist insect-borne disease"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "camping",
+   "disease"
+  ],
+  "summary": "Net and repellent.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "machete-sheath-kit",
+  "name": "Machete Sheath Kit",
+  "genre": "Survival & Outdoors",
+  "category": "Tools",
+  "effect": "Feature 1 (cut through dense jungle at full speed)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "cut through dense jungle at full speed"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "tool",
+   "jungle"
+  ],
+  "summary": "Brush-clearing kit.",
+  "source": "DCUGen"
+ }
+]

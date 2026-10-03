@@ -1,0 +1,696 @@
+[
+ {
+  "id": "ritual-kit",
+  "name": "Ritual Kit",
+  "genre": "Occult & Mystic",
+  "category": "Ritual Gear",
+  "effect": "Feature 2 (tools for rituals: avoids no-tools penalty for Expertise (magic); +2 to ritual checks)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "tools for rituals: avoids no-tools penalty for Expertise (magic); +2 to ritual checks"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "ritual",
+   "kit",
+   "magic"
+  ],
+  "summary": "Candles, chalk, censer, herbs and a ritual knife.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "grimoire",
+  "name": "Grimoire",
+  "genre": "Occult & Mystic",
+  "category": "Ritual Gear",
+  "effect": "Feature 1 (research for Expertise (magic) checks)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "research for Expertise (magic) checks"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "ritual",
+   "research",
+   "book"
+  ],
+  "summary": "Hand-copied book of rites.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "occult-library",
+  "name": "Occult Library",
+  "genre": "Occult & Mystic",
+  "category": "Ritual Gear",
+  "effect": "Feature 3 (+5 Expertise (magic) research checks)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 3,
+    "detail": "+5 Expertise (magic) research checks"
+   }
+  ],
+  "cost": 3,
+  "tags": [
+   "research",
+   "book"
+  ],
+  "summary": "Shelves of forbidden tomes.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "athame",
+  "name": "Athame",
+  "genre": "Occult & Mystic",
+  "category": "Ritual Gear",
+  "effect": "Feature 1 (ritual focus; as a weapon, use Knife)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "ritual focus; as a weapon, use Knife"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "ritual",
+   "blade"
+  ],
+  "summary": "Black-handled ritual knife.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "chalk-and-salt",
+  "name": "Chalk and Salt",
+  "genre": "Occult & Mystic",
+  "category": "Ritual Gear",
+  "effect": "Feature 1 (draw circles that spirits cannot cross (GM))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "draw circles that spirits cannot cross (GM)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "ritual",
+   "protection",
+   "spirits"
+  ],
+  "summary": "For protective circles and wards.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "incense-and-sage",
+  "name": "Incense and Sage",
+  "genre": "Occult & Mystic",
+  "category": "Ritual Gear",
+  "effect": "Feature 1 (+2 to rituals of cleansing and banishing)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 to rituals of cleansing and banishing"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "ritual",
+   "cleansing"
+  ],
+  "summary": "Smudge sticks and resin.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "spell-engine",
+  "name": "Spell Engine",
+  "genre": "Occult & Mystic",
+  "category": "Ritual Gear",
+  "effect": "Enhanced Ritualist 1, Feature 1 (self-executing ritual)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 1,
+    "option": "Ritualist"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Feature",
+    "rank": 1,
+    "detail": "self-executing ritual"
+   }
+  ],
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "ritual",
+   "clockwork",
+   "magic"
+  ],
+  "summary": "Clockwork that performs a programmed ritual.",
+  "source": "GG 104"
+ },
+ {
+  "id": "lucky-charm",
+  "name": "Lucky Charm",
+  "genre": "Occult & Mystic",
+  "category": "Talisman",
+  "effect": "Second Chance (one hazard, e.g. falling)",
+  "features": [
+   {
+    "name": "Second Chance",
+    "ranks": 1,
+    "detail": "one hazard, e.g. falling"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "talisman",
+   "luck"
+  ],
+  "summary": "Rabbit's foot or coin: Second Chance vs. one hazard.",
+  "source": "GG 19"
+ },
+ {
+  "id": "evil-eye-amulet",
+  "name": "Evil Eye Amulet",
+  "genre": "Occult & Mystic",
+  "category": "Talisman",
+  "effect": "Feature 1 (+5 to resist curses and jinxes)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist curses and jinxes"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "talisman",
+   "curse",
+   "protection"
+  ],
+  "summary": "Blue glass nazar.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "crucifix",
+  "name": "Crucifix",
+  "genre": "Occult & Mystic",
+  "category": "Talisman",
+  "effect": "Feature 1 (holds back vampires: +5 Intimidation vs. undead)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "holds back vampires: +5 Intimidation vs. undead"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "talisman",
+   "holy",
+   "undead"
+  ],
+  "summary": "Blessed cross.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "rosary",
+  "name": "Rosary",
+  "genre": "Occult & Mystic",
+  "category": "Talisman",
+  "effect": "Feature 1 (+2 Will vs. possession)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Will vs. possession"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "talisman",
+   "holy",
+   "possession"
+  ],
+  "summary": "Prayer beads.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "holy-water-vials",
+  "name": "Holy Water Vials",
+  "genre": "Occult & Mystic",
+  "category": "Talisman",
+  "effect": "Feature 1 (Damage 2 to unholy creatures (thrown, close))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "Damage 2 to unholy creatures (thrown, close)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "holy",
+   "undead"
+  ],
+  "summary": "Blessed water that burns the damned.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "cold-iron-horseshoe",
+  "name": "Cold Iron Horseshoe",
+  "genre": "Occult & Mystic",
+  "category": "Talisman",
+  "effect": "Feature 1 (faeries cannot cross a threshold it guards)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "faeries cannot cross a threshold it guards"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "talisman",
+   "fae",
+   "iron"
+  ],
+  "summary": "Nailed above a door.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "witch-bottle",
+  "name": "Witch Bottle",
+  "genre": "Occult & Mystic",
+  "category": "Talisman",
+  "effect": "Feature 1 (reflects one curse back on its caster)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "reflects one curse back on its caster"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "talisman",
+   "curse"
+  ],
+  "summary": "Bottle of pins, herbs and hair.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "garlic-garland",
+  "name": "Garlic Garland",
+  "genre": "Occult & Mystic",
+  "category": "Talisman",
+  "effect": "Feature 1 (vampires must make a Will check to approach)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "vampires must make a Will check to approach"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "undead",
+   "vampire"
+  ],
+  "summary": "Old-world vampire deterrent.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "ward-stone",
+  "name": "Ward Stone",
+  "genre": "Occult & Mystic",
+  "category": "Talisman",
+  "effect": "Feature 2 (+5 to resist mental influence by spirits)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "+5 to resist mental influence by spirits"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "talisman",
+   "protection",
+   "spirits"
+  ],
+  "summary": "Carved rune stone.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "silver-dagger",
+  "name": "Silver Dagger",
+  "genre": "Occult & Mystic",
+  "category": "Monster Hunting",
+  "effect": "Damage 1 (piercing, silver), Strength-based, Improved Critical 1 (19-20), Feature 1 (silver: triggers werewolf and fae weaknesses)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "strengthBased": true,
+    "detail": "piercing, silver"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   },
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "silver: triggers werewolf and fae weaknesses"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 1,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 3,
+  "tags": [
+   "blade",
+   "silver",
+   "werewolf"
+  ],
+  "summary": "Silvered blade for lycanthropes.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "wooden-stakes",
+  "name": "Wooden Stakes",
+  "genre": "Occult & Mystic",
+  "category": "Monster Hunting",
+  "effect": "Damage 1 (piercing, wood), Strength-based, Feature 1 (wood: staking a helpless vampire paralyzes it)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "strengthBased": true,
+    "detail": "piercing, wood"
+   }
+  ],
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "wood: staking a helpless vampire paralyzes it"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 1,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 2,
+  "tags": [
+   "wood",
+   "vampire"
+  ],
+  "summary": "Hawthorn stakes and a mallet.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "silver-loaded-revolver",
+  "name": "Silver-Loaded Revolver",
+  "genre": "Occult & Mystic",
+  "category": "Monster Hunting",
+  "effect": "Ranged Damage 3, Feature 1 (silver ammunition)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "silver ammunition"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 7,
+  "tags": [
+   "firearm",
+   "silver",
+   "werewolf"
+  ],
+  "summary": "Revolver loaded with blessed silver.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "tarot-deck",
+  "name": "Tarot Deck",
+  "genre": "Occult & Mystic",
+  "category": "Divination",
+  "effect": "Feature 1 (divination tool for Insight and Expertise (magic))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "divination tool for Insight and Expertise (magic)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "divination",
+   "cards"
+  ],
+  "summary": "Hand-painted cards.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "talking-board",
+  "name": "Talking Board",
+  "genre": "Occult & Mystic",
+  "category": "Divination",
+  "effect": "Feature 1 (communicate with willing spirits (GM))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "communicate with willing spirits (GM)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "divination",
+   "spirits"
+  ],
+  "summary": "Board and planchette.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "crystal-pendulum",
+  "name": "Crystal Pendulum",
+  "genre": "Occult & Mystic",
+  "category": "Divination",
+  "effect": "Feature 1 (+2 to find lost objects on a map (dowsing))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 to find lost objects on a map (dowsing)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "divination"
+  ],
+  "summary": "Quartz on a silver chain.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "scrying-mirror",
+  "name": "Scrying Mirror",
+  "genre": "Occult & Mystic",
+  "category": "Divination",
+  "effect": "Feature 1 (divination focus for rituals)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "divination focus for rituals"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "divination",
+   "mirror"
+  ],
+  "summary": "Black obsidian mirror.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "emf-meter",
+  "name": "EMF Meter",
+  "genre": "Occult & Mystic",
+  "category": "Ghost Hunting",
+  "effect": "Senses 1 (detect spirits (electromagnetic disturbance))",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 1,
+    "detail": "detect spirits (electromagnetic disturbance)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "ghost",
+   "sensor",
+   "electronics"
+  ],
+  "summary": "Lights up near hauntings.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "spirit-box",
+  "name": "Spirit Box",
+  "genre": "Occult & Mystic",
+  "category": "Ghost Hunting",
+  "effect": "Feature 1 (hear spirits through radio static)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "hear spirits through radio static"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "ghost",
+   "electronics",
+   "communication"
+  ],
+  "summary": "Sweeping radio for EVP.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "ghost-cam",
+  "name": "Ghost Cam",
+  "genre": "Occult & Mystic",
+  "category": "Ghost Hunting",
+  "effect": "Senses 1 (infravision), Feature 1 (records anomalies)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 1,
+    "detail": "infravision"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Feature",
+    "rank": 1,
+    "detail": "records anomalies"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "ghost",
+   "camera"
+  ],
+  "summary": "Full-spectrum camera.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "thermometer-gun",
+  "name": "Thermometer Gun",
+  "genre": "Occult & Mystic",
+  "category": "Ghost Hunting",
+  "effect": "Feature 1 (spot cold spots: +2 Perception to locate spirits)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "spot cold spots: +2 Perception to locate spirits"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "ghost",
+   "sensor"
+  ],
+  "summary": "Infrared thermometer.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "exorcism-kit",
+  "name": "Exorcism Kit",
+  "genre": "Occult & Mystic",
+  "category": "Ritual Gear",
+  "effect": "Feature 2 (tools for exorcism rituals: +2 vs. possession)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "tools for exorcism rituals: +2 vs. possession"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "ritual",
+   "possession",
+   "holy"
+  ],
+  "summary": "Stole, oils, holy water and rite book.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "mystic-robes",
+  "name": "Mystic Robes",
+  "genre": "Occult & Mystic",
+  "category": "Ritual Gear",
+  "effect": "Feature 1 (+2 Intimidation among cultists; ritual garb)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Intimidation among cultists; ritual garb"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "clothing",
+   "ritual"
+  ],
+  "summary": "Embroidered vestments.",
+  "source": "DCUGen"
+ }
+]

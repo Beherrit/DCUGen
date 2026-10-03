@@ -74,6 +74,7 @@ async function boot() {
   initForge(R, document.getElementById('view-forge'), {
     editPower: (path) => { openInLab(state.current, path); showTab('lab'); },
     addPower: () => { openInLab(state.current, null); showTab('lab'); },
+    browseGear: () => showTab('garage'),
   });
   initRoster(R, document.getElementById('view-roster'), {
     open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },

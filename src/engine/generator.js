@@ -14,6 +14,7 @@ import { deriveAll, advantageRank, attackKind, allPowers } from './derive.js';
 import { checkLimits } from './limits.js';
 import { rollSpec, rangeOf, evalExpr } from './expr.js';
 import { makeIdentity } from './flavor.js';
+import { generateBio } from './lifepath.js';
 export const ENGINE_VERSION = 1;
 
 const clone = (x) => JSON.parse(JSON.stringify(x));
@@ -927,6 +928,8 @@ export function generateCharacter(R, opts = {}) {
   if (style) ch.style = { name: style.name, summary: style.summary };
   ch.alignment = alignment;
   Object.assign(ch, makeIdentity(R, ch, { arch, theme, themes, rng: rng.fork('identity'), gender: opts.gender }));
+  // A full life story (family, timeline, people, personality, hooks) for every rolled character.
+  try { ch.bio = generateBio(R, ch, { seed: `${seed}::bio` }); } catch { /* the bio is optional */ }
   ch.createdAt = new Date().toISOString();
   return ch;
 }
@@ -938,6 +941,7 @@ export function rerollIdentity(R, ch, seed = randomSeed()) {
   const themes = [theme];
   const out = clone(ch);
   Object.assign(out, makeIdentity(R, out, { arch, theme, themes, rng: makeRng(`${seed}::identity`) }));
+  try { out.bio = generateBio(R, out, { seed: `${seed}::bio` }); } catch { delete out.bio; }
   return out;
 }
 

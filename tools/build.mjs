@@ -41,6 +41,9 @@ function buildData() {
     reference: opt('reference.json', null),
     vehicles: opt('vehicles.json', null), headquarters: opt('headquarters.json', null),
     gm: jsonFolder('gm'),
+    lifepath: jsonFolder('lifepath'),
+    gear: jsonFolder('gear'),
+    spaceRules: opt('space_rules.json', null),
   };
   const out = path.join(SRC, 'generated');
   fs.mkdirSync(out, { recursive: true });

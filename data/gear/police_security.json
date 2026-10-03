@@ -1,0 +1,936 @@
+[
+ {
+  "id": "handcuffs",
+  "name": "Handcuffs",
+  "genre": "Police & Security",
+  "category": "Restraint",
+  "effect": "Feature 1 (restraint; Toughness 9, DC 20 to escape)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "restraint; Toughness 9, DC 20 to escape"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "restraint",
+   "police"
+  ],
+  "summary": "Steel cuffs for defenseless or unresisting prisoners.",
+  "source": "DCA 149"
+ },
+ {
+  "id": "restraints",
+  "name": "Restraints",
+  "genre": "Police & Security",
+  "category": "Restraint",
+  "effect": "Feature 1 (plastic restraint; Toughness 5, DC 20 to escape)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "plastic restraint; Toughness 5, DC 20 to escape"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "restraint",
+   "police"
+  ],
+  "summary": "Plastic zip-cuffs for mass arrests.",
+  "source": "DCA 149"
+ },
+ {
+  "id": "taser",
+  "name": "Taser",
+  "genre": "Police & Security",
+  "category": "Energy Weapon",
+  "effect": "Ranged Affliction 5",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 5,
+    "range": "Ranged",
+    "detail": "electrical; Resisted by Fortitude (DC 15); Dazed, Stunned, Incapacitated"
+   }
+  ],
+  "cost": 10,
+  "bookCost": 10,
+  "tags": [
+   "less-lethal",
+   "electrical",
+   "police"
+  ],
+  "summary": "Dart-firing stunner.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "undercover-shirt",
+  "name": "Undercover Shirt",
+  "genre": "Police & Security",
+  "category": "Modern Armor",
+  "effect": "Protection 2, Limited to Ballistic, Subtle",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "ballistic"
+     }
+    ],
+    "effect": "Protection",
+    "rank": 2
+   }
+  ],
+  "protection": 2,
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "armor",
+   "ballistic",
+   "concealable"
+  ],
+  "summary": "Thin ballistic shirt worn under clothes.",
+  "source": "DCA 154"
+ },
+ {
+  "id": "bulletproof-vest",
+  "name": "Bulletproof Vest",
+  "genre": "Police & Security",
+  "category": "Modern Armor",
+  "effect": "Protection 4, Limited to Ballistic, Subtle",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "ballistic"
+     }
+    ],
+    "effect": "Protection",
+    "rank": 4
+   }
+  ],
+  "protection": 4,
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "armor",
+   "ballistic",
+   "police"
+  ],
+  "summary": "Heavier ballistic vest of police and soldiers.",
+  "source": "DCA 154"
+ },
+ {
+  "id": "tear-gas-grenade",
+  "name": "Tear Gas Grenade",
+  "genre": "Police & Security",
+  "category": "Grenade",
+  "effect": "Cloud Area Affliction 4",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Cloud"
+     },
+     {
+      "name": "Extra Condition"
+     }
+    ],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 4,
+    "range": "Ranged",
+    "detail": "Resisted by Fortitude; Dazed and Vision Impaired, Stunned and Vision Disabled, Incapacitated"
+   }
+  ],
+  "cost": 16,
+  "bookCost": 16,
+  "tags": [
+   "grenade",
+   "gas",
+   "less-lethal",
+   "riot"
+  ],
+  "summary": "Irritant gas that blinds and sickens; Dodge DC 14.",
+  "notes": "Dazed and visually impaired, stunned and visually disabled, incapacitated.",
+  "source": "DCA 154"
+ },
+ {
+  "id": "riot-armor",
+  "name": "Riot Armor",
+  "genre": "Police & Security",
+  "category": "Modern Armor",
+  "effect": "Protection 6",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 6
+   }
+  ],
+  "protection": 6,
+  "cost": 6,
+  "bookCost": 6,
+  "tags": [
+   "armor",
+   "riot",
+   "police"
+  ],
+  "summary": "Full ballistic suit with helmet and gloves.",
+  "source": "GG 18"
+ },
+ {
+  "id": "bulletproof-vest-with-plates",
+  "name": "Bulletproof Vest with Plates",
+  "genre": "Police & Security",
+  "category": "Modern Armor",
+  "effect": "Protection 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 4
+   }
+  ],
+  "protection": 4,
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "armor",
+   "ballistic"
+  ],
+  "summary": "Vest with rigid inserts; protects against more than bullets.",
+  "source": "GG 18"
+ },
+ {
+  "id": "ballistic-jumpsuit",
+  "name": "Ballistic Jumpsuit",
+  "genre": "Police & Security",
+  "category": "Modern Armor",
+  "effect": "Protection 5",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 5
+   }
+  ],
+  "protection": 5,
+  "cost": 5,
+  "tags": [
+   "armor",
+   "agent"
+  ],
+  "summary": "Form-fitting armored uniform of government field agents.",
+  "source": "GG 16"
+ },
+ {
+  "id": "riot-shield",
+  "name": "Riot Shield",
+  "genre": "Police & Security",
+  "category": "Shield",
+  "effect": "Enhanced Dodge 2, Enhanced Parry 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 2,
+    "option": "Dodge"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 2,
+    "option": "Parry"
+   }
+  ],
+  "cost": 4,
+  "tags": [
+   "shield",
+   "riot",
+   "police"
+  ],
+  "summary": "Clear polycarbonate shield (+2 active defenses).",
+  "source": "DCUGen"
+ },
+ {
+  "id": "ballistic-shield",
+  "name": "Ballistic Shield",
+  "genre": "Police & Security",
+  "category": "Shield",
+  "effect": "Enhanced Dodge 3, Enhanced Parry 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 3,
+    "option": "Dodge"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 3,
+    "option": "Parry"
+   }
+  ],
+  "cost": 6,
+  "tags": [
+   "shield",
+   "swat"
+  ],
+  "summary": "Heavy SWAT entry shield with viewport (+3 active defenses).",
+  "source": "DCUGen"
+ },
+ {
+  "id": "police-baton",
+  "name": "Police Baton",
+  "genre": "Police & Security",
+  "category": "Melee Weapon",
+  "effect": "Damage 2 (bludgeoning), Strength-based",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 2,
+  "tags": [
+   "melee",
+   "police",
+   "bludgeoning"
+  ],
+  "summary": "Standard-issue nightstick.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "tonfa",
+  "name": "Tonfa",
+  "genre": "Police & Security",
+  "category": "Melee Weapon",
+  "effect": "Damage 2 (bludgeoning), Strength-based, Defensive",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "features": [
+   {
+    "name": "Defensive",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "melee",
+   "police",
+   "martial arts"
+  ],
+  "summary": "Side-handle baton that guards the forearm.",
+  "source": "GG 23"
+ },
+ {
+  "id": "service-pistol",
+  "name": "Service Pistol",
+  "genre": "Police & Security",
+  "category": "Firearm",
+  "effect": "Ranged Damage 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 6,
+  "tags": [
+   "firearm",
+   "pistol",
+   "police"
+  ],
+  "summary": "Standard police sidearm.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "patrol-shotgun",
+  "name": "Patrol Shotgun",
+  "genre": "Police & Security",
+  "category": "Firearm",
+  "effect": "Ranged Damage 5",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 10,
+  "tags": [
+   "firearm",
+   "shotgun",
+   "police"
+  ],
+  "summary": "Pump shotgun in the cruiser rack.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "patrol-rifle",
+  "name": "Patrol Rifle",
+  "genre": "Police & Security",
+  "category": "Firearm",
+  "effect": "Ranged Damage 5",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 10,
+  "tags": [
+   "firearm",
+   "rifle",
+   "police"
+  ],
+  "summary": "Semi-automatic carbine for active threats.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "beanbag-shotgun",
+  "name": "Beanbag Shotgun",
+  "genre": "Police & Security",
+  "category": "Less-Lethal Weapon",
+  "effect": "Ranged Affliction 4 (Resisted by Fortitude; Dazed, Stunned, Incapacitated)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 4,
+    "range": "Ranged",
+    "detail": "Resisted by Fortitude; Dazed, Stunned, Incapacitated"
+   }
+  ],
+  "cost": 8,
+  "tags": [
+   "less-lethal",
+   "shotgun",
+   "police"
+  ],
+  "summary": "Fires padded rounds that knock the wind out.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "pepper-ball-launcher",
+  "name": "Pepper Ball Launcher",
+  "genre": "Police & Security",
+  "category": "Less-Lethal Weapon",
+  "effect": "Ranged Affliction 3 (Resisted by Fortitude; Dazed and Vision Impaired, Stunned and Vision Disabled), Extra Condition, Limited Degree",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Extra Condition"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited Degree"
+     }
+    ],
+    "effect": "Affliction",
+    "rank": 3,
+    "range": "Ranged",
+    "detail": "Resisted by Fortitude; Dazed and Vision Impaired, Stunned and Vision Disabled"
+   }
+  ],
+  "cost": 6,
+  "tags": [
+   "less-lethal",
+   "chemical",
+   "riot"
+  ],
+  "summary": "Paintball-style irritant rounds.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "long-range-acoustic-device",
+  "name": "Long-Range Acoustic Device",
+  "genre": "Police & Security",
+  "category": "Less-Lethal Weapon",
+  "effect": "Cone Area Affliction 5 (sonic; Resisted by Fortitude; Impaired, Disabled, Unaware (hearing)), Cumulative, Limited to hearing only",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Cone"
+     },
+     {
+      "name": "Cumulative"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "hearing only"
+     }
+    ],
+    "effect": "Affliction",
+    "rank": 5,
+    "detail": "sonic; Resisted by Fortitude; Impaired, Disabled, Unaware (hearing)"
+   }
+  ],
+  "cost": 10,
+  "tags": [
+   "less-lethal",
+   "sonic",
+   "riot"
+  ],
+  "summary": "Truck-mounted sound cannon for crowds.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "net-launcher",
+  "name": "Net Launcher",
+  "genre": "Police & Security",
+  "category": "Less-Lethal Weapon",
+  "effect": "Ranged Affliction 4 (Resisted by Dodge, Overcome by Damage; Hindered and Vulnerable, Defenseless and Immobilized), Extra Condition, Limited Degree",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Extra Condition"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited Degree"
+     }
+    ],
+    "effect": "Affliction",
+    "rank": 4,
+    "range": "Ranged",
+    "detail": "Resisted by Dodge, Overcome by Damage; Hindered and Vulnerable, Defenseless and Immobilized"
+   }
+  ],
+  "cost": 8,
+  "tags": [
+   "capture",
+   "entangling"
+  ],
+  "summary": "Fires a weighted net to snare a fleeing suspect.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "body-camera",
+  "name": "Body Camera",
+  "genre": "Police & Security",
+  "category": "Electronics",
+  "effect": "Feature 1 (records video and audio of encounters)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "records video and audio of encounters"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "recording",
+   "police"
+  ],
+  "summary": "Chest-mounted camera.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "police-radio",
+  "name": "Police Radio",
+  "genre": "Police & Security",
+  "category": "Electronics",
+  "effect": "Feature 1 (dispatch and tactical channels)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "dispatch and tactical channels"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "communication",
+   "radio",
+   "police"
+  ],
+  "summary": "Shoulder radio linked to dispatch.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "badge-and-id",
+  "name": "Badge and ID",
+  "genre": "Police & Security",
+  "category": "Credentials",
+  "effect": "Feature 1 (+2 Intimidation and Persuasion as police)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Intimidation and Persuasion as police"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "credentials",
+   "police",
+   "social"
+  ],
+  "summary": "Shows you speak with the law.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "forensics-kit",
+  "name": "Forensics Kit",
+  "genre": "Police & Security",
+  "category": "Kits",
+  "effect": "Feature 2 (tools for Investigation; +2 to analyze evidence)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "tools for Investigation; +2 to analyze evidence"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "investigation",
+   "kit",
+   "police"
+  ],
+  "summary": "Fingerprint powder, swabs, luminol and bags.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "evidence-kit",
+  "name": "Evidence Kit",
+  "genre": "Police & Security",
+  "category": "Kits",
+  "effect": "Feature 1 (tools for Investigation)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "tools for Investigation"
+   }
+  ],
+  "cost": 1,
+  "bookCost": 1,
+  "tags": [
+   "investigation",
+   "kit"
+  ],
+  "summary": "Bags, tags and gloves to preserve a scene.",
+  "source": "GG 114"
+ },
+ {
+  "id": "breathalyzer",
+  "name": "Breathalyzer",
+  "genre": "Police & Security",
+  "category": "Electronics",
+  "effect": "Feature 1 (measures blood alcohol)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "measures blood alcohol"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "police",
+   "medical"
+  ],
+  "summary": "Roadside sobriety tester.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "door-ram",
+  "name": "Door Ram",
+  "genre": "Police & Security",
+  "category": "Tools",
+  "effect": "Feature 1 (+5 Strength checks to break doors)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 Strength checks to break doors"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "breaching",
+   "swat"
+  ],
+  "summary": "Two-handed battering ram.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "hydraulic-spreader",
+  "name": "Hydraulic Spreader",
+  "genre": "Police & Security",
+  "category": "Tools",
+  "effect": "Feature 2 (pries open cars and doors (Strength 8 for prying))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "pries open cars and doors (Strength 8 for prying)"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "breaching",
+   "rescue"
+  ],
+  "summary": "The \"jaws of life\".",
+  "source": "DCUGen"
+ },
+ {
+  "id": "leg-irons",
+  "name": "Leg Irons",
+  "genre": "Police & Security",
+  "category": "Restraint",
+  "effect": "Feature 1 (restraint; Toughness 9, halves speed)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "restraint; Toughness 9, halves speed"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "restraint",
+   "corrections"
+  ],
+  "summary": "Ankle shackles for transport.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "metahuman-restraints",
+  "name": "Metahuman Restraints",
+  "genre": "Police & Security",
+  "category": "Restraint",
+  "effect": "Feature 3 (restraint; Toughness 13, DC 25 to escape)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 3,
+    "detail": "restraint; Toughness 13, DC 25 to escape"
+   }
+  ],
+  "cost": 3,
+  "tags": [
+   "restraint",
+   "metahuman"
+  ],
+  "summary": "Heavy alloy cuffs rated for super-strong prisoners.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "metal-detector-wand",
+  "name": "Metal Detector Wand",
+  "genre": "Police & Security",
+  "category": "Electronics",
+  "effect": "Feature 1 (+5 Perception to find metal on a person)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 Perception to find metal on a person"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "security",
+   "detection"
+  ],
+  "summary": "Handheld scanner for checkpoints.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "spike-strip",
+  "name": "Spike Strip",
+  "genre": "Police & Security",
+  "category": "Tools",
+  "effect": "Feature 1 (blows out ordinary tires)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "blows out ordinary tires"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "vehicle",
+   "pursuit"
+  ],
+  "summary": "Folding strip of hollow spikes.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "security-keycard",
+  "name": "Security Keycard",
+  "genre": "Police & Security",
+  "category": "Credentials",
+  "effect": "Feature 1 (opens doors in one facility)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "opens doors in one facility"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "security",
+   "access"
+  ],
+  "summary": "Access badge for a building.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "riot-helmet",
+  "name": "Riot Helmet",
+  "genre": "Police & Security",
+  "category": "Armor Accessory",
+  "effect": "Feature 1 (+5 to resist head blows causing Stunned (GM))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist head blows causing Stunned (GM)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "riot",
+   "helmet"
+  ],
+  "summary": "Visored helmet; included with Riot Armor.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "k9-scent-kit",
+  "name": "K9 Scent Kit",
+  "genre": "Police & Security",
+  "category": "Kits",
+  "effect": "Feature 1 (scent samples and lead for a police dog)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "scent samples and lead for a police dog"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "police",
+   "tracking"
+  ],
+  "summary": "Kit for running a tracking dog.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "thermal-imaging-camera",
+  "name": "Thermal Imaging Camera",
+  "genre": "Police & Security",
+  "category": "Electronics",
+  "effect": "Feature 1 (infravision through smoke and darkness)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "infravision through smoke and darkness"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "vision",
+   "swat",
+   "rescue"
+  ],
+  "summary": "Handheld heat camera.",
+  "source": "DCUGen"
+ }
+]

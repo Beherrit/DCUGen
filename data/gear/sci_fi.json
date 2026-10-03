@@ -1,0 +1,1551 @@
+[
+ {
+  "id": "blaster-pistol",
+  "name": "Blaster Pistol",
+  "genre": "Sci-Fi",
+  "category": "Energy Weapon",
+  "effect": "Ranged Damage 5",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged",
+    "detail": "energy"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 10,
+  "bookCost": 10,
+  "tags": [
+   "energy",
+   "pistol",
+   "blaster"
+  ],
+  "summary": "Pistol firing coherent energy bolts.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "blaster-rifle",
+  "name": "Blaster Rifle",
+  "genre": "Sci-Fi",
+  "category": "Energy Weapon",
+  "effect": "Ranged Damage 8",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 8,
+    "range": "Ranged",
+    "detail": "energy"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 8,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 16,
+  "bookCost": 16,
+  "tags": [
+   "energy",
+   "rifle",
+   "blaster"
+  ],
+  "summary": "Rifle-sized blaster.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "laser-pistol",
+  "name": "Laser Pistol",
+  "genre": "Sci-Fi",
+  "category": "Energy Weapon",
+  "effect": "Ranged Damage 5 (light), Accurate",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Accurate",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged",
+    "detail": "light"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 11,
+  "bookCost": 11,
+  "tags": [
+   "energy",
+   "pistol",
+   "laser"
+  ],
+  "summary": "Precise beam sidearm.",
+  "source": "GG 45"
+ },
+ {
+  "id": "ice-gun",
+  "name": "Ice Gun",
+  "genre": "Sci-Fi",
+  "category": "Energy Weapon",
+  "effect": "Ranged Affliction 8 (ice; Resisted by Dodge, Overcome by Damage; Hindered and Vulnerable, Defenseless and Immobilized), Extra Condition, Limited Degree",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Extra Condition"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited Degree"
+     }
+    ],
+    "effect": "Affliction",
+    "rank": 8,
+    "range": "Ranged",
+    "detail": "ice; Resisted by Dodge, Overcome by Damage; Hindered and Vulnerable, Defenseless and Immobilized"
+   }
+  ],
+  "cost": 16,
+  "bookCost": 16,
+  "tags": [
+   "energy",
+   "cold",
+   "capture"
+  ],
+  "summary": "Freeze ray that encases targets.",
+  "source": "GG 45"
+ },
+ {
+  "id": "microwave-disruptor",
+  "name": "Microwave Disruptor",
+  "genre": "Sci-Fi",
+  "category": "Energy Weapon",
+  "effect": "Ranged Weaken 6 (Electronics), Broad, Simultaneous, Accurate",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Broad"
+     },
+     {
+      "name": "Simultaneous"
+     },
+     {
+      "name": "Accurate",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Weaken",
+    "rank": 6,
+    "detail": "Electronics",
+    "range": "Ranged"
+   }
+  ],
+  "cost": 25,
+  "bookCost": 25,
+  "tags": [
+   "energy",
+   "emp",
+   "anti-robot"
+  ],
+  "summary": "Targeted EMP gun.",
+  "source": "GG 45"
+ },
+ {
+  "id": "plasma-burst",
+  "name": "Plasma Burst",
+  "genre": "Sci-Fi",
+  "category": "Energy Weapon",
+  "effect": "Cone Area Damage 8 (fire), Secondary Effect",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Cone"
+     },
+     {
+      "name": "Secondary Effect"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 8,
+    "strengthBased": false,
+    "detail": "fire"
+   }
+  ],
+  "cost": 24,
+  "bookCost": 24,
+  "tags": [
+   "energy",
+   "plasma",
+   "area",
+   "fire"
+  ],
+  "summary": "Cone of plasma that keeps burning.",
+  "source": "GG 45"
+ },
+ {
+  "id": "sonic-stunner",
+  "name": "Sonic Stunner",
+  "genre": "Sci-Fi",
+  "category": "Energy Weapon",
+  "effect": "Ranged Affliction 6 (sonic; Resisted and Overcome by Fortitude; Dazed, Stunned, Incapacitated)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 6,
+    "range": "Ranged",
+    "detail": "sonic; Resisted and Overcome by Fortitude; Dazed, Stunned, Incapacitated"
+   }
+  ],
+  "cost": 12,
+  "bookCost": 12,
+  "tags": [
+   "energy",
+   "sonic",
+   "less-lethal"
+  ],
+  "summary": "Non-lethal sound-wave pistol.",
+  "source": "GG 45"
+ },
+ {
+  "id": "x-ray-laser-sniper-rifle",
+  "name": "X-Ray Laser Sniper Rifle",
+  "genre": "Sci-Fi",
+  "category": "Energy Weapon",
+  "effect": "Ranged Damage 8 (radiation), Accurate, Penetrating 5, Subtle, Extended Range, Dangerous",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Accurate",
+      "steps": 1
+     },
+     {
+      "name": "Penetrating",
+      "steps": 5
+     },
+     {
+      "name": "Subtle"
+     },
+     {
+      "name": "Extended Range",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 8,
+    "range": "Ranged",
+    "detail": "radiation"
+   }
+  ],
+  "features": [
+   {
+    "name": "Dangerous",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 8,
+   "strengthBased": false,
+   "crit": 19
+  },
+  "cost": 25,
+  "bookCost": 25,
+  "tags": [
+   "energy",
+   "rifle",
+   "laser",
+   "long range"
+  ],
+  "summary": "Invisible armor-piercing beam rifle.",
+  "source": "GG 45"
+ },
+ {
+  "id": "plasma-flamer",
+  "name": "Plasma Flamer",
+  "genre": "Sci-Fi",
+  "category": "Energy Weapon",
+  "effect": "Line Area Damage 6 (fire), Secondary Effect",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Line"
+     },
+     {
+      "name": "Secondary Effect"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 6,
+    "strengthBased": false,
+    "detail": "fire"
+   }
+  ],
+  "cost": 18,
+  "bookCost": 18,
+  "tags": [
+   "energy",
+   "fire",
+   "area"
+  ],
+  "summary": "Energy flamethrower with clinging fire.",
+  "source": "GG 45"
+ },
+ {
+  "id": "electro-whip",
+  "name": "Electro-Whip",
+  "genre": "Sci-Fi",
+  "category": "Energy Melee Weapon",
+  "effect": "Damage 3 (electricity), Secondary Effect, Disarming, Grabbing",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Secondary Effect"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": false,
+    "detail": "electricity"
+   }
+  ],
+  "features": [
+   {
+    "name": "Disarming",
+    "ranks": 1
+   },
+   {
+    "name": "Grabbing",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 8,
+  "bookCost": 8,
+  "tags": [
+   "energy",
+   "whip",
+   "electricity"
+  ],
+  "summary": "Charged lash that shocks, snags and holds.",
+  "notes": "GG 45 lists Concentration (+1 per rank); modeled as Secondary Effect at the same cost.",
+  "source": "GG 45"
+ },
+ {
+  "id": "grav-gauntlet",
+  "name": "Grav Gauntlet",
+  "genre": "Sci-Fi",
+  "category": "Energy Melee Weapon",
+  "effect": "Damage 6, Strength-based",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 6,
+    "strengthBased": true
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 6,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 6,
+  "bookCost": 6,
+  "tags": [
+   "energy",
+   "gauntlet",
+   "gravity"
+  ],
+  "summary": "Gravity-boosted punches.",
+  "source": "GG 45"
+ },
+ {
+  "id": "laser-sword",
+  "name": "Laser Sword",
+  "genre": "Sci-Fi",
+  "category": "Energy Melee Weapon",
+  "effect": "Damage 6 (light), Penetrating 6",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Penetrating",
+      "steps": 6
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 6,
+    "strengthBased": false,
+    "detail": "light"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 6,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 12,
+  "bookCost": 12,
+  "tags": [
+   "energy",
+   "sword",
+   "laser"
+  ],
+  "summary": "Energy blade that slices most protection.",
+  "source": "GG 45"
+ },
+ {
+  "id": "shock-baton",
+  "name": "Shock Baton",
+  "genre": "Sci-Fi",
+  "category": "Energy Melee Weapon",
+  "effect": "Affliction 5 (electricity; Resisted and Overcome by Fortitude; Dazed, Stunned, Incapacitated), Cumulative",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Cumulative"
+     }
+    ],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 5,
+    "detail": "electricity; Resisted and Overcome by Fortitude; Dazed, Stunned, Incapacitated"
+   }
+  ],
+  "cost": 10,
+  "bookCost": 10,
+  "tags": [
+   "energy",
+   "baton",
+   "less-lethal",
+   "electricity"
+  ],
+  "summary": "Stun stick whose jolts stack.",
+  "source": "GG 45"
+ },
+ {
+  "id": "sonic-knife",
+  "name": "Sonic Knife",
+  "genre": "Sci-Fi",
+  "category": "Energy Melee Weapon",
+  "effect": "Damage 2 (slashing, sonic), Strength-based, Dangerous",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "slashing, sonic"
+   }
+  ],
+  "features": [
+   {
+    "name": "Dangerous",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "energy",
+   "blade",
+   "sonic"
+  ],
+  "summary": "Vibro-edged knife.",
+  "source": "GG 45"
+ },
+ {
+  "id": "personal-force-field",
+  "name": "Personal Force Field",
+  "genre": "Sci-Fi",
+  "category": "Energy Armor",
+  "effect": "Protection 6, Sustained",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Sustained"
+     }
+    ],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 6
+   }
+  ],
+  "protection": 6,
+  "cost": 6,
+  "tags": [
+   "force field",
+   "armor",
+   "energy"
+  ],
+  "summary": "Glowing second skin of force (1 per rank).",
+  "source": "GG 18"
+ },
+ {
+  "id": "sealed-force-field",
+  "name": "Sealed Force Field",
+  "genre": "Sci-Fi",
+  "category": "Energy Armor",
+  "effect": "Protection 6, Sustained, Immunity 8 (life support except eating and sleeping)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Sustained"
+     }
+    ],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 6
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 8,
+    "detail": "life support except eating and sleeping"
+   }
+  ],
+  "protection": 6,
+  "cost": 14,
+  "tags": [
+   "force field",
+   "armor",
+   "environment"
+  ],
+  "summary": "Airtight field that doubles as a space suit (8 + 1 per rank).",
+  "source": "GG 18"
+ },
+ {
+  "id": "nano-armor",
+  "name": "Nano-Armor",
+  "genre": "Sci-Fi",
+  "category": "Energy Armor",
+  "effect": "Protection 6, Variable Descriptor (Broad group)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Variable Descriptor",
+      "option": "Broad group"
+     }
+    ],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 6
+   }
+  ],
+  "protection": 6,
+  "cost": 8,
+  "tags": [
+   "nanotech",
+   "armor"
+  ],
+  "summary": "Smart matter that adapts its descriptors (2 + 1 per rank).",
+  "source": "GG 18"
+ },
+ {
+  "id": "life-support-field",
+  "name": "Life Support Field",
+  "genre": "Sci-Fi",
+  "category": "Environmental",
+  "effect": "Immunity 10 (life support), Quirk 2 (no nourishment or sleep benefit)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Quirk",
+      "detail": "no nourishment or sleep benefit",
+      "steps": 2
+     }
+    ],
+    "effect": "Immunity",
+    "rank": 10,
+    "detail": "life support"
+   }
+  ],
+  "cost": 8,
+  "bookCost": 8,
+  "tags": [
+   "environment",
+   "force field"
+  ],
+  "summary": "Aura that lets the wearer breathe anywhere.",
+  "source": "GG 19"
+ },
+ {
+  "id": "disruptor-pistol",
+  "name": "Disruptor Pistol",
+  "genre": "Sci-Fi",
+  "category": "Energy Weapon",
+  "effect": "Ranged Damage 6 (disintegration), Penetrating 3",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Penetrating",
+      "steps": 3
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 6,
+    "range": "Ranged",
+    "detail": "disintegration"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 6,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 15,
+  "tags": [
+   "energy",
+   "pistol"
+  ],
+  "summary": "Particle pistol that unbinds matter.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "pulse-rifle",
+  "name": "Pulse Rifle",
+  "genre": "Sci-Fi",
+  "category": "Energy Weapon",
+  "effect": "Ranged Damage 7 (energy), Multiattack",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 7,
+    "range": "Ranged",
+    "detail": "energy"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 7,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 21,
+  "tags": [
+   "energy",
+   "rifle",
+   "automatic"
+  ],
+  "summary": "Rapid-fire energy carbine.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "rail-gun",
+  "name": "Rail Gun",
+  "genre": "Sci-Fi",
+  "category": "Heavy Weapon",
+  "effect": "Ranged Damage 9, Penetrating 9, Extended Range",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Penetrating",
+      "steps": 9
+     },
+     {
+      "name": "Extended Range",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 9,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 9,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 28,
+  "tags": [
+   "kinetic",
+   "rifle",
+   "heavy"
+  ],
+  "summary": "Magnetic accelerator that pierces anything.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "needler",
+  "name": "Needler",
+  "genre": "Sci-Fi",
+  "category": "Energy Weapon",
+  "effect": "Ranged Damage 3, Multiattack, Homing",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     },
+     {
+      "name": "Homing",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 10,
+  "tags": [
+   "kinetic",
+   "pistol",
+   "homing"
+  ],
+  "summary": "Fires seeking crystal flechettes.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "stun-pistol",
+  "name": "Stun Pistol",
+  "genre": "Sci-Fi",
+  "category": "Energy Weapon",
+  "effect": "Ranged Affliction 6 (energy; Resisted and Overcome by Fortitude; Dazed, Stunned, Incapacitated)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 6,
+    "range": "Ranged",
+    "detail": "energy; Resisted and Overcome by Fortitude; Dazed, Stunned, Incapacitated"
+   }
+  ],
+  "cost": 12,
+  "tags": [
+   "energy",
+   "pistol",
+   "less-lethal"
+  ],
+  "summary": "The classic \"set to stun\" sidearm.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "phaser",
+  "name": "Phaser",
+  "genre": "Sci-Fi",
+  "category": "Energy Weapon",
+  "effect": "Ranged Damage 6 (energy); AE: Ranged Affliction 6 (stun; Resisted by Fortitude; Dazed, Stunned, Incapacitated)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 6,
+    "range": "Ranged",
+    "detail": "energy",
+    "alternates": [
+     {
+      "extras": [],
+      "flaws": [],
+      "effect": "Affliction",
+      "rank": 6,
+      "range": "Ranged",
+      "detail": "stun; Resisted by Fortitude; Dazed, Stunned, Incapacitated"
+     }
+    ]
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 6,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 13,
+  "tags": [
+   "energy",
+   "pistol",
+   "less-lethal"
+  ],
+  "summary": "Kill or stun settings (Alternate Effect).",
+  "source": "DCUGen"
+ },
+ {
+  "id": "plasma-grenade",
+  "name": "Plasma Grenade",
+  "genre": "Sci-Fi",
+  "category": "Grenade",
+  "effect": "Ranged Burst Area Damage 7 (plasma)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 7,
+    "range": "Ranged",
+    "detail": "plasma"
+   }
+  ],
+  "cost": 21,
+  "tags": [
+   "grenade",
+   "plasma",
+   "area"
+  ],
+  "summary": "Sticky ball of star-fire.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "gravity-grenade",
+  "name": "Gravity Grenade",
+  "genre": "Sci-Fi",
+  "category": "Grenade",
+  "effect": "Ranged Burst Area Affliction 6 (gravity; Resisted by Dodge; Hindered and Vulnerable, Defenseless and Immobilized), Extra Condition, Limited Degree",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     },
+     {
+      "name": "Extra Condition"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited Degree"
+     }
+    ],
+    "effect": "Affliction",
+    "rank": 6,
+    "range": "Ranged",
+    "detail": "gravity; Resisted by Dodge; Hindered and Vulnerable, Defenseless and Immobilized"
+   }
+  ],
+  "cost": 18,
+  "tags": [
+   "grenade",
+   "gravity",
+   "capture"
+  ],
+  "summary": "Pins everyone in the blast to the floor.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "emp-grenade",
+  "name": "EMP Grenade",
+  "genre": "Sci-Fi",
+  "category": "Grenade",
+  "effect": "Ranged Burst Area Weaken 6 (Electronics), Broad",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     },
+     {
+      "name": "Broad"
+     }
+    ],
+    "flaws": [],
+    "effect": "Weaken",
+    "rank": 6,
+    "detail": "Electronics",
+    "range": "Ranged"
+   }
+  ],
+  "cost": 24,
+  "tags": [
+   "grenade",
+   "emp",
+   "anti-robot"
+  ],
+  "summary": "Fries electronics in a radius.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "vibro-blade",
+  "name": "Vibro-Blade",
+  "genre": "Sci-Fi",
+  "category": "Energy Melee Weapon",
+  "effect": "Damage 3 (slashing), Strength-based, Penetrating 5",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Penetrating",
+      "steps": 5
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 8,
+  "tags": [
+   "blade",
+   "vibro"
+  ],
+  "summary": "Ultrasonic sword that cuts armor.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "energy-staff",
+  "name": "Energy Staff",
+  "genre": "Sci-Fi",
+  "category": "Energy Melee Weapon",
+  "effect": "Damage 4 (energy), Reach, Double",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Reach",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "strengthBased": false,
+    "detail": "energy"
+   }
+  ],
+  "features": [
+   {
+    "name": "Double",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 6,
+  "tags": [
+   "energy",
+   "staff"
+  ],
+  "summary": "Polearm with crackling energy tips.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "monofilament-whip",
+  "name": "Monofilament Whip",
+  "genre": "Sci-Fi",
+  "category": "Energy Melee Weapon",
+  "effect": "Burst Area Damage 6, Selective, Penetrating 6, Side Effect (On failure) (damages wielder)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     },
+     {
+      "name": "Selective"
+     },
+     {
+      "name": "Penetrating",
+      "steps": 6
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Side Effect",
+      "option": "On failure",
+      "detail": "damages wielder"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 6,
+    "strengthBased": false
+   }
+  ],
+  "cost": 18,
+  "tags": [
+   "nanotech",
+   "whip"
+  ],
+  "summary": "Invisible wire that slices everything around you.",
+  "source": "GG 78"
+ },
+ {
+  "id": "light-combat-armor",
+  "name": "Light Combat Armor",
+  "genre": "Sci-Fi",
+  "category": "Powered Armor",
+  "effect": "Protection 5",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 5
+   }
+  ],
+  "protection": 5,
+  "cost": 5,
+  "tags": [
+   "armor",
+   "combat"
+  ],
+  "summary": "Polymer plate for troopers.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "powered-armor",
+  "name": "Powered Armor",
+  "genre": "Sci-Fi",
+  "category": "Powered Armor",
+  "effect": "Protection 8, Impervious, Enhanced Strength 4, Immunity 10 (life support), Senses 3 (darkvision, radio), Leaping 3",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Impervious",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 8
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 4,
+    "option": "Strength"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 10,
+    "detail": "life support"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 3,
+    "detail": "darkvision, radio"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Leaping",
+    "rank": 3
+   }
+  ],
+  "protection": 8,
+  "cost": 40,
+  "tags": [
+   "armor",
+   "powered",
+   "battlesuit"
+  ],
+  "summary": "Mass-produced powered suit for far-future soldiers.",
+  "notes": "A battlesuit is a device in a modern setting (DCA 143); priced here as far-future equipment (GG 16).",
+  "source": "GG 16"
+ },
+ {
+  "id": "heavy-powered-armor",
+  "name": "Heavy Powered Armor",
+  "genre": "Sci-Fi",
+  "category": "Powered Armor",
+  "effect": "Protection 10, Impervious, Enhanced Strength 6, Immunity 10 (life support), Senses 4 (darkvision, radio, distance sense, direction sense), Flight 3, Limited to jump jets: leaps and hovers",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Impervious"
+     }
+    ],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 10
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 6,
+    "option": "Strength"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 10,
+    "detail": "life support"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 4,
+    "detail": "darkvision, radio, distance sense, direction sense"
+   },
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "jump jets: leaps and hovers"
+     }
+    ],
+    "effect": "Flight",
+    "rank": 3
+   }
+  ],
+  "protection": 10,
+  "cost": 49,
+  "tags": [
+   "armor",
+   "powered",
+   "battlesuit"
+  ],
+  "summary": "Walking tank with jump jets.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "exo-frame",
+  "name": "Exo-Frame",
+  "genre": "Sci-Fi",
+  "category": "Powered Armor",
+  "effect": "Enhanced Strength 3, Power-Lifting 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 3,
+    "option": "Strength"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Power-Lifting",
+    "rank": 3
+   }
+  ],
+  "cost": 9,
+  "tags": [
+   "exoskeleton",
+   "strength",
+   "industrial"
+  ],
+  "summary": "Open-frame lifting exoskeleton.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "medkit-auto-doc",
+  "name": "Medkit (Auto-Doc)",
+  "genre": "Sci-Fi",
+  "category": "Medical",
+  "effect": "Healing 5, Activation (Standard action)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Activation",
+      "option": "Standard action"
+     }
+    ],
+    "effect": "Healing",
+    "rank": 5
+   }
+  ],
+  "cost": 8,
+  "tags": [
+   "medical",
+   "healing"
+  ],
+  "summary": "Sprays nanogel that seals wounds.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "regeneration-patch",
+  "name": "Regeneration Patch",
+  "genre": "Sci-Fi",
+  "category": "Medical",
+  "effect": "Regeneration 2",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Regeneration",
+    "rank": 2
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "medical",
+   "healing"
+  ],
+  "summary": "Patch that speeds healing.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "scanner",
+  "name": "Scanner",
+  "genre": "Sci-Fi",
+  "category": "Sensors",
+  "effect": "Senses 5 (Analytical, Extended, Detect life and energy (ranged))",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 5,
+    "detail": "Analytical, Extended, Detect life and energy (ranged)"
+   }
+  ],
+  "cost": 5,
+  "tags": [
+   "sensor",
+   "scanner",
+   "analytical"
+  ],
+  "summary": "Handheld multi-sensor for life, energy and chemistry.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "bio-scanner",
+  "name": "Bio-Scanner",
+  "genre": "Sci-Fi",
+  "category": "Sensors",
+  "effect": "Senses 2 (Detect life (ranged)), Feature 1 (medical readouts: +2 Treatment)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 2,
+    "detail": "Detect life (ranged)"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Feature",
+    "rank": 1,
+    "detail": "medical readouts: +2 Treatment"
+   }
+  ],
+  "cost": 3,
+  "tags": [
+   "sensor",
+   "medical"
+  ],
+  "summary": "Life-sign and vitals reader.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "universal-translator",
+  "name": "Universal Translator",
+  "genre": "Sci-Fi",
+  "category": "Utility",
+  "effect": "Comprehend 2 (languages, speak and understand)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Comprehend",
+    "rank": 2,
+    "detail": "languages, speak and understand"
+   }
+  ],
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "language",
+   "communication"
+  ],
+  "summary": "Understand and be understood in any language.",
+  "source": "GG 6"
+ },
+ {
+  "id": "subspace-communicator",
+  "name": "Subspace Communicator",
+  "genre": "Sci-Fi",
+  "category": "Utility",
+  "effect": "Communication 3 (radio, interplanetary), Subtle",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [],
+    "effect": "Communication",
+    "rank": 3,
+    "detail": "radio, interplanetary"
+   }
+  ],
+  "cost": 13,
+  "bookCost": 13,
+  "tags": [
+   "communication",
+   "radio"
+  ],
+  "summary": "Encrypted long-range communicator.",
+  "source": "GG 6"
+ },
+ {
+  "id": "holo-disguise",
+  "name": "Holo-Disguise",
+  "genre": "Sci-Fi",
+  "category": "Utility",
+  "effect": "Morph 3 (humanoids), Limited to visual and auditory",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "visual and auditory"
+     }
+    ],
+    "effect": "Morph",
+    "rank": 3,
+    "detail": "humanoids"
+   }
+  ],
+  "cost": 12,
+  "bookCost": 12,
+  "tags": [
+   "disguise",
+   "hologram"
+  ],
+  "summary": "Hologram that fools eyes and ears but not sensors.",
+  "source": "GG 7"
+ },
+ {
+  "id": "personal-cloaking-device",
+  "name": "Personal Cloaking Device",
+  "genre": "Sci-Fi",
+  "category": "Utility",
+  "effect": "Concealment 4 (visual)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Concealment",
+    "rank": 4,
+    "detail": "visual"
+   }
+  ],
+  "cost": 8,
+  "bookCost": 8,
+  "tags": [
+   "stealth",
+   "invisibility"
+  ],
+  "summary": "Personal invisibility field.",
+  "source": "GG 7"
+ },
+ {
+  "id": "mind-mask",
+  "name": "Mind Mask",
+  "genre": "Sci-Fi",
+  "category": "Utility",
+  "effect": "Concealment 2 (mental)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Concealment",
+    "rank": 2,
+    "detail": "mental"
+   }
+  ],
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "mental",
+   "stealth"
+  ],
+  "summary": "Hides thoughts from telepaths.",
+  "source": "GG 7"
+ },
+ {
+  "id": "hover-board",
+  "name": "Hover Board",
+  "genre": "Sci-Fi",
+  "category": "Transport",
+  "effect": "Flight 2, Platform",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Platform"
+     }
+    ],
+    "effect": "Flight",
+    "rank": 2
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "transport",
+   "flight"
+  ],
+  "summary": "Anti-grav board.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "holo-projector",
+  "name": "Holo-Projector",
+  "genre": "Sci-Fi",
+  "category": "Utility",
+  "effect": "Feature 1 (projects 3-D images and video)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "projects 3-D images and video"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "hologram",
+   "electronics"
+  ],
+  "summary": "Palm projector for messages and maps.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "datapad",
+  "name": "Datapad",
+  "genre": "Sci-Fi",
+  "category": "Utility",
+  "effect": "Feature 2 (computer, comms and library)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "computer, comms and library"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "computer",
+   "electronics"
+  ],
+  "summary": "Tablet of the future.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "tractor-beam-projector",
+  "name": "Tractor Beam Projector",
+  "genre": "Sci-Fi",
+  "category": "Utility",
+  "effect": "Move Object 4 (tractor beam)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Move Object",
+    "rank": 4,
+    "detail": "tractor beam"
+   }
+  ],
+  "cost": 8,
+  "tags": [
+   "gravity",
+   "utility"
+  ],
+  "summary": "Hauls objects through the air.",
+  "source": "DCUGen"
+ }
+]

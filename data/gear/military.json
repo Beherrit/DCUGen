@@ -1,0 +1,1356 @@
+[
+ {
+  "id": "assault-rifle",
+  "name": "Assault Rifle",
+  "genre": "Military",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Multiattack Damage 5",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 15,
+  "bookCost": 15,
+  "tags": [
+   "firearm",
+   "rifle",
+   "automatic"
+  ],
+  "summary": "Select-fire military rifle.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "flamethrower",
+  "name": "Flamethrower",
+  "genre": "Military",
+  "category": "Heavy Weapon",
+  "effect": "Cone or Line Area Damage 6",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Cone"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 6,
+    "strengthBased": false,
+    "detail": "fire",
+    "alternates": [
+     {
+      "extras": [
+       {
+        "name": "Area",
+        "option": "Line"
+       }
+      ],
+      "flaws": [],
+      "effect": "Damage",
+      "rank": 6,
+      "strengthBased": false,
+      "detail": "fire"
+     }
+    ]
+   }
+  ],
+  "cost": 13,
+  "bookCost": 13,
+  "tags": [
+   "heavy",
+   "fire",
+   "area"
+  ],
+  "summary": "Sprays fire as a cone or a line (Alternate Effects).",
+  "source": "DCA 152"
+ },
+ {
+  "id": "grenade-launcher",
+  "name": "Grenade Launcher",
+  "genre": "Military",
+  "category": "Heavy Weapon",
+  "effect": "Ranged Burst Area Damage 5",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "cost": 15,
+  "bookCost": 15,
+  "tags": [
+   "heavy",
+   "explosive",
+   "area"
+  ],
+  "summary": "Lobs fragmentation grenades a long way.",
+  "source": "DCA 152"
+ },
+ {
+  "id": "rocket-launcher",
+  "name": "Rocket Launcher",
+  "genre": "Military",
+  "category": "Heavy Weapon",
+  "effect": "Ranged Damage 10, Burst Area 7",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 10,
+    "range": "Ranged",
+    "detail": "explosive"
+   }
+  ],
+  "partials": [
+   {
+    "name": "Area",
+    "option": "Burst",
+    "ranks": 7
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 10,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 27,
+  "bookCost": 27,
+  "tags": [
+   "heavy",
+   "explosive",
+   "anti-tank"
+  ],
+  "summary": "Anti-tank rocket: Damage 10 on the target, 7 in the burst.",
+  "notes": "Primary target resists Damage 10, others in the burst Damage 7; must reload after one or two shots. Burst Area is a partial extra on 7 ranks (+7).",
+  "source": "DCA 152"
+ },
+ {
+  "id": "fragmentation-grenade",
+  "name": "Fragmentation Grenade",
+  "genre": "Military",
+  "category": "Grenade",
+  "effect": "Burst Area Damage 5",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged",
+    "detail": "thrown"
+   }
+  ],
+  "cost": 15,
+  "bookCost": 15,
+  "tags": [
+   "grenade",
+   "explosive",
+   "area"
+  ],
+  "summary": "Shrapnel grenade; Dodge DC 15.",
+  "source": "DCA 154"
+ },
+ {
+  "id": "smoke-grenade",
+  "name": "Smoke Grenade",
+  "genre": "Military",
+  "category": "Grenade",
+  "effect": "Cloud Area Concealment Attack 4",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Cloud"
+     }
+    ],
+    "flaws": [],
+    "effect": "Concealment",
+    "rank": 4,
+    "detail": "all visual; Attack"
+   }
+  ],
+  "cost": 12,
+  "bookCost": 12,
+  "tags": [
+   "grenade",
+   "smoke",
+   "concealment"
+  ],
+  "summary": "Total visual concealment in a cloud; Dodge DC 14.",
+  "notes": "Attack is a +0 extra here, as the book prices it.",
+  "source": "DCA 154"
+ },
+ {
+  "id": "flash-bang-grenade",
+  "name": "Flash-Bang Grenade",
+  "genre": "Military",
+  "category": "Grenade",
+  "effect": "Burst Area Dazzle 4",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Cumulative"
+     },
+     {
+      "name": "Area",
+      "option": "Burst"
+     }
+    ],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 4,
+    "range": "Ranged",
+    "detail": "Dazzle (vision and hearing); Resisted by Fortitude; Impaired, Disabled, Unaware"
+   }
+  ],
+  "cost": 16,
+  "bookCost": 16,
+  "tags": [
+   "grenade",
+   "dazzle",
+   "less-lethal"
+  ],
+  "summary": "Blinds and deafens; Dodge DC 14.",
+  "notes": "Affects vision and hearing (a two-sense Dazzle); a vision-only flash grenade costs 12.",
+  "source": "DCA 154"
+ },
+ {
+  "id": "flash-grenade",
+  "name": "Flash Grenade",
+  "genre": "Military",
+  "category": "Grenade",
+  "effect": "Burst Area Visual Dazzle 4",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     }
+    ],
+    "flaws": [],
+    "effect": "Dazzle",
+    "rank": 4,
+    "detail": "vision"
+   }
+  ],
+  "cost": 12,
+  "bookCost": 12,
+  "tags": [
+   "grenade",
+   "dazzle",
+   "less-lethal"
+  ],
+  "summary": "Vision-only flash grenade.",
+  "source": "DCA 154"
+ },
+ {
+  "id": "sleep-gas-grenade",
+  "name": "Sleep Gas Grenade",
+  "genre": "Military",
+  "category": "Grenade",
+  "effect": "Cloud Area Sleep 4",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Cloud"
+     }
+    ],
+    "flaws": [],
+    "effect": "Sleep",
+    "rank": 4
+   }
+  ],
+  "cost": 12,
+  "bookCost": 12,
+  "tags": [
+   "grenade",
+   "gas",
+   "less-lethal"
+  ],
+  "summary": "Knockout gas; Dodge DC 14.",
+  "source": "DCA 154"
+ },
+ {
+  "id": "dynamite",
+  "name": "Dynamite",
+  "genre": "Military",
+  "category": "Explosive",
+  "effect": "Burst Area Damage 5",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged",
+    "detail": "thrown stick"
+   }
+  ],
+  "cost": 15,
+  "bookCost": 15,
+  "tags": [
+   "explosive",
+   "area"
+  ],
+  "summary": "Per stick; each doubling adds +1 Damage.",
+  "source": "DCA 154"
+ },
+ {
+  "id": "plastic-explosive",
+  "name": "Plastic Explosive",
+  "genre": "Military",
+  "category": "Explosive",
+  "effect": "Burst Area Damage 10",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 10,
+    "range": "Ranged",
+    "detail": "per 1 lb. block"
+   }
+  ],
+  "cost": 30,
+  "bookCost": 30,
+  "tags": [
+   "explosive",
+   "area",
+   "demolition"
+  ],
+  "summary": "Moldable explosive; Dodge DC 20.",
+  "source": "DCA 154"
+ },
+ {
+  "id": "light-machine-gun",
+  "name": "Light Machine Gun",
+  "genre": "Military",
+  "category": "Heavy Weapon",
+  "effect": "Ranged Damage 6, Multiattack",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 6,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 6,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 18,
+  "tags": [
+   "firearm",
+   "automatic",
+   "heavy"
+  ],
+  "summary": "Belt-fed squad automatic weapon.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "heavy-machine-gun",
+  "name": "Heavy Machine Gun",
+  "genre": "Military",
+  "category": "Heavy Weapon",
+  "effect": "Ranged Damage 7, Multiattack",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 7,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 7,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 21,
+  "tags": [
+   "firearm",
+   "automatic",
+   "heavy",
+   "mounted"
+  ],
+  "summary": "Tripod or vehicle-mounted .50 caliber gun.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "anti-materiel-rifle",
+  "name": "Anti-Materiel Rifle",
+  "genre": "Military",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 7, Penetrating 7, Extended Range",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Penetrating",
+      "steps": 7
+     },
+     {
+      "name": "Extended Range",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 7,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 7,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 22,
+  "tags": [
+   "firearm",
+   "rifle",
+   "long range",
+   "anti-armor"
+  ],
+  "summary": "Huge-caliber rifle that punches through armor.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "battle-rifle",
+  "name": "Battle Rifle",
+  "genre": "Military",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 5, Multiattack, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 19
+  },
+  "cost": 16,
+  "tags": [
+   "firearm",
+   "rifle",
+   "automatic"
+  ],
+  "summary": "Full-power select-fire rifle.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "designated-marksman-rifle",
+  "name": "Designated Marksman Rifle",
+  "genre": "Military",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 5, Accurate, Extended Range",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Accurate",
+      "steps": 1
+     },
+     {
+      "name": "Extended Range",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 12,
+  "tags": [
+   "firearm",
+   "rifle",
+   "long range"
+  ],
+  "summary": "Scoped semi-auto for squad sharpshooters.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "combat-pistol",
+  "name": "Combat Pistol",
+  "genre": "Military",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 4",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 8,
+  "tags": [
+   "firearm",
+   "pistol"
+  ],
+  "summary": "Military sidearm.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "personal-defense-weapon",
+  "name": "Personal Defense Weapon",
+  "genre": "Military",
+  "category": "Projectile Weapon",
+  "effect": "Ranged Damage 4, Multiattack, Penetrating 2",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     },
+     {
+      "name": "Penetrating",
+      "steps": 2
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 14,
+  "tags": [
+   "firearm",
+   "automatic"
+  ],
+  "summary": "Compact automatic firing armor-piercing rounds.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "automatic-grenade-launcher",
+  "name": "Automatic Grenade Launcher",
+  "genre": "Military",
+  "category": "Heavy Weapon",
+  "effect": "Ranged Burst Area Damage 5, Multiattack",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     },
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged"
+   }
+  ],
+  "cost": 20,
+  "tags": [
+   "heavy",
+   "explosive",
+   "area",
+   "mounted"
+  ],
+  "summary": "Belt-fed grenade machine gun.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "guided-missile-launcher",
+  "name": "Guided Missile Launcher",
+  "genre": "Military",
+  "category": "Heavy Weapon",
+  "effect": "Ranged Damage 10 (explosive), Homing 3, Penetrating 5, Burst Area 6 (on 6 ranks)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Homing",
+      "steps": 3
+     },
+     {
+      "name": "Penetrating",
+      "steps": 5
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 10,
+    "range": "Ranged",
+    "detail": "explosive"
+   }
+  ],
+  "partials": [
+   {
+    "name": "Area",
+    "option": "Burst",
+    "ranks": 6
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 10,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 34,
+  "tags": [
+   "heavy",
+   "explosive",
+   "anti-tank",
+   "homing"
+  ],
+  "summary": "Fire-and-forget anti-tank missile.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "portable-mortar",
+  "name": "Portable Mortar",
+  "genre": "Military",
+  "category": "Heavy Weapon",
+  "effect": "Ranged Burst Area Damage 6, Indirect 2",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     },
+     {
+      "name": "Indirect",
+      "steps": 2
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 6,
+    "range": "Ranged"
+   }
+  ],
+  "cost": 20,
+  "tags": [
+   "heavy",
+   "explosive",
+   "artillery"
+  ],
+  "summary": "Light mortar for indirect fire.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "thermobaric-grenade",
+  "name": "Thermobaric Grenade",
+  "genre": "Military",
+  "category": "Grenade",
+  "effect": "Ranged Burst Area Damage 6 (fire and blast)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 6,
+    "range": "Ranged",
+    "detail": "fire and blast"
+   }
+  ],
+  "cost": 18,
+  "tags": [
+   "grenade",
+   "explosive",
+   "fire"
+  ],
+  "summary": "Fuel-air grenade for clearing rooms.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "incendiary-grenade",
+  "name": "Incendiary Grenade",
+  "genre": "Military",
+  "category": "Grenade",
+  "effect": "Ranged Burst Area Damage 4 (fire), Secondary Effect",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     },
+     {
+      "name": "Secondary Effect"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged",
+    "detail": "fire"
+   }
+  ],
+  "cost": 16,
+  "tags": [
+   "grenade",
+   "fire"
+  ],
+  "summary": "Thermite that keeps burning next round.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "concussion-grenade",
+  "name": "Concussion Grenade",
+  "genre": "Military",
+  "category": "Grenade",
+  "effect": "Ranged Burst Area Affliction 4 (Resisted by Fortitude; Dazed, Stunned, Incapacitated)",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     }
+    ],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 4,
+    "range": "Ranged",
+    "detail": "Resisted by Fortitude; Dazed, Stunned, Incapacitated"
+   }
+  ],
+  "cost": 12,
+  "tags": [
+   "grenade",
+   "less-lethal"
+  ],
+  "summary": "Overpressure blast that stuns.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "claymore-mine",
+  "name": "Claymore Mine",
+  "genre": "Military",
+  "category": "Explosive",
+  "effect": "Cone Area Damage 6 (directional shrapnel), Triggered",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Cone"
+     },
+     {
+      "name": "Triggered",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 6,
+    "strengthBased": false,
+    "detail": "directional shrapnel"
+   }
+  ],
+  "cost": 13,
+  "tags": [
+   "explosive",
+   "mine",
+   "trap"
+  ],
+  "summary": "Tripwire-fired directional mine.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "land-mine",
+  "name": "Land Mine",
+  "genre": "Military",
+  "category": "Explosive",
+  "effect": "Burst Area Damage 7, Triggered",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     },
+     {
+      "name": "Triggered",
+      "steps": 1
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 7,
+    "strengthBased": false
+   }
+  ],
+  "cost": 15,
+  "tags": [
+   "explosive",
+   "mine",
+   "trap"
+  ],
+  "summary": "Buried pressure-triggered mine.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "shaped-charge",
+  "name": "Shaped Charge",
+  "genre": "Military",
+  "category": "Explosive",
+  "effect": "Damage 10 (breaching; objects), Penetrating 10, Limited to objects and structures",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Penetrating",
+      "steps": 10
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "to objects and structures"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 10,
+    "strengthBased": false,
+    "detail": "breaching; objects"
+   }
+  ],
+  "cost": 15,
+  "tags": [
+   "explosive",
+   "demolition",
+   "breaching"
+  ],
+  "summary": "Cuts through walls, doors and vehicle hulls.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "detonator-kit",
+  "name": "Detonator Kit",
+  "genre": "Military",
+  "category": "Explosive Accessory",
+  "effect": "Feature 1 (remote or timed detonation)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "remote or timed detonation"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "explosive",
+   "demolition"
+  ],
+  "summary": "Blasting caps, timers and radio triggers.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "combat-bayonet-knife",
+  "name": "Combat Bayonet Knife",
+  "genre": "Military",
+  "category": "Melee Weapon",
+  "effect": "Damage 2 (slashing), Strength-based, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 3,
+  "tags": [
+   "melee",
+   "blade"
+  ],
+  "summary": "Fighting knife that mounts on a rifle.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "entrenching-tool",
+  "name": "Entrenching Tool",
+  "genre": "Military",
+  "category": "Melee Weapon",
+  "effect": "Damage 2 (slashing), Strength-based",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 2,
+  "tags": [
+   "melee",
+   "tool"
+  ],
+  "summary": "Folding shovel with a sharpened edge.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "plate-carrier",
+  "name": "Plate Carrier",
+  "genre": "Military",
+  "category": "Military Armor",
+  "effect": "Protection 5, Limited to ballistic",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "ballistic"
+     }
+    ],
+    "effect": "Protection",
+    "rank": 5
+   }
+  ],
+  "protection": 5,
+  "cost": 3,
+  "tags": [
+   "armor",
+   "ballistic"
+  ],
+  "summary": "Vest with ceramic plates over the vitals.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "infantry-body-armor",
+  "name": "Infantry Body Armor",
+  "genre": "Military",
+  "category": "Military Armor",
+  "effect": "Protection 6",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 6
+   }
+  ],
+  "protection": 6,
+  "cost": 6,
+  "tags": [
+   "armor"
+  ],
+  "summary": "Full combat armor with helmet and side plates.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "bomb-disposal-suit",
+  "name": "Bomb Disposal Suit",
+  "genre": "Military",
+  "category": "Military Armor",
+  "effect": "Protection 8, Quirk 2 (bulky: -2 speed, -5 Agility skill checks)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Quirk",
+      "detail": "bulky: -2 speed, -5 Agility skill checks",
+      "steps": 2
+     }
+    ],
+    "effect": "Protection",
+    "rank": 8
+   }
+  ],
+  "protection": 8,
+  "cost": 6,
+  "tags": [
+   "armor",
+   "explosive"
+  ],
+  "summary": "Massive blast suit for EOD technicians.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "ceramic-trauma-plates",
+  "name": "Ceramic Trauma Plates",
+  "genre": "Military",
+  "category": "Military Armor",
+  "effect": "Protection 2, Impervious, Limited to ballistic, torso",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Impervious"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "ballistic, torso"
+     }
+    ],
+    "effect": "Protection",
+    "rank": 2
+   }
+  ],
+  "protection": 2,
+  "cost": 2,
+  "tags": [
+   "armor",
+   "ballistic"
+  ],
+  "summary": "Rigid inserts adding Impervious protection.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "kevlar-helmet",
+  "name": "Kevlar Helmet",
+  "genre": "Military",
+  "category": "Military Armor",
+  "effect": "Feature 1 (+2 to resist being stunned by head blows)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 to resist being stunned by head blows"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "armor",
+   "helmet"
+  ],
+  "summary": "Combat helmet.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "thermal-scope",
+  "name": "Thermal Scope",
+  "genre": "Military",
+  "category": "Optics",
+  "effect": "Senses 2 (infravision; extended vision)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 2,
+    "detail": "infravision; extended vision"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "optics",
+   "vision"
+  ],
+  "summary": "Sees body heat at range.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "night-vision-monocular",
+  "name": "Night Vision Monocular",
+  "genre": "Military",
+  "category": "Optics",
+  "effect": "Senses 1 (low-light vision)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 1,
+    "detail": "low-light vision"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "optics",
+   "vision",
+   "night"
+  ],
+  "summary": "Helmet-mounted light amplifier.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "laser-rangefinder",
+  "name": "Laser Rangefinder",
+  "genre": "Military",
+  "category": "Optics",
+  "effect": "Feature 1 (exact distance to target)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "exact distance to target"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "optics"
+  ],
+  "summary": "Measures distance for artillery and snipers.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "field-radio",
+  "name": "Field Radio",
+  "genre": "Military",
+  "category": "Electronics",
+  "effect": "Feature 1 (long-range encrypted radio)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "long-range encrypted radio"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "communication",
+   "radio"
+  ],
+  "summary": "Backpack radio for calling support.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "mre-ration-pack",
+  "name": "MRE Ration Pack",
+  "genre": "Military",
+  "category": "Field Gear",
+  "effect": "Feature 1 (a day of food without cooking)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "a day of food without cooking"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "food",
+   "survival"
+  ],
+  "summary": "Meals ready to eat.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "ghillie-suit",
+  "name": "Ghillie Suit",
+  "genre": "Military",
+  "category": "Field Gear",
+  "effect": "Feature 2 (+5 Stealth (+10 when prone and still) in matching terrain)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "+5 Stealth (+10 when prone and still) in matching terrain"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "camouflage",
+   "stealth",
+   "sniper"
+  ],
+  "summary": "Shaggy camouflage cover for snipers.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "nbc-suit",
+  "name": "NBC Suit",
+  "genre": "Military",
+  "category": "Field Gear",
+  "effect": "Immunity 3 (disease, poison, radiation (limited exposure)), Immunity 1 (eye and lung irritants)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 3,
+    "detail": "disease, poison, radiation (limited exposure)"
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Immunity",
+    "rank": 1,
+    "detail": "eye and lung irritants"
+   }
+  ],
+  "cost": 4,
+  "tags": [
+   "protective",
+   "hazmat"
+  ],
+  "summary": "Sealed suit against chemical, biological and nuclear agents.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "military-parachute",
+  "name": "Military Parachute",
+  "genre": "Military",
+  "category": "Field Gear",
+  "effect": "Movement 1 (Safe Fall)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Movement",
+    "rank": 1,
+    "detail": "Safe Fall"
+   }
+  ],
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "movement",
+   "airborne"
+  ],
+  "summary": "Static-line or free-fall chute.",
+  "source": "GG 112"
+ },
+ {
+  "id": "combat-medic-bag",
+  "name": "Combat Medic Bag",
+  "genre": "Military",
+  "category": "Field Gear",
+  "effect": "Feature 2 (tools for Treatment; +2 to stabilize)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 2,
+    "detail": "tools for Treatment; +2 to stabilize"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "medical",
+   "kit"
+  ],
+  "summary": "Tourniquets, chest seals and IV kit.",
+  "source": "DCUGen"
+ }
+]

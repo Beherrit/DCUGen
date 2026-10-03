@@ -1,0 +1,979 @@
+[
+ {
+  "id": "clockwork-carbine",
+  "name": "Clockwork Carbine",
+  "genre": "Steampunk & Victorian",
+  "category": "Steamtech Weapon",
+  "effect": "Ranged Damage 4 (ballistic), Multiattack",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 4,
+    "range": "Ranged",
+    "detail": "ballistic"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 4,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 12,
+  "bookCost": 12,
+  "tags": [
+   "firearm",
+   "clockwork",
+   "automatic"
+  ],
+  "summary": "Spring-wound repeating carbine.",
+  "source": "GG 101"
+ },
+ {
+  "id": "shock-cane",
+  "name": "Shock Cane",
+  "genre": "Steampunk & Victorian",
+  "category": "Gimmicked Cane",
+  "effect": "Affliction 3 (electricity; Resisted and Overcome by Fortitude; Dazed, Stunned, Incapacitated)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Affliction",
+    "rank": 3,
+    "detail": "electricity; Resisted and Overcome by Fortitude; Dazed, Stunned, Incapacitated"
+   }
+  ],
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "cane",
+   "electricity",
+   "less-lethal"
+  ],
+  "summary": "Capacitor in the cane tip zaps on contact.",
+  "source": "GG 101"
+ },
+ {
+  "id": "spear-cane",
+  "name": "Spear Cane",
+  "genre": "Steampunk & Victorian",
+  "category": "Gimmicked Cane",
+  "effect": "Damage 2 (piercing), Strength-based, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "piercing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "cane",
+   "concealable",
+   "polearm"
+  ],
+  "summary": "Blade springs from the cane tip.",
+  "source": "GG 101"
+ },
+ {
+  "id": "spyglass-cane",
+  "name": "Spyglass Cane",
+  "genre": "Steampunk & Victorian",
+  "category": "Gimmicked Cane",
+  "effect": "Senses 3 (Extended Vision 3)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 3,
+    "detail": "Extended Vision 3"
+   }
+  ],
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "cane",
+   "optics"
+  ],
+  "summary": "Collapsible telescope inside a walking stick.",
+  "source": "GG 102"
+ },
+ {
+  "id": "sword-cane",
+  "name": "Sword Cane",
+  "genre": "Steampunk & Victorian",
+  "category": "Gimmicked Cane",
+  "effect": "Damage 3 (slashing), Strength-based",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "bookCost": 3,
+  "tags": [
+   "cane",
+   "sword",
+   "concealable"
+  ],
+  "summary": "Thin blade sheathed in the cane.",
+  "source": "GG 102"
+ },
+ {
+  "id": "gentlemans-walking-stick",
+  "name": "Gentleman's Walking Stick",
+  "genre": "Steampunk & Victorian",
+  "category": "Gimmicked Cane",
+  "effect": "Damage 2 (bludgeoning), Strength-based",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 2,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 2,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 2,
+  "bookCost": 2,
+  "tags": [
+   "cane",
+   "bludgeoning"
+  ],
+  "summary": "Weighted cane, the base for gimmicks.",
+  "source": "GG 102"
+ },
+ {
+  "id": "sleeve-derringer",
+  "name": "Sleeve Derringer",
+  "genre": "Steampunk & Victorian",
+  "category": "Steamtech Weapon",
+  "effect": "Ranged Damage 3 (ballistic), Subtle, Limited to two shots",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Limited",
+      "detail": "two shots"
+     }
+    ],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged",
+    "detail": "ballistic"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "firearm",
+   "concealable",
+   "pistol"
+  ],
+  "summary": "Spring-loaded hideaway pistol.",
+  "source": "GG 102"
+ },
+ {
+  "id": "voltaic-gun",
+  "name": "Voltaic Gun",
+  "genre": "Steampunk & Victorian",
+  "category": "Steamtech Weapon",
+  "effect": "Ranged Affliction 6 (electricity; Resisted and Overcome by Fortitude; Dazed, Stunned, Incapacitated), Unreliable (5 uses)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Unreliable",
+      "detail": "5 uses"
+     }
+    ],
+    "effect": "Affliction",
+    "rank": 6,
+    "range": "Ranged",
+    "detail": "electricity; Resisted and Overcome by Fortitude; Dazed, Stunned, Incapacitated"
+   }
+  ],
+  "cost": 6,
+  "bookCost": 6,
+  "tags": [
+   "electricity",
+   "pistol",
+   "less-lethal"
+  ],
+  "summary": "Lightning pistol with a few shots per charge.",
+  "source": "GG 102"
+ },
+ {
+  "id": "x-ray-goggles",
+  "name": "X-Ray Goggles",
+  "genre": "Steampunk & Victorian",
+  "category": "Steamtech Apparatus",
+  "effect": "Senses 4 (Vision Penetrates Concealment)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Senses",
+    "rank": 4,
+    "detail": "Vision Penetrates Concealment"
+   }
+  ],
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "goggles",
+   "vision",
+   "x-ray"
+  ],
+  "summary": "Goggles that see through solid objects.",
+  "source": "GG 103"
+ },
+ {
+  "id": "etheric-communicator",
+  "name": "Etheric Communicator",
+  "genre": "Steampunk & Victorian",
+  "category": "Steamtech Apparatus",
+  "effect": "Comprehend 2 (spirits)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Comprehend",
+    "rank": 2,
+    "detail": "spirits"
+   }
+  ],
+  "cost": 4,
+  "bookCost": 4,
+  "tags": [
+   "spirits",
+   "communication",
+   "occult"
+  ],
+  "summary": "Valve set that lets you talk with ghosts.",
+  "source": "GG 104"
+ },
+ {
+  "id": "flight-harness",
+  "name": "Flight Harness",
+  "genre": "Steampunk & Victorian",
+  "category": "Steamtech Apparatus",
+  "effect": "Flight 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Flight",
+    "rank": 3
+   }
+  ],
+  "cost": 6,
+  "tags": [
+   "flight",
+   "harness"
+  ],
+  "summary": "Batwing harness with a steam turbine (16 MPH).",
+  "source": "GG 103"
+ },
+ {
+  "id": "aether-pistol",
+  "name": "Aether Pistol",
+  "genre": "Steampunk & Victorian",
+  "category": "Steamtech Weapon",
+  "effect": "Ranged Damage 5 (aetheric energy)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 5,
+    "range": "Ranged",
+    "detail": "aetheric energy"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 5,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 10,
+  "tags": [
+   "energy",
+   "pistol",
+   "aether"
+  ],
+  "summary": "Brass pistol firing crackling aether.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "aether-rifle",
+  "name": "Aether Rifle",
+  "genre": "Steampunk & Victorian",
+  "category": "Steamtech Weapon",
+  "effect": "Ranged Damage 7 (aetheric energy)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 7,
+    "range": "Ranged",
+    "detail": "aetheric energy"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 7,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 14,
+  "tags": [
+   "energy",
+   "rifle",
+   "aether"
+  ],
+  "summary": "Long gun with a glowing capacitor drum.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "steam-cannon",
+  "name": "Steam Cannon",
+  "genre": "Steampunk & Victorian",
+  "category": "Steamtech Weapon",
+  "effect": "Ranged Burst Area Damage 6",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Area",
+      "option": "Burst"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 6,
+    "range": "Ranged"
+   }
+  ],
+  "cost": 18,
+  "tags": [
+   "heavy",
+   "steam",
+   "area"
+  ],
+  "summary": "Shoulder cannon lobbing pressure shells.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "pepperbox-pistol",
+  "name": "Pepperbox Pistol",
+  "genre": "Steampunk & Victorian",
+  "category": "Victorian Firearm",
+  "effect": "Ranged Damage 3, Multiattack, Inaccurate",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Multiattack"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Inaccurate",
+      "steps": 1
+     }
+    ],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 8,
+  "tags": [
+   "firearm",
+   "pistol"
+  ],
+  "summary": "Rotating multi-barrel pistol; hard to aim.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "webley-revolver",
+  "name": "Webley Revolver",
+  "genre": "Steampunk & Victorian",
+  "category": "Victorian Firearm",
+  "effect": "Ranged Damage 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 6,
+  "tags": [
+   "firearm",
+   "pistol"
+  ],
+  "summary": "Top-break service revolver.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "elephant-gun",
+  "name": "Elephant Gun",
+  "genre": "Steampunk & Victorian",
+  "category": "Victorian Firearm",
+  "effect": "Ranged Damage 6, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 6,
+    "range": "Ranged"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 6,
+   "strengthBased": false,
+   "crit": 19
+  },
+  "cost": 13,
+  "tags": [
+   "firearm",
+   "rifle",
+   "big game"
+  ],
+  "summary": "Double rifle for very large game.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "air-rifle-girandoni",
+  "name": "Air Rifle (Girandoni)",
+  "genre": "Steampunk & Victorian",
+  "category": "Victorian Firearm",
+  "effect": "Ranged Damage 3, Subtle",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "range": "Ranged"
+   }
+  ],
+  "attack": {
+   "kind": "ranged",
+   "rank": 3,
+   "strengthBased": false,
+   "crit": 20
+  },
+  "cost": 7,
+  "tags": [
+   "firearm",
+   "pneumatic",
+   "stealth"
+  ],
+  "summary": "Near-silent repeating air rifle.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "cavalry-saber",
+  "name": "Cavalry Saber",
+  "genre": "Steampunk & Victorian",
+  "category": "Victorian Blade",
+  "effect": "Damage 3 (slashing), Strength-based, Improved Critical 1 (19-20)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "slashing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 4,
+  "tags": [
+   "melee",
+   "sword"
+  ],
+  "summary": "Curved officer's sword.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "fencing-foil",
+  "name": "Fencing Foil",
+  "genre": "Steampunk & Victorian",
+  "category": "Victorian Blade",
+  "effect": "Damage 1 (piercing), Strength-based, Improved Critical 1 (19-20), Defensive",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 1,
+    "strengthBased": true,
+    "detail": "piercing"
+   }
+  ],
+  "features": [
+   {
+    "name": "Improved Critical",
+    "ranks": 1
+   },
+   {
+    "name": "Defensive",
+    "ranks": 1
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 1,
+   "strengthBased": true,
+   "crit": 19
+  },
+  "cost": 3,
+  "tags": [
+   "melee",
+   "sword",
+   "fencing"
+  ],
+  "summary": "Light dueling blade.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "clockwork-gauntlet",
+  "name": "Clockwork Gauntlet",
+  "genre": "Steampunk & Victorian",
+  "category": "Steamtech Weapon",
+  "effect": "Damage 3 (bludgeoning), Strength-based",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Damage",
+    "rank": 3,
+    "strengthBased": true,
+    "detail": "bludgeoning"
+   }
+  ],
+  "attack": {
+   "kind": "close",
+   "rank": 3,
+   "strengthBased": true,
+   "crit": 20
+  },
+  "cost": 3,
+  "tags": [
+   "gauntlet",
+   "clockwork"
+  ],
+  "summary": "Geared glove that adds punch.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "brass-cuirass",
+  "name": "Brass Cuirass",
+  "genre": "Steampunk & Victorian",
+  "category": "Steamtech Armor",
+  "effect": "Protection 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 3
+   }
+  ],
+  "protection": 3,
+  "cost": 3,
+  "tags": [
+   "armor",
+   "brass"
+  ],
+  "summary": "Riveted brass breastplate.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "steam-powered-armor-suit",
+  "name": "Steam-Powered Armor Suit",
+  "genre": "Steampunk & Victorian",
+  "category": "Steamtech Armor",
+  "effect": "Protection 7, Quirk (noisy and slow: -1 speed), Enhanced Strength 3",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [
+     {
+      "name": "Quirk",
+      "detail": "noisy and slow: -1 speed",
+      "steps": 1
+     }
+    ],
+    "effect": "Protection",
+    "rank": 7
+   },
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Enhanced Trait",
+    "rank": 3,
+    "option": "Strength"
+   }
+  ],
+  "protection": 7,
+  "cost": 12,
+  "tags": [
+   "armor",
+   "powered",
+   "steam"
+  ],
+  "summary": "Boiler-backed iron suit.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "reinforced-frock-coat",
+  "name": "Reinforced Frock Coat",
+  "genre": "Steampunk & Victorian",
+  "category": "Victorian Armor",
+  "effect": "Protection 2, Subtle",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Subtle"
+     }
+    ],
+    "flaws": [],
+    "effect": "Protection",
+    "rank": 2
+   }
+  ],
+  "protection": 2,
+  "cost": 3,
+  "tags": [
+   "armor",
+   "clothing",
+   "concealable"
+  ],
+  "summary": "Chain-lined coat that looks perfectly respectable.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "brass-goggles",
+  "name": "Brass Goggles",
+  "genre": "Steampunk & Victorian",
+  "category": "Steamtech Apparatus",
+  "effect": "Feature 1 (+5 to resist bright light and dust)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+5 to resist bright light and dust"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "goggles",
+   "eyes"
+  ],
+  "summary": "Multi-lens goggles.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "difference-engine-calculator",
+  "name": "Difference Engine Calculator",
+  "genre": "Steampunk & Victorian",
+  "category": "Steamtech Apparatus",
+  "effect": "Feature 1 (portable computing engine (calculations only))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "portable computing engine (calculations only)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "computer",
+   "clockwork"
+  ],
+  "summary": "Hand-cranked analytical engine.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "pneumatic-lockpick",
+  "name": "Pneumatic Lockpick",
+  "genre": "Steampunk & Victorian",
+  "category": "Steamtech Apparatus",
+  "effect": "Feature 1 (opens mechanical locks as a routine check)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "opens mechanical locks as a routine check"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "lock",
+   "infiltration"
+  ],
+  "summary": "Air-driven pick gun.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "grapnel-launcher",
+  "name": "Grapnel Launcher",
+  "genre": "Steampunk & Victorian",
+  "category": "Steamtech Apparatus",
+  "effect": "Movement 1 (Swinging)",
+  "powers": [
+   {
+    "extras": [],
+    "flaws": [],
+    "effect": "Movement",
+    "rank": 1,
+    "detail": "Swinging"
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "movement",
+   "grapnel"
+  ],
+  "summary": "Spring-fired hook and cable.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "galvanic-resuscitator",
+  "name": "Galvanic Resuscitator",
+  "genre": "Steampunk & Victorian",
+  "category": "Steamtech Apparatus",
+  "effect": "Healing 3, Persistent, Activation (Standard action), Limited to stabilizing and reviving only",
+  "powers": [
+   {
+    "extras": [
+     {
+      "name": "Persistent"
+     }
+    ],
+    "flaws": [
+     {
+      "name": "Activation",
+      "option": "Standard action"
+     },
+     {
+      "name": "Limited",
+      "detail": "stabilizing and reviving only"
+     }
+    ],
+    "effect": "Healing",
+    "rank": 3
+   }
+  ],
+  "cost": 2,
+  "tags": [
+   "medical",
+   "electricity"
+  ],
+  "summary": "Electrodes that jolt the dying back.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "gaslight-lantern",
+  "name": "Gaslight Lantern",
+  "genre": "Steampunk & Victorian",
+  "category": "Victorian Gear",
+  "effect": "Feature 1 (negates darkness penalties within 30 ft.)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "negates darkness penalties within 30 ft."
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "light"
+  ],
+  "summary": "Hooded gas lantern.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "calling-cards-and-top-hat",
+  "name": "Calling Cards and Top Hat",
+  "genre": "Steampunk & Victorian",
+  "category": "Victorian Gear",
+  "effect": "Feature 1 (+2 Persuasion in high society)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Persuasion in high society"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "social",
+   "clothing"
+  ],
+  "summary": "The trappings of a gentleman.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "detectives-magnifier",
+  "name": "Detective's Magnifier",
+  "genre": "Steampunk & Victorian",
+  "category": "Victorian Gear",
+  "effect": "Feature 1 (+2 Investigation to examine evidence)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "+2 Investigation to examine evidence"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "investigation",
+   "optics"
+  ],
+  "summary": "Folding lens.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "telegraph-key",
+  "name": "Telegraph Key",
+  "genre": "Steampunk & Victorian",
+  "category": "Victorian Gear",
+  "effect": "Feature 1 (send coded messages over wires)",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "send coded messages over wires"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "communication"
+  ],
+  "summary": "Portable telegraph set.",
+  "source": "DCUGen"
+ },
+ {
+  "id": "chemists-case",
+  "name": "Chemist's Case",
+  "genre": "Steampunk & Victorian",
+  "category": "Victorian Gear",
+  "effect": "Feature 1 (tools for Expertise (chemistry))",
+  "features": [
+   {
+    "name": "Feature",
+    "ranks": 1,
+    "detail": "tools for Expertise (chemistry)"
+   }
+  ],
+  "cost": 1,
+  "tags": [
+   "science",
+   "kit"
+  ],
+  "summary": "Vials, reagents and a spirit lamp.",
+  "source": "DCUGen"
+ }
+]
