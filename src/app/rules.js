@@ -16,6 +16,7 @@ function buildCards() {
   for (const x of ref.actions || []) add('Actions', { title: x.name, meta: `${x.action} action`, summary: x.summary, details: x.details, source: x.source });
   for (const x of ref.maneuvers || []) add('Maneuvers', { title: x.name, meta: 'Maneuver', summary: x.summary, details: x.details, source: x.source });
   for (const x of ref.checks || []) add('Checks', { title: x.name, meta: 'Core rules', summary: x.summary, details: x.details, source: x.source });
+  add('Combat', { title: 'Defense class', meta: 'Combat', summary: 'The DC to affect a target is its defense + 10.', details: 'Close attacks target Parry (DC Parry + 10), ranged attacks target Dodge (DC Dodge + 10), and mental powers target Will (DC Will + 10). A vulnerable target halves its active defenses (round up); a defenseless one has them at 0, so the DC is 10.', source: 'DCA 51' });
   for (const x of ref.combat || []) add('Combat', { title: x.name, meta: 'Combat', summary: x.summary, details: x.details, source: x.source });
   add('Tables', { title: 'Degrees of success and failure', meta: 'Table', summary: 'Every 5 points over the DC is another degree of success; every 5 under is another degree of failure.',
     table: [['Check result ≥', 'Degree', 'Example (DC 20)'], ['DC+15', 'Four (Success)', 35], ['DC+10', 'Three (Success)', 30], ['DC+5', 'Two (Success)', 25], ['DC', 'One (Success)', 20],

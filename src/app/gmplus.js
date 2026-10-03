@@ -206,6 +206,7 @@ export function gmScreen(rerender) {
       h('div', { class: 'card-stats', style: { gridTemplateColumns: 'repeat(5, 1fr)' } },
         [['Dodge', def.Dodge], ['Parry', def.Parry], ['Fort', def.immune?.Fortitude ? '—' : def.Fortitude], ['Tough', def.Toughness - t.penalty], ['Will', def.immune?.Will ? '—' : def.Will]].map(([n, v]) =>
           h('div', null, h('b', { class: 'num' }, v), h('span', null, n.toUpperCase())))),
+      h('div', { style: { fontSize: '13px', color: 'var(--ink-2)' } }, `To hit: close DC ${Math.ceil((t.cond === 'Vulnerable' ? def.Parry / 2 : t.cond === 'Defenseless' ? 0 : def.Parry)) + 10} · ranged DC ${Math.ceil((t.cond === 'Vulnerable' ? def.Dodge / 2 : t.cond === 'Defenseless' ? 0 : def.Dodge)) + 10}${def.immune?.Will ? '' : ` · mental DC ${def.Will + 10}`}`),
       h('div', { style: { fontSize: '13.5px' } }, d.attacks.slice(0, 5).map((a) => h('div', null, h('b', null, a.name), ` ${a.roll ? sign(a.bonus) : a.kind}, ${a.effect} ${a.rank}`))),
       powers.length ? h('div', { style: { fontSize: '12.5px', color: 'var(--ink-2)' } }, powers.map((p) => p.name).join(' · ')) : null,
       h('div', { class: 'btn-row' }, counter('Hero points', 'hp'), counter('Toughness penalty', 'penalty'),

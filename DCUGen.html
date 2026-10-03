@@ -211,6 +211,12 @@ button.chip:hover { border-color: var(--ink-3); }
 .def .name { font: 700 14px/1 var(--font-label); letter-spacing: .04em; text-transform: uppercase; }
 .def .v { font: 900 24px/1 var(--font-display); text-align: right; }
 .def .note { font-size: 12px; color: var(--ink-3); }
+.def-class { margin-top: 12px; display: grid; gap: 6px; }
+.dc-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.dc-box { border: 1px solid var(--line); border-radius: var(--radius); padding: 6px 8px; background: var(--surface-2); display: grid; gap: 2px; text-align: center; }
+.dc-box b { font: 900 24px/1 var(--font-display); }
+.dc-box span { font: 700 11px/1.2 var(--font-label); letter-spacing: .04em; color: var(--ink-2); text-transform: uppercase; }
+.dc-box small { font-size: 11px; color: var(--ink-3); }
 .caps { display: grid; gap: 8px; margin-top: 12px; }
 .cap { display: grid; grid-template-columns: 130px minmax(0, 1fr) 56px; gap: 10px; align-items: center; font: 600 12.5px/1 var(--font-label); color: var(--ink-2); }
 .meter { height: 10px; border-radius: 5px; background: var(--surface-2); border: 1px solid var(--line); position: relative; overflow: hidden; }
@@ -1717,6 +1723,17 @@ function renderFile(ch, R, opts = {}) {
         ? `Stamina ${d.parts.stamina}${d.parts.protection ? ` + Protection ${d.parts.protection}` : ''}${d.parts.defensiveRoll ? ` + Defensive Roll ${d.parts.defensiveRoll}` : ''}`
         : d.bought ? `${d.bought} bought` : ''),
       editing && BUYABLE_DEFENSES.includes(d.name) ? stepper(d.bought, (x) => change((c) => { c.defenses[d.name] = Math.max(0, (c.defenses[d.name] || 0) + x); }), { min: 0, label: d.name }) : h('span')))),
+    (() => {
+      const dd = s.d.defenses;
+      const cls = (v) => (typeof v === 'number' ? v + 10 : '—');
+      const half = (v) => (typeof v === 'number' ? Math.ceil(v / 2) + 10 : '—');
+      return h('div', { class: 'def-class', title: 'Defense class = defense + 10 (DC Adventures p. 51). Vulnerable halves defenses (round up); defenseless makes them 0.' },
+        h('div', { class: 'label' }, 'Defense class (DC to affect you)'),
+        h('div', { class: 'dc-row' },
+          [['Close attacks', 'Parry', dd.Parry], ['Ranged attacks', 'Dodge', dd.Dodge], ['Mental powers', 'Will', dd.immune?.Will ? null : dd.Will]].map(([what, name, v]) =>
+            h('div', { class: 'dc-box' }, h('b', { class: 'num' }, v == null ? 'Immune' : cls(v)), h('span', null, `${what} · ${name} + 10`),
+              v == null || name === 'Will' ? null : h('small', null, `Vulnerable ${half(v)} · Defenseless 10`)))));
+    })(),
     h('div', { class: 'caps' },
       capRow('Dodge + Toughness', s.d.defenses.Dodge, t.value),
       capRow('Parry + Toughness', s.d.defenses.Parry, t.value),
@@ -2227,6 +2244,9 @@ function statBlockRows(ch, R) {
   rows.push(['DEFENSES', 'Rank', '']);
   for (const d of s.defenses) rows.push([d.name, d.value, d.name === 'Toughness' && d.noRoll !== d.value ? `${d.noRoll} without Defensive Roll` : '']);
   rows.push(['Initiative', s.d.initiative, '']);
+  rows.push(['Defense class: close (Parry + 10)', s.d.defenses.Parry + 10, 'DC for close attacks to hit (DCA 51)']);
+  rows.push(['Defense class: ranged (Dodge + 10)', s.d.defenses.Dodge + 10, 'DC for ranged attacks to hit']);
+  if (!s.d.defenses.immune?.Will) rows.push(['Defense class: mental (Will + 10)', s.d.defenses.Will + 10, 'DC for Will-targeting powers']);
   rows.push([]);
   rows.push(['POWERS', 'Points', 'Effect']);
   for (const p of s.powers) for (const l of p.lines) rows.push([`${l.alternate ? '   AE: ' : ''}${l.name}`, l.cost, l.text]);
@@ -4666,6 +4686,7 @@ function gmScreen(rerender) {
       h('div', { class: 'card-stats', style: { gridTemplateColumns: 'repeat(5, 1fr)' } },
         [['Dodge', def.Dodge], ['Parry', def.Parry], ['Fort', def.immune?.Fortitude ? '—' : def.Fortitude], ['Tough', def.Toughness - t.penalty], ['Will', def.immune?.Will ? '—' : def.Will]].map(([n, v]) =>
           h('div', null, h('b', { class: 'num' }, v), h('span', null, n.toUpperCase())))),
+      h('div', { style: { fontSize: '13px', color: 'var(--ink-2)' } }, `To hit: close DC ${Math.ceil((t.cond === 'Vulnerable' ? def.Parry / 2 : t.cond === 'Defenseless' ? 0 : def.Parry)) + 10} · ranged DC ${Math.ceil((t.cond === 'Vulnerable' ? def.Dodge / 2 : t.cond === 'Defenseless' ? 0 : def.Dodge)) + 10}${def.immune?.Will ? '' : ` · mental DC ${def.Will + 10}`}`),
       h('div', { style: { fontSize: '13.5px' } }, d.attacks.slice(0, 5).map((a) => h('div', null, h('b', null, a.name), ` ${a.roll ? sign(a.bonus) : a.kind}, ${a.effect} ${a.rank}`))),
       powers.length ? h('div', { style: { fontSize: '12.5px', color: 'var(--ink-2)' } }, powers.map((p) => p.name).join(' · ')) : null,
       h('div', { class: 'btn-row' }, counter('Hero points', 'hp'), counter('Toughness penalty', 'penalty'),
@@ -5828,6 +5849,7 @@ function buildCards() {
   for (const x of ref.actions || []) add('Actions', { title: x.name, meta: `${x.action} action`, summary: x.summary, details: x.details, source: x.source });
   for (const x of ref.maneuvers || []) add('Maneuvers', { title: x.name, meta: 'Maneuver', summary: x.summary, details: x.details, source: x.source });
   for (const x of ref.checks || []) add('Checks', { title: x.name, meta: 'Core rules', summary: x.summary, details: x.details, source: x.source });
+  add('Combat', { title: 'Defense class', meta: 'Combat', summary: 'The DC to affect a target is its defense + 10.', details: 'Close attacks target Parry (DC Parry + 10), ranged attacks target Dodge (DC Dodge + 10), and mental powers target Will (DC Will + 10). A vulnerable target halves its active defenses (round up); a defenseless one has them at 0, so the DC is 10.', source: 'DCA 51' });
   for (const x of ref.combat || []) add('Combat', { title: x.name, meta: 'Combat', summary: x.summary, details: x.details, source: x.source });
   add('Tables', { title: 'Degrees of success and failure', meta: 'Table', summary: 'Every 5 points over the DC is another degree of success; every 5 under is another degree of failure.',
     table: [['Check result ≥', 'Degree', 'Example (DC 20)'], ['DC+15', 'Four (Success)', 35], ['DC+10', 'Three (Success)', 30], ['DC+5', 'Two (Success)', 25], ['DC', 'One (Success)', 20],

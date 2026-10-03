@@ -88,6 +88,17 @@ export function renderFile(ch, R, opts = {}) {
         ? `Stamina ${d.parts.stamina}${d.parts.protection ? ` + Protection ${d.parts.protection}` : ''}${d.parts.defensiveRoll ? ` + Defensive Roll ${d.parts.defensiveRoll}` : ''}`
         : d.bought ? `${d.bought} bought` : ''),
       editing && BUYABLE_DEFENSES.includes(d.name) ? stepper(d.bought, (x) => change((c) => { c.defenses[d.name] = Math.max(0, (c.defenses[d.name] || 0) + x); }), { min: 0, label: d.name }) : h('span')))),
+    (() => {
+      const dd = s.d.defenses;
+      const cls = (v) => (typeof v === 'number' ? v + 10 : '—');
+      const half = (v) => (typeof v === 'number' ? Math.ceil(v / 2) + 10 : '—');
+      return h('div', { class: 'def-class', title: 'Defense class = defense + 10 (DC Adventures p. 51). Vulnerable halves defenses (round up); defenseless makes them 0.' },
+        h('div', { class: 'label' }, 'Defense class (DC to affect you)'),
+        h('div', { class: 'dc-row' },
+          [['Close attacks', 'Parry', dd.Parry], ['Ranged attacks', 'Dodge', dd.Dodge], ['Mental powers', 'Will', dd.immune?.Will ? null : dd.Will]].map(([what, name, v]) =>
+            h('div', { class: 'dc-box' }, h('b', { class: 'num' }, v == null ? 'Immune' : cls(v)), h('span', null, `${what} · ${name} + 10`),
+              v == null || name === 'Will' ? null : h('small', null, `Vulnerable ${half(v)} · Defenseless 10`)))));
+    })(),
     h('div', { class: 'caps' },
       capRow('Dodge + Toughness', s.d.defenses.Dodge, t.value),
       capRow('Parry + Toughness', s.d.defenses.Parry, t.value),

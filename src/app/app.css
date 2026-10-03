@@ -200,6 +200,12 @@ button.chip:hover { border-color: var(--ink-3); }
 .def .name { font: 700 14px/1 var(--font-label); letter-spacing: .04em; text-transform: uppercase; }
 .def .v { font: 900 24px/1 var(--font-display); text-align: right; }
 .def .note { font-size: 12px; color: var(--ink-3); }
+.def-class { margin-top: 12px; display: grid; gap: 6px; }
+.dc-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.dc-box { border: 1px solid var(--line); border-radius: var(--radius); padding: 6px 8px; background: var(--surface-2); display: grid; gap: 2px; text-align: center; }
+.dc-box b { font: 900 24px/1 var(--font-display); }
+.dc-box span { font: 700 11px/1.2 var(--font-label); letter-spacing: .04em; color: var(--ink-2); text-transform: uppercase; }
+.dc-box small { font-size: 11px; color: var(--ink-3); }
 .caps { display: grid; gap: 8px; margin-top: 12px; }
 .cap { display: grid; grid-template-columns: 130px minmax(0, 1fr) 56px; gap: 10px; align-items: center; font: 600 12.5px/1 var(--font-label); color: var(--ink-2); }
 .meter { height: 10px; border-radius: 5px; background: var(--surface-2); border: 1px solid var(--line); position: relative; overflow: hidden; }

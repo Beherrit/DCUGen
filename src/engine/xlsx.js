@@ -232,6 +232,9 @@ export function statBlockRows(ch, R) {
   rows.push(['DEFENSES', 'Rank', '']);
   for (const d of s.defenses) rows.push([d.name, d.value, d.name === 'Toughness' && d.noRoll !== d.value ? `${d.noRoll} without Defensive Roll` : '']);
   rows.push(['Initiative', s.d.initiative, '']);
+  rows.push(['Defense class: close (Parry + 10)', s.d.defenses.Parry + 10, 'DC for close attacks to hit (DCA 51)']);
+  rows.push(['Defense class: ranged (Dodge + 10)', s.d.defenses.Dodge + 10, 'DC for ranged attacks to hit']);
+  if (!s.d.defenses.immune?.Will) rows.push(['Defense class: mental (Will + 10)', s.d.defenses.Will + 10, 'DC for Will-targeting powers']);
   rows.push([]);
   rows.push(['POWERS', 'Points', 'Effect']);
   for (const p of s.powers) for (const l of p.lines) rows.push([`${l.alternate ? '   AE: ' : ''}${l.name}`, l.cost, l.text]);
