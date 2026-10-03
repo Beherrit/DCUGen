@@ -8,11 +8,11 @@
   "main": "main.js",
   "scripts": {
     "prepare-app": "node -e \"require('fs').copyFileSync('../DCUGen.html','DCUGen.html')\"",
-    "start": "npm run prepare-app && electron .",
-    "dist": "npm run prepare-app && electron-builder",
-    "dist:win": "npm run prepare-app && electron-builder --win",
-    "dist:mac": "npm run prepare-app && electron-builder --mac",
-    "dist:linux": "npm run prepare-app && electron-builder --linux"
+    "start": "npm run prepare-app && node ensure-electron.cjs && electron .",
+    "dist": "npm run prepare-app && node ensure-electron.cjs && electron-builder",
+    "dist:win": "npm run prepare-app && node ensure-electron.cjs && electron-builder --win",
+    "dist:mac": "npm run prepare-app && node ensure-electron.cjs && electron-builder --mac",
+    "dist:linux": "npm run prepare-app && node ensure-electron.cjs && electron-builder --linux"
   },
   "devDependencies": {
     "electron": "^33.0.0",
@@ -21,11 +21,38 @@
   "build": {
     "appId": "com.dcugen.heroforge",
     "productName": "DCUGen Hero Forge",
-    "files": ["main.js", "preload.cjs", "lobby-server.js", "DCUGen.html", "package.json"],
-    "directories": { "output": "dist" },
-    "win": { "target": ["nsis", "portable"] },
-    "mac": { "target": ["dmg"], "category": "public.app-category.games" },
-    "linux": { "target": ["AppImage"], "category": "Game" },
-    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true }
+    "files": [
+      "main.js",
+      "preload.cjs",
+      "lobby-server.js",
+      "DCUGen.html",
+      "package.json",
+      "ensure-electron.cjs"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.games"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Game"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   }
 }

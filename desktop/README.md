@@ -36,6 +36,21 @@ npm install
 npm start
 ```
 
+### "Electron failed to install correctly"
+
+`npm install` downloaded the package but not Electron's runtime (interrupted or blocked download). `npm start`
+now fetches it on its own; if that fails too, run these one at a time inside `desktop/`:
+
+```
+Remove-Item -Recurse -Force node_modules\electron      (PowerShell; on Mac/Linux: rm -rf node_modules/electron)
+npm install
+npm start
+```
+
+Behind a proxy or firewall that blocks downloads from github.com, point Electron at a mirror first:
+`$env:ELECTRON_MIRROR="https://npmmirror.com/mirrors/electron/"` (PowerShell) or
+`export ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/`.
+
 ## Make installers
 
 ```
