@@ -4,6 +4,7 @@
 import { h, toast, copyText, inkFor } from './dom.js';
 import { generateBio, rerollSection, bioText } from '../engine/lifepath.js';
 import { randomSeed } from '../engine/rng.js';
+import { journalSection } from './journal.js';
 
 const SIDE_LABEL = { light: 'Lightside', dark: 'Darkside', neutral: 'Neutral', exotic: 'Exotic' };
 
@@ -24,12 +25,15 @@ export function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
 
   const regen = () => change?.((c) => { c.bio = generateBio(R, c, { seed: randomSeed() }); });
 
+  const journal = journalSection(ch, R, { change, onOpenPerson: open });
   if (!bio) {
     const file = h('article', { class: 'file bio' }, head, toolbar || null,
       h('div', { class: 'bio-empty' },
         h('p', null, 'No life story yet. Roll one: family, childhood, the events that made them, the people in their life, personality, secrets and story hooks for the GM.'),
-        change ? h('button', { class: 'btn primary big', type: 'button', id: 'bio-generate', onClick: regen }, 'Roll a life story') : null));
+        change ? h('button', { class: 'btn primary big', type: 'button', id: 'bio-generate', onClick: regen }, 'Roll a life story') : null),
+      h('div', { class: 'file-body' }, h('div', { class: 'col', style: { gridColumn: '1 / -1' } }, journal)));
     file.style.setProperty('--hero', hero);
+    file.style.setProperty('--hero-ink', inkFor(hero));
     return file;
   }
 
@@ -38,7 +42,7 @@ export function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
   });
 
   const summary = h('section', { class: 'sec bio-summary' },
-    h('h3', null, 'Their story', change ? h('span', { class: 'pts no-print' }, h('button', { class: 'linkish', type: 'button', onClick: regen }, 'Roll a new life')) : null),
+    h('h3', null, 'Their story', change ? h('span', { class: 'pts no-print' }, h('button', { class: 'linkish', type: 'button', onClick: regen }, bio.manual ? 'Roll a life story' : 'Roll a new life')) : null),
     change
       ? h('textarea', { class: 'bio-summary-edit', id: 'bio-summary', 'aria-label': 'Biography summary', onChange: (e) => change((c) => { c.bio = { ...c.bio, summary: e.target.value, edited: true }; }) }, bio.summary || '')
       : h('p', null, bio.summary));
@@ -49,9 +53,9 @@ export function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
 
   const timeline = (bio.timeline || []).length ? h('section', { class: 'sec' },
     h('h3', null, 'Life timeline'),
-    h('ol', { class: 'bio-timeline' }, bio.timeline.map((t) => h('li', null,
-      h('span', { class: 'bio-age num' }, t.age != null ? t.age : '—'),
-      h('div', null, t.stage ? h('span', { class: 'bio-stage' }, t.stage) : null, h('span', null, t.text)))))) : null;
+    h('ol', { class: 'bio-timeline' }, bio.timeline.map((t) => h('li', { class: t.journalId ? 'in-play' : '' },
+      h('span', { class: 'bio-age num', title: t.session ? `Session ${t.session}` : '' }, t.session ? `S${t.session}` : t.age != null ? t.age : '—'),
+      h('div', null, t.stage ? h('span', { class: 'bio-stage' }, t.stage, t.date ? ` · ${t.date}` : '') : null, h('span', null, t.text)))))) : null;
 
   const fam = bio.family || {};
   const family = (fam.parents?.length || fam.siblings?.length || fam.structure) ? h('section', { class: 'sec' },
@@ -66,19 +70,19 @@ export function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
     h('ul', { class: 'bio-people' }, bio.people.map((p) => person(p.name, p.relation, p.who, p.status, open && (() => open(p, 'person')))))) : null;
 
   const pers = bio.personality || {};
-  const personality = h('section', { class: 'sec' },
+  const personality = (pers.traits?.length || pers.values?.length || pers.voice) ? h('section', { class: 'sec' },
     h('h3', null, 'Personality'),
     (pers.traits || []).length ? h('div', { class: 'bio-traits' }, pers.traits.map((t) => h('span', { class: `bio-trait ${t.side || ''}`, title: SIDE_LABEL[t.side] || '' }, t.name, t.strength && t.strength !== 'mild' ? h('small', null, ` · ${t.strength}`) : null))) : null,
     h('dl', { class: 'bio-dl' },
       list('Values', pers.values), list('Fears', pers.fears), list('Habits', pers.habits), list('Likes', pers.likes), list('Dislikes', pers.dislikes),
-      pers.voice ? [h('dt', null, 'Roleplay it'), h('dd', null, pers.voice)] : null));
+      pers.voice ? [h('dt', null, 'Roleplay it'), h('dd', null, pers.voice)] : null)) : null;
 
-  const inner = h('section', { class: 'sec' },
+  const inner = (bio.motivations?.length || bio.secrets?.length || bio.regrets?.length || bio.hopes?.length) ? h('section', { class: 'sec' },
     h('h3', null, 'Inner life'),
-    h('dl', { class: 'bio-dl' }, list('Motivations', bio.motivations), list('Secrets', bio.secrets), list('Regrets', bio.regrets), list('Hopes', bio.hopes)));
+    h('dl', { class: 'bio-dl' }, list('Motivations', bio.motivations), list('Secrets', bio.secrets), list('Regrets', bio.regrets), list('Hopes', bio.hopes))) : null;
 
   const haveComp = new Set((ch.complications || []).map((c) => `${c.type}|${c.text}`));
-  const gm = h('section', { class: 'sec bio-gm' },
+  const gm = (bio.hooks?.length || bio.complications?.length || bio.benefits?.skills?.length || bio.benefits?.advantages?.length) ? h('section', { class: 'sec bio-gm' },
     h('h3', null, 'For the GM'),
     (bio.hooks || []).length ? h('ul', { class: 'bio-hooks' }, bio.hooks.map((x) => h('li', null, x))) : null,
     (bio.complications || []).length ? [h('div', { class: 'label', style: { margin: '10px 0 6px' } }, 'Complications from their past (DCA 27)'),
@@ -87,14 +91,14 @@ export function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
     (bio.benefits?.skills?.length || bio.benefits?.advantages?.length) ? [h('div', { class: 'label', style: { margin: '10px 0 6px' } }, 'What their past suggests (buy with points if you like)'),
       h('ul', { class: 'bio-comps' },
         (bio.benefits.skills || []).map((s) => h('li', null, h('b', null, `${s.name}${s.spec ? ` (${s.spec})` : ''}`), s.why ? `: ${s.why}` : '')),
-        (bio.benefits.advantages || []).map((a) => h('li', null, h('b', null, a.name), a.why ? `: ${a.why}` : '')))] : null);
+        (bio.benefits.advantages || []).map((a) => h('li', null, h('b', null, a.name), a.why ? `: ${a.why}` : '')))] : null) : null;
 
   const actions = h('div', { class: 'btn-row no-print', style: { marginTop: '4px' } },
     h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(bioText(bio))) ? 'Bio copied' : 'Copy failed') }, 'Copy bio text'));
 
   const file = h('article', { class: 'file bio' }, head, toolbar || null,
     h('div', { class: 'file-body' },
-      h('div', { class: 'col' }, summary, timeline, family, people),
+      h('div', { class: 'col' }, summary, journal, timeline, family, people),
       h('div', { class: 'col' }, personality, inner, sections, gm, actions)));
   file.style.setProperty('--hero', hero);
   file.style.setProperty('--hero-ink', inkFor(hero));

@@ -102,7 +102,10 @@ export function checkLimits(ch, R) {
 
   // Budget
   const cost = costBreakdown(ch, R);
-  if (cost.total > cost.budget) out.push(issue('budget', ch.advancement ? `Spent ${cost.total} power points; starting points plus GM awards give ${cost.budget}.` : `Spent ${cost.total} power points; PL ${pl} allows ${cost.budget}.`));
+  // PL 0 is for ordinary people: anything up to 14 points is fine, and nothing is "unspent".
+  if (pl === 0 && !ch.advancement) {
+    if (cost.total > 14) out.push(issue('budget', `Spent ${cost.total} power points; an ordinary person (PL 0) has 14 or fewer. Raise the power level or trim the build.`));
+  } else if (cost.total > cost.budget) out.push(issue('budget', ch.advancement ? `Spent ${cost.total} power points; starting points plus GM awards give ${cost.budget}.` : `Spent ${cost.total} power points; PL ${pl} allows ${cost.budget}.`));
   else if (cost.total < cost.budget) out.push(issue('budget', `${cost.budget - cost.total} power points unspent.`, 'info'));
 
   return out;

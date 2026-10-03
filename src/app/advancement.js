@@ -34,13 +34,15 @@ export function advancementSection(ch, R, { change, onSpend, editing }) {
   const over = a.unspent < 0;
   const pendingBox = p.changes.length ? (() => {
     const why = h('input', { type: 'text', id: 'adv-spend-note', placeholder: 'Note (optional)', 'aria-label': 'Spending note' });
+    const sessions = [...(ch.journal?.entries || [])].sort((x, y) => (y.session || 0) - (x.session || 0));
+    const forSession = sessions.length ? h('select', { id: 'adv-spend-session', 'aria-label': 'Tie to a session' }, h('option', { value: '' }, 'Not tied to a session'), sessions.map((e) => h('option', { value: e.id }, `Session ${e.session}${e.title ? `: ${e.title}` : ''}`))) : null;
     return h('div', { class: `adv-pending ${over ? 'over' : ''}` },
       h('div', { class: 'adv-pending-head' }, h('b', null, 'Not yet in the log'), h('span', { class: 'num' }, `${sign(p.points)} pp`)),
       h('ul', null, p.changes.map((c) => h('li', null, c.text, c.points ? h('span', { class: 'num adv-pts' }, ` ${sign(c.points)}`) : null))),
       ...checkLimits(ch, R).filter((i) => i.severity === 'error' && i.rule !== 'budget').map((i) => h('p', { class: 'adv-warn' }, `Breaks a PL limit: ${i.message}`)),
       over ? h('p', { class: 'adv-warn' }, `That's ${-a.unspent} more than you have. Remove something, or ask the GM for more points.`) : null,
-      editing ? h('p', { class: 'hint', style: { margin: '4px 0 0' } }, 'This goes into the log when you press "Done editing".') : h('div', { class: 'add-row no-print' }, why,
-        h('button', { class: 'btn primary', type: 'button', disabled: over, onClick: () => change((c) => recordChanges(c, R, why.value.trim())) }, 'Record in log'),
+      editing ? h('p', { class: 'hint', style: { margin: '4px 0 0' } }, 'This goes into the log when you press "Done editing".') : h('div', { class: 'add-row no-print' }, why, forSession,
+        h('button', { class: 'btn primary', type: 'button', disabled: over, onClick: () => change((c) => recordChanges(c, R, why.value.trim(), { journalId: forSession?.value || null })) }, 'Record in log'),
         h('button', { class: 'btn ghost', type: 'button', onClick: () => change((c) => revertChanges(c)) }, 'Undo these changes')));
   })() : null;
 
@@ -65,7 +67,7 @@ export function advancementSection(ch, R, { change, onSpend, editing }) {
       h('div', { class: 'adv-entry-head' },
         h('span', { class: 'adv-type-chip' }, TYPE_LABEL[e.type] || e.type),
         h('span', { class: 'adv-pts num' }, e.type === 'pl' ? '' : `${e.type === 'award' ? sign(e.points) : e.points > 0 ? `−${e.points}` : `+${-e.points}`} pp`),
-        h('span', { class: 'adv-note' }, e.note || ''),
+        h('span', { class: 'adv-note' }, e.note || '', e.journalId && ch.journal?.entries?.some((j) => j.id === e.journalId) && !/^Session/.test(e.note || '') ? h('small', { style: { color: 'var(--ink-3)' } }, ` · session ${ch.journal.entries.find((j) => j.id === e.journalId)?.session}`) : null),
         h('span', { class: 'adv-date num' }, e.date || ''),
         e.type === 'award' ? h('button', { class: 'x no-print', type: 'button', 'aria-label': 'Remove this award', title: 'Remove this award (a mistake)', onClick: () => change((c) => removeEntry(c, e.id)) }, '✕') : null),
       (e.changes || []).length ? h('ul', { class: 'adv-changes' }, e.changes.map((t) => h('li', null, t))) : null)))

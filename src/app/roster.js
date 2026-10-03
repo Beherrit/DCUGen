@@ -49,6 +49,7 @@ function card(ch) {
       h('button', { class: 'btn sm primary', type: 'button', onClick: () => hooks.open?.(ch) }, 'Open'),
       h('button', { class: 'btn sm', type: 'button', onClick: () => exportExcel(ch, R) }, 'Excel'),
       h('button', { class: 'btn sm', type: 'button', onClick: () => exportJson(ch) }, 'JSON'),
+      h('button', { class: 'btn sm', type: 'button', title: 'Add to the Battle Room', onClick: () => hooks.throwIn?.(ch) }, '⚔ Battle'),
       h('button', { class: 'btn sm', type: 'button', onClick: () => {
         const copy = JSON.parse(JSON.stringify(ch)); copy.rosterId = newId(); copy.identity = { ...copy.identity, codename: `${copy.identity?.codename || 'Unnamed'} (copy)` };
         upsert(copy); renderRoster(); toast('Copy added');

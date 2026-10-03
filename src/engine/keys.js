@@ -39,7 +39,7 @@ function fromB64url(text) {
 function fingerprint(ch) {
   const pick = (({ pl, abilities, defenses, skills, advantages, powers, devices, equipment, identity, alignment, complications, notes }) =>
     ({ pl, abilities, defenses, skills, advantages, powers, devices, equipment, identity, alignment, complications, notes }))(ch);
-  return JSON.stringify([pick, ch.bio?.summary || null, ch.bio?.timeline?.length || 0]);
+  return JSON.stringify([pick, ch.bio?.summary || null, ch.bio?.timeline?.length || 0, ch.journal?.entries?.length || 0]);
 }
 
 // ---- rolled characters ----------------------------------------------------------------------------

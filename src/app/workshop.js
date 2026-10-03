@@ -113,6 +113,7 @@ function charActions(ch, extra = []) {
     h('button', { class: 'btn primary', type: 'button', onClick: () => { upsert(ch); toast(`${ch.identity?.codename} saved to your roster`); } }, 'Save to roster'),
     h('button', { class: 'btn', type: 'button', onClick: () => { hooks.openInForge?.(ch); } }, 'Open in Forge to edit'),
     h('button', { class: 'btn', type: 'button', onClick: () => { hooks.addToInitiative?.(ch); toast(`${ch.identity?.codename} added to initiative`); } }, 'Add to initiative'),
+    h('button', { class: 'btn', type: 'button', title: 'Add to the Battle Room', onClick: () => hooks.throwIn?.(JSON.parse(JSON.stringify(ch))) }, '⚔ Battle Room'),
     ...extra,
     h('span', { class: 'spacer' }),
     h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(statBlockText(ch, R))) ? 'Stat block copied' : 'Copy failed') }, 'Copy stat block'),
@@ -196,7 +197,8 @@ function showResult() {
         h('h2', null, `${s.name} (${s.count})`),
         h('p', { style: { margin: 0 } }, `${s.count} ${s.typeName.toLowerCase()} minions, PL ${s.rank}. One stat block for the whole group; each one is out after a single failed Toughness check (minion rules).`),
         h('div', { class: 'result' }, h('b', null, 'To give these to a villain: '), h('div', null, s.villainCost.minionAdvantage.text), h('div', null, `or ${s.villainCost.summon.text}`)),
-        h('div', { class: 'tagwrap' }, s.names.map((n) => h('span', { class: 'chip' }, n)))),
+        h('div', { class: 'tagwrap' }, s.names.map((n) => h('span', { class: 'chip' }, n))),
+        h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', type: 'button', title: 'Every member joins team B in the Battle Room', onClick: () => hooks.throwIn?.(JSON.parse(JSON.stringify(s.member)), { copies: s.count, name: s.typeName, team: 'B' }) }, `⚔ Throw all ${s.count} into the Battle Room`))),
       el);
   }
   if (result.kind === 'character') {
