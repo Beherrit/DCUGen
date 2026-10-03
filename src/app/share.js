@@ -52,3 +52,36 @@ export function shareLink(code) {
   const base = location.href.split('#')[0];
   return `${base}#c=${code}`;
 }
+
+// ---- a whole world in one key -----------------------------------------------------------------------------
+// "DCUW1." + base64url(deflate(JSON { world, characters })). Portrait paintings are left out (they are
+// big and the receiver's app repaints them); everything else travels: pages, ties, moments, the roster.
+
+const WORLD_PREFIX = 'DCUW1.';
+export function isWorldKey(text) { return /DCUW1\.[A-Za-z0-9_-]{8,}/.test(String(text || '')); }
+
+function slimForWorld(ch) {
+  const { savedAt, lobbyShared, ...rest } = ch;
+  if (rest.portrait?.image && rest.portrait.aiSaved) { const { image, aiSaved, ...p } = rest.portrait; rest.portrait = p; }
+  return rest;
+}
+
+export async function encodeWorld(world, characters, { name = '' } = {}) {
+  const payload = { app: 'DCUGen', kind: 'world', v: 1, name: name || world?.name || 'World', madeAt: new Date().toISOString(), world, characters: (characters || []).map(slimForWorld) };
+  const json = new TextEncoder().encode(JSON.stringify(payload));
+  const packed = await pipe(json, new CompressionStream('deflate-raw'));
+  return WORLD_PREFIX + toBase64Url(packed);
+}
+
+export async function decodeWorld(input) {
+  const text = String(input || '').trim();
+  const m = /DCUW1\.([A-Za-z0-9_-]+)/.exec(text);
+  if (!m) throw new Error('That is not a world key. World keys start with "DCUW1."');
+  const bytes = await inflateRaw(fromBase64Url(m[1]));
+  const data = JSON.parse(new TextDecoder().decode(bytes));
+  if (data.kind !== 'world' || !data.world) throw new Error('That key does not hold a world.');
+  return data;
+}
+
+/** Rough size for the user: "38 KB". */
+export function keySize(key) { const n = key.length; return n < 1024 ? `${n} chars` : `${Math.round(n / 1024)} KB`; }

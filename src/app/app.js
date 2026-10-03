@@ -12,7 +12,7 @@ import { initRules, renderRules } from './rules.js';
 import { initBestiary, renderBestiary } from './bestiary.js';
 import { initGarage, renderGarage } from './garage.js';
 import { initBattle, renderBattle, throwIn } from './battle.js';
-import { initWorld, renderWorld, openWorldPage, recordBattleInWorld, worldSaved, worldApply } from './world.js';
+import { initWorld, renderWorld, openWorldPage, recordBattleInWorld, worldSaved, worldApply, openWorldKey } from './world.js';
 import { initTable, renderTable, postRoll } from './table.js';
 import { setLobbyHandlers, lobbySendRoster, lobbySendRemove, lobby } from './lobby.js';
 import { snapshotAll, restoreAll } from './backup.js';
@@ -167,6 +167,7 @@ async function boot() {
     throwIn: (ch) => throwInBattle(ch),
     goBattle: () => showTab('battle'),
     openWorld: (ch) => { openWorldPage(ch); showTab('world'); },
+    openWorldKey: async (text) => { showTab('world'); await openWorldKey(text); },
   });
   initRoster(R, document.getElementById('view-roster'), {
     open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },

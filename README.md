@@ -71,7 +71,9 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
   the new tie at that session, ends the tie it replaces (kept on the pages as "formerly"), marks a fate on the page,
   lands on both timelines and the campaign timeline, and can be undone. The graph has an "as of session" slider to
   wind the world back. Factions live on the character too (Bio > Factions: role, kind, since) and travel with the
-  sheet and the exports.
+  sheet and the exports. **Share the whole world as one key** (Vault page or the 🔑 button): pages, ties, moments
+  and the roster in a `DCUW1.` string that players paste into the Forge's "Open a key" box and choose merge or
+  replace.
 - **Portraits** – every character gets a portrait on the case file, the Bio page and the World: built-in comic art
   drawn by the app (offline, instant) or an AI painting from a free, open-source service (one at a time, with the
   built-in art standing in while it paints), or a picture you upload. New portrait, edit or copy the prompt, delete.

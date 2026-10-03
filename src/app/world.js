@@ -11,6 +11,7 @@ import { zip } from '../engine/xlsx.js';
 import { sheet as makeSheet } from '../engine/render.js';
 import { fromKeySync } from '../engine/keys.js';
 import { portraitImg } from './portrait.js';
+import { encodeWorld, decodeWorld, isWorldKey, keySize } from './share.js';
 
 const KEY = 'dcugen.world.v1';
 let R; let root; let hooks = {};
@@ -60,6 +61,39 @@ export function worldApply(incoming) {
   if (incoming.name && (!saved.name || saved.name === 'My World')) { saved.name = incoming.name; saved.tagline = incoming.tagline || saved.tagline; saved.description = incoming.description || saved.description; }
   save();
   if (root && !root.hidden) renderWorld();
+}
+
+/** The whole world as one key: pages, ties, moments, and the roster. */
+export async function worldKey() {
+  if (!saved) saved = load();
+  return encodeWorld(saved, state.roster, { name: saved.name });
+}
+
+/** Open a world key someone sent: asks whether to merge into this world or replace it. */
+export async function openWorldKey(text) {
+  let data;
+  try { data = await decodeWorld(text); } catch (e) { toast(e.message); return false; }
+  const w = data.world || {};
+  const pages = Object.keys(w.entities || {}).length; const links = (w.links || []).length; const moments = (w.moments || []).length; const chars = (data.characters || []).length;
+  const mode = h('select', null,
+    h('option', { value: 'merge' }, 'Merge: keep what is here, add and update from the key'),
+    h('option', { value: 'replace' }, 'Replace my world with theirs (my own pages and ties go; characters are merged)'));
+  const ok = await openDialog({
+    title: `Open "${data.name || 'World'}"`,
+    body: [h('p', { style: { margin: 0 } }, `${pages} hand-made page${pages === 1 ? '' : 's'}, ${links} tie${links === 1 ? '' : 's'}, ${moments} moment${moments === 1 ? '' : 's'} and ${chars} character${chars === 1 ? '' : 's'}${data.madeAt ? `, made ${data.madeAt.slice(0, 10)}` : ''}.`), h('label', { class: 'field' }, h('span', null, 'How'), mode)],
+    buttons: [{ label: 'Cancel', value: false }, { label: 'Open', value: true, primary: true }],
+  });
+  if (!ok) return false;
+  if (!saved) saved = load();
+  if (mode.value === 'replace') { saved = { ...emptyWorld(), ...w }; save(); }
+  else worldApply({ ...w, v: w.v || 1 });
+  let n = 0;
+  for (const ch of data.characters || []) { if (ch?.abilities && ch.pl != null) { upsert(ch); n++; } }
+  save();
+  ui.page = 'home'; ui.history = [];
+  if (root && !root.hidden) renderWorld();
+  toast(`Opened ${data.name || 'the world'}: ${pages} pages, ${n} characters`);
+  return true;
 }
 
 export function recordBattleInWorld(battle) {
@@ -137,7 +171,8 @@ function sidebar() {
       h('button', { type: 'button', class: 'wd-world-name', onClick: () => go('home'), title: 'Home' }, h('span', { class: 'wd-glyph' }, '🌐'), h('b', null, world.name || 'My World'))),
     h('div', { class: 'btn-row', style: { gap: '6px' } },
       h('button', { class: 'btn sm primary', type: 'button', title: 'Record something that happened: a new tie, a betrayal, a death, a move, a faction joined or left', onClick: () => momentDialog({}) }, '⚡ What happened'),
-      h('button', { class: 'btn sm', type: 'button', onClick: () => newPageDialog() }, '+ Page')),
+      h('button', { class: 'btn sm', type: 'button', onClick: () => newPageDialog() }, '+ Page'),
+      h('button', { class: 'btn sm', type: 'button', title: 'Copy a key that holds this whole world and roster, to paste to your players', onClick: copyWorldKey }, '🔑 Share')),
     q, results,
     h('nav', { class: 'wd-navs' }, navBtn('home', 'Home', '⌂'), navBtn('timeline', 'Campaign timeline', '🕰'), navBtn('graph', 'Relationship graph', '◉'), navBtn('vault', 'Vault: import / export', '🗄')),
     h('div', { class: 'wd-sections' }, sections));
@@ -656,6 +691,11 @@ function graphPage() {
           svg('text', { 'text-anchor': 'middle', dy: r + 12, fill: 'var(--ink)', 'font-size': 10.5, 'font-weight': n.character ? 800 : 500 }, n.name.length > 22 ? `${n.name.slice(0, 21)}…` : n.name)); }))) : h('div', { class: 'empty' }, h('h2', null, 'No one to draw yet'), h('p', null, 'Save characters to the roster; their families, mentors, rivals and enemies fill the graph.')));
 }
 
+async function copyWorldKey() {
+  const k = await worldKey();
+  toast((await copyText(k)) ? `World key copied (${keySize(k)}). Paste it to your players; they open it on the World's Vault page or the Forge's "Open a key" box.` : 'Copy failed: use "Save key as a file"');
+}
+
 function vaultPage() {
   const fileIn = h('input', { type: 'file', accept: '.json', hidden: true, onChange: async (e) => {
     const f = e.target.files?.[0]; if (!f) return;
@@ -688,9 +728,14 @@ function vaultPage() {
   };
   const manual = Object.keys(saved.entities).length;
   const moments = (saved.moments || []).length;
+  const keyIn = h('textarea', { placeholder: 'Paste a world key (DCUW1…) from your GM or a player', 'aria-label': 'World key', style: { minHeight: '64px', fontFamily: 'ui-monospace, Consolas, monospace', fontSize: '12px' } });
+  const openIt = async () => { if (!isWorldKey(keyIn.value)) { toast('That is not a world key (they start with DCUW1.)'); return; } if (await openWorldKey(keyIn.value)) keyIn.value = ''; };
   return h('div', { class: 'wd-page' },
-    h('header', { class: 'wd-hero small' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'Vault'), h('h1', null, 'Import and export'), h('p', { class: 'wd-tagline' }, 'The world lives in this browser (and in the desktop app\'s data folder). Save it to a file to keep it, move it, or hand it to your players.'))),
+    h('header', { class: 'wd-hero small' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'Vault'), h('h1', null, 'Share, import and export'), h('p', { class: 'wd-tagline' }, 'The world lives in this browser (and in the desktop app\'s data folder). Share it as one key, save it to a file, or hand it to your players.'))),
     h('div', { class: 'gm' },
+      h('section', { class: 'panel wd-share' }, h('h2', null, '🔑 World key'), h('p', { style: { margin: 0 } }, `One key holds the whole world: every hand-made page, tie and moment, and all ${state.roster.length} character${state.roster.length === 1 ? '' : 's'} on the roster (portrait paintings are left out and repaint on arrival). Paste it anywhere: chat, email, the "Open a key" box on the Forge.`),
+        h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', type: 'button', onClick: copyWorldKey }, 'Copy world key'), h('button', { class: 'btn', type: 'button', onClick: async () => { const k = await worldKey(); download(`${slug(world.name || 'world')}-key.txt`, k, 'text/plain'); toast(`World key saved (${keySize(k)})`); } }, 'Save key as a file')),
+        h('div', { class: 'label', style: { marginTop: '8px' } }, 'Open a world key'), keyIn, h('div', { class: 'btn-row' }, h('button', { class: 'btn', type: 'button', onClick: openIt }, 'Open key'))),
       h('section', { class: 'panel' }, h('h2', null, 'Obsidian vault (Markdown)'), h('p', { style: { margin: 0 } }, 'One .md page per person, faction, location, event and item, with [[wikilinks]] between them, YAML front matter, infobox tables, current and former ties, and timelines. Unzip the folder into any Obsidian vault and the graph view lights up.'), h('button', { class: 'btn primary', type: 'button', onClick: exportMd }, `Download ${world.entities.size} pages as Markdown (.zip)`)),
       h('section', { class: 'panel' }, h('h2', null, 'DCUGen vault (.json)'), h('p', { style: { margin: 0 } }, `Everything: ${manual} hand-made page${manual === 1 ? '' : 's'}, ${saved.links.length} hand-made tie${saved.links.length === 1 ? '' : 's'}, ${moments} recorded moment${moments === 1 ? '' : 's'}, your edits to automatic pages, and the ${state.roster.length} character${state.roster.length === 1 ? '' : 's'} on your roster. Import merges into this world.`), h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', type: 'button', onClick: exportJson }, 'Save vault'), h('button', { class: 'btn', type: 'button', onClick: () => fileIn.click() }, 'Import vault'), fileIn)),
       h('section', { class: 'panel' }, h('h2', null, 'Reset'), h('p', { style: { margin: 0 } }, 'Removes hand-made pages, ties, moments and edits. Roster characters and their bios stay, so their pages come straight back.'), h('button', { class: 'btn ghost danger', type: 'button', onClick: async () => { const ok = await openDialog({ title: 'Reset the world?', body: h('p', { style: { margin: 0 } }, 'Hand-made pages, ties, moments and edits are deleted. Export the vault first if you want a copy.'), buttons: [{ label: 'Keep', value: false }, { label: 'Reset', value: true, danger: true }] }); if (ok) { saved = emptyWorld(); save(); go('home'); } } }, 'Reset the world'))));
