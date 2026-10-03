@@ -47,6 +47,10 @@ npm install
 npm start
 ```
 
+If the installer finishes instantly without downloading anything, the environment variable
+`ELECTRON_SKIP_BINARY_DOWNLOAD` is set on your computer (some developer tools set it). `npm start` ignores it,
+but `npm install` honours it; remove it from your system environment variables to make `npm install` work normally.
+
 Behind a proxy or firewall that blocks downloads from github.com, point Electron at a mirror first:
 `$env:ELECTRON_MIRROR="https://npmmirror.com/mirrors/electron/"` (PowerShell) or
 `export ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/`.
