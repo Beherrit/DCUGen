@@ -5,6 +5,7 @@ import { state } from './store.js';
 import { makeRng, randomSeed } from '../engine/rng.js';
 import { deriveAll } from '../engine/derive.js';
 import { combatCalculator, gmScreen, notesTool, setRules, damageMatrixTool } from './gmplus.js';
+import { skillCheatSheet } from './skillguide.js';
 let R;
 let root;
 const init = { list: [], turn: 0, round: 1 };
@@ -224,7 +225,7 @@ function conditionsTool() {
 }
 
 let tab = 'table';
-const TABS = [['table', 'At the table'], ['screen', 'GM screen'], ['notes', 'Notes'], ['generators', 'Generators'], ['beasts', 'Beastiary']];
+const TABS = [['table', 'At the table'], ['screen', 'GM screen'], ['skills', 'Skills'], ['notes', 'Notes'], ['generators', 'Generators'], ['beasts', 'Beastiary']];
 
 export function initGm(rules, el) {
   R = rules;
@@ -252,6 +253,7 @@ export function renderGm() {
   if (tab === 'table') root.append(h('div', { class: 'gm' }, diceTool(), initiativeTool(), combatCalculator()), h('div', { style: { marginTop: '16px', display: 'grid', gap: '16px' } }, damageMatrixTool()));
   if (tab === 'screen') root.append(gmScreen(renderGm));
   if (tab === 'notes') root.append(notesTool(renderGm));
+  if (tab === 'skills') root.append(skillCheatSheet(R));
   if (tab === 'generators') root.append(h('div', { class: 'gm' }, encounterTool(), hideoutTool(), vehicleTool(), conditionsTool()));
   if (tab === 'beasts') root.append(h('div', { class: 'gm' }, beastTool(), initiativeTool()));
 }

@@ -1,0 +1,732 @@
+[
+  {
+    "name": "Acrobatics",
+    "ability": "Agility",
+    "trained_only": true,
+    "covers": "Gymnastic stunts such as flips, rolls, dives and tumbles, plus keeping your footing on treacherous surfaces.",
+    "uses": [
+      {
+        "name": "Balancing",
+        "action": "Move",
+        "text": "Cross a precarious surface at ground speed rank -1 by beating the surface DC. Fail by one degree and you spend the move just staying upright; fail by two or more and you fall. You are vulnerable while balancing unless you take +5 to the DC. If you fail a resistance check mid-balance, immediately re-check against the original DC or fall.",
+        "dcs": [
+          ["Surface a yard or more wide", 0],
+          ["Wide ledge (1-3 ft.)", 5],
+          ["Narrow ledge (under 1 ft.)", 10],
+          ["Balance beam", 15],
+          ["Tightrope", 20],
+          ["Modifier: slightly slippery", 2],
+          ["Modifier: very slippery", 5],
+          ["Modifier: slightly uneven", 2],
+          ["Modifier: very uneven or angled", 5],
+          ["Modifier: move at normal speed rank", 5],
+          ["Modifier: not vulnerable while balancing", 5]
+        ]
+      },
+      {
+        "name": "Maneuvering",
+        "action": "Move",
+        "text": "Pull off an acrobatic stunt such as a back flip, vaulting an opponent to get behind them, flipping onto a ledge or tumbling past obstacles. The GM sets the DC (typically 15). Failing means the stunt doesn't happen; two or more degrees of failure usually leaves you prone, possibly with other consequences. A good maneuver may earn a circumstance bonus on a follow-up action at GM discretion.",
+        "dcs": [["Acrobatic maneuver (typical)", 15]]
+      },
+      {
+        "name": "Standing",
+        "action": "Free",
+        "text": "Spring up from prone as a free action instead of a move action with a DC 20 check. On a failure you stay prone.",
+        "dcs": [["Prone to standing as a free action", 20]]
+      },
+      {
+        "name": "Tumbling",
+        "action": "Reaction",
+        "text": "Soften a fall with a DC 5 check: each degree of success cuts the fall's damage rank by 1. If that brings the damage to rank 0 you take nothing and roll back to your feet as a free action; otherwise you end the fall prone.",
+        "dcs": [["Lessen falling damage (-1 rank per degree)", 5]]
+      },
+      {
+        "name": "Contorting",
+        "action": "Standard",
+        "text": "The Acrobatics difficulty table lists squeezing your body through a very tight space at DC 30 (the same task also appears under Sleight of Hand).",
+        "dcs": [["Contort through a tight space", 30]]
+      }
+    ],
+    "opposed_by": null,
+    "examples": "Swinging across rooftops, flipping over a thug, rolling with a punch off a building.",
+    "source": "DCA 54-55"
+  },
+  {
+    "name": "Athletics",
+    "ability": "Strength",
+    "trained_only": false,
+    "covers": "Raw physical exertion: climbing, jumping, running, swimming (and, at GM option, riding mounts).",
+    "uses": [
+      {
+        "name": "Climbing",
+        "action": "Move",
+        "text": "Scale a slope or wall at ground speed rank -2. A failure means no progress; two or more degrees of failure means you fall unless secured. You can try to catch yourself (DC = original climb DC + 10), and a character within arm's reach can try to catch you at the same DC, falling too if they fail by more than one degree. You are vulnerable while climbing unless you take +5 to the DC, and must re-check against the climb DC whenever you fail a resistance check or else fall. Perfectly smooth vertical surfaces need Wall-crawling. Some climbs need gear; lacking it is -5.",
+        "dcs": [
+          ["Ladder", 0],
+          ["Knotted rope", 5],
+          ["Rope", 10],
+          ["Uneven surface (rock face)", 15],
+          ["Rough surface (brick wall)", 20],
+          ["Modifier: brace against two opposite walls (duct, chimney)", -10],
+          ["Modifier: brace in a corner of perpendicular walls", -5],
+          ["Modifier: total climb under 10 ft.", -5],
+          ["Modifier: slightly slippery", 2],
+          ["Modifier: very slippery", 5],
+          ["Modifier: +1 speed rank (up to full speed)", 5],
+          ["Modifier: not vulnerable while climbing", 5],
+          ["Catch yourself / another faller", "climb DC + 10"]
+        ]
+      },
+      {
+        "name": "Falling",
+        "action": "None",
+        "text": "Not a check, but the reference rule: a fall deals damage rank 4 + twice the distance rank fallen, capped at rank 16. Damage rank 0 or less (about 6 ft. or less) does nothing. You land prone. Acrobatics can reduce the damage.",
+        "dcs": []
+      },
+      {
+        "name": "Jumping",
+        "action": "Move",
+        "text": "Your check total is how many feet you clear in a running long jump. Halve it for a standing long jump, divide by 5 for a running vertical jump, and by 10 for a standing vertical jump. Routinely you can jump Athletics bonus + 10 (so +10 gives 20 ft. running, 10 ft. standing, 4 ft. vertical, 2 ft. standing vertical).",
+        "dcs": [
+          ["Running long jump: feet = check result", 1],
+          ["Standing long jump: feet = result / 2", 2],
+          ["Running vertical jump: feet = result / 5", 5],
+          ["Standing vertical jump: feet = result / 10", 10]
+        ]
+      },
+      {
+        "name": "Running",
+        "action": "Free",
+        "text": "Push yourself with a DC 15 check: success adds +1 to your ground speed rank for one round.",
+        "dcs": [["Sprint (+1 ground speed rank for a round)", 15]]
+      },
+      {
+        "name": "Swimming",
+        "action": "Move",
+        "text": "On a DC 10 check you swim at ground speed rank -2. A failure means no headway that action; more than one degree of failure and you go under and must hold your breath (see Suffocation).",
+        "dcs": [
+          ["Base swim", 10],
+          ["Modifier: rescuing a non-swimmer", 5],
+          ["Modifier: rough or choppy water", 5],
+          ["Modifier: +1 speed rank (up to full ground speed)", 5],
+          ["Modifier: stormy or turbulent water", 10]
+        ]
+      }
+    ],
+    "opposed_by": null,
+    "examples": "Scaling a skyscraper, leaping a gap between rooftops, pulling a civilian out of a flooded river. Escaping a grab can use Athletics or Acrobatics.",
+    "source": "DCA 55-57"
+  },
+  {
+    "name": "Close Combat",
+    "ability": "Fighting",
+    "trained_only": false,
+    "covers": "Training with one specific kind of close attack, adding your rank to attack checks made with it.",
+    "uses": [
+      {
+        "name": "Specialized attack bonus",
+        "action": "Standard",
+        "text": "Each close attack is its own Close Combat skill with separate ranks, covering one weapon or one power (an array can count as one power if the GM agrees). The bonus applies only to attack checks with that attack, never to defenses.",
+        "dcs": []
+      },
+      {
+        "name": "Choosing a specialty",
+        "action": "None",
+        "text": "Pick something narrow: Swords is fine, Melee Weapons is too broad. Unarmed covers punches and kicks but not grabs, trips or other unarmed maneuvers. For a wider bonus across all close attacks, buy the Close Attack advantage or raise Fighting instead.",
+        "dcs": []
+      }
+    ],
+    "opposed_by": "Target's Parry (via the attack check)",
+    "examples": "Close Combat (Unarmed), (Swords), (Batons), (Claws), (Power Mace).",
+    "source": "DCA 57"
+  },
+  {
+    "name": "Deception",
+    "ability": "Presence",
+    "trained_only": false,
+    "covers": "Making people believe what you want: acting, lying, fast talk, disguise and misdirection. An interaction skill.",
+    "uses": [
+      {
+        "name": "Bluffing",
+        "action": "Standard",
+        "text": "Tell a convincing lie or get someone to play along, opposed by their Deception or Insight. The target gets a resistance modifier based on how believable and risky the lie is. If they resist thanks to a +10 risk modifier but only by 10 or less, they doubt the request rather than the story; beating you by 11 or more means they saw right through it. Can be done as a move action at -5.",
+        "dcs": [
+          ["Target wants to believe you", -5],
+          ["Believable, little effect on target", 0],
+          ["A little hard to believe or somewhat risky", 5],
+          ["Hard to believe or seriously risky", 10],
+          ["Almost too incredible to consider", 20]
+        ]
+      },
+      {
+        "name": "Disguise",
+        "action": "Extended (10+ minutes)",
+        "text": "Use makeup, costume and props to change your look; your result (rolled secretly by the GM) opposes observers' Perception. Good props and a similar build help; disguising across race or sex, or lacking props, hurts (up to -5). People who know the person you are impersonating get a Perception bonus. Acting the part may need a further Deception check against the observer's Insight. Observers check on first meeting and then hourly or daily.",
+        "dcs": [
+          ["Observer bonus: regular associate", 2],
+          ["Observer bonus: friend", 5],
+          ["Observer bonus: intimate loved one", 10],
+          ["Penalty: insufficient props (up to)", -5]
+        ]
+      },
+      {
+        "name": "Feinting",
+        "action": "Standard",
+        "text": "Mislead a foe in combat with a Deception check (opposed by their Deception or Insight). On a success, the target is vulnerable to your next attack until the end of your next round.",
+        "dcs": []
+      },
+      {
+        "name": "Innuendo",
+        "action": "Standard",
+        "text": "Hide a message in ordinary conversation through double meanings. The recipient must make an Insight check against the same DC to get it. Eavesdroppers can check Insight against the DC to spot a hidden message, and need two degrees of success to understand it. Anyone (sender or receiver) failing by more than one degree garbles the meaning.",
+        "dcs": [
+          ["Basic message", 10],
+          ["Complex message", 15],
+          ["New or detailed information", 20]
+        ]
+      },
+      {
+        "name": "Tricking",
+        "action": "Standard",
+        "text": "Lure an opponent into a risky position (beside a junction box, at a cliff edge), opposed by Deception or Insight. If you win, the foe ignores the danger and may suffer it if their attack misses you (a hit may send you into it instead). More than one degree of failure leaves you vulnerable to the target until the start of your next round.",
+        "dcs": []
+      }
+    ],
+    "opposed_by": "Deception or Insight (bluff, feint, trick); Perception (disguise)",
+    "examples": "Fast-talking a guard, posing as a delivery driver, pretending to be knocked out, baiting a villain into a power line.",
+    "source": "DCA 57-58"
+  },
+  {
+    "name": "Expertise",
+    "ability": "Intellect",
+    "trained_only": true,
+    "covers": "Knowledge and professional training in one particular field; each field is bought as a separate skill with its own rank.",
+    "uses": [
+      {
+        "name": "Practicing a profession",
+        "action": "Varies",
+        "text": "Trained characters can earn a living in the field: use its tools, handle routine daily tasks and common problems, and supervise untrained helpers. Most job tasks are routine checks with GM-set DCs. Professionals are assumed licensed; licensing or rivalry troubles are complications.",
+        "dcs": []
+      },
+      {
+        "name": "Answering questions",
+        "action": "Varies",
+        "text": "Check whether your character knows something in the field. Usually routine; the GM may roll secretly.",
+        "dcs": [
+          ["Easy question", 10],
+          ["Basic question", 15],
+          ["Difficult question (or higher)", 20]
+        ]
+      },
+      {
+        "name": "Untrained use",
+        "action": "Varies",
+        "text": "The GM may allow untrained checks in general-knowledge fields, but they can never be routine and only handle easy or basic matters.",
+        "dcs": [["Maximum untrained DC range", "10-15"]]
+      },
+      {
+        "name": "Related fields",
+        "action": "Varies",
+        "text": "The GM may let a related Expertise substitute for another skill at a circumstance penalty (e.g. Law for a Politics clue at -2, Journalism at -5); unrelated fields don't help.",
+        "dcs": [
+          ["Closely related field", -2],
+          ["Loosely related field", -5]
+        ]
+      },
+      {
+        "name": "Alternate abilities",
+        "action": "None",
+        "text": "Intellect is the default, but the GM can swap it: e.g. Dexterity for hands-on technical work, Presence for performance fields like acting or music. Expertise doesn't replace tasks owned by other skills (a detective still needs Investigation, a doctor Treatment).",
+        "dcs": []
+      }
+    ],
+    "opposed_by": null,
+    "examples": "Art, Business, Carpentry, Cooking, Criminal, Current Events, Dance, History, Journalism, Law, Law Enforcement, Medicine, Military, Music, Magic, Philosophy, Politics, Popular Culture, Psychiatry, Science, Sociology, Streetwise, Theology. Riding (Agility) for animal mounts.",
+    "source": "DCA 59"
+  },
+  {
+    "name": "Insight",
+    "ability": "Awareness",
+    "trained_only": false,
+    "covers": "Reading people's real motives and feelings from body language, tone and gut instinct, and seeing through social manipulation.",
+    "uses": [
+      {
+        "name": "Detect Illusion",
+        "action": "Free",
+        "text": "The GM secretly rolls to see if you sense a flaw in an illusion that reveals it as false.",
+        "dcs": [["Sense an illusion", "10 + Illusion rank"]]
+      },
+      {
+        "name": "Detect Influence",
+        "action": "Free",
+        "text": "Notice that someone isn't fully acting of their own will. Three or more degrees of success hint at what (and maybe who) is controlling them.",
+        "dcs": [["Notice outside influence", "10 + rank of the effect or skill"]]
+      },
+      {
+        "name": "Evaluate",
+        "action": "Free",
+        "text": "Size up whether a person is trustworthy on meeting them (opposed by their Deception), or read the general mood of a social scene (DC 20). Two or more degrees of failure on either gives a false read, so the GM may roll secretly.",
+        "dcs": [["Read a social situation", 20]]
+      },
+      {
+        "name": "Innuendo",
+        "action": "Free",
+        "text": "Catch hidden messages sent with Deception, using the message's DC (see Deception: Innuendo).",
+        "dcs": [
+          ["Basic message", 10],
+          ["Complex message", 15],
+          ["New or detailed information", 20]
+        ]
+      },
+      {
+        "name": "Resist Influence",
+        "action": "Reaction",
+        "text": "When called for, roll Insight to shrug off interaction skills like Deception or Intimidation; if your result beats theirs, the attempt doesn't affect you.",
+        "dcs": []
+      }
+    ],
+    "opposed_by": null,
+    "examples": "Spotting a liar during an interrogation, sensing a mind-controlled teammate, noticing an illusionary wall.",
+    "source": "DCA 60"
+  },
+  {
+    "name": "Intimidation",
+    "ability": "Presence",
+    "trained_only": false,
+    "covers": "Using threats, open or implied, to bend others to your will or shake their nerve. An interaction skill.",
+    "uses": [
+      {
+        "name": "Coercing",
+        "action": "Standard",
+        "text": "Opposed by the target's Insight or Will (whichever is higher). On success, treat the target as friendly while you are present: they talk, advise, and give limited help, but won't put themselves in direct danger. Looking more imposing grants a circumstance bonus; a target in a superior position imposes a penalty. More than one degree of failure may make them do the opposite. Afterward their real attitude usually turns hostile, win or lose.",
+        "dcs": []
+      },
+      {
+        "name": "Demoralizing",
+        "action": "Standard",
+        "text": "Rattle an opponent in combat. Success leaves them impaired (-2 on checks) until the end of your next round; four or more degrees of success leaves them disabled (-5) instead.",
+        "dcs": [
+          ["Impaired (success)", -2],
+          ["Disabled (4+ degrees)", -5]
+        ]
+      },
+      {
+        "name": "Intimidating Minions",
+        "action": "Standard",
+        "text": "Cow an entire group of minions who can see and hear you with one check against a single group resistance check rolled by the GM. The result must be the same for all of them (you can't demoralize some and coerce others). Being at a disadvantage to the group means the usual penalty.",
+        "dcs": []
+      }
+    ],
+    "opposed_by": "Insight or Will (whichever is higher)",
+    "examples": "Dangling a thug off a roof for answers, a menacing glare that unnerves a villain mid-fight, scattering a gang of henchmen.",
+    "source": "DCA 60"
+  },
+  {
+    "name": "Investigation",
+    "ability": "Intellect",
+    "trained_only": true,
+    "covers": "Finding and studying clues, interviewing and watching people, and analyzing evidence to crack cases. The GM often rolls it secretly.",
+    "uses": [
+      {
+        "name": "Search",
+        "action": "Extended",
+        "text": "Comb an area for clues, hidden objects or traps (Perception notices things instantly; Investigation finds details with effort). Search time = time rank of the area's measurement + 4 (an 8x8 ft. room takes about 4 minutes; a square mile about 8 hours). Hidden objects are usually opposed by the hider's Stealth or Sleight of Hand.",
+        "dcs": [
+          ["Ransack an area for a specific object", 10],
+          ["Secret compartment, simple trap or obscure clue", 20],
+          ["Well-hidden compartment or trap, very obscure clue (or more)", 25]
+        ]
+      },
+      {
+        "name": "Gather Evidence",
+        "action": "Extended",
+        "text": "Collect a sample for later analysis (DC 15). On failure analysis is still possible at -5; more than one degree of failure ruins the evidence. Two or more degrees of success gives +2 to the later analysis.",
+        "dcs": [
+          ["Gather evidence", 15],
+          ["Modifier: each day since the event (max +10)", 2],
+          ["Modifier: scene is outdoors", 5],
+          ["Modifier: scene disturbed", 2],
+          ["Modifier: scene highly disturbed", 5]
+        ]
+      },
+      {
+        "name": "Analyze Evidence",
+        "action": "Extended",
+        "text": "Apply forensics to extract information from evidence you already have (it can't create clues that aren't there). Base DC 15, adjusted for elapsed time and scene disturbance. Success yields GM-determined information; two or more degrees of failure may mislead you.",
+        "dcs": [
+          ["Analyze evidence", 15],
+          ["Modifier: each day since the event (max +10)", 2],
+          ["Modifier: scene is outdoors", 5],
+          ["Modifier: scene disturbed", 2],
+          ["Modifier: scene highly disturbed", 5]
+        ]
+      },
+      {
+        "name": "Gather Information",
+        "action": "Extended (1+ hour)",
+        "text": "Work contacts, informants and the rumor mill for at least an hour. A DC 10 check gets the local news and gossip; more degrees of success unlock deeper info: one = general (local rumors), two = specific (answers a particular question), three = restricted (requires finding someone with access), four = protected (dangerous to ask or tell). Failure wastes the time; an extra degree of failure tips off someone interested, possibly your target.",
+        "dcs": [["Get a feel for local news and rumors", 10]]
+      },
+      {
+        "name": "Surveillance",
+        "action": "Extended",
+        "text": "Stake out an area from a fixed spot; your Investigation result becomes the DC for a subject's Stealth check to slip past unnoticed. For following someone on the move, use Stealth (Tailing).",
+        "dcs": [["Subject's Stealth DC", "your check result"]]
+      }
+    ],
+    "opposed_by": "Stealth or Sleight of Hand (hidden objects); Stealth (surveillance)",
+    "examples": "Dusting a crime scene, working the docks for word on a smuggling ring, watching a warehouse overnight.",
+    "source": "DCA 60-62"
+  },
+  {
+    "name": "Perception",
+    "ability": "Awareness",
+    "trained_only": false,
+    "covers": "Noticing things with your senses. The GM usually rolls secretly, so you may not know if you missed something or there was nothing there.",
+    "uses": [
+      {
+        "name": "General modifiers",
+        "action": "Free",
+        "text": "Take -1 for every 10 ft. between you and what you're sensing (e.g. a noise 50 ft. away is -5). Picking out details, like hearing words clearly or reading small print, takes three or more degrees of success. You get a check whenever there's something new to notice, and can spend a move action to retry something you missed. Sensory powers may add modifiers.",
+        "dcs": [
+          ["Distance: per 10 ft.", -1],
+          ["Discern details (degrees of success needed)", 3]
+        ]
+      },
+      {
+        "name": "Hearing",
+        "action": "Free",
+        "text": "Check against the noise's loudness or an opposed Stealth check.",
+        "dcs": [
+          ["Normal conversation", 0],
+          ["Soft noise", 10],
+          ["Modifier: through a door", 5],
+          ["Modifier: through a solid wall", 15],
+          ["Modifier: waking up from sleep", 10]
+        ]
+      },
+      {
+        "name": "Seeing",
+        "action": "Free",
+        "text": "Check against how visible something is or an opposed Stealth check. Also used to spot disguises (vs. Deception) and concealed items (vs. Sleight of Hand).",
+        "dcs": [
+          ["In plain sight", 0],
+          ["Subtle or easily overlooked (or more)", 5],
+          ["Harder to notice (or more)", 10]
+        ]
+      },
+      {
+        "name": "Other Senses",
+        "action": "Free",
+        "text": "Smell, touch, special senses and so on use the same scale; discerning details still needs three degrees of success.",
+        "dcs": [
+          ["Obvious to the sense", 0],
+          ["Less obvious (approx.)", 10],
+          ["Hidden (or more)", 20]
+        ]
+      }
+    ],
+    "opposed_by": "Stealth (hiding), Deception (disguise), Sleight of Hand (concealed items/legerdemain)",
+    "examples": "Spotting a sniper on a rooftop, hearing footsteps in the dark, smelling gas in a building.",
+    "source": "DCA 62"
+  },
+  {
+    "name": "Persuasion",
+    "ability": "Presence",
+    "trained_only": false,
+    "covers": "Social grace, rhetoric and negotiation: making a good impression and winning people over. An interaction skill.",
+    "uses": [
+      {
+        "name": "Improve Attitude",
+        "action": "Standard (or longer)",
+        "text": "A DC 15 check shifts an NPC's attitude one step better, plus another step for every two additional degrees (two steps at three degrees, three at five, etc.). Failure changes nothing; more than one degree of failure worsens it a step, and a hostile subject may lash out. Retries in the same scene check against the original attitude and can backfire; the GM decides if persuasion is possible once a fight starts. Most people start favorable or indifferent toward heroes.",
+        "dcs": [
+          ["Improve attitude one step", 15],
+          ["Hostile: takes risks to attack or hinder you", 1],
+          ["Unfavorable: insults, misleads or makes trouble", 2],
+          ["Indifferent: behaves as socially expected", 3],
+          ["Favorable: chats, advises, offers limited help", 4],
+          ["Helpful: takes risks to help or protect you", 5]
+        ]
+      },
+      {
+        "name": "Negotiation",
+        "action": "Extended",
+        "text": "Everyone in the negotiation rolls Persuasion to see who comes out ahead; opposed checks also settle two advocates arguing before a third party.",
+        "dcs": []
+      }
+    ],
+    "opposed_by": "Persuasion (negotiation); otherwise DC 15 vs. attitude",
+    "examples": "Talking down a hostage taker, convincing an alien leader to call off an invasion, rallying a crowd.",
+    "source": "DCA 62-63"
+  },
+  {
+    "name": "Ranged Combat",
+    "ability": "Dexterity",
+    "trained_only": false,
+    "covers": "Training with one specific kind of ranged attack, adding your rank to attack checks made with it.",
+    "uses": [
+      {
+        "name": "Specialized attack bonus",
+        "action": "Standard",
+        "text": "Each ranged attack is its own Ranged Combat skill with separate ranks, covering one weapon or one power (an array can count as one power if the GM agrees). The bonus applies only to attack checks with that attack, never to defenses.",
+        "dcs": []
+      },
+      {
+        "name": "Choosing a specialty",
+        "action": "None",
+        "text": "Pick something narrow: Guns or Fire Control are fine, Powers is too broad. Throwing covers both thrown weapons and improvised objects. For a wider bonus across all ranged attacks, buy the Ranged Attack advantage or raise Dexterity instead.",
+        "dcs": []
+      }
+    ],
+    "opposed_by": "Target's Dodge (via the attack check)",
+    "examples": "Ranged Combat (Guns), (Throwing), (Batarangs), (Energy Blast), (Fire Control).",
+    "source": "DCA 63-64"
+  },
+  {
+    "name": "Sleight of Hand",
+    "ability": "Dexterity",
+    "trained_only": true,
+    "covers": "Nimble-fingered tricks like palming, pickpocketing and slipping restraints; used by stage magicians and, more often, criminals. A manipulation skill.",
+    "uses": [
+      {
+        "name": "Concealing",
+        "action": "Standard",
+        "text": "Hide a small item on your body; your result sets the DC for Investigation or Perception checks to find it.",
+        "dcs": [["Finding the item", "your check result"]]
+      },
+      {
+        "name": "Contorting",
+        "action": "Standard",
+        "text": "Squeeze through a gap big enough for your head but not your shoulders, or reach through a hole big enough for your hand but not your arm.",
+        "dcs": [["Contort through a tight space", 30]]
+      },
+      {
+        "name": "Escaping Bonds",
+        "action": "Extended (1+ minute)",
+        "text": "Wriggle free of restraints; each attempt takes at least a minute. Breaking a grab instead uses Acrobatics or Athletics.",
+        "dcs": [
+          ["Ropes", 15],
+          ["Handcuffs", 20],
+          ["Straitjacket", 25],
+          ["Power effect", "15 + effect rank"]
+        ]
+      },
+      {
+        "name": "Legerdemain",
+        "action": "Standard",
+        "text": "Simple tricks like vanishing a coin or card are DC 10 if no one is watching closely; under scrutiny the check is opposed by the observer's Perception.",
+        "dcs": [["Minor trick, unobserved", 10]]
+      },
+      {
+        "name": "Stealing / Planting",
+        "action": "Standard",
+        "text": "Lift something from a person with a DC 20 check, or plant a small item on them (pocket, drink, tracer) needing a result of 20 or more. Either way the target notices the attempt if their Perception beats your result, whether or not you succeeded.",
+        "dcs": [
+          ["Pick a pocket / take an item", 20],
+          ["Plant an item", 20]
+        ]
+      }
+    ],
+    "opposed_by": "Perception (and Investigation for concealed items)",
+    "examples": "Lifting a keycard from a guard, slipping out of handcuffs, planting a tracker on a villain.",
+    "source": "DCA 64-65"
+  },
+  {
+    "name": "Stealth",
+    "ability": "Agility",
+    "trained_only": false,
+    "covers": "Avoiding notice: hiding, sneaking and shadowing people.",
+    "uses": [
+      {
+        "name": "Moving While Hidden",
+        "action": "Move",
+        "text": "While sneaking you can move at speed rank -1 without penalty; moving faster, up to full speed, gives -5 to Stealth.",
+        "dcs": [["Moving faster than speed rank -1", -5]]
+      },
+      {
+        "name": "Hiding",
+        "action": "Move",
+        "text": "With cover or concealment, roll Stealth against observers' Perception. You can't hide in plain sight or from someone already aware of you (ducking around a corner still reveals your direction), but someone not looking your way gives you concealment. A successful Deception or Intimidation distraction lets you try to hide while observed, at -5 for the rushed move to cover.",
+        "dcs": [["Hiding after a distraction", -5]]
+      },
+      {
+        "name": "Tailing",
+        "action": "Move",
+        "text": "Follow someone at normal speed given some cover (crowds, shadows, fog). A wary subject rolls Perception vs. your Stealth each time they change course; an unsuspecting one gets one check per scene. If spotted, a Deception check vs. their Insight passes it off as coincidence; failing that, or being spotted twice, means they know they're being followed.",
+        "dcs": []
+      }
+    ],
+    "opposed_by": "Perception",
+    "examples": "Sneaking past patrols in a villain's lair, shadowing a mob courier, vanishing into the night mid-conversation.",
+    "source": "DCA 65"
+  },
+  {
+    "name": "Technology",
+    "ability": "Intellect",
+    "trained_only": true,
+    "covers": "Operating, building, repairing and generally working with technical gear. Requires tools: without proper tools or equipment you take -5.",
+    "uses": [
+      {
+        "name": "Operating",
+        "action": "Standard",
+        "text": "Routine use of equipment needs no check and can be done untrained. Unfamiliar devices need a check scaled to how strange they are.",
+        "dcs": [
+          ["Simple unfamiliar device", 10],
+          ["Highly advanced device (or more)", 25]
+        ]
+      },
+      {
+        "name": "Building",
+        "action": "Extended",
+        "text": "DC and time depend on complexity. Success completes the item after the listed time; failure wastes the time and materials; more than one degree of failure may cause an accident. You can cut the time rank by 1 by taking -5 on the check.",
+        "dcs": [
+          ["Simple (time rank 10, 2 hours: timer, detonator, tripwire trap)", 15],
+          ["Moderate (time rank 12, 8 hours: radio direction finder, lock, engine part)", 20],
+          ["Complex (time rank 14, 24 hours: cell phone, combustion engine)", 25],
+          ["Advanced (time rank 16, 4 days: computer, vehicle)", 30],
+          ["Modifier: rush, -1 time rank", -5]
+        ]
+      },
+      {
+        "name": "Repairing",
+        "action": "Extended",
+        "text": "Fix a damaged item at the build DC -5 and build time rank -2 (e.g. a complex item: DC 20, 8 hours). Failure spends the time with no progress; two or more degrees of failure may cause further damage or an accident. Rushing works as for building.",
+        "dcs": [
+          ["Simple item", 10],
+          ["Moderate item", 15],
+          ["Complex item", 20],
+          ["Advanced item", 25]
+        ]
+      },
+      {
+        "name": "Jury-Rigging",
+        "action": "Standard",
+        "text": "A temporary fix at the build DC -10, done as a standard action. It solves only one problem, lasts until the end of the scene, and the item can't be jury-rigged again until properly repaired.",
+        "dcs": [
+          ["Simple item", 5],
+          ["Moderate item", 10],
+          ["Complex item", 15],
+          ["Advanced item", 20]
+        ]
+      },
+      {
+        "name": "Demolitions",
+        "action": "Standard (set/disarm detonator); 1+ minute (placement)",
+        "text": "Placing a charge to exploit a structure's weak points takes at least a minute and a DC 10 check (rolled by the GM); every two full degrees of success adds +5 damage against the structure. Failure means it doesn't go off as planned; more than one degree of failure detonates it while you work. Other targets take normal damage. To make a bomb harder to defuse, pick a disarm DC and use it as your DC to set the detonator (two or more degrees of failure sets it off). Disarming is DC 10 or the chosen disarm DC; more than one degree of failure detonates it.",
+        "dcs": [
+          ["Place charge against a structure (+5 damage per 2 degrees)", 10],
+          ["Set detonator", "chosen disarm DC"],
+          ["Disarm explosive (default)", 10]
+        ]
+      },
+      {
+        "name": "Security",
+        "action": "Extended (1+ minute)",
+        "text": "Bypass or sabotage locks, traps and sensors; the GM rolls secretly. Failure means nothing happens and you may retry; more than one degree of failure triggers the alarm or trap if possible.",
+        "dcs": [
+          ["Simple lock or home alarm", 10],
+          ["Quality lock or home alarm", 15],
+          ["Business / corporate security", 20],
+          ["High security: branch bank vault, museum", 25],
+          ["Very high security: bank HQ vault, medium prison", 30],
+          ["Maximum security: highly secure prison", 35],
+          ["Super-max security: super-prison", 40],
+          ["Modifier: leave no sign of tampering", 5]
+        ]
+      },
+      {
+        "name": "Inventing",
+        "action": "Extended",
+        "text": "With the Inventor advantage, Technology lets you create temporary devices (inventions); see Inventing, page 145.",
+        "dcs": []
+      }
+    ],
+    "opposed_by": null,
+    "examples": "Hacking a LexCorp lock, patching a damaged Batmobile mid-chase, rigging a bomb to drop a bridge support, defusing a Joker device.",
+    "source": "DCA 65-67"
+  },
+  {
+    "name": "Treatment",
+    "ability": "Intellect",
+    "trained_only": true,
+    "covers": "Medical care for injuries and illness. Requires tools and is a manipulation skill: lacking medical supplies is -5, and unusual biology (aliens) may add a penalty.",
+    "uses": [
+      {
+        "name": "Diagnosis",
+        "action": "Extended (1+ minute)",
+        "text": "Identify injuries and ailments in at least a minute; at GM discretion success gives +2 on later Treatment checks for that patient.",
+        "dcs": [["Diagnose", 10]]
+      },
+      {
+        "name": "Provide Care",
+        "action": "Extended (1+ day)",
+        "text": "Tend a patient for a day or more; success lowers their recovery time by another rank. You can care for up to your Treatment rank in patients at once.",
+        "dcs": [["Long-term care", 15]]
+      },
+      {
+        "name": "Revive",
+        "action": "Standard",
+        "text": "Remove the dazed or stunned condition. Other conditions remain (e.g. exhausted or staggered), and a dying character must be stabilized first.",
+        "dcs": [["Revive dazed or stunned", 15]]
+      },
+      {
+        "name": "Stabilize",
+        "action": "Standard",
+        "text": "Stop a dying character from getting worse.",
+        "dcs": [["Stabilize dying character", 15]]
+      },
+      {
+        "name": "Treat Disease and Poison",
+        "action": "Varies",
+        "text": "Each time the patient resists the ailment, you roll Treatment: one degree of success gives them +2 on the resistance check, three or more degrees gives +5.",
+        "dcs": [["Treat disease or poison", 15]]
+      },
+      {
+        "name": "Treating Yourself",
+        "action": "Varies",
+        "text": "You can self-diagnose, provide care to yourself or treat your own disease or poison (not revive or stabilize), at -5.",
+        "dcs": [["Self-treatment", -5]]
+      }
+    ],
+    "opposed_by": null,
+    "examples": "Patching up a wounded teammate, stabilizing a civilian after a building collapse, counteracting Scarecrow's toxin.",
+    "source": "DCA 67"
+  },
+  {
+    "name": "Vehicles",
+    "ability": "Dexterity",
+    "trained_only": true,
+    "covers": "Driving and piloting anything from cars to boats, aircraft and spaceships. A manipulation skill; see Vehicles in Gadgets & Gear.",
+    "uses": [
+      {
+        "name": "Routine operation",
+        "action": "Move",
+        "text": "Ordinary driving of familiar vehicles needs no check, and common vehicles like cars may even be driven untrained. Roll only under pressure: chases, attacks, or racing a deadline.",
+        "dcs": []
+      },
+      {
+        "name": "Maneuvers",
+        "action": "Move",
+        "text": "Stunt driving or flying requires a check based on difficulty.",
+        "dcs": [
+          ["Easy: low-speed turn", 5],
+          ["Average: sudden reverse, dodging obstacles", 10],
+          ["Difficult: tight turns", 15],
+          ["Challenging: bootlegger reverse, loop, barrel roll", 20],
+          ["Formidable: high-speed maneuvers, jumping or flying around obstacles", 25]
+        ]
+      },
+      {
+        "name": "Riding mounts",
+        "action": "Move",
+        "text": "Vehicles doesn't cover animals; use Expertise (Riding), based on Agility, with the same DCs. The GM may allow Athletics instead, possibly with a penalty.",
+        "dcs": []
+      }
+    ],
+    "opposed_by": null,
+    "examples": "Car chases through Gotham, flying the Javelin through an asteroid field, outrunning a pursuing helicopter.",
+    "source": "DCA 67"
+  }
+]

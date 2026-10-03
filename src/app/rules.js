@@ -3,6 +3,7 @@
 
 import { h, clear } from './dom.js';
 import { damageMatrix } from './gmplus.js';
+import { guideFor, skillGuideBody } from './skillguide.js';
 let R;
 let root;
 let query = '';
@@ -45,7 +46,11 @@ function buildCards() {
     const max = a.max_rank === 'half_pl' ? 'half your PL' : a.max_rank;
     add('Advantages', { title: a.name, meta: `${a.type}${a.ranked ? `, ranked${max ? ` (max ${max})` : ''}` : ''}${a.book ? ` · ${a.book}` : ''}`, summary: a.summary, details: (a.requires || []).length ? `Requires: ${a.requires.join(', ')}.` : '', source: a.source });
   }
-  for (const s of R.raw.skills || []) add('Skills', { title: s.name, meta: `${s.ability}${s.trained_only ? ' · trained only' : ''}${s.specialized ? ' · pick a specialty' : ''}`, summary: s.summary, source: s.source });
+  for (const s of R.raw.skills || []) {
+    const g = guideFor(R, s.name);
+    add('Skills', { title: s.name, meta: `${s.ability}${s.trained_only ? ' · trained only' : ''}${s.specialized ? ' · pick a specialty' : ''}`, summary: g ? null : s.summary,
+      details: g ? `${g.covers || ''} ${(g.uses || []).map((u) => `${u.name} ${u.text || ''}`).join(' ')}` : null, el: g ? () => skillGuideBody(g) : null, hideDetails: !!g, source: g ? null : s.source });
+  }
   return cards;
 }
 
@@ -58,12 +63,12 @@ export function initRules(rules, el) {
 }
 
 function cardEl(c) {
-  return h('article', { class: `panel rule-card ${c.el ? 'wide' : ''}` },
+  return h('article', { class: `panel rule-card ${c.el && c.cat !== 'Skills' ? 'wide' : ''}` },
     h('div', null,
       h('div', { class: 'label' }, `${c.cat}${c.meta ? ` · ${c.meta}` : ''}`),
       h('h3', { class: 'rule-title' }, c.title)),
     c.summary ? h('p', { class: 'rule-sum' }, c.summary) : null,
-    c.details ? h('p', { class: 'rule-det' }, c.details) : null,
+    c.details && !c.hideDetails ? h('p', { class: 'rule-det' }, c.details) : null,
     c.table ? h('div', { class: 'table-wrap' }, h('table', { class: 'skills rule-table' },
       h('thead', null, h('tr', null, c.table[0].map((x) => h('th', null, x)))),
       h('tbody', null, c.table.slice(1).map((row, i) => h('tr', { class: c.rowClasses?.[i] || '' }, row.map((x) => h('td', null, x))))))) : null,

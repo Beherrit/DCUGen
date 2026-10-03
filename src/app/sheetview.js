@@ -1,6 +1,7 @@
 // The character "case file": read view and edit view.
 
 import { h } from './dom.js';
+import { guideFor, skillGuideBody } from './skillguide.js';
 import { inkFor } from './dom.js';
 import { sheet as makeSheet, describeEffect, explainPower } from '../engine/render.js';
 import { costMath } from '../engine/powersmith.js';
@@ -170,13 +171,18 @@ export function renderFile(ch, R, opts = {}) {
   const advNames = (R.raw.advantages || []).map((a) => a.name).sort();
   const advantages = h('section', { class: 'sec' },
     h('h3', null, 'Advantages', h('span', { class: 'pts' }, `${s.cost.advantages} pp`)),
-    h('div', { class: 'tagwrap' }, s.advantages.map((a) => {
+    h('div', { class: 'adv-list' }, s.advantages.map((a) => {
       const def = R.advantage(a.name);
       const i = ch.advantages.findIndex((x) => x.name === a.name && (x.param || null) === (a.param || null));
-      return h('span', { class: 'adv', title: def?.summary || '' },
-        a.name, a.param ? ` (${a.param})` : '', (a.rank || 1) > 1 || def?.ranked ? h('span', { class: 'r' }, ` ${a.rank || 1}`) : null,
-        editing && def?.ranked ? stepper(a.rank || 1, (d) => change((c) => { const x = c.advantages[i]; x.rank = (x.rank || 1) + d; if (x.rank <= 0) c.advantages.splice(i, 1); }), { min: 0, label: a.name }) : null,
-        editing ? h('button', { class: 'x no-print', type: 'button', 'aria-label': `Remove ${a.name}`, onClick: () => change((c) => { c.advantages.splice(i, 1); }) }, '✕') : null);
+      const max = def?.max_rank === 'half_pl' ? Math.floor(ch.pl / 2) : def?.max_rank;
+      return h('div', { class: 'adv-row' },
+        h('div', { class: 'adv-head' },
+          h('b', null, a.name), a.param ? h('span', { class: 'adv-param' }, ` (${a.param})`) : null,
+          (a.rank || 1) > 1 || def?.ranked ? h('span', { class: 'adv-rank num' }, `${a.rank || 1}${max ? ` / ${max}` : ''}`) : null,
+          h('span', { class: 'adv-type' }, def ? `${def.type}${def.book ? ` · ${def.book}` : ''}` : ''),
+          editing && def?.ranked ? stepper(a.rank || 1, (d) => change((c) => { const x = c.advantages[i]; x.rank = (x.rank || 1) + d; if (x.rank <= 0) c.advantages.splice(i, 1); }), { min: 0, label: a.name }) : null,
+          editing ? h('button', { class: 'x no-print', type: 'button', 'aria-label': `Remove ${a.name}`, onClick: () => change((c) => { c.advantages.splice(i, 1); }) }, '✕') : null),
+        def?.summary ? h('div', { class: 'adv-what' }, def.summary, (def.requires || []).length ? h('span', { class: 'adv-req' }, ` Requires ${def.requires.map((r) => r.replace(/^\w+:/, '')).join(', ')}.`) : null) : null);
     })),
     editing ? (() => {
       const nameIn = h('input', { type: 'text', list: 'adv-list', placeholder: 'Advantage', id: 'add-adv-name', 'aria-label': 'Advantage to add' });
@@ -201,12 +207,14 @@ export function renderFile(ch, R, opts = {}) {
     h('h3', null, 'Skills', h('span', { class: 'pts' }, `${s.cost.skills} pp · ${s.cost.skillRanks} ranks`)),
     s.skills.length ? h('table', { class: 'skills' }, h('tbody', null, s.skills.map((k) => {
       const i = ch.skills.findIndex((x) => x.name === k.name && (x.spec || null) === (k.spec || null));
+      const g = guideFor(R, k.name);
       return h('tr', null,
-        h('td', null, k.label),
+        h('td', null, g ? h('details', { class: 'skill-details' }, h('summary', null, k.label), skillGuideBody(g, { compact: true })) : k.label),
         h('td', { class: 'n' }, `${k.ranks} rank${k.ranks === 1 ? '' : 's'}`),
         h('td', { class: 'b' }, sign(k.bonus)),
         editing ? h('td', { class: 'no-print' }, stepper(k.ranks, (d) => change((c) => { const x = c.skills[i]; x.ranks += d; if (x.ranks <= 0) c.skills.splice(i, 1); }), { min: 0, label: k.label })) : null);
     }))) : h('p', { style: { color: 'var(--ink-3)', margin: 0 } }, 'No trained skills.'),
+    (R.raw.skillGuide || []).length ? h('p', { class: 'hint no-print', style: { margin: '6px 0 0', fontSize: '12.5px', color: 'var(--ink-3)' } }, 'Tap a skill to see what it covers and its DCs. Full list: Rules > Skills or GM Tools > Skills.') : null,
     editing ? (() => {
       const sel = h('select', { id: 'add-skill', 'aria-label': 'Skill to add' }, R.raw.skills.map((k) => h('option', { value: k.name }, k.name)));
       const spec = h('input', { type: 'text', placeholder: 'Specialty (Expertise, Combat)', id: 'add-skill-spec', 'aria-label': 'Skill specialty' });

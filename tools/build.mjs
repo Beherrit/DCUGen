@@ -31,6 +31,7 @@ function buildData() {
     ),
     advantages: opt('advantages.json', []),
     skills: readJson(path.join(DATA, 'skills.json')),
+    skillGuide: opt('skill_guide.json', []),
     equipment: opt('equipment.json', { weapons: [], armor: [], gear: [], devices: [] }),
     styles: opt('styles.json', []),
     archetypes: opt('archetypes.json', []),

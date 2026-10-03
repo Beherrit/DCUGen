@@ -261,6 +261,27 @@ button.chip:hover { border-color: var(--ink-3); }
 details > summary { cursor: pointer; color: var(--ink-2); font: 600 12.5px/1.4 var(--font-label); }
 
 .tagwrap { display: flex; flex-wrap: wrap; gap: 6px; }
+.skill-guide { display: grid; gap: 6px; font-size: 13.5px; }
+.skill-guide.compact { margin: 6px 0 4px; padding: 8px 10px; background: var(--surface-2); border-radius: 6px; }
+.sg-covers { margin: 0; font-weight: 600; }
+.sg-meta { display: flex; flex-wrap: wrap; gap: 4px; }
+.sg-use { border-top: 1px dotted var(--line); padding-top: 5px; }
+.sg-use-head { display: flex; gap: 8px; align-items: baseline; }
+.sg-action { font: 700 10.5px/1 var(--font-label); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.sg-text { color: var(--ink-2); }
+.sg-dcs { border-collapse: collapse; margin-top: 3px; font-size: 12.5px; }
+.sg-dcs td { padding: 1px 10px 1px 0; border-bottom: 1px dotted var(--line); }
+.sg-dcs td.num { font-weight: 700; white-space: nowrap; }
+.sg-examples { margin: 0; color: var(--ink-3); font-size: 12.5px; }
+.skill-details > summary { cursor: pointer; color: var(--ink); font: inherit; list-style-position: inside; }
+.adv-list { display: grid; gap: 4px; }
+.adv-row { padding: 6px 8px; border-left: 3px solid color-mix(in srgb, var(--hero) 55%, var(--line)); background: var(--surface-2); border-radius: 0 4px 4px 0; }
+.adv-head { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 14px; }
+.adv-param { color: var(--ink-2); }
+.adv-rank { font: 800 13px/1 var(--font-label); padding: 2px 6px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); }
+.adv-type { margin-left: auto; font: 700 10.5px/1 var(--font-label); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.adv-what { font-size: 13px; color: var(--ink-2); margin-top: 2px; }
+.adv-req { color: var(--ink-3); }
 .adv { display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface-2); font-size: 13.5px; }
 .adv .r { font-weight: 700; }
 .skills { width: 100%; border-collapse: collapse; font-size: 14px; }
