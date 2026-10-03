@@ -5,6 +5,13 @@ A character generator and GM toolkit for the **DC Adventures RPG** (Mutants & Ma
 **Open [`DCUGen.html`](DCUGen.html) in any modern browser.** It is one self-contained file: send it to your
 players and they can use it too. No install, works offline (fonts fall back to system fonts without internet).
 
+**Or install the desktop app:** [Windows installer](https://github.com/Beherrit/DCUGen/releases/latest/download/DCUGen-Setup.exe) ·
+[Windows portable](https://github.com/Beherrit/DCUGen/releases/latest/download/DCUGen-Portable.exe) ·
+[macOS](https://github.com/Beherrit/DCUGen/releases/latest/download/DCUGen.dmg) ·
+[Linux](https://github.com/Beherrit/DCUGen/releases/latest/download/DCUGen.AppImage) ·
+[all releases](https://github.com/Beherrit/DCUGen/releases). GitHub builds a new release from every push to `main`, and
+installed apps update themselves. Your data lives in a folder on your own disk, and you can host a table for your players.
+
 ## What's inside
 
 - **Forge** – roll a complete, legal character in one click. Pick power level, archetype (20 including androids

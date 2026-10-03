@@ -62,12 +62,13 @@ export function portraitOf(ch) {
   return { prompt, custom: !!p.prompt, seed, source, url: portraitUrl(prompt, { seed }), avatar: avatarSvg(ch, { seed }).dataUrl, image: p.image || null, hidden: !!p.hidden };
 }
 
-export function setPortrait(ch, { seed, prompt, hidden, source, image } = {}) {
+export function setPortrait(ch, { seed, prompt, hidden, source, image, aiSaved } = {}) {
   const next = { ...(ch.portrait || {}) };
+  if (aiSaved !== undefined) next.aiSaved = !!aiSaved;
   if (seed !== undefined) next.seed = seed;
   if (prompt !== undefined) { if (prompt && prompt !== portraitPrompt(ch)) next.prompt = prompt; else delete next.prompt; }
   if (hidden !== undefined) next.hidden = !!hidden;
-  if (image !== undefined) { if (image) { next.image = image; next.source = 'upload'; } else { delete next.image; if (next.source === 'upload') delete next.source; } }
+  if (image !== undefined) { if (image) { next.image = image; next.source = 'upload'; } else { delete next.image; delete next.aiSaved; if (next.source === 'upload') delete next.source; } }
   if (source !== undefined) { if (source === 'builtin') next.source = 'builtin'; else if (source === 'upload' && next.image) next.source = 'upload'; else delete next.source; }
   ch.portrait = next;
   return ch;

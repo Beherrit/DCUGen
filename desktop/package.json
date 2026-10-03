@@ -36,23 +36,40 @@
       "target": [
         "nsis",
         "portable"
-      ]
+      ],
+      "artifactName": "DCUGen-Setup.${ext}"
     },
     "mac": {
       "target": [
         "dmg"
       ],
-      "category": "public.app-category.games"
+      "category": "public.app-category.games",
+      "artifactName": "DCUGen.${ext}"
     },
     "linux": {
       "target": [
         "AppImage"
       ],
-      "category": "Game"
+      "category": "Game",
+      "artifactName": "DCUGen.${ext}"
     },
     "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "artifactName": "DCUGen-Setup.${ext}"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "Beherrit",
+      "repo": "DCUGen",
+      "releaseType": "release"
+    },
+    "portable": {
+      "artifactName": "DCUGen-Portable.${ext}"
     }
+  },
+  "dependencies": {
+    "electron-updater": "^6.3.9"
   }
 }

@@ -16,6 +16,7 @@ import { initWorld, renderWorld, openWorldPage, recordBattleInWorld, worldSaved,
 import { initTable, renderTable, postRoll } from './table.js';
 import { setLobbyHandlers, lobbySendRoster, lobbySendRemove, lobby } from './lobby.js';
 import { snapshotAll, restoreAll } from './backup.js';
+import { getAppButton } from './getapp.js';
 import { state as st, upsert, removeFromRoster } from './store.js';
 import { decodeCharacter } from './share.js';
 import { setImportHooks, enableDropImport, setImportRules, openAnything } from './importer.js';
@@ -140,6 +141,8 @@ async function desktopSync() {
 async function boot() {
   initTheme();
   await desktopSync();
+  const getApp = getAppButton();
+  if (getApp) document.getElementById('theme-toggle').before(getApp);
   for (const v of views) {
     document.getElementById(`tab-${v}`).addEventListener('click', () => showTab(v));
   }

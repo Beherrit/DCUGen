@@ -6,6 +6,8 @@ import { exportExcel, exportJson, exportRosterExcel, exportRosterJson } from './
 import { importDialog as importAndOpen } from './importer.js';
 import { sheet as makeSheet } from '../engine/render.js';
 import { backupMenuItems } from './backup.js';
+import { paintRoster } from './portrait.js';
+import { setPortrait, portraitOf } from '../engine/portrait.js';
 let R;
 let root;
 let hooks = {};
@@ -79,6 +81,7 @@ export function renderRoster() {
     h('div', null, h('h1', null, 'Roster'), h('p', null, 'Characters you save live here, in this browser. Export to Excel or JSON to keep a copy, move them to another computer or send them to your group. Import brings back DCUGen Excel sheets, .json files and share codes.')),
     h('span', { class: 'spacer' }),
     h('div', { class: 'btn-row' },
+      paintButton(),
       backupMenu(),
       h('button', { class: 'btn', type: 'button', onClick: importDialog }, 'Import'),
       h('button', { class: 'btn', type: 'button', disabled: !list.length, onClick: () => exportRosterExcel(list, R) }, 'Export to Excel'),
@@ -94,6 +97,7 @@ export function renderRoster() {
     return;
   }
 
+  if (painting) root.append(h('p', { class: 'hint', id: 'paint-status', style: { margin: '0 0 8px' } }, paintStatus));
   root.append(h('div', { class: 'roster-tools' },
     h('input', { type: 'search', id: 'roster-search', placeholder: 'Search name, archetype, theme, team', value: query, 'aria-label': 'Search roster',
       onInput: (e) => { query = e.target.value; renderRosterList(); } }),
@@ -124,6 +128,24 @@ function renderRosterList() {
     if (teams.size) host.append(h('div', { class: 'group-title' }, 'Solo'));
     host.append(h('div', { class: 'cards' }, solo.map(card)));
   }
+}
+
+let painting = null; // cancel function while a roster paint runs
+let paintStatus = '';
+function paintButton() {
+  const waiting = state.roster.filter((c) => { const p = portraitOf(c); return !p.hidden && p.source === 'ai'; }).length;
+  if (painting) return h('button', { class: 'btn', type: 'button', title: paintStatus, onClick: () => { painting(); painting = null; renderRoster(); } }, `⏹ Stop painting (${paintStatus || 'working'})`);
+  return h('button', { class: 'btn', type: 'button', disabled: !waiting, title: 'Fetch an AI painting for everyone who still has the built-in art, one every 15 seconds, and keep it on the character', onClick: () => {
+    painting = paintRoster(() => state.roster, (rosterId, image) => {
+      const live = state.roster.find((x) => x.rosterId === rosterId);
+      if (live) upsert(setPortrait(JSON.parse(JSON.stringify(live)), { image, aiSaved: true }));
+    }, (p) => {
+      paintStatus = p.current ? `${p.done}/${p.total} · ${p.current}: ${p.status}` : p.status;
+      if (p.status === 'finished' || p.status === 'stopped') { painting = null; toast(`Painting ${p.status}: ${p.done} of ${p.total}`); }
+      const b = root?.querySelector('#paint-status'); if (b) b.textContent = paintStatus; else renderRoster();
+    });
+    renderRoster();
+  } }, `🖼 Paint all portraits (${waiting})`);
 }
 
 function backupMenu() {

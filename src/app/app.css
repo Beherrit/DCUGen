@@ -977,3 +977,15 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 .roll-menu button small { display: inline; margin-left: 6px; }
 #table-count:not([hidden]) { background: var(--accent); color: var(--accent-ink); }
 @media (max-width: 900px) { .tb-layout { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- get the app ---------- */
+.topbar .getapp { margin-left: 8px; background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.topbar .getapp:hover { filter: brightness(1.08); }
+.getapp-list { display: grid; gap: 6px; }
+.getapp-row { display: grid; grid-template-columns: 150px minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); color: var(--ink); text-decoration: none; }
+.getapp-row:hover { border-color: var(--ink-3); }
+.getapp-row.mine { border-color: var(--accent); box-shadow: inset 4px 0 0 var(--accent); }
+.getapp-row b { font: 800 15px/1.1 var(--font-label); }
+.getapp-row span { font-size: 13px; color: var(--ink-2); }
+.getapp-row small { font: 600 11px/1 ui-monospace, Consolas, monospace; color: var(--ink-3); }
+@media (max-width: 860px) { .getapp-row { grid-template-columns: minmax(0, 1fr); } .getapp-row small { display: none; } }
