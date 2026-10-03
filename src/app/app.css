@@ -1036,6 +1036,48 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 .be-section .be-rows { padding-left: 10px; }
 @media (max-width: 760px) { .be-grid.p, .be-grid.s, .be-grid.pe, .be-grid.t, .be-grid.tr, .be-grid.c, .be-grid.it { grid-template-columns: minmax(0, 1fr); } }
 
+/* roster folders */
+.rf-layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 18px; align-items: start; }
+.rf-side { position: sticky; top: 70px; display: grid; gap: 2px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px; box-shadow: var(--shadow); max-height: calc(100vh - 90px); overflow-y: auto; }
+.rf-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.rf-head b { font: 800 13px/1 var(--font-label); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+.rf-node { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; align-items: center; gap: 2px; padding-left: calc(var(--d, 0) * 14px); border-radius: 6px; }
+.rf-node.active { background: var(--surface-2); box-shadow: inset 3px 0 0 var(--c); }
+.rf-node.drop-over { outline: 2px dashed var(--accent); outline-offset: -2px; background: color-mix(in srgb, var(--accent) 12%, var(--surface)); }
+.rf-caret { border: 0; background: none; color: var(--ink-3); cursor: pointer; font-size: 11px; padding: 0; width: 18px; }
+.rf-name { display: flex; align-items: center; gap: 6px; border: 0; background: none; padding: 5px 4px; cursor: pointer; font: 600 13.5px/1.2 var(--font-label); color: var(--ink); text-align: left; min-width: 0; }
+.rf-name:hover .rf-label { text-decoration: underline; text-underline-offset: 2px; }
+.rf-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rf-glyph { filter: drop-shadow(0 0 0 var(--c)); }
+.rf-node .count { margin-left: auto; font: 700 11px/1 var(--font-label); color: var(--ink-3); background: var(--surface-2); padding: 3px 6px; border-radius: 8px; }
+.rf-more { border: 0; background: none; color: var(--ink-3); cursor: pointer; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
+.rf-more:hover { background: var(--surface-2); color: var(--ink); }
+.rf-menu .menu-list { position: static; display: grid; min-width: 240px; }
+.rf-main { display: grid; gap: 10px; min-width: 0; }
+.rf-crumbs { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font: 700 14px/1 var(--font-label); }
+.rf-crumbs .linkish { font: inherit; }
+.rf-sep { color: var(--ink-3); }
+.rf-subs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.rf-sub { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font: 700 13px/1 var(--font-label); color: var(--ink); cursor: pointer; box-shadow: inset 4px 0 0 var(--c); }
+.rf-sub:hover { border-color: var(--ink-3); }
+.rf-sub.drop-over { outline: 2px dashed var(--accent); }
+.rf-sub .count { font-weight: 600; color: var(--ink-3); }
+.rf-bulk { position: sticky; bottom: 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 14px; border-radius: 10px; background: var(--ink); color: var(--surface); box-shadow: 0 6px 20px rgba(0, 0, 0, .3); }
+.rf-bulk .btn { background: var(--surface); color: var(--ink); border-color: transparent; }
+.rf-bulk .btn.danger { color: var(--bad); }
+.rf-bulk select.btn { max-width: 200px; }
+.card.selected { outline: 3px solid var(--accent); outline-offset: -1px; }
+.card.dragging { opacity: .5; }
+.card-head { position: relative; }
+.card-pick { position: absolute; top: 8px; right: 8px; }
+.card-pick input { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+.card-folder { margin-top: 4px; border: 0; background: rgba(255, 255, 255, .18); color: inherit; border-radius: 999px; padding: 2px 8px; font: 700 11px/1.3 var(--font-label); cursor: pointer; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-actions select.btn { max-width: 120px; }
+.rf-table td, .rf-table th { white-space: nowrap; }
+.rf-table tr.selected td { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.rf-table select.btn { max-width: 150px; }
+@media (max-width: 900px) { .rf-layout { grid-template-columns: minmax(0, 1fr); } .rf-side { position: static; max-height: none; } }
+
 /* ---------- portraits ---------- */
 .file-head.has-portrait { padding-right: 200px; min-height: 262px; }
 .file-head.has-portrait .pl-badge { right: 200px; }

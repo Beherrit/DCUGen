@@ -94,6 +94,10 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
 - **Advancement** – track the power points the GM awards (DCA 190): earned, spent and unspent, with a history log
   that records exactly what each point bought, tied to the journal session it came from.
 - **Roster** – save characters, teams and creatures in the browser; search, duplicate, delete.
+  Folders (nested with "/", colours, counts), drag a card onto a folder or use "Move to…", select several and move,
+  export, delete or throw them in the Battle Room together; sort by name, PL, side, archetype or folder; cards or a
+  compact list. The folder travels with the character in every export and key.
+
 - **Export** – your Excel character sheet filled in (plus a *Full Stat Block* tab), a whole roster or team to one
   workbook, JSON files, book-style text and print/PDF. **Import** brings characters back from DCUGen Excel sheets, .json
   files, share codes or links (Forge > Import, or drag files onto the page).
