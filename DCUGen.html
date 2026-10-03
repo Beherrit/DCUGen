@@ -133,7 +133,8 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 /* ---------- forge layout ---------- */
 .forge { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 20px; align-items: start; }
 .rail {
-  position: sticky; top: 70px; display: grid; gap: 14px;
+  position: sticky; top: 70px; display: grid; gap: 14px; align-content: start;
+  max-height: calc(100vh - 86px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin;
   background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; box-shadow: var(--shadow);
 }
 .rail { min-width: 0; }
@@ -485,7 +486,7 @@ details > summary { cursor: pointer; color: var(--ink-2); font: 600 12.5px/1.4 v
 }
 @media (max-width: 860px) {
   .forge { grid-template-columns: minmax(0, 1fr); }
-  .rail { position: static; }
+  .rail { position: static; max-height: none; overflow: visible; }
   .brand-sub { display: none; }
 }
 @media (max-width: 520px) {
