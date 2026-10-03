@@ -10,7 +10,8 @@ const SIDE_LABEL = { light: 'Lightside', dark: 'Darkside', neutral: 'Neutral', e
 /**
  * change(fn): clone the character, apply fn, save (same helper the sheet uses). May be null (read-only).
  */
-export function renderBio(ch, R, { change, toolbar } = {}) {
+export function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
+  const open = onOpenPerson || null;
   const hero = ch.theme?.color || '#c8202f';
   const id = ch.identity || {};
   const bio = ch.bio;
@@ -57,12 +58,12 @@ export function renderBio(ch, R, { change, toolbar } = {}) {
     h('h3', null, 'Family'),
     fam.structure ? h('p', { class: 'bio-note' }, fam.structure) : null,
     h('ul', { class: 'bio-people' },
-      (fam.parents || []).map((p) => person(p.name, p.role, [p.occupation, p.trait].filter(Boolean).join('; '), p.status)),
-      (fam.siblings || []).map((p) => person(p.name, p.relation, [p.age != null ? `age ${p.age}` : null, p.note].filter(Boolean).join('; '), p.status)))) : null;
+      (fam.parents || []).map((p) => person(p.name, p.role, [p.occupation, p.trait].filter(Boolean).join('; '), p.status, open && (() => open(p, 'parent')))),
+      (fam.siblings || []).map((p) => person(p.name, p.relation, [p.age != null ? `age ${p.age}` : null, p.note].filter(Boolean).join('; '), p.status, open && (() => open(p, 'sibling')))))) : null;
 
   const people = (bio.people || []).length ? h('section', { class: 'sec' },
-    h('h3', null, 'People in their life'),
-    h('ul', { class: 'bio-people' }, bio.people.map((p) => person(p.name, p.relation, p.who, p.status)))) : null;
+    h('h3', null, 'People in their life', open ? h('span', { class: 'pts no-print' }, 'tap a name to meet them') : null),
+    h('ul', { class: 'bio-people' }, bio.people.map((p) => person(p.name, p.relation, p.who, p.status, open && (() => open(p, 'person')))))) : null;
 
   const pers = bio.personality || {};
   const personality = h('section', { class: 'sec' },
@@ -100,9 +101,11 @@ export function renderBio(ch, R, { change, toolbar } = {}) {
   return file;
 }
 
-function person(name, relation, who, status) {
+function person(name, relation, who, status, onOpen) {
   return h('li', null,
-    h('div', null, h('b', null, name || 'Unnamed'), relation ? h('span', { class: 'bio-rel' }, relation) : null),
+    h('div', null, onOpen
+      ? h('button', { type: 'button', class: 'bio-name-link', title: `Open ${name} as a full character in a new tab`, onClick: onOpen }, name || 'Unnamed', h('span', { class: 'bio-open', 'aria-hidden': 'true' }, ' ↗'))
+      : h('b', null, name || 'Unnamed'), relation ? h('span', { class: 'bio-rel' }, relation) : null),
     who ? h('div', { class: 'bio-who' }, who) : null,
     status ? h('div', { class: 'bio-status' }, status) : null);
 }

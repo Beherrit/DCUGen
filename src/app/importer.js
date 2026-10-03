@@ -5,6 +5,7 @@ import { h, toast, openDialog } from './dom.js';
 import { upsert, emit } from './store.js';
 import { readCharactersFile } from './exporters.js';
 import { decodeCharacter } from './share.js';
+import { fromKeySync } from '../engine/keys.js';
 
 let hooks = { open: null, afterSave: null };
 
@@ -30,9 +31,24 @@ export async function importCharacters(list, { open = true, save = true } = {}) 
 
 async function readAll(files, text) {
   const out = [];
-  if (text && text.trim()) out.push(await decodeCharacter(text.trim()));
+  if (text && text.trim()) out.push(await openAnything(text.trim()));
   for (const f of files || []) out.push(...(await readCharactersFile(f)));
   return out;
+}
+
+let R = null;
+export function setImportRules(rules) { R = rules; }
+
+/** A character key (DCUK1/DCUP1), a share code or link, or character JSON. */
+export async function openAnything(text) {
+  const t = text.trim();
+  const keyMatch = /DCU[KP]1\.[A-Za-z0-9%._~-]+/.exec(t);
+  if (keyMatch && !/DCU1\./.test(t)) {
+    const { character, versionMatch } = fromKeySync(R, keyMatch[0]);
+    if (!versionMatch) toast('That key was made with a different version of DCUGen, so details may differ from what its owner sees.');
+    return character;
+  }
+  return decodeCharacter(t);
 }
 
 export async function importFiles(files, opts) {
@@ -46,7 +62,7 @@ export async function importFiles(files, opts) {
 }
 
 export async function importDialog({ open = true } = {}) {
-  const area = h('textarea', { id: 'import-code', placeholder: 'Paste a share code (DCU1....), a share link, or character JSON' });
+  const area = h('textarea', { id: 'import-code', placeholder: 'Paste a character key (DCUK1... / DCUP1...), a share code or link, or character JSON' });
   const file = h('input', { type: 'file', id: 'import-file', accept: ACCEPT, multiple: true });
   const save = h('input', { type: 'checkbox', id: 'import-save', checked: true });
   const openIt = h('input', { type: 'checkbox', id: 'import-open', checked: open });
@@ -55,7 +71,7 @@ export async function importDialog({ open = true } = {}) {
     body: [
       h('p', { style: { margin: 0 } }, 'Got a character from your GM or another player? Bring it in here. Everything (powers, advancement history, notes) comes across.'),
       h('label', { class: 'field' }, h('span', null, 'Files: DCUGen Excel sheets (.xlsx), character or roster files (.json)'), file),
-      h('label', { class: 'field' }, h('span', null, 'Or paste a share code or link'), area),
+      h('label', { class: 'field' }, h('span', null, 'Or paste a character key, share code or link'), area),
       h('label', { class: 'check' }, save, ' Save to my roster'),
       h('label', { class: 'check' }, openIt, ' Open in Forge tabs'),
       h('p', { class: 'hint', style: { margin: 0 } }, 'Tip: you can also drag files straight onto the page.'),

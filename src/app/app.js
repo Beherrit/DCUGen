@@ -12,7 +12,7 @@ import { initRules, renderRules } from './rules.js';
 import { initBestiary, renderBestiary } from './bestiary.js';
 import { initGarage, renderGarage } from './garage.js';
 import { decodeCharacter } from './share.js';
-import { setImportHooks, enableDropImport } from './importer.js';
+import { setImportHooks, enableDropImport, setImportRules, openAnything } from './importer.js';
 const R = RULES;
 const views = ['forge', 'roster', 'lab', 'bestiary', 'workshop', 'garage', 'gm', 'rules'];
 
@@ -49,10 +49,10 @@ function initTheme() {
 }
 
 async function loadFromHash() {
-  const m = /[#&]c=(DCU1\.[A-Za-z0-9_-]+)/.exec(location.hash);
+  const m = /[#&]c=(DCU1\.[A-Za-z0-9_-]+)/.exec(location.hash) || /[#&]k=(DCU[KP]1\.[A-Za-z0-9%._~-]+)/.exec(location.hash);
   if (!m) return false;
   try {
-    const ch = await decodeCharacter(m[1]);
+    const ch = await openAnything(m[1]);
     setCurrent(ch, { newTab: true });
     toast(`Loaded ${ch.identity?.codename || 'shared character'}`);
     history.replaceState(null, '', location.pathname + location.search);
@@ -93,6 +93,7 @@ async function boot() {
     openInForge: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
     addToInitiative: (ch) => { addToInitiative(ch); toast(`${ch.identity?.codename || 'Creature'} joins the initiative (GM Tools)`); },
   });
+  setImportRules(R);
   setImportHooks({
     open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
     afterSave: () => renderRoster(),

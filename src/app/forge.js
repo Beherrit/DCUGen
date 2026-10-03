@@ -5,8 +5,9 @@ import { state, emit, savePrefs, upsert } from './store.js';
 import { renderFile } from './sheetview.js';
 import { exportExcel, exportJson, exportText } from './exporters.js';
 import { encodeCharacter, shareLink } from './share.js';
-import { importDialog } from './importer.js';
 import { renderBio } from './bio.js';
+import { characterKey, personKey, fromKeySync } from '../engine/keys.js';
+import { openAnything, importDialog } from './importer.js';
 import { generateCharacter, rerollIdentity, generateTeam } from '../engine/generator.js';
 import { randomSeed } from '../engine/rng.js';
 import { statBlockText, sheet as makeSheet } from '../engine/render.js';
@@ -199,6 +200,21 @@ function build() {
       h('button', { class: 'btn', type: 'button', onClick: surprise }, 'Surprise me'),
       h('button', { class: 'btn', type: 'button', onClick: rollTeam }, 'Roll a team'),
       h('button', { class: 'btn', type: 'button', id: 'build-scratch', onClick: buildFromScratch }, 'Build from scratch')),
+    (() => {
+      const keyIn = h('input', { type: 'text', id: 'open-key', placeholder: 'Paste a key or share code', 'aria-label': 'Character key or share code', autocomplete: 'off' });
+      const go = async () => {
+        const v = keyIn.value.trim();
+        if (!v) return;
+        try {
+          const ch = await openAnything(v);
+          setCurrent(ch, { newTab: true, fresh: true });
+          keyIn.value = '';
+          toast(`Opened ${ch.identity?.codename || 'character'}`);
+        } catch (e) { toast(e.message); }
+      };
+      keyIn.addEventListener('keydown', (e) => { if (e.key === 'Enter') go(); });
+      return h('div', { class: 'field' }, h('span', null, '🔑 Open a key'), h('div', { class: 'seed-row' }, keyIn, h('button', { class: 'btn', type: 'button', onClick: go }, 'Open')));
+    })(),
     h('button', { class: 'btn import-btn', type: 'button', id: 'forge-import', title: 'Open a character your GM or another player sent you', onClick: () => importDialog() }, '⇪ Import a character (.xlsx, .json, share code)'),
     h('p', { class: 'hint' }, 'Press R to roll. Every rolled character is legal for its power level and spends exactly 15 points per PL. Build from scratch starts a blank sheet you fill in yourself.'),
     h('div', { class: 'field' }, h('span', null, 'Recent rolls'), historyEl));
@@ -318,11 +334,11 @@ export function renderCurrent() {
       { label: 'Stat block (.txt)', hint: 'Book-style text', run: () => exportText(ch, R) },
       { label: 'Print or save as PDF', hint: 'Uses your browser\'s print dialog', run: () => window.print() },
     ]),
-    h('button', { class: 'btn', type: 'button', onClick: () => share(ch) }, 'Share'));
+    h('button', { class: 'btn', type: 'button', onClick: () => share(ch) }, '🔑 Share / Key'));
   const onChange = (c) => { state.current = c; state.tabs[state.active] = c; saveTabs(); fresh = false; renderCurrent(); };
   fileHost.append(viewSwitch(ch));
   if (sheetView === 'bio') {
-    fileHost.append(renderBio(ch, R, { toolbar, change: (fn) => { const c = JSON.parse(JSON.stringify(ch)); fn(c); onChange(c); } }));
+    fileHost.append(renderBio(ch, R, { toolbar, change: (fn) => { const c = JSON.parse(JSON.stringify(ch)); fn(c); onChange(c); }, onOpenPerson: (p, kind) => openPerson(ch, p, kind) }));
     fresh = false;
     return;
   }
@@ -338,6 +354,27 @@ export function renderCurrent() {
   });
   fresh = false;
   fileHost.append(el);
+}
+
+/** Open someone from a bio as a full character in a new tab (rebuilt the same way for everyone). */
+async function openPerson(ch, p, kind) {
+  try {
+    characterKey(R, ch); // so the person can link back to this character
+    // Already open in a tab (e.g. the character this person came from)? Go there.
+    const open = state.tabs.findIndex((t) => t.identity?.realName === p.name && t !== ch);
+    if (open >= 0) { switchTab(open); return; }
+    if (!p.key && ch.personKey && ch.bio?.people?.[0] === p) {
+      toast(`${p.name} was edited after this person was made, so there's no key to rebuild them. Open them from your roster.`);
+      return;
+    }
+    let person;
+    if (p.key) person = (await openAnything(p.key));
+    else person = fromKeySync(R, personKey(ch, p, kind)).character;
+    setCurrent(person, { newTab: true, fresh: true });
+    toast(`Opened ${person.identity?.realName || p.name}`);
+  } catch (e) {
+    toast(`Couldn't open ${p.name}: ${e.message}`);
+  }
 }
 
 // Character sheet or Bio page, remembered between visits.
@@ -393,10 +430,20 @@ async function share(ch) {
   const link = shareLink(code);
   const codeBox = h('textarea', { readonly: true, id: 'share-code', style: { minHeight: '90px', fontFamily: 'ui-monospace, Consolas, monospace', fontSize: '12px' } }, code);
   const linkBox = h('input', { type: 'text', readonly: true, id: 'share-link', value: link });
+  const key = characterKey(R, ch);
+  const keyLink = key ? `${link.replace(/#.*$/, '')}#k=${key}` : null;
   await openDialog({
     title: `Share ${ch.identity?.codename || 'character'}`,
     body: [
-      h('p', { style: { margin: 0 } }, 'Send the share code to anyone with DCUGen. They paste it into Import (Forge or Roster). The link opens the character directly when the app is hosted or opened from the same file.'),
+      key ? h('div', { class: 'key-box' },
+        h('div', { class: 'label' }, '🔑 Character key'),
+        h('code', { id: 'share-key' }, key),
+        h('p', { class: 'hint', style: { margin: '4px 0 0' } }, "This short key rebuilds this exact character, bio and all, in anyone's DCUGen. Paste it into 'Open a key' on the Forge. Keys work while the app's tables stay the same; for a copy that never changes, send the share code below."),
+        h('div', { class: 'btn-row', style: { marginTop: '6px' } },
+          h('button', { class: 'btn primary', type: 'button', onClick: async () => toast((await copyText(key)) ? 'Key copied' : 'Select the key and copy it') }, 'Copy key'),
+          h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(keyLink)) ? 'Key link copied' : 'Copy failed') }, 'Copy key link')))
+        : h('p', { class: 'hint', style: { margin: 0 } }, 'This character has been edited (or was built by hand), so it has no short key: share the code below, which carries everything.'),
+      h('p', { style: { margin: 0 } }, 'The share code carries the whole character, edits included. They paste it into Import or "Open a key". The link opens it directly.'),
       h('label', { class: 'field' }, h('span', null, 'Share code'), codeBox),
       h('div', { class: 'btn-row' }, h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(code)) ? 'Code copied' : 'Select the code and copy it') }, 'Copy code')),
       h('label', { class: 'field' }, h('span', null, 'Link'), linkBox),

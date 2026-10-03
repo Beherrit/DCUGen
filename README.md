@@ -33,6 +33,10 @@ players and they can use it too. No install, works offline (fonts fall back to s
 - **Bio** – every rolled character gets a full life story: family and siblings, a life timeline, the people in their
   life (mentors, rivals, enemies, exes), personality, secrets, regrets, hopes, GM hooks, and complications you can add
   to the sheet. Re-roll any part. The tables are original, inspired by the structure of Central Casting: Heroes Now!
+- **Character keys** – every rolled character has a short key (Share / Key) that rebuilds it exactly, bio and all,
+  in anyone's copy of the app: paste it into "Open a key" on the Forge. Every name in a bio is clickable and opens
+  that person (parent, sibling, rival, mentor...) as a full character with their own bio, stats that fit who they
+  are, and a link back. Edited characters share with the full code instead.
 - **Gear & Vehicles** – 712 items across 18 genres (modern, military, espionage, fantasy, magic items, sci-fi, space,
   steampunk, wild west, pulp, cyberpunk, post-apocalyptic, occult, superhero gadgets...), a custom item maker, 169
   vehicles including 80 starships, headquarters, a builder for your own vehicles and bases, and space-game rules:
