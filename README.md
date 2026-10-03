@@ -86,8 +86,8 @@ players and they can use it too. No install, works offline (fonts fall back to s
 ## Desktop app
 
 `desktop/` wraps the same single file in an Electron app: your data in a folder on disk that survives updates, daily
-backups, and the lobby server for hosting a table. See [desktop/README.md](desktop/README.md) for running it from
-source (`cd desktop && npm install && npm start`) and building installers (`npm run dist`).
+backups, and the lobby server for hosting a table. Run it with `npm run desktop` from the repository root (any shell), or build installers with
+`npm run desktop:dist`. See [desktop/README.md](desktop/README.md).
 
 ## Rules sources
 
