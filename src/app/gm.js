@@ -1,6 +1,6 @@
 // GM Tools: dice and checks, initiative, encounters, hideouts, vehicles, beastiary and conditions.
 
-import { h, clear, toast } from './dom.js';
+import { h, clear, append, toast } from './dom.js';
 import { state } from './store.js';
 import { makeRng, randomSeed } from '../engine/rng.js';
 import { deriveAll } from '../engine/derive.js';
@@ -161,7 +161,7 @@ function encounterTool() {
     const e = rng.pick(pool);
     const villain = state.roster.filter((c) => c.alignment === 'villain');
     const foe = villain.length && rng.chance(0.5) ? rng.pick(villain) : null;
-    clear(out).append(h('h4', null, `${e.type} encounter`), e.description, foe ? h('p', { style: { margin: '8px 0 0' } }, h('b', null, 'Twist: '), `${foe.identity.codename} is behind it.`) : null);
+    append(clear(out), [h('h4', null, `${e.type} encounter`), e.description, foe ? h('p', { style: { margin: '8px 0 0' } }, h('b', null, 'Twist: '), `${foe.identity.codename} is behind it.`) : null]);
   };
   return panel('Encounter generator', h('div', { class: 'add-row' }, sel, h('button', { class: 'btn primary', type: 'button', onClick: roll }, 'Roll encounter')), out);
 }
@@ -171,7 +171,7 @@ function hideoutTool() {
   const roll = () => {
     const q = randomHeadquarters(R, { seed: randomSeed() });
     if (!q) return;
-    clear(out).append(h('h4', null, `${q.name} (${q.setting})`), q.summary ? h('p', { style: { margin: '0 0 4px' } }, q.summary) : null, h('div', null, hqStatLine(q, R)));
+    append(clear(out), [h('h4', null, `${q.name} (${q.setting})`), q.summary ? h('p', { style: { margin: '0 0 4px' } }, q.summary) : null, h('div', null, hqStatLine(q, R))]);
   };
   return panel('Hideout generator', h('button', { class: 'btn primary', type: 'button', onClick: roll }, 'Roll hideout'), out,
     h('p', { class: 'hint', style: { margin: 0 } }, 'Browse all of them on the Vehicles & HQs tab.'));
@@ -182,7 +182,7 @@ function vehicleTool() {
   const roll = () => {
     const v = randomVehicle(R, { seed: randomSeed() });
     if (!v) return;
-    clear(out).append(h('h4', null, `${v.name} (${v.setting} ${v.category.toLowerCase()})`), v.summary ? h('p', { style: { margin: '0 0 4px' } }, v.summary) : null, h('div', null, vehicleStatLine(v, R)));
+    append(clear(out), [h('h4', null, `${v.name} (${v.setting} ${v.category.toLowerCase()})`), v.summary ? h('p', { style: { margin: '0 0 4px' } }, v.summary) : null, h('div', null, vehicleStatLine(v, R))]);
   };
   return panel('Vehicle generator', h('button', { class: 'btn primary', type: 'button', onClick: roll }, 'Roll vehicle'), out);
 }

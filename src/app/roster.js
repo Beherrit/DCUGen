@@ -133,12 +133,14 @@ function renderRosterList() {
 let painting = null; // cancel function while a roster paint runs
 let paintStatus = '';
 function paintButton() {
-  const waiting = state.roster.filter((c) => { const p = portraitOf(c); return !p.hidden && p.source === 'ai'; }).length;
+  const waiting = state.roster.filter((c) => { const p = portraitOf(c); return !p.hidden && p.source === 'ai' && !p.live; }).length;
   if (painting) return h('button', { class: 'btn', type: 'button', title: paintStatus, onClick: () => { painting(); painting = null; renderRoster(); } }, `⏹ Stop painting (${paintStatus || 'working'})`);
   return h('button', { class: 'btn', type: 'button', disabled: !waiting, title: 'Fetch an AI painting for everyone who still has the built-in art, one every 15 seconds, and keep it on the character', onClick: () => {
-    painting = paintRoster(() => state.roster, (rosterId, image) => {
-      const live = state.roster.find((x) => x.rosterId === rosterId);
-      if (live) upsert(setPortrait(JSON.parse(JSON.stringify(live)), { image, aiSaved: true }));
+    painting = paintRoster(() => state.roster, (rosterId, { image, live }) => {
+      const cur = state.roster.find((x) => x.rosterId === rosterId);
+      if (!cur) return;
+      if (image) upsert(setPortrait(JSON.parse(JSON.stringify(cur)), { image, aiSaved: true }));
+      else if (live) upsert(setPortrait(JSON.parse(JSON.stringify(cur)), { live: true }));
     }, (p) => {
       paintStatus = p.current ? `${p.done}/${p.total} · ${p.current}: ${p.status}` : p.status;
       if (p.status === 'finished' || p.status === 'stopped') { painting = null; toast(`Painting ${p.status}: ${p.done} of ${p.total}`); }

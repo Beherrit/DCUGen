@@ -76,3 +76,20 @@ test('built-in avatars are valid SVG, deterministic, and reflect the looks', asy
   assert.equal(portraitOf(ch).source, 'builtin');
   assert.ok(portraitOf(ch).avatar.length > 1000);
 });
+
+test('a live AI picture is remembered until the prompt, the seed or the picture changes', () => {
+  const ch = generateCharacter(R, { seed: 'live-portrait', pl: 10 });
+  setPortrait(ch, { live: true });
+  assert.equal(portraitOf(ch).live, true);
+  setPortrait(ch, { hidden: false });
+  assert.equal(portraitOf(ch).live, true, 'unrelated settings keep it');
+  setPortrait(ch, { seed: 4242 });
+  assert.equal(portraitOf(ch).live, false, 'new dice means a new picture');
+  setPortrait(ch, { live: true });
+  setPortrait(ch, { prompt: 'a different look' });
+  assert.equal(portraitOf(ch).live, false, 'a new prompt means a new picture');
+  setPortrait(ch, { live: true });
+  setPortrait(ch, { image: 'data:image/jpeg;base64,xx', aiSaved: true });
+  assert.equal(portraitOf(ch).live, false, 'a copied picture replaces the live one');
+  assert.equal(portraitOf(ch).source, 'upload');
+});
