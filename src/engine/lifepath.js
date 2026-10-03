@@ -1286,6 +1286,76 @@ function build(R, ch, seed, seeds) {
   };
 }
 
+/** Every "a person enters their life" spec in the lifepath tables, by relationship. */
+function personSpecs(R) {
+  const out = [];
+  const walk = (o) => {
+    if (!o || typeof o !== 'object') return;
+    if (Array.isArray(o)) { o.forEach(walk); return; }
+    if (o.relation && o.who && !o.name) out.push(o);
+    for (const v of Object.values(o)) if (v && typeof v === 'object') walk(v);
+  };
+  walk(R?.raw?.lifepath || {});
+  return out;
+}
+
+/**
+ * Roll one person for a hand-written bio: fills in everything but what you typed. kind: 'parent',
+ * 'sibling' or 'person'. Give a name to keep it (and a role or relation to keep that); leave them blank
+ * to roll them too. Deterministic for a given seed. Returns a row for bio.family.parents, .siblings or
+ * bio.people.
+ */
+export function rollPerson(R, ch, { kind = 'person', name = '', role = '', relation = '', age = null } = {}, { seed } = {}) {
+  const s = String(seed ?? `${ch?.bio?.seed || ch?.seed || 'bio'}::roll::${name || kind}`);
+  const ctx = makeContext(R, ch || {}, s, defaultSeeds(s));
+  const rng = ctx.rng = makeRng(`${s}::person::${kind}::${name}::${role || relation}`);
+  const T = ctx.T;
+  const keep = String(name || '').trim();
+  if (kind === 'parent') {
+    const r = String(role || '').trim() || rng.pick(['Mother', 'Father', 'Mother', 'Father', 'Stepmother', 'Stepfather', 'Grandmother', 'Grandfather', 'Guardian', 'Adoptive mother', 'Adoptive father']);
+    const g = /mother|grandmother|aunt|nanny/i.test(r) ? 'Female' : /father|grandfather|uncle/i.test(r) ? 'Male' : rng.pick(['Female', 'Male']);
+    const np = keep ? { name: keep } : newPerson(ctx, { gender: g, surname: ctx.surname || undefined });
+    const occupations = (T.parents.occupations || []).map(norm);
+    const occ = rng.pick(occupations.filter((o) => (o.min ?? 0) <= 3 && 3 <= (o.max ?? 6))) || { text: 'office worker' };
+    const statuses = (T.parents.status || []).map(norm).filter((x) => !x.minAge || ctx.age >= x.minAge);
+    const st = rng.weighted(statuses, (x) => (x.weight ?? 1)) || { text: 'Alive and well.' };
+    const stText = fill(st.text, ctx, { role: r.toLowerCase() });
+    const status = st.dies && !/deceased|died|dead/i.test(stText) ? `Deceased; ${noStop(lowerFirst(stText))}.` : endStop(cap(stText));
+    return { name: np.name, role: r, occupation: /Grand/.test(r) ? `retired ${fill(occ.text, ctx)}` : fill(occ.text, ctx), trait: cap(fill(rng.pick(T.parents.temperament || ['ordinary']), ctx)), status };
+  }
+  if (kind === 'sibling') {
+    const rel = String(relation || '').trim();
+    const g = /sister/i.test(rel) ? 'Female' : /brother/i.test(rel) ? 'Male' : rng.pick(['Female', 'Male']);
+    const word = g === 'Female' ? 'sister' : 'brother';
+    const offset = /twin/i.test(rel) ? 0 : /older|elder|big/i.test(rel) ? rng.int(1, 8) : /younger|little|baby/i.test(rel) ? -rng.int(1, 8) : rng.pick([1, -1]) * rng.int(1, 8);
+    const sibAge = age != null ? Number(age) : Math.max(0, ctx.age + offset);
+    const relationOut = rel || cap(`${offset === 0 ? 'twin' : offset > 0 ? 'older' : 'younger'} ${word}`);
+    const first = keep ? keep : `${randomFirst(ctx, rng, g)} ${ctx.surname || ''}`.trim();
+    const fates = (T.birth.siblingFates || []).map(norm).filter((f) => !(f.adult && sibAge < 18) && !(f.young && (sibAge < 6 || sibAge >= 18)) && !(f.toddler && sibAge >= 6) && !f.dead);
+    const fate = rng.pick(fates) || { text: 'is doing fine' };
+    const note = fill(fate.text, ctx, { sibling: first.split(' ')[0] });
+    return { name: first, relation: relationOut, age: sibAge, note: endStop(cap(note)), status: fate.status || 'Alive' };
+  }
+  // anyone else in their life
+  const specs = personSpecs(R);
+  const want = String(relation || '').trim();
+  const rel = want || rng.pick(BIO_RELATIONS);
+  let pool = specs.filter((x) => x.relation.toLowerCase() === rel.toLowerCase());
+  if (!pool.length) pool = specs.filter((x) => ({ Contact: 'Ally', Teammate: 'Ally', Partner: 'Love', Employer: 'Mentor', Student: 'Dependent', Guardian: 'Mentor', Family: 'Friend', Informant: 'Ally', Nemesis: 'Enemy' })[rel] === x.relation);
+  if (!pool.length) pool = specs;
+  const spec = rng.pick(pool) || { relation: rel, who: '{npc}, someone from the old days', status: 'Still around.' };
+  // the typed name goes into the slot that is this person; any other name in the sentence is rolled
+  const local = {};
+  if (keep) {
+    const lead = /^\{(npc|hero|villain)\}/.exec(spec.who)?.[1] || (spec.who.includes('{npc}') ? 'npc' : spec.who.includes('{hero}') ? 'hero' : spec.who.includes('{villain}') ? 'villain' : 'npc');
+    local[lead] = keep; local.first = keep.split(' ')[0];
+  }
+  const who = fill(spec.who, ctx, local);
+  const nm = keep || local.npc || local.hero || local.villain || newPerson(ctx).name;
+  const status = endStop(cap(spec.status ? fill(spec.status, ctx, local) : fill(rng.pick(T.people?.[rel]?.status || ['Still around.']), ctx, local)));
+  return { name: nm, relation: rel, who: endStop(cap(stripLead(who, nm))), status };
+}
+
 /**
  * Generate a life history for a character (or NPC). Deterministic for a given seed.
  * Reads ch.identity (realName, gender, age, occupation, homeland, base), ch.origin, ch.alignment,

@@ -1031,6 +1031,8 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 .be-sec { display: grid; gap: 8px; }
 .be-rows { display: grid; gap: 6px; }
 .be-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px; align-items: start; }
+.be-row.rollable { grid-template-columns: minmax(0, 1fr) auto auto; }
+.be-roll { padding-inline: 8px; }
 .be-grid { display: grid; gap: 4px; }
 .be-grid input, .be-grid select, .be-grid textarea { padding: 5px 7px; font-size: 13px; }
 .be-grid.p { grid-template-columns: 1.2fr 1fr 1fr 1.4fr 1.2fr; }
@@ -6426,6 +6428,76 @@ function build(R, ch, seed, seeds) {
   };
 }
 
+/** Every "a person enters their life" spec in the lifepath tables, by relationship. */
+function personSpecs(R) {
+  const out = [];
+  const walk = (o) => {
+    if (!o || typeof o !== 'object') return;
+    if (Array.isArray(o)) { o.forEach(walk); return; }
+    if (o.relation && o.who && !o.name) out.push(o);
+    for (const v of Object.values(o)) if (v && typeof v === 'object') walk(v);
+  };
+  walk(R?.raw?.lifepath || {});
+  return out;
+}
+
+/**
+ * Roll one person for a hand-written bio: fills in everything but what you typed. kind: 'parent',
+ * 'sibling' or 'person'. Give a name to keep it (and a role or relation to keep that); leave them blank
+ * to roll them too. Deterministic for a given seed. Returns a row for bio.family.parents, .siblings or
+ * bio.people.
+ */
+function rollPerson(R, ch, { kind = 'person', name = '', role = '', relation = '', age = null } = {}, { seed } = {}) {
+  const s = String(seed ?? `${ch?.bio?.seed || ch?.seed || 'bio'}::roll::${name || kind}`);
+  const ctx = makeContext(R, ch || {}, s, defaultSeeds(s));
+  const rng = ctx.rng = makeRng(`${s}::person::${kind}::${name}::${role || relation}`);
+  const T = ctx.T;
+  const keep = String(name || '').trim();
+  if (kind === 'parent') {
+    const r = String(role || '').trim() || rng.pick(['Mother', 'Father', 'Mother', 'Father', 'Stepmother', 'Stepfather', 'Grandmother', 'Grandfather', 'Guardian', 'Adoptive mother', 'Adoptive father']);
+    const g = /mother|grandmother|aunt|nanny/i.test(r) ? 'Female' : /father|grandfather|uncle/i.test(r) ? 'Male' : rng.pick(['Female', 'Male']);
+    const np = keep ? { name: keep } : newPerson(ctx, { gender: g, surname: ctx.surname || undefined });
+    const occupations = (T.parents.occupations || []).map(norm);
+    const occ = rng.pick(occupations.filter((o) => (o.min ?? 0) <= 3 && 3 <= (o.max ?? 6))) || { text: 'office worker' };
+    const statuses = (T.parents.status || []).map(norm).filter((x) => !x.minAge || ctx.age >= x.minAge);
+    const st = rng.weighted(statuses, (x) => (x.weight ?? 1)) || { text: 'Alive and well.' };
+    const stText = fill(st.text, ctx, { role: r.toLowerCase() });
+    const status = st.dies && !/deceased|died|dead/i.test(stText) ? `Deceased; ${noStop(lowerFirst(stText))}.` : endStop(cap(stText));
+    return { name: np.name, role: r, occupation: /Grand/.test(r) ? `retired ${fill(occ.text, ctx)}` : fill(occ.text, ctx), trait: cap(fill(rng.pick(T.parents.temperament || ['ordinary']), ctx)), status };
+  }
+  if (kind === 'sibling') {
+    const rel = String(relation || '').trim();
+    const g = /sister/i.test(rel) ? 'Female' : /brother/i.test(rel) ? 'Male' : rng.pick(['Female', 'Male']);
+    const word = g === 'Female' ? 'sister' : 'brother';
+    const offset = /twin/i.test(rel) ? 0 : /older|elder|big/i.test(rel) ? rng.int(1, 8) : /younger|little|baby/i.test(rel) ? -rng.int(1, 8) : rng.pick([1, -1]) * rng.int(1, 8);
+    const sibAge = age != null ? Number(age) : Math.max(0, ctx.age + offset);
+    const relationOut = rel || cap(`${offset === 0 ? 'twin' : offset > 0 ? 'older' : 'younger'} ${word}`);
+    const first = keep ? keep : `${randomFirst(ctx, rng, g)} ${ctx.surname || ''}`.trim();
+    const fates = (T.birth.siblingFates || []).map(norm).filter((f) => !(f.adult && sibAge < 18) && !(f.young && (sibAge < 6 || sibAge >= 18)) && !(f.toddler && sibAge >= 6) && !f.dead);
+    const fate = rng.pick(fates) || { text: 'is doing fine' };
+    const note = fill(fate.text, ctx, { sibling: first.split(' ')[0] });
+    return { name: first, relation: relationOut, age: sibAge, note: endStop(cap(note)), status: fate.status || 'Alive' };
+  }
+  // anyone else in their life
+  const specs = personSpecs(R);
+  const want = String(relation || '').trim();
+  const rel = want || rng.pick(BIO_RELATIONS);
+  let pool = specs.filter((x) => x.relation.toLowerCase() === rel.toLowerCase());
+  if (!pool.length) pool = specs.filter((x) => ({ Contact: 'Ally', Teammate: 'Ally', Partner: 'Love', Employer: 'Mentor', Student: 'Dependent', Guardian: 'Mentor', Family: 'Friend', Informant: 'Ally', Nemesis: 'Enemy' })[rel] === x.relation);
+  if (!pool.length) pool = specs;
+  const spec = rng.pick(pool) || { relation: rel, who: '{npc}, someone from the old days', status: 'Still around.' };
+  // the typed name goes into the slot that is this person; any other name in the sentence is rolled
+  const local = {};
+  if (keep) {
+    const lead = /^\{(npc|hero|villain)\}/.exec(spec.who)?.[1] || (spec.who.includes('{npc}') ? 'npc' : spec.who.includes('{hero}') ? 'hero' : spec.who.includes('{villain}') ? 'villain' : 'npc');
+    local[lead] = keep; local.first = keep.split(' ')[0];
+  }
+  const who = fill(spec.who, ctx, local);
+  const nm = keep || local.npc || local.hero || local.villain || newPerson(ctx).name;
+  const status = endStop(cap(spec.status ? fill(spec.status, ctx, local) : fill(rng.pick(T.people?.[rel]?.status || ['Still around.']), ctx, local)));
+  return { name: nm, relation: rel, who: endStop(cap(stripLead(who, nm))), status };
+}
+
 /**
  * Generate a life history for a character (or NPC). Deterministic for a given seed.
  * Reads ch.identity (realName, gender, age, occupation, homeland, base), ch.origin, ch.alignment,
@@ -6500,7 +6572,7 @@ function rollDowntimeEvent(R, ch, { seed } = {}) {
   return { text, tags: [...(e.tags || [])], people: ctx.people.slice(before).map(({ since, ...p }) => p) };
 }
 
-return { BIO_VERSION, DCA_COMPLICATIONS, BIO_RELATIONS, generateBio, rerollSection, bioText, rollDowntimeEvent };
+return { BIO_VERSION, DCA_COMPLICATIONS, BIO_RELATIONS, rollPerson, generateBio, rerollSection, bioText, rollDowntimeEvent };
 })();
 
 __mods["src/engine/expr.js"] = (() => {
@@ -9067,6 +9139,8 @@ __mods["src/app/bioedit.js"] = (() => {
 // the bio was edited, so a share key will not rebuild it from dice.
 
 const { h, toast } = __mods["src/app/dom.js"];
+const { rollPerson } = __mods["src/engine/lifepath.js"];
+const { randomSeed } = __mods["src/engine/rng.js"];
 const TRAIT_SIDES = { light: 'Lightside', dark: 'Darkside', neutral: 'Neutral', exotic: 'Exotic' };
 const STRENGTHS = ['mild', 'strong', 'obsessive'];
 const SECTION_IDS = ['origins', 'youth', 'career', 'life', 'people', 'drives', 'game'];
@@ -9100,13 +9174,16 @@ function pick(value, options, attrs = {}) { return h('select', attrs, options.ma
 function pickFree(value, options, attrs = {}) { const id = `be-${Math.random().toString(36).slice(2, 8)}`; return [h('input', { type: 'text', value: value ?? '', list: id, ...attrs }), h('datalist', { id }, options.map((o) => h('option', { value: o })))]; }
 
 /** A list of rows with add/remove, rendered from draft.items via row(item, i). */
-function rowList(items, row, { add, addLabel = '+ Add', empty = 'Nothing yet.' } = {}) {
+function rowList(items, row, { add, addLabel = '+ Add', empty = 'Nothing yet.', roll = null, rollLabel = '🎲 Roll one' } = {}) {
   const host = h('div', { class: 'be-rows' });
   const draw = () => {
     host.replaceChildren();
     if (!items.length) host.append(h('p', { class: 'hint', style: { margin: 0 } }, empty));
-    items.forEach((it, i) => host.append(h('div', { class: 'be-row' }, row(it, i), h('button', { class: 'x', type: 'button', 'aria-label': 'Remove', onClick: () => { items.splice(i, 1); draw(); } }, '✕'))));
-    host.append(h('button', { class: 'btn sm', type: 'button', onClick: () => { items.push(add()); draw(); } }, addLabel));
+    items.forEach((it, i) => host.append(h('div', { class: `be-row ${roll ? 'rollable' : ''}` }, row(it, i),
+      roll ? h('button', { class: 'btn sm be-roll', type: 'button', title: 'Roll the rest: keeps the name and relationship you typed, fills in everything else', onClick: () => { try { Object.assign(it, roll(it)); draw(); } catch (e) { toast(e.message); } } }, '🎲') : null,
+      h('button', { class: 'x', type: 'button', 'aria-label': 'Remove', onClick: () => { items.splice(i, 1); draw(); } }, '✕'))));
+    host.append(h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', type: 'button', onClick: () => { items.push(add()); draw(); } }, addLabel),
+      roll ? h('button', { class: 'btn sm ghost', type: 'button', title: 'A whole new person, rolled', onClick: () => { try { items.push(roll({})); draw(); } catch (e) { toast(e.message); } } }, rollLabel) : null));
   };
   draw();
   return host;
@@ -9115,7 +9192,8 @@ function rowList(items, row, { add, addLabel = '+ Add', empty = 'Nothing yet.' }
 /**
  * The editor. onSave(bio) stores the story and leaves edit mode; onCancel() just leaves. Returns an element.
  */
-function bioEditor(ch, { onSave, onCancel }) {
+function bioEditor(ch, R, { onSave, onCancel }) {
+  const roll = (kind) => (it) => rollPerson(R, ch, { kind, name: it.name || '', role: it.role || '', relation: it.relation || '', age: it.age ?? null }, { seed: randomSeed() });
   const d = clone(ch.bio || blankBio(ch));
   d.family = d.family || { parents: [], siblings: [], structure: '' };
   d.family.parents = d.family.parents || []; d.family.siblings = d.family.siblings || [];
@@ -9132,20 +9210,20 @@ function bioEditor(ch, { onSave, onCancel }) {
     text(p.occupation, { placeholder: 'Occupation', onInput: (e) => { p.occupation = e.target.value; } }),
     text(p.trait, { placeholder: 'Trait (one line)', onInput: (e) => { p.trait = e.target.value; } }),
     text(p.status, { placeholder: 'Status (alive, estranged, deceased…)', onInput: (e) => { p.status = e.target.value; } })),
-  { add: () => ({ name: '', role: 'Mother', occupation: '', trait: '', status: 'Alive.' }), addLabel: '+ Parent', empty: 'No parents written.' });
+  { add: () => ({ name: '', role: 'Mother', occupation: '', trait: '', status: 'Alive.' }), addLabel: '+ Parent', empty: 'No parents written.', roll: roll('parent') });
   const siblings = rowList(d.family.siblings, (p) => h('div', { class: 'be-grid s' },
     text(p.name, { placeholder: 'Name', onInput: (e) => { p.name = e.target.value; } }),
     pickFree(p.relation, SIBLING_RELS, { placeholder: 'Relation', onInput: (e) => { p.relation = e.target.value; } }),
     h('input', { type: 'number', min: 0, value: p.age ?? '', placeholder: 'Age', style: { maxWidth: '70px' }, onInput: (e) => { p.age = e.target.value === '' ? undefined : Number(e.target.value); } }),
     text(p.note, { placeholder: 'A line about them', onInput: (e) => { p.note = e.target.value; } }),
     text(p.status, { placeholder: 'Status', onInput: (e) => { p.status = e.target.value; } })),
-  { add: () => ({ name: '', relation: 'Sister', note: '', status: 'Alive' }), addLabel: '+ Sibling', empty: 'No siblings written.' });
+  { add: () => ({ name: '', relation: 'Sister', note: '', status: 'Alive' }), addLabel: '+ Sibling', empty: 'No siblings written.', roll: roll('sibling') });
   const people = rowList(d.people, (p) => h('div', { class: 'be-grid pe' },
     text(p.name, { placeholder: 'Name', onInput: (e) => { p.name = e.target.value; } }),
     pickFree(p.relation, PEOPLE_RELS, { placeholder: 'Relationship', onInput: (e) => { p.relation = e.target.value; } }),
     text(p.who, { placeholder: 'Who they are and what they mean', onInput: (e) => { p.who = e.target.value; } }),
     text(p.status, { placeholder: 'Status now', onInput: (e) => { p.status = e.target.value; } })),
-  { add: () => ({ name: '', relation: 'Friend', who: '', status: '' }), addLabel: '+ Person', empty: 'No one written yet: mentors, friends, rivals, enemies, loves.' });
+  { add: () => ({ name: '', relation: 'Friend', who: '', status: '' }), addLabel: '+ Person', empty: 'No one written yet: mentors, friends, rivals, enemies, loves. Type a name and a relationship, then 🎲 rolls the rest; after saving, every name opens as a full character.', roll: roll('person') });
   const life = d.timeline.filter((t) => !t.journalId);
   const timeline = rowList(life, (t) => h('div', { class: 'be-grid t' },
     h('input', { type: 'number', min: 0, value: t.age ?? '', placeholder: 'Age', style: { maxWidth: '70px' }, onInput: (e) => { t.age = e.target.value === '' ? undefined : Number(e.target.value); } }),
@@ -9196,7 +9274,7 @@ function bioEditor(ch, { onSave, onCancel }) {
   return h('div', { class: 'be' },
     h('div', { class: 'be-bar no-print' },
       h('b', null, d.manual ? 'Writing their life story' : 'Editing the rolled life story'),
-      h('span', { class: 'hint' }, 'Everything below is yours to change. Journal sessions stay as they are.'),
+      h('span', { class: 'hint' }, 'Everything below is yours to change. 🎲 on a person keeps the name and relationship you typed and rolls the rest. Journal sessions stay as they are.'),
       h('span', { class: 'spacer' }),
       h('button', { class: 'btn ghost', type: 'button', onClick: () => onCancel?.() }, 'Cancel'),
       h('button', { class: 'btn primary', type: 'button', onClick: saveIt }, 'Save life story')),
@@ -9256,7 +9334,7 @@ function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
   const onSave = (out) => { editingBio = false; change((c) => { c.bio = out; }); };
   const onCancel = () => { editingBio = false; change((c) => c); };
   if (editingBio && change) {
-    const file = h('article', { class: 'file bio' }, head, toolbar || null, h('div', { class: 'file-body' }, h('div', { class: 'col', style: { gridColumn: '1 / -1' } }, bioEditor(ch, { onSave, onCancel }))));
+    const file = h('article', { class: 'file bio' }, head, toolbar || null, h('div', { class: 'file-body' }, h('div', { class: 'col', style: { gridColumn: '1 / -1' } }, bioEditor(ch, R, { onSave, onCancel }))));
     file.style.setProperty('--hero', hero);
     file.style.setProperty('--hero-ink', inkFor(hero));
     return file;

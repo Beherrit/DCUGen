@@ -3,6 +3,8 @@
 // the bio was edited, so a share key will not rebuild it from dice.
 
 import { h, toast } from './dom.js';
+import { rollPerson } from '../engine/lifepath.js';
+import { randomSeed } from '../engine/rng.js';
 
 export const TRAIT_SIDES = { light: 'Lightside', dark: 'Darkside', neutral: 'Neutral', exotic: 'Exotic' };
 const STRENGTHS = ['mild', 'strong', 'obsessive'];
@@ -37,13 +39,16 @@ function pick(value, options, attrs = {}) { return h('select', attrs, options.ma
 function pickFree(value, options, attrs = {}) { const id = `be-${Math.random().toString(36).slice(2, 8)}`; return [h('input', { type: 'text', value: value ?? '', list: id, ...attrs }), h('datalist', { id }, options.map((o) => h('option', { value: o })))]; }
 
 /** A list of rows with add/remove, rendered from draft.items via row(item, i). */
-function rowList(items, row, { add, addLabel = '+ Add', empty = 'Nothing yet.' } = {}) {
+function rowList(items, row, { add, addLabel = '+ Add', empty = 'Nothing yet.', roll = null, rollLabel = '🎲 Roll one' } = {}) {
   const host = h('div', { class: 'be-rows' });
   const draw = () => {
     host.replaceChildren();
     if (!items.length) host.append(h('p', { class: 'hint', style: { margin: 0 } }, empty));
-    items.forEach((it, i) => host.append(h('div', { class: 'be-row' }, row(it, i), h('button', { class: 'x', type: 'button', 'aria-label': 'Remove', onClick: () => { items.splice(i, 1); draw(); } }, '✕'))));
-    host.append(h('button', { class: 'btn sm', type: 'button', onClick: () => { items.push(add()); draw(); } }, addLabel));
+    items.forEach((it, i) => host.append(h('div', { class: `be-row ${roll ? 'rollable' : ''}` }, row(it, i),
+      roll ? h('button', { class: 'btn sm be-roll', type: 'button', title: 'Roll the rest: keeps the name and relationship you typed, fills in everything else', onClick: () => { try { Object.assign(it, roll(it)); draw(); } catch (e) { toast(e.message); } } }, '🎲') : null,
+      h('button', { class: 'x', type: 'button', 'aria-label': 'Remove', onClick: () => { items.splice(i, 1); draw(); } }, '✕'))));
+    host.append(h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', type: 'button', onClick: () => { items.push(add()); draw(); } }, addLabel),
+      roll ? h('button', { class: 'btn sm ghost', type: 'button', title: 'A whole new person, rolled', onClick: () => { try { items.push(roll({})); draw(); } catch (e) { toast(e.message); } } }, rollLabel) : null));
   };
   draw();
   return host;
@@ -52,7 +57,8 @@ function rowList(items, row, { add, addLabel = '+ Add', empty = 'Nothing yet.' }
 /**
  * The editor. onSave(bio) stores the story and leaves edit mode; onCancel() just leaves. Returns an element.
  */
-export function bioEditor(ch, { onSave, onCancel }) {
+export function bioEditor(ch, R, { onSave, onCancel }) {
+  const roll = (kind) => (it) => rollPerson(R, ch, { kind, name: it.name || '', role: it.role || '', relation: it.relation || '', age: it.age ?? null }, { seed: randomSeed() });
   const d = clone(ch.bio || blankBio(ch));
   d.family = d.family || { parents: [], siblings: [], structure: '' };
   d.family.parents = d.family.parents || []; d.family.siblings = d.family.siblings || [];
@@ -69,20 +75,20 @@ export function bioEditor(ch, { onSave, onCancel }) {
     text(p.occupation, { placeholder: 'Occupation', onInput: (e) => { p.occupation = e.target.value; } }),
     text(p.trait, { placeholder: 'Trait (one line)', onInput: (e) => { p.trait = e.target.value; } }),
     text(p.status, { placeholder: 'Status (alive, estranged, deceased…)', onInput: (e) => { p.status = e.target.value; } })),
-  { add: () => ({ name: '', role: 'Mother', occupation: '', trait: '', status: 'Alive.' }), addLabel: '+ Parent', empty: 'No parents written.' });
+  { add: () => ({ name: '', role: 'Mother', occupation: '', trait: '', status: 'Alive.' }), addLabel: '+ Parent', empty: 'No parents written.', roll: roll('parent') });
   const siblings = rowList(d.family.siblings, (p) => h('div', { class: 'be-grid s' },
     text(p.name, { placeholder: 'Name', onInput: (e) => { p.name = e.target.value; } }),
     pickFree(p.relation, SIBLING_RELS, { placeholder: 'Relation', onInput: (e) => { p.relation = e.target.value; } }),
     h('input', { type: 'number', min: 0, value: p.age ?? '', placeholder: 'Age', style: { maxWidth: '70px' }, onInput: (e) => { p.age = e.target.value === '' ? undefined : Number(e.target.value); } }),
     text(p.note, { placeholder: 'A line about them', onInput: (e) => { p.note = e.target.value; } }),
     text(p.status, { placeholder: 'Status', onInput: (e) => { p.status = e.target.value; } })),
-  { add: () => ({ name: '', relation: 'Sister', note: '', status: 'Alive' }), addLabel: '+ Sibling', empty: 'No siblings written.' });
+  { add: () => ({ name: '', relation: 'Sister', note: '', status: 'Alive' }), addLabel: '+ Sibling', empty: 'No siblings written.', roll: roll('sibling') });
   const people = rowList(d.people, (p) => h('div', { class: 'be-grid pe' },
     text(p.name, { placeholder: 'Name', onInput: (e) => { p.name = e.target.value; } }),
     pickFree(p.relation, PEOPLE_RELS, { placeholder: 'Relationship', onInput: (e) => { p.relation = e.target.value; } }),
     text(p.who, { placeholder: 'Who they are and what they mean', onInput: (e) => { p.who = e.target.value; } }),
     text(p.status, { placeholder: 'Status now', onInput: (e) => { p.status = e.target.value; } })),
-  { add: () => ({ name: '', relation: 'Friend', who: '', status: '' }), addLabel: '+ Person', empty: 'No one written yet: mentors, friends, rivals, enemies, loves.' });
+  { add: () => ({ name: '', relation: 'Friend', who: '', status: '' }), addLabel: '+ Person', empty: 'No one written yet: mentors, friends, rivals, enemies, loves. Type a name and a relationship, then 🎲 rolls the rest; after saving, every name opens as a full character.', roll: roll('person') });
   const life = d.timeline.filter((t) => !t.journalId);
   const timeline = rowList(life, (t) => h('div', { class: 'be-grid t' },
     h('input', { type: 'number', min: 0, value: t.age ?? '', placeholder: 'Age', style: { maxWidth: '70px' }, onInput: (e) => { t.age = e.target.value === '' ? undefined : Number(e.target.value); } }),
@@ -133,7 +139,7 @@ export function bioEditor(ch, { onSave, onCancel }) {
   return h('div', { class: 'be' },
     h('div', { class: 'be-bar no-print' },
       h('b', null, d.manual ? 'Writing their life story' : 'Editing the rolled life story'),
-      h('span', { class: 'hint' }, 'Everything below is yours to change. Journal sessions stay as they are.'),
+      h('span', { class: 'hint' }, 'Everything below is yours to change. 🎲 on a person keeps the name and relationship you typed and rolls the rest. Journal sessions stay as they are.'),
       h('span', { class: 'spacer' }),
       h('button', { class: 'btn ghost', type: 'button', onClick: () => onCancel?.() }, 'Cancel'),
       h('button', { class: 'btn primary', type: 'button', onClick: saveIt }, 'Save life story')),
