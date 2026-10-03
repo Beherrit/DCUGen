@@ -1,0 +1,4871 @@
+[
+  {
+    "id": "fire",
+    "name": "Fire",
+    "color": "#e8592b",
+    "attack_skill": "Fire Powers",
+    "descriptors": [
+      "fire",
+      "heat",
+      "plasma"
+    ],
+    "origin_hint": "a burning star, a lava-born mutation, or a pact with a fire elemental",
+    "environment": "Volcanic",
+    "weakness": [
+      "water",
+      "cold",
+      "oxygen-starved spaces"
+    ],
+    "codename": {
+      "words": [
+        "Blaze",
+        "Pyre",
+        "Inferno",
+        "Ember",
+        "Cinder",
+        "Scorch",
+        "Flare",
+        "Torch",
+        "Phoenix",
+        "Kindle",
+        "Firebrand",
+        "Wildfire"
+      ],
+      "adjectives": [
+        "Burning",
+        "Molten",
+        "Scarlet",
+        "Searing",
+        "Smoldering",
+        "Crimson"
+      ]
+    },
+    "costume": [
+      "red and gold",
+      "charcoal and orange",
+      "white with flame trim"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Fire Blast",
+          "Flame Bolt",
+          "Inferno Lance",
+          "Searing Ray"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 5
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Flame Burst",
+          "Fusion",
+          "Detonation"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "pl",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Dragon's Breath",
+          "Flame Jet"
+        ],
+        "effect": "Damage",
+        "range": "Close",
+        "rank": "pl",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cone"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Blinding Flare",
+          "Flashfire"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Resisted by Fortitude; Impaired, Disabled, Unaware",
+        "extras": [
+          {
+            "name": "Cumulative"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "to vision"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Searing Touch",
+          "Burning Grip"
+        ],
+        "effect": "Damage",
+        "range": "Close",
+        "rank": "attack",
+        "weight": 1
+      },
+      {
+        "role": "control",
+        "names": [
+          "Wall of Flame",
+          "Fire Constructs"
+        ],
+        "effect": "Create",
+        "rank": "pl/2..pl-2",
+        "weight": 1
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Flame Shield",
+          "Heat Haze Aura"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "extras": [
+          {
+            "name": "Sustained"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Flame Jets",
+          "Fire Wings",
+          "Thermal Flight"
+        ],
+        "effect": "Flight",
+        "rank": "pl/2..pl/2+3",
+        "weight": 4
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Fireproof"
+        ],
+        "effect": "Immunity",
+        "rank": "10",
+        "detail": "Fire effects",
+        "weight": 4
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Heat Control"
+        ],
+        "effect": "Environment",
+        "rank": "2..4",
+        "detail": "Heat",
+        "weight": 2
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Heat Sight"
+        ],
+        "effect": "Senses",
+        "rank": "1",
+        "detail": "Infravision",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "ice",
+    "name": "Ice & Cold",
+    "color": "#5fb3e6",
+    "attack_skill": "Ice Powers",
+    "descriptors": [
+      "cold",
+      "ice",
+      "frost"
+    ],
+    "origin_hint": "a cryogenics accident, a frost giant bloodline, or an arctic meteor",
+    "environment": "Arctic",
+    "weakness": [
+      "intense heat",
+      "fire"
+    ],
+    "codename": {
+      "words": [
+        "Frost",
+        "Glacier",
+        "Rime",
+        "Blizzard",
+        "Icicle",
+        "Permafrost",
+        "Floe",
+        "Hailstorm",
+        "Winter",
+        "Sleet"
+      ],
+      "adjectives": [
+        "Frozen",
+        "Arctic",
+        "Polar",
+        "Crystal",
+        "Silent"
+      ]
+    },
+    "costume": [
+      "white and pale blue",
+      "silver and navy",
+      "translucent ice-blue"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Ice Blast",
+          "Frost Ray",
+          "Hail Barrage",
+          "Cold Snap"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 5
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Flash Freeze",
+          "Ice Prison",
+          "Frozen Bonds"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Resisted by Dodge, overcome by Damage; Hindered and Vulnerable, Defenseless and Immobile",
+        "extras": [
+          {
+            "name": "Cumulative"
+          },
+          {
+            "name": "Extra Condition"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited Degree"
+          }
+        ],
+        "weight": 4
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Blizzard",
+          "Polar Vortex"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "pl",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cloud"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Absolute Zero Touch"
+        ],
+        "effect": "Weaken",
+        "range": "Close",
+        "rank": "attack",
+        "detail": "Stamina; resisted by Fortitude",
+        "weight": 1
+      },
+      {
+        "role": "control",
+        "names": [
+          "Ice Walls",
+          "Frozen Constructs",
+          "Ice Slide"
+        ],
+        "effect": "Create",
+        "rank": "pl/2..pl-2",
+        "weight": 3
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Ice Armor",
+          "Frost Skin"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "extras": [
+          {
+            "name": "Sustained"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Ice Slides"
+        ],
+        "effect": "Movement",
+        "rank": "1",
+        "detail": "Ice slides (travel on self-made ramps)",
+        "weight": 2
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Ice Slide Speed"
+        ],
+        "effect": "Speed",
+        "rank": "3..pl/2+2",
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "only on ice slides"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Cold Immunity"
+        ],
+        "effect": "Immunity",
+        "rank": "10",
+        "detail": "Cold effects",
+        "weight": 4
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Chill the Air"
+        ],
+        "effect": "Environment",
+        "rank": "2..4",
+        "detail": "Cold",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "electric",
+    "name": "Electricity",
+    "color": "#f2c53d",
+    "attack_skill": "Lightning",
+    "descriptors": [
+      "electricity",
+      "lightning",
+      "static"
+    ],
+    "origin_hint": "a lightning strike in a chemistry lab, a storm god's favor, or a living battery implant",
+    "environment": "Urban",
+    "weakness": [
+      "grounding",
+      "water",
+      "insulation"
+    ],
+    "codename": {
+      "words": [
+        "Volt",
+        "Spark",
+        "Surge",
+        "Static",
+        "Arc",
+        "Livewire",
+        "Thunderbolt",
+        "Amp",
+        "Dynamo",
+        "Tesla",
+        "Shock",
+        "Current"
+      ],
+      "adjectives": [
+        "Electric",
+        "Live",
+        "Crackling",
+        "Blue",
+        "Charged"
+      ]
+    },
+    "costume": [
+      "black with yellow lightning",
+      "blue and white",
+      "silver with glowing seams"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Lightning Bolt",
+          "Shock Blast",
+          "Arc Strike"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 5
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Chain Lightning"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "extras": [
+          {
+            "name": "Multiattack"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Stun Bolt",
+          "Taser Touch"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Resisted by Fortitude; Dazed, Stunned, Incapacitated",
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Electrical Storm",
+          "Discharge"
+        ],
+        "effect": "Damage",
+        "range": "Close",
+        "rank": "pl",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "EMP Pulse",
+          "Short Circuit"
+        ],
+        "effect": "Nullify",
+        "range": "Ranged",
+        "rank": "pl/2..pl",
+        "detail": "Electronics",
+        "extras": [
+          {
+            "name": "Broad"
+          },
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "weight": 1
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Static Field",
+          "Ion Shield"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "extras": [
+          {
+            "name": "Sustained"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Ride the Lightning",
+          "Magnetic Glide"
+        ],
+        "effect": "Flight",
+        "rank": "pl/2..pl/2+4",
+        "weight": 3
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Power-Line Travel"
+        ],
+        "effect": "Teleport",
+        "rank": "pl/2..pl",
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "along power lines"
+          }
+        ],
+        "weight": 1
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Electrical Immunity"
+        ],
+        "effect": "Immunity",
+        "rank": "5",
+        "detail": "Electrical damage",
+        "weight": 3
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Machine Talk"
+        ],
+        "effect": "Comprehend",
+        "rank": "1..2",
+        "detail": "Machines (electronics)",
+        "weight": 1
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Feel the Current"
+        ],
+        "effect": "Senses",
+        "rank": "2",
+        "detail": "Detect Electricity (ranged)",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "earth",
+    "name": "Earth & Stone",
+    "color": "#a07a4a",
+    "attack_skill": "Earth Powers",
+    "descriptors": [
+      "earth",
+      "stone",
+      "seismic"
+    ],
+    "origin_hint": "a cave-in near a strange meteorite, a geological spirit, or Atlantean stone-shaping",
+    "environment": "Underground",
+    "weakness": [
+      "flight-bound foes",
+      "being lifted off the ground"
+    ],
+    "codename": {
+      "words": [
+        "Granite",
+        "Quake",
+        "Boulder",
+        "Tremor",
+        "Obsidian",
+        "Bedrock",
+        "Landslide",
+        "Basalt",
+        "Monolith",
+        "Rockslide",
+        "Fault",
+        "Terra"
+      ],
+      "adjectives": [
+        "Stone",
+        "Iron",
+        "Living",
+        "Shaking",
+        "Mountain"
+      ]
+    },
+    "costume": [
+      "slate gray and green",
+      "brown and bronze",
+      "stone-textured armor"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Rock Hurl",
+          "Stone Barrage",
+          "Boulder Toss"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 4
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Stone Fist",
+          "Seismic Punch"
+        ],
+        "effect": "Damage",
+        "range": "Close",
+        "rank": "attack",
+        "strengthBased": true,
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Earthquake",
+          "Shockwave"
+        ],
+        "effect": "Affliction",
+        "range": "Close",
+        "rank": "pl",
+        "detail": "Resisted by Dodge; Hindered and Prone",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Earth Grasp",
+          "Quicksand Trap"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Resisted by Dodge, overcome by Damage; Hindered and Vulnerable, Defenseless and Immobile",
+        "extras": [
+          {
+            "name": "Cumulative"
+          },
+          {
+            "name": "Extra Condition"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited Degree"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "control",
+        "names": [
+          "Shape Stone",
+          "Earth Walls"
+        ],
+        "effect": "Move Object",
+        "rank": "pl/2..pl",
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "to earth and stone"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Stone Skin",
+          "Granite Hide"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "weight": 4
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Tunneling",
+          "Earth Swim"
+        ],
+        "effect": "Burrowing",
+        "rank": "3..pl/2+2",
+        "weight": 4
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Tremorsense"
+        ],
+        "effect": "Senses",
+        "rank": "3",
+        "detail": "Detect Vibrations (ranged, accurate)",
+        "weight": 3
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Rooted"
+        ],
+        "effect": "Enhanced Trait",
+        "option": "Strength",
+        "rank": "1..3",
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "to resist being moved"
+          }
+        ],
+        "weight": 1
+      }
+    ]
+  },
+  {
+    "id": "air",
+    "name": "Air & Weather",
+    "color": "#8fc7c1",
+    "attack_skill": "Weather Powers",
+    "descriptors": [
+      "air",
+      "wind",
+      "weather"
+    ],
+    "origin_hint": "a goddess of storms, a weather-control satellite, or a mutant born during a hurricane",
+    "environment": "Sky",
+    "weakness": [
+      "vacuum",
+      "enclosed spaces"
+    ],
+    "codename": {
+      "words": [
+        "Cyclone",
+        "Gale",
+        "Tempest",
+        "Zephyr",
+        "Squall",
+        "Monsoon",
+        "Tornado",
+        "Windrider",
+        "Nimbus",
+        "Typhoon",
+        "Storm"
+      ],
+      "adjectives": [
+        "Howling",
+        "Stormy",
+        "Windswept",
+        "Gray",
+        "Thundering"
+      ]
+    },
+    "costume": [
+      "sky blue and white",
+      "storm gray and silver",
+      "flowing cape in cloud white"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Wind Blast",
+          "Air Hammer",
+          "Gale Force"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 4
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Lightning Call",
+          "Thunderstrike"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "extras": [
+          {
+            "name": "Indirect",
+            "steps": 2
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Cyclone",
+          "Twister"
+        ],
+        "effect": "Move Object",
+        "range": "Ranged",
+        "rank": "pl/2..pl",
+        "extras": [
+          {
+            "name": "Damaging"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Suffocating Vacuum",
+          "Steal Breath"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Resisted by Fortitude; Fatigued, Exhausted, Incapacitated",
+        "extras": [
+          {
+            "name": "Progressive"
+          }
+        ],
+        "weight": 1
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Hail Storm",
+          "Downpour"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "pl",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cloud"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Wind Barrier",
+          "Deflecting Winds"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "extras": [
+          {
+            "name": "Sustained"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "to ranged physical attacks"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Wind Wall"
+        ],
+        "effect": "Deflect",
+        "rank": "pl/2..pl",
+        "weight": 1
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Ride the Winds",
+          "Wind Flight"
+        ],
+        "effect": "Flight",
+        "rank": "pl/2..pl/2+4",
+        "weight": 6
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Weather Control"
+        ],
+        "effect": "Environment",
+        "rank": "3..6",
+        "detail": "Rain, wind, fog and cold",
+        "weight": 3
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Breathe Anything"
+        ],
+        "effect": "Immunity",
+        "rank": "2",
+        "detail": "Suffocation",
+        "weight": 1
+      }
+    ]
+  },
+  {
+    "id": "water",
+    "name": "Water & Sea",
+    "color": "#2f7fb8",
+    "attack_skill": "Hydrokinesis",
+    "descriptors": [
+      "water",
+      "ocean",
+      "tides"
+    ],
+    "origin_hint": "Atlantean blood, a sea god's blessing, or a deep-trench mutation",
+    "environment": "Underwater",
+    "weakness": [
+      "dehydration",
+      "desert heat"
+    ],
+    "codename": {
+      "words": [
+        "Tide",
+        "Riptide",
+        "Undertow",
+        "Torrent",
+        "Maelstrom",
+        "Typhoon",
+        "Coral",
+        "Kraken",
+        "Leviathan",
+        "Abyss",
+        "Wave",
+        "Current"
+      ],
+      "adjectives": [
+        "Deep",
+        "Tidal",
+        "Ocean",
+        "Sea",
+        "Drowned"
+      ]
+    },
+    "costume": [
+      "teal and gold scale-mail",
+      "navy and seafoam",
+      "orange and green"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Water Jet",
+          "Hydro Cannon",
+          "Tidal Lash"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 4
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Drown",
+          "Water Lungs"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Resisted by Fortitude; Fatigued, Exhausted, Incapacitated",
+        "extras": [
+          {
+            "name": "Progressive"
+          }
+        ],
+        "weight": 1
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Tidal Wave",
+          "Crashing Surf"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "pl",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Line"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "control",
+        "names": [
+          "Water Control",
+          "Shape Water"
+        ],
+        "effect": "Move Object",
+        "range": "Ranged",
+        "rank": "pl/2..pl",
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "to water"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Pressure-Hardened Body",
+          "Deep-Sea Toughness"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "weight": 3
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Swift Swimmer",
+          "Ride the Current"
+        ],
+        "effect": "Swimming",
+        "rank": "4..pl/2+4",
+        "weight": 5
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Water Spout"
+        ],
+        "effect": "Flight",
+        "rank": "3..pl/2+2",
+        "flaws": [
+          {
+            "name": "Platform"
+          }
+        ],
+        "weight": 1
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Amphibious",
+          "Water Breathing"
+        ],
+        "effect": "Immunity",
+        "rank": "3",
+        "detail": "Drowning, cold and high pressure",
+        "weight": 4
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Speak with Sea Life"
+        ],
+        "effect": "Comprehend",
+        "rank": "1",
+        "detail": "Animals (sea life)",
+        "weight": 2
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Sea-Sight"
+        ],
+        "effect": "Senses",
+        "rank": "1",
+        "detail": "Low-light Vision",
+        "weight": 1
+      }
+    ]
+  },
+  {
+    "id": "light",
+    "name": "Light & Photonics",
+    "color": "#f4e27a",
+    "attack_skill": "Light Powers",
+    "descriptors": [
+      "light",
+      "photonic",
+      "solar"
+    ],
+    "origin_hint": "absorbed starlight, a prism artifact, or a laser lab accident",
+    "environment": "Sunlit",
+    "weakness": [
+      "total darkness",
+      "smoke and fog"
+    ],
+    "codename": {
+      "words": [
+        "Prism",
+        "Halo",
+        "Lumen",
+        "Beacon",
+        "Dazzler",
+        "Radiance",
+        "Sunburst",
+        "Photon",
+        "Lightspeed",
+        "Flash",
+        "Aurora",
+        "Spectrum"
+      ],
+      "adjectives": [
+        "Brilliant",
+        "Golden",
+        "Shining",
+        "Radiant",
+        "White"
+      ]
+    },
+    "costume": [
+      "white and gold",
+      "rainbow-edged white",
+      "pearl and lilac"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Laser Beam",
+          "Photon Lance",
+          "Light Blast"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 5
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Dazzling Flash",
+          "Blinding Light"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "pl",
+        "detail": "Resisted by Fortitude; Impaired, Disabled, Unaware",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          },
+          {
+            "name": "Cumulative"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "to vision"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Hard Light Fist"
+        ],
+        "effect": "Damage",
+        "range": "Close",
+        "rank": "attack",
+        "weight": 1
+      },
+      {
+        "role": "control",
+        "names": [
+          "Hard Light Constructs"
+        ],
+        "effect": "Create",
+        "rank": "pl/2..pl-2",
+        "weight": 3
+      },
+      {
+        "role": "control",
+        "names": [
+          "Holograms",
+          "Light Illusions"
+        ],
+        "effect": "Illusion",
+        "option": "Two sense types",
+        "rank": "pl/2..pl-2",
+        "detail": "Visual",
+        "weight": 2
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Light Shield",
+          "Photon Barrier"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "extras": [
+          {
+            "name": "Sustained"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Light-Speed Flight",
+          "Solar Wings"
+        ],
+        "effect": "Flight",
+        "rank": "pl/2..pl/2+5",
+        "weight": 5
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Bend Light",
+          "Light Cloak"
+        ],
+        "effect": "Concealment",
+        "rank": "4",
+        "detail": "All visual senses",
+        "weight": 2
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Glow"
+        ],
+        "effect": "Environment",
+        "rank": "1..3",
+        "detail": "Light",
+        "weight": 2
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Spectrum Sight"
+        ],
+        "effect": "Senses",
+        "rank": "2",
+        "detail": "Infravision, Ultravision",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "shadow",
+    "name": "Darkness & Shadow",
+    "color": "#6a5a9e",
+    "attack_skill": "Shadow Powers",
+    "descriptors": [
+      "darkness",
+      "shadow",
+      "night"
+    ],
+    "origin_hint": "a pact with the Shadowlands, a cursed cloak, or a mind touched by the dark between stars",
+    "environment": "Darkness",
+    "weakness": [
+      "bright light",
+      "noon sun"
+    ],
+    "codename": {
+      "words": [
+        "Umbra",
+        "Nightshade",
+        "Eclipse",
+        "Gloom",
+        "Wraith",
+        "Penumbra",
+        "Shade",
+        "Duskblade",
+        "Nocturne",
+        "Raven",
+        "Obscura",
+        "Midnight"
+      ],
+      "adjectives": [
+        "Dark",
+        "Silent",
+        "Black",
+        "Hollow",
+        "Night"
+      ]
+    },
+    "costume": [
+      "black and deep violet",
+      "charcoal with a hooded cloak",
+      "midnight blue and silver"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Shadow Bolt",
+          "Night Lash",
+          "Void Strike"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Shadow Tendrils",
+          "Grasping Dark"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Resisted by Dodge, overcome by Damage; Hindered and Vulnerable, Defenseless and Immobile",
+        "extras": [
+          {
+            "name": "Cumulative"
+          },
+          {
+            "name": "Extra Condition"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited Degree"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Chilling Darkness",
+          "Soul Chill"
+        ],
+        "effect": "Affliction",
+        "range": "Close",
+        "rank": "attack",
+        "detail": "Resisted by Will; Dazed, Stunned, Incapacitated",
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Field of Darkness"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "pl",
+        "detail": "Resisted by Will; Impaired, Disabled, Unaware",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cloud"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "to vision"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Shadow Form"
+        ],
+        "effect": "Insubstantial",
+        "rank": "2..4",
+        "weight": 2
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Cloak of Night"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "extras": [
+          {
+            "name": "Sustained"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Shadow Step",
+          "Shadow Walk"
+        ],
+        "effect": "Teleport",
+        "rank": "pl/2..pl",
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "from one shadow to another"
+          }
+        ],
+        "weight": 5
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Blend into Shadows",
+          "Shroud"
+        ],
+        "effect": "Concealment",
+        "rank": "4",
+        "detail": "All visual senses",
+        "flaws": [
+          {
+            "name": "Blending"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Night Eyes",
+          "Darksight"
+        ],
+        "effect": "Senses",
+        "rank": "2",
+        "detail": "Darkvision",
+        "weight": 4
+      }
+    ]
+  },
+  {
+    "id": "sonic",
+    "name": "Sound & Sonics",
+    "color": "#d24f8a",
+    "attack_skill": "Sonic Powers",
+    "descriptors": [
+      "sound",
+      "sonic",
+      "vibration"
+    ],
+    "origin_hint": "a canary-cry metagene, an experimental resonance suit, or a cursed instrument",
+    "environment": "Urban",
+    "weakness": [
+      "vacuum",
+      "total silence fields"
+    ],
+    "codename": {
+      "words": [
+        "Echo",
+        "Wailer",
+        "Siren",
+        "Resonance",
+        "Decibel",
+        "Tremolo",
+        "Shriek",
+        "Canary",
+        "Thunderclap",
+        "Feedback",
+        "Bass Drop",
+        "Harmonic"
+      ],
+      "adjectives": [
+        "Screaming",
+        "Sonic",
+        "Silent",
+        "Ringing",
+        "Loud"
+      ]
+    },
+    "costume": [
+      "black leather and fishnet",
+      "purple and silver",
+      "white with speaker motifs"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Sonic Scream",
+          "Sound Blast",
+          "Canary Cry"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 5
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Shattering Cry",
+          "Sonic Cone"
+        ],
+        "effect": "Damage",
+        "range": "Close",
+        "rank": "pl",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cone"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Disorienting Wail",
+          "Vertigo Tone"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Resisted by Fortitude; Dazed, Stunned, Incapacitated",
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Deafening Roar"
+        ],
+        "effect": "Affliction",
+        "range": "Close",
+        "rank": "pl",
+        "detail": "Resisted by Fortitude; Impaired, Disabled, Unaware",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "to hearing"
+          }
+        ],
+        "weight": 1
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Vibrating Shield"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "extras": [
+          {
+            "name": "Sustained"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Sonic Glide"
+        ],
+        "effect": "Flight",
+        "rank": "3..pl/2+2",
+        "weight": 2
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Sound Immunity"
+        ],
+        "effect": "Immunity",
+        "rank": "5",
+        "detail": "Sonic effects",
+        "weight": 3
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Voice Mimicry"
+        ],
+        "effect": "Feature",
+        "rank": "1",
+        "detail": "Perfectly mimic any sound",
+        "weight": 2
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Echolocation",
+          "Sonar"
+        ],
+        "effect": "Senses",
+        "rank": "4",
+        "detail": "Accurate hearing, Extended hearing, Ultrahearing",
+        "weight": 4
+      }
+    ]
+  },
+  {
+    "id": "gravity",
+    "name": "Gravity",
+    "color": "#7a63c9",
+    "attack_skill": "Gravity Powers",
+    "descriptors": [
+      "gravity",
+      "mass",
+      "graviton"
+    ],
+    "origin_hint": "a collapsed-star fragment, a graviton reactor meltdown, or a singularity bonded to the soul",
+    "environment": "Space",
+    "weakness": [
+      "zero-g confusion",
+      "magnetic shielding"
+    ],
+    "codename": {
+      "words": [
+        "Graviton",
+        "Mass",
+        "Event Horizon",
+        "Singularity",
+        "Pulsar",
+        "Heavyweight",
+        "Orbit",
+        "Terminal Velocity",
+        "Collapse",
+        "Neutron"
+      ],
+      "adjectives": [
+        "Crushing",
+        "Heavy",
+        "Dense",
+        "Falling",
+        "Dark"
+      ]
+    },
+    "costume": [
+      "violet and black",
+      "deep purple with orbit rings",
+      "gunmetal and indigo"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Gravity Crush",
+          "Mass Spike",
+          "Graviton Beam"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 4
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Pin Down",
+          "Heavy Gravity"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "pl",
+        "detail": "Resisted by Fortitude; Hindered and Vulnerable, Defenseless and Immobile",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          },
+          {
+            "name": "Extra Condition"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited Degree"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "control",
+        "names": [
+          "Telekinetic Gravity",
+          "Gravity Well"
+        ],
+        "effect": "Move Object",
+        "range": "Ranged",
+        "rank": "pl/2..pl",
+        "weight": 4
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Implosion"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "pl",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Gravity Field",
+          "Distortion Shield"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "extras": [
+          {
+            "name": "Sustained"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Gravity Flight",
+          "Fall Upward"
+        ],
+        "effect": "Flight",
+        "rank": "pl/2..pl/2+4",
+        "weight": 5
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Increase Density"
+        ],
+        "effect": "Enhanced Trait",
+        "option": "Strength",
+        "rank": "2..4",
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "to lifting and resisting movement"
+          }
+        ],
+        "weight": 1
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Feel Mass"
+        ],
+        "effect": "Senses",
+        "rank": "2",
+        "detail": "Detect Mass (ranged)",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "magnetism",
+    "name": "Magnetism",
+    "color": "#c0404a",
+    "attack_skill": "Magnetic Powers",
+    "descriptors": [
+      "magnetism",
+      "metal",
+      "electromagnetic"
+    ],
+    "origin_hint": "an iron-blooded mutation, a particle accelerator surge, or a magnetar fragment",
+    "environment": "Urban",
+    "weakness": [
+      "non-metal foes",
+      "wood and plastic"
+    ],
+    "codename": {
+      "words": [
+        "Magnetar",
+        "Lodestone",
+        "Polarity",
+        "Flux",
+        "Iron Will",
+        "Attractor",
+        "Ferro",
+        "Repulse",
+        "Magnus",
+        "Field"
+      ],
+      "adjectives": [
+        "Iron",
+        "Steel",
+        "Magnetic",
+        "Red",
+        "Polar"
+      ]
+    },
+    "costume": [
+      "red and purple",
+      "steel gray with red field lines",
+      "crimson with a magnetic sigil"
+    ],
+    "powers": [
+      {
+        "role": "control",
+        "names": [
+          "Magnetic Control",
+          "Metal Mastery"
+        ],
+        "effect": "Move Object",
+        "range": "Ranged",
+        "rank": "pl..pl+3",
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "to metal"
+          }
+        ],
+        "weight": 5
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Magnetic Blast",
+          "Shrapnel Storm",
+          "Rail Shot"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 4
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Steel Bonds",
+          "Metal Cage"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Resisted by Dodge, overcome by Damage; Hindered and Vulnerable, Defenseless and Immobile",
+        "extras": [
+          {
+            "name": "Cumulative"
+          },
+          {
+            "name": "Extra Condition"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited Degree"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Electromagnetic Pulse"
+        ],
+        "effect": "Nullify",
+        "range": "Ranged",
+        "rank": "pl/2..pl",
+        "detail": "Electronics",
+        "extras": [
+          {
+            "name": "Broad"
+          }
+        ],
+        "weight": 1
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Magnetic Shield",
+          "Repulsor Field"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "extras": [
+          {
+            "name": "Sustained"
+          }
+        ],
+        "weight": 4
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Magnetic Levitation",
+          "Ride the Field Lines"
+        ],
+        "effect": "Flight",
+        "rank": "pl/2..pl/2+4",
+        "weight": 5
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Magnetic Sense"
+        ],
+        "effect": "Senses",
+        "rank": "3",
+        "detail": "Detect Metal (ranged), Direction Sense",
+        "weight": 3
+      }
+    ]
+  },
+  {
+    "id": "cosmic",
+    "name": "Cosmic Energy",
+    "color": "#3fbf7f",
+    "attack_skill": "Energy Constructs",
+    "descriptors": [
+      "cosmic",
+      "energy",
+      "willpower"
+    ],
+    "origin_hint": "a power ring chosen by an alien Corps, a cosmic storm, or a dying alien's gift",
+    "environment": "Space",
+    "weakness": [
+      "a color or element the energy can't affect",
+      "losing focus or faith"
+    ],
+    "codename": {
+      "words": [
+        "Nova",
+        "Quasar",
+        "Starfire",
+        "Comet",
+        "Nebula",
+        "Supernova",
+        "Galaxy",
+        "Starlight",
+        "Zenith",
+        "Corona",
+        "Cosmos",
+        "Orion"
+      ],
+      "adjectives": [
+        "Cosmic",
+        "Stellar",
+        "Emerald",
+        "Star",
+        "Astral"
+      ]
+    },
+    "costume": [
+      "green and black",
+      "starfield blue with silver",
+      "violet and white with a chest emblem"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Cosmic Blast",
+          "Energy Beam",
+          "Star Bolt",
+          "Ring Beam"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 5
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Energy Cage",
+          "Construct Bonds"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Resisted by Dodge, overcome by Damage; Hindered and Vulnerable, Defenseless and Immobile",
+        "extras": [
+          {
+            "name": "Cumulative"
+          },
+          {
+            "name": "Extra Condition"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited Degree"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Energy Burst",
+          "Starburst"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "pl",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "control",
+        "names": [
+          "Energy Constructs",
+          "Will-Shaped Constructs"
+        ],
+        "effect": "Create",
+        "rank": "pl/2..pl",
+        "extras": [
+          {
+            "name": "Movable"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "control",
+        "names": [
+          "Energy Grip",
+          "Tractor Beam"
+        ],
+        "effect": "Move Object",
+        "range": "Ranged",
+        "rank": "pl/2..pl",
+        "weight": 2
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Force Field",
+          "Energy Aura Shield"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "extras": [
+          {
+            "name": "Sustained"
+          }
+        ],
+        "weight": 5
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Cosmic Flight",
+          "Star Flight"
+        ],
+        "effect": "Flight",
+        "rank": "pl/2+1..pl/2+6",
+        "weight": 6
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Space Travel"
+        ],
+        "effect": "Movement",
+        "rank": "1",
+        "detail": "Space Travel",
+        "weight": 2
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Life Support Field"
+        ],
+        "effect": "Immunity",
+        "rank": "10",
+        "detail": "Life Support",
+        "weight": 4
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Universal Translator"
+        ],
+        "effect": "Comprehend",
+        "rank": "2",
+        "detail": "Languages (understand and be understood)",
+        "weight": 2
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Cosmic Awareness"
+        ],
+        "effect": "Senses",
+        "rank": "2",
+        "detail": "Cosmic Awareness (detect cosmic energy, ranged)",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "magic",
+    "name": "Sorcery",
+    "color": "#9b59d0",
+    "attack_skill": "Spellcasting",
+    "descriptors": [
+      "magic",
+      "mystic",
+      "arcane"
+    ],
+    "origin_hint": "years of study under a mysterious master, a demon's bargain, or a bloodline of witches",
+    "environment": "Mystic Realms",
+    "weakness": [
+      "being gagged or bound",
+      "cold iron",
+      "a true name"
+    ],
+    "codename": {
+      "words": [
+        "Hex",
+        "Sigil",
+        "Arcana",
+        "Grimoire",
+        "Mystic",
+        "Warlock",
+        "Enchantress",
+        "Rune",
+        "Seer",
+        "Conjurer",
+        "Spellbinder",
+        "Oracle"
+      ],
+      "adjectives": [
+        "Doctor",
+        "Lady",
+        "Mister",
+        "Mystic",
+        "Eldritch",
+        "Crimson"
+      ]
+    },
+    "costume": [
+      "robes of midnight blue and gold",
+      "a high-collared cape and amulet",
+      "violet and black with runes"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Mystic Bolt",
+          "Eldritch Blast",
+          "Bolts of the Ninth Seal"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 4
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Binding Spell",
+          "Crimson Bands"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Resisted by Dodge, overcome by Damage; Hindered and Vulnerable, Defenseless and Immobile",
+        "extras": [
+          {
+            "name": "Cumulative"
+          },
+          {
+            "name": "Extra Condition"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited Degree"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Sleep Spell",
+          "Hypnotic Glamour"
+        ],
+        "effect": "Affliction",
+        "range": "Perception",
+        "rank": "pl",
+        "detail": "Resisted by Will; Dazed, Stunned, Asleep",
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Banishment",
+          "Dispel Magic"
+        ],
+        "effect": "Nullify",
+        "range": "Ranged",
+        "rank": "pl/2..pl",
+        "detail": "Magic",
+        "extras": [
+          {
+            "name": "Broad"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "control",
+        "names": [
+          "Illusions",
+          "Phantasms"
+        ],
+        "effect": "Illusion",
+        "option": "All sense types",
+        "rank": "pl/2..pl-2",
+        "weight": 2
+      },
+      {
+        "role": "control",
+        "names": [
+          "Transmutation"
+        ],
+        "effect": "Transform",
+        "option": "Broad group into one result, or one into a broad group",
+        "rank": "3..pl/2+2",
+        "weight": 1
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Mystic Shield",
+          "Shield of Seraphim"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "extras": [
+          {
+            "name": "Sustained"
+          }
+        ],
+        "weight": 4
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Levitation",
+          "Mystic Flight"
+        ],
+        "effect": "Flight",
+        "rank": "3..pl/2+2",
+        "weight": 3
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Teleportation Spell",
+          "Step Between Realms"
+        ],
+        "effect": "Teleport",
+        "rank": "pl/2..pl",
+        "extras": [
+          {
+            "name": "Extended"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Mystic Awareness",
+          "Second Sight"
+        ],
+        "effect": "Senses",
+        "rank": "3",
+        "detail": "Magical Awareness, Detect Magic (ranged)",
+        "weight": 4
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Scrying"
+        ],
+        "effect": "Remote Sensing",
+        "option": "Two sense types",
+        "rank": "pl/2..pl",
+        "detail": "Visual and auditory",
+        "flaws": [
+          {
+            "name": "Concentration"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Tongues"
+        ],
+        "effect": "Comprehend",
+        "rank": "2",
+        "detail": "Languages",
+        "weight": 1
+      }
+    ]
+  },
+  {
+    "id": "psychic",
+    "name": "Psychic",
+    "color": "#e070c0",
+    "attack_skill": "Psychic Powers",
+    "descriptors": [
+      "psychic",
+      "mental",
+      "telekinetic"
+    ],
+    "origin_hint": "a dormant metagene, a government psi program, or contact with an alien mind",
+    "environment": "Urban",
+    "weakness": [
+      "psychic dampeners",
+      "crowds of minds",
+      "migraines"
+    ],
+    "codename": {
+      "words": [
+        "Mindwave",
+        "Psyche",
+        "Cortex",
+        "Synapse",
+        "Telos",
+        "Cipher",
+        "Mentalist",
+        "Prophet",
+        "Thought",
+        "Brainstorm",
+        "Psion",
+        "Echo"
+      ],
+      "adjectives": [
+        "Psychic",
+        "Silent",
+        "Third Eye",
+        "Violet",
+        "Mind"
+      ]
+    },
+    "costume": [
+      "lavender and white",
+      "black with a glowing forehead gem",
+      "pink and gray"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Psychic Blast",
+          "Mind Spike",
+          "Psi Bolt"
+        ],
+        "effect": "Damage",
+        "range": "Perception",
+        "rank": "pl",
+        "detail": "Resisted by Will",
+        "extras": [
+          {
+            "name": "Alternate Resistance",
+            "option": "Equivalent resistance"
+          }
+        ],
+        "weight": 4
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Mind Control",
+          "Puppet Strings"
+        ],
+        "effect": "Affliction",
+        "range": "Perception",
+        "rank": "pl",
+        "detail": "Resisted by Will; Dazed, Compelled, Controlled",
+        "extras": [
+          {
+            "name": "Cumulative"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Telekinetic Strike",
+          "Kinetic Push"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 3
+      },
+      {
+        "role": "control",
+        "names": [
+          "Telekinesis",
+          "Mind over Matter"
+        ],
+        "effect": "Move Object",
+        "range": "Ranged",
+        "rank": "pl/2..pl",
+        "weight": 4
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Telepathy",
+          "Read Thoughts"
+        ],
+        "effect": "Mind Reading",
+        "rank": "pl/2..pl",
+        "weight": 4
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Mental Link",
+          "Telepathic Speech"
+        ],
+        "effect": "Communication",
+        "rank": "1..3",
+        "detail": "Mental",
+        "weight": 3
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Telekinetic Shield",
+          "Psi Shield"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "extras": [
+          {
+            "name": "Sustained"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Mental Fortress"
+        ],
+        "effect": "Enhanced Trait",
+        "option": "Will",
+        "rank": "1..3",
+        "weight": 2
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Telekinetic Flight",
+          "Levitation"
+        ],
+        "effect": "Flight",
+        "rank": "3..pl/2+2",
+        "weight": 4
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Danger Sense",
+          "Precognitive Flash"
+        ],
+        "effect": "Senses",
+        "rank": "2",
+        "detail": "Danger Sense (mental), Precognition flash",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "strength",
+    "name": "Alien Physiology",
+    "color": "#d23b3b",
+    "attack_skill": "Superhuman Powers",
+    "descriptors": [
+      "alien",
+      "solar-powered",
+      "superhuman physiology"
+    ],
+    "origin_hint": "being the last child of a dead world, a sun that charges alien cells, or an Amazon's gift",
+    "environment": "Sunlit",
+    "weakness": [
+      "a glowing alien mineral",
+      "red sunlight",
+      "magic"
+    ],
+    "codename": {
+      "words": [
+        "Titan",
+        "Bastion",
+        "Sentinel",
+        "Vanguard",
+        "Bulwark",
+        "Rampart",
+        "Paragon",
+        "Herakles",
+        "Atlas",
+        "Champion",
+        "Goliath",
+        "Valiant"
+      ],
+      "adjectives": [
+        "Mighty",
+        "Steel",
+        "Captain",
+        "Iron",
+        "Invincible",
+        "Golden"
+      ]
+    },
+    "costume": [
+      "blue and red with a chest emblem",
+      "white and gold armor",
+      "black and silver"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Heat Vision",
+          "Eye Beams"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Thunderclap",
+          "Super-Breath Gust"
+        ],
+        "effect": "Affliction",
+        "range": "Close",
+        "rank": "pl",
+        "detail": "Resisted by Fortitude; Dazed, Stunned, Incapacitated",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cone"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Freezing Breath"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Resisted by Dodge, overcome by Damage; Hindered and Vulnerable, Defenseless and Immobile",
+        "extras": [
+          {
+            "name": "Cumulative"
+          },
+          {
+            "name": "Extra Condition"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited Degree"
+          }
+        ],
+        "weight": 1
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Invulnerability",
+          "Steel Skin"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ],
+        "weight": 5
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Flight"
+        ],
+        "effect": "Flight",
+        "rank": "pl/2+2..pl/2+6",
+        "weight": 6
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Mighty Leap"
+        ],
+        "effect": "Leaping",
+        "rank": "pl/2..pl",
+        "weight": 2
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Super-Strength Lifting"
+        ],
+        "effect": "Power-Lifting",
+        "rank": "2..pl/2",
+        "weight": 2
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Self-Sufficient"
+        ],
+        "effect": "Immunity",
+        "rank": "10",
+        "detail": "Life Support",
+        "weight": 3
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Super-Senses",
+          "X-Ray Vision"
+        ],
+        "effect": "Senses",
+        "rank": "4..8",
+        "detail": "Extended Vision, Microscopic Vision, Penetrates Concealment (not lead), Ultra-hearing",
+        "weight": 4
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Speed Burst"
+        ],
+        "effect": "Speed",
+        "rank": "4..pl/2+3",
+        "weight": 1
+      }
+    ]
+  },
+  {
+    "id": "speed",
+    "name": "Speed Force",
+    "color": "#f2a23a",
+    "attack_skill": "Speed Strikes",
+    "descriptors": [
+      "speed",
+      "kinetic",
+      "Speed Force"
+    ],
+    "origin_hint": "a lightning bolt into a shelf of chemicals, a stolen speed formula, or a link to the Speed Force",
+    "environment": "Urban",
+    "weakness": [
+      "friction and slick ground",
+      "running out of calories",
+      "time anomalies"
+    ],
+    "codename": {
+      "words": [
+        "Blur",
+        "Velocity",
+        "Quickstep",
+        "Mach",
+        "Dash",
+        "Sprint",
+        "Lightning",
+        "Rush",
+        "Jolt",
+        "Zip",
+        "Tachyon",
+        "Bolt"
+      ],
+      "adjectives": [
+        "Swift",
+        "Scarlet",
+        "Flash",
+        "Kid",
+        "Rapid",
+        "Fast"
+      ]
+    },
+    "costume": [
+      "red with lightning-bolt trim",
+      "yellow and maroon",
+      "blue and white with a visor"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Rapid Strikes",
+          "Thousand Punches",
+          "Blur Fists"
+        ],
+        "effect": "Damage",
+        "range": "Close",
+        "rank": "attack",
+        "strengthBased": true,
+        "extras": [
+          {
+            "name": "Multiattack"
+          }
+        ],
+        "weight": 5
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Whirlwind Arms",
+          "Speed Tornado"
+        ],
+        "effect": "Affliction",
+        "range": "Close",
+        "rank": "pl",
+        "detail": "Resisted by Fortitude; Dazed, Stunned, Incapacitated",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Infinite Mass Punch"
+        ],
+        "effect": "Damage",
+        "range": "Close",
+        "rank": "attack",
+        "strengthBased": true,
+        "weight": 1
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Super-Speed"
+        ],
+        "effect": "Speed",
+        "rank": "pl..pl+5",
+        "weight": 8
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Accelerated Mind",
+          "Quick Thinking"
+        ],
+        "effect": "Quickness",
+        "rank": "pl/2..pl",
+        "weight": 5
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Wall-Running and Water-Running"
+        ],
+        "effect": "Movement",
+        "rank": "2",
+        "detail": "Wall-crawling (at speed), Water-walking",
+        "weight": 4
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Speed Dodge"
+        ],
+        "effect": "Enhanced Trait",
+        "option": "Dodge",
+        "rank": "1..3",
+        "weight": 2
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Lightning Reflexes"
+        ],
+        "effect": "Enhanced Trait",
+        "option": "Improved Initiative",
+        "rank": "1..3",
+        "weight": 3
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Vibrate Through Walls"
+        ],
+        "effect": "Insubstantial",
+        "rank": "4",
+        "flaws": [
+          {
+            "name": "Concentration"
+          }
+        ],
+        "weight": 1
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Accelerated Healing"
+        ],
+        "effect": "Regeneration",
+        "rank": "2..pl/2",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "plant",
+    "name": "Plant & Life",
+    "color": "#5aa04a",
+    "attack_skill": "Plant Powers",
+    "descriptors": [
+      "plant",
+      "life",
+      "nature"
+    ],
+    "origin_hint": "a link to the Green, a botanist's own toxin, or a sacred grove's blessing",
+    "environment": "Forest",
+    "weakness": [
+      "fire",
+      "herbicide",
+      "darkness without sunlight"
+    ],
+    "codename": {
+      "words": [
+        "Thorn",
+        "Ivy",
+        "Briar",
+        "Bloom",
+        "Verdant",
+        "Oak",
+        "Willow",
+        "Bramble",
+        "Root",
+        "Hemlock",
+        "Moss",
+        "Rose"
+      ],
+      "adjectives": [
+        "Green",
+        "Wild",
+        "Poison",
+        "Living",
+        "Ancient"
+      ]
+    },
+    "costume": [
+      "green leaves and bark armor",
+      "emerald and brown",
+      "vines over earth tones"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Grasping Vines",
+          "Thorn Snare"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Resisted by Dodge, overcome by Damage; Hindered and Vulnerable, Defenseless and Immobile",
+        "extras": [
+          {
+            "name": "Cumulative"
+          },
+          {
+            "name": "Extra Condition"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited Degree"
+          }
+        ],
+        "weight": 4
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Thorn Volley",
+          "Razor Leaves"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Pollen Cloud",
+          "Spore Burst"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "pl",
+        "detail": "Resisted by Fortitude; Dazed, Stunned, Asleep",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cloud"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Pheromones"
+        ],
+        "effect": "Affliction",
+        "range": "Close",
+        "rank": "pl",
+        "detail": "Resisted by Will; Entranced, Compelled, Controlled",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Sense-Dependent",
+            "detail": "smell"
+          }
+        ],
+        "weight": 1
+      },
+      {
+        "role": "control",
+        "names": [
+          "Plant Control",
+          "Command the Green"
+        ],
+        "effect": "Move Object",
+        "range": "Ranged",
+        "rank": "pl/2..pl",
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "to plants"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "support",
+        "names": [
+          "Healing Touch",
+          "Life Bloom"
+        ],
+        "effect": "Healing",
+        "rank": "pl/2..pl",
+        "weight": 3
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Bark Skin"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "weight": 3
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Regrowth"
+        ],
+        "effect": "Regeneration",
+        "rank": "2..pl/2",
+        "weight": 2
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Talk to Plants"
+        ],
+        "effect": "Comprehend",
+        "rank": "1",
+        "detail": "Plants",
+        "weight": 2
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Vine Swing"
+        ],
+        "effect": "Movement",
+        "rank": "1",
+        "detail": "Swinging",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "animal",
+    "name": "Animal Totem",
+    "color": "#b8862c",
+    "attack_skill": "Natural Weapons",
+    "descriptors": [
+      "animal",
+      "bestial",
+      "totem"
+    ],
+    "origin_hint": "an ancient totem, gene-splicing with animal DNA, or a jungle upbringing",
+    "environment": "Jungle",
+    "weakness": [
+      "loud noises",
+      "strong scents",
+      "being caged"
+    ],
+    "codename": {
+      "words": [
+        "Badger",
+        "Jaguar",
+        "Talon",
+        "Panther",
+        "Hawk",
+        "Viper",
+        "Mantis",
+        "Lynx",
+        "Kodiak",
+        "Raptor",
+        "Wildcat",
+        "Fang"
+      ],
+      "adjectives": [
+        "Wild",
+        "Feral",
+        "Savage",
+        "Black",
+        "Silver"
+      ]
+    },
+    "costume": [
+      "tawny fur-trimmed leather",
+      "black with claw marks",
+      "green and gold with an animal mask"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Claws",
+          "Fangs and Claws",
+          "Talons"
+        ],
+        "effect": "Damage",
+        "range": "Close",
+        "rank": "attack",
+        "strengthBased": true,
+        "weight": 6
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Venom Bite"
+        ],
+        "effect": "Affliction",
+        "range": "Close",
+        "rank": "attack",
+        "detail": "Resisted by Fortitude; Dazed, Stunned, Paralyzed",
+        "extras": [
+          {
+            "name": "Progressive"
+          }
+        ],
+        "weight": 1
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Feral Roar"
+        ],
+        "effect": "Affliction",
+        "range": "Close",
+        "rank": "pl",
+        "detail": "Resisted by Will; Dazed, Stunned, Incapacitated",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cone"
+          }
+        ],
+        "weight": 1
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Animal Senses",
+          "Predator's Senses"
+        ],
+        "effect": "Senses",
+        "rank": "3..5",
+        "detail": "Acute and Tracking smell, Low-light Vision, Danger Sense",
+        "weight": 6
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Pounce",
+          "Great Leap"
+        ],
+        "effect": "Leaping",
+        "rank": "2..pl/2",
+        "weight": 3
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Wall-Crawling"
+        ],
+        "effect": "Movement",
+        "rank": "1",
+        "detail": "Wall-crawling",
+        "weight": 2
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Wings"
+        ],
+        "effect": "Flight",
+        "rank": "3..pl/2+2",
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Speak with Animals",
+          "Call of the Wild"
+        ],
+        "effect": "Comprehend",
+        "rank": "2",
+        "detail": "Animals",
+        "weight": 3
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Healing Factor"
+        ],
+        "effect": "Regeneration",
+        "rank": "3..pl",
+        "weight": 3
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Thick Hide"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "weight": 2
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Running Speed"
+        ],
+        "effect": "Speed",
+        "rank": "2..pl/2",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "size",
+    "name": "Size-Changing",
+    "color": "#4b8fd6",
+    "attack_skill": "Size Strikes",
+    "descriptors": [
+      "size",
+      "Pym particles",
+      "white dwarf matter"
+    ],
+    "origin_hint": "a white dwarf star fragment, size-altering particles, or a giant's bloodline",
+    "environment": "Urban",
+    "weakness": [
+      "unstable particles",
+      "tight spaces when big",
+      "being stepped on when small"
+    ],
+    "codename": {
+      "words": [
+        "Atom",
+        "Giant",
+        "Colossal",
+        "Micro",
+        "Titan",
+        "Ant",
+        "Mite",
+        "Goliath",
+        "Behemoth",
+        "Wasp",
+        "Tiny",
+        "Megaton"
+      ],
+      "adjectives": [
+        "Giant",
+        "Tiny",
+        "Mighty",
+        "Micro",
+        "Atomic"
+      ]
+    },
+    "costume": [
+      "red and blue",
+      "black and gold with a helmet",
+      "yellow and black stripes"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Giant Stomp",
+          "Titan Punch"
+        ],
+        "effect": "Damage",
+        "range": "Close",
+        "rank": "attack",
+        "strengthBased": true,
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Size Shift Strike",
+          "Atomic Punch"
+        ],
+        "effect": "Damage",
+        "range": "Close",
+        "rank": "attack",
+        "weight": 2
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Grow"
+        ],
+        "effect": "Growth",
+        "rank": "4..8",
+        "weight": 4
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Shrink"
+        ],
+        "effect": "Shrinking",
+        "rank": "8..16",
+        "extras": [
+          {
+            "name": "Normal Strength"
+          }
+        ],
+        "weight": 4
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Ride the Wind Currents"
+        ],
+        "effect": "Flight",
+        "rank": "2..4",
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "only while shrunk"
+          }
+        ],
+        "weight": 1
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Dense Body"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "weight": 3
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Micro-Vision"
+        ],
+        "effect": "Senses",
+        "rank": "1..3",
+        "detail": "Microscopic Vision",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "stretch",
+    "name": "Stretching & Elasticity",
+    "color": "#e3743c",
+    "attack_skill": "Elastic Strikes",
+    "descriptors": [
+      "elastic",
+      "stretching",
+      "malleable"
+    ],
+    "origin_hint": "a rare fruit extract, a chemical vat, or alien biology",
+    "environment": "Urban",
+    "weakness": [
+      "extreme cold that makes them brittle",
+      "heat that makes them melt"
+    ],
+    "codename": {
+      "words": [
+        "Plastic",
+        "Elastic",
+        "Stretch",
+        "Rubberband",
+        "Bounce",
+        "Flex",
+        "Elongated",
+        "Taffy",
+        "Slinky",
+        "Putty",
+        "Contortion"
+      ],
+      "adjectives": [
+        "Elastic",
+        "Plastic",
+        "Rubber",
+        "Amazing",
+        "Bendy"
+      ]
+    },
+    "costume": [
+      "red and yellow with goggles",
+      "purple and green",
+      "white and blue"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Long-Range Punch",
+          "Slingshot Fist"
+        ],
+        "effect": "Damage",
+        "range": "Close",
+        "rank": "attack",
+        "strengthBased": true,
+        "extras": [
+          {
+            "name": "Reach",
+            "steps": 4
+          }
+        ],
+        "weight": 4
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Elastic Wrap",
+          "Constrictor Coils"
+        ],
+        "effect": "Affliction",
+        "range": "Close",
+        "rank": "attack",
+        "detail": "Resisted by Dodge, overcome by Damage; Hindered and Vulnerable, Defenseless and Immobile",
+        "extras": [
+          {
+            "name": "Cumulative"
+          },
+          {
+            "name": "Extra Condition"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited Degree"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Stretching",
+          "Elastic Body"
+        ],
+        "effect": "Elongation",
+        "rank": "pl/2..pl",
+        "weight": 7
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Rubbery Body"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "to bludgeoning damage"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Bend Around Blows"
+        ],
+        "effect": "Enhanced Trait",
+        "option": "Dodge",
+        "rank": "1..3",
+        "weight": 2
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Shape Body",
+          "Mimic Shapes"
+        ],
+        "effect": "Morph",
+        "rank": "1..2",
+        "detail": "Simple objects and disguises",
+        "weight": 3
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Bounding Stride"
+        ],
+        "effect": "Leaping",
+        "rank": "2..pl/2",
+        "weight": 2
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Squeeze Through Cracks"
+        ],
+        "effect": "Movement",
+        "rank": "1",
+        "detail": "Slithering",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "shapeshift",
+    "name": "Shapeshifting",
+    "color": "#2fa39b",
+    "attack_skill": "Shifted Forms",
+    "descriptors": [
+      "shapeshifting",
+      "biological",
+      "chimeric"
+    ],
+    "origin_hint": "a Martian heritage, a disease from a strange jungle, or a mutagen that never stopped working",
+    "environment": "Any",
+    "weakness": [
+      "fire",
+      "electric shocks that lock the form",
+      "losing track of their real face"
+    ],
+    "codename": {
+      "words": [
+        "Changeling",
+        "Chimera",
+        "Mimic",
+        "Myriad",
+        "Proteus",
+        "Skinwalker",
+        "Doppel",
+        "Shifter",
+        "Legion",
+        "Facade",
+        "Morph"
+      ],
+      "adjectives": [
+        "Many-Faced",
+        "Strange",
+        "Shifting",
+        "Beast",
+        "Green"
+      ]
+    },
+    "costume": [
+      "simple green-and-purple uniform",
+      "a uniform that changes with them",
+      "plain black bodysuit"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Shifted Claws",
+          "Bestial Attack"
+        ],
+        "effect": "Damage",
+        "range": "Close",
+        "rank": "attack",
+        "strengthBased": true,
+        "weight": 4
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Constricting Coils"
+        ],
+        "effect": "Affliction",
+        "range": "Close",
+        "rank": "attack",
+        "detail": "Resisted by Dodge, overcome by Damage; Hindered and Vulnerable, Defenseless and Immobile",
+        "extras": [
+          {
+            "name": "Cumulative"
+          },
+          {
+            "name": "Extra Condition"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited Degree"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Shapechange",
+          "Animal Forms"
+        ],
+        "effect": "Variable",
+        "rank": "1..pl/3",
+        "detail": "Animal and creature forms",
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "to animal traits"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Disguise Form",
+          "Face-Shift"
+        ],
+        "effect": "Morph",
+        "rank": "2..4",
+        "detail": "Any humanoid",
+        "weight": 5
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Grow Wings"
+        ],
+        "effect": "Flight",
+        "rank": "3..pl/2+2",
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Gills and Fins"
+        ],
+        "effect": "Swimming",
+        "rank": "3..pl/2+2",
+        "weight": 1
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Malleable Body"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "weight": 3
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Re-form Tissue"
+        ],
+        "effect": "Regeneration",
+        "rank": "3..pl",
+        "weight": 3
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Shifted Senses"
+        ],
+        "effect": "Senses",
+        "rank": "2..3",
+        "detail": "Low-light Vision, Acute smell",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "tech",
+    "name": "Super-Science",
+    "color": "#3c9ad6",
+    "attack_skill": "Tech Weapons",
+    "descriptors": [
+      "technology",
+      "super-science",
+      "power armor"
+    ],
+    "origin_hint": "a genius invention, a stolen corporate prototype, or reverse-engineered alien tech",
+    "environment": "Urban",
+    "weakness": [
+      "EMP",
+      "power drain",
+      "hacking"
+    ],
+    "codename": {
+      "words": [
+        "Steel",
+        "Ironclad",
+        "Cyborg",
+        "Circuit",
+        "Mecha",
+        "Vector",
+        "Kilowatt",
+        "Gizmo",
+        "Overclock",
+        "Rivet",
+        "Firewall",
+        "Torque"
+      ],
+      "adjectives": [
+        "Iron",
+        "Cyber",
+        "Steel",
+        "Chrome",
+        "Mark VII",
+        "Titanium"
+      ]
+    },
+    "costume": [
+      "red and silver armor",
+      "blue-gray plating with glowing lights",
+      "black tactical armor"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Repulsor Blast",
+          "Pulse Cannon",
+          "Arm Laser"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 5
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Micro-Missiles",
+          "Missile Salvo"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "pl",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Stun Field",
+          "Shock Gauntlets"
+        ],
+        "effect": "Affliction",
+        "range": "Close",
+        "rank": "attack",
+        "detail": "Resisted by Fortitude; Dazed, Stunned, Incapacitated",
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Tangle Net",
+          "Foam Launcher"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Resisted by Dodge, overcome by Damage; Hindered and Vulnerable, Defenseless and Immobile",
+        "extras": [
+          {
+            "name": "Cumulative"
+          },
+          {
+            "name": "Extra Condition"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited Degree"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Armor Plating",
+          "Polymer Shell"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "weight": 5
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Jet Boots",
+          "Rocket Pack",
+          "Thruster Array"
+        ],
+        "effect": "Flight",
+        "rank": "pl/2..pl/2+4",
+        "weight": 6
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Sealed Systems"
+        ],
+        "effect": "Immunity",
+        "rank": "10",
+        "detail": "Life Support",
+        "weight": 4
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Servo-Strength"
+        ],
+        "effect": "Enhanced Trait",
+        "option": "Strength",
+        "rank": "2..pl/2+2",
+        "weight": 3
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Sensor Suite",
+          "HUD"
+        ],
+        "effect": "Senses",
+        "rank": "4..6",
+        "detail": "Radio, Infravision, Darkvision, Extended Vision, Radar",
+        "weight": 5
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Comm Link"
+        ],
+        "effect": "Communication",
+        "rank": "2..3",
+        "detail": "Radio",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "arsenal",
+    "name": "Trick Arsenal",
+    "color": "#6c8f3a",
+    "attack_skill": "Trick Weapons",
+    "descriptors": [
+      "weapons",
+      "gadgets",
+      "archery"
+    ],
+    "origin_hint": "a stranded island survival story, military training, or a family of assassins",
+    "environment": "Urban",
+    "weakness": [
+      "running out of ammunition",
+      "losing the weapon"
+    ],
+    "codename": {
+      "words": [
+        "Arrow",
+        "Pinpoint",
+        "Snapshot",
+        "Quiver",
+        "Longbow",
+        "Ricochet",
+        "Crossfire",
+        "Sniper",
+        "Boomerang",
+        "Fletcher",
+        "Marksman",
+        "Trickshot"
+      ],
+      "adjectives": [
+        "Green",
+        "Red",
+        "Speedy",
+        "Silver",
+        "Captain"
+      ]
+    },
+    "costume": [
+      "hooded green and black",
+      "red with a quiver",
+      "tactical gray with a domino mask"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Trick Arrows",
+          "Signature Weapon",
+          "Quiver"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 6
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Explosive Arrow",
+          "Grenade Round"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "pl",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Net Arrow",
+          "Bola"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Resisted by Dodge, overcome by Damage; Hindered and Vulnerable, Defenseless and Immobile",
+        "extras": [
+          {
+            "name": "Cumulative"
+          },
+          {
+            "name": "Extra Condition"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited Degree"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Flash Arrow",
+          "Flashbang"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "pl",
+        "detail": "Resisted by Fortitude; Impaired, Disabled, Unaware",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited",
+            "detail": "to vision"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Knockout Gas Arrow"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "pl",
+        "detail": "Resisted by Fortitude; Dazed, Stunned, Asleep",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cloud"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Ricochet Shot"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "extras": [
+          {
+            "name": "Ricochet"
+          },
+          {
+            "name": "Indirect"
+          }
+        ],
+        "weight": 1
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Grapple Line",
+          "Zip Line"
+        ],
+        "effect": "Movement",
+        "rank": "1",
+        "detail": "Swinging",
+        "weight": 4
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Targeting Lenses"
+        ],
+        "effect": "Senses",
+        "rank": "1..2",
+        "detail": "Extended Vision",
+        "weight": 1
+      }
+    ]
+  },
+  {
+    "id": "martial",
+    "name": "Martial Arts & Ki",
+    "color": "#c03a2b",
+    "attack_skill": "Unarmed",
+    "descriptors": [
+      "martial arts",
+      "ki",
+      "discipline"
+    ],
+    "origin_hint": "years in a mountain monastery, a League of assassins, or a family of fighters",
+    "environment": "Urban",
+    "weakness": [
+      "broken focus",
+      "an old rival who knows every move"
+    ],
+    "codename": {
+      "words": [
+        "Lotus",
+        "Dragon",
+        "Tiger",
+        "Crane",
+        "Cobra",
+        "Monk",
+        "Shuriken",
+        "Katana",
+        "Ronin",
+        "Silk",
+        "Bronze Fist",
+        "Mantis"
+      ],
+      "adjectives": [
+        "Silent",
+        "Iron",
+        "Jade",
+        "Golden",
+        "Shadow"
+      ]
+    },
+    "costume": [
+      "black gi with a red sash",
+      "green silk",
+      "bronze and black with a mask"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Ki Strike",
+          "Dragon Fist",
+          "Pressure-Point Strike"
+        ],
+        "effect": "Affliction",
+        "range": "Close",
+        "rank": "attack",
+        "detail": "Resisted by Fortitude; Dazed, Stunned, Incapacitated",
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Chi Blast"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 1
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Iron Body"
+        ],
+        "effect": "Enhanced Trait",
+        "option": "Fortitude",
+        "rank": "1..3",
+        "weight": 2
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Danger Sense"
+        ],
+        "effect": "Senses",
+        "rank": "1",
+        "detail": "Danger Sense",
+        "weight": 3
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Meditation"
+        ],
+        "effect": "Immunity",
+        "rank": "1..2",
+        "detail": "Need for sleep, starvation and thirst",
+        "weight": 1
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Wall-Running"
+        ],
+        "effect": "Movement",
+        "rank": "1",
+        "detail": "Wall-crawling (while moving)",
+        "weight": 2
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Mountain Leap"
+        ],
+        "effect": "Leaping",
+        "rank": "1..3",
+        "weight": 1
+      }
+    ]
+  },
+  {
+    "id": "radiation",
+    "name": "Radiation",
+    "color": "#86d32c",
+    "attack_skill": "Radiation Powers",
+    "descriptors": [
+      "radiation",
+      "nuclear",
+      "atomic"
+    ],
+    "origin_hint": "a reactor meltdown, a fused-together physicist, or gamma exposure",
+    "environment": "Wasteland",
+    "weakness": [
+      "lead shielding",
+      "being contained"
+    ],
+    "codename": {
+      "words": [
+        "Fission",
+        "Isotope",
+        "Meltdown",
+        "Neutron",
+        "Gamma",
+        "Fallout",
+        "Reactor",
+        "Half-Life",
+        "Rad",
+        "Fusion",
+        "Core",
+        "Critical"
+      ],
+      "adjectives": [
+        "Nuclear",
+        "Atomic",
+        "Glowing",
+        "Radioactive",
+        "Captain"
+      ]
+    },
+    "costume": [
+      "silver and green with hazard markings",
+      "orange and yellow",
+      "lead-gray containment suit"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Radiation Blast",
+          "Nuclear Beam",
+          "Gamma Ray"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 5
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Radiation Sickness"
+        ],
+        "effect": "Weaken",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Stamina; resisted by Fortitude",
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Nuclear Pulse",
+          "Fallout Burst"
+        ],
+        "effect": "Damage",
+        "range": "Close",
+        "rank": "pl",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "control",
+        "names": [
+          "Transmute Matter"
+        ],
+        "effect": "Transform",
+        "option": "Broad group into broad group",
+        "rank": "2..pl/2",
+        "detail": "Inanimate matter",
+        "weight": 1
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Atomic Shield",
+          "Radiation Aura"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "extras": [
+          {
+            "name": "Sustained"
+          }
+        ],
+        "weight": 4
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Atomic Flight",
+          "Nuclear Thrust"
+        ],
+        "effect": "Flight",
+        "rank": "pl/2..pl/2+4",
+        "weight": 5
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Radiation Immunity"
+        ],
+        "effect": "Immunity",
+        "rank": "10",
+        "detail": "Radiation effects",
+        "weight": 4
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Detect Radiation"
+        ],
+        "effect": "Senses",
+        "rank": "2",
+        "detail": "Detect Radiation (ranged)",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "chaos",
+    "name": "Chaos & Probability",
+    "color": "#d84a8c",
+    "attack_skill": "Hexes",
+    "descriptors": [
+      "luck",
+      "probability",
+      "chaos"
+    ],
+    "origin_hint": "a cursed coin, a jinx from a witch, or a broken quantum computer",
+    "environment": "Casino",
+    "weakness": [
+      "luck that backfires",
+      "strict order and routine"
+    ],
+    "codename": {
+      "words": [
+        "Jinx",
+        "Lady Luck",
+        "Gambit",
+        "Wildcard",
+        "Domino",
+        "Hex",
+        "Ace",
+        "Joker",
+        "Fortune",
+        "Snake Eyes",
+        "Lucky",
+        "Karma"
+      ],
+      "adjectives": [
+        "Lucky",
+        "Unlucky",
+        "Black Cat",
+        "Wild",
+        "Loaded"
+      ]
+    },
+    "costume": [
+      "black and white diamonds",
+      "purple and gold with a card motif",
+      "pink and black"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Hex Bolt",
+          "Bad Luck Blast",
+          "Jinx"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Misfortune",
+          "Curse of Clumsiness"
+        ],
+        "effect": "Affliction",
+        "range": "Perception",
+        "rank": "pl",
+        "detail": "Resisted by Will; Impaired, Disabled, Incapacitated",
+        "weight": 3
+      },
+      {
+        "role": "control",
+        "names": [
+          "Probability Control",
+          "Twist Fate"
+        ],
+        "effect": "Luck Control",
+        "rank": "1..3",
+        "weight": 5
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Lucky Break"
+        ],
+        "effect": "Enhanced Trait",
+        "option": "Dodge",
+        "rank": "2..4",
+        "weight": 3
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Improbable Escape"
+        ],
+        "effect": "Protection",
+        "rank": "toughness",
+        "extras": [
+          {
+            "name": "Sustained"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Unreliable"
+          }
+        ],
+        "weight": 1
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Charmed Life"
+        ],
+        "effect": "Enhanced Trait",
+        "option": "Luck",
+        "rank": "1..2",
+        "weight": 2
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Danger Sense"
+        ],
+        "effect": "Senses",
+        "rank": "1",
+        "detail": "Danger Sense",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "time",
+    "name": "Time",
+    "color": "#4d6fd1",
+    "attack_skill": "Chrono Powers",
+    "descriptors": [
+      "time",
+      "temporal",
+      "chronal"
+    ],
+    "origin_hint": "being displaced from the 30th century, a broken time machine, or a stolen hourglass",
+    "environment": "Any",
+    "weakness": [
+      "paradoxes",
+      "being cut off from their timeline"
+    ],
+    "codename": {
+      "words": [
+        "Chrono",
+        "Hourglass",
+        "Tempo",
+        "Epoch",
+        "Paradox",
+        "Rewind",
+        "Tick-Tock",
+        "Clockwork",
+        "Eon",
+        "Tachyon",
+        "Sundial"
+      ],
+      "adjectives": [
+        "Temporal",
+        "Eternal",
+        "Future",
+        "Lost",
+        "Waverider"
+      ]
+    },
+    "costume": [
+      "bronze and blue with clock gears",
+      "white and gold future-tech",
+      "black with a glowing hourglass"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Time Freeze",
+          "Stasis Field"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Resisted by Will; Hindered, Stunned, Paralyzed",
+        "weight": 4
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Chrono Blast",
+          "Aging Ray"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Time Slip",
+          "Stop the Clock"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "pl",
+        "detail": "Resisted by Will; Hindered, Stunned, Paralyzed",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Accelerate Self",
+          "Personal Time Bubble"
+        ],
+        "effect": "Quickness",
+        "rank": "pl/2..pl",
+        "weight": 3
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Time Hop",
+          "Blink Forward"
+        ],
+        "effect": "Teleport",
+        "rank": "2..pl/2",
+        "weight": 3
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Time Travel"
+        ],
+        "effect": "Movement",
+        "rank": "1..3",
+        "detail": "Time Travel",
+        "weight": 2
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Postcognition",
+          "Precognition"
+        ],
+        "effect": "Senses",
+        "rank": "4",
+        "detail": "Postcognition, Danger Sense",
+        "weight": 3
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Foresight"
+        ],
+        "effect": "Enhanced Trait",
+        "option": "Dodge",
+        "rank": "1..3",
+        "weight": 2
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Out of Time"
+        ],
+        "effect": "Immunity",
+        "rank": "1",
+        "detail": "Aging",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "space",
+    "name": "Teleportation & Portals",
+    "color": "#2fb7c4",
+    "attack_skill": "Portals",
+    "descriptors": [
+      "teleportation",
+      "spatial",
+      "dimensional"
+    ],
+    "origin_hint": "a boom-tube accident, a mutant gate gene, or a dimensional crossroads",
+    "environment": "Any",
+    "weakness": [
+      "unfamiliar destinations",
+      "spatial anchors"
+    ],
+    "codename": {
+      "words": [
+        "Blink",
+        "Gateway",
+        "Portal",
+        "Jumper",
+        "Warp",
+        "Vanish",
+        "Waypoint",
+        "Rift",
+        "Shift",
+        "Displacer",
+        "Boom"
+      ],
+      "adjectives": [
+        "Phase",
+        "Quantum",
+        "Lost",
+        "Sudden",
+        "Dimensional"
+      ]
+    },
+    "costume": [
+      "teal and black with portal rings",
+      "white and purple",
+      "gray with blue light lines"
+    ],
+    "powers": [
+      {
+        "role": "movement",
+        "names": [
+          "Teleport",
+          "Blink"
+        ],
+        "effect": "Teleport",
+        "rank": "pl/2..pl+2",
+        "extras": [
+          {
+            "name": "Extended"
+          }
+        ],
+        "weight": 8
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Displacement Strike",
+          "Teleport Tag"
+        ],
+        "effect": "Affliction",
+        "range": "Close",
+        "rank": "attack",
+        "detail": "Resisted by Dodge; Hindered, Prone, Transported",
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Portal Punch",
+          "Wormhole Jab"
+        ],
+        "effect": "Damage",
+        "range": "Close",
+        "rank": "attack",
+        "strengthBased": true,
+        "extras": [
+          {
+            "name": "Reach",
+            "steps": 6
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Banish to Nowhere"
+        ],
+        "effect": "Affliction",
+        "range": "Ranged",
+        "rank": "attack",
+        "detail": "Resisted by Will; Hindered, Stunned, Banished",
+        "weight": 1
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Open Portal"
+        ],
+        "effect": "Teleport",
+        "rank": "pl/2..pl",
+        "extras": [
+          {
+            "name": "Portal"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Blink Dodge"
+        ],
+        "effect": "Enhanced Trait",
+        "option": "Dodge",
+        "rank": "2..4",
+        "weight": 4
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Spatial Awareness"
+        ],
+        "effect": "Senses",
+        "rank": "1..2",
+        "detail": "Direction Sense, Distance Sense",
+        "weight": 3
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Dimensional Travel"
+        ],
+        "effect": "Movement",
+        "rank": "1..2",
+        "detail": "Dimensional Travel",
+        "weight": 2
+      }
+    ]
+  },
+  {
+    "id": "death",
+    "name": "Death & Necromancy",
+    "color": "#7f8c8d",
+    "attack_skill": "Necromancy",
+    "descriptors": [
+      "death",
+      "necromantic",
+      "spectral"
+    ],
+    "origin_hint": "a return from the grave, a deal with a lord of the dead, or a haunted bloodline",
+    "environment": "Graveyard",
+    "weakness": [
+      "holy places",
+      "the living's warmth",
+      "salt"
+    ],
+    "codename": {
+      "words": [
+        "Reaper",
+        "Specter",
+        "Revenant",
+        "Grave",
+        "Wailer",
+        "Mortis",
+        "Lich",
+        "Deadman",
+        "Requiem",
+        "Wight",
+        "Ghost",
+        "Crypt"
+      ],
+      "adjectives": [
+        "Pale",
+        "Grim",
+        "Hollow",
+        "Dead",
+        "Ghostly"
+      ]
+    },
+    "costume": [
+      "bone white and black",
+      "gray shroud and hood",
+      "deep green with a skull motif"
+    ],
+    "powers": [
+      {
+        "role": "attack",
+        "names": [
+          "Death Touch",
+          "Life Drain"
+        ],
+        "effect": "Weaken",
+        "range": "Close",
+        "rank": "attack",
+        "detail": "Stamina; resisted by Fortitude",
+        "weight": 4
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Soul Bolt",
+          "Necrotic Blast"
+        ],
+        "effect": "Damage",
+        "range": "Ranged",
+        "rank": "attack",
+        "weight": 3
+      },
+      {
+        "role": "attack",
+        "names": [
+          "Terror",
+          "Visage of Death"
+        ],
+        "effect": "Affliction",
+        "range": "Perception",
+        "rank": "pl",
+        "detail": "Resisted by Will; Dazed, Compelled (flee), Controlled (cower)",
+        "weight": 3
+      },
+      {
+        "role": "control",
+        "names": [
+          "Raise the Dead",
+          "Grave Servants"
+        ],
+        "effect": "Summon",
+        "rank": "2..pl/2",
+        "detail": "Zombies",
+        "extras": [
+          {
+            "name": "Multiple Minions",
+            "steps": 2
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "role": "defense",
+        "names": [
+          "Ghost Form",
+          "Spectral Body"
+        ],
+        "effect": "Insubstantial",
+        "rank": "4",
+        "weight": 4
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Deathless"
+        ],
+        "effect": "Immortality",
+        "rank": "2..5",
+        "weight": 3
+      },
+      {
+        "role": "utility",
+        "names": [
+          "Undead Nature"
+        ],
+        "effect": "Immunity",
+        "rank": "10",
+        "detail": "Life Support",
+        "weight": 2
+      },
+      {
+        "role": "sense",
+        "names": [
+          "Speak with the Dead"
+        ],
+        "effect": "Comprehend",
+        "rank": "2",
+        "detail": "Spirits",
+        "weight": 2
+      },
+      {
+        "role": "movement",
+        "names": [
+          "Drift"
+        ],
+        "effect": "Flight",
+        "rank": "2..4",
+        "weight": 2
+      }
+    ]
+  }
+]

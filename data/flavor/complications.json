@@ -1,0 +1,767 @@
+{
+  "Secret Identity": {
+    "description": "Maintaining a separate civilian identity.",
+    "challenges": [
+      "A close friend becomes suspicious about your frequent disappearances.",
+      "Your job requires you to be in two places at once.",
+      "A new villain seems to know your secret identity.",
+      "Your social media profile accidentally reveals too much.",
+      "A journalist starts digging into your background.",
+      "Your family wants to know why you keep missing important events.",
+      "You are caught on camera using your powers in civilian form.",
+      "A hacker attempts to uncover your real identity.",
+      "You have to attend a high-profile event as both identities.",
+      "An old acquaintance recognizes you while you're in costume."
+    ]
+  },
+  "Phobia": {
+    "description": "Irrational fear of a particular thing or situation.",
+    "challenges": [
+      "A mission requires confronting your fear head-on.",
+      "An enemy uses your phobia against you in battle.",
+      "You accidentally reveal your fear to your team.",
+      "A nightmare involving your fear disrupts your sleep.",
+      "Your fear is triggered in a public setting.",
+      "A new ally shares the same phobia.",
+      "Your phobia causes a panic attack during a critical moment.",
+      "You are forced to overcome your fear to save a loved one.",
+      "Your fear is linked to a past trauma.",
+      "An unexpected encounter with your fear leaves you vulnerable."
+    ]
+  },
+  "Rivalry": {
+    "description": "Competition or conflict with another hero or group.",
+    "challenges": [
+      "Your rival sabotages your mission.",
+      "A public challenge is issued by your rival.",
+      "An ally sides with your rival on a contentious issue.",
+      "Your rival takes credit for your achievements.",
+      "You are forced to team up with your rival against a common enemy.",
+      "A misunderstanding escalates your rivalry.",
+      "Your rival has insider information that you need.",
+      "A competition between you and your rival becomes dangerous.",
+      "Your rival targets your friends or family.",
+      "An unexpected act of kindness from your rival confuses you."
+    ]
+  },
+  "Dependency": {
+    "description": "Reliance on a substance, object, or person.",
+    "challenges": [
+      "Your source of dependency becomes unavailable.",
+      "An intervention is staged by concerned allies.",
+      "You experience withdrawal symptoms at an inopportune time.",
+      "Your dependency is used as blackmail by an enemy.",
+      "A mentor warns you about the dangers of your dependency.",
+      "You miss an important event due to your dependency.",
+      "A loved one offers an ultimatum regarding your dependency.",
+      "Your dependency starts affecting your health.",
+      "An attempt to quit your dependency has unexpected side effects.",
+      "A mission requires you to be without your source of dependency."
+    ]
+  },
+  "Haunted Past": {
+    "description": "Traumatic or troubling events from the past.",
+    "challenges": [
+      "A figure from your past resurfaces unexpectedly.",
+      "Flashbacks interfere with your ability to concentrate.",
+      "You are forced to revisit a location tied to your past trauma.",
+      "A new ally brings up memories of your past.",
+      "An enemy exploits knowledge of your past against you.",
+      "A personal item from the past is discovered.",
+      "You are asked to mentor someone with a similar past.",
+      "Nightmares of past events haunt your sleep.",
+      "Your past actions affect your current relationships.",
+      "An opportunity to make amends for your past arises."
+    ]
+  },
+  "Family Ties": {
+    "description": "Relationships with family that create challenges.",
+    "challenges": [
+      "A family member is put in danger due to your actions.",
+      "You miss a family event because of your responsibilities.",
+      "A family member disapproves of your heroics.",
+      "A sibling becomes involved in your heroic activities.",
+      "Family secrets are revealed that complicate your life.",
+      "A relative asks for a favor that conflicts with your duties.",
+      "You are torn between family obligations and your mission.",
+      "A family feud spills into your heroic life.",
+      "Your family is targeted by an enemy to get to you.",
+      "A family member's actions threaten your secret identity."
+    ]
+  },
+  "Duty": {
+    "description": "Obligations to a group, cause, or individual.",
+    "challenges": [
+      "A mission conflicts with personal commitments.",
+      "You are asked to choose between duty and friendship.",
+      "An unexpected change in leadership affects your duties.",
+      "Your duty requires you to act against your moral beliefs.",
+      "A new recruit tests your patience and commitment.",
+      "You are offered a tempting opportunity that conflicts with your duty.",
+      "A crisis requires prioritizing one duty over another.",
+      "Your duty puts you at odds with an ally.",
+      "You are ordered to perform an unethical task.",
+      "Your sense of duty is questioned by others."
+    ]
+  },
+  "Enemy": {
+    "description": "A recurring foe or antagonist.",
+    "challenges": [
+      "Your enemy gains access to a powerful artifact.",
+      "A temporary alliance is required to stop a greater threat.",
+      "Your enemy impersonates you to ruin your reputation.",
+      "An ally is secretly working for your enemy.",
+      "Your enemy has a personal vendetta against someone you care about.",
+      "A trap is set by your enemy at a location you frequent.",
+      "You learn of your enemy's tragic backstory.",
+      "Your enemy seeks redemption and asks for your help.",
+      "A new enemy emerges that forces you to rethink strategies.",
+      "Your enemy knows your weaknesses and exploits them."
+    ]
+  },
+  "Moral Code": {
+    "description": "Ethical guidelines that the hero won’t cross.",
+    "challenges": [
+      "A situation forces you to question your moral beliefs.",
+      "An ally encourages you to bend your moral code.",
+      "You witness an injustice but are unable to intervene.",
+      "You are blamed for actions that go against your code.",
+      "A villain exploits your moral code to escape.",
+      "A moral dilemma divides your team.",
+      "A decision must be made between the greater good and personal ethics.",
+      "Your code is tested when a loved one is endangered.",
+      "An enemy mocks your adherence to your moral code.",
+      "You are offered a bribe to compromise your values."
+    ]
+  },
+  "Quirk": {
+    "description": "Unusual behavior or mannerisms.",
+    "challenges": [
+      "Your quirk alienates a potential ally.",
+      "An enemy finds your quirk amusing and uses it to taunt you.",
+      "Your quirk is misinterpreted during a crucial negotiation.",
+      "An attempt to hide your quirk leads to a misunderstanding.",
+      "Your quirk becomes a distraction during a mission.",
+      "You meet someone who shares your quirk, leading to an instant connection.",
+      "An ally asks you to change your behavior to fit in.",
+      "Your quirk inadvertently reveals your secret identity.",
+      "A media outlet exaggerates your quirk in a report.",
+      "Your quirk saves the day in an unexpected way."
+    ]
+  },
+  "Amnesia": {
+    "description": "Lack of memory about personal history or skills.",
+    "challenges": [
+      "A person from your forgotten past seeks you out.",
+      "You find an old photograph that triggers a memory flash.",
+      "An enemy claims to know secrets about your past.",
+      "A mission requires skills you can't remember.",
+      "You are confronted with evidence of past misdeeds.",
+      "A loved one from the past doesn't recognize you.",
+      "You encounter a place that feels strangely familiar.",
+      "A memory returns at an inconvenient time.",
+      "You are accused of something you don't remember doing.",
+      "A mysterious benefactor helps fill in the gaps of your memory."
+    ]
+  },
+  "Alter Ego": {
+    "description": "A separate personality or identity.",
+    "challenges": [
+      "Your alter ego acts independently and causes problems.",
+      "An ally becomes suspicious of your erratic behavior.",
+      "A mission requires both personas to work together.",
+      "Your alter ego forms an unexpected friendship.",
+      "A villain attempts to manipulate your alter ego.",
+      "A loved one discovers your alter ego and reacts poorly.",
+      "Your alter ego is framed for a crime.",
+      "A decision made by your alter ego has serious consequences.",
+      "You struggle to maintain control over your alter ego.",
+      "An old enemy of your alter ego reappears."
+    ]
+  },
+  "Reputation": {
+    "description": "Known for past deeds, good or bad.",
+    "challenges": [
+      "A rumor spreads that damages your reputation.",
+      "A past deed is misinterpreted by the public.",
+      "An enemy exploits your reputation for personal gain.",
+      "A journalist writes a hit piece about you.",
+      "Your reputation attracts unwanted attention.",
+      "A past ally seeks you out for an old promise.",
+      "You are asked to speak at a public event.",
+      "Your reputation causes friction within your team.",
+      "A past rival resurfaces to challenge you again.",
+      "A new ally struggles to live up to your reputation."
+    ]
+  },
+  "Debt": {
+    "description": "Financial, moral, or other debts that are owed.",
+    "challenges": [
+      "A creditor demands immediate repayment.",
+      "You are offered a chance to erase your debt at a high cost.",
+      "A past favor is called in at an inconvenient time.",
+      "You discover someone is using your debt against you.",
+      "A debt collector threatens your family or friends.",
+      "You struggle to keep your debt a secret from your team.",
+      "A mission offers a reward that could clear your debt.",
+      "Your debt is transferred to a dangerous individual.",
+      "A rival offers to pay your debt in exchange for a favor.",
+      "You realize your debt was incurred under false pretenses."
+    ]
+  },
+  "Code of Honor": {
+    "description": "Adheres to a specific code of conduct.",
+    "challenges": [
+      "A mission challenges your code of honor.",
+      "An ally questions the validity of your code.",
+      "You are forced to defend your code in public.",
+      "A rival mocks your adherence to your code.",
+      "Your code puts you at odds with your team's strategy.",
+      "You encounter an enemy who shares your code of honor.",
+      "A personal relationship is strained by your code.",
+      "You must choose between your code and a loved one.",
+      "Your code prevents you from taking a crucial action.",
+      "An opportunity arises to redefine your code."
+    ]
+  },
+  "Obsession": {
+    "description": "Fixation on a particular goal, person, or ideal.",
+    "challenges": [
+      "Your obsession causes you to neglect important duties.",
+      "An ally confronts you about your obsession.",
+      "You are offered a chance to achieve your obsession at a high cost.",
+      "An enemy exploits your obsession to lure you into a trap.",
+      "Your obsession leads to a breakthrough in a mission.",
+      "You realize your obsession has hurt someone you care about.",
+      "A rival shares your obsession, creating conflict.",
+      "You are forced to confront the origins of your obsession.",
+      "Your obsession blinds you to a greater threat.",
+      "A moment of clarity allows you to reconsider your obsession."
+    ]
+  },
+  "Vulnerability": {
+    "description": "Weakness to a specific substance or effect.",
+    "challenges": [
+      "An enemy discovers your vulnerability and exploits it.",
+      "A mission requires exposure to your vulnerability.",
+      "You accidentally reveal your vulnerability to a new ally.",
+      "An unexpected encounter triggers your vulnerability.",
+      "You meet someone immune to your vulnerability.",
+      "A scientist offers a potential cure for your vulnerability.",
+      "Your vulnerability is worsened by a new threat.",
+      "A loved one is affected by your vulnerability.",
+      "You are forced to confront your vulnerability in a public setting.",
+      "A rival develops a weapon specifically targeting your vulnerability."
+    ]
+  },
+  "Prejudice": {
+    "description": "Facing discrimination or bias.",
+    "challenges": [
+      "An authority figure dismisses your concerns due to prejudice.",
+      "A mission requires you to work with a prejudiced individual.",
+      "You are falsely accused due to bias.",
+      "An ally reveals their own prejudices.",
+      "A public demonstration highlights the prejudice you face.",
+      "You find an unexpected ally in someone facing similar prejudice.",
+      "A past experience with prejudice resurfaces.",
+      "An attempt to fight prejudice leads to unintended consequences.",
+      "A loved one experiences prejudice due to their association with you.",
+      "A villain exploits societal prejudice to their advantage."
+    ]
+  },
+  "Bad Luck": {
+    "description": "Tendency to encounter misfortune.",
+    "challenges": [
+      "A mission goes awry due to a series of unlucky events.",
+      "Your bad luck causes tension within your team.",
+      "You accidentally break an important artifact.",
+      "A loved one is caught in an unfortunate accident.",
+      "You are blamed for a mishap that was out of your control.",
+      "Your bad luck attracts the attention of a supernatural entity.",
+      "An ally offers to help break your streak of bad luck.",
+      "Your bad luck leads to a surprising discovery.",
+      "A villain uses your bad luck as part of their plan.",
+      "An unexpected windfall is marred by bad luck."
+    ]
+  },
+  "Disability": {
+    "description": "Physical or mental impairment.",
+    "challenges": [
+      "A mission requires accommodations for your disability.",
+      "An ally misunderstands your abilities due to your disability.",
+      "You encounter someone with a similar disability who inspires you.",
+      "A villain mocks or underestimates you because of your disability.",
+      "Your disability leads to an unexpected advantage.",
+      "You face a choice between using an experimental treatment or adapting.",
+      "A public figure speaks out against discrimination, influencing your perspective.",
+      "An obstacle course is set up without considering your needs.",
+      "You help design adaptive equipment for others.",
+      "Your disability leads to a new friendship."
+    ]
+  },
+  "Impulsive": {
+    "description": "Acting without thinking.",
+    "challenges": [
+      "An impulsive decision puts your team in danger.",
+      "You buy an expensive gadget on a whim.",
+      "A hasty comment offends a powerful ally.",
+      "You rush into a fight without considering the consequences.",
+      "An enemy exploits your impulsiveness in a trap.",
+      "Your impulsive actions inadvertently solve a problem.",
+      "You volunteer for a dangerous mission without consulting others.",
+      "A mentor advises you to think before acting.",
+      "An impulsive promise proves difficult to keep.",
+      "Your impulsiveness endears you to a free-spirited ally."
+    ]
+  },
+  "Outsider": {
+    "description": "Not fitting in due to origin, appearance, or culture.",
+    "challenges": [
+      "You struggle to understand cultural customs in a new environment.",
+      "An ally tries to help you fit in but makes things worse.",
+      "You are invited to a community event that highlights your outsider status.",
+      "A misunderstanding arises due to cultural differences.",
+      "You find solace in a group of fellow outsiders.",
+      "An enemy uses your outsider status to isolate you.",
+      "You learn a new skill that bridges the gap with others.",
+      "A public speech emphasizes the value of diversity.",
+      "Your outsider perspective offers a unique solution to a problem.",
+      "You form a deep bond with someone who appreciates your uniqueness."
+    ]
+  },
+  "Accursed": {
+    "description": "Cursed in a way that causes problems.",
+    "challenges": [
+      "A curse manifests at an inopportune moment.",
+      "You seek help from a mystic to lift your curse.",
+      "An enemy claims responsibility for your curse.",
+      "You discover a new aspect of your curse's origins.",
+      "A loved one is affected by your curse.",
+      "The curse gives you an unexpected advantage in a fight.",
+      "You encounter another cursed individual who offers guidance.",
+      "A curse-breaking ritual is interrupted.",
+      "A mission requires you to embrace your curse.",
+      "You uncover a prophecy related to your curse."
+    ]
+  },
+  "Uncontrolled Power": {
+    "description": "Inability to fully control one’s powers.",
+    "challenges": [
+      "Your powers activate unexpectedly during a mission.",
+      "An ally is injured due to your uncontrolled powers.",
+      "A mentor offers training to help you control your powers.",
+      "You discover an inhibitor device that could suppress your powers.",
+      "An enemy exploits your lack of control in a battle.",
+      "Your powers are linked to your emotions, creating a challenge.",
+      "A public incident results in backlash against superpowered individuals.",
+      "You meet someone with similar powers who offers guidance.",
+      "A power surge leads to an unexpected victory.",
+      "Your powers react to a mysterious artifact."
+    ]
+  },
+  "Hunted": {
+    "description": "Pursued by a group or individual.",
+    "challenges": [
+      "Your pursuers set a trap for you in a crowded area.",
+      "An unexpected ally offers sanctuary.",
+      "A close call leaves you questioning who you can trust.",
+      "You learn the true identity of your hunters.",
+      "A decoy is needed to distract your pursuers.",
+      "Your hunters are revealed to be victims of a larger conspiracy.",
+      "An ally volunteers to draw attention away from you.",
+      "A confrontation with your hunters results in new revelations.",
+      "You are forced to go off the grid to evade capture.",
+      "A rival offers to help you deal with your hunters."
+    ]
+  },
+  "Temptation": {
+    "description": "Susceptibility to temptation or corruption.",
+    "challenges": [
+      "A tempting offer is made by a morally dubious figure.",
+      "You witness the consequences of giving in to temptation.",
+      "An ally helps you resist a particularly strong temptation.",
+      "A mission requires you to face your greatest temptation.",
+      "You are offered a chance to achieve a personal goal unethically.",
+      "A loved one is tempted by the same thing, creating conflict.",
+      "You learn of someone who overcame a similar temptation.",
+      "An enemy uses temptation to try and corrupt you.",
+      "Your reputation is at stake if you succumb to temptation.",
+      "A moment of weakness is caught on camera."
+    ]
+  },
+  "Power Loss": {
+    "description": "Powers are lost or diminished under certain conditions.",
+    "challenges": [
+      "Your powers fail during a critical moment in battle.",
+      "An enemy exploits the conditions that lead to your power loss.",
+      "You discover a temporary workaround for your power loss.",
+      "An ally covers for you when your powers fail.",
+      "You are forced to rely on your skills rather than powers.",
+      "A mission requires you to face your power loss head-on.",
+      "Your powers return unexpectedly, causing chaos.",
+      "You meet someone with similar power loss issues.",
+      "An enemy offers a solution to your power loss at a price.",
+      "You learn to appreciate your abilities in new ways."
+    ]
+  },
+  "Relationship": {
+    "description": "Romantic or platonic relationships that create challenges.",
+    "challenges": [
+      "A relationship conflict interferes with your mission.",
+      "A loved one is put in danger due to your actions.",
+      "You are torn between your relationship and your duties.",
+      "An ally has romantic feelings for you that complicate things.",
+      "A new relationship is tested by your lifestyle.",
+      "A rival threatens your relationship's stability.",
+      "You are forced to keep secrets from your partner.",
+      "A mission requires working with a past romantic interest.",
+      "You question your relationship's impact on your heroics.",
+      "A relationship milestone clashes with a major mission."
+    ]
+  },
+  "Infamy": {
+    "description": "Notorious or infamous reputation.",
+    "challenges": [
+      "A public incident escalates your notoriety.",
+      "An ally distances themselves due to your infamy.",
+      "A past action is brought to light, damaging your reputation.",
+      "An enemy exploits your infamous status to frame you.",
+      "You are confronted by someone affected by your past deeds.",
+      "An opportunity arises to clear your name.",
+      "A journalist wants to write a story about your past.",
+      "Your infamy attracts dangerous individuals seeking fame.",
+      "You question whether your infamy is justified.",
+      "A public apology is demanded for past actions."
+    ]
+  },
+  "Mistaken Identity": {
+    "description": "Often mistaken for someone else.",
+    "challenges": [
+      "An enemy confuses you with their actual target.",
+      "You are approached by someone seeking help meant for another.",
+      "A public figure's scandal affects you due to mistaken identity.",
+      "An ally mistakenly reveals sensitive information to you.",
+      "You use the mistaken identity to your advantage.",
+      "A confrontation arises from the real person you are mistaken for.",
+      "You are blamed for actions you didn't commit.",
+      "A mission is complicated by mistaken identity.",
+      "A loved one is affected by the confusion.",
+      "An opportunity to meet your lookalike arises."
+    ]
+  },
+  "Codependency": {
+    "description": "Reliance on a particular relationship.",
+    "challenges": [
+      "An ally expresses concern about your codependency.",
+      "A mission requires you to act independently.",
+      "You realize your codependency is affecting your performance.",
+      "A loved one is put at risk due to your dependence.",
+      "You meet someone who offers a healthier perspective.",
+      "An unexpected separation tests your ability to cope.",
+      "A rival exploits your codependency to gain an advantage.",
+      "You struggle to establish boundaries in a relationship.",
+      "Your codependency causes tension within your team.",
+      "You are forced to reevaluate the nature of your relationship."
+    ]
+  },
+  "Trust Issues": {
+    "description": "Difficulty trusting others.",
+    "challenges": [
+      "A new ally tests your ability to trust.",
+      "You are offered information from a suspicious source.",
+      "An old betrayal resurfaces, affecting your judgment.",
+      "You are forced to rely on someone you don't trust.",
+      "A mission requires you to work closely with a former enemy.",
+      "An ally confesses a secret that tests your trust.",
+      "Your trust issues cause tension within your team.",
+      "A past experience with betrayal haunts you.",
+      "You discover an unexpected ally in someone you distrusted.",
+      "An opportunity to rebuild trust with an old friend arises."
+    ]
+  },
+  "Dark Secret": {
+    "description": "A hidden aspect of the past that, if revealed, would cause major problems.",
+    "challenges": [
+      "A blackmailer threatens to expose your secret.",
+      "An enemy discovers a clue about your dark secret.",
+      "A mission risks revealing your hidden past.",
+      "You meet someone who knows part of your secret.",
+      "A loved one stumbles upon a hint of your secret.",
+      "An ally's probing questions make you nervous.",
+      "You are forced to confront the consequences of your secret.",
+      "An unexpected encounter with someone from your past occurs.",
+      "You struggle to keep your secret while working undercover.",
+      "An opportunity to reveal your secret safely presents itself."
+    ]
+  },
+  "Public Figure": {
+    "description": "Being a known public figure with responsibilities and scrutiny.",
+    "challenges": [
+      "A public scandal threatens your reputation.",
+      "You are asked to make a controversial statement.",
+      "A paparazzo captures an unguarded moment.",
+      "A public appearance conflicts with a mission.",
+      "An ally asks for help with their own public image.",
+      "A protest is organized against your actions.",
+      "You receive an award for your public service.",
+      "An unexpected endorsement puts you in the spotlight.",
+      "Your words are misquoted in the media.",
+      "A rival challenges you to a public debate."
+    ]
+  },
+  "Famous": {
+    "description": "Widely recognized and celebrated by the public, which brings its own set of challenges.",
+    "challenges": [
+      "A fan becomes overly enthusiastic and crosses boundaries.",
+      "You are invited to a high-profile event.",
+      "A celebrity scandal affects your reputation.",
+      "A mission requires anonymity, which is difficult to maintain.",
+      "You are asked to endorse a product you don't believe in.",
+      "A public speech goes awry due to technical difficulties.",
+      "An ally struggles with being overshadowed by your fame.",
+      "A viral video captures you in an embarrassing situation.",
+      "You receive fan mail that raises ethical concerns.",
+      "A rival attempts to discredit your fame with rumors."
+    ]
+  },
+  "Distrust of Authority": {
+    "description": "A skepticism or disdain for authority figures.",
+    "challenges": [
+      "A mission requires cooperation with law enforcement.",
+      "An authority figure makes an unexpected ally.",
+      "You are asked to testify against a corrupt official.",
+      "A public figure's actions validate your distrust.",
+      "An ally questions your skepticism of authority.",
+      "You are offered a position within an authority structure.",
+      "A personal experience with an authority figure changes your perspective.",
+      "A protest against an authority figure gains momentum.",
+      "An authority figure seeks your expertise on a matter.",
+      "You are forced to confront your distrust during a crisis."
+    ]
+  },
+  "Addiction": {
+    "description": "Dependency on a substance or behavior.",
+    "challenges": [
+      "A relapse occurs during a critical mission.",
+      "An intervention is staged by concerned friends.",
+      "A new treatment option is offered with side effects.",
+      "You meet someone who overcame a similar addiction.",
+      "A loved one discovers your addiction and reacts.",
+      "A mission requires you to resist your addictive behavior.",
+      "An enemy exploits your addiction to manipulate you.",
+      "A moment of temptation tests your resolve.",
+      "Your addiction affects your performance in a mission.",
+      "You are offered a chance to help others with addiction."
+    ]
+  },
+  "Guilt": {
+    "description": "Feeling guilty for past actions or failures.",
+    "challenges": [
+      "A reminder of past actions triggers a guilt spiral.",
+      "An enemy taunts you about your past failures.",
+      "A chance to make amends for a past mistake arises.",
+      "A loved one is affected by your past actions.",
+      "You meet someone who forgives your past deeds.",
+      "A mission requires confronting the source of your guilt.",
+      "Your guilt affects your decision-making in a critical situation.",
+      "An ally reassures you about your past mistakes.",
+      "A dream reminds you of past failures.",
+      "An opportunity to help others in a similar situation presents itself."
+    ]
+  },
+  "Nightmares": {
+    "description": "Recurring nightmares affecting rest and mental state.",
+    "challenges": [
+      "A nightmare reveals a hidden fear you must confront.",
+      "You accidentally talk about your nightmare while awake.",
+      "An ally offers a solution to help with your nightmares.",
+      "A mission requires confronting the subject of your nightmares.",
+      "You learn your nightmares are shared by another individual.",
+      "A sleepless night affects your performance in a mission.",
+      "A dream journal offers insight into your subconscious.",
+      "An enemy uses illusions to mimic your nightmares.",
+      "You are forced to distinguish between nightmare and reality.",
+      "A recurring dream holds a clue to an ongoing mystery."
+    ]
+  },
+  "Overconfident": {
+    "description": "An inflated sense of one’s own abilities.",
+    "challenges": [
+      "Your overconfidence leads to a major mistake.",
+      "An ally warns you about underestimating an opponent.",
+      "A mission requires humility to succeed.",
+      "Your overconfidence puts a loved one in danger.",
+      "An enemy exploits your overconfidence in battle.",
+      "A past failure forces you to reevaluate your abilities.",
+      "An unexpected challenge tests your self-assurance.",
+      "A mentor offers guidance on overcoming arrogance.",
+      "You are forced to admit you need help from others.",
+      "A public failure challenges your self-perception."
+    ]
+  },
+  "Lost Love": {
+    "description": "The memory or presence of a lost love causes emotional turmoil.",
+    "challenges": [
+      "A reminder of your lost love triggers strong emotions.",
+      "You meet someone who resembles your lost love.",
+      "An enemy uses your lost love to taunt you.",
+      "A mission involves a location tied to your lost love.",
+      "A dream rekindles memories of your lost love.",
+      "You discover a message left by your lost love.",
+      "A new relationship is tested by memories of your past.",
+      "An unexpected encounter offers closure.",
+      "You learn new information about your lost love's fate.",
+      "A loved one encourages you to move forward."
+    ]
+  },
+  "Unresolved Past": {
+    "description": "Unresolved issues from the past.",
+    "challenges": [
+      "A figure from your past seeks closure.",
+      "An old rivalry resurfaces, complicating your current mission.",
+      "A personal item from the past is discovered.",
+      "An ally offers to help resolve your past issues.",
+      "A mission requires returning to a significant place from your past.",
+      "You learn of an opportunity to atone for past actions.",
+      "A new ally has connections to your past.",
+      "An unexpected encounter forces you to face your past.",
+      "Your past affects your reputation in the present.",
+      "A chance to learn from past mistakes presents itself."
+    ]
+  },
+  "Out of Control": {
+    "description": "Difficulty controlling one's own powers or impulses.",
+    "challenges": [
+      "Your powers activate unexpectedly during a mission.",
+      "An ally is injured due to your lack of control.",
+      "A mentor offers training to help you regain control.",
+      "You discover an inhibitor device that could suppress your impulses.",
+      "An enemy exploits your lack of control in a battle.",
+      "Your powers are linked to your emotions, creating a challenge.",
+      "A public incident results in backlash against superpowered individuals.",
+      "You meet someone with similar control issues.",
+      "A power surge leads to an unexpected victory.",
+      "Your powers react to a mysterious artifact."
+    ]
+  },
+  "Bound by Law": {
+    "description": "Adhering to the laws, even when it’s inconvenient or problematic.",
+    "challenges": [
+      "A mission requires bending the law to succeed.",
+      "An ally questions your strict adherence to rules.",
+      "You are forced to defend your actions in a court of law.",
+      "An enemy exploits your respect for the law.",
+      "A legal loophole creates an ethical dilemma.",
+      "A public figure challenges your understanding of justice.",
+      "An ally's illegal actions test your commitment to the law.",
+      "A protest highlights a law you disagree with.",
+      "You encounter a corrupt official exploiting the law.",
+      "An opportunity arises to advocate for legal reform."
+    ]
+  },
+  "Bitter Rival": {
+    "description": "A rival character who constantly competes or interferes.",
+    "challenges": [
+      "Your rival sabotages a mission for personal gain.",
+      "A public competition between you and your rival escalates.",
+      "An ally is caught in the crossfire of your rivalry.",
+      "Your rival's actions unintentionally benefit you.",
+      "A misunderstanding escalates tensions with your rival.",
+      "You discover a shared interest with your rival.",
+      "An enemy forces you and your rival to cooperate.",
+      "Your rival gains an advantage with a new ally.",
+      "A public incident embarrasses your rival.",
+      "An opportunity arises to end the rivalry peacefully."
+    ]
+  },
+  "Misunderstood": {
+    "description": "Misunderstood intentions or actions.",
+    "challenges": [
+      "A mission goes awry due to a misunderstanding.",
+      "An ally misinterprets your actions and confronts you.",
+      "You are blamed for an incident you didn't cause.",
+      "A public speech is misquoted, causing controversy.",
+      "An enemy exploits a misunderstanding to their advantage.",
+      "A chance to clarify your intentions presents itself.",
+      "An ally helps bridge the gap of misunderstanding.",
+      "A past action is reexamined with new context.",
+      "You encounter someone who truly understands you.",
+      "A misunderstanding leads to an unexpected alliance."
+    ]
+  },
+  "Pacifist": {
+    "description": "Unwillingness to cause harm or engage in violence.",
+    "challenges": [
+      "A mission requires confrontation that tests your pacifism.",
+      "An ally encourages a more aggressive approach.",
+      "A villain exploits your pacifism to escape.",
+      "A peaceful protest turns violent, challenging your beliefs.",
+      "An unexpected opportunity to promote peace arises.",
+      "A loved one is endangered by your pacifist stance.",
+      "You meet someone who shares your commitment to nonviolence.",
+      "An enemy respects your pacifism and offers a truce.",
+      "Your pacifism inspires others to reconsider their actions.",
+      "A chance to mediate a conflict presents itself."
+    ]
+  },
+  "Financial Problems": {
+    "description": "Dealing with debt or financial instability.",
+    "challenges": [
+      "A financial opportunity presents ethical concerns.",
+      "You are offered a bribe to compromise your principles.",
+      "A loved one needs financial assistance you can't provide.",
+      "A mission offers a reward that could solve your problems.",
+      "An ally offers help, but with strings attached.",
+      "A financial setback threatens your resources.",
+      "An enemy exploits your financial situation to manipulate you.",
+      "A chance to improve your finances through hard work arises.",
+      "A past debt resurfaces at an inconvenient time.",
+      "You learn a valuable lesson about financial responsibility."
+    ]
+  },
+  "Identity Crisis": {
+    "description": "Confusion or conflict about one’s identity.",
+    "challenges": [
+      "A mission forces you to confront aspects of your identity.",
+      "An ally helps you explore your true self.",
+      "A past experience with identity shapes your current actions.",
+      "You meet someone facing a similar identity crisis.",
+      "An unexpected revelation challenges your self-perception.",
+      "An enemy exploits your identity crisis to manipulate you.",
+      "A chance to redefine yourself presents itself.",
+      "An identity mix-up creates confusion in a mission.",
+      "You struggle to balance different aspects of your identity.",
+      "A loved one helps you embrace your true identity."
+    ]
+  },
+  "Moral Dilemma": {
+    "description": "Facing situations that challenge moral or ethical beliefs.",
+    "challenges": [
+      "A mission requires compromising your ethics for the greater good.",
+      "An ally challenges your moral stance on an issue.",
+      "A public debate tests your ethical convictions.",
+      "An enemy exploits a moral dilemma to gain an advantage.",
+      "A chance to mentor someone facing a similar dilemma arises.",
+      "A loved one is affected by your moral decisions.",
+      "You learn of an opportunity to make amends for past actions.",
+      "An unexpected ally offers a different perspective on ethics.",
+      "A decision has far-reaching consequences for your beliefs.",
+      "A moment of reflection leads to a new understanding of morality."
+    ]
+  },
+  "Haunted": {
+    "description": "Haunted by supernatural or eerie occurrences.",
+    "challenges": [
+      "A recurring apparition demands your attention.",
+      "You encounter someone who shares your supernatural experiences.",
+      "A mission involves a haunted location tied to your past.",
+      "An enemy exploits your haunting experiences to unsettle you.",
+      "A chance to communicate with the spirits offers insight.",
+      "A loved one is affected by the supernatural occurrences.",
+      "You discover a link between the hauntings and a current threat.",
+      "A mysterious figure offers to help you understand the hauntings.",
+      "An unexpected ally reveals their own supernatural experiences.",
+      "A ritual offers a chance to put the hauntings to rest."
+    ]
+  }
+}

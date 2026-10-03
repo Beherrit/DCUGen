@@ -1,0 +1,569 @@
+{
+  "_note": "Effect-specific modifiers from the individual effect descriptions in DC Adventures chapter 6. Same schema as modifiers.json.",
+  "Affliction": {
+    "extras": [
+      {
+        "name": "Cumulative",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Further failed checks add to the target's conditions.",
+        "source": "DCA 87"
+      },
+      {
+        "name": "Extra Condition",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Imposes an additional condition per degree.",
+        "source": "DCA 87"
+      },
+      {
+        "name": "Progressive",
+        "cost_type": "per_rank",
+        "value": 2,
+        "max_steps": 1,
+        "summary": "Worsens each round until the target resists.",
+        "source": "DCA 87"
+      },
+      {
+        "name": "Concentration",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Keep forcing new checks with a standard action after one hit.",
+        "source": "DCA 87"
+      }
+    ],
+    "flaws": [
+      {
+        "name": "Limited Degree",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Stops at two degrees of effect.",
+        "source": "DCA 87"
+      },
+      {
+        "name": "Instant Recovery",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "The target recovers automatically at the end of its turn.",
+        "source": "DCA 87"
+      }
+    ]
+  },
+  "Weaken": {
+    "extras": [
+      {
+        "name": "Broad",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Can weaken any trait from a broad set, one at a time.",
+        "source": "DCA 121"
+      },
+      {
+        "name": "Simultaneous",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "A Broad Weaken affects all its traits at once.",
+        "source": "DCA 121"
+      },
+      {
+        "name": "Progressive",
+        "cost_type": "per_rank",
+        "value": 2,
+        "max_steps": 1,
+        "summary": "Keeps draining each round until resisted.",
+        "source": "DCA 121"
+      },
+      {
+        "name": "Concentration",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Keep forcing new checks after one hit.",
+        "source": "DCA 121"
+      },
+      {
+        "name": "Precise",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Choose which of several traits to reduce.",
+        "source": "DCA 121"
+      }
+    ],
+    "flaws": []
+  },
+  "Nullify": {
+    "extras": [
+      {
+        "name": "Broad",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Counters any effect with a broad descriptor.",
+        "source": "DCA 111"
+      },
+      {
+        "name": "Simultaneous",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Counters every matching effect at once.",
+        "source": "DCA 111"
+      },
+      {
+        "name": "Effortless",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Retrying after a bad failure needs no extra effort.",
+        "source": "DCA 111"
+      },
+      {
+        "name": "Precise",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Pick which effects to counter.",
+        "source": "DCA 111"
+      }
+    ],
+    "flaws": []
+  },
+  "Flight": {
+    "extras": [],
+    "flaws": [
+      {
+        "name": "Wings",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Flies on wings that can be bound or injured.",
+        "source": "DCA 98"
+      },
+      {
+        "name": "Platform",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Flies on a disc, board or similar platform.",
+        "source": "DCA 98"
+      }
+    ]
+  },
+  "Teleport": {
+    "extras": [
+      {
+        "name": "Accurate",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Teleport to places you can't sense.",
+        "source": "DCA 119"
+      },
+      {
+        "name": "Change Direction",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Change facing on arrival.",
+        "source": "DCA 119"
+      },
+      {
+        "name": "Change Velocity",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Arrive at rest.",
+        "source": "DCA 119"
+      },
+      {
+        "name": "Easy",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "No penalties for extended teleports.",
+        "source": "DCA 119"
+      },
+      {
+        "name": "Extended",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Make long-distance teleports with two move actions.",
+        "source": "DCA 119"
+      },
+      {
+        "name": "Portal",
+        "cost_type": "per_rank",
+        "value": 2,
+        "max_steps": 1,
+        "summary": "Open a gateway others can step through.",
+        "source": "DCA 119"
+      },
+      {
+        "name": "Turnabout",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Teleport, act, and teleport back.",
+        "source": "DCA 119"
+      }
+    ],
+    "flaws": []
+  },
+  "Create": {
+    "extras": [
+      {
+        "name": "Movable",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Move your creations around.",
+        "source": "DCA 91"
+      },
+      {
+        "name": "Stationary",
+        "cost_type": "per_rank",
+        "value": 0,
+        "max_steps": 1,
+        "summary": "Creations can hang unsupported in the air.",
+        "source": "DCA 91"
+      },
+      {
+        "name": "Tether",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Stay connected to your creations.",
+        "source": "DCA 91"
+      },
+      {
+        "name": "Precise",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Detailed, precise creations.",
+        "source": "DCA 91"
+      },
+      {
+        "name": "Permanent",
+        "cost_type": "per_rank",
+        "value": 0,
+        "max_steps": 1,
+        "summary": "Always on; can't be switched off or boosted with extra effort.",
+        "source": "DCA 99"
+      }
+    ],
+    "flaws": []
+  },
+  "Move Object": {
+    "extras": [
+      {
+        "name": "Damaging",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Can strike targets directly.",
+        "source": "DCA 109"
+      },
+      {
+        "name": "Precise",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Fine manipulation at a distance.",
+        "source": "DCA 109"
+      }
+    ],
+    "flaws": []
+  },
+  "Healing": {
+    "extras": [
+      {
+        "name": "Restorative",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Also restores weakened traits.",
+        "source": "DCA 100"
+      },
+      {
+        "name": "Persistent",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Heals even incurable harm.",
+        "source": "DCA 100"
+      }
+    ],
+    "flaws": []
+  },
+  "Regeneration": {
+    "extras": [
+      {
+        "name": "Persistent",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Regenerates incurable damage too.",
+        "source": "DCA 114"
+      }
+    ],
+    "flaws": [
+      {
+        "name": "Source",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Only works with access to a particular source.",
+        "source": "DCA 114"
+      }
+    ]
+  },
+  "Summon": {
+    "extras": [
+      {
+        "name": "Active",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Minions act fully each round.",
+        "source": "DCA 117"
+      },
+      {
+        "name": "Controlled",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Minions have no free will.",
+        "source": "DCA 117"
+      },
+      {
+        "name": "Heroic",
+        "cost_type": "per_rank",
+        "value": 2,
+        "max_steps": 1,
+        "summary": "Summoned allies aren't minions.",
+        "source": "DCA 117"
+      },
+      {
+        "name": "Horde",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Summon all your minions at once.",
+        "source": "DCA 117"
+      },
+      {
+        "name": "Mental Link",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Telepathic link with your minions.",
+        "source": "DCA 117"
+      },
+      {
+        "name": "Multiple Minions",
+        "cost_type": "per_rank",
+        "value": 2,
+        "max_steps": null,
+        "summary": "Each application doubles the number of minions.",
+        "source": "DCA 117"
+      },
+      {
+        "name": "Variable Type",
+        "cost_type": "per_rank",
+        "value": 1,
+        "options": {
+          "General type": 1,
+          "Broad type": 2
+        },
+        "max_steps": 1,
+        "summary": "Summon different minions.",
+        "source": "DCA 117"
+      }
+    ],
+    "flaws": []
+  },
+  "Mind Reading": {
+    "extras": [
+      {
+        "name": "Cumulative",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Further successes dig deeper.",
+        "source": "DCA 107"
+      },
+      {
+        "name": "Effortless",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Retry without extra effort.",
+        "source": "DCA 107"
+      },
+      {
+        "name": "Sensory Link",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Share the subject's senses.",
+        "source": "DCA 107"
+      }
+    ],
+    "flaws": []
+  },
+  "Shrinking": {
+    "extras": [
+      {
+        "name": "Normal Strength",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Keep full Strength while shrunk.",
+        "source": "DCA 117"
+      },
+      {
+        "name": "Permanent",
+        "cost_type": "per_rank",
+        "value": 0,
+        "max_steps": 1,
+        "summary": "Always on; can't be switched off or boosted with extra effort.",
+        "source": "DCA 99"
+      }
+    ],
+    "flaws": []
+  },
+  "Immunity": {
+    "extras": [],
+    "flaws": [
+      {
+        "name": "Limited to Half Effect",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Halves the effect instead of ignoring it.",
+        "source": "DCA 102"
+      }
+    ]
+  },
+  "Illusion": {
+    "extras": [
+      {
+        "name": "Independent",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Illusions take only a free action to maintain.",
+        "source": "DCA 101"
+      },
+      {
+        "name": "Selective",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Choose who perceives the illusion.",
+        "source": "DCA 101"
+      }
+    ],
+    "flaws": []
+  },
+  "Concealment": {
+    "extras": [
+      {
+        "name": "Affects Others",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Grant concealment to others.",
+        "source": "DCA 90"
+      },
+      {
+        "name": "Attack",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Impose concealment on a target.",
+        "source": "DCA 90"
+      }
+    ],
+    "flaws": [
+      {
+        "name": "Blending",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Only works while standing still against a background.",
+        "source": "DCA 90"
+      },
+      {
+        "name": "Partial",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Partial rather than total concealment.",
+        "source": "DCA 90"
+      }
+    ]
+  },
+  "Environment": {
+    "extras": [
+      {
+        "name": "Selective",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Vary conditions within the area.",
+        "source": "DCA 96"
+      }
+    ],
+    "flaws": []
+  },
+  "Growth": {
+    "extras": [
+      {
+        "name": "Permanent",
+        "cost_type": "per_rank",
+        "value": 0,
+        "max_steps": 1,
+        "summary": "Always on; can't be switched off or boosted with extra effort.",
+        "source": "DCA 99"
+      }
+    ],
+    "flaws": []
+  },
+  "Insubstantial": {
+    "extras": [
+      {
+        "name": "Permanent",
+        "cost_type": "per_rank",
+        "value": 0,
+        "max_steps": 1,
+        "summary": "Always on; can't be switched off or boosted with extra effort.",
+        "source": "DCA 99"
+      }
+    ],
+    "flaws": []
+  },
+  "Enhanced Trait": {
+    "extras": [
+      {
+        "name": "Permanent",
+        "cost_type": "per_rank",
+        "value": 0,
+        "max_steps": 1,
+        "summary": "Always on; can't be switched off or boosted with extra effort.",
+        "source": "DCA 99"
+      }
+    ],
+    "flaws": []
+  }
+}

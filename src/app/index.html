@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DCUGen Hero Forge</title>
+<meta name="description" content="Random and custom character generator and GM toolkit for the DC Adventures RPG, built on the Mutants & Masterminds 3e rules.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="app" id="app">
+  <header class="topbar">
+    <a class="brand" href="#forge" data-tab="forge" aria-label="DCUGen home">
+      <span class="brand-mark" aria-hidden="true">DCU</span><span class="brand-name">Gen</span>
+      <span class="brand-sub">Hero Forge · DC Adventures rules</span>
+    </a>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button class="tab" role="tab" id="tab-forge" data-tab="forge" aria-selected="true">Forge</button>
+      <button class="tab" role="tab" id="tab-roster" data-tab="roster" aria-selected="false">Roster <span class="count" id="roster-count">0</span></button>
+      <button class="tab" role="tab" id="tab-lab" data-tab="lab" aria-selected="false">Power Lab</button>
+      <button class="tab" role="tab" id="tab-workshop" data-tab="workshop" aria-selected="false">Workshop</button>
+      <button class="tab" role="tab" id="tab-gm" data-tab="gm" aria-selected="false">GM Tools</button>
+      <button class="tab" role="tab" id="tab-rules" data-tab="rules" aria-selected="false">Rules</button>
+    </nav>
+    <button class="icon-btn theme-toggle" id="theme-toggle" type="button" title="Switch light or dark theme" aria-label="Switch light or dark theme">◐</button>
+  </header>
+
+  <main>
+    <section class="view" id="view-forge" role="tabpanel" aria-labelledby="tab-forge"></section>
+    <section class="view" id="view-roster" role="tabpanel" aria-labelledby="tab-roster" hidden></section>
+    <section class="view" id="view-lab" role="tabpanel" aria-labelledby="tab-lab" hidden></section>
+    <section class="view" id="view-workshop" role="tabpanel" aria-labelledby="tab-workshop" hidden></section>
+    <section class="view" id="view-gm" role="tabpanel" aria-labelledby="tab-gm" hidden></section>
+    <section class="view" id="view-rules" role="tabpanel" aria-labelledby="tab-rules" hidden></section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <dialog class="dialog" id="dialog"></dialog>
+</div>
+<script type="module" src="app.js"></script>
+</body>
+</html>

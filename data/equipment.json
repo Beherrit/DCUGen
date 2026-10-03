@@ -1,0 +1,1859 @@
+{
+  "weapons": [
+    {
+      "name": "Brass Knuckles",
+      "category": "Simple Melee Weapon",
+      "effect": "Damage 1",
+      "damage_type": "bludgeoning",
+      "crit": 20,
+      "strength_based": true,
+      "cost": 1,
+      "source": "DCA 151"
+    },
+    {
+      "name": "Club",
+      "category": "Simple Melee Weapon",
+      "effect": "Damage 2",
+      "damage_type": "bludgeoning",
+      "crit": 20,
+      "strength_based": true,
+      "cost": 2,
+      "notes": "A very light club may be only Damage 1.",
+      "source": "DCA 151"
+    },
+    {
+      "name": "Knife",
+      "category": "Simple Melee Weapon",
+      "effect": "Damage 1",
+      "damage_type": "piercing",
+      "crit": 19,
+      "strength_based": true,
+      "cost": 2,
+      "source": "DCA 151"
+    },
+    {
+      "name": "Pepper Spray",
+      "category": "Simple Melee Weapon",
+      "effect": "Close Visual Dazzle 4",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": false,
+      "cost": 2,
+      "descriptor": "chemical",
+      "source": "DCA 151"
+    },
+    {
+      "name": "Stun Gun",
+      "category": "Simple Melee Weapon",
+      "effect": "Affliction 5",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": false,
+      "cost": 5,
+      "descriptor": "electrical",
+      "notes": "Can daze, stun, and potentially incapacitate.",
+      "source": "DCA 151"
+    },
+    {
+      "name": "Battleaxe",
+      "category": "Archaic Melee Weapon",
+      "effect": "Damage 3",
+      "damage_type": "slashing",
+      "crit": 20,
+      "strength_based": true,
+      "cost": 3,
+      "source": "DCA 151"
+    },
+    {
+      "name": "Sword",
+      "category": "Archaic Melee Weapon",
+      "effect": "Damage 3",
+      "damage_type": "slashing",
+      "crit": 19,
+      "strength_based": true,
+      "cost": 4,
+      "source": "DCA 151"
+    },
+    {
+      "name": "Spear",
+      "category": "Archaic Melee Weapon",
+      "effect": "Damage 3",
+      "damage_type": "piercing",
+      "crit": 19,
+      "strength_based": true,
+      "cost": 4,
+      "notes": "Can also be thrown as a ranged attack.",
+      "source": "DCA 151"
+    },
+    {
+      "name": "Warhammer",
+      "category": "Archaic Melee Weapon",
+      "effect": "Damage 3",
+      "damage_type": "bludgeoning",
+      "crit": 20,
+      "strength_based": true,
+      "cost": 3,
+      "notes": "Can also be thrown as a ranged attack.",
+      "source": "DCA 151"
+    },
+    {
+      "name": "Chain",
+      "category": "Exotic Melee Weapon",
+      "effect": "Damage 2, Improved Grab, Improved Trip, Reach 2",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": true,
+      "cost": 6,
+      "source": "DCA 151"
+    },
+    {
+      "name": "Chainsaw",
+      "category": "Exotic Melee Weapon",
+      "effect": "Damage 6",
+      "damage_type": "slashing",
+      "crit": 20,
+      "strength_based": false,
+      "cost": 6,
+      "notes": "Not Strength-based.",
+      "source": "DCA 151"
+    },
+    {
+      "name": "Nunchaku",
+      "category": "Exotic Melee Weapon",
+      "effect": "Damage 2",
+      "damage_type": "bludgeoning",
+      "crit": 19,
+      "strength_based": true,
+      "cost": 3,
+      "source": "DCA 151"
+    },
+    {
+      "name": "Whip",
+      "category": "Exotic Melee Weapon",
+      "effect": "Improved Grab, Improved Trip, Reach 3",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": false,
+      "cost": 5,
+      "notes": "No damage of its own; strikes up to 15 ft. away.",
+      "source": "DCA 151"
+    },
+    {
+      "name": "Holdout Pistol",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage 2",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": false,
+      "cost": 4,
+      "source": "DCA 152"
+    },
+    {
+      "name": "Light Pistol",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage 3",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": false,
+      "cost": 6,
+      "source": "DCA 152"
+    },
+    {
+      "name": "Heavy Pistol",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage 4",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": false,
+      "cost": 8,
+      "source": "DCA 152"
+    },
+    {
+      "name": "Machine Pistol",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Multiattack Damage 3",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": false,
+      "cost": 9,
+      "source": "DCA 152"
+    },
+    {
+      "name": "Submachine Gun",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Multiattack Damage 4",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": false,
+      "cost": 12,
+      "source": "DCA 152"
+    },
+    {
+      "name": "Shotgun",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage 5",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": false,
+      "cost": 10,
+      "notes": "Shot gains Accurate 1 but is Limited to Damage 3 vs. targets with Protection; slugs have neither modifier.",
+      "source": "DCA 152"
+    },
+    {
+      "name": "Assault Rifle",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Multiattack Damage 5",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": false,
+      "cost": 15,
+      "source": "DCA 152"
+    },
+    {
+      "name": "Sniper Rifle",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage 5",
+      "damage_type": null,
+      "crit": 19,
+      "strength_based": false,
+      "cost": 11,
+      "source": "DCA 152"
+    },
+    {
+      "name": "Bow",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage 3",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": false,
+      "cost": 6,
+      "notes": "Trick arrows are usually handled as devices.",
+      "source": "DCA 152"
+    },
+    {
+      "name": "Crossbow",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage 3",
+      "damage_type": null,
+      "crit": 19,
+      "strength_based": false,
+      "cost": 7,
+      "source": "DCA 152"
+    },
+    {
+      "name": "Blaster Pistol",
+      "category": "Energy Weapon",
+      "effect": "Ranged Damage 5",
+      "damage_type": "energy",
+      "crit": 20,
+      "strength_based": false,
+      "cost": 10,
+      "source": "DCA 152"
+    },
+    {
+      "name": "Blaster Rifle",
+      "category": "Energy Weapon",
+      "effect": "Ranged Damage 8",
+      "damage_type": "energy",
+      "crit": 20,
+      "strength_based": false,
+      "cost": 16,
+      "source": "DCA 152"
+    },
+    {
+      "name": "Taser",
+      "category": "Energy Weapon",
+      "effect": "Ranged Affliction 5",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": false,
+      "cost": 10,
+      "descriptor": "electrical",
+      "notes": "Fortitude resistance (DC 15); dazed, stunned, incapacitated.",
+      "source": "DCA 152"
+    },
+    {
+      "name": "Flamethrower",
+      "category": "Heavy Weapon",
+      "effect": "Cone or Line Area Damage 6",
+      "damage_type": null,
+      "crit": null,
+      "strength_based": false,
+      "cost": 13,
+      "descriptor": "fire",
+      "notes": "Cone and Line settings are Alternate Effects.",
+      "source": "DCA 152"
+    },
+    {
+      "name": "Grenade Launcher",
+      "category": "Heavy Weapon",
+      "effect": "Ranged Burst Area Damage 5",
+      "damage_type": null,
+      "crit": null,
+      "strength_based": false,
+      "cost": 15,
+      "source": "DCA 152"
+    },
+    {
+      "name": "Rocket Launcher",
+      "category": "Heavy Weapon",
+      "effect": "Ranged Damage 10, Burst Area 7",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": false,
+      "cost": 27,
+      "descriptor": "explosive",
+      "notes": "Primary target resists Damage 10, others in the burst Damage 7; must reload after one or two shots.",
+      "source": "DCA 152"
+    },
+    {
+      "name": "Bolos",
+      "category": "Thrown Weapon",
+      "effect": "Ranged Snare 3",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": false,
+      "cost": 6,
+      "notes": "Affliction resisted by Dodge: hindered and vulnerable, then defenseless and immobilized.",
+      "source": "DCA 152"
+    },
+    {
+      "name": "Boomerang",
+      "category": "Thrown Weapon",
+      "effect": "Ranged Damage 1",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": true,
+      "cost": 2,
+      "notes": "Returns to the thrower.",
+      "source": "DCA 152"
+    },
+    {
+      "name": "Javelin",
+      "category": "Thrown Weapon",
+      "effect": "Ranged Damage 2",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": true,
+      "cost": 4,
+      "notes": "Usable in melee as well.",
+      "source": "DCA 152"
+    },
+    {
+      "name": "Shuriken",
+      "category": "Thrown Weapon",
+      "effect": "Ranged Multiattack Damage 1",
+      "damage_type": null,
+      "crit": 20,
+      "strength_based": false,
+      "cost": 3,
+      "notes": "Not Strength-based (too light).",
+      "source": "DCA 152"
+    },
+    {
+      "name": "Laser Sight",
+      "category": "Weapon Accessory",
+      "effect": "Accurate 1 (+2 attack)",
+      "damage_type": null,
+      "crit": null,
+      "strength_based": false,
+      "cost": 1,
+      "source": "DCA 153"
+    },
+    {
+      "name": "Stun Ammo",
+      "category": "Weapon Accessory",
+      "effect": "Feature: non-lethal ammunition",
+      "damage_type": null,
+      "crit": null,
+      "strength_based": false,
+      "cost": 1,
+      "source": "DCA 153"
+    },
+    {
+      "name": "Suppressor",
+      "category": "Weapon Accessory",
+      "effect": "Subtle 1 (DC 20 to hear)",
+      "damage_type": null,
+      "crit": null,
+      "strength_based": false,
+      "cost": 1,
+      "source": "DCA 153"
+    },
+    {
+      "name": "Targeting Scope",
+      "category": "Weapon Accessory",
+      "effect": "Improved Aim",
+      "damage_type": null,
+      "crit": null,
+      "strength_based": false,
+      "cost": 1,
+      "source": "DCA 153"
+    },
+    {
+      "name": "Fragmentation Grenade",
+      "category": "Grenade",
+      "effect": "Burst Area Damage 5",
+      "damage_type": null,
+      "crit": null,
+      "strength_based": false,
+      "cost": 15,
+      "dodge_dc": 15,
+      "source": "DCA 154"
+    },
+    {
+      "name": "Smoke Grenade",
+      "category": "Grenade",
+      "effect": "Cloud Area Concealment Attack 4",
+      "damage_type": null,
+      "crit": null,
+      "strength_based": false,
+      "cost": 12,
+      "dodge_dc": 14,
+      "notes": "Total concealment from all visual senses.",
+      "source": "DCA 154"
+    },
+    {
+      "name": "Flash-Bang Grenade",
+      "category": "Grenade",
+      "effect": "Burst Area Dazzle 4",
+      "damage_type": null,
+      "crit": null,
+      "strength_based": false,
+      "cost": 16,
+      "dodge_dc": 14,
+      "notes": "Affects vision and hearing; a vision-only flash grenade costs 12.",
+      "source": "DCA 154"
+    },
+    {
+      "name": "Sleep Gas Grenade",
+      "category": "Grenade",
+      "effect": "Cloud Area Sleep 4",
+      "damage_type": null,
+      "crit": null,
+      "strength_based": false,
+      "cost": 12,
+      "dodge_dc": 14,
+      "notes": "Affliction (Sleep).",
+      "source": "DCA 154"
+    },
+    {
+      "name": "Tear Gas Grenade",
+      "category": "Grenade",
+      "effect": "Cloud Area Affliction 4",
+      "damage_type": null,
+      "crit": null,
+      "strength_based": false,
+      "cost": 16,
+      "dodge_dc": 14,
+      "notes": "Dazed and vision impaired, stunned and vision disabled, incapacitated.",
+      "source": "DCA 154"
+    },
+    {
+      "name": "Dynamite",
+      "category": "Explosive",
+      "effect": "Burst Area Damage 5",
+      "damage_type": null,
+      "crit": null,
+      "strength_based": false,
+      "cost": 15,
+      "dodge_dc": 15,
+      "notes": "Per stick; each doubling of quantity adds +1 Damage.",
+      "source": "DCA 154"
+    },
+    {
+      "name": "Plastic Explosive",
+      "category": "Explosive",
+      "effect": "Burst Area Damage 10",
+      "damage_type": null,
+      "crit": null,
+      "strength_based": false,
+      "cost": 30,
+      "dodge_dc": 20,
+      "notes": "Per 1 lb. block; each doubling of quantity adds +1 Damage.",
+      "source": "DCA 154"
+    }
+  ],
+  "armor": [
+    {
+      "name": "Leather",
+      "category": "Archaic Armor",
+      "effect": "Protection 1",
+      "cost": 1,
+      "source": "DCA 154"
+    },
+    {
+      "name": "Chain Mail",
+      "category": "Archaic Armor",
+      "effect": "Protection 3",
+      "cost": 3,
+      "source": "DCA 154"
+    },
+    {
+      "name": "Plate Mail",
+      "category": "Archaic Armor",
+      "effect": "Protection 5",
+      "cost": 5,
+      "source": "DCA 154"
+    },
+    {
+      "name": "Full Plate",
+      "category": "Archaic Armor",
+      "effect": "Protection 6",
+      "cost": 6,
+      "source": "DCA 154"
+    },
+    {
+      "name": "Undercover Shirt",
+      "category": "Modern Armor",
+      "effect": "Protection 2, Limited to Ballistic, Subtle",
+      "cost": 2,
+      "source": "DCA 154"
+    },
+    {
+      "name": "Bulletproof Vest",
+      "category": "Modern Armor",
+      "effect": "Protection 4, Limited to Ballistic, Subtle",
+      "cost": 3,
+      "source": "DCA 154"
+    },
+    {
+      "name": "Small Shield",
+      "category": "Shield",
+      "effect": "+1 Active Defenses (Enhanced Dodge 1, Enhanced Parry 1)",
+      "cost": 2,
+      "source": "DCA 154"
+    },
+    {
+      "name": "Medium Shield",
+      "category": "Shield",
+      "effect": "+2 Active Defenses (Enhanced Dodge 2, Enhanced Parry 2)",
+      "cost": 4,
+      "source": "DCA 154"
+    },
+    {
+      "name": "Large Shield",
+      "category": "Shield",
+      "effect": "+3 Active Defenses (Enhanced Dodge 3, Enhanced Parry 3)",
+      "cost": 6,
+      "source": "DCA 154"
+    }
+  ],
+  "gear": [
+    {
+      "name": "Audio Recorder",
+      "category": "Electronics",
+      "effect": "Feature 1 (records up to 8 hours of audio)",
+      "cost": 1,
+      "source": "DCA 148"
+    },
+    {
+      "name": "Camera",
+      "category": "Electronics",
+      "effect": "Feature 1 (still photography)",
+      "cost": 1,
+      "source": "DCA 148"
+    },
+    {
+      "name": "Cell Phone",
+      "category": "Electronics",
+      "effect": "Feature 1 (communication)",
+      "cost": 1,
+      "source": "DCA 148"
+    },
+    {
+      "name": "Cell Phone (Smartphone)",
+      "category": "Electronics",
+      "effect": "Feature 2 (communication, internet/computer functions)",
+      "cost": 2,
+      "source": "DCA 148"
+    },
+    {
+      "name": "Commlink",
+      "category": "Electronics",
+      "effect": "Feature 1 (radio communication, about 1 mile)",
+      "cost": 1,
+      "source": "DCA 148"
+    },
+    {
+      "name": "Computer",
+      "category": "Electronics",
+      "effect": "Feature 1 (computer with standard peripherals)",
+      "cost": 1,
+      "source": "DCA 148"
+    },
+    {
+      "name": "Video Camera",
+      "category": "Electronics",
+      "effect": "Feature 2 (video and audio recording)",
+      "cost": 2,
+      "source": "DCA 148"
+    },
+    {
+      "name": "Handcuffs",
+      "category": "Criminal Gear",
+      "effect": "Feature 1 (restraint; Toughness 9, DC 20 to escape)",
+      "cost": 1,
+      "source": "DCA 149"
+    },
+    {
+      "name": "Lock Release Gun",
+      "category": "Criminal Gear",
+      "effect": "Feature 1 (opens cheap and average mechanical locks as a routine check)",
+      "cost": 1,
+      "source": "DCA 149"
+    },
+    {
+      "name": "Restraints",
+      "category": "Criminal Gear",
+      "effect": "Feature 1 (plastic restraint; Toughness 5, DC 20 to escape)",
+      "cost": 1,
+      "source": "DCA 149"
+    },
+    {
+      "name": "Binoculars",
+      "category": "Surveillance Gear",
+      "effect": "Feature 1 (+5 to visual Perception at a distance)",
+      "cost": 1,
+      "source": "DCA 149"
+    },
+    {
+      "name": "Concealable Microphone",
+      "category": "Surveillance Gear",
+      "effect": "Feature 1 (hidden listening device, about 1 mile range)",
+      "cost": 1,
+      "source": "DCA 149"
+    },
+    {
+      "name": "Mini-Tracer",
+      "category": "Surveillance Gear",
+      "effect": "Feature 1 (tracking transmitter, about 2 miles range; needs attack or Sleight of Hand to plant)",
+      "cost": 1,
+      "source": "DCA 149"
+    },
+    {
+      "name": "Night Vision Goggles",
+      "category": "Surveillance Gear",
+      "effect": "Feature 1 (darkvision; -2 Perception while worn; needs some ambient light)",
+      "cost": 1,
+      "source": "DCA 149"
+    },
+    {
+      "name": "Parabolic Microphone",
+      "category": "Surveillance Gear",
+      "effect": "Feature 1 (+5 to hearing Perception at a distance or through walls)",
+      "cost": 1,
+      "source": "DCA 149"
+    },
+    {
+      "name": "Camo Clothing",
+      "category": "Survival Gear",
+      "effect": "Feature 1 (+5 Stealth in matching environment)",
+      "cost": 1,
+      "source": "DCA 149"
+    },
+    {
+      "name": "Flash Goggles",
+      "category": "Survival Gear",
+      "effect": "Feature 1 (+5 to resist bright-light visual Dazzle)",
+      "cost": 1,
+      "source": "DCA 149"
+    },
+    {
+      "name": "Flashlight",
+      "category": "Survival Gear",
+      "effect": "Feature 1 (negates darkness penalties in its beam)",
+      "cost": 1,
+      "source": "DCA 149"
+    },
+    {
+      "name": "Fire Extinguisher",
+      "category": "Survival Gear",
+      "effect": "Feature 1 (puts out a 10x10 ft. fire as a move action; two uses)",
+      "cost": 1,
+      "source": "DCA 149"
+    },
+    {
+      "name": "Gas Mask",
+      "category": "Survival Gear",
+      "effect": "Feature 1 (immunity to eye and lung irritants; 12-hour filter)",
+      "cost": 1,
+      "source": "DCA 149"
+    },
+    {
+      "name": "GPS",
+      "category": "Survival Gear",
+      "effect": "Feature 1 (+5 to navigation checks outdoors)",
+      "cost": 1,
+      "source": "DCA 149"
+    },
+    {
+      "name": "Multi-tool",
+      "category": "Survival Gear",
+      "effect": "Feature 1 (no-tools penalty reduced from -5 to -2)",
+      "cost": 1,
+      "source": "DCA 149"
+    },
+    {
+      "name": "Rebreather",
+      "category": "Survival Gear",
+      "effect": "Feature 1 (20 rounds of air; no suffocation checks)",
+      "cost": 1,
+      "source": "DCA 149"
+    },
+    {
+      "name": "SCUBA Gear",
+      "category": "Survival Gear",
+      "effect": "Feature 1 (2 hours of air underwater)",
+      "cost": 1,
+      "source": "DCA 149"
+    },
+    {
+      "name": "Utility Belt (Sample)",
+      "category": "Utility Belt",
+      "effect": "Alternate Equipment array: most expensive item at full cost, +1 per additional item",
+      "cost": 25,
+      "contents": [
+        {
+          "name": "Tear Gas Pellets",
+          "effect": "Ranged Cloud Area Affliction 4 (Resisted by Fortitude; Dazed and Vision Impaired, Stunned and Vision Disabled, Incapacitated)",
+          "cost": 16
+        },
+        {
+          "name": "Bolos",
+          "effect": "Snare 3 (Resisted by Dodge; Hindered and Vulnerable, Defenseless and Immobilized)",
+          "cost": 1
+        },
+        {
+          "name": "Boomerangs",
+          "effect": "Ranged Damage 1, Strength-based",
+          "cost": 1
+        },
+        {
+          "name": "Explosives",
+          "effect": "Ranged Burst Area Damage 5",
+          "cost": 1
+        },
+        {
+          "name": "Cutting Torch",
+          "effect": "Damage 1 Linked to Weaken Toughness 1",
+          "cost": 1
+        },
+        {
+          "name": "Flash-Bangs",
+          "effect": "Burst Area Dazzle 4 (Resisted by Fortitude; Vision Impaired, Vision Disabled, Vision Unaware)",
+          "cost": 1
+        },
+        {
+          "name": "Pepper Spray",
+          "effect": "Close Visual Dazzle 4 (chemical)",
+          "cost": 1
+        },
+        {
+          "name": "Power Knuckles",
+          "effect": "Damage 4, Strength-based",
+          "cost": 1
+        },
+        {
+          "name": "Sleep Gas Pellets",
+          "effect": "Cloud Area Sleep 4 (Resisted by Fortitude; Fatigued, Exhausted, Asleep)",
+          "cost": 1
+        },
+        {
+          "name": "Smoke Pellets",
+          "effect": "Cloud Area Visual Concealment Attack",
+          "cost": 1
+        }
+      ],
+      "notes": "Each extra Alternate Equipment item adds 1 ep; hero points can add a one-time item.",
+      "source": "DCA 150"
+    },
+    {
+      "name": "Alarm",
+      "category": "Vehicle Feature",
+      "effect": "Feature 1 (Technology DC 20 to bypass; +5 DC per extra point)",
+      "cost": 1,
+      "source": "DCA 156"
+    },
+    {
+      "name": "Caltrops",
+      "category": "Vehicle Feature",
+      "effect": "Feature 1 (dispenser; standard action; blows out ordinary tires)",
+      "cost": 1,
+      "source": "DCA 156"
+    },
+    {
+      "name": "Hidden Compartments",
+      "category": "Vehicle Feature",
+      "effect": "Feature 1 (Perception DC 20 to find; +5 DC per extra point)",
+      "cost": 1,
+      "source": "DCA 156"
+    },
+    {
+      "name": "Navigation System",
+      "category": "Vehicle Feature",
+      "effect": "Feature 1 (+5 circumstance bonus to navigation checks)",
+      "cost": 1,
+      "source": "DCA 156"
+    },
+    {
+      "name": "Oil Slick",
+      "category": "Vehicle Feature",
+      "effect": "Feature 1 (20x20 ft. slick; pursuer Vehicles DC 15; standard action)",
+      "cost": 1,
+      "source": "DCA 156"
+    },
+    {
+      "name": "Remote Control",
+      "category": "Vehicle Feature",
+      "effect": "Feature 1 (operate the vehicle remotely)",
+      "cost": 1,
+      "source": "DCA 156"
+    },
+    {
+      "name": "Vehicle Armor",
+      "category": "Vehicle Feature",
+      "effect": "Protection (may be Impervious or Sustained), 1 point per +1 Toughness",
+      "cost": 1,
+      "per_rank": true,
+      "source": "DCA 156"
+    },
+    {
+      "name": "Cloaking Device (One Sense)",
+      "category": "Vehicle Feature",
+      "effect": "Concealment 4 (normal vision or all of one other sense type)",
+      "cost": 4,
+      "source": "DCA 156"
+    },
+    {
+      "name": "Cloaking Device (All Visual)",
+      "category": "Vehicle Feature",
+      "effect": "Concealment 8 (all visual senses)",
+      "cost": 8,
+      "source": "DCA 156"
+    },
+    {
+      "name": "Smokescreen",
+      "category": "Vehicle Feature",
+      "effect": "Cloud Area visual Concealment Attack",
+      "cost": 12,
+      "source": "DCA 156"
+    },
+    {
+      "name": "Motorcycle",
+      "category": "Vehicle (Ground)",
+      "effect": "Size Medium, Strength 1, Speed 6, Defense 10, Toughness 8",
+      "size": "Medium",
+      "strength": 1,
+      "speed": 6,
+      "defense": 10,
+      "toughness": 8,
+      "cost": 10,
+      "source": "DCA 158"
+    },
+    {
+      "name": "Car",
+      "category": "Vehicle (Ground)",
+      "effect": "Size Large, Strength 5, Speed 5, Defense 8, Toughness 8",
+      "size": "Large",
+      "strength": 5,
+      "speed": 5,
+      "defense": 8,
+      "toughness": 8,
+      "cost": 10,
+      "notes": "Full-size cars may add +1-2 Str; sports cars +1-2 Speed.",
+      "source": "DCA 158"
+    },
+    {
+      "name": "Police Cruiser",
+      "category": "Vehicle (Ground)",
+      "effect": "Size Large, Strength 6, Speed 6, Defense 8, Toughness 9",
+      "size": "Large",
+      "strength": 6,
+      "speed": 6,
+      "defense": 8,
+      "toughness": 9,
+      "cost": 11,
+      "source": "DCA 158"
+    },
+    {
+      "name": "Limousine",
+      "category": "Vehicle (Ground)",
+      "effect": "Size Huge, Strength 8, Speed 5, Defense 6, Toughness 9",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 5,
+      "defense": 6,
+      "toughness": 9,
+      "cost": 6,
+      "source": "DCA 158"
+    },
+    {
+      "name": "Truck",
+      "category": "Vehicle (Ground)",
+      "effect": "Size Huge, Strength 9, Speed 5, Defense 6, Toughness 9",
+      "size": "Huge",
+      "strength": 9,
+      "speed": 5,
+      "defense": 6,
+      "toughness": 9,
+      "cost": 7,
+      "notes": "Includes pick-ups, SUVs, and vans.",
+      "source": "DCA 158"
+    },
+    {
+      "name": "Armored Car",
+      "category": "Vehicle (Ground)",
+      "effect": "Size Huge, Strength 8, Speed 5, Defense 6, Toughness 12",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 5,
+      "defense": 6,
+      "toughness": 12,
+      "cost": 8,
+      "source": "DCA 158"
+    },
+    {
+      "name": "Tank",
+      "category": "Vehicle (Ground)",
+      "effect": "Size Huge, Strength 10, Speed 4, Defense 6, Toughness 12",
+      "size": "Huge",
+      "strength": 10,
+      "speed": 4,
+      "defense": 6,
+      "toughness": 12,
+      "cost": 59,
+      "notes": "Impervious Toughness 6; cannon Ranged Damage 10, Burst Area 6; heavy machine gun Ranged Multiattack Damage 6.",
+      "source": "DCA 158"
+    },
+    {
+      "name": "APC",
+      "category": "Vehicle (Ground)",
+      "effect": "Size Huge, Strength 12, Speed 4, Defense 6, Toughness 12",
+      "size": "Huge",
+      "strength": 12,
+      "speed": 4,
+      "defense": 6,
+      "toughness": 12,
+      "cost": 31,
+      "notes": "Impervious Toughness 4; cannon Ranged Damage 6, Burst Area 4; troops can fire from cover.",
+      "source": "DCA 158"
+    },
+    {
+      "name": "Bus",
+      "category": "Vehicle (Ground)",
+      "effect": "Size Gargantuan, Strength 12, Speed 5, Defense 4, Toughness 11",
+      "size": "Gargantuan",
+      "strength": 12,
+      "speed": 5,
+      "defense": 4,
+      "toughness": 11,
+      "cost": 8,
+      "source": "DCA 158"
+    },
+    {
+      "name": "Semi",
+      "category": "Vehicle (Ground)",
+      "effect": "Size Gargantuan, Strength 13, Speed 5, Defense 4, Toughness 11",
+      "size": "Gargantuan",
+      "strength": 13,
+      "speed": 5,
+      "defense": 4,
+      "toughness": 11,
+      "cost": 9,
+      "source": "DCA 158"
+    },
+    {
+      "name": "Train Engine",
+      "category": "Vehicle (Ground)",
+      "effect": "Size Huge, Strength 10, Speed 5, Defense 6, Toughness 10",
+      "size": "Huge",
+      "strength": 10,
+      "speed": 5,
+      "defense": 6,
+      "toughness": 10,
+      "cost": 10,
+      "source": "DCA 158"
+    },
+    {
+      "name": "Jet-ski",
+      "category": "Vehicle (Water)",
+      "effect": "Size Medium, Strength 1, Speed 5, Defense 10, Toughness 7",
+      "size": "Medium",
+      "strength": 1,
+      "speed": 5,
+      "defense": 10,
+      "toughness": 7,
+      "cost": 8,
+      "source": "DCA 158"
+    },
+    {
+      "name": "Speedboat",
+      "category": "Vehicle (Water)",
+      "effect": "Size Large, Strength 6, Speed 6, Defense 8, Toughness 7",
+      "size": "Large",
+      "strength": 6,
+      "speed": 6,
+      "defense": 8,
+      "toughness": 7,
+      "cost": 8,
+      "source": "DCA 158"
+    },
+    {
+      "name": "Yacht",
+      "category": "Vehicle (Water)",
+      "effect": "Size Huge, Strength 10, Speed 5, Defense 6, Toughness 9",
+      "size": "Huge",
+      "strength": 10,
+      "speed": 5,
+      "defense": 6,
+      "toughness": 9,
+      "cost": 9,
+      "source": "DCA 158"
+    },
+    {
+      "name": "Cutter",
+      "category": "Vehicle (Water)",
+      "effect": "Size Gargantuan, Strength 13, Speed 5, Defense 4, Toughness 12",
+      "size": "Gargantuan",
+      "strength": 13,
+      "speed": 5,
+      "defense": 4,
+      "toughness": 12,
+      "cost": 27,
+      "notes": "Light machine guns Ranged Multiattack Damage 6.",
+      "source": "DCA 158"
+    },
+    {
+      "name": "Destroyer",
+      "category": "Vehicle (Water)",
+      "effect": "Size Colossal, Strength 16, Speed 5, Defense 2, Toughness 14",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 5,
+      "defense": 2,
+      "toughness": 14,
+      "cost": 38,
+      "notes": "Heavy guns Ranged Damage 10, Burst Area 8.",
+      "source": "DCA 158"
+    },
+    {
+      "name": "Cruise Ship",
+      "category": "Vehicle (Water)",
+      "effect": "Size Awesome, Strength 20, Speed 5, Defense 0, Toughness 15",
+      "size": "Awesome",
+      "strength": 20,
+      "speed": 5,
+      "defense": 0,
+      "toughness": 15,
+      "cost": 10,
+      "source": "DCA 158"
+    },
+    {
+      "name": "Battleship",
+      "category": "Vehicle (Water)",
+      "effect": "Size Awesome, Strength 20, Speed 5, Defense 0, Toughness 16",
+      "size": "Awesome",
+      "strength": 20,
+      "speed": 5,
+      "defense": 0,
+      "toughness": 16,
+      "cost": 46,
+      "notes": "Gun batteries Ranged Damage 13, Burst Area 9; heavy armor.",
+      "source": "DCA 158"
+    },
+    {
+      "name": "Submarine",
+      "category": "Vehicle (Water)",
+      "effect": "Size Colossal, Strength 16, Speed 5, Defense 2, Toughness 13",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 5,
+      "defense": 2,
+      "toughness": 13,
+      "cost": 30,
+      "notes": "Torpedoes Ranged Damage 8, Burst Area 5; ballistic missiles (Ranged Burst Area Damage 15+) not included in cost.",
+      "source": "DCA 158"
+    },
+    {
+      "name": "Helicopter",
+      "category": "Vehicle (Air)",
+      "effect": "Size Huge, Strength 8, Speed 7, Defense 6, Toughness 9",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 7,
+      "defense": 6,
+      "toughness": 9,
+      "cost": 16,
+      "source": "DCA 158"
+    },
+    {
+      "name": "Military Copter",
+      "category": "Vehicle (Air)",
+      "effect": "Size Huge, Strength 8, Speed 8, Defense 6, Toughness 11",
+      "size": "Huge",
+      "strength": 8,
+      "speed": 8,
+      "defense": 6,
+      "toughness": 11,
+      "cost": 45,
+      "notes": "Machine guns Ranged Multiattack Damage 6; rockets Ranged Damage 9, Burst Area 6.",
+      "source": "DCA 158"
+    },
+    {
+      "name": "Private Jet",
+      "category": "Vehicle (Air)",
+      "effect": "Size Gargantuan, Strength 12, Speed 8, Defense 4, Toughness 11",
+      "size": "Gargantuan",
+      "strength": 12,
+      "speed": 8,
+      "defense": 4,
+      "toughness": 11,
+      "cost": 19,
+      "source": "DCA 158"
+    },
+    {
+      "name": "Jumbo-jet",
+      "category": "Vehicle (Air)",
+      "effect": "Size Colossal, Strength 16, Speed 7, Defense 2, Toughness 13",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 7,
+      "defense": 2,
+      "toughness": 13,
+      "cost": 18,
+      "source": "DCA 158"
+    },
+    {
+      "name": "Fighter Jet",
+      "category": "Vehicle (Air)",
+      "effect": "Size Huge, Strength 10, Speed 12, Defense 6, Toughness 10",
+      "size": "Huge",
+      "strength": 10,
+      "speed": 12,
+      "defense": 6,
+      "toughness": 10,
+      "cost": 66,
+      "notes": "Machine guns Ranged Multiattack Damage 6; missiles Ranged Damage 11, Burst Area 8, Homing 6.",
+      "source": "DCA 158"
+    },
+    {
+      "name": "Bomber",
+      "category": "Vehicle (Air)",
+      "effect": "Size Colossal, Strength 13, Speed 9, Defense 2, Toughness 13",
+      "size": "Colossal",
+      "strength": 13,
+      "speed": 9,
+      "defense": 2,
+      "toughness": 13,
+      "cost": 59,
+      "notes": "May carry machine guns and missiles; bombs Burst Area Damage 12 or higher.",
+      "source": "DCA 158"
+    },
+    {
+      "name": "Space Shuttle",
+      "category": "Vehicle (Space)",
+      "effect": "Size Colossal, Strength 16, Speed 12, Defense 2, Toughness 13",
+      "size": "Colossal",
+      "strength": 16,
+      "speed": 12,
+      "defense": 2,
+      "toughness": 13,
+      "cost": 28,
+      "notes": "Starred in the table but no special description is given in the text.",
+      "source": "DCA 158"
+    },
+    {
+      "name": "Space Fighter",
+      "category": "Vehicle (Space)",
+      "effect": "Size Huge, Strength 10, Speed 14, Defense 6, Toughness 11",
+      "size": "Huge",
+      "strength": 10,
+      "speed": 14,
+      "defense": 6,
+      "toughness": 11,
+      "cost": 56,
+      "notes": "Blaster cannons Ranged Damage 10.",
+      "source": "DCA 158"
+    },
+    {
+      "name": "Space Cruiser",
+      "category": "Vehicle (Space)",
+      "effect": "Size Colossal, Strength 18, Speed 14, Defense 2, Toughness 15",
+      "size": "Colossal",
+      "strength": 18,
+      "speed": 14,
+      "defense": 2,
+      "toughness": 15,
+      "cost": 79,
+      "notes": "Beam weapons Ranged Damage 12; energy torpedoes Ranged Damage 12, Burst Area 10, Homing 8.",
+      "source": "DCA 158"
+    },
+    {
+      "name": "Space Battleship",
+      "category": "Vehicle (Space)",
+      "effect": "Size Awesome, Strength 22, Speed 16, Defense 0, Toughness 18",
+      "size": "Awesome",
+      "strength": 22,
+      "speed": 16,
+      "defense": 0,
+      "toughness": 18,
+      "cost": 93,
+      "notes": "Blaster cannons Ranged Damage 15; energy torpedoes Ranged Damage 15, Burst Area 12, Homing 8.",
+      "source": "DCA 158"
+    },
+    {
+      "name": "Dimension Hopper",
+      "category": "Vehicle (Exotic)",
+      "effect": "Size Huge, Strength 8, Speed *, Defense 6, Toughness 9",
+      "size": "Huge",
+      "strength": 8,
+      "speed": null,
+      "defense": 6,
+      "toughness": 9,
+      "cost": 8,
+      "notes": "Speed is Movement 3 (Dimensional Travel).",
+      "source": "DCA 158"
+    },
+    {
+      "name": "Mole Machine",
+      "category": "Vehicle (Exotic)",
+      "effect": "Size Huge, Strength 11, Speed 4, Defense 6, Toughness 12",
+      "size": "Huge",
+      "strength": 11,
+      "speed": 4,
+      "defense": 6,
+      "toughness": 12,
+      "cost": 10,
+      "notes": "Speed is a Burrowing effect (front-mounted drill).",
+      "source": "DCA 158"
+    },
+    {
+      "name": "Time Machine",
+      "category": "Vehicle (Exotic)",
+      "effect": "Size Huge, Strength 8, Speed *, Defense 6, Toughness 9",
+      "size": "Huge",
+      "strength": 8,
+      "speed": null,
+      "defense": 6,
+      "toughness": 9,
+      "cost": 8,
+      "notes": "Speed is Movement (Time Travel), typically rank 2 or 3.",
+      "source": "DCA 158"
+    }
+  ],
+  "devices": [
+    {
+      "name": "Laser Pistol",
+      "category": "Weapon",
+      "powers": "Ranged Damage 5 (light), Accurate",
+      "cost": 11,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "crit": 20,
+      "source": "GG 45",
+      "summary": "Precise beam sidearm that is easier to aim than a blaster."
+    },
+    {
+      "name": "Ice Gun",
+      "category": "Weapon",
+      "powers": "Ranged Affliction 8 (ice; Resisted by Dodge, Overcome by Damage; Hindered and Vulnerable, Defenseless and Immobilized)",
+      "cost": 16,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "crit": 20,
+      "source": "GG 45",
+      "summary": "Freeze ray that encases targets in ice instead of hurting them."
+    },
+    {
+      "name": "Microwave Disruptor",
+      "category": "Weapon",
+      "powers": "Ranged Weaken Electronics 6, Broad, Simultaneous, Accurate",
+      "cost": 25,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "crit": 20,
+      "source": "GG 45",
+      "summary": "Targeted EMP gun that fries electronics and robots."
+    },
+    {
+      "name": "Plasma Burst",
+      "category": "Weapon",
+      "powers": "Cone Area Damage 8 (fire), Secondary Effect",
+      "cost": 24,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "crit": 20,
+      "source": "GG 45",
+      "summary": "Short-range cone of superheated plasma that keeps burning."
+    },
+    {
+      "name": "Sonic Stunner",
+      "category": "Weapon",
+      "powers": "Ranged Affliction 6 (sonic; Resisted and Overcome by Fortitude; Dazed, Stunned, Incapacitated)",
+      "cost": 12,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "crit": 20,
+      "source": "GG 45",
+      "summary": "Non-lethal sound-wave pistol that knocks targets senseless."
+    },
+    {
+      "name": "X-Ray Laser Sniper Rifle",
+      "category": "Weapon",
+      "powers": "Subtle Ranged Damage 8 (radiation), Penetrating 5, Accurate, Dangerous, Extended Range",
+      "cost": 25,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "crit": 19,
+      "source": "GG 45",
+      "summary": "Invisible long-range beam rifle that cuts through armor."
+    },
+    {
+      "name": "Electro-Whip",
+      "category": "Weapon",
+      "powers": "Damage 3 (electricity), Concentration, Disarming, Grabbing",
+      "cost": 8,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "crit": 20,
+      "source": "GG 45",
+      "summary": "Charged lash that shocks, snags weapons, and holds foes."
+    },
+    {
+      "name": "Grav Gauntlet",
+      "category": "Weapon",
+      "powers": "Strength-based Damage 6",
+      "cost": 6,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "crit": 20,
+      "source": "GG 45",
+      "summary": "Gravity-boosted glove that greatly amplifies punches."
+    },
+    {
+      "name": "Laser Sword",
+      "category": "Weapon",
+      "powers": "Damage 6, Penetrating",
+      "cost": 12,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "crit": 20,
+      "source": "GG 45",
+      "summary": "Energy blade that slices through most protection."
+    },
+    {
+      "name": "Shock Baton",
+      "category": "Weapon",
+      "powers": "Cumulative Affliction 5 (Resisted and Overcome by Fortitude; Dazed, Stunned, Incapacitated)",
+      "cost": 10,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "crit": 20,
+      "source": "GG 45",
+      "summary": "Stun stick whose jolts stack with each hit."
+    },
+    {
+      "name": "Katana",
+      "category": "Weapon",
+      "powers": "Strength-based Damage 3 (slashing), Dangerous",
+      "cost": 4,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "crit": 19,
+      "source": "GG 23",
+      "summary": "Classic curved samurai sword with a wide critical range."
+    },
+    {
+      "name": "Bo Staff",
+      "category": "Weapon",
+      "powers": "Strength-based Damage 2 (bludgeoning), Double, Reach",
+      "cost": 4,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "crit": 20,
+      "source": "GG 23",
+      "summary": "Long fighting staff that strikes with either end at a distance."
+    },
+    {
+      "name": "Sai (Pair)",
+      "category": "Weapon",
+      "powers": "Strength-based Damage 1 (piercing), Defensive, Disarming, Double",
+      "cost": 4,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "crit": 20,
+      "notes": "Paired as a Double weapon (+1 ep over a single sai at 3).",
+      "source": "GG 23",
+      "summary": "Paired parrying daggers built for catching and stripping weapons."
+    },
+    {
+      "name": "Chakram",
+      "category": "Weapon",
+      "powers": "Ranged Damage 3, Dangerous",
+      "cost": 7,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "crit": 19,
+      "source": "GG 23",
+      "summary": "Bladed throwing ring with a deadly edge."
+    },
+    {
+      "name": "Trident",
+      "category": "Weapon",
+      "powers": "Strength-based Damage 3, Dangerous, Disarming, Reach",
+      "cost": 5,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "crit": 19,
+      "source": "GG 13",
+      "summary": "Three-pronged polearm for reach fighting and disarms."
+    },
+    {
+      "name": "Capture Weapon",
+      "category": "Weapon",
+      "powers": "Ranged Affliction (Resisted by Dodge, Overcome by Damage; Hindered and Vulnerable, Defenseless and Immobilized), Extra Condition, Limited Degree",
+      "cost": 0,
+      "cost_per_rank": 2,
+      "cost_unit": "pp",
+      "source": "GG 111",
+      "summary": "Thrown net, bola, or foam grenade that pins a target in place."
+    },
+    {
+      "name": "Collapsible Truncheon",
+      "category": "Weapon",
+      "powers": "Strength-based Damage 2, Subtle (concealable)",
+      "cost": 3,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "notes": "Bo-staff version with an extra rank of Reach costs 4.",
+      "source": "GG 111",
+      "summary": "Palm-sized baton that snaps out to full length."
+    },
+    {
+      "name": "Mini-Grenades",
+      "category": "Weapon",
+      "powers": "Ranged Burst Area Damage (explosive); AE: Ranged Burst Area Affliction (flash-bang: Dodge/Fortitude; Impaired, Disabled, Unaware); AE: Ranged Cloud Area Affliction (gas: Fortitude; Dazed, Stunned, Incapacitated)",
+      "cost": 0,
+      "cost_per_rank": 3,
+      "cost_unit": "pp",
+      "source": "GG 111",
+      "summary": "Pellet grenades with explosive, flash, and knockout-gas loads."
+    },
+    {
+      "name": "Throwing Weapon",
+      "category": "Weapon",
+      "powers": "Ranged Damage",
+      "cost": 0,
+      "cost_per_rank": 2,
+      "cost_unit": "pp",
+      "source": "GG 112",
+      "summary": "Signature thrown disk, sphere, or boomerang."
+    },
+    {
+      "name": "Glider",
+      "category": "Movement",
+      "powers": "Flight, Gliding",
+      "cost": 0,
+      "cost_per_rank": 1,
+      "cost_unit": "pp",
+      "rank_range": [
+        1,
+        4
+      ],
+      "notes": "Rarely more than Flight 4 without boosters.",
+      "source": "GG 112",
+      "summary": "Deployable cape-wing or parawing for controlled descents."
+    },
+    {
+      "name": "Swing Line",
+      "category": "Movement",
+      "powers": "Movement (Swinging)",
+      "cost": 2,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 113",
+      "summary": "Grapnel gun or line launcher for swinging between buildings."
+    },
+    {
+      "name": "Smoke Bombs",
+      "category": "Utility",
+      "powers": "Enhanced Advantage 1 (Hide in Plain Sight)",
+      "cost": 1,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 113",
+      "summary": "Pellets that let the user vanish even while watched."
+    },
+    {
+      "name": "Cutting Torch",
+      "category": "Utility",
+      "powers": "Damage 1, Precise, Linked to Weaken Toughness 1",
+      "cost": 3,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 114",
+      "summary": "Compact torch or thermite paste for burning through locks and bars."
+    },
+    {
+      "name": "Wrist-Comp",
+      "category": "Utility",
+      "powers": "Feature (tools, Technology)",
+      "cost": 1,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 114",
+      "summary": "Glove-mounted computer for hacking and network access."
+    },
+    {
+      "name": "Gecko Gear",
+      "category": "Movement",
+      "powers": "Movement 1 (Wall-crawling)",
+      "cost": 2,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 96",
+      "summary": "Adhesive gloves and pads for clinging to any surface."
+    },
+    {
+      "name": "Biometric Decoder",
+      "category": "Utility",
+      "powers": "Morph 2 (biometric access data), Precise, Limited to Biometrics, Technology Check Required (DC 15)",
+      "cost": 5,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 95",
+      "summary": "Spoofs fingerprint, retina, and voice locks."
+    },
+    {
+      "name": "Phasing Field",
+      "category": "Utility",
+      "powers": "Insubstantial 4 (incorporeal)",
+      "cost": 20,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 97",
+      "summary": "Experimental field that lets the user walk through walls."
+    },
+    {
+      "name": "Sensor Cloak",
+      "category": "Utility",
+      "powers": "Concealment 10 (all senses), Limited to Electronics",
+      "cost": 10,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 97",
+      "summary": "Hides the wearer from cameras and electronic sensors."
+    },
+    {
+      "name": "Disguise Field",
+      "category": "Utility",
+      "powers": "Morph 3 (humanoids)",
+      "cost": 15,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 99",
+      "summary": "Holographic projector that makes the user look like someone else."
+    },
+    {
+      "name": "Sleeve Derringer",
+      "category": "Weapon",
+      "powers": "Ranged Damage 3 (ballistic), Subtle, Limited to Two Shots",
+      "cost": 4,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 102",
+      "summary": "Spring-loaded hideaway pistol for emergencies."
+    },
+    {
+      "name": "Voltaic Gun",
+      "category": "Weapon",
+      "powers": "Ranged Affliction 6 (electricity; Resisted and Overcome by Fortitude; Dazed, Stunned, Incapacitated), Unreliable (5 uses)",
+      "cost": 6,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 102",
+      "summary": "Lightning pistol with only a few shots per charge."
+    },
+    {
+      "name": "X-Ray Goggles",
+      "category": "Sensor",
+      "powers": "Senses 4 (Vision Penetrates Concealment)",
+      "cost": 4,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 103",
+      "summary": "Goggles that see through solid objects."
+    },
+    {
+      "name": "Blaster",
+      "category": "Weapon",
+      "powers": "Ranged Damage (typically 2-8 ranks)",
+      "cost": 0,
+      "cost_per_rank": 2,
+      "cost_unit": "pp",
+      "rank_range": [
+        2,
+        8
+      ],
+      "source": "GG 4",
+      "summary": "Standard charged-particle beam weapon of space-faring races."
+    },
+    {
+      "name": "Communicator",
+      "category": "Utility",
+      "powers": "Communication 3 (radio), Subtle",
+      "cost": 13,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 6",
+      "summary": "Encrypted long-range communicator."
+    },
+    {
+      "name": "Universal Translator",
+      "category": "Utility",
+      "powers": "Comprehend 2 (languages, speak and understand)",
+      "cost": 4,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 6",
+      "summary": "Device that lets the user understand and be understood in any language."
+    },
+    {
+      "name": "Chameleon Cloak",
+      "category": "Utility",
+      "powers": "Morph 3 (humanoids), Limited to visual and auditory",
+      "cost": 12,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 7",
+      "summary": "Holographic disguise that fools eyes and ears but not sensors."
+    },
+    {
+      "name": "Cloaking Device",
+      "category": "Utility",
+      "powers": "Concealment 4 (visual)",
+      "cost": 8,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 7",
+      "summary": "Personal invisibility field."
+    },
+    {
+      "name": "Mind Mask",
+      "category": "Defense",
+      "powers": "Concealment 2 (mental)",
+      "cost": 4,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 7",
+      "summary": "Hides the wearer's thoughts from telepaths."
+    },
+    {
+      "name": "Environment Suit",
+      "category": "Defense",
+      "powers": "Immunity 7 (cold, heat, pressure, radiation, suffocation, vacuum)",
+      "cost": 7,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 5",
+      "summary": "Sealed suit for surviving hostile worlds and space."
+    },
+    {
+      "name": "Teleporter",
+      "category": "Movement",
+      "powers": "Teleport, Extended, Limited to Extended",
+      "cost": 0,
+      "cost_per_rank": 2,
+      "cost_unit": "pp",
+      "rank_range": [
+        11,
+        15
+      ],
+      "source": "GG 7",
+      "summary": "Long-range beam-down transporter (rank 11+ reaches orbit)."
+    },
+    {
+      "name": "Riot Armor",
+      "category": "Armor",
+      "powers": "Protection 6",
+      "cost": 6,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "source": "GG 18",
+      "summary": "Full-body ballistic suit with helmet and gloves."
+    },
+    {
+      "name": "Tower Shield",
+      "category": "Armor",
+      "powers": "+5 Dodge and Parry, -1 speed",
+      "cost": 9,
+      "cost_per_rank": 0,
+      "cost_unit": "ep",
+      "source": "GG 18",
+      "summary": "Huge body-covering shield that slows its bearer."
+    },
+    {
+      "name": "Force Field",
+      "category": "Armor",
+      "powers": "Protection",
+      "cost": 0,
+      "cost_per_rank": 1,
+      "cost_unit": "pp",
+      "source": "GG 18",
+      "summary": "Personal energy field worn like a second skin."
+    },
+    {
+      "name": "Sealed Force Field",
+      "category": "Armor",
+      "powers": "Protection plus Immunity 8 (life support except eating and sleeping)",
+      "cost": 8,
+      "cost_per_rank": 1,
+      "cost_unit": "pp",
+      "source": "GG 18",
+      "summary": "Airtight force field doubling as a space suit."
+    },
+    {
+      "name": "Nano-Armor",
+      "category": "Armor",
+      "powers": "Protection, Variable Descriptor 2",
+      "cost": 2,
+      "cost_per_rank": 1,
+      "cost_unit": "pp",
+      "source": "GG 18",
+      "summary": "Smart-matter armor that adapts its protection to the threat."
+    },
+    {
+      "name": "Life Support Field",
+      "category": "Defense",
+      "powers": "Immunity 10 (life support), Quirk (no nourishment or sleep benefit)",
+      "cost": 8,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "source": "GG 19",
+      "summary": "Aura that lets the wearer breathe and survive anywhere."
+    },
+    {
+      "name": "Psi-Shield",
+      "category": "Defense",
+      "powers": "Immunity 10 (mental powers)",
+      "cost": 10,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "notes": "Cheaper alternative: Enhanced Will, Limited to Mental Powers, 1 point per 2 ranks.",
+      "source": "GG 18",
+      "summary": "Headgear that blocks telepathy and mind control."
+    },
+    {
+      "name": "Energy Boosting Gauntlets",
+      "category": "Weapon",
+      "powers": "Ranged Damage (energy; Additive)",
+      "cost": 0,
+      "cost_per_rank": 2,
+      "cost_unit": "pp",
+      "source": "GG 81",
+      "summary": "Gauntlets that amplify the wearer's own energy blasts."
+    },
+    {
+      "name": "Jump Belt",
+      "category": "Movement",
+      "powers": "Accurate and Extended extras for Teleport",
+      "cost": 0,
+      "cost_per_rank": 2,
+      "cost_unit": "pp",
+      "source": "GG 81",
+      "summary": "Belt that extends a teleporter's range and precision."
+    },
+    {
+      "name": "Nullifier Ray",
+      "category": "Weapon",
+      "powers": "Nullify Powers, Broad, Simultaneous, Sustained",
+      "cost": 0,
+      "cost_per_rank": 5,
+      "cost_unit": "pp",
+      "source": "GG 82",
+      "summary": "Beam that shuts down a target's super-powers."
+    },
+    {
+      "name": "Power Shield",
+      "category": "Defense",
+      "powers": "Immunity to Power Effects (or Enhanced Defense, Limited to Defined Power Effects)",
+      "cost": 10,
+      "cost_per_rank": 0,
+      "cost_unit": "pp",
+      "notes": "2 points for an uncommon power type, 10 for common, 20 for very common; Enhanced Defense version is 1 point per 2 ranks.",
+      "source": "GG 82",
+      "summary": "Protective device against one category of powers."
+    },
+    {
+      "name": "Mindsword",
+      "category": "Weapon",
+      "powers": "Damage, Resisted by Will",
+      "cost": 0,
+      "cost_per_rank": 2,
+      "cost_unit": "pp",
+      "source": "GG 85",
+      "summary": "Blade of thought that strikes the mind and ignores cover."
+    },
+    {
+      "name": "Nanosuit",
+      "category": "Armor",
+      "powers": "Immunity 10 (life support), Protection, Activation (move action)",
+      "cost": 9,
+      "cost_per_rank": 1,
+      "cost_unit": "pp",
+      "source": "GG 76",
+      "summary": "Nanite swarm that flows over the user to form a sealed armored suit."
+    },
+    {
+      "name": "Monofilament Blade",
+      "category": "Weapon",
+      "powers": "Penetrating Damage",
+      "cost": 0,
+      "cost_per_rank": 2,
+      "cost_unit": "pp",
+      "source": "GG 78",
+      "summary": "Blade with a molecule-thin edge that cuts through armor."
+    },
+    {
+      "name": "Ghost Shirt",
+      "category": "Armor",
+      "powers": "Protection",
+      "cost": 0,
+      "cost_per_rank": 1,
+      "cost_unit": "pp",
+      "source": "GG 64",
+      "summary": "Ordinary-looking garment enchanted to turn weapons."
+    },
+    {
+      "name": "Levitation Cloak",
+      "category": "Movement",
+      "powers": "Flight",
+      "cost": 0,
+      "cost_per_rank": 2,
+      "cost_unit": "pp",
+      "source": "GG 65",
+      "summary": "Enchanted cape that carries its wearer aloft."
+    },
+    {
+      "name": "Seven-League Shoes",
+      "category": "Movement",
+      "powers": "Teleport (Accurate, Easy)",
+      "cost": 0,
+      "cost_per_rank": 4,
+      "cost_unit": "pp",
+      "source": "GG 65",
+      "summary": "Footwear that crosses great distances in a single step."
+    },
+    {
+      "name": "Warding Bracer",
+      "category": "Defense",
+      "powers": "Enhanced Parry",
+      "cost": 0,
+      "cost_per_rank": 1,
+      "cost_unit": "pp",
+      "source": "GG 65",
+      "summary": "Magic wrist-guard that blocks blows better than its wearer could."
+    }
+  ]
+}

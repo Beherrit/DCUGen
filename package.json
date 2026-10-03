@@ -1,0 +1,14 @@
+{
+  "name": "dcugen",
+  "version": "6.0.0",
+  "description": "Character generator and GM toolkit for the DC Adventures RPG (Mutants & Masterminds 3e rules).",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "data": "node tools/build.mjs data",
+    "build": "node tools/build.mjs all",
+    "test": "node tools/build.mjs data && node --test \"tests/**/*.test.mjs\"",
+    "dev": "node tools/serve.mjs",
+    "validate": "node tools/validate-catalog.mjs"
+  }
+}

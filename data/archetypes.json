@@ -1,0 +1,2038 @@
+[
+  {
+    "id": "paragon",
+    "name": "Paragon",
+    "weight": 6,
+    "blurb": "Flies, punches through walls, and inspires everyone watching.",
+    "abilities": {
+      "Strength": "pl+2..pl+5",
+      "Stamina": "pl-2..pl+1",
+      "Agility": "1..3",
+      "Dexterity": "1..3",
+      "Fighting": "pl/2..pl-3",
+      "Intellect": "1..3",
+      "Awareness": "1..4",
+      "Presence": "2..5"
+    },
+    "offense": {
+      "modes": {
+        "strength": 4,
+        "ranged": 1
+      },
+      "skew": "-2..1"
+    },
+    "defense": {
+      "tough": "1..4",
+      "fort": "1..3"
+    },
+    "toughness": {
+      "protection": 5
+    },
+    "themes": {
+      "strength": 8,
+      "cosmic": 2,
+      "light": 1,
+      "magic": 1
+    },
+    "powers": {
+      "alts": "1..2",
+      "movement": 0.95,
+      "sense": 0.8,
+      "utility": "1..3",
+      "device": false
+    },
+    "skills": {
+      "Athletics": 2,
+      "Insight": 3,
+      "Perception": 3,
+      "Persuasion": 3,
+      "Intimidation": 2,
+      "Expertise": 2,
+      "Investigation": 1
+    },
+    "skill_count": "3..6",
+    "skill_ranks": "2..7",
+    "advantages": {
+      "Power Attack": 3,
+      "Interpose": 3,
+      "Leadership": 2,
+      "Inspire": 2,
+      "Fearless": 2,
+      "Extraordinary Effort": 2,
+      "Teamwork": 2,
+      "Improved Initiative": 1,
+      "All-out Attack": 1,
+      "Takedown": 1,
+      "Benefit": 1
+    },
+    "advantage_count": "3..6",
+    "origins": [
+      "alien",
+      "divine",
+      "mutation",
+      "experiment"
+    ]
+  },
+  {
+    "id": "powerhouse",
+    "name": "Powerhouse",
+    "weight": 8,
+    "blurb": "A walking wrecking ball who shrugs off tank shells.",
+    "abilities": {
+      "Strength": "pl+1..pl+5",
+      "Stamina": "pl-2..pl+1",
+      "Agility": "0..2",
+      "Dexterity": "0..2",
+      "Fighting": "pl/2-1..pl-3",
+      "Intellect": "-1..2",
+      "Awareness": "0..3",
+      "Presence": "0..3"
+    },
+    "offense": {
+      "modes": {
+        "strength": 6,
+        "close": 1
+      },
+      "skew": "-3..0"
+    },
+    "defense": {
+      "tough": "2..5",
+      "fort": "1..4"
+    },
+    "toughness": {
+      "protection": 6
+    },
+    "themes": {
+      "strength": 5,
+      "earth": 4,
+      "radiation": 2,
+      "size": 1,
+      "animal": 1,
+      "cosmic": 1
+    },
+    "powers": {
+      "alts": "0..1",
+      "movement": 0.6,
+      "sense": 0.3,
+      "utility": "1..2",
+      "device": false
+    },
+    "skills": {
+      "Athletics": 4,
+      "Intimidation": 4,
+      "Perception": 2,
+      "Insight": 1,
+      "Expertise": 1,
+      "Persuasion": 1
+    },
+    "skill_count": "2..5",
+    "skill_ranks": "2..6",
+    "advantages": {
+      "Power Attack": 4,
+      "All-out Attack": 3,
+      "Improved Smash": 3,
+      "Takedown": 2,
+      "Interpose": 2,
+      "Fearless": 2,
+      "Diehard": 2,
+      "Extraordinary Effort": 2,
+      "Improved Critical": 1,
+      "Startle": 1,
+      "Chokehold": 1,
+      "Improved Grab": 1
+    },
+    "advantage_count": "2..5",
+    "origins": [
+      "mutation",
+      "experiment",
+      "accident",
+      "alien",
+      "divine"
+    ]
+  },
+  {
+    "id": "speedster",
+    "name": "Speedster",
+    "weight": 7,
+    "blurb": "The fastest thing alive, as long as the snacks hold out.",
+    "abilities": {
+      "Strength": "1..3",
+      "Stamina": "2..pl/2",
+      "Agility": "pl/2+1..pl-1",
+      "Dexterity": "2..pl/2",
+      "Fighting": "pl/2..pl-2",
+      "Intellect": "1..4",
+      "Awareness": "2..4",
+      "Presence": "1..3"
+    },
+    "offense": {
+      "modes": {
+        "close": 5
+      },
+      "skew": "0..3"
+    },
+    "defense": {
+      "tough": "-4..-1",
+      "fort": "-1..2"
+    },
+    "toughness": {
+      "protection": 1,
+      "defensive_roll": 3
+    },
+    "themes": {
+      "speed": 10
+    },
+    "powers": {
+      "alts": "0..2",
+      "movement": 1,
+      "sense": 0.2,
+      "utility": "2..3",
+      "device": false
+    },
+    "skills": {
+      "Acrobatics": 3,
+      "Athletics": 3,
+      "Perception": 3,
+      "Investigation": 2,
+      "Expertise": 2,
+      "Technology": 1,
+      "Insight": 2,
+      "Deception": 1
+    },
+    "skill_count": "3..6",
+    "skill_ranks": "2..7",
+    "advantages": {
+      "Move-by Action": 4,
+      "Agile Feint": 3,
+      "Instant Up": 2,
+      "Improved Initiative": 2,
+      "Evasion": 3,
+      "Defensive Roll": 2,
+      "Seize Initiative": 2,
+      "Uncanny Dodge": 2,
+      "Takedown": 1,
+      "Improved Trip": 1,
+      "Quick Draw": 1
+    },
+    "advantage_count": "3..6",
+    "origins": [
+      "accident",
+      "legacy",
+      "experiment",
+      "tech"
+    ]
+  },
+  {
+    "id": "blaster",
+    "name": "Energy Projector",
+    "weight": 10,
+    "blurb": "Throws the elements around like a walking artillery battery.",
+    "abilities": {
+      "Strength": "0..2",
+      "Stamina": "2..pl/2+1",
+      "Agility": "2..pl/2",
+      "Dexterity": "pl/2..pl-2",
+      "Fighting": "1..pl/2",
+      "Intellect": "1..4",
+      "Awareness": "2..5",
+      "Presence": "1..4"
+    },
+    "offense": {
+      "modes": {
+        "ranged": 6,
+        "area": 1
+      },
+      "skew": "-1..2"
+    },
+    "defense": {
+      "tough": "-1..1",
+      "fort": "-1..1"
+    },
+    "toughness": {
+      "protection": 6
+    },
+    "themes": {
+      "fire": 4,
+      "ice": 4,
+      "electric": 4,
+      "light": 3,
+      "sonic": 3,
+      "gravity": 2,
+      "magnetism": 2,
+      "cosmic": 4,
+      "radiation": 3,
+      "air": 3,
+      "water": 2,
+      "shadow": 2
+    },
+    "powers": {
+      "alts": "1..4",
+      "movement": 0.85,
+      "sense": 0.5,
+      "utility": "1..3",
+      "device": false
+    },
+    "skills": {
+      "Perception": 3,
+      "Acrobatics": 2,
+      "Insight": 2,
+      "Expertise": 2,
+      "Persuasion": 1,
+      "Intimidation": 2,
+      "Investigation": 1,
+      "Technology": 1
+    },
+    "skill_count": "3..6",
+    "skill_ranks": "2..6",
+    "advantages": {
+      "Improved Aim": 2,
+      "Precise Attack": 2,
+      "Power Attack": 2,
+      "Accurate Attack": 2,
+      "Improved Initiative": 2,
+      "Teamwork": 1,
+      "Taunt": 1,
+      "Fearless": 1,
+      "Benefit": 1,
+      "Languages": 1
+    },
+    "advantage_count": "1..4",
+    "origins": [
+      "mutation",
+      "accident",
+      "alien",
+      "experiment",
+      "cosmic"
+    ]
+  },
+  {
+    "id": "crimefighter",
+    "name": "Crime Fighter",
+    "weight": 8,
+    "blurb": "No powers, a lot of training, and a plan for everything.",
+    "abilities": {
+      "Strength": "2..4",
+      "Stamina": "2..pl/2",
+      "Agility": "pl/2..pl/2+3",
+      "Dexterity": "2..pl/2+1",
+      "Fighting": "pl-3..pl+1",
+      "Intellect": "2..pl/2+2",
+      "Awareness": "2..pl/2+1",
+      "Presence": "1..pl/2"
+    },
+    "offense": {
+      "modes": {
+        "strength": 3,
+        "equipment": 2
+      },
+      "skew": "2..4"
+    },
+    "defense": {
+      "tough": "-4..-2",
+      "fort": "-2..1"
+    },
+    "toughness": {
+      "defensive_roll": 5,
+      "armor": 2
+    },
+    "themes": {
+      "martial": 3,
+      "arsenal": 2
+    },
+    "powerless": true,
+    "powers": {
+      "alts": "0..0",
+      "movement": 0,
+      "sense": 0,
+      "utility": "0..0",
+      "device": false
+    },
+    "equipment": "2..5",
+    "styles": true,
+    "skills": {
+      "Acrobatics": 3,
+      "Athletics": 3,
+      "Investigation": 4,
+      "Perception": 4,
+      "Stealth": 4,
+      "Expertise": 3,
+      "Insight": 3,
+      "Intimidation": 3,
+      "Deception": 2,
+      "Technology": 2,
+      "Vehicles": 2,
+      "Sleight of Hand": 1,
+      "Treatment": 1
+    },
+    "skill_count": "7..11",
+    "skill_ranks": "3..9",
+    "advantages": {
+      "Defensive Roll": 4,
+      "Assessment": 2,
+      "Contacts": 2,
+      "Improved Initiative": 2,
+      "Benefit": 2,
+      "Connected": 1,
+      "Hide in Plain Sight": 1,
+      "Evasion": 2,
+      "Takedown": 2,
+      "Power Attack": 2,
+      "Agile Feint": 2,
+      "Instant Up": 2,
+      "Quick Draw": 1,
+      "Uncanny Dodge": 2,
+      "Well-informed": 1,
+      "Jack-of-all-trades": 1,
+      "Languages": 1,
+      "Skill Mastery": 1,
+      "Startle": 1,
+      "Improved Disarm": 1
+    },
+    "advantage_count": "7..12",
+    "origins": [
+      "training",
+      "tragedy",
+      "legacy",
+      "military"
+    ]
+  },
+  {
+    "id": "martialartist",
+    "name": "Martial Artist",
+    "weight": 6,
+    "blurb": "Every strike is a decade of discipline.",
+    "abilities": {
+      "Strength": "1..4",
+      "Stamina": "2..pl/2",
+      "Agility": "pl/2..pl/2+4",
+      "Dexterity": "1..pl/2",
+      "Fighting": "pl-2..pl+2",
+      "Intellect": "0..3",
+      "Awareness": "2..pl/2+2",
+      "Presence": "0..3"
+    },
+    "offense": {
+      "modes": {
+        "strength": 4,
+        "close": 2
+      },
+      "skew": "2..5"
+    },
+    "defense": {
+      "tough": "-4..-2",
+      "fort": "-1..1"
+    },
+    "toughness": {
+      "defensive_roll": 6
+    },
+    "themes": {
+      "martial": 8
+    },
+    "powers": {
+      "alts": "0..1",
+      "movement": 0.3,
+      "sense": 0.6,
+      "utility": "0..1",
+      "device": false
+    },
+    "styles": true,
+    "skills": {
+      "Acrobatics": 4,
+      "Athletics": 3,
+      "Insight": 3,
+      "Perception": 3,
+      "Stealth": 3,
+      "Intimidation": 2,
+      "Expertise": 1,
+      "Deception": 1
+    },
+    "skill_count": "4..7",
+    "skill_ranks": "3..8",
+    "advantages": {
+      "Defensive Roll": 5,
+      "Improved Critical": 3,
+      "Instant Up": 3,
+      "Power Attack": 2,
+      "Evasion": 2,
+      "Takedown": 3,
+      "Improved Trip": 2,
+      "Improved Disarm": 2,
+      "Agile Feint": 2,
+      "Uncanny Dodge": 2,
+      "Defensive Attack": 2,
+      "Fast Grab": 1,
+      "Improved Initiative": 2,
+      "Redirect": 1,
+      "Weapon Break": 1
+    },
+    "advantage_count": "5..9",
+    "origins": [
+      "training",
+      "legacy",
+      "tragedy"
+    ]
+  },
+  {
+    "id": "weaponmaster",
+    "name": "Weapon Master",
+    "weight": 5,
+    "blurb": "Never misses, and always carries one more trick.",
+    "abilities": {
+      "Strength": "1..3",
+      "Stamina": "2..pl/2",
+      "Agility": "pl/2-1..pl/2+2",
+      "Dexterity": "pl-3..pl+1",
+      "Fighting": "pl/2..pl-2",
+      "Intellect": "1..4",
+      "Awareness": "2..pl/2+1",
+      "Presence": "1..3"
+    },
+    "offense": {
+      "modes": {
+        "ranged": 6
+      },
+      "skew": "2..4"
+    },
+    "defense": {
+      "tough": "-4..-2",
+      "fort": "-2..1"
+    },
+    "toughness": {
+      "defensive_roll": 4,
+      "armor": 1
+    },
+    "themes": {
+      "arsenal": 8,
+      "tech": 1
+    },
+    "powers": {
+      "alts": "2..5",
+      "movement": 0.8,
+      "sense": 0.4,
+      "utility": "0..1",
+      "device": "removable"
+    },
+    "styles": true,
+    "skills": {
+      "Acrobatics": 3,
+      "Athletics": 3,
+      "Perception": 4,
+      "Stealth": 3,
+      "Intimidation": 2,
+      "Investigation": 2,
+      "Expertise": 2,
+      "Vehicles": 1,
+      "Sleight of Hand": 1
+    },
+    "skill_count": "4..7",
+    "skill_ranks": "3..8",
+    "advantages": {
+      "Precise Attack": 3,
+      "Improved Aim": 3,
+      "Quick Draw": 3,
+      "Defensive Roll": 3,
+      "Improved Critical": 2,
+      "Ranged Attack": 2,
+      "Instant Up": 1,
+      "Evasion": 2,
+      "Throwing Mastery": 1,
+      "Uncanny Dodge": 1,
+      "Takedown": 1,
+      "Benefit": 1
+    },
+    "advantage_count": "4..8",
+    "origins": [
+      "training",
+      "military",
+      "tragedy",
+      "legacy"
+    ]
+  },
+  {
+    "id": "gadgeteer",
+    "name": "Gadgeteer",
+    "weight": 5,
+    "blurb": "Built every gadget on their belt last Tuesday.",
+    "abilities": {
+      "Strength": "0..2",
+      "Stamina": "1..3",
+      "Agility": "1..pl/2",
+      "Dexterity": "2..pl/2+1",
+      "Fighting": "1..pl/2",
+      "Intellect": "pl/2+2..pl+2",
+      "Awareness": "2..4",
+      "Presence": "1..3"
+    },
+    "offense": {
+      "modes": {
+        "ranged": 5
+      },
+      "skew": "0..2"
+    },
+    "defense": {
+      "tough": "-2..0",
+      "fort": "-2..0"
+    },
+    "toughness": {
+      "protection": 4
+    },
+    "themes": {
+      "tech": 8,
+      "arsenal": 2,
+      "electric": 1,
+      "gravity": 1
+    },
+    "powers": {
+      "alts": "2..4",
+      "movement": 0.8,
+      "sense": 0.7,
+      "utility": "1..3",
+      "device": "easily"
+    },
+    "skills": {
+      "Technology": 5,
+      "Expertise": 4,
+      "Investigation": 3,
+      "Perception": 2,
+      "Vehicles": 2,
+      "Treatment": 1,
+      "Insight": 1
+    },
+    "skill_count": "4..7",
+    "skill_ranks": "3..9",
+    "advantages": {
+      "Inventor": 5,
+      "Improvised Tools": 3,
+      "Eidetic Memory": 2,
+      "Assessment": 2,
+      "Benefit": 2,
+      "Well-informed": 1,
+      "Jack-of-all-trades": 1,
+      "Skill Mastery": 1,
+      "Languages": 1,
+      "Improved Aim": 1
+    },
+    "advantage_count": "3..6",
+    "origins": [
+      "tech",
+      "experiment",
+      "legacy"
+    ]
+  },
+  {
+    "id": "battlesuit",
+    "name": "Battlesuit",
+    "weight": 5,
+    "blurb": "An ordinary person inside an extraordinary suit of armor.",
+    "abilities": {
+      "Strength": "1..3",
+      "Stamina": "1..3",
+      "Agility": "1..3",
+      "Dexterity": "2..4",
+      "Fighting": "1..4",
+      "Intellect": "2..pl/2+2",
+      "Awareness": "1..4",
+      "Presence": "1..3"
+    },
+    "offense": {
+      "modes": {
+        "ranged": 5,
+        "close": 1
+      },
+      "skew": "-1..2"
+    },
+    "defense": {
+      "tough": "1..3",
+      "fort": "0..2"
+    },
+    "toughness": {
+      "protection": 8
+    },
+    "themes": {
+      "tech": 10
+    },
+    "powers": {
+      "alts": "1..3",
+      "movement": 1,
+      "sense": 0.9,
+      "utility": "2..3",
+      "device": "removable",
+      "defense_in_device": true
+    },
+    "skills": {
+      "Technology": 4,
+      "Vehicles": 2,
+      "Expertise": 3,
+      "Perception": 2,
+      "Investigation": 1,
+      "Persuasion": 1
+    },
+    "skill_count": "3..5",
+    "skill_ranks": "2..7",
+    "advantages": {
+      "Inventor": 2,
+      "Benefit": 2,
+      "Improved Aim": 1,
+      "Teamwork": 1,
+      "Power Attack": 1,
+      "Improved Initiative": 1,
+      "Accurate Attack": 1
+    },
+    "advantage_count": "1..3",
+    "origins": [
+      "tech",
+      "military",
+      "experiment"
+    ]
+  },
+  {
+    "id": "mystic",
+    "name": "Mystic",
+    "weight": 6,
+    "blurb": "Speaks with the dead and argues with demons.",
+    "abilities": {
+      "Strength": "0..2",
+      "Stamina": "1..3",
+      "Agility": "1..3",
+      "Dexterity": "1..pl/2",
+      "Fighting": "1..pl/2",
+      "Intellect": "2..pl/2+2",
+      "Awareness": "pl/2+1..pl+2",
+      "Presence": "2..pl/2+1"
+    },
+    "offense": {
+      "modes": {
+        "ranged": 4,
+        "perception": 1,
+        "area": 1
+      },
+      "skew": "-2..1"
+    },
+    "defense": {
+      "tough": "-2..0",
+      "fort": "-4..-1"
+    },
+    "toughness": {
+      "protection": 6
+    },
+    "themes": {
+      "magic": 10,
+      "death": 2,
+      "chaos": 1,
+      "time": 1
+    },
+    "powers": {
+      "alts": "2..5",
+      "movement": 0.8,
+      "sense": 0.9,
+      "utility": "1..3",
+      "device": false
+    },
+    "skills": {
+      "Expertise": 5,
+      "Insight": 3,
+      "Perception": 3,
+      "Persuasion": 2,
+      "Intimidation": 2,
+      "Investigation": 2,
+      "Deception": 1
+    },
+    "skill_count": "3..6",
+    "skill_ranks": "3..9",
+    "advantages": {
+      "Ritualist": 5,
+      "Artificer": 2,
+      "Languages": 2,
+      "Trance": 2,
+      "Fearless": 1,
+      "Eidetic Memory": 1,
+      "Well-informed": 1,
+      "Benefit": 1,
+      "Luck": 1
+    },
+    "advantage_count": "2..5",
+    "origins": [
+      "magic",
+      "divine",
+      "legacy",
+      "tragedy"
+    ]
+  },
+  {
+    "id": "psychic",
+    "name": "Psychic",
+    "weight": 5,
+    "blurb": "Knows what you're thinking, and what you'll do next.",
+    "abilities": {
+      "Strength": "0..2",
+      "Stamina": "1..3",
+      "Agility": "1..3",
+      "Dexterity": "1..pl/2",
+      "Fighting": "1..pl/2",
+      "Intellect": "2..pl/2+2",
+      "Awareness": "pl/2+2..pl+2",
+      "Presence": "2..pl/2+2"
+    },
+    "offense": {
+      "modes": {
+        "perception": 4,
+        "ranged": 2
+      },
+      "skew": "-1..1"
+    },
+    "defense": {
+      "tough": "-3..-1",
+      "fort": "-4..-2"
+    },
+    "toughness": {
+      "protection": 6
+    },
+    "themes": {
+      "psychic": 10
+    },
+    "powers": {
+      "alts": "1..4",
+      "movement": 0.7,
+      "sense": 0.9,
+      "utility": "1..2",
+      "device": false
+    },
+    "skills": {
+      "Insight": 5,
+      "Perception": 3,
+      "Persuasion": 3,
+      "Deception": 2,
+      "Expertise": 2,
+      "Investigation": 2,
+      "Intimidation": 1
+    },
+    "skill_count": "3..6",
+    "skill_ranks": "3..9",
+    "advantages": {
+      "Fearless": 2,
+      "Trance": 2,
+      "Assessment": 2,
+      "Seize Initiative": 1,
+      "Uncanny Dodge": 2,
+      "Leadership": 1,
+      "Daze": 1,
+      "Fascinate": 1,
+      "Benefit": 1
+    },
+    "advantage_count": "2..4",
+    "origins": [
+      "mutation",
+      "experiment",
+      "alien",
+      "military"
+    ]
+  },
+  {
+    "id": "shapeshifter",
+    "name": "Shapeshifter",
+    "weight": 4,
+    "blurb": "Wears a thousand faces and fights with a hundred limbs.",
+    "abilities": {
+      "Strength": "2..pl/2+2",
+      "Stamina": "2..pl/2+2",
+      "Agility": "2..pl/2+1",
+      "Dexterity": "1..pl/2",
+      "Fighting": "pl/2..pl-1",
+      "Intellect": "1..4",
+      "Awareness": "2..4",
+      "Presence": "1..4"
+    },
+    "offense": {
+      "modes": {
+        "close": 5
+      },
+      "skew": "0..2"
+    },
+    "defense": {
+      "tough": "-1..2",
+      "fort": "0..2"
+    },
+    "toughness": {
+      "protection": 6
+    },
+    "themes": {
+      "shapeshift": 6,
+      "stretch": 5,
+      "animal": 2
+    },
+    "powers": {
+      "alts": "0..2",
+      "movement": 0.8,
+      "sense": 0.5,
+      "utility": "2..3",
+      "device": false
+    },
+    "skills": {
+      "Deception": 5,
+      "Stealth": 3,
+      "Insight": 2,
+      "Perception": 2,
+      "Acrobatics": 2,
+      "Investigation": 2,
+      "Persuasion": 1
+    },
+    "skill_count": "3..6",
+    "skill_ranks": "2..8",
+    "advantages": {
+      "Improved Grab": 3,
+      "Fast Grab": 2,
+      "Chokehold": 2,
+      "Improved Hold": 2,
+      "Agile Feint": 1,
+      "Hide in Plain Sight": 1,
+      "Taunt": 1,
+      "Instant Up": 1,
+      "Evasion": 1
+    },
+    "advantage_count": "2..5",
+    "origins": [
+      "alien",
+      "accident",
+      "mutation",
+      "experiment"
+    ]
+  },
+  {
+    "id": "sizechanger",
+    "name": "Size-Changer",
+    "weight": 3,
+    "blurb": "Fights at whatever scale the problem needs.",
+    "abilities": {
+      "Strength": "1..pl/2",
+      "Stamina": "2..pl/2",
+      "Agility": "2..pl/2+1",
+      "Dexterity": "2..pl/2",
+      "Fighting": "pl/2..pl-1",
+      "Intellect": "2..pl/2+2",
+      "Awareness": "2..4",
+      "Presence": "1..3"
+    },
+    "offense": {
+      "modes": {
+        "close": 5
+      },
+      "skew": "0..2"
+    },
+    "defense": {
+      "tough": "-2..1",
+      "fort": "0..2"
+    },
+    "toughness": {
+      "protection": 4,
+      "defensive_roll": 1
+    },
+    "themes": {
+      "size": 10
+    },
+    "powers": {
+      "alts": "0..1",
+      "movement": 0.5,
+      "sense": 0.5,
+      "utility": "1..2",
+      "device": false
+    },
+    "skills": {
+      "Expertise": 3,
+      "Technology": 3,
+      "Acrobatics": 2,
+      "Stealth": 2,
+      "Perception": 2,
+      "Investigation": 2,
+      "Athletics": 1
+    },
+    "skill_count": "3..6",
+    "skill_ranks": "2..8",
+    "advantages": {
+      "Power Attack": 2,
+      "Improved Smash": 2,
+      "Evasion": 2,
+      "Inventor": 1,
+      "Takedown": 1,
+      "Agile Feint": 1,
+      "Interpose": 1
+    },
+    "advantage_count": "2..4",
+    "origins": [
+      "tech",
+      "experiment",
+      "legacy"
+    ]
+  },
+  {
+    "id": "totem",
+    "name": "Totem Warrior",
+    "weight": 4,
+    "blurb": "Channels the spirit, senses and claws of a wild animal.",
+    "abilities": {
+      "Strength": "2..pl/2+1",
+      "Stamina": "2..pl/2+1",
+      "Agility": "pl/2..pl/2+3",
+      "Dexterity": "1..pl/2",
+      "Fighting": "pl/2..pl-2",
+      "Intellect": "0..3",
+      "Awareness": "2..pl/2+2",
+      "Presence": "0..3"
+    },
+    "offense": {
+      "modes": {
+        "close": 5
+      },
+      "skew": "0..3"
+    },
+    "defense": {
+      "tough": "-3..0",
+      "fort": "0..2"
+    },
+    "toughness": {
+      "protection": 2,
+      "defensive_roll": 3
+    },
+    "themes": {
+      "animal": 8,
+      "plant": 1
+    },
+    "powers": {
+      "alts": "0..1",
+      "movement": 0.9,
+      "sense": 1,
+      "utility": "1..2",
+      "device": false
+    },
+    "skills": {
+      "Perception": 4,
+      "Stealth": 3,
+      "Athletics": 3,
+      "Acrobatics": 3,
+      "Intimidation": 2,
+      "Insight": 1,
+      "Expertise": 1
+    },
+    "skill_count": "3..6",
+    "skill_ranks": "2..8",
+    "advantages": {
+      "Tracking": 4,
+      "Animal Empathy": 3,
+      "Favored Environment": 2,
+      "Improved Critical": 2,
+      "Defensive Roll": 2,
+      "Evasion": 2,
+      "Instant Up": 1,
+      "Startle": 1,
+      "Power Attack": 1,
+      "Uncanny Dodge": 2
+    },
+    "advantage_count": "3..6",
+    "origins": [
+      "mutation",
+      "divine",
+      "experiment",
+      "legacy"
+    ]
+  },
+  {
+    "id": "elemental",
+    "name": "Elemental",
+    "weight": 6,
+    "blurb": "Their body is made of the element they command.",
+    "abilities": {
+      "Strength": "1..pl/2+2",
+      "Stamina": "pl/2..pl",
+      "Agility": "1..pl/2",
+      "Dexterity": "1..pl/2+1",
+      "Fighting": "1..pl/2+1",
+      "Intellect": "0..3",
+      "Awareness": "1..4",
+      "Presence": "1..4"
+    },
+    "offense": {
+      "modes": {
+        "ranged": 4,
+        "close": 2,
+        "area": 1
+      },
+      "skew": "-2..1"
+    },
+    "defense": {
+      "tough": "0..3",
+      "fort": "1..3"
+    },
+    "toughness": {
+      "protection": 7
+    },
+    "themes": {
+      "fire": 3,
+      "ice": 3,
+      "earth": 4,
+      "air": 2,
+      "water": 3,
+      "electric": 2,
+      "plant": 2,
+      "radiation": 2,
+      "shadow": 1,
+      "light": 1
+    },
+    "powers": {
+      "alts": "1..3",
+      "movement": 0.85,
+      "sense": 0.4,
+      "utility": "1..3",
+      "device": false
+    },
+    "skills": {
+      "Intimidation": 3,
+      "Perception": 2,
+      "Athletics": 2,
+      "Insight": 1,
+      "Expertise": 1,
+      "Stealth": 1
+    },
+    "skill_count": "2..5",
+    "skill_ranks": "2..6",
+    "advantages": {
+      "Power Attack": 2,
+      "Fearless": 2,
+      "Favored Environment": 2,
+      "Improved Smash": 1,
+      "Diehard": 1,
+      "Startle": 1,
+      "Interpose": 1
+    },
+    "advantage_count": "1..4",
+    "origins": [
+      "accident",
+      "mutation",
+      "divine",
+      "magic"
+    ]
+  },
+  {
+    "id": "infiltrator",
+    "name": "Infiltrator",
+    "weight": 4,
+    "blurb": "Gets in, gets the goods, and is gone before the alarm.",
+    "abilities": {
+      "Strength": "1..3",
+      "Stamina": "1..pl/2",
+      "Agility": "pl/2..pl/2+3",
+      "Dexterity": "2..pl/2+1",
+      "Fighting": "pl/2..pl-1",
+      "Intellect": "2..pl/2+1",
+      "Awareness": "2..pl/2+1",
+      "Presence": "2..pl/2+1"
+    },
+    "offense": {
+      "modes": {
+        "close": 3,
+        "ranged": 2
+      },
+      "skew": "1..3"
+    },
+    "defense": {
+      "tough": "-4..-1",
+      "fort": "-2..1"
+    },
+    "toughness": {
+      "defensive_roll": 4,
+      "protection": 2
+    },
+    "themes": {
+      "shadow": 5,
+      "space": 4,
+      "light": 1,
+      "shapeshift": 1,
+      "chaos": 1
+    },
+    "powers": {
+      "alts": "0..2",
+      "movement": 0.95,
+      "sense": 0.6,
+      "utility": "1..2",
+      "device": false
+    },
+    "skills": {
+      "Stealth": 5,
+      "Deception": 4,
+      "Sleight of Hand": 3,
+      "Acrobatics": 3,
+      "Perception": 3,
+      "Investigation": 2,
+      "Technology": 2,
+      "Insight": 2
+    },
+    "skill_count": "5..8",
+    "skill_ranks": "3..9",
+    "advantages": {
+      "Hide in Plain Sight": 4,
+      "Evasion": 3,
+      "Defensive Roll": 3,
+      "Agile Feint": 2,
+      "Startle": 2,
+      "Uncanny Dodge": 2,
+      "Contacts": 2,
+      "Improved Initiative": 1,
+      "Instant Up": 1,
+      "Skill Mastery": 1
+    },
+    "advantage_count": "4..7",
+    "origins": [
+      "training",
+      "mutation",
+      "magic",
+      "military"
+    ]
+  },
+  {
+    "id": "mastermind",
+    "name": "Mastermind",
+    "weight": 4,
+    "villain_weight": 3,
+    "blurb": "Ten steps ahead, with a minion for every contingency.",
+    "abilities": {
+      "Strength": "0..2",
+      "Stamina": "1..3",
+      "Agility": "1..3",
+      "Dexterity": "1..pl/2",
+      "Fighting": "1..pl/2",
+      "Intellect": "pl/2+3..pl+3",
+      "Awareness": "2..pl/2+2",
+      "Presence": "pl/2..pl+1"
+    },
+    "offense": {
+      "modes": {
+        "ranged": 4,
+        "perception": 1
+      },
+      "skew": "-1..1"
+    },
+    "defense": {
+      "tough": "-3..0",
+      "fort": "-3..-1"
+    },
+    "toughness": {
+      "protection": 5
+    },
+    "themes": {
+      "tech": 4,
+      "psychic": 3,
+      "magic": 3,
+      "chaos": 1,
+      "time": 1
+    },
+    "powers": {
+      "alts": "1..3",
+      "movement": 0.4,
+      "sense": 0.6,
+      "utility": "1..2",
+      "device": "removable"
+    },
+    "skills": {
+      "Expertise": 4,
+      "Deception": 4,
+      "Persuasion": 3,
+      "Intimidation": 3,
+      "Insight": 3,
+      "Technology": 3,
+      "Investigation": 2
+    },
+    "skill_count": "5..8",
+    "skill_ranks": "3..10",
+    "advantages": {
+      "Minion": 4,
+      "Benefit": 4,
+      "Connected": 3,
+      "Contacts": 2,
+      "Leadership": 2,
+      "Inventor": 2,
+      "Eidetic Memory": 2,
+      "Well-informed": 2,
+      "Languages": 1,
+      "Second Chance": 1,
+      "Fascinate": 1,
+      "Daze": 1
+    },
+    "advantage_count": "4..8",
+    "origins": [
+      "tech",
+      "experiment",
+      "magic",
+      "legacy"
+    ]
+  },
+  {
+    "id": "healer",
+    "name": "Guardian",
+    "weight": 3,
+    "blurb": "Keeps the team standing and the bad guys tangled up.",
+    "abilities": {
+      "Strength": "0..2",
+      "Stamina": "2..pl/2",
+      "Agility": "1..pl/2",
+      "Dexterity": "pl/2-1..pl-2",
+      "Fighting": "1..pl/2",
+      "Intellect": "1..4",
+      "Awareness": "pl/2..pl",
+      "Presence": "2..pl/2+1"
+    },
+    "offense": {
+      "modes": {
+        "ranged": 4,
+        "area": 1
+      },
+      "skew": "-1..1"
+    },
+    "defense": {
+      "tough": "-1..1",
+      "fort": "-1..1"
+    },
+    "toughness": {
+      "protection": 6
+    },
+    "themes": {
+      "plant": 4,
+      "light": 2,
+      "cosmic": 2,
+      "magic": 2,
+      "water": 1,
+      "time": 1
+    },
+    "powers": {
+      "alts": "1..3",
+      "movement": 0.6,
+      "sense": 0.5,
+      "utility": "1..3",
+      "device": false,
+      "support": true
+    },
+    "skills": {
+      "Treatment": 4,
+      "Insight": 3,
+      "Perception": 2,
+      "Persuasion": 3,
+      "Expertise": 2
+    },
+    "skill_count": "3..5",
+    "skill_ranks": "2..8",
+    "advantages": {
+      "Teamwork": 3,
+      "Interpose": 3,
+      "Inspire": 2,
+      "Leadership": 2,
+      "Set-up": 2,
+      "Diehard": 1,
+      "Fearless": 1
+    },
+    "advantage_count": "2..4",
+    "origins": [
+      "divine",
+      "magic",
+      "mutation",
+      "alien"
+    ]
+  },
+  {
+    "id": "android",
+    "name": "Android",
+    "weight": 3,
+    "construct": true,
+    "blurb": "A thinking machine learning what it means to be a hero.",
+    "abilities": {
+      "Strength": "pl/2..pl",
+      "Stamina": "0",
+      "Agility": "2..pl/2",
+      "Dexterity": "2..pl/2+1",
+      "Fighting": "pl/2..pl-1",
+      "Intellect": "2..pl/2+2",
+      "Awareness": "1..4",
+      "Presence": "0..2"
+    },
+    "offense": {
+      "modes": {
+        "ranged": 3,
+        "close": 2,
+        "strength": 2
+      },
+      "skew": "-1..2"
+    },
+    "defense": {
+      "tough": "1..4",
+      "will": "-2..1"
+    },
+    "toughness": {
+      "protection": 8
+    },
+    "themes": {
+      "tech": 8,
+      "electric": 2,
+      "cosmic": 1,
+      "magnetism": 1
+    },
+    "powers": {
+      "alts": "1..3",
+      "movement": 0.8,
+      "sense": 0.9,
+      "utility": "1..2",
+      "device": false
+    },
+    "skills": {
+      "Technology": 3,
+      "Perception": 3,
+      "Investigation": 2,
+      "Expertise": 2,
+      "Insight": 1,
+      "Athletics": 1
+    },
+    "skill_count": "3..5",
+    "skill_ranks": "2..7",
+    "advantages": {
+      "Eidetic Memory": 3,
+      "Improved Initiative": 2,
+      "Assessment": 2,
+      "Power Attack": 1,
+      "Teamwork": 1,
+      "Languages": 1
+    },
+    "advantage_count": "1..4",
+    "origins": [
+      "tech",
+      "experiment",
+      "alien"
+    ],
+    "min_pl": 3
+  },
+  {
+    "id": "robot",
+    "name": "Combat Robot",
+    "weight": 2,
+    "villain_weight": 3,
+    "construct": true,
+    "automaton": true,
+    "blurb": "Steel, servos and a single directive.",
+    "abilities": {
+      "Strength": "pl/2+1..pl+2",
+      "Stamina": "0",
+      "Agility": "1..pl/2",
+      "Dexterity": "1..pl/2",
+      "Fighting": "pl/2..pl-2",
+      "Intellect": "0",
+      "Awareness": "0..3",
+      "Presence": "0"
+    },
+    "offense": {
+      "modes": {
+        "ranged": 4,
+        "strength": 3
+      },
+      "skew": "-2..1"
+    },
+    "defense": {
+      "tough": "2..5"
+    },
+    "toughness": {
+      "protection": 10
+    },
+    "themes": {
+      "tech": 10
+    },
+    "powers": {
+      "alts": "1..2",
+      "movement": 0.6,
+      "sense": 0.9,
+      "utility": "0..2",
+      "device": false
+    },
+    "skills": {
+      "Perception": 4,
+      "Athletics": 3
+    },
+    "skill_count": "1..2",
+    "skill_ranks": "2..6",
+    "advantages": {
+      "Power Attack": 3,
+      "All-out Attack": 2,
+      "Improved Smash": 2,
+      "Fearless": 1
+    },
+    "advantage_count": "1..3",
+    "origins": [
+      "tech",
+      "experiment"
+    ],
+    "min_pl": 2
+  },
+  {
+    "hidden": true,
+    "minion": true,
+    "weight": 0,
+    "id": "m-thug",
+    "name": "Thug",
+    "blurb": "Hired muscle with a knife and a bad attitude.",
+    "abilities": {
+      "Strength": "1..3",
+      "Stamina": "1..3",
+      "Agility": "0..2",
+      "Dexterity": "0..2",
+      "Fighting": "1..pl/2+1",
+      "Intellect": "-1..1",
+      "Awareness": "0..1",
+      "Presence": "-1..1"
+    },
+    "offense": {
+      "modes": {
+        "equipment": 3,
+        "strength": 2
+      },
+      "skew": "-1..1"
+    },
+    "defense": {
+      "tough": "-2..0",
+      "fort": "0..1"
+    },
+    "toughness": {
+      "armor": 3,
+      "defensive_roll": 1
+    },
+    "powerless": true,
+    "powers": {
+      "alts": "0..0",
+      "movement": 0,
+      "sense": 0,
+      "utility": "0..0",
+      "device": false
+    },
+    "equipment": "1..2",
+    "gear": [
+      "Knife|Club|Brass Knuckles",
+      "Light Pistol|Holdout Pistol",
+      "Undercover Shirt"
+    ],
+    "skills": {
+      "Intimidation": 4,
+      "Athletics": 2,
+      "Perception": 2,
+      "Vehicles": 1
+    },
+    "skill_count": "1..3",
+    "skill_ranks": "1..4",
+    "advantages": {
+      "All-out Attack": 2,
+      "Power Attack": 2
+    },
+    "advantage_count": "0..1",
+    "origins": [
+      "tragedy"
+    ],
+    "themes": {
+      "arsenal": 1
+    }
+  },
+  {
+    "hidden": true,
+    "minion": true,
+    "weight": 0,
+    "id": "m-soldier",
+    "name": "Soldier",
+    "blurb": "Drilled, armored and carrying a rifle.",
+    "abilities": {
+      "Strength": "1..3",
+      "Stamina": "2..3",
+      "Agility": "1..2",
+      "Dexterity": "1..3",
+      "Fighting": "1..3",
+      "Intellect": "0..1",
+      "Awareness": "1..2",
+      "Presence": "0..1"
+    },
+    "offense": {
+      "modes": {
+        "equipment": 5
+      },
+      "skew": "0..1"
+    },
+    "defense": {
+      "tough": "-1..1",
+      "fort": "0..1"
+    },
+    "toughness": {
+      "armor": 5
+    },
+    "powerless": true,
+    "powers": {
+      "alts": "0..0",
+      "movement": 0,
+      "sense": 0,
+      "utility": "0..0",
+      "device": false
+    },
+    "equipment": "3..5",
+    "gear": [
+      "Assault Rifle|Submachine Gun|Shotgun",
+      "Bulletproof Vest",
+      "Knife",
+      "Commlink",
+      "Night Vision Goggles"
+    ],
+    "skills": {
+      "Perception": 3,
+      "Athletics": 2,
+      "Stealth": 2,
+      "Vehicles": 1,
+      "Treatment": 1
+    },
+    "skill_count": "2..4",
+    "skill_ranks": "2..4",
+    "advantages": {
+      "Teamwork": 2,
+      "Quick Draw": 1,
+      "Improved Aim": 1
+    },
+    "advantage_count": "0..2",
+    "origins": [
+      "military"
+    ],
+    "themes": {
+      "arsenal": 1
+    }
+  },
+  {
+    "hidden": true,
+    "minion": true,
+    "weight": 0,
+    "id": "m-ninja",
+    "name": "Ninja",
+    "blurb": "Silent, black-clad and very hard to catch.",
+    "abilities": {
+      "Strength": "1..3",
+      "Stamina": "1..3",
+      "Agility": "2..pl/2+1",
+      "Dexterity": "2..3",
+      "Fighting": "2..pl/2+2",
+      "Intellect": "0..1",
+      "Awareness": "1..3",
+      "Presence": "0..1"
+    },
+    "offense": {
+      "modes": {
+        "equipment": 3,
+        "strength": 2
+      },
+      "skew": "1..2"
+    },
+    "defense": {
+      "tough": "-3..-1",
+      "fort": "0..1"
+    },
+    "toughness": {
+      "defensive_roll": 5
+    },
+    "powerless": true,
+    "powers": {
+      "alts": "0..0",
+      "movement": 0,
+      "sense": 0,
+      "utility": "0..0",
+      "device": false
+    },
+    "equipment": "1..2",
+    "gear": [
+      "Sword",
+      "Shuriken",
+      "Nunchaku"
+    ],
+    "skills": {
+      "Stealth": 5,
+      "Acrobatics": 4,
+      "Perception": 2,
+      "Athletics": 2
+    },
+    "skill_count": "2..4",
+    "skill_ranks": "2..6",
+    "advantages": {
+      "Defensive Roll": 2,
+      "Evasion": 2,
+      "Hide in Plain Sight": 1,
+      "Instant Up": 1
+    },
+    "advantage_count": "1..2",
+    "origins": [
+      "training"
+    ],
+    "themes": {
+      "martial": 1
+    }
+  },
+  {
+    "hidden": true,
+    "minion": true,
+    "weight": 0,
+    "id": "m-cultist",
+    "name": "Cultist",
+    "blurb": "Robed, chanting and dabbling in forbidden magic.",
+    "abilities": {
+      "Strength": "0..2",
+      "Stamina": "1..2",
+      "Agility": "0..2",
+      "Dexterity": "0..2",
+      "Fighting": "0..2",
+      "Intellect": "0..2",
+      "Awareness": "1..3",
+      "Presence": "0..2"
+    },
+    "offense": {
+      "modes": {
+        "ranged": 3,
+        "equipment": 1
+      },
+      "skew": "-1..1"
+    },
+    "defense": {
+      "tough": "-2..0",
+      "fort": "-1..1"
+    },
+    "toughness": {
+      "protection": 3
+    },
+    "themes": {
+      "magic": 4,
+      "death": 3,
+      "shadow": 2
+    },
+    "powers": {
+      "alts": "0..1",
+      "movement": 0,
+      "sense": 0.3,
+      "utility": "0..1",
+      "device": false
+    },
+    "equipment": "0..1",
+    "gear": [
+      "Knife"
+    ],
+    "skills": {
+      "Expertise": 4,
+      "Deception": 2,
+      "Intimidation": 2,
+      "Perception": 1
+    },
+    "skill_count": "2..3",
+    "skill_ranks": "1..4",
+    "advantages": {
+      "Ritualist": 3,
+      "Fearless": 1
+    },
+    "advantage_count": "0..1",
+    "origins": [
+      "magic"
+    ]
+  },
+  {
+    "hidden": true,
+    "minion": true,
+    "weight": 0,
+    "id": "m-agent",
+    "name": "Agent",
+    "blurb": "Suit, sunglasses, earpiece and a silenced pistol.",
+    "abilities": {
+      "Strength": "1..2",
+      "Stamina": "1..3",
+      "Agility": "1..3",
+      "Dexterity": "2..3",
+      "Fighting": "1..3",
+      "Intellect": "1..3",
+      "Awareness": "1..3",
+      "Presence": "1..2"
+    },
+    "offense": {
+      "modes": {
+        "equipment": 5
+      },
+      "skew": "0..2"
+    },
+    "defense": {
+      "tough": "-2..0",
+      "fort": "0..1"
+    },
+    "toughness": {
+      "armor": 4,
+      "defensive_roll": 2
+    },
+    "powerless": true,
+    "powers": {
+      "alts": "0..0",
+      "movement": 0,
+      "sense": 0,
+      "utility": "0..0",
+      "device": false
+    },
+    "equipment": "2..3",
+    "gear": [
+      "Light Pistol|Heavy Pistol",
+      "Undercover Shirt",
+      "Commlink",
+      "Mini-Tracer"
+    ],
+    "skills": {
+      "Perception": 3,
+      "Investigation": 3,
+      "Deception": 2,
+      "Stealth": 2,
+      "Vehicles": 2,
+      "Technology": 1
+    },
+    "skill_count": "3..5",
+    "skill_ranks": "2..5",
+    "advantages": {
+      "Contacts": 1,
+      "Quick Draw": 1,
+      "Improved Initiative": 1
+    },
+    "advantage_count": "0..2",
+    "origins": [
+      "military"
+    ],
+    "themes": {
+      "arsenal": 1
+    }
+  },
+  {
+    "hidden": true,
+    "minion": true,
+    "weight": 0,
+    "id": "m-hench",
+    "name": "Henchman",
+    "blurb": "A jumpsuited goon in the boss's colors.",
+    "abilities": {
+      "Strength": "1..2",
+      "Stamina": "1..2",
+      "Agility": "0..2",
+      "Dexterity": "0..2",
+      "Fighting": "1..2",
+      "Intellect": "0..1",
+      "Awareness": "0..1",
+      "Presence": "0..1"
+    },
+    "offense": {
+      "modes": {
+        "equipment": 4,
+        "strength": 1
+      },
+      "skew": "0..1"
+    },
+    "defense": {
+      "tough": "-2..0",
+      "fort": "0..1"
+    },
+    "toughness": {
+      "armor": 3
+    },
+    "powerless": true,
+    "powers": {
+      "alts": "0..0",
+      "movement": 0,
+      "sense": 0,
+      "utility": "0..0",
+      "device": false
+    },
+    "equipment": "1..3",
+    "gear": [
+      "Blaster Pistol|Taser|Light Pistol",
+      "Undercover Shirt",
+      "Commlink"
+    ],
+    "skills": {
+      "Intimidation": 2,
+      "Vehicles": 2,
+      "Technology": 1,
+      "Perception": 2
+    },
+    "skill_count": "1..3",
+    "skill_ranks": "1..4",
+    "advantages": {
+      "Teamwork": 2
+    },
+    "advantage_count": "0..1",
+    "origins": [
+      "tragedy"
+    ],
+    "themes": {
+      "arsenal": 1
+    }
+  },
+  {
+    "hidden": true,
+    "minion": true,
+    "weight": 0,
+    "id": "m-alien",
+    "name": "Alien Trooper",
+    "blurb": "An invader in armor with an energy rifle.",
+    "abilities": {
+      "Strength": "1..3",
+      "Stamina": "2..3",
+      "Agility": "1..2",
+      "Dexterity": "1..3",
+      "Fighting": "1..3",
+      "Intellect": "0..2",
+      "Awareness": "1..2",
+      "Presence": "0..1"
+    },
+    "offense": {
+      "modes": {
+        "equipment": 5
+      },
+      "skew": "0..1"
+    },
+    "defense": {
+      "tough": "0..2",
+      "fort": "0..1"
+    },
+    "toughness": {
+      "armor": 3,
+      "protection": 3
+    },
+    "themes": {
+      "tech": 5,
+      "cosmic": 2
+    },
+    "powers": {
+      "alts": "0..0",
+      "movement": 0.3,
+      "sense": 0.3,
+      "utility": "0..1",
+      "device": false
+    },
+    "equipment": "3..4",
+    "gear": [
+      "Blaster Rifle|Blaster Pistol",
+      "Commlink"
+    ],
+    "skills": {
+      "Perception": 3,
+      "Athletics": 2,
+      "Vehicles": 2,
+      "Technology": 1
+    },
+    "skill_count": "2..3",
+    "skill_ranks": "2..4",
+    "advantages": {
+      "Teamwork": 2,
+      "Improved Aim": 1
+    },
+    "advantage_count": "0..1",
+    "origins": [
+      "alien"
+    ]
+  },
+  {
+    "hidden": true,
+    "minion": true,
+    "weight": 0,
+    "id": "m-drone",
+    "name": "Robot Drone",
+    "construct": true,
+    "automaton": true,
+    "blurb": "A mass-produced security robot.",
+    "abilities": {
+      "Strength": "1..pl/2",
+      "Stamina": "0",
+      "Agility": "0..2",
+      "Dexterity": "1..2",
+      "Fighting": "1..2",
+      "Intellect": "0",
+      "Awareness": "0..1",
+      "Presence": "0"
+    },
+    "offense": {
+      "modes": {
+        "ranged": 4,
+        "strength": 1
+      },
+      "skew": "-1..1"
+    },
+    "defense": {
+      "tough": "0..2"
+    },
+    "toughness": {
+      "protection": 8
+    },
+    "themes": {
+      "tech": 10
+    },
+    "powers": {
+      "alts": "0..0",
+      "movement": 0.4,
+      "sense": 0.5,
+      "utility": "0..0",
+      "device": false
+    },
+    "skills": {
+      "Perception": 3
+    },
+    "skill_count": "1..1",
+    "skill_ranks": "1..4",
+    "advantages": {
+      "Power Attack": 1
+    },
+    "advantage_count": "0..1",
+    "origins": [
+      "tech"
+    ]
+  },
+  {
+    "hidden": true,
+    "minion": true,
+    "weight": 0,
+    "id": "m-zombie",
+    "name": "Zombie",
+    "construct": true,
+    "automaton": true,
+    "blurb": "Shambling, hungry and nearly impossible to stop.",
+    "abilities": {
+      "Strength": "2..pl/2+1",
+      "Stamina": "0",
+      "Agility": "-2..0",
+      "Dexterity": "-2..0",
+      "Fighting": "1..2",
+      "Intellect": "0",
+      "Awareness": "0..1",
+      "Presence": "0"
+    },
+    "offense": {
+      "modes": {
+        "strength": 5
+      },
+      "skew": "-2..0"
+    },
+    "defense": {
+      "tough": "0..2"
+    },
+    "toughness": {
+      "protection": 6
+    },
+    "themes": {
+      "death": 10
+    },
+    "powers": {
+      "alts": "0..0",
+      "movement": 0,
+      "sense": 0.2,
+      "utility": "0..0",
+      "device": false
+    },
+    "skills": {
+      "Perception": 2
+    },
+    "skill_count": "0..1",
+    "skill_ranks": "1..3",
+    "advantages": {
+      "Fearless": 1
+    },
+    "advantage_count": "0..0",
+    "origins": [
+      "magic"
+    ]
+  }
+]

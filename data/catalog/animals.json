@@ -1,0 +1,5485 @@
+[
+  {
+    "id": "dolphin",
+    "name": "Dolphin",
+    "kind": "animal",
+    "category": "Aquatic",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "A playful, intelligent bottlenose that navigates by sound and can outpace most swimmers.",
+    "tags": [
+      "wild",
+      "aquatic",
+      "everyday"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 1,
+      "Agility": 3,
+      "Dexterity": 1,
+      "Fighting": 2,
+      "Intellect": -2,
+      "Awareness": 1,
+      "Presence": -2
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 2,
+      "Fortitude": 4,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 8
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 8
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Senses",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Accurate Hearing, Low-light Vision, Ultra-Hearing",
+        "role": "sense"
+      },
+      {
+        "name": "Swimming",
+        "effect": "Swimming",
+        "rank": 4,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCA 268",
+    "printed_total": 36,
+    "book_note": "Book lists PL3, but its own Fortitude 5 + Will 3 = 8 exceeds the PL3 limit of 6; listed here at PL4 with the book stats unchanged."
+  },
+  {
+    "id": "ape",
+    "name": "Ape",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 5,
+    "size": "Large",
+    "summary": "A great ape such as a gorilla: massively strong, quick to intimidate, and dangerous when cornered.",
+    "tags": [
+      "wild",
+      "jungle"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 0,
+      "Agility": 3,
+      "Dexterity": 1,
+      "Fighting": 3,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 2,
+      "Fortitude": 2,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Growth",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Protection",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Low-light Vision, Scent",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCA 268",
+    "printed_total": 35
+  },
+  {
+    "id": "shark",
+    "name": "Shark",
+    "kind": "animal",
+    "category": "Aquatic",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "A mid-sized predatory shark that follows blood in the water and strikes from below.",
+    "tags": [
+      "wild",
+      "aquatic",
+      "predator"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 1,
+      "Agility": 2,
+      "Dexterity": 1,
+      "Fighting": 4,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -4
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 0,
+      "Fortitude": 4,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Bite",
+        "ranks": 1
+      },
+      {
+        "name": "Perception",
+        "ranks": 5
+      }
+    ],
+    "advantages": [
+      {
+        "name": "All-out Attack",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Protection",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense"
+      },
+      {
+        "name": "Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Low-light Vision, Scent",
+        "role": "sense"
+      },
+      {
+        "name": "Swimming",
+        "effect": "Swimming",
+        "rank": 4,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCA 268",
+    "printed_total": 30,
+    "book_note": "Book totals Powers as 9, but Damage 1 + Protection 3 + Senses 2 + Swimming 4 = 10, so the true total is 31."
+  },
+  {
+    "id": "hawk",
+    "name": "Hawk",
+    "kind": "animal",
+    "category": "Birds",
+    "pl": 4,
+    "size": "Tiny",
+    "summary": "A sharp-eyed bird of prey that dives on small game from high above.",
+    "tags": [
+      "wild",
+      "flying",
+      "bird"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 0,
+      "Agility": 3,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -4,
+      "Awareness": 2,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 2,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Flight",
+        "effect": "Flight",
+        "rank": 2,
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "role": "movement"
+      },
+      {
+        "name": "Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Extended Vision, Low-light Vision",
+        "role": "sense"
+      },
+      {
+        "name": "Shrinking",
+        "effect": "Shrinking",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          }
+        ],
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCA 268",
+    "printed_total": 24,
+    "book_note": "Book totals are Abilities 6 + Powers 11 = 17; printed STR -2 already includes Shrinking 8 (base STR 0), so abilities cost 8, and Flight 2 (Wings) 2 + Senses 2 + Shrinking 8 = 12 powers, for 27. The book's Close Combat: Claws is its unarmed talon attack, so it is recorded as Close Combat: Unarmed."
+  },
+  {
+    "id": "lion",
+    "name": "Lion",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 6,
+    "size": "Medium",
+    "summary": "The big cat of the savanna: a stealthy stalker that finishes prey with a pounce and raking claws.",
+    "tags": [
+      "wild",
+      "predator",
+      "big cat"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 0,
+      "Agility": 3,
+      "Dexterity": 1,
+      "Fighting": 4,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 3,
+      "Fortitude": 4,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 3
+      },
+      {
+        "name": "Perception",
+        "ranks": 5
+      },
+      {
+        "name": "Stealth",
+        "ranks": 8
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Growth",
+        "effect": "Growth",
+        "rank": 2,
+        "extras": [
+          {
+            "name": "Permanent"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Protection",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Low-light Vision, Scent",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCA 268",
+    "printed_total": 45,
+    "book_note": "Book totals Powers as 8, but Growth 2 (4) + Protection 4 + Senses 2 = 10, so the true total is 47. The book's Close Combat: Claws is its unarmed attack, recorded as Close Combat: Unarmed."
+  },
+  {
+    "id": "whale",
+    "name": "Whale",
+    "kind": "animal",
+    "category": "Aquatic",
+    "pl": 8,
+    "size": "Gargantuan",
+    "summary": "A fifty-foot humpback or sperm whale; adjust Growth for bigger or smaller species.",
+    "tags": [
+      "wild",
+      "aquatic"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 0,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 2,
+      "Intellect": -3,
+      "Awareness": 1,
+      "Presence": -3
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 2,
+      "Fortitude": 0,
+      "Will": 3
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 6
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 10
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Growth",
+        "effect": "Growth",
+        "rank": 12,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Protection",
+        "effect": "Protection",
+        "rank": 1,
+        "role": "defense"
+      },
+      {
+        "name": "Senses",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Accurate Hearing, Low-light Vision, Ultra-Hearing",
+        "role": "sense"
+      },
+      {
+        "name": "Swimming",
+        "effect": "Swimming",
+        "rank": 5,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCA 268",
+    "printed_total": 46,
+    "book_note": "Book gives Athletics 8 (printed +8, ignoring STR 12); with STR 12 that is +20, over the PL8 skill cap of +18, so Athletics is reduced to 6 (+18). That trims 1 point: 45 instead of 46."
+  },
+  {
+    "id": "wolf",
+    "name": "Wolf",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 3,
+    "size": "Medium",
+    "summary": "A wild canine pack hunter that wears prey down and drags it off its feet.",
+    "tags": [
+      "wild",
+      "predator",
+      "pack"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 2,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -4,
+      "Awareness": 2,
+      "Presence": -2
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 1,
+      "Fortitude": 2,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Trip",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Senses",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Low-light Vision, Scent, Tracking",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCA 268",
+    "printed_total": 23
+  },
+  {
+    "id": "dog",
+    "name": "Dog",
+    "kind": "animal",
+    "category": "Pets & Farm",
+    "pl": 2,
+    "size": "Medium",
+    "summary": "A typical medium-sized family dog: loyal, loud, and quick to notice strangers.",
+    "tags": [
+      "everyday",
+      "pet",
+      "city"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 2,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 2,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Low-light Vision, Scent, Tracking",
+        "role": "sense"
+      },
+      {
+        "name": "Fast Runner",
+        "effect": "Speed",
+        "rank": 1,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "guard-dog",
+    "name": "Guard Dog",
+    "kind": "animal",
+    "category": "Pets & Farm",
+    "pl": 3,
+    "size": "Medium",
+    "summary": "A trained attack dog (shepherd, rottweiler, or similar) that bites and holds on until called off.",
+    "tags": [
+      "everyday",
+      "guard",
+      "city",
+      "trained"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 2,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 1,
+      "Fortitude": 2,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 5
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Low-light Vision, Scent, Tracking",
+        "role": "sense"
+      },
+      {
+        "name": "Fast Runner",
+        "effect": "Speed",
+        "rank": 1,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "cat",
+    "name": "Cat",
+    "kind": "animal",
+    "category": "Pets & Farm",
+    "pl": 3,
+    "size": "Tiny",
+    "summary": "A house or alley cat. Small, nimble, and very hard to catch; its claws are more nuisance than danger.",
+    "tags": [
+      "everyday",
+      "pet",
+      "city"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 0,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 2,
+      "Intellect": -4,
+      "Awareness": 2,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Acrobatics",
+        "ranks": 4
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Tiny Size",
+        "effect": "Shrinking",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 1,
+        "detail": "Low-light Vision",
+        "role": "sense"
+      },
+      {
+        "name": "Leaper",
+        "effect": "Leaping",
+        "rank": 1,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "horse",
+    "name": "Horse",
+    "kind": "animal",
+    "category": "Pets & Farm",
+    "pl": 3,
+    "size": "Large",
+    "summary": "A riding or draft horse; a strong runner and a common mount, with a kick that can break bones.",
+    "tags": [
+      "everyday",
+      "farm",
+      "mount"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 0,
+      "Agility": 1,
+      "Dexterity": 0,
+      "Fighting": 1,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 1,
+      "Fortitude": 1,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 3
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 1,
+        "detail": "Low-light Vision",
+        "role": "sense"
+      },
+      {
+        "name": "Gallop",
+        "effect": "Speed",
+        "rank": 4,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "cow",
+    "name": "Cow",
+    "kind": "animal",
+    "category": "Pets & Farm",
+    "pl": 2,
+    "size": "Large",
+    "summary": "A placid dairy or beef cow. Heavy and hard to move, but rarely aggressive.",
+    "tags": [
+      "everyday",
+      "farm"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 0,
+      "Agility": -1,
+      "Dexterity": -2,
+      "Fighting": 0,
+      "Intellect": -5,
+      "Awareness": 0,
+      "Presence": -2
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 2
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "bull",
+    "name": "Bull",
+    "kind": "animal",
+    "category": "Pets & Farm",
+    "pl": 5,
+    "size": "Large",
+    "summary": "An ill-tempered breeding bull or rodeo bull that charges anything that annoys it.",
+    "tags": [
+      "everyday",
+      "farm"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 1,
+      "Agility": 0,
+      "Dexterity": -1,
+      "Fighting": 2,
+      "Intellect": -5,
+      "Awareness": 1,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 1,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Charge",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Horns",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Tough Hide",
+        "effect": "Protection",
+        "rank": 1,
+        "role": "defense"
+      },
+      {
+        "name": "Charge",
+        "effect": "Speed",
+        "rank": 3,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "pig",
+    "name": "Pig",
+    "kind": "animal",
+    "category": "Pets & Farm",
+    "pl": 2,
+    "size": "Medium",
+    "summary": "A full-grown farm hog: stubborn, sturdy, and nastier than it looks if it bites.",
+    "tags": [
+      "everyday",
+      "farm"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 3,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 1,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -2
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 3
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 1,
+        "detail": "Acute Smell",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "goat",
+    "name": "Goat",
+    "kind": "animal",
+    "category": "Pets & Farm",
+    "pl": 2,
+    "size": "Medium",
+    "summary": "A sure-footed goat that climbs anything, eats everything, and headbutts whoever is in the way.",
+    "tags": [
+      "everyday",
+      "farm"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 2,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 1,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -2
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 1,
+      "Fortitude": 1,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Acrobatics",
+        "ranks": 2
+      },
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 2
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Horns",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Sure-footed",
+        "effect": "Movement",
+        "rank": 1,
+        "detail": "Sure-footed",
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "chicken-flock",
+    "name": "Chicken Flock",
+    "kind": "animal",
+    "category": "Pets & Farm",
+    "pl": 1,
+    "size": "Medium",
+    "summary": "A squawking, pecking mob of farmyard chickens, treated as a single swarm. Mostly a comic distraction.",
+    "tags": [
+      "everyday",
+      "farm",
+      "swarm"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": -1,
+      "Stamina": 0,
+      "Agility": 1,
+      "Dexterity": 0,
+      "Fighting": 0,
+      "Intellect": -5,
+      "Awareness": 1,
+      "Presence": -3
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 2
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Pecking Frenzy",
+        "effect": "Damage",
+        "rank": 1,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ]
+      },
+      {
+        "name": "Swarm Body",
+        "effect": "Insubstantial",
+        "rank": 1,
+        "detail": "A mass of many small creatures; pours through any gap and is hard to hurt with single blows",
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "rat",
+    "name": "Rat",
+    "kind": "animal",
+    "category": "Pets & Farm",
+    "pl": 2,
+    "size": "Tiny",
+    "summary": "A single sewer or pet rat; quick, sneaky, and able to squeeze almost anywhere.",
+    "tags": [
+      "everyday",
+      "city",
+      "vermin"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": -1,
+      "Stamina": 0,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 0,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -3
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 2
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Tiny Size",
+        "effect": "Shrinking",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Low-light Vision, Scent",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "rat-swarm",
+    "name": "Rat Swarm",
+    "kind": "animal",
+    "category": "Insects & Swarms",
+    "pl": 3,
+    "size": "Medium",
+    "summary": "A seething tide of rats pouring out of a sewer or basement and gnawing everything in reach.",
+    "tags": [
+      "everyday",
+      "city",
+      "swarm",
+      "vermin"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 2,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 2,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -3
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 2,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 2
+      },
+      {
+        "name": "Stealth",
+        "ranks": 2
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Gnawing Swarm",
+        "effect": "Damage",
+        "rank": 3,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ]
+      },
+      {
+        "name": "Swarm Body",
+        "effect": "Insubstantial",
+        "rank": 1,
+        "detail": "A mass of many small creatures; pours through any gap and is hard to hurt with single blows",
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Low-light Vision, Scent",
+        "role": "sense"
+      },
+      {
+        "name": "Climbers",
+        "effect": "Movement",
+        "rank": 1,
+        "detail": "Wall-crawling",
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "pigeon-flock",
+    "name": "Pigeon Flock",
+    "kind": "animal",
+    "category": "City Wildlife",
+    "pl": 1,
+    "size": "Medium",
+    "summary": "An explosion of startled pigeons that fills the air with wings and feathers, blinding anyone caught in it.",
+    "tags": [
+      "everyday",
+      "city",
+      "swarm",
+      "flying"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": -2,
+      "Stamina": 0,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 0,
+      "Intellect": -5,
+      "Awareness": 1,
+      "Presence": -3
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 1,
+      "Fortitude": 1,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 2
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Feathery Flurry",
+        "effect": "Dazzle",
+        "rank": 1,
+        "range": "Close",
+        "detail": "Visual",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "role": "attack"
+      },
+      {
+        "name": "Swarm Body",
+        "effect": "Insubstantial",
+        "rank": 1,
+        "detail": "A mass of many small creatures; pours through any gap and is hard to hurt with single blows",
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "defense"
+      },
+      {
+        "name": "Wings",
+        "effect": "Flight",
+        "rank": 2,
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "raccoon",
+    "name": "Raccoon",
+    "kind": "animal",
+    "category": "City Wildlife",
+    "pl": 2,
+    "size": "Small",
+    "summary": "A masked bandit of the alleys with clever hands that open latches, lids, and the occasional window.",
+    "tags": [
+      "everyday",
+      "city"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 1,
+      "Agility": 1,
+      "Dexterity": 2,
+      "Fighting": 1,
+      "Intellect": -3,
+      "Awareness": 1,
+      "Presence": -2
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 3
+      },
+      {
+        "name": "Sleight of Hand",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Small Size",
+        "effect": "Shrinking",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 1,
+        "detail": "Low-light Vision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "stray-dog-pack-leader",
+    "name": "Stray Dog Pack Leader",
+    "kind": "animal",
+    "category": "City Wildlife",
+    "pl": 3,
+    "size": "Medium",
+    "summary": "The scarred, half-wild boss of a pack of city strays. Use regular dogs for the rest of the pack.",
+    "tags": [
+      "everyday",
+      "city",
+      "pack"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 3,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Leadership",
+        "rank": 1
+      },
+      {
+        "name": "Teamwork",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Low-light Vision, Scent, Tracking",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "grizzly-bear",
+    "name": "Grizzly Bear",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 6,
+    "size": "Large",
+    "summary": "A half-ton brown bear able to shred a car door with its claws; most dangerous when protecting cubs.",
+    "tags": [
+      "wild",
+      "predator",
+      "forest"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 2,
+      "Agility": 1,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 2,
+      "Fortitude": 2,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 5
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Claws",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Thick Fur",
+        "effect": "Protection",
+        "rank": 1,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Low-light Vision, Scent",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "black-bear",
+    "name": "Black Bear",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "A smaller forest bear that raids campsites and trash cans and climbs trees with ease.",
+    "tags": [
+      "wild",
+      "forest",
+      "everyday"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 2,
+      "Agility": 1,
+      "Dexterity": 0,
+      "Fighting": 2,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 2,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Big",
+        "effect": "Growth",
+        "rank": 2,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Claws",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Low-light Vision, Scent",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "polar-bear",
+    "name": "Polar Bear",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 7,
+    "size": "Large",
+    "summary": "The largest land predator: a patient arctic hunter, at home on the ice or in freezing water.",
+    "tags": [
+      "wild",
+      "predator",
+      "arctic"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 6,
+      "Stamina": 4,
+      "Agility": 1,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 2,
+      "Fortitude": 2,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 5
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Claws",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Blubber and Fur",
+        "effect": "Protection",
+        "rank": 1,
+        "role": "defense"
+      },
+      {
+        "name": "Arctic Adapted",
+        "effect": "Immunity",
+        "rank": 1,
+        "detail": "Environmental cold",
+        "role": "defense"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 3,
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Low-light Vision, Scent",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "gorilla",
+    "name": "Silverback Gorilla",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 5,
+    "size": "Large",
+    "summary": "The dominant male of a gorilla troop. Usually peaceful, but its bluff charges are terrifying and its strength is real.",
+    "tags": [
+      "wild",
+      "jungle"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 1,
+      "Agility": 2,
+      "Dexterity": 1,
+      "Fighting": 3,
+      "Intellect": -3,
+      "Awareness": 1,
+      "Presence": 1
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 2,
+      "Fortitude": 1,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Startle",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Thick Hide",
+        "effect": "Protection",
+        "rank": 1,
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "tiger",
+    "name": "Tiger",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 7,
+    "size": "Medium",
+    "summary": "The largest of the big cats: a solitary ambush hunter that strikes from cover with overwhelming force.",
+    "tags": [
+      "wild",
+      "predator",
+      "big cat",
+      "jungle"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 1,
+      "Agility": 3,
+      "Dexterity": 1,
+      "Fighting": 5,
+      "Intellect": -4,
+      "Awareness": 2,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 5,
+      "Parry": 3,
+      "Fortitude": 4,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Claws",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Stealth",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Big",
+        "effect": "Growth",
+        "rank": 2,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Claws",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Tough Hide",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Low-light Vision, Scent",
+        "role": "sense"
+      },
+      {
+        "name": "Pounce",
+        "effect": "Leaping",
+        "rank": 2,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "leopard",
+    "name": "Leopard",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 5,
+    "size": "Medium",
+    "summary": "A leopard or black panther: a silent climber that drags its kills up into the trees.",
+    "tags": [
+      "wild",
+      "predator",
+      "big cat",
+      "jungle"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 2,
+      "Agility": 4,
+      "Dexterity": 1,
+      "Fighting": 4,
+      "Intellect": -4,
+      "Awareness": 2,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 2,
+      "Fortitude": 2,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 6
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Claws",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Stealth",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Claws",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Tough Hide",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Low-light Vision, Scent",
+        "role": "sense"
+      },
+      {
+        "name": "Pounce",
+        "effect": "Leaping",
+        "rank": 1,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "cheetah",
+    "name": "Cheetah",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "The fastest land animal, able to outrun a car on the highway for a short sprint.",
+    "tags": [
+      "wild",
+      "predator",
+      "big cat",
+      "savanna"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 2,
+      "Agility": 4,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -4,
+      "Awareness": 2,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 1,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      },
+      {
+        "name": "Improved Trip",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Claws",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Sprinter",
+        "effect": "Speed",
+        "rank": 5,
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 1,
+        "detail": "Extended Vision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "wolf-pack-alpha",
+    "name": "Wolf Pack Alpha",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "The lead wolf of a pack, bigger and smarter than the rest. Pair it with several ordinary wolves.",
+    "tags": [
+      "wild",
+      "predator",
+      "pack"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 3,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 4,
+      "Intellect": -4,
+      "Awareness": 2,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 1,
+      "Fortitude": 2,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Trip",
+        "rank": 1
+      },
+      {
+        "name": "Leadership",
+        "rank": 1
+      },
+      {
+        "name": "Teamwork",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Low-light Vision, Scent, Tracking",
+        "role": "sense"
+      },
+      {
+        "name": "Fast Runner",
+        "effect": "Speed",
+        "rank": 2,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "coyote",
+    "name": "Coyote",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 2,
+    "size": "Medium",
+    "summary": "A wily scavenger equally at home in the desert and the suburbs.",
+    "tags": [
+      "wild",
+      "everyday",
+      "city"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 1,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 2,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -2
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Low-light Vision, Scent, Tracking",
+        "role": "sense"
+      },
+      {
+        "name": "Fast Runner",
+        "effect": "Speed",
+        "rank": 2,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "deer",
+    "name": "Deer",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 2,
+    "size": "Medium",
+    "summary": "A skittish deer that bolts at the first sign of danger. A rutting buck will fight with its antlers.",
+    "tags": [
+      "wild",
+      "everyday",
+      "forest"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 2,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 0,
+      "Intellect": -4,
+      "Awareness": 2,
+      "Presence": -2
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 1,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 6
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Antlers",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Low-light Vision, Acute Smell",
+        "role": "sense"
+      },
+      {
+        "name": "Fast Runner",
+        "effect": "Speed",
+        "rank": 3,
+        "role": "movement"
+      },
+      {
+        "name": "Leaper",
+        "effect": "Leaping",
+        "rank": 2,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "moose",
+    "name": "Moose",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 5,
+    "size": "Large",
+    "summary": "A towering northern deer with a short temper and broad antlers; it injures more people than bears do.",
+    "tags": [
+      "wild",
+      "forest"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 2,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 2,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 2,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Antlers",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 2,
+        "role": "movement"
+      },
+      {
+        "name": "Fast Runner",
+        "effect": "Speed",
+        "rank": 3,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "elephant",
+    "name": "Elephant",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 8,
+    "size": "Huge",
+    "summary": "An African or Asian elephant, smart and social, able to flatten a vehicle when enraged.",
+    "tags": [
+      "wild",
+      "savanna",
+      "mount"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 2,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 2,
+      "Intellect": -2,
+      "Awareness": 2,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 2,
+      "Fortitude": 1,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Huge Size",
+        "effect": "Growth",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Tusks",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Thick Hide",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Trunk",
+        "effect": "Extra Limbs",
+        "rank": 1,
+        "detail": "Prehensile trunk",
+        "role": "utility"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Acute Smell, Ultra-Hearing (infrasound)",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "rhinoceros",
+    "name": "Rhinoceros",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 7,
+    "size": "Large",
+    "summary": "A near-sighted armored tank of an animal that charges first and investigates later.",
+    "tags": [
+      "wild",
+      "savanna"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 2,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -5,
+      "Awareness": 1,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 1,
+      "Fortitude": 1,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Charge",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 6,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Horn",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Armored Hide",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 1,
+        "detail": "Acute Smell",
+        "role": "sense"
+      },
+      {
+        "name": "Charge",
+        "effect": "Speed",
+        "rank": 3,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "hippopotamus",
+    "name": "Hippopotamus",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 7,
+    "size": "Large",
+    "summary": "A territorial river giant with a jaw that can bite a canoe in half.",
+    "tags": [
+      "wild",
+      "aquatic",
+      "river"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 3,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 2,
+      "Intellect": -5,
+      "Awareness": 1,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 2,
+      "Fortitude": 1,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 3
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 6,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Thick Hide",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 2,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "wild-boar",
+    "name": "Wild Boar",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "A bristly forest hog with razor tusks that keeps fighting long after it should have fallen.",
+    "tags": [
+      "wild",
+      "forest"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 4,
+      "Agility": 1,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Diehard",
+        "rank": 1
+      },
+      {
+        "name": "Improved Charge",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Tusks",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Bristly Hide",
+        "effect": "Protection",
+        "rank": 1,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 1,
+        "detail": "Acute Smell",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "cape-buffalo",
+    "name": "Cape Buffalo",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 6,
+    "size": "Large",
+    "summary": "A savanna buffalo known for circling back to ambush the hunters tracking it.",
+    "tags": [
+      "wild",
+      "savanna",
+      "herd"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 3,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -5,
+      "Awareness": 1,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 2,
+      "Fortitude": 1,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Charge",
+        "rank": 1
+      },
+      {
+        "name": "Teamwork",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Horns",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Thick Hide",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Charge",
+        "effect": "Speed",
+        "rank": 3,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "hyena",
+    "name": "Hyena",
+    "kind": "animal",
+    "category": "Wild Animals",
+    "pl": 3,
+    "size": "Medium",
+    "summary": "A cackling clan hunter whose jaws crack bone. Rarely encountered alone.",
+    "tags": [
+      "wild",
+      "savanna",
+      "pack"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 3,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 2,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 1,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Intimidation",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Teamwork",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Low-light Vision, Scent, Tracking",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "eagle",
+    "name": "Eagle",
+    "kind": "animal",
+    "category": "Birds",
+    "pl": 4,
+    "size": "Small",
+    "summary": "A large eagle with a seven-foot wingspan, able to spot a rabbit from a mile up.",
+    "tags": [
+      "wild",
+      "flying",
+      "bird"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 1,
+      "Agility": 3,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -4,
+      "Awareness": 2,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Close Combat",
+        "spec": "Talons",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 8
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Small Size",
+        "effect": "Shrinking",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Talons",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Wings",
+        "effect": "Flight",
+        "rank": 4,
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Extended Vision (x100), Low-light Vision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "owl",
+    "name": "Owl",
+    "kind": "animal",
+    "category": "Birds",
+    "pl": 3,
+    "size": "Tiny",
+    "summary": "A silent night hunter that locates prey in total darkness by sound alone.",
+    "tags": [
+      "wild",
+      "flying",
+      "bird",
+      "nocturnal"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 0,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 1,
+      "Intellect": -4,
+      "Awareness": 2,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 3
+      },
+      {
+        "name": "Perception",
+        "ranks": 8
+      },
+      {
+        "name": "Stealth",
+        "ranks": 6
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Tiny Size",
+        "effect": "Shrinking",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Wings",
+        "effect": "Flight",
+        "rank": 2,
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Darkvision, Accurate Hearing",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "raven",
+    "name": "Raven",
+    "kind": "animal",
+    "category": "Birds",
+    "pl": 2,
+    "size": "Tiny",
+    "summary": "A clever black bird that steals shiny things, solves puzzles, and can mimic a few words.",
+    "tags": [
+      "wild",
+      "city",
+      "flying",
+      "bird",
+      "everyday"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 0,
+      "Agility": 0,
+      "Dexterity": 1,
+      "Fighting": 0,
+      "Intellect": -2,
+      "Awareness": 2,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Sleight of Hand",
+        "ranks": 2
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Tiny Size",
+        "effect": "Shrinking",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Wings",
+        "effect": "Flight",
+        "rank": 2,
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "role": "movement"
+      },
+      {
+        "name": "Mimicry",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Mimics simple sounds and a few words",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "vulture",
+    "name": "Vulture",
+    "kind": "animal",
+    "category": "Birds",
+    "pl": 2,
+    "size": "Small",
+    "summary": "A patient carrion bird that circles anything that looks close to death.",
+    "tags": [
+      "wild",
+      "flying",
+      "bird"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 2,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 0,
+      "Intellect": -4,
+      "Awareness": 2,
+      "Presence": -2
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 6
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Small Size",
+        "effect": "Shrinking",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Wings",
+        "effect": "Flight",
+        "rank": 3,
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Extended Vision, Acute Smell",
+        "role": "sense"
+      },
+      {
+        "name": "Iron Gut",
+        "effect": "Immunity",
+        "rank": 2,
+        "detail": "Disease, Poison",
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "alligator",
+    "name": "Alligator",
+    "kind": "animal",
+    "category": "Reptiles",
+    "pl": 5,
+    "size": "Large",
+    "summary": "A swamp or sewer gator that waits motionless at the waterline, then grabs and drags its prey under.",
+    "tags": [
+      "wild",
+      "aquatic",
+      "swamp",
+      "city"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 1,
+      "Agility": 1,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -5,
+      "Awareness": 1,
+      "Presence": -2
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 1,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 3
+      },
+      {
+        "name": "Stealth",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Improved Hold",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Scaly Hide",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 2,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "crocodile",
+    "name": "Saltwater Crocodile",
+    "kind": "animal",
+    "category": "Reptiles",
+    "pl": 7,
+    "size": "Large",
+    "summary": "A twenty-foot estuary crocodile, the largest living reptile, with the strongest bite on record.",
+    "tags": [
+      "wild",
+      "aquatic",
+      "river"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 2,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -5,
+      "Awareness": 1,
+      "Presence": -2
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 2,
+      "Fortitude": 2,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 3
+      },
+      {
+        "name": "Stealth",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Improved Hold",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 6,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Armored Scales",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 3,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "python",
+    "name": "Python",
+    "kind": "animal",
+    "category": "Reptiles",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "A huge constrictor that coils around its victim and squeezes a little tighter with every breath.",
+    "tags": [
+      "wild",
+      "jungle",
+      "pet"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 3,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -5,
+      "Awareness": 1,
+      "Presence": -2
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 1,
+      "Fortitude": 2,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 2
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Chokehold",
+        "rank": 1
+      },
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Improved Hold",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Constriction",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack",
+        "flaws": [
+          {
+            "name": "Grab-Based"
+          }
+        ]
+      },
+      {
+        "name": "Scales",
+        "effect": "Protection",
+        "rank": 1,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Infravision, Scent",
+        "role": "sense"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 1,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "cobra",
+    "name": "Cobra",
+    "kind": "animal",
+    "category": "Reptiles",
+    "pl": 3,
+    "size": "Small",
+    "summary": "A hooded snake whose neurotoxic bite can stop a grown man's breathing.",
+    "tags": [
+      "wild",
+      "venomous"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 1,
+      "Agility": 3,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -5,
+      "Awareness": 1,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 2
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Small Size",
+        "effect": "Shrinking",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Venomous Bite",
+        "effect": "Affliction",
+        "rank": 3,
+        "detail": "Resisted by Fortitude; Dazed, Stunned, Paralyzed (neurotoxin)",
+        "role": "attack"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Infravision, Scent",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "rattlesnake",
+    "name": "Rattlesnake",
+    "kind": "animal",
+    "category": "Reptiles",
+    "pl": 3,
+    "size": "Small",
+    "summary": "A desert pit viper that rattles a warning before it strikes; its venom causes swelling and collapse.",
+    "tags": [
+      "wild",
+      "venomous",
+      "desert"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 0,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 2,
+      "Intellect": -5,
+      "Awareness": 1,
+      "Presence": -2
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 2,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 3
+      },
+      {
+        "name": "Stealth",
+        "ranks": 6
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Small Size",
+        "effect": "Shrinking",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Venomous Bite",
+        "effect": "Affliction",
+        "rank": 3,
+        "detail": "Resisted by Fortitude; Impaired, Disabled, Incapacitated (hemotoxin)",
+        "role": "attack"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Infravision (heat pits), Scent",
+        "role": "sense"
+      },
+      {
+        "name": "Rattle",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Warning rattle",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "komodo-dragon",
+    "name": "Komodo Dragon",
+    "kind": "animal",
+    "category": "Reptiles",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "A giant island monitor lizard whose toxic bite leaves its prey to weaken and fall.",
+    "tags": [
+      "wild",
+      "venomous"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 3,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -2
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 0,
+      "Fortitude": 2,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack",
+        "linked": [
+          {
+            "name": "Toxic Saliva",
+            "effect": "Affliction",
+            "rank": 3,
+            "detail": "Resisted by Fortitude; Fatigued, Exhausted, Incapacitated",
+            "role": "attack",
+            "attackSkill": "Bite"
+          }
+        ]
+      },
+      {
+        "name": "Scaly Hide",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Scent, Extended Scent",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "sea-turtle",
+    "name": "Sea Turtle",
+    "kind": "animal",
+    "category": "Reptiles",
+    "pl": 3,
+    "size": "Medium",
+    "summary": "A big ocean turtle with a heavy shell, slow on land but graceful in the water.",
+    "tags": [
+      "wild",
+      "aquatic",
+      "everyday"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 3,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 0,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -2
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 2
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Shell",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 3,
+        "role": "movement"
+      },
+      {
+        "name": "Hold Breath",
+        "effect": "Immunity",
+        "rank": 1,
+        "detail": "Drowning (holds breath for hours)",
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "orca",
+    "name": "Orca",
+    "kind": "animal",
+    "category": "Aquatic",
+    "pl": 7,
+    "size": "Huge",
+    "summary": "A killer whale: a brilliant, coordinated pod hunter that can snatch seals off the ice.",
+    "tags": [
+      "wild",
+      "aquatic",
+      "predator",
+      "pack"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 1,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -2,
+      "Awareness": 2,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 3,
+      "Fortitude": 1,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "All-out Attack",
+        "rank": 1
+      },
+      {
+        "name": "Teamwork",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Huge Size",
+        "effect": "Growth",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Blubber",
+        "effect": "Protection",
+        "rank": 1,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Accurate Hearing, Low-light Vision, Ultra-Hearing",
+        "role": "sense"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 6,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "great-white-shark",
+    "name": "Great White Shark",
+    "kind": "animal",
+    "category": "Aquatic",
+    "pl": 6,
+    "size": "Large",
+    "summary": "A twenty-foot apex shark that senses a heartbeat through the water and hits like a truck.",
+    "tags": [
+      "wild",
+      "aquatic",
+      "predator"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 1,
+      "Agility": 1,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -4
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 2,
+      "Fortitude": 1,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "All-out Attack",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 6,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Tough Skin",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Low-light Vision, Scent, Extended Scent, Detect Electric Fields",
+        "role": "sense"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 5,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "octopus",
+    "name": "Octopus",
+    "kind": "animal",
+    "category": "Aquatic",
+    "pl": 2,
+    "size": "Small",
+    "summary": "A clever, color-changing octopus that escapes through tiny gaps and hides behind a cloud of ink.",
+    "tags": [
+      "wild",
+      "aquatic",
+      "everyday"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 0,
+      "Agility": 2,
+      "Dexterity": 2,
+      "Fighting": 1,
+      "Intellect": -2,
+      "Awareness": 2,
+      "Presence": -2
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Sleight of Hand",
+        "ranks": 2
+      },
+      {
+        "name": "Stealth",
+        "ranks": 6
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Small Size",
+        "effect": "Shrinking",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Extra Limbs",
+        "effect": "Extra Limbs",
+        "rank": 6,
+        "detail": "Eight arms",
+        "role": "utility"
+      },
+      {
+        "name": "Ink Cloud",
+        "effect": "Environment",
+        "option": "Greater (extreme cold/heat, -2 speed, daylight, -5 Perception)",
+        "rank": 1,
+        "detail": "Visibility only: a cloud of ink imposes -5 on visual Perception; Limited to underwater",
+        "flaws": [
+          {
+            "name": "Limited"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Boneless",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Boneless; squeezes through any gap larger than its beak",
+        "role": "utility"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 2,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "giant-squid",
+    "name": "Giant Squid",
+    "kind": "animal",
+    "category": "Aquatic",
+    "pl": 7,
+    "size": "Huge",
+    "summary": "A forty-foot deep-sea squid with ten grasping arms, rarely seen at the surface.",
+    "tags": [
+      "wild",
+      "aquatic",
+      "deep sea"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 0,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -3,
+      "Awareness": 2,
+      "Presence": -3
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 3,
+      "Fortitude": 2,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Improved Hold",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Huge Size",
+        "effect": "Growth",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Beak",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Extra Limbs",
+        "effect": "Extra Limbs",
+        "rank": 8,
+        "detail": "Ten arms",
+        "role": "utility"
+      },
+      {
+        "name": "Long Tentacles",
+        "effect": "Elongation",
+        "rank": 2,
+        "role": "utility"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Darkvision",
+        "role": "sense"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 4,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "piranha-swarm",
+    "name": "Piranha Swarm",
+    "kind": "animal",
+    "category": "Insects & Swarms",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "A frenzied school of piranhas that strips anything in the water to the bone.",
+    "tags": [
+      "wild",
+      "aquatic",
+      "swarm",
+      "river"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 1,
+      "Agility": 3,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -5,
+      "Awareness": 1,
+      "Presence": -4
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 2
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Feeding Frenzy",
+        "effect": "Damage",
+        "rank": 4,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited"
+          }
+        ],
+        "detail": "Limited to targets in the water"
+      },
+      {
+        "name": "Swarm Body",
+        "effect": "Insubstantial",
+        "rank": 1,
+        "detail": "A mass of many small creatures; pours through any gap and is hard to hurt with single blows",
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "defense"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 3,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "jellyfish-swarm",
+    "name": "Jellyfish Swarm",
+    "kind": "animal",
+    "category": "Insects & Swarms",
+    "pl": 3,
+    "size": "Medium",
+    "summary": "A drifting bloom of box jellyfish; brushing against the tentacles brings agonizing, paralyzing pain.",
+    "tags": [
+      "wild",
+      "aquatic",
+      "swarm",
+      "venomous"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": -4,
+      "Stamina": 1,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 1,
+      "Intellect": null,
+      "Awareness": 0,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 0,
+      "Fortitude": 2,
+      "Will": 0
+    },
+    "skills": [],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Stinging Bloom",
+        "effect": "Affliction",
+        "rank": 3,
+        "detail": "Resisted by Fortitude; Impaired, Disabled, Paralyzed",
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited"
+          }
+        ]
+      },
+      {
+        "name": "Swarm Body",
+        "effect": "Insubstantial",
+        "rank": 1,
+        "detail": "A mass of many small creatures; pours through any gap and is hard to hurt with single blows",
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "defense"
+      },
+      {
+        "name": "Drifting",
+        "effect": "Swimming",
+        "rank": 1,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "barracuda",
+    "name": "Barracuda",
+    "kind": "animal",
+    "category": "Aquatic",
+    "pl": 3,
+    "size": "Medium",
+    "summary": "A sleek, toothy reef fish that strikes at anything shiny in a burst of speed.",
+    "tags": [
+      "wild",
+      "aquatic"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 1,
+      "Agility": 3,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -3
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 1,
+      "Fortitude": 2,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 1,
+        "detail": "Low-light Vision",
+        "role": "sense"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 5,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "electric-eel",
+    "name": "Electric Eel",
+    "kind": "animal",
+    "category": "Aquatic",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "A river fish that stuns everything around it with a powerful electrical discharge.",
+    "tags": [
+      "wild",
+      "aquatic",
+      "river"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 2,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 2,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -3
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 1,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 2
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Electric Discharge",
+        "effect": "Damage",
+        "rank": 4,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Limited"
+          }
+        ],
+        "detail": "Limited to targets in contact with the water"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Detect Electric Fields (ranged)",
+        "role": "sense"
+      },
+      {
+        "name": "Insulated",
+        "effect": "Immunity",
+        "rank": 1,
+        "detail": "Own electrical discharge",
+        "role": "defense"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 2,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "stinging-insect-swarm",
+    "name": "Bee or Wasp Swarm",
+    "kind": "animal",
+    "category": "Insects & Swarms",
+    "pl": 3,
+    "size": "Medium",
+    "summary": "An angry cloud of bees, wasps, or hornets that chases intruders and stings any exposed skin.",
+    "tags": [
+      "everyday",
+      "swarm",
+      "flying",
+      "venomous"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": -4,
+      "Stamina": 0,
+      "Agility": 3,
+      "Dexterity": 0,
+      "Fighting": 2,
+      "Intellect": -5,
+      "Awareness": 1,
+      "Presence": -3
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 2,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Stinging Cloud",
+        "effect": "Damage",
+        "rank": 3,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ]
+      },
+      {
+        "name": "Swarm Body",
+        "effect": "Insubstantial",
+        "rank": 1,
+        "detail": "A mass of many small creatures; pours through any gap and is hard to hurt with single blows",
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "defense"
+      },
+      {
+        "name": "Wings",
+        "effect": "Flight",
+        "rank": 2,
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "army-ant-swarm",
+    "name": "Army Ant Swarm",
+    "kind": "animal",
+    "category": "Insects & Swarms",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "A marching carpet of millions of ants that devours anything too slow to get out of the way.",
+    "tags": [
+      "wild",
+      "swarm",
+      "jungle"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": -4,
+      "Stamina": 2,
+      "Agility": 1,
+      "Dexterity": 0,
+      "Fighting": 2,
+      "Intellect": -5,
+      "Awareness": 1,
+      "Presence": -5
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 1,
+      "Fortitude": 2,
+      "Will": 1
+    },
+    "skills": [],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Devouring Tide",
+        "effect": "Damage",
+        "rank": 4,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ]
+      },
+      {
+        "name": "Swarm Body",
+        "effect": "Insubstantial",
+        "rank": 1,
+        "detail": "A mass of many small creatures; pours through any gap and is hard to hurt with single blows",
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "defense"
+      },
+      {
+        "name": "Climbers",
+        "effect": "Movement",
+        "rank": 1,
+        "detail": "Wall-crawling",
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "scorpion",
+    "name": "Scorpion",
+    "kind": "animal",
+    "category": "Insects & Swarms",
+    "pl": 2,
+    "size": "Tiny",
+    "summary": "A palm-sized desert scorpion with a painful, sometimes deadly sting.",
+    "tags": [
+      "wild",
+      "venomous",
+      "desert"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": -1,
+      "Stamina": 0,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 0,
+      "Intellect": -5,
+      "Awareness": 1,
+      "Presence": -4
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Close Combat",
+        "spec": "Sting",
+        "ranks": 2
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Tiny Size",
+        "effect": "Shrinking",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Sting",
+        "effect": "Affliction",
+        "rank": 2,
+        "detail": "Resisted by Fortitude; Impaired, Disabled, Incapacitated",
+        "role": "attack"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Darkvision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "venomous-spider",
+    "name": "Venomous Spider",
+    "kind": "animal",
+    "category": "Insects & Swarms",
+    "pl": 2,
+    "size": "Tiny",
+    "summary": "A black widow, brown recluse, or big tarantula; its bite causes cramps, fever, and collapse.",
+    "tags": [
+      "everyday",
+      "venomous",
+      "city"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": -1,
+      "Stamina": 0,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 0,
+      "Intellect": -5,
+      "Awareness": 1,
+      "Presence": -4
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Close Combat",
+        "spec": "Venomous Bite",
+        "ranks": 2
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Tiny Size",
+        "effect": "Shrinking",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Venomous Bite",
+        "effect": "Affliction",
+        "rank": 2,
+        "detail": "Resisted by Fortitude; Impaired, Disabled, Incapacitated",
+        "role": "attack"
+      },
+      {
+        "name": "Wall-crawling",
+        "effect": "Movement",
+        "rank": 1,
+        "detail": "Wall-crawling",
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 1,
+        "detail": "Tremorsense (Detect Vibration)",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "bat-swarm",
+    "name": "Bat Swarm",
+    "kind": "animal",
+    "category": "Insects & Swarms",
+    "pl": 2,
+    "size": "Medium",
+    "summary": "A shrieking cloud of bats pouring out of a cave or belfry, nipping and battering everything in its path.",
+    "tags": [
+      "wild",
+      "city",
+      "swarm",
+      "flying",
+      "nocturnal"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": -4,
+      "Stamina": 0,
+      "Agility": 3,
+      "Dexterity": 0,
+      "Fighting": 1,
+      "Intellect": -4,
+      "Awareness": 2,
+      "Presence": -3
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 0
+    },
+    "skills": [],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Biting Cloud",
+        "effect": "Damage",
+        "rank": 1,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ]
+      },
+      {
+        "name": "Swarm Body",
+        "effect": "Insubstantial",
+        "rank": 1,
+        "detail": "A mass of many small creatures; pours through any gap and is hard to hurt with single blows",
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "defense"
+      },
+      {
+        "name": "Wings",
+        "effect": "Flight",
+        "rank": 2,
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Accurate Hearing, Ultra-Hearing (echolocation)",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "tyrannosaurus",
+    "name": "Tyrannosaurus Rex",
+    "kind": "animal",
+    "category": "Prehistoric",
+    "pl": 10,
+    "size": "Gargantuan",
+    "summary": "The tyrant lizard: forty feet of muscle and teeth, the classic lost-world showstopper.",
+    "tags": [
+      "prehistoric",
+      "predator",
+      "dinosaur"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 1,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -4,
+      "Awareness": 2,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 3,
+      "Fortitude": 1,
+      "Will": 3
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Startle",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Gargantuan Size",
+        "effect": "Growth",
+        "rank": 12,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Scaly Hide",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Low-light Vision, Scent, Extended Scent",
+        "role": "sense"
+      },
+      {
+        "name": "Fast Runner",
+        "effect": "Speed",
+        "rank": 3,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "raptor",
+    "name": "Raptor",
+    "kind": "animal",
+    "category": "Prehistoric",
+    "pl": 5,
+    "size": "Medium",
+    "summary": "A man-sized pack-hunting dinosaur with a sickle claw on each foot and a nasty cunning.",
+    "tags": [
+      "prehistoric",
+      "predator",
+      "dinosaur",
+      "pack"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 2,
+      "Agility": 4,
+      "Dexterity": 0,
+      "Fighting": 5,
+      "Intellect": -3,
+      "Awareness": 2,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 1,
+      "Fortitude": 2,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Acrobatics",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Stealth",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      },
+      {
+        "name": "Teamwork",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Sickle Claw",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Scaly Hide",
+        "effect": "Protection",
+        "rank": 1,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Low-light Vision, Scent",
+        "role": "sense"
+      },
+      {
+        "name": "Fast Runner",
+        "effect": "Speed",
+        "rank": 4,
+        "role": "movement"
+      },
+      {
+        "name": "Leaper",
+        "effect": "Leaping",
+        "rank": 2,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "triceratops",
+    "name": "Triceratops",
+    "kind": "animal",
+    "category": "Prehistoric",
+    "pl": 9,
+    "size": "Huge",
+    "summary": "A three-horned herbivore the size of a truck, armored with a bony frill and quick to charge.",
+    "tags": [
+      "prehistoric",
+      "dinosaur",
+      "herd"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 4,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -5,
+      "Awareness": 1,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 2,
+      "Fortitude": 1,
+      "Will": 3
+    },
+    "skills": [
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Charge",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Huge Size",
+        "effect": "Growth",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Horns",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Bony Frill and Hide",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "mammoth",
+    "name": "Woolly Mammoth",
+    "kind": "animal",
+    "category": "Prehistoric",
+    "pl": 9,
+    "size": "Huge",
+    "summary": "An ice-age elephant wrapped in shaggy fur, with curving tusks longer than a man.",
+    "tags": [
+      "prehistoric",
+      "arctic",
+      "herd",
+      "mount"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 5,
+      "Stamina": 4,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -3,
+      "Awareness": 2,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 2,
+      "Fortitude": 1,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Huge Size",
+        "effect": "Growth",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Tusks",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Shaggy Hide",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Woolly Coat",
+        "effect": "Immunity",
+        "rank": 1,
+        "detail": "Environmental cold",
+        "role": "defense"
+      },
+      {
+        "name": "Trunk",
+        "effect": "Extra Limbs",
+        "rank": 1,
+        "detail": "Prehensile trunk",
+        "role": "utility"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 1,
+        "detail": "Acute Smell",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "sabretooth",
+    "name": "Sabre-tooth Cat",
+    "kind": "animal",
+    "category": "Prehistoric",
+    "pl": 7,
+    "size": "Large",
+    "summary": "An ice-age ambush predator that pins prey down and stabs with foot-long fangs.",
+    "tags": [
+      "prehistoric",
+      "predator",
+      "big cat"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 1,
+      "Agility": 3,
+      "Dexterity": 0,
+      "Fighting": 4,
+      "Intellect": -4,
+      "Awareness": 2,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 3,
+      "Fortitude": 2,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Sabre Fangs",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Thick Hide",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Low-light Vision, Scent",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "pteranodon",
+    "name": "Pteranodon",
+    "kind": "animal",
+    "category": "Prehistoric",
+    "pl": 5,
+    "size": "Large",
+    "summary": "A flying reptile with a twenty-foot wingspan that snatches fish and the occasional explorer.",
+    "tags": [
+      "prehistoric",
+      "flying"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": -1,
+      "Stamina": -2,
+      "Agility": 3,
+      "Dexterity": 0,
+      "Fighting": 4,
+      "Intellect": -4,
+      "Awareness": 2,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 2,
+      "Fortitude": 0,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Move-by Action",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Beak",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Wings",
+        "effect": "Flight",
+        "rank": 5,
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 1,
+        "detail": "Extended Vision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  }
+]
