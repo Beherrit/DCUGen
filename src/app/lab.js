@@ -2,7 +2,7 @@
 
 import { h, clear, toast, copyText } from './dom.js';
 import { state } from './store.js';
-import { getPower, setPower } from './sheetview.js';
+import { getPower, setPower, whatItDoes } from './sheetview.js';
 import { costMath, availableModifiers, randomPower } from '../engine/powersmith.js';
 import { powerCost, alternateOwnCost, primaryOwnCost } from '../engine/costs.js';
 import { describeEffect } from '../engine/render.js';
@@ -198,6 +198,7 @@ function render() {
     h('p', { style: { margin: 0, fontSize: '13px', color: 'var(--ink-3)' } },
       'Cost per rank = base + range change + per-rank extras − per-rank flaws. Below 1, each point buys more ranks (0 = 1 point per 2 ranks, −1 = per 3). Flat modifiers are added last. Each Alternate Effect adds 1 point and may not cost more than the primary.'),
     aeWarnings.length ? h('ul', { class: 'issues' }, aeWarnings.map((w) => h('li', { class: 'error' }, w))) : null,
+    h('div', { class: 'field' }, h('span', null, `What ${p.name || 'it'} does`), whatItDoes(p, R)),
     h('div', { class: 'field' }, h('span', null, 'Stat block line'),
       h('div', { class: 'statblock-text', id: 'lab-text' }, statLine(arr))),
     h('div', { class: 'btn-row' },

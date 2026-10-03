@@ -150,6 +150,20 @@ button.chip { cursor: pointer; }
 button.chip:hover { border-color: var(--ink-3); }
 .swatch { width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--accent)); flex: none; }
 
+/* ---------- open character tabs ---------- */
+.char-tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 0; margin-bottom: -1px; position: relative; z-index: 1; scrollbar-width: thin; }
+.char-tab { display: flex; align-items: center; flex: 0 0 auto; max-width: 220px; border: 1px solid var(--line); border-bottom: 0; border-radius: 8px 8px 0 0; background: var(--surface-2); box-shadow: inset 0 3px 0 var(--c); }
+.char-tab.active { background: var(--surface); box-shadow: inset 0 4px 0 var(--c); }
+.char-tab-btn { display: flex; align-items: center; gap: 6px; border: 0; background: transparent; padding: 8px 4px 7px 10px; cursor: pointer; min-width: 0; font: 700 13px/1 var(--font-label); color: var(--ink-2); }
+.char-tab.active .char-tab-btn { color: var(--ink); }
+.char-tab-btn .swatch { background: var(--c); }
+.char-tab-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-transform: uppercase; letter-spacing: .03em; }
+.char-tab-pl { font-size: 11px; padding: 1px 5px; border-radius: 8px; background: var(--paper); color: var(--ink-3); }
+.char-tab .x { padding: 0 8px 0 2px; }
+.char-tab-new { flex: 0 0 auto; border: 1px dashed var(--line); background: transparent; border-radius: 8px 8px 0 0; padding: 4px 12px; cursor: pointer; font: 800 18px/1 var(--font-label); color: var(--ink-2); }
+.char-tab-new:hover { color: var(--ink); border-style: solid; }
+.file-host > .file { border-top-left-radius: 0; }
+
 /* ---------- the case file ---------- */
 .file { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); overflow: hidden; min-width: 0; }
 .file-head {
@@ -238,6 +252,12 @@ button.chip:hover { border-color: var(--ink-3); }
 .power-name { font: 800 17px/1.1 var(--font-display); letter-spacing: .03em; text-transform: uppercase; }
 .power-cost { margin-left: auto; font: 700 13px/1 var(--font-label); color: var(--ink-2); white-space: nowrap; }
 .power-text { font-size: 14px; color: var(--ink); overflow-wrap: anywhere; }
+.power-what { font-size: 13.5px; color: var(--ink-2); background: var(--surface-2); border-radius: 4px; padding: 6px 9px; }
+.power-what p { margin: 0; }
+.power-what ul { margin: 4px 0 0; padding-left: 18px; }
+.power-what li { margin: 2px 0; }
+.power-what li.flaw b { color: var(--warn); }
+.power-what.compact { background: none; padding: 2px 0 0; font-size: 13px; }
 .power .ae { border-left: 3px solid color-mix(in srgb, var(--hero) 60%, transparent); padding: 4px 0 4px 10px; margin-top: 4px; font-size: 13.5px; }
 .power .ae b { font: 700 13px/1.2 var(--font-label); letter-spacing: .04em; text-transform: uppercase; }
 .device { border: 2px dashed color-mix(in srgb, var(--hero) 55%, var(--line)); border-radius: 8px; padding: 10px; margin-top: 8px; }
@@ -1493,6 +1513,184 @@ function modText(m) {
   return s;
 }
 
+// ---- plain-English power descriptions ---------------------------------------------------------
+
+const fmtMph = (rank) => {
+  const mph = 2 ** (rank + 1);
+  return mph >= 1000000 ? `${(mph / 1000000).toFixed(mph >= 10000000 ? 0 : 1)} million mph` : `${mph.toLocaleString('en-US')} mph`;
+};
+
+function distanceAt(rank, R) {
+  const row = (R.raw.reference?.measurements || []).find((m) => m.rank === rank);
+  return row ? row.distance : null;
+}
+
+function massAt(rank, R) {
+  const row = (R.raw.reference?.measurements || []).find((m) => m.rank === rank);
+  return row ? row.mass : null;
+}
+
+/**
+ * What a power does at the table, in plain English: the effect, how it's resisted (with DCs),
+ * range or area, speeds and distances, and a short note per extra and flaw.
+ * Returns { what: string, notes: [{name, kind, text}] }.
+ */
+function explainPower(p, R) {
+  const eff = R.effect(p.effect);
+  const rank = p.rank || 0;
+  const range = p.range || eff.range;
+  const area = (p.extras || []).find((m) => m.name === 'Area');
+  const parts = [];
+  const resist = (p.detail && /Resisted by ([A-Za-z]+)/.exec(p.detail)?.[1]) || eff.resistance;
+  const conditions = p.detail && p.detail.includes(';') ? p.detail.split(';').slice(1).join(';').trim() : null;
+
+  switch (p.effect) {
+    case 'Damage': case 'Blast': case 'Strike': case 'Energy Control': case 'Magic':
+      parts.push(`Deals damage: the target makes a Toughness check against DC ${15 + rank + (p.strengthBased ? 0 : 0)}${p.strengthBased ? ' + your Strength (it adds to your Strength damage)' : ''}. Failing by more means bruises, then dazed, staggered and finally incapacitated.`);
+      break;
+    case 'Affliction': case 'Dazzle': case 'Sleep': case 'Snare': case 'Mind Control':
+      parts.push(`Imposes conditions: the target resists with ${resist || 'Fortitude or Will'} against DC ${10 + rank}${conditions ? `. Each failure degree is worse: ${conditions}` : ''}. The target repeats the check at the end of each turn to shake it off.`);
+      break;
+    case 'Weaken':
+      parts.push(`Drains a trait${p.detail ? ` (${p.detail.split(';')[0]})` : ''}: the target resists against DC ${10 + rank} and loses 1 rank per degree of failure, recovering 1 point per round.`);
+      break;
+    case 'Nullify':
+      parts.push(`Shuts down powers${p.detail ? ` (${p.detail})` : ''}: make an opposed check of Nullify ${rank} against the target's power rank or Will; if you win, the effect turns off.`);
+      break;
+    case 'Mental Blast':
+      parts.push(`Mental damage: the target makes a Will check against DC ${15 + rank} instead of Toughness.`);
+      break;
+    case 'Protection': case 'Force Field':
+      parts.push(`Adds +${rank} to Toughness against damage.${(p.extras || []).some((m) => m.name === 'Impervious') ? ` Impervious: ignores any damage of rank ${Math.floor(rank / 2)} or less.` : ''}`);
+      break;
+    case 'Immunity':
+      parts.push(`Automatically succeeds against ${p.detail || 'the chosen effects'}.`);
+      break;
+    case 'Flight': case 'Speed': case 'Swimming': case 'Burrowing': {
+      const verb = { Flight: 'Fly', Speed: 'Run', Swimming: 'Swim', Burrowing: 'Tunnel' }[p.effect];
+      const dist = distanceAt(p.effect === 'Burrowing' ? rank - 5 : rank, R);
+      parts.push(`${verb} up to ${dist || `distance rank ${rank}`} per move action (about ${fmtMph(p.effect === 'Burrowing' ? rank - 5 : rank)}).`);
+      break;
+    }
+    case 'Leaping': {
+      const dist = distanceAt(rank - 2, R);
+      parts.push(`Jump up to ${dist || `distance rank ${rank - 2}`} in a single leap.`);
+      break;
+    }
+    case 'Teleport': {
+      const dist = distanceAt(rank, R);
+      parts.push(`Teleport up to ${dist || `distance rank ${rank}`} as a move action to a place you can sense.`);
+      break;
+    }
+    case 'Move Object': case 'Element Control':
+      parts.push(`Moves things at a distance as if lifting with Strength ${rank} (up to ${massAt(rank, R) || `mass rank ${rank}`}).`);
+      break;
+    case 'Create':
+      parts.push(`Creates solid objects with Toughness ${rank} and up to volume rank ${rank}.`);
+      break;
+    case 'Elongation':
+      parts.push(`Stretches to reach up to ${distanceAt(rank, R) || `distance rank ${rank}`} away.`);
+      break;
+    case 'Growth':
+      parts.push(`Grows larger: +${rank} Strength and Stamina, −${Math.floor(rank / 2)} to Dodge and Parry, +${Math.floor(rank / 2)} Intimidation.`);
+      break;
+    case 'Shrinking':
+      parts.push(`Shrinks: +${Math.floor(rank / 2)} to Dodge and Parry, harder to spot, −${Math.floor(rank / 4)} Strength.`);
+      break;
+    case 'Insubstantial':
+      parts.push(['', 'Fluid form: flows through cracks and resists physical harm.', 'Gaseous form: drifts, immune to most physical effects.', 'Energy form: immune to physical damage, only energy affects you.', 'Incorporeal: passes through solid objects; only special effects can touch you.'][Math.min(4, rank)] || eff.summary);
+      break;
+    case 'Regeneration':
+      parts.push(`Recovers from one damage condition every ${Math.max(1, Math.round(10 / Math.max(1, rank)))} rounds or so (rank ${rank} of 20 per minute).`);
+      break;
+    case 'Healing':
+      parts.push(`Heals: a DC 10 check removes one damage condition per degree of success from a subject you touch${range !== 'Close' ? ' (at range)' : ''}.`);
+      break;
+    case 'Quickness':
+      parts.push(`Does routine tasks fast: a task that takes time rank X takes X − ${rank}.`);
+      break;
+    case 'Enhanced Trait':
+      parts.push(`Raises ${p.option || 'a trait'} by ${rank}.`);
+      break;
+    case 'Movement':
+      parts.push(`Special movement: ${p.detail || 'one mode per rank'}.`);
+      break;
+    case 'Senses':
+      parts.push(`Extra senses: ${p.detail || `${rank} points of sense abilities`}.`);
+      break;
+    case 'Comprehend':
+      parts.push(`Understands ${p.detail || 'a kind of communication'}.`);
+      break;
+    case 'Communication':
+      parts.push(`Communicates through ${p.detail || 'a special medium'} across ${['', 'close range', 'about a mile', 'a state or small nation', 'the planet', 'any distance'][Math.min(5, rank)]}.`);
+      break;
+    case 'Feature':
+      parts.push(`${p.detail || 'A minor special ability'}.`);
+      break;
+    case 'Concealment': case 'Invisibility':
+      parts.push(`Hides you from ${p.detail || 'some senses'}; foes can't target you with those senses.`);
+      break;
+    case 'Illusion':
+      parts.push(`Creates illusions (${p.option || 'senses'}); observers see through them with an Insight check against DC ${10 + rank}.`);
+      break;
+    case 'Mind Reading':
+      parts.push(`Reads minds: an opposed check of Mind Reading ${rank} against the target's Will; more degrees reach deeper thoughts.`);
+      break;
+    case 'Summon':
+      parts.push(`Summons ${p.detail || 'a minion'} built on ${rank * 15} power points.`);
+      break;
+    case 'Variable': case 'Mimic': case 'Shapeshift':
+      parts.push(`Reassigns up to ${rank * 5} points of traits${p.detail ? ` (${p.detail})` : ''} as an action.`);
+      break;
+    case 'Morph':
+      parts.push(`Changes appearance${p.detail ? ` (${p.detail})` : ''}; +${rank * 5 > 20 ? 20 : rank * 5} to Deception checks to pass as someone else.`);
+      break;
+    case 'Environment':
+      parts.push(`Changes the environment (${p.detail || 'heat, cold, light...'}) in an area of distance rank ${rank}.`);
+      break;
+    case 'Remote Sensing':
+      parts.push(`Perceives a distant place up to distance rank ${rank} away${p.detail ? ` (${p.detail})` : ''}.`);
+      break;
+    case 'Deflect':
+      parts.push(`Deflects ranged attacks aimed at others: your Deflect ${rank} replaces their Dodge.`);
+      break;
+    case 'Immortality':
+      parts.push(`Comes back from death in about ${['', 'a month', 'a week', 'a day', 'an hour', 'a few minutes'][Math.min(5, rank)] || 'a few minutes'}.`);
+      break;
+    case 'Transform':
+      parts.push(`Transforms ${p.detail || 'targets'} of up to mass rank ${rank} (DC ${10 + rank} to resist).`);
+      break;
+    case 'Luck Control':
+      parts.push('Spends hero points to change luck: grant re-rolls, force them on others, or improve results.');
+      break;
+    default:
+      parts.push(eff.summary || '');
+      if (p.detail) parts.push(p.detail.endsWith('.') ? p.detail : `${p.detail}.`);
+  }
+
+  if (area) {
+    parts.push(`${area.option || 'Burst'} area: no attack roll. Everyone in the area may make a Dodge check (DC ${10 + rank}) to take half the effect.`);
+  } else if (range === 'Ranged' && (eff.attack || eff.type === 'Attack' || p.effect === 'Healing')) {
+    parts.push(`Ranged attack: roll against the target's Dodge + 10. Short range ${25 * rank} ft, medium ${50 * rank} ft (−2), long ${100 * rank} ft (−5).`);
+  } else if (range === 'Perception' && (eff.attack || eff.type === 'Attack' || eff.resistance)) {
+    parts.push('Perception range: no attack roll; works on any target you can perceive.');
+  } else if (range === 'Close' && (eff.attack || eff.type === 'Attack')) {
+    parts.push("Close attack: roll against the target's Parry + 10.");
+  }
+
+  const notes = [];
+  for (const [kind, list] of [['extra', p.extras], ['flaw', p.flaws]]) {
+    for (const m of list || []) {
+      if (m.name === 'Area') continue;
+      let def;
+      try { def = R.modifier(kind, m.name, p.effect); } catch { def = null; }
+      notes.push({ name: m.name + (m.detail ? ` (${m.detail})` : ''), kind, text: def?.summary || '' });
+    }
+  }
+  if ((p.alternates || []).length) notes.push({ name: `${p.dynamic ? 'Dynamic ' : ''}Alternate Effects`, kind: 'extra', text: `Use one effect of this array at a time${p.dynamic ? ', or split its points between them' : ''}; switching is a free action.` });
+  return { what: parts.filter(Boolean).join(' '), notes };
+}
+
 /** "Ranged Burst Area Damage 8 (fire), Accurate 2, Limited to vision" */
 function describeEffect(p, R) {
   const eff = R.effect(p.effect);
@@ -1629,7 +1827,7 @@ function statBlockText(ch, R) {
 }
 
 
-return { traitKind, effectLabel, describeEffect, powerLines, offenseLines, sheet, statBlockText };
+return { traitKind, effectLabel, explainPower, describeEffect, powerLines, offenseLines, sheet, statBlockText };
 })();
 
 __mods["src/app/sheetview.js"] = (() => {
@@ -1637,7 +1835,7 @@ __mods["src/app/sheetview.js"] = (() => {
 
 const { h } = __mods["src/app/dom.js"];
 const { inkFor } = __mods["src/app/dom.js"];
-const { sheet: makeSheet, describeEffect } = __mods["src/engine/render.js"];
+const { sheet: makeSheet, describeEffect, explainPower } = __mods["src/engine/render.js"];
 const { costMath } = __mods["src/engine/powersmith.js"];
 const { ABILITIES, BUYABLE_DEFENSES } = __mods["src/engine/rules.js"];
 const { powerCost } = __mods["src/engine/costs.js"];
@@ -1659,6 +1857,15 @@ function mathTable(p, R) {
     h('td', { class: 'v' }, l.perRank !== undefined ? `${fmt(l.perRank)}/rank` : l.flat !== undefined ? `${fmt(l.flat)} flat` : ''),
     h('td', { class: 'v' }, l.total !== undefined ? `${l.total} pp` : ''))))),
   h('div', { style: { color: 'var(--ink-3)', marginTop: '4px' } }, `Cost ratio ${m.ratio} (points : ranks)`));
+}
+
+/** The plain-English "what it does" block under a power. */
+function whatItDoes(p, R, compact = false) {
+  let ex;
+  try { ex = explainPower(p, R); } catch { return null; }
+  return h('div', { class: `power-what ${compact ? 'compact' : ''}` },
+    h('p', null, ex.what),
+    !compact && ex.notes.length ? h('ul', null, ex.notes.map((n) => h('li', { class: n.kind }, h('b', null, `${n.name}: `), n.text))) : null);
 }
 
 /**
@@ -1768,8 +1975,9 @@ function renderFile(ch, R, opts = {}) {
           h('button', { class: 'btn sm', type: 'button', onClick: () => opts.onEditPower?.(path) }, 'Open in Lab'),
           h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${p.name}`, onClick: () => change((c) => removeAt(c, path)) }, '✕')) : null),
       h('div', { class: 'power-text' }, describeEffect(p, R)),
+      whatItDoes(p, R),
       alts.map((a, i) => h('div', { class: 'ae' },
-        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R),
+        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), whatItDoes(a, R, true),
         editing ? h('span', { class: 'no-print' }, ' ',
           stepper(a.rank, (d) => change((c) => { const q = getPower(c, { ...path, alt: i }); q.rank = Math.max(1, q.rank + d); }), { min: 1, label: `${a.name} rank` }),
           h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${a.name}`, onClick: () => change((c) => removeAt(c, { ...path, alt: i })) }, '✕')) : null)),
@@ -1947,7 +2155,7 @@ function setPower(ch, path, p) {
 }
 
 
-return { ABILITIES, renderFile, getPower, removeAt, setPower };
+return { ABILITIES, whatItDoes, renderFile, getPower, removeAt, setPower };
 })();
 
 __mods["src/app/share.js"] = (() => {
@@ -3823,22 +4031,96 @@ function prefsToOptions(seed) {
   };
 }
 
-function roll(seed = randomSeed()) {
+function roll(seed = randomSeed(), { newTab = false } = {}) {
   try {
     const ch = generateCharacter(R, prefsToOptions(seed));
-    setCurrent(ch, { fresh: true });
+    setCurrent(ch, { fresh: true, newTab });
     pushHistory(ch);
   } catch (e) {
     toast(e.message);
   }
 }
 
-function setCurrent(ch, { fresh: isFresh = false, editing = false } = {}) {
+// ---- open characters as tabs ----------------------------------------------------------------
+const TABS_KEY = 'dcugen.tabs.v1';
+const MAX_TABS = 12;
+if (!state.tabs) state.tabs = [];
+if (state.active == null) state.active = 0;
+
+function saveTabs() {
+  try { localStorage.setItem(TABS_KEY, JSON.stringify({ tabs: state.tabs, active: state.active })); } catch { /* storage full or blocked */ }
+}
+
+/** Restore the open tabs from the last visit. Returns true if any were restored. */
+function restoreTabs() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(TABS_KEY) || 'null');
+    if (saved?.tabs?.length) {
+      state.tabs = saved.tabs.slice(0, MAX_TABS);
+      state.active = Math.min(saved.active || 0, state.tabs.length - 1);
+      state.current = state.tabs[state.active];
+      renderCurrent();
+      return true;
+    }
+  } catch { /* ignore */ }
+  return false;
+}
+
+/**
+ * Show a character. By default it replaces the active tab; newTab opens it in a new tab
+ * (or switches to the tab already showing that saved character).
+ */
+function setCurrent(ch, { fresh: isFresh = false, editing = false, newTab = false } = {}) {
+  if (newTab || !state.tabs.length) {
+    const existing = ch.rosterId ? state.tabs.findIndex((t) => t.rosterId === ch.rosterId) : -1;
+    if (existing >= 0) {
+      state.tabs[existing] = ch;
+      state.active = existing;
+    } else {
+      if (state.tabs.length >= MAX_TABS) state.tabs.shift();
+      state.tabs.push(ch);
+      state.active = state.tabs.length - 1;
+    }
+  } else {
+    state.tabs[state.active] = ch;
+  }
   state.current = ch;
   state.editing = editing;
   fresh = isFresh;
+  saveTabs();
   renderCurrent();
   emit('current');
+}
+
+function switchTab(i) {
+  if (!state.tabs[i]) return;
+  state.active = i;
+  state.current = state.tabs[i];
+  state.editing = false;
+  saveTabs();
+  renderCurrent();
+  emit('current');
+}
+
+function closeTab(i) {
+  state.tabs.splice(i, 1);
+  if (!state.tabs.length) { state.active = 0; roll(); return; }
+  if (i < state.active || state.active >= state.tabs.length) state.active -= 1;
+  state.active = Math.max(0, Math.min(state.active, state.tabs.length - 1));
+  state.current = state.tabs[state.active];
+  state.editing = false;
+  saveTabs();
+  renderCurrent();
+  emit('current');
+}
+
+function tabStrip() {
+  return h('div', { class: 'char-tabs', role: 'tablist', 'aria-label': 'Open characters' },
+    state.tabs.map((c, i) => h('div', { class: `char-tab ${i === state.active ? 'active' : ''}`, role: 'presentation', style: { '--c': c.theme?.color || '#888888' } },
+      h('button', { type: 'button', role: 'tab', 'aria-selected': String(i === state.active), class: 'char-tab-btn', title: `${c.identity?.codename || 'Unnamed'} · PL ${c.pl}`, onClick: () => switchTab(i) },
+        h('span', { class: 'swatch' }), h('span', { class: 'char-tab-name' }, c.identity?.codename || 'Unnamed'), h('span', { class: 'char-tab-pl num' }, c.pl)),
+      h('button', { type: 'button', class: 'x', 'aria-label': `Close ${c.identity?.codename || 'tab'}`, onClick: (e) => { e.stopPropagation(); closeTab(i); } }, '✕'))),
+    h('button', { type: 'button', class: 'char-tab-new', title: 'Roll a new character in a new tab', 'aria-label': 'New tab', onClick: () => roll(undefined, { newTab: true }) }, '+'));
 }
 
 function pushHistory(ch) {
@@ -3936,7 +4218,7 @@ function buildFromScratch() {
     origin: null, complications: [], notes: '',
     createdAt: new Date().toISOString(),
   };
-  setCurrent(ch, { fresh: true, editing: true });
+  setCurrent(ch, { fresh: true, editing: true, newTab: true });
   toast(`Blank PL ${pl} character: ${pl * 15} points to spend. Use + and − to build, and "Add a power" for the Power Lab.`);
 }
 
@@ -3970,11 +4252,11 @@ async function rollTeam() {
   state.prefs.teamSize = size; savePrefs();
   try {
     const team = generateTeam(R, { ...prefsToOptions(randomSeed()), archetype: state.prefs.archetype || null, size });
-    team.members.forEach((m) => { m.team = team.name; pushHistory(m); });
-    setCurrent(team.members[0], { fresh: true });
+    team.members.forEach((m) => { m.team = team.name; pushHistory(m); setCurrent(m, { newTab: true }); });
+    switchTab(state.tabs.indexOf(team.members[0]));
     const save = await openDialog({
       title: team.name,
-      body: h('div', { class: 'tagwrap' }, team.members.map((m) => h('button', { class: 'chip', type: 'button', onClick: () => setCurrent(m) },
+      body: h('div', { class: 'tagwrap' }, team.members.map((m) => h('button', { class: 'chip', type: 'button', onClick: () => { const i = state.tabs.indexOf(m); if (i >= 0) switchTab(i); else setCurrent(m, { newTab: true }); } },
         h('span', { class: 'swatch', style: { '--c': m.theme?.color } }), `${m.identity.codename} · ${m.archetype.name}`))),
       buttons: [{ label: 'Close', value: false }, { label: 'Save all to roster', value: true, primary: true }],
     });
@@ -4009,10 +4291,11 @@ function renderCurrent() {
   clear(fileHost);
   const ch = state.current;
   if (!ch) return;
+  fileHost.append(tabStrip());
   const inRoster = ch.rosterId && state.roster.some((x) => x.rosterId === ch.rosterId);
   const toolbar = h('div', { class: 'toolbar' },
     h('button', { class: 'btn primary', type: 'button', onClick: () => {
-      const saved = upsert(ch); state.current = saved; renderCurrent(); toast(inRoster ? 'Roster updated' : 'Saved to your roster');
+      const saved = upsert(ch); state.current = saved; state.tabs[state.active] = saved; saveTabs(); renderCurrent(); toast(inRoster ? 'Roster updated' : 'Saved to your roster');
     } }, inRoster ? 'Update in roster' : 'Save to roster'),
     h('button', { class: 'btn', type: 'button', 'aria-pressed': String(state.editing), onClick: () => { state.editing = !state.editing; renderCurrent(); } }, state.editing ? 'Done editing' : 'Edit'),
     h('button', { class: 'btn ghost', type: 'button', title: 'Keep the build, roll a new name and story', onClick: () => {
@@ -4033,7 +4316,7 @@ function renderCurrent() {
     editing: state.editing,
     fresh,
     toolbar,
-    onChange: (c) => { state.current = c; fresh = false; renderCurrent(); },
+    onChange: (c) => { state.current = c; state.tabs[state.active] = c; saveTabs(); fresh = false; renderCurrent(); },
     onEditPower: (path) => api.editPower?.(path),
     onAddPower: () => api.addPower?.(),
   });
@@ -4082,7 +4365,7 @@ async function share(ch) {
 }
 
 
-return { inkFor, initForge, roll, setCurrent, renderCurrent };
+return { inkFor, initForge, roll, restoreTabs, setCurrent, renderCurrent };
 })();
 
 __mods["src/app/roster.js"] = (() => {
@@ -4238,7 +4521,7 @@ __mods["src/app/lab.js"] = (() => {
 
 const { h, clear, toast, copyText } = __mods["src/app/dom.js"];
 const { state } = __mods["src/app/store.js"];
-const { getPower, setPower } = __mods["src/app/sheetview.js"];
+const { getPower, setPower, whatItDoes } = __mods["src/app/sheetview.js"];
 const { costMath, availableModifiers, randomPower } = __mods["src/engine/powersmith.js"];
 const { powerCost, alternateOwnCost, primaryOwnCost } = __mods["src/engine/costs.js"];
 const { describeEffect } = __mods["src/engine/render.js"];
@@ -4434,6 +4717,7 @@ function render() {
     h('p', { style: { margin: 0, fontSize: '13px', color: 'var(--ink-3)' } },
       'Cost per rank = base + range change + per-rank extras − per-rank flaws. Below 1, each point buys more ranks (0 = 1 point per 2 ranks, −1 = per 3). Flat modifiers are added last. Each Alternate Effect adds 1 point and may not cost more than the primary.'),
     aeWarnings.length ? h('ul', { class: 'issues' }, aeWarnings.map((w) => h('li', { class: 'error' }, w))) : null,
+    h('div', { class: 'field' }, h('span', null, `What ${p.name || 'it'} does`), whatItDoes(p, R)),
     h('div', { class: 'field' }, h('span', null, 'Stat block line'),
       h('div', { class: 'statblock-text', id: 'lab-text' }, statLine(arr))),
     h('div', { class: 'btn-row' },
@@ -5572,7 +5856,7 @@ __mods["src/app/workshop.js"] = (() => {
 
 const { h, clear, toast, copyText, download, slug, inkFor } = __mods["src/app/dom.js"];
 const { state, upsert } = __mods["src/app/store.js"];
-const { renderFile } = __mods["src/app/sheetview.js"];
+const { renderFile, whatItDoes } = __mods["src/app/sheetview.js"];
 const { exportExcel, exportJson, exportText } = __mods["src/app/exporters.js"];
 const { randomSeed } = __mods["src/engine/rng.js"];
 const { generateCharacter } = __mods["src/engine/generator.js"];
@@ -5740,7 +6024,8 @@ function showResult() {
         ...lines.map((l) => h('div', { class: 'power' },
           h('div', { class: 'power-top' }, h('span', { class: 'power-name' }, l.p.name), h('span', { class: 'power-cost' }, `${l.cost} pp`)),
           h('div', { class: 'power-text' }, l.text),
-          (l.p.alternates || []).map((a) => h('div', { class: 'ae' }, h('b', null, `AE: ${a.name} `), describeEffect(a, R))))),
+          whatItDoes(l.p, R),
+          (l.p.alternates || []).map((a) => h('div', { class: 'ae' }, h('b', null, `AE: ${a.name} `), describeEffect(a, R), whatItDoes(a, R, true))))),
         h('div', { class: 'result' }, h('b', null, `Cost: ${d.cost.raw} − ${d.cost.discount} = ${d.cost.total} power points. `),
           `${d.device.kind === 'easily' ? 'Easily Removable: −2' : 'Removable: −1'} point per 5 points of the device's powers. ${d.note}`),
         d.issues.length ? h('ul', { class: 'issues' }, d.issues.map((i) => h('li', { class: 'error' }, i.message))) : null],
@@ -5941,7 +6226,7 @@ __mods["src/app/app.js"] = (() => {
 const { RULES } = __mods["src/engine/index.js"];
 const { state, onChange } = __mods["src/app/store.js"];
 const { toast } = __mods["src/app/dom.js"];
-const { initForge, roll, setCurrent, renderCurrent } = __mods["src/app/forge.js"];
+const { initForge, roll, setCurrent, renderCurrent, restoreTabs } = __mods["src/app/forge.js"];
 const { initRoster, renderRoster } = __mods["src/app/roster.js"];
 const { initLab, openInLab, renderLab } = __mods["src/app/lab.js"];
 const { initGm, renderGm, addToInitiative } = __mods["src/app/gm.js"];
@@ -5986,7 +6271,7 @@ async function loadFromHash() {
   if (!m) return false;
   try {
     const ch = await decodeCharacter(m[1]);
-    setCurrent(ch);
+    setCurrent(ch, { newTab: true });
     toast(`Loaded ${ch.identity?.codename || 'shared character'}`);
     history.replaceState(null, '', location.pathname + location.search);
     return true;
@@ -6009,13 +6294,13 @@ async function boot() {
     addPower: () => { openInLab(state.current, null); showTab('lab'); },
   });
   initRoster(R, document.getElementById('view-roster'), {
-    open: (ch) => { setCurrent(ch); showTab('forge'); },
+    open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
     goForge: () => showTab('forge'),
   });
   initLab(R, document.getElementById('view-lab'), { applyToCurrent });
   initGm(R, document.getElementById('view-gm'));
   initWorkshop(R, document.getElementById('view-workshop'), {
-    openInForge: (ch) => { setCurrent(ch); showTab('forge'); },
+    openInForge: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
     addToInitiative: (ch) => addToInitiative(ch),
     applyToCurrent: (ch) => { setCurrent(ch); },
   });
@@ -6029,8 +6314,9 @@ async function boot() {
   });
   document.getElementById('roster-count').textContent = state.roster.length;
 
+  const restored = restoreTabs();
   const loaded = await loadFromHash();
-  if (!loaded) roll();
+  if (!loaded && !restored) roll();
 
   let tab = 'forge';
   try { tab = localStorage.getItem('dcugen.tab') || 'forge'; } catch { /* ignore */ }

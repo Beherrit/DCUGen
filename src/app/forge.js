@@ -34,22 +34,96 @@ function prefsToOptions(seed) {
   };
 }
 
-export function roll(seed = randomSeed()) {
+export function roll(seed = randomSeed(), { newTab = false } = {}) {
   try {
     const ch = generateCharacter(R, prefsToOptions(seed));
-    setCurrent(ch, { fresh: true });
+    setCurrent(ch, { fresh: true, newTab });
     pushHistory(ch);
   } catch (e) {
     toast(e.message);
   }
 }
 
-export function setCurrent(ch, { fresh: isFresh = false, editing = false } = {}) {
+// ---- open characters as tabs ----------------------------------------------------------------
+const TABS_KEY = 'dcugen.tabs.v1';
+const MAX_TABS = 12;
+if (!state.tabs) state.tabs = [];
+if (state.active == null) state.active = 0;
+
+function saveTabs() {
+  try { localStorage.setItem(TABS_KEY, JSON.stringify({ tabs: state.tabs, active: state.active })); } catch { /* storage full or blocked */ }
+}
+
+/** Restore the open tabs from the last visit. Returns true if any were restored. */
+export function restoreTabs() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(TABS_KEY) || 'null');
+    if (saved?.tabs?.length) {
+      state.tabs = saved.tabs.slice(0, MAX_TABS);
+      state.active = Math.min(saved.active || 0, state.tabs.length - 1);
+      state.current = state.tabs[state.active];
+      renderCurrent();
+      return true;
+    }
+  } catch { /* ignore */ }
+  return false;
+}
+
+/**
+ * Show a character. By default it replaces the active tab; newTab opens it in a new tab
+ * (or switches to the tab already showing that saved character).
+ */
+export function setCurrent(ch, { fresh: isFresh = false, editing = false, newTab = false } = {}) {
+  if (newTab || !state.tabs.length) {
+    const existing = ch.rosterId ? state.tabs.findIndex((t) => t.rosterId === ch.rosterId) : -1;
+    if (existing >= 0) {
+      state.tabs[existing] = ch;
+      state.active = existing;
+    } else {
+      if (state.tabs.length >= MAX_TABS) state.tabs.shift();
+      state.tabs.push(ch);
+      state.active = state.tabs.length - 1;
+    }
+  } else {
+    state.tabs[state.active] = ch;
+  }
   state.current = ch;
   state.editing = editing;
   fresh = isFresh;
+  saveTabs();
   renderCurrent();
   emit('current');
+}
+
+function switchTab(i) {
+  if (!state.tabs[i]) return;
+  state.active = i;
+  state.current = state.tabs[i];
+  state.editing = false;
+  saveTabs();
+  renderCurrent();
+  emit('current');
+}
+
+function closeTab(i) {
+  state.tabs.splice(i, 1);
+  if (!state.tabs.length) { state.active = 0; roll(); return; }
+  if (i < state.active || state.active >= state.tabs.length) state.active -= 1;
+  state.active = Math.max(0, Math.min(state.active, state.tabs.length - 1));
+  state.current = state.tabs[state.active];
+  state.editing = false;
+  saveTabs();
+  renderCurrent();
+  emit('current');
+}
+
+function tabStrip() {
+  return h('div', { class: 'char-tabs', role: 'tablist', 'aria-label': 'Open characters' },
+    state.tabs.map((c, i) => h('div', { class: `char-tab ${i === state.active ? 'active' : ''}`, role: 'presentation', style: { '--c': c.theme?.color || '#888888' } },
+      h('button', { type: 'button', role: 'tab', 'aria-selected': String(i === state.active), class: 'char-tab-btn', title: `${c.identity?.codename || 'Unnamed'} · PL ${c.pl}`, onClick: () => switchTab(i) },
+        h('span', { class: 'swatch' }), h('span', { class: 'char-tab-name' }, c.identity?.codename || 'Unnamed'), h('span', { class: 'char-tab-pl num' }, c.pl)),
+      h('button', { type: 'button', class: 'x', 'aria-label': `Close ${c.identity?.codename || 'tab'}`, onClick: (e) => { e.stopPropagation(); closeTab(i); } }, '✕'))),
+    h('button', { type: 'button', class: 'char-tab-new', title: 'Roll a new character in a new tab', 'aria-label': 'New tab', onClick: () => roll(undefined, { newTab: true }) }, '+'));
 }
 
 function pushHistory(ch) {
@@ -147,7 +221,7 @@ function buildFromScratch() {
     origin: null, complications: [], notes: '',
     createdAt: new Date().toISOString(),
   };
-  setCurrent(ch, { fresh: true, editing: true });
+  setCurrent(ch, { fresh: true, editing: true, newTab: true });
   toast(`Blank PL ${pl} character: ${pl * 15} points to spend. Use + and − to build, and "Add a power" for the Power Lab.`);
 }
 
@@ -181,11 +255,11 @@ async function rollTeam() {
   state.prefs.teamSize = size; savePrefs();
   try {
     const team = generateTeam(R, { ...prefsToOptions(randomSeed()), archetype: state.prefs.archetype || null, size });
-    team.members.forEach((m) => { m.team = team.name; pushHistory(m); });
-    setCurrent(team.members[0], { fresh: true });
+    team.members.forEach((m) => { m.team = team.name; pushHistory(m); setCurrent(m, { newTab: true }); });
+    switchTab(state.tabs.indexOf(team.members[0]));
     const save = await openDialog({
       title: team.name,
-      body: h('div', { class: 'tagwrap' }, team.members.map((m) => h('button', { class: 'chip', type: 'button', onClick: () => setCurrent(m) },
+      body: h('div', { class: 'tagwrap' }, team.members.map((m) => h('button', { class: 'chip', type: 'button', onClick: () => { const i = state.tabs.indexOf(m); if (i >= 0) switchTab(i); else setCurrent(m, { newTab: true }); } },
         h('span', { class: 'swatch', style: { '--c': m.theme?.color } }), `${m.identity.codename} · ${m.archetype.name}`))),
       buttons: [{ label: 'Close', value: false }, { label: 'Save all to roster', value: true, primary: true }],
     });
@@ -220,10 +294,11 @@ export function renderCurrent() {
   clear(fileHost);
   const ch = state.current;
   if (!ch) return;
+  fileHost.append(tabStrip());
   const inRoster = ch.rosterId && state.roster.some((x) => x.rosterId === ch.rosterId);
   const toolbar = h('div', { class: 'toolbar' },
     h('button', { class: 'btn primary', type: 'button', onClick: () => {
-      const saved = upsert(ch); state.current = saved; renderCurrent(); toast(inRoster ? 'Roster updated' : 'Saved to your roster');
+      const saved = upsert(ch); state.current = saved; state.tabs[state.active] = saved; saveTabs(); renderCurrent(); toast(inRoster ? 'Roster updated' : 'Saved to your roster');
     } }, inRoster ? 'Update in roster' : 'Save to roster'),
     h('button', { class: 'btn', type: 'button', 'aria-pressed': String(state.editing), onClick: () => { state.editing = !state.editing; renderCurrent(); } }, state.editing ? 'Done editing' : 'Edit'),
     h('button', { class: 'btn ghost', type: 'button', title: 'Keep the build, roll a new name and story', onClick: () => {
@@ -244,7 +319,7 @@ export function renderCurrent() {
     editing: state.editing,
     fresh,
     toolbar,
-    onChange: (c) => { state.current = c; fresh = false; renderCurrent(); },
+    onChange: (c) => { state.current = c; state.tabs[state.active] = c; saveTabs(); fresh = false; renderCurrent(); },
     onEditPower: (path) => api.editPower?.(path),
     onAddPower: () => api.addPower?.(),
   });

@@ -28,6 +28,184 @@ function modText(m) {
   return s;
 }
 
+// ---- plain-English power descriptions ---------------------------------------------------------
+
+const fmtMph = (rank) => {
+  const mph = 2 ** (rank + 1);
+  return mph >= 1000000 ? `${(mph / 1000000).toFixed(mph >= 10000000 ? 0 : 1)} million mph` : `${mph.toLocaleString('en-US')} mph`;
+};
+
+function distanceAt(rank, R) {
+  const row = (R.raw.reference?.measurements || []).find((m) => m.rank === rank);
+  return row ? row.distance : null;
+}
+
+function massAt(rank, R) {
+  const row = (R.raw.reference?.measurements || []).find((m) => m.rank === rank);
+  return row ? row.mass : null;
+}
+
+/**
+ * What a power does at the table, in plain English: the effect, how it's resisted (with DCs),
+ * range or area, speeds and distances, and a short note per extra and flaw.
+ * Returns { what: string, notes: [{name, kind, text}] }.
+ */
+export function explainPower(p, R) {
+  const eff = R.effect(p.effect);
+  const rank = p.rank || 0;
+  const range = p.range || eff.range;
+  const area = (p.extras || []).find((m) => m.name === 'Area');
+  const parts = [];
+  const resist = (p.detail && /Resisted by ([A-Za-z]+)/.exec(p.detail)?.[1]) || eff.resistance;
+  const conditions = p.detail && p.detail.includes(';') ? p.detail.split(';').slice(1).join(';').trim() : null;
+
+  switch (p.effect) {
+    case 'Damage': case 'Blast': case 'Strike': case 'Energy Control': case 'Magic':
+      parts.push(`Deals damage: the target makes a Toughness check against DC ${15 + rank + (p.strengthBased ? 0 : 0)}${p.strengthBased ? ' + your Strength (it adds to your Strength damage)' : ''}. Failing by more means bruises, then dazed, staggered and finally incapacitated.`);
+      break;
+    case 'Affliction': case 'Dazzle': case 'Sleep': case 'Snare': case 'Mind Control':
+      parts.push(`Imposes conditions: the target resists with ${resist || 'Fortitude or Will'} against DC ${10 + rank}${conditions ? `. Each failure degree is worse: ${conditions}` : ''}. The target repeats the check at the end of each turn to shake it off.`);
+      break;
+    case 'Weaken':
+      parts.push(`Drains a trait${p.detail ? ` (${p.detail.split(';')[0]})` : ''}: the target resists against DC ${10 + rank} and loses 1 rank per degree of failure, recovering 1 point per round.`);
+      break;
+    case 'Nullify':
+      parts.push(`Shuts down powers${p.detail ? ` (${p.detail})` : ''}: make an opposed check of Nullify ${rank} against the target's power rank or Will; if you win, the effect turns off.`);
+      break;
+    case 'Mental Blast':
+      parts.push(`Mental damage: the target makes a Will check against DC ${15 + rank} instead of Toughness.`);
+      break;
+    case 'Protection': case 'Force Field':
+      parts.push(`Adds +${rank} to Toughness against damage.${(p.extras || []).some((m) => m.name === 'Impervious') ? ` Impervious: ignores any damage of rank ${Math.floor(rank / 2)} or less.` : ''}`);
+      break;
+    case 'Immunity':
+      parts.push(`Automatically succeeds against ${p.detail || 'the chosen effects'}.`);
+      break;
+    case 'Flight': case 'Speed': case 'Swimming': case 'Burrowing': {
+      const verb = { Flight: 'Fly', Speed: 'Run', Swimming: 'Swim', Burrowing: 'Tunnel' }[p.effect];
+      const dist = distanceAt(p.effect === 'Burrowing' ? rank - 5 : rank, R);
+      parts.push(`${verb} up to ${dist || `distance rank ${rank}`} per move action (about ${fmtMph(p.effect === 'Burrowing' ? rank - 5 : rank)}).`);
+      break;
+    }
+    case 'Leaping': {
+      const dist = distanceAt(rank - 2, R);
+      parts.push(`Jump up to ${dist || `distance rank ${rank - 2}`} in a single leap.`);
+      break;
+    }
+    case 'Teleport': {
+      const dist = distanceAt(rank, R);
+      parts.push(`Teleport up to ${dist || `distance rank ${rank}`} as a move action to a place you can sense.`);
+      break;
+    }
+    case 'Move Object': case 'Element Control':
+      parts.push(`Moves things at a distance as if lifting with Strength ${rank} (up to ${massAt(rank, R) || `mass rank ${rank}`}).`);
+      break;
+    case 'Create':
+      parts.push(`Creates solid objects with Toughness ${rank} and up to volume rank ${rank}.`);
+      break;
+    case 'Elongation':
+      parts.push(`Stretches to reach up to ${distanceAt(rank, R) || `distance rank ${rank}`} away.`);
+      break;
+    case 'Growth':
+      parts.push(`Grows larger: +${rank} Strength and Stamina, −${Math.floor(rank / 2)} to Dodge and Parry, +${Math.floor(rank / 2)} Intimidation.`);
+      break;
+    case 'Shrinking':
+      parts.push(`Shrinks: +${Math.floor(rank / 2)} to Dodge and Parry, harder to spot, −${Math.floor(rank / 4)} Strength.`);
+      break;
+    case 'Insubstantial':
+      parts.push(['', 'Fluid form: flows through cracks and resists physical harm.', 'Gaseous form: drifts, immune to most physical effects.', 'Energy form: immune to physical damage, only energy affects you.', 'Incorporeal: passes through solid objects; only special effects can touch you.'][Math.min(4, rank)] || eff.summary);
+      break;
+    case 'Regeneration':
+      parts.push(`Recovers from one damage condition every ${Math.max(1, Math.round(10 / Math.max(1, rank)))} rounds or so (rank ${rank} of 20 per minute).`);
+      break;
+    case 'Healing':
+      parts.push(`Heals: a DC 10 check removes one damage condition per degree of success from a subject you touch${range !== 'Close' ? ' (at range)' : ''}.`);
+      break;
+    case 'Quickness':
+      parts.push(`Does routine tasks fast: a task that takes time rank X takes X − ${rank}.`);
+      break;
+    case 'Enhanced Trait':
+      parts.push(`Raises ${p.option || 'a trait'} by ${rank}.`);
+      break;
+    case 'Movement':
+      parts.push(`Special movement: ${p.detail || 'one mode per rank'}.`);
+      break;
+    case 'Senses':
+      parts.push(`Extra senses: ${p.detail || `${rank} points of sense abilities`}.`);
+      break;
+    case 'Comprehend':
+      parts.push(`Understands ${p.detail || 'a kind of communication'}.`);
+      break;
+    case 'Communication':
+      parts.push(`Communicates through ${p.detail || 'a special medium'} across ${['', 'close range', 'about a mile', 'a state or small nation', 'the planet', 'any distance'][Math.min(5, rank)]}.`);
+      break;
+    case 'Feature':
+      parts.push(`${p.detail || 'A minor special ability'}.`);
+      break;
+    case 'Concealment': case 'Invisibility':
+      parts.push(`Hides you from ${p.detail || 'some senses'}; foes can't target you with those senses.`);
+      break;
+    case 'Illusion':
+      parts.push(`Creates illusions (${p.option || 'senses'}); observers see through them with an Insight check against DC ${10 + rank}.`);
+      break;
+    case 'Mind Reading':
+      parts.push(`Reads minds: an opposed check of Mind Reading ${rank} against the target's Will; more degrees reach deeper thoughts.`);
+      break;
+    case 'Summon':
+      parts.push(`Summons ${p.detail || 'a minion'} built on ${rank * 15} power points.`);
+      break;
+    case 'Variable': case 'Mimic': case 'Shapeshift':
+      parts.push(`Reassigns up to ${rank * 5} points of traits${p.detail ? ` (${p.detail})` : ''} as an action.`);
+      break;
+    case 'Morph':
+      parts.push(`Changes appearance${p.detail ? ` (${p.detail})` : ''}; +${rank * 5 > 20 ? 20 : rank * 5} to Deception checks to pass as someone else.`);
+      break;
+    case 'Environment':
+      parts.push(`Changes the environment (${p.detail || 'heat, cold, light...'}) in an area of distance rank ${rank}.`);
+      break;
+    case 'Remote Sensing':
+      parts.push(`Perceives a distant place up to distance rank ${rank} away${p.detail ? ` (${p.detail})` : ''}.`);
+      break;
+    case 'Deflect':
+      parts.push(`Deflects ranged attacks aimed at others: your Deflect ${rank} replaces their Dodge.`);
+      break;
+    case 'Immortality':
+      parts.push(`Comes back from death in about ${['', 'a month', 'a week', 'a day', 'an hour', 'a few minutes'][Math.min(5, rank)] || 'a few minutes'}.`);
+      break;
+    case 'Transform':
+      parts.push(`Transforms ${p.detail || 'targets'} of up to mass rank ${rank} (DC ${10 + rank} to resist).`);
+      break;
+    case 'Luck Control':
+      parts.push('Spends hero points to change luck: grant re-rolls, force them on others, or improve results.');
+      break;
+    default:
+      parts.push(eff.summary || '');
+      if (p.detail) parts.push(p.detail.endsWith('.') ? p.detail : `${p.detail}.`);
+  }
+
+  if (area) {
+    parts.push(`${area.option || 'Burst'} area: no attack roll. Everyone in the area may make a Dodge check (DC ${10 + rank}) to take half the effect.`);
+  } else if (range === 'Ranged' && (eff.attack || eff.type === 'Attack' || p.effect === 'Healing')) {
+    parts.push(`Ranged attack: roll against the target's Dodge + 10. Short range ${25 * rank} ft, medium ${50 * rank} ft (−2), long ${100 * rank} ft (−5).`);
+  } else if (range === 'Perception' && (eff.attack || eff.type === 'Attack' || eff.resistance)) {
+    parts.push('Perception range: no attack roll; works on any target you can perceive.');
+  } else if (range === 'Close' && (eff.attack || eff.type === 'Attack')) {
+    parts.push("Close attack: roll against the target's Parry + 10.");
+  }
+
+  const notes = [];
+  for (const [kind, list] of [['extra', p.extras], ['flaw', p.flaws]]) {
+    for (const m of list || []) {
+      if (m.name === 'Area') continue;
+      let def;
+      try { def = R.modifier(kind, m.name, p.effect); } catch { def = null; }
+      notes.push({ name: m.name + (m.detail ? ` (${m.detail})` : ''), kind, text: def?.summary || '' });
+    }
+  }
+  if ((p.alternates || []).length) notes.push({ name: `${p.dynamic ? 'Dynamic ' : ''}Alternate Effects`, kind: 'extra', text: `Use one effect of this array at a time${p.dynamic ? ', or split its points between them' : ''}; switching is a free action.` });
+  return { what: parts.filter(Boolean).join(' '), notes };
+}
+
 /** "Ranged Burst Area Damage 8 (fire), Accurate 2, Limited to vision" */
 export function describeEffect(p, R) {
   const eff = R.effect(p.effect);

@@ -139,6 +139,20 @@ button.chip { cursor: pointer; }
 button.chip:hover { border-color: var(--ink-3); }
 .swatch { width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--accent)); flex: none; }
 
+/* ---------- open character tabs ---------- */
+.char-tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 0; margin-bottom: -1px; position: relative; z-index: 1; scrollbar-width: thin; }
+.char-tab { display: flex; align-items: center; flex: 0 0 auto; max-width: 220px; border: 1px solid var(--line); border-bottom: 0; border-radius: 8px 8px 0 0; background: var(--surface-2); box-shadow: inset 0 3px 0 var(--c); }
+.char-tab.active { background: var(--surface); box-shadow: inset 0 4px 0 var(--c); }
+.char-tab-btn { display: flex; align-items: center; gap: 6px; border: 0; background: transparent; padding: 8px 4px 7px 10px; cursor: pointer; min-width: 0; font: 700 13px/1 var(--font-label); color: var(--ink-2); }
+.char-tab.active .char-tab-btn { color: var(--ink); }
+.char-tab-btn .swatch { background: var(--c); }
+.char-tab-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-transform: uppercase; letter-spacing: .03em; }
+.char-tab-pl { font-size: 11px; padding: 1px 5px; border-radius: 8px; background: var(--paper); color: var(--ink-3); }
+.char-tab .x { padding: 0 8px 0 2px; }
+.char-tab-new { flex: 0 0 auto; border: 1px dashed var(--line); background: transparent; border-radius: 8px 8px 0 0; padding: 4px 12px; cursor: pointer; font: 800 18px/1 var(--font-label); color: var(--ink-2); }
+.char-tab-new:hover { color: var(--ink); border-style: solid; }
+.file-host > .file { border-top-left-radius: 0; }
+
 /* ---------- the case file ---------- */
 .file { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); overflow: hidden; min-width: 0; }
 .file-head {
@@ -227,6 +241,12 @@ button.chip:hover { border-color: var(--ink-3); }
 .power-name { font: 800 17px/1.1 var(--font-display); letter-spacing: .03em; text-transform: uppercase; }
 .power-cost { margin-left: auto; font: 700 13px/1 var(--font-label); color: var(--ink-2); white-space: nowrap; }
 .power-text { font-size: 14px; color: var(--ink); overflow-wrap: anywhere; }
+.power-what { font-size: 13.5px; color: var(--ink-2); background: var(--surface-2); border-radius: 4px; padding: 6px 9px; }
+.power-what p { margin: 0; }
+.power-what ul { margin: 4px 0 0; padding-left: 18px; }
+.power-what li { margin: 2px 0; }
+.power-what li.flaw b { color: var(--warn); }
+.power-what.compact { background: none; padding: 2px 0 0; font-size: 13px; }
 .power .ae { border-left: 3px solid color-mix(in srgb, var(--hero) 60%, transparent); padding: 4px 0 4px 10px; margin-top: 4px; font-size: 13.5px; }
 .power .ae b { font: 700 13px/1.2 var(--font-label); letter-spacing: .04em; text-transform: uppercase; }
 .device { border: 2px dashed color-mix(in srgb, var(--hero) 55%, var(--line)); border-radius: 8px; padding: 10px; margin-top: 8px; }

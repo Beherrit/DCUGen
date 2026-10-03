@@ -2,7 +2,7 @@
 
 import { h, clear, toast, copyText, download, slug, inkFor } from './dom.js';
 import { state, upsert } from './store.js';
-import { renderFile } from './sheetview.js';
+import { renderFile, whatItDoes } from './sheetview.js';
 import { exportExcel, exportJson, exportText } from './exporters.js';
 import { randomSeed } from '../engine/rng.js';
 import { generateCharacter } from '../engine/generator.js';
@@ -170,7 +170,8 @@ function showResult() {
         ...lines.map((l) => h('div', { class: 'power' },
           h('div', { class: 'power-top' }, h('span', { class: 'power-name' }, l.p.name), h('span', { class: 'power-cost' }, `${l.cost} pp`)),
           h('div', { class: 'power-text' }, l.text),
-          (l.p.alternates || []).map((a) => h('div', { class: 'ae' }, h('b', null, `AE: ${a.name} `), describeEffect(a, R))))),
+          whatItDoes(l.p, R),
+          (l.p.alternates || []).map((a) => h('div', { class: 'ae' }, h('b', null, `AE: ${a.name} `), describeEffect(a, R), whatItDoes(a, R, true))))),
         h('div', { class: 'result' }, h('b', null, `Cost: ${d.cost.raw} − ${d.cost.discount} = ${d.cost.total} power points. `),
           `${d.device.kind === 'easily' ? 'Easily Removable: −2' : 'Removable: −1'} point per 5 points of the device's powers. ${d.note}`),
         d.issues.length ? h('ul', { class: 'issues' }, d.issues.map((i) => h('li', { class: 'error' }, i.message))) : null],

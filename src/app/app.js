@@ -3,7 +3,7 @@
 import { RULES } from '../engine/index.js';
 import { state, onChange } from './store.js';
 import { toast } from './dom.js';
-import { initForge, roll, setCurrent, renderCurrent } from './forge.js';
+import { initForge, roll, setCurrent, renderCurrent, restoreTabs } from './forge.js';
 import { initRoster, renderRoster } from './roster.js';
 import { initLab, openInLab, renderLab } from './lab.js';
 import { initGm, renderGm, addToInitiative } from './gm.js';
@@ -48,7 +48,7 @@ async function loadFromHash() {
   if (!m) return false;
   try {
     const ch = await decodeCharacter(m[1]);
-    setCurrent(ch);
+    setCurrent(ch, { newTab: true });
     toast(`Loaded ${ch.identity?.codename || 'shared character'}`);
     history.replaceState(null, '', location.pathname + location.search);
     return true;
@@ -71,13 +71,13 @@ async function boot() {
     addPower: () => { openInLab(state.current, null); showTab('lab'); },
   });
   initRoster(R, document.getElementById('view-roster'), {
-    open: (ch) => { setCurrent(ch); showTab('forge'); },
+    open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
     goForge: () => showTab('forge'),
   });
   initLab(R, document.getElementById('view-lab'), { applyToCurrent });
   initGm(R, document.getElementById('view-gm'));
   initWorkshop(R, document.getElementById('view-workshop'), {
-    openInForge: (ch) => { setCurrent(ch); showTab('forge'); },
+    openInForge: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
     addToInitiative: (ch) => addToInitiative(ch),
     applyToCurrent: (ch) => { setCurrent(ch); },
   });
@@ -91,8 +91,9 @@ async function boot() {
   });
   document.getElementById('roster-count').textContent = state.roster.length;
 
+  const restored = restoreTabs();
   const loaded = await loadFromHash();
-  if (!loaded) roll();
+  if (!loaded && !restored) roll();
 
   let tab = 'forge';
   try { tab = localStorage.getItem('dcugen.tab') || 'forge'; } catch { /* ignore */ }

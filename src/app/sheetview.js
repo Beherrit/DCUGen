@@ -2,7 +2,7 @@
 
 import { h } from './dom.js';
 import { inkFor } from './dom.js';
-import { sheet as makeSheet, describeEffect } from '../engine/render.js';
+import { sheet as makeSheet, describeEffect, explainPower } from '../engine/render.js';
 import { costMath } from '../engine/powersmith.js';
 import { ABILITIES, BUYABLE_DEFENSES } from '../engine/rules.js';
 import { powerCost } from '../engine/costs.js';
@@ -24,6 +24,15 @@ function mathTable(p, R) {
     h('td', { class: 'v' }, l.perRank !== undefined ? `${fmt(l.perRank)}/rank` : l.flat !== undefined ? `${fmt(l.flat)} flat` : ''),
     h('td', { class: 'v' }, l.total !== undefined ? `${l.total} pp` : ''))))),
   h('div', { style: { color: 'var(--ink-3)', marginTop: '4px' } }, `Cost ratio ${m.ratio} (points : ranks)`));
+}
+
+/** The plain-English "what it does" block under a power. */
+export function whatItDoes(p, R, compact = false) {
+  let ex;
+  try { ex = explainPower(p, R); } catch { return null; }
+  return h('div', { class: `power-what ${compact ? 'compact' : ''}` },
+    h('p', null, ex.what),
+    !compact && ex.notes.length ? h('ul', null, ex.notes.map((n) => h('li', { class: n.kind }, h('b', null, `${n.name}: `), n.text))) : null);
 }
 
 /**
@@ -133,8 +142,9 @@ export function renderFile(ch, R, opts = {}) {
           h('button', { class: 'btn sm', type: 'button', onClick: () => opts.onEditPower?.(path) }, 'Open in Lab'),
           h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${p.name}`, onClick: () => change((c) => removeAt(c, path)) }, '✕')) : null),
       h('div', { class: 'power-text' }, describeEffect(p, R)),
+      whatItDoes(p, R),
       alts.map((a, i) => h('div', { class: 'ae' },
-        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R),
+        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), whatItDoes(a, R, true),
         editing ? h('span', { class: 'no-print' }, ' ',
           stepper(a.rank, (d) => change((c) => { const q = getPower(c, { ...path, alt: i }); q.rank = Math.max(1, q.rank + d); }), { min: 1, label: `${a.name} rank` }),
           h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${a.name}`, onClick: () => change((c) => removeAt(c, { ...path, alt: i })) }, '✕')) : null)),
