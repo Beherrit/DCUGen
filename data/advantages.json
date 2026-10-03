@@ -1,0 +1,2441 @@
+[
+  {
+    "name": "Accurate Attack",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 69",
+    "summary": "Accurate attack maneuver: lower effect rank by up to 5 to raise attack bonus by the same amount."
+  },
+  {
+    "name": "All-out Attack",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 69",
+    "summary": "All-out attack maneuver: lower Dodge and Parry by up to 5 to raise attack bonus by the same amount."
+  },
+  {
+    "name": "Chokehold",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 72",
+    "summary": "Start a restrained, grabbed foe suffocating for as long as you hold them."
+  },
+  {
+    "name": "Close Attack",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 72",
+    "summary": "+1 to all close attack checks per rank (still capped by power level)."
+  },
+  {
+    "name": "Defensive Attack",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 73",
+    "summary": "Defensive attack maneuver: lower attack bonus by up to 5 to raise Dodge and Parry by the same amount."
+  },
+  {
+    "name": "Defensive Roll",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 73",
+    "summary": "+1 Toughness per rank that counts as an active defense (lost when vulnerable or defenseless)."
+  },
+  {
+    "name": "Evasion",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": 2,
+    "param": null,
+    "requires": [],
+    "source": "DCA 74",
+    "summary": "+2 circumstance bonus to Dodge checks against area effects (+5 at rank 2)."
+  },
+  {
+    "name": "Fast Grab",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 74",
+    "summary": "A successful unarmed hit lets you attempt a grab check as a free action."
+  },
+  {
+    "name": "Favored Environment",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": "environment",
+    "requires": [],
+    "source": "DCA 74",
+    "summary": "+2 circumstance bonus to attack or active defenses (chosen each round) in one environment."
+  },
+  {
+    "name": "Grabbing Finesse",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 75",
+    "summary": "Grab with Dexterity instead of Strength and stay non-vulnerable while grabbing."
+  },
+  {
+    "name": "Improved Aim",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 75",
+    "summary": "Aiming doubles its circumstance bonus: +10 close or adjacent, +5 at range."
+  },
+  {
+    "name": "Improved Critical",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": 4,
+    "param": "attack",
+    "requires": [],
+    "source": "DCA 75",
+    "summary": "Critical threat range of a chosen attack widens by 1 per rank (to 16-20 at 4 ranks); extra ranks may go to other attacks.",
+    "max_rank_note": "Cap of 4 is per attack; ranks may be split among different attacks."
+  },
+  {
+    "name": "Improved Defense",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 75",
+    "summary": "+2 circumstance bonus to active defenses when you take the defend action."
+  },
+  {
+    "name": "Improved Disarm",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 75",
+    "summary": "Disarm with no attack penalty and without giving the foe a chance to disarm you."
+  },
+  {
+    "name": "Improved Grab",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 75",
+    "summary": "Grab one-handed, keep the other hand free, and stay non-vulnerable while grabbing."
+  },
+  {
+    "name": "Improved Hold",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 75",
+    "summary": "Foes you grab take a -5 circumstance penalty to escape."
+  },
+  {
+    "name": "Improved Initiative",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 75",
+    "summary": "+4 to initiative checks per rank."
+  },
+  {
+    "name": "Improved Smash",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 75",
+    "summary": "No attack penalty when smashing an object held by someone else."
+  },
+  {
+    "name": "Improved Trip",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 76",
+    "summary": "Trip with no penalty or counter-trip, and choose whether the foe resists with Strength or Agility."
+  },
+  {
+    "name": "Improvised Weapon",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 76",
+    "summary": "Use Close Combat (Unarmed) with improvised weapons; each rank past the first adds +1 damage with them."
+  },
+  {
+    "name": "Move-by Action",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 77",
+    "summary": "Split your movement before and after your standard action."
+  },
+  {
+    "name": "Power Attack",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 77",
+    "summary": "Power attack maneuver: lower attack bonus by up to 5 to raise effect rank by the same amount."
+  },
+  {
+    "name": "Precise Attack",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": 4,
+    "param": "option",
+    "requires": [],
+    "source": "DCA 77",
+    "summary": "Ignore cover or concealment penalties with close or ranged attacks; one close/ranged + cover/concealment pairing per rank.",
+    "options": [
+      "Close, Cover",
+      "Close, Concealment",
+      "Ranged, Cover",
+      "Ranged, Concealment"
+    ]
+  },
+  {
+    "name": "Prone Fighting",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 77",
+    "summary": "No penalty to attack while prone, and adjacent foes gain no bonus against you for it."
+  },
+  {
+    "name": "Quick Draw",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 77",
+    "summary": "Draw a holstered or sheathed weapon as a free action."
+  },
+  {
+    "name": "Ranged Attack",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 77",
+    "summary": "+1 to all ranged attack checks per rank (still capped by power level)."
+  },
+  {
+    "name": "Redirect",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 78",
+    "summary": "After tricking a foe, send their missed attack into another adjacent target."
+  },
+  {
+    "name": "Set-up",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 78",
+    "summary": "Hand the benefit of a combat interaction-skill use (feint, etc.) to one ally per rank."
+  },
+  {
+    "name": "Takedown",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": 2,
+    "param": null,
+    "requires": [],
+    "source": "DCA 78",
+    "summary": "Free extra attack after taking out a minion; rank 2 lets you move to reach non-adjacent minions."
+  },
+  {
+    "name": "Throwing Mastery",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 79",
+    "summary": "+1 damage per rank with thrown weapons, and harmless objects become thrown weapons."
+  },
+  {
+    "name": "Uncanny Dodge",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 79",
+    "summary": "You are not vulnerable when surprised or caught off-guard."
+  },
+  {
+    "name": "Weapon Bind",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 79",
+    "summary": "After successfully defending against a close weapon attack, attempt a disarm as a reaction."
+  },
+  {
+    "name": "Weapon Break",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 79",
+    "summary": "After successfully defending against a close weapon attack, attack the weapon as a reaction."
+  },
+  {
+    "name": "Beginner's Luck",
+    "type": "Fortune",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 72",
+    "summary": "Spend a hero point to gain effective rank 5 for the scene in a skill you have at 4 or less."
+  },
+  {
+    "name": "Inspire",
+    "type": "Fortune",
+    "ranked": true,
+    "max_rank": 5,
+    "param": null,
+    "requires": [],
+    "source": "DCA 76",
+    "summary": "Once per scene, spend a hero point and a standard action to give allies +1 per rank on checks until your next round."
+  },
+  {
+    "name": "Leadership",
+    "type": "Fortune",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 76",
+    "summary": "Spend a hero point and a standard action to remove dazed, fatigued, or stunned from an ally."
+  },
+  {
+    "name": "Luck",
+    "type": "Fortune",
+    "ranked": true,
+    "max_rank": "half_pl",
+    "param": null,
+    "requires": [],
+    "source": "DCA 77",
+    "summary": "Re-roll a die once per round, up to your rank in uses per session."
+  },
+  {
+    "name": "Seize Initiative",
+    "type": "Fortune",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 78",
+    "summary": "Spend a hero point at the start of combat to act first."
+  },
+  {
+    "name": "Ultimate Effort",
+    "type": "Fortune",
+    "ranked": false,
+    "max_rank": null,
+    "param": "check",
+    "requires": [],
+    "source": "DCA 79",
+    "summary": "Spend a hero point to treat one specific type of check as a roll of 20; take again for other checks.",
+    "examples": [
+      "Ultimate Aim",
+      "Ultimate Resistance (one defense)",
+      "Ultimate Skill (one skill)"
+    ]
+  },
+  {
+    "name": "Assessment",
+    "type": "General",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 70",
+    "summary": "Secret Insight check against a foe's Deception reveals how their attack and defenses compare to yours."
+  },
+  {
+    "name": "Benefit",
+    "type": "General",
+    "ranked": true,
+    "max_rank": null,
+    "param": "benefit",
+    "requires": [],
+    "source": "DCA 72",
+    "summary": "A significant perk or privilege, worth about one power point per rank, defined with the GM.",
+    "benefit_examples": [
+      {
+        "name": "Alternate Identity",
+        "ranked": false,
+        "max_rank": 1,
+        "summary": "A second identity with legal paperwork."
+      },
+      {
+        "name": "Ambidexterity",
+        "ranked": false,
+        "max_rank": 1,
+        "summary": "No off-hand penalty."
+      },
+      {
+        "name": "Cipher",
+        "ranked": true,
+        "max_rank": null,
+        "summary": "-5 per rank to Investigation checks about you."
+      },
+      {
+        "name": "Diplomatic Immunity",
+        "ranked": false,
+        "max_rank": 1,
+        "summary": "Cannot be prosecuted abroad, only deported."
+      },
+      {
+        "name": "Security Clearance",
+        "ranked": false,
+        "max_rank": 1,
+        "summary": "Access to classified information and facilities."
+      },
+      {
+        "name": "Status",
+        "ranked": false,
+        "max_rank": 1,
+        "summary": "Special social standing such as nobility or knighthood."
+      },
+      {
+        "name": "Wealth",
+        "ranked": true,
+        "max_rank": 5,
+        "summary": "Above-average resources.",
+        "levels": {
+          "1": "Well-off",
+          "2": "Independently Wealthy",
+          "3": "Millionaire",
+          "4": "Multimillionaire",
+          "5": "Billionaire"
+        }
+      },
+      {
+        "name": "(Style) Grandmaster",
+        "ranked": true,
+        "max_rank": null,
+        "summary": "Recognized grandmaster of a fighting style (GM may require (Style) Master first).",
+        "source": "MA 57",
+        "book": "Martial Arts"
+      }
+    ]
+  },
+  {
+    "name": "Diehard",
+    "type": "General",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 73",
+    "summary": "Automatically stabilize when dying."
+  },
+  {
+    "name": "Eidetic Memory",
+    "type": "General",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 73",
+    "summary": "Perfect recall: +5 to remember things and answer Expertise questions as if trained."
+  },
+  {
+    "name": "Equipment",
+    "type": "General",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 73",
+    "summary": "5 equipment points per rank for gear, vehicles, and headquarters."
+  },
+  {
+    "name": "Extraordinary Effort",
+    "type": "General",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 74",
+    "summary": "Take two extra-effort benefits at once at double the fatigue cost."
+  },
+  {
+    "name": "Fearless",
+    "type": "General",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 75",
+    "summary": "Immune to fear effects."
+  },
+  {
+    "name": "Great Endurance",
+    "type": "General",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 75",
+    "summary": "+5 on checks to resist fatigue, suffocation, drowning, starvation, thirst, and heat or cold.",
+    "type_note": "Advantage heading says General; the DCA Combat Advantages summary table also lists it."
+  },
+  {
+    "name": "Instant Up",
+    "type": "General",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 76",
+    "summary": "Stand from prone as a free action, no Acrobatics check needed."
+  },
+  {
+    "name": "Interpose",
+    "type": "General",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 76",
+    "summary": "Once per round, step in front of an attack that hit an ally within your movement range."
+  },
+  {
+    "name": "Minion",
+    "type": "General",
+    "ranked": true,
+    "max_rank": null,
+    "param": "minion",
+    "requires": [],
+    "source": "DCA 77",
+    "summary": "A loyal follower built on 15 power points per rank."
+  },
+  {
+    "name": "Second Chance",
+    "type": "General",
+    "ranked": true,
+    "max_rank": null,
+    "param": "hazard",
+    "requires": [],
+    "source": "DCA 78",
+    "summary": "Re-roll a failed check against one specific hazard and keep the better roll; take again for other hazards."
+  },
+  {
+    "name": "Sidekick",
+    "type": "General",
+    "ranked": true,
+    "max_rank": null,
+    "param": "sidekick",
+    "requires": [],
+    "source": "DCA 78",
+    "summary": "A sidekick built on 5 power points per rank."
+  },
+  {
+    "name": "Teamwork",
+    "type": "General",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 78",
+    "summary": "+5 circumstance bonus when supporting a team check."
+  },
+  {
+    "name": "Trance",
+    "type": "General",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 79",
+    "summary": "Meditate into a deathlike trance that extends breath-holding and suspends poison and disease."
+  },
+  {
+    "name": "Agile Feint",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 69",
+    "summary": "Feint using Acrobatics or your movement speed rank in place of Deception."
+  },
+  {
+    "name": "Animal Empathy",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 69",
+    "summary": "Use interaction skills on animals normally, without a shared language."
+  },
+  {
+    "name": "Artificer",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "skill:Expertise (Magic)"
+    ],
+    "source": "DCA 70",
+    "summary": "Use Expertise (Magic) to build temporary magical devices."
+  },
+  {
+    "name": "Attractive",
+    "type": "Skill",
+    "ranked": true,
+    "max_rank": 2,
+    "param": null,
+    "requires": [],
+    "source": "DCA 70",
+    "summary": "+2 circumstance bonus to Deception and Persuasion with those who find you appealing (+5 at rank 2)."
+  },
+  {
+    "name": "Connected",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 72",
+    "summary": "Call in favors from your network with a Persuasion check."
+  },
+  {
+    "name": "Contacts",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 72",
+    "summary": "Make your first Investigation check to gather information in just one minute."
+  },
+  {
+    "name": "Daze",
+    "type": "Skill",
+    "ranked": true,
+    "max_rank": 2,
+    "param": "skill",
+    "requires": [],
+    "source": "DCA 73",
+    "summary": "Use Deception or Intimidation as a standard action to daze a foe until the end of your next round; one skill per rank.",
+    "options": [
+      "Deception",
+      "Intimidation"
+    ]
+  },
+  {
+    "name": "Fascinate",
+    "type": "Skill",
+    "ranked": true,
+    "max_rank": null,
+    "param": "skill",
+    "requires": [],
+    "source": "DCA 74",
+    "summary": "Use an interaction skill to entrance an audience outside of combat; one skill per rank.",
+    "options": [
+      "Deception",
+      "Intimidation",
+      "Persuasion",
+      "Expertise (performance, GM approval)"
+    ]
+  },
+  {
+    "name": "Favored Foe",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": "foe",
+    "requires": [],
+    "source": "DCA 75",
+    "summary": "+2 circumstance bonus to Deception, Intimidation, Insight, and Perception against one type of opponent."
+  },
+  {
+    "name": "Hide in Plain Sight",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 75",
+    "summary": "Hide while observed without a diversion or Stealth penalty."
+  },
+  {
+    "name": "Improvised Tools",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 76",
+    "summary": "Ignore the penalty for lacking proper tools (only -2 with no tools at all)."
+  },
+  {
+    "name": "Inventor",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "skill:Technology"
+    ],
+    "source": "DCA 76",
+    "summary": "Use Technology to create inventions."
+  },
+  {
+    "name": "Jack-of-all-trades",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 76",
+    "summary": "Use any skill untrained."
+  },
+  {
+    "name": "Languages",
+    "type": "Skill",
+    "ranked": true,
+    "max_rank": null,
+    "param": "language",
+    "requires": [],
+    "source": "DCA 76",
+    "summary": "Know extra languages: 1 at rank 1, doubling with each further rank."
+  },
+  {
+    "name": "Ritualist",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "skill:Expertise (Magic)"
+    ],
+    "source": "DCA 78",
+    "summary": "Use Expertise (Magic) to devise and cast rituals."
+  },
+  {
+    "name": "Skill Mastery",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": "skill",
+    "requires": [],
+    "source": "DCA 78",
+    "summary": "Make routine checks with one skill even under pressure; take again for other skills."
+  },
+  {
+    "name": "Startle",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 78",
+    "summary": "Feint using Intimidation instead of Deception."
+  },
+  {
+    "name": "Taunt",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 78",
+    "summary": "Demoralize using Deception instead of Intimidation."
+  },
+  {
+    "name": "Tracking",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 79",
+    "summary": "Follow tracks visually with Perception."
+  },
+  {
+    "name": "Well-informed",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "DCA 79",
+    "summary": "On first meeting a person or group, make an immediate Investigation or Persuasion check to know about them."
+  },
+  {
+    "name": "Acrobatic Defense",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": 2,
+    "param": null,
+    "requires": [],
+    "source": "MA 52",
+    "summary": "Move at half speed acrobatically; an Acrobatics check grants +1 active defense per degree vs one foe (all foes at rank 2).",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Action Surge",
+    "type": "General",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 52",
+    "summary": "After using extra effort for an action, try a Stamina check instead of spending a hero point to avoid exhaustion.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Active Disarm",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 52",
+    "summary": "Disarm using Parry instead of attack, and trade up to 5 Parry for a disarm bonus.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Added Critical",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "attack",
+    "requires": [],
+    "source": "MA 52",
+    "summary": "Critical hits with a chosen attack apply both Increased Effect and a fixed Added Effect.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Aggressive Driving",
+    "type": "Skill",
+    "ranked": true,
+    "max_rank": 2,
+    "param": null,
+    "requires": [],
+    "source": "MA 52",
+    "summary": "+2 to Vehicles checks while the pursuer in a chase (+5 at rank 2).",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Aggressive Escape",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "attack",
+    "requires": [],
+    "source": "MA 55",
+    "summary": "Use a chosen attack against someone grabbing you to force them to let go.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Ambush",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": 5,
+    "param": null,
+    "requires": [],
+    "source": "MA 55",
+    "summary": "+1 critical threat range per rank against unaware or surprised targets.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Armed Grab",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 56",
+    "summary": "Grab with occupied hands at -2 (one hand full) or -5 (both).",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Attack Specialist",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "attack",
+    "requires": [],
+    "source": "MA 57",
+    "summary": "+2 initiative and +1 Parry in rounds you fight only with a chosen attack.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Bail Out",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 57",
+    "summary": "Take reduced damage from vehicle crashes with a Dodge check.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Burn Rubber",
+    "type": "General",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 58",
+    "summary": "Your vehicle begins a chase a quarter faster than normal.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Cheap Shot",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": 5,
+    "param": null,
+    "requires": [],
+    "source": "MA 58",
+    "summary": "Turn a successful feint into +1 damage per rank on the attack (once per foe per encounter).",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Close-Quarters Battle",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "attack",
+    "requires": [],
+    "source": "MA 58",
+    "summary": "+1 attack and initiative per rank with a chosen ranged attack against foes at short range.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Combo Element",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "action",
+    "requires": [],
+    "source": "MA 59",
+    "summary": "Make a chosen combat action or trait count as a Combo Action.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Countering Expert",
+    "type": "General",
+    "ranked": true,
+    "max_rank": null,
+    "param": "descriptor",
+    "requires": [],
+    "source": "MA 59",
+    "summary": "+2 to counter powers of a chosen descriptor (+5 with a second rank in it).",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Crushing Hold",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 59",
+    "summary": "Inflict Strength damage on a held foe as a free action each round, at -5 active defense.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Cunning Fighter",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 59",
+    "summary": "Feint with your melee attack bonus instead of Deception.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Damaging Escape",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 59",
+    "summary": "When you escape a grab, make a free unarmed attack on the grabber.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Dancing Combat",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "skill:Expertise (Dancing)"
+    ],
+    "source": "MA 59",
+    "summary": "Feint and trick with Expertise (Dancing) instead of Deception.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Daredevil",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": 2,
+    "param": null,
+    "requires": [],
+    "source": "MA 60",
+    "summary": "After your successful pursuit maneuver, your pursuer must make a crash check at -2 (-5 at rank 2).",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Dauntless",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": 2,
+    "param": "attack",
+    "requires": [],
+    "source": "MA 60",
+    "summary": "Foes defending against a chosen attack take -2 to the defend action or Deflect (-5 at rank 2).",
+    "book": "Martial Arts",
+    "max_rank_note": "Cap of 2 is per attack; buy separately for each attack."
+  },
+  {
+    "name": "Dedicated Defense",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 60",
+    "summary": "Shift up to +5 active defense toward one attacker at an equal cost against all others.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Defensive Driving",
+    "type": "Skill",
+    "ranked": true,
+    "max_rank": 2,
+    "param": null,
+    "requires": [],
+    "source": "MA 60",
+    "summary": "+2 to Vehicles checks while being chased (+5 at rank 2).",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Defensive Strike",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": 2,
+    "param": null,
+    "requires": [],
+    "source": "MA 60",
+    "summary": "+2 to your next close attack against a foe who missed you in melee (+5 at rank 2).",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Defensive Throw",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 60",
+    "summary": "Free trip attempt against a foe whose close attack misses you by 2+ degrees.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Demolition Derby",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 60",
+    "summary": "When ramming, your vehicle counts as a quarter tougher and faster.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Devastating Hold",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 61",
+    "summary": "Double the critical threat range when crushing a held foe with Strength damage.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Dirty Attack",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 61",
+    "summary": "Add Dexterity to melee damage against prone foes.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Dirty Fighting",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 61",
+    "summary": "+1 melee damage per rank when adjacent to a foe in cover or concealment or with hampered movement.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Distracting Attack",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 61",
+    "summary": "Trade up to 5 points of attack damage for an equal bonus to aid an ally (aid becomes a move action).",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Diverting Feint",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 61",
+    "summary": "After two successful feints on a foe, a special attack can make them lose track of you.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Driving Instinct",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 61",
+    "summary": "Insight check predicts a chase opponent's next maneuver for +4 on your opposing Vehicles check.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Duck and Cover",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 61",
+    "summary": "Cover protects you better: -3/-7 to attacks against you and improved Dodge vs area effects.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Empowered Critical",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": 2,
+    "param": "attack",
+    "requires": [],
+    "source": "MA 61",
+    "summary": "Critical hits with a chosen attack gain +2 more Increased Effect (+5 at rank 2).",
+    "book": "Martial Arts",
+    "max_rank_note": "Cap of 2 is per attack; extra ranks may go to other attacks."
+  },
+  {
+    "name": "Entangling Feint",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 62",
+    "summary": "A feinted foe who attacks you may tangle themselves up, becoming hindered and vulnerable.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Escapist",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 62",
+    "summary": "On escaping someone's hold, release your own grab on them as a free action.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Favored Conditions",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": "condition",
+    "requires": [],
+    "source": "MA 62",
+    "summary": "+2 circumstance bonus to attack or active defenses under a chosen circumstance (outnumbered, drunk, cornered...).",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Finesse Attack",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "attack",
+    "requires": [],
+    "source": "MA 62",
+    "summary": "Use Dexterity in place of Strength for the damage of a chosen melee attack.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Finish Them",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 62",
+    "summary": "Finishing attacks take one less action step.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "First Strike",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 62",
+    "summary": "+2 damage against surprised or unaware foes with lower initiative.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Flippant Disarm",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": 2,
+    "param": null,
+    "requires": [],
+    "source": "MA 62",
+    "summary": "Control where a disarmed weapon lands: catch it, toss it to an ally, or hurl it; rank 2 works at range.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Follow-Up Strike",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 63",
+    "summary": "After a melee critical hit, make a free extra attack on the same foe.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Grab Breaker",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "attack",
+    "requires": [],
+    "source": "MA 63",
+    "summary": "Oppose a grab attempt with a chosen attack, adding its damage to your resistance.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Grabbing Parry",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 63",
+    "summary": "After an unarmed defend (Parry) succeeds against a melee attack, start a grab as a free action.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Guard Weapon",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 63",
+    "summary": "A smaller off-hand weapon grants +1 Parry, or a limited defend alongside your attack.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Gymkhana",
+    "type": "Skill",
+    "ranked": true,
+    "max_rank": null,
+    "param": "vehicle",
+    "requires": [],
+    "source": "MA 64",
+    "summary": "+2 on sliding, drifting, and obstacle maneuvers with a chosen ground vehicle type (+5 at rank 2).",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Healing Touch",
+    "type": "General",
+    "ranked": false,
+    "max_rank": null,
+    "param": "skill",
+    "requires": [],
+    "source": "MA 64",
+    "summary": "Use Expertise (Biology) or Expertise (Martial Arts) on pressure points to grant Healing ranks by touch.",
+    "book": "Martial Arts",
+    "options": [
+      "Expertise (Biology)",
+      "Expertise (Martial Arts)"
+    ]
+  },
+  {
+    "name": "Healing Trance",
+    "type": "General",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:Trance"
+    ],
+    "source": "MA 64",
+    "summary": "While in a Trance, an Awareness check speeds recovery from damage; once per day per rank.",
+    "book": "Martial Arts",
+    "requires_note": "Prerequisite implied by the rules text rather than listed as a formal prerequisite."
+  },
+  {
+    "name": "Improved Assessment",
+    "type": "General",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:Assessment"
+    ],
+    "source": "MA 64",
+    "summary": "Use Assessment on one additional foe per rank at the same time.",
+    "book": "Martial Arts",
+    "requires_note": "Prerequisite implied by the rules text rather than listed as a formal prerequisite."
+  },
+  {
+    "name": "Improved Charge",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 65",
+    "summary": "Charges gain +1 damage per distance rank traveled (with possible self-damage).",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Improved Concealment",
+    "type": "General",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 65",
+    "summary": "Concealment gives attackers -4 (partial) or -7 (total) against you.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Improved Covering Attack",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 65",
+    "summary": "Covering attacks can impose -4 on a foe's attacks and skills and may earn a free extra attack.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Improved Disabling",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": 4,
+    "param": "attack",
+    "requires": [],
+    "source": "MA 65",
+    "summary": "Disabling-critical threat range of a chosen attack widens by 1 per rank (to 16-20 at 4).",
+    "book": "Martial Arts",
+    "max_rank_note": "Cap of 4 is per attack."
+  },
+  {
+    "name": "Improved Entangle Weapon",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": 2,
+    "param": null,
+    "requires": [],
+    "source": "MA 65",
+    "summary": "+2 to entangle weapons and foes take -2 to counter-entangle you (+5/-5 at rank 2).",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Improved Escape",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 65",
+    "summary": "Escaping a grab with Acrobatics or Athletics is a free action.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Improved Exchange",
+    "type": "General",
+    "ranked": true,
+    "max_rank": null,
+    "param": "advantage",
+    "requires": [],
+    "source": "MA 65",
+    "summary": "Raise the trade limit of a chosen trade-off advantage (Power Attack, Accurate Attack...) by 1 per rank.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Improved Joint Lock",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:Joint Lock"
+    ],
+    "source": "MA 66",
+    "summary": "Attempt joint locks without the usual -2 penalty.",
+    "book": "Martial Arts",
+    "requires_note": "Prerequisite implied by the rules text rather than listed as a formal prerequisite."
+  },
+  {
+    "name": "Improved Ranged Disarm",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 66",
+    "summary": "Disarm at range without the usual -5 penalty.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Improved Readiness",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "attack",
+    "requires": [],
+    "source": "MA 66",
+    "summary": "Ready a chosen attack without declaring its trigger in advance.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Improved Reversal",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": 2,
+    "param": null,
+    "requires": [
+      "advantage:Reversal"
+    ],
+    "source": "MA 66",
+    "summary": "+2 to grab checks made as a Reversal (+5 at rank 2).",
+    "book": "Martial Arts",
+    "requires_note": "Prerequisite implied by the rules text rather than listed as a formal prerequisite."
+  },
+  {
+    "name": "Improved Tricking",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 66",
+    "summary": "Trick with Deception as a move action.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Inviting Defense",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 66",
+    "summary": "Trade up to 5 initiative for an equal bonus to Dodge and Parry.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Iron Liver",
+    "type": "General",
+    "ranked": true,
+    "max_rank": 2,
+    "param": null,
+    "requires": [],
+    "source": "MA 66",
+    "summary": "+2 to resist alcohol and to fake being drunk (+5 at rank 2).",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Joint Lock",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 66",
+    "summary": "Allows the joint-lock grab option.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Just a Scratch",
+    "type": "Fortune",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 66",
+    "summary": "Spend a hero point and pass a Fortitude check to shed one damage condition; once per session per rank.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Knockout",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "attack",
+    "requires": [],
+    "source": "MA 67",
+    "summary": "A chosen attack that harms a foe forces a Fortitude check or leaves them dazed, stunned, or incapacitated.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Lie in Wait",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 67",
+    "summary": "Take full actions during a planned ambush's surprise round.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Light Sleeper",
+    "type": "General",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 67",
+    "summary": "Wake easily and act at once on waking.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Mobile Defense",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 67",
+    "summary": "+1 active defense per degree of success on your running Athletics check.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Mobile Offense",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 67",
+    "summary": "+1 attack per degree on running checks, or +1 for moving at least your full speed.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Monkey Climber",
+    "type": "Skill",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 68",
+    "summary": "Climb with Acrobatics instead of Athletics when there are holds or surfaces to bound off.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Multi-Entangle",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 68",
+    "summary": "Try to entangle several incoming weapons at once, -2 per extra weapon.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Multiattack Mastery",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 68",
+    "summary": "Extra benefits when attacking with a Multiattack effect (bigger bonuses, smaller penalties, stronger cover fire).",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Neck Breaker",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 68",
+    "summary": "Lethal finishing attacks on a bound foe need fewer degrees of success.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Not So Helpless",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 68",
+    "summary": "Fortitude check to lessen damage from a finishing attack.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Off-Putting Feint",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 68",
+    "summary": "A successful feint also gives the foe -1 to attack and Perception for a round.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Parkour",
+    "type": "General",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 68",
+    "summary": "Make several jumps per round and catch yourself with Acrobatics instead of falling.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Pummel",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": 2,
+    "param": "attack",
+    "requires": [],
+    "source": "MA 68",
+    "summary": "+2 effective damage for knockback only with a chosen attack (+5 at rank 2).",
+    "book": "Martial Arts",
+    "max_rank_note": "Cap of 2 is per attack; extra ranks may go to other attacks."
+  },
+  {
+    "name": "Quick Strike",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 68",
+    "summary": "Trade up to 5 damage for an equal initiative bonus.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Quick Throw",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 69",
+    "summary": "After a successful grab, throw (trip) the foe as a free action.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Red Lining",
+    "type": "General",
+    "ranked": true,
+    "max_rank": null,
+    "param": "vehicle",
+    "requires": [],
+    "source": "MA 69",
+    "summary": "Push a vehicle category past its top speed with Vehicles checks, risking engine failure.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Reversal",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 69",
+    "summary": "After escaping a grab, immediately try to grab the former grabber as a free action.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Steadfast",
+    "type": "General",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 70",
+    "summary": "Reduce knockback distance by one rank per rank.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Stuntman",
+    "type": "Skill",
+    "ranked": true,
+    "max_rank": null,
+    "param": "maneuver",
+    "requires": [],
+    "source": "MA 70",
+    "summary": "+2 on checks with a chosen pursuit maneuver (+5 at rank 2).",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Superior Disabling",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "attack",
+    "requires": [],
+    "source": "MA 70",
+    "summary": "Disabling criticals with a chosen attack are harder to treat (+2 DC) and last longer per rank.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Superior Entangle Weapon",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 70",
+    "summary": "After parrying a melee weapon, make an entangle-weapon attempt as a free action.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Sweeping Strike",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 70",
+    "summary": "Split an unarmed hit's damage into a bonus for a free trip attempt.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Take the Hit",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 71",
+    "summary": "Forgo active defense against a melee attack; if it hits, make a free melee attack.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Unbalancing Strike",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 71",
+    "summary": "Forgo damage on a melee hit to divide the foe's Dodge next round.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Vehicrobatics",
+    "type": "Skill",
+    "ranked": true,
+    "max_rank": null,
+    "param": "vehicle",
+    "requires": [],
+    "source": "MA 71",
+    "summary": "Use Vehicles in place of Acrobatics for stunts with a chosen vehicle type.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Vehicular Shield",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [],
+    "source": "MA 71",
+    "summary": "Vehicles check as a move action to have your vehicle absorb an attack aimed at you.",
+    "book": "Martial Arts"
+  },
+  {
+    "name": "Acrobatic Fighter",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Student"
+    ],
+    "source": "MA 72",
+    "summary": "Add acrobatics to kicks or flying attacks for +1 damage or active defense per rank (Acrobatics check).",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Aggressive Counter",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Initiate"
+    ],
+    "source": "MA 74",
+    "summary": "Countering a foe's effect leaves them vulnerable to your next attack.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Anticipation",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Master"
+    ],
+    "source": "MA 74",
+    "summary": "Opposed Insight check grants +2 active defense per degree against one foe.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Attack Mastery",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "attack",
+    "requires": [
+      "advantage:Attack Specialist",
+      "advantage:(Style) Master"
+    ],
+    "source": "MA 74",
+    "summary": "Raise one bonus that applies to your Attack Specialist attack by half.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Bob and Weave",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Master"
+    ],
+    "source": "MA 74",
+    "summary": "Fighting-style check as a move action grants +1 active defense per degree of success.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Bullet Time",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Student"
+    ],
+    "source": "MA 74",
+    "summary": "When using extra effort for an action, spend a hero point and roll for bonus move actions.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Counterstrike",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Initiate"
+    ],
+    "source": "MA 74",
+    "summary": "In rounds you don't attack, strike back free at foes who hit you in melee (one per rank, -2 cumulative).",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Deceptive Attack",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "attack",
+    "requires": [
+      "advantage:(Style) Initiate"
+    ],
+    "source": "MA 75",
+    "summary": "Feint at -4 with a chosen attack to add Presence to the follow-up attack.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Deceptive Stance",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Student"
+    ],
+    "source": "MA 75",
+    "summary": "Disguise your stance: -4 per rank to foes reading it, +2 per rank to its DC.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Defensive Feint",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Initiate"
+    ],
+    "source": "MA 75",
+    "summary": "Feint using Parry or Dodge, halving that defense for the round.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Evasive Retreat",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Student"
+    ],
+    "source": "MA 75",
+    "summary": "Move up to 5 feet per rank whenever an attack misses you while defending.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Flowing Form",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Master"
+    ],
+    "source": "MA 75",
+    "summary": "Change stances as a free action at -5 DC.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Follow-Up Hard",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Initiate"
+    ],
+    "source": "MA 75",
+    "summary": "Chase a foe you knocked back and hit them again for free at -2.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Grappling Knee",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Student"
+    ],
+    "source": "MA 75",
+    "summary": "Pin a prone, grabbed foe with your knee to free your hands.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Hard Defense",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Initiate"
+    ],
+    "source": "MA 75",
+    "summary": "Defend with Toughness to blunt damage and gain attack bonuses against that foe.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Hard Grab",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Initiate"
+    ],
+    "source": "MA 75",
+    "summary": "Let a close attack land to make a free, unresisted grab on the attacker.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Hard Throw",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Initiate"
+    ],
+    "source": "MA 76",
+    "summary": "After a successful close trip, make a free throw at half damage bonus.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Iaijutsu",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "attack",
+    "requires": [
+      "advantage:(Style) Student"
+    ],
+    "source": "MA 76",
+    "summary": "The round you first draw a chosen weapon, use your fighting-style check in place of initiative.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts",
+    "alt_names": [
+      "Iaijitsu"
+    ]
+  },
+  {
+    "name": "Improved Prone Fighting",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Initiate",
+      "advantage:Prone Fighting"
+    ],
+    "source": "MA 76",
+    "summary": "+2 damage on close attacks while prone against a standing adjacent foe.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Improvised Weapon Element",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Student",
+      "advantage:Weapon Element"
+    ],
+    "source": "MA 76",
+    "summary": "Use almost anything as a style weapon at -4 attack and -2 initiative.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Kata",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "style",
+    "requires": [
+      "advantage:(Style) Student"
+    ],
+    "source": "MA 76",
+    "summary": "+2 active defense in rounds you use the style's maneuvers in a non-Neutral stance; one style per rank.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Kata Lore",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "skill",
+    "requires": [
+      "advantage:(Style) Master",
+      "advantage:Kata"
+    ],
+    "source": "MA 76",
+    "summary": "+4 to one of the style's skills while your Kata bonus is active.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Know Your Enemy",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "style",
+    "requires": [
+      "advantage:(Style) Student",
+      "advantage:Opposing Style"
+    ],
+    "source": "MA 77",
+    "summary": "+2 initiative against users of a style you hold Opposing Style for.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Living Weapon",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "attack",
+    "requires": [
+      "advantage:(Style) Student"
+    ],
+    "source": "MA 77",
+    "summary": "A chosen unarmed attack deals slashing or piercing damage.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Martial Balance",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Initiate"
+    ],
+    "source": "MA 77",
+    "summary": "In a style stance, use your fighting-style skill (at -2) for balance and tumbling instead of Acrobatics.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Martial Defense",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Initiate"
+    ],
+    "source": "MA 77",
+    "summary": "Defend against armed attacks unarmed with no penalty (matters only under the optional unarmed-defense rule).",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Mobile Trance",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Initiate"
+    ],
+    "source": "MA 77",
+    "summary": "Move while in a trance with an Awareness check each round.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts",
+    "requires_note": "Only useful with Trance or Healing Trance."
+  },
+  {
+    "name": "Offensive Defense",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Student"
+    ],
+    "source": "MA 77",
+    "summary": "Meet an incoming close attack with a readied attack at -4 to defend and hit at once.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Opposing Style",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "style",
+    "requires": [
+      "advantage:(Style) Student"
+    ],
+    "source": "MA 77",
+    "summary": "Recognize a chosen rival style and gain +2 to attack and stance checks against it.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Passing Attack",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Initiate"
+    ],
+    "source": "MA 78",
+    "summary": "Keep moving after a charge attack, at -2 to hit.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Preferred Stance",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "stance",
+    "requires": [
+      "advantage:(Style) Student",
+      "advantage:(Style) Stances"
+    ],
+    "source": "MA 78",
+    "summary": "Boost one benefit of a favored stance by half, or halve one of its drawbacks.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Shattering Blow",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "attack",
+    "requires": [
+      "advantage:(Style) Student"
+    ],
+    "source": "MA 78",
+    "summary": "+50% damage against objects with a chosen attack.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Soft Defense",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Student"
+    ],
+    "source": "MA 78",
+    "summary": "Accept half damage from a defended close attack to act against the attacker at once.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "(Style) Initiate",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "style",
+    "requires": [],
+    "source": "MA 78",
+    "summary": "First tier of a fighting style: +2 to the style's related non-attack skill checks.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts",
+    "requires_note": "Needs 1 rank in each style skill, all style flaws, one non-martial-arts style advantage, and one basic maneuver."
+  },
+  {
+    "name": "(Style) Student",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "style",
+    "requires": [
+      "advantage:(Style) Initiate",
+      "advantage:(Style) Stances"
+    ],
+    "source": "MA 79",
+    "summary": "Second tier of a fighting style: +2 attack with the style's basic and advanced maneuvers.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts",
+    "requires_note": "Also half the style's skills at listed ranks, all extras and flaws, half its advantages, half its basic maneuvers, and one advanced maneuver."
+  },
+  {
+    "name": "(Style) Master",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "style",
+    "requires": [
+      "advantage:(Style) Student",
+      "advantage:(Style) Stances"
+    ],
+    "source": "MA 78",
+    "summary": "Final tier of a fighting style: one free re-roll on a style-related check per session per rank (max Awareness).",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts",
+    "requires_note": "Also all the style's skills, extras, flaws, advantages, and maneuvers at listed ranks."
+  },
+  {
+    "name": "(Style) Stances",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "style",
+    "requires": [
+      "advantage:(Style) Initiate"
+    ],
+    "source": "MA 79",
+    "summary": "Use the non-Neutral stances of a fighting style you practice; one style per rank.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Stylistic Teamwork",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Initiate"
+    ],
+    "source": "MA 79",
+    "summary": "+2 to aid bonuses for allies using a style you have reached Initiate in.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Up In Your Face",
+    "type": "Combat",
+    "ranked": false,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Initiate"
+    ],
+    "source": "MA 80",
+    "summary": "Share a foe's space for +2 Toughness and close attack against them; they get +4 to grab you.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Warrior's Trance",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": null,
+    "requires": [
+      "advantage:(Style) Master",
+      "advantage:Trance"
+    ],
+    "source": "MA 80",
+    "summary": "Spend a hero point and pass Awareness checks to get the extra-effort action benefit without fatigue.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  },
+  {
+    "name": "Weapon Element",
+    "type": "Combat",
+    "ranked": true,
+    "max_rank": null,
+    "param": "weapon",
+    "requires": [
+      "advantage:(Style) Initiate"
+    ],
+    "source": "MA 80",
+    "summary": "Add one weapon per rank to a fighting style's usable weapons.",
+    "book": "Martial Arts",
+    "ma_type": "Martial Arts"
+  }
+]

@@ -1,10 +1,4 @@
-# Ignore Python cache directories
-__pycache__/
-
-# Ignore distribution folders
-dist/
-
-# Ignore build folders
-build/
-*.db
-gm_sheet_autosave.json
+node_modules/
+src/generated/
+*.log
+.DS_Store

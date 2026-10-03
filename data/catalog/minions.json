@@ -1,0 +1,4198 @@
+[
+  {
+    "id": "bystander",
+    "name": "Bystander",
+    "kind": "minion",
+    "category": "Civilians",
+    "pl": 0,
+    "size": "Medium",
+    "summary": "An ordinary person on the street: hostage, witness, or someone to rescue. Swap the Expertise for any job or hobby.",
+    "tags": [
+      "everyday",
+      "civilian"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 0,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 0,
+      "Intellect": 0,
+      "Awareness": 0,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Expertise",
+        "spec": "Choose One",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Current Events",
+        "ranks": 2
+      },
+      {
+        "name": "Expertise",
+        "spec": "Pop Culture",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 1
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Cell Phone",
+        "cost": 1,
+        "effect": "Feature 1 (communication)"
+      }
+    ],
+    "source": "DCA 266-267",
+    "printed_total": 5
+  },
+  {
+    "id": "reporter",
+    "name": "Reporter",
+    "kind": "minion",
+    "category": "Civilians",
+    "pl": 1,
+    "size": "Medium",
+    "summary": "A journalist chasing the big story, often right into the middle of a super-powered fight. Works for any professional with new Expertise picks.",
+    "tags": [
+      "everyday",
+      "civilian",
+      "media"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 0,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 0,
+      "Intellect": 2,
+      "Awareness": 2,
+      "Presence": 1
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Deception",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Current Events",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Pop Culture",
+        "ranks": 2
+      },
+      {
+        "name": "Expertise",
+        "spec": "Streetwise",
+        "ranks": 2
+      },
+      {
+        "name": "Expertise",
+        "spec": "Writing",
+        "ranks": 4
+      },
+      {
+        "name": "Investigation",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Persuasion",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Contacts",
+        "rank": 1
+      },
+      {
+        "name": "Equipment",
+        "rank": 1
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Camera",
+        "cost": 1,
+        "effect": "Feature 1 (still photography)"
+      },
+      {
+        "name": "Computer",
+        "cost": 1,
+        "effect": "Feature 1 (computer)"
+      },
+      {
+        "name": "Digital Recorder",
+        "cost": 1,
+        "effect": "Feature 1 (audio recording)"
+      },
+      {
+        "name": "Smartphone",
+        "cost": 2,
+        "effect": "Feature 2 (communication, internet)"
+      }
+    ],
+    "source": "DCA 266-267",
+    "printed_total": 30,
+    "book_note": "Book totals Defenses as 2, but its printed Will 2 comes entirely from AWE 2 (no purchased defenses), so the true total is 28."
+  },
+  {
+    "id": "scientist",
+    "name": "Scientist",
+    "kind": "minion",
+    "category": "Civilians",
+    "pl": 1,
+    "size": "Medium",
+    "summary": "A specialist in one field, from archaeology to zoology; useful as a professor, consultant, or kidnapping target.",
+    "tags": [
+      "everyday",
+      "civilian",
+      "science"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 0,
+      "Agility": 0,
+      "Dexterity": 1,
+      "Fighting": 0,
+      "Intellect": 4,
+      "Awareness": 1,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Expertise",
+        "spec": "Current Events",
+        "ranks": 2
+      },
+      {
+        "name": "Expertise",
+        "spec": "Pop Culture",
+        "ranks": 2
+      },
+      {
+        "name": "Expertise",
+        "spec": "Science",
+        "ranks": 6
+      },
+      {
+        "name": "Technology",
+        "ranks": 6
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 1
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Camera",
+        "cost": 1,
+        "effect": "Feature 1 (still photography)"
+      },
+      {
+        "name": "Smartphone",
+        "cost": 2,
+        "effect": "Feature 2 (communication, internet)"
+      }
+    ],
+    "source": "DCA 266-267",
+    "printed_total": 23
+  },
+  {
+    "id": "government-agent",
+    "name": "Government Agent",
+    "kind": "minion",
+    "category": "Law & Military",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "A federal agent or intelligence officer with broad training, a badge, and a sidearm.",
+    "tags": [
+      "law",
+      "government",
+      "investigator"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 2,
+      "Agility": 1,
+      "Dexterity": 1,
+      "Fighting": 3,
+      "Intellect": 2,
+      "Awareness": 2,
+      "Presence": 2
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 2,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Deception",
+        "ranks": 2
+      },
+      {
+        "name": "Expertise",
+        "spec": "Behavioral Sciences",
+        "ranks": 3
+      },
+      {
+        "name": "Expertise",
+        "spec": "Civics",
+        "ranks": 2
+      },
+      {
+        "name": "Expertise",
+        "spec": "Current Events",
+        "ranks": 2
+      },
+      {
+        "name": "Expertise",
+        "spec": "Government Agent",
+        "ranks": 3
+      },
+      {
+        "name": "Expertise",
+        "spec": "Streetwise",
+        "ranks": 2
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Investigation",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 3
+      },
+      {
+        "name": "Persuasion",
+        "ranks": 3
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Light Pistol",
+        "ranks": 4
+      },
+      {
+        "name": "Technology",
+        "ranks": 2
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Defensive Roll",
+        "rank": 1
+      },
+      {
+        "name": "Equipment",
+        "rank": 2
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Light Pistol",
+        "cost": 6,
+        "effect": "Ranged Damage 3",
+        "attack": {
+          "kind": "ranged",
+          "rank": 3
+        }
+      },
+      {
+        "name": "Camera",
+        "cost": 1,
+        "effect": "Feature 1 (still photography)"
+      },
+      {
+        "name": "Cell Phone",
+        "cost": 1,
+        "effect": "Feature 1 (communication)"
+      },
+      {
+        "name": "Computer",
+        "cost": 1,
+        "effect": "Feature 1 (computer)"
+      },
+      {
+        "name": "Handcuffs",
+        "cost": 1,
+        "effect": "Feature 1 (restraint; Toughness 9, DC 20 to escape)"
+      }
+    ],
+    "source": "DCA 266-267",
+    "printed_total": 61
+  },
+  {
+    "id": "police-chief",
+    "name": "Police Chief",
+    "kind": "minion",
+    "category": "Law & Military",
+    "pl": 3,
+    "size": "Medium",
+    "summary": "The head of a city or county police force; a dedicated public servant or a politician on the take.",
+    "tags": [
+      "law",
+      "police",
+      "leader"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 0,
+      "Agility": 0,
+      "Dexterity": 1,
+      "Fighting": 1,
+      "Intellect": 2,
+      "Awareness": 2,
+      "Presence": 3
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 2,
+      "Fortitude": 2,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Expertise",
+        "spec": "Streetwise",
+        "ranks": 6
+      },
+      {
+        "name": "Expertise",
+        "spec": "Current Events",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Police Officer",
+        "ranks": 6
+      },
+      {
+        "name": "Insight",
+        "ranks": 8
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Investigation",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Light Pistol",
+        "ranks": 2
+      },
+      {
+        "name": "Treatment",
+        "ranks": 2
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Connected",
+        "rank": 1
+      },
+      {
+        "name": "Equipment",
+        "rank": 2
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Light Pistol",
+        "cost": 6,
+        "effect": "Ranged Damage 3",
+        "attack": {
+          "kind": "ranged",
+          "rank": 3
+        }
+      },
+      {
+        "name": "Cell Phone",
+        "cost": 1,
+        "effect": "Feature 1 (communication)"
+      },
+      {
+        "name": "Handcuffs",
+        "cost": 1,
+        "effect": "Feature 1 (restraint; Toughness 9, DC 20 to escape)"
+      }
+    ],
+    "source": "DCA 266-267",
+    "printed_total": 50,
+    "book_note": "Book totals Abilities as 14 and Advantages as 2, but its abilities sum to 9 ranks (18 points) and Connected + Equipment 2 is 3 points, so the true total is 55."
+  },
+  {
+    "id": "police-officer",
+    "name": "Police Officer",
+    "kind": "minion",
+    "category": "Law & Military",
+    "pl": 5,
+    "size": "Medium",
+    "summary": "A uniformed beat cop. Detectives and plainclothes officers trade some combat training for Investigation and social skills.",
+    "tags": [
+      "law",
+      "police",
+      "city",
+      "everyday"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 2,
+      "Agility": 1,
+      "Dexterity": 1,
+      "Fighting": 3,
+      "Intellect": 0,
+      "Awareness": 1,
+      "Presence": 1
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 1,
+      "Fortitude": 2,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 3
+      },
+      {
+        "name": "Expertise",
+        "spec": "Current Events",
+        "ranks": 2
+      },
+      {
+        "name": "Expertise",
+        "spec": "Streetwise",
+        "ranks": 3
+      },
+      {
+        "name": "Expertise",
+        "spec": "Police Officer",
+        "ranks": 4
+      },
+      {
+        "name": "Insight",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 2
+      },
+      {
+        "name": "Investigation",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Light Pistol",
+        "ranks": 4
+      },
+      {
+        "name": "Treatment",
+        "ranks": 2
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 3
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Bulletproof Vest",
+        "cost": 3,
+        "effect": "Protection 4, Limited to Ballistic, Subtle",
+        "protection": 4
+      },
+      {
+        "name": "Light Pistol",
+        "cost": 6,
+        "effect": "Ranged Damage 3",
+        "attack": {
+          "kind": "ranged",
+          "rank": 3
+        }
+      },
+      {
+        "name": "Tonfa",
+        "cost": 1,
+        "effect": "Strength-based Damage 1",
+        "attack": {
+          "kind": "close",
+          "rank": 1,
+          "strengthBased": true
+        }
+      },
+      {
+        "name": "Cell Phone",
+        "cost": 1,
+        "effect": "Feature 1 (communication)"
+      },
+      {
+        "name": "Handcuffs",
+        "cost": 1,
+        "effect": "Feature 1 (restraint; Toughness 9, DC 20 to escape)"
+      }
+    ],
+    "source": "DCA 266-267",
+    "printed_total": 47,
+    "book_note": "Book lists PL4, but Parry 4 + Toughness 6 (with the vest) = 10 exceeds the PL4 limit of 8; listed here at PL5 with the book stats unchanged."
+  },
+  {
+    "id": "swat-officer",
+    "name": "SWAT Officer",
+    "kind": "minion",
+    "category": "Law & Military",
+    "pl": 5,
+    "size": "Medium",
+    "summary": "A tactical police officer trained for squad assaults, hostage rescue, and containing metahuman criminals.",
+    "tags": [
+      "law",
+      "police",
+      "tactical"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 2,
+      "Agility": 2,
+      "Dexterity": 2,
+      "Fighting": 4,
+      "Intellect": 0,
+      "Awareness": 1,
+      "Presence": 1
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 0,
+      "Fortitude": 4,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 3
+      },
+      {
+        "name": "Expertise",
+        "spec": "Current Events",
+        "ranks": 2
+      },
+      {
+        "name": "Expertise",
+        "spec": "Streetwise",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Police Officer",
+        "ranks": 5
+      },
+      {
+        "name": "Expertise",
+        "spec": "Tactics",
+        "ranks": 5
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 2
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Submachine Gun",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      },
+      {
+        "name": "Treatment",
+        "ranks": 3
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Close Attack",
+        "rank": 2
+      },
+      {
+        "name": "Equipment",
+        "rank": 4
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Submachine Gun",
+        "cost": 12,
+        "effect": "Ranged Multiattack Damage 4",
+        "attack": {
+          "kind": "ranged",
+          "rank": 4
+        }
+      },
+      {
+        "name": "Riot Gear",
+        "cost": 4,
+        "effect": "Protection 4",
+        "protection": 4
+      },
+      {
+        "name": "Tonfa",
+        "cost": 1,
+        "effect": "Strength-based Damage 1",
+        "attack": {
+          "kind": "close",
+          "rank": 1,
+          "strengthBased": true
+        }
+      },
+      {
+        "name": "Cell Phone",
+        "cost": 1,
+        "effect": "Feature 1 (communication)"
+      },
+      {
+        "name": "Handcuffs",
+        "cost": 1,
+        "effect": "Feature 1 (restraint; Toughness 9, DC 20 to escape)"
+      }
+    ],
+    "source": "DCA 266-267",
+    "printed_total": 60
+  },
+  {
+    "id": "militant",
+    "name": "Militant",
+    "kind": "minion",
+    "category": "Law & Military",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "A trained fighter for a cause, from militia member to terrorist bomb-maker, ready to kill or die for it.",
+    "tags": [
+      "military",
+      "terrorist",
+      "demolitions"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 1,
+      "Agility": 1,
+      "Dexterity": 1,
+      "Fighting": 1,
+      "Intellect": 1,
+      "Awareness": 1,
+      "Presence": 1
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 3,
+      "Fortitude": 3,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 4
+      },
+      {
+        "name": "Deception",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Choose One",
+        "ranks": 3
+      },
+      {
+        "name": "Expertise",
+        "spec": "Demolitions",
+        "ranks": 6
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 3
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Light Pistol",
+        "ranks": 4
+      },
+      {
+        "name": "Technology",
+        "ranks": 4
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 3
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Light Pistol",
+        "cost": 6,
+        "effect": "Ranged Damage 3",
+        "attack": {
+          "kind": "ranged",
+          "rank": 3
+        }
+      },
+      {
+        "name": "Other Gear (GM's choice)",
+        "cost": 9,
+        "effect": "9 equipment points chosen for the mission"
+      }
+    ],
+    "source": "DCA 266-267",
+    "printed_total": 45
+  },
+  {
+    "id": "soldier",
+    "name": "Soldier",
+    "kind": "minion",
+    "category": "Law & Military",
+    "pl": 5,
+    "size": "Medium",
+    "summary": "An enlisted infantry soldier with a rifle, armor, and drilled teamwork. Officers and specialists add skills.",
+    "tags": [
+      "military"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 2,
+      "Agility": 1,
+      "Dexterity": 1,
+      "Fighting": 5,
+      "Intellect": 0,
+      "Awareness": 0,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 0,
+      "Fortitude": 3,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Soldier",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Tactics",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 2
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 7
+      },
+      {
+        "name": "Ranged Attack",
+        "rank": 4
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Assault Rifle",
+        "cost": 15,
+        "effect": "Ranged Multiattack Damage 5",
+        "attack": {
+          "kind": "ranged",
+          "rank": 5
+        }
+      },
+      {
+        "name": "Body Armor",
+        "cost": 3,
+        "effect": "Protection 3",
+        "protection": 3
+      },
+      {
+        "name": "Field Gear (GM's choice)",
+        "cost": 17,
+        "effect": "17 equipment points of other gear"
+      }
+    ],
+    "source": "DCA 266-267",
+    "printed_total": 48
+  },
+  {
+    "id": "crime-lord",
+    "name": "Crime Lord",
+    "kind": "minion",
+    "category": "Street",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "A boss who clawed up through the ranks and now runs the rackets. Weak in a fight, dangerous through money and connections.",
+    "tags": [
+      "criminal",
+      "leader",
+      "mob"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 1,
+      "Agility": 1,
+      "Dexterity": 0,
+      "Fighting": 2,
+      "Intellect": 3,
+      "Awareness": 2,
+      "Presence": 4
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 1,
+      "Fortitude": 2,
+      "Will": 3
+    },
+    "skills": [
+      {
+        "name": "Expertise",
+        "spec": "Criminal",
+        "ranks": 8
+      },
+      {
+        "name": "Expertise",
+        "spec": "Streetwise",
+        "ranks": 6
+      },
+      {
+        "name": "Expertise",
+        "spec": "Current Events",
+        "ranks": 2
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 2
+      },
+      {
+        "name": "Persuasion",
+        "ranks": 4
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Heavy Pistol",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Benefit",
+        "param": "Millionaire and Status",
+        "rank": 5
+      },
+      {
+        "name": "Connected",
+        "rank": 1
+      },
+      {
+        "name": "Equipment",
+        "rank": 3
+      },
+      {
+        "name": "Well-informed",
+        "rank": 1
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Bulletproof Vest",
+        "cost": 3,
+        "effect": "Protection 4, Limited to Ballistic, Subtle",
+        "protection": 4
+      },
+      {
+        "name": "Heavy Pistol",
+        "cost": 8,
+        "effect": "Ranged Damage 4",
+        "attack": {
+          "kind": "ranged",
+          "rank": 4
+        }
+      },
+      {
+        "name": "Cell Phone",
+        "cost": 1,
+        "effect": "Feature 1 (communication)"
+      }
+    ],
+    "source": "DCA 266-267",
+    "printed_total": 60
+  },
+  {
+    "id": "criminal",
+    "name": "Criminal",
+    "kind": "minion",
+    "category": "Street",
+    "pl": 2,
+    "size": "Medium",
+    "summary": "A run-of-the-mill career crook: burglar, fence, car thief, or stick-up artist. Shuffle the skills to specialize.",
+    "tags": [
+      "criminal",
+      "city",
+      "everyday"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 0,
+      "Agility": 2,
+      "Dexterity": 1,
+      "Fighting": 1,
+      "Intellect": 1,
+      "Awareness": 0,
+      "Presence": 1
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 2,
+      "Fortitude": 2,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Choose One",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Streetwise",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Current Events",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 6
+      },
+      {
+        "name": "Technology",
+        "ranks": 4
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 2
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Leather Jacket",
+        "cost": 1,
+        "effect": "Protection 1",
+        "protection": 1
+      },
+      {
+        "name": "Light Pistol",
+        "cost": 6,
+        "effect": "Ranged Damage 3",
+        "attack": {
+          "kind": "ranged",
+          "rank": 3
+        }
+      },
+      {
+        "name": "Knife",
+        "cost": 2,
+        "effect": "Strength-based Damage 1, Crit 19-20",
+        "attack": {
+          "kind": "close",
+          "rank": 1,
+          "strengthBased": true,
+          "crit": 19
+        }
+      },
+      {
+        "name": "Cell Phone",
+        "cost": 1,
+        "effect": "Feature 1 (communication)"
+      }
+    ],
+    "source": "DCA 266-267",
+    "printed_total": 37
+  },
+  {
+    "id": "gang-leader",
+    "name": "Gang Leader",
+    "kind": "minion",
+    "category": "Street",
+    "pl": 2,
+    "size": "Medium",
+    "summary": "The boss of a small street gang. Add Deception, Persuasion, and Expertise for a bigger crew.",
+    "tags": [
+      "criminal",
+      "gang",
+      "leader",
+      "city"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 0,
+      "Agility": 2,
+      "Dexterity": 1,
+      "Fighting": 1,
+      "Intellect": 1,
+      "Awareness": 0,
+      "Presence": 1
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 2,
+      "Fortitude": 2,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Deception",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Choose One",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Streetwise",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Current Events",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 6
+      },
+      {
+        "name": "Technology",
+        "ranks": 4
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 2
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Leather Jacket",
+        "cost": 1,
+        "effect": "Protection 1",
+        "protection": 1
+      },
+      {
+        "name": "Light Pistol",
+        "cost": 6,
+        "effect": "Ranged Damage 3",
+        "attack": {
+          "kind": "ranged",
+          "rank": 3
+        }
+      },
+      {
+        "name": "Knife",
+        "cost": 2,
+        "effect": "Strength-based Damage 1, Crit 19-20",
+        "attack": {
+          "kind": "close",
+          "rank": 1,
+          "strengthBased": true,
+          "crit": 19
+        }
+      },
+      {
+        "name": "Cell Phone",
+        "cost": 1,
+        "effect": "Feature 1 (communication)"
+      }
+    ],
+    "source": "DCA 266-267",
+    "printed_total": 39
+  },
+  {
+    "id": "street-informant",
+    "name": "Street Informant",
+    "kind": "minion",
+    "category": "Street",
+    "pl": 2,
+    "size": "Medium",
+    "summary": "The eyes and ears of the underworld: knows who is doing what, for a price.",
+    "tags": [
+      "criminal",
+      "contact",
+      "city"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 0,
+      "Agility": 1,
+      "Dexterity": 1,
+      "Fighting": 1,
+      "Intellect": 1,
+      "Awareness": 1,
+      "Presence": 1
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 2,
+      "Fortitude": 2,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Criminal",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Streetwise",
+        "ranks": 6
+      },
+      {
+        "name": "Expertise",
+        "spec": "Current Events",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 2
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Contacts",
+        "rank": 1
+      },
+      {
+        "name": "Equipment",
+        "rank": 2
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Leather Jacket",
+        "cost": 1,
+        "effect": "Protection 1",
+        "protection": 1
+      },
+      {
+        "name": "Knife",
+        "cost": 2,
+        "effect": "Strength-based Damage 1, Crit 19-20",
+        "attack": {
+          "kind": "close",
+          "rank": 1,
+          "strengthBased": true,
+          "crit": 19
+        }
+      },
+      {
+        "name": "Light Pistol",
+        "cost": 6,
+        "effect": "Ranged Damage 3",
+        "attack": {
+          "kind": "ranged",
+          "rank": 3
+        }
+      },
+      {
+        "name": "Cell Phone",
+        "cost": 1,
+        "effect": "Feature 1 (communication)"
+      }
+    ],
+    "source": "DCA 266-267",
+    "printed_total": 35
+  },
+  {
+    "id": "thug",
+    "name": "Thug",
+    "kind": "minion",
+    "category": "Street",
+    "pl": 3,
+    "size": "Medium",
+    "summary": "Hired muscle: mugger, gangster, or a super-villain's goon. Also works for bouncers and cheap security.",
+    "tags": [
+      "criminal",
+      "henchman",
+      "city",
+      "everyday"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 2,
+      "Agility": 1,
+      "Dexterity": 1,
+      "Fighting": 2,
+      "Intellect": 0,
+      "Awareness": 0,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 2,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Choose One",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Criminal",
+        "ranks": 2
+      },
+      {
+        "name": "Expertise",
+        "spec": "Streetwise",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Current Events",
+        "ranks": 2
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 2
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 2
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Leather Jacket",
+        "cost": 1,
+        "effect": "Protection 1",
+        "protection": 1
+      },
+      {
+        "name": "Light Pistol",
+        "cost": 6,
+        "effect": "Ranged Damage 3",
+        "attack": {
+          "kind": "ranged",
+          "rank": 3
+        }
+      },
+      {
+        "name": "Cell Phone",
+        "cost": 1,
+        "effect": "Feature 1 (communication)"
+      }
+    ],
+    "source": "DCA 266-267",
+    "printed_total": 30,
+    "book_note": "Book lists PL2, but Parry 2 + Toughness 3 (with the jacket) = 5 exceeds the PL2 limit of 4, so it is listed at PL3 with the book stats unchanged. The book also adds its totals to 30, but 14 + 2 + 13 + 2 = 31."
+  },
+  {
+    "id": "robot",
+    "name": "Robot",
+    "kind": "construct",
+    "category": "Robots & Constructs",
+    "pl": 5,
+    "size": "Medium",
+    "summary": "A basic armored robot following simple programmed orders, typical of a villain's mechanical army.",
+    "tags": [
+      "robot",
+      "construct",
+      "henchman"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 5,
+      "Stamina": null,
+      "Agility": -1,
+      "Dexterity": -1,
+      "Fighting": 0,
+      "Intellect": null,
+      "Awareness": 0,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Armor",
+        "effect": "Protection",
+        "rank": 6,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Armor (non-impervious ranks)",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Robot",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCA 165",
+    "printed_total": 25
+  },
+  {
+    "id": "gang-member",
+    "name": "Gang Member",
+    "kind": "minion",
+    "category": "Street",
+    "pl": 2,
+    "size": "Medium",
+    "summary": "A young street-gang soldier with a knife, a cheap pistol, and something to prove.",
+    "tags": [
+      "criminal",
+      "gang",
+      "city",
+      "everyday"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 1,
+      "Agility": 1,
+      "Dexterity": 1,
+      "Fighting": 1,
+      "Intellect": 0,
+      "Awareness": 0,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 1,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Expertise",
+        "spec": "Streetwise",
+        "ranks": 2
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 2
+      },
+      {
+        "name": "Stealth",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 2
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Knife",
+        "cost": 2,
+        "effect": "Strength-based Damage 1, Crit 19-20",
+        "attack": {
+          "kind": "close",
+          "rank": 1,
+          "strengthBased": true,
+          "crit": 19
+        }
+      },
+      {
+        "name": "Light Pistol",
+        "cost": 6,
+        "effect": "Ranged Damage 3",
+        "attack": {
+          "kind": "ranged",
+          "rank": 3
+        }
+      },
+      {
+        "name": "Cell Phone",
+        "cost": 1,
+        "effect": "Feature 1 (communication)"
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "mob-enforcer",
+    "name": "Mob Enforcer",
+    "kind": "minion",
+    "category": "Street",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "A broad-shouldered leg-breaker who collects debts and sends messages with brass knuckles.",
+    "tags": [
+      "criminal",
+      "mob",
+      "henchman"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 3,
+      "Agility": 1,
+      "Dexterity": 1,
+      "Fighting": 3,
+      "Intellect": 0,
+      "Awareness": 1,
+      "Presence": 1
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 1
+      },
+      {
+        "name": "Expertise",
+        "spec": "Streetwise",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 6
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Light Pistol",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 2
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Startle",
+        "rank": 1
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Brass Knuckles",
+        "cost": 1,
+        "effect": "Strength-based Damage 1",
+        "attack": {
+          "kind": "close",
+          "rank": 1,
+          "strengthBased": true
+        }
+      },
+      {
+        "name": "Light Pistol",
+        "cost": 6,
+        "effect": "Ranged Damage 3",
+        "attack": {
+          "kind": "ranged",
+          "rank": 3
+        }
+      },
+      {
+        "name": "Leather Jacket",
+        "cost": 1,
+        "effect": "Protection 1",
+        "protection": 1
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "bodyguard",
+    "name": "Bodyguard",
+    "kind": "minion",
+    "category": "Street",
+    "pl": 5,
+    "size": "Medium",
+    "summary": "A professional protector in a dark suit who watches the crowd and throws himself in front of the bullet.",
+    "tags": [
+      "guard",
+      "henchman",
+      "professional"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 3,
+      "Agility": 1,
+      "Dexterity": 1,
+      "Fighting": 5,
+      "Intellect": 0,
+      "Awareness": 2,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 0,
+      "Fortitude": 2,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 2
+      },
+      {
+        "name": "Insight",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Heavy Pistol",
+        "ranks": 4
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 3
+      },
+      {
+        "name": "Interpose",
+        "rank": 1
+      },
+      {
+        "name": "Takedown",
+        "rank": 1
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Heavy Pistol",
+        "cost": 8,
+        "effect": "Ranged Damage 4",
+        "attack": {
+          "kind": "ranged",
+          "rank": 4
+        }
+      },
+      {
+        "name": "Undercover Shirt",
+        "cost": 2,
+        "effect": "Protection 2, Limited to Ballistic, Subtle",
+        "protection": 2
+      },
+      {
+        "name": "Commlink",
+        "cost": 1,
+        "effect": "Feature 1 (radio, about 1 mile)"
+      },
+      {
+        "name": "Cell Phone",
+        "cost": 1,
+        "effect": "Feature 1 (communication)"
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "street-martial-artist",
+    "name": "Street Martial Artist",
+    "kind": "minion",
+    "category": "Street",
+    "pl": 5,
+    "size": "Medium",
+    "summary": "An underground fight-club champion or dojo dropout who takes on all comers with fast hands and feet.",
+    "tags": [
+      "martial arts",
+      "fighter",
+      "city"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 2,
+      "Agility": 3,
+      "Dexterity": 1,
+      "Fighting": 5,
+      "Intellect": 0,
+      "Awareness": 2,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 2,
+      "Fortitude": 2,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Acrobatics",
+        "ranks": 6
+      },
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 2
+      },
+      {
+        "name": "Insight",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Defensive Roll",
+        "rank": 1
+      },
+      {
+        "name": "Improved Trip",
+        "rank": 1
+      },
+      {
+        "name": "Instant Up",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Takedown",
+        "rank": 1
+      }
+    ],
+    "powers": [],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "hacker",
+    "name": "Hacker",
+    "kind": "minion",
+    "category": "Street",
+    "pl": 2,
+    "size": "Medium",
+    "summary": "A keyboard wizard who cracks security systems, forges records, and sells data to the highest bidder.",
+    "tags": [
+      "tech",
+      "criminal",
+      "city"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 0,
+      "Agility": 0,
+      "Dexterity": 1,
+      "Fighting": 0,
+      "Intellect": 4,
+      "Awareness": 1,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Deception",
+        "ranks": 2
+      },
+      {
+        "name": "Investigation",
+        "ranks": 4
+      },
+      {
+        "name": "Technology",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 1
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Computer",
+        "cost": 1,
+        "effect": "Feature 1 (computer)"
+      },
+      {
+        "name": "Smartphone",
+        "cost": 2,
+        "effect": "Feature 2 (communication, internet)"
+      },
+      {
+        "name": "Concealable Microphone",
+        "cost": 1,
+        "effect": "Feature 1 (hidden listening device)"
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "getaway-driver",
+    "name": "Getaway Driver",
+    "kind": "minion",
+    "category": "Street",
+    "pl": 3,
+    "size": "Medium",
+    "summary": "The wheel artist who keeps the engine running and loses the cops in traffic.",
+    "tags": [
+      "criminal",
+      "driver",
+      "city"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 1,
+      "Agility": 2,
+      "Dexterity": 3,
+      "Fighting": 1,
+      "Intellect": 0,
+      "Awareness": 2,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 1,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Expertise",
+        "spec": "Streetwise",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 2
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 10
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 2
+      },
+      {
+        "name": "Defensive Driving",
+        "rank": 1
+      },
+      {
+        "name": "Driving Instinct",
+        "rank": 1
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Car",
+        "cost": 10,
+        "effect": "Vehicle: Large, Strength 5, Speed 5, Defense 8, Toughness 8"
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "security-guard",
+    "name": "Security Guard",
+    "kind": "minion",
+    "category": "Law & Military",
+    "pl": 2,
+    "size": "Medium",
+    "summary": "A night watchman or mall cop with a nightstick, a flashlight, and very little desire to be a hero.",
+    "tags": [
+      "guard",
+      "everyday",
+      "city"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 1,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 1,
+      "Intellect": 0,
+      "Awareness": 1,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 1,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Expertise",
+        "spec": "Security",
+        "ranks": 4
+      },
+      {
+        "name": "Insight",
+        "ranks": 2
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Light Pistol",
+        "ranks": 1
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 2
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Nightstick",
+        "cost": 1,
+        "effect": "Strength-based Damage 1",
+        "attack": {
+          "kind": "close",
+          "rank": 1,
+          "strengthBased": true
+        }
+      },
+      {
+        "name": "Light Pistol",
+        "cost": 6,
+        "effect": "Ranged Damage 3",
+        "attack": {
+          "kind": "ranged",
+          "rank": 3
+        }
+      },
+      {
+        "name": "Flashlight",
+        "cost": 1,
+        "effect": "Feature 1 (light beam)"
+      },
+      {
+        "name": "Commlink",
+        "cost": 1,
+        "effect": "Feature 1 (radio, about 1 mile)"
+      },
+      {
+        "name": "Handcuffs",
+        "cost": 1,
+        "effect": "Feature 1 (restraint; Toughness 9, DC 20 to escape)"
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "riot-police",
+    "name": "Riot Police",
+    "kind": "minion",
+    "category": "Law & Military",
+    "pl": 5,
+    "size": "Medium",
+    "summary": "An armored officer in a riot line, trained to hold ground and use batons and tear gas together with the squad.",
+    "tags": [
+      "law",
+      "police",
+      "tactical"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 2,
+      "Agility": 1,
+      "Dexterity": 1,
+      "Fighting": 4,
+      "Intellect": 0,
+      "Awareness": 1,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 0,
+      "Fortitude": 2,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Police Officer",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Close Attack",
+        "rank": 1
+      },
+      {
+        "name": "Equipment",
+        "rank": 4
+      },
+      {
+        "name": "Teamwork",
+        "rank": 1
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Riot Baton",
+        "cost": 2,
+        "effect": "Strength-based Damage 2",
+        "attack": {
+          "kind": "close",
+          "rank": 2,
+          "strengthBased": true
+        }
+      },
+      {
+        "name": "Riot Gear",
+        "cost": 4,
+        "effect": "Protection 4",
+        "protection": 4
+      },
+      {
+        "name": "Gas Mask",
+        "cost": 1,
+        "effect": "Feature 1 (immune to eye and lung irritants)"
+      },
+      {
+        "name": "Restraints",
+        "cost": 1,
+        "effect": "Feature 1 (plastic restraints; Toughness 5)"
+      },
+      {
+        "name": "Pepper Spray",
+        "cost": 2,
+        "effect": "Close Visual Dazzle 4"
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "special-forces",
+    "name": "Special Forces Operative",
+    "kind": "minion",
+    "category": "Law & Military",
+    "pl": 7,
+    "size": "Medium",
+    "summary": "An elite commando trained for raids, rescues, and covert strikes deep in hostile territory.",
+    "tags": [
+      "military",
+      "elite",
+      "tactical"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 3,
+      "Agility": 3,
+      "Dexterity": 3,
+      "Fighting": 5,
+      "Intellect": 1,
+      "Awareness": 3,
+      "Presence": 1
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 1,
+      "Fortitude": 3,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Acrobatics",
+        "ranks": 2
+      },
+      {
+        "name": "Athletics",
+        "ranks": 6
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Combat Knife",
+        "ranks": 2
+      },
+      {
+        "name": "Expertise",
+        "spec": "Soldier",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Tactics",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Assault Rifle",
+        "ranks": 2
+      },
+      {
+        "name": "Stealth",
+        "ranks": 6
+      },
+      {
+        "name": "Technology",
+        "ranks": 2
+      },
+      {
+        "name": "Treatment",
+        "ranks": 2
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Close Attack",
+        "rank": 1
+      },
+      {
+        "name": "Defensive Roll",
+        "rank": 1
+      },
+      {
+        "name": "Equipment",
+        "rank": 8
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      },
+      {
+        "name": "Ranged Attack",
+        "rank": 3
+      },
+      {
+        "name": "Teamwork",
+        "rank": 1
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Assault Rifle",
+        "cost": 15,
+        "effect": "Ranged Multiattack Damage 5",
+        "attack": {
+          "kind": "ranged",
+          "rank": 5
+        }
+      },
+      {
+        "name": "Combat Knife",
+        "cost": 2,
+        "effect": "Strength-based Damage 1, Crit 19-20",
+        "attack": {
+          "kind": "close",
+          "rank": 1,
+          "strengthBased": true,
+          "crit": 19
+        }
+      },
+      {
+        "name": "Tactical Armor",
+        "cost": 4,
+        "effect": "Protection 4",
+        "protection": 4
+      },
+      {
+        "name": "Fragmentation Grenades",
+        "cost": 15,
+        "effect": "Ranged Burst Area Damage 5"
+      },
+      {
+        "name": "Night Vision Goggles",
+        "cost": 1,
+        "effect": "Feature 1 (darkvision with some ambient light)"
+      },
+      {
+        "name": "Commlink",
+        "cost": 1,
+        "effect": "Feature 1 (radio, about 1 mile)"
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "sniper",
+    "name": "Sniper",
+    "kind": "minion",
+    "category": "Law & Military",
+    "pl": 7,
+    "size": "Medium",
+    "summary": "A patient marksman who can wait for hours and hit a target from half a mile away.",
+    "tags": [
+      "military",
+      "marksman",
+      "stealth"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 1,
+      "Stamina": 2,
+      "Agility": 2,
+      "Dexterity": 4,
+      "Fighting": 2,
+      "Intellect": 1,
+      "Awareness": 4,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 2,
+      "Fortitude": 2,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Expertise",
+        "spec": "Soldier",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 8
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Sniper Rifle",
+        "ranks": 3
+      },
+      {
+        "name": "Stealth",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 4
+      },
+      {
+        "name": "Improved Aim",
+        "rank": 1
+      },
+      {
+        "name": "Improved Critical",
+        "param": "Sniper Rifle",
+        "rank": 2
+      },
+      {
+        "name": "Precise Attack",
+        "param": "Ranged Concealment",
+        "rank": 1
+      },
+      {
+        "name": "Ranged Attack",
+        "rank": 2
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Sniper Rifle",
+        "cost": 11,
+        "effect": "Ranged Damage 5",
+        "attack": {
+          "kind": "ranged",
+          "rank": 5
+        }
+      },
+      {
+        "name": "Targeting Scope",
+        "cost": 1,
+        "effect": "Improved Aim with the rifle"
+      },
+      {
+        "name": "Camo Clothing",
+        "cost": 1,
+        "effect": "Feature 1 (+5 Stealth in matching terrain)"
+      },
+      {
+        "name": "Light Pistol",
+        "cost": 6,
+        "effect": "Ranged Damage 3",
+        "attack": {
+          "kind": "ranged",
+          "rank": 3
+        }
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "mercenary",
+    "name": "Mercenary",
+    "kind": "minion",
+    "category": "Law & Military",
+    "pl": 6,
+    "size": "Medium",
+    "summary": "A soldier for hire working for whoever pays: warlords, corporations, or super-villains.",
+    "tags": [
+      "military",
+      "henchman",
+      "professional"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 3,
+      "Agility": 2,
+      "Dexterity": 2,
+      "Fighting": 4,
+      "Intellect": 0,
+      "Awareness": 1,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 1,
+      "Fortitude": 2,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Soldier",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Assault Rifle",
+        "ranks": 2
+      },
+      {
+        "name": "Stealth",
+        "ranks": 2
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 5
+      },
+      {
+        "name": "Ranged Attack",
+        "rank": 2
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Assault Rifle",
+        "cost": 15,
+        "effect": "Ranged Multiattack Damage 5",
+        "attack": {
+          "kind": "ranged",
+          "rank": 5
+        }
+      },
+      {
+        "name": "Bulletproof Vest",
+        "cost": 3,
+        "effect": "Protection 4, Limited to Ballistic, Subtle",
+        "protection": 4
+      },
+      {
+        "name": "Knife",
+        "cost": 2,
+        "effect": "Strength-based Damage 1, Crit 19-20",
+        "attack": {
+          "kind": "close",
+          "rank": 1,
+          "strengthBased": true,
+          "crit": 19
+        }
+      },
+      {
+        "name": "Commlink",
+        "cost": 1,
+        "effect": "Feature 1 (radio, about 1 mile)"
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "pirate",
+    "name": "Pirate",
+    "kind": "minion",
+    "category": "Street",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "A modern sea raider who boards ships from a fast skiff with a rifle and a machete.",
+    "tags": [
+      "criminal",
+      "aquatic",
+      "henchman"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 2,
+      "Agility": 2,
+      "Dexterity": 1,
+      "Fighting": 3,
+      "Intellect": 0,
+      "Awareness": 1,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Expertise",
+        "spec": "Sailor",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 2
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Assault Rifle",
+        "ranks": 2
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 4
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Assault Rifle",
+        "cost": 15,
+        "effect": "Ranged Multiattack Damage 5",
+        "attack": {
+          "kind": "ranged",
+          "rank": 5
+        }
+      },
+      {
+        "name": "Machete",
+        "cost": 3,
+        "effect": "Strength-based Damage 2, Crit 19-20",
+        "attack": {
+          "kind": "close",
+          "rank": 2,
+          "strengthBased": true,
+          "crit": 19
+        }
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "bounty-hunter",
+    "name": "Bounty Hunter",
+    "kind": "minion",
+    "category": "Law & Military",
+    "pl": 7,
+    "size": "Medium",
+    "summary": "A relentless tracker who brings in fugitives, preferably alive, with a shotgun, bolas, and a stun gun.",
+    "tags": [
+      "hunter",
+      "professional",
+      "tracker"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 3,
+      "Agility": 2,
+      "Dexterity": 3,
+      "Fighting": 5,
+      "Intellect": 2,
+      "Awareness": 3,
+      "Presence": 2
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 1,
+      "Fortitude": 3,
+      "Will": 3
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 2
+      },
+      {
+        "name": "Expertise",
+        "spec": "Streetwise",
+        "ranks": 6
+      },
+      {
+        "name": "Insight",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 6
+      },
+      {
+        "name": "Investigation",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Shotgun",
+        "ranks": 3
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      },
+      {
+        "name": "Technology",
+        "ranks": 2
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Defensive Roll",
+        "rank": 1
+      },
+      {
+        "name": "Equipment",
+        "rank": 6
+      },
+      {
+        "name": "Ranged Attack",
+        "rank": 2
+      },
+      {
+        "name": "Tracking",
+        "rank": 1
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Shotgun",
+        "cost": 10,
+        "effect": "Ranged Damage 5",
+        "attack": {
+          "kind": "ranged",
+          "rank": 5
+        }
+      },
+      {
+        "name": "Bolos",
+        "cost": 6,
+        "effect": "Ranged Snare 3",
+        "attack": {
+          "kind": "ranged",
+          "rank": 3
+        }
+      },
+      {
+        "name": "Taser",
+        "cost": 10,
+        "effect": "Ranged Affliction 5 (Fortitude; Dazed, Stunned, Incapacitated)",
+        "attack": {
+          "kind": "ranged",
+          "rank": 5
+        }
+      },
+      {
+        "name": "Bulletproof Vest",
+        "cost": 3,
+        "effect": "Protection 4, Limited to Ballistic, Subtle",
+        "protection": 4
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "secret-agent",
+    "name": "Secret Agent",
+    "kind": "minion",
+    "category": "Spies & Assassins",
+    "pl": 6,
+    "size": "Medium",
+    "summary": "A polished field operative fluent in languages, lies, and lethal force, working deep cover for an intelligence service.",
+    "tags": [
+      "spy",
+      "government",
+      "professional"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 2,
+      "Agility": 3,
+      "Dexterity": 3,
+      "Fighting": 4,
+      "Intellect": 3,
+      "Awareness": 3,
+      "Presence": 3
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 2,
+      "Fortitude": 2,
+      "Will": 3
+    },
+    "skills": [
+      {
+        "name": "Acrobatics",
+        "ranks": 2
+      },
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 4
+      },
+      {
+        "name": "Deception",
+        "ranks": 6
+      },
+      {
+        "name": "Expertise",
+        "spec": "Espionage",
+        "ranks": 6
+      },
+      {
+        "name": "Insight",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Persuasion",
+        "ranks": 4
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Light Pistol",
+        "ranks": 3
+      },
+      {
+        "name": "Sleight of Hand",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 6
+      },
+      {
+        "name": "Technology",
+        "ranks": 4
+      },
+      {
+        "name": "Vehicles",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Attractive",
+        "rank": 1
+      },
+      {
+        "name": "Defensive Roll",
+        "rank": 2
+      },
+      {
+        "name": "Equipment",
+        "rank": 4
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      },
+      {
+        "name": "Languages",
+        "rank": 2
+      },
+      {
+        "name": "Ranged Attack",
+        "rank": 2
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Light Pistol",
+        "cost": 6,
+        "effect": "Ranged Damage 3",
+        "attack": {
+          "kind": "ranged",
+          "rank": 3
+        }
+      },
+      {
+        "name": "Suppressor",
+        "cost": 1,
+        "effect": "Subtle 1 on a firearm (DC 20 to hear)"
+      },
+      {
+        "name": "Smartphone",
+        "cost": 2,
+        "effect": "Feature 2 (communication, internet)"
+      },
+      {
+        "name": "Mini-Tracer",
+        "cost": 1,
+        "effect": "Feature 1 (tracking transmitter, about 2 miles)"
+      },
+      {
+        "name": "Lock Release Gun",
+        "cost": 1,
+        "effect": "Feature 1 (opens ordinary locks)"
+      },
+      {
+        "name": "Undercover Shirt",
+        "cost": 2,
+        "effect": "Protection 2, Limited to Ballistic, Subtle",
+        "protection": 2
+      },
+      {
+        "name": "Commlink",
+        "cost": 1,
+        "effect": "Feature 1 (radio, about 1 mile)"
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "ninja",
+    "name": "Ninja",
+    "kind": "minion",
+    "category": "Spies & Assassins",
+    "pl": 6,
+    "size": "Medium",
+    "summary": "A black-clad clan warrior who strikes from the shadows with sword and shuriken and vanishes again.",
+    "tags": [
+      "martial arts",
+      "stealth",
+      "henchman",
+      "clan"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 2,
+      "Agility": 4,
+      "Dexterity": 3,
+      "Fighting": 6,
+      "Intellect": 0,
+      "Awareness": 2,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 1,
+      "Fortitude": 1,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Acrobatics",
+        "ranks": 6
+      },
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Sword",
+        "ranks": 1
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Shuriken",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Defensive Roll",
+        "rank": 1
+      },
+      {
+        "name": "Equipment",
+        "rank": 2
+      },
+      {
+        "name": "Evasion",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Sword",
+        "cost": 4,
+        "effect": "Strength-based Damage 3, Crit 19-20",
+        "attack": {
+          "kind": "close",
+          "rank": 3,
+          "strengthBased": true,
+          "crit": 19
+        }
+      },
+      {
+        "name": "Shuriken",
+        "cost": 3,
+        "effect": "Ranged Multiattack Damage 1",
+        "attack": {
+          "kind": "ranged",
+          "rank": 1
+        }
+      },
+      {
+        "name": "Climbing Gear",
+        "cost": 1,
+        "effect": "Feature 1 (grapnel and line)"
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "assassin",
+    "name": "Assassin",
+    "kind": "minion",
+    "category": "Spies & Assassins",
+    "pl": 8,
+    "size": "Medium",
+    "summary": "A professional killer who studies the target, picks the moment, and is gone before the body hits the floor.",
+    "tags": [
+      "killer",
+      "stealth",
+      "professional"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 2,
+      "Agility": 4,
+      "Dexterity": 4,
+      "Fighting": 6,
+      "Intellect": 2,
+      "Awareness": 3,
+      "Presence": 1
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 2,
+      "Fortitude": 3,
+      "Will": 4
+    },
+    "skills": [
+      {
+        "name": "Acrobatics",
+        "ranks": 4
+      },
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Knife",
+        "ranks": 4
+      },
+      {
+        "name": "Deception",
+        "ranks": 6
+      },
+      {
+        "name": "Expertise",
+        "spec": "Poisons",
+        "ranks": 6
+      },
+      {
+        "name": "Insight",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 8
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Sniper Rifle",
+        "ranks": 4
+      },
+      {
+        "name": "Sleight of Hand",
+        "ranks": 6
+      },
+      {
+        "name": "Stealth",
+        "ranks": 10
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Defensive Roll",
+        "rank": 2
+      },
+      {
+        "name": "Equipment",
+        "rank": 5
+      },
+      {
+        "name": "Evasion",
+        "rank": 1
+      },
+      {
+        "name": "Improved Critical",
+        "param": "Sniper Rifle",
+        "rank": 1
+      },
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      },
+      {
+        "name": "Ranged Attack",
+        "rank": 2
+      },
+      {
+        "name": "Takedown",
+        "rank": 1
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Sniper Rifle",
+        "cost": 11,
+        "effect": "Ranged Damage 5",
+        "attack": {
+          "kind": "ranged",
+          "rank": 5
+        }
+      },
+      {
+        "name": "Targeting Scope",
+        "cost": 1,
+        "effect": "Improved Aim with the rifle"
+      },
+      {
+        "name": "Knife",
+        "cost": 2,
+        "effect": "Strength-based Damage 1, Crit 19-20",
+        "attack": {
+          "kind": "close",
+          "rank": 1,
+          "strengthBased": true,
+          "crit": 19
+        }
+      },
+      {
+        "name": "Light Pistol",
+        "cost": 6,
+        "effect": "Ranged Damage 3",
+        "attack": {
+          "kind": "ranged",
+          "rank": 3
+        }
+      },
+      {
+        "name": "Suppressor",
+        "cost": 1,
+        "effect": "Subtle 1 on a firearm (DC 20 to hear)"
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "cultist",
+    "name": "Cultist",
+    "kind": "minion",
+    "category": "Cults & Occult",
+    "pl": 2,
+    "size": "Medium",
+    "summary": "A robed believer who chants at midnight rituals and will fight fanatically for the cult's dark master.",
+    "tags": [
+      "cult",
+      "occult",
+      "henchman",
+      "fanatic"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 1,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 1,
+      "Intellect": 0,
+      "Awareness": 0,
+      "Presence": 1
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 1,
+      "Fortitude": 0,
+      "Will": 3
+    },
+    "skills": [
+      {
+        "name": "Expertise",
+        "spec": "Occult",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 2
+      },
+      {
+        "name": "Stealth",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 1
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Ritual Dagger",
+        "cost": 2,
+        "effect": "Strength-based Damage 1, Crit 19-20",
+        "attack": {
+          "kind": "close",
+          "rank": 1,
+          "strengthBased": true,
+          "crit": 19
+        }
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "cult-leader",
+    "name": "Cult Leader",
+    "kind": "minion",
+    "category": "Cults & Occult",
+    "pl": 6,
+    "size": "Medium",
+    "summary": "A charismatic high priest who has bargained with something from beyond for a little real power.",
+    "tags": [
+      "cult",
+      "occult",
+      "leader",
+      "magic"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 1,
+      "Agility": 1,
+      "Dexterity": 1,
+      "Fighting": 1,
+      "Intellect": 2,
+      "Awareness": 3,
+      "Presence": 4
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 2,
+      "Fortitude": 2,
+      "Will": 5
+    },
+    "skills": [
+      {
+        "name": "Deception",
+        "ranks": 8
+      },
+      {
+        "name": "Expertise",
+        "spec": "Magic",
+        "ranks": 8
+      },
+      {
+        "name": "Insight",
+        "ranks": 6
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 6
+      },
+      {
+        "name": "Persuasion",
+        "ranks": 8
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Eldritch Bolt",
+        "ranks": 3
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Benefit",
+        "param": "Wealth",
+        "rank": 2
+      },
+      {
+        "name": "Fearless",
+        "rank": 1
+      },
+      {
+        "name": "Inspire",
+        "rank": 2
+      },
+      {
+        "name": "Leadership",
+        "rank": 1
+      },
+      {
+        "name": "Ritualist",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Eldritch Bolt",
+        "effect": "Damage",
+        "rank": 6,
+        "range": "Ranged",
+        "role": "attack"
+      },
+      {
+        "name": "Unholy Command",
+        "effect": "Affliction",
+        "rank": 6,
+        "detail": "Resisted by Will; Entranced, Compelled, Controlled",
+        "role": "attack",
+        "range": "Perception"
+      },
+      {
+        "name": "Warding Amulet",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "lab-technician",
+    "name": "Lab Technician",
+    "kind": "minion",
+    "category": "Henchmen",
+    "pl": 1,
+    "size": "Medium",
+    "summary": "A mad scientist's lab-coated assistant who keeps the death ray calibrated and flees when the heroes burst in.",
+    "tags": [
+      "science",
+      "henchman",
+      "civilian"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 0,
+      "Stamina": 0,
+      "Agility": 0,
+      "Dexterity": 1,
+      "Fighting": 0,
+      "Intellect": 3,
+      "Awareness": 1,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Expertise",
+        "spec": "Science",
+        "ranks": 6
+      },
+      {
+        "name": "Technology",
+        "ranks": 6
+      },
+      {
+        "name": "Treatment",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 1
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Smartphone",
+        "cost": 2,
+        "effect": "Feature 2 (communication, internet)"
+      },
+      {
+        "name": "Computer",
+        "cost": 1,
+        "effect": "Feature 1 (computer)"
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "jumpsuit-henchman",
+    "name": "Jumpsuit Henchman",
+    "kind": "minion",
+    "category": "Henchmen",
+    "pl": 3,
+    "size": "Medium",
+    "summary": "A color-coded goon in the villain's matching jumpsuit, armed with a ray gun and a lot of enthusiasm.",
+    "tags": [
+      "henchman",
+      "villain",
+      "horde"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 2,
+      "Agility": 1,
+      "Dexterity": 1,
+      "Fighting": 2,
+      "Intellect": 0,
+      "Awareness": 0,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 1,
+      "Fortitude": 1,
+      "Will": 1
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 2
+      },
+      {
+        "name": "Teamwork",
+        "rank": 1
+      }
+    ],
+    "powers": [],
+    "equipment": [
+      {
+        "name": "Ray Gun",
+        "cost": 10,
+        "effect": "Ranged Damage 5",
+        "attack": {
+          "kind": "ranged",
+          "rank": 5
+        }
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "alien-soldier",
+    "name": "Alien Soldier",
+    "kind": "minion",
+    "category": "Henchmen",
+    "pl": 6,
+    "size": "Medium",
+    "summary": "An armored infantry trooper of an invading star empire, carrying a plasma rifle and seeing in infrared.",
+    "tags": [
+      "alien",
+      "military",
+      "invasion",
+      "horde"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 3,
+      "Agility": 2,
+      "Dexterity": 2,
+      "Fighting": 4,
+      "Intellect": 1,
+      "Awareness": 2,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 1,
+      "Fortitude": 2,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Expertise",
+        "spec": "Alien Tactics",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Plasma Rifle",
+        "ranks": 2
+      },
+      {
+        "name": "Technology",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Equipment",
+        "rank": 4
+      }
+    ],
+    "powers": [
+      {
+        "name": "Alien Eyes",
+        "effect": "Senses",
+        "rank": 1,
+        "detail": "Infravision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [
+      {
+        "name": "Plasma Rifle",
+        "cost": 16,
+        "effect": "Ranged Damage 8",
+        "attack": {
+          "kind": "ranged",
+          "rank": 8
+        }
+      },
+      {
+        "name": "Alien Battle Armor",
+        "cost": 4,
+        "effect": "Protection 4",
+        "protection": 4
+      }
+    ],
+    "source": "DCUGen"
+  },
+  {
+    "id": "robot-drone",
+    "name": "Robot Drone",
+    "kind": "construct",
+    "category": "Robots & Constructs",
+    "pl": 4,
+    "size": "Small",
+    "summary": "A hovering surveillance drone with a built-in laser, deployed in flocks to watch, chase, and harass.",
+    "tags": [
+      "robot",
+      "construct",
+      "flying",
+      "surveillance"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": -1,
+      "Stamina": null,
+      "Agility": 2,
+      "Dexterity": 2,
+      "Fighting": 0,
+      "Intellect": null,
+      "Awareness": 2,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Laser",
+        "ranks": 2
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Small Size",
+        "effect": "Shrinking",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Laser",
+        "effect": "Damage",
+        "rank": 4,
+        "range": "Ranged",
+        "role": "attack"
+      },
+      {
+        "name": "Armored Casing",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense"
+      },
+      {
+        "name": "Rotors",
+        "effect": "Flight",
+        "rank": 4,
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Infravision, Extended Vision, Radio",
+        "role": "sense"
+      },
+      {
+        "name": "Robot",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "combat-robot",
+    "name": "Combat Robot",
+    "kind": "construct",
+    "category": "Robots & Constructs",
+    "pl": 7,
+    "size": "Medium",
+    "summary": "A heavily armored war machine with an arm blaster and crushing fists, built to fight heroes head-on.",
+    "tags": [
+      "robot",
+      "construct",
+      "henchman"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 7,
+      "Stamina": null,
+      "Agility": 1,
+      "Dexterity": 2,
+      "Fighting": 4,
+      "Intellect": null,
+      "Awareness": 2,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 3
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Arm Blaster",
+        "ranks": 5
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Arm Blaster",
+        "effect": "Damage",
+        "rank": 7,
+        "range": "Ranged",
+        "role": "attack"
+      },
+      {
+        "name": "Armor Plating",
+        "effect": "Protection",
+        "rank": 5,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Armor Plating (non-impervious ranks)",
+        "effect": "Protection",
+        "rank": 5,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Infravision, Radio, Darkvision (low-light)",
+        "role": "sense"
+      },
+      {
+        "name": "Robot",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "android-infiltrator",
+    "name": "Android Infiltrator",
+    "kind": "construct",
+    "category": "Robots & Constructs",
+    "pl": 8,
+    "size": "Medium",
+    "summary": "A synthetic person with lifelike skin and a programmed personality, built to replace someone important.",
+    "tags": [
+      "robot",
+      "construct",
+      "spy",
+      "infiltrator"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 6,
+      "Stamina": null,
+      "Agility": 3,
+      "Dexterity": 3,
+      "Fighting": 6,
+      "Intellect": 3,
+      "Awareness": 3,
+      "Presence": 2
+    },
+    "defenses": {
+      "Dodge": 5,
+      "Parry": 2,
+      "Fortitude": 0,
+      "Will": 5
+    },
+    "skills": [
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 4
+      },
+      {
+        "name": "Deception",
+        "ranks": 8
+      },
+      {
+        "name": "Expertise",
+        "spec": "Infiltration",
+        "ranks": 6
+      },
+      {
+        "name": "Insight",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Persuasion",
+        "ranks": 4
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Hidden Blaster",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 6
+      },
+      {
+        "name": "Technology",
+        "ranks": 6
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Synthetic Disguise",
+        "effect": "Morph",
+        "rank": 2,
+        "detail": "Any human appearance",
+        "role": "utility"
+      },
+      {
+        "name": "Hidden Blaster",
+        "effect": "Damage",
+        "rank": 6,
+        "range": "Ranged",
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Subtle"
+          }
+        ]
+      },
+      {
+        "name": "Reinforced Frame",
+        "effect": "Protection",
+        "rank": 6,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Subtle"
+          }
+        ]
+      },
+      {
+        "name": "Internal Radio",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Internal radio link to its creators",
+        "role": "utility"
+      },
+      {
+        "name": "Android",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "construct_note": "Automaton that has bought up its absent Intellect and Presence (starting from -5) per DCA ch. 7, giving it a programmed personality.",
+    "source": "DCUGen"
+  },
+  {
+    "id": "giant-mech",
+    "name": "Giant Mech",
+    "kind": "construct",
+    "category": "Robots & Constructs",
+    "pl": 10,
+    "size": "Gargantuan",
+    "summary": "A building-sized war robot with jump jets, a shoulder missile pod, and an arm cannon, rampaging through downtown.",
+    "tags": [
+      "robot",
+      "construct",
+      "giant",
+      "vehicle-sized",
+      "flying"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": null,
+      "Agility": 0,
+      "Dexterity": 2,
+      "Fighting": 3,
+      "Intellect": null,
+      "Awareness": 1,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 2,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Arm Cannon",
+        "ranks": 6
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Gargantuan Size",
+        "effect": "Growth",
+        "rank": 12,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Heavy Armor",
+        "effect": "Protection",
+        "rank": 9,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Missile Pod",
+        "effect": "Damage",
+        "rank": 10,
+        "range": "Ranged",
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "alternates": [
+          {
+            "name": "Arm Cannon",
+            "effect": "Damage",
+            "rank": 10,
+            "range": "Ranged",
+            "role": "attack"
+          }
+        ]
+      },
+      {
+        "name": "Jump Jets",
+        "effect": "Flight",
+        "rank": 5,
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Darkvision, Extended Vision, Radio",
+        "role": "sense"
+      },
+      {
+        "name": "Robot",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "construct_note": "The engine does not add Growth to an absent Stamina, so the mech's size-based Toughness is bought as Protection. Toughness 21 = Growth 12 (constructs add Growth to Toughness) + Protection 9.",
+    "source": "DCUGen"
+  },
+  {
+    "id": "security-turret",
+    "name": "Security Turret",
+    "kind": "construct",
+    "category": "Robots & Constructs",
+    "pl": 6,
+    "size": "Small",
+    "summary": "A ceiling- or wall-mounted autocannon with motion sensors that guards a vault or corridor.",
+    "tags": [
+      "robot",
+      "construct",
+      "immobile",
+      "guard",
+      "trap"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": null,
+      "Stamina": null,
+      "Agility": null,
+      "Dexterity": 3,
+      "Fighting": null,
+      "Intellect": -2,
+      "Awareness": 2,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 0,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Autocannon",
+        "ranks": 3
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Autocannon",
+        "effect": "Damage",
+        "rank": 6,
+        "range": "Ranged",
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Multiattack"
+          }
+        ]
+      },
+      {
+        "name": "Armored Housing",
+        "effect": "Protection",
+        "rank": 8,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Infravision, Detect Motion (ranged, accurate)",
+        "role": "sense"
+      },
+      {
+        "name": "Turret",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "construct_note": "Immobile construct: absent Strength and Agility (plus absent Fighting and Presence); it can aim with Dexterity but cannot move.",
+    "source": "DCUGen"
+  }
+]

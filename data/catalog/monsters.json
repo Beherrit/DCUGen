@@ -1,0 +1,3517 @@
+[
+  {
+    "id": "young-dragon",
+    "name": "Young Dragon",
+    "kind": "monster",
+    "category": "Mythic Beasts",
+    "pl": 10,
+    "size": "Huge",
+    "summary": "A dragon barely a century old, already as big as a house, greedy, proud, and quick to breathe fire.",
+    "tags": [
+      "dragon",
+      "flying",
+      "fire",
+      "magic"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 3,
+      "Agility": 1,
+      "Dexterity": 0,
+      "Fighting": 6,
+      "Intellect": 1,
+      "Awareness": 4,
+      "Presence": 3
+    },
+    "defenses": {
+      "Dodge": 7,
+      "Parry": 2,
+      "Fortitude": 1,
+      "Will": 4
+    },
+    "skills": [
+      {
+        "name": "Expertise",
+        "spec": "Magic",
+        "ranks": 4
+      },
+      {
+        "name": "Insight",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 8
+      },
+      {
+        "name": "Perception",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "All-out Attack",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Startle",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Huge Size",
+        "effect": "Growth",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Dragon Scales",
+        "effect": "Protection",
+        "rank": 5,
+        "role": "defense"
+      },
+      {
+        "name": "Fire Breath",
+        "effect": "Damage",
+        "rank": 10,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cone"
+          }
+        ]
+      },
+      {
+        "name": "Wings",
+        "effect": "Flight",
+        "rank": 5,
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "role": "movement"
+      },
+      {
+        "name": "Fireproof",
+        "effect": "Immunity",
+        "rank": 5,
+        "detail": "Fire",
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Darkvision, Scent, Extended Vision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "ancient-dragon",
+    "name": "Ancient Dragon",
+    "kind": "monster",
+    "category": "Mythic Beasts",
+    "pl": 14,
+    "size": "Gargantuan",
+    "summary": "A wyrm older than most nations, cunning and steeped in sorcery; its shadow alone sends armies running.",
+    "tags": [
+      "dragon",
+      "flying",
+      "fire",
+      "magic"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 2,
+      "Agility": 1,
+      "Dexterity": 0,
+      "Fighting": 8,
+      "Intellect": 5,
+      "Awareness": 6,
+      "Presence": 6
+    },
+    "defenses": {
+      "Dodge": 12,
+      "Parry": 5,
+      "Fortitude": 1,
+      "Will": 5
+    },
+    "skills": [
+      {
+        "name": "Deception",
+        "ranks": 6
+      },
+      {
+        "name": "Expertise",
+        "spec": "History",
+        "ranks": 8
+      },
+      {
+        "name": "Expertise",
+        "spec": "Magic",
+        "ranks": 10
+      },
+      {
+        "name": "Insight",
+        "ranks": 8
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 10
+      },
+      {
+        "name": "Perception",
+        "ranks": 10
+      },
+      {
+        "name": "Persuasion",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "All-out Attack",
+        "rank": 1
+      },
+      {
+        "name": "Fearless",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Startle",
+        "rank": 1
+      },
+      {
+        "name": "Languages",
+        "rank": 3
+      }
+    ],
+    "powers": [
+      {
+        "name": "Gargantuan Size",
+        "effect": "Growth",
+        "rank": 14,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Ancient Scales",
+        "effect": "Protection",
+        "rank": 6,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Fire Breath",
+        "effect": "Damage",
+        "rank": 14,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cone"
+          }
+        ]
+      },
+      {
+        "name": "Dread Presence",
+        "effect": "Affliction",
+        "rank": 10,
+        "detail": "Resisted by Will; Impaired, Disabled, Incapacitated (cowed)",
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ]
+      },
+      {
+        "name": "Wings",
+        "effect": "Flight",
+        "rank": 7,
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "role": "movement"
+      },
+      {
+        "name": "Fireproof",
+        "effect": "Immunity",
+        "rank": 10,
+        "detail": "Fire effects",
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 6,
+        "detail": "Darkvision, Scent, Extended Vision, Detect Magic (ranged)",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "giant-spider",
+    "name": "Giant Spider",
+    "kind": "monster",
+    "category": "Mythic Beasts",
+    "pl": 7,
+    "size": "Large",
+    "summary": "A spider the size of a pony that webs up alleys and tunnels and paralyzes its victims with venom.",
+    "tags": [
+      "giant",
+      "venomous",
+      "webs"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 1,
+      "Agility": 3,
+      "Dexterity": 2,
+      "Fighting": 5,
+      "Intellect": -3,
+      "Awareness": 2,
+      "Presence": -2
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 2,
+      "Fortitude": 2,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Web",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 6
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack",
+        "linked": [
+          {
+            "name": "Venom",
+            "effect": "Affliction",
+            "rank": 7,
+            "detail": "Resisted by Fortitude; Dazed, Stunned, Paralyzed",
+            "role": "attack",
+            "attackSkill": "Bite"
+          }
+        ]
+      },
+      {
+        "name": "Web",
+        "effect": "Snare",
+        "rank": 5,
+        "role": "attack"
+      },
+      {
+        "name": "Chitin",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense"
+      },
+      {
+        "name": "Wall-crawling",
+        "effect": "Movement",
+        "rank": 2,
+        "detail": "Wall-crawling 2",
+        "role": "movement"
+      },
+      {
+        "name": "Many Legs",
+        "effect": "Extra Limbs",
+        "rank": 6,
+        "detail": "Eight legs",
+        "role": "utility"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Darkvision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "gargoyle",
+    "name": "Gargoyle",
+    "kind": "monster",
+    "category": "Mythic Beasts",
+    "pl": 6,
+    "size": "Medium",
+    "summary": "A winged creature of living stone that perches among cathedral spires and passes for a statue until it moves.",
+    "tags": [
+      "flying",
+      "stone",
+      "city",
+      "night"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 5,
+      "Stamina": 4,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 5,
+      "Intellect": -1,
+      "Awareness": 3,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 0,
+      "Fortitude": 2,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Stealth",
+        "ranks": 6
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Claws",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Stone Skin",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Wings",
+        "effect": "Flight",
+        "rank": 3,
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Darkvision",
+        "role": "sense"
+      },
+      {
+        "name": "Statue Stillness",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Holds perfectly still to pass as a carved statue",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "werewolf",
+    "name": "Werewolf",
+    "kind": "monster",
+    "category": "Mythic Beasts",
+    "pl": 8,
+    "size": "Medium",
+    "summary": "A cursed human who becomes a towering wolf-beast under the full moon; wounds close almost instantly unless made with silver.",
+    "tags": [
+      "shapeshifter",
+      "curse",
+      "night",
+      "horror",
+      "regeneration"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 5,
+      "Stamina": 4,
+      "Agility": 3,
+      "Dexterity": 1,
+      "Fighting": 7,
+      "Intellect": 0,
+      "Awareness": 3,
+      "Presence": 1
+    },
+    "defenses": {
+      "Dodge": 5,
+      "Parry": 2,
+      "Fortitude": 2,
+      "Will": 3
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "All-out Attack",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Startle",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Hulking",
+        "effect": "Growth",
+        "rank": 2,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Claws",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Lycanthrope Hide",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Rapid Healing",
+        "effect": "Regeneration",
+        "rank": 8,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Low-light Vision, Scent, Tracking, Acute Hearing",
+        "role": "sense"
+      },
+      {
+        "name": "Fast Runner",
+        "effect": "Speed",
+        "rank": 3,
+        "role": "movement"
+      },
+      {
+        "name": "Leaper",
+        "effect": "Leaping",
+        "rank": 2,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "minotaur",
+    "name": "Minotaur",
+    "kind": "monster",
+    "category": "Mythic Beasts",
+    "pl": 8,
+    "size": "Large",
+    "summary": "A bull-headed giant of a man that guards its maze and never loses its way inside it.",
+    "tags": [
+      "giant",
+      "myth",
+      "labyrinth"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 5,
+      "Stamina": 3,
+      "Agility": 1,
+      "Dexterity": 0,
+      "Fighting": 6,
+      "Intellect": -1,
+      "Awareness": 2,
+      "Presence": 1
+    },
+    "defenses": {
+      "Dodge": 5,
+      "Parry": 2,
+      "Fortitude": 2,
+      "Will": 3
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Charge",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Horns",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Thick Hide",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Scent, Tracking, Direction Sense",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "cyclops",
+    "name": "Cyclops",
+    "kind": "monster",
+    "category": "Mythic Beasts",
+    "pl": 10,
+    "size": "Huge",
+    "summary": "A one-eyed giant shepherd and smith who smashes with a tree-trunk club and hurls boulders.",
+    "tags": [
+      "giant",
+      "myth"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 6,
+      "Stamina": 4,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 4,
+      "Intellect": 0,
+      "Awareness": 1,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 5,
+      "Parry": 3,
+      "Fortitude": 1,
+      "Will": 3
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 2
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 2
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Hurled Boulder",
+        "ranks": 5
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Huge Size",
+        "effect": "Growth",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Tree-trunk Club",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Hurled Boulder",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack",
+        "range": "Ranged"
+      },
+      {
+        "name": "Thick Hide",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "griffin",
+    "name": "Griffin",
+    "kind": "monster",
+    "category": "Mythic Beasts",
+    "pl": 7,
+    "size": "Large",
+    "summary": "Eagle in front and lion behind; a proud guardian of treasure that can be tamed as a flying mount.",
+    "tags": [
+      "flying",
+      "myth",
+      "mount"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 1,
+      "Agility": 3,
+      "Dexterity": 0,
+      "Fighting": 5,
+      "Intellect": -3,
+      "Awareness": 3,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 3,
+      "Fortitude": 1,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 8
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Talons",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Beak",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Feathered Hide",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Wings",
+        "effect": "Flight",
+        "rank": 5,
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Extended Vision, Low-light Vision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "hydra",
+    "name": "Hydra",
+    "kind": "monster",
+    "category": "Mythic Beasts",
+    "pl": 11,
+    "size": "Huge",
+    "summary": "A many-headed swamp serpent whose heads grow back as fast as heroes can cut them off.",
+    "tags": [
+      "myth",
+      "swamp",
+      "regeneration",
+      "venomous"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 5,
+      "Stamina": 5,
+      "Agility": 1,
+      "Dexterity": 0,
+      "Fighting": 6,
+      "Intellect": -3,
+      "Awareness": 3,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 5,
+      "Parry": 3,
+      "Fortitude": 1,
+      "Will": 5
+    },
+    "skills": [
+      {
+        "name": "Close Combat",
+        "spec": "Many Heads",
+        "ranks": 1
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 8
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Huge Size",
+        "effect": "Growth",
+        "rank": 8,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Many Heads",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Multiattack"
+          }
+        ]
+      },
+      {
+        "name": "Scales",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Venomous Breath",
+        "effect": "Damage",
+        "rank": 11,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cloud"
+          }
+        ]
+      },
+      {
+        "name": "Regrowing Heads",
+        "effect": "Regeneration",
+        "rank": 10,
+        "role": "defense"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 3,
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Darkvision, Scent, Radius Vision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "sea-serpent",
+    "name": "Sea Serpent",
+    "kind": "monster",
+    "category": "Mythic Beasts",
+    "pl": 10,
+    "size": "Gargantuan",
+    "summary": "A ship-crushing serpent from the deep that coils around hulls and drags them under.",
+    "tags": [
+      "aquatic",
+      "myth",
+      "giant"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 2,
+      "Agility": 1,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -3,
+      "Awareness": 2,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 4,
+      "Fortitude": 1,
+      "Will": 3
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Improved Hold",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Gargantuan Size",
+        "effect": "Growth",
+        "rank": 12,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Scales",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Serpentine Coils",
+        "effect": "Elongation",
+        "rank": 4,
+        "role": "utility"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 6,
+        "role": "movement"
+      },
+      {
+        "name": "Deep Dweller",
+        "effect": "Immunity",
+        "rank": 2,
+        "detail": "Cold, High Pressure",
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Darkvision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "yeti",
+    "name": "Yeti",
+    "kind": "monster",
+    "category": "Mythic Beasts",
+    "pl": 7,
+    "size": "Large",
+    "summary": "A shaggy white giant of the high mountains, seldom seen and almost impossible to track through snow.",
+    "tags": [
+      "cryptid",
+      "arctic",
+      "mountain"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 3,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 5,
+      "Intellect": -2,
+      "Awareness": 2,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 2,
+      "Fortitude": 1,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Claws",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Shaggy Fur",
+        "effect": "Protection",
+        "rank": 1,
+        "role": "defense"
+      },
+      {
+        "name": "Arctic Adapted",
+        "effect": "Immunity",
+        "rank": 1,
+        "detail": "Environmental cold",
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 1,
+        "detail": "Scent",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "troll",
+    "name": "Troll",
+    "kind": "monster",
+    "category": "Mythic Beasts",
+    "pl": 8,
+    "size": "Large",
+    "summary": "A warty, long-armed brute that heals almost any wound in moments. Only fire and acid keep it down.",
+    "tags": [
+      "giant",
+      "regeneration",
+      "myth"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 5,
+      "Stamina": 5,
+      "Agility": 1,
+      "Dexterity": 0,
+      "Fighting": 5,
+      "Intellect": -2,
+      "Awareness": 1,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 1,
+      "Fortitude": 1,
+      "Will": 3
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 2
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Claws",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Warty Hide",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Troll Healing",
+        "effect": "Regeneration",
+        "rank": 8,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Persistent"
+          }
+        ]
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Darkvision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "swamp-beast",
+    "name": "Swamp Beast",
+    "kind": "monster",
+    "category": "Mythic Beasts",
+    "pl": 9,
+    "size": "Large",
+    "summary": "A hulking mound of moss, roots, and muck that rises from the bayou and smothers those who trespass.",
+    "tags": [
+      "swamp",
+      "plant",
+      "regeneration"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 6,
+      "Stamina": 6,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 5,
+      "Intellect": 0,
+      "Awareness": 3,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 5,
+      "Parry": 2,
+      "Fortitude": 1,
+      "Will": 4
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Smothering Muck",
+        "effect": "Affliction",
+        "rank": 9,
+        "detail": "Resisted by Fortitude; Hindered and Vulnerable, Defenseless and Immobile, Incapacitated",
+        "role": "attack",
+        "flaws": [
+          {
+            "name": "Grab-Based"
+          }
+        ]
+      },
+      {
+        "name": "Bark and Muck",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Regrowth",
+        "effect": "Regeneration",
+        "rank": 6,
+        "role": "defense"
+      },
+      {
+        "name": "Plant Body",
+        "effect": "Immunity",
+        "rank": 10,
+        "detail": "Life Support (plant body)",
+        "role": "defense"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 2,
+        "role": "movement"
+      },
+      {
+        "name": "Merge with Swamp",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Sinks into swamp water and mud and re-forms elsewhere nearby",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "wendigo",
+    "name": "Wendigo",
+    "kind": "monster",
+    "category": "Mythic Beasts",
+    "pl": 9,
+    "size": "Large",
+    "summary": "A gaunt, antlered spirit of hunger that stalks the winter woods, mimicking the voices of its victims' loved ones.",
+    "tags": [
+      "spirit",
+      "forest",
+      "arctic",
+      "horror"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 5,
+      "Stamina": 4,
+      "Agility": 4,
+      "Dexterity": 0,
+      "Fighting": 7,
+      "Intellect": 0,
+      "Awareness": 4,
+      "Presence": 1
+    },
+    "defenses": {
+      "Dodge": 5,
+      "Parry": 3,
+      "Fortitude": 1,
+      "Will": 4
+    },
+    "skills": [
+      {
+        "name": "Athletics",
+        "ranks": 4
+      },
+      {
+        "name": "Deception",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 8
+      },
+      {
+        "name": "Perception",
+        "ranks": 8
+      },
+      {
+        "name": "Stealth",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      },
+      {
+        "name": "Startle",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Claws",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Frozen Flesh",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Regeneration",
+        "effect": "Regeneration",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Wind Runner",
+        "effect": "Speed",
+        "rank": 5,
+        "role": "movement"
+      },
+      {
+        "name": "Cold-blooded",
+        "effect": "Immunity",
+        "rank": 1,
+        "detail": "Environmental cold",
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Darkvision, Scent, Tracking",
+        "role": "sense"
+      },
+      {
+        "name": "Haunting Mimicry",
+        "effect": "Feature",
+        "rank": 1,
+        "detail": "Imitates any voice it has heard",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "chupacabra",
+    "name": "Chupacabra",
+    "kind": "monster",
+    "category": "Mythic Beasts",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "A spiny, leaping cryptid that drains livestock (and the occasional rancher) of blood in the night.",
+    "tags": [
+      "cryptid",
+      "night",
+      "desert"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 2,
+      "Agility": 4,
+      "Dexterity": 0,
+      "Fighting": 4,
+      "Intellect": -3,
+      "Awareness": 2,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 1,
+      "Fortitude": 1,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Acrobatics",
+        "ranks": 2
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Stealth",
+        "ranks": 8
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Blood-draining Fangs",
+        "effect": "Weaken",
+        "rank": 4,
+        "detail": "Stamina; resisted by Fortitude",
+        "role": "attack"
+      },
+      {
+        "name": "Spiny Hide",
+        "effect": "Protection",
+        "rank": 1,
+        "role": "defense"
+      },
+      {
+        "name": "Leaper",
+        "effect": "Leaping",
+        "rank": 3,
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Darkvision, Scent",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "stone-golem",
+    "name": "Stone Golem",
+    "kind": "construct",
+    "category": "Golems & Constructs",
+    "pl": 9,
+    "size": "Large",
+    "summary": "A towering statue animated by an old spell, following its last command with mindless persistence.",
+    "tags": [
+      "construct",
+      "magic",
+      "guardian",
+      "stone"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 8,
+      "Stamina": null,
+      "Agility": -1,
+      "Dexterity": -1,
+      "Fighting": 4,
+      "Intellect": null,
+      "Awareness": 0,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 5,
+      "Parry": 2,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [],
+    "advantages": [
+      {
+        "name": "Improved Smash",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Golem",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Stone Body",
+        "effect": "Protection",
+        "rank": 10,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen",
+    "construct_note": "Toughness 14 = Growth 4 + Protection 10."
+  },
+  {
+    "id": "zombie",
+    "name": "Zombie",
+    "kind": "construct",
+    "category": "Undead",
+    "pl": 2,
+    "size": "Medium",
+    "summary": "A shambling animated corpse, slow and mindless, dangerous mostly in large numbers.",
+    "tags": [
+      "undead",
+      "mindless",
+      "horde"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": null,
+      "Agility": -1,
+      "Dexterity": -1,
+      "Fighting": 1,
+      "Intellect": null,
+      "Awareness": -1,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 1,
+      "Parry": 0,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Undead",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Protection",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCA 165",
+    "printed_total": 4
+  },
+  {
+    "id": "skeleton-warrior",
+    "name": "Skeleton Warrior",
+    "kind": "construct",
+    "category": "Undead",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "Animated bones in rusted armor, raised by a necromancer to guard a tomb or march as a legion.",
+    "tags": [
+      "undead",
+      "mindless",
+      "horde",
+      "magic"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": null,
+      "Agility": 1,
+      "Dexterity": 1,
+      "Fighting": 3,
+      "Intellect": null,
+      "Awareness": 0,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 1,
+      "Fortitude": 0,
+      "Will": 0
+    },
+    "skills": [
+      {
+        "name": "Close Combat",
+        "spec": "Rusty Blade",
+        "ranks": 1
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Rusty Blade",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Undead",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Bones and Old Armor",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "ghost",
+    "name": "Ghost",
+    "kind": "construct",
+    "category": "Undead",
+    "pl": 6,
+    "size": "Medium",
+    "summary": "The restless spirit of the dead, bound to a place or grudge. Its chilling touch drains the warmth from the living.",
+    "tags": [
+      "undead",
+      "incorporeal",
+      "spirit",
+      "horror"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": null,
+      "Stamina": null,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": 0,
+      "Awareness": 3,
+      "Presence": 3
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 3,
+      "Fortitude": 0,
+      "Will": 5
+    },
+    "skills": [
+      {
+        "name": "Insight",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Stealth",
+        "ranks": 8
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Ghostly Form",
+        "effect": "Insubstantial",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "defense"
+      },
+      {
+        "name": "Chilling Touch",
+        "effect": "Weaken",
+        "rank": 6,
+        "detail": "Stamina; resisted by Fortitude",
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Affects Corporeal",
+            "steps": 6
+          }
+        ]
+      },
+      {
+        "name": "Terrifying Visage",
+        "effect": "Affliction",
+        "rank": 6,
+        "detail": "Resisted by Will; Impaired, Disabled, Incapacitated (panic)",
+        "role": "attack",
+        "range": "Perception"
+      },
+      {
+        "name": "Undead",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Float",
+        "effect": "Flight",
+        "rank": 2,
+        "role": "movement"
+      },
+      {
+        "name": "Fade from Sight",
+        "effect": "Concealment",
+        "rank": 4,
+        "detail": "All visual senses",
+        "role": "utility"
+      }
+    ],
+    "equipment": [],
+    "construct_note": "Spirit construct: absent Strength and Stamina; Agility bought up from absent per DCA ch. 7.",
+    "source": "DCUGen"
+  },
+  {
+    "id": "banshee",
+    "name": "Banshee",
+    "kind": "construct",
+    "category": "Undead",
+    "pl": 7,
+    "size": "Medium",
+    "summary": "A wailing spirit whose scream foretells death and can bring it on, shattering glass and stopping hearts.",
+    "tags": [
+      "undead",
+      "incorporeal",
+      "spirit",
+      "sonic"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": null,
+      "Stamina": null,
+      "Agility": 3,
+      "Dexterity": 0,
+      "Fighting": 2,
+      "Intellect": 1,
+      "Awareness": 4,
+      "Presence": 4
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 5,
+      "Fortitude": 0,
+      "Will": 6
+    },
+    "skills": [
+      {
+        "name": "Intimidation",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Stealth",
+        "ranks": 6
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Ghostly Form",
+        "effect": "Insubstantial",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "defense"
+      },
+      {
+        "name": "Deathly Wail",
+        "effect": "Affliction",
+        "rank": 7,
+        "detail": "Resisted by Fortitude; Dazed, Stunned, Incapacitated",
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ]
+      },
+      {
+        "name": "Undead",
+        "effect": "Immunity",
+        "rank": 30,
+        "detail": "Fortitude effects",
+        "role": "defense"
+      },
+      {
+        "name": "Float",
+        "effect": "Flight",
+        "rank": 3,
+        "role": "movement"
+      },
+      {
+        "name": "Fade from Sight",
+        "effect": "Concealment",
+        "rank": 4,
+        "detail": "All visual senses",
+        "role": "utility"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Detect Impending Death (ranged)",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "construct_note": "Spirit construct: absent Strength and Stamina; Agility bought up from absent per DCA ch. 7.",
+    "source": "DCUGen"
+  },
+  {
+    "id": "vampire-spawn",
+    "name": "Vampire Spawn",
+    "kind": "monster",
+    "category": "Undead",
+    "pl": 6,
+    "size": "Medium",
+    "summary": "A newly risen vampire, ravenous and feral, still bound to the master who made it. Sunlight and stakes end it.",
+    "tags": [
+      "undead",
+      "night",
+      "horror"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 5,
+      "Stamina": 3,
+      "Agility": 3,
+      "Dexterity": 1,
+      "Fighting": 4,
+      "Intellect": 0,
+      "Awareness": 2,
+      "Presence": 2
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 2,
+      "Fortitude": 2,
+      "Will": 3
+    },
+    "skills": [
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 2
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 6
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Draining Bite",
+        "effect": "Weaken",
+        "rank": 6,
+        "detail": "Stamina; resisted by Fortitude",
+        "role": "attack",
+        "flaws": [
+          {
+            "name": "Grab-Based"
+          }
+        ]
+      },
+      {
+        "name": "Undead Flesh",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Regeneration",
+        "effect": "Regeneration",
+        "rank": 3,
+        "role": "defense"
+      },
+      {
+        "name": "Undead",
+        "effect": "Immunity",
+        "rank": 10,
+        "detail": "Life Support",
+        "role": "defense"
+      },
+      {
+        "name": "Spider Climb",
+        "effect": "Movement",
+        "rank": 1,
+        "detail": "Wall-crawling",
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Darkvision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "mummy",
+    "name": "Mummy",
+    "kind": "monster",
+    "category": "Undead",
+    "pl": 8,
+    "size": "Medium",
+    "summary": "An embalmed priest-king risen to punish tomb robbers; its touch withers flesh and its gaze freezes the soul.",
+    "tags": [
+      "undead",
+      "curse",
+      "magic",
+      "horror"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 7,
+      "Stamina": 6,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 6,
+      "Intellect": 0,
+      "Awareness": 2,
+      "Presence": 3
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 0,
+      "Fortitude": 2,
+      "Will": 6
+    },
+    "skills": [
+      {
+        "name": "Expertise",
+        "spec": "Ancient History",
+        "ranks": 6
+      },
+      {
+        "name": "Expertise",
+        "spec": "Magic",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Fearless",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Withering Touch",
+        "effect": "Affliction",
+        "rank": 8,
+        "detail": "Resisted by Fortitude; Fatigued, Exhausted, Incapacitated",
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Cumulative"
+          }
+        ]
+      },
+      {
+        "name": "Dread Gaze",
+        "effect": "Affliction",
+        "rank": 8,
+        "detail": "Resisted by Will; Dazed, Stunned, Paralyzed",
+        "role": "attack",
+        "range": "Perception"
+      },
+      {
+        "name": "Embalmed Flesh",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Undead",
+        "effect": "Immunity",
+        "rank": 10,
+        "detail": "Life Support",
+        "role": "defense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "lesser-demon",
+    "name": "Lesser Demon",
+    "kind": "monster",
+    "category": "Demons & Spirits",
+    "pl": 6,
+    "size": "Medium",
+    "summary": "A horned, bat-winged fiend from the infernal planes, summoned as a servant or loosed through a rift.",
+    "tags": [
+      "demon",
+      "fire",
+      "flying",
+      "magic"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 5,
+      "Stamina": 4,
+      "Agility": 2,
+      "Dexterity": 2,
+      "Fighting": 5,
+      "Intellect": -1,
+      "Awareness": 2,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 0,
+      "Fortitude": 2,
+      "Will": 3
+    },
+    "skills": [
+      {
+        "name": "Deception",
+        "ranks": 4
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Hellfire Bolt",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Claws",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Hellfire Bolt",
+        "effect": "Damage",
+        "rank": 6,
+        "range": "Ranged",
+        "role": "attack"
+      },
+      {
+        "name": "Infernal Hide",
+        "effect": "Protection",
+        "rank": 3,
+        "role": "defense"
+      },
+      {
+        "name": "Wings",
+        "effect": "Flight",
+        "rank": 2,
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "role": "movement"
+      },
+      {
+        "name": "Infernal",
+        "effect": "Immunity",
+        "rank": 5,
+        "detail": "Fire",
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Darkvision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "greater-demon",
+    "name": "Greater Demon",
+    "kind": "monster",
+    "category": "Demons & Spirits",
+    "pl": 11,
+    "size": "Large",
+    "summary": "A demon lord's lieutenant: a winged colossus wreathed in hellfire, with the cunning to bargain for souls.",
+    "tags": [
+      "demon",
+      "fire",
+      "flying",
+      "magic"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 6,
+      "Stamina": 5,
+      "Agility": 2,
+      "Dexterity": 3,
+      "Fighting": 8,
+      "Intellect": 3,
+      "Awareness": 5,
+      "Presence": 5
+    },
+    "defenses": {
+      "Dodge": 8,
+      "Parry": 2,
+      "Fortitude": 1,
+      "Will": 5
+    },
+    "skills": [
+      {
+        "name": "Deception",
+        "ranks": 8
+      },
+      {
+        "name": "Expertise",
+        "spec": "Magic",
+        "ranks": 8
+      },
+      {
+        "name": "Insight",
+        "ranks": 6
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 10
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Hellfire Lance",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Fearless",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      },
+      {
+        "name": "Startle",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 6,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Claws",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Infernal Hide",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Hellfire Burst",
+        "effect": "Damage",
+        "rank": 11,
+        "range": "Ranged",
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ],
+        "alternates": [
+          {
+            "name": "Hellfire Lance",
+            "effect": "Damage",
+            "rank": 11,
+            "range": "Ranged",
+            "role": "attack"
+          }
+        ]
+      },
+      {
+        "name": "Wings",
+        "effect": "Flight",
+        "rank": 4,
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "role": "movement"
+      },
+      {
+        "name": "Infernal",
+        "effect": "Immunity",
+        "rank": 10,
+        "detail": "Fire effects",
+        "role": "defense"
+      },
+      {
+        "name": "Regeneration",
+        "effect": "Regeneration",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 3,
+        "detail": "Darkvision, Detect Souls (ranged)",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "hellhound",
+    "name": "Hellhound",
+    "kind": "monster",
+    "category": "Demons & Spirits",
+    "pl": 6,
+    "size": "Medium",
+    "summary": "A black, smoldering hound of the underworld that tracks the damned and breathes gouts of flame.",
+    "tags": [
+      "demon",
+      "fire",
+      "pack"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 4,
+      "Agility": 3,
+      "Dexterity": 0,
+      "Fighting": 5,
+      "Intellect": -2,
+      "Awareness": 3,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 3,
+      "Parry": 1,
+      "Fortitude": 2,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Intimidation",
+        "ranks": 6
+      },
+      {
+        "name": "Perception",
+        "ranks": 6
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [],
+    "powers": [
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Fire Breath",
+        "effect": "Damage",
+        "rank": 6,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cone"
+          }
+        ]
+      },
+      {
+        "name": "Smoldering Hide",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Infernal",
+        "effect": "Immunity",
+        "rank": 5,
+        "detail": "Fire",
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 4,
+        "detail": "Darkvision, Scent, Tracking",
+        "role": "sense"
+      },
+      {
+        "name": "Fast Runner",
+        "effect": "Speed",
+        "rank": 3,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "alien-hunter-beast",
+    "name": "Alien Hunter Beast",
+    "kind": "monster",
+    "category": "Alien Beasts",
+    "pl": 8,
+    "size": "Medium",
+    "summary": "An off-world apex predator with chameleon skin and acid spit, bred or released to hunt sentient prey.",
+    "tags": [
+      "alien",
+      "predator",
+      "stealth"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 6,
+      "Stamina": 6,
+      "Agility": 4,
+      "Dexterity": 2,
+      "Fighting": 7,
+      "Intellect": -2,
+      "Awareness": 4,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 1,
+      "Fortitude": 2,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Acrobatics",
+        "ranks": 4
+      },
+      {
+        "name": "Close Combat",
+        "spec": "Claws",
+        "ranks": 1
+      },
+      {
+        "name": "Perception",
+        "ranks": 8
+      },
+      {
+        "name": "Ranged Combat",
+        "spec": "Acid Spit",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 8
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Initiative",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Claws",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Acid Spit",
+        "effect": "Damage",
+        "rank": 6,
+        "range": "Ranged",
+        "role": "attack"
+      },
+      {
+        "name": "Chitin Plates",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Chameleon Skin",
+        "effect": "Concealment",
+        "rank": 4,
+        "detail": "All visual senses",
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Blending"
+          }
+        ]
+      },
+      {
+        "name": "Wall-crawling",
+        "effect": "Movement",
+        "rank": 1,
+        "detail": "Wall-crawling",
+        "role": "movement"
+      },
+      {
+        "name": "Leaper",
+        "effect": "Leaping",
+        "rank": 3,
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 5,
+        "detail": "Darkvision, Infravision, Scent, Tracking",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "alien-hive-drone",
+    "name": "Alien Hive Drone",
+    "kind": "monster",
+    "category": "Alien Beasts",
+    "pl": 4,
+    "size": "Medium",
+    "summary": "An insectoid worker-soldier of an invading hive, acting as one with thousands of its siblings.",
+    "tags": [
+      "alien",
+      "horde",
+      "insect"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 3,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 4,
+      "Intellect": -3,
+      "Awareness": 1,
+      "Presence": -3
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 0,
+      "Fortitude": 1,
+      "Will": 2
+    },
+    "skills": [],
+    "advantages": [
+      {
+        "name": "Teamwork",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Mandibles",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Chitin",
+        "effect": "Protection",
+        "rank": 1,
+        "role": "defense"
+      },
+      {
+        "name": "Hive Link",
+        "effect": "Communication",
+        "rank": 1,
+        "detail": "Mental; Limited to the hive",
+        "flaws": [
+          {
+            "name": "Limited"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Wall-crawling",
+        "effect": "Movement",
+        "rank": 1,
+        "detail": "Wall-crawling",
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Darkvision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "winged-hellspawn-trooper",
+    "name": "Winged Hellspawn Trooper",
+    "kind": "monster",
+    "category": "Alien Beasts",
+    "pl": 5,
+    "size": "Medium",
+    "summary": "A bat-winged shock trooper from a hellish alien world, attacking in screeching swarms with energized lances.",
+    "tags": [
+      "alien",
+      "flying",
+      "horde",
+      "invasion"
+    ],
+    "minion": true,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 3,
+      "Agility": 2,
+      "Dexterity": 1,
+      "Fighting": 4,
+      "Intellect": -1,
+      "Awareness": 1,
+      "Presence": -1
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 1,
+      "Fortitude": 1,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Close Combat",
+        "spec": "Unarmed",
+        "ranks": 1
+      },
+      {
+        "name": "Intimidation",
+        "ranks": 4
+      },
+      {
+        "name": "Perception",
+        "ranks": 3
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Teamwork",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Energized Lance",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Armored Carapace",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Wings",
+        "effect": "Flight",
+        "rank": 4,
+        "flaws": [
+          {
+            "name": "Wings"
+          }
+        ],
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Detect Fear (scent, ranged)",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "giant-radioactive-ant",
+    "name": "Giant Radioactive Ant",
+    "kind": "monster",
+    "category": "Alien Beasts",
+    "pl": 7,
+    "size": "Large",
+    "summary": "A car-sized ant mutated by atomic testing, spraying acid and tunneling up beneath unsuspecting towns.",
+    "tags": [
+      "giant",
+      "insect",
+      "radioactive",
+      "b-movie"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 1,
+      "Agility": 2,
+      "Dexterity": 0,
+      "Fighting": 3,
+      "Intellect": -4,
+      "Awareness": 2,
+      "Presence": -3
+    },
+    "defenses": {
+      "Dodge": 4,
+      "Parry": 3,
+      "Fortitude": 1,
+      "Will": 2
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Teamwork",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 6,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Mandibles",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Acid Spray",
+        "effect": "Damage",
+        "rank": 7,
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cone"
+          }
+        ]
+      },
+      {
+        "name": "Chitin",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Many Legs",
+        "effect": "Extra Limbs",
+        "rank": 4,
+        "detail": "Six legs",
+        "role": "utility"
+      },
+      {
+        "name": "Wall-crawling",
+        "effect": "Movement",
+        "rank": 2,
+        "detail": "Wall-crawling 2",
+        "role": "movement"
+      },
+      {
+        "name": "Burrower",
+        "effect": "Burrowing",
+        "rank": 2,
+        "role": "movement"
+      },
+      {
+        "name": "Irradiated",
+        "effect": "Immunity",
+        "rank": 5,
+        "detail": "Radiation",
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Scent, Tremorsense",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "killer-plant",
+    "name": "Killer Plant",
+    "kind": "monster",
+    "category": "Alien Beasts",
+    "pl": 6,
+    "size": "Large",
+    "summary": "A carnivorous plant grown to monstrous size by alien spores or mad science, luring prey with sleep-inducing pollen.",
+    "tags": [
+      "plant",
+      "b-movie",
+      "grab"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 3,
+      "Stamina": 2,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 4,
+      "Intellect": -4,
+      "Awareness": 1,
+      "Presence": -5
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 2,
+      "Fortitude": 1,
+      "Will": 2
+    },
+    "skills": [],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Improved Hold",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Digestive Maw",
+        "effect": "Damage",
+        "rank": 1,
+        "strengthBased": true,
+        "role": "attack",
+        "flaws": [
+          {
+            "name": "Grab-Based"
+          }
+        ]
+      },
+      {
+        "name": "Vines",
+        "effect": "Extra Limbs",
+        "rank": 4,
+        "detail": "Grasping vines",
+        "role": "utility"
+      },
+      {
+        "name": "Long Vines",
+        "effect": "Elongation",
+        "rank": 2,
+        "role": "utility"
+      },
+      {
+        "name": "Sleep Pollen",
+        "effect": "Affliction",
+        "rank": 6,
+        "detail": "Resisted by Fortitude; Dazed, Stunned, Asleep",
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Cloud"
+          }
+        ]
+      },
+      {
+        "name": "Woody Stalk",
+        "effect": "Protection",
+        "rank": 2,
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Tremorsense (Detect Vibration, ranged)",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "ooze",
+    "name": "Acidic Ooze",
+    "kind": "monster",
+    "category": "Alien Beasts",
+    "pl": 6,
+    "size": "Large",
+    "summary": "A mindless, quivering blob of corrosive slime that slides under doors and dissolves whatever it engulfs.",
+    "tags": [
+      "ooze",
+      "mindless",
+      "acid",
+      "b-movie"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 2,
+      "Stamina": 4,
+      "Agility": -2,
+      "Dexterity": -2,
+      "Fighting": 3,
+      "Intellect": null,
+      "Awareness": 1,
+      "Presence": null
+    },
+    "defenses": {
+      "Dodge": 2,
+      "Parry": 1,
+      "Fortitude": 0,
+      "Will": 1
+    },
+    "skills": [],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Large Size",
+        "effect": "Growth",
+        "rank": 4,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Corrosive Touch",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Engulf",
+        "effect": "Affliction",
+        "rank": 6,
+        "detail": "Resisted by Fortitude; Hindered, Immobile, Incapacitated (suffocating)",
+        "role": "attack",
+        "flaws": [
+          {
+            "name": "Grab-Based"
+          }
+        ]
+      },
+      {
+        "name": "Fluid Body",
+        "effect": "Insubstantial",
+        "rank": 1,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "defense"
+      },
+      {
+        "name": "Pseudopods",
+        "effect": "Elongation",
+        "rank": 2,
+        "role": "utility"
+      },
+      {
+        "name": "Wall-crawling",
+        "effect": "Movement",
+        "rank": 1,
+        "detail": "Wall-crawling",
+        "role": "movement"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Tremorsense (Detect Vibration, accurate)",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "atomic-saurian",
+    "name": "Atomic Saurian",
+    "kind": "monster",
+    "category": "Kaiju",
+    "pl": 15,
+    "size": "Awesome",
+    "summary": "A skyscraper-tall reptile woken by nuclear testing, wading ashore to flatten cities with its glowing atomic breath.",
+    "tags": [
+      "kaiju",
+      "giant",
+      "radioactive",
+      "aquatic"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 2,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 4,
+      "Intellect": -3,
+      "Awareness": 3,
+      "Presence": 2
+    },
+    "defenses": {
+      "Dodge": 8,
+      "Parry": 6,
+      "Fortitude": 1,
+      "Will": 4
+    },
+    "skills": [
+      {
+        "name": "Intimidation",
+        "ranks": 8
+      },
+      {
+        "name": "Perception",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Smash",
+        "rank": 1
+      },
+      {
+        "name": "Power Attack",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Awesome Size",
+        "effect": "Growth",
+        "rank": 20,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Bite",
+        "effect": "Damage",
+        "rank": 2,
+        "strengthBased": true,
+        "role": "attack"
+      },
+      {
+        "name": "Armored Hide",
+        "effect": "Protection",
+        "rank": 6,
+        "role": "defense",
+        "extras": [
+          {
+            "name": "Impervious"
+          }
+        ]
+      },
+      {
+        "name": "Atomic Breath",
+        "effect": "Damage",
+        "rank": 15,
+        "range": "Ranged",
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Line"
+          }
+        ]
+      },
+      {
+        "name": "Regeneration",
+        "effect": "Regeneration",
+        "rank": 5,
+        "role": "defense"
+      },
+      {
+        "name": "Radioactive",
+        "effect": "Immunity",
+        "rank": 10,
+        "detail": "Radiation effects",
+        "role": "defense"
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 4,
+        "role": "movement"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  },
+  {
+    "id": "abyssal-leviathan",
+    "name": "Abyssal Leviathan",
+    "kind": "monster",
+    "category": "Kaiju",
+    "pl": 14,
+    "size": "Colossal",
+    "summary": "A tentacled horror from the ocean trench whose eerie song drives sailors mad before its arms pull down their ships.",
+    "tags": [
+      "kaiju",
+      "giant",
+      "aquatic",
+      "horror"
+    ],
+    "minion": false,
+    "abilities": {
+      "Strength": 4,
+      "Stamina": 2,
+      "Agility": 0,
+      "Dexterity": 0,
+      "Fighting": 6,
+      "Intellect": -2,
+      "Awareness": 3,
+      "Presence": 0
+    },
+    "defenses": {
+      "Dodge": 9,
+      "Parry": 5,
+      "Fortitude": 1,
+      "Will": 4
+    },
+    "skills": [
+      {
+        "name": "Perception",
+        "ranks": 4
+      },
+      {
+        "name": "Stealth",
+        "ranks": 4
+      }
+    ],
+    "advantages": [
+      {
+        "name": "Improved Grab",
+        "rank": 1
+      },
+      {
+        "name": "Improved Hold",
+        "rank": 1
+      }
+    ],
+    "powers": [
+      {
+        "name": "Colossal Size",
+        "effect": "Growth",
+        "rank": 18,
+        "extras": [
+          {
+            "name": "Permanent"
+          },
+          {
+            "name": "Innate"
+          }
+        ],
+        "role": "utility"
+      },
+      {
+        "name": "Rubbery Hide",
+        "effect": "Protection",
+        "rank": 4,
+        "role": "defense"
+      },
+      {
+        "name": "Tentacles",
+        "effect": "Extra Limbs",
+        "rank": 8,
+        "detail": "Colossal tentacles",
+        "role": "utility"
+      },
+      {
+        "name": "Reaching Tentacles",
+        "effect": "Elongation",
+        "rank": 6,
+        "role": "utility"
+      },
+      {
+        "name": "Maddening Song",
+        "effect": "Affliction",
+        "rank": 12,
+        "detail": "Resisted by Will; Dazed, Stunned, Incapacitated",
+        "role": "attack",
+        "extras": [
+          {
+            "name": "Area",
+            "option": "Burst"
+          }
+        ]
+      },
+      {
+        "name": "Swimmer",
+        "effect": "Swimming",
+        "rank": 6,
+        "role": "movement"
+      },
+      {
+        "name": "Deep Dweller",
+        "effect": "Immunity",
+        "rank": 3,
+        "detail": "Cold, High Pressure, Drowning",
+        "role": "defense"
+      },
+      {
+        "name": "Keen Senses",
+        "effect": "Senses",
+        "rank": 2,
+        "detail": "Darkvision",
+        "role": "sense"
+      }
+    ],
+    "equipment": [],
+    "source": "DCUGen"
+  }
+]

@@ -1,0 +1,2741 @@
+[
+ {
+  "name": "Batman",
+  "pl": 12,
+  "page": "HV1 44",
+  "archetype": "pure-skill crime fighter",
+  "abilities": {
+   "Strength": 4,
+   "Stamina": 4,
+   "Agility": 7,
+   "Dexterity": 7,
+   "Fighting": 14,
+   "Intellect": 8,
+   "Awareness": 7,
+   "Presence": 7
+  },
+  "abilities_note": "No enhanced abilities.",
+  "abilities_purchased": {
+   "Strength": 4,
+   "Stamina": 4,
+   "Agility": 7,
+   "Dexterity": 7,
+   "Fighting": 14,
+   "Intellect": 8,
+   "Awareness": 7,
+   "Presence": 7
+  },
+  "defenses_printed": {
+   "Dodge": 14,
+   "Parry": 14,
+   "Fortitude": 9,
+   "Toughness": "8/4*",
+   "Will": 13
+  },
+  "defenses_footnote": "* Without Defensive Roll.",
+  "skills": [
+   {
+    "name": "Acrobatics",
+    "ranks": 8,
+    "bonus": 15
+   },
+   {
+    "name": "Athletics",
+    "ranks": 11,
+    "bonus": 15
+   },
+   {
+    "name": "Deception",
+    "ranks": 8,
+    "bonus": 15
+   },
+   {
+    "name": "Expertise",
+    "spec": "Criminology",
+    "ranks": 13,
+    "bonus": 21
+   },
+   {
+    "name": "Expertise",
+    "spec": "Streetwise",
+    "ranks": 13,
+    "bonus": 21
+   },
+   {
+    "name": "Insight",
+    "ranks": 10,
+    "bonus": 17
+   },
+   {
+    "name": "Intimidation",
+    "ranks": 15,
+    "bonus": 22
+   },
+   {
+    "name": "Investigation",
+    "ranks": 14,
+    "bonus": 22
+   },
+   {
+    "name": "Perception",
+    "ranks": 13,
+    "bonus": 20
+   },
+   {
+    "name": "Persuasion",
+    "ranks": 5,
+    "bonus": 12
+   },
+   {
+    "name": "Stealth",
+    "ranks": 13,
+    "bonus": 20
+   },
+   {
+    "name": "Sleight of Hand",
+    "ranks": 8,
+    "bonus": 15
+   },
+   {
+    "name": "Technology",
+    "ranks": 8,
+    "bonus": 15
+   },
+   {
+    "name": "Treatment",
+    "ranks": 5,
+    "bonus": 12
+   },
+   {
+    "name": "Vehicles",
+    "ranks": 8,
+    "bonus": 15
+   }
+  ],
+  "advantages": [
+   {
+    "name": "Assessment",
+    "rank": 1
+   },
+   {
+    "name": "Benefit",
+    "param": "Billionaire",
+    "rank": 5
+   },
+   {
+    "name": "Close Attack",
+    "rank": 6
+   },
+   {
+    "name": "Connected",
+    "rank": 1
+   },
+   {
+    "name": "Contacts",
+    "rank": 1
+   },
+   {
+    "name": "Daze",
+    "param": "Intimidation",
+    "rank": 1
+   },
+   {
+    "name": "Defensive Attack",
+    "rank": 1
+   },
+   {
+    "name": "Defensive Roll",
+    "rank": 4
+   },
+   {
+    "name": "Equipment",
+    "rank": 19
+   },
+   {
+    "name": "Evasion",
+    "rank": 1
+   },
+   {
+    "name": "Hide in Plain Sight",
+    "rank": 1
+   },
+   {
+    "name": "Improved Initiative",
+    "rank": 1
+   },
+   {
+    "name": "Improvised Tools",
+    "rank": 1
+   },
+   {
+    "name": "Instant Up",
+    "rank": 1
+   },
+   {
+    "name": "Inventor",
+    "rank": 1
+   },
+   {
+    "name": "Jack-of-all-trades",
+    "rank": 1
+   },
+   {
+    "name": "Languages",
+    "rank": 4
+   },
+   {
+    "name": "Move-by Action",
+    "rank": 1
+   },
+   {
+    "name": "Power Attack",
+    "rank": 1
+   },
+   {
+    "name": "Precise Attack",
+    "param": "Ranged; Cover",
+    "rank": 1
+   },
+   {
+    "name": "Quick Draw",
+    "rank": 1
+   },
+   {
+    "name": "Ranged Attack",
+    "rank": 7
+   },
+   {
+    "name": "Redirect",
+    "rank": 1
+   },
+   {
+    "name": "Seize Initiative",
+    "rank": 1
+   },
+   {
+    "name": "Set-up",
+    "rank": 1
+   },
+   {
+    "name": "Skill Mastery",
+    "param": "Intimidation",
+    "rank": 1
+   },
+   {
+    "name": "Skill Mastery",
+    "param": "Investigation",
+    "rank": 1
+   },
+   {
+    "name": "Startle",
+    "rank": 1
+   },
+   {
+    "name": "Takedown",
+    "rank": 1
+   },
+   {
+    "name": "Trance",
+    "rank": 1
+   },
+   {
+    "name": "Tracking",
+    "rank": 1
+   },
+   {
+    "name": "Uncanny Dodge",
+    "rank": 1
+   },
+   {
+    "name": "Well-informed",
+    "rank": 1
+   }
+  ],
+  "powers_printed": [],
+  "equipment_items": [
+   {
+    "name": "Flashlight",
+    "text": "Feature 1 (Illumination)",
+    "cost": 1
+   },
+   {
+    "name": "Grapnel Gun",
+    "text": "Super-Movement 1 (Swinging)",
+    "cost": 2
+   },
+   {
+    "name": "Mini-Tracers",
+    "text": "Feature 1 (Tracking)",
+    "cost": 1
+   },
+   {
+    "name": "Rebreather",
+    "text": "Immunity 2 (Suffocation), Limited",
+    "cost": 1
+   },
+   {
+    "name": "Utility Belt",
+    "text": "Array (12 points)",
+    "cost": 12,
+    "array_header": true
+   },
+   {
+    "name": "Bolos",
+    "text": "Ranged Affliction 4 (Resisted by Dodge; Hindered and Vulnerable, Defenseless and Immobile)",
+    "cost": 12,
+    "array": "Utility Belt"
+   },
+   {
+    "name": "Batarangs",
+    "text": "Strength-based Ranged Damage 2",
+    "cost": 1,
+    "array": "Utility Belt",
+    "ae": true
+   },
+   {
+    "name": "Cutting Torch",
+    "text": "Damage 1 (heat) Linked to Weaken Object's Toughness 1",
+    "cost": 1,
+    "array": "Utility Belt",
+    "ae": true
+   },
+   {
+    "name": "Explosive Batarangs",
+    "text": "Ranged Burst Area Damage 4",
+    "cost": 1,
+    "array": "Utility Belt",
+    "ae": true
+   },
+   {
+    "name": "Flash Bombs",
+    "text": "Ranged Burst Area Affliction 3 (Resisted by Fortitude; Vision Impaired, Vision Disabled, Vision Unaware)",
+    "cost": 1,
+    "array": "Utility Belt",
+    "ae": true
+   },
+   {
+    "name": "Sleep Gas Pellets",
+    "text": "Ranged Cloud Area Affliction 4 (Resisted by Fortitude; Fatigued, Exhausted, Asleep)",
+    "cost": 1,
+    "array": "Utility Belt",
+    "ae": true
+   },
+   {
+    "name": "Smoke Bombs",
+    "text": "Cloud Area Visual Concealment Attack 4",
+    "cost": 1,
+    "array": "Utility Belt",
+    "ae": true
+   },
+   {
+    "name": "Tear Gas Pellets",
+    "text": "Ranged Cloud Area Affliction 3 (Resisted by Fortitude; Dazed and Vision Impaired, Stunned and Vision Disabled, Incapacitated)",
+    "cost": 1,
+    "array": "Utility Belt",
+    "ae": true
+   },
+   {
+    "name": "Headquarters: The Batcave",
+    "text": "Size: Huge Tou 10 Features: Communications, Computer, Concealed, Defense System, Dock, Garage, Gym, Hanger, Infirmary, Laboratory, Library, Living Space, Power System, Workshop.",
+    "cost": 20
+   },
+   {
+    "name": "Vehicles",
+    "text": "Array (49 points)",
+    "cost": 49,
+    "array_header": true
+   },
+   {
+    "name": "Batplane",
+    "text": "Equivalent to a fighter jet without machine guns (but with air-to-air missiles) and with the Remote Control feature.",
+    "cost": 49,
+    "array": "Vehicles"
+   },
+   {
+    "name": "Batmobile",
+    "text": "Size: Huge Str 8 Spd 6 Def 8 Tou 10 Features: Alarm 3 (DC 30), Caltrops, Hidden Compartments, Navigation System 2 (+10 bonus), Oil Slick, Remote Control; Impervious Toughness 8",
+    "cost": 1,
+    "array": "Vehicles",
+    "ae": true
+   },
+   {
+    "name": "Batboat",
+    "text": "Equivalent to the Batmobile, but with water speed in place of ground speed and without the Caltrops or Oil Slick features.",
+    "cost": 1,
+    "array": "Vehicles",
+    "ae": true
+   }
+  ],
+  "equipment_printed": "Flashlight: Feature 1 (Illumination) - 1 point; Grapnel Gun: Super-Movement 1 (Swinging) - 2 points; Mini-Tracers: Feature 1 (Tracking) - 1 point; Rebreather: Immunity 2 (Suffocation), Limited - 1 point; Utility Belt: Array (12 points) [Bolos 12 points; Batarangs, Cutting Torch, Explosive Batarangs, Flash Bombs, Sleep Gas Pellets, Smoke Bombs, Tear Gas Pellets 1 point each]; Headquarters: The Batcave - 20 points; Vehicles: Array (49 points) [Batplane 49 points; Batmobile 1 point; Batboat 1 point]",
+  "offense_printed": [
+   "Initiative +11",
+   "Batarang +14 Ranged, Damage 6",
+   "Unarmed +20 Close, Damage 4"
+  ],
+  "totals_printed": {
+   "abilities": 116,
+   "powers": 0,
+   "advantages": 72,
+   "skills": 76,
+   "defenses": 19,
+   "total": 283
+  },
+  "book_note": "Defenses printed as 19 but purchased defense ranks compute to 18 (Dodge 14-Agl 7=7, Parry 14-Fgt 14=0, Fortitude 9-Sta 4=5, Will 13-Awe 7=6); the printed total 283 uses 19. Also Equipment 19 = 95 equipment points, while listed equipment sums to 97 (26 personal + 20 Batcave + 51 vehicle array). Skill bonuses for Technology 8 (+15) and Treatment 5 (+12) are 1 lower than Int 8 + ranks would give (+16, +13); the other Intellect skills use Int 8."
+ },
+ {
+  "name": "Captain Marvel",
+  "pl": 15,
+  "page": "HV1 104",
+  "archetype": "powerhouse",
+  "abilities": {
+   "Strength": 19,
+   "Stamina": 15,
+   "Agility": 2,
+   "Dexterity": 2,
+   "Fighting": 6,
+   "Intellect": 2,
+   "Awareness": 10,
+   "Presence": 3
+  },
+  "abilities_note": "Printed Fighting 6 includes Enhanced Fighting 4 (Courage of Achilles; base 2). Printed Awareness 10 includes Enhanced Awareness 7 (Wisdom of Solomon; base 3). Enhanced Strength 4 is Limited to Lifting (lifting Str 23) and is not reflected in the printed Strength 19.",
+  "abilities_purchased": {
+   "Strength": 19,
+   "Stamina": 15,
+   "Agility": 2,
+   "Dexterity": 2,
+   "Fighting": 2,
+   "Intellect": 2,
+   "Awareness": 3,
+   "Presence": 3
+  },
+  "defenses_printed": {
+   "Dodge": 11,
+   "Parry": 10,
+   "Fortitude": 15,
+   "Toughness": 19,
+   "Will": 15
+  },
+  "skills": [
+   {
+    "name": "Close Combat",
+    "spec": "Unarmed",
+    "ranks": 5,
+    "bonus": 11
+   },
+   {
+    "name": "Expertise",
+    "spec": "Radio Host",
+    "ranks": 6,
+    "bonus": 9
+   },
+   {
+    "name": "Insight",
+    "ranks": 2,
+    "bonus": 12
+   },
+   {
+    "name": "Perception",
+    "ranks": 3,
+    "bonus": 13
+   }
+  ],
+  "advantages": [
+   {
+    "name": "Assessment",
+    "rank": 1,
+    "granted_by_power": "Wisdom of Solomon"
+   },
+   {
+    "name": "Beginner's Luck",
+    "rank": 1,
+    "granted_by_power": "Wisdom of Solomon"
+   },
+   {
+    "name": "Eidetic Memory",
+    "rank": 1,
+    "granted_by_power": "Wisdom of Solomon"
+   },
+   {
+    "name": "Great Endurance",
+    "rank": 1
+   },
+   {
+    "name": "Interpose",
+    "rank": 1
+   },
+   {
+    "name": "Jack-of-all-trades",
+    "rank": 1,
+    "granted_by_power": "Wisdom of Solomon"
+   },
+   {
+    "name": "Move-by Action",
+    "rank": 1
+   }
+  ],
+  "advantages_note": "Printed advantage list includes the 4 granted by Wisdom of Solomon (Enhanced Advantages 4); only the other 3 are paid as advantages.",
+  "powers_printed": [
+   {
+    "name": "Wisdom of Solomon",
+    "text": "Enhanced Advantages 4 (Assessment, Beginner's Luck, Eidetic Memory, Jack-of-all-trades), Enhanced Awareness 7",
+    "cost": 18
+   },
+   {
+    "name": "Strength of Hercules",
+    "text": "Enhanced Strength 4, Limited to Lifting (Lifting Str 23; 200,000 tons)",
+    "cost": 4
+   },
+   {
+    "name": "Stamina of Atlas",
+    "text": "Protection 4, Impervious Toughness 19; Immunity 10 (Life Support)",
+    "cost": 33
+   },
+   {
+    "name": "Courage of Achilles",
+    "text": "Enhanced Fighting 4, Enhanced Will 5, Impervious Will 10",
+    "cost": 23
+   },
+   {
+    "name": "Speed of Mercury",
+    "text": "Array (30 points)",
+    "cost": 30,
+    "array_header": true
+   },
+   {
+    "name": "Flight",
+    "text": "Flight 15 (64,000 MPH)",
+    "cost": 30,
+    "array": "Speed of Mercury"
+   },
+   {
+    "name": "Dimensional Travel",
+    "text": "Dimensional Travel 1 (Rock of Eternity)",
+    "cost": 1,
+    "array": "Speed of Mercury",
+    "ae": true
+   },
+   {
+    "name": "Quickness/Speed",
+    "text": "Quickness 15, Speed 15 (64,000 MPH)",
+    "cost": 1,
+    "array": "Speed of Mercury",
+    "ae": true
+   }
+  ],
+  "equipment_printed": "",
+  "offense_printed": [
+   "Initiative +2",
+   "Unarmed +11 Close, Damage 19"
+  ],
+  "totals_printed": {
+   "abilities": 96,
+   "powers": 110,
+   "advantages": 3,
+   "skills": 8,
+   "defenses": 13,
+   "total": 230
+  },
+  "book_note": "Expertise: Radio Host 6 is printed (+9), which matches Presence 3 + 6 rather than Intellect 2 + 6 (+8)."
+ },
+ {
+  "name": "The Flash (Barry Allen)",
+  "pl": 12,
+  "page": "HV1 207",
+  "archetype": "speedster",
+  "abilities": {
+   "Strength": 1,
+   "Stamina": 3,
+   "Agility": 4,
+   "Dexterity": 3,
+   "Fighting": 4,
+   "Intellect": 4,
+   "Awareness": 3,
+   "Presence": 2
+  },
+  "abilities_note": "No enhanced abilities.",
+  "abilities_purchased": {
+   "Strength": 1,
+   "Stamina": 3,
+   "Agility": 4,
+   "Dexterity": 3,
+   "Fighting": 4,
+   "Intellect": 4,
+   "Awareness": 3,
+   "Presence": 2
+  },
+  "defenses_printed": {
+   "Dodge": 16,
+   "Parry": 16,
+   "Fortitude": 9,
+   "Toughness": "8/3*",
+   "Will": 10
+  },
+  "defenses_footnote": "* Without Defensive Roll. Dodge/Parry include Enhanced Defense 24 (Dodge 12, Parry 12) from Super-Speed.",
+  "skills": [
+   {
+    "name": "Acrobatics",
+    "ranks": 4,
+    "bonus": 8
+   },
+   {
+    "name": "Athletics",
+    "ranks": 6,
+    "bonus": 7
+   },
+   {
+    "name": "Deception",
+    "ranks": 4,
+    "bonus": 6
+   },
+   {
+    "name": "Close Combat",
+    "spec": "Unarmed",
+    "ranks": 2,
+    "bonus": 10
+   },
+   {
+    "name": "Expertise",
+    "spec": "Forensics",
+    "ranks": 8,
+    "bonus": 12
+   },
+   {
+    "name": "Expertise",
+    "spec": "Law Enforcement",
+    "ranks": 4,
+    "bonus": 8
+   },
+   {
+    "name": "Insight",
+    "ranks": 8,
+    "bonus": 11
+   },
+   {
+    "name": "Investigation",
+    "ranks": 8,
+    "bonus": 12
+   },
+   {
+    "name": "Perception",
+    "ranks": 4,
+    "bonus": 7
+   },
+   {
+    "name": "Technology",
+    "ranks": 8,
+    "bonus": 12
+   }
+  ],
+  "advantages": [
+   {
+    "name": "Agile Feint",
+    "rank": 1,
+    "granted_by_power": "Super-Speed"
+   },
+   {
+    "name": "Close Attack",
+    "rank": 4,
+    "granted_by_power": "Super-Speed"
+   },
+   {
+    "name": "Contacts",
+    "rank": 1
+   },
+   {
+    "name": "Defensive Roll",
+    "rank": 5,
+    "granted_by_power": "Super-Speed"
+   },
+   {
+    "name": "Equipment",
+    "rank": 2
+   },
+   {
+    "name": "Evasion",
+    "rank": 2,
+    "granted_by_power": "Super-Speed"
+   },
+   {
+    "name": "Improved Initiative",
+    "rank": 10,
+    "granted_by_power": "Super-Speed"
+   },
+   {
+    "name": "Interpose",
+    "rank": 1,
+    "granted_by_power": "Super-Speed"
+   },
+   {
+    "name": "Instant Up",
+    "rank": 1,
+    "granted_by_power": "Super-Speed"
+   },
+   {
+    "name": "Move-by Action",
+    "rank": 1,
+    "granted_by_power": "Super-Speed"
+   },
+   {
+    "name": "Seize Initiative",
+    "rank": 1,
+    "granted_by_power": "Super-Speed"
+   },
+   {
+    "name": "Takedown",
+    "rank": 1,
+    "granted_by_power": "Super-Speed"
+   },
+   {
+    "name": "Teamwork",
+    "rank": 1
+   },
+   {
+    "name": "Ultimate Effort",
+    "param": "Super-Speed checks",
+    "rank": 1
+   },
+   {
+    "name": "Well-informed",
+    "rank": 1
+   }
+  ],
+  "advantages_note": "Printed advantage list includes those granted by Super-Speed's Enhanced Advantage; paid advantages are Contacts, Equipment 2, Teamwork, Ultimate Effort, Well-informed (= 6).",
+  "powers_printed": [
+   {
+    "name": "Frictionless Aura",
+    "text": "Immunity 1 (Friction Heat)",
+    "cost": null,
+    "cost_implied": 1
+   },
+   {
+    "name": "Run On Water",
+    "text": "Movement 1 (Water Walking), Limited to While Moving",
+    "cost": 1
+   },
+   {
+    "name": "Run Up Walls",
+    "text": "Movement 2 (Wall-crawling 2), Limited to While Moving",
+    "cost": 2
+   },
+   {
+    "name": "Super-Speed",
+    "text": "Enhanced Defense 24 (Dodge 12, Parry 12), Enhanced Advantage (Agile Feint, Close Attack 4, Defensive Roll 5, Evasion 2, Improved Initiative 10, Interpose, Instant Up, Move-by Action, Seize Initiative, Takedown), Quickness 20, Speed 20 (2,000,000 MPH)",
+    "cost": 91
+   },
+   {
+    "name": "Super-Speed Stunts",
+    "text": "Array (20 points)",
+    "cost": 20,
+    "array_header": true
+   },
+   {
+    "name": "Air Control",
+    "text": "Cone Area Move Object 10, Close Range",
+    "cost": 20,
+    "array": "Super-Speed Stunts"
+   },
+   {
+    "name": "Air Cushion",
+    "text": "Burst Area Safe Fall, Affects Others",
+    "cost": 1,
+    "array": "Super-Speed Stunts",
+    "ae": true
+   },
+   {
+    "name": "Vacuum",
+    "text": "Burst Area Cumulative Affliction 5 (Resisted by Fortitude; Dazed, Stunned, Incapacitated), Concentration",
+    "cost": 1,
+    "array": "Super-Speed Stunts",
+    "ae": true
+   },
+   {
+    "name": "Vibration",
+    "text": "Insubstantial 4 (Intangible)",
+    "cost": 1,
+    "array": "Super-Speed Stunts",
+    "ae": true
+   },
+   {
+    "name": "Whirlwind",
+    "text": "Burst Area Move Object 10, Close Range",
+    "cost": 1,
+    "array": "Super-Speed Stunts",
+    "ae": true
+   }
+  ],
+  "equipment_items": [
+   {
+    "name": "Cosmic Treadmill",
+    "text": "Time Travel 3",
+    "cost": 6
+   },
+   {
+    "name": "Costume Ring",
+    "text": "Feature 1 (stores compressed costume)",
+    "cost": 1
+   }
+  ],
+  "equipment_printed": "Cosmic Treadmill: Time Travel 3 - 6 points; Costume Ring: Feature 1 (stores compressed costume) - 1 point",
+  "offense_printed": [
+   "Initiative +44",
+   "Unarmed +10 Close, Damage 1",
+   "Whirlwind Burst Area, Grapple, Dodge DC 20"
+  ],
+  "totals_printed": {
+   "abilities": 48,
+   "powers": 119,
+   "advantages": 6,
+   "skills": 28,
+   "defenses": 13,
+   "total": 214
+  },
+  "book_note": "Frictionless Aura has no printed cost; the printed Powers total 119 implies it costs 1 point."
+ },
+ {
+  "name": "Green Lantern (Hal Jordan)",
+  "pl": 14,
+  "page": "HV1 237",
+  "archetype": "energy projector / ring user",
+  "abilities": {
+   "Strength": 2,
+   "Stamina": 2,
+   "Agility": 2,
+   "Dexterity": 3,
+   "Fighting": 5,
+   "Intellect": 1,
+   "Awareness": 3,
+   "Presence": 3
+  },
+  "abilities_note": "No enhanced abilities.",
+  "abilities_purchased": {
+   "Strength": 2,
+   "Stamina": 2,
+   "Agility": 2,
+   "Dexterity": 3,
+   "Fighting": 5,
+   "Intellect": 1,
+   "Awareness": 3,
+   "Presence": 3
+  },
+  "defenses_printed": {
+   "Dodge": 12,
+   "Parry": 10,
+   "Fortitude": 10,
+   "Toughness": "14/2*",
+   "Will": 18
+  },
+  "defenses_footnote": "* Without Power Ring Protection.",
+  "skills": [
+   {
+    "name": "Athletics",
+    "ranks": 4,
+    "bonus": 6
+   },
+   {
+    "name": "Close Combat",
+    "spec": "Unarmed",
+    "ranks": 3,
+    "bonus": 8
+   },
+   {
+    "name": "Deception",
+    "ranks": 4,
+    "bonus": 7
+   },
+   {
+    "name": "Expertise",
+    "spec": "Law Enforcement",
+    "ranks": 8,
+    "bonus": 9
+   },
+   {
+    "name": "Expertise",
+    "spec": "Military",
+    "ranks": 8,
+    "bonus": 9
+   },
+   {
+    "name": "Insight",
+    "ranks": 8,
+    "bonus": 11
+   },
+   {
+    "name": "Investigation",
+    "ranks": 4,
+    "bonus": 5
+   },
+   {
+    "name": "Perception",
+    "ranks": 4,
+    "bonus": 7
+   },
+   {
+    "name": "Persuasion",
+    "ranks": 4,
+    "bonus": 7
+   },
+   {
+    "name": "Ranged Combat",
+    "spec": "Power Ring",
+    "ranks": 7,
+    "bonus": 10
+   },
+   {
+    "name": "Vehicles",
+    "ranks": 12,
+    "bonus": 15
+   }
+  ],
+  "advantages": [
+   {
+    "name": "Fearless",
+    "rank": 1
+   },
+   {
+    "name": "Teamwork",
+    "rank": 1
+   },
+   {
+    "name": "Ultimate Effort",
+    "param": "Will",
+    "rank": 1
+   }
+  ],
+  "powers_printed": [
+   {
+    "name": "Power Ring",
+    "text": "132 points, Removable (-26 points)",
+    "cost": 106,
+    "container_header": true,
+    "container_points": 132
+   },
+   {
+    "name": "AI and Database",
+    "text": "Features 2",
+    "cost": 2,
+    "container": "Power Ring"
+   },
+   {
+    "name": "Communication",
+    "text": "Senses 1 (Communication Link to Central Power Battery)",
+    "cost": 1,
+    "container": "Power Ring"
+   },
+   {
+    "name": "Flight",
+    "text": "Flight 14 (32,000 MPH), Movement 4 (Environmental Adaptation: Zero-G, Space Travel 3)",
+    "cost": 36,
+    "container": "Power Ring"
+   },
+   {
+    "name": "Force Field",
+    "text": "Protection 12, Impervious; Immunity 10 (Life Support)",
+    "cost": 34,
+    "container": "Power Ring"
+   },
+   {
+    "name": "Force Manipulation",
+    "text": "Array (36 points)",
+    "cost": 36,
+    "container": "Power Ring",
+    "array_header": true
+   },
+   {
+    "name": "Force Blast",
+    "text": "Ranged Damage 18, Dynamic",
+    "cost": 37,
+    "container": "Power Ring",
+    "array": "Force Manipulation"
+   },
+   {
+    "name": "Force Bubble",
+    "text": "Affects Others, Burst Area, and Ranged on Immunity 10 (Life Support), Dynamic",
+    "cost": 2,
+    "container": "Power Ring",
+    "array": "Force Manipulation",
+    "ae": true
+   },
+   {
+    "name": "Force Constructs",
+    "text": "Create 18, Dynamic",
+    "cost": 2,
+    "container": "Power Ring",
+    "array": "Force Manipulation",
+    "ae": true
+   },
+   {
+    "name": "Lifting",
+    "text": "Move Object 18, Dynamic",
+    "cost": 2,
+    "container": "Power Ring",
+    "array": "Force Manipulation",
+    "ae": true
+   },
+   {
+    "name": "Mobile Constructs",
+    "text": "Create 12, Movable, Dynamic",
+    "cost": 2,
+    "container": "Power Ring",
+    "array": "Force Manipulation",
+    "ae": true
+   },
+   {
+    "name": "Scanning Beam",
+    "text": "Senses 6 (Analytical Auditory, Chemical, and Visual)",
+    "cost": 6,
+    "container": "Power Ring"
+   },
+   {
+    "name": "Universal Translator",
+    "text": "Comprehend Languages 4",
+    "cost": 8,
+    "container": "Power Ring"
+   }
+  ],
+  "powers_note": "All powers are inside the Power Ring device: sub-entries (container='Power Ring') sum to 132; Removable (-26) gives the ring's 106 points, which equals the Powers total.",
+  "equipment_printed": "",
+  "offense_printed": [
+   "Initiative +2",
+   "Power Ring +10 Ranged, Damage 18",
+   "Unarmed +8 Close, Damage 2"
+  ],
+  "totals_printed": {
+   "abilities": 42,
+   "powers": 106,
+   "advantages": 3,
+   "skills": 33,
+   "defenses": 38,
+   "total": 222
+  }
+ },
+ {
+  "name": "Circe",
+  "pl": 14,
+  "page": "HV1 121",
+  "archetype": "mystic / magician (villain)",
+  "abilities": {
+   "Strength": 0,
+   "Stamina": 3,
+   "Agility": 2,
+   "Dexterity": 3,
+   "Fighting": 3,
+   "Intellect": 3,
+   "Awareness": 4,
+   "Presence": 4
+  },
+  "abilities_note": "No enhanced abilities.",
+  "abilities_purchased": {
+   "Strength": 0,
+   "Stamina": 3,
+   "Agility": 2,
+   "Dexterity": 3,
+   "Fighting": 3,
+   "Intellect": 3,
+   "Awareness": 4,
+   "Presence": 4
+  },
+  "defenses_printed": {
+   "Dodge": 13,
+   "Parry": 10,
+   "Fortitude": 11,
+   "Toughness": "11/3*",
+   "Will": 16
+  },
+  "defenses_footnote": "* Without Mystic Shield bonus.",
+  "skills": [
+   {
+    "name": "Deception",
+    "ranks": 10,
+    "bonus": 14
+   },
+   {
+    "name": "Expertise",
+    "spec": "Magic",
+    "ranks": 15,
+    "bonus": 18
+   },
+   {
+    "name": "Insight",
+    "ranks": 6,
+    "bonus": 10
+   },
+   {
+    "name": "Intimidation",
+    "ranks": 4,
+    "bonus": 8
+   },
+   {
+    "name": "Perception",
+    "ranks": 4,
+    "bonus": 8
+   },
+   {
+    "name": "Persuasion",
+    "ranks": 10,
+    "bonus": 14
+   },
+   {
+    "name": "Ranged Combat",
+    "spec": "Magic",
+    "ranks": 8,
+    "bonus": 11
+   },
+   {
+    "name": "Treatment",
+    "ranks": 7,
+    "bonus": 10
+   }
+  ],
+  "advantages": [
+   {
+    "name": "Artificer",
+    "rank": 1
+   },
+   {
+    "name": "Attractive",
+    "rank": 1
+   },
+   {
+    "name": "Daze",
+    "param": "Deception",
+    "rank": 1
+   },
+   {
+    "name": "Fascinate",
+    "param": "Deception",
+    "rank": 1
+   },
+   {
+    "name": "Ritualist",
+    "rank": 1
+   }
+  ],
+  "powers_printed": [
+   {
+    "name": "Immortality",
+    "text": "Immunity 1 (Aging)",
+    "cost": 1
+   },
+   {
+    "name": "Magic",
+    "text": "Array (34 points)",
+    "cost": 34,
+    "array_header": true
+   },
+   {
+    "name": "Magic Blast",
+    "text": "Ranged Damage 17",
+    "cost": 34,
+    "array": "Magic"
+   },
+   {
+    "name": "Bestiamorph",
+    "text": "Ranged Affliction 8 (Resisted by Will; Dazed, Compelled, Transformed), Progressive",
+    "cost": 1,
+    "array": "Magic",
+    "ae": true
+   },
+   {
+    "name": "Mystic Passage",
+    "text": "Teleport 11 (8 miles), Accurate",
+    "cost": 1,
+    "array": "Magic",
+    "ae": true
+   },
+   {
+    "name": "Spell of Sleep",
+    "text": "Ranged Affliction 17 (Resisted by Fortitude; Dazed, Stunned, Asleep)",
+    "cost": 1,
+    "array": "Magic",
+    "ae": true
+   },
+   {
+    "name": "Veil of Illusion",
+    "text": "Illusion 6 (All Senses), Area 4, Selective",
+    "cost": 1,
+    "array": "Magic",
+    "ae": true
+   },
+   {
+    "name": "Mystic Shield",
+    "text": "Protection 8, Impervious, Sustained",
+    "cost": 16
+   }
+  ],
+  "equipment_printed": "",
+  "offense_printed": [
+   "Initiative +2",
+   "Magic +11 Ranged, Damage 17 (or others)",
+   "Unarmed +3 Close, Damage 0"
+  ],
+  "totals_printed": {
+   "abilities": 44,
+   "powers": 55,
+   "advantages": 5,
+   "skills": 32,
+   "defenses": 38,
+   "total": 174
+  }
+ },
+ {
+  "name": "Gorilla Grodd",
+  "pl": 12,
+  "page": "HV1 229",
+  "archetype": "psychic (telepath villain)",
+  "abilities": {
+   "Strength": 9,
+   "Stamina": 6,
+   "Agility": 4,
+   "Dexterity": 4,
+   "Fighting": 6,
+   "Intellect": 8,
+   "Awareness": 5,
+   "Presence": 3
+  },
+  "abilities_note": "No enhanced abilities.",
+  "abilities_purchased": {
+   "Strength": 9,
+   "Stamina": 6,
+   "Agility": 4,
+   "Dexterity": 4,
+   "Fighting": 6,
+   "Intellect": 8,
+   "Awareness": 5,
+   "Presence": 3
+  },
+  "defenses_printed": {
+   "Dodge": 13,
+   "Parry": 13,
+   "Fortitude": 11,
+   "Toughness": "9/6*",
+   "Will": 13
+  },
+  "defenses_footnote": "* Without Defensive Roll.",
+  "skills": [
+   {
+    "name": "Acrobatics",
+    "ranks": 8,
+    "bonus": 12
+   },
+   {
+    "name": "Athletics",
+    "ranks": 6,
+    "bonus": 15
+   },
+   {
+    "name": "Deception",
+    "ranks": 8,
+    "bonus": 11
+   },
+   {
+    "name": "Close Combat",
+    "spec": "Unarmed",
+    "ranks": 7,
+    "bonus": 13
+   },
+   {
+    "name": "Expertise",
+    "spec": "Gorilla City",
+    "ranks": 8,
+    "bonus": 16
+   },
+   {
+    "name": "Insight",
+    "ranks": 6,
+    "bonus": 11
+   },
+   {
+    "name": "Intimidation",
+    "ranks": 8,
+    "bonus": 11
+   },
+   {
+    "name": "Perception",
+    "ranks": 5,
+    "bonus": 10
+   },
+   {
+    "name": "Stealth",
+    "ranks": 4,
+    "bonus": 8
+   },
+   {
+    "name": "Technology",
+    "ranks": 8,
+    "bonus": 16
+   },
+   {
+    "name": "Vehicles",
+    "ranks": 4,
+    "bonus": 8
+   }
+  ],
+  "advantages": [
+   {
+    "name": "All-out Attack",
+    "rank": 1
+   },
+   {
+    "name": "Benefit",
+    "param": "Ambidexterity",
+    "rank": 1
+   },
+   {
+    "name": "Defensive Roll",
+    "rank": 3
+   },
+   {
+    "name": "Fast Grab",
+    "rank": 1
+   },
+   {
+    "name": "Inventor",
+    "rank": 1
+   }
+  ],
+  "powers_printed": [
+   {
+    "name": "Ape Senses",
+    "text": "Senses 2 (Low-Light Vision, Acute Smell)",
+    "cost": 2
+   },
+   {
+    "name": "Force of Mind",
+    "text": "Perception Range Move Object 5, Subtle 2",
+    "cost": 17
+   },
+   {
+    "name": "Prehensile Feet",
+    "text": "Feature 1 (May use feet as hands)",
+    "cost": 1
+   },
+   {
+    "name": "Telepathy",
+    "text": "Array (25 points)",
+    "cost": 25,
+    "array_header": true
+   },
+   {
+    "name": "Mind Reading 12",
+    "text": "Mind Reading 12: Subtle",
+    "cost": 25,
+    "array": "Telepathy"
+   },
+   {
+    "name": "Mind Control",
+    "text": "Perception Range Affliction 8 (Resisted by Will; Dazed, Compelled, Controlled), Subtle",
+    "cost": 1,
+    "array": "Telepathy",
+    "ae": true
+   },
+   {
+    "name": "Thought Projection",
+    "text": "Area Mental Communication 5",
+    "cost": 1,
+    "array": "Telepathy",
+    "ae": true
+   }
+  ],
+  "equipment_printed": "",
+  "offense_printed": [
+   "Initiative +4",
+   "Unarmed +13 Close, Damage 9",
+   "Mind Control -- Perception Range, Affliction 8, Resisted by Will"
+  ],
+  "totals_printed": {
+   "abilities": 90,
+   "powers": 47,
+   "advantages": 7,
+   "skills": 36,
+   "defenses": 29,
+   "total": 209
+  }
+ },
+ {
+  "name": "Elongated Man",
+  "pl": 10,
+  "page": "HV1 191",
+  "archetype": "stretcher",
+  "abilities": {
+   "Strength": 2,
+   "Stamina": 4,
+   "Agility": 5,
+   "Dexterity": 3,
+   "Fighting": 2,
+   "Intellect": 3,
+   "Awareness": 5,
+   "Presence": 2
+  },
+  "abilities_note": "No enhanced abilities in printed scores (Enhanced Strength 4 is Limited to Resist Attempts to Break Grabs).",
+  "abilities_purchased": {
+   "Strength": 2,
+   "Stamina": 4,
+   "Agility": 5,
+   "Dexterity": 3,
+   "Fighting": 2,
+   "Intellect": 3,
+   "Awareness": 5,
+   "Presence": 2
+  },
+  "defenses_printed": {
+   "Dodge": 8,
+   "Parry": 8,
+   "Fortitude": 12,
+   "Toughness": 12,
+   "Will": 8
+  },
+  "skills": [
+   {
+    "name": "Acrobatics",
+    "ranks": 5,
+    "bonus": 10
+   },
+   {
+    "name": "Athletics",
+    "ranks": 8,
+    "bonus": 10
+   },
+   {
+    "name": "Close Combat",
+    "spec": "Unarmed",
+    "ranks": 9,
+    "bonus": 11
+   },
+   {
+    "name": "Deception",
+    "ranks": 2,
+    "bonus": 4
+   },
+   {
+    "name": "Insight",
+    "ranks": 10,
+    "bonus": 15
+   },
+   {
+    "name": "Investigation",
+    "ranks": 15,
+    "bonus": 18
+   },
+   {
+    "name": "Perception",
+    "ranks": 11,
+    "bonus": 16
+   },
+   {
+    "name": "Sleight of Hand",
+    "ranks": 10,
+    "bonus": 13
+   },
+   {
+    "name": "Stealth",
+    "ranks": 4,
+    "bonus": 9
+   },
+   {
+    "name": "Vehicles",
+    "ranks": 4,
+    "bonus": 7
+   }
+  ],
+  "advantages": [
+   {
+    "name": "Accurate Attack",
+    "rank": 1,
+    "granted_by_power": "Elongating Man"
+   },
+   {
+    "name": "All-out Attack",
+    "rank": 1,
+    "granted_by_power": "Elongating Man"
+   },
+   {
+    "name": "Assessment",
+    "rank": 1
+   },
+   {
+    "name": "Chokehold",
+    "rank": 1,
+    "granted_by_power": "Elongating Man"
+   },
+   {
+    "name": "Close Attack",
+    "rank": 4,
+    "granted_by_power": "Elongating Man"
+   },
+   {
+    "name": "Contacts",
+    "rank": 1
+   },
+   {
+    "name": "Fast Grab",
+    "rank": 1,
+    "granted_by_power": "Elongating Man"
+   },
+   {
+    "name": "Improved Grab",
+    "rank": 1,
+    "granted_by_power": "Elongating Man"
+   },
+   {
+    "name": "Improved Hold",
+    "rank": 1,
+    "granted_by_power": "Elongating Man"
+   },
+   {
+    "name": "Well-informed",
+    "rank": 1
+   }
+  ],
+  "advantages_note": "Printed advantage list includes the 10 ranks granted by Elongating Man's Enhanced Advantage 10; paid advantages are Assessment, Contacts, Well-informed (= 3).",
+  "powers_printed": [
+   {
+    "name": "Elongating Man",
+    "text": "Strength-based Damage 3; Elongation 7 (900 feet); Enhanced Advantage 10 (Accurate Attack, All-out Attack, Chokehold, Close Attack 4, Fast Grab, Improved Grab, Improved Hold); Enhanced Strength 4, Limited to Resist Attempts to Break Grabs; Leaping 6; Movement 3 (Safe Fall, Slithering, Swinging)",
+    "cost": 33
+   },
+   {
+    "name": "Rubber Body",
+    "text": "Impervious Protection 8",
+    "cost": 16
+   }
+  ],
+  "equipment_printed": "",
+  "offense_printed": [
+   "Initiative +5",
+   "Stretching Strike +15 Close, Damage 5 or Grab (900 feet reach)"
+  ],
+  "totals_printed": {
+   "abilities": 52,
+   "powers": 49,
+   "advantages": 3,
+   "skills": 39,
+   "defenses": 20,
+   "total": 163
+  }
+ },
+ {
+  "name": "Cyborg",
+  "pl": 10,
+  "page": "HV1 143",
+  "archetype": "gadgeteer / battlesuit (cybernetic)",
+  "abilities": {
+   "Strength": 7,
+   "Stamina": 6,
+   "Agility": 3,
+   "Dexterity": 3,
+   "Fighting": 4,
+   "Intellect": 4,
+   "Awareness": 3,
+   "Presence": 3
+  },
+  "abilities_note": "Printed Strength 7 includes Enhanced Strength 4 (Hydraulic Muscles; base 3). Printed Stamina 6 includes Enhanced Stamina 3 (Self-Repair Systems; base 3).",
+  "abilities_purchased": {
+   "Strength": 3,
+   "Stamina": 3,
+   "Agility": 3,
+   "Dexterity": 3,
+   "Fighting": 4,
+   "Intellect": 4,
+   "Awareness": 3,
+   "Presence": 3
+  },
+  "defenses_printed": {
+   "Dodge": 8,
+   "Parry": 8,
+   "Fortitude": 10,
+   "Toughness": 12,
+   "Will": 7
+  },
+  "skills": [
+   {
+    "name": "Athletics",
+    "ranks": 5,
+    "bonus": 12
+   },
+   {
+    "name": "Close Combat",
+    "spec": "Unarmed",
+    "ranks": 9,
+    "bonus": 13
+   },
+   {
+    "name": "Expertise",
+    "spec": "Streetwise",
+    "ranks": 4,
+    "bonus": 8
+   },
+   {
+    "name": "Perception",
+    "ranks": 6,
+    "bonus": 9
+   },
+   {
+    "name": "Ranged Combat",
+    "spec": "Sound Blaster",
+    "ranks": 8,
+    "bonus": 11
+   },
+   {
+    "name": "Technology",
+    "ranks": 8,
+    "bonus": 12
+   }
+  ],
+  "advantages": [
+   {
+    "name": "Accurate Attack",
+    "rank": 1
+   },
+   {
+    "name": "Diehard",
+    "rank": 1
+   },
+   {
+    "name": "Great Endurance",
+    "rank": 1
+   },
+   {
+    "name": "Improved Grab",
+    "rank": 1
+   },
+   {
+    "name": "Improved Smash",
+    "rank": 1
+   },
+   {
+    "name": "Power Attack",
+    "rank": 1
+   }
+  ],
+  "powers_printed": [
+   {
+    "name": "Amplified Senses",
+    "text": "Senses 11 (Analytical Vision, Analytical Hearing, Darkvision, Extended Vision, Extended Hearing, Infravision, Radio, Ultra-Hearing, Ultravision)",
+    "cost": 11
+   },
+   {
+    "name": "Computer Link",
+    "text": "Comprehend 2 (Machines)",
+    "cost": 4
+   },
+   {
+    "name": "Hydraulic Muscles",
+    "text": "Enhanced Strength 4, Leaping 8 (1,800 feet)",
+    "cost": 16
+   },
+   {
+    "name": "Molybdenum Steel Body",
+    "text": "Protection 6",
+    "cost": 6
+   },
+   {
+    "name": "Self-Repair Systems",
+    "text": "Enhanced Stamina 3, Regeneration 3",
+    "cost": 9
+   },
+   {
+    "name": "White Sound Blaster",
+    "text": "Ranged Damage 9",
+    "cost": 18
+   },
+   {
+    "name": "Widespread White Sound",
+    "text": "Cone Area Damage 9",
+    "cost": 1,
+    "ae": true,
+    "array": "White Sound Blaster"
+   }
+  ],
+  "powers_note": "Widespread White Sound is an Alternate Effect of White Sound Blaster (no separate 'Array' header line).",
+  "equipment_printed": "",
+  "offense_printed": [
+   "Initiative +3",
+   "Unarmed +13 Close, Damage 7",
+   "White Sound Blaster +11 Range, Damage 9"
+  ],
+  "totals_printed": {
+   "abilities": 52,
+   "powers": 65,
+   "advantages": 6,
+   "skills": 20,
+   "defenses": 17,
+   "total": 160
+  }
+ },
+ {
+  "name": "Bronze Tiger",
+  "pl": 11,
+  "page": "HV1 86",
+  "archetype": "martial artist",
+  "abilities": {
+   "Strength": 4,
+   "Stamina": 4,
+   "Agility": 7,
+   "Dexterity": 7,
+   "Fighting": 14,
+   "Intellect": 5,
+   "Awareness": 6,
+   "Presence": 5
+  },
+  "abilities_note": "No enhanced abilities.",
+  "abilities_purchased": {
+   "Strength": 4,
+   "Stamina": 4,
+   "Agility": 7,
+   "Dexterity": 7,
+   "Fighting": 14,
+   "Intellect": 5,
+   "Awareness": 6,
+   "Presence": 5
+  },
+  "defenses_printed": {
+   "Dodge": 14,
+   "Parry": 14,
+   "Fortitude": 9,
+   "Toughness": "8/4*",
+   "Will": 10
+  },
+  "defenses_footnote": "* Without Defensive Roll.",
+  "skills": [
+   {
+    "name": "Acrobatics",
+    "ranks": 10,
+    "bonus": 17
+   },
+   {
+    "name": "Athletics",
+    "ranks": 8,
+    "bonus": 12
+   },
+   {
+    "name": "Deception",
+    "ranks": 6,
+    "bonus": 11
+   },
+   {
+    "name": "Expertise",
+    "spec": "Criminology",
+    "ranks": 6,
+    "bonus": 11
+   },
+   {
+    "name": "Expertise",
+    "spec": "Streetwise",
+    "ranks": 4,
+    "bonus": 9
+   },
+   {
+    "name": "Insight",
+    "ranks": 4,
+    "bonus": 10
+   },
+   {
+    "name": "Intimidation",
+    "ranks": 6,
+    "bonus": 11
+   },
+   {
+    "name": "Investigation",
+    "ranks": 4,
+    "bonus": 9
+   },
+   {
+    "name": "Perception",
+    "ranks": 8,
+    "bonus": 14
+   },
+   {
+    "name": "Stealth",
+    "ranks": 10,
+    "bonus": 17
+   },
+   {
+    "name": "Treatment",
+    "ranks": 4,
+    "bonus": 9
+   }
+  ],
+  "advantages": [
+   {
+    "name": "Agile Feint",
+    "rank": 1
+   },
+   {
+    "name": "Assessment",
+    "rank": 1
+   },
+   {
+    "name": "Chokehold",
+    "rank": 1
+   },
+   {
+    "name": "Close Attack",
+    "rank": 4
+   },
+   {
+    "name": "Daze",
+    "param": "Intimidation",
+    "rank": 1
+   },
+   {
+    "name": "Defensive Attack",
+    "rank": 1
+   },
+   {
+    "name": "Defensive Roll",
+    "rank": 4
+   },
+   {
+    "name": "Evasion",
+    "rank": 1
+   },
+   {
+    "name": "Fast Grab",
+    "rank": 1
+   },
+   {
+    "name": "Grabbing Finesse",
+    "rank": 1
+   },
+   {
+    "name": "Improved Disarm",
+    "rank": 1
+   },
+   {
+    "name": "Improved Grab",
+    "rank": 1
+   },
+   {
+    "name": "Improved Initiative",
+    "rank": 1
+   },
+   {
+    "name": "Improved Trip",
+    "rank": 1
+   },
+   {
+    "name": "Instant Up",
+    "rank": 1
+   },
+   {
+    "name": "Move-by Action",
+    "rank": 1
+   },
+   {
+    "name": "Power Attack",
+    "rank": 1
+   },
+   {
+    "name": "Redirect",
+    "rank": 1
+   },
+   {
+    "name": "Seize Initiative",
+    "rank": 1
+   },
+   {
+    "name": "Set-up",
+    "rank": 1
+   },
+   {
+    "name": "Takedown",
+    "rank": 1
+   },
+   {
+    "name": "Trance",
+    "rank": 1
+   },
+   {
+    "name": "Tracking",
+    "rank": 1
+   },
+   {
+    "name": "Uncanny Dodge",
+    "rank": 1
+   },
+   {
+    "name": "Weapon Bind",
+    "rank": 1
+   }
+  ],
+  "powers_printed": [],
+  "equipment_printed": "",
+  "offense_printed": [
+   "Initiative +11",
+   "Unarmed +18 Close Range, Damage 4"
+  ],
+  "totals_printed": {
+   "abilities": 104,
+   "powers": 0,
+   "advantages": 31,
+   "skills": 35,
+   "defenses": 16,
+   "total": 186
+  }
+ },
+ {
+  "name": "Green Arrow (Oliver Queen)",
+  "pl": 10,
+  "page": "HV1 232",
+  "archetype": "archer / weapon user",
+  "abilities": {
+   "Strength": 2,
+   "Stamina": 2,
+   "Agility": 4,
+   "Dexterity": 4,
+   "Fighting": 4,
+   "Intellect": 1,
+   "Awareness": 2,
+   "Presence": 3
+  },
+  "abilities_note": "No enhanced abilities.",
+  "abilities_purchased": {
+   "Strength": 2,
+   "Stamina": 2,
+   "Agility": 4,
+   "Dexterity": 4,
+   "Fighting": 4,
+   "Intellect": 1,
+   "Awareness": 2,
+   "Presence": 3
+  },
+  "defenses_printed": {
+   "Dodge": 14,
+   "Parry": 12,
+   "Fortitude": 7,
+   "Toughness": "6/2*",
+   "Will": 10
+  },
+  "defenses_footnote": "* Without Defensive Roll.",
+  "skills": [
+   {
+    "name": "Acrobatics",
+    "ranks": 4,
+    "bonus": 8
+   },
+   {
+    "name": "Athletics",
+    "ranks": 8,
+    "bonus": 10
+   },
+   {
+    "name": "Close Combat",
+    "spec": "Unarmed",
+    "ranks": 4,
+    "bonus": 8
+   },
+   {
+    "name": "Deception",
+    "ranks": 8,
+    "bonus": 11
+   },
+   {
+    "name": "Expertise",
+    "spec": "Journalism",
+    "ranks": 6,
+    "bonus": 7
+   },
+   {
+    "name": "Expertise",
+    "spec": "Politics",
+    "ranks": 6,
+    "bonus": 7
+   },
+   {
+    "name": "Expertise",
+    "spec": "Survival",
+    "ranks": 4,
+    "bonus": 5
+   },
+   {
+    "name": "Insight",
+    "ranks": 6,
+    "bonus": 8
+   },
+   {
+    "name": "Intimidation",
+    "ranks": 4,
+    "bonus": 7
+   },
+   {
+    "name": "Investigation",
+    "ranks": 6,
+    "bonus": 7
+   },
+   {
+    "name": "Perception",
+    "ranks": 6,
+    "bonus": 8
+   },
+   {
+    "name": "Ranged Combat",
+    "spec": "Bow",
+    "ranks": 8,
+    "bonus": 12
+   },
+   {
+    "name": "Stealth",
+    "ranks": 8,
+    "bonus": 12
+   },
+   {
+    "name": "Vehicles",
+    "ranks": 6,
+    "bonus": 10
+   }
+  ],
+  "advantages": [
+   {
+    "name": "Accurate Attack",
+    "rank": 1
+   },
+   {
+    "name": "All-out Attack",
+    "rank": 1
+   },
+   {
+    "name": "Benefit",
+    "param": "wealthy",
+    "rank": 3
+   },
+   {
+    "name": "Defensive Roll",
+    "rank": 4
+   },
+   {
+    "name": "Equipment",
+    "rank": 3
+   },
+   {
+    "name": "Improved Aim",
+    "rank": 1
+   },
+   {
+    "name": "Improved Critical",
+    "param": "Bow",
+    "rank": 1
+   },
+   {
+    "name": "Improved Disarm",
+    "rank": 1
+   },
+   {
+    "name": "Improved Initiative",
+    "rank": 1
+   },
+   {
+    "name": "Move-by Action",
+    "rank": 1
+   },
+   {
+    "name": "Power Attack",
+    "rank": 1
+   },
+   {
+    "name": "Precise Attack",
+    "param": "Ranged, Cover and Concealment",
+    "rank": 2
+   },
+   {
+    "name": "Ranged Attack",
+    "rank": 3
+   },
+   {
+    "name": "Quick Draw",
+    "rank": 1
+   },
+   {
+    "name": "Skill Mastery",
+    "param": "Ranged Combat: Bow",
+    "rank": 1
+   },
+   {
+    "name": "Takedown",
+    "rank": 1
+   },
+   {
+    "name": "Taunt",
+    "rank": 1
+   },
+   {
+    "name": "Ultimate Effort",
+    "param": "Aim",
+    "rank": 1
+   },
+   {
+    "name": "Uncanny Dodge",
+    "rank": 1
+   }
+  ],
+  "powers_printed": [],
+  "equipment_items": [
+   {
+    "name": "Bow and Arrows",
+    "text": "Array (10 points)",
+    "cost": 10,
+    "array_header": true
+   },
+   {
+    "name": "Standard Arrow",
+    "text": "Ranged Damage 5",
+    "cost": 10,
+    "array": "Bow and Arrows"
+   },
+   {
+    "name": "Cable Arrow",
+    "text": "Movement (Swinging)",
+    "cost": 1,
+    "array": "Bow and Arrows",
+    "ae": true
+   },
+   {
+    "name": "Flare Arrow",
+    "text": "Ranged Affliction 5 (Resisted by Fortitude; Vision Impaired, Vision Disabled, Vision Unaware)",
+    "cost": 1,
+    "array": "Bow and Arrows",
+    "ae": true
+   },
+   {
+    "name": "Knockout Gas Arrow",
+    "text": "Ranged Burst Area Affliction 3 (Resisted by Fortitude; Fatigued, Exhausted, Asleep)",
+    "cost": 1,
+    "array": "Bow and Arrows",
+    "ae": true
+   },
+   {
+    "name": "Net Arrow",
+    "text": "Ranged Affliction 3 (Resisted by Dodge; Hindered and Vulnerable, Defenseless and Immobile)",
+    "cost": 1,
+    "array": "Bow and Arrows",
+    "ae": true
+   },
+   {
+    "name": "Stun Arrow",
+    "text": "Ranged Affliction 3 (Resisted by Fortitude; Dazed, Stunned, Incapacitated)",
+    "cost": 1,
+    "array": "Bow and Arrows",
+    "ae": true
+   }
+  ],
+  "equipment_printed": "Bow and Arrows: Array (10 points) [Standard Arrow: Ranged Damage 5 - 10 points; Cable Arrow, Flare Arrow, Knockout Gas Arrow, Net Arrow, Stun Arrow - 1 point each] (15 equipment points = Equipment 3)",
+  "offense_printed": [
+   "Initiative +8",
+   "Bow +15 Ranged, Damage 5 plus others, Crit. 19-20",
+   "Unarmed +8 Close, Damage 2"
+  ],
+  "totals_printed": {
+   "abilities": 44,
+   "powers": 0,
+   "advantages": 29,
+   "skills": 42,
+   "defenses": 31,
+   "total": 146
+  }
+ },
+ {
+  "name": "Atom Smasher",
+  "pl": 10,
+  "page": "HV1 32",
+  "archetype": "size-changer (Growth)",
+  "abilities": {
+   "Strength": 15,
+   "Stamina": 15,
+   "Agility": 2,
+   "Dexterity": 2,
+   "Fighting": 5,
+   "Intellect": 1,
+   "Awareness": 1,
+   "Presence": 2
+  },
+  "abilities_note": "Strength and Stamina printed as '15/5*' (*Without Growth): base (purchased) 5, total 15 with Growth 10.",
+  "abilities_purchased": {
+   "Strength": 5,
+   "Stamina": 5,
+   "Agility": 2,
+   "Dexterity": 2,
+   "Fighting": 5,
+   "Intellect": 1,
+   "Awareness": 1,
+   "Presence": 2
+  },
+  "defenses_printed": {
+   "Dodge": "5/10*",
+   "Parry": "5/10*",
+   "Fortitude": "15/5*",
+   "Toughness": "15/5*",
+   "Will": 5
+  },
+  "defenses_footnote": "* Without Growth.",
+  "skills": [
+   {
+    "name": "Athletics",
+    "ranks": 5,
+    "bonus": 10
+   },
+   {
+    "name": "Deception",
+    "ranks": 2,
+    "bonus": 4
+   },
+   {
+    "name": "Expertise",
+    "spec": "Vehicle Repair",
+    "ranks": 10,
+    "bonus": 11
+   },
+   {
+    "name": "Insight",
+    "ranks": 4,
+    "bonus": 5
+   },
+   {
+    "name": "Intimidation",
+    "ranks": 6,
+    "bonus": 12,
+    "bonus_printed": "+12/+8*"
+   },
+   {
+    "name": "Perception",
+    "ranks": 5,
+    "bonus": 6,
+    "bonus_printed": "5, (+6)"
+   },
+   {
+    "name": "Persuasion",
+    "ranks": 4,
+    "bonus": 6
+   },
+   {
+    "name": "Ranged Combat",
+    "spec": "Throwing",
+    "ranks": 3,
+    "bonus": 5
+   },
+   {
+    "name": "Technology",
+    "ranks": 4,
+    "bonus": 5
+   },
+   {
+    "name": "Vehicles",
+    "ranks": 7,
+    "bonus": 9
+   }
+  ],
+  "skills_note": "Intimidation printed '6 (+12/+8*)' (*Without Growth). Perception printed with a stray comma: 'Perception 5, (+6)'.",
+  "advantages": [
+   {
+    "name": "All-out Attack",
+    "rank": 1
+   },
+   {
+    "name": "Daze",
+    "param": "Intimidation",
+    "rank": 1
+   },
+   {
+    "name": "Fast Grab",
+    "rank": 1
+   },
+   {
+    "name": "Improved Grab",
+    "rank": 1
+   },
+   {
+    "name": "Interpose",
+    "rank": 1
+   },
+   {
+    "name": "Languages",
+    "param": "Kahndaqi",
+    "rank": 1
+   },
+   {
+    "name": "Power Attack",
+    "rank": 1
+   },
+   {
+    "name": "Startle",
+    "rank": 1
+   }
+  ],
+  "powers_printed": [
+   {
+    "name": "Atomic Expansion",
+    "text": "Growth 10 Linked to Enhanced Impervious Toughness 5, Stacks with Tough",
+    "cost": 25
+   },
+   {
+    "name": "Tough",
+    "text": "Impervious Toughness 5",
+    "cost": 5
+   }
+  ],
+  "equipment_printed": "",
+  "offense_printed": [
+   "Initiative +2",
+   "Unarmed +5 Close, Damage 15/5*",
+   "Throwing +5 Range varies, Damage varies"
+  ],
+  "totals_printed": {
+   "abilities": 46,
+   "powers": 30,
+   "advantages": 8,
+   "skills": 25,
+   "defenses": 17,
+   "total": 126
+  }
+ },
+ {
+  "name": "Killer Croc",
+  "pl": 11,
+  "page": "HV1 307",
+  "archetype": "villain brute",
+  "abilities": {
+   "Strength": 10,
+   "Stamina": 8,
+   "Agility": 4,
+   "Dexterity": 1,
+   "Fighting": 6,
+   "Intellect": -1,
+   "Awareness": 0,
+   "Presence": 3
+  },
+  "abilities_note": "No enhanced abilities. Intellect is negative (-1).",
+  "abilities_purchased": {
+   "Strength": 10,
+   "Stamina": 8,
+   "Agility": 4,
+   "Dexterity": 1,
+   "Fighting": 6,
+   "Intellect": -1,
+   "Awareness": 0,
+   "Presence": 3
+  },
+  "defenses_printed": {
+   "Dodge": 6,
+   "Parry": 6,
+   "Fortitude": 16,
+   "Toughness": 16,
+   "Will": 6
+  },
+  "skills": [
+   {
+    "name": "Athletics",
+    "ranks": 8,
+    "bonus": 18
+   },
+   {
+    "name": "Close Combat",
+    "spec": "Unarmed",
+    "ranks": 3,
+    "bonus": 9
+   },
+   {
+    "name": "Intimidation",
+    "ranks": 9,
+    "bonus": 12
+   },
+   {
+    "name": "Perception",
+    "ranks": 8,
+    "bonus": 8
+   },
+   {
+    "name": "Stealth",
+    "ranks": 4,
+    "bonus": 8
+   }
+  ],
+  "advantages": [
+   {
+    "name": "All-out Attack",
+    "rank": 1
+   },
+   {
+    "name": "Chokehold",
+    "rank": 1
+   },
+   {
+    "name": "Diehard",
+    "rank": 1
+   },
+   {
+    "name": "Fast Grab",
+    "rank": 1
+   },
+   {
+    "name": "Fearless",
+    "rank": 1
+   },
+   {
+    "name": "Great Endurance",
+    "rank": 1
+   },
+   {
+    "name": "Improved Hold",
+    "rank": 1
+   },
+   {
+    "name": "Power Attack",
+    "rank": 1
+   },
+   {
+    "name": "Startle",
+    "rank": 1
+   },
+   {
+    "name": "Takedown",
+    "rank": 2
+   }
+  ],
+  "powers_printed": [
+   {
+    "name": "Aquatic",
+    "text": "Immunity 3 (Disease, Suffocation: Limited: Must Hold Breath); Movement 2 (Environmental Adaptation 2: Aquatic, Sewers); Swimming 4 (8 MPH)",
+    "cost": 10
+   },
+   {
+    "name": "Epidermolytic Hyperkeratosis",
+    "text": "Feature 2 (Density; Weighs 800 lbs.); Impervious Protection 8",
+    "cost": 18
+   },
+   {
+    "name": "Reptilian",
+    "text": "Leaping 3; Regeneration 5; Senses 3 (Acute Accurate Olfactory)",
+    "cost": 11
+   },
+   {
+    "name": "Teeth and Claws",
+    "text": "Strength-based Damage 3",
+    "cost": 3
+   }
+  ],
+  "equipment_printed": "",
+  "offense_printed": [
+   "Initiative +4",
+   "Unarmed +9 Close, Damage 13"
+  ],
+  "totals_printed": {
+   "abilities": 62,
+   "powers": 42,
+   "advantages": 11,
+   "skills": 16,
+   "defenses": 16,
+   "total": 147
+  }
+ },
+ {
+  "name": "Doctor Sivana",
+  "pl": 12,
+  "page": "HV1 175",
+  "archetype": "villain mastermind",
+  "abilities": {
+   "Strength": -1,
+   "Stamina": 1,
+   "Agility": 0,
+   "Dexterity": 2,
+   "Fighting": 2,
+   "Intellect": 10,
+   "Awareness": 3,
+   "Presence": 4
+  },
+  "abilities_note": "No enhanced abilities. Strength is negative (-1).",
+  "abilities_purchased": {
+   "Strength": -1,
+   "Stamina": 1,
+   "Agility": 0,
+   "Dexterity": 2,
+   "Fighting": 2,
+   "Intellect": 10,
+   "Awareness": 3,
+   "Presence": 4
+  },
+  "defenses_printed": {
+   "Dodge": 4,
+   "Parry": 4,
+   "Fortitude": 3,
+   "Toughness": 1,
+   "Will": 12
+  },
+  "skills": [
+   {
+    "name": "Deception",
+    "ranks": 9,
+    "bonus": 13
+   },
+   {
+    "name": "Expertise",
+    "spec": "Business",
+    "ranks": 6,
+    "bonus": 16
+   },
+   {
+    "name": "Expertise",
+    "spec": "Science",
+    "ranks": 12,
+    "bonus": 22
+   },
+   {
+    "name": "Insight",
+    "ranks": 6,
+    "bonus": 9
+   },
+   {
+    "name": "Intimidation",
+    "ranks": 10,
+    "bonus": 14
+   },
+   {
+    "name": "Investigation",
+    "ranks": 3,
+    "bonus": 13
+   },
+   {
+    "name": "Perception",
+    "ranks": 5,
+    "bonus": 8
+   },
+   {
+    "name": "Persuasion",
+    "ranks": 3,
+    "bonus": 7
+   },
+   {
+    "name": "Technology",
+    "ranks": 12,
+    "bonus": 22
+   },
+   {
+    "name": "Treatment",
+    "ranks": 2,
+    "bonus": 12
+   }
+  ],
+  "advantages": [
+   {
+    "name": "Benefit",
+    "param": "Multi-millionaire",
+    "rank": 4
+   },
+   {
+    "name": "Equipment",
+    "rank": 10
+   },
+   {
+    "name": "Improvised Tools",
+    "rank": 1
+   },
+   {
+    "name": "Inventor",
+    "rank": 1
+   },
+   {
+    "name": "Jack-of-all-trades",
+    "rank": 1
+   },
+   {
+    "name": "Leadership",
+    "rank": 1
+   },
+   {
+    "name": "Redirect",
+    "rank": 1
+   },
+   {
+    "name": "Set-up",
+    "rank": 1
+   },
+   {
+    "name": "Skill Mastery",
+    "param": "Technology",
+    "rank": 1
+   },
+   {
+    "name": "Well-informed",
+    "rank": 1
+   }
+  ],
+  "powers_printed": [],
+  "equipment_printed": "50 points of equipment as appropriate, typically headquarters and vehicles.",
+  "offense_printed": [
+   "Initiative +0",
+   "Unarmed +2 Close, Damage -1"
+  ],
+  "offense_note": "Initiative printed as 'Initiative + 0'.",
+  "totals_printed": {
+   "abilities": 42,
+   "powers": 0,
+   "advantages": 22,
+   "skills": 34,
+   "defenses": 17,
+   "total": 115
+  }
+ },
+ {
+  "name": "Abra Kadabra",
+  "pl": 11,
+  "page": "HV1 10",
+  "archetype": "power array (Alternate Effects) villain",
+  "abilities": {
+   "Strength": 2,
+   "Stamina": 4,
+   "Agility": 1,
+   "Dexterity": 3,
+   "Fighting": 2,
+   "Intellect": 4,
+   "Awareness": 4,
+   "Presence": 2
+  },
+  "abilities_note": "No enhanced abilities.",
+  "abilities_purchased": {
+   "Strength": 2,
+   "Stamina": 4,
+   "Agility": 1,
+   "Dexterity": 3,
+   "Fighting": 2,
+   "Intellect": 4,
+   "Awareness": 4,
+   "Presence": 2
+  },
+  "defenses_printed": {
+   "Dodge": 10,
+   "Parry": 12,
+   "Fortitude": 9,
+   "Toughness": "7/4*",
+   "Will": 11
+  },
+  "defenses_footnote": "* Without Defensive Roll.",
+  "skills": [
+   {
+    "name": "Deception",
+    "ranks": 6,
+    "bonus": 8
+   },
+   {
+    "name": "Expertise",
+    "spec": "Science",
+    "ranks": 15,
+    "bonus": 19
+   },
+   {
+    "name": "Expertise",
+    "spec": "Stage Magic",
+    "ranks": 10,
+    "bonus": 14
+   },
+   {
+    "name": "Intimidation",
+    "ranks": 6,
+    "bonus": 8
+   },
+   {
+    "name": "Persuasion",
+    "ranks": 6,
+    "bonus": 8
+   },
+   {
+    "name": "Sleight of Hand",
+    "ranks": 6,
+    "bonus": 9
+   },
+   {
+    "name": "Stealth",
+    "ranks": 6,
+    "bonus": 7
+   },
+   {
+    "name": "Technology",
+    "ranks": 7,
+    "bonus": 11
+   }
+  ],
+  "advantages": [
+   {
+    "name": "Daze",
+    "param": "Deception",
+    "rank": 1
+   },
+   {
+    "name": "Defensive Roll",
+    "rank": 3
+   },
+   {
+    "name": "Fascinate",
+    "param": "Deception",
+    "rank": 1
+   },
+   {
+    "name": "Improvised Tools",
+    "rank": 1
+   },
+   {
+    "name": "Inventor",
+    "rank": 1
+   }
+  ],
+  "powers_printed": [
+   {
+    "name": "Technological Magic",
+    "text": "Array (56 points)",
+    "cost": 56,
+    "array_header": true
+   },
+   {
+    "name": "Mind over Matter",
+    "text": "Move Object 11, Damaging, Perception Area, Perception Range, Precise",
+    "cost": 56,
+    "array": "Technological Magic"
+   },
+   {
+    "name": "Disappearing Act",
+    "text": "Teleport 11, Accurate, Easy, Extended, Increased Mass",
+    "cost": 1,
+    "array": "Technological Magic",
+    "ae": true
+   },
+   {
+    "name": "Hypno-Ray",
+    "text": "Affliction 11 (Resisted by Will; Dazed, Compelled, Controlled), Cone Area, Cumulative, Perception Range, Reversible",
+    "cost": 1,
+    "array": "Technological Magic",
+    "ae": true
+   },
+   {
+    "name": "Nanotechnological Transformation",
+    "text": "Affliction 11 (Resisted by Fortitude; Hindered, Immobile, Transformed), Perception Range, Progressive, Reversible",
+    "cost": 1,
+    "array": "Technological Magic",
+    "ae": true
+   },
+   {
+    "name": "Nanotechnological Transmutation",
+    "text": "Transform 8 (solids into other solids), Continuous, Perception Range",
+    "cost": 1,
+    "array": "Technological Magic",
+    "ae": true
+   },
+   {
+    "name": "Teleport Ray",
+    "text": "Teleport 11, Attack (Resisted by Dodge), Extended, Increased Mass, Perception Range",
+    "cost": 1,
+    "array": "Technological Magic",
+    "ae": true
+   }
+  ],
+  "equipment_printed": "",
+  "offense_printed": [
+   "Initiative +1",
+   "Technological Magic -- Perception, Move Object 11, others",
+   "Unarmed +2 Close, Damage 2"
+  ],
+  "totals_printed": {
+   "abilities": 44,
+   "powers": 61,
+   "advantages": 7,
+   "skills": 31,
+   "defenses": 31,
+   "total": 174
+  }
+ }
+]

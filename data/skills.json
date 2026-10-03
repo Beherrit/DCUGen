@@ -1,0 +1,108 @@
+[
+  {
+    "name": "Acrobatics",
+    "ability": "Agility",
+    "trained_only": true,
+    "summary": "Flips, rolls, balance and tumbling.",
+    "source": "DCA 56"
+  },
+  {
+    "name": "Athletics",
+    "ability": "Strength",
+    "summary": "Climbing, jumping, running and swimming.",
+    "source": "DCA 57"
+  },
+  {
+    "name": "Close Combat",
+    "ability": "Fighting",
+    "specialized": true,
+    "summary": "Bonus with one kind of close attack.",
+    "source": "DCA 57"
+  },
+  {
+    "name": "Deception",
+    "ability": "Presence",
+    "summary": "Lies, disguise, feints and tricks.",
+    "source": "DCA 58"
+  },
+  {
+    "name": "Expertise",
+    "ability": "Intellect",
+    "specialized": true,
+    "trained_only": true,
+    "summary": "Knowledge of one field.",
+    "source": "DCA 59"
+  },
+  {
+    "name": "Insight",
+    "ability": "Awareness",
+    "summary": "Reading people and spotting lies.",
+    "source": "DCA 61"
+  },
+  {
+    "name": "Intimidation",
+    "ability": "Presence",
+    "summary": "Threats, menace and demoralizing foes.",
+    "source": "DCA 61"
+  },
+  {
+    "name": "Investigation",
+    "ability": "Intellect",
+    "trained_only": true,
+    "summary": "Gathering clues, evidence and information.",
+    "source": "DCA 62"
+  },
+  {
+    "name": "Perception",
+    "ability": "Awareness",
+    "summary": "Noticing things with your senses.",
+    "source": "DCA 63"
+  },
+  {
+    "name": "Persuasion",
+    "ability": "Presence",
+    "summary": "Convincing and negotiating.",
+    "source": "DCA 64"
+  },
+  {
+    "name": "Ranged Combat",
+    "ability": "Dexterity",
+    "specialized": true,
+    "summary": "Bonus with one kind of ranged attack.",
+    "source": "DCA 64"
+  },
+  {
+    "name": "Sleight of Hand",
+    "ability": "Dexterity",
+    "trained_only": true,
+    "summary": "Pickpocketing, palming and escaping bonds.",
+    "source": "DCA 65"
+  },
+  {
+    "name": "Stealth",
+    "ability": "Agility",
+    "summary": "Hiding and moving unseen.",
+    "source": "DCA 65"
+  },
+  {
+    "name": "Technology",
+    "ability": "Intellect",
+    "trained_only": true,
+    "summary": "Building, repairing and hacking machines.",
+    "source": "DCA 66"
+  },
+  {
+    "name": "Treatment",
+    "ability": "Intellect",
+    "trained_only": true,
+    "summary": "Medical care and diagnosis.",
+    "source": "DCA 67"
+  },
+  {
+    "name": "Vehicles",
+    "ability": "Dexterity",
+    "trained_only": true,
+    "summary": "Driving and piloting.",
+    "source": "DCA 67"
+  }
+]

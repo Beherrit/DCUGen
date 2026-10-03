@@ -1,0 +1,758 @@
+{
+  "extras": [
+    {
+      "name": "Accurate",
+      "kind": "extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [
+        "attack"
+      ],
+      "source": "DCA 125",
+      "summary": "+2 to attack checks with the effect per rank."
+    },
+    {
+      "name": "Affects Corporeal",
+      "kind": "extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "DCA 125",
+      "summary": "Lets an incorporeal user's effect work on corporeal targets at a rank equal to extra ranks."
+    },
+    {
+      "name": "Affects Insubstantial",
+      "kind": "extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": {
+        "Half rank": 1,
+        "Full rank": 2
+      },
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 125",
+      "summary": "Effect also works on insubstantial targets at half (1 point) or full (2 points) rank."
+    },
+    {
+      "name": "Affects Objects",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": {
+        "Objects only": 0,
+        "Objects and creatures": 1
+      },
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 125",
+      "summary": "Fortitude-resisted effect also works on objects (+1), or only on objects (+0)."
+    },
+    {
+      "name": "Affects Others",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": {
+        "Others only": 0,
+        "Self and others": 1
+      },
+      "max_steps": 1,
+      "requires": [
+        "personal"
+      ],
+      "source": "DCA 125",
+      "summary": "Grant a personal effect to others by touch (+1), or to others only (+0)."
+    },
+    {
+      "name": "Alternate Effect",
+      "kind": "extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": {
+        "Alternate Effect": 1,
+        "Dynamic Alternate Effect": 2
+      },
+      "max_steps": null,
+      "requires": [],
+      "source": "DCA 125",
+      "summary": "Adds an alternate setting to a power's array; Dynamic versions can share points."
+    },
+    {
+      "name": "Alternate Resistance",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": {
+        "Equivalent resistance": 0,
+        "Easier resistance": 1
+      },
+      "max_steps": 1,
+      "requires": [
+        "resisted"
+      ],
+      "source": "DCA 126",
+      "summary": "Effect is resisted by a different defense: +1 if easier to beat, +0 if equivalent."
+    },
+    {
+      "name": "Area",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": {
+        "Burst": 1,
+        "Cloud": 1,
+        "Cone": 1,
+        "Cylinder": 1,
+        "Line": 1,
+        "Perception": 1,
+        "Shapeable": 1
+      },
+      "max_steps": null,
+      "requires": [
+        "resisted"
+      ],
+      "source": "DCA 126",
+      "summary": "Effect fills an area shape instead of needing an attack; each extra +1 doubles area distance."
+    },
+    {
+      "name": "Attack",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 0,
+      "options": null,
+      "max_steps": 1,
+      "requires": [
+        "personal"
+      ],
+      "source": "DCA 128",
+      "summary": "Turns a personal effect into a close attack used on others (e.g. Teleport Attack)."
+    },
+    {
+      "name": "Contagious",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [
+        "resisted"
+      ],
+      "source": "DCA 129",
+      "summary": "Effect spreads to anyone who touches an affected target."
+    },
+    {
+      "name": "Dimensional",
+      "kind": "extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": {
+        "One dimension": 1,
+        "Related group": 2,
+        "Any dimension": 3
+      },
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 129",
+      "summary": "Effect reaches into one dimension (1), a related group (2), or any dimension (3)."
+    },
+    {
+      "name": "Extended Range",
+      "kind": "extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [
+        "ranged"
+      ],
+      "source": "DCA 129",
+      "summary": "Doubles all range increments of a ranged effect per rank."
+    },
+    {
+      "name": "Feature",
+      "kind": "extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "DCA 129",
+      "summary": "Adds a minor extra capability to the effect per rank."
+    },
+    {
+      "name": "Homing",
+      "kind": "extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [
+        "attack",
+        "ranged"
+      ],
+      "source": "DCA 129",
+      "summary": "A missed ranged attack tries again next turn; one extra attempt per rank."
+    },
+    {
+      "name": "Impervious",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 129",
+      "summary": "Defense ignores effects whose rank is half the Impervious rank (rounded up) or less."
+    },
+    {
+      "name": "Increased Duration",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 3,
+      "requires": [],
+      "source": "DCA 129",
+      "summary": "Raises duration one step: instant to concentration, concentration to sustained, sustained to continuous."
+    },
+    {
+      "name": "Increased Mass",
+      "kind": "extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "DCA 130",
+      "summary": "Adds 1 to the mass rank an effect (e.g. Teleport) can carry per rank."
+    },
+    {
+      "name": "Increased Range",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 2,
+      "requires": [],
+      "source": "DCA 130",
+      "summary": "Raises range one step: close to ranged, ranged to perception (close-to-perception is +2)."
+    },
+    {
+      "name": "Incurable",
+      "kind": "extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [
+        "resisted"
+      ],
+      "source": "DCA 130",
+      "summary": "Healing and Regeneration cannot remove the effect's results (unless Persistent)."
+    },
+    {
+      "name": "Indirect",
+      "kind": "extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 4,
+      "requires": [
+        "ranged"
+      ],
+      "source": "DCA 130",
+      "summary": "Ranged effect originates from a point other than the user, ignoring intervening cover (1-4 ranks)."
+    },
+    {
+      "name": "Innate",
+      "kind": "extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 130",
+      "summary": "Effect is an inborn trait and cannot be Nullified."
+    },
+    {
+      "name": "Insidious",
+      "kind": "extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 130",
+      "summary": "Results of the effect are hard to detect (DC 20 check or unusual sense)."
+    },
+    {
+      "name": "Linked",
+      "kind": "extra",
+      "cost_type": "flat",
+      "value": 0,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 130",
+      "summary": "Two or more effects always work together as one action; costs simply add up."
+    },
+    {
+      "name": "Multiattack",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [
+        "attack"
+      ],
+      "source": "DCA 131",
+      "summary": "Hit multiple targets, or one target several times for a higher resistance DC."
+    },
+    {
+      "name": "Penetrating",
+      "kind": "extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [
+        "resisted"
+      ],
+      "source": "DCA 131",
+      "summary": "Overcomes Impervious defenses up to the Penetrating rank (max effect rank)."
+    },
+    {
+      "name": "Precise",
+      "kind": "extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 131",
+      "summary": "Effect can perform delicate, fine-control tasks."
+    },
+    {
+      "name": "Reach",
+      "kind": "extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [
+        "close"
+      ],
+      "source": "DCA 131",
+      "summary": "Extends a close effect's reach by 5 feet per rank."
+    },
+    {
+      "name": "Reaction",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": {
+        "From free action": 1,
+        "From standard action": 3
+      },
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 131",
+      "summary": "Effect triggers automatically as a reaction: +1 from a free action, +3 from a standard action."
+    },
+    {
+      "name": "Reversible",
+      "kind": "extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 132",
+      "summary": "You can undo the effect's results at will as a free action."
+    },
+    {
+      "name": "Ricochet",
+      "kind": "extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [
+        "attack"
+      ],
+      "source": "DCA 132",
+      "summary": "Bounce an attack off surfaces to change direction, one bounce per rank."
+    },
+    {
+      "name": "Secondary Effect",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [
+        "instant"
+      ],
+      "source": "DCA 132",
+      "summary": "Instant effect hits the target again on the following round."
+    },
+    {
+      "name": "Selective",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [
+        "resisted"
+      ],
+      "source": "DCA 132",
+      "summary": "Choose who is and is not affected, mainly for area effects."
+    },
+    {
+      "name": "Sleep",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 0,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 132",
+      "summary": "Effect leaves targets asleep instead of incapacitated."
+    },
+    {
+      "name": "Split",
+      "kind": "extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [
+        "resisted"
+      ],
+      "source": "DCA 132",
+      "summary": "Divide a single-target effect's ranks among an extra target per rank."
+    },
+    {
+      "name": "Subtle",
+      "kind": "extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": {
+        "Hard to notice": 1,
+        "Undetectable": 2
+      },
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 132",
+      "summary": "Effect is hard to notice (1 point, DC 20 Perception) or undetectable (2 points)."
+    },
+    {
+      "name": "Sustained",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 0,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 132",
+      "summary": "Turns a permanent effect into a sustained one (usable with extra effort)."
+    },
+    {
+      "name": "Triggered",
+      "kind": "extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [
+        "instant"
+      ],
+      "source": "DCA 132",
+      "summary": "Set an instant effect to go off later under chosen circumstances; one use per rank."
+    },
+    {
+      "name": "Variable Descriptor",
+      "kind": "extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": {
+        "Closely related group": 1,
+        "Broad group": 2
+      },
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 133",
+      "summary": "Change the effect's descriptors within a closely related (1) or broad (2) group."
+    }
+  ],
+  "flaws": [
+    {
+      "name": "Activation",
+      "kind": "flaw",
+      "cost_type": "flat",
+      "value": 1,
+      "options": {
+        "Move action": 1,
+        "Standard action": 2
+      },
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 133",
+      "summary": "Power needs a move (-1) or standard (-2) action to switch on before its effects work."
+    },
+    {
+      "name": "Check Required",
+      "kind": "flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "DCA 134",
+      "summary": "Must pass a check (DC 10 + flaw ranks) to use the effect."
+    },
+    {
+      "name": "Concentration",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [
+        "sustained"
+      ],
+      "source": "DCA 135",
+      "summary": "Sustained effect becomes concentration duration (standard action to maintain)."
+    },
+    {
+      "name": "Diminished Range",
+      "kind": "flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 3,
+      "requires": [
+        "ranged"
+      ],
+      "source": "DCA 135",
+      "summary": "Shrinks the effect's short/medium/long range increments per rank (max 3)."
+    },
+    {
+      "name": "Distracting",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 135",
+      "summary": "You are vulnerable until your next turn after using the effect."
+    },
+    {
+      "name": "Fades",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 135",
+      "summary": "Effect loses 1 rank per use until recovered."
+    },
+    {
+      "name": "Feedback",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 135",
+      "summary": "You take damage when the effect's physical manifestation is damaged."
+    },
+    {
+      "name": "Grab-Based",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [
+        "attack"
+      ],
+      "source": "DCA 135",
+      "summary": "Effect only works after a successful grab."
+    },
+    {
+      "name": "Inaccurate",
+      "kind": "flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [
+        "attack"
+      ],
+      "source": "DCA 135",
+      "summary": "-2 to attack checks with the effect per rank."
+    },
+    {
+      "name": "Increased Action",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 3,
+      "requires": [],
+      "source": "DCA 135",
+      "summary": "Each step up in required action (free to move to standard...) is -1 per rank."
+    },
+    {
+      "name": "Limited",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 135",
+      "summary": "Effect works only in certain situations or on certain things (about half usefulness)."
+    },
+    {
+      "name": "Noticeable",
+      "kind": "flaw",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 135",
+      "summary": "A continuous or permanent effect has an obvious display."
+    },
+    {
+      "name": "Permanent",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 136",
+      "summary": "Continuous effect becomes permanent: always on, no extra effort."
+    },
+    {
+      "name": "Quirk",
+      "kind": "flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "DCA 136",
+      "summary": "A minor nuisance attached to the effect, the opposite of a Feature."
+    },
+    {
+      "name": "Reduced Range",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 2,
+      "requires": [],
+      "source": "DCA 136",
+      "summary": "Lowers range one step per rank (perception to ranged to close)."
+    },
+    {
+      "name": "Removable",
+      "kind": "flaw",
+      "cost_type": "special",
+      "value": 1,
+      "options": {
+        "Removable": 1,
+        "Easily Removable": 2
+      },
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 136",
+      "summary": "Power can be taken away: -1 per 5 points of final cost, or -2 per 5 if Easily Removable (Indestructible reduces the flaw by 1 flat)."
+    },
+    {
+      "name": "Resistible",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 137",
+      "summary": "Effect gains a (or an additional) resistance check of a chosen defense."
+    },
+    {
+      "name": "Sense-Dependent",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [
+        "resisted"
+      ],
+      "source": "DCA 137",
+      "summary": "Target must perceive the effect with a chosen sense for it to work (Dodge to avert)."
+    },
+    {
+      "name": "Side Effect",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": {
+        "On failure": 1,
+        "Always": 2
+      },
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 137",
+      "summary": "Failing with the effect (-1) or using it at all (-2) causes you a problem."
+    },
+    {
+      "name": "Tiring",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 138",
+      "summary": "Using the effect leaves you fatigued."
+    },
+    {
+      "name": "Uncontrolled",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 138",
+      "summary": "The GM, not you, decides when and how the effect works."
+    },
+    {
+      "name": "Unreliable",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "DCA 138",
+      "summary": "Effect fails on a d20 roll of 10 or less (or has only five uses)."
+    }
+  ]
+}

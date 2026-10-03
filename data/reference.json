@@ -1,0 +1,989 @@
+{
+  "action_types": [
+    {
+      "name": "Standard Action",
+      "summary": "The main 'do something' action of your turn; one per round.",
+      "details": "Attacking, using a skill, advantage, or power, and similar active efforts take a standard action. Each turn you normally get one standard action plus one move action. You may trade the standard action for a second move action (or for a free action).",
+      "source": "DCA 167"
+    },
+    {
+      "name": "Move Action",
+      "summary": "Moving your speed or doing something of similar duration.",
+      "details": "A move action covers moving up to your speed rank, drawing or putting away an item, standing up, picking something up, and comparable tasks. It can come before or after your standard action, but you cannot normally split it around the standard action. Trading your standard action lets you take two move actions in a turn.",
+      "source": "DCA 167"
+    },
+    {
+      "name": "Free Action",
+      "summary": "Something so quick it takes no meaningful time; take as many as the GM allows on your turn.",
+      "details": "Examples include speaking a sentence or two, dropping an object, dropping prone, and ceasing to concentrate on (or ending) a power. Free actions are a conscious choice made on your own turn and can be taken alongside other actions.",
+      "source": "DCA 168"
+    },
+    {
+      "name": "Reaction",
+      "summary": "An instant response to a trigger, usable even outside your turn.",
+      "details": "Reactions take no real time and do not count against your action allotment; you can react as often as circumstances call for, but only when they call for it. Unlike a free action, a reaction responds to something happening and need not occur on your turn. Spending a hero point is normally a reaction.",
+      "source": "DCA 168"
+    },
+    {
+      "name": "No Action",
+      "summary": "Things like resistance checks that involve no effort from the character.",
+      "details": "Some rolls, notably resistance checks, are not actions at all and do not use up any part of your turn. Delaying your turn is also treated as no action.",
+      "source": "DCA 168"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Aid",
+      "action": "Standard",
+      "summary": "Help an ally fighting an opponent you could also attack.",
+      "details": "Make an attack check against DC 10 (you do not actually hit the foe). On a success your ally gains your choice of a +2 circumstance bonus to attack checks against that opponent or a +2 circumstance bonus to defense against it, lasting until the end of the ally's next turn. Four or more degrees of success raise the bonus to +5.",
+      "source": "DCA 175"
+    },
+    {
+      "name": "Aim",
+      "action": "Standard",
+      "summary": "Spend time lining up a shot for a bonus on your next attack.",
+      "details": "A close attack, or a ranged attack at close range, gains a +5 circumstance bonus; a ranged attack from farther away gains +2. You are vulnerable while aiming and must spend a free action to hold your aim. Your very next action must be the attack, or the bonus is lost.",
+      "source": "DCA 175"
+    },
+    {
+      "name": "Attack",
+      "action": "Standard",
+      "summary": "Make an attack check against an opponent within range.",
+      "details": "Roll d20 + attack bonus against the target's defense class (10 + Parry for close, 10 + Dodge for ranged). Area and perception-range effects need no attack check; they simply affect the target or area. A natural 20 always hits (and may be a critical hit); a natural 1 always misses.",
+      "source": "DCA 175"
+    },
+    {
+      "name": "Charge",
+      "action": "Standard",
+      "summary": "Rush in a fairly straight line and make a close attack at the end.",
+      "details": "Move up to your speed rank toward the target using any movement mode you have, then make a close attack at a -2 circumstance penalty. Pairing it with your move action lets you cover up to twice your speed (speed rank for the move, then speed rank again with the charge). Charging is the basis of the Slam Attack maneuver.",
+      "source": "DCA 175"
+    },
+    {
+      "name": "Command",
+      "action": "Move",
+      "summary": "Give orders to a minion or thrall under your control.",
+      "details": "Each command to a controlled character, or to a group receiving the same order, takes one move action. Giving different orders to different characters or groups needs a separate move action for each, so you can issue at most two commands in a round.",
+      "source": "DCA 175"
+    },
+    {
+      "name": "Crawl",
+      "action": "Move",
+      "summary": "Move while prone.",
+      "details": "A prone character can only crawl, at ground speed -1 rank (half normal speed). Characters with the Slither Movement effect crawl at their full ground speed.",
+      "source": "DCA 175"
+    },
+    {
+      "name": "Defend",
+      "action": "Standard",
+      "summary": "Give up attacking to actively avoid incoming attacks.",
+      "details": "Until the start of your next turn, every attack against you is resolved as an opposed check: you roll your relevant active defense, adding 10 to any die roll of 10 or less (so the minimum roll is 11, like a hero point re-roll). An attacker must equal or beat your result to hit.",
+      "source": "DCA 175"
+    },
+    {
+      "name": "Delay",
+      "action": "None",
+      "summary": "Postpone your whole turn to a later point in the initiative order.",
+      "details": "You must delay the entire turn and cannot do so after acting or while unable to act. After any other character acts you may step in; your initiative moves to that point. If your next initiative count comes around first, the delayed turn is lost. Beneficial 'until end of turn' effects end when you delay, but harmful ones last until you act, and resistance checks wait until after your turn.",
+      "source": "DCA 175-176"
+    },
+    {
+      "name": "Demoralize",
+      "action": "Standard",
+      "summary": "Use Intimidation to shake a foe's confidence in combat.",
+      "details": "Make an Intimidation check opposed by the better of the target's Insight or Will. Success leaves the target impaired (-2 on checks) until the end of your next round; four or more degrees of success leave it disabled (-5) for the same time. Some advantages let Deception substitute for Intimidation here.",
+      "source": "DCA 60"
+    },
+    {
+      "name": "Disarm",
+      "action": "Standard",
+      "summary": "Knock a weapon or device out of an opponent's grip.",
+      "details": "Attack the defender at -2 (or -5 if using a ranged attack). If you hit, make an opposed check of your attack's damage rank against the defender's Strength; winning makes them drop the item, and an unarmed disarmer can grab it as a free action. If you used a melee weapon and lose, the defender may immediately try to disarm you as a reaction (no further counter by you if that fails).",
+      "source": "DCA 176"
+    },
+    {
+      "name": "Drop an Item",
+      "action": "Free",
+      "summary": "Let go of something you are holding.",
+      "details": "Simply releasing an item costs only a free action. Dropping or throwing an object deliberately to hit something is instead a standard attack action.",
+      "source": "DCA 176"
+    },
+    {
+      "name": "Drop Prone",
+      "action": "Free",
+      "summary": "Fall flat to the ground.",
+      "details": "Going prone is a free action, but getting back up takes a move action (see Stand). While prone you suffer -5 on close attacks, close attackers get +5 against you, ranged attackers take -5, and you are hindered.",
+      "source": "DCA 176"
+    },
+    {
+      "name": "Escape",
+      "action": "Move",
+      "summary": "Break free of an opponent's grab.",
+      "details": "Roll Athletics or Sleight of Hand against the routine result (rank + 10) of the grabber's Strength or grabbing effect rank. Success ends the grab, and you may move away at up to your ground speed -1 rank. Failure means you remain held.",
+      "source": "DCA 176"
+    },
+    {
+      "name": "Feint",
+      "action": "Standard",
+      "summary": "Use Deception to mislead a foe and open them up to your next attack.",
+      "details": "Make a Deception check (a deception is normally opposed by the target's Deception or Insight). On a success the target is vulnerable against your next attack until the end of your next round. Advantages such as Agile Feint or Startle let other traits (Acrobatics, Speed, Intimidation) stand in for Deception.",
+      "source": "DCA 58"
+    },
+    {
+      "name": "Grab",
+      "action": "Standard",
+      "summary": "Seize and hold a target.",
+      "details": "Make an attack check; if it hits, the target resists your Strength (or grab effect rank) using the better of its Strength or Dodge. One degree of success leaves it restrained (immobile and vulnerable); two or more leave it bound (defenseless, immobile, impaired). Later grab actions can add cumulative degrees, but a loss lets the target escape. While holding someone you are hindered and vulnerable; maintaining the hold is a free action, letting you spend a standard action to inflict Strength damage on the held target.",
+      "source": "DCA 176-177"
+    },
+    {
+      "name": "Move",
+      "action": "Move",
+      "summary": "Travel up to your speed rank.",
+      "details": "Move your speed rank in any movement mode you possess; ordinary ground speed is rank 0 (about 30 feet). Taking two move actions lets you move your speed rank twice. You cannot normally split a move around your standard action.",
+      "source": "DCA 177"
+    },
+    {
+      "name": "Ready",
+      "action": "Standard",
+      "summary": "Prepare an action to fire off when a stated trigger occurs.",
+      "details": "Name a single standard, move, or free action and the circumstance that will trigger it; before your next turn you may take it as a reaction when that happens, and your initiative shifts to that point. Since ready is a standard action you may still move. If your next turn arrives first, the readied action is lost (you may ready again). Readying is how you counter an opponent's power.",
+      "source": "DCA 177"
+    },
+    {
+      "name": "Recover",
+      "action": "Standard",
+      "summary": "Catch your breath to shed damage or fatigue, once per conflict.",
+      "details": "Spend your whole turn recovering: remove your worst level of damage or fatigue, or instead make an extra resistance check against an ongoing effect (on top of the usual end-of-turn check). You also gain +2 circumstance bonus to active defenses until the start of your next turn. Usable only once per conflict.",
+      "source": "DCA 177"
+    },
+    {
+      "name": "Smash",
+      "action": "Standard",
+      "summary": "Attack an object held or worn by an opponent.",
+      "details": "Make an attack check against the defense of the character carrying the object, with an extra -5 circumstance penalty if the object is held. A hit damages the object instead of the character (see Damaging Objects).",
+      "source": "DCA 177"
+    },
+    {
+      "name": "Stand",
+      "action": "Move",
+      "summary": "Get up from prone.",
+      "details": "Standing normally takes a move action. You may instead try a DC 20 Acrobatics check to stand as a free action; if it fails, you can still stand with a move action. The Instant Up advantage lets you stand as a free action with no check.",
+      "source": "DCA 177"
+    },
+    {
+      "name": "Trick",
+      "action": "Standard",
+      "summary": "Use Deception to lure a foe into a dangerous blunder.",
+      "details": "Make a Deception check opposed by the target's Deception or Insight. Success means the opponent ignores a hazard you set up (a ledge, a live junction box) and may suffer it if their attack on you misses. More than one degree of failure leaves you vulnerable to that target until the start of your next round.",
+      "source": "DCA 58"
+    },
+    {
+      "name": "Trip",
+      "action": "Standard",
+      "summary": "Knock or throw an opponent to the ground.",
+      "details": "Make a close attack against Parry at -2. If it hits, make an opposed check using the better of Acrobatics or Athletics on each side. If you win, the defender falls prone in an adjacent space of your choice; if you lose, the defender immediately gets an opposed check to trip you in return, and the attempt ends if that fails.",
+      "source": "DCA 177"
+    }
+  ],
+  "maneuvers": [
+    {
+      "name": "Accurate Attack",
+      "summary": "Trade effect for accuracy.",
+      "details": "Take up to -2 on the attack's effect modifier and add the same amount (max +2) to your attack bonus. The effect modifier cannot drop below +0 and the attack bonus cannot more than double. Declare before rolling; the change lasts until the start of your next turn.",
+      "source": "DCA 177"
+    },
+    {
+      "name": "All-out Attack",
+      "summary": "Trade defense for accuracy.",
+      "details": "Take up to -2 on your active defenses (Dodge and Parry) and add the same amount (max +2) to your attack bonus. Defenses cannot drop below +0 and the attack bonus cannot more than double. Declare before rolling; it lasts until the start of your next turn.",
+      "source": "DCA 177"
+    },
+    {
+      "name": "Defensive Attack",
+      "summary": "Trade accuracy for defense.",
+      "details": "Take up to -2 on your attack bonus and add the same amount (max +2) to both Dodge and Parry. The attack bonus cannot go below +0 and defenses cannot more than double. Lasts until the start of your next turn. Not usable with effects that need no attack check or allow no resistance check.",
+      "source": "DCA 178"
+    },
+    {
+      "name": "Finishing Attack",
+      "summary": "Attack a defenseless target as a routine check, or roll for an automatic critical.",
+      "details": "Against a defenseless target in close range you may treat the attack as a routine check, which usually means an automatic hit. If you roll normally against DC 10 instead, any hit counts as a critical hit. If you hit with a damaging attack intending to kill and the target's resistance check has three or more degrees of failure, the target dies immediately.",
+      "source": "DCA 178"
+    },
+    {
+      "name": "Power Attack",
+      "summary": "Trade accuracy for effect.",
+      "details": "Take up to -2 on your attack bonus and add the same amount (max +2) to the attack's effect bonus. The attack bonus cannot go below +0 and the effect bonus cannot more than double. Decide before rolling; it lasts until the start of your next turn. Not usable with effects that need no attack check or allow no resistance check.",
+      "source": "DCA 178"
+    },
+    {
+      "name": "Slam Attack",
+      "summary": "Charge straight into a target, using momentum as damage.",
+      "details": "When charging, your damage rank is the higher of your movement speed rank or your normal damage +1. Moving your full speed first adds another +1. Base slam damage (before circumstance modifiers) is capped by power level. You resist half the attack's damage rank (rounded down) with Toughness yourself. Immunity to your own slam damage is Immunity rank 2; Immunity to all slam damage is rank 5.",
+      "source": "DCA 178"
+    },
+    {
+      "name": "Surprise Attack",
+      "summary": "An attack that catches the target off guard makes it vulnerable.",
+      "details": "A surprised target is vulnerable (active defenses halved). Surprise attacks happen in the surprise round, through stealth or concealment, or when the GM rules an unusual tactic (such as an Indirect attack) caught the target unprepared.",
+      "source": "DCA 178"
+    },
+    {
+      "name": "Team Attack",
+      "summary": "Several attackers combine similar attacks to overwhelm a target's resistance.",
+      "details": "Attacks must share the same effect and resistance and be within 5 ranks of one another, and all attackers delay to the slowest attacker's initiative. Each rolls to hit; use the largest effect rank that hit as the main attack. The other hits add up degrees of success: one degree gives +2 to the main attack's rank, three or more give +5. Misses simply add nothing (unlike team checks, they impose no penalty). Effects with no attack check count as one degree of success when not the main attack.",
+      "source": "DCA 178-179"
+    }
+  ],
+  "checks": [
+    {
+      "name": "Core Mechanic",
+      "summary": "Roll d20, add modifiers, and compare to a difficulty class.",
+      "details": "Whenever the outcome is uncertain, roll d20 + the relevant trait rank + any modifiers. Meeting or beating the DC is a success; falling short is a failure.",
+      "source": "DCA 8, 12"
+    },
+    {
+      "name": "Degrees of Success",
+      "summary": "Every full 5 points above or below the DC adds another degree.",
+      "details": "Simply succeeding or failing is one degree; each additional full 5 points over or under the DC adds a degree (fractions dropped). So DC+5 = two successes, DC+10 = three, DC+15 = four; DC-5 = two failures, DC-10 = three, DC-15 = four (e.g. against DC 20: 35 / 30 / 25 / 20 succeed, 15 / 10 / 5 / 0 fail). There is no cap, though beyond two degrees of failure extra degrees seldom matter.",
+      "source": "DCA 14-15"
+    },
+    {
+      "name": "Critical Success",
+      "summary": "A natural 20 raises the result by one degree of success.",
+      "details": "Work out the degree normally, then improve it by one; this can turn a failure into a success. On an attack check a natural 20 is handled as a critical hit (see Critical Hits).",
+      "source": "DCA 13"
+    },
+    {
+      "name": "Routine Checks",
+      "summary": "When not under pressure, treat the die as a 10 instead of rolling.",
+      "details": "The GM decides when a situation is routine. A routine check result is modifier + 10, so a +0 modifier succeeds at DC 10 and a +10 modifier reaches 20. If the routine result is too low, you may still choose to roll, since the task is not routine for you.",
+      "source": "DCA 13-14"
+    },
+    {
+      "name": "Opposed Checks",
+      "summary": "Both sides roll; the higher result wins.",
+      "details": "Each character rolls the relevant check and the higher total wins. On a tie, the higher bonus wins; if bonuses also match, roll d20 with 1-10 going to one side and 11-20 to the other (assigned before rolling).",
+      "source": "DCA 14"
+    },
+    {
+      "name": "Routine Opposition",
+      "summary": "If one side isn't actively resisting, its check is treated as a routine 10 + modifier.",
+      "details": "An unaware or unfocused opponent provides a DC of their modifier + 10. This is why attack checks target 10 + defense: active defenses in combat are routine opposition unless the defender takes the Defend action.",
+      "source": "DCA 14"
+    },
+    {
+      "name": "Comparison Checks",
+      "summary": "Straight contests of rank with no luck involved: higher rank wins.",
+      "details": "When it is purely a question of who is stronger or faster, compare ranks instead of rolling. Extra effort and maneuvers can still change the outcome. Identical ranks: roll d20, 1-10 first character, 11-20 the second.",
+      "source": "DCA 14"
+    },
+    {
+      "name": "Circumstance Modifiers",
+      "summary": "+/-2 for a favorable/unfavorable situation, +/-5 for a major one.",
+      "details": "The GM applies circumstance bonuses or penalties to the check result. Lacking necessary tools is a -5 penalty (if the task is possible at all); improvised tools reduce that to -2.",
+      "source": "DCA 15"
+    },
+    {
+      "name": "Team Checks",
+      "summary": "Helpers roll against DC 10 to boost a leader's check.",
+      "details": "The leader (usually the best at the task) rolls normally while each helper makes the same check against DC 10. Total all helpers' degrees: one total degree of success gives the leader +2, three or more give +5; one degree of failure has no effect, two or more impose -2. The leader's modifier is capped at +5 / -2 regardless of the number of helpers, and the GM limits how many can help.",
+      "source": "DCA 16"
+    },
+    {
+      "name": "Attack Checks",
+      "summary": "d20 + attack bonus against the target's defense class.",
+      "details": "Close attacks target Parry and ranged attacks target Dodge (defense class = 10 + defense rank). Meeting or beating it is a hit. A natural 20 always hits and threatens a critical; a natural 1 always misses.",
+      "source": "DCA 16, 172"
+    },
+    {
+      "name": "Resistance Checks",
+      "summary": "d20 + the appropriate defense against the effect's DC.",
+      "details": "Resistance uses Dodge, Fortitude, Toughness, or Will against a DC that is usually the effect rank + 10 (Damage uses rank + 15). Results are often graded, with worse conditions at more degrees of failure. Ongoing effects are re-checked at the end of each of the target's turns; success ends them.",
+      "source": "DCA 16, 174-175"
+    },
+    {
+      "name": "Extra Effort",
+      "summary": "Push beyond your limits for one benefit per turn, at the cost of fatigue.",
+      "details": "Declare it as a free action, once per turn, for one of: an extra standard action; a +2 circumstance bonus on one check (or upgrade +2 to +5, or reduce a -2 penalty to 0 / a -5 to -2); +1 rank to one power effect until your next turn; a power stunt (temporary Alternate Effect for the scene); an immediate extra resistance check against an ongoing effect; a retry of an effect that requires it; +1 speed rank; or +1 Strength rank until your next turn. Permanent effects cannot be boosted or stunted. At the start of your next turn you become fatigued (fatigued becomes exhausted, exhausted becomes incapacitated) unless you spend a hero point then to cancel it. Extra effort is not limited by power level.",
+      "source": "DCA 19-20"
+    },
+    {
+      "name": "Hero Points",
+      "summary": "Spendable narrative resource; each player starts every session with 1.",
+      "details": "Spending one is a reaction and you may spend as many as you have. Uses: Edit Scene (add a helpful detail, GM approval); Heroic Feat (one rank of a non-Fortune advantage you lack, until the end of your next turn); Improve Roll (re-roll and keep the better, with 1-10 on the re-roll counting as 11-20; spend before the GM announces the result); Inspiration (a hint or clue from the GM); Instant Counter (counter an effect as a reaction); Recover (instantly remove dazed, fatigued, or stunned, or turn exhausted into fatigued). Unspent points do not carry over; more are earned through complications, heroism, and roleplaying.",
+      "source": "DCA 20-21"
+    },
+    {
+      "name": "Initiative",
+      "summary": "d20 + initiative modifier (base Agility) sets turn order at the start of a conflict.",
+      "details": "Characters act from highest result to lowest. Ties go to higher Agility, then higher Awareness, then a die roll. The GM may roll once for a whole group of minions. Late arrivals roll when they join and slot into the existing order.",
+      "source": "DCA 167"
+    },
+    {
+      "name": "Surprise Round",
+      "summary": "Unaware characters lose the first round.",
+      "details": "If anyone is surprised, the conflict opens with a surprise round. Surprised characters cannot act and are stunned and vulnerable until the next round; everyone else may take only a standard action (or a move action instead) plus free actions.",
+      "source": "DCA 167"
+    }
+  ],
+  "combat": [
+    {
+      "name": "Taking Your Turn",
+      "summary": "What happens at the start and end of each turn.",
+      "details": "At the start of your turn, end any effects lasting 'until the start of your next turn'. Then declare and resolve your actions in any order, without splitting them. At the end, end effects lasting 'until the end of your turn' and make resistance checks to recover from ongoing effects.",
+      "source": "DCA 168"
+    },
+    {
+      "name": "Critical Hits",
+      "summary": "A natural 20 that would also have hit by total is a critical hit.",
+      "details": "A natural 20 always hits and is a threat; if the total also meets the target's defense it is a critical hit, otherwise a normal hit (Improved Critical widens the threat range, but only a natural 20 auto-hits). Choose one benefit: Increased Effect (+5 to the resistance DC; a minion automatically suffers the worst degree), Added Effect (a second rank-0 effect such as an Affliction, resisted at DC 10, or 15 for Damage), or Alternate Effect (like a free power stunt with no fatigue).",
+      "source": "DCA 172"
+    },
+    {
+      "name": "Concealment",
+      "summary": "Penalties for attacking what you cannot clearly perceive.",
+      "details": "Partial concealment (dim light, fog, foliage, smoke) imposes -2 on attack checks; total concealment (darkness, heavy smoke) imposes -5, assuming you even know where to aim.",
+      "source": "DCA 173"
+    },
+    {
+      "name": "Cover",
+      "summary": "Penalties for attacking a target behind physical obstructions.",
+      "details": "Partial cover (roughly half the target obscured) imposes -2 on attack checks; total cover (three-quarters or more) imposes -5. A target completely behind cover cannot be attacked, though the cover itself can. Cover also adds the same value as a bonus to Dodge checks against area effects originating from the far side.",
+      "source": "DCA 173-174"
+    },
+    {
+      "name": "Defense Class",
+      "summary": "Your active defense + 10 is the DC to hit you.",
+      "details": "Close attacks target 10 + Parry, ranged attacks 10 + Dodge. Vulnerable halves active defenses (round up); defenseless reduces them to 0, so the DC is just 10 and attackers may roll as routine checks.",
+      "source": "DCA 174"
+    },
+    {
+      "name": "Perception and Area Effects",
+      "summary": "Automatic effects that skip the attack check.",
+      "details": "Perception-range and area effects hit automatically, so they cannot score critical hits or misses and are unaffected by maneuvers or other modifiers to attack checks. Area effects usually allow a Dodge check for reduced effect.",
+      "source": "DCA 173"
+    },
+    {
+      "name": "Minions",
+      "summary": "Special rules that make minor foes easy to defeat.",
+      "details": "Minions cannot score critical hits on non-minions. Non-minions may attack minions as routine checks. A minion that fails a resistance check suffers the effect's worst degree (e.g. any failed Damage check incapacitates). Some traits, such as Takedown, work especially well against them.",
+      "source": "DCA 174"
+    },
+    {
+      "name": "Ongoing Effects",
+      "summary": "Some effects are resisted repeatedly until shaken off.",
+      "details": "The target makes a resistance check at the end of each of its turns; success ends the effect and its conditions, failure means they persist as the effect describes.",
+      "source": "DCA 174-175"
+    },
+    {
+      "name": "Damaging Objects",
+      "summary": "Inanimate objects are defenseless and break on bad resistance checks.",
+      "details": "Objects ignore dazed and staggered (constructs do not). Being defenseless, they can be attacked with a finishing attack: routine check, or roll normally for an automatic critical (+5 effect). When trying to break something, two degrees of failure on its Toughness check is a break and three or more destroys it.",
+      "source": "DCA 94"
+    },
+    {
+      "name": "Death",
+      "summary": "Main characters only die after being incapacitated and then deliberately harmed further.",
+      "details": "An incapacitated character who fails another Damage resistance check becomes dying; a dying character who fails one is dead. Dying characters roll Fortitude DC 15 each round (two degrees of success stabilizes, three total degrees of failure is death); a DC 15 Treatment check or Healing can stabilize them. Minions can be killed by any successful attack made with that intent.",
+      "source": "DCA 19, 93, 179"
+    }
+  ],
+  "difficulty": [
+    {
+      "dc": 0,
+      "label": "Very easy",
+      "example": "Spot something in plain view (Perception)"
+    },
+    {
+      "dc": 5,
+      "label": "Easy",
+      "example": "Climb a rope with knots in it (Athletics)"
+    },
+    {
+      "dc": 10,
+      "label": "Average",
+      "example": "Hear a guard approaching (Perception)"
+    },
+    {
+      "dc": 15,
+      "label": "Tough",
+      "example": "Defuse an explosive (Technology)"
+    },
+    {
+      "dc": 20,
+      "label": "Challenging",
+      "example": "Swim against a strong current (Athletics)"
+    },
+    {
+      "dc": 25,
+      "label": "Formidable",
+      "example": "Scale a slick, wet rock face (Athletics)"
+    },
+    {
+      "dc": 30,
+      "label": "Heroic",
+      "example": "Beat a sophisticated security system (Technology)"
+    },
+    {
+      "dc": 35,
+      "label": "Super-heroic",
+      "example": "Talk your way past guards with no ID or clearance (Deception)"
+    },
+    {
+      "dc": 40,
+      "label": "Nigh-impossible",
+      "example": "Track a trained commando through jungle on a dark night after days of rain (Perception)"
+    }
+  ],
+  "damage": {
+    "toughness_dc": "15 + rank",
+    "check": "Toughness vs. DC (Damage rank + 15)",
+    "results": [
+      {
+        "degree": "Success",
+        "result": "No effect."
+      },
+      {
+        "degree": "One degree of failure",
+        "result": "-1 circumstance penalty to further Toughness checks against damage."
+      },
+      {
+        "degree": "Two degrees of failure",
+        "result": "Dazed until the end of the target's next turn, plus a -1 penalty to further damage resistance checks."
+      },
+      {
+        "degree": "Three degrees of failure",
+        "result": "Staggered (dazed and hindered) until recovered, plus a -1 penalty to further damage resistance checks. Being staggered a second time (another three-degree failure) applies the fourth degree instead."
+      },
+      {
+        "degree": "Four degrees of failure",
+        "result": "Incapacitated until the target recovers."
+      }
+    ],
+    "notes": "The -1 penalties stack (three failed checks of one to three degrees each = -3 total). An incapacitated target who fails another Damage check becomes dying; a dying target who fails one dies. Minions that fail any Damage resistance check are incapacitated. Objects being deliberately broken suffer a break at two degrees of failure and are destroyed at three or more. Strength provides built-in close Damage equal to its rank.",
+    "source": "DCA 93-94"
+  },
+  "afflictions": "The target resists with Fortitude or Will (set when the power is bought; some use Dodge for the initial check) against DC Affliction rank + 10. Success: no effect. One degree of failure imposes the first-degree condition (choose one of dazed, entranced, fatigued, hindered, impaired, or vulnerable); two degrees impose the second (compelled, defenseless, disabled, exhausted, immobile, prone, or stunned); three degrees impose the third (asleep, controlled, incapacitated, paralyzed, transformed, or unaware). The conditions for each degree are fixed when the power is created. First- and second-degree conditions can be shaken off with a resistance check at the end of each of the target's turns; third-degree conditions need a minute of recovery or outside help such as Treatment or Healing (DC 10 + rank). Repeated hits are not cumulative unless the power has the Cumulative extra; a later, higher-degree result replaces the earlier one. (DCA 87)",
+  "measurements": [
+    {
+      "rank": -5,
+      "mass": "1.5 lb.",
+      "time": "1/8 second",
+      "distance": "6 inches",
+      "volume": "1/32 cft."
+    },
+    {
+      "rank": -4,
+      "mass": "3 lbs.",
+      "time": "1/4 second",
+      "distance": "1 foot",
+      "volume": "1/16 cft."
+    },
+    {
+      "rank": -3,
+      "mass": "6 lbs.",
+      "time": "1/2 second",
+      "distance": "3 feet",
+      "volume": "1/8 cft."
+    },
+    {
+      "rank": -2,
+      "mass": "12 lbs.",
+      "time": "1 second",
+      "distance": "6 feet",
+      "volume": "1/4 cft."
+    },
+    {
+      "rank": -1,
+      "mass": "25 lbs.",
+      "time": "3 seconds",
+      "distance": "15 feet",
+      "volume": "1/2 cft."
+    },
+    {
+      "rank": 0,
+      "mass": "50 lbs.",
+      "time": "6 seconds",
+      "distance": "30 feet",
+      "volume": "1 cft."
+    },
+    {
+      "rank": 1,
+      "mass": "100 lbs.",
+      "time": "12 seconds",
+      "distance": "60 feet",
+      "volume": "2 cft."
+    },
+    {
+      "rank": 2,
+      "mass": "200 lbs.",
+      "time": "30 seconds",
+      "distance": "120 feet",
+      "volume": "4 cft."
+    },
+    {
+      "rank": 3,
+      "mass": "400 lbs.",
+      "time": "1 minute",
+      "distance": "250 feet",
+      "volume": "8 cft."
+    },
+    {
+      "rank": 4,
+      "mass": "800 lbs.",
+      "time": "2 minutes",
+      "distance": "500 feet",
+      "volume": "15 cft."
+    },
+    {
+      "rank": 5,
+      "mass": "1,600 lbs.",
+      "time": "4 minutes",
+      "distance": "900 feet",
+      "volume": "30 cft."
+    },
+    {
+      "rank": 6,
+      "mass": "3,200 lbs.",
+      "time": "8 minutes",
+      "distance": "1,800 feet",
+      "volume": "60 cft."
+    },
+    {
+      "rank": 7,
+      "mass": "3 tons",
+      "time": "15 minutes",
+      "distance": "1/2 mile",
+      "volume": "125 cft."
+    },
+    {
+      "rank": 8,
+      "mass": "6 tons",
+      "time": "30 minutes",
+      "distance": "1 mile",
+      "volume": "250 cft."
+    },
+    {
+      "rank": 9,
+      "mass": "12 tons",
+      "time": "1 hour",
+      "distance": "2 miles",
+      "volume": "500 cft."
+    },
+    {
+      "rank": 10,
+      "mass": "25 tons",
+      "time": "2 hours",
+      "distance": "4 miles",
+      "volume": "1,000 cft."
+    },
+    {
+      "rank": 11,
+      "mass": "50 tons",
+      "time": "4 hours",
+      "distance": "8 miles",
+      "volume": "2,000 cft."
+    },
+    {
+      "rank": 12,
+      "mass": "100 tons",
+      "time": "8 hours",
+      "distance": "16 miles",
+      "volume": "4,000 cft."
+    },
+    {
+      "rank": 13,
+      "mass": "200 tons",
+      "time": "16 hours",
+      "distance": "30 miles",
+      "volume": "8,000 cft."
+    },
+    {
+      "rank": 14,
+      "mass": "400 tons",
+      "time": "1 day",
+      "distance": "60 miles",
+      "volume": "15,000 cft."
+    },
+    {
+      "rank": 15,
+      "mass": "800 tons",
+      "time": "2 days",
+      "distance": "120 miles",
+      "volume": "32,000 cft."
+    },
+    {
+      "rank": 16,
+      "mass": "1,600 tons",
+      "time": "4 days",
+      "distance": "250 miles",
+      "volume": "65,000 cft."
+    },
+    {
+      "rank": 17,
+      "mass": "3.2 ktons",
+      "time": "1 week",
+      "distance": "500 miles",
+      "volume": "125,000 cft."
+    },
+    {
+      "rank": 18,
+      "mass": "6 ktons",
+      "time": "2 weeks",
+      "distance": "1,000 miles",
+      "volume": "250,000 cft."
+    },
+    {
+      "rank": 19,
+      "mass": "12 ktons",
+      "time": "1 month",
+      "distance": "2,000 miles",
+      "volume": "500,000 cft."
+    },
+    {
+      "rank": 20,
+      "mass": "25 ktons",
+      "time": "2 months",
+      "distance": "4,000 miles",
+      "volume": "1 million cft."
+    },
+    {
+      "rank": 21,
+      "mass": "50 ktons",
+      "time": "4 months",
+      "distance": "8,000 miles",
+      "volume": "2 million cft."
+    },
+    {
+      "rank": 22,
+      "mass": "100 ktons",
+      "time": "8 months",
+      "distance": "16,000 miles",
+      "volume": "4 million cft."
+    },
+    {
+      "rank": 23,
+      "mass": "200 ktons",
+      "time": "1.5 years",
+      "distance": "32,000 miles",
+      "volume": "8 million cft."
+    },
+    {
+      "rank": 24,
+      "mass": "400 ktons",
+      "time": "3 years",
+      "distance": "64,000 miles",
+      "volume": "15 million cft."
+    },
+    {
+      "rank": 25,
+      "mass": "800 ktons",
+      "time": "6 years",
+      "distance": "125,000 miles",
+      "volume": "32 million cft."
+    },
+    {
+      "rank": 26,
+      "mass": "1,600 ktons",
+      "time": "12 years",
+      "distance": "250,000 miles",
+      "volume": "65 million cft."
+    },
+    {
+      "rank": 27,
+      "mass": "3,200 ktons",
+      "time": "25 years",
+      "distance": "500,000 miles",
+      "volume": "125 million cft."
+    },
+    {
+      "rank": 28,
+      "mass": "6,400 ktons",
+      "time": "50 years",
+      "distance": "1 million miles",
+      "volume": "250 million cft."
+    },
+    {
+      "rank": 29,
+      "mass": "12,500 ktons",
+      "time": "100 years",
+      "distance": "2 million miles",
+      "volume": "500 million cft."
+    },
+    {
+      "rank": 30,
+      "mass": "25,000 ktons",
+      "time": "200 years",
+      "distance": "4 million miles",
+      "volume": "1 billion cft."
+    }
+  ],
+  "measurement_notes": {
+    "name": "Using the Measurements Table",
+    "summary": "Each rank roughly doubles the previous one; ranks convert to real-world mass, time, distance, and volume.",
+    "details": "Each +1 rank beyond 30 doubles the value; each rank below -5 halves it. A rank covers a span, so round a value up to the next listed entry (12 hours is time rank 13). Never add ranks directly: convert to measures, add, and convert back. Handy formulas: Distance rank = Time rank + Speed rank; Time rank = Distance rank - Speed rank; Throwing distance rank = Strength rank - mass rank of the object. Lifting capacity is the mass for your Strength rank (Strength 3 = 400 lbs.).",
+    "source": "DCA 10-11"
+  },
+  "hazards": [
+    {
+      "name": "Falling",
+      "summary": "Damage based on how far you fall.",
+      "details": "A fall deals Damage rank 4 + twice the distance rank fallen, up to a maximum of rank 16. Acrobatics can let you fall farther safely, and landing on something dangerous may add damage. Catching a falling person or object takes a DC 5 Dexterity check; subtract your Strength (or, with GM approval, a power such as Flight or Move Object) from the fall damage, and both of you resist whatever remains.",
+      "source": "DCA 170-171"
+    },
+    {
+      "name": "Heat & Cold",
+      "summary": "Exposure forces repeated Fortitude checks against fatigue.",
+      "details": "Make a Fortitude check (DC 10, +1 per previous check) at the end of each exposure period: every hour for uncomfortable conditions, every 10 minutes for intense (desert, arctic), every minute for extreme (volcano edge, arctic storm). Failures progress fatigued, exhausted, incapacitated, then dying. Truly intense sources (blast furnace, liquid nitrogen) deal direct damage like an attack. Appropriate Immunity removes the need to check.",
+      "source": "DCA 170"
+    },
+    {
+      "name": "Light & Darkness",
+      "summary": "Poor lighting grants concealment.",
+      "details": "Dim or dark areas give targets concealment: partial concealment is -2 to attack checks, total concealment (complete darkness) is -5. Senses that counter concealment from darkness ignore these penalties.",
+      "source": "DCA 170, 173"
+    },
+    {
+      "name": "Starvation & Thirst",
+      "summary": "Going without water or food leads to escalating fatigue.",
+      "details": "Without water, after one day make a Fortitude check (DC 10, +1 per previous check) every hour or gain a level of fatigue. Without food, after three days make the same check every day. You cannot recover until you get water or food. Immunity to Starvation and Thirst removes the need.",
+      "source": "DCA 170"
+    },
+    {
+      "name": "Suffocation",
+      "summary": "Holding your breath, then risking incapacitation and death.",
+      "details": "You can hold your breath for 10 rounds (one minute) plus rounds equal to twice your Stamina. After that, make a Fortitude check each round at DC 10, +1 per previous success. On a failure you are incapacitated, and the following round you are dying; you cannot stabilize until you can breathe. Immunity to Suffocation lets you go without air indefinitely.",
+      "source": "DCA 170"
+    },
+    {
+      "name": "Drowning",
+      "summary": "Being underwater uses the Suffocation rules.",
+      "details": "Swimming takes a DC 10 Athletics check (move action) to move at ground speed -2 ranks; a failure means no progress and more than one degree of failure means you go under. Underwater you must hold your breath and follow the Suffocation rules. Immunity (Drowning) or Immunity to Suffocation negates it.",
+      "source": "DCA 56, 170"
+    },
+    {
+      "name": "Vacuum",
+      "summary": "The bends, lung damage, suffocation, and radiation in open space.",
+      "details": "Starting on the third round of exposure, make a DC 20 Fortitude check each round or suffer the bends: stunned until back at normal pressure, or incapacitated with two or more degrees of failure. Holding your breath in vacuum takes a Fortitude check each round starting at DC 15 and rising by 1 per round; each success still costs a rank of Stamina, and a failure (or exhaling) starts suffocation: incapacitated the next round, dying the round after, unable to stabilize until back in atmosphere. Unprotected characters are also exposed to radiation. Surviving deep space requires Immunity to Suffocation, Vacuum, and Radiation at minimum.",
+      "source": "DCA 172"
+    },
+    {
+      "name": "Disease",
+      "table": [
+        [
+          "Rank",
+          "Sample disease",
+          "Typical effect"
+        ],
+        [
+          "1-2",
+          "Common cold",
+          "Usually just impaired"
+        ],
+        [
+          "3-5",
+          "Influenza (bird flu, swine flu, etc.)",
+          "Affliction: impaired, disabled, incapacitated"
+        ],
+        [
+          "4",
+          "Malaria",
+          "Affliction: impaired, disabled, incapacitated"
+        ],
+        [
+          "6",
+          "Typhoid",
+          "Affliction: dazed, stunned, incapacitated"
+        ],
+        [
+          "7",
+          "Rabies",
+          "Affliction: impaired, compelled (paranoid, violent), incapacitated"
+        ],
+        [
+          "8",
+          "Leprosy",
+          "Affliction: impaired, disabled, incapacitated"
+        ],
+        [
+          "10",
+          "AIDS",
+          "Weaken Fortitude, opening the way to other infections"
+        ],
+        [
+          "11",
+          "Smallpox",
+          "Affliction: hindered and impaired, disabled, incapacitated; Linked Weaken Stamina"
+        ],
+        [
+          "12-14",
+          "Bubonic plague",
+          "Affliction: dazed and hindered, stunned and immobile; Linked Weaken Stamina"
+        ],
+        [
+          "15",
+          "Ebola virus",
+          "Affliction: dazed/hindered/impaired, stunned/immobile/disabled, incapacitated; Linked Weaken Strength and Stamina"
+        ],
+        [
+          "16+",
+          "Engineered mega-viruses",
+          "Varies"
+        ]
+      ],
+      "summary": "Fortitude check on exposure to avoid infection; usually Affliction or Weaken.",
+      "details": "On contact make a Fortitude check (DC 10 + disease rank) to avoid infection; transmission may be airborne or by contact. Diseases are typically Affliction or Weaken effects, sometimes Linked. Lethal diseases tend to Weaken Stamina, and dropping below Stamina -5 means death. Immunity to Disease negates them, and Treatment can grant a bonus on resistance checks.",
+      "source": "DCA 170-171"
+    },
+    {
+      "name": "Poison",
+      "table": [
+        [
+          "Rank",
+          "Sample poison",
+          "Typical effect"
+        ],
+        [
+          "1",
+          "Food poisoning",
+          "Affliction: impaired, disabled (dazed, stunned if severe)"
+        ],
+        [
+          "1",
+          "Alcohol",
+          "Impaired, disabled (dazed, stunned if severe)"
+        ],
+        [
+          "3",
+          "Pesticides",
+          "Affliction: impaired, disabled; heavy exposure may Weaken Stamina"
+        ],
+        [
+          "4",
+          "Chloroform",
+          "Affliction: dazed, stunned, unconscious"
+        ],
+        [
+          "7",
+          "Cobra venom",
+          "Weaken Strength, Agility, or Stamina (Stamina potentially lethal)"
+        ],
+        [
+          "8",
+          "Mustard gas",
+          "Affliction: impaired, disabled, unconscious; Linked Fortitude Damage"
+        ],
+        [
+          "9",
+          "Poisonous mushrooms",
+          "Fortitude Damage; possible dazed, impaired, or hindered"
+        ],
+        [
+          "11",
+          "Chlorine gas",
+          "Affliction: dazed, stunned, unconscious; Linked Fortitude Damage"
+        ],
+        [
+          "13",
+          "Curare",
+          "Affliction: dazed and hindered, stunned and immobile, unconscious; Linked Weaken Stamina"
+        ],
+        [
+          "14",
+          "Cyanide",
+          "Fortitude Damage"
+        ],
+        [
+          "15",
+          "Nerve gas",
+          "Affliction: dazed and impaired, stunned and disabled, unconscious; Linked Fortitude Damage"
+        ],
+        [
+          "16+",
+          "Alien, supernatural, or mad-science toxins",
+          "Varies"
+        ]
+      ],
+      "summary": "Toxins usually work as Affliction, Damage, or Weaken, resisted by Fortitude.",
+      "details": "Poisons may enter through a wound or the air and are generally Affliction, Damage, or Weaken effects, sometimes several Linked together. Fortitude is the usual resistance (DC 10 + rank; 15 + rank for Damage). Immunity to Poison negates them entirely, and Treatment can give a bonus on resistance checks.",
+      "source": "DCA 170-171"
+    },
+    {
+      "name": "Radiation",
+      "table": [
+        [
+          "Rank",
+          "Radiation example"
+        ],
+        [
+          "1",
+          "Lingering irradiation"
+        ],
+        [
+          "2-5",
+          "Nuclear fallout"
+        ],
+        [
+          "5-10",
+          "Exposure to radioactive materials"
+        ],
+        [
+          "10-12",
+          "Stellar radiation (deep space)"
+        ],
+        [
+          "13-14",
+          "Nuclear reactor"
+        ],
+        [
+          "15+",
+          "Nuclear blast"
+        ]
+      ],
+      "summary": "Handled like a disease: initial and daily Fortitude checks.",
+      "details": "In comics radiation is as likely to cause mutations or awaken powers as sickness, making it a good complication. Otherwise treat it like disease: a Fortitude check against DC 10 + radiation rank on exposure and again each day. Radiation sickness is usually Weaken Stamina, possibly with Fortitude-resisted Damage or temporary loss of power ranks at the GM's discretion.",
+      "source": "DCA 170-171"
+    },
+    {
+      "name": "Fire",
+      "table": [
+        [
+          "Rank",
+          "Fire example"
+        ],
+        [
+          "1",
+          "Torch"
+        ],
+        [
+          "2",
+          "Campfire"
+        ],
+        [
+          "4",
+          "Blowtorch"
+        ],
+        [
+          "6",
+          "Flamethrower"
+        ],
+        [
+          "8",
+          "Burning jet fuel, napalm"
+        ],
+        [
+          "10+",
+          "Chemical accelerants and fire powers"
+        ]
+      ],
+      "summary": "Sample Damage ranks for common fire sources.",
+      "details": "The book gives fire only as a table of sample ranks; treat a fire source as a Damage effect of the listed rank (Toughness vs. DC 15 + rank). Intense heat sources deal direct damage like an attack (see Heat & Cold).",
+      "source": "DCA 171"
+    }
+  ],
+  "recovery": "Damage: living characters remove one damage condition per minute of rest, worst first, so incapacitated, then staggered, then dazed, then each -1 Toughness penalty, one per minute (Healing and Regeneration speed this up). Objects do not recover on their own and must be repaired (Technology). In combat, the Recover action (once per conflict, takes your turn) removes your worst level of damage or fatigue or grants an extra resistance check, plus +2 to active defenses until your next turn. A hero point instantly removes dazed, fatigued, or stunned, or turns exhausted into fatigued. Fatigued clears after an hour of rest; exhausted after an hour of rest in comfortable surroundings. Ongoing effects (including Affliction first/second degrees) are resisted at the end of each turn; third-degree Affliction conditions take a minute or outside aid. A dying character stabilizes with two degrees of success on the DC 15 Fortitude check or a DC 15 Treatment check. (DCA 18-21, 87, 177, 179)",
+  "range": "Every attack is close, ranged, or perception range. Close attacks only reach targets you can physically touch or hit with a melee weapon. Ranged attacks have three bands: short range up to rank x 25 feet (no penalty), medium up to rank x 50 feet (-2 to the attack check), and long up to rank x 100 feet (-5); beyond long range you cannot attack. Perception-range attacks automatically affect any target you can accurately perceive, with no attack check. Otherwise the game only tracks whether characters are adjacent (close range) and whether they can perceive one another. (DCA 172-173)"
+}
