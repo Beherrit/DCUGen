@@ -299,7 +299,7 @@ export function renderFile(ch, R, opts = {}) {
   ];
   const denom = Math.max(c.budget, c.total, 1);
   const points = h('section', { class: 'sec points' },
-    h('h3', null, 'Power points', h('span', { class: 'pts num' }, `${c.total} / ${c.budget}`)),
+    h('h3', null, 'Power points', h('span', { class: 'pts num' }, ch.pl === 0 && !ch.advancement ? `${c.total} pp · ordinary person (up to 14)` : `${c.total} / ${c.budget}`)),
     h('div', { class: 'points-bar', role: 'img', 'aria-label': parts.map(([n, v]) => `${n} ${v}`).join(', ') },
       parts.map(([, v, col]) => h('i', { style: { width: `${(Math.max(0, v) / denom) * 100}%`, background: col } }))),
     h('div', { class: 'legend' }, parts.map(([n, v, col]) => h('span', { style: { '--c': col } }, `${n} ${v}`))),

@@ -349,6 +349,16 @@ export function statBlockRows(ch, R) {
       for (const x of list || []) rows.push([label, '', x]);
     }
   }
+  if (ch.journal?.entries?.length) {
+    rows.push([]);
+    rows.push(['CAMPAIGN JOURNAL', 'Session', 'What happened']);
+    for (const e of [...ch.journal.entries].sort((a, b) => (a.session || 0) - (b.session || 0))) {
+      rows.push([e.date || '', e.session ?? '', [e.title, e.text].filter(Boolean).join(': ')]);
+      for (const p of e.people || []) rows.push(['', '', `${p.name} (${p.relation})${p.who ? `: ${p.who}` : ''}${p.status ? ` [${p.status}]` : ''}`]);
+      for (const a of (ch.advancement?.log || []).filter((x) => x.journalId === e.id)) rows.push(['', '', `${a.type === 'award' ? `+${a.points} pp earned` : `${a.points} pp spent`}${a.changes?.length ? `: ${a.changes.join('; ')}` : ''}`]);
+      if (e.downtime) rows.push(['', '', `Between adventures: ${e.downtime}`]);
+    }
+  }
   rows.push([]);
   rows.push(['STAT BLOCK (text)', '', statBlockText(ch, R)]);
   const boldRows = rows.map((r, i) => (r.length && typeof r[0] === 'string' && r[0] === r[0].toUpperCase() && r[0].length > 3 ? i : -1)).filter((i) => i >= 0);

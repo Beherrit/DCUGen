@@ -135,7 +135,9 @@ function detail() {
   const tpl = h('select', { id: 'bst-template', 'aria-label': 'Template', onChange: (e) => select(entry, e.target.value) },
     Object.entries(CREATURE_TEMPLATES).map(([k, v]) => h('option', { value: k, selected: k === template }, v.label)));
   const toolbar = h('div', { class: 'toolbar' },
-    h('button', { class: 'btn primary', type: 'button', onClick: () => hooks.addToInitiative?.(ch) }, 'Add to initiative'),
+    h('button', { class: 'btn primary', type: 'button', onClick: () => hooks.throwIn?.(JSON.parse(JSON.stringify(ch)), { name: entry.name }) }, '⚔ Throw in Battle Room'),
+    h('button', { class: 'btn', type: 'button', title: 'Three of them', onClick: () => hooks.throwIn?.(JSON.parse(JSON.stringify(ch)), { name: entry.name, copies: 3 }) }, '×3'),
+    h('button', { class: 'btn', type: 'button', onClick: () => hooks.addToInitiative?.(ch) }, 'Add to initiative'),
     h('button', { class: 'btn', type: 'button', onClick: () => hooks.openInForge?.(JSON.parse(JSON.stringify(ch))) }, 'Open in Forge'),
     h('button', { class: 'btn', type: 'button', onClick: () => { upsert(ch); toast(`${ch.identity?.codename} saved to your roster`); } }, 'Save to roster'),
     h('label', { class: 'bst-tpl' }, h('span', null, 'Template'), tpl),
@@ -152,8 +154,8 @@ function rollRandom(list, n = 1) {
   const rng = makeRng(randomSeed());
   if (n === 1) { select(rng.pick(list)); return; }
   const picks = rng.sample(list, Math.min(n, list.length));
-  for (const e of picks) hooks.addToInitiative?.(toCharacter(e));
-  toast(`Encounter: ${picks.map((e) => e.name).join(', ')} added to initiative (GM Tools)`);
+  for (const e of picks) { const ch = toCharacter(e); hooks.addToInitiative?.(ch); hooks.throwIn?.(ch, { name: e.name, team: 'B' }); }
+  toast(`Encounter: ${picks.map((e) => e.name).join(', ')} added to initiative and the Battle Room`);
 }
 
 export function renderBestiary() {

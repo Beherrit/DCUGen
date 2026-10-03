@@ -165,13 +165,14 @@ export function pendingChanges(ch, R) {
 }
 
 /** Record the pending changes in the log and move the snapshot forward. */
-export function recordChanges(ch, R, note = '') {
+export function recordChanges(ch, R, note = '', { journalId = null } = {}) {
   if (!ch.advancement) return ch;
   const { changes, points } = pendingChanges(ch, R);
   if (!changes.length && !points) return ch;
   const plOnly = changes.length && changes.every((c) => /^Power level/.test(c.text));
   ch.advancement.log.push({
     id: newId(),
+    ...(journalId ? { journalId } : {}),
     date: today(),
     type: plOnly ? 'pl' : points < 0 ? 'refund' : 'spend',
     points,

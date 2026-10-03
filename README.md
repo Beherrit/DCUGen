@@ -41,8 +41,26 @@ players and they can use it too. No install, works offline (fonts fall back to s
   steampunk, wild west, pulp, cyberpunk, post-apocalyptic, occult, superhero gadgets...), a custom item maker, 169
   vehicles including 80 starships, headquarters, a builder for your own vehicles and bases, and space-game rules:
   travel times, sensors, ship combat, hazards and a random planet generator.
+- **Battle Room** – a fight simulator on the DC Adventures combat rules. Throw in anyone (the open character, roster
+  cards, any Bestiary creature, a whole Workshop minion squad), pick sides, and watch it play out turn by turn with a
+  full log of every attack roll, resistance check, condition, hero point and extra effort. Pause, step, run a round, or
+  run to the end; replay the same seed or rematch with new dice; run the match-up 100 times for the odds. Every fighter
+  fights in a style that fits its build: brawlers close in and go all-out, skilled fighters feint and chain Takedowns,
+  gear fighters and blasters keep their range and trade accuracy for effect, spellcasters rotate effects to the weak
+  defense, mentalists turn controlled enemies on their friends, beasts lunge and grab, minions mob and break.
+  Afflictions with all three degrees and recovery checks, area effects with Dodge for half, Multiattack, Impervious vs
+  Penetrating, Immunity, Concealment, Healing, Regeneration, grabs, Interpose, Evasion and more.
+- **Campaign journal** – on the Bio page: sessions played, what happened, who was met (added to "People in their life"
+  or with their status updated), points earned and what they bought, and a rolled "between adventures" event from the
+  life tables. Sessions join the life timeline as "In play" and go into every export.
+- **World** – a wiki of the whole campaign, Obsidian-style. Every saved character is a page; every parent, sibling,
+  mentor, rival, enemy, ally and ex named in their life is a page too (and opens as a full character); teams, cities and
+  homelands are pages; journal sessions and recorded battles are events. Links are typed and run both ways (mentor /
+  student, parent / child, member of / member, based in / base of...). Add factions, locations, items and events by
+  hand, link anything to anything, draw the relationship graph, read the campaign timeline, and export the whole
+  thing as a Markdown vault with [[wikilinks]] or a JSON vault that also carries the roster.
 - **Advancement** – track the power points the GM awards (DCA 190): earned, spent and unspent, with a history log
-  that records exactly what each point bought.
+  that records exactly what each point bought, tied to the journal session it came from.
 - **Roster** – save characters, teams and creatures in the browser; search, duplicate, delete.
 - **Export** – your Excel character sheet filled in (plus a *Full Stat Block* tab), a whole roster or team to one
   workbook, JSON files, book-style text and print/PDF. **Import** brings characters back from DCUGen Excel sheets, .json
@@ -71,7 +89,8 @@ npm run validate  # check every catalog creature against the PL limits
 ```
 
 - `src/engine/` – the rules engine: costs, PL limits, derived traits, character generator, workshop generators,
-  power math, stat blocks and the .xlsx writer.
+  power math, stat blocks, the .xlsx writer, the battle simulator (`battle.js`), the campaign journal (`journal.js`)
+  and the world wiki model (`world.js`).
 - `src/app/` – the web app.
 - `tests/` – the engine reproduces the printed point costs of published Heroes & Villains characters, and
   thousands of random characters, items and creatures are checked against the rules.

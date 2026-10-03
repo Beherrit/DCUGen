@@ -334,6 +334,8 @@ export function renderCurrent() {
       { label: 'Stat block (.txt)', hint: 'Book-style text', run: () => exportText(ch, R) },
       { label: 'Print or save as PDF', hint: 'Uses your browser\'s print dialog', run: () => window.print() },
     ]),
+    h('button', { class: 'btn', type: 'button', title: 'Add this character to the Battle Room', onClick: () => api.throwIn?.(ch) }, '⚔ Throw in Battle Room'),
+    h('button', { class: 'btn', type: 'button', title: 'This character\'s page in the World wiki', onClick: () => api.openWorld?.(ch) }, '🌐 World'),
     h('button', { class: 'btn', type: 'button', onClick: () => share(ch) }, '🔑 Share / Key'));
   const onChange = (c) => { state.current = c; state.tabs[state.active] = c; saveTabs(); fresh = false; renderCurrent(); };
   fileHost.append(viewSwitch(ch));
@@ -407,6 +409,7 @@ function status(ch) {
   const s = makeSheet(ch, R);
   const errs = s.issues.filter((i) => i.severity === 'error');
   if (errs.length) return h('span', { class: 'status bad', title: errs.map((e) => e.message).join('\n') }, `✕ ${errs.length} rule issue${errs.length > 1 ? 's' : ''}`);
+  if (ch.pl === 0 && !ch.advancement) return h('span', { class: 'status ok', title: 'PL 0 is for ordinary people: up to 14 points, no limits to check' }, `✓ Ordinary person · ${s.cost.total} pp`);
   if (s.cost.total < s.cost.budget) return h('span', { class: 'status warn' }, `Legal · ${s.cost.budget - s.cost.total} pp unspent`);
   return h('span', { class: 'status ok' }, `✓ Legal · ${s.cost.total}/${s.cost.budget} pp`);
 }

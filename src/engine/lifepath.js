@@ -1323,8 +1323,39 @@ export function bioText(bio) {
   }
   if (bio.timeline?.length) {
     out.push('== Timeline ==');
-    for (const t of bio.timeline) out.push(`Age ${t.age} (${t.stage}): ${t.text}`);
+    for (const t of bio.timeline) out.push(`Age ${t.age} (${t.stage}${t.session ? `, session ${t.session}` : ''}): ${t.text}`);
+    out.push('');
+  }
+  if (bio.people?.length) {
+    out.push('== People ==');
+    for (const p of bio.people) out.push(`- ${p.name} (${p.relation})${p.who ? `: ${p.who}` : ''}${p.status ? ` [${p.status}]` : ''}`);
     out.push('');
   }
   return out.join('\n').trim() + '\n';
+}
+
+/**
+ * One event from the adult-life tables for "what happened between adventures": used by the
+ * campaign journal's downtime roll. Returns { text, tags, people } where people are anyone the
+ * event brought into the character's life (not yet added to the bio).
+ */
+export function rollDowntimeEvent(R, ch, { seed } = {}) {
+  const s = String(seed ?? randomSeed());
+  const ctx = makeContext(R, ch || {}, s, defaultSeeds(s));
+  ctx.rng = makeRng(`${s}::downtime`);
+  // Keep the family and people the bio already has, so events can refer to them.
+  const bio = ch?.bio;
+  if (bio?.family?.parents?.length) {
+    ctx.family.parents = bio.family.parents.map((p) => ({ ...p, present: !/deceased/i.test(p.status || '') }));
+    ctx.parentRoles = ctx.family.parents.filter((p) => p.present).map((p) => p.role.toLowerCase().replace(/^adoptive /, ''));
+  }
+  if (bio?.family?.siblings?.length) ctx.family.siblings = bio.family.siblings.map((x) => ({ ...x }));
+  if (bio?.people?.length) ctx.people = bio.people.map((x) => ({ ...x }));
+  const before = ctx.people.length;
+  const used = new Set((bio?.timeline || []).map((t) => t.text));
+  const pool = (ctx.mode === 'person' ? ctx.T.adult : ctx.T.other?.creature || ctx.T.adult).map(norm).filter((e) => !(e.tags || []).includes('birth'));
+  const e = pickEntry(ctx, pool, { age: Math.max(20, ctx.age), unique: false, filter: (x) => !used.has(x.text) });
+  if (!e) return { text: 'A quiet stretch: nothing worth writing down.', tags: ['quiet'], people: [] };
+  const text = happen(ctx, e, { age: ctx.age, stage: 'Downtime', timeline: false });
+  return { text, tags: [...(e.tags || [])], people: ctx.people.slice(before).map(({ since, ...p }) => p) };
 }
