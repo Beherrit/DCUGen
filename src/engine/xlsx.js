@@ -349,6 +349,10 @@ export function statBlockRows(ch, R) {
       for (const x of list || []) rows.push([label, '', x]);
     }
   }
+  if (ch.factions?.length) {
+    rows.push([]); rows.push(['FACTIONS', 'Role', 'Notes']);
+    for (const f of ch.factions) rows.push([f.name, f.role || 'Member', [f.kind, f.since ? `since ${f.since}` : '', f.note].filter(Boolean).join(' · ')]);
+  }
   if (ch.journal?.entries?.length) {
     rows.push([]);
     rows.push(['CAMPAIGN JOURNAL', 'Session', 'What happened']);

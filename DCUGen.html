@@ -921,6 +921,80 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 .wd-field-row input { padding: 5px 7px; font-size: 13px; }
 @media (max-width: 1000px) { .wd-layout { grid-template-columns: minmax(0, 1fr); } .wd-side { position: static; max-height: none; } .wd-body-grid { grid-template-columns: minmax(0, 1fr); } .wd-counts { grid-template-columns: repeat(3, auto); } }
 
+/* world: what happened, factions, status, timeline groups */
+.wd-section-add { margin-left: 4px; width: 18px; height: 18px; display: inline-grid; place-items: center; border-radius: 4px; color: var(--ink-3); font-weight: 800; }
+.wd-section-add:hover { background: var(--surface-2); color: var(--ink); }
+.wd-status { display: inline-block; vertical-align: middle; font: 800 10px/1.5 var(--font-label); letter-spacing: .06em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--line); }
+.wd-status.bad { background: #b42318; color: #fff; border-color: #b42318; }
+.wd-status.warn { background: #e0a030; color: #1a1300; border-color: #e0a030; }
+.wd-status.good { background: #1a7f4b; color: #fff; border-color: #1a7f4b; }
+.wd-status.muted { opacity: .8; }
+.wd-status.big { font-size: 13px; padding: 3px 10px; vertical-align: 6px; }
+.wd-head.gone { filter: saturate(.5); }
+.wd-head.gone h1 { text-decoration: line-through; text-decoration-thickness: 3px; text-decoration-color: rgba(255, 255, 255, .55); }
+.wd-quicks { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; }
+.wd-quick { display: grid; grid-template-columns: 34px minmax(0, 1fr); grid-template-rows: auto auto; gap: 0 10px; align-items: center; text-align: left; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); cursor: pointer; font: inherit; color: var(--ink); box-shadow: var(--shadow); }
+.wd-quick:hover { border-color: var(--ink-3); transform: translateY(-1px); }
+.wd-quick.primary { border-color: var(--accent); background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 18%, var(--surface)), var(--surface)); }
+.wd-quick-glyph { grid-row: 1 / 3; font-size: 24px; text-align: center; }
+.wd-quick b { font: 800 15px/1.1 var(--font-label); }
+.wd-quick small { color: var(--ink-3); font-size: 11.5px; line-height: 1.25; }
+.wd-glance { display: grid; gap: 6px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); box-shadow: var(--shadow); }
+.wd-glance-row { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 8px; align-items: center; }
+.wd-glance-label { font: 700 10.5px/1.3 var(--font-label); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.wd-quicklinks { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+.wd-quicklink { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 3px 10px; font: 600 12.5px/1.2 var(--font-label); color: var(--ink); cursor: pointer; box-shadow: inset 3px 0 0 var(--rc, var(--line)); }
+.wd-quicklink:hover, .wd-quicklink.active { border-color: var(--rc, var(--ink-3)); background: color-mix(in srgb, var(--rc, var(--ink-3)) 12%, var(--surface)); }
+.wd-when { font: 700 10.5px/1.6 var(--font-label); color: var(--ink-3); padding: 0 6px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); }
+.wd-conns li.ended { opacity: .6; border-left-style: dashed; }
+.wd-conns li.ended .wd-link-name { text-decoration: line-through; }
+.wd-past { margin-top: 8px; }
+.wd-past summary { cursor: pointer; font: 700 11px/1 var(--font-label); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); padding: 6px 0; }
+.wd-past[open] summary { margin-bottom: 8px; }
+.wd-members { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.wd-members th { text-align: left; font: 700 10.5px/1.4 var(--font-label); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); padding: 4px 8px; border-bottom: 1px solid var(--line); }
+.wd-members td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.wd-members tr.former { opacity: .6; }
+.wd-members tr.former .wd-link-name { text-decoration: line-through; }
+.wd-note-cell { color: var(--ink-3); font-size: 12.5px; }
+.wd-here { display: grid; gap: 4px; margin-bottom: 8px; }
+.wd-tl-tools { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12px; }
+.wd-tl-tools .linkish.danger { color: var(--bad); }
+.wd-tl-row.change .wd-tl-when { background: #8a5cd6; }
+.wd-tl-change { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.wd-tl-kind { font: 800 10px/1.5 var(--font-label); letter-spacing: .1em; text-transform: uppercase; color: var(--c); padding: 0 6px; border-radius: 6px; border: 1px solid color-mix(in srgb, var(--c) 40%, transparent); }
+.wd-tl-ev-text { font: 700 16px/1.25 var(--font-label); }
+.wd-tl-ev.change { border-left-style: double; border-left-width: 6px; }
+.wd-tl-ev .linkish.danger { color: var(--bad); }
+.wd-tl-groups { display: grid; gap: 18px; }
+.wd-tl-group { display: grid; gap: 8px; }
+.wd-tl-session { font: 900 22px/1 var(--font-display); text-transform: uppercase; letter-spacing: .03em; margin: 0; display: flex; align-items: baseline; gap: 10px; padding-bottom: 4px; border-bottom: 2px solid var(--line); }
+.wd-tl-session .pts { font: 600 12px/1 var(--font-label); color: var(--ink-3); letter-spacing: 0; text-transform: none; }
+.wd-tree.has-status .wd-tree-pl { color: var(--ink-3); font-size: 10.5px; }
+.wd-pill { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 5px 12px; font: 700 12.5px/1 var(--font-label); color: var(--ink); cursor: pointer; }
+.wd-pill.active { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.wd-asof { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.wd-asof input[type=range] { flex: 1 1 200px; }
+.wd-asof b { font: 900 16px/1 var(--font-display); min-width: 110px; }
+.wd-mo-preview { margin: 0; padding: 10px 12px; border-left: 4px solid var(--accent); background: var(--surface-2); border-radius: 0 8px 8px 0; font: 700 15px/1.3 var(--font-label); }
+.wd-inline { display: inline-flex; align-items: center; gap: 6px; font: 700 12px/1 var(--font-label); color: var(--ink-2); }
+.dialog .add-row > input[type=text], .dialog .add-row > select { flex: 1 1 160px; }
+.dialog select[size="1"] { width: 100%; }
+
+/* factions on the bio page */
+.fx-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.fx-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; padding: 6px 8px; border-radius: 6px; background: var(--surface-2); border-left: 3px solid #8a5cd6; font-size: 14px; }
+.fx-row.former { opacity: .65; border-left-style: dashed; }
+.fx-role { font: 700 10.5px/1.4 var(--font-label); letter-spacing: .06em; text-transform: uppercase; color: #8a5cd6; min-width: 70px; }
+.fx-name { font-weight: 700; }
+.fx-name small { font-weight: 500; color: var(--ink-3); }
+.fx-since { font: 700 10.5px/1.6 var(--font-label); color: var(--ink-3); padding: 0 6px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); }
+.fx-note { flex: 1 1 100%; color: var(--ink-3); font-size: 13px; padding-left: 78px; }
+.fx-tools { margin-left: auto; display: inline-flex; gap: 4px; align-items: center; }
+.fx-tools select { padding: 2px 4px; font-size: 12px; }
+.fx-form { margin-top: 8px; padding: 10px; border: 1px dashed var(--line); border-radius: 8px; display: grid; gap: 6px; }
+.fx-form .add-row > * { flex: 1 1 140px; }
+
 /* ---------- portraits ---------- */
 .file-head.has-portrait { padding-right: 200px; min-height: 262px; }
 .file-head.has-portrait .pl-badge { right: 200px; }
@@ -4336,6 +4410,10 @@ function statBlockRows(ch, R) {
     for (const [label, list] of [['Motivation', ch.bio.motivations], ['Secret', ch.bio.secrets], ['Regret', ch.bio.regrets], ['Hope', ch.bio.hopes], ['GM hook', ch.bio.hooks]]) {
       for (const x of list || []) rows.push([label, '', x]);
     }
+  }
+  if (ch.factions?.length) {
+    rows.push([]); rows.push(['FACTIONS', 'Role', 'Notes']);
+    for (const f of ch.factions) rows.push([f.name, f.role || 'Member', [f.kind, f.since ? `since ${f.since}` : '', f.note].filter(Boolean).join(' · ')]);
   }
   if (ch.journal?.entries?.length) {
     rows.push([]);
@@ -7954,6 +8032,838 @@ async function enemyDialog(ch, R, change) {
 return { journalSection };
 })();
 
+__mods["src/engine/world.js"] = (() => {
+// The World: a wiki of everyone and everything in a campaign, built from the roster and kept in
+// a vault (saved world data) that the user extends by hand.
+//
+// Entities: people, factions, locations, events and items. Links are typed and directed; each
+// relation has an inverse, so "Alleycat is Nightfang's mentor" also reads "Nightfang is Alleycat's
+// student" on the other page. Everything from the roster and the bios is rebuilt on every build
+// (so it is always current) and merged with what the user wrote by hand.
+//
+// buildWorld(saved, roster, R) -> { entities: Map, links: [], name, ... } with backlinks and
+// timelines ready for the UI and for the Markdown vault export.
+
+const { personKey } = __mods["src/engine/keys.js"];
+const ENTITY_TYPES = {
+  person: { label: 'People', one: 'Person', glyph: '🧑', color: '#2f6fde' },
+  faction: { label: 'Factions', one: 'Faction', glyph: '🏛', color: '#8a5cd6' },
+  location: { label: 'Locations', one: 'Location', glyph: '📍', color: '#1a7f4b' },
+  event: { label: 'Events', one: 'Event', glyph: '📅', color: '#c2410c' },
+  item: { label: 'Items', one: 'Item', glyph: '🗝', color: '#a8670b' },
+};
+
+// rel = what `to` is to `from`. inverse = what `from` is to `to`.
+const RELATIONS = {
+  friend: { label: 'Friend', inverse: 'friend', group: 'Friends & allies', color: '#1a7f4b' },
+  ally: { label: 'Ally', inverse: 'ally', group: 'Friends & allies', color: '#1a7f4b' },
+  teammate: { label: 'Teammate', inverse: 'teammate', group: 'Friends & allies', color: '#1a7f4b' },
+  contact: { label: 'Contact', inverse: 'contact', group: 'Friends & allies', color: '#3aa17e' },
+  love: { label: 'Love', inverse: 'love', group: 'Family & loves', color: '#d1495b' },
+  ex: { label: 'Ex', inverse: 'ex', group: 'Family & loves', color: '#b56576' },
+  parent: { label: 'Parent', inverse: 'child', group: 'Family & loves', color: '#8a5a44' },
+  child: { label: 'Child', inverse: 'parent', group: 'Family & loves', color: '#8a5a44' },
+  sibling: { label: 'Sibling', inverse: 'sibling', group: 'Family & loves', color: '#8a5a44' },
+  family: { label: 'Family', inverse: 'family', group: 'Family & loves', color: '#8a5a44' },
+  dependent: { label: 'Dependent', inverse: 'guardian', group: 'Family & loves', color: '#8a5a44' },
+  guardian: { label: 'Guardian', inverse: 'dependent', group: 'Family & loves', color: '#8a5a44' },
+  mentor: { label: 'Mentor', inverse: 'student', group: 'Mentors & students', color: '#2f6fde' },
+  student: { label: 'Student', inverse: 'mentor', group: 'Mentors & students', color: '#2f6fde' },
+  rival: { label: 'Rival', inverse: 'rival', group: 'Rivals & enemies', color: '#e0a030' },
+  enemy: { label: 'Enemy', inverse: 'enemy', group: 'Rivals & enemies', color: '#b42318' },
+  nemesis: { label: 'Nemesis', inverse: 'nemesis', group: 'Rivals & enemies', color: '#8e1b1b' },
+  fought: { label: 'Fought', inverse: 'fought', group: 'Rivals & enemies', color: '#db3a2f' },
+  employer: { label: 'Employer', inverse: 'employee', group: 'Work & factions', color: '#5b6470' },
+  employee: { label: 'Employee', inverse: 'employer', group: 'Work & factions', color: '#5b6470' },
+  member: { label: 'Member of', inverse: 'hasMember', group: 'Work & factions', color: '#8a5cd6' },
+  hasMember: { label: 'Member', inverse: 'member', group: 'Work & factions', color: '#8a5cd6' },
+  leader: { label: 'Leads', inverse: 'ledBy', group: 'Work & factions', color: '#8a5cd6' },
+  ledBy: { label: 'Led by', inverse: 'leader', group: 'Work & factions', color: '#8a5cd6' },
+  allied: { label: 'Allied with', inverse: 'allied', group: 'Work & factions', color: '#1a7f4b' },
+  atWar: { label: 'At war with', inverse: 'atWar', group: 'Rivals & enemies', color: '#b42318' },
+  basedIn: { label: 'Based in', inverse: 'baseOf', group: 'Places', color: '#1a7f4b' },
+  baseOf: { label: 'Base of', inverse: 'basedIn', group: 'Places', color: '#1a7f4b' },
+  livesIn: { label: 'Lives in', inverse: 'homeOf', group: 'Places', color: '#1a7f4b' },
+  homeOf: { label: 'Home of', inverse: 'livesIn', group: 'Places', color: '#1a7f4b' },
+  from: { label: 'From', inverse: 'birthplaceOf', group: 'Places', color: '#3f7d3a' },
+  birthplaceOf: { label: 'Birthplace of', inverse: 'from', group: 'Places', color: '#3f7d3a' },
+  worksAt: { label: 'Works at', inverse: 'workplaceOf', group: 'Places', color: '#5b6470' },
+  workplaceOf: { label: 'Workplace of', inverse: 'worksAt', group: 'Places', color: '#5b6470' },
+  locatedIn: { label: 'Located in', inverse: 'contains', group: 'Places', color: '#1a7f4b' },
+  contains: { label: 'Contains', inverse: 'locatedIn', group: 'Places', color: '#1a7f4b' },
+  sceneOf: { label: 'Scene of', inverse: 'happenedAt', group: 'Places', color: '#c2410c' },
+  happenedAt: { label: 'Happened at', inverse: 'sceneOf', group: 'Places', color: '#c2410c' },
+  owns: { label: 'Owns', inverse: 'ownedBy', group: 'Things', color: '#a8670b' },
+  ownedBy: { label: 'Owned by', inverse: 'owns', group: 'Things', color: '#a8670b' },
+  created: { label: 'Created', inverse: 'createdBy', group: 'Things', color: '#a8670b' },
+  createdBy: { label: 'Created by', inverse: 'created', group: 'Things', color: '#a8670b' },
+  involved: { label: 'Involved in', inverse: 'involves', group: 'Events', color: '#c2410c' },
+  involves: { label: 'Involves', inverse: 'involved', group: 'Events', color: '#c2410c' },
+  spouse: { label: 'Spouse', inverse: 'spouse', group: 'Family & loves', color: '#d1495b' },
+  partner: { label: 'Partner', inverse: 'partner', group: 'Friends & allies', color: '#2f6fde' },
+  patron: { label: 'Patron', inverse: 'protege', group: 'Mentors & students', color: '#2f6fde' },
+  protege: { label: 'Protégé', inverse: 'patron', group: 'Mentors & students', color: '#2f6fde' },
+  handler: { label: 'Handler', inverse: 'informant', group: 'Work & factions', color: '#5b6470' },
+  informant: { label: 'Informant', inverse: 'handler', group: 'Work & factions', color: '#5b6470' },
+  betrayed: { label: 'Betrayed', inverse: 'betrayedBy', group: 'Rivals & enemies', color: '#8e1b1b' },
+  betrayedBy: { label: 'Betrayed by', inverse: 'betrayed', group: 'Rivals & enemies', color: '#8e1b1b' },
+  savedLife: { label: 'Saved the life of', inverse: 'savedBy', group: 'Friends & allies', color: '#3aa17e' },
+  savedBy: { label: 'Saved by', inverse: 'savedLife', group: 'Friends & allies', color: '#3aa17e' },
+  owes: { label: 'Owes', inverse: 'owedBy', group: 'Other', color: '#a8670b' },
+  owedBy: { label: 'Owed by', inverse: 'owes', group: 'Other', color: '#a8670b' },
+  captor: { label: 'Captor', inverse: 'captive', group: 'Rivals & enemies', color: '#b42318' },
+  captive: { label: 'Captive', inverse: 'captor', group: 'Rivals & enemies', color: '#b42318' },
+  founder: { label: 'Founder of', inverse: 'foundedBy', group: 'Work & factions', color: '#8a5cd6' },
+  foundedBy: { label: 'Founded by', inverse: 'founder', group: 'Work & factions', color: '#8a5cd6' },
+  formerMember: { label: 'Former member of', inverse: 'formerHasMember', group: 'Work & factions', color: '#9a8fb5' },
+  formerHasMember: { label: 'Former member', inverse: 'formerMember', group: 'Work & factions', color: '#9a8fb5' },
+  knowsSecret: { label: 'Knows the secret of', inverse: 'secretKnownBy', group: 'Other', color: '#6b7480' },
+  secretKnownBy: { label: 'Secret known by', inverse: 'knowsSecret', group: 'Other', color: '#6b7480' },
+  related: { label: 'Related to', inverse: 'related', group: 'Other', color: '#6b7480' },
+};
+
+/** What a character's own faction list (ch.factions[].role) means as a link. */
+const FACTION_ROLES = { Member: 'member', Leader: 'leader', Founder: 'founder', 'Former member': 'formerMember', Ally: 'ally', Contact: 'contact', Enemy: 'enemy', Informant: 'informant' };
+const PERSON_STATUSES = ['Active', 'Dead', 'Missing', 'Captured', 'Retired', 'Injured', 'In hiding', 'Reformed', 'Turned villain', 'Unknown'];
+const RELATION_GROUPS = [...new Set(Object.values(RELATIONS).map((r) => r.group))];
+
+const BIO_REL = { Mentor: 'mentor', Student: 'student', Rival: 'rival', Enemy: 'enemy', Nemesis: 'nemesis', Ally: 'ally', Ex: 'ex', Love: 'love', Dependent: 'dependent', Guardian: 'guardian', Friend: 'friend', Contact: 'contact', Employer: 'employer', Teammate: 'teammate', Family: 'family', Parent: 'parent', Sibling: 'sibling', Child: 'child', Daughter: 'child', Son: 'child', Sister: 'sibling', Brother: 'sibling' };
+
+const slug = (s) => String(s || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'x';
+
+function emptyWorld() {
+  return { v: 1, name: 'My World', tagline: 'Everyone, everywhere, and how they are tied together', description: '', entities: {}, links: [], overrides: {}, hidden: [], hiddenLinks: [], linkEnds: {}, moments: [] };
+}
+
+const newId = (prefix) => `${prefix}:${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+
+// ---- building ---------------------------------------------------------------------------------------------------
+
+function makeEntity(id, type, name, extra = {}) {
+  return { id, type, name, aliases: [], tags: [], summary: '', body: '', fields: {}, source: 'auto', ...extra };
+}
+
+/** Build the live world from the saved vault plus the roster. */
+function buildWorld(saved, roster, R, { openTabs = [] } = {}) {
+  const w = { ...emptyWorld(), ...(saved || {}) };
+  const entities = new Map();
+  const links = [];
+  const byName = new Map(); // lower name -> entity (people only), for merging bio people across characters
+  const add = (e) => { entities.set(e.id, e); return e; };
+  const link = (from, to, rel, extra = {}) => {
+    if (!from || !to || from === to) return null;
+    if (links.some((l) => l.from === from && l.to === to && l.rel === rel)) return null;
+    const l = { id: `${from}|${to}|${rel}`, from, to, rel, source: 'auto', ...extra };
+    links.push(l);
+    return l;
+  };
+  const chars = [...roster];
+  for (const t of openTabs) if (!chars.some((c) => (c.rosterId && c.rosterId === t.rosterId) || c === t)) chars.push(t);
+
+  // 1. Roster characters are people pages
+  const charId = (ch) => `char:${ch.rosterId || ch.seed || slug(ch.identity?.codename || ch.identity?.realName || 'x')}`;
+  for (const ch of chars) {
+    const id = charId(ch);
+    const name = ch.identity?.codename || ch.identity?.realName || 'Unnamed';
+    const e = add(makeEntity(id, 'person', name, {
+      source: ch.rosterId ? 'roster' : 'open',
+      rosterId: ch.rosterId || null,
+      character: ch,
+      color: ch.theme?.color || null,
+      aliases: [ch.identity?.realName].filter((x) => x && x !== name),
+      summary: ch.bio?.summary || ch.origin?.text || ch.summary || '',
+      fields: {
+        'Power level': ch.pl, Side: ch.alignment === 'villain' ? 'Villain' : ch.minion ? 'Minion' : 'Hero', Archetype: ch.archetype?.name, Theme: ch.theme?.name,
+        Age: ch.identity?.age, Occupation: ch.identity?.occupation, Base: ch.identity?.base, Homeland: ch.identity?.homeland?.country, Team: ch.team, Status: ch.status,
+      },
+      tags: [ch.alignment === 'villain' ? 'villain' : 'hero', ch.archetype?.name, ch.theme?.name, ch.team, ...(ch.kind ? [ch.kind] : [])].filter(Boolean).map((x) => String(x).toLowerCase()),
+    }));
+    byName.set(name.toLowerCase(), e);
+    if (ch.identity?.realName) byName.set(String(ch.identity.realName).toLowerCase(), e);
+  }
+
+  const personFor = (name, ctx) => {
+    const key = String(name || '').trim().toLowerCase();
+    if (!key) return null;
+    const hit = byName.get(key);
+    if (hit) return hit;
+    const id = `npc:${slug(name)}`;
+    const e = entities.get(id) || add(makeEntity(id, 'person', String(name).trim(), { source: 'bio', keys: {}, knownBy: [] }));
+    byName.set(key, e);
+    void ctx;
+    return e;
+  };
+  const locationFor = (name, kind) => {
+    const key = String(name || '').trim();
+    if (!key || /^the city$/i.test(key)) return null;
+    const id = `loc:${slug(key)}`;
+    return entities.get(id) || add(makeEntity(id, 'location', key, { source: 'auto', fields: { Kind: kind } }));
+  };
+  const factionFor = (name) => {
+    const key = String(name || '').trim();
+    if (!key) return null;
+    const id = `faction:${slug(key)}`;
+    return entities.get(id) || add(makeEntity(id, 'faction', key, { source: 'auto' }));
+  };
+
+  // 2. Everyone in the bios, journals, families; places and teams
+  for (const ch of chars) {
+    const me = entities.get(charId(ch));
+    const bio = ch.bio || {};
+    const note = (p) => [p.who || p.note, p.status].filter(Boolean).join(' ');
+    const people = [
+      ...(bio.family?.parents || []).map((p) => ({ ...p, kind: 'parent', rel: 'parent' })),
+      ...(bio.family?.siblings || []).map((p) => ({ ...p, kind: 'sibling', rel: 'sibling' })),
+      ...(bio.people || []).map((p) => ({ ...p, kind: 'person', rel: BIO_REL[p.relation] || 'contact' })),
+    ];
+    for (const p of people) {
+      const other = personFor(p.name, ch);
+      if (!other || other === me) continue;
+      if (other.source === 'bio') {
+        other.knownBy.push({ id: me.id, name: me.name, relation: p.relation || p.role, who: p.who || p.note || '', status: p.status || '', role: p.role, occupation: p.occupation, age: p.age, trait: p.trait });
+        if (!other.summary && (p.who || p.note)) other.summary = p.who || p.note;
+        if (p.occupation && !other.fields.Occupation) other.fields.Occupation = p.occupation;
+        if (p.status && !other.fields.Status) other.fields.Status = p.status;
+        if (p.age != null && !other.fields.Age) other.fields.Age = p.age;
+        try { other.keys[me.id] = p.key || personKey(ch, p, p.kind); } catch { /* no key */ }
+        if (!other.tags.includes(p.relation?.toLowerCase())) other.tags.push((p.relation || p.role || 'npc').toLowerCase());
+      }
+      link(me.id, other.id, p.rel, { note: note(p), label: p.relation || p.role, via: me.id });
+    }
+    if (ch.identity?.base) { const l = locationFor(ch.identity.base, 'City'); if (l) { link(me.id, l.id, 'basedIn'); l.tags = [...new Set([...l.tags, 'city'])]; } }
+    if (ch.identity?.homeland?.country) { const l = locationFor(ch.identity.homeland.country, 'Country'); if (l) { link(me.id, l.id, 'from'); if (ch.identity.homeland.region && ch.identity.homeland.region !== ch.identity.homeland.country) { const r = locationFor(ch.identity.homeland.region, 'Region'); if (r) { link(r.id, l.id, 'locatedIn'); link(me.id, r.id, 'from'); } } } }
+    if (ch.team) { const f = factionFor(ch.team); if (f) { link(me.id, f.id, 'member'); f.tags = [...new Set([...f.tags, 'team'])]; } }
+    // The character's own faction list (Forge > Bio > Factions)
+    for (const fm of ch.factions || []) {
+      const f = factionFor(fm.name);
+      if (!f) continue;
+      const rel = FACTION_ROLES[fm.role] || 'member';
+      link(me.id, f.id, rel, { note: [fm.since ? `since ${fm.since}` : '', fm.note || ''].filter(Boolean).join(' · '), label: fm.role });
+      if (rel === 'leader' || rel === 'founder') link(me.id, f.id, 'member');
+      if (rel === 'formerMember' && fm.was && FACTION_ROLES[fm.was]) {
+        // what they were, until they left: stays on both pages as a past tie
+        const until = fm.untilSession != null ? { session: fm.untilSession } : fm.until ? { date: fm.until } : { };
+        link(me.id, f.id, FACTION_ROLES[fm.was], { until, since: fm.since ? { date: fm.since } : undefined });
+        if (['leader', 'founder'].includes(FACTION_ROLES[fm.was])) link(me.id, f.id, 'member', { until });
+      }
+      if (fm.kind && !f.fields.Kind) f.fields.Kind = fm.kind;
+    }
+    if (ch.factions?.length) me.fields.Factions = ch.factions.map((f) => `${f.name}${f.role && f.role !== 'Member' ? ` (${f.role.toLowerCase()})` : ''}`).join(', ');
+    // Journal sessions are events
+    for (const j of ch.journal?.entries || []) {
+      const id = `event:${me.id}:${j.id}`;
+      const ev = add(makeEntity(id, 'event', j.title || `Session ${j.session}`, { source: 'journal', summary: j.text || '', fields: { Session: j.session, Date: j.date, Character: me.name }, tags: ['session', ...(j.tags || [])], session: j.session, date: j.date, journal: j, character: me.id }));
+      if (j.downtime) ev.fields['Between adventures'] = j.downtime;
+      link(me.id, ev.id, 'involved');
+      for (const p of j.people || []) { const o = personFor(p.name, ch); if (o) link(o.id, ev.id, 'involved', { note: [p.who, p.status].filter(Boolean).join(' ') }); }
+      const pts = (ch.advancement?.log || []).filter((x) => x.journalId === j.id);
+      if (pts.length) ev.fields.Points = pts.map((x) => (x.type === 'award' ? `+${x.points} earned` : `${x.points} spent: ${(x.changes || []).join('; ')}`)).join(' · ');
+    }
+  }
+
+  // 3. Hand-made entities and links from the vault
+  for (const e of Object.values(w.entities || {})) {
+    const existing = entities.get(e.id);
+    if (existing) Object.assign(existing, { summary: e.summary ?? existing.summary, body: e.body ?? existing.body });
+    else add({ ...makeEntity(e.id, e.type, e.name), ...e, source: 'manual', fields: { ...(e.fields || {}) }, tags: [...(e.tags || [])], aliases: [...(e.aliases || [])] });
+    if (e.type === 'person') byName.set(String(e.name).toLowerCase(), entities.get(e.id));
+  }
+  for (const l of w.links || []) {
+    if (!entities.has(l.from) || !entities.has(l.to)) continue;
+    if (!RELATIONS[l.rel]) continue;
+    const prev = links.find((x) => x.from === l.from && x.to === l.to && x.rel === l.rel);
+    if (prev) { prev.note = l.note || prev.note; prev.source = 'manual'; prev.id = l.id || prev.id; if (l.since) prev.since = l.since; if (l.until) prev.until = l.until; continue; }
+    links.push({ ...l, id: l.id || `${l.from}|${l.to}|${l.rel}`, source: 'manual' });
+  }
+  // Ties that ended (a moment closed them): they stay on the pages as "formerly"
+  for (const [id, end] of Object.entries(w.linkEnds || {})) { const l = links.find((x) => x.id === id); if (l) l.until = end; }
+  // Overrides on automatic pages (summary, body, tags, color, aliases, fields)
+  for (const [id, o] of Object.entries(w.overrides || {})) {
+    const e = entities.get(id);
+    if (!e) continue;
+    if (o.summary != null) e.summary = o.summary;
+    if (o.body != null) e.body = o.body;
+    if (o.color) e.color = o.color;
+    if (o.aliases) e.aliases = [...new Set([...e.aliases, ...o.aliases])];
+    if (o.tags) e.tags = [...new Set([...e.tags, ...o.tags])];
+    if (o.fields) e.fields = { ...e.fields, ...o.fields };
+    if (o.type && o.type !== e.type) e.type = o.type;
+    e.edited = true;
+  }
+  for (const id of w.hidden || []) entities.delete(id);
+  const hiddenLinks = new Set(w.hiddenLinks || []);
+  const live = links.filter((l) => entities.has(l.from) && entities.has(l.to) && !hiddenLinks.has(l.id));
+  for (const e of entities.values()) e.status = e.fields?.Status || null;
+
+  // 4. Backlinks: every link also appears from the other end, as its inverse
+  for (const e of entities.values()) { e.out = []; e.in = []; e.color = e.color || ENTITY_TYPES[e.type]?.color; }
+  for (const l of live) {
+    const a = entities.get(l.from); const b = entities.get(l.to);
+    a.out.push({ ...l, other: b, rel: l.rel, label: RELATIONS[l.rel]?.label || l.rel, ended: !!l.until });
+    b.in.push({ ...l, other: a, rel: RELATIONS[l.rel]?.inverse || 'related', label: RELATIONS[RELATIONS[l.rel]?.inverse]?.label || 'Related', ended: !!l.until });
+  }
+  for (const e of entities.values()) {
+    const all = dedupe([...e.out, ...e.in]);
+    e.connections = all.filter((c) => !c.ended);
+    e.past = all.filter((c) => c.ended);
+    e.degree = e.connections.length;
+  }
+  const moments = (w.moments || []).map((m) => resolveMoment(m, entities)).filter(Boolean).sort(byWhen);
+  return { ...w, entities, links: live, roster: chars, moments };
+}
+
+const byWhen = (a, b) => (a.session ?? 1e9) - (b.session ?? 1e9) || String(a.date || '').localeCompare(String(b.date || '')) || String(a.created || '').localeCompare(String(b.created || ''));
+
+/** Does this tie exist at the given session (or now, when session is null)? */
+function linkActiveAt(l, session = null) {
+  if (session == null) return !l.until;
+  if (l.since?.session != null && l.since.session > session) return false;
+  if (l.until?.session != null && l.until.session <= session) return false;
+  if (l.until && l.until.session == null) return false;
+  return true;
+}
+/** The world's ties as they stood at a session: for the graph's "as of" slider. */
+function linksAsOf(world, session) { return world.links.filter((l) => linkActiveAt(l, session)); }
+function lastSession(world) {
+  let n = 0;
+  for (const e of world.entities.values()) if (e.session > n) n = e.session;
+  for (const m of world.moments || []) if (m.session > n) n = m.session;
+  for (const l of world.links) { if (l.since?.session > n) n = l.since.session; if (l.until?.session > n) n = l.until.session; }
+  return n;
+}
+
+function dedupe(list) {
+  const seen = new Set();
+  return list.filter((c) => { const k = `${c.other.id}|${c.rel}`; if (seen.has(k)) return false; seen.add(k); return true; });
+}
+
+/** Connections of a page grouped by relation group, in a stable order. */
+function groupedConnections(e, { past = false } = {}) {
+  const groups = new Map();
+  for (const c of (past ? e.past : e.connections) || []) {
+    const g = RELATIONS[c.rel]?.group || 'Other';
+    if (!groups.has(g)) groups.set(g, []);
+    groups.get(g).push(c);
+  }
+  return RELATION_GROUPS.filter((g) => groups.has(g)).map((g) => ({ group: g, items: groups.get(g).sort((a, b) => a.other.name.localeCompare(b.other.name)) }));
+}
+
+// ---- timelines ------------------------------------------------------------------------------------------------------
+
+/** A person's whole story in order: life events by age, then play by session, with points and battles. */
+function entityTimeline(world, e) {
+  const out = [];
+  const ch = e.character;
+  if (ch) {
+    for (const t of ch.bio?.timeline || []) {
+      if (t.journalId) continue;
+      out.push({ kind: 'life', when: `Age ${t.age}`, sortA: 0, sortB: t.age ?? 0, stage: t.stage, text: t.text, tags: t.tags || [] });
+    }
+    for (const j of ch.journal?.entries || []) {
+      const pts = (ch.advancement?.log || []).filter((x) => x.journalId === j.id);
+      out.push({ kind: 'play', when: `Session ${j.session}`, date: j.date, sortA: 1, sortB: j.session || 0, stage: 'In play', text: [j.title, j.text].filter(Boolean).join(': '), people: j.people || [], points: pts, downtime: j.downtime, eventId: `event:${e.id}:${j.id}` });
+    }
+    for (const a of ch.advancement?.log || []) {
+      if (a.journalId && (ch.journal?.entries || []).some((j) => j.id === a.journalId)) continue;
+      out.push({ kind: 'points', when: a.date || '', sortA: 1, sortB: 0.5, stage: a.type === 'award' ? 'Points earned' : a.type === 'pl' ? 'Power level' : 'Points spent', text: `${a.type === 'award' ? `+${a.points} pp` : a.type === 'pl' ? '' : `${a.points > 0 ? `−${a.points}` : `+${-a.points}`} pp`}${a.note ? ` · ${a.note}` : ''}${a.changes?.length ? `: ${a.changes.join('; ')}` : ''}`, date: a.date });
+    }
+  }
+  // Events this page is tied to (from other people's journals, battles, hand-made events)
+  for (const c of e.connections || []) {
+    if (c.other.type !== 'event') continue;
+    if (c.other.character === e.id) continue;
+    const ev = c.other;
+    out.push({ kind: 'event', when: ev.session ? `Session ${ev.session}` : ev.date || '', date: ev.date, sortA: 1, sortB: ev.session || 0, stage: ev.fields?.Kind || 'Event', text: `${ev.name}${ev.summary ? `: ${ev.summary}` : ''}${c.note ? ` (${c.note})` : ''}`, eventId: ev.id });
+  }
+  // What happened to them: recorded moments
+  for (const m of world.moments || []) {
+    if (m.a !== e.id && m.b !== e.id) continue;
+    out.push({ kind: 'change', when: m.session != null ? `Session ${m.session}` : m.date || '', date: m.date, sortA: 1, sortB: m.session ?? 1e9, stage: MOMENT_KINDS[m.kind]?.group || 'Change', text: m.text + (m.note ? ` ${m.note}` : ''), momentId: m.id, other: m.a === e.id ? m.b : m.a });
+  }
+  // What the people who know this NPC say about them
+  if (e.source === 'bio') for (const k of e.knownBy || []) out.push({ kind: 'known', when: '', sortA: 0.5, sortB: 0, stage: `As ${k.name}'s ${(k.relation || '').toLowerCase()}`, text: [k.who, k.status].filter(Boolean).join(' '), by: k.id });
+  return out.sort((a, b) => a.sortA - b.sortA || a.sortB - b.sortB || String(a.date || '').localeCompare(String(b.date || '')));
+}
+
+/** The campaign's own timeline: every session and event across the whole world. */
+function campaignTimeline(world, { kinds = null } = {}) {
+  const items = [];
+  for (const e of world.entities.values()) if (e.type === 'event') items.push({ kind: e.source === 'journal' ? 'session' : e.tags?.includes('battle') ? 'battle' : 'event', id: e.id, session: e.session ?? null, date: e.date || e.fields?.Date || '', name: e.name, text: e.summary || '', ev: e, created: e.created || '' });
+  for (const m of world.moments || []) items.push({ kind: 'change', id: m.id, session: m.session ?? null, date: m.date || '', name: m.text, text: m.note || '', m, created: m.created || '' });
+  return items.filter((x) => !kinds || kinds.includes(x.kind)).sort((a, b) => (a.session ?? 1e9) - (b.session ?? 1e9) || String(a.date || '').localeCompare(String(b.date || '')) || (a.kind === 'session' ? -1 : 0) - (b.kind === 'session' ? -1 : 0) || String(a.created).localeCompare(String(b.created)) || a.name.localeCompare(b.name));
+}
+
+// ---- search ------------------------------------------------------------------------------------------------------------
+
+function searchWorld(world, q, { type = null, limit = 50 } = {}) {
+  const term = String(q || '').trim().toLowerCase();
+  const all = [...world.entities.values()].filter((e) => !type || e.type === type);
+  if (!term) return all.sort((a, b) => b.degree - a.degree || a.name.localeCompare(b.name)).slice(0, limit);
+  const score = (e) => {
+    const name = e.name.toLowerCase();
+    if (name === term) return 100;
+    if (name.startsWith(term)) return 80;
+    if (name.includes(term)) return 60;
+    if (e.aliases.some((a) => String(a).toLowerCase().includes(term))) return 50;
+    if (e.tags.some((t) => String(t).toLowerCase().includes(term))) return 30;
+    if (`${e.summary} ${e.body}`.toLowerCase().includes(term)) return 20;
+    if (Object.values(e.fields || {}).some((v) => String(v ?? '').toLowerCase().includes(term))) return 15;
+    return 0;
+  };
+  return all.map((e) => ({ e, s: score(e) })).filter((x) => x.s > 0).sort((a, b) => b.s - a.s || b.e.degree - a.e.degree || a.e.name.localeCompare(b.e.name)).slice(0, limit).map((x) => x.e);
+}
+
+// ---- editing the vault -------------------------------------------------------------------------------------------------
+
+function createEntity(saved, { type, name, summary = '', body = '', tags = [], fields = {}, aliases = [], color = null }) {
+  const id = newId(type);
+  saved.entities[id] = { id, type, name: String(name).trim(), summary, body, tags, fields, aliases, color, created: new Date().toISOString() };
+  return saved.entities[id];
+}
+
+function updateEntity(saved, world, id, patch) {
+  const live = world.entities.get(id);
+  if (saved.entities[id]) { Object.assign(saved.entities[id], patch, { updated: new Date().toISOString() }); return; }
+  if (!live) return;
+  saved.overrides[id] = { ...(saved.overrides[id] || {}), ...patch };
+}
+
+function deleteEntity(saved, id) {
+  if (saved.entities[id]) delete saved.entities[id];
+  else if (!saved.hidden.includes(id)) saved.hidden.push(id);
+  saved.links = saved.links.filter((l) => l.from !== id && l.to !== id);
+}
+
+function restoreHidden(saved, id) { saved.hidden = saved.hidden.filter((x) => x !== id); }
+
+function addLink(saved, { from, to, rel, note = '', since = null }) {
+  if (!from || !to || from === to || !RELATIONS[rel]) return null;
+  const id = `${from}|${to}|${rel}`;
+  saved.links = saved.links.filter((l) => l.id !== id);
+  const l = { id, from, to, rel, note, created: new Date().toISOString() };
+  if (since) l.since = since;
+  saved.links.push(l);
+  if (saved.linkEnds?.[id]) delete saved.linkEnds[id];
+  saved.hiddenLinks = (saved.hiddenLinks || []).filter((x) => x !== id);
+  return l;
+}
+
+// ---- moments: what happened, and what it changed -------------------------------------------------------------------------
+//
+// A moment is one line of history ("Session 4: Nightfang and the Baron became enemies"). Recording it
+// adds the new ties, ends the ties it replaces (they stay on the pages as "formerly") and, for a
+// status change, marks the page. Removing the moment undoes exactly that.
+//
+// a: the subject. b: the other party (when `b` names a type). add: the tie made (rel = what b is to a,
+// or with dir 'ba', what a is to b). ends: ties between a and b that this closes. endsAny: close a's
+// ties of those kinds to anyone. endsOthers: close everyone else's ties of those kinds to b.
+
+const P = 'person'; const F = 'faction'; const L = 'location'; const I = 'item'; const ANY = ['person', 'faction', 'location', 'item', 'event'];
+const MOMENT_KINDS = {
+  // people and people
+  met: { group: 'People', label: 'met', text: '{a} and {b} met', a: [P], b: [P], add: 'contact' },
+  becameFriends: { group: 'People', label: 'became friends', text: '{a} and {b} became friends', a: [P], b: [P], add: 'friend', ends: ['enemy', 'rival', 'nemesis', 'betrayed'] },
+  becameAllies: { group: 'People', label: 'became allies', text: '{a} and {b} became allies', a: [P, F], b: [P, F], add: 'ally', ends: ['enemy', 'atWar'] },
+  teamedUp: { group: 'People', label: 'teamed up', text: '{a} and {b} teamed up', a: [P], b: [P], add: 'teammate', ends: ['enemy'] },
+  partedWays: { group: 'People', label: 'parted ways', text: '{a} and {b} parted ways', a: [P], b: [P], ends: ['teammate', 'partner', 'ally'] },
+  becameRivals: { group: 'People', label: 'became rivals', text: '{a} and {b} became rivals', a: [P], b: [P], add: 'rival', ends: ['friend'] },
+  becameEnemies: { group: 'People', label: 'became enemies', text: '{a} and {b} became enemies', a: [P, F], b: [P, F], add: 'enemy', ends: ['friend', 'ally', 'teammate', 'contact', 'partner', 'allied'] },
+  sworeRevenge: { group: 'People', label: 'swore revenge on', text: '{a} swore revenge on {b}', a: [P], b: [P], add: 'nemesis', ends: ['friend', 'ally', 'teammate', 'enemy'] },
+  betrayed: { group: 'People', label: 'betrayed', text: '{a} betrayed {b}', a: [P], b: [P, F], add: 'betrayed', ends: ['friend', 'ally', 'teammate', 'love', 'partner', 'member', 'spouse'] },
+  reconciled: { group: 'People', label: 'reconciled with', text: '{a} and {b} reconciled', a: [P], b: [P], add: 'friend', ends: ['enemy', 'rival', 'nemesis', 'betrayed', 'ex'] },
+  forgave: { group: 'People', label: 'forgave', text: '{a} forgave {b}', a: [P], b: [P], add: 'contact', ends: ['enemy', 'rival', 'nemesis', 'betrayed'] },
+  fought: { group: 'People', label: 'fought', text: '{a} fought {b}', a: [P, F], b: [P, F], add: 'fought' },
+  savedLife: { group: 'People', label: 'saved the life of', text: '{a} saved the life of {b}', a: [P], b: [P], add: 'savedLife' },
+  owesDebt: { group: 'People', label: 'now owes', text: '{a} now owes {b}', a: [P, F], b: [P, F], add: 'owes' },
+  tookStudent: { group: 'People', label: 'took as a student', text: '{a} took {b} as a student', a: [P], b: [P], add: 'student' },
+  learnedSecret: { group: 'People', label: 'learned the secret of', text: '{a} learned the secret of {b}', a: [P], b: [P], add: 'knowsSecret' },
+  // loves and family
+  fellInLove: { group: 'Loves & family', label: 'fell in love with', text: '{a} and {b} fell in love', a: [P], b: [P], add: 'love', ends: ['ex', 'enemy', 'rival'] },
+  married: { group: 'Loves & family', label: 'married', text: '{a} and {b} married', a: [P], b: [P], add: 'spouse', ends: ['love', 'ex'] },
+  brokeUp: { group: 'Loves & family', label: 'broke up with', text: '{a} and {b} broke up', a: [P], b: [P], add: 'ex', ends: ['love', 'spouse', 'partner'] },
+  adopted: { group: 'Loves & family', label: 'adopted', text: '{a} adopted {b}', a: [P], b: [P], add: 'child' },
+  becameGuardian: { group: 'Loves & family', label: 'became guardian of', text: '{a} became the guardian of {b}', a: [P], b: [P], add: 'dependent' },
+  // factions
+  joined: { group: 'Factions', label: 'joined', text: '{a} joined {b}', a: [P], b: [F], add: 'member', ends: ['formerMember', 'enemy'] },
+  left: { group: 'Factions', label: 'left', text: '{a} left {b}', a: [P], b: [F], add: 'formerMember', ends: ['member', 'leader'] },
+  expelled: { group: 'Factions', label: 'was thrown out of', text: '{a} was thrown out of {b}', a: [P], b: [F], add: 'formerMember', ends: ['member', 'leader'] },
+  founded: { group: 'Factions', label: 'founded', text: '{a} founded {b}', a: [P], b: [F], add: 'founder', also: ['member', 'leader'] },
+  tookLeadership: { group: 'Factions', label: 'took leadership of', text: '{a} took leadership of {b}', a: [P], b: [F], add: 'leader', also: ['member'], ends: ['formerMember'], endsOthers: ['leader'] },
+  steppedDown: { group: 'Factions', label: 'stepped down from leading', text: '{a} stepped down from leading {b}', a: [P], b: [F], ends: ['leader'] },
+  factionsAllied: { group: 'Factions', label: 'allied with (faction)', text: '{a} and {b} formed an alliance', a: [F], b: [F], add: 'allied', ends: ['atWar'] },
+  factionsAtWar: { group: 'Factions', label: 'went to war with', text: '{a} went to war with {b}', a: [F], b: [F], add: 'atWar', ends: ['allied'] },
+  madePeace: { group: 'Factions', label: 'made peace with', text: '{a} and {b} made peace', a: [F, P], b: [F, P], ends: ['atWar', 'enemy'] },
+  disbanded: { group: 'Factions', label: 'disbanded', text: '{a} disbanded', a: [F], status: 'Disbanded', endsAny: ['hasMember', 'ledBy', 'allied', 'atWar'] },
+  // places
+  movedTo: { group: 'Places', label: 'moved to', text: '{a} moved to {b}', a: [P], b: [L], add: 'livesIn', endsAny: ['livesIn'] },
+  setUpBase: { group: 'Places', label: 'set up a base in', text: '{a} set up a base in {b}', a: [P, F], b: [L], add: 'basedIn' },
+  leftPlace: { group: 'Places', label: 'left (a place)', text: '{a} left {b}', a: [P, F], b: [L], ends: ['livesIn', 'basedIn', 'worksAt'] },
+  tookOver: { group: 'Places', label: 'took control of', text: '{a} took control of {b}', a: [P, F], b: [L], add: 'owns', endsOthers: ['owns'] },
+  discovered: { group: 'Places', label: 'discovered', text: '{a} discovered {b}', a: [P, F], b: [L, I], add: 'related' },
+  destroyedPlace: { group: 'Places', label: 'destroyed (a place)', text: '{a} destroyed {b}', a: [P, F], b: [L], add: 'related', statusB: 'Destroyed' },
+  rebuilt: { group: 'Places', label: 'rebuilt', text: '{a} rebuilt {b}', a: [P, F], b: [L], add: 'related', statusB: 'Rebuilt' },
+  // what became of them
+  died: { group: 'Fate', label: 'died', text: '{a} died', a: [P], status: 'Dead' },
+  returned: { group: 'Fate', label: 'returned from the dead', text: '{a} returned from the dead', a: [P], status: 'Active' },
+  captured: { group: 'Fate', label: 'was captured', text: '{a} was captured', a: [P], status: 'Captured', optB: [P, F], addB: 'captor' },
+  escaped: { group: 'Fate', label: 'escaped', text: '{a} escaped', a: [P], status: 'Active', endsAny: ['captor'] },
+  wentMissing: { group: 'Fate', label: 'went missing', text: '{a} went missing', a: [P], status: 'Missing' },
+  found: { group: 'Fate', label: 'was found', text: '{a} was found', a: [P], status: 'Active' },
+  retired: { group: 'Fate', label: 'retired', text: '{a} retired', a: [P], status: 'Retired' },
+  cameBack: { group: 'Fate', label: 'came out of retirement', text: '{a} came out of retirement', a: [P], status: 'Active' },
+  injured: { group: 'Fate', label: 'was badly hurt', text: '{a} was badly hurt', a: [P], status: 'Injured' },
+  recovered: { group: 'Fate', label: 'recovered', text: '{a} recovered', a: [P], status: 'Active' },
+  wentIntoHiding: { group: 'Fate', label: 'went into hiding', text: '{a} went into hiding', a: [P], status: 'In hiding' },
+  turnedVillain: { group: 'Fate', label: 'turned villain', text: '{a} turned villain', a: [P], status: 'Turned villain' },
+  reformed: { group: 'Fate', label: 'reformed', text: '{a} reformed', a: [P], status: 'Reformed' },
+  revealed: { group: 'Fate', label: 'had their identity revealed', text: "{a}'s secret identity was revealed", a: [P], optB: [P, F], addB: 'secretKnownBy' },
+  lostPowers: { group: 'Fate', label: 'lost their powers', text: '{a} lost their powers', a: [P] },
+  gainedPowers: { group: 'Fate', label: 'gained new powers', text: '{a} gained new powers', a: [P] },
+  newName: { group: 'Fate', label: 'took a new name', text: '{a} took a new name', a: [P] },
+  // things
+  acquired: { group: 'Things', label: 'acquired', text: '{a} acquired {b}', a: [P, F], b: [I], add: 'owns', endsOthers: ['owns'] },
+  stole: { group: 'Things', label: 'stole', text: '{a} stole {b}', a: [P, F], b: [I], add: 'owns', endsOthers: ['owns'] },
+  lostItem: { group: 'Things', label: 'lost', text: '{a} lost {b}', a: [P, F], b: [I], ends: ['owns'] },
+  gaveAway: { group: 'Things', label: 'gave away', text: '{a} gave away {b}', a: [P, F], b: [I], ends: ['owns'] },
+  madeItem: { group: 'Things', label: 'made', text: '{a} made {b}', a: [P, F], b: [I], add: 'created', also: ['owns'] },
+  destroyedItem: { group: 'Things', label: 'destroyed (a thing)', text: '{a} destroyed {b}', a: [P, F], b: [I], add: 'related', statusB: 'Destroyed' },
+  // anything else
+  tiedTo: { group: 'Other', label: 'became tied to', text: '{a} and {b} became tied together', a: ANY, b: ANY, add: 'related' },
+  note: { group: 'Other', label: 'something else happened', text: '{a}: {note}', a: ANY, optB: ANY, addB: 'related' },
+};
+const MOMENT_GROUPS = [...new Set(Object.values(MOMENT_KINDS).map((k) => k.group))];
+
+/** Kinds that fit a subject of this type (and, when b is given, an other party of that type). */
+function momentKindsFor(aType, bType = null) {
+  return Object.entries(MOMENT_KINDS).filter(([, k]) => (!aType || k.a.includes(aType)) && (!bType || (k.b || k.optB || []).includes(bType))).map(([id]) => id);
+}
+
+const relBetween = (links, x, y, rel) => links.find((l) => ((l.from === x && l.to === y && l.rel === rel) || (l.from === y && l.to === x && l.rel === RELATIONS[rel]?.inverse)) && !l.until);
+
+function endLink(saved, l, when, momentId, ended) {
+  if (!l || l.until) return;
+  saved.linkEnds = saved.linkEnds || {};
+  saved.linkEnds[l.id] = { ...when, momentId };
+  ended.push(l.id);
+}
+
+function momentSentence(kind, aName, bName, note = '') {
+  const k = MOMENT_KINDS[kind];
+  if (!k) return `${aName} ${kind}${bName ? ` ${bName}` : ''}`;
+  let t = k.text.replace('{a}', aName).replace('{b}', bName || 'someone').replace('{note}', note || '…');
+  if (kind === 'note' && !bName) t = `${aName}: ${note || '…'}`;
+  return t;
+}
+
+/**
+ * Record a moment. a and b are entity ids (b optional for one-party kinds). when: { session, date }.
+ * Needs the live world (for the ties that exist). Returns the stored moment.
+ */
+function recordMoment(saved, world, { kind, a, b = null, session = null, date = '', note = '' }) {
+  const k = MOMENT_KINDS[kind];
+  if (!k || !a) return null;
+  const A = world.entities.get(a); const B = b ? world.entities.get(b) : null;
+  if (!A) return null;
+  if ((k.b && !B) || (B && !(k.b || k.optB || []).length && kind !== 'note')) return null;
+  const when = {}; if (session != null && session !== '') when.session = Number(session); if (date) when.date = date;
+  const id = newId('moment');
+  const created = []; const ended = [];
+  const m = { id, kind, a, b: B ? b : null, session: when.session ?? null, date: when.date || '', note, text: momentSentence(kind, A.name, B?.name, note), created, ended, at: new Date().toISOString() };
+  saved.moments = saved.moments || [];
+  const links = world.links;
+  // close what it replaces
+  if (B) for (const rel of k.ends || []) endLink(saved, relBetween(links, a, b, rel), when, id, ended);
+  for (const rel of k.endsAny || []) for (const l of links) if (((l.from === a && l.rel === rel) || (l.to === a && RELATIONS[l.rel]?.inverse === rel)) && !l.until) endLink(saved, l, when, id, ended);
+  if (B) for (const rel of k.endsOthers || []) for (const l of links) if (l.from !== a && ((l.to === b && l.rel === rel) || (l.from === b && RELATIONS[l.rel]?.inverse === rel)) && !l.until) endLink(saved, l, when, id, ended);
+  // make the new ties
+  const mk = (rel) => { const l = addLink(saved, { from: a, to: b, rel, note: note || '', since: Object.keys(when).length ? when : null }); if (l) created.push(l.id); };
+  if (B && k.add) mk(k.add);
+  if (B) for (const rel of k.also || []) mk(rel);
+  if (B && !k.add && k.addB) mk(k.addB);
+  // status
+  const setStatus = (id2, status) => {
+    saved.overrides[id2] = saved.overrides[id2] || {};
+    const prev = saved.overrides[id2].fields?.Status ?? null;
+    saved.overrides[id2].fields = { ...(saved.overrides[id2].fields || {}), Status: status };
+    return prev;
+  };
+  if (k.status) { m.prevStatus = setStatus(a, k.status); m.statusOf = a; }
+  if (k.statusB && B) { m.prevStatusB = setStatus(b, k.statusB); m.statusOfB = b; }
+  saved.moments.push(m);
+  return m;
+}
+
+/** Undo a moment: its ties go, the ties it ended come back, its status change is reverted. */
+function removeMoment(saved, id) {
+  const m = (saved.moments || []).find((x) => x.id === id);
+  if (!m) return false;
+  saved.links = saved.links.filter((l) => !(m.created || []).includes(l.id));
+  for (const lid of m.ended || []) if (saved.linkEnds?.[lid]?.momentId === id) delete saved.linkEnds[lid];
+  const revert = (eid, prev) => { const o = saved.overrides[eid]; if (!o?.fields) return; if (prev) o.fields.Status = prev; else delete o.fields.Status; };
+  if (m.statusOf) revert(m.statusOf, m.prevStatus);
+  if (m.statusOfB) revert(m.statusOfB, m.prevStatusB);
+  saved.moments = saved.moments.filter((x) => x.id !== id);
+  return true;
+}
+
+function updateMoment(saved, id, { session, date, note }) {
+  const m = (saved.moments || []).find((x) => x.id === id);
+  if (!m) return null;
+  if (session !== undefined) m.session = session === null || session === '' ? null : Number(session);
+  if (date !== undefined) m.date = date || '';
+  if (note !== undefined) m.note = note;
+  const when = {}; if (m.session != null) when.session = m.session; if (m.date) when.date = m.date;
+  for (const l of saved.links) if ((m.created || []).includes(l.id)) { if (Object.keys(when).length) l.since = when; else delete l.since; }
+  for (const lid of m.ended || []) if (saved.linkEnds?.[lid]?.momentId === id) saved.linkEnds[lid] = { ...when, momentId: id };
+  return m;
+}
+
+function resolveMoment(m, entities) {
+  const A = entities.get(m.a); const B = m.b ? entities.get(m.b) : null;
+  if (!A || (m.b && !B)) return null;
+  return { ...m, text: momentSentence(m.kind, A.name, B?.name, m.note), aName: A.name, bName: B?.name || null, created: m.at };
+}
+
+function removeLink(saved, world, id) {
+  const before = saved.links.length;
+  saved.links = saved.links.filter((l) => l.id !== id);
+  if (saved.links.length === before) {
+    // an automatic link: hide it
+    saved.hiddenLinks = [...new Set([...(saved.hiddenLinks || []), id])];
+  }
+}
+
+/** Record a Battle Room fight as an event with everyone who fought in it. */
+function recordBattle(saved, battle, world) {
+  const name = `${battle.name || 'Battle'}: ${battle.winner ? `team ${battle.winner} wins` : 'stalemate'}`;
+  const teams = [...new Set(battle.combatants.map((c) => c.team))].sort();
+  const sides = teams.map((t) => `Team ${t}: ${battle.combatants.filter((c) => c.team === t).map((c) => c.name).join(', ')}`).join(' vs ');
+  const standing = battle.combatants.filter((c) => !c.out && !c.fled).map((c) => c.name);
+  const ev = createEntity(saved, { type: 'event', name, summary: `${sides}. ${battle.round} rounds. ${standing.length ? `Still standing: ${standing.join(', ')}.` : ''}`, tags: ['battle'], fields: { Kind: 'Battle', Date: new Date().toISOString().slice(0, 10), Seed: battle.seed, Rounds: battle.round } });
+  const ids = [];
+  const made = new Map();
+  for (const c of battle.combatants) {
+    const plain = c.name.replace(/ #\d+$/, '');
+    let e = c.ch.rosterId ? world.entities.get(`char:${c.ch.rosterId}`) : null;
+    if (!e) e = [...world.entities.values()].find((x) => x.type === 'person' && x.name.toLowerCase() === plain.toLowerCase()) || Object.values(saved.entities).find((x) => x.type === 'person' && x.name.toLowerCase() === plain.toLowerCase()) || made.get(plain.toLowerCase());
+    if (!e) { e = createEntity(saved, { type: 'person', name: plain, summary: `PL ${c.pl} ${c.ch.alignment === 'villain' ? 'villain' : 'fighter'} from the Battle Room.`, tags: [c.ch.alignment === 'villain' ? 'villain' : 'hero', 'battle'] }); made.set(plain.toLowerCase(), e); }
+    if (ids.some((x) => x.id === e.id)) continue;
+    ids.push({ id: e.id, team: c.team });
+    const same = battle.combatants.filter((x) => x.name.replace(/ #\d+$/, '') === plain);
+    const fate = same.length > 1 ? `${same.length} of them: ${same.filter((x) => x.out).length} knocked out, ${same.filter((x) => x.fled).length} fled` : c.out ? 'knocked out' : c.fled ? 'fled' : 'still standing';
+    addLink(saved, { from: e.id, to: ev.id, rel: 'involved', note: `Team ${c.team}, ${fate}` });
+  }
+  for (const a of ids) for (const b of ids) if (a.team !== b.team && a.id < b.id) addLink(saved, { from: a.id, to: b.id, rel: 'fought', note: name });
+  return ev;
+}
+
+// ---- graph layout ------------------------------------------------------------------------------------------------------
+
+/** A simple force layout. nodes: [{id}], edges: [{from,to}]. Returns Map id -> {x,y} in [0,w]x[0,h]. */
+function layoutGraph(nodes, edges, { width = 800, height = 600, iterations = 220, seed = 1, center = null, margin = 24 } = {}) {
+  const pos = new Map();
+  let s = seed >>> 0 || 1;
+  const rnd = () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
+  const n = nodes.length;
+  nodes.forEach((nd, i) => {
+    const a = (i / Math.max(1, n)) * Math.PI * 2;
+    const r = Math.min(width, height) * (0.25 + rnd() * 0.2);
+    pos.set(nd.id, { x: width / 2 + Math.cos(a) * r, y: height / 2 + Math.sin(a) * r, vx: 0, vy: 0 });
+  });
+  if (center && pos.has(center)) { const c = pos.get(center); c.x = width / 2; c.y = height / 2; }
+  const k = Math.sqrt((width * height) / Math.max(1, n)) * 0.9;
+  const adj = edges.filter((e) => pos.has(e.from) && pos.has(e.to));
+  for (let it = 0; it < iterations; it++) {
+    const t = 1 - it / iterations;
+    const temp = Math.max(2, k * t * 0.6);
+    for (const a of nodes) {
+      const pa = pos.get(a.id);
+      let fx = 0; let fy = 0;
+      for (const b of nodes) {
+        if (a === b) continue;
+        const pb = pos.get(b.id);
+        let dx = pa.x - pb.x; let dy = pa.y - pb.y;
+        let d2 = dx * dx + dy * dy;
+        if (d2 < 1) { dx = rnd() - 0.5; dy = rnd() - 0.5; d2 = 1; }
+        const d = Math.sqrt(d2);
+        const f = (k * k) / d;
+        fx += (dx / d) * f; fy += (dy / d) * f;
+      }
+      pa.vx = fx; pa.vy = fy;
+    }
+    for (const e of adj) {
+      const pa = pos.get(e.from); const pb = pos.get(e.to);
+      const dx = pa.x - pb.x; const dy = pa.y - pb.y;
+      const d = Math.max(1, Math.sqrt(dx * dx + dy * dy));
+      const f = (d * d) / k * 0.5;
+      pa.vx -= (dx / d) * f; pa.vy -= (dy / d) * f;
+      pb.vx += (dx / d) * f; pb.vy += (dy / d) * f;
+    }
+    for (const a of nodes) {
+      const p = pos.get(a.id);
+      if (center && a.id === center) { p.x = width / 2; p.y = height / 2; continue; }
+      // gravity to the middle
+      p.vx += (width / 2 - p.x) * 0.02; p.vy += (height / 2 - p.y) * 0.02;
+      const v = Math.sqrt(p.vx * p.vx + p.vy * p.vy) || 1;
+      const step = Math.min(v, temp);
+      p.x = Math.max(margin, Math.min(width - margin, p.x + (p.vx / v) * step));
+      p.y = Math.max(margin, Math.min(height - margin, p.y + (p.vy / v) * step));
+    }
+  }
+  return pos;
+}
+
+// ---- Markdown vault (Obsidian) ----------------------------------------------------------------------------------------------
+
+const safeName = (s) => String(s).replace(/[\\/:*?"<>|#^[\]]/g, '').replace(/\s+/g, ' ').trim() || 'Untitled';
+const FOLDER = { person: 'People', faction: 'Factions', location: 'Locations', event: 'Events', item: 'Items' };
+
+function mdPage(world, e) {
+  const name = safeName(e.name);
+  const out = [];
+  out.push('---');
+  out.push(`type: ${e.type}`);
+  if (e.aliases?.length) out.push(`aliases: [${e.aliases.map((a) => JSON.stringify(a)).join(', ')}]`);
+  if (e.tags?.length) out.push(`tags: [${e.tags.map((t) => JSON.stringify(String(t))).join(', ')}]`);
+  for (const [k, v] of Object.entries(e.fields || {})) if (v != null && v !== '') out.push(`${slug(k).replace(/-/g, '_')}: ${JSON.stringify(String(v))}`);
+  out.push('---', '', `# ${name}`, '');
+  if (e.summary) out.push(e.summary, '');
+  const fields = Object.entries(e.fields || {}).filter(([, v]) => v != null && v !== '');
+  if (fields.length) { out.push('| | |', '|---|---|'); for (const [k, v] of fields) out.push(`| **${k}** | ${String(v).replace(/\|/g, '\\|')} |`); out.push(''); }
+  const groups = groupedConnections(e);
+  if (groups.length) {
+    out.push('## Connections', '');
+    for (const g of groups) {
+      out.push(`### ${g.group}`);
+      for (const c of g.items) out.push(`- **${c.label}:** [[${safeName(c.other.name)}]]${c.note ? ` — ${c.note}` : ''}${c.since?.session != null ? ` (since session ${c.since.session})` : ''}`);
+      out.push('');
+    }
+  }
+  const past = groupedConnections(e, { past: true });
+  if (past.length) {
+    out.push('## Formerly', '');
+    for (const g of past) for (const c of g.items) out.push(`- **${c.label}:** [[${safeName(c.other.name)}]]${c.until?.session != null ? ` (until session ${c.until.session})` : ''}`);
+    out.push('');
+  }
+  const tl = entityTimeline(world, e);
+  if (tl.length) {
+    out.push('## Timeline', '');
+    for (const t of tl) {
+      let line = `- **${t.when || t.stage}**${t.when && t.stage ? ` (${t.stage})` : ''}: ${t.text}`;
+      if (t.people?.length) line += ` — with ${t.people.map((p) => `[[${safeName(p.name)}]]`).join(', ')}`;
+      if (t.points?.length) line += ` — ${t.points.map((x) => (x.type === 'award' ? `+${x.points} pp earned` : `${x.points} pp spent: ${(x.changes || []).join('; ')}`)).join('; ')}`;
+      out.push(line);
+      if (t.downtime) out.push(`  - Between adventures: ${t.downtime}`);
+    }
+    out.push('');
+  }
+  if (e.character) {
+    const ch = e.character;
+    out.push('## Character', '');
+    out.push(`- PL ${ch.pl} ${ch.archetype?.name || ''} ${ch.theme?.name ? `(${ch.theme.name})` : ''}`.trim());
+    if (ch.powers?.length) out.push(`- Powers: ${ch.powers.map((p) => `${p.name} (${p.effect} ${p.rank})`).join(', ')}`);
+    if (ch.advantages?.length) out.push(`- Advantages: ${ch.advantages.map((a) => `${a.name}${a.rank > 1 ? ` ${a.rank}` : ''}`).join(', ')}`);
+    if (ch.complications?.length) out.push(`- Complications: ${ch.complications.map((c) => `${c.type}: ${c.text}`).join(' ')}`);
+    out.push('');
+  }
+  if (e.body) out.push('## Notes', '', e.body, '');
+  return out.join('\n');
+}
+
+/** { 'People/Name.md': markdown, ... } for the whole world. */
+function vaultMarkdown(world) {
+  const files = {};
+  const used = new Set();
+  for (const e of world.entities.values()) {
+    let name = safeName(e.name);
+    if (used.has(`${FOLDER[e.type]}/${name}`)) name = `${name} (${e.id.split(':')[0]})`;
+    used.add(`${FOLDER[e.type]}/${name}`);
+    files[`${FOLDER[e.type] || 'Other'}/${name}.md`] = mdPage(world, e);
+  }
+  const home = [`# ${world.name || 'World'}`, '', world.tagline || '', '', world.description || '', ''];
+  for (const [type, meta] of Object.entries(ENTITY_TYPES)) {
+    const list = [...world.entities.values()].filter((e) => e.type === type).sort((a, b) => a.name.localeCompare(b.name));
+    if (!list.length) continue;
+    home.push(`## ${meta.label}`, '');
+    for (const e of list) home.push(`- [[${safeName(e.name)}]]${e.summary ? ` — ${String(e.summary).split(/(?<=[.!?])\s/)[0]}` : ''}`);
+    home.push('');
+  }
+  const tl = campaignTimeline(world);
+  if (tl.length) { home.push('## Campaign timeline', ''); for (const it of tl) home.push(`- ${it.session != null ? `Session ${it.session}` : it.date || ''}: ${it.ev ? `[[${safeName(it.name)}]]` : it.name}${it.text ? ` — ${it.text}` : ''}`); home.push(''); }
+  files[`${safeName(world.name || 'World')}.md`] = home.join('\n');
+  return files;
+}
+
+return { ENTITY_TYPES, RELATIONS, FACTION_ROLES, PERSON_STATUSES, RELATION_GROUPS, slug, emptyWorld, buildWorld, linkActiveAt, linksAsOf, lastSession, groupedConnections, entityTimeline, campaignTimeline, searchWorld, createEntity, updateEntity, deleteEntity, restoreHidden, addLink, MOMENT_KINDS, MOMENT_GROUPS, momentKindsFor, momentSentence, recordMoment, removeMoment, updateMoment, removeLink, recordBattle, layoutGraph, vaultMarkdown };
+})();
+
+__mods["src/app/factions.js"] = (() => {
+// Factions on a character: the teams, gangs, agencies, courts and cults they belong to (or used to),
+// kept on the character itself so they travel with the sheet, the exports and the World.
+
+const { h } = __mods["src/app/dom.js"];
+const { FACTION_ROLES } = __mods["src/engine/world.js"];
+const FACTION_KINDS = ['Team', 'Agency', 'Gang', 'Corporation', 'Cult', 'Court', 'Family', 'Guild', 'Government', 'Military', 'Rebels', 'School', 'Secret society', 'Syndicate', 'Other'];
+const ROLES = Object.keys(FACTION_ROLES);
+
+/** Names of factions already in the world (for the picker), from the saved vault and the roster. */
+function knownFactions(roster) {
+  const names = new Set();
+  try { const w = JSON.parse(localStorage.getItem('dcugen.world.v1') || 'null'); for (const e of Object.values(w?.entities || {})) if (e.type === 'faction') names.add(e.name); } catch { /* none */ }
+  for (const c of roster || []) { if (c.team) names.add(c.team); for (const f of c.factions || []) names.add(f.name); }
+  return [...names].sort();
+}
+
+let adding = false;
+
+/** change(fn) clones, applies, saves. Omit for read-only. */
+function factionsSection(ch, { change, roster = [] } = {}) {
+  const list = ch.factions || [];
+  if (!list.length && !change) return null;
+  const known = knownFactions(roster).filter((n) => !list.some((f) => f.name === n));
+  const row = (f, i) => h('li', { class: `fx-row ${/^Former/.test(f.role || '') ? 'former' : ''}` },
+    h('span', { class: 'fx-role' }, f.role || 'Member'),
+    h('span', { class: 'fx-name' }, f.name, f.kind ? h('small', null, ` · ${f.kind.toLowerCase()}`) : null),
+    f.since ? h('span', { class: 'fx-since' }, `since ${f.since}`) : null,
+    f.was ? h('span', { class: 'fx-since' }, `was ${f.was.toLowerCase()}${f.until ? ` until ${f.until}` : ''}`) : null,
+    f.note ? h('span', { class: 'fx-note' }, f.note) : null,
+    change ? h('span', { class: 'fx-tools no-print' },
+      h('select', { 'aria-label': 'Role', value: f.role, onChange: (e) => change((c) => { c.factions[i].role = e.target.value; }) }, ROLES.map((r) => h('option', { value: r, selected: r === (f.role || 'Member') }, r))),
+      h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${f.name}`, onClick: () => change((c) => { c.factions.splice(i, 1); }) }, '✕')) : null);
+  const form = () => {
+    const name = h('input', { type: 'text', list: 'fx-known', placeholder: 'Faction name', 'aria-label': 'Faction name', id: 'fx-name' });
+    const role = h('select', { 'aria-label': 'Role' }, ROLES.map((r) => h('option', { value: r }, r)));
+    const kind = h('select', { 'aria-label': 'Kind' }, h('option', { value: '' }, 'Kind…'), FACTION_KINDS.map((k) => h('option', { value: k }, k)));
+    const since = h('input', { type: 'text', placeholder: 'Since (e.g. age 19, session 3)', 'aria-label': 'Since', style: { maxWidth: '190px' } });
+    const note = h('input', { type: 'text', placeholder: 'Note (optional)', 'aria-label': 'Note' });
+    const add = () => {
+      const n = name.value.trim();
+      if (!n) { name.focus(); return; }
+      adding = false;
+      change((c) => { c.factions = [...(c.factions || []), { name: n, role: role.value, kind: kind.value || undefined, since: since.value.trim() || undefined, note: note.value.trim() || undefined }]; });
+    };
+    name.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); add(); } });
+    return h('div', { class: 'fx-form no-print' },
+      h('datalist', { id: 'fx-known' }, known.map((n) => h('option', { value: n }))),
+      h('div', { class: 'add-row' }, name, role, kind, since),
+      h('div', { class: 'add-row' }, note, h('button', { class: 'btn primary', type: 'button', onClick: add }, 'Add'), h('button', { class: 'btn ghost', type: 'button', onClick: () => { adding = false; change((c) => c); } }, 'Cancel')));
+  };
+  const el = h('section', { class: 'sec fx' },
+    h('h3', null, 'Factions', change && !adding ? h('span', { class: 'pts no-print' }, h('button', { class: 'linkish', type: 'button', onClick: () => { adding = true; change((c) => c); } }, '+ Add')) : null),
+    list.length ? h('ul', { class: 'fx-list' }, list.map(row)) : h('p', { class: 'hint', style: { margin: 0 } }, 'No factions yet: the team, the agency, the gang or the cult they belong to, or used to. Each gets a page in the World with its members, allies and enemies.'),
+    adding && change ? form() : null);
+  if (adding && change) setTimeout(() => el.querySelector('#fx-name')?.focus(), 0);
+  return el;
+}
+
+/** One line per faction for text and spreadsheet exports. */
+function factionsText(ch) {
+  return (ch.factions || []).map((f) => `${f.name}: ${f.role || 'Member'}${f.kind ? ` (${f.kind})` : ''}${f.since ? `, since ${f.since}` : ''}${f.note ? `. ${f.note}` : ''}`);
+}
+
+return { FACTION_KINDS, factionsSection, factionsText };
+})();
+
 __mods["src/app/bio.js"] = (() => {
 // The Bio page: a random life history for a character (family, timeline, people, personality,
 // secrets, GM hooks), generated by engine/lifepath.js and editable.
@@ -7962,6 +8872,8 @@ const { h, toast, copyText, inkFor } = __mods["src/app/dom.js"];
 const { generateBio, rerollSection, bioText } = __mods["src/engine/lifepath.js"];
 const { randomSeed } = __mods["src/engine/rng.js"];
 const { journalSection } = __mods["src/app/journal.js"];
+const { factionsSection } = __mods["src/app/factions.js"];
+const { state } = __mods["src/app/store.js"];
 const { portraitBlock } = __mods["src/app/portrait.js"];
 const SIDE_LABEL = { light: 'Lightside', dark: 'Darkside', neutral: 'Neutral', exotic: 'Exotic' };
 
@@ -7985,12 +8897,13 @@ function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
   const regen = () => change?.((c) => { c.bio = generateBio(R, c, { seed: randomSeed() }); });
 
   const journal = journalSection(ch, R, { change, onOpenPerson: open });
+  const factions = factionsSection(ch, { change, roster: state.roster });
   if (!bio) {
     const file = h('article', { class: 'file bio' }, head, toolbar || null,
       h('div', { class: 'bio-empty' },
         h('p', null, 'No life story yet. Roll one: family, childhood, the events that made them, the people in their life, personality, secrets and story hooks for the GM.'),
         change ? h('button', { class: 'btn primary big', type: 'button', id: 'bio-generate', onClick: regen }, 'Roll a life story') : null),
-      h('div', { class: 'file-body' }, h('div', { class: 'col', style: { gridColumn: '1 / -1' } }, journal)));
+      h('div', { class: 'file-body' }, h('div', { class: 'col', style: { gridColumn: '1 / -1' } }, factions, journal)));
     file.style.setProperty('--hero', hero);
     file.style.setProperty('--hero-ink', inkFor(hero));
     return file;
@@ -8057,7 +8970,7 @@ function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
 
   const file = h('article', { class: 'file bio' }, head, toolbar || null,
     h('div', { class: 'file-body' },
-      h('div', { class: 'col' }, summary, journal, timeline, family, people),
+      h('div', { class: 'col' }, summary, factions, journal, timeline, family, people),
       h('div', { class: 'col' }, personality, inner, sections, gm, actions)));
   file.style.setProperty('--hero', hero);
   file.style.setProperty('--hero-ink', inkFor(hero));
@@ -14130,521 +15043,16 @@ function resultPanel() {
 return { STYLES, detectStyle, initBattle, throwIn, battleCount, renderBattle };
 })();
 
-__mods["src/engine/world.js"] = (() => {
-// The World: a wiki of everyone and everything in a campaign, built from the roster and kept in
-// a vault (saved world data) that the user extends by hand.
-//
-// Entities: people, factions, locations, events and items. Links are typed and directed; each
-// relation has an inverse, so "Alleycat is Nightfang's mentor" also reads "Nightfang is Alleycat's
-// student" on the other page. Everything from the roster and the bios is rebuilt on every build
-// (so it is always current) and merged with what the user wrote by hand.
-//
-// buildWorld(saved, roster, R) -> { entities: Map, links: [], name, ... } with backlinks and
-// timelines ready for the UI and for the Markdown vault export.
-
-const { personKey } = __mods["src/engine/keys.js"];
-const ENTITY_TYPES = {
-  person: { label: 'People', one: 'Person', glyph: '🧑', color: '#2f6fde' },
-  faction: { label: 'Factions', one: 'Faction', glyph: '🏛', color: '#8a5cd6' },
-  location: { label: 'Locations', one: 'Location', glyph: '📍', color: '#1a7f4b' },
-  event: { label: 'Events', one: 'Event', glyph: '📅', color: '#c2410c' },
-  item: { label: 'Items', one: 'Item', glyph: '🗝', color: '#a8670b' },
-};
-
-// rel = what `to` is to `from`. inverse = what `from` is to `to`.
-const RELATIONS = {
-  friend: { label: 'Friend', inverse: 'friend', group: 'Friends & allies', color: '#1a7f4b' },
-  ally: { label: 'Ally', inverse: 'ally', group: 'Friends & allies', color: '#1a7f4b' },
-  teammate: { label: 'Teammate', inverse: 'teammate', group: 'Friends & allies', color: '#1a7f4b' },
-  contact: { label: 'Contact', inverse: 'contact', group: 'Friends & allies', color: '#3aa17e' },
-  love: { label: 'Love', inverse: 'love', group: 'Family & loves', color: '#d1495b' },
-  ex: { label: 'Ex', inverse: 'ex', group: 'Family & loves', color: '#b56576' },
-  parent: { label: 'Parent', inverse: 'child', group: 'Family & loves', color: '#8a5a44' },
-  child: { label: 'Child', inverse: 'parent', group: 'Family & loves', color: '#8a5a44' },
-  sibling: { label: 'Sibling', inverse: 'sibling', group: 'Family & loves', color: '#8a5a44' },
-  family: { label: 'Family', inverse: 'family', group: 'Family & loves', color: '#8a5a44' },
-  dependent: { label: 'Dependent', inverse: 'guardian', group: 'Family & loves', color: '#8a5a44' },
-  guardian: { label: 'Guardian', inverse: 'dependent', group: 'Family & loves', color: '#8a5a44' },
-  mentor: { label: 'Mentor', inverse: 'student', group: 'Mentors & students', color: '#2f6fde' },
-  student: { label: 'Student', inverse: 'mentor', group: 'Mentors & students', color: '#2f6fde' },
-  rival: { label: 'Rival', inverse: 'rival', group: 'Rivals & enemies', color: '#e0a030' },
-  enemy: { label: 'Enemy', inverse: 'enemy', group: 'Rivals & enemies', color: '#b42318' },
-  nemesis: { label: 'Nemesis', inverse: 'nemesis', group: 'Rivals & enemies', color: '#8e1b1b' },
-  fought: { label: 'Fought', inverse: 'fought', group: 'Rivals & enemies', color: '#db3a2f' },
-  employer: { label: 'Employer', inverse: 'employee', group: 'Work & factions', color: '#5b6470' },
-  employee: { label: 'Employee', inverse: 'employer', group: 'Work & factions', color: '#5b6470' },
-  member: { label: 'Member of', inverse: 'hasMember', group: 'Work & factions', color: '#8a5cd6' },
-  hasMember: { label: 'Member', inverse: 'member', group: 'Work & factions', color: '#8a5cd6' },
-  leader: { label: 'Leads', inverse: 'ledBy', group: 'Work & factions', color: '#8a5cd6' },
-  ledBy: { label: 'Led by', inverse: 'leader', group: 'Work & factions', color: '#8a5cd6' },
-  allied: { label: 'Allied with', inverse: 'allied', group: 'Work & factions', color: '#1a7f4b' },
-  atWar: { label: 'At war with', inverse: 'atWar', group: 'Rivals & enemies', color: '#b42318' },
-  basedIn: { label: 'Based in', inverse: 'baseOf', group: 'Places', color: '#1a7f4b' },
-  baseOf: { label: 'Base of', inverse: 'basedIn', group: 'Places', color: '#1a7f4b' },
-  livesIn: { label: 'Lives in', inverse: 'homeOf', group: 'Places', color: '#1a7f4b' },
-  homeOf: { label: 'Home of', inverse: 'livesIn', group: 'Places', color: '#1a7f4b' },
-  from: { label: 'From', inverse: 'birthplaceOf', group: 'Places', color: '#3f7d3a' },
-  birthplaceOf: { label: 'Birthplace of', inverse: 'from', group: 'Places', color: '#3f7d3a' },
-  worksAt: { label: 'Works at', inverse: 'workplaceOf', group: 'Places', color: '#5b6470' },
-  workplaceOf: { label: 'Workplace of', inverse: 'worksAt', group: 'Places', color: '#5b6470' },
-  locatedIn: { label: 'Located in', inverse: 'contains', group: 'Places', color: '#1a7f4b' },
-  contains: { label: 'Contains', inverse: 'locatedIn', group: 'Places', color: '#1a7f4b' },
-  sceneOf: { label: 'Scene of', inverse: 'happenedAt', group: 'Places', color: '#c2410c' },
-  happenedAt: { label: 'Happened at', inverse: 'sceneOf', group: 'Places', color: '#c2410c' },
-  owns: { label: 'Owns', inverse: 'ownedBy', group: 'Things', color: '#a8670b' },
-  ownedBy: { label: 'Owned by', inverse: 'owns', group: 'Things', color: '#a8670b' },
-  created: { label: 'Created', inverse: 'createdBy', group: 'Things', color: '#a8670b' },
-  createdBy: { label: 'Created by', inverse: 'created', group: 'Things', color: '#a8670b' },
-  involved: { label: 'Involved in', inverse: 'involves', group: 'Events', color: '#c2410c' },
-  involves: { label: 'Involves', inverse: 'involved', group: 'Events', color: '#c2410c' },
-  related: { label: 'Related to', inverse: 'related', group: 'Other', color: '#6b7480' },
-};
-const RELATION_GROUPS = [...new Set(Object.values(RELATIONS).map((r) => r.group))];
-
-const BIO_REL = { Mentor: 'mentor', Student: 'student', Rival: 'rival', Enemy: 'enemy', Nemesis: 'nemesis', Ally: 'ally', Ex: 'ex', Love: 'love', Dependent: 'dependent', Guardian: 'guardian', Friend: 'friend', Contact: 'contact', Employer: 'employer', Teammate: 'teammate', Family: 'family', Parent: 'parent', Sibling: 'sibling', Child: 'child', Daughter: 'child', Son: 'child', Sister: 'sibling', Brother: 'sibling' };
-
-const slug = (s) => String(s || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'x';
-
-function emptyWorld() {
-  return { v: 1, name: 'My World', tagline: 'Everyone, everywhere, and how they are tied together', description: '', entities: {}, links: [], overrides: {}, hidden: [] };
-}
-
-const newId = (prefix) => `${prefix}:${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
-
-// ---- building ---------------------------------------------------------------------------------------------------
-
-function makeEntity(id, type, name, extra = {}) {
-  return { id, type, name, aliases: [], tags: [], summary: '', body: '', fields: {}, source: 'auto', ...extra };
-}
-
-/** Build the live world from the saved vault plus the roster. */
-function buildWorld(saved, roster, R, { openTabs = [] } = {}) {
-  const w = { ...emptyWorld(), ...(saved || {}) };
-  const entities = new Map();
-  const links = [];
-  const byName = new Map(); // lower name -> entity (people only), for merging bio people across characters
-  const add = (e) => { entities.set(e.id, e); return e; };
-  const link = (from, to, rel, extra = {}) => {
-    if (!from || !to || from === to) return null;
-    if (links.some((l) => l.from === from && l.to === to && l.rel === rel)) return null;
-    const l = { id: `${from}|${to}|${rel}`, from, to, rel, source: 'auto', ...extra };
-    links.push(l);
-    return l;
-  };
-  const chars = [...roster];
-  for (const t of openTabs) if (!chars.some((c) => (c.rosterId && c.rosterId === t.rosterId) || c === t)) chars.push(t);
-
-  // 1. Roster characters are people pages
-  const charId = (ch) => `char:${ch.rosterId || ch.seed || slug(ch.identity?.codename || ch.identity?.realName || 'x')}`;
-  for (const ch of chars) {
-    const id = charId(ch);
-    const name = ch.identity?.codename || ch.identity?.realName || 'Unnamed';
-    const e = add(makeEntity(id, 'person', name, {
-      source: ch.rosterId ? 'roster' : 'open',
-      rosterId: ch.rosterId || null,
-      character: ch,
-      color: ch.theme?.color || null,
-      aliases: [ch.identity?.realName].filter((x) => x && x !== name),
-      summary: ch.bio?.summary || ch.origin?.text || ch.summary || '',
-      fields: {
-        'Power level': ch.pl, Side: ch.alignment === 'villain' ? 'Villain' : ch.minion ? 'Minion' : 'Hero', Archetype: ch.archetype?.name, Theme: ch.theme?.name,
-        Age: ch.identity?.age, Occupation: ch.identity?.occupation, Base: ch.identity?.base, Homeland: ch.identity?.homeland?.country, Team: ch.team, Status: ch.status,
-      },
-      tags: [ch.alignment === 'villain' ? 'villain' : 'hero', ch.archetype?.name, ch.theme?.name, ch.team, ...(ch.kind ? [ch.kind] : [])].filter(Boolean).map((x) => String(x).toLowerCase()),
-    }));
-    byName.set(name.toLowerCase(), e);
-    if (ch.identity?.realName) byName.set(String(ch.identity.realName).toLowerCase(), e);
-  }
-
-  const personFor = (name, ctx) => {
-    const key = String(name || '').trim().toLowerCase();
-    if (!key) return null;
-    const hit = byName.get(key);
-    if (hit) return hit;
-    const id = `npc:${slug(name)}`;
-    const e = entities.get(id) || add(makeEntity(id, 'person', String(name).trim(), { source: 'bio', keys: {}, knownBy: [] }));
-    byName.set(key, e);
-    void ctx;
-    return e;
-  };
-  const locationFor = (name, kind) => {
-    const key = String(name || '').trim();
-    if (!key || /^the city$/i.test(key)) return null;
-    const id = `loc:${slug(key)}`;
-    return entities.get(id) || add(makeEntity(id, 'location', key, { source: 'auto', fields: { Kind: kind } }));
-  };
-  const factionFor = (name) => {
-    const key = String(name || '').trim();
-    if (!key) return null;
-    const id = `faction:${slug(key)}`;
-    return entities.get(id) || add(makeEntity(id, 'faction', key, { source: 'auto' }));
-  };
-
-  // 2. Everyone in the bios, journals, families; places and teams
-  for (const ch of chars) {
-    const me = entities.get(charId(ch));
-    const bio = ch.bio || {};
-    const note = (p) => [p.who || p.note, p.status].filter(Boolean).join(' ');
-    const people = [
-      ...(bio.family?.parents || []).map((p) => ({ ...p, kind: 'parent', rel: 'parent' })),
-      ...(bio.family?.siblings || []).map((p) => ({ ...p, kind: 'sibling', rel: 'sibling' })),
-      ...(bio.people || []).map((p) => ({ ...p, kind: 'person', rel: BIO_REL[p.relation] || 'contact' })),
-    ];
-    for (const p of people) {
-      const other = personFor(p.name, ch);
-      if (!other || other === me) continue;
-      if (other.source === 'bio') {
-        other.knownBy.push({ id: me.id, name: me.name, relation: p.relation || p.role, who: p.who || p.note || '', status: p.status || '', role: p.role, occupation: p.occupation, age: p.age, trait: p.trait });
-        if (!other.summary && (p.who || p.note)) other.summary = p.who || p.note;
-        if (p.occupation && !other.fields.Occupation) other.fields.Occupation = p.occupation;
-        if (p.status && !other.fields.Status) other.fields.Status = p.status;
-        if (p.age != null && !other.fields.Age) other.fields.Age = p.age;
-        try { other.keys[me.id] = p.key || personKey(ch, p, p.kind); } catch { /* no key */ }
-        if (!other.tags.includes(p.relation?.toLowerCase())) other.tags.push((p.relation || p.role || 'npc').toLowerCase());
-      }
-      link(me.id, other.id, p.rel, { note: note(p), label: p.relation || p.role, via: me.id });
-    }
-    if (ch.identity?.base) { const l = locationFor(ch.identity.base, 'City'); if (l) { link(me.id, l.id, 'basedIn'); l.tags = [...new Set([...l.tags, 'city'])]; } }
-    if (ch.identity?.homeland?.country) { const l = locationFor(ch.identity.homeland.country, 'Country'); if (l) { link(me.id, l.id, 'from'); if (ch.identity.homeland.region && ch.identity.homeland.region !== ch.identity.homeland.country) { const r = locationFor(ch.identity.homeland.region, 'Region'); if (r) { link(r.id, l.id, 'locatedIn'); link(me.id, r.id, 'from'); } } } }
-    if (ch.team) { const f = factionFor(ch.team); if (f) { link(me.id, f.id, 'member'); f.tags = [...new Set([...f.tags, 'team'])]; } }
-    // Journal sessions are events
-    for (const j of ch.journal?.entries || []) {
-      const id = `event:${me.id}:${j.id}`;
-      const ev = add(makeEntity(id, 'event', j.title || `Session ${j.session}`, { source: 'journal', summary: j.text || '', fields: { Session: j.session, Date: j.date, Character: me.name }, tags: ['session', ...(j.tags || [])], session: j.session, date: j.date, journal: j, character: me.id }));
-      if (j.downtime) ev.fields['Between adventures'] = j.downtime;
-      link(me.id, ev.id, 'involved');
-      for (const p of j.people || []) { const o = personFor(p.name, ch); if (o) link(o.id, ev.id, 'involved', { note: [p.who, p.status].filter(Boolean).join(' ') }); }
-      const pts = (ch.advancement?.log || []).filter((x) => x.journalId === j.id);
-      if (pts.length) ev.fields.Points = pts.map((x) => (x.type === 'award' ? `+${x.points} earned` : `${x.points} spent: ${(x.changes || []).join('; ')}`)).join(' · ');
-    }
-  }
-
-  // 3. Hand-made entities and links from the vault
-  for (const e of Object.values(w.entities || {})) {
-    const existing = entities.get(e.id);
-    if (existing) Object.assign(existing, { summary: e.summary ?? existing.summary, body: e.body ?? existing.body });
-    else add({ ...makeEntity(e.id, e.type, e.name), ...e, source: 'manual', fields: { ...(e.fields || {}) }, tags: [...(e.tags || [])], aliases: [...(e.aliases || [])] });
-    if (e.type === 'person') byName.set(String(e.name).toLowerCase(), entities.get(e.id));
-  }
-  for (const l of w.links || []) {
-    if (!entities.has(l.from) || !entities.has(l.to)) continue;
-    if (!RELATIONS[l.rel]) continue;
-    const prev = links.find((x) => x.from === l.from && x.to === l.to && x.rel === l.rel);
-    if (prev) { prev.note = l.note || prev.note; prev.source = 'manual'; prev.id = l.id || prev.id; continue; }
-    links.push({ ...l, id: l.id || `${l.from}|${l.to}|${l.rel}`, source: 'manual' });
-  }
-  // Overrides on automatic pages (summary, body, tags, color, aliases, fields)
-  for (const [id, o] of Object.entries(w.overrides || {})) {
-    const e = entities.get(id);
-    if (!e) continue;
-    if (o.summary != null) e.summary = o.summary;
-    if (o.body != null) e.body = o.body;
-    if (o.color) e.color = o.color;
-    if (o.aliases) e.aliases = [...new Set([...e.aliases, ...o.aliases])];
-    if (o.tags) e.tags = [...new Set([...e.tags, ...o.tags])];
-    if (o.fields) e.fields = { ...e.fields, ...o.fields };
-    if (o.type && o.type !== e.type) e.type = o.type;
-    e.edited = true;
-  }
-  for (const id of w.hidden || []) entities.delete(id);
-  const live = links.filter((l) => entities.has(l.from) && entities.has(l.to));
-
-  // 4. Backlinks: every link also appears from the other end, as its inverse
-  for (const e of entities.values()) { e.out = []; e.in = []; e.color = e.color || ENTITY_TYPES[e.type]?.color; }
-  for (const l of live) {
-    const a = entities.get(l.from); const b = entities.get(l.to);
-    a.out.push({ ...l, other: b, rel: l.rel, label: RELATIONS[l.rel]?.label || l.rel });
-    b.in.push({ ...l, other: a, rel: RELATIONS[l.rel]?.inverse || 'related', label: RELATIONS[RELATIONS[l.rel]?.inverse]?.label || 'Related' });
-  }
-  for (const e of entities.values()) {
-    e.connections = dedupe([...e.out, ...e.in]);
-    e.degree = e.connections.length;
-  }
-  return { ...w, entities, links: live, roster: chars };
-}
-
-function dedupe(list) {
-  const seen = new Set();
-  return list.filter((c) => { const k = `${c.other.id}|${c.rel}`; if (seen.has(k)) return false; seen.add(k); return true; });
-}
-
-/** Connections of a page grouped by relation group, in a stable order. */
-function groupedConnections(e) {
-  const groups = new Map();
-  for (const c of e.connections || []) {
-    const g = RELATIONS[c.rel]?.group || 'Other';
-    if (!groups.has(g)) groups.set(g, []);
-    groups.get(g).push(c);
-  }
-  return RELATION_GROUPS.filter((g) => groups.has(g)).map((g) => ({ group: g, items: groups.get(g).sort((a, b) => a.other.name.localeCompare(b.other.name)) }));
-}
-
-// ---- timelines ------------------------------------------------------------------------------------------------------
-
-/** A person's whole story in order: life events by age, then play by session, with points and battles. */
-function entityTimeline(world, e) {
-  const out = [];
-  const ch = e.character;
-  if (ch) {
-    for (const t of ch.bio?.timeline || []) {
-      if (t.journalId) continue;
-      out.push({ kind: 'life', when: `Age ${t.age}`, sortA: 0, sortB: t.age ?? 0, stage: t.stage, text: t.text, tags: t.tags || [] });
-    }
-    for (const j of ch.journal?.entries || []) {
-      const pts = (ch.advancement?.log || []).filter((x) => x.journalId === j.id);
-      out.push({ kind: 'play', when: `Session ${j.session}`, date: j.date, sortA: 1, sortB: j.session || 0, stage: 'In play', text: [j.title, j.text].filter(Boolean).join(': '), people: j.people || [], points: pts, downtime: j.downtime, eventId: `event:${e.id}:${j.id}` });
-    }
-    for (const a of ch.advancement?.log || []) {
-      if (a.journalId && (ch.journal?.entries || []).some((j) => j.id === a.journalId)) continue;
-      out.push({ kind: 'points', when: a.date || '', sortA: 1, sortB: 0.5, stage: a.type === 'award' ? 'Points earned' : a.type === 'pl' ? 'Power level' : 'Points spent', text: `${a.type === 'award' ? `+${a.points} pp` : a.type === 'pl' ? '' : `${a.points > 0 ? `−${a.points}` : `+${-a.points}`} pp`}${a.note ? ` · ${a.note}` : ''}${a.changes?.length ? `: ${a.changes.join('; ')}` : ''}`, date: a.date });
-    }
-  }
-  // Events this page is tied to (from other people's journals, battles, hand-made events)
-  for (const c of e.connections || []) {
-    if (c.other.type !== 'event') continue;
-    if (c.other.character === e.id) continue;
-    const ev = c.other;
-    out.push({ kind: 'event', when: ev.session ? `Session ${ev.session}` : ev.date || '', date: ev.date, sortA: 1, sortB: ev.session || 0, stage: ev.fields?.Kind || 'Event', text: `${ev.name}${ev.summary ? `: ${ev.summary}` : ''}${c.note ? ` (${c.note})` : ''}`, eventId: ev.id });
-  }
-  // What the people who know this NPC say about them
-  if (e.source === 'bio') for (const k of e.knownBy || []) out.push({ kind: 'known', when: '', sortA: 0.5, sortB: 0, stage: `As ${k.name}'s ${(k.relation || '').toLowerCase()}`, text: [k.who, k.status].filter(Boolean).join(' '), by: k.id });
-  return out.sort((a, b) => a.sortA - b.sortA || a.sortB - b.sortB || String(a.date || '').localeCompare(String(b.date || '')));
-}
-
-/** The campaign's own timeline: every session and event across the whole world. */
-function campaignTimeline(world) {
-  const events = [...world.entities.values()].filter((e) => e.type === 'event');
-  return events.sort((a, b) => (a.session || 0) - (b.session || 0) || String(a.date || '').localeCompare(String(b.date || '')) || a.name.localeCompare(b.name));
-}
-
-// ---- search ------------------------------------------------------------------------------------------------------------
-
-function searchWorld(world, q, { type = null, limit = 50 } = {}) {
-  const term = String(q || '').trim().toLowerCase();
-  const all = [...world.entities.values()].filter((e) => !type || e.type === type);
-  if (!term) return all.sort((a, b) => b.degree - a.degree || a.name.localeCompare(b.name)).slice(0, limit);
-  const score = (e) => {
-    const name = e.name.toLowerCase();
-    if (name === term) return 100;
-    if (name.startsWith(term)) return 80;
-    if (name.includes(term)) return 60;
-    if (e.aliases.some((a) => String(a).toLowerCase().includes(term))) return 50;
-    if (e.tags.some((t) => String(t).toLowerCase().includes(term))) return 30;
-    if (`${e.summary} ${e.body}`.toLowerCase().includes(term)) return 20;
-    if (Object.values(e.fields || {}).some((v) => String(v ?? '').toLowerCase().includes(term))) return 15;
-    return 0;
-  };
-  return all.map((e) => ({ e, s: score(e) })).filter((x) => x.s > 0).sort((a, b) => b.s - a.s || b.e.degree - a.e.degree || a.e.name.localeCompare(b.e.name)).slice(0, limit).map((x) => x.e);
-}
-
-// ---- editing the vault -------------------------------------------------------------------------------------------------
-
-function createEntity(saved, { type, name, summary = '', body = '', tags = [], fields = {}, aliases = [], color = null }) {
-  const id = newId(type);
-  saved.entities[id] = { id, type, name: String(name).trim(), summary, body, tags, fields, aliases, color, created: new Date().toISOString() };
-  return saved.entities[id];
-}
-
-function updateEntity(saved, world, id, patch) {
-  const live = world.entities.get(id);
-  if (saved.entities[id]) { Object.assign(saved.entities[id], patch, { updated: new Date().toISOString() }); return; }
-  if (!live) return;
-  saved.overrides[id] = { ...(saved.overrides[id] || {}), ...patch };
-}
-
-function deleteEntity(saved, id) {
-  if (saved.entities[id]) delete saved.entities[id];
-  else if (!saved.hidden.includes(id)) saved.hidden.push(id);
-  saved.links = saved.links.filter((l) => l.from !== id && l.to !== id);
-}
-
-function restoreHidden(saved, id) { saved.hidden = saved.hidden.filter((x) => x !== id); }
-
-function addLink(saved, { from, to, rel, note = '' }) {
-  if (!from || !to || from === to || !RELATIONS[rel]) return null;
-  const id = `${from}|${to}|${rel}`;
-  saved.links = saved.links.filter((l) => l.id !== id);
-  const l = { id, from, to, rel, note, created: new Date().toISOString() };
-  saved.links.push(l);
-  return l;
-}
-
-function removeLink(saved, world, id) {
-  const before = saved.links.length;
-  saved.links = saved.links.filter((l) => l.id !== id);
-  if (saved.links.length === before) {
-    // an automatic link: hide it
-    saved.hiddenLinks = [...new Set([...(saved.hiddenLinks || []), id])];
-  }
-}
-
-/** Record a Battle Room fight as an event with everyone who fought in it. */
-function recordBattle(saved, battle, world) {
-  const name = `${battle.name || 'Battle'}: ${battle.winner ? `team ${battle.winner} wins` : 'stalemate'}`;
-  const teams = [...new Set(battle.combatants.map((c) => c.team))].sort();
-  const sides = teams.map((t) => `Team ${t}: ${battle.combatants.filter((c) => c.team === t).map((c) => c.name).join(', ')}`).join(' vs ');
-  const standing = battle.combatants.filter((c) => !c.out && !c.fled).map((c) => c.name);
-  const ev = createEntity(saved, { type: 'event', name, summary: `${sides}. ${battle.round} rounds. ${standing.length ? `Still standing: ${standing.join(', ')}.` : ''}`, tags: ['battle'], fields: { Kind: 'Battle', Date: new Date().toISOString().slice(0, 10), Seed: battle.seed, Rounds: battle.round } });
-  const ids = [];
-  const made = new Map();
-  for (const c of battle.combatants) {
-    const plain = c.name.replace(/ #\d+$/, '');
-    let e = c.ch.rosterId ? world.entities.get(`char:${c.ch.rosterId}`) : null;
-    if (!e) e = [...world.entities.values()].find((x) => x.type === 'person' && x.name.toLowerCase() === plain.toLowerCase()) || Object.values(saved.entities).find((x) => x.type === 'person' && x.name.toLowerCase() === plain.toLowerCase()) || made.get(plain.toLowerCase());
-    if (!e) { e = createEntity(saved, { type: 'person', name: plain, summary: `PL ${c.pl} ${c.ch.alignment === 'villain' ? 'villain' : 'fighter'} from the Battle Room.`, tags: [c.ch.alignment === 'villain' ? 'villain' : 'hero', 'battle'] }); made.set(plain.toLowerCase(), e); }
-    if (ids.some((x) => x.id === e.id)) continue;
-    ids.push({ id: e.id, team: c.team });
-    const same = battle.combatants.filter((x) => x.name.replace(/ #\d+$/, '') === plain);
-    const fate = same.length > 1 ? `${same.length} of them: ${same.filter((x) => x.out).length} knocked out, ${same.filter((x) => x.fled).length} fled` : c.out ? 'knocked out' : c.fled ? 'fled' : 'still standing';
-    addLink(saved, { from: e.id, to: ev.id, rel: 'involved', note: `Team ${c.team}, ${fate}` });
-  }
-  for (const a of ids) for (const b of ids) if (a.team !== b.team && a.id < b.id) addLink(saved, { from: a.id, to: b.id, rel: 'fought', note: name });
-  return ev;
-}
-
-// ---- graph layout ------------------------------------------------------------------------------------------------------
-
-/** A simple force layout. nodes: [{id}], edges: [{from,to}]. Returns Map id -> {x,y} in [0,w]x[0,h]. */
-function layoutGraph(nodes, edges, { width = 800, height = 600, iterations = 220, seed = 1, center = null, margin = 24 } = {}) {
-  const pos = new Map();
-  let s = seed >>> 0 || 1;
-  const rnd = () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
-  const n = nodes.length;
-  nodes.forEach((nd, i) => {
-    const a = (i / Math.max(1, n)) * Math.PI * 2;
-    const r = Math.min(width, height) * (0.25 + rnd() * 0.2);
-    pos.set(nd.id, { x: width / 2 + Math.cos(a) * r, y: height / 2 + Math.sin(a) * r, vx: 0, vy: 0 });
-  });
-  if (center && pos.has(center)) { const c = pos.get(center); c.x = width / 2; c.y = height / 2; }
-  const k = Math.sqrt((width * height) / Math.max(1, n)) * 0.9;
-  const adj = edges.filter((e) => pos.has(e.from) && pos.has(e.to));
-  for (let it = 0; it < iterations; it++) {
-    const t = 1 - it / iterations;
-    const temp = Math.max(2, k * t * 0.6);
-    for (const a of nodes) {
-      const pa = pos.get(a.id);
-      let fx = 0; let fy = 0;
-      for (const b of nodes) {
-        if (a === b) continue;
-        const pb = pos.get(b.id);
-        let dx = pa.x - pb.x; let dy = pa.y - pb.y;
-        let d2 = dx * dx + dy * dy;
-        if (d2 < 1) { dx = rnd() - 0.5; dy = rnd() - 0.5; d2 = 1; }
-        const d = Math.sqrt(d2);
-        const f = (k * k) / d;
-        fx += (dx / d) * f; fy += (dy / d) * f;
-      }
-      pa.vx = fx; pa.vy = fy;
-    }
-    for (const e of adj) {
-      const pa = pos.get(e.from); const pb = pos.get(e.to);
-      const dx = pa.x - pb.x; const dy = pa.y - pb.y;
-      const d = Math.max(1, Math.sqrt(dx * dx + dy * dy));
-      const f = (d * d) / k * 0.5;
-      pa.vx -= (dx / d) * f; pa.vy -= (dy / d) * f;
-      pb.vx += (dx / d) * f; pb.vy += (dy / d) * f;
-    }
-    for (const a of nodes) {
-      const p = pos.get(a.id);
-      if (center && a.id === center) { p.x = width / 2; p.y = height / 2; continue; }
-      // gravity to the middle
-      p.vx += (width / 2 - p.x) * 0.02; p.vy += (height / 2 - p.y) * 0.02;
-      const v = Math.sqrt(p.vx * p.vx + p.vy * p.vy) || 1;
-      const step = Math.min(v, temp);
-      p.x = Math.max(margin, Math.min(width - margin, p.x + (p.vx / v) * step));
-      p.y = Math.max(margin, Math.min(height - margin, p.y + (p.vy / v) * step));
-    }
-  }
-  return pos;
-}
-
-// ---- Markdown vault (Obsidian) ----------------------------------------------------------------------------------------------
-
-const safeName = (s) => String(s).replace(/[\\/:*?"<>|#^[\]]/g, '').replace(/\s+/g, ' ').trim() || 'Untitled';
-const FOLDER = { person: 'People', faction: 'Factions', location: 'Locations', event: 'Events', item: 'Items' };
-
-function mdPage(world, e) {
-  const name = safeName(e.name);
-  const out = [];
-  out.push('---');
-  out.push(`type: ${e.type}`);
-  if (e.aliases?.length) out.push(`aliases: [${e.aliases.map((a) => JSON.stringify(a)).join(', ')}]`);
-  if (e.tags?.length) out.push(`tags: [${e.tags.map((t) => JSON.stringify(String(t))).join(', ')}]`);
-  for (const [k, v] of Object.entries(e.fields || {})) if (v != null && v !== '') out.push(`${slug(k).replace(/-/g, '_')}: ${JSON.stringify(String(v))}`);
-  out.push('---', '', `# ${name}`, '');
-  if (e.summary) out.push(e.summary, '');
-  const fields = Object.entries(e.fields || {}).filter(([, v]) => v != null && v !== '');
-  if (fields.length) { out.push('| | |', '|---|---|'); for (const [k, v] of fields) out.push(`| **${k}** | ${String(v).replace(/\|/g, '\\|')} |`); out.push(''); }
-  const groups = groupedConnections(e);
-  if (groups.length) {
-    out.push('## Connections', '');
-    for (const g of groups) {
-      out.push(`### ${g.group}`);
-      for (const c of g.items) out.push(`- **${c.label}:** [[${safeName(c.other.name)}]]${c.note ? ` — ${c.note}` : ''}`);
-      out.push('');
-    }
-  }
-  const tl = entityTimeline(world, e);
-  if (tl.length) {
-    out.push('## Timeline', '');
-    for (const t of tl) {
-      let line = `- **${t.when || t.stage}**${t.when && t.stage ? ` (${t.stage})` : ''}: ${t.text}`;
-      if (t.people?.length) line += ` — with ${t.people.map((p) => `[[${safeName(p.name)}]]`).join(', ')}`;
-      if (t.points?.length) line += ` — ${t.points.map((x) => (x.type === 'award' ? `+${x.points} pp earned` : `${x.points} pp spent: ${(x.changes || []).join('; ')}`)).join('; ')}`;
-      out.push(line);
-      if (t.downtime) out.push(`  - Between adventures: ${t.downtime}`);
-    }
-    out.push('');
-  }
-  if (e.character) {
-    const ch = e.character;
-    out.push('## Character', '');
-    out.push(`- PL ${ch.pl} ${ch.archetype?.name || ''} ${ch.theme?.name ? `(${ch.theme.name})` : ''}`.trim());
-    if (ch.powers?.length) out.push(`- Powers: ${ch.powers.map((p) => `${p.name} (${p.effect} ${p.rank})`).join(', ')}`);
-    if (ch.advantages?.length) out.push(`- Advantages: ${ch.advantages.map((a) => `${a.name}${a.rank > 1 ? ` ${a.rank}` : ''}`).join(', ')}`);
-    if (ch.complications?.length) out.push(`- Complications: ${ch.complications.map((c) => `${c.type}: ${c.text}`).join(' ')}`);
-    out.push('');
-  }
-  if (e.body) out.push('## Notes', '', e.body, '');
-  return out.join('\n');
-}
-
-/** { 'People/Name.md': markdown, ... } for the whole world. */
-function vaultMarkdown(world) {
-  const files = {};
-  const used = new Set();
-  for (const e of world.entities.values()) {
-    let name = safeName(e.name);
-    if (used.has(`${FOLDER[e.type]}/${name}`)) name = `${name} (${e.id.split(':')[0]})`;
-    used.add(`${FOLDER[e.type]}/${name}`);
-    files[`${FOLDER[e.type] || 'Other'}/${name}.md`] = mdPage(world, e);
-  }
-  const home = [`# ${world.name || 'World'}`, '', world.tagline || '', '', world.description || '', ''];
-  for (const [type, meta] of Object.entries(ENTITY_TYPES)) {
-    const list = [...world.entities.values()].filter((e) => e.type === type).sort((a, b) => a.name.localeCompare(b.name));
-    if (!list.length) continue;
-    home.push(`## ${meta.label}`, '');
-    for (const e of list) home.push(`- [[${safeName(e.name)}]]${e.summary ? ` — ${String(e.summary).split(/(?<=[.!?])\s/)[0]}` : ''}`);
-    home.push('');
-  }
-  const tl = campaignTimeline(world);
-  if (tl.length) { home.push('## Campaign timeline', ''); for (const ev of tl) home.push(`- ${ev.session ? `Session ${ev.session}` : ev.date || ''}: [[${safeName(ev.name)}]]${ev.summary ? ` — ${ev.summary}` : ''}`); home.push(''); }
-  files[`${safeName(world.name || 'World')}.md`] = home.join('\n');
-  return files;
-}
-
-return { ENTITY_TYPES, RELATIONS, RELATION_GROUPS, slug, emptyWorld, buildWorld, groupedConnections, entityTimeline, campaignTimeline, searchWorld, createEntity, updateEntity, deleteEntity, restoreHidden, addLink, removeLink, recordBattle, layoutGraph, vaultMarkdown };
-})();
-
 __mods["src/app/world.js"] = (() => {
 // The World tab: a wiki of the whole campaign. Every saved character is a page; everyone named in
-// their lives is a page; teams, cities and sessions are pages; and every page links to the others
-// in both directions. Add factions, locations, items and events by hand, draw the relationship
-// graph, read the campaign timeline, and export it all as a Markdown vault for Obsidian.
+// their lives is a page; teams, factions, cities and sessions are pages; and every page links to the
+// others in both directions. Record what happened ("these two became enemies", "she joined the
+// Court", "he died") and the world changes with it: ties start and end at a session, pages carry a
+// status, the timeline shows when, and the graph can be wound back to any session.
 
 const { h, clear, toast, copyText, download, openDialog, inkFor } = __mods["src/app/dom.js"];
 const { state, upsert } = __mods["src/app/store.js"];
-const { buildWorld, emptyWorld, ENTITY_TYPES, RELATIONS, RELATION_GROUPS, groupedConnections, entityTimeline, campaignTimeline, searchWorld, createEntity, updateEntity, deleteEntity, addLink, removeLink, layoutGraph, vaultMarkdown, recordBattle, slug } = __mods["src/engine/world.js"];
+const { buildWorld, emptyWorld, ENTITY_TYPES, RELATIONS, RELATION_GROUPS, groupedConnections, entityTimeline, campaignTimeline, searchWorld, createEntity, updateEntity, deleteEntity, addLink, removeLink, layoutGraph, vaultMarkdown, recordBattle, slug, MOMENT_KINDS, MOMENT_GROUPS, momentKindsFor, momentSentence, recordMoment, removeMoment, updateMoment, linksAsOf, lastSession } = __mods["src/engine/world.js"];
 const { zip } = __mods["src/engine/xlsx.js"];
 const { sheet: makeSheet } = __mods["src/engine/render.js"];
 const { fromKeySync } = __mods["src/engine/keys.js"];
@@ -14653,18 +15061,23 @@ const KEY = 'dcugen.world.v1';
 let R; let root; let hooks = {};
 let saved;
 let world;
-let ui = { page: 'home', q: '', edit: false, graphTypes: new Set(Object.keys(ENTITY_TYPES)), graphGroups: new Set(RELATION_GROUPS), open: {}, showAll: {} };
+const ui = { page: 'home', q: '', edit: false, graphTypes: new Set(Object.keys(ENTITY_TYPES)), graphGroups: new Set(RELATION_GROUPS), open: {}, showAll: {}, history: [], tlFilter: 'all', asOf: null, showPast: false, linkPreset: null };
 
 function load() {
   try { const raw = JSON.parse(localStorage.getItem(KEY) || 'null'); if (raw?.v) return { ...emptyWorld(), ...raw }; } catch { /* ignore */ }
   return emptyWorld();
 }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch { /* full */ } }
-function rebuild() { world = buildWorld(saved, state.roster, R, { openTabs: state.tabs || [] }); for (const id of saved.hiddenLinks || []) world.links = world.links.filter((l) => l.id !== id); return world; }
+function rebuild() { world = buildWorld(saved, state.roster, R, { openTabs: state.tabs || [] }); return world; }
 
 function initWorld(rules, el, h2 = {}) {
   R = rules; root = el; hooks = h2;
   saved = load();
+  document.addEventListener('keydown', (e) => {
+    if (!root || root.hidden || e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName)) return;
+    const q = root.querySelector('#wd-q'); if (q) { e.preventDefault(); q.focus(); q.select(); }
+  });
 }
 
 /** Jump to a character's page (from the Forge). */
@@ -14678,14 +15091,17 @@ function openWorldPage(ch) {
 
 /** The hand-made part of the world (what the vault keeps), for sharing. */
 function worldSaved() { if (!saved) saved = load(); return saved; }
-/** Merge a shared world in (pages, links, overrides; the name if ours is the default). */
+/** Merge a shared world in (pages, links, moments, overrides; the name if ours is the default). */
 function worldApply(incoming) {
   if (!saved) saved = load();
   if (!incoming?.v) return;
   saved.entities = { ...saved.entities, ...(incoming.entities || {}) };
   saved.overrides = { ...saved.overrides, ...(incoming.overrides || {}) };
   for (const l of incoming.links || []) if (!saved.links.some((x) => x.id === l.id)) saved.links.push(l);
+  for (const m of incoming.moments || []) if (!(saved.moments || []).some((x) => x.id === m.id)) (saved.moments = saved.moments || []).push(m);
+  saved.linkEnds = { ...(saved.linkEnds || {}), ...(incoming.linkEnds || {}) };
   saved.hidden = [...new Set([...(saved.hidden || []), ...(incoming.hidden || [])])];
+  saved.hiddenLinks = [...new Set([...(saved.hiddenLinks || []), ...(incoming.hiddenLinks || [])])];
   if (incoming.name && (!saved.name || saved.name === 'My World')) { saved.name = incoming.name; saved.tagline = incoming.tagline || saved.tagline; saved.description = incoming.description || saved.description; }
   save();
   if (root && !root.hidden) renderWorld();
@@ -14714,24 +15130,34 @@ function svg(tag, attrs = {}, ...children) {
 
 // ---- navigation -----------------------------------------------------------------------------------------------------------
 
-function go(page) { ui.page = page; ui.edit = false; renderWorld(); window.scrollTo({ top: 0 }); }
+function go(page, { replace = false } = {}) {
+  if (!replace && page !== ui.page) { ui.history.push(ui.page); if (ui.history.length > 40) ui.history.shift(); }
+  ui.page = page; ui.edit = false; ui.linkPreset = null; renderWorld(); window.scrollTo({ top: 0 });
+}
+function back() { const prev = ui.history.pop(); if (prev != null) { ui.page = prev; ui.edit = false; ui.linkPreset = null; renderWorld(); } }
 const typeMeta = (t) => ENTITY_TYPES[t] || { label: t, one: t, glyph: '✦', color: '#666' };
+const whenText = (w) => (w?.session != null ? `S${w.session}` : w?.date || '');
+const STATUS_TONE = { Dead: 'bad', Missing: 'warn', Captured: 'warn', Injured: 'warn', Retired: 'muted', 'In hiding': 'muted', Destroyed: 'bad', Disbanded: 'muted', 'Turned villain': 'bad', Reformed: 'good', Active: 'good', Alive: 'good' };
+// A short status is a badge (Dead, Missing, Estranged); a long bio sentence is not.
+const shortStatus = (e) => (e.status && e.status !== 'Active' && e.status !== 'Alive' && (STATUS_TONE[e.status] || e.status.length <= 14) ? e.status : null);
+const statusBadge = (e, { big = false } = {}) => (shortStatus(e) ? h('span', { class: `wd-status ${STATUS_TONE[e.status] || ''} ${big ? 'big' : ''}` }, e.status) : null);
 
 function pageLink(e, { chip = false, note = null, rel = null } = {}) {
   const color = e.color || typeMeta(e.type).color;
-  return h('button', { type: 'button', class: chip ? 'wd-chip' : 'wd-link', style: { '--c': color, '--rc': rel ? (RELATIONS[rel]?.color || color) : color }, title: [typeMeta(e.type).one, e.summary ? String(e.summary).slice(0, 140) : ''].filter(Boolean).join(' · '), onClick: () => go(e.id) },
-    h('span', { class: 'wd-glyph', 'aria-hidden': 'true' }, e.type === 'person' && e.character ? initialsOf(e.name) : typeMeta(e.type).glyph), h('span', { class: 'wd-link-name' }, e.name), note ? h('small', null, note) : null);
+  return h('button', { type: 'button', class: chip ? 'wd-chip' : 'wd-link', style: { '--c': color, '--rc': rel ? (RELATIONS[rel]?.color || color) : color }, title: [typeMeta(e.type).one, e.status || null, e.summary ? String(e.summary).slice(0, 140) : ''].filter(Boolean).join(' · '), onClick: () => go(e.id) },
+    h('span', { class: 'wd-glyph', 'aria-hidden': 'true' }, e.type === 'person' && e.character ? initialsOf(e.name) : typeMeta(e.type).glyph), h('span', { class: 'wd-link-name' }, e.name), statusBadge(e), note ? h('small', null, note) : null);
 }
 const initialsOf = (name) => name.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+const findByName = (name, type = null) => { const n = String(name || '').trim().toLowerCase(); return [...world.entities.values()].find((x) => (!type || x.type === type) && (x.name.toLowerCase() === n || x.aliases?.some((a) => String(a).toLowerCase() === n))) || null; };
 
 function sidebar() {
-  const q = h('input', { type: 'search', id: 'wd-q', placeholder: 'Search the world…', value: ui.q, 'aria-label': 'Search the world', onInput: (e) => { ui.q = e.target.value; drawResults(); } });
+  const q = h('input', { type: 'search', id: 'wd-q', placeholder: 'Search the world…  ( / )', value: ui.q, 'aria-label': 'Search the world', onInput: (e) => { ui.q = e.target.value; drawResults(); }, onKeydown: (e) => { if (e.key === 'Enter') { const f = searchWorld(world, ui.q, { limit: 1 })[0]; if (f) go(f.id); } } });
   const results = h('div', { class: 'wd-results' });
   const drawResults = () => {
     clear(results);
     if (!ui.q.trim()) return;
     const found = searchWorld(world, ui.q, { limit: 14 });
-    if (!found.length) { results.append(h('p', { class: 'hint', style: { margin: 0 } }, 'Nothing by that name. Make a page for it below.')); return; }
+    if (!found.length) { results.append(h('p', { class: 'hint', style: { margin: 0 } }, 'Nothing by that name. '), h('button', { type: 'button', class: 'linkish', onClick: () => newPageDialog('person', ui.q.trim()) }, `Make a page for "${ui.q.trim()}"`)); return; }
     for (const e of found) results.append(pageLink(e, { note: typeMeta(e.type).one }));
   };
   drawResults();
@@ -14744,16 +15170,19 @@ function sidebar() {
     const shown = showAll ? list : list.slice(0, 12);
     return h('div', { class: 'wd-section' },
       h('button', { type: 'button', class: 'wd-section-head', 'aria-expanded': String(open), onClick: () => { ui.open[t] = !open; renderWorld(); } },
-        h('span', { class: 'wd-caret' }, open ? '▾' : '▸'), h('span', { class: 'wd-glyph' }, meta.glyph), meta.label, h('span', { class: 'count' }, counts[t])),
+        h('span', { class: 'wd-caret' }, open ? '▾' : '▸'), h('span', { class: 'wd-glyph' }, meta.glyph), meta.label, h('span', { class: 'count' }, counts[t]),
+        h('span', { class: 'wd-section-add', role: 'button', title: `New ${meta.one.toLowerCase()}`, onClick: (e) => { e.stopPropagation(); newPageDialog(t); } }, '+')),
       open ? h('div', { class: 'wd-section-list' },
-        shown.map((e) => h('button', { type: 'button', class: `wd-tree ${ui.page === e.id ? 'active' : ''}`, style: { '--c': e.color || meta.color }, onClick: () => go(e.id) }, h('span', { class: 'swatch' }), h('span', { class: 'wd-tree-name' }, e.name), e.character ? h('span', { class: 'wd-tree-pl num' }, `PL ${e.character.pl}`) : null)),
+        shown.map((e) => h('button', { type: 'button', class: `wd-tree ${ui.page === e.id ? 'active' : ''} ${shortStatus(e) ? 'has-status' : ''}`, style: { '--c': e.color || meta.color }, title: e.status || '', onClick: () => go(e.id) }, h('span', { class: 'swatch' }), h('span', { class: 'wd-tree-name' }, e.name), e.character ? h('span', { class: 'wd-tree-pl num' }, `PL ${e.character.pl}`) : shortStatus(e) ? h('span', { class: 'wd-tree-pl' }, e.status) : null)),
         list.length > 12 ? h('button', { type: 'button', class: 'linkish', style: { fontSize: '12px', margin: '2px 0 0 22px' }, onClick: () => { ui.showAll[t] = !showAll; renderWorld(); } }, showAll ? 'Show fewer' : `Show all ${list.length}`) : null,
         !list.length ? h('p', { class: 'hint', style: { margin: '0 0 0 22px' } }, t === 'person' ? 'Save characters to the roster.' : `No ${meta.label.toLowerCase()} yet.`) : null) : null);
   });
   return h('aside', { class: 'wd-side', 'aria-label': 'World index' },
     h('div', { class: 'wd-side-top' },
-      h('button', { type: 'button', class: 'wd-world-name', onClick: () => go('home'), title: 'Home' }, h('span', { class: 'wd-glyph' }, '🌐'), h('b', null, world.name || 'My World')),
-      h('button', { class: 'btn sm primary', type: 'button', onClick: newPageDialog }, '+ Page')),
+      h('button', { type: 'button', class: 'wd-world-name', onClick: () => go('home'), title: 'Home' }, h('span', { class: 'wd-glyph' }, '🌐'), h('b', null, world.name || 'My World'))),
+    h('div', { class: 'btn-row', style: { gap: '6px' } },
+      h('button', { class: 'btn sm primary', type: 'button', title: 'Record something that happened: a new tie, a betrayal, a death, a move, a faction joined or left', onClick: () => momentDialog({}) }, '⚡ What happened'),
+      h('button', { class: 'btn sm', type: 'button', onClick: () => newPageDialog() }, '+ Page')),
     q, results,
     h('nav', { class: 'wd-navs' }, navBtn('home', 'Home', '⌂'), navBtn('timeline', 'Campaign timeline', '🕰'), navBtn('graph', 'Relationship graph', '◉'), navBtn('vault', 'Vault: import / export', '🗄')),
     h('div', { class: 'wd-sections' }, sections));
@@ -14765,8 +15194,9 @@ function home() {
   const ents = [...world.entities.values()];
   const counts = Object.entries(ENTITY_TYPES).map(([t, meta]) => ({ t, meta, n: ents.filter((e) => e.type === t).length }));
   const chars = ents.filter((e) => e.character).sort((a, b) => b.degree - a.degree);
-  const connected = ents.filter((e) => !e.character && e.degree > 0).sort((a, b) => b.degree - a.degree).slice(0, 12);
-  const sessions = campaignTimeline(world).slice(-6).reverse();
+  const factions = ents.filter((e) => e.type === 'faction').sort((a, b) => b.degree - a.degree).slice(0, 8);
+  const connected = ents.filter((e) => !e.character && e.type !== 'faction' && e.degree > 0).sort((a, b) => b.degree - a.degree).slice(0, 12);
+  const latest = campaignTimeline(world).slice(-6).reverse();
   const editBtn = h('button', { class: 'btn sm', type: 'button', onClick: async () => {
     const name = h('input', { type: 'text', value: world.name || '' });
     const tag = h('input', { type: 'text', value: world.tagline || '' });
@@ -14774,15 +15204,24 @@ function home() {
     const ok = await openDialog({ title: 'This world', body: [h('label', { class: 'field' }, h('span', null, 'Name'), name), h('label', { class: 'field' }, h('span', null, 'Tagline'), tag), h('label', { class: 'field' }, h('span', null, 'About'), desc)], buttons: [{ label: 'Cancel', value: false }, { label: 'Save', value: true, primary: true }] });
     if (ok) { saved.name = name.value.trim() || 'My World'; saved.tagline = tag.value.trim(); saved.description = desc.value.trim(); save(); renderWorld(); }
   } }, 'Edit');
+  const quick = (glyph, label, hint, fn, primary = false) => h('button', { type: 'button', class: `wd-quick ${primary ? 'primary' : ''}`, title: hint, onClick: fn }, h('span', { class: 'wd-quick-glyph' }, glyph), h('b', null, label), h('small', null, hint));
   return h('div', { class: 'wd-page' },
     h('header', { class: 'wd-hero' },
       h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'World'), h('h1', null, world.name || 'My World'), h('p', { class: 'wd-tagline' }, world.tagline || ''), world.description ? h('p', null, world.description) : null, editBtn),
       h('div', { class: 'wd-counts' }, counts.map(({ t, meta, n }) => h('button', { type: 'button', class: 'wd-count', style: { '--c': meta.color }, onClick: () => { ui.open[t] = true; ui.showAll[t] = true; renderWorld(); } }, h('b', { class: 'num' }, n), h('span', null, meta.label))))),
-    !ents.length ? h('div', { class: 'empty' }, h('h2', null, 'An empty world'), h('p', null, 'Save characters to your roster and they appear here with everyone in their lives: parents, mentors, rivals, enemies, their city and their team. Add factions, places, items and events with "+ Page".')) : null,
+    h('div', { class: 'wd-quicks' },
+      quick('⚡', 'What happened', 'Two people became enemies, someone joined a faction, moved, died…', () => momentDialog({}), true),
+      quick('🏛', 'New faction', 'A team, agency, gang, court or cult', () => newPageDialog('faction')),
+      quick('📍', 'New location', 'A city, a base, a bar, a planet', () => newPageDialog('location')),
+      quick('📅', 'New event', 'A battle, a wedding, a heist, a funeral', () => newPageDialog('event')),
+      quick('🗝', 'New item', 'An artefact, a weapon, a vehicle, a MacGuffin', () => newPageDialog('item')),
+      quick('🧑', 'New person', 'Anyone the roster does not know yet', () => newPageDialog('person'))),
+    !ents.length ? h('div', { class: 'empty' }, h('h2', null, 'An empty world'), h('p', null, 'Save characters to your roster and they appear here with everyone in their lives: parents, mentors, rivals, enemies, their city and their team. Then record what happens to them with "What happened".')) : null,
+    latest.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Latest in the campaign', h('button', { class: 'linkish', type: 'button', style: { marginLeft: '10px', fontSize: '13px' }, onClick: () => go('timeline') }, 'full timeline')), h('div', { class: 'wd-tl' }, latest.map(timelineItem))) : null,
     chars.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Heroes, villains and everyone saved'), h('div', { class: 'wd-cards' }, chars.map(personCard))) : null,
-    connected.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Most connected'), h('div', { class: 'wd-chips' }, connected.map((e) => pageLink(e, { chip: true, note: `${e.degree} link${e.degree === 1 ? '' : 's'}` })))) : null,
-    sessions.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Latest in the campaign', h('button', { class: 'linkish', type: 'button', style: { marginLeft: '10px', fontSize: '13px' }, onClick: () => go('timeline') }, 'full timeline')), h('div', { class: 'wd-tl' }, sessions.map(timelineEvent))) : null,
-    h('p', { class: 'hint' }, 'Everything here is clickable. Pages for saved characters follow the roster: edit a character, roll a new bio or add a journal session and the world updates. Pages you write by hand live in the vault (export it from the sidebar).'));
+    factions.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Factions'), h('div', { class: 'wd-cards' }, factions.map(factionCard))) : null,
+    connected.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Most connected'), h('div', { class: 'wd-chips' }, connected.map((e) => pageLink(e, { chip: true, note: `${e.degree} tie${e.degree === 1 ? '' : 's'}` })))) : null,
+    h('p', { class: 'hint' }, 'Everything here is clickable. Pages for saved characters follow the roster: edit a character, roll a new bio, add factions or a journal session and the world updates. What you record here (pages, ties, what happened) lives in the vault and goes out with backups and lobby keys. Press / to search.'));
 }
 
 function personCard(e) {
@@ -14792,11 +15231,24 @@ function personCard(e) {
   const color = e.color || typeMeta(e.type).color;
   const img = ch ? portraitImg(ch) : null;
   return h('article', { class: 'wd-card', style: { '--c': color, '--c-ink': inkFor(color) } },
-    h('button', { type: 'button', class: `wd-card-head ${img ? 'has-img' : ''}`, onClick: () => go(e.id) }, img ? h('span', { class: 'wd-card-img' }, img) : null, h('span', { class: 'wd-card-titles' }, h('span', { class: 'wd-card-name' }, e.name), h('span', { class: 'wd-card-sub' }, [e.aliases[0], ch ? `PL ${ch.pl}` : null, e.fields?.Side].filter(Boolean).join(' · ')))),
+    h('button', { type: 'button', class: `wd-card-head ${img ? 'has-img' : ''}`, onClick: () => go(e.id) }, img ? h('span', { class: 'wd-card-img' }, img) : null, h('span', { class: 'wd-card-titles' }, h('span', { class: 'wd-card-name' }, e.name), h('span', { class: 'wd-card-sub' }, [e.aliases[0], ch ? `PL ${ch.pl}` : null, e.fields?.Side, shortStatus(e)].filter(Boolean).join(' · ')))),
     h('div', { class: 'wd-card-body' },
       e.summary ? h('p', null, String(e.summary).length > 160 ? `${String(e.summary).slice(0, 157)}…` : e.summary) : null,
       s ? h('div', { class: 'card-stats' }, [['Dodge', s.d.defenses.Dodge], ['Parry', s.d.defenses.Parry], ['Tough', s.d.defenses.Toughness], ['Will', s.d.defenses.Will]].map(([k, v]) => h('div', null, h('b', { class: 'num' }, v), h('span', null, k.toUpperCase())))) : null,
       h('div', { class: 'wd-card-links' }, e.connections.slice(0, 5).map((c) => pageLink(c.other, { chip: true, rel: c.rel, note: c.label.toLowerCase() })), e.connections.length > 5 ? h('span', { class: 'hint' }, `+${e.connections.length - 5} more`) : null)));
+}
+
+function factionCard(e) {
+  const color = e.color || typeMeta(e.type).color;
+  const members = e.connections.filter((c) => ['hasMember', 'ledBy', 'foundedBy'].includes(c.rel));
+  const leaders = e.connections.filter((c) => c.rel === 'ledBy').map((c) => c.other);
+  const foes = e.connections.filter((c) => ['enemy', 'atWar', 'nemesis'].includes(c.rel)).map((c) => c.other);
+  return h('article', { class: 'wd-card', style: { '--c': color, '--c-ink': inkFor(color) } },
+    h('button', { type: 'button', class: 'wd-card-head', onClick: () => go(e.id) }, h('span', { class: 'wd-card-titles' }, h('span', { class: 'wd-card-name' }, e.name), h('span', { class: 'wd-card-sub' }, [e.fields?.Kind, `${[...new Set(members.map((m) => m.other.id))].length} member${members.length === 1 ? '' : 's'}`, e.status].filter(Boolean).join(' · ')))),
+    h('div', { class: 'wd-card-body' },
+      e.summary ? h('p', null, String(e.summary).length > 140 ? `${String(e.summary).slice(0, 137)}…` : e.summary) : null,
+      leaders.length ? h('div', { class: 'wd-card-links' }, h('small', { class: 'hint' }, 'Led by'), leaders.map((l) => pageLink(l, { chip: true }))) : null,
+      foes.length ? h('div', { class: 'wd-card-links' }, h('small', { class: 'hint' }, 'Against'), foes.slice(0, 4).map((l) => pageLink(l, { chip: true, rel: 'enemy' }))) : null));
 }
 
 // ---- entity page ------------------------------------------------------------------------------------------------------------
@@ -14807,7 +15259,7 @@ function infobox(e) {
   let s = null;
   try { s = ch ? makeSheet(ch, R) : null; } catch { s = null; }
   return h('aside', { class: 'wd-infobox', style: { '--c': e.color || typeMeta(e.type).color } },
-    h('div', { class: 'wd-infobox-head' }, h('span', { class: 'wd-glyph' }, typeMeta(e.type).glyph), typeMeta(e.type).one),
+    h('div', { class: 'wd-infobox-head' }, h('span', { class: 'wd-glyph' }, typeMeta(e.type).glyph), typeMeta(e.type).one, statusBadge(e)),
     s ? h('div', { class: 'card-stats', style: { gridTemplateColumns: 'repeat(5, 1fr)', margin: '8px 0' } }, [['DOD', s.d.defenses.Dodge], ['PAR', s.d.defenses.Parry], ['TOU', s.d.defenses.Toughness], ['FOR', s.d.defenses.Fortitude], ['WIL', s.d.defenses.Will]].map(([k, v]) => h('div', null, h('b', { class: 'num' }, v), h('span', null, k)))) : null,
     rows.length ? h('dl', { class: 'wd-fields' }, rows.map(([k, v]) => [h('dt', null, k), h('dd', null, String(v))])) : null,
     e.source === 'bio' && e.knownBy?.length ? h('div', { class: 'wd-known' }, h('div', { class: 'label' }, 'Known through'), e.knownBy.map((k) => h('div', { class: 'wd-known-row' }, h('button', { type: 'button', class: 'wd-link', onClick: () => go(k.id) }, k.name), h('small', null, ` · their ${(k.relation || k.role || 'contact').toLowerCase()}`)))) : null,
@@ -14819,7 +15271,6 @@ function egoGraph(e) {
   const nodes = [e, ...e.connections.map((c) => c.other)];
   const seen = new Set(nodes.map((n) => n.id));
   const edges = e.connections.map((c) => ({ from: e.id, to: c.other.id, rel: c.rel }));
-  // second ring: links between neighbours
   for (const n of e.connections.map((c) => c.other)) for (const c of n.connections || []) if (seen.has(c.other.id) && c.other.id !== e.id && !edges.some((x) => (x.from === n.id && x.to === c.other.id) || (x.from === c.other.id && x.to === n.id))) edges.push({ from: n.id, to: c.other.id, rel: c.rel, faint: true });
   if (nodes.length < 2) return null;
   const W = 520; const H = Math.max(260, Math.min(460, 120 + nodes.length * 18));
@@ -14828,44 +15279,110 @@ function egoGraph(e) {
     svg('svg', { viewBox: `0 0 ${W} ${H}`, class: 'wd-graph', role: 'img', 'aria-label': `${e.name} and their connections` },
       edges.map((ed) => { const a = pos.get(ed.from); const b = pos.get(ed.to); return svg('line', { x1: a.x, y1: a.y, x2: b.x, y2: b.y, stroke: RELATIONS[ed.rel]?.color || '#999', 'stroke-width': ed.faint ? 1 : 2, 'stroke-opacity': ed.faint ? 0.35 : 0.8 }); }),
       nodes.map((n) => { const p = pos.get(n.id); const me = n.id === e.id; const color = n.color || typeMeta(n.type).color; return svg('g', { class: 'wd-node', transform: `translate(${p.x},${p.y})`, onClick: () => (me ? null : go(n.id)), style: me ? '' : 'cursor:pointer' },
-        svg('circle', { r: me ? 20 : 13, fill: color, stroke: 'var(--surface)', 'stroke-width': 2 }),
+        svg('title', null, `${n.name}${n.status ? ` (${n.status})` : ''}`),
+        svg('circle', { r: me ? 20 : 13, fill: color, stroke: 'var(--surface)', 'stroke-width': 2, 'stroke-dasharray': n.status === 'Dead' ? '3 2' : null }),
         svg('text', { 'text-anchor': 'middle', dy: me ? 5 : 4, fill: inkFor(color), 'font-size': me ? 12 : 9, 'font-weight': 700 }, n.type === 'person' ? initialsOf(n.name) : typeMeta(n.type).glyph),
         svg('text', { 'text-anchor': 'middle', dy: me ? 34 : 26, fill: 'var(--ink)', 'font-size': 11, 'font-weight': me ? 800 : 600 }, n.name.length > 20 ? `${n.name.slice(0, 19)}…` : n.name)); })),
     h('div', { class: 'wd-legend' }, [...new Set(edges.map((x) => RELATIONS[x.rel]?.group).filter(Boolean))].map((g) => h('span', null, h('i', { style: { background: RELATIONS[Object.keys(RELATIONS).find((k) => RELATIONS[k].group === g)]?.color } }), g))));
 }
 
-function timelineRow(t) {
+function timelineRow(t, e) {
+  const other = t.other ? world.entities.get(t.other) : null;
   return h('li', { class: `wd-tl-row ${t.kind}` },
     h('span', { class: 'wd-tl-when num' }, t.when || '·'),
     h('div', { class: 'wd-tl-body' },
       h('span', { class: 'bio-stage' }, [t.stage, t.date].filter(Boolean).join(' · ')),
       h('span', null, t.text),
-      t.people?.length ? h('div', { class: 'wd-chips', style: { marginTop: '4px' } }, t.people.map((p) => { const pe = [...world.entities.values()].find((x) => x.type === 'person' && x.name.toLowerCase() === p.name.toLowerCase()); return pe ? pageLink(pe, { chip: true, note: p.relation || null }) : h('span', { class: 'wd-chip' }, p.name); })) : null,
+      t.people?.length ? h('div', { class: 'wd-chips', style: { marginTop: '4px' } }, t.people.map((p) => { const pe = findByName(p.name, 'person'); return pe ? pageLink(pe, { chip: true, note: p.relation || null }) : h('span', { class: 'wd-chip' }, p.name); })) : null,
       t.points?.length ? h('ul', { class: 'wd-points' }, t.points.map((x) => h('li', null, h('b', null, x.type === 'award' ? `+${x.points} pp` : `${x.points > 0 ? `−${x.points}` : `+${-x.points}`} pp`), ' ', x.type === 'award' ? 'earned' : (x.changes || []).join('; ') || x.note))) : null,
       t.downtime ? h('div', { class: 'wd-downtime' }, h('b', null, 'Between adventures: '), t.downtime) : null,
-      t.by ? h('button', { type: 'button', class: 'linkish', style: { fontSize: '12px' }, onClick: () => go(t.by) }, 'open their page') : null,
-      t.eventId && world.entities.has(t.eventId) ? h('button', { type: 'button', class: 'linkish', style: { fontSize: '12px', marginLeft: '8px' }, onClick: () => go(t.eventId) }, 'event page') : null));
+      h('div', { class: 'wd-tl-tools' },
+        t.by ? h('button', { type: 'button', class: 'linkish', onClick: () => go(t.by) }, 'open their page') : null,
+        other ? h('button', { type: 'button', class: 'linkish', onClick: () => go(other.id) }, other.name) : null,
+        t.eventId && world.entities.has(t.eventId) ? h('button', { type: 'button', class: 'linkish', onClick: () => go(t.eventId) }, 'event page') : null,
+        t.momentId ? h('button', { type: 'button', class: 'linkish', onClick: () => editMomentDialog(t.momentId) }, 'edit') : null,
+        t.momentId ? h('button', { type: 'button', class: 'linkish danger', onClick: () => undoMoment(t.momentId) }, 'undo') : null)));
 }
+
+// Quick ways to add a tie, by page type: [label, rel, type of a new page made from a typed name]
+const QUICK_LINKS = {
+  person: [['+ Friend', 'friend', 'person'], ['+ Ally', 'ally', 'person'], ['+ Enemy', 'enemy', 'person'], ['+ Rival', 'rival', 'person'], ['+ Love', 'love', 'person'], ['+ Family', 'family', 'person'], ['+ Mentor', 'mentor', 'person'], ['+ Faction', 'member', 'faction'], ['+ Lives in', 'livesIn', 'location'], ['+ Base', 'basedIn', 'location'], ['+ Owns', 'owns', 'item']],
+  faction: [['+ Member', 'hasMember', 'person'], ['+ Leader', 'ledBy', 'person'], ['+ Founder', 'foundedBy', 'person'], ['+ Allied faction', 'allied', 'faction'], ['+ At war with', 'atWar', 'faction'], ['+ Enemy', 'enemy', 'person'], ['+ Headquarters', 'basedIn', 'location'], ['+ Owns', 'owns', 'item']],
+  location: [['+ Lives here', 'homeOf', 'person'], ['+ Based here', 'baseOf', 'faction'], ['+ Works here', 'workplaceOf', 'person'], ['+ Inside', 'contains', 'location'], ['+ Part of', 'locatedIn', 'location'], ['+ Scene of', 'sceneOf', 'event'], ['+ Owner', 'ownedBy', 'person']],
+  item: [['+ Owner', 'ownedBy', 'person'], ['+ Maker', 'createdBy', 'person'], ['+ Kept at', 'locatedIn', 'location'], ['+ Tied to', 'related', 'person']],
+  event: [['+ Involved', 'involves', 'person'], ['+ Faction involved', 'involves', 'faction'], ['+ Where', 'happenedAt', 'location'], ['+ Item involved', 'involves', 'item']],
+};
 
 function addLinkForm(e) {
   const all = [...world.entities.values()].filter((x) => x.id !== e.id).sort((a, b) => a.name.localeCompare(b.name));
-  const target = h('input', { type: 'text', list: 'wd-all', placeholder: 'Who or what (type to search)', 'aria-label': 'Link to' });
-  const rel = h('select', { 'aria-label': 'Relationship' }, RELATION_GROUPS.map((g) => h('optgroup', { label: g }, Object.entries(RELATIONS).filter(([, r]) => r.group === g).map(([k, r]) => h('option', { value: k }, r.label)))));
-  const note = h('input', { type: 'text', placeholder: 'Note (optional): since when, why, how it ended', 'aria-label': 'Note' });
+  const preset = ui.linkPreset || {};
+  const target = h('input', { type: 'text', id: 'wd-link-target', list: 'wd-all', placeholder: 'Who or what (type to search, or a new name)', 'aria-label': 'Link to' });
+  const rel = h('select', { 'aria-label': 'Relationship' }, RELATION_GROUPS.map((g) => h('optgroup', { label: g }, Object.entries(RELATIONS).filter(([, r]) => r.group === g).map(([k, r]) => h('option', { value: k, selected: k === preset.rel }, r.label)))));
+  const newType = h('select', { 'aria-label': 'If new, make a', title: 'What kind of page a new name becomes' }, Object.entries(ENTITY_TYPES).map(([t, m]) => h('option', { value: t, selected: t === (preset.newType || 'person') }, `new ${m.one.toLowerCase()}`)));
+  const since = h('input', { type: 'number', min: 0, placeholder: 'Since S#', title: 'Since which session (optional)', 'aria-label': 'Since session', style: { maxWidth: '92px' } });
+  const note = h('input', { type: 'text', placeholder: 'Note (optional): why, how, since when', 'aria-label': 'Note' });
   const submit = () => {
     const name = target.value.trim();
     let other = all.find((x) => x.name.toLowerCase() === name.toLowerCase());
-    if (!other && name) { other = createEntity(saved, { type: 'person', name }); toast(`Made a page for ${name}`); }
+    if (!other && name) { other = createEntity(saved, { type: newType.value, name }); toast(`Made a ${typeMeta(newType.value).one.toLowerCase()} page for ${name}`); }
     if (!other) { target.setCustomValidity('Pick someone, or type a new name'); target.reportValidity(); return; }
-    addLink(saved, { from: e.id, to: other.id, rel: rel.value, note: note.value.trim() });
+    addLink(saved, { from: e.id, to: other.id, rel: rel.value, note: note.value.trim(), since: since.value ? { session: Number(since.value) } : null });
+    ui.linkPreset = null;
     save(); renderWorld();
     toast(`${other.name}: ${RELATIONS[rel.value].label.toLowerCase()} of ${e.name}`);
   };
-  return h('div', { class: 'wd-addlink' },
+  target.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') { ev.preventDefault(); submit(); } });
+  const quick = (QUICK_LINKS[e.type] || []).map(([label, r, t]) => h('button', { type: 'button', class: `wd-quicklink ${preset.rel === r ? 'active' : ''}`, style: { '--rc': RELATIONS[r]?.color }, onClick: () => { ui.linkPreset = { rel: r, newType: t }; renderWorld(); setTimeout(() => root.querySelector('#wd-link-target')?.focus(), 0); } }, label));
+  const el = h('div', { class: 'wd-addlink' },
     h('datalist', { id: 'wd-all' }, all.map((x) => h('option', { value: x.name }, typeMeta(x.type).one))),
-    h('div', { class: 'label' }, 'Add a connection'),
-    h('div', { class: 'add-row' }, target, rel, note, h('button', { class: 'btn', type: 'button', onClick: submit }, 'Link')),
-    h('p', { class: 'hint', style: { margin: '4px 0 0' } }, `Reads as "<name> is ${e.name}'s <relationship>". The other page gets the inverse automatically. A name that doesn't exist yet becomes a new person page.`));
+    h('div', { class: 'label' }, 'Add a tie'),
+    h('div', { class: 'wd-quicklinks' }, quick),
+    h('div', { class: 'add-row' }, target, rel, newType, since, h('button', { class: 'btn primary', type: 'button', onClick: submit }, 'Link')),
+    h('div', { class: 'add-row' }, note),
+    h('p', { class: 'hint', style: { margin: '4px 0 0' } }, `Reads as "<name> is ${e.name}'s <relationship>". The other page gets the inverse. Prefer "⚡ What happened" when the tie starts in play: it also ends what it replaces and lands on the timeline.`));
+  return el;
+}
+
+function membersTable(e) {
+  const ROLE_OF = { ledBy: 'Leader', foundedBy: 'Founder', hasMember: 'Member', formerHasMember: 'Former member', employee: 'Employee', informant: 'Informant', ally: 'Ally', contact: 'Contact', enemy: 'Enemy', captive: 'Captive' };
+  const RANK = { Founder: 0, Leader: 1, Member: 2, Employee: 3, Informant: 4, Ally: 5, Contact: 6, Captive: 7, Enemy: 8, 'Former member': 9 };
+  const people = new Map();
+  for (const c of [...e.connections, ...e.past]) {
+    if (c.other.type !== 'person' || !ROLE_OF[c.rel]) continue;
+    const cur = people.get(c.other.id) || { e: c.other, roles: [], since: null, until: null, note: '' };
+    if (c.ended) { if (c.rel === 'hasMember' || c.rel === 'ledBy') { cur.until = c.until; if (!cur.roles.length) cur.roles.push('Former member'); } }
+    else { cur.roles.push(ROLE_OF[c.rel]); if (c.since) cur.since = c.since; if (c.note) cur.note = c.note; }
+    people.set(c.other.id, cur);
+  }
+  const rows = [...people.values()].map((p) => ({ ...p, roles: [...new Set(p.roles)].sort((a, b) => RANK[a] - RANK[b]) })).sort((a, b) => RANK[a.roles[0]] - RANK[b.roles[0]] || a.e.name.localeCompare(b.e.name));
+  if (!rows.length) return null;
+  return h('section', { class: 'sec' },
+    h('h3', null, 'Members and people', h('span', { class: 'pts' }, `${rows.filter((r) => RANK[r.roles[0]] <= 2).length} in`)),
+    h('table', { class: 'wd-members' }, h('thead', null, h('tr', null, h('th', null, 'Role'), h('th', null, 'Who'), h('th', null, 'Since'), h('th', null, 'Note'))),
+      h('tbody', null, rows.map((r) => h('tr', { class: r.roles[0] === 'Former member' ? 'former' : '' }, h('td', null, r.roles.join(', ')), h('td', null, pageLink(r.e)), h('td', { class: 'num' }, r.until ? `until ${whenText(r.until)}` : whenText(r.since) || ''), h('td', { class: 'wd-note-cell' }, r.note))))));
+}
+
+function hereList(e) {
+  const GROUPS = [['Lives here', 'homeOf'], ['Based here', 'baseOf'], ['Works here', 'workplaceOf'], ['Inside', 'contains'], ['Part of', 'locatedIn'], ['Happened here', 'sceneOf'], ['Owned by', 'ownedBy']];
+  const blocks = GROUPS.map(([label, rel]) => { const items = e.connections.filter((c) => c.rel === rel); return items.length ? h('div', { class: 'wd-here' }, h('div', { class: 'label' }, label), h('div', { class: 'wd-chips' }, items.map((c) => pageLink(c.other, { chip: true, rel: c.rel, note: c.note || null })))) : null; }).filter(Boolean);
+  return blocks.length ? h('section', { class: 'sec' }, h('h3', null, 'Who and what is here'), blocks) : null;
+}
+
+function glance(e) {
+  const chip = (label, items, rel) => (items.length ? h('div', { class: 'wd-glance-row' }, h('span', { class: 'wd-glance-label' }, label), h('div', { class: 'wd-chips' }, items.map((c) => pageLink(c.other, { chip: true, rel: rel || c.rel, note: c.note && c.note.length < 40 ? c.note : null })))) : null);
+  const by = (rels) => e.connections.filter((c) => rels.includes(c.rel));
+  const rows = e.type === 'person' ? [
+    chip('Factions', by(['member', 'leader', 'founder'])),
+    chip('Home & base', by(['livesIn', 'basedIn', 'from', 'worksAt'])),
+    chip('Closest', by(['love', 'spouse', 'partner', 'friend', 'teammate', 'ally']).slice(0, 8)),
+    chip('Against', by(['enemy', 'nemesis', 'rival', 'betrayed', 'betrayedBy', 'atWar']).slice(0, 8)),
+  ] : e.type === 'faction' ? [
+    chip('Led by', by(['ledBy', 'foundedBy'])), chip('Headquarters', by(['basedIn'])), chip('Allies', by(['allied', 'ally'])), chip('Enemies', by(['atWar', 'enemy', 'nemesis'])),
+  ] : e.type === 'location' ? [chip('Part of', by(['locatedIn'])), chip('Controlled by', by(['ownedBy', 'baseOf']))]
+    : e.type === 'item' ? [chip('Owner', by(['ownedBy'])), chip('Made by', by(['createdBy'])), chip('Kept at', by(['locatedIn']))]
+      : [chip('Where', by(['happenedAt'])), chip('Involved', by(['involves']))];
+  const live = rows.filter(Boolean);
+  return live.length ? h('div', { class: 'wd-glance' }, live) : null;
 }
 
 function entityPage(e) {
@@ -14873,6 +15390,7 @@ function entityPage(e) {
   const color = e.color || meta.color;
   const ch = e.character;
   const groups = groupedConnections(e);
+  const past = groupedConnections(e, { past: true });
   const tl = entityTimeline(world, e);
   const canOpenAsCharacter = !ch && e.source === 'bio' && Object.values(e.keys || {}).some(Boolean);
   const openAsCharacter = () => {
@@ -14880,49 +15398,54 @@ function entityPage(e) {
     try { const person = fromKeySync(R, key).character; hooks.open?.(person); toast(`Opened ${person.identity?.realName || e.name}. Save to roster to give them a full page.`); } catch (err) { toast(`Couldn't build ${e.name}: ${err.message}`); }
   };
   const actions = h('div', { class: 'toolbar wd-actions' },
-    ch ? h('button', { class: 'btn primary', type: 'button', onClick: () => hooks.open?.(ch) }, 'Open on the Forge') : null,
-    canOpenAsCharacter ? h('button', { class: 'btn primary', type: 'button', title: 'Rebuild this person as a full character from their key', onClick: openAsCharacter }, 'Open as a character') : null,
-    ch ? h('button', { class: 'btn', type: 'button', onClick: () => hooks.throwIn?.(ch) }, '⚔ Throw in Battle Room') : null,
-    h('button', { class: 'btn', type: 'button', 'aria-pressed': String(ui.edit), onClick: () => { ui.edit = !ui.edit; renderWorld(); } }, ui.edit ? 'Done editing' : 'Edit page'),
+    ui.history.length ? h('button', { class: 'btn', type: 'button', title: 'Back to the previous page', onClick: back }, '← Back') : null,
+    h('button', { class: 'btn primary', type: 'button', title: 'Record something that happened to them', onClick: () => momentDialog({ a: e.id }) }, '⚡ What happened'),
+    ch ? h('button', { class: 'btn', type: 'button', onClick: () => hooks.open?.(ch) }, 'Open on the Forge') : null,
+    canOpenAsCharacter ? h('button', { class: 'btn', type: 'button', title: 'Rebuild this person as a full character from their key', onClick: openAsCharacter }, 'Open as a character') : null,
+    ch ? h('button', { class: 'btn', type: 'button', onClick: () => hooks.throwIn?.(ch) }, '⚔ Battle Room') : null,
+    h('button', { class: 'btn', type: 'button', 'aria-pressed': String(ui.edit), onClick: () => { ui.edit = !ui.edit; renderWorld(); } }, ui.edit ? 'Done editing' : '✎ Edit page'),
     h('span', { class: 'spacer' }),
-    h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(vaultMarkdown(world)[Object.keys(vaultMarkdown(world)).find((k) => k.endsWith(`/${e.name.replace(/[\\/:*?"<>|#^[\]]/g, '')}.md`)) || ''] || '')) ? 'Page copied as Markdown' : 'Copy failed') }, 'Copy as Markdown'),
+    h('button', { class: 'btn ghost', type: 'button', onClick: async () => toast((await copyText(vaultMarkdown(world)[Object.keys(vaultMarkdown(world)).find((k) => k.endsWith(`/${e.name.replace(/[\\/:*?"<>|#^[\]]/g, '')}.md`)) || ''] || '')) ? 'Page copied as Markdown' : 'Copy failed') }, 'Copy as Markdown'),
     h('button', { class: 'btn ghost danger', type: 'button', onClick: async () => {
       const ok = await openDialog({ title: `Remove ${e.name}?`, body: h('p', { style: { margin: 0 } }, e.source === 'manual' ? 'This page and its links are deleted from the vault.' : 'This page is hidden from the world. The character or bio it came from is not touched.'), buttons: [{ label: 'Keep', value: false }, { label: 'Remove', value: true, danger: true }] });
       if (ok) { deleteEntity(saved, e.id); save(); go('home'); }
     } }, 'Remove'));
 
   const por = ch ? portraitImg(ch) : null;
-  const head = h('header', { class: 'wd-head', style: { '--c': color, '--c-ink': inkFor(color) } },
+  const head = h('header', { class: `wd-head ${e.status === 'Dead' || e.status === 'Destroyed' ? 'gone' : ''}`, style: { '--c': color, '--c-ink': inkFor(color) } },
     por ? h('div', { class: 'wd-head-glyph has-img' }, por, h('span', null, initialsOf(e.name))) : h('div', { class: 'wd-head-glyph' }, e.type === 'person' ? initialsOf(e.name) : meta.glyph),
     h('div', { class: 'wd-head-text' },
-      h('div', { class: 'eyebrow' }, `${meta.one}${ch ? ` · PL ${ch.pl} ${ch.archetype?.name || ''}` : ''}${e.fields?.Side ? ` · ${e.fields.Side}` : ''}`),
-      h('h1', null, e.name),
+      h('div', { class: 'eyebrow' }, `${meta.one}${ch ? ` · PL ${ch.pl} ${ch.archetype?.name || ''}` : ''}${e.fields?.Side ? ` · ${e.fields.Side}` : ''}${e.fields?.Kind && e.type !== 'person' ? ` · ${e.fields.Kind}` : ''}`),
+      h('h1', null, e.name, ' ', statusBadge(e, { big: true })),
       e.aliases?.length ? h('div', { class: 'wd-aliases' }, `Also: ${e.aliases.join(', ')}`) : null),
-    h('div', { class: 'wd-head-stats' }, h('b', { class: 'num' }, e.degree), h('span', null, 'connections')));
+    h('div', { class: 'wd-head-stats' }, h('b', { class: 'num' }, e.degree), h('span', null, 'ties')));
 
+  const connRow = (c) => h('li', { style: { '--rc': RELATIONS[c.rel]?.color || '#888' }, class: c.ended ? 'ended' : '' },
+    h('span', { class: 'wd-rel' }, c.label),
+    pageLink(c.other),
+    c.since || c.until ? h('span', { class: 'wd-when num', title: c.until ? 'Ended' : 'Since' }, c.until ? `until ${whenText(c.until)}` : `since ${whenText(c.since)}`) : null,
+    c.note ? h('span', { class: 'wd-note' }, c.note) : null,
+    (c.source === 'manual' || ui.edit) && !c.ended ? h('button', { class: 'x', type: 'button', 'aria-label': 'Remove link', title: c.source === 'manual' ? 'Delete this link' : 'Hide this automatic link', onClick: () => { removeLink(saved, world, c.id); save(); renderWorld(); } }, '✕') : null);
   const connections = h('section', { class: 'sec' },
-    h('h3', null, 'Connections', h('span', { class: 'pts' }, `${e.connections.length}`)),
+    h('h3', null, 'Ties', h('span', { class: 'pts' }, `${e.connections.length}${e.past.length ? ` · ${e.past.length} past` : ''}`)),
     groups.length ? groups.map((g) => h('div', { class: 'wd-group' },
       h('div', { class: 'wd-group-name', style: { '--rc': RELATIONS[g.items[0].rel]?.color } }, g.group),
-      h('ul', { class: 'wd-conns' }, g.items.map((c) => h('li', { style: { '--rc': RELATIONS[c.rel]?.color || '#888' } },
-        h('span', { class: 'wd-rel' }, c.label),
-        pageLink(c.other),
-        c.note ? h('span', { class: 'wd-note' }, c.note) : null,
-        c.source === 'manual' || ui.edit ? h('button', { class: 'x', type: 'button', 'aria-label': 'Remove link', title: c.source === 'manual' ? 'Delete this link' : 'Hide this automatic link', onClick: () => { removeLink(saved, world, c.id); save(); renderWorld(); } }, '✕') : null))))) : h('p', { class: 'hint', style: { margin: 0 } }, 'No connections yet. Add one below.'),
+      h('ul', { class: 'wd-conns' }, g.items.map(connRow)))) : h('p', { class: 'hint', style: { margin: 0 } }, 'No ties yet. Add one below, or record what happened.'),
+    past.length ? h('details', { class: 'wd-past' }, h('summary', null, `Formerly (${e.past.length})`), past.map((g) => h('div', { class: 'wd-group' }, h('div', { class: 'wd-group-name', style: { '--rc': RELATIONS[g.items[0].rel]?.color } }, g.group), h('ul', { class: 'wd-conns' }, g.items.map(connRow))))) : null,
     addLinkForm(e));
 
-  const timeline = tl.length ? h('section', { class: 'sec' }, h('h3', null, 'Timeline', h('span', { class: 'pts' }, ch ? 'life, then play' : 'as others tell it')), h('ol', { class: 'wd-tl-list' }, tl.map(timelineRow))) : null;
+  const timeline = tl.length ? h('section', { class: 'sec' }, h('h3', null, 'Timeline', h('span', { class: 'pts' }, ch ? 'life, then play' : 'as others tell it')), h('ol', { class: 'wd-tl-list' }, tl.map((t) => timelineRow(t, e)))) : null;
   const notes = (e.body || ui.edit) ? h('section', { class: 'sec' }, h('h3', null, 'Notes'), ui.edit ? null : h('div', { class: 'wd-body' }, ...String(e.body).split(/\n{2,}/).map((p) => h('p', null, p)))) : null;
-  const summary = h('section', { class: 'sec' }, h('h3', null, e.type === 'event' ? 'What happened' : 'Summary'), e.summary ? h('p', { class: 'wd-summary' }, e.summary) : h('p', { class: 'hint', style: { margin: 0 } }, 'Nothing written yet.'));
+  const summary = h('section', { class: 'sec' }, h('h3', null, e.type === 'event' ? 'What happened' : 'Summary'), e.summary ? h('p', { class: 'wd-summary' }, e.summary) : h('p', { class: 'hint', style: { margin: 0 } }, 'Nothing written yet. ', h('button', { type: 'button', class: 'linkish', onClick: () => { ui.edit = true; renderWorld(); } }, 'Write something')));
   const journalEvent = e.type === 'event' && e.journal ? h('section', { class: 'sec' }, h('h3', null, 'From the journal'),
-    h('dl', { class: 'bio-dl' }, e.journal.people?.length ? [h('dt', null, 'People'), h('dd', null, h('div', { class: 'wd-chips' }, e.journal.people.map((p) => { const pe = [...world.entities.values()].find((x) => x.type === 'person' && x.name.toLowerCase() === p.name.toLowerCase()); return pe ? pageLink(pe, { chip: true, note: [p.relation, p.status].filter(Boolean).join(' · ') || null }) : h('span', { class: 'wd-chip' }, p.name); })))] : null,
+    h('dl', { class: 'bio-dl' }, e.journal.people?.length ? [h('dt', null, 'People'), h('dd', null, h('div', { class: 'wd-chips' }, e.journal.people.map((p) => { const pe = findByName(p.name, 'person'); return pe ? pageLink(pe, { chip: true, note: [p.relation, p.status].filter(Boolean).join(' · ') || null }) : h('span', { class: 'wd-chip' }, p.name); })))] : null,
       e.fields?.Points ? [h('dt', null, 'Points'), h('dd', null, e.fields.Points)] : null,
       e.journal.downtime ? [h('dt', null, 'Between adventures'), h('dd', null, e.journal.downtime)] : null)) : null;
 
   const editor = ui.edit ? editForm(e) : null;
-  return h('div', { class: 'wd-page' }, head, actions,
+  return h('div', { class: 'wd-page' }, head, actions, glance(e),
     h('div', { class: 'wd-body-grid' },
-      h('div', { class: 'wd-main' }, editor, summary, journalEvent, connections, timeline, notes),
+      h('div', { class: 'wd-main' }, editor, summary, journalEvent, e.type === 'faction' ? membersTable(e) : null, e.type === 'location' ? hereList(e) : null, connections, timeline, notes),
       h('div', { class: 'wd-aside' }, egoGraph(e), infobox(e))));
 }
 
@@ -14937,7 +15460,7 @@ function editForm(e) {
   const color = h('input', { type: 'color', value: /^#[0-9a-f]{6}$/i.test(e.color || '') ? e.color : typeMeta(e.type).color, 'aria-label': 'Colour', style: { width: '48px', padding: '2px' } });
   const fieldRows = h('div', { class: 'wd-field-rows' });
   const fields = Object.entries(e.fields || {}).map(([k, v]) => ({ k, v: v == null ? '' : String(v) }));
-  const presets = { faction: ['Motto', 'Leader', 'Headquarters', 'Goals', 'Size', 'Reputation'], location: ['Kind', 'Region', 'Population', 'Notable for', 'Danger'], item: ['Owner', 'Powers', 'Origin', 'Value'], event: ['Date', 'Session', 'Kind', 'Outcome'], person: ['Occupation', 'Age', 'Status', 'Base'] };
+  const presets = { faction: ['Kind', 'Motto', 'Leader', 'Headquarters', 'Goals', 'Size', 'Reputation', 'Status', 'Founded', 'Resources', 'Methods'], location: ['Kind', 'Region', 'Population', 'Notable for', 'Danger', 'Status', 'Ruled by', 'Atmosphere'], item: ['Owner', 'Powers', 'Origin', 'Value', 'Status', 'Last seen'], event: ['Date', 'Session', 'Kind', 'Outcome', 'Casualties'], person: ['Occupation', 'Age', 'Status', 'Base', 'Species', 'Goal', 'Secret', 'Voice'] };
   const drawFields = () => {
     clear(fieldRows);
     fields.forEach((f, i) => fieldRows.append(h('div', { class: 'wd-field-row' },
@@ -14945,7 +15468,7 @@ function editForm(e) {
       h('input', { type: 'text', value: f.v, placeholder: 'Value', onInput: (ev) => { f.v = ev.target.value; } }),
       h('button', { class: 'x', type: 'button', 'aria-label': 'Remove field', onClick: () => { fields.splice(i, 1); drawFields(); } }, '✕'))));
     fieldRows.append(h('datalist', { id: 'wd-field-presets' }, (presets[type.value] || []).map((p) => h('option', { value: p }))));
-    fieldRows.append(h('button', { class: 'btn sm', type: 'button', onClick: () => { fields.push({ k: '', v: '' }); drawFields(); } }, '+ Field'));
+    fieldRows.append(h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', type: 'button', onClick: () => { fields.push({ k: '', v: '' }); drawFields(); } }, '+ Field'), (presets[type.value] || []).filter((p) => !fields.some((f) => f.k === p)).slice(0, 6).map((p) => h('button', { class: 'btn sm ghost', type: 'button', onClick: () => { fields.push({ k: p, v: '' }); drawFields(); } }, `+ ${p}`))));
   };
   drawFields();
   const saveIt = () => {
@@ -14965,56 +15488,215 @@ function editForm(e) {
     h('div', { class: 'btn-row', style: { justifyContent: 'flex-end' } }, h('button', { class: 'btn ghost', type: 'button', onClick: () => { ui.edit = false; renderWorld(); } }, 'Cancel'), h('button', { class: 'btn primary', type: 'button', onClick: saveIt }, 'Save page')));
 }
 
-async function newPageDialog(presetType = 'faction') {
+async function newPageDialog(presetType = 'faction', presetName = '') {
   const type = h('select', { 'aria-label': 'Type' }, Object.entries(ENTITY_TYPES).map(([t, m]) => h('option', { value: t, selected: t === presetType }, `${m.glyph} ${m.one}`)));
-  const name = h('input', { type: 'text', placeholder: 'Name', 'aria-label': 'Name' });
+  const name = h('input', { type: 'text', placeholder: 'Name', 'aria-label': 'Name', value: presetName });
+  const kind = h('input', { type: 'text', list: 'wd-kind-presets', placeholder: 'Kind (optional): team, gang, city, bar, artefact…', 'aria-label': 'Kind' });
   const summary = h('textarea', { placeholder: 'A line or two', style: { minHeight: '70px' } });
-  const ok = await openDialog({ title: 'New page', body: [h('label', { class: 'field' }, h('span', null, 'Type'), type), h('label', { class: 'field' }, h('span', null, 'Name'), name), h('label', { class: 'field' }, h('span', null, 'Summary'), summary), h('p', { class: 'hint', style: { margin: 0 } }, 'Factions, organisations, cities, bases, artefacts, battles, weddings, funerals: anything the campaign needs a page for.')], buttons: [{ label: 'Cancel', value: false }, { label: 'Create', value: true, primary: true }] });
+  const KINDS = { faction: ['Team', 'Agency', 'Gang', 'Corporation', 'Cult', 'Court', 'Family', 'Guild', 'Government', 'Military', 'Rebels', 'Secret society', 'Syndicate'], location: ['City', 'District', 'Base', 'Bar', 'Building', 'Country', 'Planet', 'Dimension', 'Prison', 'Ruin', 'Ship', 'Wilderness'], item: ['Artefact', 'Weapon', 'Vehicle', 'Armour', 'Device', 'Document', 'Relic', 'Treasure'], event: ['Battle', 'Heist', 'Wedding', 'Funeral', 'Trial', 'Disaster', 'Festival', 'Discovery', 'Betrayal'], person: ['Civilian', 'Hero', 'Villain', 'Official', 'Criminal', 'Scientist', 'Reporter', 'Cop', 'Soldier'] };
+  const list = h('datalist', { id: 'wd-kind-presets' });
+  const refill = () => { clear(list); for (const k of KINDS[type.value] || []) list.append(h('option', { value: k })); };
+  refill(); type.addEventListener('change', refill);
+  const ok = await openDialog({ title: 'New page', body: [h('label', { class: 'field' }, h('span', null, 'Type'), type), h('label', { class: 'field' }, h('span', null, 'Name'), name), h('label', { class: 'field' }, h('span', null, 'Kind'), kind, list), h('label', { class: 'field' }, h('span', null, 'Summary'), summary), h('p', { class: 'hint', style: { margin: 0 } }, 'Factions, organisations, cities, bases, artefacts, battles, weddings, funerals: anything the campaign needs a page for. Add ties from the page itself, or record what happened.')], buttons: [{ label: 'Cancel', value: false }, { label: 'Create', value: true, primary: true }] });
   if (!ok || !name.value.trim()) return;
-  const e = createEntity(saved, { type: type.value, name: name.value.trim(), summary: summary.value.trim() });
-  save(); go(e.id); ui.edit = true; renderWorld();
+  const e = createEntity(saved, { type: type.value, name: name.value.trim(), summary: summary.value.trim(), fields: kind.value.trim() ? { Kind: kind.value.trim() } : {} });
+  save(); go(e.id);
+}
+
+// ---- moments: what happened -------------------------------------------------------------------------------------------------
+
+/** Keep a roster character's own faction list in step with a faction moment recorded in the World. */
+function syncCharacterFactions(m) {
+  const A = world.entities.get(m.a); const B = m.b ? world.entities.get(m.b) : null;
+  if (!A?.character?.rosterId || !B || B.type !== 'faction') return;
+  const roleOf = { joined: 'Member', founded: 'Founder', tookLeadership: 'Leader', left: 'Former member', expelled: 'Former member', steppedDown: 'Member' };
+  const role = roleOf[m.kind];
+  if (!role) return;
+  const live = state.roster.find((x) => x.rosterId === A.character.rosterId);
+  if (!live) return;
+  const c = JSON.parse(JSON.stringify(live));
+  c.factions = c.factions || [];
+  const cur = c.factions.find((f) => f.name.toLowerCase() === B.name.toLowerCase());
+  const since = m.session != null ? `session ${m.session}` : m.date || undefined;
+  if (cur) {
+    if (/Former/.test(role)) { if (!/Former/.test(cur.role || 'Member')) { cur.was = cur.role || 'Member'; cur.untilSession = m.session ?? undefined; cur.until = since; } cur.role = role; }
+    else { cur.role = role; cur.since = cur.since || since; delete cur.was; delete cur.until; delete cur.untilSession; }
+  }
+  else c.factions.push({ name: B.name, role, kind: B.fields?.Kind || undefined, since });
+  const savedCopy = upsert(c);
+  // the Forge keeps its own copy of an open character: keep it in step
+  for (const t of state.tabs || []) if (t.rosterId === savedCopy.rosterId) t.factions = JSON.parse(JSON.stringify(savedCopy.factions));
+  if (state.current?.rosterId === savedCopy.rosterId) state.current.factions = JSON.parse(JSON.stringify(savedCopy.factions));
+  hooks.changed?.(savedCopy);
+}
+
+async function momentDialog({ a = null, b = null, kind = null } = {}) {
+  const all = [...world.entities.values()].sort((x, y) => x.name.localeCompare(y.name));
+  const nameOf = (id) => world.entities.get(id)?.name || '';
+  const subject = h('input', { type: 'text', list: 'wd-mo-all', placeholder: 'Who (or which faction, place, thing)', 'aria-label': 'Who', value: a ? nameOf(a) : '' });
+  const other = h('input', { type: 'text', list: 'wd-mo-all', placeholder: 'With whom / what', 'aria-label': 'Other party', value: b ? nameOf(b) : '' });
+  const kindSel = h('select', { 'aria-label': 'What happened', size: 1 });
+  const otherType = h('select', { 'aria-label': 'If new, make a' }, Object.entries(ENTITY_TYPES).map(([t, m]) => h('option', { value: t }, `new ${m.one.toLowerCase()}`)));
+  const subjectType = h('select', { 'aria-label': 'If new, make a' }, Object.entries(ENTITY_TYPES).map(([t, m]) => h('option', { value: t }, `new ${m.one.toLowerCase()}`)));
+  const latest = lastSession(world);
+  const session = h('input', { type: 'number', min: 0, value: latest || '', placeholder: 'S#', 'aria-label': 'Session', style: { maxWidth: '90px' } });
+  const date = h('input', { type: 'date', 'aria-label': 'Date', style: { maxWidth: '170px' } });
+  const note = h('input', { type: 'text', placeholder: 'Why, how, what it cost (optional)', 'aria-label': 'Note' });
+  const preview = h('p', { class: 'wd-mo-preview' });
+  const otherRow = h('div', { class: 'add-row', id: 'wd-mo-other' }, other, otherType);
+  const resolve = (input) => findByName(input.value);
+  const fillKinds = () => {
+    const A = resolve(subject); const B = resolve(other);
+    const ids = momentKindsFor(A ? A.type : (subject.value.trim() ? subjectType.value : null), B ? B.type : null);
+    const prev = kindSel.value || kind;
+    clear(kindSel);
+    kindSel.append(h('option', { value: '' }, 'What happened…'));
+    for (const g of MOMENT_GROUPS) {
+      const items = ids.filter((id) => MOMENT_KINDS[id].group === g);
+      if (items.length) kindSel.append(h('optgroup', { label: g }, items.map((id) => h('option', { value: id, selected: id === prev }, MOMENT_KINDS[id].label))));
+    }
+    if (prev && !ids.includes(prev)) kindSel.value = '';
+    refresh();
+  };
+  const refresh = () => {
+    const k = MOMENT_KINDS[kindSel.value];
+    const needsB = !!k?.b; const mayB = !!(k?.b || k?.optB);
+    otherRow.hidden = !mayB;
+    other.placeholder = needsB ? (k.b.length === 1 ? `Which ${typeMeta(k.b[0]).one.toLowerCase()}` : 'With whom / what') : 'With whom / what (optional)';
+    if (k && (k.b || k.optB)) { const t = (k.b || k.optB)[0]; otherType.value = t; }
+    const A = resolve(subject); const B = resolve(other);
+    const an = A?.name || subject.value.trim() || 'Someone'; const bn = B?.name || other.value.trim() || (needsB ? '…' : '');
+    preview.textContent = k ? `${session.value ? `Session ${session.value}: ` : ''}${momentSentence(kindSel.value, an, bn || null, note.value.trim())}${note.value.trim() && kindSel.value !== 'note' ? ` ${note.value.trim()}` : ''}` : 'Pick what happened.';
+    subjectType.hidden = !!A || !subject.value.trim();
+    otherType.hidden = !!B || !other.value.trim();
+  };
+  subject.addEventListener('input', fillKinds); other.addEventListener('input', fillKinds); kindSel.addEventListener('change', refresh); session.addEventListener('input', refresh); note.addEventListener('input', refresh); subjectType.addEventListener('change', fillKinds);
+  fillKinds();
+  const ok = await openDialog({
+    title: '⚡ What happened',
+    body: [
+      h('datalist', { id: 'wd-mo-all' }, all.map((x) => h('option', { value: x.name }, typeMeta(x.type).one))),
+      h('div', { class: 'add-row' }, subject, subjectType),
+      kindSel,
+      otherRow,
+      h('div', { class: 'add-row' }, h('label', { class: 'wd-inline' }, 'Session', session), h('label', { class: 'wd-inline' }, 'Date', date)),
+      note,
+      preview,
+      h('p', { class: 'hint', style: { margin: 0 } }, 'This writes a line on both timelines, starts the new tie at that session, ends the tie it replaces (it stays on the pages as "formerly") and, for a fate, marks the page. Undo it from any timeline.'),
+    ],
+    buttons: [{ label: 'Cancel', value: false }, { label: 'Record', value: true, primary: true }],
+  });
+  if (!ok) return;
+  const k = MOMENT_KINDS[kindSel.value];
+  if (!k) { toast('Pick what happened'); return momentDialog({ a, b, kind: kindSel.value }); }
+  let A = resolve(subject);
+  if (!A && subject.value.trim()) { const made = createEntity(saved, { type: subjectType.value, name: subject.value.trim() }); rebuild(); A = world.entities.get(made.id); }
+  if (!A) { toast('Who did it happen to?'); return momentDialog({ a, b, kind: kindSel.value }); }
+  let B = resolve(other);
+  if (!B && other.value.trim() && (k.b || k.optB)) { const made = createEntity(saved, { type: otherType.value, name: other.value.trim() }); rebuild(); B = world.entities.get(made.id); }
+  if (k.b && !B) { toast(`${k.label}: with whom?`); return momentDialog({ a: A.id, kind: kindSel.value }); }
+  rebuild();
+  const m = recordMoment(saved, world, { kind: kindSel.value, a: A.id, b: B?.id || null, session: session.value === '' ? null : Number(session.value), date: date.value || '', note: note.value.trim() });
+  if (!m) { toast('That did not fit (wrong kind of page for this change).'); return; }
+  save();
+  syncCharacterFactions(m);
+  rebuild();
+  toast(`Recorded: ${m.text}`);
+  if (ui.page === 'home' || ui.page === 'graph' || ui.page === 'vault') go(A.id); else renderWorld();
+}
+
+async function editMomentDialog(id) {
+  const m = (saved.moments || []).find((x) => x.id === id);
+  if (!m) return;
+  const session = h('input', { type: 'number', min: 0, value: m.session ?? '', style: { maxWidth: '90px' } });
+  const date = h('input', { type: 'date', value: m.date || '', style: { maxWidth: '170px' } });
+  const note = h('input', { type: 'text', value: m.note || '', placeholder: 'Note' });
+  const ok = await openDialog({ title: 'Edit this moment', body: [h('p', { style: { margin: 0 }, class: 'wd-mo-preview' }, world.moments.find((x) => x.id === id)?.text || ''), h('div', { class: 'add-row' }, h('label', { class: 'wd-inline' }, 'Session', session), h('label', { class: 'wd-inline' }, 'Date', date)), note], buttons: [{ label: 'Cancel', value: false }, { label: 'Undo this moment', value: 'undo', danger: true }, { label: 'Save', value: true, primary: true }] });
+  if (ok === 'undo') return undoMoment(id);
+  if (!ok) return;
+  updateMoment(saved, id, { session: session.value, date: date.value, note: note.value.trim() });
+  save(); renderWorld();
+}
+
+async function undoMoment(id) {
+  const m = world.moments.find((x) => x.id === id);
+  const ok = await openDialog({ title: 'Undo this moment?', body: h('p', { style: { margin: 0 } }, `"${m?.text || ''}" is removed from the timelines, the ties it made go, and the ties it ended come back.`), buttons: [{ label: 'Keep', value: false }, { label: 'Undo', value: true, danger: true }] });
+  if (!ok) return;
+  removeMoment(saved, id); save(); renderWorld(); toast('Undone');
 }
 
 // ---- campaign timeline & graph & vault -------------------------------------------------------------------------------------
 
-function timelineEvent(ev) {
+function timelineItem(it) {
+  if (it.kind === 'change') {
+    const m = it.m;
+    const A = world.entities.get(m.a); const B = m.b ? world.entities.get(m.b) : null;
+    const k = MOMENT_KINDS[m.kind];
+    return h('div', { class: 'wd-tl-ev change', style: { '--c': k?.group === 'Fate' ? '#8e1b1b' : k?.group === 'Factions' ? '#8a5cd6' : k?.group === 'Places' ? '#1a7f4b' : k?.group === 'Things' ? '#a8670b' : '#2f6fde' } },
+      h('div', { class: 'wd-tl-ev-when' }, h('b', { class: 'num' }, m.session != null ? `S${m.session}` : '•'), h('span', null, m.date || '')),
+      h('div', { class: 'wd-tl-ev-body' },
+        h('div', { class: 'wd-tl-change' }, h('span', { class: 'wd-tl-kind' }, k?.group || 'Change'), h('span', { class: 'wd-tl-ev-text' }, m.text)),
+        m.note ? h('p', null, m.note) : null,
+        h('div', { class: 'wd-chips' }, A ? pageLink(A, { chip: true }) : null, B ? pageLink(B, { chip: true }) : null, h('button', { type: 'button', class: 'linkish', onClick: () => editMomentDialog(m.id) }, 'edit'), h('button', { type: 'button', class: 'linkish danger', onClick: () => undoMoment(m.id) }, 'undo'))));
+  }
+  const ev = it.ev;
   const people = ev.connections.filter((c) => c.other.type === 'person').map((c) => c.other);
-  return h('div', { class: 'wd-tl-ev', style: { '--c': ev.color || typeMeta('event').color } },
-    h('div', { class: 'wd-tl-ev-when' }, h('b', { class: 'num' }, ev.session ? `S${ev.session}` : '•'), h('span', null, ev.date || '')),
+  return h('div', { class: `wd-tl-ev ${it.kind}`, style: { '--c': ev.color || typeMeta('event').color } },
+    h('div', { class: 'wd-tl-ev-when' }, h('b', { class: 'num' }, ev.session ? `S${ev.session}` : '•'), h('span', null, ev.date || ev.fields?.Date || '')),
     h('div', { class: 'wd-tl-ev-body' },
-      h('button', { type: 'button', class: 'wd-tl-ev-title', onClick: () => go(ev.id) }, ev.name),
+      h('div', { class: 'wd-tl-change' }, h('span', { class: 'wd-tl-kind' }, it.kind === 'session' ? 'Session' : it.kind === 'battle' ? 'Battle' : ev.fields?.Kind || 'Event'), h('button', { type: 'button', class: 'wd-tl-ev-title', onClick: () => go(ev.id) }, ev.name)),
       ev.summary ? h('p', null, ev.summary) : null,
       people.length ? h('div', { class: 'wd-chips' }, people.map((p) => pageLink(p, { chip: true }))) : null,
       ev.fields?.Points ? h('div', { class: 'wd-points-line' }, ev.fields.Points) : null));
 }
 
 function timelinePage() {
-  const evs = campaignTimeline(world);
+  const FILTERS = [['all', 'Everything'], ['session', 'Sessions'], ['battle', 'Battles'], ['event', 'Events'], ['change', 'What changed']];
+  const items = campaignTimeline(world, { kinds: ui.tlFilter === 'all' ? null : [ui.tlFilter] });
+  // group by session
+  const groups = [];
+  for (const it of items) {
+    const key = it.session != null ? `S${it.session}` : it.date || 'undated';
+    let g = groups[groups.length - 1];
+    if (!g || g.key !== key) { g = { key, session: it.session, date: it.date, items: [] }; groups.push(g); }
+    g.items.push(it);
+  }
   return h('div', { class: 'wd-page' },
-    h('header', { class: 'wd-hero small' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'Campaign'), h('h1', null, 'Timeline'), h('p', { class: 'wd-tagline' }, 'Every session from every journal, every recorded battle and every event page, in order. Click anyone to see what it did to them.')),
-      h('button', { class: 'btn', type: 'button', onClick: () => newPageDialog('event') }, '+ Event')),
-    evs.length ? h('div', { class: 'wd-tl' }, evs.map(timelineEvent)) : h('div', { class: 'empty' }, h('h2', null, 'Nothing has happened yet'), h('p', null, 'Add a session to a character\'s campaign journal (Bio page), record a Battle Room fight, or add an event page.')));
+    h('header', { class: 'wd-hero small' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'Campaign'), h('h1', null, 'Timeline'), h('p', { class: 'wd-tagline' }, 'Every session from every journal, every recorded battle and event, and every change you recorded: who turned on whom, who joined what, who fell. In order, by session.')),
+      h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', type: 'button', onClick: () => momentDialog({}) }, '⚡ What happened'), h('button', { class: 'btn', type: 'button', onClick: () => newPageDialog('event') }, '+ Event'))),
+    h('div', { class: 'wd-filter-row' }, FILTERS.map(([k, label]) => h('button', { type: 'button', class: `wd-pill ${ui.tlFilter === k ? 'active' : ''}`, onClick: () => { ui.tlFilter = k; renderWorld(); } }, label))),
+    items.length ? h('div', { class: 'wd-tl-groups' }, groups.map((g) => h('section', { class: 'wd-tl-group' },
+      h('h2', { class: 'wd-tl-session' }, g.session != null ? `Session ${g.session}` : g.date || 'Undated', h('span', { class: 'pts' }, `${g.items.length}`)),
+      h('div', { class: 'wd-tl' }, g.items.map(timelineItem))))) : h('div', { class: 'empty' }, h('h2', null, 'Nothing has happened yet'), h('p', null, 'Add a session to a character\'s campaign journal (Bio page), record a Battle Room fight, add an event page, or record what happened with the ⚡ button.')));
 }
 
 function graphPage() {
+  const last = lastSession(world);
+  const asOf = ui.asOf == null || ui.asOf > last ? null : ui.asOf;
   const nodes = [...world.entities.values()].filter((e) => ui.graphTypes.has(e.type));
   const ids = new Set(nodes.map((n) => n.id));
-  const edges = world.links.filter((l) => ids.has(l.from) && ids.has(l.to) && ui.graphGroups.has(RELATIONS[l.rel]?.group));
+  const base = asOf == null ? world.links.filter((l) => !l.until || ui.showPast) : linksAsOf(world, asOf);
+  const edges = base.filter((l) => ids.has(l.from) && ids.has(l.to) && ui.graphGroups.has(RELATIONS[l.rel]?.group));
   const linked = new Set(edges.flatMap((l) => [l.from, l.to]));
   const shown = nodes.filter((n) => linked.has(n.id) || n.character);
   const W = 1100; const H = Math.max(520, Math.min(900, 300 + shown.length * 9));
   const pos = layoutGraph(shown.map((n) => ({ id: n.id })), edges, { width: W, height: H, iterations: 260, seed: shown.length * 7 + edges.length, margin: 80 });
   const typeToggle = (t) => h('label', { class: 'wd-toggle', style: { '--c': typeMeta(t).color } }, h('input', { type: 'checkbox', checked: ui.graphTypes.has(t), onChange: (e) => { if (e.target.checked) ui.graphTypes.add(t); else ui.graphTypes.delete(t); renderWorld(); } }), `${typeMeta(t).glyph} ${typeMeta(t).label}`);
   const groupToggle = (g) => h('label', { class: 'wd-toggle', style: { '--c': RELATIONS[Object.keys(RELATIONS).find((k) => RELATIONS[k].group === g)]?.color } }, h('input', { type: 'checkbox', checked: ui.graphGroups.has(g), onChange: (e) => { if (e.target.checked) ui.graphGroups.add(g); else ui.graphGroups.delete(g); renderWorld(); } }), g);
+  const slider = last > 0 ? h('div', { class: 'wd-asof' },
+    h('span', { class: 'label' }, 'As of'),
+    h('input', { type: 'range', min: 0, max: last + 1, step: 1, value: asOf == null ? last + 1 : asOf, 'aria-label': 'As of session', onInput: (e) => { const v = Number(e.target.value); ui.asOf = v > last ? null : v; renderWorld(); } }),
+    h('b', { class: 'num' }, asOf == null ? 'Now' : asOf === 0 ? 'Before play' : `Session ${asOf}`),
+    asOf == null ? h('label', { class: 'wd-toggle', style: { '--c': '#9a8fb5' } }, h('input', { type: 'checkbox', checked: ui.showPast, onChange: (e) => { ui.showPast = e.target.checked; renderWorld(); } }), 'Show past ties (dashed)') : null) : null;
   return h('div', { class: 'wd-page' },
-    h('header', { class: 'wd-hero small' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'Everyone'), h('h1', null, 'Relationship graph'), h('p', { class: 'wd-tagline' }, `${shown.length} pages, ${edges.length} connections. Lines are coloured by the kind of tie; click a node to open its page.`))),
-    h('div', { class: 'wd-filters' }, h('div', { class: 'wd-filter-row' }, Object.keys(ENTITY_TYPES).map(typeToggle)), h('div', { class: 'wd-filter-row' }, RELATION_GROUPS.map(groupToggle))),
+    h('header', { class: 'wd-hero small' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'Everyone'), h('h1', null, 'Relationship graph'), h('p', { class: 'wd-tagline' }, `${shown.length} pages, ${edges.length} ties${asOf != null ? ` as they stood at session ${asOf}` : ''}. Lines are coloured by the kind of tie; click a node to open its page. Wind the slider back to see the world before a betrayal, a death or a move.`))),
+    h('div', { class: 'wd-filters' }, slider, h('div', { class: 'wd-filter-row' }, Object.keys(ENTITY_TYPES).map(typeToggle)), h('div', { class: 'wd-filter-row' }, RELATION_GROUPS.map(groupToggle))),
     shown.length ? h('div', { class: 'wd-graph-wrap big' },
       svg('svg', { viewBox: `0 0 ${W} ${H}`, class: 'wd-graph', role: 'img', 'aria-label': 'Relationship graph' },
-        edges.map((l) => { const a = pos.get(l.from); const b = pos.get(l.to); return svg('line', { x1: a.x, y1: a.y, x2: b.x, y2: b.y, stroke: RELATIONS[l.rel]?.color || '#999', 'stroke-width': 1.6, 'stroke-opacity': 0.7 }, svg('title', null, `${world.entities.get(l.to).name} is ${world.entities.get(l.from).name}'s ${RELATIONS[l.rel]?.label.toLowerCase()}`)); }),
+        edges.map((l) => { const a = pos.get(l.from); const b = pos.get(l.to); return svg('line', { x1: a.x, y1: a.y, x2: b.x, y2: b.y, stroke: RELATIONS[l.rel]?.color || '#999', 'stroke-width': 1.6, 'stroke-opacity': l.until ? 0.35 : 0.7, 'stroke-dasharray': l.until ? '5 4' : null }, svg('title', null, `${world.entities.get(l.to).name} is ${world.entities.get(l.from).name}'s ${RELATIONS[l.rel]?.label.toLowerCase()}${l.since?.session != null ? ` since S${l.since.session}` : ''}${l.until ? ` (ended ${whenText(l.until)})` : ''}`)); }),
         shown.map((n) => { const p = pos.get(n.id); const color = n.color || typeMeta(n.type).color; const r = Math.min(22, 8 + Math.sqrt(n.degree) * 3 + (n.character ? 4 : 0)); return svg('g', { class: 'wd-node', transform: `translate(${p.x},${p.y})`, style: 'cursor:pointer', onClick: () => go(n.id) },
-          svg('title', null, `${n.name} (${typeMeta(n.type).one}, ${n.degree} connections)`),
-          svg('circle', { r, fill: color, stroke: 'var(--surface)', 'stroke-width': 2 }),
+          svg('title', null, `${n.name} (${typeMeta(n.type).one}, ${n.degree} ties${n.status ? `, ${n.status}` : ''})`),
+          svg('circle', { r, fill: color, stroke: 'var(--surface)', 'stroke-width': 2, 'stroke-dasharray': n.status === 'Dead' || n.status === 'Destroyed' || n.status === 'Disbanded' ? '3 2' : null }),
           svg('text', { 'text-anchor': 'middle', dy: 4, fill: inkFor(color), 'font-size': Math.max(8, r * 0.7), 'font-weight': 700 }, n.type === 'person' ? initialsOf(n.name) : typeMeta(n.type).glyph),
           svg('text', { 'text-anchor': 'middle', dy: r + 12, fill: 'var(--ink)', 'font-size': 10.5, 'font-weight': n.character ? 800 : 500 }, n.name.length > 22 ? `${n.name.slice(0, 21)}…` : n.name)); }))) : h('div', { class: 'empty' }, h('h2', null, 'No one to draw yet'), h('p', null, 'Save characters to the roster; their families, mentors, rivals and enemies fill the graph.')));
 }
@@ -15029,12 +15711,14 @@ function vaultPage() {
       let n = 0;
       for (const [id, ent] of Object.entries(w.entities || {})) { saved.entities[id] = ent; n++; }
       for (const l of w.links || []) if (!saved.links.some((x) => x.id === l.id)) saved.links.push(l);
+      for (const m of w.moments || []) if (!(saved.moments || []).some((x) => x.id === m.id)) (saved.moments = saved.moments || []).push(m);
+      saved.linkEnds = { ...(saved.linkEnds || {}), ...(w.linkEnds || {}) };
       saved.overrides = { ...saved.overrides, ...(w.overrides || {}) };
       if (w.name && (!saved.name || saved.name === 'My World')) { saved.name = w.name; saved.tagline = w.tagline || saved.tagline; saved.description = w.description || saved.description; }
       let chars = 0;
       for (const ch of data.characters || []) { if (ch?.abilities && ch.pl != null) { const c = { ...ch }; delete c.savedAt; upsert(c); chars++; } }
       save(); renderWorld();
-      toast(`Imported ${n} page${n === 1 ? '' : 's'}, ${(w.links || []).length} links${chars ? ` and ${chars} characters` : ''}`);
+      toast(`Imported ${n} page${n === 1 ? '' : 's'}, ${(w.links || []).length} links, ${(w.moments || []).length} moments${chars ? ` and ${chars} characters` : ''}`);
     } catch (err) { toast(`Import failed: ${err.message}`); }
   } });
   const exportJson = () => {
@@ -15048,12 +15732,13 @@ function vaultPage() {
     toast(`${Object.keys(files).length} Markdown pages zipped. Unzip into an Obsidian vault.`);
   };
   const manual = Object.keys(saved.entities).length;
+  const moments = (saved.moments || []).length;
   return h('div', { class: 'wd-page' },
-    h('header', { class: 'wd-hero small' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'Vault'), h('h1', null, 'Import and export'), h('p', { class: 'wd-tagline' }, 'The world lives in this browser. Save it to a file to keep it, move it, or hand it to your players.'))),
+    h('header', { class: 'wd-hero small' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'Vault'), h('h1', null, 'Import and export'), h('p', { class: 'wd-tagline' }, 'The world lives in this browser (and in the desktop app\'s data folder). Save it to a file to keep it, move it, or hand it to your players.'))),
     h('div', { class: 'gm' },
-      h('section', { class: 'panel' }, h('h2', null, 'Obsidian vault (Markdown)'), h('p', { style: { margin: 0 } }, 'One .md page per person, faction, location, event and item, with [[wikilinks]] between them, YAML front matter, infobox tables and timelines. Unzip the folder into any Obsidian vault and the graph view lights up.'), h('button', { class: 'btn primary', type: 'button', onClick: exportMd }, `Download ${world.entities.size} pages as Markdown (.zip)`)),
-      h('section', { class: 'panel' }, h('h2', null, 'DCUGen vault (.json)'), h('p', { style: { margin: 0 } }, `Everything: ${manual} hand-made page${manual === 1 ? '' : 's'}, ${saved.links.length} hand-made link${saved.links.length === 1 ? '' : 's'}, your edits to automatic pages, and the ${state.roster.length} character${state.roster.length === 1 ? '' : 's'} on your roster. Import merges into this world.`), h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', type: 'button', onClick: exportJson }, 'Save vault'), h('button', { class: 'btn', type: 'button', onClick: () => fileIn.click() }, 'Import vault'), fileIn)),
-      h('section', { class: 'panel' }, h('h2', null, 'Reset'), h('p', { style: { margin: 0 } }, 'Removes hand-made pages, links and edits. Roster characters and their bios stay, so their pages come straight back.'), h('button', { class: 'btn ghost danger', type: 'button', onClick: async () => { const ok = await openDialog({ title: 'Reset the world?', body: h('p', { style: { margin: 0 } }, 'Hand-made pages, links and edits are deleted. Export the vault first if you want a copy.'), buttons: [{ label: 'Keep', value: false }, { label: 'Reset', value: true, danger: true }] }); if (ok) { saved = emptyWorld(); save(); go('home'); } } }, 'Reset the world'))));
+      h('section', { class: 'panel' }, h('h2', null, 'Obsidian vault (Markdown)'), h('p', { style: { margin: 0 } }, 'One .md page per person, faction, location, event and item, with [[wikilinks]] between them, YAML front matter, infobox tables, current and former ties, and timelines. Unzip the folder into any Obsidian vault and the graph view lights up.'), h('button', { class: 'btn primary', type: 'button', onClick: exportMd }, `Download ${world.entities.size} pages as Markdown (.zip)`)),
+      h('section', { class: 'panel' }, h('h2', null, 'DCUGen vault (.json)'), h('p', { style: { margin: 0 } }, `Everything: ${manual} hand-made page${manual === 1 ? '' : 's'}, ${saved.links.length} hand-made tie${saved.links.length === 1 ? '' : 's'}, ${moments} recorded moment${moments === 1 ? '' : 's'}, your edits to automatic pages, and the ${state.roster.length} character${state.roster.length === 1 ? '' : 's'} on your roster. Import merges into this world.`), h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', type: 'button', onClick: exportJson }, 'Save vault'), h('button', { class: 'btn', type: 'button', onClick: () => fileIn.click() }, 'Import vault'), fileIn)),
+      h('section', { class: 'panel' }, h('h2', null, 'Reset'), h('p', { style: { margin: 0 } }, 'Removes hand-made pages, ties, moments and edits. Roster characters and their bios stay, so their pages come straight back.'), h('button', { class: 'btn ghost danger', type: 'button', onClick: async () => { const ok = await openDialog({ title: 'Reset the world?', body: h('p', { style: { margin: 0 } }, 'Hand-made pages, ties, moments and edits are deleted. Export the vault first if you want a copy.'), buttons: [{ label: 'Keep', value: false }, { label: 'Reset', value: true, danger: true }] }); if (ok) { saved = emptyWorld(); save(); go('home'); } } }, 'Reset the world'))));
 }
 
 // ---- render ----------------------------------------------------------------------------------------------------------------
@@ -15287,6 +15972,7 @@ async function boot() {
   initWorld(R, document.getElementById('view-world'), {
     open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
     throwIn: throwInBattle,
+    changed: () => renderCurrent(),
   });
   initForge(R, document.getElementById('view-forge'), {
     editPower: (path) => { openInLab(state.current, path); showTab('lab'); },

@@ -158,6 +158,7 @@ async function boot() {
   initWorld(R, document.getElementById('view-world'), {
     open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
     throwIn: throwInBattle,
+    changed: () => renderCurrent(),
   });
   initForge(R, document.getElementById('view-forge'), {
     editPower: (path) => { openInLab(state.current, path); showTab('lab'); },
