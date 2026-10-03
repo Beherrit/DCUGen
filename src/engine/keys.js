@@ -163,6 +163,7 @@ export function generatePerson(R, ctx) {
     const entry = (R.raw.catalog?.minions || []).find((e) => e.id === id) || (R.raw.catalog?.minions || [])[0];
     ch = catalogToCharacter(entry);
     ch.minion = false;
+    ch.npc = true;
     ch.archetype = { id: `npc-${entry.id}`, name: entry.name };
     ch.alignment = /enemy|crime|criminal|cult|villain/i.test(text) ? 'villain' : 'hero';
     ch.theme = { name: entry.name, color: '#8a5a44' };

@@ -9,6 +9,7 @@ import { costMath } from '../engine/powersmith.js';
 import { ABILITIES, BUYABLE_DEFENSES } from '../engine/rules.js';
 import { powerCost } from '../engine/costs.js';
 import { gearCatalog, gearToEquipment, gearToDevice } from '../engine/gear.js';
+import { portraitBlock } from './portrait.js';
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const clone = (x) => JSON.parse(JSON.stringify(x));
 
@@ -56,7 +57,8 @@ export function renderFile(ch, R, opts = {}) {
     h('span', { class: 'chip' }, ch.alignment === 'villain' ? 'Villain' : 'Hero'),
     id.base && h('span', { class: 'chip' }, id.base),
   ];
-  const head = h('div', { class: `file-head ${editing ? 'editing' : ''}` },
+  const portrait = opts.noPortrait ? null : portraitBlock(ch, { change: opts.onChange ? change : null });
+  const head = h('div', { class: `file-head ${editing ? 'editing' : ''} ${portrait && !ch.portrait?.hidden ? 'has-portrait' : ''}` },
     h('div', { class: 'pl-badge' },
       h('b', { class: 'num' }, ch.pl), h('span', null, 'POWER LEVEL'),
       editing ? stepper(ch.pl, (d) => change((c) => { c.pl = Math.max(1, Math.min(20, c.pl + d)); }), { min: 1, max: 20, label: 'power level' }) : null),
@@ -66,7 +68,8 @@ export function renderFile(ch, R, opts = {}) {
         h('input', { class: 'codename-input', type: 'text', id: 'edit-codename', value: id.codename || '', 'aria-label': 'Codename', onChange: (e) => change((c) => { c.identity = { ...c.identity, codename: e.target.value }; }) }),
         h('input', { class: 'realname-input', type: 'text', id: 'edit-realname', value: id.realName || '', 'aria-label': 'Real name', onChange: (e) => change((c) => { c.identity = { ...c.identity, realName: e.target.value }; }) }))
       : [h('h1', { class: 'codename' }, id.codename || 'Unnamed'), h('div', { class: 'realname' }, [id.realName, id.age ? `${id.age}` : null, id.occupation].filter(Boolean).join(' · '))],
-    h('div', { class: 'head-tags' }, tags));
+    h('div', { class: 'head-tags' }, tags),
+    portrait);
   head.style.setProperty('--hero', hero);
   head.style.setProperty('--hero-ink', inkFor(hero));
 

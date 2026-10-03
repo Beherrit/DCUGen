@@ -67,3 +67,24 @@ test('characters without a bio get a shell and a journal; downtime rolls are cle
   }
   assert.equal(rollDowntimeEvent(R, full, { seed: 'same' }).text, rollDowntimeEvent(R, full, { seed: 'same' }).text);
 });
+
+test('an enemy is a full villain at a fitting power level, in the people list with a working key', async () => {
+  const { addEnemy, ENEMY_LEVELS } = await import('../src/engine/journal.js');
+  const { fromKeySync } = await import('../src/engine/keys.js');
+  const ch = generateCharacter(R, { seed: 'enemy-1', pl: 10 });
+  for (const level of Object.keys(ENEMY_LEVELS)) {
+    const { person, villain } = addEnemy(ch, R, { level, seed: `e-${level}` });
+    assert.equal(villain.alignment, 'villain');
+    assert.ok(villain.pl >= 10 + ENEMY_LEVELS[level].plShift[0] && villain.pl <= 10 + ENEMY_LEVELS[level].plShift[1]);
+    assert.ok(ch.bio.people.includes(person));
+    assert.ok(person.key, 'has a key');
+    const back = fromKeySync(R, person.key).character;
+    assert.equal(back.identity.codename, person.name);
+    assert.ok(/who .+\.$/.test(person.who));
+    assert.ok(ch.bio.timeline.some((t) => t.enemyOf === person.name));
+  }
+  assert.equal(ch.complications.filter((c) => c.type === 'Enemy').length, 3);
+  const named = addEnemy(ch, R, { level: 'nemesis', seed: 'e-named', name: 'Doctor Dread', complication: false });
+  assert.equal(named.person.name, 'Doctor Dread');
+  assert.equal(named.person.relation, 'Nemesis');
+});

@@ -9,6 +9,7 @@ import { buildWorld, emptyWorld, ENTITY_TYPES, RELATIONS, RELATION_GROUPS, group
 import { zip } from '../engine/xlsx.js';
 import { sheet as makeSheet } from '../engine/render.js';
 import { fromKeySync } from '../engine/keys.js';
+import { portraitOf } from '../engine/portrait.js';
 
 const KEY = 'dcugen.world.v1';
 let R; let root; let hooks = {};
@@ -236,8 +237,9 @@ function entityPage(e) {
       if (ok) { deleteEntity(saved, e.id); save(); go('home'); }
     } }, 'Remove'));
 
+  const por = ch && !ch.portrait?.hidden ? portraitOf(ch) : null;
   const head = h('header', { class: 'wd-head', style: { '--c': color, '--c-ink': inkFor(color) } },
-    h('div', { class: 'wd-head-glyph' }, e.type === 'person' ? initialsOf(e.name) : meta.glyph),
+    por ? h('div', { class: 'wd-head-glyph has-img' }, h('img', { src: por.url, alt: '', loading: 'lazy', referrerpolicy: 'no-referrer', onError: (ev) => { ev.target.remove(); } }), h('span', null, initialsOf(e.name))) : h('div', { class: 'wd-head-glyph' }, e.type === 'person' ? initialsOf(e.name) : meta.glyph),
     h('div', { class: 'wd-head-text' },
       h('div', { class: 'eyebrow' }, `${meta.one}${ch ? ` · PL ${ch.pl} ${ch.archetype?.name || ''}` : ''}${e.fields?.Side ? ` · ${e.fields.Side}` : ''}`),
       h('h1', null, e.name),

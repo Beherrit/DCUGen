@@ -122,9 +122,13 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 /* ---------- forge layout ---------- */
 .forge { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 20px; align-items: start; }
 .rail {
-  position: sticky; top: 70px; display: grid; gap: 14px;
+  position: sticky; top: 70px; display: grid; gap: 14px; align-content: start;
+  max-height: calc(100vh - 86px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin;
   background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; box-shadow: var(--shadow);
 }
+.rail { min-width: 0; }
+.rail > * { min-width: 0; }
+.rail .btn { white-space: normal; }
 .rail h2 { font: 800 22px/1 var(--font-display); letter-spacing: .03em; text-transform: uppercase; }
 .rail .hint { font-size: 12.5px; color: var(--ink-3); margin: 0; }
 .range-row { display: flex; justify-content: space-between; font: 600 12px/1 var(--font-label); color: var(--ink-3); }
@@ -471,7 +475,7 @@ details > summary { cursor: pointer; color: var(--ink-2); font: 600 12.5px/1.4 v
 }
 @media (max-width: 860px) {
   .forge { grid-template-columns: minmax(0, 1fr); }
-  .rail { position: static; }
+  .rail { position: static; max-height: none; overflow: visible; }
   .brand-sub { display: none; }
 }
 @media (max-width: 520px) {
@@ -905,3 +909,26 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 .wd-field-row { display: grid; grid-template-columns: minmax(100px, .7fr) minmax(0, 1.3fr) auto; gap: 4px; align-items: center; }
 .wd-field-row input { padding: 5px 7px; font-size: 13px; }
 @media (max-width: 1000px) { .wd-layout { grid-template-columns: minmax(0, 1fr); } .wd-side { position: static; max-height: none; } .wd-body-grid { grid-template-columns: minmax(0, 1fr); } .wd-counts { grid-template-columns: repeat(3, auto); } }
+
+/* ---------- portraits ---------- */
+.file-head.has-portrait { padding-right: 200px; min-height: 262px; }
+.file-head.has-portrait .pl-badge { right: 200px; }
+.portrait.file { position: absolute; top: 16px; right: 20px; width: 160px; display: grid; gap: 6px; }
+.portrait-frame { position: relative; aspect-ratio: 4 / 5; border-radius: 6px; overflow: hidden; background: rgba(0, 0, 0, .3); box-shadow: 0 2px 10px rgba(0, 0, 0, .35), 0 0 0 3px rgba(255, 255, 255, .55); }
+.portrait-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.portrait-status { position: absolute; inset: 0; display: grid; place-items: center; padding: 8px; text-align: center; font: 600 12px/1.3 var(--font-label); color: #fff; background: rgba(0, 0, 0, .45); }
+.portrait-status.bad { background: color-mix(in srgb, var(--hero) 70%, #000); }
+.portrait-frame:has(.portrait-status.bad) .portrait-img { visibility: hidden; }
+.portrait-tools { display: flex; flex-wrap: wrap; gap: 3px; align-items: center; }
+.portrait-tools .btn { padding: 3px 7px; font-size: 11.5px; background: rgba(0, 0, 0, .25); border-color: rgba(255, 255, 255, .35); color: var(--hero-ink); }
+.portrait-tools .x { color: var(--hero-ink); opacity: .8; }
+.portrait.hidden { position: absolute; top: 72px; right: 20px; width: auto; }
+.wd-head-glyph.has-img { position: relative; overflow: hidden; width: 96px; height: 96px; }
+.wd-head-glyph.has-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.wd-head-glyph.has-img span { position: relative; z-index: -1; }
+@media (max-width: 720px) {
+  .file-head.has-portrait { padding-right: 24px; padding-top: 70px; }
+  .portrait.file { position: static; width: 140px; margin-top: 10px; }
+  .file-head.has-portrait .pl-badge { right: 22px; }
+}
+@media print { .portrait-tools { display: none; } }

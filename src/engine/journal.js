@@ -9,6 +9,9 @@
 // its id so the journal can show what the session paid for.
 
 import { awardPoints } from './advancement.js';
+import { generateCharacter } from './generator.js';
+import { characterKey } from './keys.js';
+import { makeRng } from './rng.js';
 
 const newId = () => `j-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 const today = () => new Date().toISOString().slice(0, 10);
@@ -162,4 +165,95 @@ export function journalText(ch) {
     out.push('');
   }
   return out.join('\n').trim();
+}
+
+// ---- enemies ----------------------------------------------------------------------------------
+//
+// Some heroes collect enemies. A nuisance keeps turning up; a threat means it; a nemesis has made
+// it personal. The enemy is a full villain rolled at a power level that fits the threat, and the
+// person entry carries their key, so they open as a complete character with their own bio.
+
+export const ENEMY_LEVELS = {
+  nuisance: { label: 'Nuisance', plShift: [-4, -2], relation: 'Enemy', blurb: 'Outclassed, annoying, and never quite gone.' },
+  threat: { label: 'Threat', plShift: [-1, 1], relation: 'Enemy', blurb: 'A real danger who means every word.' },
+  nemesis: { label: 'Nemesis', plShift: [0, 2], relation: 'Nemesis', blurb: 'Their opposite number. It\'s personal, and it will not end well for one of them.' },
+};
+
+const ENEMY_REASONS = {
+  nuisance: [
+    'keeps robbing the same three banks and takes it personally every time {hero} shows up',
+    'blames {hero} for a job that went wrong years ago and has never let it go',
+    'runs a small crew that {hero} keeps breaking up, and keeps rebuilding it',
+    'sees {hero} as the one thing standing between them and the big leagues',
+    'picked a fight with {hero} on a dare and has been losing it ever since',
+    'got {hero} on camera at a bad moment and has milked it for all it is worth',
+    'is convinced {hero} is a fraud and keeps trying to prove it in public',
+    'wants {hero}\'s territory, costume, name, or all three',
+    'escapes every month, calls {hero} out every month, and loses every month',
+    'thinks {hero} owes them money, and has started charging interest',
+  ],
+  threat: [
+    'wants {hero} out of the way and has the means to do it',
+    'runs the operation {hero} has been dismantling piece by piece, and has had enough',
+    'was put away by {hero} once, and came back with friends',
+    'has been hired, by someone who will not give a name, to make {hero} stop',
+    'believes {hero} is a danger to the city and intends to prove it the hard way',
+    'has studied {hero}\'s every fight and found the weak point',
+    'needs something only {hero} is protecting, and will go through anyone to get it',
+    'shares {hero}\'s origin and none of {hero}\'s scruples',
+    'has already hurt someone close to {hero}, and promised that was only the start',
+    'is building toward something big, and {hero} is the loose end',
+  ],
+  nemesis: [
+    'is everything {hero} might have become, and knows it',
+    'was there the day {hero} got powers, and got the mirror image',
+    'blames {hero} for the loss that made them, and has built a life around paying it back',
+    'was once {hero}\'s closest ally, and has never forgiven the betrayal, real or imagined',
+    'cannot be beaten for good: every defeat only teaches them more about {hero}',
+    'knows {hero}\'s real name, and is saving it for the right moment',
+    'wants {hero} to join them, and will burn the city down to make the offer convincing',
+    'has decided the two of them are the only ones who matter, and the rest of the world is scenery',
+    'kills what {hero} protects, slowly, to see what it takes to make {hero} break the rules',
+    'was made by the same hands as {hero}, and intends to be the only one left',
+  ],
+};
+const ENEMY_STATUS = {
+  nuisance: ['At large, and probably planning something small.', 'Back in a cell, for now.', 'Lying low after the last beating.', 'Sending threatening letters from a holding cell.'],
+  threat: ['At large.', 'Escaped custody last month.', 'Running the operation from somewhere {hero} cannot reach.', 'Watching, waiting for the right moment.'],
+  nemesis: ['At large, and {hero} can feel it.', 'Locked away, for whatever that is worth.', 'Missing, presumed plotting.', 'Closer than {hero} thinks.'],
+};
+
+/**
+ * Roll an enemy for a character and add them to their life (people, timeline, and a complication if asked).
+ * opts: { level: 'nuisance'|'threat'|'nemesis', seed, name, complication, theme, archetype }
+ * Returns { person, villain }.
+ */
+export function addEnemy(ch, R, { level = 'threat', seed = randomSeedFor(ch), name, complication = true, theme = null, archetype = null } = {}) {
+  const L = ENEMY_LEVELS[level] || ENEMY_LEVELS.threat;
+  const rng = makeRng(`${seed}::enemy`);
+  const basePl = Math.max(1, Number(ch.pl) || 10);
+  const pl = Math.max(1, Math.min(20, basePl + rng.int(L.plShift[0], L.plShift[1])));
+  const villain = generateCharacter(R, { seed: `${seed}::villain`, pl, alignment: 'villain', chaos: 0.35, theme, archetype });
+  if (name) villain.identity = { ...villain.identity, codename: name };
+  const hero = ch.identity?.codename || ch.identity?.realName || 'them';
+  const fill = (t) => t.replace(/\{hero\}/g, hero);
+  const reason = fill(rng.pick(ENEMY_REASONS[level] || ENEMY_REASONS.threat));
+  const status = fill(rng.pick(ENEMY_STATUS[level] || ENEMY_STATUS.threat));
+  const codename = villain.identity.codename;
+  const who = `${codename}${villain.identity.realName && villain.identity.realName !== codename ? ` (${villain.identity.realName})` : ''}, a PL ${pl} ${String(villain.archetype?.name || 'villain').toLowerCase()}${villain.theme?.name ? ` with ${villain.theme.name.toLowerCase()} powers` : ''}, who ${reason}.`;
+  const bio = ensureBio(ch);
+  const person = { name: codename, relation: L.relation, who, status, key: characterKey(R, villain), enemy: { level, pl, seed } };
+  bio.people = [...bio.people.filter((p) => p.name !== codename), person];
+  const age = Number.isFinite(Number(ch.identity?.age)) ? Number(ch.identity.age) : (bio.timeline.length ? Math.max(...bio.timeline.map((t) => t.age || 0)) : 0);
+  bio.timeline.push({ age, stage: 'In play', text: `Made an enemy: ${codename}, who ${reason}.`, tags: ['play', 'enemy', level], enemyOf: codename });
+  if (complication) {
+    const type = level === 'nemesis' ? 'Enemy' : 'Enemy';
+    const text = `${level === 'nemesis' ? 'Nemesis' : L.label}: ${codename} ${reason}.`;
+    ch.complications = [...(ch.complications || []).filter((c) => !(c.type === type && c.text === text)), { type, text }];
+  }
+  return { person, villain };
+}
+
+function randomSeedFor(ch) {
+  return `${ch.seed || ch.identity?.codename || 'enemy'}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 }

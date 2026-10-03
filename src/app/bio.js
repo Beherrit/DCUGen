@@ -5,6 +5,7 @@ import { h, toast, copyText, inkFor } from './dom.js';
 import { generateBio, rerollSection, bioText } from '../engine/lifepath.js';
 import { randomSeed } from '../engine/rng.js';
 import { journalSection } from './journal.js';
+import { portraitBlock } from './portrait.js';
 
 const SIDE_LABEL = { light: 'Lightside', dark: 'Darkside', neutral: 'Neutral', exotic: 'Exotic' };
 
@@ -16,10 +17,12 @@ export function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
   const hero = ch.theme?.color || '#c8202f';
   const id = ch.identity || {};
   const bio = ch.bio;
-  const head = h('div', { class: 'file-head' },
+  const portrait = portraitBlock(ch, { change: change || null });
+  const head = h('div', { class: `file-head ${portrait && !ch.portrait?.hidden ? 'has-portrait' : ''}` },
     h('div', { class: 'eyebrow' }, 'Biography'),
     h('h1', { class: 'codename' }, id.codename || 'Unnamed'),
-    h('div', { class: 'realname' }, [id.realName, id.age ? `age ${id.age}` : null, id.occupation, id.homeland?.country].filter(Boolean).join(' · ')));
+    h('div', { class: 'realname' }, [id.realName, id.age ? `age ${id.age}` : null, id.occupation, id.homeland?.country].filter(Boolean).join(' · ')),
+    portrait);
   head.style.setProperty('--hero', hero);
   head.style.setProperty('--hero-ink', inkFor(hero));
 

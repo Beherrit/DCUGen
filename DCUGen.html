@@ -133,9 +133,13 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 /* ---------- forge layout ---------- */
 .forge { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 20px; align-items: start; }
 .rail {
-  position: sticky; top: 70px; display: grid; gap: 14px;
+  position: sticky; top: 70px; display: grid; gap: 14px; align-content: start;
+  max-height: calc(100vh - 86px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin;
   background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; box-shadow: var(--shadow);
 }
+.rail { min-width: 0; }
+.rail > * { min-width: 0; }
+.rail .btn { white-space: normal; }
 .rail h2 { font: 800 22px/1 var(--font-display); letter-spacing: .03em; text-transform: uppercase; }
 .rail .hint { font-size: 12.5px; color: var(--ink-3); margin: 0; }
 .range-row { display: flex; justify-content: space-between; font: 600 12px/1 var(--font-label); color: var(--ink-3); }
@@ -482,7 +486,7 @@ details > summary { cursor: pointer; color: var(--ink-2); font: 600 12.5px/1.4 v
 }
 @media (max-width: 860px) {
   .forge { grid-template-columns: minmax(0, 1fr); }
-  .rail { position: static; }
+  .rail { position: static; max-height: none; overflow: visible; }
   .brand-sub { display: none; }
 }
 @media (max-width: 520px) {
@@ -916,6 +920,29 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 .wd-field-row { display: grid; grid-template-columns: minmax(100px, .7fr) minmax(0, 1.3fr) auto; gap: 4px; align-items: center; }
 .wd-field-row input { padding: 5px 7px; font-size: 13px; }
 @media (max-width: 1000px) { .wd-layout { grid-template-columns: minmax(0, 1fr); } .wd-side { position: static; max-height: none; } .wd-body-grid { grid-template-columns: minmax(0, 1fr); } .wd-counts { grid-template-columns: repeat(3, auto); } }
+
+/* ---------- portraits ---------- */
+.file-head.has-portrait { padding-right: 200px; min-height: 262px; }
+.file-head.has-portrait .pl-badge { right: 200px; }
+.portrait.file { position: absolute; top: 16px; right: 20px; width: 160px; display: grid; gap: 6px; }
+.portrait-frame { position: relative; aspect-ratio: 4 / 5; border-radius: 6px; overflow: hidden; background: rgba(0, 0, 0, .3); box-shadow: 0 2px 10px rgba(0, 0, 0, .35), 0 0 0 3px rgba(255, 255, 255, .55); }
+.portrait-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.portrait-status { position: absolute; inset: 0; display: grid; place-items: center; padding: 8px; text-align: center; font: 600 12px/1.3 var(--font-label); color: #fff; background: rgba(0, 0, 0, .45); }
+.portrait-status.bad { background: color-mix(in srgb, var(--hero) 70%, #000); }
+.portrait-frame:has(.portrait-status.bad) .portrait-img { visibility: hidden; }
+.portrait-tools { display: flex; flex-wrap: wrap; gap: 3px; align-items: center; }
+.portrait-tools .btn { padding: 3px 7px; font-size: 11.5px; background: rgba(0, 0, 0, .25); border-color: rgba(255, 255, 255, .35); color: var(--hero-ink); }
+.portrait-tools .x { color: var(--hero-ink); opacity: .8; }
+.portrait.hidden { position: absolute; top: 72px; right: 20px; width: auto; }
+.wd-head-glyph.has-img { position: relative; overflow: hidden; width: 96px; height: 96px; }
+.wd-head-glyph.has-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.wd-head-glyph.has-img span { position: relative; z-index: -1; }
+@media (max-width: 720px) {
+  .file-head.has-portrait { padding-right: 24px; padding-top: 70px; }
+  .portrait.file { position: static; width: 140px; margin-top: 10px; }
+  .file-head.has-portrait .pl-badge { right: 22px; }
+}
+@media print { .portrait-tools { display: none; } }
 
 </style>
 </head>
@@ -1976,17 +2003,25 @@ function checkLimits(ch, R) {
   // PL 0 is for ordinary people: anything up to 14 points is fine, and nothing is "unspent".
   if (pl === 0 && !ch.advancement) {
     if (cost.total > 14) out.push(issue('budget', `Spent ${cost.total} power points; an ordinary person (PL 0) has 14 or fewer. Raise the power level or trim the build.`));
+  } else if (cost.total > cost.budget && isNpc(ch)) {
+    // Supporting characters and creatures are stat blocks, not player builds: points over PL x 15 are fine (DCA 194).
+    out.push(issue('budget', `${cost.total} power points for a PL ${pl} supporting character (player characters get ${cost.budget}).`, 'info'));
   } else if (cost.total > cost.budget) out.push(issue('budget', ch.advancement ? `Spent ${cost.total} power points; starting points plus GM awards give ${cost.budget}.` : `Spent ${cost.total} power points; PL ${pl} allows ${cost.budget}.`));
   else if (cost.total < cost.budget) out.push(issue('budget', `${cost.budget - cost.total} power points unspent.`, 'info'));
 
   return out;
 }
 
+/** Supporting characters, minions and creatures: built as stat blocks, so the point budget is advisory. */
+function isNpc(ch) {
+  return !!(ch.npc || ch.minion || ch.catalogId || /^npc-/.test(ch.archetype?.id || '') || ['creature', 'animal', 'monster', 'construct'].includes(String(ch.kind || '').toLowerCase()));
+}
+
 function isLegal(ch, R) {
   return checkLimits(ch, R).every((i) => i.severity !== 'error');
 }
 
-return { checkLimits, isLegal };
+return { checkLimits, isNpc, isLegal };
 })();
 
 __mods["src/engine/advancement.js"] = (() => {
@@ -2935,6 +2970,127 @@ function equipmentRankFor(ch) {
 return { GEAR_GENRES, gearGenre, gearItemCost, gearEffectText, buildGearItem, gearCatalog, searchGear, gearToEquipment, gearToDevice, customItem, equipmentRankFor };
 })();
 
+__mods["src/engine/portrait.js"] = (() => {
+// Character portraits: a prompt built from the sheet and the bio, rendered by a free, open-source
+// text-to-image service (Pollinations.ai: no account, no key). The prompt and a seed are kept on
+// the character, so the same portrait comes back and a re-roll only changes the seed.
+
+const PORTRAIT_SERVICE = { name: 'Pollinations.ai', url: 'https://pollinations.ai', free: true, openSource: true };
+const BASE = 'https://image.pollinations.ai/prompt/';
+
+const lower = (s) => String(s || '').trim().toLowerCase();
+const firstSentence = (s) => { const m = String(s || '').match(/^.*?[.!?](?=\s|$)/); return (m ? m[0] : String(s || '')).trim(); };
+
+/** The prompt for a character's portrait, from identity, appearance, powers, side and bio. */
+function portraitPrompt(ch) {
+  const id = ch.identity || {};
+  const ap = ch.appearance || {};
+  const name = id.codename || id.realName || 'a hero';
+  const side = ch.alignment === 'villain' ? 'supervillain' : ch.minion ? 'henchman' : 'superhero';
+  const kind = String(ch.kind || '').toLowerCase();
+  const creature = ['creature', 'animal', 'monster'].includes(kind);
+  const construct = ch.construct || kind === 'construct' || ch.abilities?.Stamina === null;
+  const bits = [];
+  if (creature) {
+    bits.push(`${name}, a ${lower(ch.theme?.name || ch.summary || 'monster')}`);
+    if (ch.summary) bits.push(firstSentence(ch.summary));
+    if (ch.size && !/medium/i.test(ch.size)) bits.push(`${lower(ch.size)} size`);
+  } else {
+    bits.push(`comic book ${side} portrait of ${name}`);
+    const who = [id.gender ? lower(id.gender) : null, id.age ? `age ${id.age}` : null, construct ? 'android' : null].filter(Boolean).join(', ');
+    if (who) bits.push(who);
+    const looks = [ap.height && !/average/i.test(ap.height) ? `${lower(ap.height)} build` : null, ap.eyes ? `${lower(ap.eyes)} eyes` : null, ap.hair && !/none/i.test(ap.hair) ? `${lower(ap.hair)} hair` : null, ap.skin ? `${lower(ap.skin)} skin` : null, ap.feature && !/none/i.test(ap.feature) ? lower(ap.feature) : null].filter(Boolean);
+    if (looks.length) bits.push(looks.join(', '));
+    if (ap.costume) bits.push(`costume: ${lower(ap.costume)}`);
+    if (ch.theme?.name) bits.push(`${lower(ch.theme.name)} powers${ch.theme.secondary?.name ? ` and ${lower(ch.theme.secondary.name)}` : ''}`);
+    if (ch.archetype?.name && !/custom/i.test(ch.archetype.name)) bits.push(lower(ch.archetype.name));
+    if (id.occupation) bits.push(`${lower(id.occupation)} by day`);
+    const traits = [...(ch.personality?.positive || []), ...(ch.personality?.negative || [])].slice(0, 2).map(lower);
+    if (traits.length) bits.push(`${traits.join(' and ')} expression`);
+    const origin = ch.origin?.label ? `${lower(ch.origin.label)} origin` : null;
+    if (origin) bits.push(origin);
+    const story = firstSentence(ch.bio?.summary);
+    if (story && story.length < 160) bits.push(story);
+  }
+  bits.push(ch.alignment === 'villain' ? 'dramatic low-key lighting, menacing' : 'dramatic lighting, heroic');
+  bits.push('upper body, looking at viewer, detailed comic book art, bold inks, rich colors, plain background, no text, no logo');
+  return bits.join('; ');
+}
+
+/** The image URL for a prompt and seed. */
+function portraitUrl(prompt, { seed = 1, width = 512, height = 640, model = 'flux' } = {}) {
+  const q = new URLSearchParams({ width: String(width), height: String(height), seed: String(seed), nologo: 'true', model });
+  return `${BASE}${encodeURIComponent(prompt)}?${q}`;
+}
+
+/** The portrait settings on a character, filled in with defaults. */
+function portraitOf(ch) {
+  const p = ch.portrait || {};
+  const prompt = p.prompt || portraitPrompt(ch);
+  return { prompt, custom: !!p.prompt, seed: p.seed ?? 1, url: portraitUrl(prompt, { seed: p.seed ?? 1 }), hidden: !!p.hidden };
+}
+
+function setPortrait(ch, { seed, prompt, hidden } = {}) {
+  const next = { ...(ch.portrait || {}) };
+  if (seed !== undefined) next.seed = seed;
+  if (prompt !== undefined) { if (prompt && prompt !== portraitPrompt(ch)) next.prompt = prompt; else delete next.prompt; }
+  if (hidden !== undefined) next.hidden = !!hidden;
+  ch.portrait = next;
+  return ch;
+}
+
+function newPortraitSeed() {
+  return Math.floor(Math.random() * 1e9);
+}
+
+return { PORTRAIT_SERVICE, portraitPrompt, portraitUrl, portraitOf, setPortrait, newPortraitSeed };
+})();
+
+__mods["src/app/portrait.js"] = (() => {
+// The portrait block on the case file, the Bio page and the World.
+
+const { h, toast, copyText, openDialog } = __mods["src/app/dom.js"];
+const { portraitOf, setPortrait, newPortraitSeed, portraitPrompt, PORTRAIT_SERVICE } = __mods["src/engine/portrait.js"];
+const CREDIT = `Generated by ${PORTRAIT_SERVICE.name}: free and open source, no account. Only the prompt is sent to it; the image is not stored anywhere but your browser's cache.`;
+
+/**
+ * change(fn): clone, apply, save. Omit it for a read-only portrait.
+ * size: 'file' (case file header) | 'small' (cards)
+ */
+function portraitBlock(ch, { change, size = 'file' } = {}) {
+  const p = portraitOf(ch);
+  if (p.hidden && !change) return null;
+  const img = h('img', { class: 'portrait-img', src: p.url, alt: `Portrait of ${ch.identity?.codename || 'the character'}`, loading: 'lazy', width: 512, height: 640, referrerpolicy: 'no-referrer' });
+  const status = h('div', { class: 'portrait-status' }, 'Painting…');
+  img.addEventListener('load', () => { status.hidden = true; });
+  img.addEventListener('error', () => { status.textContent = 'Couldn\'t load the portrait (needs internet). Try again later or re-roll.'; status.classList.add('bad'); });
+  const editPrompt = async () => {
+    const ta = h('textarea', { style: { minHeight: '140px' } }, p.prompt);
+    const ok = await openDialog({
+      title: 'Portrait prompt',
+      body: [h('p', { style: { margin: 0 } }, 'Built from the sheet, the looks and the bio. Change anything; "Reset" goes back to the generated prompt.'), ta, h('p', { class: 'hint', style: { margin: 0 } }, CREDIT)],
+      buttons: [{ label: 'Cancel', value: null }, { label: 'Reset to generated', value: 'reset' }, { label: 'Use this prompt', value: 'save', primary: true }],
+    });
+    if (ok === 'save') change((c) => setPortrait(c, { prompt: ta.value.trim(), seed: newPortraitSeed() }));
+    if (ok === 'reset') change((c) => setPortrait(c, { prompt: '', seed: newPortraitSeed() }));
+  };
+  const controls = change ? h('div', { class: 'portrait-tools no-print' },
+    p.hidden
+      ? h('button', { class: 'btn sm', type: 'button', title: CREDIT, onClick: () => change((c) => setPortrait(c, { hidden: false, seed: c.portrait?.seed ?? newPortraitSeed() })) }, '🖼 Generate a portrait')
+      : [
+        h('button', { class: 'btn sm', type: 'button', title: 'Same prompt, new dice', onClick: () => change((c) => setPortrait(c, { seed: newPortraitSeed() })) }, '🎲 New portrait'),
+        h('button', { class: 'btn sm', type: 'button', onClick: editPrompt }, p.custom ? 'Prompt (edited)' : 'Prompt'),
+        h('button', { class: 'btn sm ghost', type: 'button', title: 'Copy the prompt to use in any other image tool', onClick: async () => toast((await copyText(p.prompt)) ? 'Prompt copied' : 'Copy failed') }, 'Copy'),
+        h('button', { class: 'x', type: 'button', 'aria-label': 'Hide the portrait', title: 'Hide the portrait', onClick: () => change((c) => setPortrait(c, { hidden: true })) }, '✕'),
+      ]) : null;
+  if (p.hidden) return h('div', { class: `portrait ${size} hidden` }, controls);
+  return h('div', { class: `portrait ${size}`, title: p.prompt }, h('div', { class: 'portrait-frame' }, img, status), controls);
+}
+
+
+return { portraitPrompt, portraitBlock };
+})();
+
 __mods["src/app/sheetview.js"] = (() => {
 // The character "case file": read view and edit view.
 
@@ -2947,6 +3103,7 @@ const { costMath } = __mods["src/engine/powersmith.js"];
 const { ABILITIES, BUYABLE_DEFENSES } = __mods["src/engine/rules.js"];
 const { powerCost } = __mods["src/engine/costs.js"];
 const { gearCatalog, gearToEquipment, gearToDevice } = __mods["src/engine/gear.js"];
+const { portraitBlock } = __mods["src/app/portrait.js"];
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const clone = (x) => JSON.parse(JSON.stringify(x));
 
@@ -2994,7 +3151,8 @@ function renderFile(ch, R, opts = {}) {
     h('span', { class: 'chip' }, ch.alignment === 'villain' ? 'Villain' : 'Hero'),
     id.base && h('span', { class: 'chip' }, id.base),
   ];
-  const head = h('div', { class: `file-head ${editing ? 'editing' : ''}` },
+  const portrait = opts.noPortrait ? null : portraitBlock(ch, { change: opts.onChange ? change : null });
+  const head = h('div', { class: `file-head ${editing ? 'editing' : ''} ${portrait && !ch.portrait?.hidden ? 'has-portrait' : ''}` },
     h('div', { class: 'pl-badge' },
       h('b', { class: 'num' }, ch.pl), h('span', null, 'POWER LEVEL'),
       editing ? stepper(ch.pl, (d) => change((c) => { c.pl = Math.max(1, Math.min(20, c.pl + d)); }), { min: 1, max: 20, label: 'power level' }) : null),
@@ -3004,7 +3162,8 @@ function renderFile(ch, R, opts = {}) {
         h('input', { class: 'codename-input', type: 'text', id: 'edit-codename', value: id.codename || '', 'aria-label': 'Codename', onChange: (e) => change((c) => { c.identity = { ...c.identity, codename: e.target.value }; }) }),
         h('input', { class: 'realname-input', type: 'text', id: 'edit-realname', value: id.realName || '', 'aria-label': 'Real name', onChange: (e) => change((c) => { c.identity = { ...c.identity, realName: e.target.value }; }) }))
       : [h('h1', { class: 'codename' }, id.codename || 'Unnamed'), h('div', { class: 'realname' }, [id.realName, id.age ? `${id.age}` : null, id.occupation].filter(Boolean).join(' · '))],
-    h('div', { class: 'head-tags' }, tags));
+    h('div', { class: 'head-tags' }, tags),
+    portrait);
   head.style.setProperty('--hero', hero);
   head.style.setProperty('--hero-ink', inkFor(hero));
 
@@ -5530,419 +5689,6 @@ function rollDowntimeEvent(R, ch, { seed } = {}) {
 return { BIO_VERSION, DCA_COMPLICATIONS, BIO_RELATIONS, generateBio, rerollSection, bioText, rollDowntimeEvent };
 })();
 
-__mods["src/engine/journal.js"] = (() => {
-// The campaign journal: what happened to a character in play, session by session.
-//
-// ch.journal = { entries: [{ id, date, session, title, text, people: [{ name, relation, who, status }],
-//                            downtime, tags, created }] }
-//
-// Each entry also lives on the bio's life timeline (stage "In play"), so it shows up with the rest
-// of the character's life, in exports and in the World wiki. People named in an entry join
-// "People in their life" (or have their status updated), and GM awards made for the entry carry
-// its id so the journal can show what the session paid for.
-
-const { awardPoints } = __mods["src/engine/advancement.js"];
-const newId = () => `j-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
-const today = () => new Date().toISOString().slice(0, 10);
-const endStop = (s) => (/[.!?]['"]?$/.test(String(s).trim()) ? String(s).trim() : `${String(s).trim()}.`);
-
-const JOURNAL_RELATIONS = ['Ally', 'Friend', 'Enemy', 'Rival', 'Mentor', 'Student', 'Love', 'Ex', 'Dependent', 'Contact', 'Employer', 'Teammate', 'Nemesis', 'Family'];
-
-/** A bio shell for characters that never rolled one (hand-built, imported, creatures). */
-function ensureBio(ch) {
-  if (!ch.bio) ch.bio = { version: 1, manual: true, summary: '', sections: [], timeline: [], family: { parents: [], siblings: [], structure: '' }, people: [], personality: {}, motivations: [], secrets: [], regrets: [], hopes: [], hooks: [], complications: [], benefits: {} };
-  ch.bio.timeline = ch.bio.timeline || [];
-  ch.bio.people = ch.bio.people || [];
-  return ch.bio;
-}
-
-function ensureJournal(ch) {
-  if (!ch.journal) ch.journal = { entries: [] };
-  ch.journal.entries = ch.journal.entries || [];
-  return ch.journal;
-}
-
-function timelineText(e) {
-  const head = e.title ? e.title.trim() : '';
-  const body = e.text ? e.text.trim() : '';
-  return endStop(head && body ? `${head}: ${body}` : head || body || 'Session played');
-}
-
-function syncTimeline(ch, e) {
-  const bio = ensureBio(ch);
-  const age = Number.isFinite(Number(ch.identity?.age)) ? Number(ch.identity.age) : null;
-  const row = { age: age ?? (bio.timeline.length ? Math.max(...bio.timeline.map((t) => t.age || 0)) : 0), stage: 'In play', text: timelineText(e), tags: ['play', ...(e.tags || [])], journalId: e.id, session: e.session, date: e.date };
-  const i = bio.timeline.findIndex((t) => t.journalId === e.id);
-  if (i >= 0) bio.timeline[i] = { ...bio.timeline[i], ...row };
-  else bio.timeline.push(row);
-  if (e.downtime) {
-    const dt = { age: row.age, stage: 'Between adventures', text: endStop(e.downtime), tags: ['downtime'], journalId: e.id, downtime: true, session: e.session, date: e.date };
-    const j = bio.timeline.findIndex((t) => t.journalId === e.id && t.downtime);
-    if (j >= 0) bio.timeline[j] = { ...bio.timeline[j], ...dt }; else bio.timeline.push(dt);
-  } else bio.timeline = bio.timeline.filter((t) => !(t.journalId === e.id && t.downtime));
-}
-
-function findPerson(bio, name) {
-  const n = String(name || '').trim().toLowerCase();
-  if (!n) return null;
-  for (const p of bio.people || []) if (String(p.name).toLowerCase() === n) return { p, list: 'people' };
-  for (const p of bio.family?.parents || []) if (String(p.name).toLowerCase() === n) return { p, list: 'parents' };
-  for (const p of bio.family?.siblings || []) if (String(p.name).toLowerCase() === n) return { p, list: 'siblings' };
-  return null;
-}
-
-function syncPeople(ch, e) {
-  const bio = ensureBio(ch);
-  for (const person of e.people || []) {
-    const name = String(person.name || '').trim();
-    if (!name) continue;
-    const found = findPerson(bio, name);
-    const label = e.session ? `Session ${e.session}` : e.date || 'In play';
-    if (found) {
-      if (person.status) found.p.status = endStop(person.status);
-      if (person.relation && found.list === 'people' && person.relation !== found.p.relation) { found.p.relation = person.relation; found.p.changed = label; }
-      if (person.who && !(found.p.who || '').includes(person.who)) found.p.who = `${found.p.who ? `${endStop(found.p.who)} ` : ''}${label}: ${endStop(person.who)}`;
-      found.p.lastSeen = label;
-    } else {
-      bio.people.push({ name, relation: person.relation || 'Contact', who: endStop(person.who || `Met in play (${label}).`), status: endStop(person.status || 'Still around.'), journalId: e.id, met: label });
-    }
-  }
-}
-
-/** Add a session to the journal (and to the life timeline, the people list and the point log). */
-function addJournalEntry(ch, R, data = {}) {
-  const j = ensureJournal(ch);
-  const e = {
-    id: newId(),
-    date: data.date || today(),
-    session: data.session != null && data.session !== '' ? Number(data.session) : j.entries.length + 1,
-    title: String(data.title || '').trim(),
-    text: String(data.text || '').trim(),
-    people: (data.people || []).filter((p) => p && String(p.name || '').trim()).map((p) => ({ name: String(p.name).trim(), relation: p.relation || '', who: String(p.who || '').trim(), status: String(p.status || '').trim() })),
-    downtime: String(data.downtime || '').trim(),
-    tags: data.tags || [],
-    created: new Date().toISOString(),
-  };
-  j.entries.push(e);
-  syncTimeline(ch, e);
-  syncPeople(ch, e);
-  const pts = Number(data.pointsEarned);
-  if (pts) {
-    awardPoints(ch, R, pts, `Session ${e.session}${e.title ? `: ${e.title}` : ''}`);
-    ch.advancement.log[ch.advancement.log.length - 1].journalId = e.id;
-  }
-  return e;
-}
-
-function updateJournalEntry(ch, R, id, patch = {}) {
-  const j = ensureJournal(ch);
-  const e = j.entries.find((x) => x.id === id);
-  if (!e) return null;
-  for (const k of ['date', 'title', 'text', 'downtime', 'tags']) if (patch[k] !== undefined) e[k] = typeof patch[k] === 'string' ? patch[k].trim() : patch[k];
-  if (patch.session !== undefined && patch.session !== '') e.session = Number(patch.session);
-  if (patch.people) e.people = patch.people.filter((p) => p && String(p.name || '').trim()).map((p) => ({ name: String(p.name).trim(), relation: p.relation || '', who: String(p.who || '').trim(), status: String(p.status || '').trim() }));
-  syncTimeline(ch, e);
-  syncPeople(ch, e);
-  const pts = Number(patch.pointsEarned);
-  if (pts) {
-    awardPoints(ch, R, pts, `Session ${e.session}${e.title ? `: ${e.title}` : ''}`);
-    ch.advancement.log[ch.advancement.log.length - 1].journalId = e.id;
-  }
-  return e;
-}
-
-function removeJournalEntry(ch, id) {
-  const j = ensureJournal(ch);
-  j.entries = j.entries.filter((x) => x.id !== id);
-  if (ch.bio) {
-    ch.bio.timeline = (ch.bio.timeline || []).filter((t) => t.journalId !== id);
-    ch.bio.people = (ch.bio.people || []).filter((p) => p.journalId !== id);
-  }
-  for (const e of ch.advancement?.log || []) if (e.journalId === id) delete e.journalId;
-  return ch;
-}
-
-/** Advancement entries that belong to a journal entry. */
-function journalPoints(ch, id) {
-  return (ch.advancement?.log || []).filter((e) => e.journalId === id);
-}
-
-/** Spending entries not yet tied to a session. */
-function unlinkedSpends(ch) {
-  return (ch.advancement?.log || []).filter((e) => (e.type === 'spend' || e.type === 'refund') && !e.journalId);
-}
-
-function linkPoints(ch, logId, journalId) {
-  const e = (ch.advancement?.log || []).find((x) => x.id === logId);
-  if (e) { if (journalId) e.journalId = journalId; else delete e.journalId; }
-  return ch;
-}
-
-/** Entries newest first. */
-function journalEntries(ch) {
-  return [...(ch.journal?.entries || [])].sort((a, b) => (b.session || 0) - (a.session || 0) || String(b.date || '').localeCompare(String(a.date || '')));
-}
-
-function journalText(ch) {
-  const out = [];
-  for (const e of [...(ch.journal?.entries || [])].sort((a, b) => (a.session || 0) - (b.session || 0))) {
-    out.push(`Session ${e.session}${e.date ? ` (${e.date})` : ''}${e.title ? `: ${e.title}` : ''}`);
-    if (e.text) out.push(`  ${e.text}`);
-    for (const p of e.people || []) out.push(`  - ${p.name}${p.relation ? ` (${p.relation})` : ''}${p.who ? `: ${p.who}` : ''}${p.status ? ` [${p.status}]` : ''}`);
-    for (const a of journalPoints(ch, e.id)) out.push(`  * ${a.type === 'award' ? `+${a.points} pp earned` : `${a.points} pp spent`}${a.changes?.length ? `: ${a.changes.join('; ')}` : a.note ? `: ${a.note}` : ''}`);
-    if (e.downtime) out.push(`  Between adventures: ${e.downtime}`);
-    out.push('');
-  }
-  return out.join('\n').trim();
-}
-
-return { JOURNAL_RELATIONS, ensureBio, ensureJournal, addJournalEntry, updateJournalEntry, removeJournalEntry, journalPoints, unlinkedSpends, linkPoints, journalEntries, journalText };
-})();
-
-__mods["src/app/journal.js"] = (() => {
-// The campaign journal on the Bio page: sessions played, who was met, what the points bought,
-// and what happened between adventures.
-
-const { h, toast, copyText } = __mods["src/app/dom.js"];
-const { addJournalEntry, updateJournalEntry, removeJournalEntry, journalEntries, journalPoints, unlinkedSpends, linkPoints, journalText, JOURNAL_RELATIONS } = __mods["src/engine/journal.js"];
-const { rollDowntimeEvent } = __mods["src/engine/lifepath.js"];
-const { randomSeed } = __mods["src/engine/rng.js"];
-const sign = (n) => (n > 0 ? `+${n}` : `${n}`);
-let editing = null; // id of the entry being edited, or 'new'
-
-/**
- * change(fn) clones the character, applies fn and saves. onOpenPerson(p) opens a person as a character.
- */
-function journalSection(ch, R, { change, onOpenPerson } = {}) {
-  const entries = journalEntries(ch);
-  const known = [...(ch.bio?.people || []), ...(ch.bio?.family?.parents || []), ...(ch.bio?.family?.siblings || [])];
-  const spends = unlinkedSpends(ch);
-
-  const form = (entry) => {
-    const isNew = !entry;
-    const e = entry || { session: (ch.journal?.entries?.length || 0) + 1, date: new Date().toISOString().slice(0, 10), title: '', text: '', people: [], downtime: '' };
-    const session = h('input', { type: 'number', min: 0, value: e.session, id: 'jr-session', 'aria-label': 'Session number', style: { maxWidth: '80px' } });
-    const date = h('input', { type: 'date', value: e.date || '', id: 'jr-date', 'aria-label': 'Date', style: { maxWidth: '160px' } });
-    const title = h('input', { type: 'text', value: e.title || '', id: 'jr-title', placeholder: 'Title (e.g. "The Royal Flush Gang")', 'aria-label': 'Title' });
-    const text = h('textarea', { id: 'jr-text', placeholder: 'What happened: the job, the fight, the fallout, what they learned…', 'aria-label': 'What happened', style: { minHeight: '90px' } }, e.text || '');
-    const points = isNew ? h('input', { type: 'number', min: 0, max: 20, value: 0, id: 'jr-points', 'aria-label': 'Points earned', style: { maxWidth: '80px' } }) : null;
-    const downtime = h('textarea', { id: 'jr-downtime', placeholder: 'Between adventures (optional): training, travel, a funeral, a wedding…', 'aria-label': 'Between adventures', style: { minHeight: '50px' } }, e.downtime || '');
-    const peopleRows = h('div', { class: 'jr-people' });
-    const people = (e.people || []).map((p) => ({ ...p }));
-    const drawPeople = () => {
-      peopleRows.replaceChildren();
-      people.forEach((p, i) => {
-        const existing = known.find((k) => String(k.name).toLowerCase() === String(p.name || '').toLowerCase());
-        peopleRows.append(h('div', { class: 'jr-person' },
-          h('input', { type: 'text', list: 'jr-known', value: p.name || '', placeholder: 'Name', 'aria-label': 'Person', onInput: (ev) => { p.name = ev.target.value; }, onChange: () => drawPeople() }),
-          h('select', { 'aria-label': 'Relationship', onChange: (ev) => { p.relation = ev.target.value; } },
-            h('option', { value: '', selected: !p.relation }, existing ? `Keep: ${existing.relation || existing.role || 'as is'}` : 'Relationship…'),
-            JOURNAL_RELATIONS.map((r) => h('option', { value: r, selected: p.relation === r }, r))),
-          h('input', { type: 'text', value: p.who || '', placeholder: existing ? 'What happened with them' : 'Who they are', 'aria-label': 'Who they are', onInput: (ev) => { p.who = ev.target.value; } }),
-          h('input', { type: 'text', value: p.status || '', placeholder: 'Status now (e.g. "now an enemy", "died in issue #12")', 'aria-label': 'Status', onInput: (ev) => { p.status = ev.target.value; } }),
-          h('span', { class: `jr-tag ${existing ? '' : 'new'}` }, existing ? 'known' : 'new'),
-          h('button', { class: 'x', type: 'button', 'aria-label': 'Remove person', onClick: () => { people.splice(i, 1); drawPeople(); } }, '✕')));
-      });
-      peopleRows.append(h('button', { class: 'btn sm', type: 'button', onClick: () => { people.push({ name: '', relation: '', who: '', status: '' }); drawPeople(); } }, '+ Someone they met or dealt with'));
-    };
-    drawPeople();
-    const dtRoll = h('button', { class: 'btn sm', type: 'button', title: 'Roll what happened between adventures from the life-event tables', onClick: () => {
-      try {
-        const r = rollDowntimeEvent(R, ch, { seed: randomSeed() });
-        downtime.value = r.text;
-        for (const p of r.people || []) if (!people.some((x) => x.name === p.name)) { people.push({ name: p.name, relation: p.relation, who: p.who, status: p.status }); }
-        drawPeople();
-        toast(r.people?.length ? `Downtime rolled: ${r.people.map((p) => p.name).join(', ')} added to the people list` : 'Downtime rolled');
-      } catch (err) { toast(err.message); }
-    } }, '🎲 Roll a downtime event');
-    const save = () => {
-      const data = { session: session.value, date: date.value, title: title.value, text: text.value, people, downtime: downtime.value, pointsEarned: points ? Number(points.value) || 0 : 0 };
-      if (!data.title.trim() && !data.text.trim()) { title.setCustomValidity('Give the session a title or some text'); title.reportValidity(); return; }
-      editing = null;
-      change?.((c) => { if (isNew) addJournalEntry(c, R, data); else updateJournalEntry(c, R, entry.id, data); });
-      toast(isNew ? 'Session added to the journal and the timeline' : 'Session updated');
-    };
-    return h('div', { class: 'jr-form' },
-      h('datalist', { id: 'jr-known' }, known.map((k) => h('option', { value: k.name }, k.relation || k.role || ''))),
-      h('div', { class: 'jr-row' }, h('label', { class: 'field' }, h('span', null, 'Session'), session), h('label', { class: 'field' }, h('span', null, 'Date'), date), h('label', { class: 'field', style: { flex: 1 } }, h('span', null, 'Title'), title)),
-      h('label', { class: 'field' }, h('span', null, 'What happened'), text),
-      h('div', { class: 'label' }, 'People in this session'),
-      peopleRows,
-      h('label', { class: 'field' }, h('span', null, 'Between adventures ', dtRoll), downtime),
-      h('div', { class: 'jr-row', style: { alignItems: 'end' } },
-        points ? h('label', { class: 'field' }, h('span', null, 'Points earned (GM award)'), points) : null,
-        h('span', { style: { flex: 1 } }),
-        h('button', { class: 'btn ghost', type: 'button', onClick: () => { editing = null; change?.(() => {}); } }, 'Cancel'),
-        h('button', { class: 'btn primary', type: 'button', onClick: save }, isNew ? 'Add to the journal' : 'Save changes')));
-  };
-
-  const card = (e) => {
-    if (editing === e.id) return form(e);
-    const pts = journalPoints(ch, e.id);
-    const earned = pts.filter((x) => x.type === 'award').reduce((s, x) => s + (x.points || 0), 0);
-    const spent = pts.filter((x) => x.type !== 'award');
-    return h('article', { class: 'jr-entry' },
-      h('div', { class: 'jr-head' },
-        h('span', { class: 'jr-session num' }, `S${e.session ?? '?'}`),
-        h('div', { class: 'jr-titles' }, h('b', null, e.title || 'Untitled session'), h('span', { class: 'jr-date num' }, e.date || '')),
-        earned ? h('span', { class: 'chip jr-earned' }, `+${earned} pp`) : null,
-        change ? h('span', { class: 'btn-row no-print' },
-          h('button', { class: 'btn sm ghost', type: 'button', onClick: () => { editing = e.id; change(() => {}); } }, 'Edit'),
-          h('button', { class: 'btn sm ghost danger', type: 'button', onClick: () => { if (confirm(`Remove session ${e.session} from the journal? Its timeline entry and the people it added go with it.`)) change((c) => removeJournalEntry(c, e.id)); } }, '✕')) : null),
-      e.text ? h('p', { class: 'jr-text' }, e.text) : null,
-      e.people?.length ? h('div', { class: 'jr-chips' }, e.people.map((p) => {
-        const k = known.find((x) => String(x.name).toLowerCase() === p.name.toLowerCase());
-        return h('button', { type: 'button', class: 'chip jr-chip', title: [p.who, p.status].filter(Boolean).join(' · ') || p.name, onClick: () => (k && onOpenPerson ? onOpenPerson(k, k.role ? (k.relation ? 'sibling' : 'parent') : 'person') : null) },
-          p.name, p.relation || k?.relation ? h('small', null, ` · ${p.relation || k.relation}`) : null, p.status ? h('small', { class: 'jr-status' }, ` · ${p.status}`) : null);
-      })) : null,
-      spent.length ? h('ul', { class: 'jr-spent' }, spent.map((x) => h('li', null, h('b', null, `${x.points > 0 ? `−${x.points}` : `+${-x.points}`} pp`), ' ', (x.changes || []).join('; ') || x.note || ''))) : null,
-      e.downtime ? h('p', { class: 'jr-downtime' }, h('b', null, 'Between adventures: '), e.downtime) : null);
-  };
-
-  const linkRow = spends.length && entries.length && change ? (() => {
-    const sel = h('select', { 'aria-label': 'Spending to link' }, spends.map((x) => h('option', { value: x.id }, `${x.date || ''} ${x.points > 0 ? `−${x.points}` : `+${-x.points}`} pp: ${(x.changes || []).join('; ').slice(0, 70) || x.note}`)));
-    const to = h('select', { 'aria-label': 'Session' }, entries.map((e) => h('option', { value: e.id }, `Session ${e.session}${e.title ? `: ${e.title}` : ''}`)));
-    return h('div', { class: 'jr-link no-print' }, h('span', { class: 'label' }, 'Points spent, not yet tied to a session'), h('div', { class: 'add-row' }, sel, to, h('button', { class: 'btn sm', type: 'button', onClick: () => change((c) => linkPoints(c, sel.value, to.value)) }, 'Link')));
-  })() : null;
-
-  return h('section', { class: 'sec journal' },
-    h('h3', null, 'Campaign journal', h('span', { class: 'pts' }, entries.length ? `${entries.length} session${entries.length === 1 ? '' : 's'}` : 'what happened in play')),
-    h('p', { class: 'hint', style: { margin: '0 0 8px' } }, 'Each session joins the life timeline as "In play". People you name are added to their life, or have their status updated. Points the GM awards for a session are tied to it, and so is whatever they bought.'),
-    change && editing !== 'new' ? h('div', { class: 'btn-row no-print', style: { marginBottom: '8px' } },
-      h('button', { class: 'btn primary', type: 'button', id: 'jr-new', onClick: () => { editing = 'new'; change(() => {}); } }, '+ New session'),
-      entries.length ? h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(journalText(ch))) ? 'Journal copied' : 'Copy failed') }, 'Copy journal') : null) : null,
-    editing === 'new' ? form(null) : null,
-    linkRow,
-    entries.length ? h('div', { class: 'jr-list' }, entries.map(card)) : (editing !== 'new' ? h('p', { class: 'hint', style: { margin: 0 } }, 'No sessions yet. After a game, add what happened: it becomes part of their story.') : null));
-}
-
-return { journalSection };
-})();
-
-__mods["src/app/bio.js"] = (() => {
-// The Bio page: a random life history for a character (family, timeline, people, personality,
-// secrets, GM hooks), generated by engine/lifepath.js and editable.
-
-const { h, toast, copyText, inkFor } = __mods["src/app/dom.js"];
-const { generateBio, rerollSection, bioText } = __mods["src/engine/lifepath.js"];
-const { randomSeed } = __mods["src/engine/rng.js"];
-const { journalSection } = __mods["src/app/journal.js"];
-const SIDE_LABEL = { light: 'Lightside', dark: 'Darkside', neutral: 'Neutral', exotic: 'Exotic' };
-
-/**
- * change(fn): clone the character, apply fn, save (same helper the sheet uses). May be null (read-only).
- */
-function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
-  const open = onOpenPerson || null;
-  const hero = ch.theme?.color || '#c8202f';
-  const id = ch.identity || {};
-  const bio = ch.bio;
-  const head = h('div', { class: 'file-head' },
-    h('div', { class: 'eyebrow' }, 'Biography'),
-    h('h1', { class: 'codename' }, id.codename || 'Unnamed'),
-    h('div', { class: 'realname' }, [id.realName, id.age ? `age ${id.age}` : null, id.occupation, id.homeland?.country].filter(Boolean).join(' · ')));
-  head.style.setProperty('--hero', hero);
-  head.style.setProperty('--hero-ink', inkFor(hero));
-
-  const regen = () => change?.((c) => { c.bio = generateBio(R, c, { seed: randomSeed() }); });
-
-  const journal = journalSection(ch, R, { change, onOpenPerson: open });
-  if (!bio) {
-    const file = h('article', { class: 'file bio' }, head, toolbar || null,
-      h('div', { class: 'bio-empty' },
-        h('p', null, 'No life story yet. Roll one: family, childhood, the events that made them, the people in their life, personality, secrets and story hooks for the GM.'),
-        change ? h('button', { class: 'btn primary big', type: 'button', id: 'bio-generate', onClick: regen }, 'Roll a life story') : null),
-      h('div', { class: 'file-body' }, h('div', { class: 'col', style: { gridColumn: '1 / -1' } }, journal)));
-    file.style.setProperty('--hero', hero);
-    file.style.setProperty('--hero-ink', inkFor(hero));
-    return file;
-  }
-
-  const reroll = (sectionId) => change?.((c) => {
-    try { c.bio = rerollSection(R, c, c.bio, sectionId, { seed: randomSeed() }); } catch (e) { toast(e.message); }
-  });
-
-  const summary = h('section', { class: 'sec bio-summary' },
-    h('h3', null, 'Their story', change ? h('span', { class: 'pts no-print' }, h('button', { class: 'linkish', type: 'button', onClick: regen }, bio.manual ? 'Roll a life story' : 'Roll a new life')) : null),
-    change
-      ? h('textarea', { class: 'bio-summary-edit', id: 'bio-summary', 'aria-label': 'Biography summary', onChange: (e) => change((c) => { c.bio = { ...c.bio, summary: e.target.value, edited: true }; }) }, bio.summary || '')
-      : h('p', null, bio.summary));
-
-  const sections = (bio.sections || []).map((s) => h('section', { class: 'sec bio-sec' },
-    h('h3', null, s.title, change ? h('span', { class: 'pts no-print' }, h('button', { class: 'linkish', type: 'button', title: `Re-roll ${s.title}`, onClick: () => reroll(s.id) }, '🎲 re-roll')) : null),
-    h('dl', { class: 'bio-dl' }, (s.items || []).map((it) => [h('dt', null, it.label), h('dd', null, it.text)]))));
-
-  const timeline = (bio.timeline || []).length ? h('section', { class: 'sec' },
-    h('h3', null, 'Life timeline'),
-    h('ol', { class: 'bio-timeline' }, bio.timeline.map((t) => h('li', { class: t.journalId ? 'in-play' : '' },
-      h('span', { class: 'bio-age num', title: t.session ? `Session ${t.session}` : '' }, t.session ? `S${t.session}` : t.age != null ? t.age : '—'),
-      h('div', null, t.stage ? h('span', { class: 'bio-stage' }, t.stage, t.date ? ` · ${t.date}` : '') : null, h('span', null, t.text)))))) : null;
-
-  const fam = bio.family || {};
-  const family = (fam.parents?.length || fam.siblings?.length || fam.structure) ? h('section', { class: 'sec' },
-    h('h3', null, 'Family'),
-    fam.structure ? h('p', { class: 'bio-note' }, fam.structure) : null,
-    h('ul', { class: 'bio-people' },
-      (fam.parents || []).map((p) => person(p.name, p.role, [p.occupation, p.trait].filter(Boolean).join('; '), p.status, open && (() => open(p, 'parent')))),
-      (fam.siblings || []).map((p) => person(p.name, p.relation, [p.age != null ? `age ${p.age}` : null, p.note].filter(Boolean).join('; '), p.status, open && (() => open(p, 'sibling')))))) : null;
-
-  const people = (bio.people || []).length ? h('section', { class: 'sec' },
-    h('h3', null, 'People in their life', open ? h('span', { class: 'pts no-print' }, 'tap a name to meet them') : null),
-    h('ul', { class: 'bio-people' }, bio.people.map((p) => person(p.name, p.relation, p.who, p.status, open && (() => open(p, 'person')))))) : null;
-
-  const pers = bio.personality || {};
-  const personality = (pers.traits?.length || pers.values?.length || pers.voice) ? h('section', { class: 'sec' },
-    h('h3', null, 'Personality'),
-    (pers.traits || []).length ? h('div', { class: 'bio-traits' }, pers.traits.map((t) => h('span', { class: `bio-trait ${t.side || ''}`, title: SIDE_LABEL[t.side] || '' }, t.name, t.strength && t.strength !== 'mild' ? h('small', null, ` · ${t.strength}`) : null))) : null,
-    h('dl', { class: 'bio-dl' },
-      list('Values', pers.values), list('Fears', pers.fears), list('Habits', pers.habits), list('Likes', pers.likes), list('Dislikes', pers.dislikes),
-      pers.voice ? [h('dt', null, 'Roleplay it'), h('dd', null, pers.voice)] : null)) : null;
-
-  const inner = (bio.motivations?.length || bio.secrets?.length || bio.regrets?.length || bio.hopes?.length) ? h('section', { class: 'sec' },
-    h('h3', null, 'Inner life'),
-    h('dl', { class: 'bio-dl' }, list('Motivations', bio.motivations), list('Secrets', bio.secrets), list('Regrets', bio.regrets), list('Hopes', bio.hopes))) : null;
-
-  const haveComp = new Set((ch.complications || []).map((c) => `${c.type}|${c.text}`));
-  const gm = (bio.hooks?.length || bio.complications?.length || bio.benefits?.skills?.length || bio.benefits?.advantages?.length) ? h('section', { class: 'sec bio-gm' },
-    h('h3', null, 'For the GM'),
-    (bio.hooks || []).length ? h('ul', { class: 'bio-hooks' }, bio.hooks.map((x) => h('li', null, x))) : null,
-    (bio.complications || []).length ? [h('div', { class: 'label', style: { margin: '10px 0 6px' } }, 'Complications from their past (DCA 27)'),
-      h('ul', { class: 'bio-comps' }, bio.complications.map((c) => h('li', null, h('b', null, `${c.type}: `), c.text,
-        change && !haveComp.has(`${c.type}|${c.text}`) ? h('button', { class: 'btn sm no-print', type: 'button', onClick: () => change((x) => { x.complications = [...(x.complications || []), { type: c.type, text: c.text }]; }) }, 'Add to sheet') : h('span', { class: 'bio-added' }, ' ✓ on sheet'))))] : null,
-    (bio.benefits?.skills?.length || bio.benefits?.advantages?.length) ? [h('div', { class: 'label', style: { margin: '10px 0 6px' } }, 'What their past suggests (buy with points if you like)'),
-      h('ul', { class: 'bio-comps' },
-        (bio.benefits.skills || []).map((s) => h('li', null, h('b', null, `${s.name}${s.spec ? ` (${s.spec})` : ''}`), s.why ? `: ${s.why}` : '')),
-        (bio.benefits.advantages || []).map((a) => h('li', null, h('b', null, a.name), a.why ? `: ${a.why}` : '')))] : null) : null;
-
-  const actions = h('div', { class: 'btn-row no-print', style: { marginTop: '4px' } },
-    h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(bioText(bio))) ? 'Bio copied' : 'Copy failed') }, 'Copy bio text'));
-
-  const file = h('article', { class: 'file bio' }, head, toolbar || null,
-    h('div', { class: 'file-body' },
-      h('div', { class: 'col' }, summary, journal, timeline, family, people),
-      h('div', { class: 'col' }, personality, inner, sections, gm, actions)));
-  file.style.setProperty('--hero', hero);
-  file.style.setProperty('--hero-ink', inkFor(hero));
-  return file;
-}
-
-function person(name, relation, who, status, onOpen) {
-  return h('li', null,
-    h('div', null, onOpen
-      ? h('button', { type: 'button', class: 'bio-name-link', title: `Open ${name} as a full character in a new tab`, onClick: onOpen }, name || 'Unnamed', h('span', { class: 'bio-open', 'aria-hidden': 'true' }, ' ↗'))
-      : h('b', null, name || 'Unnamed'), relation ? h('span', { class: 'bio-rel' }, relation) : null),
-    who ? h('div', { class: 'bio-who' }, who) : null,
-    status ? h('div', { class: 'bio-status' }, status) : null);
-}
-
-function list(label, arr) {
-  if (!arr?.length) return null;
-  return [h('dt', null, label), h('dd', null, arr.length === 1 ? arr[0] : h('ul', null, arr.map((x) => h('li', null, x))))];
-}
-
-return { renderBio };
-})();
-
 __mods["src/engine/expr.js"] = (() => {
 // Tiny arithmetic for data files: "pl/2+1", "pl-2", "4", ranges "2..pl/2+3".
 // Supports integers, pl, + - * / and parentheses. Results are floored.
@@ -6526,11 +6272,20 @@ function tplKey(tpl) {
   return `${tpl.effect}|${(tpl.names || [])[0]}`;
 }
 
+// Effects that can repeat on one character (everything else is bought once: two Flights is a mistake).
+const STACKABLE = new Set(['Enhanced Trait', 'Feature', 'Immunity', 'Senses', 'Movement', 'Damage', 'Affliction']);
+function usedEffects(ch) {
+  const out = new Set();
+  for (const p of [...(ch.powers || []), ...(ch.devices || []).flatMap((d) => d.powers)]) if (!STACKABLE.has(p.effect)) out.add(p.effect);
+  return out;
+}
+
 function addUtilityPower(ch, R, ctx, room) {
   const { rng, themes } = ctx;
   if (ctx.arch.powerless) return false;
   const used = usedTemplates(ch);
-  const choices = themeTemplates(themes, (t) => ['utility', 'sense', 'support', 'movement', 'control'].includes(t.role) && t.rank !== 'toughness' && !used.has(tplKey(t)));
+  const have = usedEffects(ch);
+  const choices = themeTemplates(themes, (t) => ['utility', 'sense', 'support', 'movement', 'control'].includes(t.role) && t.rank !== 'toughness' && !used.has(tplKey(t)) && !have.has(t.effect));
   const pick = rng.weighted(choices);
   if (!pick) return false;
   const p = instantiate(pick.tpl, rankFor(pick.tpl, ctx, R, 'utility'), pick.theme, rng);
@@ -6779,7 +6534,8 @@ function buildMechanics(R, ctx) {
     const placeIn = () => (ctx.device && rng.chance(arch.id === 'battlesuit' ? 0.95 : 0.5) ? ctx.device.powers : ch.powers);
     const addRole = (role) => {
       const used = usedTemplates(ch);
-      const pick = rng.weighted(themeTemplates(themes, (t) => t.role === role && t.rank !== 'toughness' && !used.has(tplKey(t))));
+      const have = usedEffects(ch);
+      const pick = rng.weighted(themeTemplates(themes, (t) => t.role === role && t.rank !== 'toughness' && !used.has(tplKey(t)) && !have.has(t.effect)));
       if (!pick) return;
       const p = instantiate(pick.tpl, rankFor(pick.tpl, ctx, R, role), pick.theme, rng);
       p.tpl = tplKey(pick.tpl);
@@ -7175,6 +6931,7 @@ function generatePerson(R, ctx) {
     const entry = (R.raw.catalog?.minions || []).find((e) => e.id === id) || (R.raw.catalog?.minions || [])[0];
     ch = catalogToCharacter(entry);
     ch.minion = false;
+    ch.npc = true;
     ch.archetype = { id: `npc-${entry.id}`, name: entry.name };
     ch.alignment = /enemy|crime|criminal|cult|villain/i.test(text) ? 'villain' : 'hero';
     ch.theme = { name: entry.name, color: '#8a5a44' };
@@ -7249,6 +7006,540 @@ function fromKeySync(R, key) {
 }
 
 return { DATA_VERSION, rollKey, personContext, personKey, generatePerson, characterKey, isKey, fromKeySync };
+})();
+
+__mods["src/engine/journal.js"] = (() => {
+// The campaign journal: what happened to a character in play, session by session.
+//
+// ch.journal = { entries: [{ id, date, session, title, text, people: [{ name, relation, who, status }],
+//                            downtime, tags, created }] }
+//
+// Each entry also lives on the bio's life timeline (stage "In play"), so it shows up with the rest
+// of the character's life, in exports and in the World wiki. People named in an entry join
+// "People in their life" (or have their status updated), and GM awards made for the entry carry
+// its id so the journal can show what the session paid for.
+
+const { awardPoints } = __mods["src/engine/advancement.js"];
+const { generateCharacter } = __mods["src/engine/generator.js"];
+const { characterKey } = __mods["src/engine/keys.js"];
+const { makeRng } = __mods["src/engine/rng.js"];
+const newId = () => `j-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+const today = () => new Date().toISOString().slice(0, 10);
+const endStop = (s) => (/[.!?]['"]?$/.test(String(s).trim()) ? String(s).trim() : `${String(s).trim()}.`);
+
+const JOURNAL_RELATIONS = ['Ally', 'Friend', 'Enemy', 'Rival', 'Mentor', 'Student', 'Love', 'Ex', 'Dependent', 'Contact', 'Employer', 'Teammate', 'Nemesis', 'Family'];
+
+/** A bio shell for characters that never rolled one (hand-built, imported, creatures). */
+function ensureBio(ch) {
+  if (!ch.bio) ch.bio = { version: 1, manual: true, summary: '', sections: [], timeline: [], family: { parents: [], siblings: [], structure: '' }, people: [], personality: {}, motivations: [], secrets: [], regrets: [], hopes: [], hooks: [], complications: [], benefits: {} };
+  ch.bio.timeline = ch.bio.timeline || [];
+  ch.bio.people = ch.bio.people || [];
+  return ch.bio;
+}
+
+function ensureJournal(ch) {
+  if (!ch.journal) ch.journal = { entries: [] };
+  ch.journal.entries = ch.journal.entries || [];
+  return ch.journal;
+}
+
+function timelineText(e) {
+  const head = e.title ? e.title.trim() : '';
+  const body = e.text ? e.text.trim() : '';
+  return endStop(head && body ? `${head}: ${body}` : head || body || 'Session played');
+}
+
+function syncTimeline(ch, e) {
+  const bio = ensureBio(ch);
+  const age = Number.isFinite(Number(ch.identity?.age)) ? Number(ch.identity.age) : null;
+  const row = { age: age ?? (bio.timeline.length ? Math.max(...bio.timeline.map((t) => t.age || 0)) : 0), stage: 'In play', text: timelineText(e), tags: ['play', ...(e.tags || [])], journalId: e.id, session: e.session, date: e.date };
+  const i = bio.timeline.findIndex((t) => t.journalId === e.id);
+  if (i >= 0) bio.timeline[i] = { ...bio.timeline[i], ...row };
+  else bio.timeline.push(row);
+  if (e.downtime) {
+    const dt = { age: row.age, stage: 'Between adventures', text: endStop(e.downtime), tags: ['downtime'], journalId: e.id, downtime: true, session: e.session, date: e.date };
+    const j = bio.timeline.findIndex((t) => t.journalId === e.id && t.downtime);
+    if (j >= 0) bio.timeline[j] = { ...bio.timeline[j], ...dt }; else bio.timeline.push(dt);
+  } else bio.timeline = bio.timeline.filter((t) => !(t.journalId === e.id && t.downtime));
+}
+
+function findPerson(bio, name) {
+  const n = String(name || '').trim().toLowerCase();
+  if (!n) return null;
+  for (const p of bio.people || []) if (String(p.name).toLowerCase() === n) return { p, list: 'people' };
+  for (const p of bio.family?.parents || []) if (String(p.name).toLowerCase() === n) return { p, list: 'parents' };
+  for (const p of bio.family?.siblings || []) if (String(p.name).toLowerCase() === n) return { p, list: 'siblings' };
+  return null;
+}
+
+function syncPeople(ch, e) {
+  const bio = ensureBio(ch);
+  for (const person of e.people || []) {
+    const name = String(person.name || '').trim();
+    if (!name) continue;
+    const found = findPerson(bio, name);
+    const label = e.session ? `Session ${e.session}` : e.date || 'In play';
+    if (found) {
+      if (person.status) found.p.status = endStop(person.status);
+      if (person.relation && found.list === 'people' && person.relation !== found.p.relation) { found.p.relation = person.relation; found.p.changed = label; }
+      if (person.who && !(found.p.who || '').includes(person.who)) found.p.who = `${found.p.who ? `${endStop(found.p.who)} ` : ''}${label}: ${endStop(person.who)}`;
+      found.p.lastSeen = label;
+    } else {
+      bio.people.push({ name, relation: person.relation || 'Contact', who: endStop(person.who || `Met in play (${label}).`), status: endStop(person.status || 'Still around.'), journalId: e.id, met: label });
+    }
+  }
+}
+
+/** Add a session to the journal (and to the life timeline, the people list and the point log). */
+function addJournalEntry(ch, R, data = {}) {
+  const j = ensureJournal(ch);
+  const e = {
+    id: newId(),
+    date: data.date || today(),
+    session: data.session != null && data.session !== '' ? Number(data.session) : j.entries.length + 1,
+    title: String(data.title || '').trim(),
+    text: String(data.text || '').trim(),
+    people: (data.people || []).filter((p) => p && String(p.name || '').trim()).map((p) => ({ name: String(p.name).trim(), relation: p.relation || '', who: String(p.who || '').trim(), status: String(p.status || '').trim() })),
+    downtime: String(data.downtime || '').trim(),
+    tags: data.tags || [],
+    created: new Date().toISOString(),
+  };
+  j.entries.push(e);
+  syncTimeline(ch, e);
+  syncPeople(ch, e);
+  const pts = Number(data.pointsEarned);
+  if (pts) {
+    awardPoints(ch, R, pts, `Session ${e.session}${e.title ? `: ${e.title}` : ''}`);
+    ch.advancement.log[ch.advancement.log.length - 1].journalId = e.id;
+  }
+  return e;
+}
+
+function updateJournalEntry(ch, R, id, patch = {}) {
+  const j = ensureJournal(ch);
+  const e = j.entries.find((x) => x.id === id);
+  if (!e) return null;
+  for (const k of ['date', 'title', 'text', 'downtime', 'tags']) if (patch[k] !== undefined) e[k] = typeof patch[k] === 'string' ? patch[k].trim() : patch[k];
+  if (patch.session !== undefined && patch.session !== '') e.session = Number(patch.session);
+  if (patch.people) e.people = patch.people.filter((p) => p && String(p.name || '').trim()).map((p) => ({ name: String(p.name).trim(), relation: p.relation || '', who: String(p.who || '').trim(), status: String(p.status || '').trim() }));
+  syncTimeline(ch, e);
+  syncPeople(ch, e);
+  const pts = Number(patch.pointsEarned);
+  if (pts) {
+    awardPoints(ch, R, pts, `Session ${e.session}${e.title ? `: ${e.title}` : ''}`);
+    ch.advancement.log[ch.advancement.log.length - 1].journalId = e.id;
+  }
+  return e;
+}
+
+function removeJournalEntry(ch, id) {
+  const j = ensureJournal(ch);
+  j.entries = j.entries.filter((x) => x.id !== id);
+  if (ch.bio) {
+    ch.bio.timeline = (ch.bio.timeline || []).filter((t) => t.journalId !== id);
+    ch.bio.people = (ch.bio.people || []).filter((p) => p.journalId !== id);
+  }
+  for (const e of ch.advancement?.log || []) if (e.journalId === id) delete e.journalId;
+  return ch;
+}
+
+/** Advancement entries that belong to a journal entry. */
+function journalPoints(ch, id) {
+  return (ch.advancement?.log || []).filter((e) => e.journalId === id);
+}
+
+/** Spending entries not yet tied to a session. */
+function unlinkedSpends(ch) {
+  return (ch.advancement?.log || []).filter((e) => (e.type === 'spend' || e.type === 'refund') && !e.journalId);
+}
+
+function linkPoints(ch, logId, journalId) {
+  const e = (ch.advancement?.log || []).find((x) => x.id === logId);
+  if (e) { if (journalId) e.journalId = journalId; else delete e.journalId; }
+  return ch;
+}
+
+/** Entries newest first. */
+function journalEntries(ch) {
+  return [...(ch.journal?.entries || [])].sort((a, b) => (b.session || 0) - (a.session || 0) || String(b.date || '').localeCompare(String(a.date || '')));
+}
+
+function journalText(ch) {
+  const out = [];
+  for (const e of [...(ch.journal?.entries || [])].sort((a, b) => (a.session || 0) - (b.session || 0))) {
+    out.push(`Session ${e.session}${e.date ? ` (${e.date})` : ''}${e.title ? `: ${e.title}` : ''}`);
+    if (e.text) out.push(`  ${e.text}`);
+    for (const p of e.people || []) out.push(`  - ${p.name}${p.relation ? ` (${p.relation})` : ''}${p.who ? `: ${p.who}` : ''}${p.status ? ` [${p.status}]` : ''}`);
+    for (const a of journalPoints(ch, e.id)) out.push(`  * ${a.type === 'award' ? `+${a.points} pp earned` : `${a.points} pp spent`}${a.changes?.length ? `: ${a.changes.join('; ')}` : a.note ? `: ${a.note}` : ''}`);
+    if (e.downtime) out.push(`  Between adventures: ${e.downtime}`);
+    out.push('');
+  }
+  return out.join('\n').trim();
+}
+
+// ---- enemies ----------------------------------------------------------------------------------
+//
+// Some heroes collect enemies. A nuisance keeps turning up; a threat means it; a nemesis has made
+// it personal. The enemy is a full villain rolled at a power level that fits the threat, and the
+// person entry carries their key, so they open as a complete character with their own bio.
+
+const ENEMY_LEVELS = {
+  nuisance: { label: 'Nuisance', plShift: [-4, -2], relation: 'Enemy', blurb: 'Outclassed, annoying, and never quite gone.' },
+  threat: { label: 'Threat', plShift: [-1, 1], relation: 'Enemy', blurb: 'A real danger who means every word.' },
+  nemesis: { label: 'Nemesis', plShift: [0, 2], relation: 'Nemesis', blurb: 'Their opposite number. It\'s personal, and it will not end well for one of them.' },
+};
+
+const ENEMY_REASONS = {
+  nuisance: [
+    'keeps robbing the same three banks and takes it personally every time {hero} shows up',
+    'blames {hero} for a job that went wrong years ago and has never let it go',
+    'runs a small crew that {hero} keeps breaking up, and keeps rebuilding it',
+    'sees {hero} as the one thing standing between them and the big leagues',
+    'picked a fight with {hero} on a dare and has been losing it ever since',
+    'got {hero} on camera at a bad moment and has milked it for all it is worth',
+    'is convinced {hero} is a fraud and keeps trying to prove it in public',
+    'wants {hero}\'s territory, costume, name, or all three',
+    'escapes every month, calls {hero} out every month, and loses every month',
+    'thinks {hero} owes them money, and has started charging interest',
+  ],
+  threat: [
+    'wants {hero} out of the way and has the means to do it',
+    'runs the operation {hero} has been dismantling piece by piece, and has had enough',
+    'was put away by {hero} once, and came back with friends',
+    'has been hired, by someone who will not give a name, to make {hero} stop',
+    'believes {hero} is a danger to the city and intends to prove it the hard way',
+    'has studied {hero}\'s every fight and found the weak point',
+    'needs something only {hero} is protecting, and will go through anyone to get it',
+    'shares {hero}\'s origin and none of {hero}\'s scruples',
+    'has already hurt someone close to {hero}, and promised that was only the start',
+    'is building toward something big, and {hero} is the loose end',
+  ],
+  nemesis: [
+    'is everything {hero} might have become, and knows it',
+    'was there the day {hero} got powers, and got the mirror image',
+    'blames {hero} for the loss that made them, and has built a life around paying it back',
+    'was once {hero}\'s closest ally, and has never forgiven the betrayal, real or imagined',
+    'cannot be beaten for good: every defeat only teaches them more about {hero}',
+    'knows {hero}\'s real name, and is saving it for the right moment',
+    'wants {hero} to join them, and will burn the city down to make the offer convincing',
+    'has decided the two of them are the only ones who matter, and the rest of the world is scenery',
+    'kills what {hero} protects, slowly, to see what it takes to make {hero} break the rules',
+    'was made by the same hands as {hero}, and intends to be the only one left',
+  ],
+};
+const ENEMY_STATUS = {
+  nuisance: ['At large, and probably planning something small.', 'Back in a cell, for now.', 'Lying low after the last beating.', 'Sending threatening letters from a holding cell.'],
+  threat: ['At large.', 'Escaped custody last month.', 'Running the operation from somewhere {hero} cannot reach.', 'Watching, waiting for the right moment.'],
+  nemesis: ['At large, and {hero} can feel it.', 'Locked away, for whatever that is worth.', 'Missing, presumed plotting.', 'Closer than {hero} thinks.'],
+};
+
+/**
+ * Roll an enemy for a character and add them to their life (people, timeline, and a complication if asked).
+ * opts: { level: 'nuisance'|'threat'|'nemesis', seed, name, complication, theme, archetype }
+ * Returns { person, villain }.
+ */
+function addEnemy(ch, R, { level = 'threat', seed = randomSeedFor(ch), name, complication = true, theme = null, archetype = null } = {}) {
+  const L = ENEMY_LEVELS[level] || ENEMY_LEVELS.threat;
+  const rng = makeRng(`${seed}::enemy`);
+  const basePl = Math.max(1, Number(ch.pl) || 10);
+  const pl = Math.max(1, Math.min(20, basePl + rng.int(L.plShift[0], L.plShift[1])));
+  const villain = generateCharacter(R, { seed: `${seed}::villain`, pl, alignment: 'villain', chaos: 0.35, theme, archetype });
+  if (name) villain.identity = { ...villain.identity, codename: name };
+  const hero = ch.identity?.codename || ch.identity?.realName || 'them';
+  const fill = (t) => t.replace(/\{hero\}/g, hero);
+  const reason = fill(rng.pick(ENEMY_REASONS[level] || ENEMY_REASONS.threat));
+  const status = fill(rng.pick(ENEMY_STATUS[level] || ENEMY_STATUS.threat));
+  const codename = villain.identity.codename;
+  const who = `${codename}${villain.identity.realName && villain.identity.realName !== codename ? ` (${villain.identity.realName})` : ''}, a PL ${pl} ${String(villain.archetype?.name || 'villain').toLowerCase()}${villain.theme?.name ? ` with ${villain.theme.name.toLowerCase()} powers` : ''}, who ${reason}.`;
+  const bio = ensureBio(ch);
+  const person = { name: codename, relation: L.relation, who, status, key: characterKey(R, villain), enemy: { level, pl, seed } };
+  bio.people = [...bio.people.filter((p) => p.name !== codename), person];
+  const age = Number.isFinite(Number(ch.identity?.age)) ? Number(ch.identity.age) : (bio.timeline.length ? Math.max(...bio.timeline.map((t) => t.age || 0)) : 0);
+  bio.timeline.push({ age, stage: 'In play', text: `Made an enemy: ${codename}, who ${reason}.`, tags: ['play', 'enemy', level], enemyOf: codename });
+  if (complication) {
+    const type = level === 'nemesis' ? 'Enemy' : 'Enemy';
+    const text = `${level === 'nemesis' ? 'Nemesis' : L.label}: ${codename} ${reason}.`;
+    ch.complications = [...(ch.complications || []).filter((c) => !(c.type === type && c.text === text)), { type, text }];
+  }
+  return { person, villain };
+}
+
+function randomSeedFor(ch) {
+  return `${ch.seed || ch.identity?.codename || 'enemy'}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+}
+
+return { JOURNAL_RELATIONS, ensureBio, ensureJournal, addJournalEntry, updateJournalEntry, removeJournalEntry, journalPoints, unlinkedSpends, linkPoints, journalEntries, journalText, ENEMY_LEVELS, addEnemy };
+})();
+
+__mods["src/app/journal.js"] = (() => {
+// The campaign journal on the Bio page: sessions played, who was met, what the points bought,
+// and what happened between adventures.
+
+const { h, toast, copyText, openDialog } = __mods["src/app/dom.js"];
+const { addJournalEntry, updateJournalEntry, removeJournalEntry, journalEntries, journalPoints, unlinkedSpends, linkPoints, journalText, JOURNAL_RELATIONS, addEnemy, ENEMY_LEVELS } = __mods["src/engine/journal.js"];
+const { rollDowntimeEvent } = __mods["src/engine/lifepath.js"];
+const { randomSeed } = __mods["src/engine/rng.js"];
+const sign = (n) => (n > 0 ? `+${n}` : `${n}`);
+let editing = null; // id of the entry being edited, or 'new'
+
+/**
+ * change(fn) clones the character, applies fn and saves. onOpenPerson(p) opens a person as a character.
+ */
+function journalSection(ch, R, { change, onOpenPerson } = {}) {
+  const entries = journalEntries(ch);
+  const known = [...(ch.bio?.people || []), ...(ch.bio?.family?.parents || []), ...(ch.bio?.family?.siblings || [])];
+  const spends = unlinkedSpends(ch);
+
+  const form = (entry) => {
+    const isNew = !entry;
+    const e = entry || { session: (ch.journal?.entries?.length || 0) + 1, date: new Date().toISOString().slice(0, 10), title: '', text: '', people: [], downtime: '' };
+    const session = h('input', { type: 'number', min: 0, value: e.session, id: 'jr-session', 'aria-label': 'Session number', style: { maxWidth: '80px' } });
+    const date = h('input', { type: 'date', value: e.date || '', id: 'jr-date', 'aria-label': 'Date', style: { maxWidth: '160px' } });
+    const title = h('input', { type: 'text', value: e.title || '', id: 'jr-title', placeholder: 'Title (e.g. "The Royal Flush Gang")', 'aria-label': 'Title' });
+    const text = h('textarea', { id: 'jr-text', placeholder: 'What happened: the job, the fight, the fallout, what they learned…', 'aria-label': 'What happened', style: { minHeight: '90px' } }, e.text || '');
+    const points = isNew ? h('input', { type: 'number', min: 0, max: 20, value: 0, id: 'jr-points', 'aria-label': 'Points earned', style: { maxWidth: '80px' } }) : null;
+    const downtime = h('textarea', { id: 'jr-downtime', placeholder: 'Between adventures (optional): training, travel, a funeral, a wedding…', 'aria-label': 'Between adventures', style: { minHeight: '50px' } }, e.downtime || '');
+    const peopleRows = h('div', { class: 'jr-people' });
+    const people = (e.people || []).map((p) => ({ ...p }));
+    const drawPeople = () => {
+      peopleRows.replaceChildren();
+      people.forEach((p, i) => {
+        const existing = known.find((k) => String(k.name).toLowerCase() === String(p.name || '').toLowerCase());
+        peopleRows.append(h('div', { class: 'jr-person' },
+          h('input', { type: 'text', list: 'jr-known', value: p.name || '', placeholder: 'Name', 'aria-label': 'Person', onInput: (ev) => { p.name = ev.target.value; }, onChange: () => drawPeople() }),
+          h('select', { 'aria-label': 'Relationship', onChange: (ev) => { p.relation = ev.target.value; } },
+            h('option', { value: '', selected: !p.relation }, existing ? `Keep: ${existing.relation || existing.role || 'as is'}` : 'Relationship…'),
+            JOURNAL_RELATIONS.map((r) => h('option', { value: r, selected: p.relation === r }, r))),
+          h('input', { type: 'text', value: p.who || '', placeholder: existing ? 'What happened with them' : 'Who they are', 'aria-label': 'Who they are', onInput: (ev) => { p.who = ev.target.value; } }),
+          h('input', { type: 'text', value: p.status || '', placeholder: 'Status now (e.g. "now an enemy", "died in issue #12")', 'aria-label': 'Status', onInput: (ev) => { p.status = ev.target.value; } }),
+          h('span', { class: `jr-tag ${existing ? '' : 'new'}` }, existing ? 'known' : 'new'),
+          h('button', { class: 'x', type: 'button', 'aria-label': 'Remove person', onClick: () => { people.splice(i, 1); drawPeople(); } }, '✕')));
+      });
+      peopleRows.append(h('button', { class: 'btn sm', type: 'button', onClick: () => { people.push({ name: '', relation: '', who: '', status: '' }); drawPeople(); } }, '+ Someone they met or dealt with'));
+    };
+    drawPeople();
+    const dtRoll = h('button', { class: 'btn sm', type: 'button', title: 'Roll what happened between adventures from the life-event tables', onClick: () => {
+      try {
+        const r = rollDowntimeEvent(R, ch, { seed: randomSeed() });
+        downtime.value = r.text;
+        for (const p of r.people || []) if (!people.some((x) => x.name === p.name)) { people.push({ name: p.name, relation: p.relation, who: p.who, status: p.status }); }
+        drawPeople();
+        toast(r.people?.length ? `Downtime rolled: ${r.people.map((p) => p.name).join(', ')} added to the people list` : 'Downtime rolled');
+      } catch (err) { toast(err.message); }
+    } }, '🎲 Roll a downtime event');
+    const save = () => {
+      const data = { session: session.value, date: date.value, title: title.value, text: text.value, people, downtime: downtime.value, pointsEarned: points ? Number(points.value) || 0 : 0 };
+      if (!data.title.trim() && !data.text.trim()) { title.setCustomValidity('Give the session a title or some text'); title.reportValidity(); return; }
+      editing = null;
+      change?.((c) => { if (isNew) addJournalEntry(c, R, data); else updateJournalEntry(c, R, entry.id, data); });
+      toast(isNew ? 'Session added to the journal and the timeline' : 'Session updated');
+    };
+    return h('div', { class: 'jr-form' },
+      h('datalist', { id: 'jr-known' }, known.map((k) => h('option', { value: k.name }, k.relation || k.role || ''))),
+      h('div', { class: 'jr-row' }, h('label', { class: 'field' }, h('span', null, 'Session'), session), h('label', { class: 'field' }, h('span', null, 'Date'), date), h('label', { class: 'field', style: { flex: 1 } }, h('span', null, 'Title'), title)),
+      h('label', { class: 'field' }, h('span', null, 'What happened'), text),
+      h('div', { class: 'label' }, 'People in this session'),
+      peopleRows,
+      h('label', { class: 'field' }, h('span', null, 'Between adventures ', dtRoll), downtime),
+      h('div', { class: 'jr-row', style: { alignItems: 'end' } },
+        points ? h('label', { class: 'field' }, h('span', null, 'Points earned (GM award)'), points) : null,
+        h('span', { style: { flex: 1 } }),
+        h('button', { class: 'btn ghost', type: 'button', onClick: () => { editing = null; change?.(() => {}); } }, 'Cancel'),
+        h('button', { class: 'btn primary', type: 'button', onClick: save }, isNew ? 'Add to the journal' : 'Save changes')));
+  };
+
+  const card = (e) => {
+    if (editing === e.id) return form(e);
+    const pts = journalPoints(ch, e.id);
+    const earned = pts.filter((x) => x.type === 'award').reduce((s, x) => s + (x.points || 0), 0);
+    const spent = pts.filter((x) => x.type !== 'award');
+    return h('article', { class: 'jr-entry' },
+      h('div', { class: 'jr-head' },
+        h('span', { class: 'jr-session num' }, `S${e.session ?? '?'}`),
+        h('div', { class: 'jr-titles' }, h('b', null, e.title || 'Untitled session'), h('span', { class: 'jr-date num' }, e.date || '')),
+        earned ? h('span', { class: 'chip jr-earned' }, `+${earned} pp`) : null,
+        change ? h('span', { class: 'btn-row no-print' },
+          h('button', { class: 'btn sm ghost', type: 'button', onClick: () => { editing = e.id; change(() => {}); } }, 'Edit'),
+          h('button', { class: 'btn sm ghost danger', type: 'button', onClick: () => { if (confirm(`Remove session ${e.session} from the journal? Its timeline entry and the people it added go with it.`)) change((c) => removeJournalEntry(c, e.id)); } }, '✕')) : null),
+      e.text ? h('p', { class: 'jr-text' }, e.text) : null,
+      e.people?.length ? h('div', { class: 'jr-chips' }, e.people.map((p) => {
+        const k = known.find((x) => String(x.name).toLowerCase() === p.name.toLowerCase());
+        return h('button', { type: 'button', class: 'chip jr-chip', title: [p.who, p.status].filter(Boolean).join(' · ') || p.name, onClick: () => (k && onOpenPerson ? onOpenPerson(k, k.role ? (k.relation ? 'sibling' : 'parent') : 'person') : null) },
+          p.name, p.relation || k?.relation ? h('small', null, ` · ${p.relation || k.relation}`) : null, p.status ? h('small', { class: 'jr-status' }, ` · ${p.status}`) : null);
+      })) : null,
+      spent.length ? h('ul', { class: 'jr-spent' }, spent.map((x) => h('li', null, h('b', null, `${x.points > 0 ? `−${x.points}` : `+${-x.points}`} pp`), ' ', (x.changes || []).join('; ') || x.note || ''))) : null,
+      e.downtime ? h('p', { class: 'jr-downtime' }, h('b', null, 'Between adventures: '), e.downtime) : null);
+  };
+
+  const linkRow = spends.length && entries.length && change ? (() => {
+    const sel = h('select', { 'aria-label': 'Spending to link' }, spends.map((x) => h('option', { value: x.id }, `${x.date || ''} ${x.points > 0 ? `−${x.points}` : `+${-x.points}`} pp: ${(x.changes || []).join('; ').slice(0, 70) || x.note}`)));
+    const to = h('select', { 'aria-label': 'Session' }, entries.map((e) => h('option', { value: e.id }, `Session ${e.session}${e.title ? `: ${e.title}` : ''}`)));
+    return h('div', { class: 'jr-link no-print' }, h('span', { class: 'label' }, 'Points spent, not yet tied to a session'), h('div', { class: 'add-row' }, sel, to, h('button', { class: 'btn sm', type: 'button', onClick: () => change((c) => linkPoints(c, sel.value, to.value)) }, 'Link')));
+  })() : null;
+
+  return h('section', { class: 'sec journal' },
+    h('h3', null, 'Campaign journal', h('span', { class: 'pts' }, entries.length ? `${entries.length} session${entries.length === 1 ? '' : 's'}` : 'what happened in play')),
+    h('p', { class: 'hint', style: { margin: '0 0 8px' } }, 'Each session joins the life timeline as "In play". People you name are added to their life, or have their status updated. Points the GM awards for a session are tied to it, and so is whatever they bought.'),
+    change && editing !== 'new' ? h('div', { class: 'btn-row no-print', style: { marginBottom: '8px' } },
+      h('button', { class: 'btn primary', type: 'button', id: 'jr-new', onClick: () => { editing = 'new'; change(() => {}); } }, '+ New session'),
+      h('button', { class: 'btn', type: 'button', id: 'jr-enemy', title: 'Roll a villain who has it in for them', onClick: () => enemyDialog(ch, R, change) }, '😈 Add an enemy'),
+      entries.length ? h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(journalText(ch))) ? 'Journal copied' : 'Copy failed') }, 'Copy journal') : null) : null,
+    editing === 'new' ? form(null) : null,
+    linkRow,
+    entries.length ? h('div', { class: 'jr-list' }, entries.map(card)) : (editing !== 'new' ? h('p', { class: 'hint', style: { margin: 0 } }, 'No sessions yet. After a game, add what happened: it becomes part of their story.') : null));
+}
+
+async function enemyDialog(ch, R, change) {
+  const hero = ch.identity?.codename || 'them';
+  const level = h('select', { id: 'enemy-level', 'aria-label': 'How dangerous' }, Object.entries(ENEMY_LEVELS).map(([k, v]) => h('option', { value: k, selected: k === 'threat' }, `${v.label} · ${v.blurb}`)));
+  const name = h('input', { type: 'text', id: 'enemy-name', placeholder: 'Leave blank for a rolled name', 'aria-label': 'Codename' });
+  const themes = (R.raw.themes || []).slice().sort((a, b) => a.name.localeCompare(b.name));
+  const theme = h('select', { id: 'enemy-theme', 'aria-label': 'Power theme' }, h('option', { value: '' }, 'Any power theme'), themes.map((t) => h('option', { value: t.id }, t.name)));
+  const comp = h('input', { type: 'checkbox', id: 'enemy-comp', checked: true });
+  const ok = await openDialog({
+    title: `An enemy for ${hero}`,
+    body: [
+      h('p', { style: { margin: 0 } }, 'A full villain, rolled at a power level that fits the threat, added to "People in their life" and the timeline. Tap their name to open them as a character of their own.'),
+      h('label', { class: 'field' }, h('span', null, 'How dangerous'), level),
+      h('div', { class: 'grid2' }, h('label', { class: 'field' }, h('span', null, 'Codename (optional)'), name), h('label', { class: 'field' }, h('span', null, 'Power theme'), theme)),
+      h('label', { class: 'check' }, comp, ' Add an Enemy complication to the sheet'),
+    ],
+    buttons: [{ label: 'Cancel', value: false }, { label: 'Roll the enemy', value: true, primary: true }],
+  });
+  if (!ok) return;
+  let made = null;
+  change((c) => { made = addEnemy(c, R, { level: level.value, name: name.value.trim() || undefined, theme: theme.value || null, complication: comp.checked }); });
+  if (made) toast(`${made.person.name} (PL ${made.person.enemy.pl}) now has it in for ${hero}`);
+}
+
+return { journalSection };
+})();
+
+__mods["src/app/bio.js"] = (() => {
+// The Bio page: a random life history for a character (family, timeline, people, personality,
+// secrets, GM hooks), generated by engine/lifepath.js and editable.
+
+const { h, toast, copyText, inkFor } = __mods["src/app/dom.js"];
+const { generateBio, rerollSection, bioText } = __mods["src/engine/lifepath.js"];
+const { randomSeed } = __mods["src/engine/rng.js"];
+const { journalSection } = __mods["src/app/journal.js"];
+const { portraitBlock } = __mods["src/app/portrait.js"];
+const SIDE_LABEL = { light: 'Lightside', dark: 'Darkside', neutral: 'Neutral', exotic: 'Exotic' };
+
+/**
+ * change(fn): clone the character, apply fn, save (same helper the sheet uses). May be null (read-only).
+ */
+function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
+  const open = onOpenPerson || null;
+  const hero = ch.theme?.color || '#c8202f';
+  const id = ch.identity || {};
+  const bio = ch.bio;
+  const portrait = portraitBlock(ch, { change: change || null });
+  const head = h('div', { class: `file-head ${portrait && !ch.portrait?.hidden ? 'has-portrait' : ''}` },
+    h('div', { class: 'eyebrow' }, 'Biography'),
+    h('h1', { class: 'codename' }, id.codename || 'Unnamed'),
+    h('div', { class: 'realname' }, [id.realName, id.age ? `age ${id.age}` : null, id.occupation, id.homeland?.country].filter(Boolean).join(' · ')),
+    portrait);
+  head.style.setProperty('--hero', hero);
+  head.style.setProperty('--hero-ink', inkFor(hero));
+
+  const regen = () => change?.((c) => { c.bio = generateBio(R, c, { seed: randomSeed() }); });
+
+  const journal = journalSection(ch, R, { change, onOpenPerson: open });
+  if (!bio) {
+    const file = h('article', { class: 'file bio' }, head, toolbar || null,
+      h('div', { class: 'bio-empty' },
+        h('p', null, 'No life story yet. Roll one: family, childhood, the events that made them, the people in their life, personality, secrets and story hooks for the GM.'),
+        change ? h('button', { class: 'btn primary big', type: 'button', id: 'bio-generate', onClick: regen }, 'Roll a life story') : null),
+      h('div', { class: 'file-body' }, h('div', { class: 'col', style: { gridColumn: '1 / -1' } }, journal)));
+    file.style.setProperty('--hero', hero);
+    file.style.setProperty('--hero-ink', inkFor(hero));
+    return file;
+  }
+
+  const reroll = (sectionId) => change?.((c) => {
+    try { c.bio = rerollSection(R, c, c.bio, sectionId, { seed: randomSeed() }); } catch (e) { toast(e.message); }
+  });
+
+  const summary = h('section', { class: 'sec bio-summary' },
+    h('h3', null, 'Their story', change ? h('span', { class: 'pts no-print' }, h('button', { class: 'linkish', type: 'button', onClick: regen }, bio.manual ? 'Roll a life story' : 'Roll a new life')) : null),
+    change
+      ? h('textarea', { class: 'bio-summary-edit', id: 'bio-summary', 'aria-label': 'Biography summary', onChange: (e) => change((c) => { c.bio = { ...c.bio, summary: e.target.value, edited: true }; }) }, bio.summary || '')
+      : h('p', null, bio.summary));
+
+  const sections = (bio.sections || []).map((s) => h('section', { class: 'sec bio-sec' },
+    h('h3', null, s.title, change ? h('span', { class: 'pts no-print' }, h('button', { class: 'linkish', type: 'button', title: `Re-roll ${s.title}`, onClick: () => reroll(s.id) }, '🎲 re-roll')) : null),
+    h('dl', { class: 'bio-dl' }, (s.items || []).map((it) => [h('dt', null, it.label), h('dd', null, it.text)]))));
+
+  const timeline = (bio.timeline || []).length ? h('section', { class: 'sec' },
+    h('h3', null, 'Life timeline'),
+    h('ol', { class: 'bio-timeline' }, bio.timeline.map((t) => h('li', { class: t.journalId ? 'in-play' : '' },
+      h('span', { class: 'bio-age num', title: t.session ? `Session ${t.session}` : '' }, t.session ? `S${t.session}` : t.age != null ? t.age : '—'),
+      h('div', null, t.stage ? h('span', { class: 'bio-stage' }, t.stage, t.date ? ` · ${t.date}` : '') : null, h('span', null, t.text)))))) : null;
+
+  const fam = bio.family || {};
+  const family = (fam.parents?.length || fam.siblings?.length || fam.structure) ? h('section', { class: 'sec' },
+    h('h3', null, 'Family'),
+    fam.structure ? h('p', { class: 'bio-note' }, fam.structure) : null,
+    h('ul', { class: 'bio-people' },
+      (fam.parents || []).map((p) => person(p.name, p.role, [p.occupation, p.trait].filter(Boolean).join('; '), p.status, open && (() => open(p, 'parent')))),
+      (fam.siblings || []).map((p) => person(p.name, p.relation, [p.age != null ? `age ${p.age}` : null, p.note].filter(Boolean).join('; '), p.status, open && (() => open(p, 'sibling')))))) : null;
+
+  const people = (bio.people || []).length ? h('section', { class: 'sec' },
+    h('h3', null, 'People in their life', open ? h('span', { class: 'pts no-print' }, 'tap a name to meet them') : null),
+    h('ul', { class: 'bio-people' }, bio.people.map((p) => person(p.name, p.relation, p.who, p.status, open && (() => open(p, 'person')))))) : null;
+
+  const pers = bio.personality || {};
+  const personality = (pers.traits?.length || pers.values?.length || pers.voice) ? h('section', { class: 'sec' },
+    h('h3', null, 'Personality'),
+    (pers.traits || []).length ? h('div', { class: 'bio-traits' }, pers.traits.map((t) => h('span', { class: `bio-trait ${t.side || ''}`, title: SIDE_LABEL[t.side] || '' }, t.name, t.strength && t.strength !== 'mild' ? h('small', null, ` · ${t.strength}`) : null))) : null,
+    h('dl', { class: 'bio-dl' },
+      list('Values', pers.values), list('Fears', pers.fears), list('Habits', pers.habits), list('Likes', pers.likes), list('Dislikes', pers.dislikes),
+      pers.voice ? [h('dt', null, 'Roleplay it'), h('dd', null, pers.voice)] : null)) : null;
+
+  const inner = (bio.motivations?.length || bio.secrets?.length || bio.regrets?.length || bio.hopes?.length) ? h('section', { class: 'sec' },
+    h('h3', null, 'Inner life'),
+    h('dl', { class: 'bio-dl' }, list('Motivations', bio.motivations), list('Secrets', bio.secrets), list('Regrets', bio.regrets), list('Hopes', bio.hopes))) : null;
+
+  const haveComp = new Set((ch.complications || []).map((c) => `${c.type}|${c.text}`));
+  const gm = (bio.hooks?.length || bio.complications?.length || bio.benefits?.skills?.length || bio.benefits?.advantages?.length) ? h('section', { class: 'sec bio-gm' },
+    h('h3', null, 'For the GM'),
+    (bio.hooks || []).length ? h('ul', { class: 'bio-hooks' }, bio.hooks.map((x) => h('li', null, x))) : null,
+    (bio.complications || []).length ? [h('div', { class: 'label', style: { margin: '10px 0 6px' } }, 'Complications from their past (DCA 27)'),
+      h('ul', { class: 'bio-comps' }, bio.complications.map((c) => h('li', null, h('b', null, `${c.type}: `), c.text,
+        change && !haveComp.has(`${c.type}|${c.text}`) ? h('button', { class: 'btn sm no-print', type: 'button', onClick: () => change((x) => { x.complications = [...(x.complications || []), { type: c.type, text: c.text }]; }) }, 'Add to sheet') : h('span', { class: 'bio-added' }, ' ✓ on sheet'))))] : null,
+    (bio.benefits?.skills?.length || bio.benefits?.advantages?.length) ? [h('div', { class: 'label', style: { margin: '10px 0 6px' } }, 'What their past suggests (buy with points if you like)'),
+      h('ul', { class: 'bio-comps' },
+        (bio.benefits.skills || []).map((s) => h('li', null, h('b', null, `${s.name}${s.spec ? ` (${s.spec})` : ''}`), s.why ? `: ${s.why}` : '')),
+        (bio.benefits.advantages || []).map((a) => h('li', null, h('b', null, a.name), a.why ? `: ${a.why}` : '')))] : null) : null;
+
+  const actions = h('div', { class: 'btn-row no-print', style: { marginTop: '4px' } },
+    h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(bioText(bio))) ? 'Bio copied' : 'Copy failed') }, 'Copy bio text'));
+
+  const file = h('article', { class: 'file bio' }, head, toolbar || null,
+    h('div', { class: 'file-body' },
+      h('div', { class: 'col' }, summary, journal, timeline, family, people),
+      h('div', { class: 'col' }, personality, inner, sections, gm, actions)));
+  file.style.setProperty('--hero', hero);
+  file.style.setProperty('--hero-ink', inkFor(hero));
+  return file;
+}
+
+function person(name, relation, who, status, onOpen) {
+  return h('li', null,
+    h('div', null, onOpen
+      ? h('button', { type: 'button', class: 'bio-name-link', title: `Open ${name} as a full character in a new tab`, onClick: onOpen }, name || 'Unnamed', h('span', { class: 'bio-open', 'aria-hidden': 'true' }, ' ↗'))
+      : h('b', null, name || 'Unnamed'), relation ? h('span', { class: 'bio-rel' }, relation) : null),
+    who ? h('div', { class: 'bio-who' }, who) : null,
+    status ? h('div', { class: 'bio-status' }, status) : null);
+}
+
+function list(label, arr) {
+  if (!arr?.length) return null;
+  return [h('dt', null, label), h('dd', null, arr.length === 1 ? arr[0] : h('ul', null, arr.map((x) => h('li', null, x))))];
+}
+
+return { renderBio };
 })();
 
 __mods["src/app/importer.js"] = (() => {
@@ -7777,6 +8068,7 @@ function status(ch) {
   const errs = s.issues.filter((i) => i.severity === 'error');
   if (errs.length) return h('span', { class: 'status bad', title: errs.map((e) => e.message).join('\n') }, `✕ ${errs.length} rule issue${errs.length > 1 ? 's' : ''}`);
   if (ch.pl === 0 && !ch.advancement) return h('span', { class: 'status ok', title: 'PL 0 is for ordinary people: up to 14 points, no limits to check' }, `✓ Ordinary person · ${s.cost.total} pp`);
+  if (s.cost.total > s.cost.budget) return h('span', { class: 'status ok', title: 'A supporting character: built as a stat block, so points over PL x 15 are allowed (DCA 194)' }, `✓ Legal · ${s.cost.total} pp (supporting character)`);
   if (s.cost.total < s.cost.budget) return h('span', { class: 'status warn' }, `Legal · ${s.cost.budget - s.cost.total} pp unspent`);
   return h('span', { class: 'status ok' }, `✓ Legal · ${s.cost.total}/${s.cost.budget} pp`);
 }
@@ -13305,6 +13597,7 @@ const { buildWorld, emptyWorld, ENTITY_TYPES, RELATIONS, RELATION_GROUPS, groupe
 const { zip } = __mods["src/engine/xlsx.js"];
 const { sheet: makeSheet } = __mods["src/engine/render.js"];
 const { fromKeySync } = __mods["src/engine/keys.js"];
+const { portraitOf } = __mods["src/engine/portrait.js"];
 const KEY = 'dcugen.world.v1';
 let R; let root; let hooks = {};
 let saved;
@@ -13531,8 +13824,9 @@ function entityPage(e) {
       if (ok) { deleteEntity(saved, e.id); save(); go('home'); }
     } }, 'Remove'));
 
+  const por = ch && !ch.portrait?.hidden ? portraitOf(ch) : null;
   const head = h('header', { class: 'wd-head', style: { '--c': color, '--c-ink': inkFor(color) } },
-    h('div', { class: 'wd-head-glyph' }, e.type === 'person' ? initialsOf(e.name) : meta.glyph),
+    por ? h('div', { class: 'wd-head-glyph has-img' }, h('img', { src: por.url, alt: '', loading: 'lazy', referrerpolicy: 'no-referrer', onError: (ev) => { ev.target.remove(); } }), h('span', null, initialsOf(e.name))) : h('div', { class: 'wd-head-glyph' }, e.type === 'person' ? initialsOf(e.name) : meta.glyph),
     h('div', { class: 'wd-head-text' },
       h('div', { class: 'eyebrow' }, `${meta.one}${ch ? ` · PL ${ch.pl} ${ch.archetype?.name || ''}` : ''}${e.fields?.Side ? ` · ${e.fields.Side}` : ''}`),
       h('h1', null, e.name),
