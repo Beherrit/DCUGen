@@ -12,13 +12,13 @@ test('a session joins the timeline, adds people, updates statuses and awards poi
   const ch = generateCharacter(R, { seed: 'journal-1', pl: 10 });
   const people = ch.bio.people.length;
   const known = ch.bio.people[0];
-  const e = addJournalEntry(ch, R, { session: 3, title: 'Casino night', text: 'Stopped a heist.', people: [{ name: 'Wildcat', relation: 'Mentor', who: 'Old boxer', status: 'Impressed' }, { name: known.name, status: 'Now an enemy.' }], pointsEarned: 2, downtime: 'Trained for a month.' });
+  const e = addJournalEntry(ch, R, { session: 3, title: 'Casino night', text: 'Stopped a heist.', people: [{ name: 'Alleycat', relation: 'Mentor', who: 'Old boxer', status: 'Impressed' }, { name: known.name, status: 'Now an enemy.' }], pointsEarned: 2, downtime: 'Trained for a month.' });
   const inPlay = ch.bio.timeline.filter((t) => t.journalId === e.id);
   assert.equal(inPlay.length, 2);
   assert.equal(inPlay[0].stage, 'In play');
   assert.ok(inPlay[0].text.startsWith('Casino night'));
   assert.equal(ch.bio.people.length, people + 1);
-  assert.equal(ch.bio.people.find((p) => p.name === 'Wildcat').relation, 'Mentor');
+  assert.equal(ch.bio.people.find((p) => p.name === 'Alleycat').relation, 'Mentor');
   assert.equal(known.status, 'Now an enemy.');
   assert.equal(known.relation, ch.bio.people[0].relation, 'relation kept when the entry does not set one');
   assert.equal(journalPoints(ch, e.id).length, 1);

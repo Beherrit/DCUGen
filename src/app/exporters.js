@@ -4,6 +4,7 @@ import { download, slug, toast } from './dom.js';
 import { inflateRaw } from './share.js';
 import { fillCharacterSheet, rosterWorkbook, readWorkbookCharacters } from '../engine/xlsx.js';
 import { statBlockText } from '../engine/render.js';
+import { portraitPng } from './portrait.js';
 const XLSX_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 async function loadTemplate() {
@@ -20,7 +21,9 @@ async function loadTemplate() {
 
 export async function exportExcel(ch, R) {
   try {
-    const bytes = await fillCharacterSheet(await loadTemplate(), ch, R, inflateRaw);
+    let png = null;
+    try { png = await portraitPng(ch); } catch { png = null; }
+    const bytes = await fillCharacterSheet(await loadTemplate(), ch, R, inflateRaw, { portraitPng: png });
     download(`${slug(ch.identity?.codename)}.xlsx`, new Blob([bytes], { type: XLSX_TYPE }));
     toast('Excel character sheet saved');
   } catch (e) {

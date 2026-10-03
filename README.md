@@ -59,6 +59,18 @@ players and they can use it too. No install, works offline (fonts fall back to s
   student, parent / child, member of / member, based in / base of...). Add factions, locations, items and events by
   hand, link anything to anything, draw the relationship graph, read the campaign timeline, and export the whole
   thing as a Markdown vault with [[wikilinks]] or a JSON vault that also carries the roster.
+- **Portraits** – every character gets a portrait on the case file, the Bio page and the World: built-in comic art
+  drawn by the app (offline, instant) or an AI painting from a free, open-source service (one at a time, with the
+  built-in art standing in while it paints), or a picture you upload. New portrait, edit or copy the prompt, delete.
+  The portrait goes into the Excel character sheet's PORTRAIT box.
+- **Enemies** – "Add an enemy" on the Bio page rolls a full villain (nuisance, threat or nemesis) with a reason and a
+  status, puts them in the character's life with a key so they open as a character, and on the sheet as a complication.
+- **The Table** – a shared feed of dice. Every sheet has a "Roll" menu (initiative, attacks, resistance checks,
+  skills, abilities) and the results land on the Table with the dice shown; a quick roller and chat live there too.
+  With the desktop app, host a table and hand out a lobby key: players join from their own app, get your world and
+  roster, claim their own characters, and roll for them where everyone can see.
+- **Backup** – "Back up everything" (Roster tab) saves roster, world, battle, notes, screen and settings to one file;
+  "Restore" merges or replaces. The desktop app also mirrors everything to a folder on disk, with daily backups.
 - **Advancement** – track the power points the GM awards (DCA 190): earned, spent and unspent, with a history log
   that records exactly what each point bought, tied to the journal session it came from.
 - **Roster** – save characters, teams and creatures in the browser; search, duplicate, delete.
@@ -70,6 +82,12 @@ players and they can use it too. No install, works offline (fonts fall back to s
   condition trackers, GM notes, and encounter, hideout and vehicle generators.
 - **Rules** – searchable reference cards: actions, maneuvers, checks, combat, hazards, conditions, the DC,
   degrees and measurement tables, and every effect, extra, flaw, advantage and skill, with page numbers.
+
+## Desktop app
+
+`desktop/` wraps the same single file in an Electron app: your data in a folder on disk that survives updates, daily
+backups, and the lobby server for hosting a table. See [desktop/README.md](desktop/README.md) for running it from
+source (`cd desktop && npm install && npm start`) and building installers (`npm run dist`).
 
 ## Rules sources
 
@@ -92,5 +110,6 @@ npm run validate  # check every catalog creature against the PL limits
   power math, stat blocks, the .xlsx writer, the battle simulator (`battle.js`), the campaign journal (`journal.js`)
   and the world wiki model (`world.js`).
 - `src/app/` – the web app.
+- `desktop/` – the Electron app (main process, preload bridge, dependency-free WebSocket lobby relay).
 - `tests/` – the engine reproduces the printed point costs of published Heroes & Villains characters, and
   thousands of random characters, items and creatures are checked against the rules.

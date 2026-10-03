@@ -12,11 +12,15 @@ import { initRules, renderRules } from './rules.js';
 import { initBestiary, renderBestiary } from './bestiary.js';
 import { initGarage, renderGarage } from './garage.js';
 import { initBattle, renderBattle, throwIn } from './battle.js';
-import { initWorld, renderWorld, openWorldPage, recordBattleInWorld } from './world.js';
+import { initWorld, renderWorld, openWorldPage, recordBattleInWorld, worldSaved, worldApply } from './world.js';
+import { initTable, renderTable, postRoll } from './table.js';
+import { setLobbyHandlers, lobbySendRoster, lobbySendRemove, lobby } from './lobby.js';
+import { snapshotAll, restoreAll } from './backup.js';
+import { state as st, upsert, removeFromRoster } from './store.js';
 import { decodeCharacter } from './share.js';
 import { setImportHooks, enableDropImport, setImportRules, openAnything } from './importer.js';
 const R = RULES;
-const views = ['forge', 'roster', 'lab', 'bestiary', 'workshop', 'garage', 'battle', 'world', 'gm', 'rules'];
+const views = ['forge', 'roster', 'lab', 'bestiary', 'workshop', 'garage', 'battle', 'world', 'table', 'gm', 'rules'];
 
 function showTab(name) {
   if (!views.includes(name)) name = 'forge';
@@ -33,6 +37,7 @@ function showTab(name) {
   if (name === 'garage') renderGarage();
   if (name === 'battle') renderBattle();
   if (name === 'world') renderWorld();
+  if (name === 'table') renderTable();
   if (name === 'rules') renderRules();
   try { localStorage.setItem('dcugen.tab', name); } catch { /* storage unavailable */ }
   window.scrollTo({ top: 0 });
@@ -67,8 +72,74 @@ async function loadFromHash() {
   }
 }
 
+// ---- lobby: the host shares its roster and world; players claim characters and send edits ------------
+function wireLobby() {
+  const me = () => lobby.id;
+  let applying = 0; // changes that came from the table must not be echoed back to it
+  const quiet = (fn) => (...a) => { applying++; try { return fn(...a); } finally { applying--; } };
+  setLobbyHandlers({
+    snapshot: () => ({ roster: st.roster, world: worldSaved(), feed: [] }),
+    worldSnapshot: () => worldSaved(),
+    applySnapshot: quiet((msg) => {
+      let n = 0;
+      for (const ch of msg.roster || []) { const copy = { ...ch, lobbyShared: true }; upsert(copy); n++; }
+      if (msg.world) worldApply(msg.world);
+      toast(`Joined ${lobby.info?.name || 'the table'}: ${n} shared character${n === 1 ? '' : 's'}`);
+      renderRoster();
+    }),
+    applyRoster: quiet((ch, from) => {
+      if (!ch?.rosterId) return null;
+      if (lobby.role === 'host') {
+        const mine = st.roster.find((x) => x.rosterId === ch.rosterId);
+        if (mine && mine.lobbyOwner && mine.lobbyOwner !== from) { toast(`${ch.identity?.codename}: edit refused, that character belongs to someone else`); return null; }
+        const kept = { ...ch, lobbyOwner: mine?.lobbyOwner || ch.lobbyOwner || null, lobbyShared: true };
+        upsert(kept); renderCurrent(); return kept;
+      }
+      if (from === me()) return null;
+      upsert({ ...ch, lobbyShared: true }); renderCurrent(); return ch;
+    }),
+    removeRoster: quiet((id, from) => { if (lobby.role === 'host' && st.roster.find((x) => x.rosterId === id)?.lobbyOwner && st.roster.find((x) => x.rosterId === id).lobbyOwner !== from) return false; removeFromRoster(id); return true; }),
+    applyWorld: quiet((saved) => { worldApply(saved); }),
+    claim: quiet((rosterId, from) => {
+      const ch = st.roster.find((x) => x.rosterId === rosterId);
+      if (!ch) return null;
+      if (ch.lobbyOwner && ch.lobbyOwner !== from) return null;
+      const who = lobby.members.find((m) => m.id === from)?.name || 'a player';
+      const kept = upsert({ ...ch, lobbyOwner: from, lobbyOwnerName: who });
+      postRoll({ who: 'Table', kind: 'chat', text: `${who} now plays ${ch.identity?.codename}.` });
+      return kept;
+    }),
+    feed: (entry, from) => { if (from !== me()) postRoll(entry, { fromLobby: true }); },
+  });
+  // Any roster change goes to the table while connected.
+  onChange((what) => {
+    if (applying || lobby.status !== 'on') return;
+    if (what === 'roster-upsert') lobbySendRoster(st.lastUpsert);
+    if (what === 'roster-remove') lobbySendRemove(st.lastRemoved);
+  });
+}
+
+// ---- desktop app: mirror everything to the vault on disk ---------------------------------------------------
+async function desktopSync() {
+  const d = window.dcugenDesktop;
+  if (!d) return;
+  try {
+    const vault = await d.vaultLoad();
+    const haveLocal = (() => { try { return !!localStorage.getItem('dcugen.roster.v1'); } catch { return false; } })();
+    if (!haveLocal && vault && Object.keys(vault).length) { restoreAll({ app: 'DCUGen', data: vault }, { mode: 'replace' }); location.reload(); return; }
+  } catch { /* no vault yet */ }
+  let dirty = false;
+  const orig = Storage.prototype.setItem;
+  Storage.prototype.setItem = function (k, v) { orig.call(this, k, v); if (String(k).startsWith('dcugen.')) dirty = true; };
+  const flush = async () => { if (!dirty) return; dirty = false; try { await d.vaultSave(snapshotAll().data); } catch { dirty = true; } };
+  setInterval(flush, 4000);
+  window.addEventListener('beforeunload', () => { if (dirty) d.vaultSave(snapshotAll().data); });
+  document.body.classList.add('desktop');
+}
+
 async function boot() {
   initTheme();
+  await desktopSync();
   for (const v of views) {
     document.getElementById(`tab-${v}`).addEventListener('click', () => showTab(v));
   }
@@ -106,6 +177,8 @@ async function boot() {
     applyToCurrent: (ch) => { setCurrent(ch); },
     throwIn: (ch, opts) => throwInBattle(ch, opts),
   });
+  initTable(R, document.getElementById('view-table'), { open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); } });
+  wireLobby();
   initRules(R, document.getElementById('view-rules'));
   initGarage(R, document.getElementById('view-garage'), { applyToCurrent: (ch) => setCurrent(ch) });
   initBestiary(R, document.getElementById('view-bestiary'), {

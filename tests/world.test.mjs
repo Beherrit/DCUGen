@@ -9,7 +9,7 @@ import { createBattle, addCombatant, makeCombatant, runToEnd } from '../src/engi
 function roster() {
   const a = generateCharacter(R, { seed: 'world-a', pl: 10 }); a.rosterId = 'r-a'; a.team = 'The Night Watch';
   const b = generateCharacter(R, { seed: 'world-b', pl: 10 }); b.rosterId = 'r-b'; b.team = 'The Night Watch';
-  addJournalEntry(a, R, { session: 1, title: 'Opening night', text: 'The team meets.', people: [{ name: b.identity.codename, relation: 'Teammate' }, { name: 'Wildcat', relation: 'Mentor' }], pointsEarned: 1 });
+  addJournalEntry(a, R, { session: 1, title: 'Opening night', text: 'The team meets.', people: [{ name: b.identity.codename, relation: 'Teammate' }, { name: 'Alleycat', relation: 'Mentor' }], pointsEarned: 1 });
   return [a, b];
 }
 
@@ -27,10 +27,10 @@ test('roster characters, their people, places and teams become linked pages, bot
   assert.ok(pa.connections.some((c) => c.other === pe && c.rel === 'parent'));
   assert.ok(pe.connections.some((c) => c.other === pa && c.rel === 'child'));
   assert.ok(pe.keys['char:r-a'], 'parent can be opened as a character');
-  // journal: teammate link points at the roster page, not a duplicate; Wildcat is a new page; the session is an event
+  // journal: teammate link points at the roster page, not a duplicate; Alleycat is a new page; the session is an event
   assert.ok(pa.connections.some((c) => c.other === pb && c.rel === 'teammate'));
   assert.equal([...w.entities.values()].filter((e) => e.name === b.identity.codename).length, 1);
-  assert.ok(w.entities.has('npc:wildcat'));
+  assert.ok(w.entities.has('npc:alleycat'));
   const ev = [...w.entities.values()].find((e) => e.type === 'event');
   assert.ok(ev && ev.session === 1 && /Points/.test(Object.keys(ev.fields).join(',')));
   assert.ok(ev.connections.some((c) => c.other === pb));
@@ -47,8 +47,8 @@ test('roster characters, their people, places and teams become linked pages, bot
 test('hand-made pages, links, edits and removals live in the vault and survive a rebuild', () => {
   const [a, b] = roster();
   const saved = emptyWorld();
-  const f = createEntity(saved, { type: 'faction', name: 'The Court of Owls', summary: 'Old money, older grudges.', fields: { Motto: 'Beware' } });
-  const loc = createEntity(saved, { type: 'location', name: 'Blackgate', fields: { Kind: 'Prison' } });
+  const f = createEntity(saved, { type: 'faction', name: 'The Court of Crows', summary: 'Old money, older grudges.', fields: { Motto: 'Beware' } });
+  const loc = createEntity(saved, { type: 'location', name: 'Ironwall', fields: { Kind: 'Prison' } });
   addLink(saved, { from: 'char:r-a', to: f.id, rel: 'enemy', note: 'Since issue 4' });
   addLink(saved, { from: f.id, to: loc.id, rel: 'basedIn' });
   let w = buildWorld(saved, [a, b], R);
@@ -62,14 +62,14 @@ test('hand-made pages, links, edits and removals live in the vault and survive a
   assert.ok(court.connections.some((c) => c.other === pa && c.rel === 'enemy'));
   assert.ok(court.connections.some((c) => c.rel === 'basedIn'));
   assert.ok(w.entities.get(loc.id).connections.some((c) => c.rel === 'baseOf'));
-  assert.ok(searchWorld(w, 'owls')[0] === court);
+  assert.ok(searchWorld(w, 'crows')[0] === court);
   assert.ok(searchWorld(w, 'prison').includes(w.entities.get(loc.id)));
   deleteEntity(saved, f.id);
   w = buildWorld(saved, [a, b], R);
   assert.ok(!w.entities.has(f.id));
-  deleteEntity(saved, 'npc:wildcat');
+  deleteEntity(saved, 'npc:alleycat');
   w = buildWorld(saved, [a, b], R);
-  assert.ok(!w.entities.has('npc:wildcat'), 'automatic pages can be hidden');
+  assert.ok(!w.entities.has('npc:alleycat'), 'automatic pages can be hidden');
   for (const [k, r] of Object.entries(RELATIONS)) assert.equal(RELATIONS[r.inverse].inverse, k, `${k} inverse is symmetric`);
 });
 

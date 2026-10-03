@@ -464,7 +464,55 @@ export function templateCells(ch, R) {
 }
 
 /** Fill the template workbook and add the full stat block as a second sheet. Returns xlsx bytes. */
-export async function fillCharacterSheet(templateBytes, ch, R, inflateRaw) {
+/**
+ * Put a PNG on a worksheet at a cell, with a size in pixels (one-cell anchor). Adds the media part,
+ * the drawing (or extends the sheet's existing one), the relationships and the content type.
+ */
+export function embedImage(files, png, { sheet = 1, col = 1, row = 174, widthPx = 300, heightPx = 375, name = 'Portrait' } = {}) {
+  const n = Object.keys(files).filter((f) => /^xl\/media\/image\d+\.png$/.test(f)).length + 1;
+  files[`xl/media/image${n}.png`] = png;
+  let types = dec.decode(files['[Content_Types].xml']);
+  if (!/Extension="png"/.test(types)) types = types.replace('<Default Extension="rels"', '<Default Extension="png" ContentType="image/png"/><Default Extension="rels"');
+  const sheetRelsPath = `xl/worksheets/_rels/sheet${sheet}.xml.rels`;
+  const sheetPath = `xl/worksheets/sheet${sheet}.xml`;
+  let sheetXml = dec.decode(files[sheetPath]);
+  let sheetRels = files[sheetRelsPath] ? dec.decode(files[sheetRelsPath]) : '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"></Relationships>';
+  let drawingPath;
+  const dm = /<Relationship[^>]*Type="[^"]*\/drawing"[^>]*Target="([^"]+)"/.exec(sheetRels) || /<Relationship[^>]*Target="([^"]+)"[^>]*Type="[^"]*\/drawing"/.exec(sheetRels);
+  if (dm) drawingPath = `xl/drawings/${dm[1].replace(/^\.\.\/drawings\//, '')}`;
+  else {
+    const dn = Object.keys(files).filter((f) => /^xl\/drawings\/drawing\d+\.xml$/.test(f)).length + 1;
+    drawingPath = `xl/drawings/drawing${dn}.xml`;
+    files[drawingPath] = enc.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"></xdr:wsDr>');
+    const ids = [...sheetRels.matchAll(/Id="rId(\d+)"/g)].map((m) => Number(m[1]));
+    const rid = `rId${Math.max(0, ...ids) + 1}`;
+    sheetRels = sheetRels.replace('</Relationships>', `<Relationship Id="${rid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing" Target="../drawings/drawing${dn}.xml"/></Relationships>`);
+    if (!/<drawing /.test(sheetXml)) sheetXml = sheetXml.replace(/((?:<\/sheetData>|<sheetData\/>)[\s\S]*?)(<legacyDrawing|<tableParts|<extLst|<\/worksheet>)/, (m0, before, tag) => `${before}<drawing r:id="${rid}"/>${tag}`);
+    types = types.replace('</Types>', `<Override PartName="/${drawingPath}" ContentType="application/vnd.openxmlformats-officedocument.drawing+xml"/></Types>`);
+  }
+  const drawingRelsPath = drawingPath.replace('xl/drawings/', 'xl/drawings/_rels/') + '.rels';
+  let drawingRels = files[drawingRelsPath] ? dec.decode(files[drawingRelsPath]) : '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"></Relationships>';
+  const dids = [...drawingRels.matchAll(/Id="rId(\d+)"/g)].map((m) => Number(m[1]));
+  const imgRid = `rId${Math.max(0, ...dids) + 1}`;
+  drawingRels = drawingRels.replace('</Relationships>', `<Relationship Id="${imgRid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/image${n}.png"/></Relationships>`);
+  let drawing = dec.decode(files[drawingPath]);
+  const picIds = [...drawing.matchAll(/<xdr:cNvPr id="(\d+)"/g)].map((m) => Number(m[1]));
+  const picId = Math.max(1, ...picIds) + 1;
+  const emu = (px) => Math.round(px * 9525);
+  const pic = `<xdr:oneCellAnchor><xdr:from><xdr:col>${col}</xdr:col><xdr:colOff>19050</xdr:colOff><xdr:row>${row}</xdr:row><xdr:rowOff>19050</xdr:rowOff></xdr:from><xdr:ext cx="${emu(widthPx)}" cy="${emu(heightPx)}"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="${picId}" name="${esc(name)}"/><xdr:cNvPicPr><a:picLocks noChangeAspect="1"/></xdr:cNvPicPr></xdr:nvPicPr><xdr:blipFill><a:blip xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:embed="${imgRid}"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${emu(widthPx)}" cy="${emu(heightPx)}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic><xdr:clientData/></xdr:oneCellAnchor>`;
+  drawing = drawing.replace('</xdr:wsDr>', `${pic}</xdr:wsDr>`);
+  files[drawingPath] = enc.encode(drawing);
+  files[drawingRelsPath] = enc.encode(drawingRels);
+  files[sheetRelsPath] = enc.encode(sheetRels);
+  files[sheetPath] = enc.encode(sheetXml);
+  files['[Content_Types].xml'] = enc.encode(types);
+  return files;
+}
+
+/** Where the portrait goes on the classic sheet: the PORTRAIT box on page 2 (cell B175, about 300 x 375 px). */
+export const PORTRAIT_SLOT = { col: 1, row: 174, widthPx: 300, heightPx: 375 };
+
+export async function fillCharacterSheet(templateBytes, ch, R, inflateRaw, { portraitPng = null } = {}) {
   const files = await unzip(templateBytes, inflateRaw);
   const sheetPath = 'xl/worksheets/sheet1.xml';
   let xml = dec.decode(files[sheetPath]);
@@ -486,6 +534,7 @@ export async function fillCharacterSheet(templateBytes, ch, R, inflateRaw) {
     xml = setCell(xml, ref, v, idx);
   }
   files[sheetPath] = enc.encode(xml);
+  if (portraitPng && portraitPng.length) embedImage(files, portraitPng, { ...PORTRAIT_SLOT, name: `Portrait of ${ch.identity?.codename || 'character'}` });
 
   // Add "Full Stat Block" as sheet 2, and the character data (hidden) so DCUGen can import the file
   const { rows, boldRows } = statBlockRows(ch, R);

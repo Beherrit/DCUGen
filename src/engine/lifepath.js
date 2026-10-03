@@ -37,7 +37,7 @@ export const DCA_COMPLICATIONS = ['Accident', 'Addiction', 'Disability', 'Enemy'
 export const BIO_RELATIONS = ['Mentor', 'Rival', 'Enemy', 'Ally', 'Ex', 'Love', 'Dependent', 'Friend'];
 
 const ANGLO = /united states|canada|great britain|britain|england|ireland|australia|new zealand|unknown/i;
-const CITY_COUNTRY = { London: 'Great Britain', Paris: 'France', Tokyo: 'Japan', Lagos: 'Nigeria', Mumbai: 'India', 'São Paulo': 'Brazil', 'Mexico City': 'Mexico', Cairo: 'Egypt', Seoul: 'Korea', Sydney: 'Australia', Berlin: 'Germany', Toronto: 'Canada' };
+const CITY_COUNTRY = { London: 'Great Britain', Paris: 'France', Tokyo: 'Japan', Lagos: 'Nigeria', Mumbai: 'India', 'São Paulo': 'Brazil', 'Mexico City': 'Mexico', Cairo: 'Egypt', Seoul: 'Korea', Sydney: 'Australia', Berlin: 'Germany', Toronto: 'Canada', Kharamesh: 'Kharamesh' };
 const NUMBER_WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
 
 const cap = (s) => (s ? String(s).charAt(0).toUpperCase() + String(s).slice(1) : s);
@@ -132,7 +132,7 @@ function makeContext(R, ch, seed, seeds) {
   const gender = mode === 'automaton' ? 'None' : (id.gender || 'Nonbinary');
   const p = pronounsFor(mode === 'construct' && (gender === 'None' || !id.gender) ? 'None' : gender);
   const base = String(id.base || '').trim();
-  const baseOk = base && !/^the\s/i.test(base) && !/Atlantis|Themyscira|Nanda Parbat|Kahndaq|Watchtower/i.test(base);
+  const baseOk = base && !/^the\s/i.test(base) && !/Atlantis|Hidden Isle|Hidden Monastery|Kharamesh|Sky Station/i.test(base);
   return {
     R, ch, T, flavor, story, seed, seeds, mode,
     minion: !!ch?.minion,

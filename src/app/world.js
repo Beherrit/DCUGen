@@ -38,6 +38,21 @@ export function openWorldPage(ch) {
   if (!world.entities.has(id)) toast('Save the character to the roster to give them a page in the World.');
 }
 
+/** The hand-made part of the world (what the vault keeps), for sharing. */
+export function worldSaved() { if (!saved) saved = load(); return saved; }
+/** Merge a shared world in (pages, links, overrides; the name if ours is the default). */
+export function worldApply(incoming) {
+  if (!saved) saved = load();
+  if (!incoming?.v) return;
+  saved.entities = { ...saved.entities, ...(incoming.entities || {}) };
+  saved.overrides = { ...saved.overrides, ...(incoming.overrides || {}) };
+  for (const l of incoming.links || []) if (!saved.links.some((x) => x.id === l.id)) saved.links.push(l);
+  saved.hidden = [...new Set([...(saved.hidden || []), ...(incoming.hidden || [])])];
+  if (incoming.name && (!saved.name || saved.name === 'My World')) { saved.name = incoming.name; saved.tagline = incoming.tagline || saved.tagline; saved.description = incoming.description || saved.description; }
+  save();
+  if (root && !root.hidden) renderWorld();
+}
+
 export function recordBattleInWorld(battle) {
   rebuild();
   const ev = recordBattle(saved, battle, world);

@@ -12,6 +12,9 @@ import { generateCharacter, rerollIdentity, generateTeam } from '../engine/gener
 import { randomSeed } from '../engine/rng.js';
 import { statBlockText, sheet as makeSheet } from '../engine/render.js';
 import { recordChanges } from '../engine/advancement.js';
+import { rollMenu } from './dice.js';
+import { lobby } from './lobby.js';
+import { claimCharacter } from './table.js';
 let R;
 let root;
 let fileHost;
@@ -325,6 +328,9 @@ export function renderCurrent() {
       const c = rerollIdentity(R, ch, randomSeed()); c.rosterId = ch.rosterId; setCurrent(c, { fresh: true });
     } }, 'New name'),
     h('button', { class: 'btn ghost', type: 'button', title: 'Keep the name and story, roll new powers and stats', onClick: () => rebuild(ch) }, 'New build'),
+    rollMenu(ch, R),
+    lobby.status === 'on' && ch.rosterId && !ch.lobbyOwner ? h('button', { class: 'btn ghost', type: 'button', title: 'Tell the table this character is yours', onClick: () => claimCharacter(ch) }, '✋ Mine') : null,
+    ch.lobbyOwner ? h('span', { class: 'chip', title: 'Claimed at the table' }, `${ch.lobbyOwner === lobby.id ? 'Yours' : `Played by ${ch.lobbyOwnerName || 'a player'}`}`) : null,
     h('span', { class: 'spacer' }),
     status(ch),
     h('button', { class: 'btn', type: 'button', onClick: async () => { const ok = await copyText(statBlockText(ch, R)); toast(ok ? 'Stat block copied' : 'Copy failed. Use Export > Text instead.'); } }, 'Copy stat block'),

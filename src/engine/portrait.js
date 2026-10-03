@@ -5,7 +5,7 @@
 import { avatarSvg } from './avatar.js';
 
 export const PORTRAIT_SERVICE = { name: 'Pollinations.ai', url: 'https://pollinations.ai', free: true, openSource: true, limit: 'about one image every 15 seconds without an account' };
-export const PORTRAIT_SOURCES = { ai: 'AI painting (Pollinations.ai, free, needs internet)', builtin: 'Built-in comic art (offline, instant)' };
+export const PORTRAIT_SOURCES = { ai: 'AI painting (Pollinations.ai, free, needs internet)', builtin: 'Built-in comic art (offline, instant)', upload: 'My own picture (uploaded)' };
 const BASE = 'https://image.pollinations.ai/prompt/';
 
 const lower = (s) => String(s || '').trim().toLowerCase();
@@ -58,17 +58,24 @@ export function portraitOf(ch) {
   const p = ch.portrait || {};
   const prompt = p.prompt || portraitPrompt(ch);
   const seed = p.seed ?? 1;
-  const source = p.source === 'builtin' ? 'builtin' : 'ai';
-  return { prompt, custom: !!p.prompt, seed, source, url: portraitUrl(prompt, { seed }), avatar: avatarSvg(ch, { seed }).dataUrl, hidden: !!p.hidden };
+  const source = p.source === 'upload' && p.image ? 'upload' : p.source === 'builtin' ? 'builtin' : 'ai';
+  return { prompt, custom: !!p.prompt, seed, source, url: portraitUrl(prompt, { seed }), avatar: avatarSvg(ch, { seed }).dataUrl, image: p.image || null, hidden: !!p.hidden };
 }
 
-export function setPortrait(ch, { seed, prompt, hidden, source } = {}) {
+export function setPortrait(ch, { seed, prompt, hidden, source, image } = {}) {
   const next = { ...(ch.portrait || {}) };
   if (seed !== undefined) next.seed = seed;
   if (prompt !== undefined) { if (prompt && prompt !== portraitPrompt(ch)) next.prompt = prompt; else delete next.prompt; }
   if (hidden !== undefined) next.hidden = !!hidden;
-  if (source !== undefined) { if (source === 'builtin') next.source = 'builtin'; else delete next.source; }
+  if (image !== undefined) { if (image) { next.image = image; next.source = 'upload'; } else { delete next.image; if (next.source === 'upload') delete next.source; } }
+  if (source !== undefined) { if (source === 'builtin') next.source = 'builtin'; else if (source === 'upload' && next.image) next.source = 'upload'; else delete next.source; }
   ch.portrait = next;
+  return ch;
+}
+
+/** Wipe the portrait entirely (hidden, no uploaded picture, default prompt). */
+export function clearPortrait(ch) {
+  ch.portrait = { hidden: true };
   return ch;
 }
 
