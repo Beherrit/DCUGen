@@ -41,22 +41,61 @@ function blobToPortrait(blob, { width = 400, height = 500 } = {}) {
   });
 }
 
+/** Load a picture through an <img>; with cors, the browser asks the service for permission to copy it. */
+function loadImage(url, { cors = false, timeout = 120000 } = {}) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    if (cors) img.crossOrigin = 'anonymous';
+    const timer = setTimeout(() => { img.src = ''; reject(new Error('took too long')); }, timeout);
+    img.onload = () => { clearTimeout(timer); resolve(img); };
+    img.onerror = () => { clearTimeout(timer); reject(new Error('image failed')); };
+    img.src = url;
+  });
+}
+
+function imageToPortrait(img, { width = 400, height = 500 } = {}) {
+  const canvas = document.createElement('canvas');
+  canvas.width = width; canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  const scale = Math.max(width / img.naturalWidth, height / img.naturalHeight);
+  const w = img.naturalWidth * scale; const hh = img.naturalHeight * scale;
+  ctx.drawImage(img, (width - w) / 2, (height - hh) / 2, w, hh);
+  return canvas.toDataURL('image/jpeg', 0.88); // throws when the browser was not allowed to copy it
+}
+
+/**
+ * One painting, three ways in order: a direct fetch (the service's exact answer is known and the
+ * picture is copied into the character), then an image load the browser is allowed to copy, then a
+ * plain image load that at least shows the picture ("live": the sheet keeps loading it from the
+ * service's address, which the browser caches). Resolves { ok, image?, live?, why?, retry?, fatal? }.
+ */
 async function paintOnce(url) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 120000);
+  let why = null; let retry = 0;
   try {
     const res = await fetch(url, { signal: ctrl.signal, referrerPolicy: 'no-referrer', cache: 'force-cache' });
-    if (!res.ok) {
-      const retry = Number(res.headers.get('retry-after')) || 0;
-      const why = res.status === 429 ? 'rate limit' : res.status === 401 || res.status === 402 ? 'the service now wants an account for this' : res.status >= 500 ? 'the service is overloaded' : `HTTP ${res.status}`;
-      return { ok: false, why, retry, fatal: res.status === 401 || res.status === 402 };
+    if (res.ok) {
+      const blob = await res.blob();
+      if (/^image\//.test(blob.type) || blob.size >= 2000) return { ok: true, image: await blobToPortrait(blob) };
+      why = 'not an image';
+    } else {
+      retry = Number(res.headers.get('retry-after')) || 0;
+      why = res.status === 429 ? 'rate limit' : res.status === 401 || res.status === 402 ? 'the service now wants an account for this' : res.status >= 500 ? 'the service is overloaded' : `HTTP ${res.status}`;
+      if (res.status === 401 || res.status === 402) return { ok: false, why, retry, fatal: true };
+      if (res.status === 429 || res.status >= 500) return { ok: false, why, retry };
     }
-    const blob = await res.blob();
-    if (!/^image\//.test(blob.type) && blob.size < 2000) return { ok: false, why: 'not an image' };
-    return { ok: true, image: await blobToPortrait(blob) };
   } catch (e) {
-    return { ok: false, why: e.name === 'AbortError' ? 'took too long' : /Failed to fetch|NetworkError|TypeError/.test(String(e)) ? 'no connection, or the service refused the browser' : e.message };
+    why = e.name === 'AbortError' ? 'took too long' : null;
   } finally { clearTimeout(timer); }
+  // Second way: the browser loads it as a picture and, if the service allows, lets the app copy it.
+  try {
+    const img = await loadImage(url, { cors: true });
+    try { return { ok: true, image: imageToPortrait(img) }; } catch { return { ok: true, live: true }; }
+  } catch { /* third way below */ }
+  // Third way: a plain picture load. Shows, but cannot be copied into the character.
+  try { await loadImage(url); return { ok: true, live: true }; } catch { /* give up this round */ }
+  return { ok: false, why: why || 'no connection, or the service refused the browser', retry };
 }
 
 function pump() {
@@ -87,7 +126,9 @@ export function paintingAvailable() { return !fatalNote; }
 
 /**
  * Paint a character: queue the AI portrait and save it into the character when it arrives.
- * save(image) stores it (the app passes a function that clones, sets and saves). Resolves true/false.
+ * save({ image, live, url }) stores it: image is a data URL to keep on the character; when it is null and
+ * live is true the picture showed but could not be copied, so the character keeps showing it from the
+ * service (setPortrait(c, { live: true })). Resolves true/false.
  */
 export async function paintCharacter(ch, save, { onStatus, cancelled, tries = 40 } = {}) {
   const p = portraitOf(ch);
@@ -95,7 +136,7 @@ export async function paintCharacter(ch, save, { onStatus, cancelled, tries = 40
   for (let i = 0; i < tries; i++) {
     if (cancelled?.()) return false;
     const r = await requestPainting(p.url, { onWait: (ms) => onStatus?.(ms > 800 ? `Painting in ${Math.ceil(ms / 1000)}s…` : 'Painting…'), cancelled });
-    if (r.ok) { save(r.image); return true; }
+    if (r.ok) { save({ image: r.image || null, live: !!r.live, url: p.url }); return true; }
     if (r.fatal) { fatalNote = r.why; onStatus?.(`AI portraits unavailable: ${r.why}.`); return false; }
     onStatus?.(`${r.why}; trying again in ${Math.max(15, r.retry || 0)}s (${i + 1})…`);
     await new Promise((res) => setTimeout(res, Math.max(GAP, (r.retry || 0) * 1000)));
@@ -147,11 +188,12 @@ function drawToPng(src, { width = 400, height = 500, crossOrigin = false } = {})
   });
 }
 
-/** The portrait as PNG bytes for exports: the uploaded picture, the AI painting if it is available, else the built-in art. */
+/** The portrait as PNG bytes for exports: the uploaded picture (or saved AI painting), the live AI picture when the service allows a copy, else the built-in art. */
 export async function portraitPng(ch) {
   const p = portraitOf(ch);
   if (p.hidden) return null;
   if (p.source === 'upload' && p.image) { try { return await drawToPng(p.image); } catch { /* fall through */ } }
+  if (p.live) { try { return await drawToPng(p.url, { crossOrigin: true }); } catch { /* the service did not allow the copy: built-in art */ } }
   try { return await drawToPng(p.avatar); } catch { return null; }
 }
 
@@ -167,13 +209,23 @@ export function portraitBlock(ch, { change, size = 'file' } = {}) {
   const status = h('div', { class: 'portrait-status', hidden: true });
   const frame = h('div', { class: 'portrait-frame' }, img, status);
   const setStatus = (t) => { status.textContent = t; status.hidden = !t; };
+  const showLive = () => { img.src = p.url; frame.classList.remove('builtin'); frame.classList.add('live'); };
+  const paint = () => {
+    setStatus('Painting…');
+    paintCharacter(ch, ({ image, live }) => {
+      if (image) change((c) => setPortrait(c, { image, aiSaved: true }));
+      else if (live) { showLive(); setStatus(''); if (!p.live) change((c) => setPortrait(c, { live: true })); }
+    }, { onStatus: setStatus, cancelled: () => !frame.isConnected });
+  };
   if (!p.hidden) {
     if (p.source === 'upload') { img.src = p.image; }
-    else { img.src = p.avatar; frame.classList.add('builtin'); }
-    if (p.source === 'ai' && change) {
-      setStatus('Painting…');
-      paintCharacter(ch, (image) => change((c) => setPortrait(c, { image, aiSaved: true })), { onStatus: setStatus, cancelled: () => !frame.isConnected });
-    } else if (p.source === 'ai') setStatus('Built-in art (open on the Forge to paint)');
+    else if (p.live) {
+      // the picture loads straight from the service; if it is gone, paint again (or show the built-in art)
+      img.onerror = () => { img.onerror = null; img.src = p.avatar; frame.classList.add('builtin'); frame.classList.remove('live'); if (change) paint(); else setStatus('Built-in art (the painting did not load)'); };
+      showLive();
+    } else { img.src = p.avatar; frame.classList.add('builtin'); }
+    if (p.source === 'ai' && !p.live && change) paint();
+    else if (p.source === 'ai' && !p.live) setStatus('Built-in art (open on the Forge to paint)');
   }
 
   const settings = async () => {
@@ -204,7 +256,7 @@ export function portraitBlock(ch, { change, size = 'file' } = {}) {
       : [
         h('button', { class: 'btn sm', type: 'button', title: 'A new AI painting with the same prompt and new dice', onClick: newPortrait }, '🎲 New portrait'),
         h('button', { class: 'btn sm', type: 'button', title: 'Use a picture of your own', onClick: () => fileIn.click() }, 'Upload…'),
-        h('button', { class: 'btn sm', type: 'button', title: 'Source and prompt', onClick: settings }, p.source === 'upload' ? (ch.portrait?.aiSaved ? 'AI painting ✓' : 'Your picture') : p.source === 'builtin' ? 'Built-in art' : p.custom ? 'AI · edited prompt' : 'AI prompt'),
+        h('button', { class: 'btn sm', type: 'button', title: 'Source and prompt', onClick: settings }, p.source === 'upload' ? (ch.portrait?.aiSaved ? 'AI painting ✓' : 'Your picture') : p.source === 'builtin' ? 'Built-in art' : p.custom ? 'AI · edited prompt' : p.live ? 'AI painting' : 'AI prompt'),
         h('button', { class: 'btn sm ghost', type: 'button', title: 'Copy the prompt to use in any other image tool', onClick: async () => toast((await copyText(p.prompt)) ? 'Prompt copied' : 'Copy failed') }, 'Copy prompt'),
         h('button', { class: 'btn sm ghost danger', type: 'button', title: 'Remove the portrait from this character', onClick: () => change((c) => clearPortrait(c)) }, '🗑 Delete portrait'),
         fileIn,
@@ -213,12 +265,13 @@ export function portraitBlock(ch, { change, size = 'file' } = {}) {
   return h('div', { class: `portrait ${size}`, title: p.prompt }, frame, controls);
 }
 
-/** A small, read-only portrait image (World pages): the upload, the AI picture if it is already cached, else the built-in art. */
+/** A small, read-only portrait image (World pages): the upload, the live AI picture, else the built-in art. */
 export function portraitImg(ch, { alt = '' } = {}) {
   const p = portraitOf(ch);
   if (p.hidden) return null;
   const img = h('img', { alt, loading: 'lazy' });
-  img.src = p.source === 'upload' ? p.image : p.avatar;
+  if (p.live) { img.onerror = () => { img.onerror = null; img.src = p.avatar; }; img.src = p.url; }
+  else img.src = p.source === 'upload' ? p.image : p.avatar;
   return img;
 }
 
@@ -226,19 +279,19 @@ export { portraitPrompt };
 
 /**
  * Paint everyone on the roster who still has the built-in art (one painting every 15 seconds, in the
- * background). getList() returns the current roster; save(rosterId, image) stores a finished painting.
+ * background). getList() returns the current roster; save(rosterId, { image, live }) stores a finished painting.
  * onProgress({ done, total, current, status }) reports. Returns a cancel function.
  */
 export function paintRoster(getList, save, onProgress) {
   let cancelled = false;
   (async () => {
-    const todo = getList().filter((c) => { const p = portraitOf(c); return !p.hidden && p.source === 'ai'; });
+    const todo = getList().filter((c) => { const p = portraitOf(c); return !p.hidden && p.source === 'ai' && !p.live; });
     let done = 0;
     for (const ch of todo) {
       if (cancelled) break;
       const name = ch.identity?.codename || 'character';
       onProgress?.({ done, total: todo.length, current: name, status: 'queued' });
-      const ok = await paintCharacter(ch, (image) => save(ch.rosterId, image), { onStatus: (t) => onProgress?.({ done, total: todo.length, current: name, status: t }), cancelled: () => cancelled, tries: 6 });
+      const ok = await paintCharacter(ch, (r) => save(ch.rosterId, r), { onStatus: (t) => onProgress?.({ done, total: todo.length, current: name, status: t }), cancelled: () => cancelled, tries: 6 });
       done++;
       onProgress?.({ done, total: todo.length, current: name, status: ok ? 'painted' : 'skipped' });
       if (!paintingAvailable()) break;

@@ -59,16 +59,19 @@ export function portraitOf(ch) {
   const prompt = p.prompt || portraitPrompt(ch);
   const seed = p.seed ?? 1;
   const source = p.source === 'upload' && p.image ? 'upload' : p.source === 'builtin' ? 'builtin' : 'ai';
-  return { prompt, custom: !!p.prompt, seed, source, url: portraitUrl(prompt, { seed }), avatar: avatarSvg(ch, { seed }).dataUrl, image: p.image || null, hidden: !!p.hidden };
+  // live: the AI picture loaded straight from the service in this browser (it could not be copied
+  // into the character, so the sheet shows it from the service's address, which the browser caches)
+  return { prompt, custom: !!p.prompt, seed, source, url: portraitUrl(prompt, { seed }), avatar: avatarSvg(ch, { seed }).dataUrl, image: p.image || null, hidden: !!p.hidden, live: source === 'ai' && !!p.live };
 }
 
-export function setPortrait(ch, { seed, prompt, hidden, source, image, aiSaved } = {}) {
+export function setPortrait(ch, { seed, prompt, hidden, source, image, aiSaved, live } = {}) {
   const next = { ...(ch.portrait || {}) };
   if (aiSaved !== undefined) next.aiSaved = !!aiSaved;
-  if (seed !== undefined) next.seed = seed;
-  if (prompt !== undefined) { if (prompt && prompt !== portraitPrompt(ch)) next.prompt = prompt; else delete next.prompt; }
+  if (seed !== undefined && seed !== next.seed) { next.seed = seed; delete next.live; }
+  if (prompt !== undefined) { const before = next.prompt; if (prompt && prompt !== portraitPrompt(ch)) next.prompt = prompt; else delete next.prompt; if (before !== next.prompt) delete next.live; }
   if (hidden !== undefined) next.hidden = !!hidden;
-  if (image !== undefined) { if (image) { next.image = image; next.source = 'upload'; } else { delete next.image; delete next.aiSaved; if (next.source === 'upload') delete next.source; } }
+  if (image !== undefined) { if (image) { next.image = image; next.source = 'upload'; delete next.live; } else { delete next.image; delete next.aiSaved; if (next.source === 'upload') delete next.source; } }
+  if (live !== undefined) { if (live) next.live = true; else delete next.live; }
   if (source !== undefined) { if (source === 'builtin') next.source = 'builtin'; else if (source === 'upload' && next.image) next.source = 'upload'; else delete next.source; }
   ch.portrait = next;
   return ch;

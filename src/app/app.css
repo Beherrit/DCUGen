@@ -979,8 +979,10 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 @media (max-width: 900px) { .tb-layout { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- get the app ---------- */
-.topbar .getapp { margin-left: 8px; background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.getapp-wrap { display: inline-flex; margin-left: 8px; }
+.topbar .getapp { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); text-decoration: none; border-radius: 6px 0 0 6px; }
 .topbar .getapp:hover { filter: brightness(1.08); }
+.topbar .getapp-more { border-radius: 0 6px 6px 0; border-left: 0; padding-inline: 7px; }
 .getapp-list { display: grid; gap: 6px; }
 .getapp-row { display: grid; grid-template-columns: 150px minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); color: var(--ink); text-decoration: none; }
 .getapp-row:hover { border-color: var(--ink-3); }

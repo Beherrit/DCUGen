@@ -16,7 +16,27 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # One job makes the release first, so the three builders only upload into it (making it from three
+  # jobs at once failed with "already_exists" for whichever came last).
+  release:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+    steps:
+      - name: Pick the version (6.1.<build number>)
+        id: v
+        run: echo "version=6.1.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+      - name: Make the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          V: ${{ steps.v.outputs.version }}
+        run: |
+          gh release view "v$V" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 \
+            || gh release create "v$V" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "DCUGen $V" --latest \
+                 --notes "Desktop app build $V from $GITHUB_SHA. Windows: DCUGen-Setup.exe (installer, updates itself) or DCUGen-Portable.exe. macOS: DCUGen.dmg. Linux: DCUGen.AppImage."
+
   build:
+    needs: release
     strategy:
       fail-fast: false
       matrix:
@@ -39,7 +59,7 @@ jobs:
         shell: bash
         run: |
           cd desktop
-          v="6.1.${{ github.run_number }}"
+          v="${{ needs.release.outputs.version }}"
           node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('package.json'));p.version=process.argv[1];fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n')" "$v"
           echo "APP_VERSION=$v" >> "$GITHUB_ENV"
       - name: Install Electron
