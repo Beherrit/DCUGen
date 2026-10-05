@@ -44,3 +44,46 @@ test('people in a bio open as the same full character every time, and link back'
     if (kind === 'parent') assert.ok(a.identity.age > ch.identity.age);
   }
 });
+
+test('an edited or played character gets a key that carries its edits on top of the seed', async () => {
+  const { keyFor, fromKey } = await import('../src/engine/keys.js');
+  const ch = generateCharacter(R, { seed: 'key-edits', pl: 10 });
+  assert.equal((await keyFor(R, ch)).kind, 'exact');
+  ch.abilities.Fighting += 1;
+  ch.notes = 'Hates Mondays.';
+  ch.advantages.push({ name: 'Feature', rank: 1, param: 'A hidden pocket in every costume' });
+  ch.journal = { entries: [{ id: 1, title: 'Session 1', text: 'They met the Iron Court and lost badly.' }] };
+  ch.portrait = { seed: 3, image: `data:image/png;base64,${'A'.repeat(4000)}`, aiSaved: true };
+  ch.rosterId = 'r-1'; ch.savedAt = '2026-01-01';
+  assert.equal(characterKey(R, ch), null, 'no short key once edited');
+  const found = await keyFor(R, ch);
+  assert.equal(found.kind, 'edits');
+  assert.ok(isKey(found.key) && found.key.startsWith('DCUE1.DCUK1.'), found.key);
+  assert.ok(found.key.length < 1000, `seed + edits stays short: ${found.key.length}`);
+  const { character: back, edited, versionMatch } = await fromKey(R, found.key);
+  assert.ok(edited && versionMatch);
+  assert.equal(back.abilities.Fighting, ch.abilities.Fighting);
+  assert.equal(back.notes, 'Hates Mondays.');
+  assert.equal(back.advantages.at(-1).param, 'A hidden pocket in every costume');
+  assert.equal(back.journal.entries.length, 1);
+  assert.equal(back.bio.summary, ch.bio.summary);
+  assert.equal(back.portrait.image, undefined, 'pictures stay home');
+  assert.equal(back.portrait.seed, 3);
+  assert.equal(back.rosterId, undefined);
+  assert.equal((await fromKey(R, found.key)).character.seed, 'key-edits', 'the seed travels so the copy can be re-keyed');
+  assert.equal((await keyFor(R, back)).key, found.key, 'the rebuilt copy keys the same');
+  // people from a bio key the same way once edited
+  const p = ch.bio.people[0];
+  const person = fromKeySync(R, personKey(ch, p, 'person')).character;
+  person.identity.occupation = 'Retired';
+  const pk = await keyFor(R, person);
+  assert.ok(pk.key.startsWith('DCUE1.DCUP1.'));
+  assert.equal((await fromKey(R, pk.key)).character.identity.occupation, 'Retired');
+  // exact keys still open through fromKey
+  assert.equal((await fromKey(R, characterKey(R, generateCharacter(R, { seed: 'key-edits' })))).edited, false);
+});
+
+test('a character with no seed has no key at all (the share code carries it)', async () => {
+  const { keyFor } = await import('../src/engine/keys.js');
+  assert.equal(await keyFor(R, { pl: 10, abilities: {}, defenses: {}, skills: [], advantages: [], powers: [] }), null);
+});

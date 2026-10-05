@@ -5,10 +5,14 @@
 //       a rolled character (unedited), rebuilt with generateCharacter.
 //   DCUP1.<base64url JSON>
 //       a person from someone's bio (parent, sibling, rival, mentor...), rebuilt with generatePerson.
+//   DCUE1.<one of the keys above>.<base64url deflate JSON patch>
+//       a character that no longer matches its seed (edited, played, or rolled with older tables):
+//       the seed rebuilds the base and the patch carries every field that differs on top.
 //
 // Keys only reproduce a character while the random tables stay the same, so each one carries the
-// data version it was made with. Edited characters can't be rebuilt from a seed: share those with
-// the full share code instead (characterKey returns null for them).
+// data version it was made with. characterKey gives the short exact key or null; keyFor always
+// finds the best key a character can have (exact, or seed + edits), and only characters with no
+// seed at all (built by hand, imported from a sheet, catalog creatures) are left to the share code.
 
 import { DATA_VERSION } from '../generated/rulesdata.js';
 import { generateCharacter } from './generator.js';
@@ -34,6 +38,25 @@ function fromB64url(text) {
   for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
   return new TextDecoder().decode(bytes);
 }
+
+function bytesToB64url(bytes) {
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+function b64urlToBytes(text) {
+  const b64 = text.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((text.length + 3) % 4);
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return bytes;
+}
+async function pipe(bytes, stream) {
+  const s = new Blob([bytes]).stream().pipeThrough(stream);
+  return new Uint8Array(await new Response(s).arrayBuffer());
+}
+const deflate = (text) => pipe(new TextEncoder().encode(text), new CompressionStream('deflate-raw'));
+const inflate = async (bytes) => new TextDecoder().decode(await pipe(bytes, new DecompressionStream('deflate-raw')));
 
 /** The parts of a character that a key must reproduce exactly. */
 function fingerprint(ch) {
@@ -220,7 +243,65 @@ function characterKeyCached(ch) {
 }
 
 export function isKey(text) {
-  return /^DCU[KP]1\./.test(String(text || '').trim());
+  return /^DCU[KPE]1\./.test(String(text || '').trim());
+}
+
+/** The seed-only key this character would have if it were unedited, or null when it has no seed. */
+export function baseKey(ch) {
+  if (!ch) return null;
+  return ch.personKey || (ch.seed && ch.options ? rollKey(ch) : null);
+}
+
+// ---- keys that carry edits ----------------------------------------------------------------------------
+// The patch is the set of top-level fields that differ between the character and what its seed rebuilds.
+// Local bookkeeping stays home, and so do pictures: the receiver's app draws or repaints the portrait.
+
+const PATCH_SKIP = new Set(['rosterId', 'savedAt', 'createdAt', 'version', 'seed', 'options', 'personKey', 'lobbyShared', 'lobbyOwner', 'lobbyOwnerName']);
+
+function forPatch(ch) {
+  const out = {};
+  for (const [k, v] of Object.entries(ch || {})) if (!PATCH_SKIP.has(k) && v !== undefined) out[k] = v;
+  if (out.portrait?.image) { const { image, aiSaved, ...p } = out.portrait; out.portrait = p; }
+  return out;
+}
+
+function diff(from, to) {
+  const set = {}; const del = [];
+  for (const k of new Set([...Object.keys(from), ...Object.keys(to)])) {
+    const a = JSON.stringify(from[k]); const b = JSON.stringify(to[k]);
+    if (a === b) continue;
+    if (b === undefined) del.push(k); else set[k] = to[k];
+  }
+  return { set, del };
+}
+
+/**
+ * The best key a character can have: { key, kind: 'exact' | 'edits', base } or null when it has no seed.
+ * Exact keys come from characterKey; everything else gets DCUE1 = that key + a patch of its differences.
+ */
+export async function keyFor(R, ch) {
+  const exact = characterKey(R, ch);
+  if (exact) return { key: exact, kind: 'exact', base: exact };
+  const base = baseKey(ch);
+  if (!base) return null;
+  let rebuilt;
+  try { rebuilt = fromKeySync(R, base).character; } catch { return null; }
+  const { set, del } = diff(forPatch(rebuilt), forPatch(ch));
+  const patch = bytesToB64url(await deflate(JSON.stringify(del.length ? { set, del } : { set })));
+  return { key: `DCUE1.${base}.${patch}`, kind: 'edits', base };
+}
+
+/** Rebuild a character from any key (DCUK1, DCUP1 or DCUE1). Returns { character, versionMatch, edited }. */
+export async function fromKey(R, key) {
+  const k = String(key).trim();
+  if (!k.startsWith('DCUE1.')) return { ...fromKeySync(R, k), edited: false };
+  const cut = k.lastIndexOf('.');
+  if (cut <= 6) throw new Error('That key is cut short: it should end with its edits after the last dot.');
+  const { character, versionMatch } = fromKeySync(R, k.slice(6, cut));
+  const { set = {}, del = [] } = JSON.parse(await inflate(b64urlToBytes(k.slice(cut + 1))));
+  for (const [f, v] of Object.entries(set)) character[f] = v;
+  for (const f of del) delete character[f];
+  return { character, versionMatch, edited: true };
 }
 
 /** Rebuild a character from a key. Returns { character, versionMatch }. */

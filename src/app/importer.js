@@ -5,7 +5,7 @@ import { h, toast, openDialog } from './dom.js';
 import { upsert, emit } from './store.js';
 import { readCharactersFile } from './exporters.js';
 import { decodeCharacter } from './share.js';
-import { fromKeySync } from '../engine/keys.js';
+import { fromKey } from '../engine/keys.js';
 
 let hooks = { open: null, afterSave: null };
 
@@ -42,10 +42,10 @@ export function setImportRules(rules) { R = rules; }
 /** A character key (DCUK1/DCUP1), a share code or link, or character JSON. */
 export async function openAnything(text) {
   const t = text.trim();
-  const keyMatch = /DCU[KP]1\.[A-Za-z0-9%._~-]+/.exec(t);
+  const keyMatch = /DCU[KPE]1\.[A-Za-z0-9%._~-]+/.exec(t);
   if (keyMatch && !/DCU1\./.test(t)) {
-    const { character, versionMatch } = fromKeySync(R, keyMatch[0]);
-    if (!versionMatch) toast('That key was made with a different version of DCUGen, so details may differ from what its owner sees.');
+    const { character, versionMatch, edited } = await fromKey(R, keyMatch[0]);
+    if (!versionMatch) toast(edited ? 'That key was made with a different version of DCUGen: its edits are exact, other details may differ from what its owner sees.' : 'That key was made with a different version of DCUGen, so details may differ from what its owner sees.');
     return character;
   }
   return decodeCharacter(t);
@@ -62,7 +62,7 @@ export async function importFiles(files, opts) {
 }
 
 export async function importDialog({ open = true } = {}) {
-  const area = h('textarea', { id: 'import-code', placeholder: 'Paste a character key (DCUK1... / DCUP1...), a share code or link, or character JSON' });
+  const area = h('textarea', { id: 'import-code', placeholder: 'Paste a character key (DCUK1... / DCUP1... / DCUE1...), a share code or link, or character JSON' });
   const file = h('input', { type: 'file', id: 'import-file', accept: ACCEPT, multiple: true });
   const save = h('input', { type: 'checkbox', id: 'import-save', checked: true });
   const openIt = h('input', { type: 'checkbox', id: 'import-open', checked: open });

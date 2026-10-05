@@ -43,7 +43,9 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
 - **Character keys** – every rolled character has a short key (Share / Key) that rebuilds it exactly, bio and all,
   in anyone's copy of the app: paste it into "Open a key" on the Forge. Every name in a bio is clickable and opens
   that person (parent, sibling, rival, mentor...) as a full character with their own bio, stats that fit who they
-  are, and a link back. Edited characters share with the full code instead.
+  are, and a link back. A character that has been edited or played since it was rolled (or rolled with an older
+  version of the tables) gets a longer key that carries its seed plus everything that changed, journal included; only
+  characters with no seed at all (built by hand, imported from a sheet, catalog creatures) use the full share code.
 - **Gear & Vehicles** – 712 items across 18 genres (modern, military, espionage, fantasy, magic items, sci-fi, space,
   steampunk, wild west, pulp, cyberpunk, post-apocalyptic, occult, superhero gadgets...), a custom item maker, 169
   vehicles including 80 starships, headquarters, a builder for your own vehicles and bases, and space-game rules:
