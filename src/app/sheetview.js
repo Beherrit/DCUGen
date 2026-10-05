@@ -1,6 +1,6 @@
 // The character "case file": read view and edit view.
 
-import { h } from './dom.js';
+import { h, clear, append } from './dom.js';
 import { guideFor, skillGuideBody } from './skillguide.js';
 import { advancementSection } from './advancement.js';
 import { inkFor } from './dom.js';
@@ -180,31 +180,63 @@ export function renderFile(ch, R, opts = {}) {
       const def = R.advantage(a.name);
       const i = ch.advantages.findIndex((x) => x.name === a.name && (x.param || null) === (a.param || null));
       const max = def?.max_rank === 'half_pl' ? Math.floor(ch.pl / 2) : def?.max_rank;
+      // A Feature's detail is its whole description, so long details move down a line instead of crowding the name.
+      const longParam = !!a.param && a.param.length > 28;
       return h('div', { class: 'adv-row' },
         h('div', { class: 'adv-head' },
-          h('b', null, a.name), a.param ? h('span', { class: 'adv-param' }, ` (${a.param})`) : null,
+          h('b', null, a.name), a.param && !longParam ? h('span', { class: 'adv-param' }, ` (${a.param})`) : null,
           (a.rank || 1) > 1 || def?.ranked ? h('span', { class: 'adv-rank num' }, `${a.rank || 1}${max ? ` / ${max}` : ''}`) : null,
           h('span', { class: 'adv-type' }, def ? `${def.type}${def.book ? ` · ${def.book}` : ''}` : ''),
           editing && def?.ranked ? stepper(a.rank || 1, (d) => change((c) => { const x = c.advantages[i]; x.rank = (x.rank || 1) + d; if (x.rank <= 0) c.advantages.splice(i, 1); }), { min: 0, label: a.name }) : null,
           editing ? h('button', { class: 'x no-print', type: 'button', 'aria-label': `Remove ${a.name}`, onClick: () => change((c) => { c.advantages.splice(i, 1); }) }, '✕') : null),
+        longParam ? h('div', { class: 'adv-what adv-custom' }, a.param) : null,
         def?.summary ? h('div', { class: 'adv-what' }, def.summary, (def.requires || []).length ? h('span', { class: 'adv-req' }, ` Requires ${def.requires.map((r) => r.replace(/^\w+:/, '')).join(', ')}.`) : null) : null);
     })),
     editing ? (() => {
-      const nameIn = h('input', { type: 'text', list: 'adv-list', placeholder: 'Advantage', id: 'add-adv-name', 'aria-label': 'Advantage to add' });
+      const nameIn = h('input', { type: 'text', list: 'adv-list', placeholder: 'Advantage (Feature for your own)', id: 'add-adv-name', 'aria-label': 'Advantage to add', autocomplete: 'off' });
       const paramIn = h('input', { type: 'text', placeholder: 'Detail (optional)', id: 'add-adv-param', 'aria-label': 'Advantage detail' });
-      return h('div', { class: 'add-row no-print' },
-        h('datalist', { id: 'adv-list' }, advNames.map((n) => h('option', { value: n }))),
-        nameIn, paramIn,
-        h('button', { class: 'btn', type: 'button', onClick: () => {
-          const name = nameIn.value.trim();
-          if (!R.advantage(name)) { nameIn.setCustomValidity('Pick an advantage from the list'); nameIn.reportValidity(); return; }
-          change((c) => {
+      // Ranked advantages cost a point per rank: set the cost here instead of pressing + afterwards.
+      const costIn = h('input', { type: 'number', min: 1, max: 20, step: 1, value: 1, id: 'add-adv-cost', 'aria-label': 'Cost in power points (ranks)', title: 'Cost: one power point per rank', hidden: true, style: { flex: '0 0 76px' } });
+      const preview = h('div', { class: 'adv-preview', hidden: true });
+      // What the picked advantage does, shown as soon as it is picked from the list (or typed in full).
+      const showPick = () => {
+        nameIn.setCustomValidity('');
+        const def = R.advantage(nameIn.value.trim());
+        preview.hidden = !def;
+        costIn.hidden = !def?.ranked;
+        if (!def) { paramIn.placeholder = 'Detail (optional)'; return; }
+        costIn.placeholder = def.name === 'Feature' ? 'Cost' : 'Ranks';
+        costIn.title = def.name === 'Feature' ? 'Cost in power points: one per rank, each rank a feature (or a bigger one)' : `Ranks (one power point each)${def.max_rank ? `, up to ${def.max_rank === 'half_pl' ? Math.floor(ch.pl / 2) : def.max_rank}` : ''}`;
+        costIn.max = def.max_rank === 'half_pl' ? Math.floor(ch.pl / 2) : def.max_rank || 20;
+        const max = def.max_rank === 'half_pl' ? `up to half your PL (${Math.floor(ch.pl / 2)})` : def.max_rank ? `up to ${def.max_rank}` : null;
+        const facts = [def.type, def.ranked ? `ranked${max ? `, ${max}` : ''}` : '1 point', def.source].filter(Boolean).join(' · ');
+        append(clear(preview), [
+          h('b', null, def.name), h('span', { class: 'adv-type' }, ` ${facts}`),
+          h('div', null, def.summary || ''),
+          (def.requires || []).length ? h('div', { class: 'adv-req' }, `Requires ${def.requires.map((r) => r.replace(/^\w+:/, '')).join(', ')}.`) : null,
+          def.param ? h('div', { class: 'adv-req' }, def.name === 'Feature' ? 'Write what the feature does in the detail box (that text is its description on the sheet) and set its cost: one point per feature, more for a bigger one.' : `Name the ${def.param} in the detail box.`) : null]);
+        paramIn.placeholder = def.name === 'Feature' ? 'What it does (a hidden pocket, a perfect memory for faces...)' : def.param ? `Which ${def.param}?` : 'Detail (optional)';
+      };
+      nameIn.addEventListener('input', showPick);
+      nameIn.addEventListener('change', showPick);
+      return h('div', { class: 'no-print' },
+        h('div', { class: 'add-row' },
+          h('datalist', { id: 'adv-list' }, advNames.map((n) => h('option', { value: n }))),
+          nameIn, paramIn, costIn,
+          h('button', { class: 'btn', type: 'button', onClick: () => {
+            const name = nameIn.value.trim();
+            const def = R.advantage(name);
+            if (!def) { nameIn.setCustomValidity('Pick an advantage from the list'); nameIn.reportValidity(); return; }
             const param = paramIn.value.trim() || undefined;
-            const ex = c.advantages.find((x) => x.name === R.advantage(name).name && (x.param || undefined) === param);
-            if (ex && R.advantage(name).ranked) ex.rank = (ex.rank || 1) + 1;
-            else if (!ex) c.advantages.push(param ? { name: R.advantage(name).name, rank: 1, param } : { name: R.advantage(name).name, rank: 1 });
-          });
-        } }, 'Add'));
+            if (def.name === 'Feature' && !param) { paramIn.setCustomValidity('Say what the feature does'); paramIn.reportValidity(); paramIn.addEventListener('input', () => paramIn.setCustomValidity(''), { once: true }); return; }
+            const rank = def.ranked ? Math.max(1, Math.min(Number(costIn.max) || 20, Math.round(Number(costIn.value) || 1))) : 1;
+            change((c) => {
+              const ex = c.advantages.find((x) => x.name === def.name && (x.param || undefined) === param);
+              if (ex && def.ranked) ex.rank = (ex.rank || 1) + rank;
+              else if (!ex) c.advantages.push(param ? { name: def.name, rank, param } : { name: def.name, rank });
+            });
+          } }, 'Add')),
+        preview);
     })() : null);
 
   // ---- skills ----

@@ -531,6 +531,16 @@
     "summary": "Immune to fear effects."
   },
   {
+    "name": "Feature",
+    "type": "General",
+    "ranked": true,
+    "max_rank": null,
+    "param": "feature",
+    "requires": [],
+    "source": "DCA 75",
+    "summary": "A minor, useful trait that is not quite a power, one point per rank: say what it does (a hidden pocket, a perfect memory for faces, a built-in clock, a pet that follows simple orders...). Each rank is one such feature, or a bigger one."
+  },
+  {
     "name": "Great Endurance",
     "type": "General",
     "ranked": false,

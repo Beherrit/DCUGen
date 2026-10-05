@@ -285,6 +285,9 @@ details > summary { cursor: pointer; color: var(--ink-2); font: 600 12.5px/1.4 v
 .adv-rank { font: 800 13px/1 var(--font-label); padding: 2px 6px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); }
 .adv-type { margin-left: auto; font: 700 10.5px/1 var(--font-label); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
 .adv-what { font-size: 13px; color: var(--ink-2); margin-top: 2px; }
+.adv-what.adv-custom { color: var(--ink); font-style: italic; }
+.adv-preview { margin-top: 6px; padding: 6px 8px; font-size: 13px; color: var(--ink-2); background: var(--surface-2); border-left: 3px solid var(--line); border-radius: 0 4px 4px 0; display: grid; gap: 2px; }
+.adv-preview b { color: var(--ink); }
 .adv-req { color: var(--ink-3); }
 .adv { display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface-2); font-size: 13.5px; }
 .adv .r { font-weight: 700; }
@@ -654,6 +657,7 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 /* ---------- character keys ---------- */
 .key-box { border: 2px solid var(--hero, var(--ink)); border-radius: 8px; padding: 10px 12px; background: var(--surface-2); }
 .key-box code { display: block; margin-top: 4px; font: 600 13px/1.4 ui-monospace, Consolas, monospace; word-break: break-all; user-select: all; }
+.key-box code.key-long { max-height: 120px; overflow: auto; font-size: 11px; }
 .bio-name-link { border: 0; background: none; padding: 0; font: inherit; font-weight: 700; color: var(--hero-link, #2f6fde); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
 .bio-name-link:hover { text-decoration-thickness: 2px; }
 .bio-open { font-size: 12px; }

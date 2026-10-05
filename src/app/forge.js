@@ -4,9 +4,9 @@ import { h, clear, toast, copyText, openDialog, inkFor } from './dom.js';
 import { state, emit, savePrefs, upsert } from './store.js';
 import { renderFile } from './sheetview.js';
 import { exportExcel, exportJson, exportText } from './exporters.js';
-import { encodeCharacter, shareLink } from './share.js';
+import { encodeCharacter, shareLink, keySize } from './share.js';
 import { renderBio } from './bio.js';
-import { characterKey, personKey, fromKeySync } from '../engine/keys.js';
+import { characterKey, keyFor, personKey, fromKeySync } from '../engine/keys.js';
 import { openAnything, importDialog } from './importer.js';
 import { generateCharacter, rerollIdentity, generateTeam } from '../engine/generator.js';
 import { randomSeed } from '../engine/rng.js';
@@ -313,11 +313,42 @@ function menu(label, items) {
 
 document.addEventListener('click', () => document.querySelectorAll('.menu-list').forEach((m) => { m.hidden = true; }));
 
+/**
+ * Every edit (+/−, a typed field, a bio change) rebuilds the whole case file. Clearing the page would
+ * let the browser clamp the scroll to the top and drop the focused +/− button, so note both first and
+ * put them back once the new file is in place.
+ */
+function rememberView() {
+  const a = document.activeElement;
+  const inside = a && a !== document.body && fileHost.contains(a);
+  return {
+    x: window.scrollX, y: window.scrollY,
+    focus: inside ? { tag: a.tagName, id: a.id || '', label: a.getAttribute('aria-label') || '', text: a.tagName === 'BUTTON' ? a.textContent : '' } : null,
+  };
+}
+
+function restoreView(v) {
+  if (!v) return;
+  window.scrollTo(v.x, v.y);
+  const f = v.focus;
+  if (!f) return;
+  let el = null;
+  if (f.id) el = document.getElementById(f.id);
+  if (!el && f.label) el = fileHost.querySelector(`${f.tag.toLowerCase()}[aria-label="${CSS.escape(f.label)}"]`);
+  if (!el && f.text) el = [...fileHost.querySelectorAll('button')].find((b) => b.textContent === f.text) || null;
+  if (el && !el.disabled) el.focus({ preventScroll: true });
+}
+
 export function renderCurrent() {
   if (!fileHost) return;
+  const view = rememberView();
   clear(fileHost);
   const ch = state.current;
   if (!ch) return;
+  try { drawCurrent(ch); } finally { restoreView(view); }
+}
+
+function drawCurrent(ch) {
   fileHost.append(tabStrip());
   const inRoster = ch.rosterId && state.roster.some((x) => x.rosterId === ch.rosterId);
   const toolbar = h('div', { class: 'toolbar' },
@@ -441,19 +472,26 @@ async function share(ch) {
   const link = shareLink(code);
   const codeBox = h('textarea', { readonly: true, id: 'share-code', style: { minHeight: '90px', fontFamily: 'ui-monospace, Consolas, monospace', fontSize: '12px' } }, code);
   const linkBox = h('input', { type: 'text', readonly: true, id: 'share-link', value: link });
-  const key = characterKey(R, ch);
+  let found = null;
+  try { found = await keyFor(R, ch); } catch { found = null; }
+  const key = found?.key || null;
   const keyLink = key ? `${link.replace(/#.*$/, '')}#k=${key}` : null;
+  const why = () => {
+    if (!found) return 'This character has no seed to rebuild from (built by hand, imported from a sheet, or a creature from the catalog), so its key is the share code below. "Open a key" takes that too.';
+    if (found.kind === 'exact') return "This short key rebuilds this exact character, bio and all, in anyone's DCUGen. Paste it into 'Open a key' on the Forge. Keys work while the app's tables stay the same; for a copy that never changes, send the share code below.";
+    const played = (ch.journal?.entries?.length || 0) > 0 || (ch.advancement?.log?.length || 0) > 0;
+    return `This character ${played ? 'has been played and edited' : 'has been edited'} since it was rolled${ch.options ? ', or was rolled with an older version of the tables' : ''}, so its key is the seed plus everything that changed (${keySize(key)}). It still rebuilds this exact character, bio, journal and all, in anyone's DCUGen: paste it into 'Open a key' on the Forge.`;
+  };
   await openDialog({
     title: `Share ${ch.identity?.codename || 'character'}`,
     body: [
-      key ? h('div', { class: 'key-box' },
-        h('div', { class: 'label' }, '🔑 Character key'),
-        h('code', { id: 'share-key' }, key),
-        h('p', { class: 'hint', style: { margin: '4px 0 0' } }, "This short key rebuilds this exact character, bio and all, in anyone's DCUGen. Paste it into 'Open a key' on the Forge. Keys work while the app's tables stay the same; for a copy that never changes, send the share code below."),
-        h('div', { class: 'btn-row', style: { marginTop: '6px' } },
+      h('div', { class: 'key-box' },
+        h('div', { class: 'label' }, found?.kind === 'edits' ? '🔑 Character key · seed + edits' : '🔑 Character key'),
+        key ? h('code', { id: 'share-key', class: found.kind === 'edits' ? 'key-long' : '' }, key) : null,
+        h('p', { class: 'hint', style: { margin: '4px 0 0' } }, why()),
+        key ? h('div', { class: 'btn-row', style: { marginTop: '6px' } },
           h('button', { class: 'btn primary', type: 'button', onClick: async () => toast((await copyText(key)) ? 'Key copied' : 'Select the key and copy it') }, 'Copy key'),
-          h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(keyLink)) ? 'Key link copied' : 'Copy failed') }, 'Copy key link')))
-        : h('p', { class: 'hint', style: { margin: 0 } }, 'This character has been edited (or was built by hand), so it has no short key: share the code below, which carries everything.'),
+          h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(keyLink)) ? 'Key link copied' : 'Copy failed') }, 'Copy key link')) : null),
       h('p', { style: { margin: 0 } }, 'The share code carries the whole character, edits included. They paste it into Import or "Open a key". The link opens it directly.'),
       h('label', { class: 'field' }, h('span', null, 'Share code'), codeBox),
       h('div', { class: 'btn-row' }, h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(code)) ? 'Code copied' : 'Select the code and copy it') }, 'Copy code')),

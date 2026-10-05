@@ -59,7 +59,7 @@ function initTheme() {
 }
 
 async function loadFromHash() {
-  const m = /[#&]c=(DCU1\.[A-Za-z0-9_-]+)/.exec(location.hash) || /[#&]k=(DCU[KP]1\.[A-Za-z0-9%._~-]+)/.exec(location.hash);
+  const m = /[#&]c=(DCU1\.[A-Za-z0-9_-]+)/.exec(location.hash) || /[#&]k=(DCU[KPE]1\.[A-Za-z0-9%._~-]+)/.exec(location.hash);
   if (!m) return false;
   try {
     const ch = await openAnything(m[1]);
