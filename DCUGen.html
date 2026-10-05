@@ -7,7 +7,7 @@
 <meta name="description" content="Random and custom character generator and GM toolkit for the DC Adventures RPG, built on the Mutants & Masterminds 3e rules.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow+Semi+Condensed:wght@500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=UnifrakturCook:wght@700&family=Bangers&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Special+Elite&display=swap">
 <style>
 /* Layout: a control rail beside the hero's "case file"; the file's header band takes the
    character's power color under a halftone screen, like a comic cover. */
@@ -1174,6 +1174,260 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 .getapp-row span { font-size: 13px; color: var(--ink-2); }
 .getapp-row small { font: 600 11px/1 ui-monospace, Consolas, monospace; color: var(--ink-3); }
 @media (max-width: 860px) { .getapp-row { grid-template-columns: minmax(0, 1fr); } .getapp-row small { display: none; } }
+
+/* ---------- the newsstand: front pages ---------- */
+/* The page is a physical object: it keeps its own paper and ink whatever the app theme. */
+.np { --np-paper: #f5efe1; --np-paper-2: #ece4d2; --np-rule: #1b1813; --np-ink: #141414; --np-serif: "Playfair Display", Georgia, "Times New Roman", serif; --np-body: Georgia, "Times New Roman", serif; --np-sans: "Barlow Semi Condensed", "Arial Narrow", sans-serif;
+  position: relative; width: 100%; max-width: 980px; margin: 0 auto; background: var(--np-paper); color: #15130f; padding: 22px 28px 18px; font: 14px/1.4 var(--np-body); box-shadow: 0 2px 4px rgba(0, 0, 0, .25), 0 14px 40px rgba(0, 0, 0, .25); overflow: hidden; text-wrap: initial; }
+.np::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .015) 0 2px, transparent 2px 4px), radial-gradient(circle at 20% 10%, rgba(255, 255, 255, .5), transparent 60%); mix-blend-mode: multiply; }
+.np * { color: inherit; }
+.np h1, .np h2, .np h3, .np p { margin: 0; text-wrap: initial; }
+.np-head { border-bottom: 4px double var(--np-rule); padding-bottom: 6px; margin-bottom: 10px; }
+.np-ears { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 4.5fr) minmax(0, 1fr); gap: 12px; align-items: center; }
+.np-ear { font: 11px/1.3 var(--np-sans); border: 1px solid var(--np-rule); padding: 6px 8px; min-height: 44px; display: flex; align-items: center; }
+.np-ear.right { text-align: right; justify-content: flex-end; }
+.np-title { text-align: center; }
+.np-city { font: 600 11px/1 var(--np-sans); letter-spacing: .2em; text-transform: uppercase; margin-bottom: 6px; }
+.np-masthead { font: 900 54px/1 var(--np-serif); letter-spacing: .01em; color: var(--np-ink); text-transform: uppercase; }
+.np-slogan { font: italic 13px/1.2 var(--np-serif); margin-top: 6px; }
+.np-bar { display: flex; justify-content: space-between; gap: 10px; border-top: 1px solid var(--np-rule); border-bottom: 1px solid var(--np-rule); margin-top: 8px; padding: 3px 0; font: 600 11px/1.2 var(--np-sans); letter-spacing: .08em; text-transform: uppercase; }
+.np-body { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); grid-template-rows: auto 1fr; gap: 0 20px; }
+.np-lead { grid-column: 1; grid-row: 1; }
+.np-col { grid-column: 2; grid-row: 1 / span 2; display: grid; gap: 12px; align-content: start; align-items: start; border-left: 1px solid var(--np-rule); padding-left: 18px; }
+.np-briefs { grid-column: 1; grid-row: 2; align-self: start; border-top: 1px solid var(--np-rule); margin-top: 14px; padding-top: 12px; columns: 2; column-gap: 20px; column-rule: 1px solid var(--np-rule); }
+.np-briefs > * { break-inside: avoid; margin-bottom: 12px; }
+.np-story { min-width: 0; }
+.np-kicker { font: 700 11px/1 var(--np-sans); letter-spacing: .18em; text-transform: uppercase; color: var(--np-ink); margin-bottom: 4px; }
+.np-headline { font: 900 20px/1.05 var(--np-serif); text-transform: uppercase; letter-spacing: 0; margin-bottom: 4px; color: var(--np-ink); overflow-wrap: anywhere; }
+.np-lead .np-headline { font-size: 44px; margin-bottom: 8px; }
+.np-second .np-headline { font-size: 24px; }
+.np-deck { font: italic 15px/1.3 var(--np-serif); margin-bottom: 6px; }
+.np-lead .np-deck { font-size: 18px; }
+.np-byline { font: 600 11px/1.3 var(--np-sans); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; display: flex; gap: 10px; flex-wrap: wrap; }
+.np-dateline { font-weight: 800; }
+.np-photo { margin: 0 0 10px; }
+.np-photo-frame { position: relative; border: 1px solid var(--np-rule); background: #ccc; overflow: hidden; }
+.np-photo-frame img { display: block; width: 100%; height: auto; max-height: 420px; object-fit: cover; }
+.np-photo-frame::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
+.np-photo figcaption { font: 11px/1.3 var(--np-sans); margin-top: 4px; }
+.np-credit { font-style: italic; opacity: .7; }
+.np-text { font-size: 13.5px; text-align: justify; hyphens: auto; }
+.np-text p { margin: 0 0 7px; }
+.np-text p.first::first-letter { float: left; font: 900 46px/.8 var(--np-serif); padding: 5px 5px 0 0; color: var(--np-ink); }
+.np-lead .np-text { columns: 2; column-gap: 18px; column-rule: 1px solid rgba(0, 0, 0, .25); }
+.np-lead.has-photo .np-text { columns: 2; }
+.np-sidebar { border: 2px solid var(--np-rule); padding: 10px 12px; background: var(--np-paper-2); }
+.np-sidebar .np-headline { font-size: 17px; }
+.np-brief .np-headline { font-size: 16px; }
+.np-brief .np-text, .np-sidebar .np-text { font-size: 12.5px; }
+.np-brief .np-text p.first::first-letter, .np-sidebar .np-text p.first::first-letter { float: none; font: inherit; padding: 0; }
+.np-empty { opacity: .55; }
+.np-about { font: 12px/1.3 var(--np-sans); margin-top: 4px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.np-about-link { border: 1px solid var(--np-rule); background: var(--np-paper-2); border-radius: 999px; padding: 1px 8px; cursor: pointer; font: 600 11px/1.4 var(--np-sans); }
+.np-about-link:hover { background: var(--np-rule); color: var(--np-paper); }
+/* adverts */
+.np-ad { border: 2px solid var(--np-rule); padding: 8px 10px; text-align: center; background: var(--np-paper-2); break-inside: avoid; }
+.np-ad-tag { font: 700 9px/1 var(--np-sans); letter-spacing: .2em; text-transform: uppercase; opacity: .75; margin-bottom: 4px; }
+.np-ad-title { font: 900 18px/1.05 var(--np-serif); text-transform: uppercase; margin-bottom: 4px; }
+.np-ad-text { font: 12px/1.3 var(--np-body); }
+.np-ad-banner { margin-top: 14px; display: grid; grid-template-columns: auto 1fr; gap: 2px 16px; text-align: left; align-items: center; border-width: 3px; }
+.np-ad-banner .np-ad-tag { grid-column: 1 / -1; }
+.np-ad-banner .np-ad-title { font-size: 24px; margin: 0; }
+.np-foot { margin-top: 10px; }
+.np-classifieds { margin-top: 12px; border-top: 1px solid var(--np-rule); padding-top: 6px; font: 11px/1.35 var(--np-body); columns: 3; column-gap: 16px; }
+.np-classifieds .np-ad-tag { column-span: all; }
+.np-classified { display: block; break-inside: avoid; margin-bottom: 4px; }
+.np-colophon { margin-top: 12px; border-top: 1px solid var(--np-rule); padding-top: 4px; font: 600 10px/1.2 var(--np-sans); letter-spacing: .14em; text-transform: uppercase; text-align: center; opacity: .7; }
+.np-banner, .np-ribbon, .np-burst { display: none; }
+
+/* photo treatments */
+.np-photo-newsprint .np-photo-frame img { filter: grayscale(1) contrast(1.2) brightness(1.02); }
+.np-photo-newsprint .np-photo-frame::after { background: radial-gradient(circle, rgba(0, 0, 0, .45) .7px, transparent 1.3px) 0 0 / 3.5px 3.5px; mix-blend-mode: multiply; opacity: .55; }
+.np-photo-comic .np-photo-frame img { filter: saturate(1.7) contrast(1.35) brightness(1.03); }
+.np-photo-comic .np-photo-frame { border: 3px solid #111; box-shadow: 5px 5px 0 #111; }
+.np-photo-comic .np-photo-frame::after { background: radial-gradient(circle, rgba(220, 40, 60, .35) 1px, transparent 1.8px) 0 0 / 6px 6px, radial-gradient(circle, rgba(40, 90, 220, .25) 1px, transparent 1.8px) 3px 3px / 6px 6px; mix-blend-mode: multiply; }
+
+/* ---- looks ---- */
+/* Tabloid: one shout, one picture */
+.np-tabloid { --np-serif: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif; --np-paper: #f7f3ea; }
+.np-tabloid .np-head { border-bottom: 0; padding: 0; margin-bottom: 8px; }
+.np-tabloid .np-title { background: var(--np-ink); color: #fff; padding: 10px 14px 12px; }
+.np-tabloid .np-masthead { font-size: 64px; letter-spacing: .02em; color: #fff; font-weight: 900; }
+.np-tabloid .np-slogan { color: #ffd84d; font: 800 13px/1 var(--np-sans); letter-spacing: .14em; text-transform: uppercase; }
+.np-tabloid .np-city { color: #ffd84d; }
+.np-tabloid .np-ear { border: 0; background: #d41b2a; color: #fff; font-weight: 700; }
+.np-tabloid .np-ribbon { display: block; position: absolute; top: 22px; left: -58px; transform: rotate(-32deg); background: #d41b2a; color: #fff; font: 800 13px/1 var(--np-sans); letter-spacing: .25em; padding: 7px 60px; box-shadow: 0 2px 6px rgba(0, 0, 0, .3); z-index: 2; }
+.np-tabloid .np-body { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto auto; }
+.np-tabloid .np-lead { grid-column: 1 / -1; grid-row: 1; display: grid; grid-template-columns: 1fr; }
+.np-tabloid .np-briefs { grid-column: 1 / -1; grid-row: 3; columns: 3; }
+.np-tabloid .np-lead .np-headline { font-size: 86px; line-height: .92; letter-spacing: .01em; text-align: center; }
+.np-tabloid .np-lead .np-deck { text-align: center; font: 700 20px/1.2 var(--np-sans); text-transform: uppercase; letter-spacing: .04em; }
+.np-tabloid .np-lead .np-kicker { background: #d41b2a; color: #fff; display: inline-block; padding: 4px 10px; justify-self: center; font-size: 13px; }
+.np-tabloid .np-lead .np-photo-frame img { max-height: 520px; }
+.np-tabloid .np-lead .np-text { columns: 3; }
+.np-tabloid .np-col { grid-column: 1 / -1; grid-row: 2; grid-template-columns: 1fr 1fr 1fr; border: 0; padding: 0; margin-top: 12px; }
+.np-tabloid .np-headline { letter-spacing: .02em; }
+.np-tabloid .np-second .np-headline { font-size: 34px; }
+
+/* EXTRA!: stop the presses */
+.np-extra { --np-paper: #f3ecdb; }
+.np-extra .np-banner { display: flex; justify-content: center; gap: 24px; background: var(--np-ink); color: var(--np-paper); font: 900 42px/1 "Big Shoulders Display", Impact, sans-serif; letter-spacing: .2em; padding: 8px 0 10px; margin: -4px 0 12px; }
+.np-extra .np-banner span { color: #e63946; }
+.np-extra .np-masthead { font-size: 60px; }
+.np-extra .np-head { border-bottom-width: 6px; border-bottom-style: solid; }
+.np-extra .np-lead .np-headline { font-size: 68px; line-height: .95; text-align: center; letter-spacing: -.01em; }
+.np-extra .np-lead .np-deck { text-align: center; font-size: 20px; }
+.np-extra .np-body { grid-template-columns: 1fr; grid-template-rows: auto auto auto; }
+.np-extra .np-lead { grid-row: 1; }
+.np-extra .np-col { grid-column: 1; grid-row: 2; grid-template-columns: repeat(3, 1fr); border-left: 0; border-top: 4px solid var(--np-rule); padding: 12px 0 0; margin-top: 12px; }
+.np-extra .np-briefs { grid-column: 1; grid-row: 3; columns: 3; }
+.np-extra .np-lead .np-text { columns: 3; }
+.np-extra .np-kicker { font-size: 14px; letter-spacing: .3em; }
+
+/* Vintage gazette: blackletter and ornaments */
+.np-gazette { --np-paper: #e9dcb8; --np-paper-2: #e0d1a8; --np-rule: #2b2217; --np-serif: "Playfair Display", "Times New Roman", serif; color: #2b2217; }
+.np-gazette::before { background: radial-gradient(ellipse at 50% 40%, transparent 50%, rgba(80, 50, 10, .25) 100%), repeating-linear-gradient(90deg, rgba(0, 0, 0, .02) 0 1px, transparent 1px 3px); }
+.np-gazette .np-masthead { font: 700 66px/1 "UnifrakturCook", "Old English Text MT", "Playfair Display", serif; text-transform: none; letter-spacing: 0; }
+.np-gazette .np-slogan::before, .np-gazette .np-slogan::after { content: " ❦ "; }
+.np-gazette .np-ear { border-style: double; border-width: 3px; }
+.np-gazette .np-bar { border-top: 3px double var(--np-rule); border-bottom: 3px double var(--np-rule); }
+.np-gazette .np-headline { font-weight: 700; text-transform: none; }
+.np-gazette .np-lead .np-headline { font-size: 40px; text-align: center; }
+.np-gazette .np-lead .np-deck { text-align: center; }
+.np-gazette .np-lead .np-deck::before { content: "— "; } .np-gazette .np-lead .np-deck::after { content: " —"; }
+.np-gazette .np-kicker { letter-spacing: .3em; }
+.np-gazette .np-kicker::before, .np-gazette .np-kicker::after { content: " ✦ "; }
+.np-gazette .np-photo-frame { border: 4px double var(--np-rule); padding: 3px; background: var(--np-paper); }
+.np-gazette .np-photo-newsprint .np-photo-frame img, .np-gazette.np-photo-newsprint .np-photo-frame img { filter: sepia(.8) contrast(1.15) brightness(.95); }
+.np-gazette .np-ad { border-style: double; border-width: 4px; }
+
+/* Comic panel: Ben-Day dots, thick inks, burst sticker, tilted clippings */
+.np-comic { --np-paper: #fff7d6; --np-paper-2: #fff; --np-rule: #111; --np-serif: "Bangers", "Big Shoulders Display", Impact, sans-serif; --np-body: "Comic Neue", "Comic Sans MS", "Segoe UI", sans-serif; --np-sans: "Comic Neue", "Comic Sans MS", sans-serif; border: 5px solid #111; box-shadow: 10px 10px 0 #111, 0 14px 40px rgba(0, 0, 0, .25); }
+.np-comic::before { background: radial-gradient(circle, rgba(240, 150, 30, .28) 1.3px, transparent 2px) 0 0 / 9px 9px, radial-gradient(circle, rgba(30, 120, 240, .12) 1.2px, transparent 2px) 4px 4px / 9px 9px; mix-blend-mode: multiply; }
+.np-comic .np-head { border-bottom: 5px solid #111; }
+.np-comic .np-masthead { font: 400 72px/1 var(--np-serif); letter-spacing: .04em; color: #ffd400; -webkit-text-stroke: 2px #111; text-shadow: 4px 4px 0 #111, 6px 6px 0 var(--np-ink); }
+.np-comic .np-slogan { font: 700 14px/1.2 var(--np-sans); background: #111; color: #fff; display: inline-block; padding: 3px 12px; transform: rotate(-1.5deg); }
+.np-comic .np-city { font-weight: 700; letter-spacing: .12em; }
+.np-comic .np-ear { border: 3px solid #111; background: #fff; box-shadow: 3px 3px 0 #111; font-weight: 700; transform: rotate(-1deg); }
+.np-comic .np-ear.right { transform: rotate(1.2deg); margin-right: 96px; }
+.np-comic .np-bar { border-width: 3px; font-weight: 700; }
+.np-comic .np-burst { display: grid; place-items: center; position: absolute; top: 14px; right: 18px; width: 128px; height: 128px; background: #e8262f; color: #fff; font: 400 30px/1 var(--np-serif); letter-spacing: .04em; transform: rotate(12deg); z-index: 3; filter: drop-shadow(3px 3px 0 #111); }
+.np-comic .np-burst span { transform: rotate(-4deg); -webkit-text-stroke: 1px #111; }
+.np-comic .np-headline { font-weight: 400; letter-spacing: .03em; color: #111; }
+.np-comic .np-lead .np-headline { font-size: 60px; line-height: .95; color: var(--np-ink); -webkit-text-stroke: 1.2px #111; text-shadow: 3px 3px 0 #111; }
+.np-comic .np-kicker { background: #ffd400; border: 2px solid #111; display: inline-block; padding: 3px 8px; box-shadow: 2px 2px 0 #111; font-weight: 700; letter-spacing: .1em; }
+.np-comic .np-deck { font: 700 16px/1.25 var(--np-sans); font-style: normal; background: #fff; border: 2px solid #111; padding: 6px 10px; display: inline-block; border-radius: 12px; box-shadow: 3px 3px 0 #111; }
+.np-comic .np-byline { font-weight: 700; }
+.np-comic .np-photo-frame { border: 4px solid #111; box-shadow: 6px 6px 0 #111; transform: rotate(-1.2deg); margin: 6px 8px 10px 2px; }
+.np-comic .np-second .np-photo-frame { transform: rotate(1.4deg); }
+.np-comic .np-photo figcaption { font-weight: 700; }
+.np-comic .np-text { text-align: left; hyphens: manual; font-size: 14px; }
+.np-comic .np-text p.first::first-letter { font-family: var(--np-serif); font-weight: 400; color: #e8262f; -webkit-text-stroke: 1px #111; }
+.np-comic .np-col { border-left: 4px solid #111; }
+.np-comic .np-sidebar { background: #fff; border: 3px solid #111; box-shadow: 5px 5px 0 #111; transform: rotate(1deg); }
+.np-comic .np-brief { background: #fff; border: 3px solid #111; padding: 8px 10px; box-shadow: 4px 4px 0 #111; transform: rotate(-.6deg); }
+.np-comic .np-brief:nth-child(even) { transform: rotate(.7deg); }
+.np-comic .np-briefs { border-top: 4px solid #111; column-rule: 0; }
+.np-comic .np-ad { border: 3px solid #111; box-shadow: 4px 4px 0 #111; background: #fff; transform: rotate(-1deg); }
+.np-comic .np-ad-title { font: 400 22px/1 var(--np-serif); letter-spacing: .04em; }
+.np-comic .np-ad-banner { background: #ffd400; }
+.np-comic .np-colophon { font-weight: 700; }
+
+/* Underground: photocopied, typewritten, stapled */
+.np-zine { --np-paper: #ededeb; --np-paper-2: #e2e2df; --np-rule: #1a1a1a; --np-serif: "Special Elite", "Courier New", monospace; --np-body: "Special Elite", "Courier New", monospace; --np-sans: "Special Elite", "Courier New", monospace; color: #1d1d1d; box-shadow: 0 1px 3px rgba(0, 0, 0, .4); transform: rotate(-.4deg); }
+.np-zine::before { background: radial-gradient(ellipse at 30% 20%, rgba(0, 0, 0, .06), transparent 50%), radial-gradient(ellipse at 80% 90%, rgba(0, 0, 0, .12), transparent 45%), repeating-linear-gradient(0deg, rgba(0, 0, 0, .03) 0 1px, transparent 1px 2px); filter: contrast(1.2); }
+.np-zine::after { content: "⌇"; position: absolute; top: 8px; left: 12px; color: #555; font-size: 18px; text-shadow: 0 120px 0 #555; }
+.np-zine .np-head { border-bottom: 3px solid var(--np-rule); }
+.np-zine .np-masthead { font: 400 50px/1 var(--np-serif); letter-spacing: -.02em; text-transform: uppercase; background: #1a1a1a; color: #ededeb; display: inline-block; padding: 4px 14px 0; transform: rotate(-1deg); }
+.np-zine .np-slogan { font-style: normal; text-transform: uppercase; letter-spacing: .1em; font-size: 11px; }
+.np-zine .np-ear { border: 2px dashed var(--np-rule); }
+.np-zine .np-bar { border-top: 2px dashed var(--np-rule); border-bottom: 2px dashed var(--np-rule); }
+.np-zine .np-headline { font-weight: 400; text-transform: uppercase; letter-spacing: 0; }
+.np-zine .np-lead .np-headline { font-size: 34px; }
+.np-zine .np-deck { font-style: normal; text-decoration: underline; }
+.np-zine .np-kicker { background: #1a1a1a; color: #ededeb; display: inline-block; padding: 2px 6px; }
+.np-zine .np-photo-frame { border: 2px solid var(--np-rule); transform: rotate(.8deg); }
+.np-zine.np-photo-newsprint .np-photo-frame img { filter: grayscale(1) contrast(1.9) brightness(1.1); }
+.np-zine .np-text { text-align: left; hyphens: manual; font-size: 12.5px; }
+.np-zine .np-text p.first::first-letter { float: none; font: inherit; padding: 0; }
+.np-zine .np-lead .np-text { column-rule: 1px dashed var(--np-rule); }
+.np-zine .np-col { border-left: 1px dashed var(--np-rule); }
+.np-zine .np-sidebar { border: 2px dashed var(--np-rule); background: transparent; }
+.np-zine .np-ad { border: 2px dashed var(--np-rule); background: transparent; }
+
+/* ---- the newsstand, cards, viewer, editor ---- */
+.np-hero { background: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, .18), transparent 40%), linear-gradient(135deg, #1b1f2b, #3b4252 55%, #6b4a12); }
+.np-hero select { background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .35); color: #fff; border-radius: var(--radius); padding: 7px 10px; }
+.np-stand { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.np-stand.small { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.np-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); overflow: hidden; display: grid; }
+.np-card-text { padding: 10px 12px 12px; display: grid; gap: 4px; }
+.np-card-text b { font: 800 16px/1.1 var(--font-display); text-transform: uppercase; letter-spacing: .02em; }
+.np-card-text span { font: 600 12px/1.2 var(--font-label); color: var(--ink-3); text-transform: uppercase; letter-spacing: .06em; }
+.np-card-text small { color: var(--ink-2); font-size: 12.5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.np-thumb { position: relative; width: 100%; overflow: hidden; background: #c9c2b2; cursor: pointer; }
+.np-thumb .np { position: absolute; top: 0; left: 0; width: 980px; max-width: none; transform-origin: 0 0; pointer-events: none; }
+.np-sheet { padding: 14px 0 24px; overflow-x: auto; }
+.np-view .wd-hero { background: linear-gradient(135deg, #1b1f2b, #3b4252 55%, #6b4a12); }
+.np-editor-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 18px; align-items: start; }
+.np-form { display: grid; gap: 12px; min-width: 0; }
+.np-sec { display: grid; gap: 8px; min-width: 0; }
+.np-form > *, .np-story-card > *, .np-ad-card > * { min-width: 0; }
+.np-preview-col { position: sticky; top: 64px; max-height: calc(100vh - 80px); overflow: auto; padding: 4px 4px 20px; }
+.np-preview { position: relative; overflow: hidden; }
+.np-preview .np { position: absolute; top: 0; left: 0; width: 980px; max-width: none; transform-origin: 0 0; }
+.np-layouts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.np-layout-pick { display: grid; gap: 4px; justify-items: center; min-width: 0; overflow: hidden; padding: 8px 6px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); cursor: pointer; font: 700 12px/1 var(--font-label); color: var(--ink); }
+.np-layout-pick:hover { border-color: var(--ink-3); }
+.np-layout-pick.active { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent); }
+.np-lp-sample { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 10px 22px; gap: 3px; width: 64px; height: 42px; background: #f1ebdc; border: 1px solid #555; padding: 3px; }
+.np-lp-sample i { display: block; background: #333; }
+.np-lp-sample i:first-child { grid-column: 1 / -1; }
+.np-lp-tabloid .np-lp-sample { grid-template-columns: 1fr; grid-template-rows: 14px 1fr; } .np-lp-tabloid .np-lp-sample i:first-child { background: #111; } .np-lp-tabloid .np-lp-sample i:nth-child(3) { display: none; }
+.np-lp-extra .np-lp-sample { grid-template-rows: 6px 6px 1fr; grid-template-columns: 1fr; } .np-lp-extra .np-lp-sample i:nth-child(2) { background: #c22; }
+.np-lp-gazette .np-lp-sample { background: #e6d8b4; }
+.np-lp-comic .np-lp-sample { background: #fff2b8; border: 2px solid #111; box-shadow: 2px 2px 0 #111; } .np-lp-comic .np-lp-sample i { transform: rotate(-3deg); }
+.np-lp-zine .np-lp-sample { background: #e6e6e3; border-style: dashed; }
+.np-inks { display: flex; gap: 6px; padding-top: 4px; }
+.np-ink { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--surface); box-shadow: 0 0 0 1px var(--line); cursor: pointer; }
+.np-ink.active { box-shadow: 0 0 0 2px var(--accent); }
+.np-story-list, .np-ad-list { display: grid; gap: 8px; }
+.np-story-card, .np-ad-card { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--surface-2); display: grid; gap: 6px; }
+.np-story-card.open { background: var(--surface); }
+.np-story-head { display: flex; align-items: center; gap: 4px; }
+.np-story-toggle { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; border: 0; background: none; padding: 2px 0; cursor: pointer; text-align: left; font: inherit; color: var(--ink); }
+.np-story-toggle b { font: 700 13.5px/1.2 var(--font-label); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.np-story-toggle small { color: var(--ink-3); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
+.np-pic-row { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
+.np-pic-preview { width: 120px; height: 80px; object-fit: cover; border: 1px solid var(--line); border-radius: 4px; background: var(--surface-2); flex: 0 0 auto; }
+.np-pic-preview.empty { display: grid; place-items: center; font: 600 11px/1 var(--font-label); color: var(--ink-3); }
+.np-pic-btns { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.np-pic-status { flex-basis: 100%; color: var(--ink-3); font-size: 12px; }
+.np-savebar { position: sticky; bottom: 0; display: flex; gap: 8px; justify-content: flex-end; padding: 10px 12px; margin-top: 8px; background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(6px); border-top: 1px solid var(--line); border-radius: 8px 8px 0 0; }
+.wd-counts { grid-template-columns: repeat(6, auto); }
+@media (max-width: 1100px) { .np-editor-grid { grid-template-columns: 1fr; } .np-preview-col { position: static; max-height: none; } }
+@media (max-width: 700px) {
+  .np { padding: 14px 12px; }
+  .np-ears { grid-template-columns: 1fr; } .np-ear { display: none; }
+  .np-masthead { font-size: 36px !important; }
+  .np-body, .np-tabloid .np-body { grid-template-columns: 1fr; }
+  .np-body, .np-tabloid .np-body, .np-extra .np-body { grid-template-rows: auto; }
+  .np-lead, .np-col, .np-briefs, .np-tabloid .np-lead, .np-tabloid .np-col, .np-tabloid .np-briefs, .np-extra .np-lead, .np-extra .np-col, .np-extra .np-briefs { grid-column: 1; grid-row: auto; }
+  .np-col, .np-tabloid .np-col, .np-extra .np-col { grid-template-columns: 1fr; border-left: 0; padding-left: 0; border-top: 1px solid var(--np-rule); padding-top: 10px; margin-top: 10px; }
+  .np-briefs, .np-classifieds { columns: 1; }
+  .np-lead .np-text, .np-tabloid .np-lead .np-text, .np-extra .np-lead .np-text { columns: 1; }
+  .np-lead .np-headline { font-size: 30px !important; }
+  .np-layouts { grid-template-columns: repeat(2, 1fr); }
+  .wd-counts { grid-template-columns: repeat(3, auto); }
+}
+/* printing just the page */
+body.np-printing .app { display: none !important; }
+.np-print-host { background: #fff; padding: 0; }
+@media print {
+  .np { box-shadow: none; max-width: none; width: 100%; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .np-zine, .np-comic .np-photo-frame { transform: none; }
+  .np-about { display: none; }
+}
 
 </style>
 </head>
@@ -4333,7 +4587,30 @@ async function decodeWorld(input) {
 /** Rough size for the user: "38 KB". */
 function keySize(key) { const n = key.length; return n < 1024 ? `${n} chars` : `${Math.round(n / 1024)} KB`; }
 
-return { inflateRaw, encodeCharacter, decodeCharacter, shareLink, isWorldKey, encodeWorld, decodeWorld, keySize };
+// ---- one front page as a key ------------------------------------------------------------------------------
+// "DCUN1." + base64url(deflate(JSON paper)). Pictures ride along (they are small), so a player gets the page as printed.
+
+const PAPER_PREFIX = 'DCUN1.';
+function isPaperKey(text) { return /DCUN1\.[A-Za-z0-9_-]{8,}/.test(String(text || '')); }
+
+async function encodePaper(paper, { pictures = true } = {}) {
+  const p = pictures ? paper : { ...paper, stories: (paper.stories || []).map((s) => (s.image?.src ? { ...s, image: { ...s.image, src: null } } : s)) };
+  const json = new TextEncoder().encode(JSON.stringify({ app: 'DCUGen', kind: 'paper', v: 1, paper: p }));
+  const packed = await pipe(json, new CompressionStream('deflate-raw'));
+  return PAPER_PREFIX + toBase64Url(packed);
+}
+
+async function decodePaper(input) {
+  const m = /DCUN1\.([A-Za-z0-9_-]+)/.exec(String(input || '').trim());
+  if (!m) throw new Error('That is not a front-page key. They start with "DCUN1."');
+  const data = JSON.parse(new TextDecoder().decode(await inflateRaw(fromBase64Url(m[1]))));
+  if (data.kind !== 'paper' || !data.paper) throw new Error('That key does not hold a front page.');
+  return data.paper;
+}
+
+function paperLink(key) { return `${location.href.split('#')[0]}#n=${key}`; }
+
+return { inflateRaw, encodeCharacter, decodeCharacter, shareLink, isWorldKey, encodeWorld, decodeWorld, keySize, isPaperKey, encodePaper, decodePaper, paperLink };
 })();
 
 __mods["src/engine/xlsx.js"] = (() => {
@@ -8479,6 +8756,7 @@ const ENTITY_TYPES = {
   location: { label: 'Locations', one: 'Location', glyph: '📍', color: '#1a7f4b' },
   event: { label: 'Events', one: 'Event', glyph: '📅', color: '#c2410c' },
   item: { label: 'Items', one: 'Item', glyph: '🗝', color: '#a8670b' },
+  paper: { label: 'Newspapers', one: 'Newspaper', glyph: '📰', color: '#3b4252' },
 };
 
 // rel = what `to` is to `from`. inverse = what `from` is to `to`.
@@ -8817,6 +9095,7 @@ function entityTimeline(world, e) {
 function campaignTimeline(world, { kinds = null } = {}) {
   const items = [];
   for (const e of world.entities.values()) if (e.type === 'event') items.push({ kind: e.source === 'journal' ? 'session' : e.tags?.includes('battle') ? 'battle' : 'event', id: e.id, session: e.session ?? null, date: e.date || e.fields?.Date || '', name: e.name, text: e.summary || '', ev: e, created: e.created || '' });
+  for (const e of world.entities.values()) if (e.type === 'paper') items.push({ kind: 'paper', id: e.id, session: e.session ?? null, date: e.date || e.fields?.Date || '', name: e.name, text: e.summary || '', ev: e, created: e.created || '' });
   for (const m of world.moments || []) items.push({ kind: 'change', id: m.id, session: m.session ?? null, date: m.date || '', name: m.text, text: m.note || '', m, created: m.created || '' });
   return items.filter((x) => !kinds || kinds.includes(x.kind)).sort((a, b) => (a.session ?? 1e9) - (b.session ?? 1e9) || String(a.date || '').localeCompare(String(b.date || '')) || (a.kind === 'session' ? -1 : 0) - (b.kind === 'session' ? -1 : 0) || String(a.created).localeCompare(String(b.created)) || a.name.localeCompare(b.name));
 }
@@ -9141,10 +9420,26 @@ function layoutGraph(nodes, edges, { width = 800, height = 600, iterations = 220
   return pos;
 }
 
+/** A front page (see newspaper.js) as Markdown, for the vault export and "Copy as Markdown". */
+function paperMarkdown(paper) {
+  const out = [`*${paper.masthead}* — ${[paper.city, paper.date, paper.edition, paper.price].filter(Boolean).join(' · ')}`, ''];
+  if (paper.slogan) out.push(`> ${paper.slogan}`, '');
+  for (const s of paper.stories || []) {
+    out.push(`## ${s.kicker ? `${s.kicker}: ` : ''}${s.headline || 'Untitled'}`);
+    if (s.deck) out.push(`*${s.deck}*`);
+    if (s.byline) out.push(`${s.byline}`);
+    out.push('');
+    if (s.image?.caption) out.push(`_[Photo: ${s.image.caption}${s.image.credit ? ` — ${s.image.credit}` : ''}]_`, '');
+    if (s.body) out.push(s.body, '');
+  }
+  for (const a of paper.ads || []) out.push(`> **${a.tag || 'ADVERTISEMENT'}** · ${a.title ? `**${a.title}** ` : ''}${a.text || ''}`, '');
+  return out.join('\n');
+}
+
 // ---- Markdown vault (Obsidian) ----------------------------------------------------------------------------------------------
 
 const safeName = (s) => String(s).replace(/[\\/:*?"<>|#^[\]]/g, '').replace(/\s+/g, ' ').trim() || 'Untitled';
-const FOLDER = { person: 'People', faction: 'Factions', location: 'Locations', event: 'Events', item: 'Items' };
+const FOLDER = { person: 'People', faction: 'Factions', location: 'Locations', event: 'Events', item: 'Items', paper: 'Newspapers' };
 
 function mdPage(world, e) {
   const name = safeName(e.name);
@@ -9194,6 +9489,7 @@ function mdPage(world, e) {
     if (ch.complications?.length) out.push(`- Complications: ${ch.complications.map((c) => `${c.type}: ${c.text}`).join(' ')}`);
     out.push('');
   }
+  if (e.paper) out.push('## Front page', '', paperMarkdown(e.paper), '');
   if (e.body) out.push('## Notes', '', e.body, '');
   return out.join('\n');
 }
@@ -9222,7 +9518,7 @@ function vaultMarkdown(world) {
   return files;
 }
 
-return { ENTITY_TYPES, RELATIONS, FACTION_ROLES, PERSON_STATUSES, RELATION_GROUPS, slug, emptyWorld, buildWorld, linkActiveAt, linksAsOf, lastSession, groupedConnections, entityTimeline, campaignTimeline, searchWorld, createEntity, updateEntity, deleteEntity, restoreHidden, addLink, MOMENT_KINDS, MOMENT_GROUPS, momentKindsFor, momentSentence, recordMoment, removeMoment, updateMoment, removeLink, recordBattle, layoutGraph, vaultMarkdown };
+return { ENTITY_TYPES, RELATIONS, FACTION_ROLES, PERSON_STATUSES, RELATION_GROUPS, slug, emptyWorld, buildWorld, linkActiveAt, linksAsOf, lastSession, groupedConnections, entityTimeline, campaignTimeline, searchWorld, createEntity, updateEntity, deleteEntity, restoreHidden, addLink, MOMENT_KINDS, MOMENT_GROUPS, momentKindsFor, momentSentence, recordMoment, removeMoment, updateMoment, removeLink, recordBattle, layoutGraph, paperMarkdown, vaultMarkdown };
 })();
 
 __mods["src/app/factions.js"] = (() => {
@@ -9601,9 +9897,9 @@ __mods["src/app/importer.js"] = (() => {
 const { h, toast, openDialog } = __mods["src/app/dom.js"];
 const { upsert, emit } = __mods["src/app/store.js"];
 const { readCharactersFile } = __mods["src/app/exporters.js"];
-const { decodeCharacter } = __mods["src/app/share.js"];
+const { decodeCharacter, decodePaper, isPaperKey } = __mods["src/app/share.js"];
 const { fromKey } = __mods["src/engine/keys.js"];
-let hooks = { open: null, afterSave: null };
+let hooks = { open: null, afterSave: null, openPaper: null };
 
 /** open(ch) shows a character in a new Forge tab; afterSave() refreshes roster views. */
 function setImportHooks(h2) { hooks = { ...hooks, ...h2 }; }
@@ -9614,6 +9910,7 @@ const ACCEPT = '.xlsx,.json,application/json,application/vnd.openxmlformats-offi
 async function importCharacters(list, { open = true, save = true } = {}) {
   let n = 0;
   for (const raw of list) {
+    if (!raw) continue;
     const ch = { ...raw };
     delete ch.rosterId;
     delete ch.savedAt;
@@ -9638,6 +9935,7 @@ function setImportRules(rules) { R = rules; }
 /** A character key (DCUK1/DCUP1), a share code or link, or character JSON. */
 async function openAnything(text) {
   const t = text.trim();
+  if (isPaperKey(t)) { hooks.openPaper?.(await decodePaper(t)); return null; }
   const keyMatch = /DCU[KPE]1\.[A-Za-z0-9%._~-]+/.exec(t);
   if (keyMatch && !/DCU1\./.test(t)) {
     const { character, versionMatch, edited } = await fromKey(R, keyMatch[0]);
@@ -9658,7 +9956,7 @@ async function importFiles(files, opts) {
 }
 
 async function importDialog({ open = true } = {}) {
-  const area = h('textarea', { id: 'import-code', placeholder: 'Paste a character key (DCUK1... / DCUP1... / DCUE1...), a share code or link, or character JSON' });
+  const area = h('textarea', { id: 'import-code', placeholder: 'Paste a character key (DCUK1... / DCUP1... / DCUE1...), a front-page key (DCUN1...), a share code or link, or character JSON' });
   const file = h('input', { type: 'file', id: 'import-file', accept: ACCEPT, multiple: true });
   const save = h('input', { type: 'checkbox', id: 'import-save', checked: true });
   const openIt = h('input', { type: 'checkbox', id: 'import-open', checked: open });
@@ -10290,13 +10588,15 @@ function build() {
       h('button', { class: 'btn', type: 'button', onClick: rollTeam }, 'Roll a team'),
       h('button', { class: 'btn', type: 'button', id: 'build-scratch', onClick: buildFromScratch }, 'Build from scratch')),
     (() => {
-      const keyIn = h('input', { type: 'text', id: 'open-key', placeholder: 'Paste a key, share code or world key', 'aria-label': 'Character key, share code or world key', autocomplete: 'off' });
+      const keyIn = h('input', { type: 'text', id: 'open-key', placeholder: 'Paste a key, share code, world key or front page', 'aria-label': 'Character key, share code or world key', autocomplete: 'off' });
       const go = async () => {
         const v = keyIn.value.trim();
         if (!v) return;
         if (/DCUW1\./.test(v)) { keyIn.value = ''; api.openWorldKey?.(v); return; }
+        if (/DCUN1\./.test(v)) { keyIn.value = ''; api.openPaperKey?.(v); return; }
         try {
           const ch = await openAnything(v);
+          if (!ch) { keyIn.value = ''; return; }
           setCurrent(ch, { newTab: true, fresh: true });
           keyIn.value = '';
           toast(`Opened ${ch.identity?.codename || 'character'}`);
@@ -16003,6 +16303,663 @@ function resultPanel() {
 return { STYLES, detectStyle, initBattle, throwIn, battleCount, renderBattle };
 })();
 
+__mods["src/engine/newspaper.js"] = (() => {
+// Front pages: a newspaper from the campaign world. The GM writes (or drafts from the timeline) a
+// masthead and a handful of stories with pictures, picks a layout, and saves the issue as a page in
+// the World, where it sits on the campaign timeline and travels with the vault and world keys.
+//
+// A paper: { masthead, slogan, city, date, edition, price, volume, layout, photoStyle, ink,
+//            ears: { left, right }, stories: [{ id, slot, kicker, headline, deck, byline, dateline,
+//            body, image: { src, caption, credit } | null, about: [entity ids] }],
+//            ads: [{ id, style, tag, title, text }] }
+
+const { makeRng, randomSeed } = __mods["src/engine/rng.js"];
+const { campaignTimeline, MOMENT_KINDS, paperMarkdown } = __mods["src/engine/world.js"];
+
+const PAPER_LAYOUTS = {
+  broadsheet: { label: 'Broadsheet', blurb: 'The big-city daily: serif masthead, six columns of ink, one lead photo. The paper of record.' },
+  tabloid: { label: 'Tabloid', blurb: 'One screaming headline over one huge photo, a red ribbon and lurid kickers. Sold at every newsstand.' },
+  extra: { label: 'EXTRA!', blurb: 'Stop the presses: a giant headline, heavy black rules and a newsboy on every corner.' },
+  gazette: { label: 'Vintage Gazette', blurb: 'Yellowed paper, a blackletter masthead and printer\'s ornaments: the pulp age.' },
+  comic: { label: 'Comic Panel', blurb: 'Ben-Day dots, thick ink outlines, burst stickers and tilted clippings: the front page as a comic cover.' },
+  zine: { label: 'Underground', blurb: 'Photocopied, typewritten and stapled: the resistance rag, the conspiracy newsletter.' },
+};
+const PHOTO_STYLES = { newsprint: 'Newsprint (black & white halftone)', comic: 'Comic (bold colour, Ben-Day dots)', plain: 'As it is' };
+const STORY_SLOTS = { lead: 'Lead story', second: 'Second story', brief: 'Brief', sidebar: 'Sidebar box' };
+const PAPER_INKS = ['#141414', '#1d3a6e', '#8e1b1b', '#1f5c3a', '#4a2a7a', '#6b4a12'];
+
+const MASTHEADS = ['Planet', 'Gazette', 'Bugle', 'Herald', 'Tribune', 'Star', 'Chronicle', 'Dispatch', 'Sentinel', 'Ledger', 'Times', 'Globe', 'Clarion', 'Register', 'Observer', 'Courier'];
+const SLOGANS = ['All the news that fits', 'Truth, justice, and a fair price', 'The city\'s paper since 1911', 'First with the facts', 'Fearless. Fair. Daily.', 'If it happened, it\'s here', 'Nothing but the truth, and some adverts', 'Read by heroes, feared by villains', 'Your city. Your paper.', 'Ink never sleeps'];
+const WEATHER = ['Sunny, high of 74. Low chance of meteors.', 'Overcast with a chance of rain by evening.', 'Clear skies; unexplained aurora possible after dark.', 'Fog over the harbour until noon.', 'Heat advisory. Stay hydrated, stay indoors.', 'Snow flurries. Roads icy on the bridges.', 'Thunderstorms tonight. Keep off the rooftops.', 'Mild and breezy. Kite weather.'];
+const INSIDE = ['Sports: the Knights clinch it, page 12', 'Opinion: do we need a metahuman registry? page 8', 'Classifieds: lab assistant wanted, must tolerate explosions', 'Arts: the museum reopens after the heist, page 10', 'Weather, comics, puzzles: pages 14-16', 'Business: Vance Industries shares climb, page 6', 'Obituaries, page 9', 'Letters: readers on the rooftop vigilantes, page 8'];
+const REPORTERS = ['Staff Reporter', 'City Desk', 'Crime Desk', 'Our Correspondent', 'Wire Services', 'Night Editor', 'Special to the paper'];
+const FIRST = ['Lois', 'Ben', 'Vicki', 'Jack', 'Iris', 'Cat', 'Perry', 'Linda', 'Clark', 'Jimmy', 'Tawny', 'Marcus', 'Dana', 'Eddie', 'Nadia', 'Rafael', 'June', 'Theo'];
+const LAST = ['Rourke', 'Okafor', 'Vale', 'Castellano', 'Lindqvist', 'Park', 'Bennett', 'Delacroix', 'Mbeki', 'Harlow', 'Novak', 'Sato', 'Fairweather', 'Quintero', 'Brandt', 'Ashby'];
+
+const FILLERS = [
+  { kicker: 'CITY HALL', headline: 'COUNCIL SPLITS ON METAHUMAN REGISTRY VOTE', deck: 'Mayor promises "a decision by Friday" as protesters fill the steps', body: 'A late-night session of the city council ended without a vote on the proposed registry of powered individuals, after four hours of testimony from police, civil-liberties groups and one masked witness who declined to give a name.\n\n"We are not here to unmask anyone," the mayor told reporters afterwards. "We are here to make sure the next time a building comes down, someone answers the phone."\n\nThe measure returns to the floor next week.' },
+  { kicker: 'HARBOUR', headline: 'MYSTERY LIGHTS OVER THE BAY FOR THIRD NIGHT RUNNING', deck: 'Coast guard says "no vessels, no aircraft, no explanation"', body: 'Residents of the waterfront reported a column of green light above the shipping lanes shortly after midnight, the third such sighting this week. The coast guard dispatched two cutters and found nothing but calm water.\n\nA spokesperson for the observatory said the lights were "almost certainly not astronomical", which did little to settle nerves along the piers.' },
+  { kicker: 'BUSINESS', headline: 'VANCE INDUSTRIES SHARES SOAR ON "CLEAN FUSION" CLAIM', deck: 'Rivals call the announcement "science fiction"', body: 'Shares in Vance Industries rose eleven percent after the company said a prototype reactor in its research campus had run for a week on "a fuel we are not yet ready to name".\n\nAnalysts were divided. "Either this is the biggest story of the decade," one said, "or someone is about to be very embarrassed."' },
+  { kicker: 'CRIME', headline: 'ARMOURED CAR CREW STILL AT LARGE AFTER DOWNTOWN CHASE', deck: 'Police: the getaway driver "was not driving in any normal sense"', body: 'Three men in identical masks escaped with an undisclosed sum after a chase through the financial district that ended with the armoured car on its roof and the thieves gone.\n\nWitnesses described the getaway vehicle leaving the road at the river and "simply continuing". Police have asked anyone with footage to come forward.' },
+  { kicker: 'SCIENCE', headline: 'UNIVERSITY LAB SEALED AFTER "CONTAINMENT EVENT"', deck: 'No injuries reported; campus closed until further notice', body: 'The physics building was evacuated on Tuesday afternoon after what the university called a "containment event" in a basement laboratory. Emergency crews in sealed suits remained on site overnight.\n\nA graduate student who asked not to be named said the lab had been "running something it should not have been running".' },
+  { kicker: 'COURTS', headline: 'JURY SELECTION BEGINS IN THE WAREHOUSE DISTRICT TRIAL', deck: 'Defence to argue "mind control" for the first time in state history', body: 'Lawyers for the accused told the court they would argue their client was "not the author of his own actions" on the night of the warehouse fire, in what legal observers say is the first mind-control defence to reach a jury in this state.\n\nThe prosecution called the defence "a comic book".' },
+  { kicker: 'SPORTS', headline: 'KNIGHTS CLINCH THE PENNANT IN EXTRA INNINGS', deck: 'Stadium crowd of 48,000 stays past midnight', body: 'The home side took the pennant in the eleventh inning after a game delayed twice by a power cut that the stadium blamed on "external factors".\n\nThe winning run was scored by a rookie who, the manager said, "runs like something is chasing him".' },
+  { kicker: 'WEATHER', headline: 'FREAK HAILSTORM STRIPS LEAVES FROM CITY PARK', deck: 'Meteorologists baffled by a storm "the size of one block"', body: 'A hailstorm confined to the four blocks around the park left cars dented and trees bare in under ten minutes on Sunday, while the rest of the city sat under clear skies.\n\n"I have never seen weather with edges," the city meteorologist said.' },
+  { kicker: 'SOCIETY', headline: 'MUSEUM GALA RAISES RECORD SUM, LOSES ONE DIAMOND', deck: 'Curators insist the stone was "misplaced, not stolen"', body: 'The annual benefit gala raised more than two million for the museum\'s new wing, though the evening ended with the discovery that the centrepiece of the gem exhibit was no longer in its case.\n\nThe museum\'s director said an inventory was under way and asked guests to "check their pockets, in the friendliest possible sense".' },
+  { kicker: 'TRANSIT', headline: 'SUBWAY LINE REOPENS AFTER TUNNEL "INCIDENT"', deck: 'Transit authority will not say what was found in the tunnel', body: 'The downtown line reopened this morning after a three-day closure that the transit authority described only as "an incident in the tunnel between the two stations".\n\nWorkers at the scene were seen carrying out something under a tarpaulin. The authority thanked riders for their patience.' },
+  { kicker: 'LETTERS', headline: 'READERS DIVIDED ON THE ROOFTOP VIGILANTES', deck: '"Heroes", "menaces", and one proposal for a parade', body: 'Our mailbag this week overflowed with opinions on the costumed figures seen on the city\'s rooftops. A retired police sergeant called them "the best thing to happen to this city since streetlights"; a downtown landlord enclosed an invoice for a skylight.\n\nOne reader suggested a parade. The letters page is on page 8.' },
+  { kicker: 'HEALTH', headline: 'CLINIC REPORTS "UNUSUAL RECOVERIES" IN BURN WARD', deck: 'Doctors decline to speculate', body: 'Staff at the city hospital say six patients in the burn unit have healed "far faster than medicine would predict" in the past month, all after visits from a volunteer who signed in only as "a friend".\n\nThe hospital has asked the volunteer to come forward. "We would like to say thank you," a spokesperson said. "And also to ask some questions."' },
+];
+
+const STORY_OPENERS = [
+  '{city} — {text}, according to witnesses and police on the scene.',
+  '{city} — The city woke to the news that {textLower}.',
+  '{city} — It was confirmed late last night that {textLower}.',
+  '{city} — {text}. Nobody downtown is talking about anything else.',
+];
+const STORY_MIDDLES = [
+  '"{quote}," said one bystander, who asked not to be named. "Then it was over."',
+  'Police cordoned off three blocks and declined to say more. "We will have a statement when we have facts," a spokesperson said.',
+  'Sources close to the matter described the mood as "tense" and the damage as "considerable, but mostly to reputations".',
+  'Officials urged calm. A spokesperson for the mayor\'s office said the situation was "under review", a phrase this paper has now printed forty-one times this year.',
+  'Neighbours reported shouting, then a silence "like the air had been taken out of the street".',
+  'Footage circulating online shows little more than a blur and a great deal of dust.',
+];
+const STORY_CLOSERS = [
+  'This paper will carry more as the story develops.',
+  'Anyone with information is asked to contact the city desk.',
+  'A full account appears on page 3.',
+  'The last word, for now, belongs to a vendor on the corner: "Same thing next week, probably."',
+  'Reached for comment, those involved said nothing, loudly.',
+];
+const QUOTES = ['I saw the whole thing from the fire escape', 'It happened so fast', 'I thought it was a movie shoot', 'You could feel it in your teeth', 'The sky went a colour I don\'t have a word for', 'Somebody shouted a name and everyone ran'];
+
+const KICKER_BY_GROUP = { People: 'CITY', Fate: 'BREAKING', Factions: 'POWER PLAYS', Places: 'ON THE MOVE', Things: 'LOST & FOUND', Loves: 'SOCIETY', Change: 'CITY' };
+
+const paperId = () => `s${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+
+function blankStory(slot = 'brief') {
+  return { id: paperId(), slot, kicker: '', headline: '', deck: '', byline: '', dateline: '', body: '', image: null, about: [] };
+}
+
+/** A fresh issue with sensible defaults; name it after the world's main city when there is one. */
+function newPaper(world, { seed = randomSeed() } = {}) {
+  const rng = makeRng(`paper::${seed}`);
+  const city = mainCity(world) || 'the City';
+  const name = city === 'the City' ? `The Daily ${rng.pick(MASTHEADS)}` : `The ${city} ${rng.pick(MASTHEADS)}`;
+  const d = new Date();
+  return {
+    v: 1, seed, masthead: name, slogan: rng.pick(SLOGANS), city, date: d.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+    edition: 'Morning edition', price: '50¢', volume: `Vol. ${roman(rng.int(40, 130))} · No. ${rng.int(100, 999)}`,
+    layout: 'broadsheet', photoStyle: 'newsprint', ink: PAPER_INKS[0],
+    ears: { left: `Weather: ${rng.pick(WEATHER)}`, right: `Inside: ${rng.pick(INSIDE)}` },
+    stories: [blankStory('lead')],
+    ads: [],
+  };
+}
+
+function roman(n) { const m = [[100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']]; let s = ''; for (const [v, r] of m) while (n >= v) { s += r; n -= v; } return s; }
+
+/** The city most characters are based in. */
+function mainCity(world) {
+  const count = new Map();
+  for (const e of world?.entities?.values?.() || []) if (e.type === 'location' && e.fields?.Kind === 'City') count.set(e.name, (count.get(e.name) || 0) + e.degree);
+  return [...count.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] || null;
+}
+
+const upperFirst = (s) => String(s || '').replace(/^./, (c) => c.toUpperCase());
+const lowerFirst = (s) => String(s || '').replace(/^./, (c) => c.toLowerCase());
+const fill = (t, vars) => t.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
+
+/** A story from one campaign-timeline item (a session, a battle, an event or a recorded moment). */
+function storyFromTimeline(it, world, { rng = makeRng(`story::${it.id}`), city = 'the City', slot = 'brief' } = {}) {
+  const names = [];
+  let text; let note = ''; let kicker = 'CITY'; let about = [];
+  if (it.kind === 'change') {
+    const m = it.m; const k = MOMENT_KINDS[m.kind];
+    text = m.text; note = m.note || ''; kicker = KICKER_BY_GROUP[k?.group] || 'CITY';
+    about = [m.a, m.b].filter(Boolean);
+    for (const id of about) { const e = world.entities.get(id); if (e) names.push(e.name); }
+  } else {
+    const ev = it.ev;
+    text = ev.name; note = ev.summary || '';
+    kicker = it.kind === 'battle' ? 'BATTLE' : it.kind === 'session' ? 'THE WEEK' : (ev.fields?.Kind || 'EVENT').toUpperCase();
+    about = [ev.id, ...ev.connections.filter((c) => c.other.type === 'person').slice(0, 4).map((c) => c.other.id)];
+    for (const c of ev.connections) if (c.other.type === 'person') names.push(c.other.name);
+  }
+  const headline = headlineFrom(text, it.kind, rng);
+  const deck = note ? firstSentence(note) : names.length ? `${names.slice(0, 3).join(', ')} at the centre of it` : rng.pick(['Witnesses tell of a night the city will not forget', 'Officials urge calm; nobody is calm', 'Full story inside']);
+  const vars = { city: city.toUpperCase(), text: upperFirst(text), textLower: lowerFirst(text), quote: rng.pick(QUOTES) };
+  const body = [fill(rng.pick(STORY_OPENERS), vars), note && note !== deck ? note : fill(rng.pick(STORY_MIDDLES), vars), fill(rng.pick(STORY_MIDDLES), vars), fill(rng.pick(STORY_CLOSERS), vars)].filter(Boolean).join('\n\n');
+  return { ...blankStory(slot), kicker, headline, deck, byline: `By ${rng.pick(FIRST)} ${rng.pick(LAST)}`, dateline: '', body, about: [...new Set(about)], from: it.id };
+}
+
+function firstSentence(s) { return String(s).split(/(?<=[.!?])\s+/)[0].slice(0, 140); }
+
+/** A headline from a sentence: shout it, trim the fat. */
+function headlineFrom(text, kind = 'change', rng = makeRng(text)) {
+  let t = String(text || '').replace(/[.!]+$/, '').trim();
+  if (kind === 'battle') t = rng.pick([`${t}: BLOW BY BLOW`, `CHAOS AS ${t}`, `${t}`]);
+  else if (kind === 'session') t = rng.pick([`${t}`, `${t}: WHAT WE KNOW`, `INSIDE: ${t}`]);
+  else t = rng.pick([`${t}`, `${t}, SOURCES SAY`, `${t}: CITY REELS`, `SHOCK AS ${t}`]);
+  return t.toUpperCase();
+}
+
+/** A filler story that uses the world's own names where it can. */
+function fillerStory(world, rng = makeRng(randomSeed()), slot = 'brief') {
+  const f = rng.pick(FILLERS);
+  const factions = [...(world?.entities?.values?.() || [])].filter((e) => e.type === 'faction').map((e) => e.name);
+  const vance = factions.length && rng.chance(0.5) ? rng.pick(factions) : 'Vance Industries';
+  const sub = (s) => String(s).replace(/Vance Industries/g, vance);
+  return { ...blankStory(slot), kicker: f.kicker, headline: sub(f.headline), deck: sub(f.deck), byline: rng.chance(0.5) ? `By ${rng.pick(FIRST)} ${rng.pick(LAST)}` : rng.pick(REPORTERS), body: sub(f.body) };
+}
+
+/**
+ * Draft a whole front page from the campaign: the latest timeline items become the lead and second
+ * stories, briefs and a sidebar; filler stories top it up. Deterministic for a seed.
+ */
+function draftPaper(world, { seed = randomSeed(), session = null, count = 5, base = null } = {}) {
+  const rng = makeRng(`draft::${seed}`);
+  const paper = base ? { ...base, seed } : newPaper(world, { seed });
+  const city = paper.city && paper.city !== 'the City' ? paper.city : mainCity(world) || 'the City';
+  let items = campaignTimeline(world);
+  if (session != null) items = items.filter((it) => it.session === session);
+  items = items.slice(-count).reverse();
+  const slots = ['lead', 'second', 'brief', 'brief', 'sidebar', 'brief', 'brief'];
+  const stories = items.map((it, i) => storyFromTimeline(it, world, { rng, city, slot: slots[i] || 'brief' }));
+  const used = new Set(stories.map((s) => s.headline));
+  let guard = 0;
+  while (stories.length < Math.max(4, Math.min(count, 5)) && guard++ < 20) {
+    const f = fillerStory(world, rng, slots[stories.length] || 'brief');
+    if (used.has(f.headline)) continue;
+    used.add(f.headline); stories.push(f);
+  }
+  const d = base?.date || paper.date;
+  const ads = base?.ads?.length ? base.ads : rollAds(world, rng, 3);
+  return { ...paper, city, date: d, stories, ads, edition: session != null ? `Session ${session} edition` : paper.edition };
+}
+
+/** One line for the page's summary and the timeline. */
+function paperSummary(paper) {
+  const lead = (paper.stories || []).find((s) => s.slot === 'lead') || (paper.stories || [])[0];
+  return lead?.headline ? `${lead.headline}${lead.deck ? ` — ${lead.deck}` : ''}` : `${paper.masthead}, ${paper.date}`;
+}
+
+/** The issue's name as a World page: masthead and edition. */
+function paperName(paper) {
+  return `${paper.masthead || 'The Paper'} · ${paper.edition || paper.date || 'edition'}`;
+}
+
+/** Strip pictures for a lighter copy (world keys keep them unless asked). */
+function paperWithoutPictures(paper) {
+  return { ...paper, stories: (paper.stories || []).map((s) => (s.image?.src ? { ...s, image: { ...s.image, src: null } } : s)) };
+}
+
+// ---- adverts ------------------------------------------------------------------------------------------------
+// Little boxed adverts fill out a front page the way they fill a real one: the GM writes their own or
+// rolls some from the world's factions and places.
+
+const ADS = [
+  { title: '{faction}', text: 'Building tomorrow, today. Now hiring: physicists, pilots, people who do not ask questions.', tag: 'ADVERTISEMENT' },
+  { title: 'BIG BITE BURGERS', text: 'Open all night. Open during the thing last Tuesday. Open now.', tag: 'ADVERTISEMENT' },
+  { title: 'SKYLIGHT REPAIR', text: 'Same-day glazing. We know why you are calling. No judgement.', tag: 'CLASSIFIED' },
+  { title: 'LEARN SELF-DEFENCE', text: 'Six weeks, no powers required. Sensei Ruiz, above the laundromat on 9th.', tag: 'CLASSIFIED' },
+  { title: 'LOST: ONE CAT', text: 'Answers to Mister Whiskers. Last seen floating. Reward.', tag: 'CLASSIFIED' },
+  { title: '{place} TOURS', text: 'See the crater! See the vault! See the place where it happened! Children half price.', tag: 'ADVERTISEMENT' },
+  { title: 'DR. HALVORSEN, PSYCHIATRIST', text: 'Specialist in recovered memory, lost time and "it was not me". Discretion guaranteed.', tag: 'ADVERTISEMENT' },
+  { title: 'ARMOURED GLASS', text: 'Storefronts. Penthouses. Aquariums. Rated to rank 8. Ask about rank 10.', tag: 'ADVERTISEMENT' },
+  { title: 'ROOM TO LET', text: 'Top floor, rooftop access, no questions about the hours you keep. Cash.', tag: 'CLASSIFIED' },
+  { title: 'TONIGHT AT THE ORPHEUM', text: 'One night only: THE AMAZING ZARDO. Doors 8. Disappearances 9.', tag: 'ADVERTISEMENT' },
+  { title: 'CITY PAWN & LOAN', text: 'We buy gold, gadgets, glowing things. Serious offers for anything from off-world.', tag: 'ADVERTISEMENT' },
+  { title: 'VOTE {faction}', text: 'A safer city. A stronger city. A city with fewer craters. Paid for by friends of {faction}.', tag: 'POLITICAL ADVERTISEMENT' },
+  { title: 'WANTED: HENCHMEN', text: 'Full-time. Uniform provided. Dental. Must be comfortable with heights and lasers.', tag: 'CLASSIFIED' },
+  { title: 'MIDNIGHT DINER', text: 'The coffee is hot and the counter has seen things. Corner of 5th and {place}.', tag: 'ADVERTISEMENT' },
+];
+
+const AD_STYLES = { box: 'Boxed advert', banner: 'Banner across the bottom', classified: 'Classified (small print)' };
+
+function blankAd(style = 'box') { return { id: paperId(), style, tag: 'ADVERTISEMENT', title: '', text: '' }; }
+
+function rollAd(world, rng = makeRng(randomSeed()), style = 'box') {
+  const ents = [...(world?.entities?.values?.() || [])];
+  const factions = ents.filter((e) => e.type === 'faction').map((e) => e.name);
+  const places = ents.filter((e) => e.type === 'location').map((e) => e.name);
+  const ad = rng.pick(ADS);
+  const vars = { faction: factions.length ? rng.pick(factions).toUpperCase() : 'VANCE INDUSTRIES', place: places.length ? rng.pick(places).toUpperCase() : 'DOWNTOWN' };
+  return { ...blankAd(ad.tag === 'CLASSIFIED' ? 'classified' : style), tag: ad.tag, title: fill(ad.title, vars), text: fill(ad.text, vars) };
+}
+
+function rollAds(world, rng = makeRng(randomSeed()), n = 3) {
+  const out = []; const seen = new Set(); let guard = 0;
+  while (out.length < n && guard++ < 30) { const a = rollAd(world, rng); if (seen.has(a.title)) continue; seen.add(a.title); out.push(a); }
+  if (out.length) out[out.length - 1].style = out.length > 2 ? 'banner' : out[out.length - 1].style;
+  return out;
+}
+
+return { paperMarkdown, PAPER_LAYOUTS, PHOTO_STYLES, STORY_SLOTS, PAPER_INKS, paperId, blankStory, newPaper, mainCity, storyFromTimeline, headlineFrom, fillerStory, draftPaper, paperSummary, paperName, paperWithoutPictures, AD_STYLES, blankAd, rollAd, rollAds };
+})();
+
+__mods["src/app/newspaper.js"] = (() => {
+// The newsstand: front pages of the campaign's newspapers. Write one by hand, draft one from the
+// timeline, dress it with pictures and adverts, pick a layout, then save it to the World, print it,
+// or hand it to the players as a key or link.
+
+const { h, clear, toast, copyText, download, openDialog } = __mods["src/app/dom.js"];
+const { state } = __mods["src/app/store.js"];
+const { readPictureFile, requestPainting, prefs: painterPrefs } = __mods["src/app/portrait.js"];
+const { PORTRAIT_STYLES, portraitUrl, portraitOf } = __mods["src/engine/portrait.js"];
+const { PAPER_LAYOUTS, PHOTO_STYLES, STORY_SLOTS, PAPER_INKS, AD_STYLES, newPaper, draftPaper, blankStory, fillerStory, storyFromTimeline, rollAd, blankAd, paperSummary, paperName, paperMarkdown } = __mods["src/engine/newspaper.js"];
+const { createEntity, addLink, campaignTimeline } = __mods["src/engine/world.js"];
+const { encodePaper, decodePaper, paperLink, keySize } = __mods["src/app/share.js"];
+const { makeRng, randomSeed } = __mods["src/engine/rng.js"];
+const clone = (x) => JSON.parse(JSON.stringify(x));
+const PAPER_W = 980;
+
+// ---- the printed page -------------------------------------------------------------------------------------
+
+function paragraphs(text) { return String(text || '').split(/\n{2,}|\n/).map((t) => t.trim()).filter(Boolean); }
+
+function storyEl(s, { world, go, interactive, lead }) {
+  const paras = paragraphs(s.body);
+  const about = interactive && world ? (s.about || []).map((id) => world.entities.get(id)).filter(Boolean) : [];
+  return h('article', { class: `np-story np-${s.slot || 'brief'} ${s.image?.src ? 'has-photo' : ''}` },
+    s.kicker ? h('div', { class: 'np-kicker' }, s.kicker) : null,
+    h(lead ? 'h2' : 'h3', { class: 'np-headline' }, s.headline || 'Untitled'),
+    s.deck ? h('p', { class: 'np-deck' }, s.deck) : null,
+    s.byline || s.dateline ? h('div', { class: 'np-byline' }, s.byline ? h('span', null, s.byline) : null, s.dateline ? h('span', { class: 'np-dateline' }, s.dateline) : null) : null,
+    s.image?.src ? h('figure', { class: 'np-photo' }, h('div', { class: 'np-photo-frame' }, h('img', { src: s.image.src, alt: s.image.caption || s.headline || '' })),
+      s.image.caption || s.image.credit ? h('figcaption', null, s.image.caption || '', s.image.credit ? h('span', { class: 'np-credit' }, ` ${s.image.credit}`) : null) : null) : null,
+    paras.length ? h('div', { class: 'np-text' }, paras.map((t, i) => h('p', { class: i === 0 ? 'first' : '' }, t))) : null,
+    about.length ? h('div', { class: 'np-about no-print' }, 'In the World: ', about.map((e) => h('button', { type: 'button', class: 'np-about-link', onClick: () => go?.(e.id) }, e.name))) : null);
+}
+
+function adEl(a) {
+  return h('div', { class: `np-ad np-ad-${a.style || 'box'}` }, a.tag ? h('div', { class: 'np-ad-tag' }, a.tag) : null, a.title ? h('div', { class: 'np-ad-title' }, a.title) : null, a.text ? h('div', { class: 'np-ad-text' }, a.text) : null);
+}
+
+/** The front page as DOM. interactive adds "In the World" links under stories (hidden in print). */
+function renderPaper(paper, { world = null, go = null, interactive = false } = {}) {
+  const p = paper;
+  const stories = p.stories || [];
+  const lead = stories.find((s) => s.slot === 'lead') || stories[0] || null;
+  const rest = stories.filter((s) => s !== lead);
+  const seconds = rest.filter((s) => s.slot === 'second' || (s.slot === 'lead'));
+  const sidebars = rest.filter((s) => s.slot === 'sidebar');
+  const briefs = rest.filter((s) => s.slot === 'brief' || !STORY_SLOTS[s.slot]);
+  const ads = p.ads || [];
+  const boxAds = ads.filter((a) => a.style === 'box');
+  const banners = ads.filter((a) => a.style === 'banner');
+  const classifieds = ads.filter((a) => a.style === 'classified');
+  const opts = { world, go, interactive };
+  const layout = PAPER_LAYOUTS[p.layout] ? p.layout : 'broadsheet';
+  const el = h('div', { class: `np np-${layout} np-photo-${PHOTO_STYLES[p.photoStyle] ? p.photoStyle : 'newsprint'}`, style: { '--np-ink': p.ink || PAPER_INKS[0] } },
+    h('header', { class: 'np-head' },
+      h('div', { class: 'np-ears' },
+        h('div', { class: 'np-ear' }, p.ears?.left || ''),
+        h('div', { class: 'np-title' },
+          h('div', { class: 'np-city' }, [p.city, p.edition].filter(Boolean).join(' · ')),
+          h('h1', { class: 'np-masthead' }, p.masthead || 'The Paper'),
+          p.slogan ? h('div', { class: 'np-slogan' }, p.slogan) : null),
+        h('div', { class: 'np-ear right' }, p.ears?.right || '')),
+      h('div', { class: 'np-bar' }, h('span', null, p.volume || ''), h('span', null, p.date || ''), h('span', null, p.price || ''))),
+    layout === 'extra' ? h('div', { class: 'np-banner' }, 'EXTRA! ', h('span', null, 'EXTRA!')) : null,
+    layout === 'tabloid' ? h('div', { class: 'np-ribbon' }, 'EXCLUSIVE') : null,
+    layout === 'comic' ? h('div', { class: 'np-burst', style: { clipPath: burst(16) } }, h('span', null, 'EXTRA!')) : null,
+    h('div', { class: 'np-body' },
+      lead ? storyEl(lead, { ...opts, lead: true }) : h('div', { class: 'np-story np-lead np-empty' }, h('h2', { class: 'np-headline' }, 'NOTHING HAPPENED TODAY'), h('p', { class: 'np-deck' }, 'Add a story, or draft the page from the campaign.')),
+      h('div', { class: 'np-col' }, seconds.map((s) => storyEl(s, opts)), sidebars.map((s) => storyEl(s, opts)), boxAds.slice(0, 2).map(adEl)),
+      briefs.length || boxAds.length > 2 ? h('div', { class: 'np-briefs' }, briefs.map((s) => storyEl(s, opts)), boxAds.slice(2).map(adEl)) : null),
+    banners.length || classifieds.length ? h('footer', { class: 'np-foot' },
+      banners.map(adEl),
+      classifieds.length ? h('div', { class: 'np-classifieds' }, h('div', { class: 'np-ad-tag' }, 'CLASSIFIEDS'), classifieds.map((a) => h('span', { class: 'np-classified' }, h('b', null, a.title ? `${a.title}. ` : ''), a.text))) : null) : null,
+    h('div', { class: 'np-colophon' }, `${p.masthead || 'The Paper'} · ${p.city || ''} · continued inside`));
+  fitMasthead(el);
+  return el;
+}
+
+/** Shrink the masthead until the paper's name sits on one line (down to a floor), once the page is in the document. */
+function fitMasthead(el, tries = 0) {
+  const m = el.querySelector('.np-masthead');
+  if (!m) return;
+  if (!el.isConnected) { if (tries < 30) requestAnimationFrame(() => fitMasthead(el, tries + 1)); return; }
+  m.style.fontSize = '';
+  const start = parseFloat(getComputedStyle(m).fontSize) || 54;
+  let size = start;
+  const set = () => { m.style.fontSize = `${size}px`; };
+  const lineHeight = () => parseFloat(getComputedStyle(m).lineHeight) || size;
+  const fits = (lines) => m.scrollWidth <= m.clientWidth + 1 && m.offsetHeight <= lineHeight() * (lines + 0.6);
+  // One line, shrinking a little; a long name gets two lines at a size that still shouts.
+  while (size > start * 0.66 && !fits(1)) { size *= 0.95; set(); }
+  if (!fits(1)) { size = start; set(); while (size > start * 0.5 && !fits(2)) { size *= 0.95; set(); } }
+}
+
+function burst(n) {
+  const pts = [];
+  for (let i = 0; i < n * 2; i++) { const r = i % 2 ? 36 : 50; const a = (Math.PI * i) / n; pts.push(`${(50 + r * Math.cos(a)).toFixed(1)}% ${(50 + r * Math.sin(a)).toFixed(1)}%`); }
+  return `polygon(${pts.join(', ')})`;
+}
+
+/** Scale a full-width page down to fit its box (thumbnails and the editor preview); the box takes the scaled height. */
+function fitInto(box, inner, { maxRatio = null } = {}) {
+  const fit = () => {
+    const s = box.clientWidth / PAPER_W; if (!s) return;
+    inner.style.transform = `scale(${s})`;
+    const hgt = inner.offsetHeight * s;
+    box.style.height = `${maxRatio ? Math.min(hgt, box.clientWidth * maxRatio) : hgt}px`;
+  };
+  requestAnimationFrame(fit);
+  if (typeof ResizeObserver !== 'undefined') { new ResizeObserver(fit).observe(box); new ResizeObserver(fit).observe(inner); }
+  return fit;
+}
+
+/** A scaled-down page for cards. */
+function paperThumb(paper, onClick) {
+  const inner = renderPaper(paper);
+  const box = h('div', { class: 'np-thumb', role: onClick ? 'button' : null, tabindex: onClick ? 0 : null, onClick, onKeydown: onClick ? (e) => { if (e.key === 'Enter') onClick(); } : null }, inner);
+  fitInto(box, inner, { maxRatio: 1.15 });
+  return box;
+}
+
+/** Print just the page. */
+function printPaper(paper) {
+  const host = h('div', { class: 'np-print-host' }, renderPaper(paper));
+  document.body.append(host);
+  document.body.classList.add('np-printing');
+  let done = false;
+  const finish = () => { if (done) return; done = true; host.remove(); document.body.classList.remove('np-printing'); };
+  window.addEventListener('afterprint', finish, { once: true });
+  setTimeout(() => { window.print(); setTimeout(finish, 500); }, 60);
+}
+
+// ---- saving into the World ---------------------------------------------------------------------------
+
+/** Save (or update) an issue as a World page. Returns the entity id. */
+function savePaper(ctx, paper, id = null) {
+  const { saved } = ctx;
+  const name = paperName(paper);
+  const summary = paperSummary(paper);
+  const fields = { Masthead: paper.masthead, Edition: paper.edition, Date: paper.date, City: paper.city, Layout: PAPER_LAYOUTS[paper.layout]?.label || paper.layout };
+  if (paper.session != null && paper.session !== '') fields.Session = paper.session;
+  let e;
+  if (id && saved.entities[id]) {
+    e = saved.entities[id];
+    Object.assign(e, { name, summary, fields, paper: clone(paper), updated: new Date().toISOString() });
+  } else {
+    e = createEntity(saved, { type: 'paper', name, summary, fields, tags: ['newspaper'] });
+    e.paper = clone(paper);
+  }
+  e.date = paper.date || '';
+  e.session = paper.session != null && paper.session !== '' ? Number(paper.session) : null;
+  // The people and places in the stories are tied to the issue.
+  saved.links = (saved.links || []).filter((l) => !(l.from === e.id && l.rel === 'involves'));
+  const about = new Set((paper.stories || []).flatMap((s) => s.about || []));
+  for (const to of about) addLink(saved, { from: e.id, to, rel: 'involves' });
+  ctx.save();
+  return e.id;
+}
+
+/** A page from a key someone sent: saved as a new issue. */
+function importPaper(ctx, paper) {
+  const id = savePaper(ctx, { ...paper, session: paper.session ?? null }, null);
+  toast(`${paper.masthead || 'Front page'} added to the newsstand`);
+  ctx.go(id);
+  return id;
+}
+
+function startPaper(ctx, { draft = false, session = null, base = null } = {}) {
+  ctx.ui.draft = draft ? draftPaper(ctx.world, { seed: randomSeed(), session, base }) : (base || newPaper(ctx.world));
+  ctx.ui.draftId = null;
+  ctx.ui.draftOpen = {};
+  ctx.go('paper-edit');
+}
+
+function editPaper(ctx, e) {
+  ctx.ui.draft = clone(e.paper);
+  ctx.ui.draftId = e.id;
+  ctx.ui.draftOpen = {};
+  ctx.go('paper-edit');
+}
+
+// ---- the newsstand -----------------------------------------------------------------------------------------
+
+function newsstandPage(ctx) {
+  const { world, go } = ctx;
+  const papers = [...world.entities.values()].filter((e) => e.type === 'paper' && e.paper).sort((a, b) => (b.session ?? -1) - (a.session ?? -1) || String(b.updated || b.created || '').localeCompare(String(a.updated || a.created || '')));
+  const tl = campaignTimeline(world);
+  const sessions = [...new Set(tl.map((it) => it.session).filter((s) => s != null))].sort((a, b) => b - a);
+  const keyIn = h('input', { type: 'text', placeholder: 'Paste a front-page key (DCUN1…) or link', 'aria-label': 'Front-page key' });
+  const openKey = async () => { const v = keyIn.value.trim(); if (!v) return; try { importPaper(ctx, await decodePaper(v)); } catch (e) { toast(e.message); } };
+  return h('div', { class: 'wd-page' },
+    h('header', { class: 'wd-hero small np-hero' },
+      h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'Newsstand'), h('h1', null, 'Front pages'), h('p', { class: 'wd-tagline' }, 'The papers of your world. Write a front page by hand or draft one from the campaign timeline, dress it with photos and adverts, pick a look (broadsheet, tabloid, EXTRA!, vintage, comic, underground), then save it to the World, print it, or send it to your players as a key or link.')),
+      h('div', { class: 'btn-row', style: { flexDirection: 'column', alignItems: 'stretch' } },
+        h('button', { class: 'btn primary', type: 'button', onClick: () => startPaper(ctx, { draft: true }) }, '⚡ Draft from the campaign'),
+        h('button', { class: 'btn', type: 'button', onClick: () => startPaper(ctx) }, '✎ Blank front page'),
+        sessions.length ? h('select', { 'aria-label': 'Draft the paper for a session', onChange: (e) => { if (e.target.value) startPaper(ctx, { draft: true, session: Number(e.target.value) }); } }, h('option', { value: '' }, 'Draft for a session…'), sessions.map((s) => h('option', { value: s }, `Session ${s}`))) : null)),
+    papers.length ? h('div', { class: 'np-stand' }, papers.map((e) => h('div', { class: 'np-card' },
+      paperThumb(e.paper, () => go(e.id)),
+      h('div', { class: 'np-card-text' },
+        h('b', null, e.paper.masthead), h('span', null, [e.paper.edition, e.paper.date].filter(Boolean).join(' · ')),
+        h('small', null, paperSummary(e.paper)),
+        h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', type: 'button', onClick: () => go(e.id) }, 'Open'), h('button', { class: 'btn sm ghost', type: 'button', onClick: () => editPaper(ctx, e) }, 'Edit'), h('button', { class: 'btn sm ghost', type: 'button', onClick: () => printPaper(e.paper) }, 'Print')))))) :
+      h('div', { class: 'empty' }, h('h2', null, 'No papers yet'), h('p', null, 'Draft one from the campaign (sessions, battles and what happened become the headlines) or start from a blank page.')),
+    h('section', { class: 'panel', style: { marginTop: '8px' } }, h('h2', null, '🔑 Open a front-page key'), h('p', { style: { margin: 0 } }, 'A GM or player sent you a key or link to a front page? Paste it here (or into the Forge\'s "Open a key" box) and it joins your newsstand.'), h('div', { class: 'seed-row' }, keyIn, h('button', { class: 'btn', type: 'button', onClick: openKey }, 'Open'))));
+}
+
+// ---- one saved issue ---------------------------------------------------------------------------------------
+
+function paperPage(ctx, e) {
+  const { go, saved } = ctx;
+  const paper = e.paper || newPaper(ctx.world);
+  const share = async (what) => {
+    try {
+      const key = await encodePaper(paper);
+      const ok = await copyText(what === 'link' ? paperLink(key) : key);
+      toast(ok ? `${what === 'link' ? 'Link' : 'Key'} copied (${keySize(key)}). Anyone with DCUGen opens it from the Forge's "Open a key" box.` : 'Copy failed');
+    } catch (err) { toast(`Sharing needs a modern browser: ${err.message}`); }
+  };
+  const actions = h('div', { class: 'toolbar wd-actions no-print' },
+    ctx.ui.history.length ? h('button', { class: 'btn', type: 'button', onClick: ctx.back }, '← Back') : null,
+    h('button', { class: 'btn primary', type: 'button', onClick: () => editPaper(ctx, e) }, '✎ Edit this page'),
+    h('button', { class: 'btn', type: 'button', title: 'A new issue with the same masthead and look, fresh stories drafted from the campaign', onClick: () => startPaper(ctx, { draft: true, base: { ...clone(paper), stories: [], ads: [] } }) }, '⚡ Next edition'),
+    h('button', { class: 'btn', type: 'button', onClick: () => printPaper(paper) }, '🖨 Print / PDF'),
+    h('span', { class: 'spacer' }),
+    h('button', { class: 'btn', type: 'button', title: 'Copy a key that holds this front page, pictures included', onClick: () => share('key') }, '🔑 Copy key'),
+    h('button', { class: 'btn', type: 'button', onClick: () => share('link') }, '🔗 Copy link'),
+    h('button', { class: 'btn ghost', type: 'button', onClick: async () => toast((await copyText(paperMarkdown(paper))) ? 'Copied as Markdown' : 'Copy failed') }, 'Copy as Markdown'),
+    h('button', { class: 'btn ghost', type: 'button', onClick: () => { download(`${(paper.masthead || 'front-page').toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${(paper.edition || 'edition').toLowerCase().replace(/[^a-z0-9]+/g, '-')}.json`, JSON.stringify({ app: 'DCUGen', kind: 'paper', v: 1, paper }, null, 2), 'application/json'); toast('Front page saved as a file'); } }, 'Save file'),
+    h('button', { class: 'btn ghost danger', type: 'button', onClick: async () => {
+      const ok = await openDialog({ title: `Remove ${paper.masthead}?`, body: h('p', { style: { margin: 0 } }, 'This issue is deleted from the World.'), buttons: [{ label: 'Keep', value: false }, { label: 'Remove', value: true, danger: true }] });
+      if (ok) { delete saved.entities[e.id]; saved.links = (saved.links || []).filter((l) => l.from !== e.id && l.to !== e.id); ctx.save(); go('newsstand'); }
+    } }, 'Remove'));
+  const about = e.connections?.filter((c) => c.rel === 'involves').map((c) => c.other) || [];
+  return h('div', { class: 'wd-page np-view' },
+    h('header', { class: 'wd-hero small', style: { '--c': ENTITY_COLOR } }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, `Newspaper${e.session != null ? ` · Session ${e.session}` : ''}`), h('h1', null, paper.masthead), h('p', { class: 'wd-tagline' }, [paper.edition, paper.date, paper.city].filter(Boolean).join(' · ')))),
+    actions,
+    h('div', { class: 'np-sheet' }, renderPaper(paper, { world: ctx.world, go, interactive: true })),
+    about.length ? h('section', { class: 'sec' }, h('h3', null, 'In this issue'), h('div', { class: 'wd-chips' }, about.map((o) => h('button', { type: 'button', class: 'wd-chip', style: { '--c': o.color || '#888' }, onClick: () => go(o.id) }, o.name)))) : null);
+}
+const ENTITY_COLOR = '#3b4252';
+
+// ---- the editor --------------------------------------------------------------------------------------------
+
+function editorPage(ctx) {
+  const { world, go } = ctx;
+  if (!ctx.ui.draft) ctx.ui.draft = newPaper(world);
+  const d = ctx.ui.draft;
+  d.stories = d.stories || []; d.ads = d.ads || []; d.ears = d.ears || { left: '', right: '' };
+  const preview = h('div', { class: 'np-preview' });
+  let raf = 0;
+  const redraw = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { const inner = renderPaper(d, { world, go, interactive: false }); clear(preview).append(inner); fitInto(preview, inner); }); };
+  const form = h('div', { class: 'np-form' });
+  const rebuildForm = () => { clear(form).append(mastheadSection(), storiesSection(), adsSection()); redraw(); };
+
+  const field = (label, input, extra = null) => h('label', { class: 'field' }, h('span', null, label), input, extra);
+  const text = (obj, key, { placeholder = '', label = '', area = false, rows = 3 } = {}) => {
+    const el = area ? h('textarea', { placeholder, 'aria-label': label || placeholder, rows, onInput: (ev) => { obj[key] = ev.target.value; redraw(); } }, obj[key] || '')
+      : h('input', { type: 'text', value: obj[key] || '', placeholder, 'aria-label': label || placeholder, onInput: (ev) => { obj[key] = ev.target.value; redraw(); } });
+    return el;
+  };
+
+  function mastheadSection() {
+    const layouts = h('div', { class: 'np-layouts', role: 'radiogroup', 'aria-label': 'Layout' }, Object.entries(PAPER_LAYOUTS).map(([id, L]) =>
+      h('button', { type: 'button', class: `np-layout-pick np-lp-${id} ${d.layout === id ? 'active' : ''}`, role: 'radio', 'aria-checked': String(d.layout === id), title: L.blurb, onClick: () => { d.layout = id; layouts.querySelectorAll('.np-layout-pick').forEach((b) => { const on = b.classList.contains(`np-lp-${id}`); b.classList.toggle('active', on); b.setAttribute('aria-checked', String(on)); }); redraw(); } },
+        h('span', { class: 'np-lp-sample' }, h('i'), h('i'), h('i')), h('b', null, L.label))));
+    const inks = h('div', { class: 'np-inks', role: 'radiogroup', 'aria-label': 'Ink colour' }, PAPER_INKS.map((c) => h('button', { type: 'button', class: `np-ink ${d.ink === c ? 'active' : ''}`, style: { background: c }, 'aria-label': `Ink ${c}`, onClick: (e2) => { d.ink = c; inks.querySelectorAll('.np-ink').forEach((b) => b.classList.toggle('active', b === e2.currentTarget)); redraw(); } })));
+    const photo = h('select', { 'aria-label': 'Photo style', onChange: (e2) => { d.photoStyle = e2.target.value; redraw(); } }, Object.entries(PHOTO_STYLES).map(([k, v]) => h('option', { value: k, selected: d.photoStyle === k }, v)));
+    const session = h('input', { type: 'number', min: 0, step: 1, value: d.session ?? '', placeholder: 'none', 'aria-label': 'Session', onInput: (e2) => { d.session = e2.target.value === '' ? null : Number(e2.target.value); } });
+    return h('section', { class: 'sec np-sec' },
+      h('h3', null, 'Masthead', h('span', { class: 'pts' }, 'the paper itself')),
+      h('div', { class: 'jr-row' }, field('Paper name', text(d, 'masthead', { placeholder: 'The Daily Planet' })), field('Slogan', text(d, 'slogan', { placeholder: 'All the news that fits' }))),
+      h('div', { class: 'jr-row' }, field('City', text(d, 'city', { placeholder: 'Metropolis' })), field('Date', text(d, 'date', { placeholder: 'Tuesday, June 3' })), field('Edition', text(d, 'edition', { placeholder: 'Late edition' }))),
+      h('div', { class: 'jr-row' }, field('Volume', text(d, 'volume', { placeholder: 'Vol. LXXX · No. 118' })), field('Price', text(d, 'price', { placeholder: '50¢' })), field('Session (for the timeline)', session)),
+      h('div', { class: 'jr-row' }, field('Left ear (top corner)', text(d.ears, 'left', { placeholder: 'Weather: sunny, chance of meteors' })), field('Right ear', text(d.ears, 'right', { placeholder: 'Inside: sports, page 12' }))),
+      h('div', { class: 'label' }, 'Look'), layouts,
+      h('div', { class: 'jr-row', style: { alignItems: 'end' } }, field('Photos', photo), h('div', { class: 'field' }, h('span', null, 'Ink'), inks)));
+  }
+
+  function storiesSection() {
+    const list = h('div', { class: 'np-story-list' }, d.stories.map((s, i) => storyCard(s, i)));
+    const addMenu = h('div', { class: 'btn-row' },
+      h('button', { class: 'btn sm', type: 'button', onClick: () => { d.stories.push(blankStory(d.stories.length ? 'brief' : 'lead')); ctx.ui.draftOpen[d.stories.at(-1).id] = true; rebuildForm(); } }, '+ Story'),
+      h('button', { class: 'btn sm', type: 'button', title: 'An evergreen story from the city desk, using your world\'s names', onClick: () => { d.stories.push(fillerStory(world, makeRng(randomSeed()), d.stories.length ? 'brief' : 'lead')); rebuildForm(); } }, '🎲 Filler story'),
+      h('button', { class: 'btn sm', type: 'button', title: 'Turn a session, battle or recorded moment into a story', onClick: fromTimeline }, '🕰 From the timeline…'),
+      h('button', { class: 'btn sm ghost', type: 'button', title: 'Replace every story with a fresh draft from the campaign', onClick: async () => { const ok = d.stories.some((s) => s.headline) ? await openDialog({ title: 'Redraft the stories?', body: h('p', { style: { margin: 0 } }, 'The stories you have are replaced with a new draft from the timeline. The masthead and look stay.'), buttons: [{ label: 'Keep mine', value: false }, { label: 'Redraft', value: true, primary: true }] }) : true; if (!ok) return; const fresh = draftPaper(world, { seed: randomSeed(), session: d.session ?? null, base: { ...d, ads: d.ads } }); d.stories = fresh.stories; rebuildForm(); } }, '⚡ Redraft all'));
+    return h('section', { class: 'sec np-sec' }, h('h3', null, 'Stories', h('span', { class: 'pts' }, `${d.stories.length}`)), list, addMenu);
+  }
+
+  async function fromTimeline() {
+    const items = campaignTimeline(world).slice().reverse();
+    if (!items.length) { toast('Nothing on the timeline yet: add a journal session, record a battle, or record what happened.'); return; }
+    const sel = h('select', { size: Math.min(10, items.length), style: { width: '100%' } }, items.map((it, i) => h('option', { value: i }, `${it.session != null ? `S${it.session} · ` : ''}${it.kind === 'change' ? 'What happened' : it.kind === 'battle' ? 'Battle' : it.kind === 'session' ? 'Session' : 'Event'}: ${it.name}`)));
+    sel.selectedIndex = 0;
+    const ok = await openDialog({ title: 'A story from the timeline', body: [sel, h('p', { class: 'hint', style: { margin: '6px 0 0' } }, 'The headline, deck and copy are drafted for you; edit anything afterwards.')], buttons: [{ label: 'Cancel', value: false }, { label: 'Write it', value: true, primary: true }] });
+    if (!ok) return;
+    const it = items[Number(sel.value)];
+    const s = storyFromTimeline(it, world, { rng: makeRng(randomSeed()), city: d.city || 'the City', slot: d.stories.length ? 'brief' : 'lead' });
+    d.stories.push(s); ctx.ui.draftOpen[s.id] = true; rebuildForm();
+  }
+
+  function storyCard(s, i) {
+    const open = ctx.ui.draftOpen[s.id] ?? (i === 0 || !s.headline);
+    const slot = h('select', { 'aria-label': 'Slot', onChange: (e2) => { s.slot = e2.target.value; redraw(); } }, Object.entries(STORY_SLOTS).map(([k, v]) => h('option', { value: k, selected: s.slot === k }, v)));
+    const head = h('div', { class: 'np-story-head' },
+      h('button', { type: 'button', class: 'np-story-toggle', 'aria-expanded': String(open), onClick: () => { ctx.ui.draftOpen[s.id] = !open; rebuildForm(); } }, h('span', { class: 'wd-caret' }, open ? '▾' : '▸'), h('b', null, s.headline || 'Untitled story'), h('small', null, STORY_SLOTS[s.slot] || 'Brief')),
+      h('span', { class: 'spacer' }),
+      h('button', { class: 'x', type: 'button', 'aria-label': 'Move up', title: 'Move up', disabled: i === 0, onClick: () => { [d.stories[i - 1], d.stories[i]] = [d.stories[i], d.stories[i - 1]]; rebuildForm(); } }, '↑'),
+      h('button', { class: 'x', type: 'button', 'aria-label': 'Move down', title: 'Move down', disabled: i === d.stories.length - 1, onClick: () => { [d.stories[i + 1], d.stories[i]] = [d.stories[i], d.stories[i + 1]]; rebuildForm(); } }, '↓'),
+      h('button', { class: 'x', type: 'button', 'aria-label': 'Remove story', title: 'Remove', onClick: () => { d.stories.splice(i, 1); rebuildForm(); } }, '✕'));
+    if (!open) return h('div', { class: 'np-story-card' }, head);
+    return h('div', { class: 'np-story-card open' }, head,
+      h('div', { class: 'jr-row' }, field('Slot', slot), field('Kicker', text(s, 'kicker', { placeholder: 'EXCLUSIVE · CRIME · CITY HALL' })), field('Byline', text(s, 'byline', { placeholder: 'By Lois Lane' }))),
+      field('Headline', text(s, 'headline', { placeholder: 'HERO SAVES CITY FROM GIANT ROBOT' })),
+      field('Deck (the line under the headline)', text(s, 'deck', { placeholder: 'Mayor: "We owe them everything"' })),
+      field('Story', text(s, 'body', { placeholder: 'The copy. Blank lines make paragraphs.', area: true, rows: 6 })),
+      pictureTools(s), aboutTools(s));
+  }
+
+  function pictureTools(s) {
+    const box = h('div', { class: 'np-pic-tools' });
+    const status = h('small', { class: 'np-pic-status' });
+    const set = (src) => { s.image = { ...(s.image || { caption: '', credit: '' }), src }; redraw(); drawPic(); };
+    const file = h('input', { type: 'file', accept: 'image/*', hidden: true, onChange: async (e2) => { const f = e2.target.files?.[0]; if (!f) return; try { set(await readPictureFile(f, { width: 720, height: 480 })); } catch (err) { toast(err.message); } } });
+    const fromRoster = async () => {
+      const list = state.roster.filter((c) => c.identity?.codename || c.identity?.realName);
+      if (!list.length) { toast('No one on the roster yet.'); return; }
+      const sel = h('select', { style: { width: '100%' } }, list.map((c, i) => h('option', { value: i }, `${c.identity?.codename || c.identity?.realName}${c.identity?.realName && c.identity?.codename ? ` (${c.identity.realName})` : ''}`)));
+      const ok = await openDialog({ title: 'A picture from the roster', body: [sel, h('p', { class: 'hint', style: { margin: '6px 0 0' } }, 'Their portrait as the press photo: the uploaded picture, the saved AI painting, or the built-in comic art.')], buttons: [{ label: 'Cancel', value: false }, { label: 'Use it', value: true, primary: true }] });
+      if (!ok) return;
+      const ch = list[Number(sel.value)];
+      const por = portraitOf(ch);
+      const src = por.hidden ? null : (por.source === 'upload' && por.image) || por.avatar;
+      if (!src) { toast('That character has no portrait to use.'); return; }
+      set(src);
+      if (!s.image.caption) { s.image.caption = ch.identity?.codename || ch.identity?.realName || ''; redraw(); drawPic(); }
+    };
+    let cancelled = false;
+    const paint = async () => {
+      const style = PORTRAIT_STYLES[painterPrefs.style] || PORTRAIT_STYLES.comic;
+      const base = `${s.headline || 'breaking news'}${s.deck ? `. ${s.deck}` : ''}`;
+      const ta = h('textarea', { rows: 4, style: { width: '100%' } }, `newspaper press photograph for a front page: ${base}. ${d.city || 'a big city'}, dramatic moment, wide shot, ${style.suffix}`);
+      const ok = await openDialog({ title: 'Paint a picture', body: [h('label', { class: 'field' }, h('span', null, 'Prompt'), ta), h('p', { class: 'hint', style: { margin: 0 } }, `Painted by ${painterPrefs.service === 'horde' ? 'AI Horde' : 'Pollinations.ai'} (free, needs internet; the painter and style are set in any character's portrait settings). It lands here when it is done.`)], buttons: [{ label: 'Cancel', value: false }, { label: 'Paint', value: true, primary: true }] });
+      if (!ok) return;
+      cancelled = false;
+      const prompt = ta.value.trim();
+      const seed = Math.floor(Math.random() * 1e9);
+      const job = painterPrefs.service === 'horde' ? { service: 'horde', prompt, seed, models: style.horde } : { service: 'pollinations', url: portraitUrl(prompt, { seed, width: 768, height: 512 }) };
+      status.textContent = 'Queued for painting…';
+      const r = await requestPainting(job, { onWait: (ms) => { status.textContent = ms > 800 ? `Painting in ${Math.ceil(ms / 1000)}s…` : 'Painting…'; }, onStatus: (t) => { status.textContent = t; }, cancelled: () => cancelled });
+      if (r.ok && r.image) { set(r.image); status.textContent = 'Painted.'; if (!s.image.credit) { s.image.credit = 'Staff photo'; redraw(); drawPic(); } }
+      else if (r.ok && r.live && job.url) { set(job.url); status.textContent = 'Painted (shown from the service).'; }
+      else status.textContent = `Could not paint: ${r.why || 'unknown'}`;
+    };
+    const drawPic = () => {
+      clear(box).append(
+        h('div', { class: 'np-pic-row' },
+          s.image?.src ? h('img', { class: 'np-pic-preview', src: s.image.src, alt: '' }) : h('div', { class: 'np-pic-preview empty' }, 'No picture'),
+          h('div', { class: 'np-pic-btns' },
+            h('button', { class: 'btn sm', type: 'button', onClick: () => file.click() }, '⇪ Upload'),
+            h('button', { class: 'btn sm', type: 'button', title: 'A character\'s portrait as the press photo', onClick: fromRoster }, '🧑 From the roster'),
+            h('button', { class: 'btn sm', type: 'button', title: 'Paint one with the free AI painter', onClick: paint }, '🎨 Paint it'),
+            s.image?.src ? h('button', { class: 'btn sm ghost danger', type: 'button', onClick: () => { s.image = null; redraw(); drawPic(); } }, 'Remove') : null,
+            status, file)),
+        s.image?.src ? h('div', { class: 'jr-row' }, field('Caption', text(s.image, 'caption', { placeholder: 'What the picture shows' })), field('Credit', text(s.image, 'credit', { placeholder: 'Staff photo · Photo: J. Olsen' }))) : null);
+    };
+    drawPic();
+    return h('div', { class: 'field' }, h('span', null, 'Picture'), box);
+  }
+
+  function aboutTools(s) {
+    const chips = h('div', { class: 'wd-chips' });
+    const draw = () => {
+      clear(chips);
+      for (const id of s.about || []) { const e = world.entities.get(id); if (!e) continue; chips.append(h('span', { class: 'wd-chip', style: { '--c': e.color || '#888' } }, e.name, h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${e.name}`, onClick: () => { s.about = s.about.filter((x) => x !== id); draw(); } }, '✕'))); }
+    };
+    draw();
+    const names = [...world.entities.values()].filter((e) => e.type !== 'paper');
+    const input = h('input', { type: 'text', list: 'np-about-list', placeholder: 'Who or what is this about? (a page in the World)', 'aria-label': 'About' });
+    const add = () => { const n = input.value.trim().toLowerCase(); const e = names.find((x) => x.name.toLowerCase() === n); if (!e) { toast('Pick a page from the list'); return; } s.about = [...new Set([...(s.about || []), e.id])]; input.value = ''; draw(); };
+    input.addEventListener('change', add);
+    input.addEventListener('keydown', (e2) => { if (e2.key === 'Enter') { e2.preventDefault(); add(); } });
+    return h('div', { class: 'field' }, h('span', null, 'In the World'), chips, h('div', { class: 'seed-row' }, input, h('datalist', { id: 'np-about-list' }, names.map((e) => h('option', { value: e.name }))), h('button', { class: 'btn sm', type: 'button', onClick: add }, 'Tie')));
+  }
+
+  function adsSection() {
+    const list = h('div', { class: 'np-ad-list' }, d.ads.map((a, i) => h('div', { class: 'np-ad-card' },
+      h('div', { class: 'jr-row' },
+        field('Style', h('select', { 'aria-label': 'Advert style', onChange: (e2) => { a.style = e2.target.value; redraw(); } }, Object.entries(AD_STYLES).map(([k, v]) => h('option', { value: k, selected: a.style === k }, v)))),
+        field('Label', text(a, 'tag', { placeholder: 'ADVERTISEMENT' })),
+        h('button', { class: 'x', type: 'button', 'aria-label': 'Remove advert', style: { alignSelf: 'end', marginBottom: '8px' }, onClick: () => { d.ads.splice(i, 1); rebuildForm(); } }, '✕')),
+      field('Title', text(a, 'title', { placeholder: 'BIG BITE BURGERS' })),
+      field('Text', text(a, 'text', { placeholder: 'Open all night. Open during the thing last Tuesday.', area: true, rows: 2 })))));
+    return h('section', { class: 'sec np-sec' }, h('h3', null, 'Adverts', h('span', { class: 'pts' }, `${d.ads.length}`)), list,
+      h('div', { class: 'btn-row' },
+        h('button', { class: 'btn sm', type: 'button', onClick: () => { d.ads.push(blankAd()); rebuildForm(); } }, '+ Advert'),
+        h('button', { class: 'btn sm', type: 'button', title: 'An advert from the city\'s businesses, using your world\'s names', onClick: () => { d.ads.push(rollAd(world, makeRng(randomSeed()))); rebuildForm(); } }, '🎲 Roll an advert')));
+  }
+
+  const saveIt = () => {
+    if (!d.stories.some((s) => s.headline?.trim())) { toast('Give at least one story a headline'); return; }
+    const id = savePaper(ctx, d, ctx.ui.draftId);
+    ctx.ui.draft = null; ctx.ui.draftId = null;
+    toast('Front page saved to the World');
+    go(id);
+  };
+  const cancel = async () => {
+    const ok = await openDialog({ title: 'Leave the editor?', body: h('p', { style: { margin: 0 } }, 'Changes since the last save are lost.'), buttons: [{ label: 'Stay', value: false }, { label: 'Leave', value: true, danger: true }] });
+    if (ok) { ctx.ui.draft = null; go(ctx.ui.draftId || 'newsstand'); }
+  };
+  rebuildForm();
+  return h('div', { class: 'wd-page np-editor' },
+    h('header', { class: 'wd-hero small' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, ctx.ui.draftId ? 'Editing' : 'New front page'), h('h1', null, d.masthead || 'Front page'), h('p', { class: 'wd-tagline' }, 'Type on the left, the page sets itself on the right. Pictures: upload, a roster portrait, or a free AI painting.')),
+      h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', type: 'button', onClick: saveIt }, '💾 Save to the World'), h('button', { class: 'btn', type: 'button', onClick: () => printPaper(d) }, '🖨 Print'), h('button', { class: 'btn ghost', type: 'button', onClick: cancel }, 'Cancel'))),
+    h('div', { class: 'np-editor-grid' }, form, h('div', { class: 'np-preview-col' }, preview)),
+    h('div', { class: 'np-savebar no-print' }, h('button', { class: 'btn primary', type: 'button', onClick: saveIt }, '💾 Save to the World'), h('button', { class: 'btn ghost', type: 'button', onClick: cancel }, 'Cancel')));
+}
+
+return { renderPaper, paperThumb, printPaper, savePaper, importPaper, startPaper, editPaper, newsstandPage, paperPage, editorPage };
+})();
+
 __mods["src/app/world.js"] = (() => {
 // The World tab: a wiki of the whole campaign. Every saved character is a page; everyone named in
 // their lives is a page; teams, factions, cities and sessions are pages; and every page links to the
@@ -16017,7 +16974,8 @@ const { zip } = __mods["src/engine/xlsx.js"];
 const { sheet: makeSheet } = __mods["src/engine/render.js"];
 const { fromKeySync } = __mods["src/engine/keys.js"];
 const { portraitImg } = __mods["src/app/portrait.js"];
-const { encodeWorld, decodeWorld, isWorldKey, keySize } = __mods["src/app/share.js"];
+const { encodeWorld, decodeWorld, isWorldKey, isPaperKey, decodePaper, keySize } = __mods["src/app/share.js"];
+const { newsstandPage, paperPage, editorPage, startPaper, importPaper, paperThumb } = __mods["src/app/newspaper.js"];
 const KEY = 'dcugen.world.v1';
 let R; let root; let hooks = {};
 let saved;
@@ -16124,6 +17082,17 @@ function svg(tag, attrs = {}, ...children) {
 
 // ---- navigation -----------------------------------------------------------------------------------------------------------
 
+/** What the newsstand module needs from this one. */
+const ctx = () => ({ R, world, saved, save, go, back, renderWorld, ui, hooks });
+
+/** A front page from a key (Forge "Open a key", a #n= link, the Vault page). Returns true when it opened. */
+async function openPaperKey(text) {
+  try { if (!saved) saved = load(); rebuild(); importPaper(ctx(), await decodePaper(text)); return true; } catch (e) { toast(e.message); return false; }
+}
+
+/** A front page that arrived as an object (the importer decoded the key). */
+function openPaperObject(paper) { if (!saved) saved = load(); rebuild(); importPaper(ctx(), paper); }
+
 function go(page, { replace = false } = {}) {
   if (!replace && page !== ui.page) { ui.history.push(ui.page); if (ui.history.length > 40) ui.history.shift(); }
   ui.page = page; ui.edit = false; ui.linkPreset = null; renderWorld(); window.scrollTo({ top: 0 });
@@ -16165,11 +17134,11 @@ function sidebar() {
     return h('div', { class: 'wd-section' },
       h('button', { type: 'button', class: 'wd-section-head', 'aria-expanded': String(open), onClick: () => { ui.open[t] = !open; renderWorld(); } },
         h('span', { class: 'wd-caret' }, open ? '▾' : '▸'), h('span', { class: 'wd-glyph' }, meta.glyph), meta.label, h('span', { class: 'count' }, counts[t]),
-        h('span', { class: 'wd-section-add', role: 'button', title: `New ${meta.one.toLowerCase()}`, onClick: (e) => { e.stopPropagation(); newPageDialog(t); } }, '+')),
+        h('span', { class: 'wd-section-add', role: 'button', title: `New ${meta.one.toLowerCase()}`, onClick: (e) => { e.stopPropagation(); if (t === 'paper') startPaper(ctx(), { draft: true }); else newPageDialog(t); } }, '+')),
       open ? h('div', { class: 'wd-section-list' },
         shown.map((e) => h('button', { type: 'button', class: `wd-tree ${ui.page === e.id ? 'active' : ''} ${shortStatus(e) ? 'has-status' : ''}`, style: { '--c': e.color || meta.color }, title: e.status || '', onClick: () => go(e.id) }, h('span', { class: 'swatch' }), h('span', { class: 'wd-tree-name' }, e.name), e.character ? h('span', { class: 'wd-tree-pl num' }, `PL ${e.character.pl}`) : shortStatus(e) ? h('span', { class: 'wd-tree-pl' }, e.status) : null)),
         list.length > 12 ? h('button', { type: 'button', class: 'linkish', style: { fontSize: '12px', margin: '2px 0 0 22px' }, onClick: () => { ui.showAll[t] = !showAll; renderWorld(); } }, showAll ? 'Show fewer' : `Show all ${list.length}`) : null,
-        !list.length ? h('p', { class: 'hint', style: { margin: '0 0 0 22px' } }, t === 'person' ? 'Save characters to the roster.' : `No ${meta.label.toLowerCase()} yet.`) : null) : null);
+        !list.length ? h('p', { class: 'hint', style: { margin: '0 0 0 22px' } }, t === 'person' ? 'Save characters to the roster.' : t === 'paper' ? 'Draft one at the newsstand.' : `No ${meta.label.toLowerCase()} yet.`) : null) : null);
   });
   return h('aside', { class: 'wd-side', 'aria-label': 'World index' },
     h('div', { class: 'wd-side-top' },
@@ -16179,7 +17148,7 @@ function sidebar() {
       h('button', { class: 'btn sm', type: 'button', onClick: () => newPageDialog() }, '+ Page'),
       h('button', { class: 'btn sm', type: 'button', title: 'Copy a key that holds this whole world and roster, to paste to your players', onClick: copyWorldKey }, '🔑 Share')),
     q, results,
-    h('nav', { class: 'wd-navs' }, navBtn('home', 'Home', '⌂'), navBtn('timeline', 'Campaign timeline', '🕰'), navBtn('graph', 'Relationship graph', '◉'), navBtn('vault', 'Vault: import / export', '🗄')),
+    h('nav', { class: 'wd-navs' }, navBtn('home', 'Home', '⌂'), navBtn('timeline', 'Campaign timeline', '🕰'), navBtn('graph', 'Relationship graph', '◉'), navBtn('newsstand', 'Newsstand: front pages', '📰'), navBtn('vault', 'Vault: import / export', '🗄')),
     h('div', { class: 'wd-sections' }, sections));
 }
 
@@ -16192,6 +17161,7 @@ function home() {
   const factions = ents.filter((e) => e.type === 'faction').sort((a, b) => b.degree - a.degree).slice(0, 8);
   const connected = ents.filter((e) => !e.character && e.type !== 'faction' && e.degree > 0).sort((a, b) => b.degree - a.degree).slice(0, 12);
   const latest = campaignTimeline(world).slice(-6).reverse();
+  const papers = ents.filter((e) => e.type === 'paper' && e.paper).sort((a, b) => String(b.updated || b.created || '').localeCompare(String(a.updated || a.created || ''))).slice(0, 3);
   const editBtn = h('button', { class: 'btn sm', type: 'button', onClick: async () => {
     const name = h('input', { type: 'text', value: world.name || '' });
     const tag = h('input', { type: 'text', value: world.tagline || '' });
@@ -16210,8 +17180,10 @@ function home() {
       quick('📍', 'New location', 'A city, a base, a bar, a planet', () => newPageDialog('location')),
       quick('📅', 'New event', 'A battle, a wedding, a heist, a funeral', () => newPageDialog('event')),
       quick('🗝', 'New item', 'An artefact, a weapon, a vehicle, a MacGuffin', () => newPageDialog('item')),
-      quick('🧑', 'New person', 'Anyone the roster does not know yet', () => newPageDialog('person'))),
+      quick('🧑', 'New person', 'Anyone the roster does not know yet', () => newPageDialog('person')),
+      quick('📰', 'Front page', 'Draft a newspaper from the campaign, or write one', () => go('newsstand'))),
     !ents.length ? h('div', { class: 'empty' }, h('h2', null, 'An empty world'), h('p', null, 'Save characters to your roster and they appear here with everyone in their lives: parents, mentors, rivals, enemies, their city and their team. Then record what happens to them with "What happened".')) : null,
+    papers.length ? h('section', { class: 'wd-block' }, h('h2', null, 'On the newsstand', h('button', { class: 'linkish', type: 'button', style: { marginLeft: '10px', fontSize: '13px' }, onClick: () => go('newsstand') }, 'all front pages')), h('div', { class: 'np-stand small' }, papers.map((e) => h('div', { class: 'np-card' }, paperThumb(e.paper, () => go(e.id)), h('div', { class: 'np-card-text' }, h('b', null, e.paper.masthead), h('span', null, [e.paper.edition, e.paper.date].filter(Boolean).join(' · '))))))) : null,
     latest.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Latest in the campaign', h('button', { class: 'linkish', type: 'button', style: { marginLeft: '10px', fontSize: '13px' }, onClick: () => go('timeline') }, 'full timeline')), h('div', { class: 'wd-tl' }, latest.map(timelineItem))) : null,
     chars.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Heroes, villains and everyone saved'), h('div', { class: 'wd-cards' }, chars.map(personCard))) : null,
     factions.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Factions'), h('div', { class: 'wd-cards' }, factions.map(factionCard))) : null,
@@ -16447,7 +17419,7 @@ function entityPage(e) {
 function editForm(e) {
   const manual = e.source === 'manual';
   const name = h('input', { type: 'text', value: e.name, disabled: !manual, 'aria-label': 'Name' });
-  const type = h('select', { 'aria-label': 'Type' }, Object.entries(ENTITY_TYPES).map(([t, m]) => h('option', { value: t, selected: t === e.type }, m.one)));
+  const type = h('select', { 'aria-label': 'Type' }, Object.entries(ENTITY_TYPES).filter(([t]) => t !== 'paper').map(([t, m]) => h('option', { value: t, selected: t === e.type }, m.one)));
   const summary = h('textarea', { style: { minHeight: '70px' }, 'aria-label': 'Summary' }, e.summary || '');
   const body = h('textarea', { style: { minHeight: '140px' }, 'aria-label': 'Notes', placeholder: 'Longer notes. Blank lines make paragraphs.' }, e.body || '');
   const tags = h('input', { type: 'text', value: (e.tags || []).join(', '), placeholder: 'tags, comma separated', 'aria-label': 'Tags' });
@@ -16484,7 +17456,7 @@ function editForm(e) {
 }
 
 async function newPageDialog(presetType = 'faction', presetName = '') {
-  const type = h('select', { 'aria-label': 'Type' }, Object.entries(ENTITY_TYPES).map(([t, m]) => h('option', { value: t, selected: t === presetType }, `${m.glyph} ${m.one}`)));
+  const type = h('select', { 'aria-label': 'Type' }, Object.entries(ENTITY_TYPES).filter(([t]) => t !== 'paper').map(([t, m]) => h('option', { value: t, selected: t === presetType }, `${m.glyph} ${m.one}`)));
   const name = h('input', { type: 'text', placeholder: 'Name', 'aria-label': 'Name', value: presetName });
   const kind = h('input', { type: 'text', list: 'wd-kind-presets', placeholder: 'Kind (optional): team, gang, city, bar, artefact…', 'aria-label': 'Kind' });
   const summary = h('textarea', { placeholder: 'A line or two', style: { minHeight: '70px' } });
@@ -16636,17 +17608,17 @@ function timelineItem(it) {
   }
   const ev = it.ev;
   const people = ev.connections.filter((c) => c.other.type === 'person').map((c) => c.other);
-  return h('div', { class: `wd-tl-ev ${it.kind}`, style: { '--c': ev.color || typeMeta('event').color } },
+  return h('div', { class: `wd-tl-ev ${it.kind}`, style: { '--c': ev.color || typeMeta(it.kind === 'paper' ? 'paper' : 'event').color } },
     h('div', { class: 'wd-tl-ev-when' }, h('b', { class: 'num' }, ev.session ? `S${ev.session}` : '•'), h('span', null, ev.date || ev.fields?.Date || '')),
     h('div', { class: 'wd-tl-ev-body' },
-      h('div', { class: 'wd-tl-change' }, h('span', { class: 'wd-tl-kind' }, it.kind === 'session' ? 'Session' : it.kind === 'battle' ? 'Battle' : ev.fields?.Kind || 'Event'), h('button', { type: 'button', class: 'wd-tl-ev-title', onClick: () => go(ev.id) }, ev.name)),
+      h('div', { class: 'wd-tl-change' }, h('span', { class: 'wd-tl-kind' }, it.kind === 'session' ? 'Session' : it.kind === 'battle' ? 'Battle' : it.kind === 'paper' ? 'Front page' : ev.fields?.Kind || 'Event'), h('button', { type: 'button', class: 'wd-tl-ev-title', onClick: () => go(ev.id) }, ev.name)),
       ev.summary ? h('p', null, ev.summary) : null,
       people.length ? h('div', { class: 'wd-chips' }, people.map((p) => pageLink(p, { chip: true }))) : null,
       ev.fields?.Points ? h('div', { class: 'wd-points-line' }, ev.fields.Points) : null));
 }
 
 function timelinePage() {
-  const FILTERS = [['all', 'Everything'], ['session', 'Sessions'], ['battle', 'Battles'], ['event', 'Events'], ['change', 'What changed']];
+  const FILTERS = [['all', 'Everything'], ['session', 'Sessions'], ['battle', 'Battles'], ['event', 'Events'], ['change', 'What changed'], ['paper', 'Front pages']];
   const items = campaignTimeline(world, { kinds: ui.tlFilter === 'all' ? null : [ui.tlFilter] });
   // group by session
   const groups = [];
@@ -16733,8 +17705,8 @@ function vaultPage() {
   };
   const manual = Object.keys(saved.entities).length;
   const moments = (saved.moments || []).length;
-  const keyIn = h('textarea', { placeholder: 'Paste a world key (DCUW1…) from your GM or a player', 'aria-label': 'World key', style: { minHeight: '64px', fontFamily: 'ui-monospace, Consolas, monospace', fontSize: '12px' } });
-  const openIt = async () => { if (!isWorldKey(keyIn.value)) { toast('That is not a world key (they start with DCUW1.)'); return; } if (await openWorldKey(keyIn.value)) keyIn.value = ''; };
+  const keyIn = h('textarea', { placeholder: 'Paste a world key (DCUW1…) or a front-page key (DCUN1…) from your GM or a player', 'aria-label': 'World key', style: { minHeight: '64px', fontFamily: 'ui-monospace, Consolas, monospace', fontSize: '12px' } });
+  const openIt = async () => { if (isPaperKey(keyIn.value)) { if (await openPaperKey(keyIn.value)) keyIn.value = ''; return; } if (!isWorldKey(keyIn.value)) { toast('That is not a world key (they start with DCUW1.) or a front-page key (DCUN1.)'); return; } if (await openWorldKey(keyIn.value)) keyIn.value = ''; };
   return h('div', { class: 'wd-page' },
     h('header', { class: 'wd-hero small' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'Vault'), h('h1', null, 'Share, import and export'), h('p', { class: 'wd-tagline' }, 'The world lives in this browser (and in the desktop app\'s data folder). Share it as one key, save it to a file, or hand it to your players.'))),
     h('div', { class: 'gm' },
@@ -16757,12 +17729,14 @@ function renderWorld() {
   else if (ui.page === 'timeline') page = timelinePage();
   else if (ui.page === 'graph') page = graphPage();
   else if (ui.page === 'vault') page = vaultPage();
-  else if (world.entities.has(ui.page)) page = entityPage(world.entities.get(ui.page));
+  else if (ui.page === 'newsstand') page = newsstandPage(ctx());
+  else if (ui.page === 'paper-edit') page = editorPage(ctx());
+  else if (world.entities.has(ui.page)) { const e = world.entities.get(ui.page); page = e.type === 'paper' && e.paper ? paperPage(ctx(), e) : entityPage(e); }
   else { ui.page = 'home'; page = home(); }
   root.append(h('div', { class: 'wd-layout' }, sidebar(), h('main', { class: 'wd-content' }, page)));
 }
 
-return { initWorld, openWorldPage, worldSaved, worldApply, worldKey, openWorldKey, recordBattleInWorld, renderWorld };
+return { initWorld, openWorldPage, worldSaved, worldApply, worldKey, openWorldKey, recordBattleInWorld, openPaperKey, openPaperObject, renderWorld };
 })();
 
 __mods["src/app/getapp.js"] = (() => {
@@ -16831,7 +17805,7 @@ const { initRules, renderRules } = __mods["src/app/rules.js"];
 const { initBestiary, renderBestiary } = __mods["src/app/bestiary.js"];
 const { initGarage, renderGarage } = __mods["src/app/garage.js"];
 const { initBattle, renderBattle, throwIn } = __mods["src/app/battle.js"];
-const { initWorld, renderWorld, openWorldPage, recordBattleInWorld, worldSaved, worldApply, openWorldKey } = __mods["src/app/world.js"];
+const { initWorld, renderWorld, openWorldPage, recordBattleInWorld, worldSaved, worldApply, openWorldKey, openPaperKey, openPaperObject } = __mods["src/app/world.js"];
 const { initTable, renderTable, postRoll } = __mods["src/app/table.js"];
 const { setLobbyHandlers, lobbySendRoster, lobbySendRemove, lobby } = __mods["src/app/lobby.js"];
 const { snapshotAll, restoreAll } = __mods["src/app/backup.js"];
@@ -16878,6 +17852,8 @@ function initTheme() {
 }
 
 async function loadFromHash() {
+  const n = /[#&]n=(DCUN1\.[A-Za-z0-9_-]+)/.exec(location.hash);
+  if (n) { showTab('world'); const ok = await openPaperKey(n[1]); if (ok) history.replaceState(null, '', location.pathname + location.search); return ok; }
   const m = /[#&]c=(DCU1\.[A-Za-z0-9_-]+)/.exec(location.hash) || /[#&]k=(DCU[KPE]1\.[A-Za-z0-9%._~-]+)/.exec(location.hash);
   if (!m) return false;
   try {
@@ -16987,6 +17963,7 @@ async function boot() {
     goBattle: () => showTab('battle'),
     openWorld: (ch) => { openWorldPage(ch); showTab('world'); },
     openWorldKey: async (text) => { showTab('world'); await openWorldKey(text); },
+    openPaperKey: async (text) => { showTab('world'); await openPaperKey(text); },
   });
   initRoster(R, document.getElementById('view-roster'), {
     open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
@@ -17012,6 +17989,7 @@ async function boot() {
   });
   setImportRules(R);
   setImportHooks({
+    openPaper: (paper) => { showTab('world'); openPaperObject(paper); },
     open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
     afterSave: () => renderRoster(),
   });

@@ -204,13 +204,15 @@ function build() {
       h('button', { class: 'btn', type: 'button', onClick: rollTeam }, 'Roll a team'),
       h('button', { class: 'btn', type: 'button', id: 'build-scratch', onClick: buildFromScratch }, 'Build from scratch')),
     (() => {
-      const keyIn = h('input', { type: 'text', id: 'open-key', placeholder: 'Paste a key, share code or world key', 'aria-label': 'Character key, share code or world key', autocomplete: 'off' });
+      const keyIn = h('input', { type: 'text', id: 'open-key', placeholder: 'Paste a key, share code, world key or front page', 'aria-label': 'Character key, share code or world key', autocomplete: 'off' });
       const go = async () => {
         const v = keyIn.value.trim();
         if (!v) return;
         if (/DCUW1\./.test(v)) { keyIn.value = ''; api.openWorldKey?.(v); return; }
+        if (/DCUN1\./.test(v)) { keyIn.value = ''; api.openPaperKey?.(v); return; }
         try {
           const ch = await openAnything(v);
+          if (!ch) { keyIn.value = ''; return; }
           setCurrent(ch, { newTab: true, fresh: true });
           keyIn.value = '';
           toast(`Opened ${ch.identity?.codename || 'character'}`);

@@ -17,6 +17,7 @@ export const ENTITY_TYPES = {
   location: { label: 'Locations', one: 'Location', glyph: '📍', color: '#1a7f4b' },
   event: { label: 'Events', one: 'Event', glyph: '📅', color: '#c2410c' },
   item: { label: 'Items', one: 'Item', glyph: '🗝', color: '#a8670b' },
+  paper: { label: 'Newspapers', one: 'Newspaper', glyph: '📰', color: '#3b4252' },
 };
 
 // rel = what `to` is to `from`. inverse = what `from` is to `to`.
@@ -355,6 +356,7 @@ export function entityTimeline(world, e) {
 export function campaignTimeline(world, { kinds = null } = {}) {
   const items = [];
   for (const e of world.entities.values()) if (e.type === 'event') items.push({ kind: e.source === 'journal' ? 'session' : e.tags?.includes('battle') ? 'battle' : 'event', id: e.id, session: e.session ?? null, date: e.date || e.fields?.Date || '', name: e.name, text: e.summary || '', ev: e, created: e.created || '' });
+  for (const e of world.entities.values()) if (e.type === 'paper') items.push({ kind: 'paper', id: e.id, session: e.session ?? null, date: e.date || e.fields?.Date || '', name: e.name, text: e.summary || '', ev: e, created: e.created || '' });
   for (const m of world.moments || []) items.push({ kind: 'change', id: m.id, session: m.session ?? null, date: m.date || '', name: m.text, text: m.note || '', m, created: m.created || '' });
   return items.filter((x) => !kinds || kinds.includes(x.kind)).sort((a, b) => (a.session ?? 1e9) - (b.session ?? 1e9) || String(a.date || '').localeCompare(String(b.date || '')) || (a.kind === 'session' ? -1 : 0) - (b.kind === 'session' ? -1 : 0) || String(a.created).localeCompare(String(b.created)) || a.name.localeCompare(b.name));
 }
@@ -679,10 +681,26 @@ export function layoutGraph(nodes, edges, { width = 800, height = 600, iteration
   return pos;
 }
 
+/** A front page (see newspaper.js) as Markdown, for the vault export and "Copy as Markdown". */
+export function paperMarkdown(paper) {
+  const out = [`*${paper.masthead}* — ${[paper.city, paper.date, paper.edition, paper.price].filter(Boolean).join(' · ')}`, ''];
+  if (paper.slogan) out.push(`> ${paper.slogan}`, '');
+  for (const s of paper.stories || []) {
+    out.push(`## ${s.kicker ? `${s.kicker}: ` : ''}${s.headline || 'Untitled'}`);
+    if (s.deck) out.push(`*${s.deck}*`);
+    if (s.byline) out.push(`${s.byline}`);
+    out.push('');
+    if (s.image?.caption) out.push(`_[Photo: ${s.image.caption}${s.image.credit ? ` — ${s.image.credit}` : ''}]_`, '');
+    if (s.body) out.push(s.body, '');
+  }
+  for (const a of paper.ads || []) out.push(`> **${a.tag || 'ADVERTISEMENT'}** · ${a.title ? `**${a.title}** ` : ''}${a.text || ''}`, '');
+  return out.join('\n');
+}
+
 // ---- Markdown vault (Obsidian) ----------------------------------------------------------------------------------------------
 
 const safeName = (s) => String(s).replace(/[\\/:*?"<>|#^[\]]/g, '').replace(/\s+/g, ' ').trim() || 'Untitled';
-const FOLDER = { person: 'People', faction: 'Factions', location: 'Locations', event: 'Events', item: 'Items' };
+const FOLDER = { person: 'People', faction: 'Factions', location: 'Locations', event: 'Events', item: 'Items', paper: 'Newspapers' };
 
 function mdPage(world, e) {
   const name = safeName(e.name);
@@ -732,6 +750,7 @@ function mdPage(world, e) {
     if (ch.complications?.length) out.push(`- Complications: ${ch.complications.map((c) => `${c.type}: ${c.text}`).join(' ')}`);
     out.push('');
   }
+  if (e.paper) out.push('## Front page', '', paperMarkdown(e.paper), '');
   if (e.body) out.push('## Notes', '', e.body, '');
   return out.join('\n');
 }
