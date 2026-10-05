@@ -4,10 +4,10 @@
 import { h, toast, openDialog } from './dom.js';
 import { upsert, emit } from './store.js';
 import { readCharactersFile } from './exporters.js';
-import { decodeCharacter } from './share.js';
+import { decodeCharacter, decodePaper, isPaperKey } from './share.js';
 import { fromKey } from '../engine/keys.js';
 
-let hooks = { open: null, afterSave: null };
+let hooks = { open: null, afterSave: null, openPaper: null };
 
 /** open(ch) shows a character in a new Forge tab; afterSave() refreshes roster views. */
 export function setImportHooks(h2) { hooks = { ...hooks, ...h2 }; }
@@ -18,6 +18,7 @@ const ACCEPT = '.xlsx,.json,application/json,application/vnd.openxmlformats-offi
 export async function importCharacters(list, { open = true, save = true } = {}) {
   let n = 0;
   for (const raw of list) {
+    if (!raw) continue;
     const ch = { ...raw };
     delete ch.rosterId;
     delete ch.savedAt;
@@ -42,6 +43,7 @@ export function setImportRules(rules) { R = rules; }
 /** A character key (DCUK1/DCUP1), a share code or link, or character JSON. */
 export async function openAnything(text) {
   const t = text.trim();
+  if (isPaperKey(t)) { hooks.openPaper?.(await decodePaper(t)); return null; }
   const keyMatch = /DCU[KPE]1\.[A-Za-z0-9%._~-]+/.exec(t);
   if (keyMatch && !/DCU1\./.test(t)) {
     const { character, versionMatch, edited } = await fromKey(R, keyMatch[0]);
@@ -62,7 +64,7 @@ export async function importFiles(files, opts) {
 }
 
 export async function importDialog({ open = true } = {}) {
-  const area = h('textarea', { id: 'import-code', placeholder: 'Paste a character key (DCUK1... / DCUP1... / DCUE1...), a share code or link, or character JSON' });
+  const area = h('textarea', { id: 'import-code', placeholder: 'Paste a character key (DCUK1... / DCUP1... / DCUE1...), a front-page key (DCUN1...), a share code or link, or character JSON' });
   const file = h('input', { type: 'file', id: 'import-file', accept: ACCEPT, multiple: true });
   const save = h('input', { type: 'checkbox', id: 'import-save', checked: true });
   const openIt = h('input', { type: 'checkbox', id: 'import-open', checked: open });

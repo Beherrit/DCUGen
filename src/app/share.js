@@ -85,3 +85,26 @@ export async function decodeWorld(input) {
 
 /** Rough size for the user: "38 KB". */
 export function keySize(key) { const n = key.length; return n < 1024 ? `${n} chars` : `${Math.round(n / 1024)} KB`; }
+
+// ---- one front page as a key ------------------------------------------------------------------------------
+// "DCUN1." + base64url(deflate(JSON paper)). Pictures ride along (they are small), so a player gets the page as printed.
+
+const PAPER_PREFIX = 'DCUN1.';
+export function isPaperKey(text) { return /DCUN1\.[A-Za-z0-9_-]{8,}/.test(String(text || '')); }
+
+export async function encodePaper(paper, { pictures = true } = {}) {
+  const p = pictures ? paper : { ...paper, stories: (paper.stories || []).map((s) => (s.image?.src ? { ...s, image: { ...s.image, src: null } } : s)) };
+  const json = new TextEncoder().encode(JSON.stringify({ app: 'DCUGen', kind: 'paper', v: 1, paper: p }));
+  const packed = await pipe(json, new CompressionStream('deflate-raw'));
+  return PAPER_PREFIX + toBase64Url(packed);
+}
+
+export async function decodePaper(input) {
+  const m = /DCUN1\.([A-Za-z0-9_-]+)/.exec(String(input || '').trim());
+  if (!m) throw new Error('That is not a front-page key. They start with "DCUN1."');
+  const data = JSON.parse(new TextDecoder().decode(await inflateRaw(fromBase64Url(m[1]))));
+  if (data.kind !== 'paper' || !data.paper) throw new Error('That key does not hold a front page.');
+  return data.paper;
+}
+
+export function paperLink(key) { return `${location.href.split('#')[0]}#n=${key}`; }

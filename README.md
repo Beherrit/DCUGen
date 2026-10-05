@@ -76,6 +76,12 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
   sheet and the exports. **Share the whole world as one key** (Vault page or the 🔑 button): pages, ties, moments
   and the roster in a `DCUW1.` string that players paste into the Forge's "Open a key" box and choose merge or
   replace.
+- **Newsstand** (in the World) – front pages of your world's newspapers. Draft one from the campaign (the latest
+  sessions, battles and recorded moments become the headlines, with reporter copy, bylines and a weather ear) or
+  write one by hand; add pictures (upload, a roster portrait, or a free AI painting with a newsprint or comic
+  treatment), adverts and classifieds (rolled from your factions and places, or your own), and pick a look:
+  broadsheet, tabloid, EXTRA!, vintage gazette, comic panel, underground zine. Save it to the World (it sits on the
+  campaign timeline, tied to the people in its stories), print it, or send it as a key or link that opens on any copy.
 - **Life stories by hand** – every part of the Bio (story, family, people, timeline, sections, personality, inner
   life, GM hooks) can be edited, or written from a blank page ("Write your own" / "start blank").
 - **Portraits** – every character gets a portrait on the case file, the Bio page and the World: built-in comic art
