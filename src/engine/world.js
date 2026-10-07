@@ -18,6 +18,7 @@ export const ENTITY_TYPES = {
   event: { label: 'Events', one: 'Event', glyph: '📅', color: '#c2410c' },
   item: { label: 'Items', one: 'Item', glyph: '🗝', color: '#a8670b' },
   paper: { label: 'Newspapers', one: 'Newspaper', glyph: '📰', color: '#3b4252' },
+  handout: { label: 'Handouts', one: 'Handout', glyph: '🗂', color: '#8a5a44' },
 };
 
 // rel = what `to` is to `from`. inverse = what `from` is to `to`.
@@ -99,7 +100,7 @@ const BIO_REL = { Mentor: 'mentor', Student: 'student', Rival: 'rival', Enemy: '
 export const slug = (s) => String(s || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'x';
 
 export function emptyWorld() {
-  return { v: 1, name: 'My World', tagline: 'Everyone, everywhere, and how they are tied together', description: '', entities: {}, links: [], overrides: {}, hidden: [], hiddenLinks: [], linkEnds: {}, moments: [] };
+  return { v: 1, name: 'My World', tagline: 'Everyone, everywhere, and how they are tied together', description: '', entities: {}, links: [], overrides: {}, hidden: [], hiddenLinks: [], linkEnds: {}, moments: [], board: null };
 }
 
 const newId = (prefix) => `${prefix}:${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
@@ -357,6 +358,7 @@ export function campaignTimeline(world, { kinds = null } = {}) {
   const items = [];
   for (const e of world.entities.values()) if (e.type === 'event') items.push({ kind: e.source === 'journal' ? 'session' : e.tags?.includes('battle') ? 'battle' : 'event', id: e.id, session: e.session ?? null, date: e.date || e.fields?.Date || '', name: e.name, text: e.summary || '', ev: e, created: e.created || '' });
   for (const e of world.entities.values()) if (e.type === 'paper') items.push({ kind: 'paper', id: e.id, session: e.session ?? null, date: e.date || e.fields?.Date || '', name: e.name, text: e.summary || '', ev: e, created: e.created || '' });
+  for (const e of world.entities.values()) if (e.type === 'handout') items.push({ kind: 'handout', id: e.id, session: e.session ?? null, date: e.date || e.fields?.Date || '', name: e.name, text: e.summary || '', ev: e, created: e.created || '' });
   for (const m of world.moments || []) items.push({ kind: 'change', id: m.id, session: m.session ?? null, date: m.date || '', name: m.text, text: m.note || '', m, created: m.created || '' });
   return items.filter((x) => !kinds || kinds.includes(x.kind)).sort((a, b) => (a.session ?? 1e9) - (b.session ?? 1e9) || String(a.date || '').localeCompare(String(b.date || '')) || (a.kind === 'session' ? -1 : 0) - (b.kind === 'session' ? -1 : 0) || String(a.created).localeCompare(String(b.created)) || a.name.localeCompare(b.name));
 }
@@ -697,10 +699,21 @@ export function paperMarkdown(paper) {
   return out.join('\n');
 }
 
+/** A handout (see handouts.js) as Markdown. Redacted passages stay marked. */
+export function handoutMarkdown(h) {
+  const out = [`**${String(h.kind || '').toUpperCase()}** · ${h.look || ''}${h.date ? ` · ${h.date}` : ''}`, ''];
+  for (const [k, v] of Object.entries(h.fields || {})) if (v != null && String(v).trim()) out.push(`- **${k}:** ${String(v).replace(/\n/g, '; ')}`);
+  if (Object.keys(h.fields || {}).length) out.push('');
+  for (const l of h.lines || []) out.push(`> **${l.side === 'me' ? h.fields?.me || 'Me' : h.fields?.them || 'Them'}** (${l.time || ''}): ${l.text}`);
+  if ((h.lines || []).length) out.push('');
+  if (h.body) out.push(String(h.body).replace(/\[\[([\s\S]*?)\]\]/g, '~~$1~~'), '');
+  return out.join('\n');
+}
+
 // ---- Markdown vault (Obsidian) ----------------------------------------------------------------------------------------------
 
 const safeName = (s) => String(s).replace(/[\\/:*?"<>|#^[\]]/g, '').replace(/\s+/g, ' ').trim() || 'Untitled';
-const FOLDER = { person: 'People', faction: 'Factions', location: 'Locations', event: 'Events', item: 'Items', paper: 'Newspapers' };
+const FOLDER = { person: 'People', faction: 'Factions', location: 'Locations', event: 'Events', item: 'Items', paper: 'Newspapers', handout: 'Handouts' };
 
 function mdPage(world, e) {
   const name = safeName(e.name);
@@ -751,6 +764,7 @@ function mdPage(world, e) {
     out.push('');
   }
   if (e.paper) out.push('## Front page', '', paperMarkdown(e.paper), '');
+  if (e.handout) out.push('## Handout', '', handoutMarkdown(e.handout), '');
   if (e.body) out.push('## Notes', '', e.body, '');
   return out.join('\n');
 }

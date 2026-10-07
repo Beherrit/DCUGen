@@ -108,3 +108,23 @@ export async function decodePaper(input) {
 }
 
 export function paperLink(key) { return `${location.href.split('#')[0]}#n=${key}`; }
+
+// ---- one handout as a key -------------------------------------------------------------------------------
+const HANDOUT_PREFIX = 'DCUH1.';
+export function isHandoutKey(text) { return /DCUH1\.[A-Za-z0-9_-]{8,}/.test(String(text || '')); }
+
+export async function encodeHandout(handout) {
+  const json = new TextEncoder().encode(JSON.stringify({ app: 'DCUGen', kind: 'handout', v: 1, handout }));
+  const packed = await pipe(json, new CompressionStream('deflate-raw'));
+  return HANDOUT_PREFIX + toBase64Url(packed);
+}
+
+export async function decodeHandout(input) {
+  const m = /DCUH1\.([A-Za-z0-9_-]+)/.exec(String(input || '').trim());
+  if (!m) throw new Error('That is not a handout key. They start with "DCUH1."');
+  const data = JSON.parse(new TextDecoder().decode(await inflateRaw(fromBase64Url(m[1]))));
+  if (data.kind !== 'handout' || !data.handout) throw new Error('That key does not hold a handout.');
+  return data.handout;
+}
+
+export function handoutLink(key) { return `${location.href.split('#')[0]}#h=${key}`; }

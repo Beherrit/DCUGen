@@ -12,7 +12,7 @@ import { initRules, renderRules } from './rules.js';
 import { initBestiary, renderBestiary } from './bestiary.js';
 import { initGarage, renderGarage } from './garage.js';
 import { initBattle, renderBattle, throwIn } from './battle.js';
-import { initWorld, renderWorld, openWorldPage, recordBattleInWorld, worldSaved, worldApply, openWorldKey, openPaperKey, openPaperObject } from './world.js';
+import { initWorld, renderWorld, openWorldPage, recordBattleInWorld, worldSaved, worldApply, openWorldKey, openPaperKey, openPaperObject, openHandoutKey, openHandoutObject } from './world.js';
 import { initTable, renderTable, postRoll } from './table.js';
 import { setLobbyHandlers, lobbySendRoster, lobbySendRemove, lobby } from './lobby.js';
 import { snapshotAll, restoreAll } from './backup.js';
@@ -59,6 +59,8 @@ function initTheme() {
 }
 
 async function loadFromHash() {
+  const hk = /[#&]h=(DCUH1\.[A-Za-z0-9_-]+)/.exec(location.hash);
+  if (hk) { showTab('world'); const ok = await openHandoutKey(hk[1]); if (ok) history.replaceState(null, '', location.pathname + location.search); return ok; }
   const n = /[#&]n=(DCUN1\.[A-Za-z0-9_-]+)/.exec(location.hash);
   if (n) { showTab('world'); const ok = await openPaperKey(n[1]); if (ok) history.replaceState(null, '', location.pathname + location.search); return ok; }
   const m = /[#&]c=(DCU1\.[A-Za-z0-9_-]+)/.exec(location.hash) || /[#&]k=(DCU[KPE]1\.[A-Za-z0-9%._~-]+)/.exec(location.hash);
@@ -171,6 +173,7 @@ async function boot() {
     openWorld: (ch) => { openWorldPage(ch); showTab('world'); },
     openWorldKey: async (text) => { showTab('world'); await openWorldKey(text); },
     openPaperKey: async (text) => { showTab('world'); await openPaperKey(text); },
+    openHandoutKey: async (text) => { showTab('world'); await openHandoutKey(text); },
   });
   initRoster(R, document.getElementById('view-roster'), {
     open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
@@ -197,6 +200,7 @@ async function boot() {
   setImportRules(R);
   setImportHooks({
     openPaper: (paper) => { showTab('world'); openPaperObject(paper); },
+    openHandout: (hd) => { showTab('world'); openHandoutObject(hd); },
     open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
     afterSave: () => renderRoster(),
   });
