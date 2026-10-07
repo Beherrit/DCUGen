@@ -216,7 +216,8 @@ async function boot() {
 
   const restored = restoreTabs();
   const loaded = await loadFromHash();
-  if (!loaded && !restored) roll();
+  // Only roll when asked: a first visit (or a reload with nothing open) shows the Roll button instead.
+  if (!loaded && !restored) renderCurrent();
 
   let tab = 'forge';
   try { tab = localStorage.getItem('dcugen.tab') || 'forge'; } catch { /* ignore */ }

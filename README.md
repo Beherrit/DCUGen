@@ -112,9 +112,12 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
 - **Advancement** – track the power points the GM awards (DCA 190): earned, spent and unspent, with a history log
   that records exactly what each point bought, tied to the journal session it came from.
 - **Roster** – save characters, teams and creatures in the browser; search, duplicate, delete.
-  Folders (nested with "/", colours, counts), drag a card onto a folder or use "Move to…", select several and move,
-  export, delete or throw them in the Battle Room together; sort by name, PL, side, archetype or folder; cards or a
-  compact list. The folder travels with the character in every export and key.
+  **Worlds** for a multiverse (Earth-1, Earth-2, a homebrew setting), with folders inside them ("Earth-2/Villains");
+  **The Multiverse Hub** lists everyone you've made, in every world. Pick the world with the "Save to world" dropdown
+  at the end of the Forge sheet (rolled, built from scratch, or a whole rolled team), or later: drag a card onto a
+  world or use "Move to…", select several and move, export, delete or throw them in the Battle Room together; sort by
+  name, PL, side, archetype or world; cards or a compact list. The world travels with the character in every export
+  and key. The Forge keeps the characters you have open through a reload and only rolls when you press Roll.
 
 - **Export** – your Excel character sheet filled in (plus a *Full Stat Block* tab), a whole roster or team to one
   workbook, JSON files, book-style text and print/PDF. **Import** brings characters back from DCUGen Excel sheets, .json

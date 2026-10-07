@@ -1,4 +1,6 @@
-// Roster: saved characters, in folders. A folder tree on the left (nested with "/", counts, colours,
+// Roster: saved characters, in worlds. Top-level folders are worlds (the multiverse: Earth-1, Earth-2,
+// a homebrew setting...), with folders inside them; "The Multiverse Hub" shows everyone in every world.
+// A folder tree on the left (nested with "/", counts, colours,
 // collapse), characters on the right grouped by team; move them with the card's menu, by dragging a
 // card onto a folder, or by selecting several and using the bar at the bottom. Sort, search, filter
 // by side, cards or a compact list. The folder travels with the character (ch.folder), so exports,
@@ -99,7 +101,7 @@ function matches(ch) {
   const hay = [ch.identity?.codename, ch.identity?.realName, ch.archetype?.name, ch.theme?.name, ch.team, ch.identity?.base, ch.folder, ...(ch.factions || []).map((f) => f.name)].join(' ').toLowerCase();
   return hay.includes(query.toLowerCase());
 }
-const SORTS = { saved: 'Recently saved', name: 'Name', pl: 'Power level', side: 'Side', archetype: 'Archetype', folder: 'Folder' };
+const SORTS = { saved: 'Recently saved', name: 'Name', pl: 'Power level', side: 'Side', archetype: 'Archetype', folder: 'World' };
 function sorted(list) {
   const name = (c) => (c.identity?.codename || c.identity?.realName || '').toLowerCase();
   const by = {
@@ -122,16 +124,39 @@ function folderPicker(current, onPick, { allowNew = true, label = 'Move to…' }
     if (v !== '__cur') onPick(v === '__root' ? '' : v);
   } },
   h('option', { value: '__cur', selected: true }, label),
-  h('option', { value: '__root' }, current ? '(no folder)' : '✓ (no folder)'),
-  allFolders().map((p) => h('option', { value: p, disabled: p === current }, `${'　'.repeat(p.split('/').length - 1)}${p === current ? '✓ ' : ''}${leafOf(p)}`)),
-  allowNew ? h('option', { value: '__new' }, '+ New folder…') : null);
+  h('option', { value: '__root' }, current ? '🌌 Hub only (no world)' : '✓ Hub only (no world)'),
+  allFolders().map((p) => h('option', { value: p, disabled: p === current }, `${'　'.repeat(p.split('/').length - 1)}${p === current ? '✓ ' : ''}${p.includes('/') ? '' : '🌍 '}${leafOf(p)}`)),
+  allowNew ? h('option', { value: '__new' }, current ? '+ New folder…' : '+ New world…') : null);
+  return sel;
+}
+
+/**
+ * The "Save to world" dropdown on the Forge: the Hub (no world), every world and folder, or a new world.
+ * onPick gets the folder path ('' for the Hub only).
+ */
+export function worldSelect(current, onPick, { id } = {}) {
+  const cur = cleanPath(current);
+  const all = allFolders();
+  if (cur && !all.includes(cur)) all.push(cur);
+  const sel = h('select', { id, 'aria-label': 'Save to world', title: 'Which world this character belongs to. Everyone shows up in The Multiverse Hub.', onChange: async (e) => {
+    const v = e.target.value;
+    if (v === '__new') {
+      const path = await newFolderDialog('');
+      if (path) onPick(path); else e.target.value = cur;
+      return;
+    }
+    onPick(v);
+  } },
+  h('option', { value: '', selected: !cur }, '🌌 The Multiverse Hub only'),
+  all.map((p) => h('option', { value: p, selected: p === cur }, `${'　'.repeat(p.split('/').length - 1)}${p.includes('/') ? '📁' : '🌍'} ${leafOf(p)}`)),
+  h('option', { value: '__new' }, '+ New world…'));
   return sel;
 }
 
 async function newFolderDialog(parent = '') {
-  const name = h('input', { type: 'text', placeholder: 'Folder name (use / for a folder inside a folder)', 'aria-label': 'Folder name' });
+  const name = h('input', { type: 'text', placeholder: parent ? 'Folder name' : 'World name, e.g. Earth-2 (use / for a folder inside a world)', 'aria-label': parent ? 'Folder name' : 'World name' });
   const color = h('input', { type: 'color', value: '#4b5563', style: { width: '48px', padding: '2px' } });
-  const ok = await openDialog({ title: parent ? `New folder in ${parent}` : 'New folder', body: [h('label', { class: 'field' }, h('span', null, 'Name'), name), h('label', { class: 'field' }, h('span', null, 'Colour'), color), h('p', { class: 'hint', style: { margin: 0 } }, 'Folders hold characters. Drag a card onto a folder, use "Move to…" on a card, or select several and move them together. "Campaign/Villains" makes a folder inside a folder.')], buttons: [{ label: 'Cancel', value: false }, { label: 'Create', value: true, primary: true }] });
+  const ok = await openDialog({ title: parent ? `New folder in ${parent}` : 'New world', body: [h('label', { class: 'field' }, h('span', null, 'Name'), name), h('label', { class: 'field' }, h('span', null, 'Colour'), color), h('p', { class: 'hint', style: { margin: 0 } }, 'Worlds hold characters, and every character also shows up in The Multiverse Hub. Drag a card onto a world, use "Move to…" on a card, or select several and move them together. "Earth-2/Villains" makes a folder inside a world.')], buttons: [{ label: 'Cancel', value: false }, { label: 'Create', value: true, primary: true }] });
   if (!ok || !name.value.trim()) return null;
   const path = ensureFolder(parent ? `${parent}/${name.value.trim()}` : name.value.trim(), { color: color.value });
   renderRoster();
@@ -153,7 +178,7 @@ function card(ch) {
       h('label', { class: 'card-pick no-print', title: 'Select' }, h('input', { type: 'checkbox', checked: sel, 'aria-label': `Select ${ch.identity?.codename || 'character'}`, onChange: toggle })),
       h('div', { class: 'cn' }, ch.identity?.codename || 'Unnamed'),
       h('div', { class: 'rn' }, [ch.identity?.realName, `PL ${ch.pl}`, ch.alignment === 'villain' ? 'Villain' : 'Hero'].filter(Boolean).join(' · ')),
-      ch.folder && ui.folder !== ch.folder ? h('button', { type: 'button', class: 'card-folder', title: 'Open this folder', onClick: () => { ui.folder = ch.folder; saveView(); renderRoster(); } }, `📁 ${ch.folder}`) : null),
+      ch.folder && ui.folder !== ch.folder ? h('button', { type: 'button', class: 'card-folder', title: 'Open this folder', onClick: () => { ui.folder = ch.folder; saveView(); renderRoster(); } }, `${ch.folder.includes('/') ? '📁' : '🌍'} ${ch.folder}`) : null),
     h('div', { class: 'card-body' },
       h('div', { class: 'tagwrap' },
         ch.archetype?.name && h('span', { class: 'chip' }, ch.archetype.name),
@@ -189,7 +214,7 @@ function row(ch) {
     h('td', null, h('button', { type: 'button', class: 'linkish', style: { fontWeight: 800 }, onClick: () => hooks.open?.(ch) }, ch.identity?.codename || 'Unnamed'), h('small', { style: { color: 'var(--ink-3)', marginLeft: '6px' } }, ch.identity?.realName || '')),
     h('td', { class: 'num' }, ch.pl), h('td', null, ch.alignment === 'villain' ? 'Villain' : 'Hero'), h('td', null, ch.archetype?.name || ''), h('td', null, ch.theme?.name || ''), h('td', null, ch.team || ''),
     h('td', { class: 'num' }, s ? `${s.d.defenses.Dodge}/${s.d.defenses.Parry}/${s.d.defenses.Toughness}/${s.d.defenses.Will}` : ''),
-    h('td', null, folderPicker(ch.folder || '', (p) => { moveTo([ch], p); renderRoster(); }, { label: ch.folder ? leafOf(ch.folder) : '(no folder)' })),
+    h('td', null, folderPicker(ch.folder || '', (p) => { moveTo([ch], p); renderRoster(); }, { label: ch.folder ? leafOf(ch.folder) : 'Hub only' })),
     h('td', null, h('div', { class: 'btn-row', style: { gap: '4px' } }, h('button', { class: 'btn sm', type: 'button', onClick: () => exportExcel(ch, R) }, 'Excel'), h('button', { class: 'btn sm', type: 'button', title: 'Add to the Battle Room', onClick: () => hooks.throwIn?.(ch) }, '⚔'))));
   return el;
 }
@@ -218,17 +243,17 @@ function folderTree() {
     const active = ui.folder === path;
     const btn = h('div', { class: `rf-node ${active ? 'active' : ''}`, style: { '--d': depth, '--c': color || 'var(--ink-3)' } },
       children.length ? h('button', { type: 'button', class: 'rf-caret', 'aria-label': collapsed ? 'Expand' : 'Collapse', onClick: () => { folders.collapsed[path] = !collapsed; saveFolders(); renderRoster(); } }, collapsed ? '▸' : '▾') : h('span', { class: 'rf-caret' }),
-      h('button', { type: 'button', class: 'rf-name', onClick: () => { ui.folder = path; saveView(); renderRoster(); } }, h('span', { class: 'rf-glyph' }, path === null ? '👥' : path === '' ? '📄' : '📁'), h('span', { class: 'rf-label' }, label), h('span', { class: 'count' }, counts(path))),
+      h('button', { type: 'button', class: 'rf-name', onClick: () => { ui.folder = path; saveView(); renderRoster(); } }, h('span', { class: 'rf-glyph' }, path === null ? '🌌' : path === '' ? '📄' : path.includes('/') ? '📁' : '🌍'), h('span', { class: 'rf-label' }, label), h('span', { class: 'count' }, counts(path))),
       path ? h('button', { type: 'button', class: 'rf-more', title: 'Rename, colour, delete, export', 'aria-label': `Folder options for ${label}`, onClick: (e) => { e.stopPropagation(); folderMenu(path, e.currentTarget); } }, '⋯') : null);
     if (path !== null) dropTarget(btn, path);
     return [btn, ...(collapsed ? [] : children.map((p) => node(p, leafOf(p), { depth: depth + 1, color: folderMeta(p)?.color || null, meta: folderMeta(p) })))];
   };
   const roots = all.filter((p) => !p.includes('/'));
-  return h('aside', { class: 'rf-side', 'aria-label': 'Folders' },
-    h('div', { class: 'rf-head' }, h('b', null, 'Folders'), h('button', { class: 'btn sm', type: 'button', onClick: () => newFolderDialog('') }, '+ Folder')),
-    node(null, 'Everyone'), node('', 'No folder'),
-    roots.length ? roots.map((p) => node(p, leafOf(p), { color: folderMeta(p)?.color || null })) : h('p', { class: 'hint', style: { margin: '6px 0 0 8px' } }, 'No folders yet. Make one for a campaign, a team, villains, NPCs, retired heroes…'),
-    h('p', { class: 'hint', style: { margin: '10px 0 0' } }, 'Drag a card onto a folder to move it.'));
+  return h('aside', { class: 'rf-side', 'aria-label': 'Worlds' },
+    h('div', { class: 'rf-head' }, h('b', null, 'Worlds'), h('button', { class: 'btn sm', type: 'button', onClick: () => newFolderDialog('') }, '+ World')),
+    node(null, 'The Multiverse Hub'), node('', 'Not in a world'),
+    roots.length ? roots.map((p) => node(p, leafOf(p), { color: folderMeta(p)?.color || null })) : h('p', { class: 'hint', style: { margin: '6px 0 0 8px' } }, 'No worlds yet. Make one for each setting or campaign (Earth-1, Earth-2, a homebrew city…), with folders inside for teams, villains, NPCs.'),
+    h('p', { class: 'hint', style: { margin: '10px 0 0' } }, 'Drag a card onto a world to move it.'));
 }
 
 async function folderMenu(path, anchor) {
@@ -284,10 +309,10 @@ export function renderRoster() {
   const list = sorted(state.roster.filter(matches));
   const count = document.getElementById('roster-count');
   if (count) count.textContent = state.roster.length;
-  const here = ui.folder === null ? 'Everyone' : ui.folder === '' ? 'No folder' : ui.folder;
+  const here = ui.folder === null ? 'The Multiverse Hub' : ui.folder === '' ? 'Not in a world' : ui.folder;
 
   root.append(h('div', { class: 'page-head' },
-    h('div', null, h('h1', null, 'Roster'), h('p', null, 'Characters you save live here, in this browser (and in the desktop app\'s data folder). Put them in folders, sort them, select several at once. Export to Excel or JSON to keep a copy or send them to your group.')),
+    h('div', null, h('h1', null, 'Roster'), h('p', null, 'Characters you save live here, in this browser (and in the desktop app\'s data folder). Sort them into worlds (and folders inside worlds); The Multiverse Hub shows everyone. Select several at once. Export to Excel or JSON to keep a copy or send them to your group.')),
     h('span', { class: 'spacer' }),
     h('div', { class: 'btn-row' },
       paintButton(),
@@ -308,7 +333,7 @@ export function renderRoster() {
 
   if (painting) root.append(h('p', { class: 'hint', id: 'paint-status', style: { margin: '0 0 8px' } }, paintStatus));
   const tools = h('div', { class: 'roster-tools' },
-    h('input', { type: 'search', id: 'roster-search', placeholder: 'Search name, archetype, theme, team, faction, folder', value: query, 'aria-label': 'Search roster',
+    h('input', { type: 'search', id: 'roster-search', placeholder: 'Search name, archetype, theme, team, faction, world', value: query, 'aria-label': 'Search roster',
       onInput: (e) => { query = e.target.value; renderRosterList(); } }),
     h('div', { class: 'seg', role: 'group', 'aria-label': 'Filter by side', style: { width: '240px' } },
       [['all', 'Everyone'], ['hero', 'Heroes'], ['villain', 'Villains']].map(([v, t]) => h('button', { type: 'button', 'aria-pressed': String(side === v), onClick: () => { side = v; renderRoster(); } }, t))),
@@ -317,8 +342,8 @@ export function renderRoster() {
       [['cards', 'Cards'], ['list', 'List']].map(([v, t]) => h('button', { type: 'button', 'aria-pressed': String(ui.view === v), onClick: () => { ui.view = v; saveView(); renderRosterList(); } }, t))),
     h('button', { class: 'btn sm', type: 'button', 'aria-pressed': String(ui.selecting), onClick: () => { ui.selecting = !ui.selecting; if (!ui.selecting) ui.selected.clear(); renderRoster(); } }, ui.selecting ? 'Done selecting' : '☑ Select'));
   const crumbs = h('div', { class: 'rf-crumbs' },
-    h('button', { type: 'button', class: 'linkish', onClick: () => { ui.folder = null; saveView(); renderRoster(); } }, 'Everyone'),
-    ...(ui.folder ? ui.folder.split('/').map((part, i, arr) => [h('span', { class: 'rf-sep' }, '›'), h('button', { type: 'button', class: 'linkish', onClick: () => { ui.folder = arr.slice(0, i + 1).join('/'); saveView(); renderRoster(); } }, part)]) : ui.folder === '' ? [h('span', { class: 'rf-sep' }, '›'), h('span', null, 'No folder')] : []),
+    h('button', { type: 'button', class: 'linkish', onClick: () => { ui.folder = null; saveView(); renderRoster(); } }, '🌌 The Multiverse Hub'),
+    ...(ui.folder ? ui.folder.split('/').map((part, i, arr) => [h('span', { class: 'rf-sep' }, '›'), h('button', { type: 'button', class: 'linkish', onClick: () => { ui.folder = arr.slice(0, i + 1).join('/'); saveView(); renderRoster(); } }, part)]) : ui.folder === '' ? [h('span', { class: 'rf-sep' }, '›'), h('span', null, 'Not in a world')] : []),
     h('span', { class: 'hint', style: { marginLeft: '8px' } }, `${list.length} of ${state.roster.length}`));
   const listHost = h('div', { id: 'roster-list' });
   const main = h('div', { class: 'rf-main' }, crumbs, tools, listHost, bulkBar());
@@ -331,17 +356,17 @@ function renderRosterList() {
   if (!host) return;
   clear(host);
   const list = sorted(state.roster.filter(matches));
-  if (!list.length) { host.append(h('p', { style: { color: 'var(--ink-2)' } }, ui.folder ? 'This folder is empty. Drag characters here, or use "Move to…" on a card.' : 'No characters match.')); return; }
+  if (!list.length) { host.append(h('p', { style: { color: 'var(--ink-2)' } }, ui.folder ? 'Nobody here yet. Drag characters here, use "Move to…" on a card, or pick this world when you save on the Forge.' : 'No characters match.')); return; }
   if (ui.view === 'list') {
     host.append(h('table', { class: 'skills rf-table' },
-      h('thead', null, h('tr', null, h('th', null, ''), h('th', null, 'Name'), h('th', null, 'PL'), h('th', null, 'Side'), h('th', null, 'Archetype'), h('th', null, 'Theme'), h('th', null, 'Team'), h('th', null, 'Dod/Par/Tou/Wil'), h('th', null, 'Folder'), h('th', null, ''))),
+      h('thead', null, h('tr', null, h('th', null, ''), h('th', null, 'Name'), h('th', null, 'PL'), h('th', null, 'Side'), h('th', null, 'Archetype'), h('th', null, 'Theme'), h('th', null, 'Team'), h('th', null, 'Dod/Par/Tou/Wil'), h('th', null, 'World'), h('th', null, ''))),
       h('tbody', null, list.map(row))));
     return;
   }
   // sub-folders of the current folder, as drop targets up top
   if (ui.folder !== '') {
     const subs = allFolders().filter((p) => (ui.folder === null ? !p.includes('/') : parentOf(p) === ui.folder));
-    if (subs.length) host.append(h('div', { class: 'rf-subs' }, subs.map((p) => dropTarget(h('button', { type: 'button', class: 'rf-sub', style: { '--c': folderMeta(p)?.color || 'var(--ink-3)' }, onClick: () => { ui.folder = p; saveView(); renderRoster(); } }, '📁 ', leafOf(p), h('span', { class: 'count' }, state.roster.filter((c) => inFolder(c, p)).length)), p))));
+    if (subs.length) host.append(h('div', { class: 'rf-subs' }, subs.map((p) => dropTarget(h('button', { type: 'button', class: 'rf-sub', style: { '--c': folderMeta(p)?.color || 'var(--ink-3)' }, onClick: () => { ui.folder = p; saveView(); renderRoster(); } }, p.includes('/') ? '📁 ' : '🌍 ', leafOf(p), h('span', { class: 'count' }, state.roster.filter((c) => inFolder(c, p)).length)), p))));
   }
   const teams = new Map();
   const solo = [];
