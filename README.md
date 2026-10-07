@@ -82,6 +82,16 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
   treatment), adverts and classifieds (rolled from your factions and places, or your own), and pick a look:
   broadsheet, tabloid, EXTRA!, vintage gazette, comic panel, underground zine. Save it to the World (it sits on the
   campaign timeline, tied to the people in its stories), print it, or send it as a key or link that opens on any copy.
+- **Handouts** (in the World) – props for the table, drafted from the World or written by hand: WANTED posters
+  (portrait, aliases, crimes from what happened, last seen, a reward from their PL; Old West, noir bulletin, agency
+  most-wanted, off-world bounty board), agency case files (mugshot, threat assessment, associates, stamps and
+  [[redacted]] passages the GM can reveal), letters (handwritten, typed, telegram, memo, ransom note cut from
+  magazines), phone screens of texts, and lab, police, medical or military reports. Saved as pages tied to the people
+  in them, printed, or sent as a key or link.
+- **Evidence board** (in the World) – the campaign as a detective's corkboard: pin people as Polaroids, factions
+  and places as index cards, front pages as clippings and handouts as documents; the ties between them appear as
+  red string, sticky notes hold the theories, and you can run your own string between anything. Drag everything;
+  the layout lives in the vault and prints as a handout.
 - **Life stories by hand** – every part of the Bio (story, family, people, timeline, sections, personality, inner
   life, GM hooks) can be edited, or written from a blank page ("Write your own" / "start blank").
 - **Portraits** – every character gets a portrait on the case file, the Bio page and the World: built-in comic art

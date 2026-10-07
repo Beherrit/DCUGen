@@ -7,7 +7,7 @@
 <meta name="description" content="Random and custom character generator and GM toolkit for the DC Adventures RPG, built on the Mutants & Masterminds 3e rules.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow+Semi+Condensed:wght@500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=UnifrakturCook:wght@700&family=Bangers&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Special+Elite&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow+Semi+Condensed:wght@500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=UnifrakturCook:wght@700&family=Bangers&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=Caveat:wght@500;700&family=Permanent+Marker&family=Rye&display=swap">
 <style>
 /* Layout: a control rail beside the hero's "case file"; the file's header band takes the
    character's power color under a halftone screen, like a comic cover. */
@@ -1428,6 +1428,202 @@ body.np-printing .app { display: none !important; }
   .np-zine, .np-comic .np-photo-frame { transform: none; }
   .np-about { display: none; }
 }
+
+/* ---------- handouts: posters, files, letters, phones, reports ---------- */
+.ho { --ho-paper: #f3ecd8; --ho-ink: #1a1612; position: relative; width: 100%; max-width: 620px; margin: 0 auto; color: var(--ho-ink); font: 14px/1.45 Georgia, "Times New Roman", serif; }
+.ho * { color: inherit; }
+.ho h2, .ho p { margin: 0; text-wrap: initial; }
+.ho-sheet { position: relative; background: var(--ho-paper); padding: 26px 28px; box-shadow: 0 2px 4px rgba(0, 0, 0, .25), 0 12px 32px rgba(0, 0, 0, .22); overflow: hidden; }
+.ho-sheet::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, .4), transparent 55%), radial-gradient(ellipse at 90% 100%, rgba(80, 50, 10, .18), transparent 50%); mix-blend-mode: multiply; }
+.ho-eyebrow { font: 700 11px/1 var(--font-label); letter-spacing: .2em; text-transform: uppercase; opacity: .7; }
+.ho-name { font: 900 34px/1 "Playfair Display", Georgia, serif; text-transform: uppercase; letter-spacing: .01em; }
+.ho-aliases { font: italic 13px/1.3 Georgia, serif; margin-top: 4px; }
+.ho-body { font-size: 14px; }
+.ho-body p { margin: 0 0 8px; }
+.ho-redact { background: #111; color: #111; border-radius: 1px; padding: 0 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.ho-redact.reveal { background: #fff3a8; color: #1a1612; outline: 1px dashed #c89b00; }
+.ho-foot { margin-top: 14px; border-top: 1px solid rgba(0, 0, 0, .35); padding-top: 6px; font: 600 10px/1.3 var(--font-label); letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+.ho-row { display: grid; grid-template-columns: 110px 1fr; gap: 8px; padding: 4px 0; border-bottom: 1px dotted rgba(0, 0, 0, .3); font-size: 13px; }
+.ho-row b { font: 700 11px/1.5 var(--font-label); letter-spacing: .1em; text-transform: uppercase; }
+.ho-row ul { margin: 0; padding-left: 16px; }
+.ho-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; margin: 12px 0; }
+.ho-nophoto { display: grid; place-items: center; width: 100%; height: 100%; min-height: 180px; background: repeating-linear-gradient(45deg, #d9d2bf 0 6px, #cfc7b2 6px 12px); font: 700 12px/1.3 var(--font-label); letter-spacing: .14em; text-align: center; padding: 12px; }
+
+/* wanted */
+.ho-wanted .ho-sheet { text-align: center; border: 10px double var(--ho-ink); padding: 18px 22px 20px; }
+.ho-banner { font: 900 84px/.95 "Rye", "Playfair Display", Georgia, serif; letter-spacing: .04em; }
+.ho-sub { font: 700 15px/1.2 var(--font-label); letter-spacing: .3em; text-transform: uppercase; margin: 6px 0 12px; }
+.ho-photo { width: 62%; margin: 0 auto 10px; border: 4px solid var(--ho-ink); background: #ccc; position: relative; aspect-ratio: 4 / 5; overflow: hidden; }
+.ho-photo img { width: 100%; height: 100%; object-fit: cover; display: block; filter: sepia(.6) contrast(1.15); }
+.ho-wanted .ho-name { font-size: 40px; margin-top: 6px; }
+.ho-facts { text-align: left; margin: 12px 0; display: grid; grid-template-columns: 120px 1fr; gap: 4px 10px; font-size: 13px; }
+.ho-facts b { font: 700 11px/1.6 var(--font-label); letter-spacing: .12em; text-transform: uppercase; }
+.ho-facts ul { margin: 0; padding-left: 16px; }
+.ho-reward { margin: 10px auto 6px; border: 3px solid var(--ho-ink); padding: 6px 14px 8px; display: inline-block; }
+.ho-reward span { display: block; font: 700 12px/1 var(--font-label); letter-spacing: .4em; text-transform: uppercase; }
+.ho-reward b { font: 900 44px/1 "Rye", "Playfair Display", serif; }
+.ho-issued { font: 600 11px/1.4 var(--font-label); letter-spacing: .08em; text-transform: uppercase; margin-top: 8px; opacity: .8; }
+.ho-wanted .ho-body { font-style: italic; margin-top: 6px; }
+.ho-look-frontier { --ho-paper: #e8d8ad; }
+.ho-look-frontier .ho-sheet::before { background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(90, 60, 10, .35) 100%); }
+.ho-look-noir { --ho-paper: #efece4; --ho-ink: #111; }
+.ho-look-noir .ho-sheet { border: 6px solid #111; }
+.ho-look-noir .ho-banner, .ho-look-noir .ho-reward b { font-family: "Big Shoulders Display", Impact, sans-serif; font-weight: 900; letter-spacing: .08em; }
+.ho-look-noir .ho-sub, .ho-look-noir .ho-facts, .ho-look-noir .ho-issued, .ho-look-noir .ho-body { font-family: "Special Elite", "Courier New", monospace; }
+.ho-look-noir .ho-photo img { filter: grayscale(1) contrast(1.3); }
+.ho-look-noir .ho-photo::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .12) 0 1px, transparent 1px 3px); }
+.ho-look-modern { --ho-paper: #fff; --ho-ink: #0d1b2a; }
+.ho-look-modern .ho-sheet { border: 0; padding-top: 0; }
+.ho-look-modern .ho-banner { background: #0d1b2a; color: #fff; font-family: "Big Shoulders Display", Impact, sans-serif; font-weight: 900; font-size: 64px; letter-spacing: .12em; margin: 0 -22px 10px; padding: 14px 0 10px; }
+.ho-look-modern .ho-sub { color: #b71c1c; }
+.ho-look-modern .ho-photo { border-color: #0d1b2a; border-width: 2px; }
+.ho-look-modern .ho-photo img { filter: none; }
+.ho-look-modern .ho-reward { border-color: #b71c1c; color: #b71c1c; }
+.ho-look-modern .ho-reward b, .ho-look-modern .ho-name { font-family: "Big Shoulders Display", Impact, sans-serif; font-weight: 900; }
+.ho-look-bounty { --ho-paper: #0b1020; --ho-ink: #d7f3ff; }
+.ho-look-bounty .ho-sheet { border: 2px solid #38e8ff; box-shadow: 0 0 0 6px #0b1020, 0 0 0 7px #ff3d8a, 0 12px 40px rgba(56, 232, 255, .25); }
+.ho-look-bounty .ho-sheet::before { background: repeating-linear-gradient(0deg, rgba(56, 232, 255, .06) 0 2px, transparent 2px 5px); }
+.ho-look-bounty .ho-banner { color: #ff3d8a; font-family: "Big Shoulders Display", Impact, sans-serif; font-weight: 900; text-shadow: 0 0 18px rgba(255, 61, 138, .7); letter-spacing: .14em; }
+.ho-look-bounty .ho-sub { color: #38e8ff; }
+.ho-look-bounty .ho-photo { border-color: #38e8ff; }
+.ho-look-bounty .ho-photo img { filter: saturate(1.4) contrast(1.2) hue-rotate(-10deg); }
+.ho-look-bounty .ho-reward { border-color: #38e8ff; }
+.ho-look-bounty .ho-reward b { color: #ffe066; font-family: "Big Shoulders Display", Impact, sans-serif; }
+.ho-look-bounty .ho-facts b, .ho-look-bounty .ho-issued { color: #38e8ff; }
+
+/* case file */
+.ho-folder { position: relative; background: #d9b56c; border-radius: 6px 10px 6px 6px; padding: 34px 14px 14px; box-shadow: 0 2px 4px rgba(0, 0, 0, .25), 0 12px 32px rgba(0, 0, 0, .22); }
+.ho-tab { position: absolute; top: 6px; left: 20px; background: #e4c37f; border-radius: 6px 6px 0 0; padding: 4px 14px; font: 700 12px/1.2 var(--font-label); letter-spacing: .12em; color: #3b2a10; }
+.ho-clip { position: absolute; top: -10px; right: 46px; width: 18px; height: 54px; border: 3px solid #7a7a7a; border-radius: 9px; border-bottom-color: transparent; z-index: 3; box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .5); }
+.ho-stamp { position: absolute; top: 60px; right: 26px; z-index: 2; transform: rotate(-14deg); border: 4px solid #b71c1c; color: #b71c1c; font: 900 26px/1 "Big Shoulders Display", Impact, sans-serif; letter-spacing: .16em; padding: 4px 10px 2px; opacity: .85; mix-blend-mode: multiply; }
+.ho-casefile .ho-sheet { --ho-paper: #f7f3e8; font-family: "Special Elite", "Courier New", monospace; font-size: 13px; }
+.ho-head { display: grid; grid-template-columns: 1fr 150px; gap: 14px; align-items: start; }
+.ho-casefile .ho-name { font-family: "Special Elite", "Courier New", monospace; font-size: 26px; }
+.ho-mug { position: relative; aspect-ratio: 4 / 5; border: 2px solid #333; background: #e3e3e3; overflow: hidden; }
+.ho-mug img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(.8) contrast(1.2); display: block; }
+.ho-mug-lines { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 22px, rgba(0, 0, 0, .25) 22px 23px); pointer-events: none; }
+.ho-look-police .ho-folder { background: #cfd8dc; }
+.ho-look-police .ho-tab { background: #eceff1; }
+.ho-look-police .ho-stamp { color: #1565c0; border-color: #1565c0; }
+.ho-look-lab .ho-folder { background: #c8e6c9; }
+.ho-look-lab .ho-tab { background: #e8f5e9; }
+.ho-look-lab .ho-stamp { color: #2e7d32; border-color: #2e7d32; }
+
+/* letters */
+.ho-letter .ho-sheet { min-height: 320px; }
+.ho-look-handwritten .ho-sheet { --ho-paper: #fbf7ee; background-image: repeating-linear-gradient(0deg, transparent 0 27px, rgba(70, 110, 160, .3) 27px 28px); background-position: 0 14px; font: 500 22px/28px "Caveat", "Segoe Script", cursive; padding: 30px 36px; }
+.ho-look-handwritten .ho-sheet::before { background: linear-gradient(90deg, transparent 44px, rgba(200, 60, 60, .45) 44px 45px, transparent 45px); mix-blend-mode: normal; }
+.ho-look-handwritten .ho-body p { margin: 0 0 28px; }
+.ho-letter-top { text-align: right; margin-bottom: 28px; opacity: .8; }
+.ho-look-typed .ho-sheet { --ho-paper: #f1ede2; font: 14px/1.7 "Special Elite", "Courier New", monospace; }
+.ho-look-typed .ho-body p { margin: 0 0 14px; }
+.ho-polaroid { position: absolute; right: 22px; bottom: 22px; width: 120px; background: #fff; padding: 6px 6px 22px; box-shadow: 0 3px 10px rgba(0, 0, 0, .35); transform: rotate(5deg); }
+.ho-polaroid img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+.ho-attach { display: flex; align-items: center; gap: 8px; margin-top: 12px; font: 600 11px/1 var(--font-label); letter-spacing: .1em; text-transform: uppercase; }
+.ho-attach img { width: 64px; height: 64px; object-fit: cover; border: 1px solid #999; }
+.ho-look-telegram .ho-sheet { --ho-paper: #f6e7a8; font: 15px/1.6 "Special Elite", "Courier New", monospace; }
+.ho-tg-head { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 3px double #5a4a10; padding-bottom: 6px; margin-bottom: 8px; }
+.ho-tg-head b { font: 900 24px/1 "Playfair Display", serif; letter-spacing: .06em; }
+.ho-tg-meta { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; margin-bottom: 14px; }
+.ho-tg-body { text-transform: uppercase; letter-spacing: .04em; min-height: 120px; }
+.ho-tg-foot { margin-top: 14px; border-top: 1px solid #5a4a10; padding-top: 4px; font-size: 10px; letter-spacing: .14em; text-align: center; }
+.ho-look-memo .ho-sheet { --ho-paper: #fff; font-family: "Barlow", sans-serif; font-size: 13.5px; }
+.ho-memo-head { font: 800 26px/1 "Big Shoulders Display", Impact, sans-serif; letter-spacing: .14em; border-bottom: 3px solid #111; padding-bottom: 6px; margin-bottom: 10px; }
+.ho-memo-meta { display: grid; grid-template-columns: 60px 1fr; gap: 3px 10px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #999; }
+.ho-memo-meta b { font: 700 11px/1.6 var(--font-label); letter-spacing: .1em; text-transform: uppercase; }
+.ho-look-ransom .ho-sheet { --ho-paper: #f5f2ea; padding: 30px 26px; min-height: 260px; }
+.ho-ransom { display: grid; gap: 10px; line-height: 1; }
+.ho-ransom-line { display: flex; flex-wrap: wrap; gap: 6px 22px; align-items: center; }
+.ho-word { display: inline-flex; gap: 2px; align-items: center; }
+.ho-cut { display: inline-block; padding: 2px 5px; font-size: 28px; line-height: 1; margin: 2px 1px; box-shadow: 1px 1px 2px rgba(0, 0, 0, .35); }
+.ho-gap { display: inline-block; width: 14px; }
+.ho-cut.f0 { font: 900 30px/1 "Playfair Display", serif; } .ho-cut.f1 { font: 900 28px/1 "Big Shoulders Display", Impact, sans-serif; } .ho-cut.f2 { font: 400 30px/1 "Bangers", Impact, sans-serif; } .ho-cut.f3 { font: 400 28px/1 "Special Elite", monospace; } .ho-cut.f4 { font: 700 30px/1 "Barlow", sans-serif; } .ho-cut.f5 { font: 700 28px/1 "UnifrakturCook", serif; }
+.ho-cut.b0 { background: #fff; } .ho-cut.b1 { background: #ffe066; } .ho-cut.b2 { background: #111; color: #fff; } .ho-cut.b3 { background: #d32f2f; color: #fff; } .ho-cut.b4 { background: #cfe8ff; } .ho-cut.b5 { background: #d9f2d0; }
+
+/* texts */
+.ho-texts { max-width: 360px; }
+.ho-phone { background: #0b0b0d; border-radius: 36px; padding: 14px 12px 16px; box-shadow: 0 0 0 3px #2a2a2e, 0 14px 40px rgba(0, 0, 0, .4); font: 15px/1.35 -apple-system, "Segoe UI", Roboto, sans-serif; color: #fff; }
+.ho-phone-status { display: flex; justify-content: space-between; font: 600 12px/1 -apple-system, sans-serif; padding: 2px 10px 10px; opacity: .9; }
+.ho-phone-contact { display: grid; justify-items: center; gap: 4px; padding: 6px 0 12px; border-bottom: 1px solid rgba(255, 255, 255, .12); margin-bottom: 10px; font-size: 13px; }
+.ho-avatar { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: #8e8e93; font-weight: 700; font-size: 18px; }
+.ho-thread { display: grid; gap: 5px; padding: 0 4px; min-height: 220px; }
+.ho-bubble { max-width: 78%; padding: 7px 12px; border-radius: 18px; position: relative; display: grid; gap: 2px; }
+.ho-bubble small { font-size: 10px; opacity: .6; }
+.ho-bubble.them { background: #26262b; border-bottom-left-radius: 5px; justify-self: start; }
+.ho-bubble.me { background: #0a84ff; border-bottom-right-radius: 5px; justify-self: end; }
+.ho-phone-input { margin-top: 12px; border: 1px solid rgba(255, 255, 255, .25); border-radius: 18px; padding: 6px 8px 6px 14px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; opacity: .7; }
+.ho-phone-input b { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #0a84ff; }
+.ho-look-light .ho-phone { background: #fff; color: #111; box-shadow: 0 0 0 3px #d0d0d4, 0 14px 40px rgba(0, 0, 0, .25); }
+.ho-look-light .ho-bubble.them { background: #e9e9eb; } .ho-look-light .ho-bubble.me { background: #34c759; color: #fff; }
+.ho-look-light .ho-phone-contact { border-color: rgba(0, 0, 0, .12); } .ho-look-light .ho-phone-input { border-color: rgba(0, 0, 0, .25); }
+.ho-look-burner .ho-phone { border-radius: 14px; background: #1e2a1e; color: #9ae29a; font-family: "Courier New", monospace; box-shadow: 0 0 0 6px #3a3a3a, 0 14px 40px rgba(0, 0, 0, .4); }
+.ho-look-burner .ho-bubble { border-radius: 4px; border: 1px solid #5c8a5c; background: transparent; } .ho-look-burner .ho-bubble.me { background: #2f4a2f; }
+.ho-look-burner .ho-avatar { background: #3a5a3a; } .ho-look-burner .ho-phone-input b { background: #5c8a5c; }
+
+/* reports */
+.ho-report .ho-sheet { --ho-paper: #fbfaf6; font-family: "Barlow", sans-serif; font-size: 13.5px; }
+.ho-report-head { display: flex; justify-content: space-between; align-items: start; gap: 12px; border-bottom: 3px solid #111; padding-bottom: 8px; margin-bottom: 8px; }
+.ho-report .ho-name { font: 800 22px/1.1 "Big Shoulders Display", Impact, sans-serif; letter-spacing: .04em; }
+.ho-class { border: 3px solid #b71c1c; color: #b71c1c; font: 900 14px/1 "Big Shoulders Display", Impact, sans-serif; letter-spacing: .2em; padding: 6px 8px 4px; transform: rotate(-4deg); white-space: nowrap; }
+.ho-exhibit { float: right; width: 150px; margin: 0 0 8px 14px; text-align: center; font: 600 10px/1.4 var(--font-label); letter-spacing: .1em; text-transform: uppercase; }
+.ho-exhibit img { width: 100%; border: 1px solid #666; display: block; filter: grayscale(.5); }
+.ho-look-police .ho-sheet { --ho-paper: #f3f6fb; font-family: "Special Elite", "Courier New", monospace; }
+.ho-look-police .ho-class { color: #1565c0; border-color: #1565c0; }
+.ho-look-medical .ho-sheet { --ho-paper: #fff; background-image: repeating-linear-gradient(0deg, transparent 0 23px, rgba(0, 120, 200, .15) 23px 24px); }
+.ho-look-medical .ho-class { color: #2e7d32; border-color: #2e7d32; }
+.ho-look-military .ho-sheet { --ho-paper: #ebe9dd; font-family: "Special Elite", "Courier New", monospace; }
+.ho-look-military .ho-report-head { border-color: #4b5320; }
+.ho-look-military .ho-class { color: #4b5320; border-color: #4b5320; }
+
+/* stand, viewer, editor */
+.ho-hero { background: linear-gradient(135deg, #1b1f2b, #4a3b2a 55%, #8a5a44); }
+.ho-stand { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.ho-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); overflow: hidden; display: grid; }
+.ho-thumb { position: relative; height: 300px; overflow: hidden; background: #b8ad96; cursor: pointer; padding: 14px; }
+.ho-thumb .ho { transform: scale(.72); transform-origin: top center; pointer-events: none; }
+.ho-sheet-host { padding: 16px 0 24px; }
+.ho-preview { padding: 6px 4px 20px; }
+.ho-lines { display: grid; gap: 6px; }
+.ho-line-row { display: flex; gap: 6px; align-items: center; }
+.ho-print-host { padding: 20px; }
+@media print { .ho { box-shadow: none; max-width: none; } .ho-sheet, .ho-folder { box-shadow: none; } }
+
+/* ---------- the evidence board ---------- */
+.eb-hero { background: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, .14), transparent 40%), linear-gradient(135deg, #3e2723, #6d4c41 55%, #8d6e63); }
+.eb-wrap { overflow: auto; border: 12px solid #5d4037; border-radius: 6px; box-shadow: inset 0 0 40px rgba(0, 0, 0, .45), var(--shadow); background: #a1887f; max-height: calc(100vh - 160px); }
+.eb-stage { position: relative; background: radial-gradient(circle, rgba(0, 0, 0, .08) 1px, transparent 1.6px) 0 0 / 7px 7px, radial-gradient(circle at 30% 40%, #c9a98a, #b08b6d 70%); }
+.eb-strings { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+.eb-pin { fill: #c62828; stroke: #7f0000; stroke-width: 1; }
+.eb-string-label { font: 700 11px var(--font-label); fill: #4e342e; letter-spacing: .04em; paint-order: stroke; stroke: #e6d2bf; stroke-width: 3px; }
+.eb-item { position: absolute; cursor: grab; user-select: none; transform: rotate(var(--rot, 0deg)); transition: box-shadow .15s; z-index: 2; }
+.eb-item.dragging { cursor: grabbing; z-index: 5; box-shadow: 0 14px 30px rgba(0, 0, 0, .45) !important; transform: rotate(0deg) scale(1.03); }
+.eb-item:hover .eb-tools { opacity: 1; }
+.eb-tools { position: absolute; top: -12px; right: -12px; display: flex; gap: 3px; opacity: 0; transition: opacity .15s; z-index: 6; }
+.eb-tool { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; font-size: 12px; line-height: 1; box-shadow: var(--shadow); }
+.eb-pushpin { position: absolute; top: -9px; left: 50%; width: 16px; height: 16px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ff8a80, #c62828 60%, #7f0000); box-shadow: 0 2px 3px rgba(0, 0, 0, .5); transform: translateX(-50%); }
+.eb-polaroid { width: 170px; background: #fff; padding: 8px 8px 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, .35); }
+.eb-photo { aspect-ratio: 4 / 5; background: var(--c, #888); display: grid; place-items: center; overflow: hidden; }
+.eb-photo img { width: 100%; height: 100%; object-fit: cover; display: block; filter: contrast(1.05) saturate(.9); }
+.eb-initials { font: 900 44px/1 var(--font-display); color: #fff; }
+.eb-caption { font: 500 18px/1.1 "Permanent Marker", "Caveat", cursive; text-align: center; margin-top: 8px; color: #222; overflow-wrap: anywhere; }
+.eb-status { font: 500 13px/1 "Permanent Marker", cursive; text-align: center; color: #c62828; margin-top: 2px; }
+.eb-card { width: 190px; background: #fdf6e3; border-left: 6px solid var(--c, #888); padding: 8px 10px 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, .3); background-image: repeating-linear-gradient(0deg, transparent 0 17px, rgba(60, 100, 160, .2) 17px 18px); }
+.eb-card-type { font: 700 9px/1 var(--font-label); letter-spacing: .14em; color: #5d4037; margin-bottom: 4px; }
+.eb-card-name { font: 700 15px/1.15 var(--font-label); color: #222; }
+.eb-clip-text { font: 12px/1.3 Georgia, serif; color: #333; margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.eb-clipping { width: 200px; background: #f3ecd8; padding: 10px 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, .3); clip-path: polygon(0 2%, 4% 0, 97% 1%, 100% 5%, 99% 96%, 95% 100%, 3% 99%, 0 94%); }
+.eb-clip-mast { font: 900 11px/1 "Playfair Display", serif; letter-spacing: .08em; text-transform: uppercase; color: #222; border-bottom: 1px solid #222; padding-bottom: 3px; margin-bottom: 4px; }
+.eb-clip-head { font: 900 16px/1.05 "Playfair Display", serif; text-transform: uppercase; color: #111; }
+.eb-doc { width: 180px; background: #f7f3e8; padding: 10px 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, .3); font-family: "Special Elite", monospace; }
+.eb-doc-kind { font: 700 9px/1 var(--font-label); letter-spacing: .16em; color: #b71c1c; border: 1px solid #b71c1c; display: inline-block; padding: 2px 5px; margin-bottom: 4px; }
+.eb-doc-title { font-size: 14px; line-height: 1.15; color: #222; }
+.eb-note { width: 170px; min-height: 120px; padding: 10px 10px 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, .3); }
+.eb-note textarea { width: 100%; min-height: 100px; border: 0; background: transparent; resize: vertical; font: 500 17px/1.25 "Permanent Marker", "Caveat", cursive; color: #222; outline: none; }
+.eb-tape { position: absolute; top: -10px; left: 50%; width: 70px; height: 20px; background: rgba(255, 255, 255, .45); transform: translateX(-50%) rotate(-3deg); box-shadow: 0 1px 2px rgba(0, 0, 0, .15); }
+body.eb-printing .app > :not(main), body.eb-printing main > :not(#view-world), body.eb-printing .wd-side, body.eb-printing .eb-page > :not(.eb-wrap) { display: none !important; }
+body.eb-printing .wd-layout { display: block; }
+body.eb-printing .eb-wrap { max-height: none; overflow: visible; border-width: 4px; }
+@media print { .eb-wrap { max-height: none; overflow: visible; } }
 
 </style>
 </head>
@@ -4610,7 +4806,27 @@ async function decodePaper(input) {
 
 function paperLink(key) { return `${location.href.split('#')[0]}#n=${key}`; }
 
-return { inflateRaw, encodeCharacter, decodeCharacter, shareLink, isWorldKey, encodeWorld, decodeWorld, keySize, isPaperKey, encodePaper, decodePaper, paperLink };
+// ---- one handout as a key -------------------------------------------------------------------------------
+const HANDOUT_PREFIX = 'DCUH1.';
+function isHandoutKey(text) { return /DCUH1\.[A-Za-z0-9_-]{8,}/.test(String(text || '')); }
+
+async function encodeHandout(handout) {
+  const json = new TextEncoder().encode(JSON.stringify({ app: 'DCUGen', kind: 'handout', v: 1, handout }));
+  const packed = await pipe(json, new CompressionStream('deflate-raw'));
+  return HANDOUT_PREFIX + toBase64Url(packed);
+}
+
+async function decodeHandout(input) {
+  const m = /DCUH1\.([A-Za-z0-9_-]+)/.exec(String(input || '').trim());
+  if (!m) throw new Error('That is not a handout key. They start with "DCUH1."');
+  const data = JSON.parse(new TextDecoder().decode(await inflateRaw(fromBase64Url(m[1]))));
+  if (data.kind !== 'handout' || !data.handout) throw new Error('That key does not hold a handout.');
+  return data.handout;
+}
+
+function handoutLink(key) { return `${location.href.split('#')[0]}#h=${key}`; }
+
+return { inflateRaw, encodeCharacter, decodeCharacter, shareLink, isWorldKey, encodeWorld, decodeWorld, keySize, isPaperKey, encodePaper, decodePaper, paperLink, isHandoutKey, encodeHandout, decodeHandout, handoutLink };
 })();
 
 __mods["src/engine/xlsx.js"] = (() => {
@@ -8757,6 +8973,7 @@ const ENTITY_TYPES = {
   event: { label: 'Events', one: 'Event', glyph: '📅', color: '#c2410c' },
   item: { label: 'Items', one: 'Item', glyph: '🗝', color: '#a8670b' },
   paper: { label: 'Newspapers', one: 'Newspaper', glyph: '📰', color: '#3b4252' },
+  handout: { label: 'Handouts', one: 'Handout', glyph: '🗂', color: '#8a5a44' },
 };
 
 // rel = what `to` is to `from`. inverse = what `from` is to `to`.
@@ -8838,7 +9055,7 @@ const BIO_REL = { Mentor: 'mentor', Student: 'student', Rival: 'rival', Enemy: '
 const slug = (s) => String(s || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'x';
 
 function emptyWorld() {
-  return { v: 1, name: 'My World', tagline: 'Everyone, everywhere, and how they are tied together', description: '', entities: {}, links: [], overrides: {}, hidden: [], hiddenLinks: [], linkEnds: {}, moments: [] };
+  return { v: 1, name: 'My World', tagline: 'Everyone, everywhere, and how they are tied together', description: '', entities: {}, links: [], overrides: {}, hidden: [], hiddenLinks: [], linkEnds: {}, moments: [], board: null };
 }
 
 const newId = (prefix) => `${prefix}:${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
@@ -9096,6 +9313,7 @@ function campaignTimeline(world, { kinds = null } = {}) {
   const items = [];
   for (const e of world.entities.values()) if (e.type === 'event') items.push({ kind: e.source === 'journal' ? 'session' : e.tags?.includes('battle') ? 'battle' : 'event', id: e.id, session: e.session ?? null, date: e.date || e.fields?.Date || '', name: e.name, text: e.summary || '', ev: e, created: e.created || '' });
   for (const e of world.entities.values()) if (e.type === 'paper') items.push({ kind: 'paper', id: e.id, session: e.session ?? null, date: e.date || e.fields?.Date || '', name: e.name, text: e.summary || '', ev: e, created: e.created || '' });
+  for (const e of world.entities.values()) if (e.type === 'handout') items.push({ kind: 'handout', id: e.id, session: e.session ?? null, date: e.date || e.fields?.Date || '', name: e.name, text: e.summary || '', ev: e, created: e.created || '' });
   for (const m of world.moments || []) items.push({ kind: 'change', id: m.id, session: m.session ?? null, date: m.date || '', name: m.text, text: m.note || '', m, created: m.created || '' });
   return items.filter((x) => !kinds || kinds.includes(x.kind)).sort((a, b) => (a.session ?? 1e9) - (b.session ?? 1e9) || String(a.date || '').localeCompare(String(b.date || '')) || (a.kind === 'session' ? -1 : 0) - (b.kind === 'session' ? -1 : 0) || String(a.created).localeCompare(String(b.created)) || a.name.localeCompare(b.name));
 }
@@ -9436,10 +9654,21 @@ function paperMarkdown(paper) {
   return out.join('\n');
 }
 
+/** A handout (see handouts.js) as Markdown. Redacted passages stay marked. */
+function handoutMarkdown(h) {
+  const out = [`**${String(h.kind || '').toUpperCase()}** · ${h.look || ''}${h.date ? ` · ${h.date}` : ''}`, ''];
+  for (const [k, v] of Object.entries(h.fields || {})) if (v != null && String(v).trim()) out.push(`- **${k}:** ${String(v).replace(/\n/g, '; ')}`);
+  if (Object.keys(h.fields || {}).length) out.push('');
+  for (const l of h.lines || []) out.push(`> **${l.side === 'me' ? h.fields?.me || 'Me' : h.fields?.them || 'Them'}** (${l.time || ''}): ${l.text}`);
+  if ((h.lines || []).length) out.push('');
+  if (h.body) out.push(String(h.body).replace(/\[\[([\s\S]*?)\]\]/g, '~~$1~~'), '');
+  return out.join('\n');
+}
+
 // ---- Markdown vault (Obsidian) ----------------------------------------------------------------------------------------------
 
 const safeName = (s) => String(s).replace(/[\\/:*?"<>|#^[\]]/g, '').replace(/\s+/g, ' ').trim() || 'Untitled';
-const FOLDER = { person: 'People', faction: 'Factions', location: 'Locations', event: 'Events', item: 'Items', paper: 'Newspapers' };
+const FOLDER = { person: 'People', faction: 'Factions', location: 'Locations', event: 'Events', item: 'Items', paper: 'Newspapers', handout: 'Handouts' };
 
 function mdPage(world, e) {
   const name = safeName(e.name);
@@ -9490,6 +9719,7 @@ function mdPage(world, e) {
     out.push('');
   }
   if (e.paper) out.push('## Front page', '', paperMarkdown(e.paper), '');
+  if (e.handout) out.push('## Handout', '', handoutMarkdown(e.handout), '');
   if (e.body) out.push('## Notes', '', e.body, '');
   return out.join('\n');
 }
@@ -9518,7 +9748,7 @@ function vaultMarkdown(world) {
   return files;
 }
 
-return { ENTITY_TYPES, RELATIONS, FACTION_ROLES, PERSON_STATUSES, RELATION_GROUPS, slug, emptyWorld, buildWorld, linkActiveAt, linksAsOf, lastSession, groupedConnections, entityTimeline, campaignTimeline, searchWorld, createEntity, updateEntity, deleteEntity, restoreHidden, addLink, MOMENT_KINDS, MOMENT_GROUPS, momentKindsFor, momentSentence, recordMoment, removeMoment, updateMoment, removeLink, recordBattle, layoutGraph, paperMarkdown, vaultMarkdown };
+return { ENTITY_TYPES, RELATIONS, FACTION_ROLES, PERSON_STATUSES, RELATION_GROUPS, slug, emptyWorld, buildWorld, linkActiveAt, linksAsOf, lastSession, groupedConnections, entityTimeline, campaignTimeline, searchWorld, createEntity, updateEntity, deleteEntity, restoreHidden, addLink, MOMENT_KINDS, MOMENT_GROUPS, momentKindsFor, momentSentence, recordMoment, removeMoment, updateMoment, removeLink, recordBattle, layoutGraph, paperMarkdown, handoutMarkdown, vaultMarkdown };
 })();
 
 __mods["src/app/factions.js"] = (() => {
@@ -9897,9 +10127,9 @@ __mods["src/app/importer.js"] = (() => {
 const { h, toast, openDialog } = __mods["src/app/dom.js"];
 const { upsert, emit } = __mods["src/app/store.js"];
 const { readCharactersFile } = __mods["src/app/exporters.js"];
-const { decodeCharacter, decodePaper, isPaperKey } = __mods["src/app/share.js"];
+const { decodeCharacter, decodePaper, isPaperKey, decodeHandout, isHandoutKey } = __mods["src/app/share.js"];
 const { fromKey } = __mods["src/engine/keys.js"];
-let hooks = { open: null, afterSave: null, openPaper: null };
+let hooks = { open: null, afterSave: null, openPaper: null, openHandout: null };
 
 /** open(ch) shows a character in a new Forge tab; afterSave() refreshes roster views. */
 function setImportHooks(h2) { hooks = { ...hooks, ...h2 }; }
@@ -9936,6 +10166,7 @@ function setImportRules(rules) { R = rules; }
 async function openAnything(text) {
   const t = text.trim();
   if (isPaperKey(t)) { hooks.openPaper?.(await decodePaper(t)); return null; }
+  if (isHandoutKey(t)) { hooks.openHandout?.(await decodeHandout(t)); return null; }
   const keyMatch = /DCU[KPE]1\.[A-Za-z0-9%._~-]+/.exec(t);
   if (keyMatch && !/DCU1\./.test(t)) {
     const { character, versionMatch, edited } = await fromKey(R, keyMatch[0]);
@@ -9956,7 +10187,7 @@ async function importFiles(files, opts) {
 }
 
 async function importDialog({ open = true } = {}) {
-  const area = h('textarea', { id: 'import-code', placeholder: 'Paste a character key (DCUK1... / DCUP1... / DCUE1...), a front-page key (DCUN1...), a share code or link, or character JSON' });
+  const area = h('textarea', { id: 'import-code', placeholder: 'Paste a character key (DCUK1... / DCUP1... / DCUE1...), a front-page or handout key (DCUN1... / DCUH1...), a share code or link, or character JSON' });
   const file = h('input', { type: 'file', id: 'import-file', accept: ACCEPT, multiple: true });
   const save = h('input', { type: 'checkbox', id: 'import-save', checked: true });
   const openIt = h('input', { type: 'checkbox', id: 'import-open', checked: open });
@@ -10588,12 +10819,13 @@ function build() {
       h('button', { class: 'btn', type: 'button', onClick: rollTeam }, 'Roll a team'),
       h('button', { class: 'btn', type: 'button', id: 'build-scratch', onClick: buildFromScratch }, 'Build from scratch')),
     (() => {
-      const keyIn = h('input', { type: 'text', id: 'open-key', placeholder: 'Paste a key, share code, world key or front page', 'aria-label': 'Character key, share code or world key', autocomplete: 'off' });
+      const keyIn = h('input', { type: 'text', id: 'open-key', placeholder: 'Paste a key, share code, world key, front page or handout', 'aria-label': 'Character key, share code or world key', autocomplete: 'off' });
       const go = async () => {
         const v = keyIn.value.trim();
         if (!v) return;
         if (/DCUW1\./.test(v)) { keyIn.value = ''; api.openWorldKey?.(v); return; }
         if (/DCUN1\./.test(v)) { keyIn.value = ''; api.openPaperKey?.(v); return; }
+        if (/DCUH1\./.test(v)) { keyIn.value = ''; api.openHandoutKey?.(v); return; }
         try {
           const ch = await openAnything(v);
           if (!ch) { keyIn.value = ''; return; }
@@ -16943,11 +17175,11 @@ function editorPage(ctx) {
     const id = savePaper(ctx, d, ctx.ui.draftId);
     ctx.ui.draft = null; ctx.ui.draftId = null;
     toast('Front page saved to the World');
-    go(id);
+    go(id, { replace: true });
   };
   const cancel = async () => {
     const ok = await openDialog({ title: 'Leave the editor?', body: h('p', { style: { margin: 0 } }, 'Changes since the last save are lost.'), buttons: [{ label: 'Stay', value: false }, { label: 'Leave', value: true, danger: true }] });
-    if (ok) { ctx.ui.draft = null; go(ctx.ui.draftId || 'newsstand'); }
+    if (ok) { ctx.ui.draft = null; go(ctx.ui.draftId || 'newsstand', { replace: true }); }
   };
   rebuildForm();
   return h('div', { class: 'wd-page np-editor' },
@@ -16958,6 +17190,736 @@ function editorPage(ctx) {
 }
 
 return { renderPaper, paperThumb, printPaper, savePaper, importPaper, startPaper, editPaper, newsstandPage, paperPage, editorPage };
+})();
+
+__mods["src/engine/handouts.js"] = (() => {
+// Handouts: props the GM puts on the table. Wanted posters and case files for anyone in the World,
+// letters, ransom notes, telegrams, memos, phone screens of texts, and redacted reports. Each one is
+// drafted from the World (a character's ties, complications and the moments recorded about them) or
+// written by hand, dressed in a look, saved as a World page, printed, or sent as a key.
+//
+// A handout: { v, kind, look, title, subject, people: [ids], session, date, picture: { src, caption },
+//              fields: { ...kind specific }, body, lines: [{ side, text, time }] }
+
+const { makeRng, randomSeed } = __mods["src/engine/rng.js"];
+const { MOMENT_KINDS } = __mods["src/engine/world.js"];
+const HANDOUT_KINDS = {
+  wanted: { label: 'Wanted poster', glyph: '📜', blurb: 'Anyone in the World as a WANTED poster: portrait, aliases, crimes, last seen, reward.',
+    looks: { frontier: 'Old West / post office', noir: 'Police bulletin, 1940s', modern: 'Agency most-wanted', bounty: 'Off-world bounty board' } },
+  casefile: { label: 'Case file', glyph: '🗂', blurb: 'An agency dossier: mugshot, known facts, associates, threat assessment, stamps and redactions.',
+    looks: { agency: 'Manila folder, CLASSIFIED', police: 'Incident report form', lab: 'Research facility record' } },
+  letter: { label: 'Letter or note', glyph: '✉', blurb: 'A letter from one person to another: handwritten, typed, a telegram, a company memo, or a ransom note.',
+    looks: { handwritten: 'Handwritten on stationery', typed: 'Typewritten', telegram: 'Telegram', memo: 'Company memo', ransom: 'Ransom note (cut-out letters)' } },
+  texts: { label: 'Text messages', glyph: '📱', blurb: 'A phone screen: a thread of texts between two people, as evidence or a cliffhanger.',
+    looks: { dark: 'Phone, dark', light: 'Phone, light', burner: 'Burner phone (old screen)' } },
+  report: { label: 'Report', glyph: '🧪', blurb: 'A lab, police or medical report with fields and [[redacted]] passages.',
+    looks: { lab: 'Laboratory report', police: 'Police report', medical: 'Medical chart', military: 'Military after-action report' } },
+};
+
+const upper = (s) => String(s || '').toUpperCase();
+const handoutId = () => `h${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+
+function newHandout(kind = 'wanted', { seed = randomSeed() } = {}) {
+  const K = HANDOUT_KINDS[kind] || HANDOUT_KINDS.wanted;
+  return { v: 1, seed, kind: K === HANDOUT_KINDS[kind] ? kind : 'wanted', look: Object.keys(K.looks)[0], title: '', subject: null, people: [], session: null, date: '', picture: null, fields: {}, body: '', lines: [] };
+}
+
+// ---- reading a World page ----------------------------------------------------------------------------------
+
+const CRIMES = ['Armed robbery', 'Grand larceny', 'Assault on a peace officer', 'Destruction of city property', 'Reckless endangerment', 'Extortion', 'Kidnapping', 'Unlawful use of extranormal abilities', 'Escape from custody', 'Conspiracy', 'Arson', 'Criminal mischief on a metropolitan scale', 'Resisting arrest by six precincts', 'Theft of a vehicle (armoured)', 'Trespass in a restricted facility', 'Impersonating a hero', 'Menacing', 'Possession of a doomsday device'];
+const THREAT = (pl) => (pl >= 14 ? 'OMEGA: do not engage without support' : pl >= 11 ? 'SEVERE: approach with extreme caution' : pl >= 8 ? 'HIGH: considered dangerous' : pl >= 5 ? 'MODERATE: armed and capable' : 'LOW: ordinary means suffice');
+
+function factsOf(e, world) {
+  const ch = e?.character;
+  const id = ch?.identity || {};
+  const pl = ch?.pl ?? (Number(e?.fields?.['Power level']) || null);
+  const ties = e?.connections || [];
+  const tieNames = (rels) => ties.filter((c) => rels.includes(c.rel)).map((c) => c.other.name);
+  const places = ties.filter((c) => ['basedIn', 'livesIn', 'worksAt'].includes(c.rel)).map((c) => c.other.name);
+  const moments = (world?.moments || []).filter((m) => m.a === e?.id || m.b === e?.id);
+  return {
+    name: e?.name || 'Unknown', realName: id.realName && id.realName !== e?.name ? id.realName : null, aliases: (e?.aliases || []).filter((a) => a !== id.realName), pl,
+    occupation: id.occupation || e?.fields?.Occupation || '', base: id.base || e?.fields?.Base || '', age: id.age ?? e?.fields?.Age ?? null, gender: id.gender || '',
+    villain: ch ? ch.alignment === 'villain' : (e?.tags || []).includes('villain'), archetype: ch?.archetype?.name || e?.fields?.Archetype || '', theme: ch?.theme?.name || '',
+    powers: (ch?.powers || []).map((p) => p.name), complications: (ch?.complications || []).map((c) => `${c.type}: ${c.text}`),
+    looks: ch?.appearance || {}, summary: e?.summary || '',
+    allies: tieNames(['ally', 'friend', 'teammate', 'partner', 'member', 'contact']), enemies: tieNames(['enemy', 'nemesis', 'rival', 'fought']), places,
+    moments: moments.map((m) => m.text + (m.note ? ` ${m.note}` : '')), status: e?.status || '',
+  };
+}
+
+/** A WANTED poster for a World page (best for villains, works for anyone). */
+function draftWanted(world, e, { seed = randomSeed() } = {}) {
+  const rng = makeRng(`wanted::${seed}::${e?.id}`);
+  const f = factsOf(e, world);
+  const crimes = [...new Set([...f.moments.filter((m) => /betray|fought|took control|stole|attack|kidnap|escaped|destroy/i.test(m)).slice(0, 2), ...Array.from({ length: 3 }, () => rng.pick(CRIMES))])].slice(0, 4);
+  const reward = f.pl ? f.pl * f.pl * 1000 : 25000;
+  const h = newHandout('wanted', { seed });
+  h.subject = e?.id || null; h.people = e ? [e.id] : []; h.title = f.name;
+  h.look = f.villain ? rng.pick(['noir', 'modern', 'frontier']) : 'modern';
+  h.fields = {
+    banner: f.villain ? 'WANTED' : 'MISSING',
+    sub: f.villain ? rng.pick(['BY ORDER OF THE CITY', 'ARMED AND EXTREMELY DANGEROUS', 'FOR CRIMES AGAINST THE CITY', 'DEAD OR ALIVE']) : 'HAVE YOU SEEN THIS PERSON?',
+    aliases: [f.realName ? `a.k.a. ${f.realName}` : null, ...f.aliases.map((a) => `a.k.a. ${a}`)].filter(Boolean).join(' · ') || 'True identity unknown',
+    description: [f.gender, f.age ? `about ${f.age}` : null, f.looks.height, f.looks.hair ? `${f.looks.hair} hair` : null, f.looks.eyes ? `${f.looks.eyes} eyes` : null, f.looks.feature].filter(Boolean).join(', ') || 'No reliable description',
+    crimes: crimes.join('\n'),
+    lastSeen: f.places[0] ? `${f.places[0]}${f.moments.length ? `; ${f.moments[f.moments.length - 1]}` : ''}` : f.base || 'Whereabouts unknown',
+    reward: `$${reward.toLocaleString()}`,
+    powers: f.powers.slice(0, 4).join(', ') || 'None reported',
+    threat: THREAT(f.pl || 6),
+    issuedBy: rng.pick(['Metropolitan Police Department', 'Department of Extranormal Affairs', 'Office of the District Attorney', 'Federal Bureau of Investigation', 'The Mayor\'s Office']),
+    contact: rng.pick(['Call 555-0199. Do not approach.', 'Report sightings to any precinct.', 'Tips line open day and night.', 'Reward paid on conviction.']),
+  };
+  h.body = f.summary ? f.summary.split(/(?<=[.!?])\s+/).slice(0, 2).join(' ') : '';
+  return h;
+}
+
+/** An agency case file for a World page. */
+function draftCasefile(world, e, { seed = randomSeed() } = {}) {
+  const rng = makeRng(`case::${seed}::${e?.id}`);
+  const f = factsOf(e, world);
+  const h = newHandout('casefile', { seed });
+  h.subject = e?.id || null; h.people = e ? [e.id] : []; h.title = f.name;
+  h.look = 'agency';
+  h.fields = {
+    fileNo: `${rng.pick(['DEA', 'MPD', 'FBI', 'ARGUS', 'CADMUS'])}-${rng.int(1000, 9999)}-${rng.pick(['A', 'B', 'K', 'X'])}`,
+    classification: rng.pick(['CLASSIFIED', 'TOP SECRET', 'EYES ONLY', 'RESTRICTED']),
+    status: f.status || (f.villain ? 'AT LARGE' : 'ACTIVE'),
+    identity: f.realName || 'UNKNOWN',
+    occupation: f.occupation || 'Unknown', base: f.base || f.places[0] || 'Unknown', archetype: [f.archetype, f.theme].filter(Boolean).join(' · '),
+    threat: THREAT(f.pl || 6), powerLevel: f.pl ? `PL ${f.pl}` : 'Unrated',
+    powers: f.powers.join('\n') || 'None observed',
+    associates: [...new Set(f.allies)].slice(0, 6).join(', ') || 'None known',
+    adversaries: [...new Set(f.enemies)].slice(0, 6).join(', ') || 'None known',
+    weaknesses: f.complications.join('\n') || 'None identified',
+    agent: `${rng.pick(['Agent', 'Det.', 'Dr.', 'Lt.'])} ${rng.pick(['Vale', 'Okafor', 'Lindqvist', 'Castellano', 'Park', 'Harlow', 'Brandt', 'Mbeki'])}`,
+  };
+  const history = f.moments.length ? f.moments.map((m) => `- ${m}`).join('\n') : '';
+  h.body = [f.summary, history ? `Recorded history:\n${history}` : '', `Assessment: [[${rng.pick(['Subject is more capable than the public record suggests.', 'Recommend surveillance of known associates.', 'Subject has at least one contact inside this agency.', 'Do not share this file with city police.'])}]]`].filter(Boolean).join('\n\n');
+  return h;
+}
+
+// ---- letters and texts -------------------------------------------------------------------------------------------
+
+const LETTER_BY_GROUP = {
+  'Rivals & enemies': ['I know what you did. So does the city, soon.', 'Stay out of my district. This is the only warning you will get in writing.', 'You cost me everything. I intend to return the favour, with interest.'],
+  People: ['We need to talk, somewhere without windows.', 'I did what I did because there was no other way. One day you will see that.', 'If you are reading this, I was right not to trust them. Burn this.'],
+  'Loves & family': ['I keep the newspaper clipping in my coat. Come home.', 'I am not angry. I am just tired of reading about you before I hear from you.', 'Whatever happens next, you were the best thing in this city.'],
+  Factions: ['The Court meets at midnight. Your seat is still empty.', 'Consider this your notice. Clear your locker.', 'We can offer you what they never could: a way out.'],
+  Places: ['The old place is being watched. Use the other door.', 'I have moved. Do not look for me.', 'Meet me where it started. You know where.'],
+  Things: ['It is not where you left it. It is somewhere safer.', 'Whatever you do, do not open it.', 'I have the item. Name your price.'],
+  Fate: ['By the time you read this, you will have heard. Do not believe all of it.', 'I am alive. Tell no one.', 'If I do not come back, the key is under the third step.'],
+};
+
+/** A letter from one World page to another, in the voice of what last happened between them. */
+function draftLetter(world, from, to, { seed = randomSeed(), look = null } = {}) {
+  const rng = makeRng(`letter::${seed}::${from?.id}::${to?.id}`);
+  const moments = (world?.moments || []).filter((m) => (m.a === from?.id && m.b === to?.id) || (m.a === to?.id && m.b === from?.id));
+  const last = moments[moments.length - 1];
+  const group = last ? MOMENT_KINDS[last.kind]?.group : null;
+  const pool = LETTER_BY_GROUP[group] || Object.values(LETTER_BY_GROUP).flat();
+  const h = newHandout('letter', { seed });
+  h.look = look || rng.pick(['handwritten', 'typed', 'handwritten', 'telegram']);
+  h.subject = to?.id || null; h.people = [from?.id, to?.id].filter(Boolean);
+  const salutation = to ? `${rng.pick(['Dear', 'To', ''])} ${to.name.split(' ')[0]},`.trim() : 'To whom it may concern,';
+  const line = rng.pick(pool);
+  const second = last ? `${rng.pick(['After what happened', 'Since', 'Ever since'])} (${last.text.toLowerCase()}), ${rng.pick(['nothing has been the same', 'I have not slept', 'they have been watching the house', 'the city has had a new name for me'])}.` : rng.pick(['The city is quieter without you, which is not a compliment.', 'I will not say more on paper.', 'Things are moving faster than either of us planned.']);
+  h.title = `${from?.name || 'Unknown'} to ${to?.name || 'unknown'}`;
+  h.fields = { from: from?.name || '', to: to?.name || '', place: '', signoff: rng.pick(['— ' + (from?.name || 'A friend'), 'Yours, as ever,', 'Until next time,', 'Burn after reading.', 'You know who.']) };
+  h.body = h.look === 'telegram' ? upper(`${line} STOP ${second} STOP ${rng.pick(['COME AT ONCE', 'TELL NO ONE', 'WIRE REPLY', 'TRUST NOBODY'])} STOP`).replace(/[.,]/g, '')
+    : h.look === 'ransom' ? upper(line) : `${salutation}\n\n${line}\n\n${second}\n\n${h.fields.signoff}`;
+  if (h.look === 'ransom') h.fields.signoff = '';
+  return h;
+}
+
+const TEXT_OPENERS = ['you up?', 'did you see the news', 'we have a problem', 'call me. not from your phone.', 'where are you', 'it happened again', 'they know'];
+const TEXT_REPLIES = ['what did you do', 'not over text', 'I told you this would happen', 'how bad', 'give me 20 min', 'stop texting me', 'is anyone hurt'];
+const TEXT_CLOSERS = ['meet me at the usual place', 'delete this thread', 'bring the thing', 'don\'t come alone', 'I\'m sorry', 'turn on channel 6', '…'];
+
+/** A phone screen of texts between two people. */
+function draftTexts(world, a, b, { seed = randomSeed() } = {}) {
+  const rng = makeRng(`texts::${seed}::${a?.id}::${b?.id}`);
+  const moments = (world?.moments || []).filter((m) => (m.a === a?.id && m.b === b?.id) || (m.a === b?.id && m.b === a?.id));
+  const last = moments[moments.length - 1];
+  const h = newHandout('texts', { seed });
+  h.look = rng.pick(['dark', 'light']);
+  h.subject = a?.id || null; h.people = [a?.id, b?.id].filter(Boolean);
+  h.title = `${a?.name || 'Unknown'} and ${b?.name || 'unknown'}`;
+  h.fields = { me: a?.name || 'Me', them: b?.name || 'Unknown number', when: rng.pick(['Today', 'Yesterday', 'Tue 23:14', 'Sat 02:51']) };
+  const t = (hour, minute) => `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+  let hour = rng.int(21, 23); let minute = rng.int(0, 50);
+  const tick = () => { minute += rng.int(1, 6); if (minute >= 60) { minute -= 60; hour = (hour + 1) % 24; } return t(hour, minute); };
+  h.lines = [
+    { side: 'them', text: rng.pick(TEXT_OPENERS), time: tick() },
+    { side: 'me', text: rng.pick(TEXT_REPLIES), time: tick() },
+    last ? { side: 'them', text: `${last.text.replace(a?.name || '', 'you').replace(b?.name || '', 'I')}. ${rng.pick(['that\'s what they\'re saying', 'it\'s everywhere', 'don\'t ask how I know'])}`, time: tick() } : { side: 'them', text: rng.pick(['it\'s on every channel', 'the whole block saw it', 'they have footage']), time: tick() },
+    { side: 'me', text: rng.pick(TEXT_REPLIES), time: tick() },
+    { side: 'them', text: rng.pick(TEXT_CLOSERS), time: tick() },
+  ];
+  return h;
+}
+
+// ---- reports --------------------------------------------------------------------------------------------------------
+
+const REPORT_BODY = {
+  lab: 'SUBJECT presented with [[anomalous cellular activity]] consistent with prior exposure. Samples taken at 04:10 showed [[a seventy percent increase in output]] over baseline.\n\nRecommend immediate [[containment protocol 4]] and notification of the Director.\n\nNote: the subject asked who was paying for this. [[Nobody answered.]]',
+  police: 'Responding officers arrived at 23:52 to find the premises [[in a state no report form has a box for]]. Witnesses (3) describe a figure matching the subject leaving via [[the roof, upward]].\n\nProperty damage estimated at [[$2.1M]]. No fatalities. One officer treated for [[temporary loss of colour vision]].',
+  medical: 'Patient admitted via emergency with [[injuries inconsistent with the stated fall]]. Imaging shows [[no fractures where fractures were expected]] and [[a healed break of unknown age]].\n\nPatient discharged against advice at 03:00, [[through a window]].',
+  military: 'Unit engaged hostile at grid [[redacted]] at 0400. Hostile withstood [[all available ordnance]] before withdrawing [[of its own accord]].\n\nCasualties: none. Morale: [[see attached]]. Recommend [[we do not do that again]].',
+};
+
+function draftReport(world, e, { seed = randomSeed(), look = 'lab' } = {}) {
+  const rng = makeRng(`report::${seed}::${e?.id}`);
+  const f = factsOf(e, world);
+  const h = newHandout('report', { seed });
+  h.look = REPORT_BODY[look] ? look : 'lab';
+  h.subject = e?.id || null; h.people = e ? [e.id] : [];
+  h.title = `${HANDOUT_KINDS.report.looks[h.look].replace(/ report$| chart$| record$/i, '')} report: ${f.name}`;
+  h.fields = { refNo: `${rng.int(10, 99)}-${rng.int(1000, 9999)}`, subject: f.name + (f.realName ? ` (${f.realName})` : ''), author: `${rng.pick(['Dr.', 'Sgt.', 'Lt.', 'Prof.'])} ${rng.pick(['Vale', 'Okafor', 'Lindqvist', 'Castellano', 'Park', 'Harlow', 'Brandt', 'Mbeki'])}`, classification: rng.pick(['CONFIDENTIAL', 'RESTRICTED', 'INTERNAL', 'DO NOT COPY']), location: f.base || f.places[0] || 'Undisclosed' };
+  h.body = REPORT_BODY[h.look] + (f.powers.length ? `\n\nObserved abilities: ${f.powers.slice(0, 3).join(', ')}.` : '');
+  return h;
+}
+
+/** Any kind, from the World pages given. */
+function draftHandout(world, kind, { a = null, b = null, seed = randomSeed(), look = null } = {}) {
+  switch (kind) {
+    case 'wanted': return draftWanted(world, a, { seed });
+    case 'casefile': return draftCasefile(world, a, { seed });
+    case 'letter': return draftLetter(world, a, b, { seed, look });
+    case 'texts': return draftTexts(world, a, b, { seed });
+    case 'report': return draftReport(world, a, { seed, look: look || 'lab' });
+    default: return newHandout(kind, { seed });
+  }
+}
+
+// ---- helpers for rendering ---------------------------------------------------------------------------------------
+
+/** Split "[[redacted]]" text into parts: { text, redacted }. */
+function redactParts(text) {
+  const out = [];
+  const re = /\[\[([\s\S]*?)\]\]/g;
+  let i = 0; let m;
+  while ((m = re.exec(String(text || '')))) { if (m.index > i) out.push({ text: text.slice(i, m.index), redacted: false }); out.push({ text: m[1], redacted: true }); i = m.index + m[0].length; }
+  if (i < String(text || '').length) out.push({ text: String(text).slice(i), redacted: false });
+  return out;
+}
+
+/** Ransom-note letters: each character gets a deterministic cut-out style. */
+function ransomLetters(text, seed = 1) {
+  const rng = makeRng(`ransom::${seed}`);
+  return [...String(text || '')].map((ch) => ({ ch, font: rng.int(0, 5), bg: rng.int(0, 5), rot: rng.int(-8, 8), scale: 0.85 + rng.next() * 0.4, space: ch === ' ' || ch === '\n' }));
+}
+
+function handoutTitle(h) {
+  const K = HANDOUT_KINDS[h.kind] || HANDOUT_KINDS.wanted;
+  return `${K.label}: ${h.title || 'untitled'}`;
+}
+
+function handoutSummary(h) {
+  if (h.kind === 'wanted') return `${h.fields?.banner || 'WANTED'}: ${h.title}. ${h.fields?.reward ? `Reward ${h.fields.reward}.` : ''}`.trim();
+  if (h.kind === 'texts') return h.lines?.map((l) => `${l.side === 'me' ? h.fields?.me : h.fields?.them}: ${l.text}`).slice(0, 2).join(' / ') || h.title;
+  const plain = String(h.body || '').replace(/\[\[|\]\]/g, '');
+  return plain.split(/\n+/).find((l) => l.trim() && !/^(dear|to|from)\b/i.test(l))?.slice(0, 140) || h.title;
+}
+
+return { HANDOUT_KINDS, handoutId, newHandout, draftWanted, draftCasefile, draftLetter, draftTexts, draftReport, draftHandout, redactParts, ransomLetters, handoutTitle, handoutSummary };
+})();
+
+__mods["src/app/handouts.js"] = (() => {
+// Handouts on the table: wanted posters, case files, letters, texts and reports. Draft one from the
+// World, dress it, save it as a page, print it, or send it as a key.
+
+const { h, clear, toast, copyText, download, openDialog } = __mods["src/app/dom.js"];
+const { readPictureFile, requestPainting, prefs: painterPrefs } = __mods["src/app/portrait.js"];
+const { PORTRAIT_STYLES, portraitUrl, portraitOf } = __mods["src/engine/portrait.js"];
+const { HANDOUT_KINDS, newHandout, draftHandout, redactParts, ransomLetters, handoutTitle, handoutSummary, handoutId } = __mods["src/engine/handouts.js"];
+const { createEntity, addLink, handoutMarkdown } = __mods["src/engine/world.js"];
+const { encodeHandout, decodeHandout, handoutLink, keySize } = __mods["src/app/share.js"];
+const { randomSeed } = __mods["src/engine/rng.js"];
+const clone = (x) => JSON.parse(JSON.stringify(x));
+const paras = (t) => String(t || '').split(/\n{2,}/).map((x) => x.trim()).filter(Boolean);
+
+/** The picture for a handout: the one set on it, else its subject's portrait. */
+function pictureFor(hd, world) {
+  if (hd.picture?.src) return hd.picture.src;
+  const e = hd.subject && world?.entities?.get(hd.subject);
+  const ch = e?.character;
+  if (!ch) return null;
+  const p = portraitOf(ch);
+  if (p.hidden) return null;
+  return (p.source === 'upload' && p.image) || p.avatar;
+}
+
+function redacted(text, reveal) {
+  return redactParts(text).map((part) => (part.redacted ? h('span', { class: `ho-redact ${reveal ? 'reveal' : ''}`, title: reveal ? '' : 'Redacted' }, part.text) : part.text));
+}
+
+const lines = (t) => String(t || '').split(/\n/).map((x) => x.trim()).filter(Boolean);
+
+// ---- renderers ------------------------------------------------------------------------------------------------
+
+function wantedEl(hd, pic) {
+  const f = hd.fields || {};
+  return h('div', { class: 'ho-sheet' },
+    h('div', { class: 'ho-banner' }, f.banner || 'WANTED'),
+    f.sub ? h('div', { class: 'ho-sub' }, f.sub) : null,
+    h('div', { class: 'ho-photo' }, pic ? h('img', { src: pic, alt: hd.title || '' }) : h('div', { class: 'ho-nophoto' }, 'NO PHOTOGRAPH ON FILE')),
+    h('h2', { class: 'ho-name' }, hd.title || 'UNKNOWN'),
+    f.aliases ? h('div', { class: 'ho-aliases' }, f.aliases) : null,
+    h('div', { class: 'ho-facts' },
+      f.description ? [h('b', null, 'Description'), h('span', null, f.description)] : null,
+      f.crimes ? [h('b', null, 'Wanted for'), h('ul', null, lines(f.crimes).map((c) => h('li', null, c)))] : null,
+      f.lastSeen ? [h('b', null, 'Last seen'), h('span', null, f.lastSeen)] : null,
+      f.powers ? [h('b', null, 'Known abilities'), h('span', null, f.powers)] : null,
+      f.threat ? [h('b', null, 'Threat'), h('span', null, f.threat)] : null),
+    hd.body ? h('p', { class: 'ho-body' }, hd.body) : null,
+    f.reward ? h('div', { class: 'ho-reward' }, h('span', null, 'REWARD'), h('b', null, f.reward)) : null,
+    h('div', { class: 'ho-issued' }, [f.issuedBy, f.contact].filter(Boolean).join(' · ')));
+}
+
+function casefileEl(hd, pic, reveal) {
+  const f = hd.fields || {};
+  const row = (k, v, { list = false } = {}) => (v ? h('div', { class: 'ho-row' }, h('b', null, k), list ? h('ul', null, lines(v).map((x) => h('li', null, x))) : h('span', null, v)) : null);
+  return h('div', { class: 'ho-folder' },
+    h('div', { class: 'ho-tab' }, f.fileNo || 'FILE'),
+    h('div', { class: 'ho-clip' }),
+    h('div', { class: 'ho-stamp' }, f.classification || 'CLASSIFIED'),
+    h('div', { class: 'ho-sheet' },
+      h('div', { class: 'ho-head' }, h('div', null, h('div', { class: 'ho-eyebrow' }, 'Subject file'), h('h2', { class: 'ho-name' }, hd.title || 'UNKNOWN'), f.identity ? h('div', { class: 'ho-aliases' }, `Identity: ${f.identity}`) : null), h('div', { class: 'ho-mug' }, pic ? h('img', { src: pic, alt: '' }) : h('div', { class: 'ho-nophoto' }, 'NO IMAGE'), h('div', { class: 'ho-mug-lines' }))),
+      h('div', { class: 'ho-grid' }, row('Status', f.status), row('Power level', f.powerLevel), row('Occupation', f.occupation), row('Base', f.base), row('Profile', f.archetype), row('Threat', f.threat)),
+      row('Known abilities', f.powers, { list: true }), row('Known associates', f.associates), row('Adversaries', f.adversaries), row('Weaknesses and leverage', f.weaknesses, { list: true }),
+      hd.body ? h('div', { class: 'ho-body' }, paras(hd.body).map((p) => h('p', null, redacted(p, reveal)))) : null,
+      h('div', { class: 'ho-foot' }, `Compiled by ${f.agent || 'the agency'} · ${hd.date || ''}`)));
+}
+
+function letterEl(hd, pic, reveal) {
+  const f = hd.fields || {};
+  if (hd.look === 'ransom') {
+    // Lines of words of cut-out letters: words stay whole, lines stay lines.
+    const letters = ransomLetters(hd.body, hd.seed || 1);
+    const linesOut = []; let words = []; let word = [];
+    const flushWord = () => { if (word.length) words.push(h('span', { class: 'ho-word' }, word)); word = []; };
+    const flushLine = () => { flushWord(); linesOut.push(h('div', { class: 'ho-ransom-line' }, words)); words = []; };
+    for (const L of letters) { if (L.ch === '\n') flushLine(); else if (L.space) flushWord(); else word.push(h('span', { class: `ho-cut f${L.font} b${L.bg}`, style: { transform: `rotate(${L.rot}deg) scale(${L.scale})` } }, L.ch)); }
+    flushLine();
+    return h('div', { class: 'ho-sheet' }, h('div', { class: 'ho-ransom' }, linesOut),
+      pic ? h('div', { class: 'ho-polaroid' }, h('img', { src: pic, alt: '' })) : null);
+  }
+  if (hd.look === 'telegram') {
+    return h('div', { class: 'ho-sheet' },
+      h('div', { class: 'ho-tg-head' }, h('b', null, 'CITY TELEGRAPH CO.'), h('span', null, 'TELEGRAM')),
+      h('div', { class: 'ho-tg-meta' }, h('span', null, `TO: ${f.to || ''}`), h('span', null, `FROM: ${f.from || ''}`), h('span', null, hd.date || '')),
+      h('div', { class: 'ho-tg-body' }, hd.body),
+      h('div', { class: 'ho-tg-foot' }, 'CHARGES PREPAID · RECEIVED AT THE DOWNTOWN OFFICE'));
+  }
+  if (hd.look === 'memo') {
+    return h('div', { class: 'ho-sheet' },
+      h('div', { class: 'ho-memo-head' }, 'MEMORANDUM'),
+      h('div', { class: 'ho-memo-meta' }, h('b', null, 'To:'), h('span', null, f.to || ''), h('b', null, 'From:'), h('span', null, f.from || ''), h('b', null, 'Date:'), h('span', null, hd.date || ''), h('b', null, 'Re:'), h('span', null, hd.title || '')),
+      h('div', { class: 'ho-body' }, paras(hd.body).map((p) => h('p', null, redacted(p, reveal)))),
+      pic ? h('div', { class: 'ho-attach' }, h('img', { src: pic, alt: '' }), h('span', null, 'Attachment')) : null);
+  }
+  return h('div', { class: 'ho-sheet' },
+    f.place || hd.date ? h('div', { class: 'ho-letter-top' }, [f.place, hd.date].filter(Boolean).join(', ')) : null,
+    h('div', { class: 'ho-body' }, paras(hd.body).map((p) => h('p', null, redacted(p, reveal)))),
+    pic ? h('div', { class: 'ho-polaroid' }, h('img', { src: pic, alt: '' })) : null);
+}
+
+function textsEl(hd) {
+  const f = hd.fields || {};
+  return h('div', { class: 'ho-phone' },
+    h('div', { class: 'ho-phone-status' }, h('span', null, f.when || ''), h('span', null, '●●●  ▮')),
+    h('div', { class: 'ho-phone-contact' }, h('span', { class: 'ho-avatar' }, (f.them || '?').slice(0, 1)), h('b', null, f.them || 'Unknown number')),
+    h('div', { class: 'ho-thread' }, (hd.lines || []).map((l) => h('div', { class: `ho-bubble ${l.side === 'me' ? 'me' : 'them'}` }, h('span', null, l.text), l.time ? h('small', null, l.time) : null))),
+    h('div', { class: 'ho-phone-input' }, h('span', null, 'Message'), h('b', null, '↑')));
+}
+
+function reportEl(hd, pic, reveal) {
+  const f = hd.fields || {};
+  return h('div', { class: 'ho-sheet' },
+    h('div', { class: 'ho-report-head' }, h('div', null, h('div', { class: 'ho-eyebrow' }, HANDOUT_KINDS.report.looks[hd.look] || 'Report'), h('h2', { class: 'ho-name' }, hd.title || 'Report')), h('div', { class: 'ho-class' }, f.classification || 'CONFIDENTIAL')),
+    h('div', { class: 'ho-grid' }, f.refNo ? h('div', { class: 'ho-row' }, h('b', null, 'Ref.'), h('span', null, f.refNo)) : null, f.subject ? h('div', { class: 'ho-row' }, h('b', null, 'Subject'), h('span', null, f.subject)) : null, f.author ? h('div', { class: 'ho-row' }, h('b', null, 'Author'), h('span', null, f.author)) : null, f.location ? h('div', { class: 'ho-row' }, h('b', null, 'Location'), h('span', null, f.location)) : null, hd.date ? h('div', { class: 'ho-row' }, h('b', null, 'Date'), h('span', null, hd.date)) : null),
+    pic ? h('div', { class: 'ho-exhibit' }, h('img', { src: pic, alt: '' }), h('span', null, hd.picture?.caption || 'Exhibit A')) : null,
+    h('div', { class: 'ho-body' }, paras(hd.body).map((p) => h('p', null, redacted(p, reveal)))),
+    h('div', { class: 'ho-foot' }, 'Page 1 of 1 · Unauthorised disclosure is an offence'));
+}
+
+/** The handout as DOM. reveal shows what the black bars hide (the GM's view). */
+function renderHandout(hd, { world = null, reveal = false } = {}) {
+  const pic = pictureFor(hd, world);
+  const kind = HANDOUT_KINDS[hd.kind] ? hd.kind : 'wanted';
+  const inner = kind === 'wanted' ? wantedEl(hd, pic) : kind === 'casefile' ? casefileEl(hd, pic, reveal) : kind === 'letter' ? letterEl(hd, pic, reveal) : kind === 'texts' ? textsEl(hd) : reportEl(hd, pic, reveal);
+  return h('div', { class: `ho ho-${kind} ho-look-${hd.look || 'default'}` }, inner);
+}
+
+function printHandout(hd, world) {
+  const host = h('div', { class: 'ho-print-host' }, renderHandout(hd, { world }));
+  document.body.append(host);
+  document.body.classList.add('np-printing');
+  let done = false;
+  const finish = () => { if (done) return; done = true; host.remove(); document.body.classList.remove('np-printing'); };
+  window.addEventListener('afterprint', finish, { once: true });
+  setTimeout(() => { window.print(); setTimeout(finish, 500); }, 60);
+}
+
+// ---- saving ---------------------------------------------------------------------------------------------------
+
+function saveHandout(ctx, hd, id = null) {
+  const { saved } = ctx;
+  const name = handoutTitle(hd);
+  const summary = handoutSummary(hd);
+  const fields = { Kind: HANDOUT_KINDS[hd.kind]?.label || hd.kind, Look: HANDOUT_KINDS[hd.kind]?.looks?.[hd.look] || hd.look };
+  if (hd.date) fields.Date = hd.date;
+  if (hd.session != null && hd.session !== '') fields.Session = hd.session;
+  let e;
+  if (id && saved.entities[id]) { e = saved.entities[id]; Object.assign(e, { name, summary, fields, handout: clone(hd), updated: new Date().toISOString() }); }
+  else { e = createEntity(saved, { type: 'handout', name, summary, fields, tags: ['handout', hd.kind] }); e.handout = clone(hd); }
+  e.date = hd.date || '';
+  e.session = hd.session != null && hd.session !== '' ? Number(hd.session) : null;
+  saved.links = (saved.links || []).filter((l) => !(l.from === e.id && l.rel === 'involves'));
+  for (const to of new Set([hd.subject, ...(hd.people || [])].filter(Boolean))) addLink(saved, { from: e.id, to, rel: 'involves' });
+  ctx.save();
+  return e.id;
+}
+
+function importHandout(ctx, hd) {
+  const id = saveHandout(ctx, hd, null);
+  toast(`${handoutTitle(hd)} added to your handouts`);
+  ctx.go(id);
+  return id;
+}
+
+function startHandout(ctx, hd) {
+  ctx.ui.hdraft = hd; ctx.ui.hdraftId = null; ctx.go('handout-edit');
+}
+function editHandout(ctx, e) { ctx.ui.hdraft = clone(e.handout); ctx.ui.hdraftId = e.id; ctx.go('handout-edit'); }
+
+/** Pick a kind and who it is about, then draft or start blank. */
+async function newHandoutDialog(ctx, { kind = 'wanted', a = null } = {}) {
+  const { world } = ctx;
+  const pages = [...world.entities.values()].filter((e) => !['paper', 'handout'].includes(e.type)).sort((x, y) => (y.character ? 1 : 0) - (x.character ? 1 : 0) || x.name.localeCompare(y.name));
+  const kindSel = h('select', { 'aria-label': 'Kind' }, Object.entries(HANDOUT_KINDS).map(([k, K]) => h('option', { value: k, selected: k === kind }, `${K.glyph} ${K.label}`)));
+  const lookSel = h('select', { 'aria-label': 'Look' });
+  const aSel = h('select', { 'aria-label': 'About' }, h('option', { value: '' }, '(no one in particular)'), pages.map((e) => h('option', { value: e.id, selected: a === e.id }, `${e.name}${e.character ? ` · PL ${e.character.pl}${e.character.alignment === 'villain' ? ' villain' : ''}` : ''}`)));
+  const bSel = h('select', { 'aria-label': 'To' }, h('option', { value: '' }, '(someone)'), pages.filter((e) => e.type === 'person').map((e) => h('option', { value: e.id }, e.name)));
+  const blurb = h('p', { class: 'hint', style: { margin: 0 } });
+  const bRow = h('label', { class: 'field' }, h('span', null, 'To / with'), bSel);
+  const refresh = () => {
+    const K = HANDOUT_KINDS[kindSel.value];
+    clear(lookSel).append(...Object.entries(K.looks).map(([k, v]) => h('option', { value: k }, v)));
+    blurb.textContent = K.blurb;
+    bRow.hidden = !['letter', 'texts'].includes(kindSel.value);
+    aSel.previousSibling.textContent = kindSel.value === 'letter' ? 'From' : kindSel.value === 'texts' ? 'Phone of' : 'About';
+  };
+  kindSel.addEventListener('change', refresh);
+  const body = [h('label', { class: 'field' }, h('span', null, 'Kind'), kindSel), blurb, h('label', { class: 'field' }, h('span', null, 'About'), aSel), bRow, h('label', { class: 'field' }, h('span', null, 'Look'), lookSel)];
+  refresh();
+  const ok = await openDialog({ title: 'New handout', body, buttons: [{ label: 'Cancel', value: false }, { label: 'Start blank', value: 'blank' }, { label: 'Draft it', value: 'draft', primary: true }] });
+  if (!ok) return;
+  const A = aSel.value ? world.entities.get(aSel.value) : null;
+  const B = bSel.value ? world.entities.get(bSel.value) : null;
+  let hd;
+  if (ok === 'draft') hd = draftHandout(world, kindSel.value, { a: A, b: B, seed: randomSeed(), look: lookSel.value });
+  else { hd = newHandout(kindSel.value); hd.subject = A?.id || null; hd.people = [A?.id, B?.id].filter(Boolean); hd.title = A ? (kindSel.value === 'letter' ? `${A.name} to ${B?.name || ''}` : A.name) : ''; }
+  if (ok === 'draft' && ['wanted', 'casefile', 'report'].includes(kindSel.value) && lookSel.value && HANDOUT_KINDS[kindSel.value].looks[lookSel.value]) hd.look = lookSel.value;
+  if (ok === 'blank') hd.look = lookSel.value;
+  startHandout(ctx, hd);
+}
+
+// ---- pages -------------------------------------------------------------------------------------------------------
+
+function handoutsPage(ctx) {
+  const { world, go } = ctx;
+  const list = [...world.entities.values()].filter((e) => e.type === 'handout' && e.handout).sort((a, b) => String(b.updated || b.created || '').localeCompare(String(a.updated || a.created || '')));
+  const keyIn = h('input', { type: 'text', placeholder: 'Paste a handout key (DCUH1…) or link', 'aria-label': 'Handout key' });
+  const openKey = async () => { const v = keyIn.value.trim(); if (!v) return; try { importHandout(ctx, await decodeHandout(v)); } catch (e) { toast(e.message); } };
+  const quick = (k) => h('button', { type: 'button', class: 'wd-quick', title: HANDOUT_KINDS[k].blurb, onClick: () => newHandoutDialog(ctx, { kind: k }) }, h('span', { class: 'wd-quick-glyph' }, HANDOUT_KINDS[k].glyph), h('b', null, HANDOUT_KINDS[k].label), h('small', null, HANDOUT_KINDS[k].blurb));
+  return h('div', { class: 'wd-page' },
+    h('header', { class: 'wd-hero small ho-hero' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'Handouts'), h('h1', null, 'Props for the table'), h('p', { class: 'wd-tagline' }, 'Wanted posters, case files, letters, ransom notes, telegrams, memos, phone screens and redacted reports. Drafted from the World (a page\'s ties, complications and what happened to them) or written by hand; saved as pages, printed, or sent as a key.')),
+      h('button', { class: 'btn primary', type: 'button', onClick: () => newHandoutDialog(ctx) }, '+ New handout')),
+    h('div', { class: 'wd-quicks' }, Object.keys(HANDOUT_KINDS).map(quick)),
+    list.length ? h('div', { class: 'ho-stand' }, list.map((e) => h('div', { class: 'ho-card' },
+      h('div', { class: 'ho-thumb', role: 'button', tabindex: 0, onClick: () => go(e.id), onKeydown: (ev) => { if (ev.key === 'Enter') go(e.id); } }, renderHandout(e.handout, { world })),
+      h('div', { class: 'np-card-text' }, h('b', null, e.handout.title || HANDOUT_KINDS[e.handout.kind]?.label), h('span', null, [HANDOUT_KINDS[e.handout.kind]?.label, e.handout.date, e.session != null ? `Session ${e.session}` : null].filter(Boolean).join(' · ')), h('small', null, handoutSummary(e.handout)),
+        h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', type: 'button', onClick: () => go(e.id) }, 'Open'), h('button', { class: 'btn sm ghost', type: 'button', onClick: () => editHandout(ctx, e) }, 'Edit'), h('button', { class: 'btn sm ghost', type: 'button', onClick: () => printHandout(e.handout, world) }, 'Print')))))) :
+      h('div', { class: 'empty' }, h('h2', null, 'Nothing on the table yet'), h('p', null, 'Pick a kind above. A wanted poster for your villain takes one click.')),
+    h('section', { class: 'panel', style: { marginTop: '8px' } }, h('h2', null, '🔑 Open a handout key'), h('div', { class: 'seed-row' }, keyIn, h('button', { class: 'btn', type: 'button', onClick: openKey }, 'Open'))));
+}
+
+function handoutPage(ctx, e) {
+  const { go, saved, world } = ctx;
+  const hd = e.handout;
+  const share = async (what) => {
+    try { const key = await encodeHandout({ ...hd, picture: hd.picture?.src ? hd.picture : null }); const ok = await copyText(what === 'link' ? handoutLink(key) : key); toast(ok ? `${what === 'link' ? 'Link' : 'Key'} copied (${keySize(key)}). It opens from the Forge's "Open a key" box.` : 'Copy failed'); } catch (err) { toast(`Sharing needs a modern browser: ${err.message}`); }
+  };
+  const hasRedactions = /\[\[/.test(hd.body || '');
+  const sheet = h('div', { class: 'ho-sheet-host' });
+  const draw = () => clear(sheet).append(renderHandout(hd, { world, reveal: !!ctx.ui.reveal }));
+  draw();
+  const actions = h('div', { class: 'toolbar wd-actions no-print' },
+    ctx.ui.history.length ? h('button', { class: 'btn', type: 'button', onClick: ctx.back }, '← Back') : null,
+    h('button', { class: 'btn primary', type: 'button', onClick: () => editHandout(ctx, e) }, '✎ Edit'),
+    hasRedactions ? h('button', { class: 'btn', type: 'button', 'aria-pressed': String(!!ctx.ui.reveal), title: 'Show what the black bars hide (the GM\'s view)', onClick: () => { ctx.ui.reveal = !ctx.ui.reveal; ctx.renderWorld(); } }, ctx.ui.reveal ? '🙈 Hide redactions' : '👁 Reveal redactions') : null,
+    h('button', { class: 'btn', type: 'button', onClick: () => printHandout(hd, world) }, '🖨 Print / PDF'),
+    h('span', { class: 'spacer' }),
+    h('button', { class: 'btn', type: 'button', onClick: () => share('key') }, '🔑 Copy key'),
+    h('button', { class: 'btn', type: 'button', onClick: () => share('link') }, '🔗 Copy link'),
+    h('button', { class: 'btn ghost', type: 'button', onClick: async () => toast((await copyText(handoutMarkdown(hd))) ? 'Copied as Markdown' : 'Copy failed') }, 'Copy as Markdown'),
+    h('button', { class: 'btn ghost', type: 'button', onClick: () => { download(`${(hd.title || hd.kind).toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${hd.kind}.json`, JSON.stringify({ app: 'DCUGen', kind: 'handout', v: 1, handout: hd }, null, 2), 'application/json'); toast('Handout saved as a file'); } }, 'Save file'),
+    h('button', { class: 'btn ghost danger', type: 'button', onClick: async () => {
+      const ok = await openDialog({ title: `Remove this ${HANDOUT_KINDS[hd.kind]?.label.toLowerCase() || 'handout'}?`, body: h('p', { style: { margin: 0 } }, 'It is deleted from the World.'), buttons: [{ label: 'Keep', value: false }, { label: 'Remove', value: true, danger: true }] });
+      if (ok) { delete saved.entities[e.id]; saved.links = (saved.links || []).filter((l) => l.from !== e.id && l.to !== e.id); ctx.save(); go('handouts'); }
+    } }, 'Remove'));
+  const about = e.connections?.filter((c) => c.rel === 'involves').map((c) => c.other) || [];
+  return h('div', { class: 'wd-page ho-view' },
+    h('header', { class: 'wd-hero small ho-hero' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, `${HANDOUT_KINDS[hd.kind]?.label || 'Handout'}${e.session != null ? ` · Session ${e.session}` : ''}`), h('h1', null, hd.title || 'Untitled'), h('p', { class: 'wd-tagline' }, [HANDOUT_KINDS[hd.kind]?.looks?.[hd.look], hd.date].filter(Boolean).join(' · ')))),
+    actions, sheet,
+    about.length ? h('section', { class: 'sec' }, h('h3', null, 'Who it is about'), h('div', { class: 'wd-chips' }, about.map((o) => h('button', { type: 'button', class: 'wd-chip', style: { '--c': o.color || '#888' }, onClick: () => go(o.id) }, o.name)))) : null);
+}
+
+// ---- the editor --------------------------------------------------------------------------------------------------
+
+const FIELD_LABELS = {
+  wanted: [['banner', 'Banner (WANTED / MISSING)'], ['sub', 'Line under the banner'], ['aliases', 'Aliases'], ['description', 'Description'], ['crimes', 'Wanted for (one per line)', true], ['lastSeen', 'Last seen'], ['powers', 'Known abilities'], ['threat', 'Threat'], ['reward', 'Reward'], ['issuedBy', 'Issued by'], ['contact', 'Contact line']],
+  casefile: [['fileNo', 'File number'], ['classification', 'Stamp'], ['status', 'Status'], ['identity', 'Identity'], ['occupation', 'Occupation'], ['base', 'Base'], ['archetype', 'Profile'], ['powerLevel', 'Power level'], ['threat', 'Threat'], ['powers', 'Known abilities (one per line)', true], ['associates', 'Known associates'], ['adversaries', 'Adversaries'], ['weaknesses', 'Weaknesses and leverage (one per line)', true], ['agent', 'Compiled by']],
+  letter: [['from', 'From'], ['to', 'To'], ['place', 'Written at'], ['signoff', 'Sign-off']],
+  texts: [['me', 'This phone belongs to'], ['them', 'The other person'], ['when', 'When (the status bar)']],
+  report: [['refNo', 'Reference'], ['classification', 'Classification'], ['subject', 'Subject'], ['author', 'Author'], ['location', 'Location']],
+};
+const BODY_LABEL = { wanted: 'A line about them (optional)', casefile: 'Notes ([[double brackets]] redact)', letter: 'The letter', texts: null, report: 'The report ([[double brackets]] redact)' };
+
+function handoutEditorPage(ctx) {
+  const { world, go } = ctx;
+  if (!ctx.ui.hdraft) ctx.ui.hdraft = newHandout('wanted');
+  const d = ctx.ui.hdraft;
+  d.fields = d.fields || {}; d.lines = d.lines || []; d.people = d.people || [];
+  const K = HANDOUT_KINDS[d.kind] || HANDOUT_KINDS.wanted;
+  const preview = h('div', { class: 'ho-preview' });
+  let raf = 0;
+  const redraw = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { clear(preview).append(renderHandout(d, { world, reveal: !!ctx.ui.reveal })); }); };
+  const form = h('div', { class: 'np-form' });
+  const field = (label, input) => h('label', { class: 'field' }, h('span', null, label), input);
+  const text = (obj, key, { placeholder = '', label = '', area = false, rows = 3 } = {}) => (area
+    ? h('textarea', { placeholder, 'aria-label': label || placeholder, rows, onInput: (ev) => { obj[key] = ev.target.value; redraw(); } }, obj[key] || '')
+    : h('input', { type: 'text', value: obj[key] || '', placeholder, 'aria-label': label || placeholder, onInput: (ev) => { obj[key] = ev.target.value; redraw(); } }));
+
+  const pages = [...world.entities.values()].filter((e) => !['paper', 'handout'].includes(e.type));
+  const subjectSel = h('select', { 'aria-label': 'Subject', onChange: (ev) => { d.subject = ev.target.value || null; if (d.subject && !d.people.includes(d.subject)) d.people.push(d.subject); redraw(); } }, h('option', { value: '' }, '(no one)'), pages.map((e) => h('option', { value: e.id, selected: d.subject === e.id }, e.name)));
+  const lookSel = h('select', { 'aria-label': 'Look', onChange: (ev) => { d.look = ev.target.value; redraw(); } }, Object.entries(K.looks).map(([k, v]) => h('option', { value: k, selected: d.look === k }, v)));
+  const session = h('input', { type: 'number', min: 0, step: 1, value: d.session ?? '', placeholder: 'none', 'aria-label': 'Session', onInput: (ev) => { d.session = ev.target.value === '' ? null : Number(ev.target.value); } });
+
+  function pictureTools() {
+    const box = h('div', { class: 'np-pic-tools' });
+    const status = h('small', { class: 'np-pic-status' });
+    const set = (src) => { d.picture = { ...(d.picture || { caption: '' }), src }; redraw(); drawPic(); };
+    const file = h('input', { type: 'file', accept: 'image/*', hidden: true, onChange: async (ev) => { const f = ev.target.files?.[0]; if (!f) return; try { set(await readPictureFile(f, { width: 480, height: 600 })); } catch (err) { toast(err.message); } } });
+    let cancelled = false;
+    const paint = async () => {
+      const style = PORTRAIT_STYLES[painterPrefs.style] || PORTRAIT_STYLES.comic;
+      const subj = d.subject && world.entities.get(d.subject);
+      const ta = h('textarea', { rows: 4, style: { width: '100%' } }, `${d.kind === 'wanted' || d.kind === 'casefile' ? 'mugshot photograph, head and shoulders, plain background' : 'evidence photograph'}: ${subj?.name || d.title || 'a mysterious figure'}${subj?.summary ? `. ${subj.summary.split(/(?<=[.!?])\s/)[0]}` : ''}, ${style.suffix}`);
+      const ok = await openDialog({ title: 'Paint a picture', body: [h('label', { class: 'field' }, h('span', null, 'Prompt'), ta)], buttons: [{ label: 'Cancel', value: false }, { label: 'Paint', value: true, primary: true }] });
+      if (!ok) return;
+      cancelled = false;
+      const prompt = ta.value.trim(); const seed = Math.floor(Math.random() * 1e9);
+      const job = painterPrefs.service === 'horde' ? { service: 'horde', prompt, seed, models: style.horde } : { service: 'pollinations', url: portraitUrl(prompt, { seed }) };
+      status.textContent = 'Queued for painting…';
+      const r = await requestPainting(job, { onWait: (ms) => { status.textContent = ms > 800 ? `Painting in ${Math.ceil(ms / 1000)}s…` : 'Painting…'; }, onStatus: (t) => { status.textContent = t; }, cancelled: () => cancelled });
+      if (r.ok && r.image) { set(r.image); status.textContent = 'Painted.'; } else if (r.ok && r.live && job.url) { set(job.url); status.textContent = 'Painted (shown from the service).'; } else status.textContent = `Could not paint: ${r.why || 'unknown'}`;
+    };
+    const drawPic = () => {
+      const auto = !d.picture?.src && pictureFor(d, world);
+      clear(box).append(
+        h('div', { class: 'np-pic-row' },
+          d.picture?.src || auto ? h('img', { class: 'np-pic-preview', src: d.picture?.src || auto, alt: '' }) : h('div', { class: 'np-pic-preview empty' }, 'No picture'),
+          h('div', { class: 'np-pic-btns' },
+            auto ? h('small', { class: 'np-pic-status' }, 'Using the subject\'s portrait. Upload or paint to replace it.') : null,
+            h('button', { class: 'btn sm', type: 'button', onClick: () => file.click() }, '⇪ Upload'),
+            h('button', { class: 'btn sm', type: 'button', onClick: paint }, '🎨 Paint it'),
+            d.picture?.src ? h('button', { class: 'btn sm ghost danger', type: 'button', onClick: () => { d.picture = null; redraw(); drawPic(); } }, 'Remove') : null,
+            status, file)),
+        d.picture?.src && d.kind === 'report' ? field('Caption', text(d.picture, 'caption', { placeholder: 'Exhibit A' })) : null);
+    };
+    drawPic();
+    return h('div', { class: 'field' }, h('span', null, 'Picture'), box);
+  }
+
+  function linesEditor() {
+    const list = h('div', { class: 'ho-lines' });
+    const draw = () => {
+      clear(list).append(d.lines.map((l, i) => h('div', { class: 'ho-line-row' },
+        h('button', { type: 'button', class: `btn sm ${l.side === 'me' ? 'primary' : ''}`, title: 'Who sent it', onClick: () => { l.side = l.side === 'me' ? 'them' : 'me'; redraw(); draw(); } }, l.side === 'me' ? d.fields.me || 'Me' : d.fields.them || 'Them'),
+        h('input', { type: 'text', value: l.text, 'aria-label': 'Message', style: { flex: 1 }, onInput: (ev) => { l.text = ev.target.value; redraw(); } }),
+        h('input', { type: 'text', value: l.time || '', placeholder: '23:14', 'aria-label': 'Time', style: { width: '70px' }, onInput: (ev) => { l.time = ev.target.value; redraw(); } }),
+        h('button', { class: 'x', type: 'button', 'aria-label': 'Remove message', onClick: () => { d.lines.splice(i, 1); redraw(); draw(); } }, '✕'))),
+      h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', type: 'button', onClick: () => { d.lines.push({ side: d.lines.at(-1)?.side === 'me' ? 'them' : 'me', text: '', time: '' }); redraw(); draw(); } }, '+ Message')));
+    };
+    draw();
+    return h('div', { class: 'field' }, h('span', null, 'Messages'), list);
+  }
+
+  const kindFields = (FIELD_LABELS[d.kind] || []).map(([k, label, multi]) => field(label, text(d.fields, k, { placeholder: '', label, area: !!multi, rows: 3 })));
+  form.append(
+    h('section', { class: 'sec np-sec' }, h('h3', null, K.label, h('span', { class: 'pts' }, 'look and who')),
+      h('div', { class: 'jr-row' }, field('Title / name', text(d, 'title', { placeholder: 'Name on the poster' })), field('Look', lookSel)),
+      h('div', { class: 'jr-row' }, field(d.kind === 'letter' ? 'From (page)' : 'About (page)', subjectSel), field('Date', text(d, 'date', { placeholder: 'June 3' })), field('Session', session)),
+      d.kind !== 'texts' ? pictureTools() : null),
+    h('section', { class: 'sec np-sec' }, h('h3', null, 'Details'), kindFields,
+      d.kind === 'texts' ? linesEditor() : null,
+      BODY_LABEL[d.kind] ? field(BODY_LABEL[d.kind], text(d, 'body', { placeholder: '', label: 'Body', area: true, rows: d.kind === 'letter' ? 10 : 6 })) : null,
+      ['casefile', 'report', 'letter'].includes(d.kind) && d.look !== 'ransom' ? h('p', { class: 'hint', style: { margin: 0 } }, 'Wrap a passage in [[double brackets]] to redact it. The GM can reveal the black bars on the saved page; the printed copy keeps them.') : null,
+      d.kind === 'letter' && d.look === 'ransom' ? h('p', { class: 'hint', style: { margin: 0 } }, 'Every letter is cut from a different magazine. Keep it short and shouty.') : null,
+      h('div', { class: 'btn-row' }, h('button', { class: 'btn sm ghost', type: 'button', title: 'Draft the text again from the World', onClick: () => { const A = d.subject ? world.entities.get(d.subject) : null; const B = d.people.map((id) => world.entities.get(id)).find((e) => e && e.id !== d.subject) || null; const fresh = draftHandout(world, d.kind, { a: A, b: B, seed: randomSeed(), look: d.look }); Object.assign(d, { fields: fresh.fields, body: fresh.body, lines: fresh.lines, title: d.title || fresh.title }); ctx.renderWorld(); } }, '⚡ Redraft the words'))));
+  redraw();
+  const saveIt = () => { if (!d.title?.trim() && !d.body?.trim() && !d.lines.length) { toast('Give it a title or some text'); return; } const id = saveHandout(ctx, d, ctx.ui.hdraftId); ctx.ui.hdraft = null; ctx.ui.hdraftId = null; toast('Handout saved to the World'); go(id, { replace: true }); };
+  const cancel = async () => { const ok = await openDialog({ title: 'Leave the editor?', body: h('p', { style: { margin: 0 } }, 'Changes since the last save are lost.'), buttons: [{ label: 'Stay', value: false }, { label: 'Leave', value: true, danger: true }] }); if (ok) { ctx.ui.hdraft = null; go(ctx.ui.hdraftId || 'handouts', { replace: true }); } };
+  return h('div', { class: 'wd-page np-editor' },
+    h('header', { class: 'wd-hero small ho-hero' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, ctx.ui.hdraftId ? 'Editing' : 'New handout'), h('h1', null, d.title || K.label), h('p', { class: 'wd-tagline' }, K.blurb)),
+      h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', type: 'button', onClick: saveIt }, '💾 Save to the World'), h('button', { class: 'btn', type: 'button', onClick: () => printHandout(d, world) }, '🖨 Print'), h('button', { class: 'btn ghost', type: 'button', onClick: cancel }, 'Cancel'))),
+    h('div', { class: 'np-editor-grid' }, form, h('div', { class: 'np-preview-col' }, preview)),
+    h('div', { class: 'np-savebar no-print' }, h('button', { class: 'btn primary', type: 'button', onClick: saveIt }, '💾 Save to the World'), h('button', { class: 'btn ghost', type: 'button', onClick: cancel }, 'Cancel')));
+}
+
+
+return { handoutId, renderHandout, printHandout, saveHandout, importHandout, startHandout, editHandout, newHandoutDialog, handoutsPage, handoutPage, handoutEditorPage };
+})();
+
+__mods["src/app/board.js"] = (() => {
+// The evidence board: the World as a detective's corkboard. Pages are pinned as Polaroids and index
+// cards, ties between them are red string, sticky notes hold the GM's theories, clippings come from
+// the newsstand. Drag anything; positions live in the vault and travel with world keys.
+
+const { h, clear, toast, openDialog } = __mods["src/app/dom.js"];
+const { RELATIONS, ENTITY_TYPES, searchWorld } = __mods["src/engine/world.js"];
+const { portraitOf } = __mods["src/engine/portrait.js"];
+const W = 1600; const H = 1000;
+const NOTE_COLORS = ['#fff59d', '#ffcc80', '#f8bbd0', '#c5e1a5', '#b3e5fc'];
+const newId = () => `n${Date.now().toString(36)}${Math.random().toString(36).slice(2, 5)}`;
+const hashRot = (id) => ((id.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % 9) - 4);
+
+function boardOf(saved) {
+  if (!saved.board) saved.board = { items: {}, notes: [], strings: [] };
+  saved.board.items = saved.board.items || {}; saved.board.notes = saved.board.notes || []; saved.board.strings = saved.board.strings || [];
+  return saved.board;
+}
+
+function pin(board, id, { x = null, y = null } = {}) {
+  if (board.items[id]) return;
+  const n = Object.keys(board.items).length;
+  board.items[id] = { x: x ?? 80 + (n % 6) * 240 + Math.random() * 30, y: y ?? 60 + Math.floor(n / 6) * 260 + Math.random() * 30, rot: hashRot(id) };
+}
+
+/** Pin a page from anywhere (an entity page's button). */
+function pinToBoard(saved, id) { pin(boardOf(saved), id); }
+
+function boardPage(ctx) {
+  const { world, saved, save, go } = ctx;
+  const board = boardOf(saved);
+  const pinned = Object.keys(board.items).filter((id) => world.entities.has(id));
+  const ents = pinned.map((id) => world.entities.get(id));
+  const ties = world.links.filter((l) => board.items[l.from] && board.items[l.to] && !l.until);
+  const stage = h('div', { class: 'eb-stage', style: { width: `${W}px`, height: `${H}px` } });
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('class', 'eb-strings'); svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('width', W); svg.setAttribute('height', H);
+  const items = new Map();
+
+  const center = (id) => { const el = items.get(id); const p = board.items[id] || (id.startsWith('n') ? board.notes.find((n) => n.id === id) : null); if (!el || !p) return null; return { x: p.x + el.offsetWidth / 2, y: p.y + el.offsetHeight / 2 }; };
+  const drawStrings = () => {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    const line = (a, b, color, label, dashed = false) => {
+      const A = center(a); const B = center(b); if (!A || !B) return;
+      const mx = (A.x + B.x) / 2; const my = (A.y + B.y) / 2 + 18;
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', `M${A.x},${A.y} Q${mx},${my} ${B.x},${B.y}`); path.setAttribute('stroke', color); path.setAttribute('fill', 'none'); path.setAttribute('stroke-width', '2.2'); if (dashed) path.setAttribute('stroke-dasharray', '6 5');
+      svg.append(path);
+      if (label) { const t = document.createElementNS('http://www.w3.org/2000/svg', 'text'); t.setAttribute('x', mx); t.setAttribute('y', my - 4); t.setAttribute('class', 'eb-string-label'); t.setAttribute('text-anchor', 'middle'); t.textContent = label; svg.append(t); }
+      for (const P of [A, B]) { const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); c.setAttribute('cx', P.x); c.setAttribute('cy', P.y); c.setAttribute('r', '5'); c.setAttribute('class', 'eb-pin'); svg.append(c); }
+    };
+    for (const l of ties) line(l.from, l.to, '#c62828', RELATIONS[l.rel]?.label?.toLowerCase() || '');
+    for (const s of board.strings) line(s.a, s.b, '#1565c0', s.text || '', true);
+  };
+
+  const drag = (el, pos, onEnd) => {
+    el.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('button, textarea, input')) return;
+      e.preventDefault();
+      const sx = e.clientX; const sy = e.clientY; const ox = pos.x; const oy = pos.y;
+      const scale = stage.getBoundingClientRect().width / W || 1;
+      el.setPointerCapture(e.pointerId); el.classList.add('dragging');
+      const move = (ev) => { pos.x = Math.max(0, Math.min(W - 60, ox + (ev.clientX - sx) / scale)); pos.y = Math.max(0, Math.min(H - 40, oy + (ev.clientY - sy) / scale)); el.style.left = `${pos.x}px`; el.style.top = `${pos.y}px`; drawStrings(); };
+      const up = () => { el.removeEventListener('pointermove', move); el.removeEventListener('pointerup', up); el.classList.remove('dragging'); onEnd?.(); };
+      el.addEventListener('pointermove', move); el.addEventListener('pointerup', up);
+    });
+  };
+
+  const unpin = (id) => { delete board.items[id]; board.strings = board.strings.filter((s) => s.a !== id && s.b !== id); save(); ctx.renderWorld(); };
+  const cardFor = (e) => {
+    const pos = board.items[e.id];
+    const ch = e.character;
+    const por = ch ? portraitOf(ch) : null;
+    const img = por && !por.hidden ? h('img', { src: (por.source === 'upload' && por.image) || por.avatar, alt: '' }) : null;
+    const meta = ENTITY_TYPES[e.type] || { glyph: '✦', color: '#888' };
+    let el;
+    if (e.type === 'person') el = h('div', { class: 'eb-item eb-polaroid' }, h('div', { class: 'eb-photo', style: { '--c': e.color || meta.color } }, img || h('span', { class: 'eb-initials' }, e.name.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase())), h('div', { class: 'eb-caption' }, e.name), e.status && e.status !== 'Active' ? h('div', { class: 'eb-status' }, e.status) : null);
+    else if (e.type === 'paper' && e.paper) el = h('div', { class: 'eb-item eb-clipping' }, h('div', { class: 'eb-clip-mast' }, e.paper.masthead), h('div', { class: 'eb-clip-head' }, (e.paper.stories?.[0]?.headline) || e.name), h('div', { class: 'eb-clip-text' }, e.paper.stories?.[0]?.deck || e.summary || ''));
+    else if (e.type === 'handout' && e.handout) el = h('div', { class: 'eb-item eb-doc' }, h('div', { class: 'eb-doc-kind' }, (e.fields?.Kind || 'Handout').toUpperCase()), h('div', { class: 'eb-doc-title' }, e.handout.title || e.name), h('div', { class: 'eb-clip-text' }, e.summary || ''));
+    else el = h('div', { class: 'eb-item eb-card', style: { '--c': e.color || meta.color } }, h('div', { class: 'eb-card-type' }, `${meta.glyph} ${(ENTITY_TYPES[e.type]?.one || e.type).toUpperCase()}`), h('div', { class: 'eb-card-name' }, e.name), e.summary ? h('div', { class: 'eb-clip-text' }, String(e.summary).split(/(?<=[.!?])\s/)[0]) : null);
+    el.style.left = `${pos.x}px`; el.style.top = `${pos.y}px`; el.style.setProperty('--rot', `${pos.rot || 0}deg`);
+    el.append(h('div', { class: 'eb-tools no-print' }, h('button', { type: 'button', class: 'eb-tool', title: 'Open the page', onClick: () => go(e.id) }, '↗'), h('button', { type: 'button', class: 'eb-tool', title: 'Take it down', onClick: () => unpin(e.id) }, '✕')));
+    el.append(h('span', { class: 'eb-pushpin' }));
+    drag(el, pos, save);
+    items.set(e.id, el);
+    return el;
+  };
+  const noteEl = (n) => {
+    const el = h('div', { class: 'eb-item eb-note', style: { left: `${n.x}px`, top: `${n.y}px`, '--rot': `${n.rot || 0}deg`, background: n.color || NOTE_COLORS[0] } },
+      h('textarea', { 'aria-label': 'Sticky note', rows: 4, onInput: (ev) => { n.text = ev.target.value; }, onChange: () => save() }, n.text || ''),
+      h('div', { class: 'eb-tools no-print' }, h('button', { type: 'button', class: 'eb-tool', title: 'Colour', onClick: () => { n.color = NOTE_COLORS[(NOTE_COLORS.indexOf(n.color || NOTE_COLORS[0]) + 1) % NOTE_COLORS.length]; el.style.background = n.color; save(); } }, '◐'), h('button', { type: 'button', class: 'eb-tool', title: 'Tear it off', onClick: () => { board.notes = board.notes.filter((x) => x !== n); board.strings = board.strings.filter((s) => s.a !== n.id && s.b !== n.id); save(); ctx.renderWorld(); } }, '✕')),
+      h('span', { class: 'eb-tape' }));
+    drag(el, n, save);
+    items.set(n.id, el);
+    return el;
+  };
+  stage.append(svg, ...ents.map(cardFor), ...board.notes.map(noteEl));
+  requestAnimationFrame(drawStrings);
+
+  const pinDialog = async () => {
+    const q = h('input', { type: 'search', placeholder: 'Search pages…', 'aria-label': 'Search' });
+    const results = h('div', { class: 'wd-results', style: { maxHeight: '260px', overflow: 'auto' } });
+    const draw = () => { clear(results); const found = q.value.trim() ? searchWorld(world, q.value, { limit: 20 }) : [...world.entities.values()].filter((e) => e.character).slice(0, 20); for (const e of found) if (!board.items[e.id]) results.append(h('button', { type: 'button', class: 'wd-link', onClick: () => { pin(board, e.id); save(); ctx.renderWorld(); } }, h('span', { class: 'wd-glyph', style: { background: e.color || ENTITY_TYPES[e.type]?.color } }, ENTITY_TYPES[e.type]?.glyph || '✦'), e.name, h('small', null, ` ${ENTITY_TYPES[e.type]?.one || e.type}`))); };
+    q.addEventListener('input', draw); draw();
+    await openDialog({ title: 'Pin a page to the board', body: [q, results, h('p', { class: 'hint', style: { margin: 0 } }, 'Click a page to pin it. Ties between pinned pages appear as red string.')], buttons: [{ label: 'Done', value: null }] });
+  };
+  const stringDialog = async () => {
+    const opts = [...pinned.map((id) => [id, world.entities.get(id).name]), ...board.notes.map((n) => [n.id, `Note: ${(n.text || '').slice(0, 30) || 'blank'}`])];
+    if (opts.length < 2) { toast('Pin two things first.'); return; }
+    const a = h('select', null, opts.map(([id, name]) => h('option', { value: id }, name)));
+    const b = h('select', null, opts.map(([id, name], i) => h('option', { value: id, selected: i === 1 }, name)));
+    const t = h('input', { type: 'text', placeholder: 'What the string means (optional)' });
+    const ok = await openDialog({ title: 'Run a string', body: [h('label', { class: 'field' }, h('span', null, 'From'), a), h('label', { class: 'field' }, h('span', null, 'To'), b), h('label', { class: 'field' }, h('span', null, 'Label'), t)], buttons: [{ label: 'Cancel', value: false }, { label: 'Pin it', value: true, primary: true }] });
+    if (!ok || a.value === b.value) return;
+    board.strings.push({ a: a.value, b: b.value, text: t.value.trim() }); save(); ctx.renderWorld();
+  };
+  const pinCast = () => { let n = 0; for (const e of world.entities.values()) if (e.character && !board.items[e.id]) { pin(board, e.id); n++; } save(); ctx.renderWorld(); toast(n ? `${n} pinned` : 'Everyone from the roster is already up'); };
+  const shuffle = () => { let i = 0; for (const id of Object.keys(board.items)) { board.items[id] = { x: 80 + (i % 6) * 245, y: 60 + Math.floor(i / 6) * 270, rot: hashRot(id) }; i++; } save(); ctx.renderWorld(); };
+  const clearBoard = async () => { const ok = await openDialog({ title: 'Clear the board?', body: h('p', { style: { margin: 0 } }, 'Everything comes down: pins, notes and strings. The pages themselves are untouched.'), buttons: [{ label: 'Keep', value: false }, { label: 'Clear', value: true, danger: true }] }); if (ok) { saved.board = { items: {}, notes: [], strings: [] }; save(); ctx.renderWorld(); } };
+  const print = () => { document.body.classList.add('eb-printing'); const finish = () => document.body.classList.remove('eb-printing'); window.addEventListener('afterprint', finish, { once: true }); setTimeout(() => { window.print(); setTimeout(finish, 500); }, 60); };
+
+  return h('div', { class: 'wd-page eb-page' },
+    h('header', { class: 'wd-hero small eb-hero' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'Evidence board'), h('h1', null, 'What do we know?'), h('p', { class: 'wd-tagline' }, `${pinned.length} pinned, ${ties.length} ties as red string, ${board.notes.length} notes. Drag anything. Pin people, factions, places, front pages and handouts; the ties between them show up by themselves.`))),
+    h('div', { class: 'toolbar wd-actions no-print' },
+      h('button', { class: 'btn primary', type: 'button', onClick: pinDialog }, '📌 Pin a page'),
+      h('button', { class: 'btn', type: 'button', onClick: pinCast }, '🧑 Pin the roster'),
+      h('button', { class: 'btn', type: 'button', onClick: () => { board.notes.push({ id: newId(), x: 60 + Math.random() * 300, y: 60 + Math.random() * 200, rot: Math.round(Math.random() * 8 - 4), text: '', color: NOTE_COLORS[board.notes.length % NOTE_COLORS.length] }); save(); ctx.renderWorld(); } }, '🗒 Sticky note'),
+      h('button', { class: 'btn', type: 'button', onClick: stringDialog }, '🧵 Run a string'),
+      h('span', { class: 'spacer' }),
+      h('button', { class: 'btn ghost', type: 'button', onClick: shuffle }, 'Tidy'),
+      h('button', { class: 'btn ghost', type: 'button', onClick: print }, '🖨 Print'),
+      h('button', { class: 'btn ghost danger', type: 'button', onClick: clearBoard }, 'Clear')),
+    pinned.length || board.notes.length ? h('div', { class: 'eb-wrap' }, stage) : h('div', { class: 'empty' }, h('h2', null, 'An empty corkboard'), h('p', null, 'Pin the roster to start, then add notes and run strings between what the players suspect.')));
+}
+
+return { pinToBoard, boardPage };
 })();
 
 __mods["src/app/world.js"] = (() => {
@@ -16974,8 +17936,11 @@ const { zip } = __mods["src/engine/xlsx.js"];
 const { sheet: makeSheet } = __mods["src/engine/render.js"];
 const { fromKeySync } = __mods["src/engine/keys.js"];
 const { portraitImg } = __mods["src/app/portrait.js"];
-const { encodeWorld, decodeWorld, isWorldKey, isPaperKey, decodePaper, keySize } = __mods["src/app/share.js"];
+const { encodeWorld, decodeWorld, isWorldKey, isPaperKey, decodePaper, isHandoutKey, decodeHandout, keySize } = __mods["src/app/share.js"];
 const { newsstandPage, paperPage, editorPage, startPaper, importPaper, paperThumb } = __mods["src/app/newspaper.js"];
+const { handoutsPage, handoutPage, handoutEditorPage, startHandout, newHandoutDialog, importHandout } = __mods["src/app/handouts.js"];
+const { boardPage, pinToBoard } = __mods["src/app/board.js"];
+const { draftHandout } = __mods["src/engine/handouts.js"];
 const KEY = 'dcugen.world.v1';
 let R; let root; let hooks = {};
 let saved;
@@ -17019,6 +17984,7 @@ function worldApply(incoming) {
   for (const l of incoming.links || []) if (!saved.links.some((x) => x.id === l.id)) saved.links.push(l);
   for (const m of incoming.moments || []) if (!(saved.moments || []).some((x) => x.id === m.id)) (saved.moments = saved.moments || []).push(m);
   saved.linkEnds = { ...(saved.linkEnds || {}), ...(incoming.linkEnds || {}) };
+  if (incoming.board && !saved.board) saved.board = incoming.board;
   saved.hidden = [...new Set([...(saved.hidden || []), ...(incoming.hidden || [])])];
   saved.hiddenLinks = [...new Set([...(saved.hiddenLinks || []), ...(incoming.hiddenLinks || [])])];
   if (incoming.name && (!saved.name || saved.name === 'My World')) { saved.name = incoming.name; saved.tagline = incoming.tagline || saved.tagline; saved.description = incoming.description || saved.description; }
@@ -17090,6 +18056,12 @@ async function openPaperKey(text) {
   try { if (!saved) saved = load(); rebuild(); importPaper(ctx(), await decodePaper(text)); return true; } catch (e) { toast(e.message); return false; }
 }
 
+/** A handout from a key (Forge "Open a key", a #h= link, the Vault page). */
+async function openHandoutKey(text) {
+  try { if (!saved) saved = load(); rebuild(); importHandout(ctx(), await decodeHandout(text)); return true; } catch (e) { toast(e.message); return false; }
+}
+function openHandoutObject(hd) { if (!saved) saved = load(); rebuild(); importHandout(ctx(), hd); }
+
 /** A front page that arrived as an object (the importer decoded the key). */
 function openPaperObject(paper) { if (!saved) saved = load(); rebuild(); importPaper(ctx(), paper); }
 
@@ -17134,11 +18106,11 @@ function sidebar() {
     return h('div', { class: 'wd-section' },
       h('button', { type: 'button', class: 'wd-section-head', 'aria-expanded': String(open), onClick: () => { ui.open[t] = !open; renderWorld(); } },
         h('span', { class: 'wd-caret' }, open ? '▾' : '▸'), h('span', { class: 'wd-glyph' }, meta.glyph), meta.label, h('span', { class: 'count' }, counts[t]),
-        h('span', { class: 'wd-section-add', role: 'button', title: `New ${meta.one.toLowerCase()}`, onClick: (e) => { e.stopPropagation(); if (t === 'paper') startPaper(ctx(), { draft: true }); else newPageDialog(t); } }, '+')),
+        h('span', { class: 'wd-section-add', role: 'button', title: `New ${meta.one.toLowerCase()}`, onClick: (e) => { e.stopPropagation(); if (t === 'paper') startPaper(ctx(), { draft: true }); else if (t === 'handout') newHandoutDialog(ctx()); else newPageDialog(t); } }, '+')),
       open ? h('div', { class: 'wd-section-list' },
         shown.map((e) => h('button', { type: 'button', class: `wd-tree ${ui.page === e.id ? 'active' : ''} ${shortStatus(e) ? 'has-status' : ''}`, style: { '--c': e.color || meta.color }, title: e.status || '', onClick: () => go(e.id) }, h('span', { class: 'swatch' }), h('span', { class: 'wd-tree-name' }, e.name), e.character ? h('span', { class: 'wd-tree-pl num' }, `PL ${e.character.pl}`) : shortStatus(e) ? h('span', { class: 'wd-tree-pl' }, e.status) : null)),
         list.length > 12 ? h('button', { type: 'button', class: 'linkish', style: { fontSize: '12px', margin: '2px 0 0 22px' }, onClick: () => { ui.showAll[t] = !showAll; renderWorld(); } }, showAll ? 'Show fewer' : `Show all ${list.length}`) : null,
-        !list.length ? h('p', { class: 'hint', style: { margin: '0 0 0 22px' } }, t === 'person' ? 'Save characters to the roster.' : t === 'paper' ? 'Draft one at the newsstand.' : `No ${meta.label.toLowerCase()} yet.`) : null) : null);
+        !list.length ? h('p', { class: 'hint', style: { margin: '0 0 0 22px' } }, t === 'person' ? 'Save characters to the roster.' : t === 'paper' ? 'Draft one at the newsstand.' : t === 'handout' ? 'Posters, files, letters: see Handouts.' : `No ${meta.label.toLowerCase()} yet.`) : null) : null);
   });
   return h('aside', { class: 'wd-side', 'aria-label': 'World index' },
     h('div', { class: 'wd-side-top' },
@@ -17148,7 +18120,7 @@ function sidebar() {
       h('button', { class: 'btn sm', type: 'button', onClick: () => newPageDialog() }, '+ Page'),
       h('button', { class: 'btn sm', type: 'button', title: 'Copy a key that holds this whole world and roster, to paste to your players', onClick: copyWorldKey }, '🔑 Share')),
     q, results,
-    h('nav', { class: 'wd-navs' }, navBtn('home', 'Home', '⌂'), navBtn('timeline', 'Campaign timeline', '🕰'), navBtn('graph', 'Relationship graph', '◉'), navBtn('newsstand', 'Newsstand: front pages', '📰'), navBtn('vault', 'Vault: import / export', '🗄')),
+    h('nav', { class: 'wd-navs' }, navBtn('home', 'Home', '⌂'), navBtn('timeline', 'Campaign timeline', '🕰'), navBtn('graph', 'Relationship graph', '◉'), navBtn('newsstand', 'Newsstand: front pages', '📰'), navBtn('handouts', 'Handouts: posters, files, letters', '🗂'), navBtn('board', 'Evidence board', '📌'), navBtn('vault', 'Vault: import / export', '🗄')),
     h('div', { class: 'wd-sections' }, sections));
 }
 
@@ -17181,7 +18153,9 @@ function home() {
       quick('📅', 'New event', 'A battle, a wedding, a heist, a funeral', () => newPageDialog('event')),
       quick('🗝', 'New item', 'An artefact, a weapon, a vehicle, a MacGuffin', () => newPageDialog('item')),
       quick('🧑', 'New person', 'Anyone the roster does not know yet', () => newPageDialog('person')),
-      quick('📰', 'Front page', 'Draft a newspaper from the campaign, or write one', () => go('newsstand'))),
+      quick('📰', 'Front page', 'Draft a newspaper from the campaign, or write one', () => go('newsstand')),
+      quick('📜', 'Wanted poster', 'A villain\'s poster, case file, letter, texts or report', () => newHandoutDialog(ctx())),
+      quick('📌', 'Evidence board', 'Pin people, string the ties, stick the theories', () => go('board'))),
     !ents.length ? h('div', { class: 'empty' }, h('h2', null, 'An empty world'), h('p', null, 'Save characters to your roster and they appear here with everyone in their lives: parents, mentors, rivals, enemies, their city and their team. Then record what happens to them with "What happened".')) : null,
     papers.length ? h('section', { class: 'wd-block' }, h('h2', null, 'On the newsstand', h('button', { class: 'linkish', type: 'button', style: { marginLeft: '10px', fontSize: '13px' }, onClick: () => go('newsstand') }, 'all front pages')), h('div', { class: 'np-stand small' }, papers.map((e) => h('div', { class: 'np-card' }, paperThumb(e.paper, () => go(e.id)), h('div', { class: 'np-card-text' }, h('b', null, e.paper.masthead), h('span', null, [e.paper.edition, e.paper.date].filter(Boolean).join(' · '))))))) : null,
     latest.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Latest in the campaign', h('button', { class: 'linkish', type: 'button', style: { marginLeft: '10px', fontSize: '13px' }, onClick: () => go('timeline') }, 'full timeline')), h('div', { class: 'wd-tl' }, latest.map(timelineItem))) : null,
@@ -17371,6 +18345,9 @@ function entityPage(e) {
     canOpenAsCharacter ? h('button', { class: 'btn', type: 'button', title: 'Rebuild this person as a full character from their key', onClick: openAsCharacter }, 'Open as a character') : null,
     ch ? h('button', { class: 'btn', type: 'button', onClick: () => hooks.throwIn?.(ch) }, '⚔ Battle Room') : null,
     h('button', { class: 'btn', type: 'button', 'aria-pressed': String(ui.edit), onClick: () => { ui.edit = !ui.edit; renderWorld(); } }, ui.edit ? 'Done editing' : '✎ Edit page'),
+    e.type === 'person' ? h('button', { class: 'btn', type: 'button', title: 'A WANTED poster for this page, drafted from their ties and what happened', onClick: () => startHandout(ctx(), draftHandout(world, 'wanted', { a: e })) }, '📜 Wanted poster') : null,
+    e.type === 'person' ? h('button', { class: 'btn', type: 'button', title: 'An agency case file, drafted from this page', onClick: () => startHandout(ctx(), draftHandout(world, 'casefile', { a: e })) }, '🗂 Case file') : null,
+    h('button', { class: 'btn', type: 'button', title: 'Pin this page to the evidence board', onClick: () => { pinToBoard(saved, e.id); save(); go('board'); } }, '📌 Pin'),
     h('span', { class: 'spacer' }),
     h('button', { class: 'btn ghost', type: 'button', onClick: async () => toast((await copyText(vaultMarkdown(world)[Object.keys(vaultMarkdown(world)).find((k) => k.endsWith(`/${e.name.replace(/[\\/:*?"<>|#^[\]]/g, '')}.md`)) || ''] || '')) ? 'Page copied as Markdown' : 'Copy failed') }, 'Copy as Markdown'),
     h('button', { class: 'btn ghost danger', type: 'button', onClick: async () => {
@@ -17419,7 +18396,7 @@ function entityPage(e) {
 function editForm(e) {
   const manual = e.source === 'manual';
   const name = h('input', { type: 'text', value: e.name, disabled: !manual, 'aria-label': 'Name' });
-  const type = h('select', { 'aria-label': 'Type' }, Object.entries(ENTITY_TYPES).filter(([t]) => t !== 'paper').map(([t, m]) => h('option', { value: t, selected: t === e.type }, m.one)));
+  const type = h('select', { 'aria-label': 'Type' }, Object.entries(ENTITY_TYPES).filter(([t]) => !['paper', 'handout'].includes(t)).map(([t, m]) => h('option', { value: t, selected: t === e.type }, m.one)));
   const summary = h('textarea', { style: { minHeight: '70px' }, 'aria-label': 'Summary' }, e.summary || '');
   const body = h('textarea', { style: { minHeight: '140px' }, 'aria-label': 'Notes', placeholder: 'Longer notes. Blank lines make paragraphs.' }, e.body || '');
   const tags = h('input', { type: 'text', value: (e.tags || []).join(', '), placeholder: 'tags, comma separated', 'aria-label': 'Tags' });
@@ -17456,7 +18433,7 @@ function editForm(e) {
 }
 
 async function newPageDialog(presetType = 'faction', presetName = '') {
-  const type = h('select', { 'aria-label': 'Type' }, Object.entries(ENTITY_TYPES).filter(([t]) => t !== 'paper').map(([t, m]) => h('option', { value: t, selected: t === presetType }, `${m.glyph} ${m.one}`)));
+  const type = h('select', { 'aria-label': 'Type' }, Object.entries(ENTITY_TYPES).filter(([t]) => !['paper', 'handout'].includes(t)).map(([t, m]) => h('option', { value: t, selected: t === presetType }, `${m.glyph} ${m.one}`)));
   const name = h('input', { type: 'text', placeholder: 'Name', 'aria-label': 'Name', value: presetName });
   const kind = h('input', { type: 'text', list: 'wd-kind-presets', placeholder: 'Kind (optional): team, gang, city, bar, artefact…', 'aria-label': 'Kind' });
   const summary = h('textarea', { placeholder: 'A line or two', style: { minHeight: '70px' } });
@@ -17608,17 +18585,17 @@ function timelineItem(it) {
   }
   const ev = it.ev;
   const people = ev.connections.filter((c) => c.other.type === 'person').map((c) => c.other);
-  return h('div', { class: `wd-tl-ev ${it.kind}`, style: { '--c': ev.color || typeMeta(it.kind === 'paper' ? 'paper' : 'event').color } },
+  return h('div', { class: `wd-tl-ev ${it.kind}`, style: { '--c': ev.color || typeMeta(it.kind === 'paper' ? 'paper' : it.kind === 'handout' ? 'handout' : 'event').color } },
     h('div', { class: 'wd-tl-ev-when' }, h('b', { class: 'num' }, ev.session ? `S${ev.session}` : '•'), h('span', null, ev.date || ev.fields?.Date || '')),
     h('div', { class: 'wd-tl-ev-body' },
-      h('div', { class: 'wd-tl-change' }, h('span', { class: 'wd-tl-kind' }, it.kind === 'session' ? 'Session' : it.kind === 'battle' ? 'Battle' : it.kind === 'paper' ? 'Front page' : ev.fields?.Kind || 'Event'), h('button', { type: 'button', class: 'wd-tl-ev-title', onClick: () => go(ev.id) }, ev.name)),
+      h('div', { class: 'wd-tl-change' }, h('span', { class: 'wd-tl-kind' }, it.kind === 'session' ? 'Session' : it.kind === 'battle' ? 'Battle' : it.kind === 'paper' ? 'Front page' : it.kind === 'handout' ? (ev.fields?.Kind || 'Handout') : ev.fields?.Kind || 'Event'), h('button', { type: 'button', class: 'wd-tl-ev-title', onClick: () => go(ev.id) }, ev.name)),
       ev.summary ? h('p', null, ev.summary) : null,
       people.length ? h('div', { class: 'wd-chips' }, people.map((p) => pageLink(p, { chip: true }))) : null,
       ev.fields?.Points ? h('div', { class: 'wd-points-line' }, ev.fields.Points) : null));
 }
 
 function timelinePage() {
-  const FILTERS = [['all', 'Everything'], ['session', 'Sessions'], ['battle', 'Battles'], ['event', 'Events'], ['change', 'What changed'], ['paper', 'Front pages']];
+  const FILTERS = [['all', 'Everything'], ['session', 'Sessions'], ['battle', 'Battles'], ['event', 'Events'], ['change', 'What changed'], ['paper', 'Front pages'], ['handout', 'Handouts']];
   const items = campaignTimeline(world, { kinds: ui.tlFilter === 'all' ? null : [ui.tlFilter] });
   // group by session
   const groups = [];
@@ -17706,7 +18683,7 @@ function vaultPage() {
   const manual = Object.keys(saved.entities).length;
   const moments = (saved.moments || []).length;
   const keyIn = h('textarea', { placeholder: 'Paste a world key (DCUW1…) or a front-page key (DCUN1…) from your GM or a player', 'aria-label': 'World key', style: { minHeight: '64px', fontFamily: 'ui-monospace, Consolas, monospace', fontSize: '12px' } });
-  const openIt = async () => { if (isPaperKey(keyIn.value)) { if (await openPaperKey(keyIn.value)) keyIn.value = ''; return; } if (!isWorldKey(keyIn.value)) { toast('That is not a world key (they start with DCUW1.) or a front-page key (DCUN1.)'); return; } if (await openWorldKey(keyIn.value)) keyIn.value = ''; };
+  const openIt = async () => { if (isHandoutKey(keyIn.value)) { if (await openHandoutKey(keyIn.value)) keyIn.value = ''; return; } if (isPaperKey(keyIn.value)) { if (await openPaperKey(keyIn.value)) keyIn.value = ''; return; } if (!isWorldKey(keyIn.value)) { toast('That is not a world key (they start with DCUW1.) or a front-page key (DCUN1.)'); return; } if (await openWorldKey(keyIn.value)) keyIn.value = ''; };
   return h('div', { class: 'wd-page' },
     h('header', { class: 'wd-hero small' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'Vault'), h('h1', null, 'Share, import and export'), h('p', { class: 'wd-tagline' }, 'The world lives in this browser (and in the desktop app\'s data folder). Share it as one key, save it to a file, or hand it to your players.'))),
     h('div', { class: 'gm' },
@@ -17731,12 +18708,15 @@ function renderWorld() {
   else if (ui.page === 'vault') page = vaultPage();
   else if (ui.page === 'newsstand') page = newsstandPage(ctx());
   else if (ui.page === 'paper-edit') page = editorPage(ctx());
-  else if (world.entities.has(ui.page)) { const e = world.entities.get(ui.page); page = e.type === 'paper' && e.paper ? paperPage(ctx(), e) : entityPage(e); }
+  else if (ui.page === 'handouts') page = handoutsPage(ctx());
+  else if (ui.page === 'handout-edit') page = handoutEditorPage(ctx());
+  else if (ui.page === 'board') page = boardPage(ctx());
+  else if (world.entities.has(ui.page)) { const e = world.entities.get(ui.page); page = e.type === 'paper' && e.paper ? paperPage(ctx(), e) : e.type === 'handout' && e.handout ? handoutPage(ctx(), e) : entityPage(e); }
   else { ui.page = 'home'; page = home(); }
   root.append(h('div', { class: 'wd-layout' }, sidebar(), h('main', { class: 'wd-content' }, page)));
 }
 
-return { initWorld, openWorldPage, worldSaved, worldApply, worldKey, openWorldKey, recordBattleInWorld, openPaperKey, openPaperObject, renderWorld };
+return { initWorld, openWorldPage, worldSaved, worldApply, worldKey, openWorldKey, recordBattleInWorld, openPaperKey, openHandoutKey, openHandoutObject, openPaperObject, renderWorld };
 })();
 
 __mods["src/app/getapp.js"] = (() => {
@@ -17805,7 +18785,7 @@ const { initRules, renderRules } = __mods["src/app/rules.js"];
 const { initBestiary, renderBestiary } = __mods["src/app/bestiary.js"];
 const { initGarage, renderGarage } = __mods["src/app/garage.js"];
 const { initBattle, renderBattle, throwIn } = __mods["src/app/battle.js"];
-const { initWorld, renderWorld, openWorldPage, recordBattleInWorld, worldSaved, worldApply, openWorldKey, openPaperKey, openPaperObject } = __mods["src/app/world.js"];
+const { initWorld, renderWorld, openWorldPage, recordBattleInWorld, worldSaved, worldApply, openWorldKey, openPaperKey, openPaperObject, openHandoutKey, openHandoutObject } = __mods["src/app/world.js"];
 const { initTable, renderTable, postRoll } = __mods["src/app/table.js"];
 const { setLobbyHandlers, lobbySendRoster, lobbySendRemove, lobby } = __mods["src/app/lobby.js"];
 const { snapshotAll, restoreAll } = __mods["src/app/backup.js"];
@@ -17852,6 +18832,8 @@ function initTheme() {
 }
 
 async function loadFromHash() {
+  const hk = /[#&]h=(DCUH1\.[A-Za-z0-9_-]+)/.exec(location.hash);
+  if (hk) { showTab('world'); const ok = await openHandoutKey(hk[1]); if (ok) history.replaceState(null, '', location.pathname + location.search); return ok; }
   const n = /[#&]n=(DCUN1\.[A-Za-z0-9_-]+)/.exec(location.hash);
   if (n) { showTab('world'); const ok = await openPaperKey(n[1]); if (ok) history.replaceState(null, '', location.pathname + location.search); return ok; }
   const m = /[#&]c=(DCU1\.[A-Za-z0-9_-]+)/.exec(location.hash) || /[#&]k=(DCU[KPE]1\.[A-Za-z0-9%._~-]+)/.exec(location.hash);
@@ -17964,6 +18946,7 @@ async function boot() {
     openWorld: (ch) => { openWorldPage(ch); showTab('world'); },
     openWorldKey: async (text) => { showTab('world'); await openWorldKey(text); },
     openPaperKey: async (text) => { showTab('world'); await openPaperKey(text); },
+    openHandoutKey: async (text) => { showTab('world'); await openHandoutKey(text); },
   });
   initRoster(R, document.getElementById('view-roster'), {
     open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
@@ -17990,6 +18973,7 @@ async function boot() {
   setImportRules(R);
   setImportHooks({
     openPaper: (paper) => { showTab('world'); openPaperObject(paper); },
+    openHandout: (hd) => { showTab('world'); openHandoutObject(hd); },
     open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
     afterSave: () => renderRoster(),
   });

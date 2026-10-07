@@ -402,11 +402,11 @@ export function editorPage(ctx) {
     const id = savePaper(ctx, d, ctx.ui.draftId);
     ctx.ui.draft = null; ctx.ui.draftId = null;
     toast('Front page saved to the World');
-    go(id);
+    go(id, { replace: true });
   };
   const cancel = async () => {
     const ok = await openDialog({ title: 'Leave the editor?', body: h('p', { style: { margin: 0 } }, 'Changes since the last save are lost.'), buttons: [{ label: 'Stay', value: false }, { label: 'Leave', value: true, danger: true }] });
-    if (ok) { ctx.ui.draft = null; go(ctx.ui.draftId || 'newsstand'); }
+    if (ok) { ctx.ui.draft = null; go(ctx.ui.draftId || 'newsstand', { replace: true }); }
   };
   rebuildForm();
   return h('div', { class: 'wd-page np-editor' },
