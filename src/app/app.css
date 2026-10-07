@@ -1613,3 +1613,12 @@ body.eb-printing .app > :not(main), body.eb-printing main > :not(#view-world), b
 body.eb-printing .wd-layout { display: block; }
 body.eb-printing .eb-wrap { max-height: none; overflow: visible; border-width: 4px; }
 @media print { .eb-wrap { max-height: none; overflow: visible; } }
+
+/* ---- the end of the Forge sheet: save to a world ---- */
+.save-bar {
+  display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 14px;
+  margin-top: 16px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface);
+}
+.save-bar .field { margin: 0; min-width: 220px; flex: 0 1 300px; }
+.save-bar .hint { flex: 1 1 100%; margin: 0; }
+.forge-empty { margin-top: 24px; }

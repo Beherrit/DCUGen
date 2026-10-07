@@ -15,6 +15,7 @@ import { recordChanges } from '../engine/advancement.js';
 import { rollMenu } from './dice.js';
 import { lobby } from './lobby.js';
 import { claimCharacter } from './table.js';
+import { worldSelect } from './roster.js';
 let R;
 let root;
 let fileHost;
@@ -57,23 +58,60 @@ const MAX_TABS = 12;
 if (!state.tabs) state.tabs = [];
 if (state.active == null) state.active = 0;
 
+// A saved character's portrait picture is already kept on the roster, so the open tabs point at it
+// instead of storing a second copy. Pictures are big, and this browser's storage is not.
+const FROM_ROSTER = '@roster';
+function slimTab(ch) {
+  const img = ch?.portrait?.image;
+  if (!img || !ch.rosterId) return ch;
+  if (state.roster.find((x) => x.rosterId === ch.rosterId)?.portrait?.image !== img) return ch;
+  return { ...ch, portrait: { ...ch.portrait, image: FROM_ROSTER } };
+}
+function fatTab(ch) {
+  if (ch?.portrait?.image !== FROM_ROSTER) return ch;
+  const img = state.roster.find((x) => x.rosterId === ch.rosterId)?.portrait?.image;
+  const portrait = { ...ch.portrait };
+  if (img) portrait.image = img; else { delete portrait.image; if (portrait.source === 'upload') delete portrait.source; }
+  return { ...ch, portrait };
+}
+const noPictures = (ch) => (ch?.portrait?.image ? { ...ch, portrait: { ...ch.portrait, image: undefined, source: undefined } } : ch);
+
+let warnedFull = false;
+/**
+ * Keep the open tabs so a reload (or a redeploy) shows the same characters. When this browser's storage
+ * is full, fall back to this window's session storage, then to a copy without uploaded pictures, so the
+ * character being worked on is never lost to a new roll.
+ */
 function saveTabs() {
-  try { localStorage.setItem(TABS_KEY, JSON.stringify({ tabs: state.tabs, active: state.active })); } catch { /* storage full or blocked */ }
+  const pack = (tabs) => JSON.stringify({ tabs, active: state.active, at: Date.now() });
+  const slim = pack(state.tabs.map(slimTab));
+  let where = null;
+  try { localStorage.setItem(TABS_KEY, slim); where = 'local'; } catch { /* storage full or blocked */ }
+  if (!where) try { sessionStorage.setItem(TABS_KEY, slim); where = 'session'; } catch { /* full too */ }
+  if (!where) try { localStorage.setItem(TABS_KEY, pack(state.tabs.map(slimTab).map(noPictures))); where = 'local'; } catch { /* nothing left */ }
+  if (where === 'local') try { sessionStorage.removeItem(TABS_KEY); } catch { /* ignore */ }
+  if (where !== 'local' && !warnedFull) {
+    warnedFull = true;
+    toast('This browser\'s storage is nearly full, so open characters may not survive closing the tab. Save them to the roster, or make room (Roster > Backup, then delete old characters or pictures).');
+  }
+}
+
+function readTabs(store) {
+  try { const t = JSON.parse(store.getItem(TABS_KEY) || 'null'); return t?.tabs?.length ? t : null; } catch { return null; }
 }
 
 /** Restore the open tabs from the last visit. Returns true if any were restored. */
 export function restoreTabs() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(TABS_KEY) || 'null');
-    if (saved?.tabs?.length) {
-      state.tabs = saved.tabs.slice(0, MAX_TABS);
-      state.active = Math.min(saved.active || 0, state.tabs.length - 1);
-      state.current = state.tabs[state.active];
-      renderCurrent();
-      return true;
-    }
-  } catch { /* ignore */ }
-  return false;
+  let local = null; let session = null;
+  try { local = readTabs(localStorage); } catch { /* blocked */ }
+  try { session = readTabs(sessionStorage); } catch { /* blocked */ }
+  const saved = session && (!local || (session.at || 0) > (local.at || 0)) ? session : local;
+  if (!saved) return false;
+  state.tabs = saved.tabs.slice(0, MAX_TABS).map(fatTab);
+  state.active = Math.max(0, Math.min(saved.active || 0, state.tabs.length - 1));
+  state.current = state.tabs[state.active];
+  try { renderCurrent(); } catch (e) { console.error(e); }
+  return true;
 }
 
 /**
@@ -114,7 +152,7 @@ function switchTab(i) {
 
 function closeTab(i) {
   state.tabs.splice(i, 1);
-  if (!state.tabs.length) { state.active = 0; roll(); return; }
+  if (!state.tabs.length) { state.active = 0; state.current = null; state.editing = false; saveTabs(); renderCurrent(); emit('current'); return; }
   if (i < state.active || state.active >= state.tabs.length) state.active -= 1;
   state.active = Math.max(0, Math.min(state.active, state.tabs.length - 1));
   state.current = state.tabs[state.active];
@@ -284,15 +322,27 @@ async function rollTeam() {
     const team = generateTeam(R, { ...prefsToOptions(randomSeed()), archetype: state.prefs.archetype || null, size });
     team.members.forEach((m) => { m.team = team.name; pushHistory(m); setCurrent(m, { newTab: true }); });
     switchTab(state.tabs.indexOf(team.members[0]));
+    let world = state.prefs.saveWorld || '';
     const save = await openDialog({
       title: team.name,
-      body: h('div', { class: 'tagwrap' }, team.members.map((m) => h('button', { class: 'chip', type: 'button', onClick: () => { const i = state.tabs.indexOf(m); if (i >= 0) switchTab(i); else setCurrent(m, { newTab: true }); } },
-        h('span', { class: 'swatch', style: { '--c': m.theme?.color } }), `${m.identity.codename} · ${m.archetype.name}`))),
+      body: [
+        h('div', { class: 'tagwrap' }, team.members.map((m) => h('button', { class: 'chip', type: 'button', onClick: () => { const i = state.tabs.indexOf(m); if (i >= 0) switchTab(i); else setCurrent(m, { newTab: true }); } },
+          h('span', { class: 'swatch', style: { '--c': m.theme?.color } }), `${m.identity.codename} · ${m.archetype.name}`))),
+        h('label', { class: 'field', style: { marginTop: '10px' } }, h('span', null, 'Save to world'),
+          worldSelect(world, (w) => { world = w; state.prefs.saveWorld = w; savePrefs(); }, { id: 'team-world' })),
+      ],
       buttons: [{ label: 'Close', value: false }, { label: 'Save all to roster', value: true, primary: true }],
     });
     if (save) {
-      for (const m of team.members) upsert(m);
-      toast(`${team.name} saved to your roster`);
+      for (const m of team.members) {
+        if (world) m.folder = world; else delete m.folder;
+        const saved = upsert(m);
+        const i = state.tabs.indexOf(m);
+        if (i >= 0) state.tabs[i] = saved;
+        if (state.current === m) state.current = saved;
+      }
+      saveTabs(); renderCurrent();
+      toast(`${team.name} saved to ${world || 'The Multiverse Hub'}`);
     }
   } catch (e) {
     toast(e.message);
@@ -347,17 +397,69 @@ export function renderCurrent() {
   const view = rememberView();
   clear(fileHost);
   const ch = state.current;
-  if (!ch) return;
+  if (!ch) { drawEmpty(); return; }
   try { drawCurrent(ch); } finally { restoreView(view); }
+}
+
+/** Nothing open: characters are only rolled when you ask for one. */
+function drawEmpty() {
+  fileHost.append(h('div', { class: 'empty forge-empty' },
+    h('h2', null, 'No character open'),
+    h('p', null, 'Roll one with the options on the left, build one from scratch, or open someone from your roster.'),
+    h('div', { class: 'btn-row', style: { justifyContent: 'center', marginTop: '12px' } },
+      h('button', { class: 'btn primary', type: 'button', onClick: () => roll() }, 'Roll a character'),
+      h('button', { class: 'btn', type: 'button', onClick: buildFromScratch }, 'Build from scratch'))));
+}
+
+// ---- saving to a world -------------------------------------------------------------------------------
+const inRosterNow = (ch) => !!ch.rosterId && state.roster.some((x) => x.rosterId === ch.rosterId);
+/** The world this character saves to: its own once chosen or saved, otherwise the last one picked. */
+function worldOf(ch) {
+  if (ch.folder !== undefined) return ch.folder || '';
+  return inRosterNow(ch) ? '' : (state.prefs.saveWorld || '');
+}
+
+function saveCurrent(ch) {
+  const was = inRosterNow(ch);
+  const world = worldOf(ch);
+  const copy = { ...ch };
+  if (world) copy.folder = world; else delete copy.folder;
+  const saved = upsert(copy);
+  state.current = saved; state.tabs[state.active] = saved; saveTabs(); renderCurrent();
+  toast(`${was ? 'Updated' : 'Saved'} in ${world || 'The Multiverse Hub'}`);
+}
+
+function pickWorld(ch, world) {
+  state.prefs.saveWorld = world; savePrefs();
+  const c = { ...ch, folder: world };
+  if (inRosterNow(ch)) {
+    if (!world) delete c.folder;
+    const saved = upsert(c);
+    state.current = saved; state.tabs[state.active] = saved;
+    toast(`Moved to ${world || 'The Multiverse Hub only'}`);
+  } else {
+    state.current = c; state.tabs[state.active] = c;
+  }
+  saveTabs(); renderCurrent();
+}
+
+/** The end of the sheet: which world to save to, and the save button. */
+function saveBar(ch) {
+  const inRoster = inRosterNow(ch);
+  const world = worldOf(ch);
+  return h('div', { class: 'save-bar no-print' },
+    h('label', { class: 'field' }, h('span', null, '🌍 Save to world'), worldSelect(world, (w) => pickWorld(ch, w), { id: 'save-world' })),
+    h('button', { class: 'btn primary', type: 'button', id: 'save-bottom', onClick: () => saveCurrent(ch) }, inRoster ? 'Update in roster' : 'Save to roster'),
+    h('p', { class: 'hint' }, world
+      ? `Saves to ${world}. Everyone also shows up in The Multiverse Hub on the Roster.`
+      : 'Saves to The Multiverse Hub, the list of everyone you make. Pick a world to file them in one, or make a new world.'));
 }
 
 function drawCurrent(ch) {
   fileHost.append(tabStrip());
   const inRoster = ch.rosterId && state.roster.some((x) => x.rosterId === ch.rosterId);
   const toolbar = h('div', { class: 'toolbar' },
-    h('button', { class: 'btn primary', type: 'button', onClick: () => {
-      const saved = upsert(ch); state.current = saved; state.tabs[state.active] = saved; saveTabs(); renderCurrent(); toast(inRoster ? 'Roster updated' : 'Saved to your roster');
-    } }, inRoster ? 'Update in roster' : 'Save to roster'),
+    h('button', { class: 'btn primary', type: 'button', title: `Saves to ${worldOf(ch) || 'The Multiverse Hub'} (change it at the bottom of the sheet)`, onClick: () => saveCurrent(ch) }, inRoster ? 'Update in roster' : 'Save to roster'),
     h('button', { class: 'btn', type: 'button', 'aria-pressed': String(state.editing), onClick: () => toggleEditing() }, state.editing ? 'Done editing' : 'Edit'),
     h('button', { class: 'btn ghost', type: 'button', title: 'Keep the build, roll a new name and story', onClick: () => {
       const c = rerollIdentity(R, ch, randomSeed()); c.rosterId = ch.rosterId; setCurrent(c, { fresh: true });
@@ -382,6 +484,7 @@ function drawCurrent(ch) {
   fileHost.append(viewSwitch(ch));
   if (sheetView === 'bio') {
     fileHost.append(renderBio(ch, R, { toolbar, change: (fn) => { const c = JSON.parse(JSON.stringify(ch)); fn(c); onChange(c); }, onOpenPerson: (p, kind) => openPerson(ch, p, kind) }));
+    fileHost.append(saveBar(ch));
     fresh = false;
     return;
   }
@@ -397,6 +500,7 @@ function drawCurrent(ch) {
   });
   fresh = false;
   fileHost.append(el);
+  fileHost.append(saveBar(ch));
 }
 
 /** Open someone from a bio as a full character in a new tab (rebuilt the same way for everyone). */
