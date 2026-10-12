@@ -4,7 +4,54 @@
 
 import { h, clear, toast, copyText, openDialog } from './dom.js';
 import { state } from './store.js';
-import { lobby, onLobby, joinLobby, leaveLobby, lobbySendFeed, lobbyClaim, makeLobbyKey, isLobbyKey } from './lobby.js';
+import { lobby, onLobby, joinLobby, leaveLobby, lobbySendFeed, lobbyClaim, makeLobbyKey, isLobbyKey, hostPeerTable, joinLink, qrSvg, isPeerKey, peerServer } from './lobby.js';
+
+/** Open a table for phones in this tab, and show the QR code and link for players. Shared with the GM screen. */
+export async function openPhoneTable() {
+  if (lobby.status === 'on' && lobby.role === 'host' && lobby.mode === 'phone') return showInvite();
+  if (!tableName() || tableName() === 'Player') {
+    const n = h('input', { type: 'text', value: myName, placeholder: 'e.g. GM Sam', 'aria-label': 'Your name' });
+    const ok = await openDialog({ title: 'Your name at the table', body: h('label', { class: 'field' }, h('span', null, 'Name'), n), buttons: [{ label: 'Cancel', value: false }, { label: 'Open the table', value: true, primary: true }] });
+    if (!ok) return null;
+    setTableName(n.value || 'GM');
+  }
+  try {
+    toast('Opening the table…');
+    await hostPeerTable({ name: tableName() });
+    renderTable();
+    return showInvite();
+  } catch (e) { toast(`Couldn't open the table: ${e.message}`); return null; }
+}
+
+/** The invite: a QR code to scan and a link to send. */
+export async function showInvite() {
+  if (!lobby.key) return null;
+  const link = joinLink(lobby.key);
+  const qr = qrSvg(link, 6);
+  const v = await openDialog({
+    title: '📱 Players: scan to join',
+    body: [
+      qr ? h('div', { class: 'qr', html: qr }) : null,
+      h('p', { style: { margin: '6px 0' } }, 'Players scan this with their phone camera (or open the link) and they\'re at your table, no install. Keep this page open while you play: it is the table.'),
+      h('div', { class: 'key-box' }, h('div', { class: 'label' }, 'Link'), h('code', { class: 'key-long' }, link)),
+      h('p', { class: 'hint', style: { margin: '6px 0 0' } }, peerServer() ? `Connecting through your own server (${peerServer().host}).` : 'A free public PeerJS server introduces the devices; after that they talk to each other directly.'),
+    ],
+    buttons: [{ label: 'Copy link', value: 'copy', primary: true }, { label: 'Close', value: null }],
+  });
+  if (v === 'copy') toast((await copyText(link)) ? 'Link copied: send it to your players' : 'Select the link and copy it');
+  return link;
+}
+
+/** Someone opened a join link: ask their name and join. */
+export async function joinFromLink(key) {
+  const n = h('input', { type: 'text', value: myName, placeholder: 'Your name', 'aria-label': 'Your name' });
+  const ok = await openDialog({ title: 'Join the table', body: [h('p', { style: { margin: '0 0 8px' } }, 'You\'re joining a DCUGen table. Your GM sees your character live and can send you hits, hero points and the map.'), h('label', { class: 'field' }, h('span', null, 'Your name'), n)], buttons: [{ label: 'Not now', value: false }, { label: 'Join', value: true, primary: true }] });
+  if (!ok) return false;
+  setTableName(n.value || 'Player');
+  joinLobby(key, { name: tableName() });
+  toast('Joining… then open your character on the Forge (and save it to your roster).');
+  return true;
+}
 
 const FEED_KEY = 'dcugen.table.v1';
 const NAME_KEY = 'dcugen.table.name';
@@ -74,9 +121,9 @@ function drawFeed() {
 function lobbyPanel() {
   const desktop = window.dcugenDesktop;
   const nameIn = h('input', { type: 'text', id: 'tb-name', value: myName, placeholder: 'Your name at the table', 'aria-label': 'Your name', onChange: (e) => setTableName(e.target.value) });
-  const keyIn = h('input', { type: 'text', id: 'tb-key', placeholder: 'Paste a lobby key (DCUL1…)', 'aria-label': 'Lobby key' });
+  const keyIn = h('input', { type: 'text', id: 'tb-key', placeholder: 'Paste the table link or key', 'aria-label': 'Table link or key' });
   const join = () => {
-    const k = keyIn.value.trim();
+    const k = (/(DCU[LP]1\.[A-Za-z0-9_-]+)/.exec(keyIn.value) || [])[1] || keyIn.value.trim();
     if (!isLobbyKey(k)) { toast('That is not a lobby key'); return; }
     setTableName(nameIn.value);
     try { joinLobby(k, { name: tableName() }); toast('Connecting…'); } catch (e) { toast(e.message); }
@@ -98,7 +145,8 @@ function lobbyPanel() {
     h('h2', null, 'Lobby'),
     status === 'on' ? [
       h('div', { class: 'tb-status on' }, h('b', null, lobby.role === 'host' ? 'Hosting' : 'Joined'), ` ${lobby.info?.name || ''}${lobby.hostGone ? ' · the host left' : ''}`),
-      lobby.role === 'host' ? h('div', { class: 'key-box' }, h('div', { class: 'label' }, 'Lobby key: send it to your players'), h('code', null, lobby.key), h('div', { class: 'btn-row', style: { marginTop: '6px' } }, h('button', { class: 'btn sm primary', type: 'button', onClick: async () => toast((await copyText(lobby.key)) ? 'Key copied' : 'Copy failed') }, 'Copy key'))) : null,
+      lobby.role === 'host' && lobby.mode === 'phone' ? h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', type: 'button', onClick: showInvite }, '📱 Show the QR code')) : null,
+      lobby.role === 'host' && lobby.mode !== 'phone' ? h('div', { class: 'key-box' }, h('div', { class: 'label' }, 'Lobby key: send it to your players'), h('code', null, lobby.key), h('div', { class: 'btn-row', style: { marginTop: '6px' } }, h('button', { class: 'btn sm primary', type: 'button', onClick: async () => toast((await copyText(lobby.key)) ? 'Key copied' : 'Copy failed') }, 'Copy key'))) : null,
       h('div', { class: 'label' }, `At the table (${members.length})`),
       h('ul', { class: 'tb-members' }, members.map((m) => h('li', null, h('span', { class: `tb-dot ${m.role}` }), m.name, m.role === 'host' ? h('small', null, ' · host') : null, m.id === lobby.id ? h('small', null, ' · you') : null))),
       h('div', { class: 'btn-row' }, h('button', { class: 'btn', type: 'button', onClick: lobby.role === 'host' ? stopHost : () => { leaveLobby(); renderTable(); } }, lobby.role === 'host' ? 'Close the table' : 'Leave')),
@@ -106,7 +154,17 @@ function lobbyPanel() {
       status === 'connecting' ? h('div', { class: 'tb-status' }, 'Connecting…') : null,
       status === 'error' ? h('div', { class: 'tb-status bad' }, lobby.error || 'Connection failed') : null,
       h('label', { class: 'field' }, h('span', null, 'Your name'), nameIn),
-      desktop ? h('div', { class: 'tb-host' }, h('button', { class: 'btn primary', type: 'button', onClick: host }, '⌂ Host a table'), h('p', { class: 'hint', style: { margin: '4px 0 0' } }, 'Opens a table on this computer and gives you a key for your players. Your roster and world are shared; players claim their own characters and roll for them.')) : h('p', { class: 'hint', style: { margin: 0 } }, 'Hosting a table needs the DCUGen desktop app. Joining works from the desktop app or from a local copy of DCUGen.html.'),
+      h('div', { class: 'tb-host' }, h('button', { class: 'btn primary', type: 'button', id: 'tb-phone', onClick: async () => { setTableName(nameIn.value); await openPhoneTable(); renderTable(); } }, '📱 Open a table for phones'), h('p', { class: 'hint', style: { margin: '4px 0 0' } }, 'Players scan a QR code and join from any phone or browser, no install. This page is the table: keep it open while you play.')),
+      desktop ? h('div', { class: 'tb-host' }, h('button', { class: 'btn', type: 'button', onClick: host }, '⌂ Host on this computer (local network)'), h('p', { class: 'hint', style: { margin: '4px 0 0' } }, 'The desktop app\'s own server: for players on your network using the desktop app. Your roster and world are shared; players claim their own characters and roll for them.')) : null,
+      h('details', { class: 'tb-server' }, h('summary', null, 'Use your own PeerJS server'), (() => {
+        const cur = peerServer();
+        const inp = h('input', { type: 'text', placeholder: 'host[:port][/path], e.g. peer.example.com/myapp', value: cur ? `${cur.host}${cur.port ? `:${cur.port}` : ''}${cur.path && cur.path !== '/' ? cur.path : ''}` : '', 'aria-label': 'PeerJS server' });
+        return h('div', null, h('p', { class: 'hint' }, 'Optional. Leave empty to use the free public server. Everyone at the table uses the GM\'s choice (it travels in the link).'),
+          h('div', { class: 'add-row' }, inp, h('button', { class: 'btn sm', type: 'button', onClick: () => {
+            const m = /^(?:https?:\/\/)?([^:/]+)(?::(\d+))?(\/.*)?$/.exec(inp.value.trim());
+            try { if (!inp.value.trim()) localStorage.removeItem('dcugen.peer.server'); else if (m) localStorage.setItem('dcugen.peer.server', JSON.stringify({ host: m[1], port: m[2] ? Number(m[2]) : undefined, path: m[3] || '/', secure: !/^http:/.test(inp.value) && m[1] !== 'localhost' })); toast('Saved'); } catch { toast('Couldn\'t save'); }
+          } }, 'Save')));
+      })()),
       h('div', { class: 'label', style: { marginTop: '6px' } }, 'Join a table'),
       h('div', { class: 'add-row', style: { marginTop: 0 } }, keyIn, h('button', { class: 'btn', type: 'button', onClick: join }, 'Join')),
     ]);
@@ -140,7 +198,7 @@ export function renderTable() {
   clear(root);
   unread = 0; bumpBadge();
   feedHost = h('div', { class: 'tb-feed', 'aria-live': 'polite' });
-  root.append(h('div', { class: 'page-head' }, h('div', null, h('h1', null, 'The Table'), h('p', null, 'Every roll from every "Roll" menu lands here, with the dice shown. Host a table from the desktop app and your players join with a key: they see your world and roster, claim their own characters, roll for them, and everyone sees it.'))));
+  root.append(h('div', { class: 'page-head' }, h('div', null, h('h1', null, 'The Table'), h('p', null, 'Every roll from every "Roll" menu lands here, with the dice shown. Open a table for phones and your players scan the QR code or tap the link: no app, no install. They see your world and roster, claim their own characters, roll for them, and everyone sees it.'))));
   root.append(h('div', { class: 'tb-layout' },
     h('section', { class: 'panel tb-main' },
       h('div', { style: { display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' } }, h('h2', null, 'Rolls & chat'), h('span', { class: 'hint' }, `${feed.length} entries`), h('span', { style: { flex: 1 } }), h('button', { class: 'btn sm ghost', type: 'button', onClick: () => { clearFeed(); } }, 'Clear')),

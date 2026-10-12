@@ -287,7 +287,19 @@ function build() {
 
   historyEl = h('div', { class: 'history' });
 
+  // On phones the rail folds into one bar once a character is open, so the sheet comes first.
+  const optsBtn = h('button', { class: 'btn', type: 'button', id: 'rail-toggle', 'aria-expanded': 'false', onClick: () => {
+    const f = root.querySelector('.forge');
+    const open = !f.classList.contains('rail-open');
+    f.classList.toggle('rail-open', open);
+    optsBtn.setAttribute('aria-expanded', String(open));
+    optsBtn.lastChild.textContent = open ? ' ▴' : ' ▾';
+  } }, 'Options', h('span', null, ' ▾'));
+  const quick = h('div', { class: 'rail-quick' },
+    h('button', { class: 'btn primary', type: 'button', onClick: () => roll(seedIn.value.trim() || undefined) }, '🎲 Roll a character'),
+    optsBtn);
   const rail = h('aside', { class: 'rail', 'aria-label': 'Roll options' },
+    quick,
     h('h2', null, 'Roll a hero'),
     h('div', { class: 'field' },
       h('span', null, 'Power level'),
@@ -428,9 +440,21 @@ function menu(label, items) {
     document.querySelectorAll('.menu-list').forEach((m) => { m.hidden = true; });
     list.hidden = !open;
     btn.setAttribute('aria-expanded', String(open));
+    if (open) {
+      // Open upward only when it fits there and not below; otherwise bring the list into view.
+      list.classList.remove('up', 'left');
+      const b = btn.getBoundingClientRect();
+      const top = document.querySelector('.topbar')?.getBoundingClientRect().bottom || 0;
+      const fitsBelow = b.bottom + list.offsetHeight + 8 <= window.innerHeight;
+      if (!fitsBelow && b.top - top - 8 >= list.offsetHeight) list.classList.add('up');
+      else if (!fitsBelow) list.scrollIntoView({ block: 'nearest' });
+      const box = (btn.closest('.toolbar') || document.body).getBoundingClientRect();
+      if (b.right - list.offsetWidth < box.left) list.classList.add('left');
+    }
   } }, label, ' ▾');
   for (const it of items) {
-    list.append(h('button', { type: 'button', role: 'menuitem', onClick: () => { list.hidden = true; it.run(); } }, it.label, it.hint ? h('small', null, it.hint) : null));
+    if (!it) continue;
+    list.append(h('button', { type: 'button', role: 'menuitem', id: it.id || null, onClick: () => { list.hidden = true; it.run(); } }, it.label, it.hint ? h('small', null, it.hint) : null));
   }
   return h('div', { class: 'menu' }, btn, list);
 }
@@ -468,6 +492,7 @@ export function renderCurrent() {
   const view = rememberView();
   clear(fileHost);
   const ch = state.current;
+  root.querySelector('.forge')?.classList.toggle('has-char', !!ch);
   if (!ch) { drawEmpty(); return; }
   try { drawCurrent(ch); } finally { restoreView(view); }
 }
@@ -745,20 +770,7 @@ function drawCurrent(ch) {
   if (banner) fileHost.append(banner);
   const forms = formStrip(ch);
   if (forms) fileHost.append(forms);
-  const inRoster = ch.rosterId && state.roster.some((x) => x.rosterId === ch.rosterId);
-  const toolbar = h('div', { class: 'toolbar' },
-    h('button', { class: 'btn primary', type: 'button', title: `Saves to ${worldOf(ch) || 'The Multiverse Hub'} (change it at the bottom of the sheet)`, onClick: () => saveCurrent(ch) }, inRoster ? 'Update in roster' : 'Save to roster'),
-    h('button', { class: 'btn', type: 'button', 'aria-pressed': String(state.editing), onClick: () => toggleEditing() }, state.editing ? 'Done editing' : 'Edit'),
-    h('span', { class: 'undo-group' },
-      h('button', { class: 'btn ghost icon', type: 'button', id: 'undo', title: 'Undo (Ctrl+Z)', 'aria-label': 'Undo', disabled: !canUndo(), onClick: undo }, '↶'),
-      h('button', { class: 'btn ghost icon', type: 'button', id: 'redo', title: 'Redo (Ctrl+Y)', 'aria-label': 'Redo', disabled: !canRedo(), onClick: redo }, '↷'),
-      h('button', { class: 'btn ghost', type: 'button', id: 'history', title: 'Saved versions of this character', onClick: () => historyDialog() }, '🕘 History')),
-    h('button', { class: 'btn ghost', type: 'button', title: 'Keep the build, roll a new name and story', onClick: () => {
-      const c = rerollIdentity(R, ch, randomSeed()); c.rosterId = ch.rosterId; setCurrent(c, { fresh: true });
-    } }, 'New name'),
-    h('button', { class: 'btn ghost', type: 'button', title: 'Keep the name and story, roll new powers and stats', onClick: () => rebuild(ch) }, 'New build'),
-    ch.companionOf ? null : h('button', { class: 'btn ghost', type: 'button', id: 'toolbar-companion', title: 'Add a sidekick, minion, animal or other follower with a full sheet', onClick: () => addCompanionDialog(ch) }, '🐾 Companion'),
-    hasForms(ch) ? null : h('button', { class: 'btn ghost', type: 'button', id: 'add-forms', title: 'Give this character alternate forms (up to 8 builds of the same person)', onClick: async () => {
+  const addFormsFlow = async () => {
       const ok = await openDialog({
         title: 'Alternate forms',
         body: [h('p', { style: { margin: 0 } }, 'Give this character up to 8 forms: civilian and costumed, armor on and off, a shapeshifter\'s shapes. Each form is a whole build of its own (power level, abilities, powers, gear, codename, picture), checked on its own. The person, bio, journal and roster entry are shared.'),
@@ -769,13 +781,21 @@ function drawCurrent(ch) {
       const c = addForm(ch, { copy: ok === 'copy' });
       commit(switchForm(c, 1));
       toast('Form 2 added. Switch between forms with the numbered tabs above the sheet.');
-    } }, '🎭 Forms'),
+    };
+  const inRoster = ch.rosterId && state.roster.some((x) => x.rosterId === ch.rosterId);
+  const toolbar = h('div', { class: 'toolbar' },
+    h('button', { class: 'btn primary', type: 'button', title: `Saves to ${worldOf(ch) || 'The Multiverse Hub'} (change it at the bottom of the sheet)`, onClick: () => saveCurrent(ch) }, inRoster ? 'Update in roster' : 'Save to roster'),
+    h('button', { class: 'btn', type: 'button', 'aria-pressed': String(state.editing), onClick: () => toggleEditing() }, state.editing ? 'Done editing' : 'Edit'),
+    h('span', { class: 'undo-group' },
+      h('button', { class: 'btn ghost icon', type: 'button', id: 'undo', title: 'Undo (Ctrl+Z)', 'aria-label': 'Undo', disabled: !canUndo(), onClick: undo }, '↶'),
+      h('button', { class: 'btn ghost icon', type: 'button', id: 'redo', title: 'Redo (Ctrl+Y)', 'aria-label': 'Redo', disabled: !canRedo(), onClick: redo }, '↷'),
+      h('button', { class: 'btn ghost', type: 'button', id: 'history', title: 'Saved versions of this character', onClick: () => historyDialog() }, '🕘 History')),
     rollMenu(ch, R),
     lobby.status === 'on' && ch.rosterId && !ch.lobbyOwner ? h('button', { class: 'btn ghost', type: 'button', title: 'Tell the table this character is yours', onClick: () => claimCharacter(ch) }, '✋ Mine') : null,
     ch.lobbyOwner ? h('span', { class: 'chip', title: 'Claimed at the table' }, `${ch.lobbyOwner === lobby.id ? 'Yours' : `Played by ${ch.lobbyOwnerName || 'a player'}`}`) : null,
     h('span', { class: 'spacer' }),
     status(ch),
-    h('button', { class: 'btn', type: 'button', onClick: async () => { const ok = await copyText(statBlockText(ch, R)); toast(ok ? 'Stat block copied' : 'Copy failed. Use Export > Text instead.'); } }, 'Copy stat block'),
+    h('button', { class: 'btn', type: 'button', title: 'Throw this character into the Battle Room', onClick: () => api.throwIn?.(ch) }, '⚔ Battle Room'),
     menu('Export', [
       { label: 'Excel character sheet (.xlsx)', hint: 'Your classic sheet, filled in. DCUGen can import it back, too', run: () => exportExcel(ch, R) },
       { label: 'Character file (.json)', hint: 'Small file to send to your GM or players; they Import it', run: () => exportJson(ch) },
@@ -784,10 +804,16 @@ function drawCurrent(ch) {
       { label: 'Print or save as PDF', hint: 'This sheet, from your browser\'s print dialog', run: () => window.print() },
       { label: 'Print the full dossier', hint: 'Every form and companion, each on its own pages, plus the bio', run: () => printDossier(ch) },
     ]),
-    h('button', { class: 'btn', type: 'button', title: 'Add this character to the Battle Room', onClick: () => api.throwIn?.(ch) }, '⚔ Throw in Battle Room'),
-    h('button', { class: 'btn', type: 'button', id: 'range-btn', title: 'Range cheat sheet: how far your powers reach, distances, travel, throwing', onClick: () => openRangeCalculator(ch, R) }, '📏 Range'),
-    h('button', { class: 'btn', type: 'button', title: 'This character\'s page in the World wiki', onClick: () => api.openWorld?.(ch) }, '🌐 World'),
-    h('button', { class: 'btn', type: 'button', onClick: () => share(ch) }, '🔑 Share / Key'));
+    menu('More', [
+      { label: '📏 Range', id: 'range-btn', hint: 'How far your powers reach, distances, travel, throwing', run: () => openRangeCalculator(ch, R) },
+      { label: 'Copy stat block', hint: 'Book-style text, ready to paste', run: async () => { const ok = await copyText(statBlockText(ch, R)); toast(ok ? 'Stat block copied' : 'Copy failed. Use Export > Text instead.'); } },
+      { label: '🔑 Share / Key', hint: 'A short key or link anyone can open', run: () => share(ch) },
+      { label: '🌐 World page', hint: 'This character in the World wiki', run: () => api.openWorld?.(ch) },
+      { label: 'New name', hint: 'Keep the build, roll a new name and story', run: () => { const c = rerollIdentity(R, ch, randomSeed()); c.rosterId = ch.rosterId; setCurrent(c, { fresh: true }); } },
+      { label: 'New build', hint: 'Keep the name and story, roll new powers and stats', run: () => rebuild(ch) },
+      ch.companionOf ? null : { label: '🐾 Add a companion', id: 'toolbar-companion', hint: 'A sidekick, minion or animal with a full sheet', run: () => addCompanionDialog(ch) },
+      hasForms(ch) ? null : { label: '🎭 Alternate forms', id: 'add-forms', hint: 'Up to 8 builds of the same person', run: addFormsFlow },
+    ]));
   const onChange = (c) => { putActive(c); saveTabs(); fresh = false; renderCurrent(); };
   fileHost.append(viewSwitch(ch));
   root.querySelector('.forge')?.classList.toggle('playing', sheetView === 'play');

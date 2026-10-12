@@ -15,7 +15,8 @@ import { initBattle, renderBattle, throwIn } from './battle.js';
 import { initWorld, renderWorld, openWorldPage, recordBattleInWorld, worldSaved, worldApply, openWorldKey, openPaperKey, openPaperObject, openHandoutKey, openHandoutObject, addWorldEvent, worldName } from './world.js';
 import { initGmScreen, renderGmScreen, receiveStatus, afterBattleRecorded } from './gmscreen.js';
 import { statusOf, resolveHit, describeHit } from '../engine/gmboard.js';
-import { initTable, renderTable, postRoll } from './table.js';
+import { receiveMapFromHost, onSharedMap } from './battlemap.js';
+import { initTable, renderTable, postRoll, joinFromLink, openPhoneTable } from './table.js';
 import { setLobbyHandlers, lobbySendRoster, lobbySendRemove, lobby, lobbySend, onLobby } from './lobby.js';
 import { snapshotAll, restoreAll } from './backup.js';
 import { getAppButton } from './getapp.js';
@@ -46,6 +47,8 @@ function showTab(name) {
   if (name === 'screen') renderGmScreen();
   if (name === 'rules') renderRules();
   try { localStorage.setItem('dcugen.tab', name); } catch { /* storage unavailable */ }
+  // keep the chosen tab in view when the tab row scrolls (phones)
+  try { document.getElementById(`tab-${name}`)?.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } catch { /* old browser */ }
   window.scrollTo({ top: 0 });
 }
 
@@ -64,6 +67,8 @@ function initTheme() {
 }
 
 async function loadFromHash() {
+  const j = /[#&]join=(DCUP1\.[A-Za-z0-9_-]+)/.exec(location.hash);
+  if (j) { history.replaceState(null, '', location.pathname + location.search); setTimeout(() => joinFromLink(j[1]), 300); return false; }
   const hk = /[#&]h=(DCUH1\.[A-Za-z0-9_-]+)/.exec(location.hash);
   if (hk) { showTab('world'); const ok = await openHandoutKey(hk[1]); if (ok) history.replaceState(null, '', location.pathname + location.search); return ok; }
   const n = /[#&]n=(DCUN1\.[A-Za-z0-9_-]+)/.exec(location.hash);
@@ -122,6 +127,7 @@ function wireLobby() {
     feed: (entry, from) => { if (from !== me()) postRoll(entry, { fromLobby: true }); },
     message: (msg) => {
       if (msg.t === 'status' && lobby.role === 'host') receiveStatus(msg.status, msg.fromName);
+      if (msg.t === 'map' && lobby.role !== 'host') receiveMapFromHost(msg.map);
       if (msg.t === 'status-request' && lobby.role !== 'host') sendStatuses();
       if (msg.t === 'hit' && lobby.role !== 'host' && msg.rosterId) {
         let res = null;
@@ -202,8 +208,11 @@ async function boot() {
     const learned = afterBattleRecorded(b, ev);
     toast([`Recorded in the World: ${ev.name}`, ...learned].join(' · '));
   } });
+  onSharedMap(() => renderCurrent());
   initGmScreen(R, document.getElementById('view-screen'), {
     open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
+    throwIn: (ch, opts) => throwInBattle(ch, opts),
+    invite: () => openPhoneTable(),
     addWorldEvent: (e) => addWorldEvent(e),
     campaign: () => worldName(),
   });

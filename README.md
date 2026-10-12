@@ -17,7 +17,9 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
 - **Forge** – roll a complete, legal character in one click. Pick power level, archetype (20 including androids
   and combat robots), power theme (29), hero or villain, gender and how wild the dice should be, or hit
   *Surprise me*. Every character obeys every power level limit and spends exactly 15 points per PL. Seeds make
-  rolls repeatable. *New name* keeps the build; *New build* keeps the name and story. *Roll a team* makes a squad.
+  rolls repeatable. *New name* keeps the build; *New build* keeps the name and story (both under **More ▾**, with
+  Range, Share / Key, the World page, companions and forms). *Roll a team* makes a squad. On a phone the roll options
+  fold into one bar once a character is open, so the sheet comes first.
 - **Edit** – change any trait with +/−. Costs and PL limits update live, and problems are listed.
 - **Power Lab** – build custom powers from all 61 DC Adventures effects with their extras and flaws, with the point
   math shown step by step. Random powers only use modifiers that fit the effect. Give any effect descriptors and your
@@ -32,11 +34,11 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
   **Drain** tracker on the sheet (the target missed by N, −1 as points fade, all back), and placed ranks fall off
   newest first as the drained points go. PL limits are checked on the build without placed points; placed points
   that push a defense pair over the limit show as a warning.
-- **Alternate forms** – 🎭 Forms on the Forge gives a character up to 8 forms (civilian and costumed, armor on and
+- **Alternate forms** – More ▾ > 🎭 Alternate forms on the Forge gives a character up to 8 forms (civilian and costumed, armor on and
   off, a shapeshifter's shapes). Each form is a whole build with its own PL, traits, powers, gear, codename and
   picture, checked on its own; the person, bio, journal, world and roster entry are shared. Switch with the numbered
   tabs; the forms travel with the character in the roster, exports and keys.
-- **Companions** – 🐾 Companion adds a sidekick (5 power points per rank of Sidekick, DCA 78), a minion (15 per rank
+- **Companions** – More ▾ > 🐾 Add a companion (or + Companion under the sheet) adds a sidekick (5 power points per rank of Sidekick, DCA 78), a minion (15 per rank
   of Minion, minion rules, DCA 77) or any other follower (an animal, a summoned creature, an ally), each with a full
   character sheet: roll one, start blank, take a creature from the Bestiary or copy someone from the roster. The
   hero's advantage is added for you and the budget is checked; edit the companion right on the hero's sheet or open
@@ -96,13 +98,33 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
   into play come up, +1 hero point in one tap; **recurring villains** who learn from every defeat recorded in the
   World (points spent on the defense that kept failing, inside the PL limits) and work a **scheme clock** between
   sessions that leaves hints in the World for the Newsstand; and **End session** makes a comic-book cover recap and
-  a few lines for the group chat (also saved in the World). Live play needs a lobby, hosted from the desktop app.
+  a few lines for the group chat (also saved in the World). Live play needs a table: open one for phones (below) or
+  host one from the desktop app.
+- **Join from any phone** – 📱 Open a table for phones (GM Screen or Table) shows a QR code and a link. Players scan
+  it and they're in, in any browser, no install: they claim their character, roll on their phone, take hits and hero
+  points from the GM Screen and see the battle map. The GM's page is the table (browser to browser over WebRTC via
+  PeerJS), so keep it open while you play. It uses the free public PeerJS server; a GM can set their own under
+  "Use your own PeerJS server".
+- **Session in a Box** (GM Screen > 🧰 Prep) – press one button before game night and get a whole session: a villain
+  (a recurring nemesis with an unfinished scheme first, then someone from the heroes' own backstories, else a new
+  one) tuned in the Battle Room to the difficulty you pick, a minion squad, four scenes (hook, investigation with skill
+  DCs, action, climax) with the spotlight going to the quiet players first, and a rumor for the newspaper. Put the
+  villain on the board, set up the fight, or play a scene, each in one tap.
+- **Rogues' gallery** (GM Screen > 🧰 Prep) – the enemies, rivals, exes and estranged mentors named in your players'
+  backstories, ranked. "Make the villain" builds one as a legal character aimed at that hero: the main attack goes
+  after their weakest defense, their defenses harden against the hero's best attack, with an Obsession complication
+  and an origin that ties back to the story.
+- **Battle map** (GM Screen > 🗺 Map) – a grid of everyone on the board: drag tokens, select one to see every
+  distance with its range band and penalty, drop a burst, cone or line template sized by Area rank, and "Hit everyone
+  in it" sends an area hit (Dodge for half) through the GM Screen. Players see the map live in their Play view.
 - **Battle Room** – a fight simulator on the DC Adventures combat rules. Throw in anyone (the open character, roster
   cards, any Bestiary creature, a whole Workshop minion squad), pick sides, and watch it play out turn by turn with a
   full log of every attack roll, resistance check, condition, hero point and extra effort. Pause, step, run a round, or
   run to the end; replay the same seed or rematch with new dice; run the match-up 100 times for the odds. **Will this fight wreck
   the party?** checks the heroes' odds over 100 fights and tunes the opposition (attacks and defenses up or down) to
-  an easy win, a tense win, a coin flip, a deadly fight or a planned defeat. Every fighter
+  an easy win, a tense win, a coin flip, a deadly fight or a planned defeat. **📖 Make the comic** turns the finished
+  fight into a comic page: the six biggest moments as panels with portraits, captions and SFX, to copy, download as a
+  picture or share. Every fighter
   fights in a style that fits its build: brawlers close in and go all-out, skilled fighters feint and chain Takedowns,
   gear fighters and blasters keep their range and trade accuracy for effect, spellcasters rotate effects to the weak
   defense, mentalists turn controlled enemies on their friends, beasts lunge and grab, minions mob and break.
@@ -154,8 +176,9 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
   status, puts them in the character's life with a key so they open as a character, and on the sheet as a complication.
 - **The Table** – a shared feed of dice. Every sheet has a "Roll" menu (initiative, attacks, resistance checks,
   skills, abilities) and the results land on the Table with the dice shown; a quick roller and chat live there too.
-  With the desktop app, host a table and hand out a lobby key: players join from their own app, get your world and
-  roster, claim their own characters, and roll for them where everyone can see.
+  Open a table for phones and players join by QR code or link from any browser (or host from the desktop app for
+  players on your network): they get your world and roster, claim their own characters, and roll for them where
+  everyone can see.
 - **Backup** – "Back up everything" (Roster tab) saves roster, world, battle, notes, screen and settings to one file;
   "Restore" merges or replaces. The desktop app also mirrors everything to a folder on disk, with daily backups.
 - **Advancement** – track the power points the GM awards (DCA 190): earned, spent and unspent, with a history log

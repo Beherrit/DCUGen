@@ -61,9 +61,12 @@ h1, h2, h3 { margin: 0; text-wrap: balance; }
 /* ---------- top bar ---------- */
 .topbar {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
-  display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
-  padding: 10px 20px; background: var(--ink); color: var(--paper);
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "brand . tools" "tabs tabs tabs"; align-items: center; gap: 6px 18px;
+  padding: 8px 20px 0; background: var(--ink); color: var(--paper);
 }
+.topbar .brand { grid-area: brand; }
+.top-tools { grid-area: tools; display: flex; align-items: center; gap: 6px; }
+.top-tools .getapp-wrap { margin-left: 0; }
 :root[data-theme="dark"] .topbar { background: #05070a; color: var(--ink); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .topbar { background: #05070a; color: var(--ink); } }
 .brand { display: flex; align-items: baseline; gap: 2px; text-decoration: none; color: inherit; }
@@ -73,7 +76,10 @@ h1, h2, h3 { margin: 0; text-wrap: balance; }
 }
 .brand-name { font: 900 26px/1 var(--font-display); margin-left: 6px; letter-spacing: .02em; }
 .brand-sub { font: 600 12px/1 var(--font-label); letter-spacing: .08em; text-transform: uppercase; opacity: .7; margin-left: 12px; }
-.tabs { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
+.tabs { grid-area: tabs; display: flex; gap: 2px; align-items: center; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 0 -8px; padding: 0 8px 2px; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab-sep { flex: 0 0 1px; height: 18px; margin: 0 8px; background: rgba(255, 255, 255, .2); }
+.tab { white-space: nowrap; flex: 0 0 auto; }
 .tab {
   border: 0; background: transparent; padding: 8px 14px; cursor: pointer; border-radius: 4px;
   font: 700 14px/1 var(--font-label); letter-spacing: .06em; text-transform: uppercase; opacity: .72;
@@ -131,6 +137,13 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .rail .btn { white-space: normal; }
 .rail h2 { font: 800 22px/1 var(--font-display); letter-spacing: .03em; text-transform: uppercase; }
 .rail .hint { font-size: 12.5px; color: var(--ink-3); margin: 0; }
+.rail-quick { display: none; gap: 8px; }
+.rail-quick .btn:first-child { flex: 1; }
+@media (max-width: 860px) {
+  .forge.has-char .rail-quick { display: flex; }
+  .forge.has-char:not(.rail-open) .rail > :not(.rail-quick) { display: none; }
+  .forge.has-char:not(.rail-open) .rail { padding: 10px; }
+}
 .range-row { display: flex; justify-content: space-between; font: 600 12px/1 var(--font-label); color: var(--ink-3); }
 .pl-readout { font: 800 28px/1 var(--font-display); }
 .seed-row { display: flex; gap: 6px; }
@@ -326,12 +339,18 @@ details > summary { cursor: pointer; color: var(--ink-2); font: 600 12.5px/1.4 v
 /* ---------- menus ---------- */
 .menu { position: relative; }
 .menu-list {
-  position: absolute; right: 0; top: calc(100% + 4px); z-index: 30; min-width: 230px; display: grid;
+  position: absolute; right: 0; top: calc(100% + 4px); z-index: 30; min-width: 230px; max-width: calc(100vw - 32px); display: grid;
   background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); padding: 6px;
 }
+.menu-list.up { top: auto; bottom: calc(100% + 4px); }
+.menu-list.left { right: auto; left: 0; }
 .menu-list button { text-align: left; border: 0; background: transparent; padding: 8px 10px; border-radius: 4px; cursor: pointer; font: 600 14px/1.2 var(--font-label); }
 .menu-list button small { display: block; font: 400 12px/1.3 var(--font-body); color: var(--ink-3); }
 .menu-list button:hover { background: var(--surface-2); }
+@media (max-width: 520px) {
+  .menu-list { position: fixed; left: 12px; right: 12px; top: auto; bottom: 12px; max-width: none; max-height: 70vh; overflow-y: auto; z-index: 60; }
+  .menu-list.up, .menu-list.left { top: auto; bottom: 12px; left: 12px; right: 12px; }
+}
 
 /* ---------- roster ---------- */
 .page-head { display: flex; align-items: end; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
@@ -484,8 +503,9 @@ details > summary { cursor: pointer; color: var(--ink-2); font: 600 12.5px/1.4 v
 @media (max-width: 520px) {
   main { padding: 14px 16px 40px; }
   .topbar { padding: 8px 16px; gap: 8px; }
-  .tabs { margin-left: 0; width: 100%; }
-  .tab { padding: 8px 9px; font-size: 13px; }
+  .tab { padding: 10px 9px; font-size: 13px; }
+  .tab-sep { margin: 0 3px; }
+  .getapp-wrap { display: none !important; }
   .abilities { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .def { grid-template-columns: 80px 38px minmax(0, 1fr); }
   .def .note { display: none; }
@@ -1844,3 +1864,46 @@ div.play-line small { grid-column: 1; grid-row: 2; }
 .recap-cover { width: 100%; max-width: 420px; display: block; margin: 0 auto 10px; border: 1px solid var(--line); border-radius: 6px; }
 .recap-text { white-space: pre-wrap; font-size: 13px; background: var(--surface-2); padding: 10px; border-radius: 8px; }
 @media (max-width: 1000px) { .gm-layout { grid-template-columns: 1fr; } }
+.share-image { width: 100%; max-width: 520px; display: block; margin: 0 auto 10px; border: 1px solid var(--line); border-radius: 6px; }
+
+/* ---- GM screen views, prep, rogues ---- */
+.gm-views { max-width: 560px; margin: 0 0 12px; }
+.prep-villain { border: 1px solid var(--line); border-left: 5px solid var(--c); border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; }
+.prep-minions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 6px 0 10px; border-bottom: 1px solid var(--line); }
+.prep-scenes { margin: 10px 0; padding-left: 22px; display: grid; gap: 10px; }
+.prep-scene p { margin: 4px 0; }
+.prep-scene.climax > .gm-card-head b { color: var(--accent); }
+.prep-rumor { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding-top: 8px; border-top: 1px solid var(--line); }
+.rogue-list { display: grid; gap: 8px; }
+.rogue { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; padding: 8px; border: 1px solid var(--line); border-radius: 8px; }
+.rogue .chip { margin-left: 6px; }
+
+/* ---- battle map ---- */
+.bm-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 12px; align-items: start; }
+.bm-host { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface); touch-action: none; }
+.bm-svg { display: block; width: 100%; height: auto; user-select: none; }
+.bm-bg { fill: var(--surface-2); }
+.bm-grid line { stroke: var(--line); stroke-width: 1; }
+.bm-token { cursor: grab; }
+.bm-token circle { stroke: #111; stroke-width: 2; }
+.bm-token.sel circle { stroke: var(--blue); stroke-width: 4; }
+.bm-token.caught circle { stroke: #e3242b; stroke-width: 5; }
+.bm-token.down { opacity: .45; }
+.bm-token.villain circle { stroke-dasharray: 4 2; }
+.bm-initial { font: 900 15px/1 var(--font-label, sans-serif); fill: #fff; pointer-events: none; }
+.bm-name { font: 700 10px/1 sans-serif; fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 3px; pointer-events: none; }
+.bm-ring { fill: none; stroke-width: 2; pointer-events: none; }
+.bm-ring.near { stroke: #2a9d55; } .bm-ring.mid { stroke: #e0a030; stroke-dasharray: 6 4; } .bm-ring.far { stroke: #d1495b; stroke-dasharray: 2 4; } .bm-ring.close { stroke: var(--blue); stroke-dasharray: 3 3; }
+.bm-ring-label { font: 700 11px/1 sans-serif; fill: #2a9d55; paint-order: stroke; stroke: var(--surface); stroke-width: 3px; }
+.bm-template { fill: rgba(227, 36, 43, .22); stroke: #e3242b; stroke-width: 2; pointer-events: none; }
+.bm-tools { margin-bottom: 8px; }
+.bm-tools .spacer { flex: 1; }
+.bm-side h3 { margin: 0 0 6px; }
+.bm-dists { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 4px; font-size: 13px; }
+.bm-dists .chip { margin-left: 6px; }
+.bm-play .bm-svg { max-height: 60vh; }
+@media (max-width: 900px) { .bm-layout { grid-template-columns: 1fr; } }
+.bm-tools select, .gm-prep select, .rc-row select { width: auto; flex: 0 0 auto; max-width: 100%; }
+.qr { display: grid; place-items: center; background: #fff; border-radius: 10px; padding: 8px; max-width: 320px; margin: 0 auto; }
+.qr svg { width: 100%; height: auto; }
+.tb-server { margin-top: 8px; font-size: 13px; }

@@ -8,6 +8,9 @@ import { randomSeed } from '../engine/rng.js';
 import { catalogEntries } from '../engine/workshop.js';
 import { catalogToCharacter } from '../engine/catalog.js';
 import { DIFFICULTIES, verdict, heroOdds, tuneBattle, scaleCharacter } from '../engine/balance.js';
+import { battleComic, comicSvg } from '../engine/comic.js';
+import { portraitOf } from '../engine/portrait.js';
+import { imageDialog } from './imageshare.js';
 import { createBattle, addCombatant, removeCombatant, makeCombatant, joinBattle, startBattle, step, runRound, runToEnd, battleText, simulateMany, serializeBattle, reviveBattle, placeAll, STYLES, TACTICS, ARENA, statusLine, conditionLabels, detectStyle, rebuildCombatant } from '../engine/battle.js';
 
 const KEY = 'dcugen.battle.v1';
@@ -236,7 +239,7 @@ function renderLive() {
 
 function teamColumns() {
   const teams = [...new Set(battle.combatants.map((c) => c.team))].sort();
-  if (!teams.length) return [h('div', { class: 'empty bt-empty' }, h('h2', null, 'The arena is empty'), h('p', null, 'Pick fighters on the left, or use a quick start:'), h('div', { class: 'bt-quicks' }, quickStarts()), h('p', { class: 'hint' }, 'Every character sheet, roster card and Bestiary creature also has a "Throw in Battle Room" button.'))];
+  if (!teams.length) return [h('div', { class: 'empty bt-empty' }, h('h2', null, 'The arena is empty'), h('p', null, 'Pick fighters on the left, or use a quick start:'), h('div', { class: 'bt-quicks' }, quickStarts()), h('p', { class: 'hint' }, 'Every character sheet, roster card and Bestiary creature also has a "⚔ Battle Room" button to throw them in.'))];
   return teams.map((t) => h('section', { class: 'bt-team-col', style: { '--t': teamColor(t) } },
     h('div', { class: 'bt-team-head' }, h('span', { class: 'bt-team', style: { background: teamColor(t) } }, t), h('b', null, `Team ${t}`), h('span', { class: 'hint' }, (() => { const p = sidePower()[t]; return battle.status === 'setup' ? `${p.n} fighter${p.n === 1 ? '' : 's'} · PL ${p.avg.toFixed(p.avg % 1 ? 1 : 0)} avg · ${p.pl} total` : `${p.standing} of ${p.n} standing`; })())),
     battle.combatants.filter((c) => c.team === t).map(fighterCard)));
@@ -516,8 +519,13 @@ function resultPanel() {
     h('b', null, battle.winner ? `Team ${battle.winner} wins in ${battle.round} round${battle.round === 1 ? '' : 's'}` : `Stalemate after ${battle.round - 1} rounds`),
     h('span', null, standing.length ? `Still standing: ${standing.map((c) => `${c.name} (${statusLine(c).toLowerCase()})`).join(', ')}.` : 'Nobody is left standing.'),
     mvp && (mvp.stats.kos || mvp.stats.degrees) ? h('span', null, `Fight of the night: ${mvp.name}, ${mvp.stats.hits} hits, ${mvp.stats.kos} KO${mvp.stats.kos === 1 ? '' : 's'}.`) : null,
-    hooks.recordBattle ? h('div', { class: 'btn-row', style: { marginTop: '6px' } },
-      h('button', { class: 'btn', type: 'button', disabled: battle.recorded, title: 'Adds an event page to the World wiki, linked to everyone who fought', onClick: () => { try { hooks.recordBattle(battle); battle.recorded = true; save(); renderBattle(); } catch (e) { toast(e.message); } } }, battle.recorded ? '✓ Recorded in the World' : '🌐 Record this fight in the World')) : null);
+    h('div', { class: 'btn-row', style: { marginTop: '6px' } },
+      h('button', { class: 'btn primary', type: 'button', id: 'bt-comic', title: 'Turn this fight into a six-panel comic page to share', onClick: () => {
+        const comic = battleComic(battle, { portraitOf: (ch) => { const p = portraitOf(ch); return p.image || p.avatar; } });
+        const svg = comicSvg(comic);
+        imageDialog({ title: `📖 ${comic.title}`, svg, file: `${comic.title}-comic`, text: `📖 ${comic.title.toUpperCase()}: ${comic.subtitle}\n${comic.panels.map((p) => `• ${p.sfx} ${p.caption}`).join('\n')}`, alt: `Comic page of ${comic.title}` });
+      } }, '📖 Make the comic'),
+      hooks.recordBattle ? h('button', { class: 'btn', type: 'button', disabled: battle.recorded, title: 'Adds an event page to the World wiki, linked to everyone who fought', onClick: () => { try { hooks.recordBattle(battle); battle.recorded = true; save(); renderBattle(); } catch (e) { toast(e.message); } } }, battle.recorded ? '✓ Recorded in the World' : '🌐 Record this fight in the World') : null));
 }
 
 export { STYLES, detectStyle };
