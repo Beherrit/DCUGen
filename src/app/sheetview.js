@@ -10,6 +10,7 @@ import { ABILITIES, BUYABLE_DEFENSES } from '../engine/rules.js';
 import { powerCost, primaryOwnCost } from '../engine/costs.js';
 import { gearCatalog, gearToEquipment, gearToDevice } from '../engine/gear.js';
 import { portraitBlock } from './portrait.js';
+import { poolTargets, poolUsed, targetLabel } from '../engine/pools.js';
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const clone = (x) => JSON.parse(JSON.stringify(x));
 
@@ -31,6 +32,42 @@ function mathTable(p, R) {
 }
 
 /** The plain-English "what it does" block under a power. */
+/**
+ * A pool's tracker: where its points are placed right now, with + and − for each, and a picker to place
+ * more. Works outside edit mode, because this is what happens at the table.
+ */
+function poolTracker(ch, p, path, change) {
+  if (!p.pool) return null;
+  const used = poolUsed(p);
+  const free = p.rank - used;
+  const edit = (fn) => change((c) => { const q = getPower(c, path); q.placed = q.placed || []; fn(q); q.placed = q.placed.filter((x) => x.points > 0); if (!q.placed.length) delete q.placed; });
+  const pick = h('select', { class: 'pool-target', 'aria-label': `Place a point from ${p.name} on` },
+    h('option', { value: '' }, 'Place a point on…'),
+    poolTargets(ch).map(([group, list]) => h('optgroup', { label: group }, list.map(([v, t]) => h('option', { value: v }, t)))));
+  const note = h('input', { type: 'text', class: 'pool-note', placeholder: 'What? e.g. Flight speed, a Feature, an ally', 'aria-label': 'Note for something else', hidden: true });
+  pick.addEventListener('change', () => { note.hidden = pick.value !== 'other'; if (!note.hidden) note.focus(); });
+  const place = () => {
+    const target = pick.value;
+    if (!target || free <= 0) return;
+    edit((q) => {
+      const hit = q.placed.find((x) => x.target === target && (target !== 'other' || (x.note || '') === note.value.trim()));
+      if (hit) hit.points += 1; else q.placed.push({ target, points: 1, ...(target === 'other' && note.value.trim() ? { note: note.value.trim() } : {}) });
+    });
+  };
+  return h('div', { class: 'pool no-print-controls' },
+    h('div', { class: 'pool-head' },
+      h('b', null, '⚡ Pool'),
+      h('span', { class: 'pool-meter', role: 'img', 'aria-label': `${used} of ${p.rank} placed` },
+        Array.from({ length: p.rank }, (_, i) => h('i', { class: i < used ? 'on' : '' }))),
+      h('span', { class: 'num pool-count' }, `${used}/${p.rank} placed · ${free} free`),
+      used ? h('button', { class: 'btn sm no-print', type: 'button', title: 'Every placed point fades away', onClick: () => edit((q) => { q.placed = []; }) }, 'Points fade (clear)') : null),
+    (p.placed || []).length ? h('div', { class: 'pool-rows' }, p.placed.map((x, i) => h('div', { class: 'pool-row' },
+      h('span', { class: 'pool-label' }, targetLabel(x)),
+      h('b', { class: 'num' }, `+${x.points}`),
+      stepper(x.points, (d) => edit((q) => { q.placed[i].points += d; }), { min: 0, max: x.points + free, label: `${targetLabel(x)} from ${p.name}` })))) : h('p', { class: 'hint', style: { margin: '4px 0' } }, 'Nothing placed. Pick where a point goes, then press +.'),
+    free > 0 ? h('div', { class: 'pool-add no-print' }, pick, note, h('button', { class: 'btn sm', type: 'button', onClick: place }, '+ 1 point')) : null);
+}
+
 /** The player's own words for a power: how it looks and what it can do. */
 function aboutPower(p) {
   return p?.description ? h('div', { class: 'power-about' }, p.description) : null;
@@ -154,6 +191,7 @@ export function renderFile(ch, R, opts = {}) {
         h('span', { class: 'power-name' }, p.name),
         alts.length ? h('span', { class: 'chip', title: p.dynamic ? 'Dynamic: split the pool between several effects at once' : 'Alternate Effects: one effect at a time' }, p.dynamic ? `Dynamic Array · ${primaryOwnCost(p, R)}-pp pool` : 'Array') : null,
         p.linked?.length ? h('span', { class: 'chip', title: 'Linked effects work together, with one action' }, '🔗 Linked') : null,
+        p.pool ? h('span', { class: 'chip', title: 'Not always on: place its points during play' }, `⚡ Pool · ${poolUsed(p)}/${p.rank}`) : null,
         h('span', { class: 'power-cost num' }, inDevice ? `${cost} pp in device` : `${cost} pp`),
         editing ? h('span', { class: 'btn-row no-print' },
           stepper(p.rank, (d) => change((c) => { const q = getPower(c, path); q.rank = Math.max(1, q.rank + d); }), { min: 1, label: `${p.name} rank` }),
@@ -162,9 +200,10 @@ export function renderFile(ch, R, opts = {}) {
       h('div', { class: 'power-text' }, describeEffect(p, R)),
       aboutPower(p),
       linkedAbout(p),
+      poolTracker(ch, p, path, change),
       whatItDoes(p, R),
       alts.map((a, i) => h('div', { class: 'ae' },
-        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), aboutPower(a), linkedAbout(a), whatItDoes(a, R, true),
+        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), aboutPower(a), linkedAbout(a), poolTracker(ch, a, { ...path, alt: i }, change), whatItDoes(a, R, true),
         editing ? h('span', { class: 'no-print' }, ' ',
           stepper(a.rank, (d) => change((c) => { const q = getPower(c, { ...path, alt: i }); q.rank = Math.max(1, q.rank + d); }), { min: 1, label: `${a.name} rank` }),
           h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${a.name}`, onClick: () => change((c) => removeAt(c, { ...path, alt: i })) }, '✕')) : null)),

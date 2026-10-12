@@ -1,6 +1,7 @@
 // Derived traits: ability totals, defenses, skill bonuses, attacks and initiative.
 
 import { ABILITIES, BUYABLE_DEFENSES, traitKind } from './rules.js';
+import { placedOn } from './pools.js';
 /** Every power the character has, including those inside devices, alternates and links. */
 export function allPowers(ch, { includeAlternates = true } = {}) {
   const out = [];
@@ -14,9 +15,9 @@ export function allPowers(ch, { includeAlternates = true } = {}) {
   return out;
 }
 
-/** Powers that are "on" at the same time (the primary of each array). */
+/** Powers that are "on" at the same time (the primary of each array). Pools only count where points are placed. */
 function activePowers(ch) {
-  return allPowers(ch, { includeAlternates: false }).map((x) => x.power);
+  return allPowers(ch, { includeAlternates: false }).map((x) => x.power).filter((p) => !p.pool);
 }
 
 function sumEnhanced(ch, R, trait) {
@@ -48,7 +49,7 @@ export function abilityTotals(ch, R) {
   for (const a of ABILITIES) {
     const base = ch.abilities?.[a];
     if (base === null) { out[a] = null; continue; }
-    let v = (base || 0) + sumEnhanced(ch, R, a);
+    let v = (base || 0) + sumEnhanced(ch, R, a) + placedOn(ch, a);
     if (a === 'Strength' || a === 'Stamina') v += growth;
     if (a === 'Strength') v -= Math.floor(shrink / 4);
     out[a] = v;
@@ -63,10 +64,10 @@ export function defenseTotals(ch, R, abil = abilityTotals(ch, R)) {
   const bought = (d) => ch.defenses?.[d] || 0;
   const active = Math.floor(shrink / 2) - Math.floor(growth / 2);
   const out = {
-    Dodge: ab('Agility') + bought('Dodge') + sumEnhanced(ch, R, 'Dodge') + active,
-    Parry: ab('Fighting') + bought('Parry') + sumEnhanced(ch, R, 'Parry') + active,
-    Fortitude: ab('Stamina') + bought('Fortitude') + sumEnhanced(ch, R, 'Fortitude'),
-    Will: ab('Awareness') + bought('Will') + sumEnhanced(ch, R, 'Will'),
+    Dodge: ab('Agility') + bought('Dodge') + sumEnhanced(ch, R, 'Dodge') + placedOn(ch, 'Dodge') + active,
+    Parry: ab('Fighting') + bought('Parry') + sumEnhanced(ch, R, 'Parry') + placedOn(ch, 'Parry') + active,
+    Fortitude: ab('Stamina') + bought('Fortitude') + sumEnhanced(ch, R, 'Fortitude') + placedOn(ch, 'Fortitude'),
+    Will: ab('Awareness') + bought('Will') + sumEnhanced(ch, R, 'Will') + placedOn(ch, 'Will'),
   };
   const protection = rankOf(ch, 'Protection') + rankOf(ch, 'Force Field');
   const armor = (ch.equipment || []).reduce((s, it) => s + (it.protection || 0), 0);
@@ -74,9 +75,10 @@ export function defenseTotals(ch, R, abil = abilityTotals(ch, R)) {
   out.immune = { Fortitude: abil.Stamina === null, Will: abil.Intellect === null && abil.Presence === null };
   // Growth adds to Stamina; constructs (no Stamina) add it to Toughness instead (DCA 100).
   const constructGrowth = abil.Stamina === null ? growth : 0;
-  out.ToughnessNoRoll = ab('Stamina') + protection + armor + constructGrowth;
+  const pooled = placedOn(ch, 'Toughness');
+  out.ToughnessNoRoll = ab('Stamina') + protection + armor + constructGrowth + pooled;
   out.Toughness = out.ToughnessNoRoll + roll;
-  out.parts = { stamina: ab('Stamina'), protection: protection + armor, defensiveRoll: roll };
+  out.parts = { stamina: ab('Stamina'), protection: protection + armor + pooled, defensiveRoll: roll };
   return out;
 }
 
@@ -85,7 +87,8 @@ export function skillBonuses(ch, R, abil = abilityTotals(ch, R)) {
     .filter((s) => s.ranks > 0)
     .map((s) => {
       const ability = R.skillAbility(s.name);
-      const enhanced = sumEnhanced(ch, R, s.spec ? `${s.name} (${s.spec})` : s.name);
+      const label = s.spec ? `${s.name} (${s.spec})` : s.name;
+      const enhanced = sumEnhanced(ch, R, label) + placedOn(ch, `skill:${label}`);
       const growth = rankOf(ch, 'Growth');
       let bonus = (abil[ability] ?? 0) + s.ranks + enhanced;
       if (s.name === 'Intimidation') bonus += Math.floor(growth / 2);
@@ -143,7 +146,7 @@ export function attacks(ch, R, abil = abilityTotals(ch, R)) {
     let bonus = null;
     if (kind === 'close') bonus = closeBase + skillRanks(ch, 'Close Combat', spec) + accurate;
     if (kind === 'ranged') bonus = rangedBase + skillRanks(ch, 'Ranged Combat', spec) + accurate;
-    const rank = p.rank + (p.strengthBased ? ab('Strength') : 0);
+    const rank = p.rank + placedOn(ch, `power:${p.name}`) + (p.strengthBased ? ab('Strength') : 0);
     out.push({
       name: p.name, kind, effect: p.effect, resistance: p.resistance || eff.resistance,
       bonus, rank, roll: bonus !== null, alternate: !!alternateOf, power: p,

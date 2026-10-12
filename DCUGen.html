@@ -1645,6 +1645,22 @@ body.eb-printing .eb-wrap { max-height: none; overflow: visible; border-width: 4
 .pool-line { margin: -4px 0 10px; font-size: 14px; color: var(--ink-2); }
 #lab-about { resize: vertical; min-height: 64px; font: inherit; }
 
+/* ---- pools: drains, stolen or redistributed points placed during play ---- */
+.pool { margin: 8px 0; padding: 8px 10px; border: 1px dashed var(--line); border-radius: 8px; background: var(--surface-2); }
+.pool-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.pool-meter { display: inline-flex; gap: 3px; }
+.pool-meter i { width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--ink-3); }
+.pool-meter i.on { background: var(--blue); border-color: var(--blue); }
+.pool-count { font-size: 13px; color: var(--ink-2); }
+.pool-head .btn { margin-left: auto; }
+.pool-rows { display: grid; gap: 4px; margin: 6px 0; }
+.pool-row { display: flex; align-items: center; gap: 8px; }
+.pool-label { flex: 1; min-width: 0; }
+.pool-add { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.pool-add select, .pool-add input { flex: 1 1 160px; min-width: 0; }
+.lab-pool { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; margin: 4px 0; }
+.lab-pool input { margin-top: 3px; }
+
 </style>
 </head>
 <body>
@@ -2033,10 +2049,78 @@ function skillCheatSheet(R) {
 return { formatSkillValue, guideFor, skillGuideBody, skillCheatSheet };
 })();
 
+__mods["src/engine/pools.js"] = (() => {
+// Pools: powers that are not always on. A drain that steals points, a boost, a "redistribute my stats"
+// power: the character has up to N points and places them during play, on any ability, defense, skill,
+// power or something else. A pool power counts for nothing until points are placed (p.placed), and the
+// power level limits are checked on the build without them.
+
+const { ABILITIES, BUYABLE_DEFENSES } = __mods["src/engine/rules.js"];
+/** Every pool power with where it lives (path as the sheet uses it). */
+function poolPowers(ch) {
+  const out = [];
+  const visit = (list, device) => (list || []).forEach((p, index) => {
+    if (p.pool) out.push({ power: p, path: { device, index } });
+    (p.alternates || []).forEach((a, alt) => { if (a.pool) out.push({ power: a, path: { device, index, alt } }); });
+  });
+  visit(ch.powers, null);
+  (ch.devices || []).forEach((d, i) => visit(d.powers, i));
+  return out;
+}
+
+/** Points placed from all pools on one target ("Strength", "Toughness", "skill:Athletics", "power:Flight"). */
+function placedOn(ch, target) {
+  let n = 0;
+  for (const { power } of poolPowers(ch)) for (const x of power.placed || []) if (x.target === target) n += x.points || 0;
+  return n;
+}
+
+function poolUsed(p) {
+  return (p.placed || []).reduce((s, x) => s + (x.points || 0), 0);
+}
+
+function hasPlaced(ch) {
+  return poolPowers(ch).some(({ power }) => poolUsed(power) > 0);
+}
+
+/** The character as built: every pool emptied. */
+function withoutPlaced(ch) {
+  if (!hasPlaced(ch)) return ch;
+  const c = JSON.parse(JSON.stringify(ch));
+  for (const { power } of poolPowers(c)) delete power.placed;
+  return c;
+}
+
+const skillLabel = (s) => (s.spec ? `${s.name} (${s.spec})` : s.name);
+
+/** What pool points can go into, grouped for a dropdown. */
+function poolTargets(ch) {
+  const powers = [];
+  const visit = (list) => (list || []).forEach((p) => { if (!p.pool) powers.push(p.name); for (const a of p.alternates || []) if (!a.pool) powers.push(a.name); });
+  visit(ch.powers);
+  for (const d of ch.devices || []) visit(d.powers);
+  return [
+    ['Abilities', ABILITIES.filter((a) => ch.abilities?.[a] !== null).map((a) => [a, a])],
+    ['Defenses', [...BUYABLE_DEFENSES, 'Toughness'].map((d) => [d, d])],
+    ['Skills', (ch.skills || []).map((s) => [`skill:${skillLabel(s)}`, skillLabel(s)])],
+    ['Powers (adds ranks)', [...new Set(powers)].map((n) => [`power:${n}`, n])],
+    ['Anything else', [['other', 'Something else (write a note)']]],
+  ].filter(([, list]) => list.length);
+}
+
+function targetLabel(x) {
+  if (x.target === 'other') return x.note || 'Something else';
+  return x.target.replace(/^(skill|power):/, '');
+}
+
+return { poolPowers, placedOn, poolUsed, hasPlaced, withoutPlaced, poolTargets, targetLabel };
+})();
+
 __mods["src/engine/derive.js"] = (() => {
 // Derived traits: ability totals, defenses, skill bonuses, attacks and initiative.
 
 const { ABILITIES, BUYABLE_DEFENSES, traitKind } = __mods["src/engine/rules.js"];
+const { placedOn } = __mods["src/engine/pools.js"];
 /** Every power the character has, including those inside devices, alternates and links. */
 function allPowers(ch, { includeAlternates = true } = {}) {
   const out = [];
@@ -2050,9 +2134,9 @@ function allPowers(ch, { includeAlternates = true } = {}) {
   return out;
 }
 
-/** Powers that are "on" at the same time (the primary of each array). */
+/** Powers that are "on" at the same time (the primary of each array). Pools only count where points are placed. */
 function activePowers(ch) {
-  return allPowers(ch, { includeAlternates: false }).map((x) => x.power);
+  return allPowers(ch, { includeAlternates: false }).map((x) => x.power).filter((p) => !p.pool);
 }
 
 function sumEnhanced(ch, R, trait) {
@@ -2084,7 +2168,7 @@ function abilityTotals(ch, R) {
   for (const a of ABILITIES) {
     const base = ch.abilities?.[a];
     if (base === null) { out[a] = null; continue; }
-    let v = (base || 0) + sumEnhanced(ch, R, a);
+    let v = (base || 0) + sumEnhanced(ch, R, a) + placedOn(ch, a);
     if (a === 'Strength' || a === 'Stamina') v += growth;
     if (a === 'Strength') v -= Math.floor(shrink / 4);
     out[a] = v;
@@ -2099,10 +2183,10 @@ function defenseTotals(ch, R, abil = abilityTotals(ch, R)) {
   const bought = (d) => ch.defenses?.[d] || 0;
   const active = Math.floor(shrink / 2) - Math.floor(growth / 2);
   const out = {
-    Dodge: ab('Agility') + bought('Dodge') + sumEnhanced(ch, R, 'Dodge') + active,
-    Parry: ab('Fighting') + bought('Parry') + sumEnhanced(ch, R, 'Parry') + active,
-    Fortitude: ab('Stamina') + bought('Fortitude') + sumEnhanced(ch, R, 'Fortitude'),
-    Will: ab('Awareness') + bought('Will') + sumEnhanced(ch, R, 'Will'),
+    Dodge: ab('Agility') + bought('Dodge') + sumEnhanced(ch, R, 'Dodge') + placedOn(ch, 'Dodge') + active,
+    Parry: ab('Fighting') + bought('Parry') + sumEnhanced(ch, R, 'Parry') + placedOn(ch, 'Parry') + active,
+    Fortitude: ab('Stamina') + bought('Fortitude') + sumEnhanced(ch, R, 'Fortitude') + placedOn(ch, 'Fortitude'),
+    Will: ab('Awareness') + bought('Will') + sumEnhanced(ch, R, 'Will') + placedOn(ch, 'Will'),
   };
   const protection = rankOf(ch, 'Protection') + rankOf(ch, 'Force Field');
   const armor = (ch.equipment || []).reduce((s, it) => s + (it.protection || 0), 0);
@@ -2110,9 +2194,10 @@ function defenseTotals(ch, R, abil = abilityTotals(ch, R)) {
   out.immune = { Fortitude: abil.Stamina === null, Will: abil.Intellect === null && abil.Presence === null };
   // Growth adds to Stamina; constructs (no Stamina) add it to Toughness instead (DCA 100).
   const constructGrowth = abil.Stamina === null ? growth : 0;
-  out.ToughnessNoRoll = ab('Stamina') + protection + armor + constructGrowth;
+  const pooled = placedOn(ch, 'Toughness');
+  out.ToughnessNoRoll = ab('Stamina') + protection + armor + constructGrowth + pooled;
   out.Toughness = out.ToughnessNoRoll + roll;
-  out.parts = { stamina: ab('Stamina'), protection: protection + armor, defensiveRoll: roll };
+  out.parts = { stamina: ab('Stamina'), protection: protection + armor + pooled, defensiveRoll: roll };
   return out;
 }
 
@@ -2121,7 +2206,8 @@ function skillBonuses(ch, R, abil = abilityTotals(ch, R)) {
     .filter((s) => s.ranks > 0)
     .map((s) => {
       const ability = R.skillAbility(s.name);
-      const enhanced = sumEnhanced(ch, R, s.spec ? `${s.name} (${s.spec})` : s.name);
+      const label = s.spec ? `${s.name} (${s.spec})` : s.name;
+      const enhanced = sumEnhanced(ch, R, label) + placedOn(ch, `skill:${label}`);
       const growth = rankOf(ch, 'Growth');
       let bonus = (abil[ability] ?? 0) + s.ranks + enhanced;
       if (s.name === 'Intimidation') bonus += Math.floor(growth / 2);
@@ -2179,7 +2265,7 @@ function attacks(ch, R, abil = abilityTotals(ch, R)) {
     let bonus = null;
     if (kind === 'close') bonus = closeBase + skillRanks(ch, 'Close Combat', spec) + accurate;
     if (kind === 'ranged') bonus = rangedBase + skillRanks(ch, 'Ranged Combat', spec) + accurate;
-    const rank = p.rank + (p.strengthBased ? ab('Strength') : 0);
+    const rank = p.rank + placedOn(ch, `power:${p.name}`) + (p.strengthBased ? ab('Strength') : 0);
     out.push({
       name: p.name, kind, effect: p.effect, resistance: p.resistance || eff.resistance,
       bonus, rank, roll: bonus !== null, alternate: !!alternateOf, power: p,
@@ -2616,6 +2702,7 @@ const { deriveAll, allPowers } = __mods["src/engine/derive.js"];
 const { costBreakdown, alternateOwnCost, primaryOwnCost, equipmentPoints } = __mods["src/engine/costs.js"];
 const { EP_PER_EQUIPMENT_RANK } = __mods["src/engine/rules.js"];
 const { powerTags } = __mods["src/engine/powersmith.js"];
+const { withoutPlaced, hasPlaced, poolPowers, poolUsed } = __mods["src/engine/pools.js"];
 function issue(rule, message, severity = 'error') {
   return { rule, message, severity };
 }
@@ -2623,7 +2710,20 @@ function issue(rule, message, severity = 'error') {
 function checkLimits(ch, R) {
   const pl = ch.pl;
   const out = [];
-  const d = deriveAll(ch, R);
+  // Limits apply to the build. Points placed from a pool right now are checked separately, as warnings.
+  const d = deriveAll(withoutPlaced(ch), R);
+  for (const { power: p } of poolPowers(ch)) {
+    const used = poolUsed(p);
+    if (used > p.rank) out.push(issue('pool', `${p.name}: ${used} points placed, but the pool holds ${p.rank}.`));
+  }
+  if (hasPlaced(ch)) {
+    const now = deriveAll(ch, R);
+    for (const [a, b] of [['Dodge', 'Toughness'], ['Parry', 'Toughness'], ['Fortitude', 'Will']]) {
+      if (now.defenses.immune?.[a] || now.defenses.immune?.[b]) continue;
+      const sum = now.defenses[a] + now.defenses[b];
+      if (sum > 2 * pl && d.defenses[a] + d.defenses[b] <= 2 * pl) out.push(issue('pool', `With the pool points placed now, ${a} ${now.defenses[a]} + ${b} ${now.defenses[b]} = ${sum}, over the limit of ${2 * pl}. Fine if your GM allows it while it lasts.`, 'warning'));
+    }
+  }
 
   // Attack & effect
   for (const atk of d.attacks) {
@@ -3240,13 +3340,17 @@ function explainPower(p, R) {
       notes.push({ name: m.name + (m.detail ? ` (${m.detail})` : ''), kind, text: def?.summary || '' });
     }
   }
+  if (p.pool) notes.push({ name: `Pool of ${p.rank} points`, kind: 'extra', text: 'Not always on: during play you place up to this many points on any ability, defense, skill, power or something else, and they count only while placed. Power level limits are checked without them.' });
   for (const l of p.linked || []) {
     let what = '';
     try { what = explainPower(l, R).what; } catch { /* unknown effect */ }
     notes.push({ name: `Linked: ${l.name || l.effect}`, kind: 'extra', text: `Happens at the same time, with the same action. ${what}`.trim() });
   }
   if ((p.alternates || []).length) notes.push({ name: `${p.dynamic ? 'Dynamic ' : ''}Alternate Effects`, kind: 'extra', text: `Use one effect of this array at a time${p.dynamic ? `, or split its ${primaryOwnCost(p, R)}-point pool between them` : ''}; switching is a free action.` });
-  return { what: parts.filter(Boolean).join(' '), notes };
+  const what = p.pool
+    ? `A pool of ${p.rank} points, not always on: place them during play with + and − on the sheet, wherever they're needed.`
+    : parts.filter(Boolean).join(' ');
+  return { what, notes };
 }
 
 /** "Ranged Burst Area Damage 8 (fire), Accurate 2, Limited to vision" */
@@ -4363,6 +4467,7 @@ const { ABILITIES, BUYABLE_DEFENSES } = __mods["src/engine/rules.js"];
 const { powerCost, primaryOwnCost } = __mods["src/engine/costs.js"];
 const { gearCatalog, gearToEquipment, gearToDevice } = __mods["src/engine/gear.js"];
 const { portraitBlock } = __mods["src/app/portrait.js"];
+const { poolTargets, poolUsed, targetLabel } = __mods["src/engine/pools.js"];
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const clone = (x) => JSON.parse(JSON.stringify(x));
 
@@ -4384,6 +4489,42 @@ function mathTable(p, R) {
 }
 
 /** The plain-English "what it does" block under a power. */
+/**
+ * A pool's tracker: where its points are placed right now, with + and − for each, and a picker to place
+ * more. Works outside edit mode, because this is what happens at the table.
+ */
+function poolTracker(ch, p, path, change) {
+  if (!p.pool) return null;
+  const used = poolUsed(p);
+  const free = p.rank - used;
+  const edit = (fn) => change((c) => { const q = getPower(c, path); q.placed = q.placed || []; fn(q); q.placed = q.placed.filter((x) => x.points > 0); if (!q.placed.length) delete q.placed; });
+  const pick = h('select', { class: 'pool-target', 'aria-label': `Place a point from ${p.name} on` },
+    h('option', { value: '' }, 'Place a point on…'),
+    poolTargets(ch).map(([group, list]) => h('optgroup', { label: group }, list.map(([v, t]) => h('option', { value: v }, t)))));
+  const note = h('input', { type: 'text', class: 'pool-note', placeholder: 'What? e.g. Flight speed, a Feature, an ally', 'aria-label': 'Note for something else', hidden: true });
+  pick.addEventListener('change', () => { note.hidden = pick.value !== 'other'; if (!note.hidden) note.focus(); });
+  const place = () => {
+    const target = pick.value;
+    if (!target || free <= 0) return;
+    edit((q) => {
+      const hit = q.placed.find((x) => x.target === target && (target !== 'other' || (x.note || '') === note.value.trim()));
+      if (hit) hit.points += 1; else q.placed.push({ target, points: 1, ...(target === 'other' && note.value.trim() ? { note: note.value.trim() } : {}) });
+    });
+  };
+  return h('div', { class: 'pool no-print-controls' },
+    h('div', { class: 'pool-head' },
+      h('b', null, '⚡ Pool'),
+      h('span', { class: 'pool-meter', role: 'img', 'aria-label': `${used} of ${p.rank} placed` },
+        Array.from({ length: p.rank }, (_, i) => h('i', { class: i < used ? 'on' : '' }))),
+      h('span', { class: 'num pool-count' }, `${used}/${p.rank} placed · ${free} free`),
+      used ? h('button', { class: 'btn sm no-print', type: 'button', title: 'Every placed point fades away', onClick: () => edit((q) => { q.placed = []; }) }, 'Points fade (clear)') : null),
+    (p.placed || []).length ? h('div', { class: 'pool-rows' }, p.placed.map((x, i) => h('div', { class: 'pool-row' },
+      h('span', { class: 'pool-label' }, targetLabel(x)),
+      h('b', { class: 'num' }, `+${x.points}`),
+      stepper(x.points, (d) => edit((q) => { q.placed[i].points += d; }), { min: 0, max: x.points + free, label: `${targetLabel(x)} from ${p.name}` })))) : h('p', { class: 'hint', style: { margin: '4px 0' } }, 'Nothing placed. Pick where a point goes, then press +.'),
+    free > 0 ? h('div', { class: 'pool-add no-print' }, pick, note, h('button', { class: 'btn sm', type: 'button', onClick: place }, '+ 1 point')) : null);
+}
+
 /** The player's own words for a power: how it looks and what it can do. */
 function aboutPower(p) {
   return p?.description ? h('div', { class: 'power-about' }, p.description) : null;
@@ -4507,6 +4648,7 @@ function renderFile(ch, R, opts = {}) {
         h('span', { class: 'power-name' }, p.name),
         alts.length ? h('span', { class: 'chip', title: p.dynamic ? 'Dynamic: split the pool between several effects at once' : 'Alternate Effects: one effect at a time' }, p.dynamic ? `Dynamic Array · ${primaryOwnCost(p, R)}-pp pool` : 'Array') : null,
         p.linked?.length ? h('span', { class: 'chip', title: 'Linked effects work together, with one action' }, '🔗 Linked') : null,
+        p.pool ? h('span', { class: 'chip', title: 'Not always on: place its points during play' }, `⚡ Pool · ${poolUsed(p)}/${p.rank}`) : null,
         h('span', { class: 'power-cost num' }, inDevice ? `${cost} pp in device` : `${cost} pp`),
         editing ? h('span', { class: 'btn-row no-print' },
           stepper(p.rank, (d) => change((c) => { const q = getPower(c, path); q.rank = Math.max(1, q.rank + d); }), { min: 1, label: `${p.name} rank` }),
@@ -4515,9 +4657,10 @@ function renderFile(ch, R, opts = {}) {
       h('div', { class: 'power-text' }, describeEffect(p, R)),
       aboutPower(p),
       linkedAbout(p),
+      poolTracker(ch, p, path, change),
       whatItDoes(p, R),
       alts.map((a, i) => h('div', { class: 'ae' },
-        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), aboutPower(a), linkedAbout(a), whatItDoes(a, R, true),
+        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), aboutPower(a), linkedAbout(a), poolTracker(ch, a, { ...path, alt: i }, change), whatItDoes(a, R, true),
         editing ? h('span', { class: 'no-print' }, ' ',
           stepper(a.rank, (d) => change((c) => { const q = getPower(c, { ...path, alt: i }); q.rank = Math.max(1, q.rank + d); }), { min: 1, label: `${a.name} rank` }),
           h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${a.name}`, onClick: () => change((c) => removeAt(c, { ...path, alt: i })) }, '✕')) : null)),
@@ -11989,6 +12132,9 @@ function render() {
     h('label', { class: 'field' }, h('span', null, 'Description (optional): what it looks like and what it can do'),
       h('textarea', { id: 'lab-about', rows: 3, placeholder: 'e.g. Crackling violet bolts leap from her palms and smell of ozone. She can split the beam to hit two targets, but it fizzles in heavy rain.',
         onChange: (e) => update((q) => { q.description = e.target.value.trim() || undefined; }) }, p.description || '')),
+    linkSel == null ? h('label', { class: 'lab-pool', title: 'For drains, stolen or redistributed points, boosts: anything you place where you want during play' },
+      h('input', { type: 'checkbox', id: 'lab-pool', checked: !!p.pool, onChange: (e) => update((q) => { if (e.target.checked) q.pool = true; else { delete q.pool; delete q.placed; } }) }),
+      h('span', null, h('b', null, 'Pool, not always on. '), `Up to ${p.rank} points you place during play (with + and − on the sheet) on any ability, defense, skill, power or something else. Nothing counts until you place it, and PL limits are checked without it. The cost stays as priced here.`)) : null,
     p.effect === 'Damage' ? h('label', { style: { display: 'flex', gap: '8px', alignItems: 'center', fontSize: '14px' } },
       h('input', { type: 'checkbox', checked: !!p.strengthBased, onChange: (e) => update((q) => { q.strengthBased = e.target.checked || undefined; }) }), 'Strength-based (adds Strength to the damage rank)') : null,
     modEditor('extra'),

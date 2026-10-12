@@ -1,0 +1,12 @@
+{"id":"c-custom-muxkodw0","version":1,"pl":10,
+"abilities":{"Strength":9,"Stamina":6,"Agility":4,"Dexterity":2,"Fighting":6,"Intellect":0,"Awareness":4,"Presence":4},
+"defenses":{"Dodge":2,"Parry":0,"Fortitude":4,"Will":2},
+"skills":[{"name":"Athletics","ranks":4},{"name":"Persuasion","ranks":6},{"name":"Intimidation","ranks":4},{"name":"Perception","ranks":4},{"name":"Insight","ranks":4},{"name":"Close Combat","spec":"Unarmed","ranks":4},{"name":"Expertise","spec":"Tactic","ranks":2},{"name":"Ranged Combat","spec":"Throw","ranks":8}],
+"advantages":[{"name":"Leadership","rank":1},{"name":"Inspire","rank":2},{"name":"Teamwork","rank":1},{"name":"Diehard","rank":1},{"name":"Interpose","rank":1},{"name":"Assessment","rank":1}],
+"powers":[
+{"name":"Summoned Armor","effect":"Protection","rank":8,"extras":[{"name":"Feature"}],"flaws":[],"descriptors":[],"alternates":[],"detail":"Armor protects identity by altering voice","role":"utility"},
+{"name":"Flight","effect":"Flight","rank":8,"extras":[],"flaws":[],"descriptors":[],"alternates":[],"role":"utility"},
+{"name":"Ethenural Absorption","effect":"Weaken","rank":12,"extras":[{"name":"Reaction","option":"From free action"},{"name":"Incurable"}],"flaws":[{"name":"Fades"},{"name":"Limited","detail":"Absorbed levels are ablated away by damage taken"},{"name":"Quirk","detail":"can only affect targets with STA"}],"descriptors":["stamina drain and redistribution"],"alternates":[],"role":"utility"},
+{"name":"Physical stat redistribution","effect":"Enhanced Trait","rank":6,"extras":[{"name":"Variable Descriptor","option":"Broad group"}],"flaws":[{"name":"Quirk","detail":"shares fade with Ethenural absorbtion"},{"name":"Noticeable"}],"descriptors":[],"alternates":[],"option":"Stamina","role":"utility"}],
+"devices":[],"equipment":[],"archetype":{"id":"custom","name":"Custom"},"theme":{"id":"custom","name":"Custom","color":"#4a5d7a"},"alignment":"hero",
+"identity":{"codename":"Shadowshot - Blue armor","realName":"Evan Lianne","languages":["English"]},"origin":null,"complications":[],"notes":""}
