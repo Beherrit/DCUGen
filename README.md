@@ -26,8 +26,21 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
   Linked effects that work together with one action (full cost each).
   Tick **Pool, not always on** for drains, stolen or redistributed points and boosts: the power counts for nothing
   until you place its points during play with + and − on the sheet (on any ability, defense, skill, power, or
-  something else with a note). PL limits are checked on the build without them; placed points that push a
-  defense pair over the limit show as a warning.
+  something else with a note). Pools count in power points the way Weaken drains them (DCA 122): an ability rank
+  costs 2, a defense rank 1, two skill ranks 1, a power rank its cost per rank, so Enhanced Stamina 6 is a 12-point
+  pool. Pick a Weaken under **Filled by** and the pool holds only what that Weaken has drained: every Weaken has a
+  **Drain** tracker on the sheet (the target missed by N, −1 as points fade, all back), and placed ranks fall off
+  newest first as the drained points go. PL limits are checked on the build without placed points; placed points
+  that push a defense pair over the limit show as a warning.
+- **Alternate forms** – 🎭 Forms on the Forge gives a character up to 8 forms (civilian and costumed, armor on and
+  off, a shapeshifter's shapes). Each form is a whole build with its own PL, traits, powers, gear, codename and
+  picture, checked on its own; the person, bio, journal, world and roster entry are shared. Switch with the numbered
+  tabs; the forms travel with the character in the roster, exports and keys.
+- **Companions** – 🐾 Companion adds a sidekick (5 power points per rank of Sidekick, DCA 78), a minion (15 per rank
+  of Minion, minion rules, DCA 77) or any other follower (an animal, a summoned creature, an ally), each with a full
+  character sheet: roll one, start blank, take a creature from the Bestiary or copy someone from the roster. The
+  hero's advantage is added for you and the budget is checked; edit the companion right on the hero's sheet or open
+  it in its own tab and save it back.
 - **Workshop**
   - *Gear loadouts* for an equipment-point budget, in styles from street tough to sci-fi.
   - *Gadgets and magic items*: named devices with real powers, priced with the Removable rule, legal at your PL.

@@ -1660,6 +1660,37 @@ body.eb-printing .eb-wrap { max-height: none; overflow: visible; border-width: 4
 .pool-add select, .pool-add input { flex: 1 1 160px; min-width: 0; }
 .lab-pool { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; margin: 4px 0; }
 .lab-pool input { margin-top: 3px; }
+.pool-meter i.off { opacity: .25; border-style: dashed; }
+.pool-feed { margin: 4px 0; }
+.pool-pp { font-size: 12px; color: var(--ink-3); min-width: 44px; text-align: right; }
+.drain .pool-meter i.on { background: var(--accent); border-color: var(--accent); }
+.drain-label { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
+.drain-missed { width: 72px; }
+
+/* ---- alternate forms ---- */
+.form-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 10px; }
+.form-strip-label { font-size: 13px; font-weight: 700; color: var(--ink-2); margin-right: 2px; }
+.form-tab { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+.form-tab.active { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.form-tab-btn { border: 0; background: none; color: inherit; padding: 4px 10px; font: inherit; font-size: 13px; cursor: pointer; }
+.form-tab .x { border: 0; background: none; color: inherit; opacity: .6; padding: 0 8px 0 0; cursor: pointer; }
+.form-add { border: 1px dashed var(--line); background: none; color: var(--ink-2); border-radius: 999px; padding: 4px 10px; font-size: 13px; cursor: pointer; }
+
+/* ---- companions ---- */
+.companions { margin-top: 16px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.comp-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; }
+.comp-title h3 { margin: 0; }
+.comp-title .spacer, .comp-head .spacer { flex: 1; }
+.companions > .comp-card + .comp-card { margin-top: 8px; }
+.comp-card { margin-top: 10px; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--surface-2); }
+.comp-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.comp-head .swatch { width: 12px; height: 12px; border-radius: 3px; background: var(--c); }
+.comp-name { font-size: 15px; }
+.comp-budget { margin: 6px 0 0; }
+.comp-budget.bad { color: var(--bad); }
+.comp-sheet { margin-top: 10px; }
+.comp-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 10px; padding: 8px 12px; border: 1px solid var(--blue); border-radius: 8px; background: var(--surface); }
+.comp-banner span { flex: 1 1 260px; }
 
 </style>
 </head>
@@ -2049,13 +2080,160 @@ function skillCheatSheet(R) {
 return { formatSkillValue, guideFor, skillGuideBody, skillCheatSheet };
 })();
 
+__mods["src/engine/costs.js"] = (() => {
+// Point costs, following DC Adventures Hero's Handbook chapter 6 ("Modifiers").
+//
+//   cost per rank = base cost + range change + per-rank extras - per-rank flaws
+//   if cost per rank >= 1: total = cost per rank x rank
+//   else: 1 point buys (2 - cost per rank) ranks   (0 -> 1 point per 2 ranks, -1 -> per 3 ranks, ...)
+//   then add flat extras and subtract flat flaws.
+//   Alternate Effects add a flat 1 point each (2 if Dynamic).
+//   Removable devices: -1 point per 5 points of total cost (Easily Removable: -2 per 5).
+
+const { ABILITIES, RANGE_STEPS, PP_PER_PL, EP_PER_EQUIPMENT_RANK, traitKind } = __mods["src/engine/rules.js"];
+const TRAIT_BASE = { ability: 2, defense: 1, skill: 0, advantage: 1 };
+
+function modifierValue(mod, def) {
+  let value = def.value ?? 0;
+  if (def.options && mod.option != null) {
+    if (!(mod.option in def.options)) throw new Error(`"${mod.option}" is not an option of ${def.name}`);
+    value = def.options[mod.option];
+  }
+  const steps = mod.steps ?? 1;
+  return value * steps;
+}
+
+/** Base cost per rank of the effect itself, before modifiers. */
+function baseCostPerRank(power, R) {
+  const eff = R.effect(power.effect);
+  if (power.effect === 'Enhanced Trait') return TRAIT_BASE[traitKind(power.option, R)];
+  if (eff.cost_options && power.option != null) {
+    if (!(power.option in eff.cost_options)) throw new Error(`"${power.option}" is not an option of ${eff.name}`);
+    return eff.cost_options[power.option];
+  }
+  return eff.cost;
+}
+
+/** Range change from the effect's default range: +1 per step longer, -1 per step shorter. */
+function rangeDelta(power, R) {
+  const eff = R.effect(power.effect);
+  if (!power.range || power.range === eff.range) return 0;
+  if (!(eff.range in RANGE_STEPS) || !(power.range in RANGE_STEPS)) {
+    throw new Error(`${power.name}: cannot change ${eff.name} range from ${eff.range} to ${power.range}`);
+  }
+  return RANGE_STEPS[power.range] - RANGE_STEPS[eff.range];
+}
+
+/** Breakdown of one effect's cost (without its alternates or linked effects). */
+function effectCost(power, R) {
+  const eff = R.effect(power.effect);
+  let perRank = baseCostPerRank(power, R) + rangeDelta(power, R);
+  let flat = 0;
+  for (const mod of power.extras || []) {
+    const def = R.modifier('extra', mod.name, power.effect);
+    const v = modifierValue(mod, def);
+    if (def.cost_type === 'per_rank') perRank += v;
+    else flat += v;
+  }
+  for (const mod of power.flaws || []) {
+    const def = R.modifier('flaw', mod.name, power.effect);
+    const v = modifierValue(mod, def);
+    if (def.cost_type === 'per_rank') perRank -= v;
+    else flat -= v;
+  }
+  const rank = power.rank ?? 0;
+  let ranked;
+  if (eff.fixed_cost) {
+    const options = eff.fixed_cost;
+    ranked = typeof options === 'number' ? options : options[power.option ?? Object.keys(options)[0]];
+    ranked += (perRank - baseCostPerRank(power, R)); // per-rank modifiers on a package count once
+  } else if (perRank >= 1) {
+    ranked = perRank * rank;
+  } else {
+    ranked = Math.ceil(rank / (2 - perRank));
+  }
+  const total = Math.max(rank > 0 || eff.fixed_cost ? 1 : 0, ranked + flat);
+  return { perRank, flat, ranked, total, ratio: perRank >= 1 ? `${perRank}:1` : `1:${2 - perRank}` };
+}
+
+/** Full cost of a power: the effect, its linked effects, and its Alternate Effects. */
+function powerCost(power, R) {
+  let total = effectCost(power, R).total;
+  for (const link of power.linked || []) total += effectCost(link, R).total;
+  const aeCost = power.dynamic ? 2 : 1;
+  total += (power.alternates || []).length * aeCost;
+  return total;
+}
+
+/** Cost of an Alternate Effect on its own (used for the "AE cost <= primary" rule). */
+function alternateOwnCost(alt, R) {
+  let total = effectCost(alt, R).total;
+  for (const link of alt.linked || []) total += effectCost(link, R).total;
+  return total;
+}
+
+function primaryOwnCost(power, R) {
+  return alternateOwnCost(power, R);
+}
+
+function deviceCost(device, R) {
+  const raw = (device.powers || []).reduce((s, p) => s + powerCost(p, R), 0);
+  const per5 = device.kind === 'easily' ? 2 : device.kind === 'none' ? 0 : 1;
+  return { raw, discount: Math.floor(raw / 5) * per5, total: raw - Math.floor(raw / 5) * per5 };
+}
+
+function equipmentPoints(ch) {
+  return (ch.equipment || []).reduce((s, item) => s + (item.cost || 0), 0);
+}
+
+function equipmentRanksNeeded(ch) {
+  return Math.ceil(equipmentPoints(ch) / EP_PER_EQUIPMENT_RANK);
+}
+
+function skillRanksTotal(ch) {
+  return (ch.skills || []).reduce((s, sk) => s + (sk.ranks || 0), 0);
+}
+
+/** The power-point breakdown printed at the bottom of a DC Adventures stat block. */
+function costBreakdown(ch, R) {
+  const abilities = ABILITIES.reduce((s, a) => {
+    const v = ch.abilities?.[a];
+    if (v === null) return s - 10; // an absent ability is worth -10 points
+    return s + 2 * (v || 0);
+  }, 0);
+  const powers = (ch.powers || []).reduce((s, p) => s + powerCost(p, R), 0)
+    + (ch.devices || []).reduce((s, d) => s + deviceCost(d, R).total, 0);
+  const advantages = (ch.advantages || []).reduce((s, a) => s + (a.rank || 1), 0);
+  const ranks = skillRanksTotal(ch);
+  const skills = Math.ceil(ranks / 2);
+  const defenses = Object.values(ch.defenses || {}).reduce((s, v) => s + (v || 0), 0);
+  const total = abilities + powers + advantages + skills + defenses;
+  // With advancement on (GM-awarded points, DCA 190), the budget is the starting points plus every award.
+  const adv = ch.advancement;
+  const budget = adv
+    ? (adv.startPoints ?? (adv.startPl ?? ch.pl) * PP_PER_PL) + (adv.log || []).filter((e) => e.type === 'award').reduce((s, e) => s + (e.points || 0), 0)
+    : (ch.pl || 0) * PP_PER_PL;
+  return { abilities, powers, advantages, skills, skillRanks: ranks, defenses, total, budget, unspent: budget - total };
+}
+
+return { modifierValue, baseCostPerRank, rangeDelta, effectCost, powerCost, alternateOwnCost, primaryOwnCost, deviceCost, equipmentPoints, equipmentRanksNeeded, skillRanksTotal, costBreakdown };
+})();
+
 __mods["src/engine/pools.js"] = (() => {
 // Pools: powers that are not always on. A drain that steals points, a boost, a "redistribute my stats"
-// power: the character has up to N points and places them during play, on any ability, defense, skill,
-// power or something else. A pool power counts for nothing until points are placed (p.placed), and the
-// power level limits are checked on the build without them.
+// power: the character holds up to N power points and places them during play, on any ability, defense,
+// skill, power or something else. A pool power counts for nothing until points are placed (p.placed), and
+// the power level limits are checked on the build without them.
+//
+// Pools count in power points, the way Weaken drains them (DCA 122): a rank of an ability costs 2, a rank
+// of a defense 1, two skill ranks 1, a rank of a power its cost per rank. So Enhanced Stamina 6 is a
+// 12-point pool, and 12 points drained buy 6 ranks of an ability or 12 of a defense.
+//
+// A pool can be fed by a Weaken power (p.feed = its name): then it only holds what that Weaken has
+// drained and still keeps (weaken.drained), which fades and is knocked loose by damage.
 
-const { ABILITIES, BUYABLE_DEFENSES } = __mods["src/engine/rules.js"];
+const { ABILITIES, BUYABLE_DEFENSES, traitKind } = __mods["src/engine/rules.js"];
+const { effectCost } = __mods["src/engine/costs.js"];
 /** Every pool power with where it lives (path as the sheet uses it). */
 function poolPowers(ch) {
   const out = [];
@@ -2075,9 +2253,99 @@ function placedOn(ch, target) {
   return n;
 }
 
+/** Ranks placed (what the pool adds to traits). */
 function poolUsed(p) {
   return (p.placed || []).reduce((s, x) => s + (x.points || 0), 0);
 }
+
+/** Power points one placed rank costs on a target. */
+function costPerRank(ch, target, R) {
+  if (ABILITIES.includes(target)) return 2;
+  if (BUYABLE_DEFENSES.includes(target) || target === 'Toughness') return 1;
+  if (target.startsWith('skill:')) return 0.5;
+  if (target.startsWith('power:')) {
+    const name = target.slice(6);
+    const p = findPower(ch, (x) => x.name === name);
+    if (p && R) {
+      try { const per = effectCost(p, R).perRank; return per >= 1 ? per : 1 / (2 - per); } catch { /* unknown effect */ }
+    }
+    return 1;
+  }
+  return 1;
+}
+
+function findPower(ch, test) {
+  const all = [];
+  const visit = (list) => (list || []).forEach((p) => { all.push(p); for (const l of p.linked || []) all.push(l); for (const a of p.alternates || []) visit([a]); });
+  visit(ch.powers);
+  for (const d of ch.devices || []) visit(d.powers);
+  return all.find(test) || null;
+}
+
+/** The most power points the pool can hold: Enhanced Trait 6 on an ability is 12, a Variable is 5 per rank. */
+function poolCapacity(p, R) {
+  if (p.effect === 'Enhanced Trait') {
+    const kind = R ? traitKind(p.option, R) : 'ability';
+    if (kind === 'ability') return p.rank * 2;
+    if (kind === 'skill') return Math.ceil(p.rank / 2);
+    return p.rank;
+  }
+  if (p.effect === 'Variable') return p.rank * 5;
+  return p.rank;
+}
+
+/** Power points the placed ranks cost. */
+function poolSpent(ch, p, R) {
+  return (p.placed || []).reduce((s, x) => s + (x.points || 0) * costPerRank(ch, x.target, R), 0);
+}
+
+/** The Weaken power that fills this pool, if any. */
+function poolFeeder(ch, p) {
+  return p.feed ? findPower(ch, (x) => x.name === p.feed && x.effect === 'Weaken') : null;
+}
+
+/** Power points the pool has to spend right now: its capacity, or what its Weaken still holds if it is fed. */
+function poolAvailable(ch, p, R) {
+  const cap = poolCapacity(p, R);
+  const feeder = poolFeeder(ch, p);
+  return feeder ? Math.min(cap, feeder.drained || 0) : cap;
+}
+
+/** Take placed ranks back (newest first) until the pool spends no more than it has. Mutates p. */
+function trimPool(ch, p, R) {
+  const avail = poolAvailable(ch, p, R);
+  const placed = p.placed || [];
+  while (placed.length && poolSpent(ch, p, R) > avail + 1e-9) {
+    const last = placed[placed.length - 1];
+    last.points -= 1;
+    if (last.points <= 0) placed.pop();
+  }
+  if (!placed.length) delete p.placed;
+}
+
+/**
+ * Weaken: the target missed its resistance check by `missedBy`; the drain keeps that many power points,
+ * up to the Weaken's rank in all (DCA 122). Returns the points actually taken. Mutates the Weaken.
+ */
+function drain(weaken, missedBy) {
+  const room = Math.max(0, weaken.rank - (weaken.drained || 0));
+  const took = Math.max(0, Math.min(room, Math.floor(missedBy)));
+  weaken.drained = (weaken.drained || 0) + took;
+  return took;
+}
+
+/** Drained points slip away (a round passes with Fades, or damage knocks them loose). Mutates. */
+function loseDrained(weaken, n = 1) {
+  weaken.drained = Math.max(0, (weaken.drained || 0) - n);
+  if (!weaken.drained) delete weaken.drained;
+}
+
+/** After a Weaken changes, trim every pool it feeds. Mutates ch. */
+function settlePools(ch, R) {
+  for (const { power } of poolPowers(ch)) if (power.feed) trimPool(ch, power, R);
+}
+
+const fmtPoints = (n) => (Number.isInteger(n) ? String(n) : n.toFixed(1).replace(/\.0$/, ''));
 
 function hasPlaced(ch) {
   return poolPowers(ch).some(({ power }) => poolUsed(power) > 0);
@@ -2113,7 +2381,7 @@ function targetLabel(x) {
   return x.target.replace(/^(skill|power):/, '');
 }
 
-return { poolPowers, placedOn, poolUsed, hasPlaced, withoutPlaced, poolTargets, targetLabel };
+return { poolPowers, placedOn, poolUsed, costPerRank, poolCapacity, poolSpent, poolFeeder, poolAvailable, trimPool, drain, loseDrained, settlePools, fmtPoints, hasPlaced, withoutPlaced, poolTargets, targetLabel };
 })();
 
 __mods["src/engine/derive.js"] = (() => {
@@ -2302,145 +2570,6 @@ function deriveAll(ch, R) {
 
 
 return { traitKind, BUYABLE_DEFENSES, allPowers, advantageRank, skillRanks, abilityTotals, defenseTotals, skillBonuses, attackKind, isAttackPower, attacks, initiative, deriveAll };
-})();
-
-__mods["src/engine/costs.js"] = (() => {
-// Point costs, following DC Adventures Hero's Handbook chapter 6 ("Modifiers").
-//
-//   cost per rank = base cost + range change + per-rank extras - per-rank flaws
-//   if cost per rank >= 1: total = cost per rank x rank
-//   else: 1 point buys (2 - cost per rank) ranks   (0 -> 1 point per 2 ranks, -1 -> per 3 ranks, ...)
-//   then add flat extras and subtract flat flaws.
-//   Alternate Effects add a flat 1 point each (2 if Dynamic).
-//   Removable devices: -1 point per 5 points of total cost (Easily Removable: -2 per 5).
-
-const { ABILITIES, RANGE_STEPS, PP_PER_PL, EP_PER_EQUIPMENT_RANK, traitKind } = __mods["src/engine/rules.js"];
-const TRAIT_BASE = { ability: 2, defense: 1, skill: 0, advantage: 1 };
-
-function modifierValue(mod, def) {
-  let value = def.value ?? 0;
-  if (def.options && mod.option != null) {
-    if (!(mod.option in def.options)) throw new Error(`"${mod.option}" is not an option of ${def.name}`);
-    value = def.options[mod.option];
-  }
-  const steps = mod.steps ?? 1;
-  return value * steps;
-}
-
-/** Base cost per rank of the effect itself, before modifiers. */
-function baseCostPerRank(power, R) {
-  const eff = R.effect(power.effect);
-  if (power.effect === 'Enhanced Trait') return TRAIT_BASE[traitKind(power.option, R)];
-  if (eff.cost_options && power.option != null) {
-    if (!(power.option in eff.cost_options)) throw new Error(`"${power.option}" is not an option of ${eff.name}`);
-    return eff.cost_options[power.option];
-  }
-  return eff.cost;
-}
-
-/** Range change from the effect's default range: +1 per step longer, -1 per step shorter. */
-function rangeDelta(power, R) {
-  const eff = R.effect(power.effect);
-  if (!power.range || power.range === eff.range) return 0;
-  if (!(eff.range in RANGE_STEPS) || !(power.range in RANGE_STEPS)) {
-    throw new Error(`${power.name}: cannot change ${eff.name} range from ${eff.range} to ${power.range}`);
-  }
-  return RANGE_STEPS[power.range] - RANGE_STEPS[eff.range];
-}
-
-/** Breakdown of one effect's cost (without its alternates or linked effects). */
-function effectCost(power, R) {
-  const eff = R.effect(power.effect);
-  let perRank = baseCostPerRank(power, R) + rangeDelta(power, R);
-  let flat = 0;
-  for (const mod of power.extras || []) {
-    const def = R.modifier('extra', mod.name, power.effect);
-    const v = modifierValue(mod, def);
-    if (def.cost_type === 'per_rank') perRank += v;
-    else flat += v;
-  }
-  for (const mod of power.flaws || []) {
-    const def = R.modifier('flaw', mod.name, power.effect);
-    const v = modifierValue(mod, def);
-    if (def.cost_type === 'per_rank') perRank -= v;
-    else flat -= v;
-  }
-  const rank = power.rank ?? 0;
-  let ranked;
-  if (eff.fixed_cost) {
-    const options = eff.fixed_cost;
-    ranked = typeof options === 'number' ? options : options[power.option ?? Object.keys(options)[0]];
-    ranked += (perRank - baseCostPerRank(power, R)); // per-rank modifiers on a package count once
-  } else if (perRank >= 1) {
-    ranked = perRank * rank;
-  } else {
-    ranked = Math.ceil(rank / (2 - perRank));
-  }
-  const total = Math.max(rank > 0 || eff.fixed_cost ? 1 : 0, ranked + flat);
-  return { perRank, flat, ranked, total, ratio: perRank >= 1 ? `${perRank}:1` : `1:${2 - perRank}` };
-}
-
-/** Full cost of a power: the effect, its linked effects, and its Alternate Effects. */
-function powerCost(power, R) {
-  let total = effectCost(power, R).total;
-  for (const link of power.linked || []) total += effectCost(link, R).total;
-  const aeCost = power.dynamic ? 2 : 1;
-  total += (power.alternates || []).length * aeCost;
-  return total;
-}
-
-/** Cost of an Alternate Effect on its own (used for the "AE cost <= primary" rule). */
-function alternateOwnCost(alt, R) {
-  let total = effectCost(alt, R).total;
-  for (const link of alt.linked || []) total += effectCost(link, R).total;
-  return total;
-}
-
-function primaryOwnCost(power, R) {
-  return alternateOwnCost(power, R);
-}
-
-function deviceCost(device, R) {
-  const raw = (device.powers || []).reduce((s, p) => s + powerCost(p, R), 0);
-  const per5 = device.kind === 'easily' ? 2 : device.kind === 'none' ? 0 : 1;
-  return { raw, discount: Math.floor(raw / 5) * per5, total: raw - Math.floor(raw / 5) * per5 };
-}
-
-function equipmentPoints(ch) {
-  return (ch.equipment || []).reduce((s, item) => s + (item.cost || 0), 0);
-}
-
-function equipmentRanksNeeded(ch) {
-  return Math.ceil(equipmentPoints(ch) / EP_PER_EQUIPMENT_RANK);
-}
-
-function skillRanksTotal(ch) {
-  return (ch.skills || []).reduce((s, sk) => s + (sk.ranks || 0), 0);
-}
-
-/** The power-point breakdown printed at the bottom of a DC Adventures stat block. */
-function costBreakdown(ch, R) {
-  const abilities = ABILITIES.reduce((s, a) => {
-    const v = ch.abilities?.[a];
-    if (v === null) return s - 10; // an absent ability is worth -10 points
-    return s + 2 * (v || 0);
-  }, 0);
-  const powers = (ch.powers || []).reduce((s, p) => s + powerCost(p, R), 0)
-    + (ch.devices || []).reduce((s, d) => s + deviceCost(d, R).total, 0);
-  const advantages = (ch.advantages || []).reduce((s, a) => s + (a.rank || 1), 0);
-  const ranks = skillRanksTotal(ch);
-  const skills = Math.ceil(ranks / 2);
-  const defenses = Object.values(ch.defenses || {}).reduce((s, v) => s + (v || 0), 0);
-  const total = abilities + powers + advantages + skills + defenses;
-  // With advancement on (GM-awarded points, DCA 190), the budget is the starting points plus every award.
-  const adv = ch.advancement;
-  const budget = adv
-    ? (adv.startPoints ?? (adv.startPl ?? ch.pl) * PP_PER_PL) + (adv.log || []).filter((e) => e.type === 'award').reduce((s, e) => s + (e.points || 0), 0)
-    : (ch.pl || 0) * PP_PER_PL;
-  return { abilities, powers, advantages, skills, skillRanks: ranks, defenses, total, budget, unspent: budget - total };
-}
-
-return { modifierValue, baseCostPerRank, rangeDelta, effectCost, powerCost, alternateOwnCost, primaryOwnCost, deviceCost, equipmentPoints, equipmentRanksNeeded, skillRanksTotal, costBreakdown };
 })();
 
 __mods["src/engine/rng.js"] = (() => {
@@ -2702,7 +2831,7 @@ const { deriveAll, allPowers } = __mods["src/engine/derive.js"];
 const { costBreakdown, alternateOwnCost, primaryOwnCost, equipmentPoints } = __mods["src/engine/costs.js"];
 const { EP_PER_EQUIPMENT_RANK } = __mods["src/engine/rules.js"];
 const { powerTags } = __mods["src/engine/powersmith.js"];
-const { withoutPlaced, hasPlaced, poolPowers, poolUsed } = __mods["src/engine/pools.js"];
+const { withoutPlaced, hasPlaced, poolPowers, poolSpent, poolAvailable, fmtPoints } = __mods["src/engine/pools.js"];
 function issue(rule, message, severity = 'error') {
   return { rule, message, severity };
 }
@@ -2713,8 +2842,8 @@ function checkLimits(ch, R) {
   // Limits apply to the build. Points placed from a pool right now are checked separately, as warnings.
   const d = deriveAll(withoutPlaced(ch), R);
   for (const { power: p } of poolPowers(ch)) {
-    const used = poolUsed(p);
-    if (used > p.rank) out.push(issue('pool', `${p.name}: ${used} points placed, but the pool holds ${p.rank}.`));
+    const spent = poolSpent(ch, p, R); const avail = poolAvailable(ch, p, R);
+    if (spent > avail + 1e-9) out.push(issue('pool', `${p.name}: ${fmtPoints(spent)} power points placed, but the pool has ${fmtPoints(avail)}.`));
   }
   if (hasPlaced(ch)) {
     const now = deriveAll(ch, R);
@@ -3142,6 +3271,7 @@ const { ABILITIES, ABBR, traitKind } = __mods["src/engine/rules.js"];
 const { costBreakdown, powerCost, deviceCost, effectCost, primaryOwnCost } = __mods["src/engine/costs.js"];
 const { deriveAll } = __mods["src/engine/derive.js"];
 const { checkLimits } = __mods["src/engine/limits.js"];
+const { poolCapacity } = __mods["src/engine/pools.js"];
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
@@ -3205,7 +3335,7 @@ function explainPower(p, R) {
       parts.push(`Imposes conditions: the target resists with ${resist || 'Fortitude or Will'} against DC ${10 + rank}${conditions ? `. Each failure degree is worse: ${conditions}` : ''}. The target repeats the check at the end of each turn to shake it off.`);
       break;
     case 'Weaken':
-      parts.push(`Drains a trait${p.detail ? ` (${p.detail.split(';')[0]})` : ''}: the target resists against DC ${10 + rank} and loses 1 rank per degree of failure, recovering 1 point per round.`);
+      parts.push(`Drains a trait${p.detail ? ` (${p.detail.split(';')[0]})` : ''}: the target resists against DC ${10 + rank} and loses as many power points of it as the check missed by (${rank} at most), getting them back over time. An ability loses a rank per 2 points, a defense a rank per point.`);
       break;
     case 'Nullify':
       parts.push(`Shuts down powers${p.detail ? ` (${p.detail})` : ''}: make an opposed check of Nullify ${rank} against the target's power rank or Will; if you win, the effect turns off.`);
@@ -3340,7 +3470,7 @@ function explainPower(p, R) {
       notes.push({ name: m.name + (m.detail ? ` (${m.detail})` : ''), kind, text: def?.summary || '' });
     }
   }
-  if (p.pool) notes.push({ name: `Pool of ${p.rank} points`, kind: 'extra', text: 'Not always on: during play you place up to this many points on any ability, defense, skill, power or something else, and they count only while placed. Power level limits are checked without them.' });
+  if (p.pool) notes.push({ name: `Pool of ${poolCapacity(p, R)} power points`, kind: 'extra', text: `Not always on: during play you place these points on any ability, defense, skill, power or something else, at what each costs (an ability rank 2, a defense rank 1), and they count only while placed.${p.feed ? ` Filled by what ${p.feed} drains.` : ''} Power level limits are checked without them.` });
   for (const l of p.linked || []) {
     let what = '';
     try { what = explainPower(l, R).what; } catch { /* unknown effect */ }
@@ -3348,7 +3478,7 @@ function explainPower(p, R) {
   }
   if ((p.alternates || []).length) notes.push({ name: `${p.dynamic ? 'Dynamic ' : ''}Alternate Effects`, kind: 'extra', text: `Use one effect of this array at a time${p.dynamic ? `, or split its ${primaryOwnCost(p, R)}-point pool between them` : ''}; switching is a free action.` });
   const what = p.pool
-    ? `A pool of ${p.rank} points, not always on: place them during play with + and − on the sheet, wherever they're needed.`
+    ? `A pool of ${poolCapacity(p, R)} power points, not always on: place them during play with + and − on the sheet, wherever they're needed.`
     : parts.filter(Boolean).join(' ');
   return { what, notes };
 }
@@ -4467,7 +4597,7 @@ const { ABILITIES, BUYABLE_DEFENSES } = __mods["src/engine/rules.js"];
 const { powerCost, primaryOwnCost } = __mods["src/engine/costs.js"];
 const { gearCatalog, gearToEquipment, gearToDevice } = __mods["src/engine/gear.js"];
 const { portraitBlock } = __mods["src/app/portrait.js"];
-const { poolTargets, poolUsed, targetLabel } = __mods["src/engine/pools.js"];
+const { poolTargets, targetLabel, poolPowers, poolCapacity, poolSpent, poolAvailable, poolFeeder, costPerRank, drain, loseDrained, settlePools, fmtPoints } = __mods["src/engine/pools.js"];
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const clone = (x) => JSON.parse(JSON.stringify(x));
 
@@ -4490,39 +4620,73 @@ function mathTable(p, R) {
 
 /** The plain-English "what it does" block under a power. */
 /**
- * A pool's tracker: where its points are placed right now, with + and − for each, and a picker to place
- * more. Works outside edit mode, because this is what happens at the table.
+ * A pool's tracker: where its power points are placed right now, with + and − for each, and a picker to
+ * place more. Works outside edit mode, because this is what happens at the table.
  */
-function poolTracker(ch, p, path, change) {
+function poolTracker(ch, p, path, change, R) {
   if (!p.pool) return null;
-  const used = poolUsed(p);
-  const free = p.rank - used;
-  const edit = (fn) => change((c) => { const q = getPower(c, path); q.placed = q.placed || []; fn(q); q.placed = q.placed.filter((x) => x.points > 0); if (!q.placed.length) delete q.placed; });
-  const pick = h('select', { class: 'pool-target', 'aria-label': `Place a point from ${p.name} on` },
-    h('option', { value: '' }, 'Place a point on…'),
-    poolTargets(ch).map(([group, list]) => h('optgroup', { label: group }, list.map(([v, t]) => h('option', { value: v }, t)))));
+  const avail = poolAvailable(ch, p, R);
+  const cap = poolCapacity(p, R);
+  const spent = poolSpent(ch, p, R);
+  const free = avail - spent;
+  const feeder = poolFeeder(ch, p);
+  const edit = (fn) => change((c) => { const q = getPower(c, path); q.placed = q.placed || []; fn(q, c); q.placed = q.placed.filter((x) => x.points > 0); if (!q.placed.length) delete q.placed; });
+  const cpr = (t) => costPerRank(ch, t, R);
+  const pick = h('select', { class: 'pool-target', 'aria-label': `Place a rank from ${p.name} on` },
+    h('option', { value: '' }, 'Place a rank on…'),
+    poolTargets(ch).map(([group, list]) => h('optgroup', { label: group }, list.map(([v, t]) => h('option', { value: v, disabled: cpr(v) > free + 1e-9 }, `${t} · ${fmtPoints(cpr(v))} pp${v.startsWith('skill:') ? ' (2 ranks per pp)' : ''}`)))));
   const note = h('input', { type: 'text', class: 'pool-note', placeholder: 'What? e.g. Flight speed, a Feature, an ally', 'aria-label': 'Note for something else', hidden: true });
   pick.addEventListener('change', () => { note.hidden = pick.value !== 'other'; if (!note.hidden) note.focus(); });
   const place = () => {
     const target = pick.value;
-    if (!target || free <= 0) return;
+    if (!target || cpr(target) > free + 1e-9) return;
     edit((q) => {
       const hit = q.placed.find((x) => x.target === target && (target !== 'other' || (x.note || '') === note.value.trim()));
       if (hit) hit.points += 1; else q.placed.push({ target, points: 1, ...(target === 'other' && note.value.trim() ? { note: note.value.trim() } : {}) });
     });
   };
+  const dots = Math.round(Math.min(cap, 40));
   return h('div', { class: 'pool no-print-controls' },
     h('div', { class: 'pool-head' },
       h('b', null, '⚡ Pool'),
-      h('span', { class: 'pool-meter', role: 'img', 'aria-label': `${used} of ${p.rank} placed` },
-        Array.from({ length: p.rank }, (_, i) => h('i', { class: i < used ? 'on' : '' }))),
-      h('span', { class: 'num pool-count' }, `${used}/${p.rank} placed · ${free} free`),
-      used ? h('button', { class: 'btn sm no-print', type: 'button', title: 'Every placed point fades away', onClick: () => edit((q) => { q.placed = []; }) }, 'Points fade (clear)') : null),
+      h('span', { class: 'pool-meter', role: 'img', 'aria-label': `${fmtPoints(spent)} of ${fmtPoints(avail)} power points placed` },
+        Array.from({ length: dots }, (_, i) => h('i', { class: i < spent ? 'on' : i < avail ? '' : 'off' }))),
+      h('span', { class: 'num pool-count' }, `${fmtPoints(spent)}/${fmtPoints(avail)} pp placed · ${fmtPoints(Math.max(0, free))} free`),
+      spent ? h('button', { class: 'btn sm no-print', type: 'button', title: 'Every placed rank fades away', onClick: () => edit((q) => { q.placed = []; }) }, 'Clear') : null),
+    feeder ? h('p', { class: 'hint pool-feed' }, `Filled by ${feeder.name}: it holds ${feeder.drained || 0} drained point${feeder.drained === 1 ? '' : 's'}${avail < (feeder.drained || 0) ? `, and this pool takes at most ${cap}` : ''}. Drain more on ${feeder.name} to fill it.`)
+      : h('p', { class: 'hint pool-feed' }, `Holds ${cap} power points. Each rank costs what the trait does: abilities 2, defenses 1, skills 1 per 2 ranks, powers their cost per rank.`),
     (p.placed || []).length ? h('div', { class: 'pool-rows' }, p.placed.map((x, i) => h('div', { class: 'pool-row' },
       h('span', { class: 'pool-label' }, targetLabel(x)),
       h('b', { class: 'num' }, `+${x.points}`),
-      stepper(x.points, (d) => edit((q) => { q.placed[i].points += d; }), { min: 0, max: x.points + free, label: `${targetLabel(x)} from ${p.name}` })))) : h('p', { class: 'hint', style: { margin: '4px 0' } }, 'Nothing placed. Pick where a point goes, then press +.'),
-    free > 0 ? h('div', { class: 'pool-add no-print' }, pick, note, h('button', { class: 'btn sm', type: 'button', onClick: place }, '+ 1 point')) : null);
+      h('span', { class: 'pool-pp num' }, `${fmtPoints(x.points * cpr(x.target))} pp`),
+      stepper(x.points, (d) => edit((q) => { q.placed[i].points += d; }), { min: 0, max: x.points + (free + 1e-9 >= cpr(x.target) ? 1 : 0), label: `${targetLabel(x)} from ${p.name}` })))) : h('p', { class: 'hint', style: { margin: '4px 0' } }, free > 0 ? 'Nothing placed. Pick where a rank goes, then press +.' : feeder ? 'Nothing to place yet: drain someone first.' : 'Nothing placed.'),
+    free > 0 ? h('div', { class: 'pool-add no-print' }, pick, note, h('button', { class: 'btn sm', type: 'button', onClick: place }, '+ 1 rank')) : null);
+}
+
+/**
+ * Weaken: track the power points it has drained and still holds (DCA 122: the target loses points by how
+ * much it missed the DC, and they come back over time). Pools it fills follow along.
+ */
+function drainTracker(ch, p, path, change, R) {
+  if (p.effect !== 'Weaken') return null;
+  const held = p.drained || 0;
+  const fills = poolPowers(ch).filter(({ power }) => power.feed === p.name).map(({ power }) => power.name);
+  const edit = (fn) => change((c) => { fn(getPower(c, path)); settlePools(c, R); });
+  const missed = h('input', { type: 'number', min: 1, max: p.rank, value: '', placeholder: 'by…', class: 'drain-missed', 'aria-label': 'The target missed its resistance check by' });
+  const go = () => { const n = Number(missed.value); if (n > 0) edit((q) => drain(q, n)); };
+  missed.addEventListener('keydown', (e) => { if (e.key === 'Enter') go(); });
+  const resist = (p.detail && /Resisted by ([A-Za-z]+)/.exec(p.detail)?.[1]) || 'Fortitude or Will';
+  return h('div', { class: 'pool drain no-print-controls' },
+    h('div', { class: 'pool-head' },
+      h('b', null, '🩸 Drain'),
+      h('span', { class: 'pool-meter', role: 'img', 'aria-label': `${held} of ${p.rank} points drained` }, Array.from({ length: Math.min(p.rank, 40) }, (_, i) => h('i', { class: i < held ? 'on' : '' }))),
+      h('span', { class: 'num pool-count' }, `${held}/${p.rank} pp held`)),
+    h('p', { class: 'hint pool-feed' }, `Target resists with ${resist} against DC ${10 + p.rank}. It loses as many power points as it missed by, ${p.rank} at most in all, and gets them back over time.${fills.length ? ` What you hold fills ${fills.join(' and ')}.` : ' Tick "Pool" on a power in the Power Lab and pick this one under "Filled by" to spend what you steal.'}`),
+    h('div', { class: 'pool-add no-print' },
+      h('label', { class: 'drain-label' }, 'Missed by', missed),
+      h('button', { class: 'btn sm', type: 'button', onClick: go, disabled: held >= p.rank }, 'Drain'),
+      h('button', { class: 'btn sm', type: 'button', disabled: !held, title: 'A round passes (Fades) or a hit knocks a point loose', onClick: () => edit((q) => loseDrained(q, 1)) }, '−1 fades'),
+      h('button', { class: 'btn sm ghost', type: 'button', disabled: !held, title: 'Everything drained goes back', onClick: () => edit((q) => loseDrained(q, q.drained || 0)) }, 'All back')));
 }
 
 /** The player's own words for a power: how it looks and what it can do. */
@@ -4648,7 +4812,8 @@ function renderFile(ch, R, opts = {}) {
         h('span', { class: 'power-name' }, p.name),
         alts.length ? h('span', { class: 'chip', title: p.dynamic ? 'Dynamic: split the pool between several effects at once' : 'Alternate Effects: one effect at a time' }, p.dynamic ? `Dynamic Array · ${primaryOwnCost(p, R)}-pp pool` : 'Array') : null,
         p.linked?.length ? h('span', { class: 'chip', title: 'Linked effects work together, with one action' }, '🔗 Linked') : null,
-        p.pool ? h('span', { class: 'chip', title: 'Not always on: place its points during play' }, `⚡ Pool · ${poolUsed(p)}/${p.rank}`) : null,
+        p.pool ? h('span', { class: 'chip', title: 'Not always on: place its points during play' }, `⚡ Pool · ${fmtPoints(poolSpent(ch, p, R))}/${fmtPoints(poolAvailable(ch, p, R))} pp`) : null,
+        p.effect === 'Weaken' && p.drained ? h('span', { class: 'chip', title: 'Power points drained and still held' }, `🩸 ${p.drained}/${p.rank}`) : null,
         h('span', { class: 'power-cost num' }, inDevice ? `${cost} pp in device` : `${cost} pp`),
         editing ? h('span', { class: 'btn-row no-print' },
           stepper(p.rank, (d) => change((c) => { const q = getPower(c, path); q.rank = Math.max(1, q.rank + d); }), { min: 1, label: `${p.name} rank` }),
@@ -4657,10 +4822,11 @@ function renderFile(ch, R, opts = {}) {
       h('div', { class: 'power-text' }, describeEffect(p, R)),
       aboutPower(p),
       linkedAbout(p),
-      poolTracker(ch, p, path, change),
+      drainTracker(ch, p, path, change, R),
+      poolTracker(ch, p, path, change, R),
       whatItDoes(p, R),
       alts.map((a, i) => h('div', { class: 'ae' },
-        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), aboutPower(a), linkedAbout(a), poolTracker(ch, a, { ...path, alt: i }, change), whatItDoes(a, R, true),
+        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), aboutPower(a), linkedAbout(a), drainTracker(ch, a, { ...path, alt: i }, change, R), poolTracker(ch, a, { ...path, alt: i }, change, R), whatItDoes(a, R, true),
         editing ? h('span', { class: 'no-print' }, ' ',
           stepper(a.rank, (d) => change((c) => { const q = getPower(c, { ...path, alt: i }); q.rank = Math.max(1, q.rank + d); }), { min: 1, label: `${a.name} rank` }),
           h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${a.name}`, onClick: () => change((c) => removeAt(c, { ...path, alt: i })) }, '✕')) : null)),
@@ -8478,8 +8644,8 @@ const inflate = async (bytes) => new TextDecoder().decode(await pipe(bytes, new 
 
 /** The parts of a character that a key must reproduce exactly. */
 function fingerprint(ch) {
-  const pick = (({ pl, abilities, defenses, skills, advantages, powers, devices, equipment, identity, alignment, complications, notes }) =>
-    ({ pl, abilities, defenses, skills, advantages, powers, devices, equipment, identity, alignment, complications, notes }))(ch);
+  const pick = (({ pl, abilities, defenses, skills, advantages, powers, devices, equipment, identity, alignment, complications, notes, forms, activeForm, companions }) =>
+    ({ pl, abilities, defenses, skills, advantages, powers, devices, equipment, identity, alignment, complications, notes, forms, activeForm, companions }))(ch);
   return JSON.stringify([pick, ch.bio?.summary || null, ch.bio?.timeline?.length || 0, ch.journal?.entries?.length || 0]);
 }
 
@@ -8680,6 +8846,10 @@ function forPatch(ch) {
   const out = {};
   for (const [k, v] of Object.entries(ch || {})) if (!PATCH_SKIP.has(k) && v !== undefined) out[k] = v;
   if (out.portrait?.image) { const { image, aiSaved, ...p } = out.portrait; out.portrait = p; }
+  // Pictures inside other forms and companions stay home too.
+  const noPicture = (x) => (x?.portrait?.image ? { ...x, portrait: (({ image, aiSaved, ...p }) => p)(x.portrait) } : x);
+  if (out.forms) out.forms = out.forms.map(noPicture);
+  if (out.companions) out.companions = out.companions.map(noPicture);
   return out;
 }
 
@@ -11081,7 +11251,9 @@ function card(ch) {
       h('label', { class: 'card-pick no-print', title: 'Select' }, h('input', { type: 'checkbox', checked: sel, 'aria-label': `Select ${ch.identity?.codename || 'character'}`, onChange: toggle })),
       h('div', { class: 'cn' }, ch.identity?.codename || 'Unnamed'),
       h('div', { class: 'rn' }, [ch.identity?.realName, `PL ${ch.pl}`, ch.alignment === 'villain' ? 'Villain' : 'Hero'].filter(Boolean).join(' · ')),
-      ch.folder && ui.folder !== ch.folder ? h('button', { type: 'button', class: 'card-folder', title: 'Open this folder', onClick: () => { ui.folder = ch.folder; saveView(); renderRoster(); } }, `${ch.folder.includes('/') ? '📁' : '🌍'} ${ch.folder}`) : null),
+      ch.folder && ui.folder !== ch.folder ? h('button', { type: 'button', class: 'card-folder', title: 'Open this folder', onClick: () => { ui.folder = ch.folder; saveView(); renderRoster(); } }, `${ch.folder.includes('/') ? '📁' : '🌍'} ${ch.folder}`) : null,
+      Array.isArray(ch.forms) && ch.forms.length > 1 ? h('span', { class: 'card-folder', title: ch.forms.map((f) => f.name).join(', ') }, `🎭 ${ch.forms.length} forms`) : null,
+      ch.companions?.length ? h('span', { class: 'card-folder', title: ch.companions.map((c) => c.identity?.codename).join(', ') }, `🐾 ${ch.companions.length}`) : null),
     h('div', { class: 'card-body' },
       h('div', { class: 'tagwrap' },
         ch.archetype?.name && h('span', { class: 'chip' }, ch.archetype.name),
@@ -11320,6 +11492,183 @@ function backupMenu() {
 return { saveRoster, initRoster, worldSelect, renderRoster };
 })();
 
+__mods["src/engine/forms.js"] = (() => {
+// Alternate forms: one character, up to 8 builds (a human identity and a powered one, armor on and off,
+// a werewolf's three shapes...). Each form is a whole build with its own power level, traits, powers,
+// gear, codename and picture, checked on its own. Everything about the person (name, bio, journal,
+// factions, world, roster entry) is shared.
+//
+// The active form lives at the top level of the character, so every part of the app (sheet, limits,
+// Battle Room, exports) works on it unchanged; the others wait in ch.forms[i]. Switching swaps them.
+
+const MAX_FORMS = 8;
+const FORM_FIELDS = ['pl', 'abilities', 'defenses', 'skills', 'advantages', 'powers', 'devices', 'equipment', 'portrait', 'theme'];
+
+const clone = (x) => (x === undefined ? undefined : JSON.parse(JSON.stringify(x)));
+
+const hasForms = (ch) => Array.isArray(ch?.forms) && ch.forms.length > 1;
+const activeForm = (ch) => (hasForms(ch) ? Math.max(0, Math.min(ch.activeForm || 0, ch.forms.length - 1)) : 0);
+
+/** A form's build, stored or live. */
+function formBuild(ch, i) {
+  if (i === activeForm(ch) || !hasForms(ch)) {
+    const out = {};
+    for (const k of FORM_FIELDS) if (ch[k] !== undefined) out[k] = ch[k];
+    return out;
+  }
+  return ch.forms[i];
+}
+
+function snapshot(ch) {
+  const out = {};
+  for (const k of FORM_FIELDS) if (ch[k] !== undefined) out[k] = clone(ch[k]);
+  return out;
+}
+
+function blankBuild(pl) {
+  return {
+    pl,
+    abilities: { Strength: 0, Stamina: 0, Agility: 0, Dexterity: 0, Fighting: 0, Intellect: 0, Awareness: 0, Presence: 0 },
+    defenses: { Dodge: 0, Parry: 0, Fortitude: 0, Will: 0 },
+    skills: [], advantages: [], powers: [], devices: [], equipment: [],
+  };
+}
+
+/** Add a form (a copy of the active one, or a blank build) and return the new character. */
+function addForm(ch, { copy = true, name } = {}) {
+  const c = clone(ch);
+  if (!hasForms(c)) { c.forms = [{ name: 'Form 1', codename: c.identity?.codename || '' }]; c.activeForm = 0; }
+  if (c.forms.length >= MAX_FORMS) throw new Error(`A character can have ${MAX_FORMS} forms at most.`);
+  const n = c.forms.length + 1;
+  const build = copy ? snapshot(c) : blankBuild(c.pl);
+  if (!copy) build.theme = clone(c.theme);
+  c.forms.push({ name: name || `Form ${n}`, codename: c.identity?.codename || '', ...build });
+  return c;
+}
+
+/** Make form i the active one. Returns the new character. */
+function switchForm(ch, i) {
+  if (!hasForms(ch)) return ch;
+  const cur = activeForm(ch);
+  if (i === cur || i < 0 || i >= ch.forms.length) return ch;
+  const c = clone(ch);
+  // put the live build away
+  c.forms[cur] = { name: c.forms[cur].name, codename: c.identity?.codename || c.forms[cur].codename || '', ...snapshot(c) };
+  // bring the other one out
+  const next = c.forms[i];
+  for (const k of FORM_FIELDS) { if (next[k] !== undefined) c[k] = next[k]; else delete c[k]; }
+  if (next.codename) c.identity = { ...c.identity, codename: next.codename };
+  c.forms[i] = { name: next.name, codename: next.codename || '' };
+  c.activeForm = i;
+  return c;
+}
+
+function renameForm(ch, i, name) {
+  const c = clone(ch);
+  if (hasForms(c) && c.forms[i]) c.forms[i].name = String(name || '').trim() || `Form ${i + 1}`;
+  return c;
+}
+
+/** Remove a form that isn't the active one. With one form left, the character has no forms any more. */
+function removeForm(ch, i) {
+  if (!hasForms(ch) || i === activeForm(ch)) return ch;
+  const c = clone(ch);
+  c.forms.splice(i, 1);
+  if (i < c.activeForm) c.activeForm -= 1;
+  if (c.forms.length < 2) { delete c.forms; delete c.activeForm; }
+  return c;
+}
+
+/** Every form as a full character of its own (for exports, stat blocks and checking each build). */
+function formCharacters(ch) {
+  if (!hasForms(ch)) return [ch];
+  return ch.forms.map((f, i) => {
+    if (i === activeForm(ch)) return ch;
+    const c = clone(ch);
+    for (const k of FORM_FIELDS) { if (f[k] !== undefined) c[k] = clone(f[k]); else delete c[k]; }
+    if (f.codename) c.identity = { ...c.identity, codename: f.codename };
+    c.activeForm = i;
+    return c;
+  });
+}
+
+return { MAX_FORMS, FORM_FIELDS, hasForms, activeForm, formBuild, addForm, switchForm, renameForm, removeForm, formCharacters };
+})();
+
+__mods["src/engine/companions.js"] = (() => {
+// Companions: sidekicks, minions, pets and other followers attached to a character, each a full
+// character sheet of its own (ch.companions[i]). They travel with the character: roster, exports, keys.
+//
+//   Sidekick advantage: 5 power points per rank for the sidekick's build (DCA 78)
+//   Minion advantage:  15 power points per rank, and the follower uses the minion rules (DCA 77)
+//   Other: summoned creatures, pets bought as a power, story NPCs. No budget is checked.
+
+const { costBreakdown } = __mods["src/engine/costs.js"];
+const COMPANION_KINDS = {
+  sidekick: { label: 'Sidekick', advantage: 'Sidekick', perRank: 5, blurb: 'A full character built on 5 power points per rank of the Sidekick advantage.' },
+  minion: { label: 'Minion', advantage: 'Minion', perRank: 15, blurb: 'A follower built on 15 power points per rank of the Minion advantage; uses the minion rules.' },
+  companion: { label: 'Companion', advantage: null, perRank: 0, blurb: 'An animal companion, summoned creature, ally or anyone else. No point budget is checked.' },
+};
+
+const companionsOf = (ch) => (Array.isArray(ch?.companions) ? ch.companions : []);
+const nameOf = (c) => c.identity?.codename || c.identity?.realName || 'Companion';
+
+/** The owner's advantage entry that pays for a companion, if any. */
+function payingAdvantage(owner, comp) {
+  const kind = COMPANION_KINDS[comp.companionKind];
+  if (!kind?.advantage) return null;
+  const list = (owner.advantages || []).filter((a) => a.name === kind.advantage);
+  const name = nameOf(comp).toLowerCase();
+  return list.find((a) => String(a.param || '').toLowerCase() === name) || (list.length === 1 ? list[0] : null);
+}
+
+/** { budget, cost, advantage, ok, message } for a companion. budget is null when nothing is checked. */
+function companionBudget(owner, comp, R) {
+  const kind = COMPANION_KINDS[comp.companionKind] || COMPANION_KINDS.companion;
+  let cost = null;
+  try { cost = costBreakdown(comp, R).total; } catch { /* unknown traits */ }
+  if (!kind.advantage) return { budget: null, cost, advantage: null, ok: true, message: 'No point budget is checked.' };
+  const adv = payingAdvantage(owner, comp);
+  if (!adv) return { budget: null, cost, advantage: null, ok: false, message: `${nameOf(owner)} needs the ${kind.advantage} advantage to pay for ${nameOf(comp)} (${kind.perRank} power points per rank). Add ${kind.advantage} ${Math.max(1, Math.ceil((cost || 0) / kind.perRank))}${nameOf(comp) ? ` (${nameOf(comp)})` : ''} in Edit mode.` };
+  const budget = (adv.rank || 1) * kind.perRank;
+  return { budget, cost, advantage: adv, ok: cost == null || cost <= budget, message: cost != null && cost > budget ? `${cost} power points, but ${kind.advantage} ${adv.rank || 1} pays for ${budget}. Raise the advantage to ${Math.ceil(cost / kind.perRank)} or trim the build.` : `${kind.advantage} ${adv.rank || 1}: ${budget} power points, ${cost ?? '?'} spent.` };
+}
+
+/** Prepare a character to be someone's companion. */
+function asCompanion(c, kind) {
+  const out = JSON.parse(JSON.stringify(c));
+  for (const k of ['rosterId', 'savedAt', 'folder', 'companions', 'companionOf', 'lobbyOwner', 'lobbyOwnerName', 'lobbyShared']) delete out[k];
+  out.companionKind = COMPANION_KINDS[kind] ? kind : 'companion';
+  out.id = out.id || `c-comp-${Date.now().toString(36)}-${Math.floor(Math.random() * 1e6).toString(36)}`;
+  if (out.companionKind === 'minion') out.minion = true;
+  return out;
+}
+
+function blankCompanion(pl, name) {
+  return {
+    pl,
+    abilities: { Strength: 0, Stamina: 0, Agility: 0, Dexterity: 0, Fighting: 0, Intellect: 0, Awareness: 0, Presence: 0 },
+    defenses: { Dodge: 0, Parry: 0, Fortitude: 0, Will: 0 },
+    skills: [], advantages: [], powers: [], devices: [], equipment: [],
+    archetype: { id: 'custom', name: 'Custom' },
+    theme: { id: 'custom', name: 'Custom', color: '#5b6b4a' },
+    alignment: 'hero',
+    identity: { codename: name || 'New companion', realName: '', languages: ['English'] },
+    complications: [], notes: '',
+    createdAt: new Date().toISOString(),
+  };
+}
+
+/** A sensible power level for a companion: what its budget buys at 15 points per PL. */
+function suggestedPl(owner, kind, rank) {
+  const k = COMPANION_KINDS[kind];
+  if (!k?.perRank || !rank) return Math.max(1, (owner.pl || 10) - 2);
+  return Math.max(1, Math.min(owner.pl || 10, Math.floor((rank * k.perRank) / 15)));
+}
+
+return { COMPANION_KINDS, companionsOf, payingAdvantage, companionBudget, asCompanion, blankCompanion, suggestedPl };
+})();
+
 __mods["src/app/forge.js"] = (() => {
 // The Forge: roll controls, the current character, and its actions.
 
@@ -11339,6 +11688,9 @@ const { rollMenu } = __mods["src/app/dice.js"];
 const { lobby } = __mods["src/app/lobby.js"];
 const { claimCharacter } = __mods["src/app/table.js"];
 const { worldSelect } = __mods["src/app/roster.js"];
+const { hasForms, activeForm, addForm, switchForm, renameForm, removeForm, MAX_FORMS } = __mods["src/engine/forms.js"];
+const { COMPANION_KINDS, companionsOf, companionBudget, asCompanion, blankCompanion, suggestedPl } = __mods["src/engine/companions.js"];
+const { catalogToCharacter } = __mods["src/engine/catalog.js"];
 let R;
 let root;
 let fileHost;
@@ -11778,8 +12130,178 @@ function saveBar(ch) {
       : 'Saves to The Multiverse Hub, the list of everyone you make. Pick a world to file them in one, or make a new world.'));
 }
 
+/** Replace the open character with a changed copy (unsaved, like any edit). */
+function commit(c) {
+  state.current = c; state.tabs[state.active] = c; saveTabs(); fresh = false; renderCurrent(); emit('current');
+}
+
+/**
+ * Alternate forms: numbered tabs for up to 8 builds of the same character. Each is a whole build (its
+ * own PL, traits, powers, codename, picture); the person, bio and journal are shared.
+ */
+function formStrip(ch) {
+  if (!hasForms(ch)) return null;
+  const cur = activeForm(ch);
+  const rename = async (i) => {
+    const input = h('input', { type: 'text', value: ch.forms[i].name, 'aria-label': 'Form name' });
+    const ok = await openDialog({ title: 'Name this form', body: [h('label', { class: 'field' }, h('span', null, 'Name'), input), h('p', { class: 'hint', style: { margin: 0 } }, 'E.g. Civilian, Armored, Wolf, Hybrid. The codename shown on the sheet is set per form in Edit mode.')], buttons: [{ label: 'Cancel', value: false }, { label: 'Save', value: true, primary: true }] });
+    if (ok) commit(renameForm(state.current, i, input.value));
+  };
+  const add = async () => {
+    const ok = await openDialog({
+      title: 'Add a form',
+      body: h('p', { style: { margin: 0 } }, `Start the new form as a copy of ${ch.forms[cur].name} and change what's different, or from a blank build at PL ${ch.pl}.`),
+      buttons: [{ label: 'Cancel', value: null }, { label: 'Blank build', value: 'blank' }, { label: `Copy ${ch.forms[cur].name}`, value: 'copy', primary: true }],
+    });
+    if (!ok) return;
+    try {
+      const c = addForm(state.current, { copy: ok === 'copy' });
+      commit(switchForm(c, c.forms.length - 1));
+      toast(`${c.forms[c.forms.length - 1].name} added. Edit it like any character; the others keep their own builds.`);
+    } catch (e) { toast(e.message); }
+  };
+  return h('div', { class: 'form-strip no-print', role: 'tablist', 'aria-label': 'Alternate forms' },
+    h('span', { class: 'form-strip-label' }, '🎭 Forms'),
+    ch.forms.map((f, i) => h('span', { class: `form-tab ${i === cur ? 'active' : ''}` },
+      h('button', { type: 'button', role: 'tab', 'aria-selected': String(i === cur), class: 'form-tab-btn', title: i === cur ? 'This form is showing. Click again to rename it.' : `Switch to ${f.name}`, onClick: () => (i === cur ? rename(i) : commit(switchForm(state.current, i))) },
+        h('b', { class: 'num' }, i + 1), ' ', f.name),
+      i !== cur ? h('button', { type: 'button', class: 'x', 'aria-label': `Remove ${f.name}`, title: `Remove ${f.name}`, onClick: async () => {
+        const ok = await openDialog({ title: `Remove ${f.name}?`, body: h('p', { style: { margin: 0 } }, 'Its whole build goes. The other forms and the character stay.'), buttons: [{ label: 'Keep', value: false }, { label: 'Remove', value: true, danger: true }] });
+        if (ok) commit(removeForm(state.current, i));
+      } }, '✕') : null)),
+    ch.forms.length < MAX_FORMS ? h('button', { type: 'button', class: 'form-add', onClick: add, title: `Add a form (up to ${MAX_FORMS})` }, '+ Form') : null);
+}
+
+// ---- companions: sidekicks, minions, pets, each with a full sheet ------------------------------------------
+const openCompanion = new Set(); // ids of companions whose sheets are unfolded
+const editingCompanion = new Set();
+
+function companionsSection(ch) {
+  const list = companionsOf(ch);
+  const setAt = (i, c) => { const o = JSON.parse(JSON.stringify(state.current)); o.companions[i] = c; commit(o); };
+  const cards = list.map((comp, i) => {
+    const kind = COMPANION_KINDS[comp.companionKind] || COMPANION_KINDS.companion;
+    const b = companionBudget(ch, comp, R);
+    const open = openCompanion.has(comp.id);
+    const editing = editingCompanion.has(comp.id);
+    const head = h('div', { class: 'comp-head' },
+      h('span', { class: 'swatch', style: { '--c': comp.theme?.color || '#5b6b4a' } }),
+      h('b', { class: 'comp-name' }, comp.identity?.codename || 'Companion'),
+      h('span', { class: 'chip' }, kind.label),
+      h('span', { class: 'chip num' }, `PL ${comp.pl}`),
+      h('span', { class: `status ${b.ok ? 'ok' : 'warn'}`, title: b.message }, b.budget != null ? `${b.cost}/${b.budget} pp` : b.ok ? `${b.cost ?? '?'} pp` : 'Needs the advantage'),
+      h('span', { class: 'spacer' }),
+      h('button', { class: 'btn sm', type: 'button', 'aria-expanded': String(open), onClick: () => { if (open) openCompanion.delete(comp.id); else openCompanion.add(comp.id); renderCurrent(); } }, open ? 'Hide sheet' : 'Show sheet'),
+      open ? h('button', { class: 'btn sm', type: 'button', 'aria-pressed': String(editing), onClick: () => { if (editing) editingCompanion.delete(comp.id); else editingCompanion.add(comp.id); renderCurrent(); } }, editing ? 'Done editing' : 'Edit') : null,
+      h('button', { class: 'btn sm', type: 'button', title: 'Open as its own tab (Power Lab, Bio, exports), then save it back', onClick: () => setCurrent({ ...JSON.parse(JSON.stringify(comp)), companionOf: { ownerId: ch.id, ownerName: ch.identity?.codename || 'their hero', index: i } }, { newTab: true }) }, 'Open in a tab'),
+      h('button', { class: 'btn sm', type: 'button', title: 'Add to the Battle Room', onClick: () => api.throwIn?.(comp) }, '⚔'),
+      h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${comp.identity?.codename}`, onClick: async () => {
+        const ok = await openDialog({ title: `Remove ${comp.identity?.codename}?`, body: h('p', { style: { margin: 0 } }, 'Their sheet goes with them. Save them to the roster first if you want to keep a copy.'), buttons: [{ label: 'Keep', value: false }, { label: 'Remove', value: true, danger: true }] });
+        if (ok) { const o = JSON.parse(JSON.stringify(state.current)); o.companions.splice(i, 1); if (!o.companions.length) delete o.companions; commit(o); }
+      } }, '✕'));
+    const body = open ? renderFile(comp, R, { editing, onChange: (c) => setAt(i, c), noPortrait: false }).el : null;
+    return h('div', { class: 'comp-card' }, head, !b.ok || b.budget != null ? h('p', { class: `hint comp-budget ${b.ok ? '' : 'bad'}` }, b.message) : null, body ? h('div', { class: 'comp-sheet' }, body) : null);
+  });
+  return h('section', { class: 'companions no-print-empty', id: 'companions' },
+    h('div', { class: 'comp-title' }, h('h3', null, 'Companions'), h('span', { class: 'hint' }, 'Sidekicks, minions, animals and other followers, each with a full sheet.'),
+      h('span', { class: 'spacer' }), h('button', { class: 'btn sm', type: 'button', id: 'add-companion', onClick: () => addCompanionDialog(ch) }, '+ Companion')),
+    cards);
+}
+
+async function addCompanionDialog(owner) {
+  const kindSel = h('select', { id: 'comp-kind' }, Object.entries(COMPANION_KINDS).map(([k, v]) => h('option', { value: k }, v.label)));
+  const kindHint = h('p', { class: 'hint', style: { margin: '2px 0 0' } }, COMPANION_KINDS.sidekick.blurb);
+  const rankIn = h('input', { type: 'number', min: 1, max: 40, value: 4, id: 'comp-rank' });
+  const rankRow = h('label', { class: 'field' }, h('span', null, 'Advantage rank (adds it to the hero if they lack it)'), rankIn);
+  const nameIn = h('input', { type: 'text', id: 'comp-name', placeholder: 'Name, e.g. Kid Flash, Ace the Bat-Hound' });
+  const srcSel = h('select', { id: 'comp-source' },
+    h('option', { value: 'roll' }, 'Roll a new character'),
+    h('option', { value: 'blank' }, 'Blank sheet (build it yourself)'),
+    h('option', { value: 'bestiary' }, 'An animal or creature from the Bestiary'),
+    state.roster.length ? h('option', { value: 'roster' }, 'Someone from your roster (a copy)') : null);
+  const plIn = h('input', { type: 'number', min: 0, max: 20, value: suggestedPl(owner, 'sidekick', 4), id: 'comp-pl' });
+  const creatures = Object.values(R.raw.catalog || {}).flat().sort((a, b) => a.name.localeCompare(b.name));
+  const find = h('input', { type: 'search', placeholder: 'Search: wolf, hawk, dragon, robot…', id: 'comp-find' });
+  const creatureSel = h('select', { id: 'comp-creature', size: 6 }, creatures.map((e) => h('option', { value: e.id }, `${e.name} · PL ${e.pl}${e.category ? ` · ${e.category}` : ''}`)));
+  find.addEventListener('input', () => { const q = find.value.toLowerCase(); for (const o of creatureSel.options) o.hidden = q && !o.textContent.toLowerCase().includes(q); });
+  const rosterSel = h('select', { id: 'comp-roster' }, state.roster.filter((c) => c.rosterId !== owner.rosterId).map((c) => h('option', { value: c.rosterId }, `${c.identity?.codename || 'Unnamed'} · PL ${c.pl}`)));
+  const plRow = h('label', { class: 'field' }, h('span', null, 'Power level'), plIn);
+  const creatureRow = h('div', { class: 'field', hidden: true }, h('span', null, 'Creature'), find, creatureSel);
+  const rosterRow = h('label', { class: 'field', hidden: true }, h('span', null, 'From the roster'), rosterSel);
+  const sync = () => {
+    const k = kindSel.value;
+    kindHint.textContent = COMPANION_KINDS[k].blurb;
+    rankRow.hidden = !COMPANION_KINDS[k].advantage;
+    plIn.value = suggestedPl(owner, k, Number(rankIn.value) || 1);
+    plRow.hidden = !['roll', 'blank'].includes(srcSel.value);
+    creatureRow.hidden = srcSel.value !== 'bestiary';
+    rosterRow.hidden = srcSel.value !== 'roster';
+  };
+  kindSel.addEventListener('change', sync); srcSel.addEventListener('change', sync); rankIn.addEventListener('input', sync);
+  const ok = await openDialog({
+    title: `A companion for ${owner.identity?.codename || 'this character'}`,
+    body: [h('label', { class: 'field' }, h('span', null, 'Kind'), kindSel), kindHint, rankRow,
+      h('label', { class: 'field' }, h('span', null, 'Start from'), srcSel), plRow, creatureRow, rosterRow,
+      h('label', { class: 'field' }, h('span', null, 'Name (optional)'), nameIn)],
+    buttons: [{ label: 'Cancel', value: false }, { label: 'Add companion', value: true, primary: true }],
+  });
+  if (!ok) return;
+  const kind = kindSel.value;
+  const pl = Math.max(0, Math.min(20, Number(plIn.value) || 1));
+  let base;
+  try {
+    if (srcSel.value === 'roll') base = generateCharacter(R, { seed: randomSeed(), pl, alignment: owner.alignment || 'hero', chaos: state.prefs.chaos });
+    else if (srcSel.value === 'bestiary') { const e = creatures.find((x) => x.id === creatureSel.value) || creatures[0]; base = catalogToCharacter(e); }
+    else if (srcSel.value === 'roster') base = state.roster.find((c) => c.rosterId === rosterSel.value);
+    else base = blankCompanion(pl, nameIn.value.trim());
+  } catch (e) { toast(e.message); return; }
+  if (!base) { toast('Pick someone first.'); return; }
+  const comp = asCompanion(base, kind);
+  if (nameIn.value.trim()) comp.identity = { ...comp.identity, codename: nameIn.value.trim() };
+  const o = JSON.parse(JSON.stringify(state.current));
+  o.companions = [...companionsOf(o), comp];
+  const adv = COMPANION_KINDS[kind].advantage;
+  if (adv) {
+    const rank = Math.max(1, Number(rankIn.value) || 1);
+    const name = comp.identity?.codename;
+    const have = (o.advantages || []).find((a) => a.name === adv && String(a.param || '').toLowerCase() === String(name || '').toLowerCase());
+    if (have) have.rank = Math.max(have.rank || 1, rank); else o.advantages = [...(o.advantages || []), { name: adv, rank, param: name }];
+  }
+  openCompanion.add(comp.id);
+  commit(o);
+  setTimeout(() => document.getElementById('companions')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  toast(`${comp.identity?.codename || 'Companion'} joins ${owner.identity?.codename || 'the character'}${adv ? ` (${adv} ${Math.max(1, Number(rankIn.value) || 1)} added to the sheet)` : ''}`);
+}
+
+/** A companion opened in its own tab: send the changes back to its hero. */
+function companionBanner(ch) {
+  if (!ch.companionOf) return null;
+  const back = () => {
+    const { ownerId, index } = ch.companionOf;
+    const copy = JSON.parse(JSON.stringify(ch)); delete copy.companionOf;
+    const ti = state.tabs.findIndex((t) => t.id === ownerId);
+    if (ti >= 0) {
+      const o = JSON.parse(JSON.stringify(state.tabs[ti]));
+      o.companions = companionsOf(o); o.companions[index] = copy;
+      state.tabs[ti] = o; state.active = ti; state.current = o; saveTabs(); renderCurrent(); emit('current');
+      toast(`Saved into ${o.identity?.codename}. Save them to the roster to keep it.`);
+      return;
+    }
+    const r = state.roster.find((x) => x.id === ownerId);
+    if (r) { const o = JSON.parse(JSON.stringify(r)); o.companions = companionsOf(o); o.companions[index] = copy; upsert(o); toast(`Saved into ${o.identity?.codename} on your roster.`); return; }
+    toast(`Open ${ch.companionOf.ownerName} first, then save back.`);
+  };
+  return h('div', { class: 'comp-banner no-print' },
+    h('span', null, `🐾 ${ch.identity?.codename || 'This companion'} belongs to ${ch.companionOf.ownerName}. Changes here stay in this tab until you save them back.`),
+    h('button', { class: 'btn sm primary', type: 'button', onClick: back }, `Save back to ${ch.companionOf.ownerName}`));
+}
+
 function drawCurrent(ch) {
   fileHost.append(tabStrip());
+  const banner = companionBanner(ch);
+  if (banner) fileHost.append(banner);
+  const forms = formStrip(ch);
+  if (forms) fileHost.append(forms);
   const inRoster = ch.rosterId && state.roster.some((x) => x.rosterId === ch.rosterId);
   const toolbar = h('div', { class: 'toolbar' },
     h('button', { class: 'btn primary', type: 'button', title: `Saves to ${worldOf(ch) || 'The Multiverse Hub'} (change it at the bottom of the sheet)`, onClick: () => saveCurrent(ch) }, inRoster ? 'Update in roster' : 'Save to roster'),
@@ -11788,6 +12310,19 @@ function drawCurrent(ch) {
       const c = rerollIdentity(R, ch, randomSeed()); c.rosterId = ch.rosterId; setCurrent(c, { fresh: true });
     } }, 'New name'),
     h('button', { class: 'btn ghost', type: 'button', title: 'Keep the name and story, roll new powers and stats', onClick: () => rebuild(ch) }, 'New build'),
+    ch.companionOf ? null : h('button', { class: 'btn ghost', type: 'button', id: 'toolbar-companion', title: 'Add a sidekick, minion, animal or other follower with a full sheet', onClick: () => addCompanionDialog(ch) }, '🐾 Companion'),
+    hasForms(ch) ? null : h('button', { class: 'btn ghost', type: 'button', id: 'add-forms', title: 'Give this character alternate forms (up to 8 builds of the same person)', onClick: async () => {
+      const ok = await openDialog({
+        title: 'Alternate forms',
+        body: [h('p', { style: { margin: 0 } }, 'Give this character up to 8 forms: civilian and costumed, armor on and off, a shapeshifter\'s shapes. Each form is a whole build of its own (power level, abilities, powers, gear, codename, picture), checked on its own. The person, bio, journal and roster entry are shared.'),
+          h('p', { class: 'hint', style: { margin: '8px 0 0' } }, 'The book builds a single power-based change as the Alternate Form effect (DCA 88: a package of effects bought with Activation) or as an array. Use forms when the builds are different enough to need their own sheets.')],
+        buttons: [{ label: 'Cancel', value: null }, { label: 'Blank second form', value: 'blank' }, { label: 'Copy this build as Form 2', value: 'copy', primary: true }],
+      });
+      if (!ok) return;
+      const c = addForm(ch, { copy: ok === 'copy' });
+      commit(switchForm(c, 1));
+      toast('Form 2 added. Switch between forms with the numbered tabs above the sheet.');
+    } }, '🎭 Forms'),
     rollMenu(ch, R),
     lobby.status === 'on' && ch.rosterId && !ch.lobbyOwner ? h('button', { class: 'btn ghost', type: 'button', title: 'Tell the table this character is yours', onClick: () => claimCharacter(ch) }, '✋ Mine') : null,
     ch.lobbyOwner ? h('span', { class: 'chip', title: 'Claimed at the table' }, `${ch.lobbyOwner === lobby.id ? 'Yours' : `Played by ${ch.lobbyOwnerName || 'a player'}`}`) : null,
@@ -11823,6 +12358,7 @@ function drawCurrent(ch) {
   });
   fresh = false;
   fileHost.append(el);
+  if (!ch.companionOf) fileHost.append(companionsSection(ch));
   fileHost.append(saveBar(ch));
 }
 
@@ -11945,6 +12481,7 @@ const { getPower, setPower, whatItDoes } = __mods["src/app/sheetview.js"];
 const { costMath, availableModifiers, randomPower } = __mods["src/engine/powersmith.js"];
 const { powerCost, alternateOwnCost, primaryOwnCost } = __mods["src/engine/costs.js"];
 const { describeEffect } = __mods["src/engine/render.js"];
+const { poolCapacity } = __mods["src/engine/pools.js"];
 const { RANGE_STEPS, ABILITIES, BUYABLE_DEFENSES } = __mods["src/engine/rules.js"];
 let R;
 let root;
@@ -12134,7 +12671,11 @@ function render() {
         onChange: (e) => update((q) => { q.description = e.target.value.trim() || undefined; }) }, p.description || '')),
     linkSel == null ? h('label', { class: 'lab-pool', title: 'For drains, stolen or redistributed points, boosts: anything you place where you want during play' },
       h('input', { type: 'checkbox', id: 'lab-pool', checked: !!p.pool, onChange: (e) => update((q) => { if (e.target.checked) q.pool = true; else { delete q.pool; delete q.placed; } }) }),
-      h('span', null, h('b', null, 'Pool, not always on. '), `Up to ${p.rank} points you place during play (with + and − on the sheet) on any ability, defense, skill, power or something else. Nothing counts until you place it, and PL limits are checked without it. The cost stays as priced here.`)) : null,
+      h('span', null, h('b', null, 'Pool, not always on. '), `Holds ${poolCapacity(p, R)} power points you place during play (with + and − on the sheet) on any ability, defense, skill, power or something else, at what each costs (an ability rank 2, a defense rank 1). Nothing counts until you place it, and PL limits are checked without it. The cost stays as priced here.`)) : null,
+    linkSel == null && p.pool ? h('label', { class: 'field' }, h('span', null, 'Filled by (a Weaken that steals what it drains)'),
+      h('select', { id: 'lab-feed', onChange: (e) => update((q) => { if (e.target.value) q.feed = e.target.value; else delete q.feed; }) },
+        h('option', { value: '' }, 'Nothing: the pool is always full'),
+        weakenNames(ch).map((n) => h('option', { value: n, selected: p.feed === n }, n)))) : null,
     p.effect === 'Damage' ? h('label', { style: { display: 'flex', gap: '8px', alignItems: 'center', fontSize: '14px' } },
       h('input', { type: 'checkbox', checked: !!p.strengthBased, onChange: (e) => update((q) => { q.strengthBased = e.target.checked || undefined; }) }), 'Strength-based (adds Strength to the damage rank)') : null,
     modEditor('extra'),
@@ -12194,6 +12735,16 @@ function render() {
   if (sel) sel.value = p.effect;
   const opt = root.querySelector('#lab-option');
   if (opt && p.option) opt.value = p.option;
+}
+
+/** Weaken powers on the open character, which can fill a pool. */
+function weakenNames(ch) {
+  const out = [];
+  const visit = (list) => (list || []).forEach((p) => { if (p.effect === 'Weaken') out.push(p.name); for (const l of p.linked || []) if (l.effect === 'Weaken') out.push(l.name); for (const a of p.alternates || []) visit([a]); });
+  visit(ch?.powers);
+  for (const d of ch?.devices || []) visit(d.powers);
+  if (state.lab?.effect === 'Weaken') out.push(state.lab.name);
+  return [...new Set(out)];
 }
 
 function statLine(arr) {

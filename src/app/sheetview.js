@@ -10,7 +10,7 @@ import { ABILITIES, BUYABLE_DEFENSES } from '../engine/rules.js';
 import { powerCost, primaryOwnCost } from '../engine/costs.js';
 import { gearCatalog, gearToEquipment, gearToDevice } from '../engine/gear.js';
 import { portraitBlock } from './portrait.js';
-import { poolTargets, poolUsed, targetLabel } from '../engine/pools.js';
+import { poolTargets, targetLabel, poolPowers, poolCapacity, poolSpent, poolAvailable, poolFeeder, costPerRank, drain, loseDrained, settlePools, fmtPoints } from '../engine/pools.js';
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const clone = (x) => JSON.parse(JSON.stringify(x));
 
@@ -33,39 +33,73 @@ function mathTable(p, R) {
 
 /** The plain-English "what it does" block under a power. */
 /**
- * A pool's tracker: where its points are placed right now, with + and − for each, and a picker to place
- * more. Works outside edit mode, because this is what happens at the table.
+ * A pool's tracker: where its power points are placed right now, with + and − for each, and a picker to
+ * place more. Works outside edit mode, because this is what happens at the table.
  */
-function poolTracker(ch, p, path, change) {
+function poolTracker(ch, p, path, change, R) {
   if (!p.pool) return null;
-  const used = poolUsed(p);
-  const free = p.rank - used;
-  const edit = (fn) => change((c) => { const q = getPower(c, path); q.placed = q.placed || []; fn(q); q.placed = q.placed.filter((x) => x.points > 0); if (!q.placed.length) delete q.placed; });
-  const pick = h('select', { class: 'pool-target', 'aria-label': `Place a point from ${p.name} on` },
-    h('option', { value: '' }, 'Place a point on…'),
-    poolTargets(ch).map(([group, list]) => h('optgroup', { label: group }, list.map(([v, t]) => h('option', { value: v }, t)))));
+  const avail = poolAvailable(ch, p, R);
+  const cap = poolCapacity(p, R);
+  const spent = poolSpent(ch, p, R);
+  const free = avail - spent;
+  const feeder = poolFeeder(ch, p);
+  const edit = (fn) => change((c) => { const q = getPower(c, path); q.placed = q.placed || []; fn(q, c); q.placed = q.placed.filter((x) => x.points > 0); if (!q.placed.length) delete q.placed; });
+  const cpr = (t) => costPerRank(ch, t, R);
+  const pick = h('select', { class: 'pool-target', 'aria-label': `Place a rank from ${p.name} on` },
+    h('option', { value: '' }, 'Place a rank on…'),
+    poolTargets(ch).map(([group, list]) => h('optgroup', { label: group }, list.map(([v, t]) => h('option', { value: v, disabled: cpr(v) > free + 1e-9 }, `${t} · ${fmtPoints(cpr(v))} pp${v.startsWith('skill:') ? ' (2 ranks per pp)' : ''}`)))));
   const note = h('input', { type: 'text', class: 'pool-note', placeholder: 'What? e.g. Flight speed, a Feature, an ally', 'aria-label': 'Note for something else', hidden: true });
   pick.addEventListener('change', () => { note.hidden = pick.value !== 'other'; if (!note.hidden) note.focus(); });
   const place = () => {
     const target = pick.value;
-    if (!target || free <= 0) return;
+    if (!target || cpr(target) > free + 1e-9) return;
     edit((q) => {
       const hit = q.placed.find((x) => x.target === target && (target !== 'other' || (x.note || '') === note.value.trim()));
       if (hit) hit.points += 1; else q.placed.push({ target, points: 1, ...(target === 'other' && note.value.trim() ? { note: note.value.trim() } : {}) });
     });
   };
+  const dots = Math.round(Math.min(cap, 40));
   return h('div', { class: 'pool no-print-controls' },
     h('div', { class: 'pool-head' },
       h('b', null, '⚡ Pool'),
-      h('span', { class: 'pool-meter', role: 'img', 'aria-label': `${used} of ${p.rank} placed` },
-        Array.from({ length: p.rank }, (_, i) => h('i', { class: i < used ? 'on' : '' }))),
-      h('span', { class: 'num pool-count' }, `${used}/${p.rank} placed · ${free} free`),
-      used ? h('button', { class: 'btn sm no-print', type: 'button', title: 'Every placed point fades away', onClick: () => edit((q) => { q.placed = []; }) }, 'Points fade (clear)') : null),
+      h('span', { class: 'pool-meter', role: 'img', 'aria-label': `${fmtPoints(spent)} of ${fmtPoints(avail)} power points placed` },
+        Array.from({ length: dots }, (_, i) => h('i', { class: i < spent ? 'on' : i < avail ? '' : 'off' }))),
+      h('span', { class: 'num pool-count' }, `${fmtPoints(spent)}/${fmtPoints(avail)} pp placed · ${fmtPoints(Math.max(0, free))} free`),
+      spent ? h('button', { class: 'btn sm no-print', type: 'button', title: 'Every placed rank fades away', onClick: () => edit((q) => { q.placed = []; }) }, 'Clear') : null),
+    feeder ? h('p', { class: 'hint pool-feed' }, `Filled by ${feeder.name}: it holds ${feeder.drained || 0} drained point${feeder.drained === 1 ? '' : 's'}${avail < (feeder.drained || 0) ? `, and this pool takes at most ${cap}` : ''}. Drain more on ${feeder.name} to fill it.`)
+      : h('p', { class: 'hint pool-feed' }, `Holds ${cap} power points. Each rank costs what the trait does: abilities 2, defenses 1, skills 1 per 2 ranks, powers their cost per rank.`),
     (p.placed || []).length ? h('div', { class: 'pool-rows' }, p.placed.map((x, i) => h('div', { class: 'pool-row' },
       h('span', { class: 'pool-label' }, targetLabel(x)),
       h('b', { class: 'num' }, `+${x.points}`),
-      stepper(x.points, (d) => edit((q) => { q.placed[i].points += d; }), { min: 0, max: x.points + free, label: `${targetLabel(x)} from ${p.name}` })))) : h('p', { class: 'hint', style: { margin: '4px 0' } }, 'Nothing placed. Pick where a point goes, then press +.'),
-    free > 0 ? h('div', { class: 'pool-add no-print' }, pick, note, h('button', { class: 'btn sm', type: 'button', onClick: place }, '+ 1 point')) : null);
+      h('span', { class: 'pool-pp num' }, `${fmtPoints(x.points * cpr(x.target))} pp`),
+      stepper(x.points, (d) => edit((q) => { q.placed[i].points += d; }), { min: 0, max: x.points + (free + 1e-9 >= cpr(x.target) ? 1 : 0), label: `${targetLabel(x)} from ${p.name}` })))) : h('p', { class: 'hint', style: { margin: '4px 0' } }, free > 0 ? 'Nothing placed. Pick where a rank goes, then press +.' : feeder ? 'Nothing to place yet: drain someone first.' : 'Nothing placed.'),
+    free > 0 ? h('div', { class: 'pool-add no-print' }, pick, note, h('button', { class: 'btn sm', type: 'button', onClick: place }, '+ 1 rank')) : null);
+}
+
+/**
+ * Weaken: track the power points it has drained and still holds (DCA 122: the target loses points by how
+ * much it missed the DC, and they come back over time). Pools it fills follow along.
+ */
+function drainTracker(ch, p, path, change, R) {
+  if (p.effect !== 'Weaken') return null;
+  const held = p.drained || 0;
+  const fills = poolPowers(ch).filter(({ power }) => power.feed === p.name).map(({ power }) => power.name);
+  const edit = (fn) => change((c) => { fn(getPower(c, path)); settlePools(c, R); });
+  const missed = h('input', { type: 'number', min: 1, max: p.rank, value: '', placeholder: 'by…', class: 'drain-missed', 'aria-label': 'The target missed its resistance check by' });
+  const go = () => { const n = Number(missed.value); if (n > 0) edit((q) => drain(q, n)); };
+  missed.addEventListener('keydown', (e) => { if (e.key === 'Enter') go(); });
+  const resist = (p.detail && /Resisted by ([A-Za-z]+)/.exec(p.detail)?.[1]) || 'Fortitude or Will';
+  return h('div', { class: 'pool drain no-print-controls' },
+    h('div', { class: 'pool-head' },
+      h('b', null, '🩸 Drain'),
+      h('span', { class: 'pool-meter', role: 'img', 'aria-label': `${held} of ${p.rank} points drained` }, Array.from({ length: Math.min(p.rank, 40) }, (_, i) => h('i', { class: i < held ? 'on' : '' }))),
+      h('span', { class: 'num pool-count' }, `${held}/${p.rank} pp held`)),
+    h('p', { class: 'hint pool-feed' }, `Target resists with ${resist} against DC ${10 + p.rank}. It loses as many power points as it missed by, ${p.rank} at most in all, and gets them back over time.${fills.length ? ` What you hold fills ${fills.join(' and ')}.` : ' Tick "Pool" on a power in the Power Lab and pick this one under "Filled by" to spend what you steal.'}`),
+    h('div', { class: 'pool-add no-print' },
+      h('label', { class: 'drain-label' }, 'Missed by', missed),
+      h('button', { class: 'btn sm', type: 'button', onClick: go, disabled: held >= p.rank }, 'Drain'),
+      h('button', { class: 'btn sm', type: 'button', disabled: !held, title: 'A round passes (Fades) or a hit knocks a point loose', onClick: () => edit((q) => loseDrained(q, 1)) }, '−1 fades'),
+      h('button', { class: 'btn sm ghost', type: 'button', disabled: !held, title: 'Everything drained goes back', onClick: () => edit((q) => loseDrained(q, q.drained || 0)) }, 'All back')));
 }
 
 /** The player's own words for a power: how it looks and what it can do. */
@@ -191,7 +225,8 @@ export function renderFile(ch, R, opts = {}) {
         h('span', { class: 'power-name' }, p.name),
         alts.length ? h('span', { class: 'chip', title: p.dynamic ? 'Dynamic: split the pool between several effects at once' : 'Alternate Effects: one effect at a time' }, p.dynamic ? `Dynamic Array · ${primaryOwnCost(p, R)}-pp pool` : 'Array') : null,
         p.linked?.length ? h('span', { class: 'chip', title: 'Linked effects work together, with one action' }, '🔗 Linked') : null,
-        p.pool ? h('span', { class: 'chip', title: 'Not always on: place its points during play' }, `⚡ Pool · ${poolUsed(p)}/${p.rank}`) : null,
+        p.pool ? h('span', { class: 'chip', title: 'Not always on: place its points during play' }, `⚡ Pool · ${fmtPoints(poolSpent(ch, p, R))}/${fmtPoints(poolAvailable(ch, p, R))} pp`) : null,
+        p.effect === 'Weaken' && p.drained ? h('span', { class: 'chip', title: 'Power points drained and still held' }, `🩸 ${p.drained}/${p.rank}`) : null,
         h('span', { class: 'power-cost num' }, inDevice ? `${cost} pp in device` : `${cost} pp`),
         editing ? h('span', { class: 'btn-row no-print' },
           stepper(p.rank, (d) => change((c) => { const q = getPower(c, path); q.rank = Math.max(1, q.rank + d); }), { min: 1, label: `${p.name} rank` }),
@@ -200,10 +235,11 @@ export function renderFile(ch, R, opts = {}) {
       h('div', { class: 'power-text' }, describeEffect(p, R)),
       aboutPower(p),
       linkedAbout(p),
-      poolTracker(ch, p, path, change),
+      drainTracker(ch, p, path, change, R),
+      poolTracker(ch, p, path, change, R),
       whatItDoes(p, R),
       alts.map((a, i) => h('div', { class: 'ae' },
-        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), aboutPower(a), linkedAbout(a), poolTracker(ch, a, { ...path, alt: i }, change), whatItDoes(a, R, true),
+        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), aboutPower(a), linkedAbout(a), drainTracker(ch, a, { ...path, alt: i }, change, R), poolTracker(ch, a, { ...path, alt: i }, change, R), whatItDoes(a, R, true),
         editing ? h('span', { class: 'no-print' }, ' ',
           stepper(a.rank, (d) => change((c) => { const q = getPower(c, { ...path, alt: i }); q.rank = Math.max(1, q.rank + d); }), { min: 1, label: `${a.name} rank` }),
           h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${a.name}`, onClick: () => change((c) => removeAt(c, { ...path, alt: i })) }, '✕')) : null)),

@@ -54,3 +54,42 @@ test('pool targets list the character\'s own skills and other powers', () => {
   assert.ok(!all.includes('power:Physical stat redistribution'));
   assert.ok(all.includes('other'));
 });
+
+import { drain, loseDrained, settlePools, poolCapacity, poolSpent, poolAvailable } from '../src/engine/pools.js';
+
+const fed = () => {
+  const ch = load();
+  Object.assign(redistribution(ch), { pool: true, feed: 'Ethenural Absorption' });
+  return ch;
+};
+const absorption = (ch) => ch.powers.find((p) => p.name === 'Ethenural Absorption');
+
+test('pools count in power points: Enhanced Stamina 6 holds 12, an ability rank costs 2, a defense rank 1', () => {
+  const ch = load();
+  Object.assign(redistribution(ch), { pool: true, placed: [{ target: 'Strength', points: 3 }, { target: 'Dodge', points: 2 }] });
+  assert.equal(poolCapacity(redistribution(ch), R), 12);
+  assert.equal(poolSpent(ch, redistribution(ch), R), 8);
+});
+
+test('a fed pool only holds what the Weaken drained, capped by its rank and the pool size', () => {
+  const ch = fed();
+  assert.equal(poolAvailable(ch, redistribution(ch), R), 0);
+  assert.equal(drain(absorption(ch), 8), 8);
+  assert.equal(poolAvailable(ch, redistribution(ch), R), 8);
+  assert.equal(drain(absorption(ch), 9), 4, 'Weaken 12 holds 12 at most');
+  assert.equal(poolAvailable(ch, redistribution(ch), R), 12);
+});
+
+test('when drained points fade, placed ranks are taken back newest first', () => {
+  const ch = fed();
+  drain(absorption(ch), 12);
+  redistribution(ch).placed = [{ target: 'Strength', points: 4 }, { target: 'Agility', points: 2 }];
+  loseDrained(absorption(ch), 3);
+  settlePools(ch, R);
+  assert.deepEqual(redistribution(ch).placed, [{ target: 'Strength', points: 4 }, { target: 'Agility', points: 0 }].filter((x) => x.points));
+  assert.equal(deriveAll(ch, R).abilities.Strength, 13);
+  loseDrained(absorption(ch), 99);
+  settlePools(ch, R);
+  assert.equal(redistribution(ch).placed, undefined);
+  assert.equal(deriveAll(ch, R).abilities.Strength, 9);
+});

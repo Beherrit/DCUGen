@@ -11,7 +11,7 @@ import { deriveAll, allPowers } from './derive.js';
 import { costBreakdown, alternateOwnCost, primaryOwnCost, equipmentPoints } from './costs.js';
 import { EP_PER_EQUIPMENT_RANK } from './rules.js';
 import { powerTags } from './powersmith.js';
-import { withoutPlaced, hasPlaced, poolPowers, poolUsed } from './pools.js';
+import { withoutPlaced, hasPlaced, poolPowers, poolSpent, poolAvailable, fmtPoints } from './pools.js';
 function issue(rule, message, severity = 'error') {
   return { rule, message, severity };
 }
@@ -22,8 +22,8 @@ export function checkLimits(ch, R) {
   // Limits apply to the build. Points placed from a pool right now are checked separately, as warnings.
   const d = deriveAll(withoutPlaced(ch), R);
   for (const { power: p } of poolPowers(ch)) {
-    const used = poolUsed(p);
-    if (used > p.rank) out.push(issue('pool', `${p.name}: ${used} points placed, but the pool holds ${p.rank}.`));
+    const spent = poolSpent(ch, p, R); const avail = poolAvailable(ch, p, R);
+    if (spent > avail + 1e-9) out.push(issue('pool', `${p.name}: ${fmtPoints(spent)} power points placed, but the pool has ${fmtPoints(avail)}.`));
   }
   if (hasPlaced(ch)) {
     const now = deriveAll(ch, R);
