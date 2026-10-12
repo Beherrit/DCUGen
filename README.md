@@ -24,6 +24,10 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
   own description (how it looks, what it can do), which shows on the sheet and in the stat block. Build arrays of
   Alternate Effects (1 point each), switch on Dynamic to share the primary's points as a pool (2 points each), and add
   Linked effects that work together with one action (full cost each).
+  Tick **Pool, not always on** for drains, stolen or redistributed points and boosts: the power counts for nothing
+  until you place its points during play with + and − on the sheet (on any ability, defense, skill, power, or
+  something else with a note). PL limits are checked on the build without them; placed points that push a
+  defense pair over the limit show as a warning.
 - **Workshop**
   - *Gear loadouts* for an equipment-point budget, in styles from street tough to sci-fi.
   - *Gadgets and magic items*: named devices with real powers, priced with the Removable rule, legal at your PL.

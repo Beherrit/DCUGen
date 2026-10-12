@@ -11,6 +11,7 @@ import { deriveAll, allPowers } from './derive.js';
 import { costBreakdown, alternateOwnCost, primaryOwnCost, equipmentPoints } from './costs.js';
 import { EP_PER_EQUIPMENT_RANK } from './rules.js';
 import { powerTags } from './powersmith.js';
+import { withoutPlaced, hasPlaced, poolPowers, poolUsed } from './pools.js';
 function issue(rule, message, severity = 'error') {
   return { rule, message, severity };
 }
@@ -18,7 +19,20 @@ function issue(rule, message, severity = 'error') {
 export function checkLimits(ch, R) {
   const pl = ch.pl;
   const out = [];
-  const d = deriveAll(ch, R);
+  // Limits apply to the build. Points placed from a pool right now are checked separately, as warnings.
+  const d = deriveAll(withoutPlaced(ch), R);
+  for (const { power: p } of poolPowers(ch)) {
+    const used = poolUsed(p);
+    if (used > p.rank) out.push(issue('pool', `${p.name}: ${used} points placed, but the pool holds ${p.rank}.`));
+  }
+  if (hasPlaced(ch)) {
+    const now = deriveAll(ch, R);
+    for (const [a, b] of [['Dodge', 'Toughness'], ['Parry', 'Toughness'], ['Fortitude', 'Will']]) {
+      if (now.defenses.immune?.[a] || now.defenses.immune?.[b]) continue;
+      const sum = now.defenses[a] + now.defenses[b];
+      if (sum > 2 * pl && d.defenses[a] + d.defenses[b] <= 2 * pl) out.push(issue('pool', `With the pool points placed now, ${a} ${now.defenses[a]} + ${b} ${now.defenses[b]} = ${sum}, over the limit of ${2 * pl}. Fine if your GM allows it while it lasts.`, 'warning'));
+    }
+  }
 
   // Attack & effect
   for (const atk of d.attacks) {

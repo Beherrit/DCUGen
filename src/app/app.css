@@ -1633,3 +1633,19 @@ body.eb-printing .eb-wrap { max-height: none; overflow: visible; border-width: 4
 .lab-note { margin: 0 0 8px; }
 .pool-line { margin: -4px 0 10px; font-size: 14px; color: var(--ink-2); }
 #lab-about { resize: vertical; min-height: 64px; font: inherit; }
+
+/* ---- pools: drains, stolen or redistributed points placed during play ---- */
+.pool { margin: 8px 0; padding: 8px 10px; border: 1px dashed var(--line); border-radius: 8px; background: var(--surface-2); }
+.pool-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.pool-meter { display: inline-flex; gap: 3px; }
+.pool-meter i { width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--ink-3); }
+.pool-meter i.on { background: var(--blue); border-color: var(--blue); }
+.pool-count { font-size: 13px; color: var(--ink-2); }
+.pool-head .btn { margin-left: auto; }
+.pool-rows { display: grid; gap: 4px; margin: 6px 0; }
+.pool-row { display: flex; align-items: center; gap: 8px; }
+.pool-label { flex: 1; min-width: 0; }
+.pool-add { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.pool-add select, .pool-add input { flex: 1 1 160px; min-width: 0; }
+.lab-pool { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; margin: 4px 0; }
+.lab-pool input { margin-top: 3px; }

@@ -202,13 +202,17 @@ export function explainPower(p, R) {
       notes.push({ name: m.name + (m.detail ? ` (${m.detail})` : ''), kind, text: def?.summary || '' });
     }
   }
+  if (p.pool) notes.push({ name: `Pool of ${p.rank} points`, kind: 'extra', text: 'Not always on: during play you place up to this many points on any ability, defense, skill, power or something else, and they count only while placed. Power level limits are checked without them.' });
   for (const l of p.linked || []) {
     let what = '';
     try { what = explainPower(l, R).what; } catch { /* unknown effect */ }
     notes.push({ name: `Linked: ${l.name || l.effect}`, kind: 'extra', text: `Happens at the same time, with the same action. ${what}`.trim() });
   }
   if ((p.alternates || []).length) notes.push({ name: `${p.dynamic ? 'Dynamic ' : ''}Alternate Effects`, kind: 'extra', text: `Use one effect of this array at a time${p.dynamic ? `, or split its ${primaryOwnCost(p, R)}-point pool between them` : ''}; switching is a free action.` });
-  return { what: parts.filter(Boolean).join(' '), notes };
+  const what = p.pool
+    ? `A pool of ${p.rank} points, not always on: place them during play with + and − on the sheet, wherever they're needed.`
+    : parts.filter(Boolean).join(' ');
+  return { what, notes };
 }
 
 /** "Ranged Burst Area Damage 8 (fire), Accurate 2, Limited to vision" */
