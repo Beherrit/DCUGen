@@ -24,6 +24,7 @@ import { rogueCandidates, makeRogue } from '../engine/rogues.js';
 import { DIFFICULTIES } from '../engine/balance.js';
 import { randomSeed } from '../engine/rng.js';
 import { mapPanel } from './battlemap.js';
+import { portraitOf } from '../engine/portrait.js';
 import { playState } from '../engine/play.js';
 
 const KEY = 'dcugen.gmscreen.v1';
@@ -46,6 +47,13 @@ function localChar(entry) {
   const ch = state.roster.find((c) => c.rosterId === entry.rosterId);
   if (!ch) return null;
   return entry.play ? { ...ch, play: entry.play } : ch;
+}
+
+/** A token's picture: the uploaded or saved portrait, else the built-in comic art. */
+function portraitFor(key) {
+  const ch = state.roster.find((c) => c.rosterId === key);
+  if (!ch) return null;
+  try { const p = portraitOf(ch); return p.image || p.avatar || null; } catch { return null; }
 }
 
 /** Everyone on the board: [{ key, kind: 'live' | 'local', status, player, entry }]. */
@@ -430,7 +438,7 @@ export function renderGmScreen() {
     (gs.view || 'run') === 'prep'
       ? h('div', { class: 'gm-layout' }, h('div', { class: 'gm-main' }, prepPanel()), h('div', { class: 'gm-side' }, roguesPanel(), nemesisPanel()))
       : gs.view === 'map'
-        ? mapPanel({ R, people, gs, save, rerender: renderGmScreen, applyHit: (hit) => applyHit(hit, people) })
+        ? mapPanel({ R, people, gs, save, rerender: renderGmScreen, applyHit: (hit) => applyHit(hit, people), portraitFor, owns: (key, playerName) => people.some((p) => p.key === key && p.kind === 'live' && p.player === playerName) })
         : h('div', { class: 'gm-layout' },
           h('div', { class: 'gm-main' },
             hitConsole(people),

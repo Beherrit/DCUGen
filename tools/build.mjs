@@ -104,7 +104,7 @@ function bundle() {
     .replace(/<link rel="stylesheet" href="app.css">/, () => `<style>\n${css}\n</style>`)
     .replace(/<script src="storage-boot.js"><\/script>/, () => `<script>\n${read(path.join(SRC, 'app', 'storage-boot.js'))}\n</script>`)
     // Phone tables: PeerJS (browser-to-browser connections) and a QR code encoder, both MIT, bundled unchanged.
-    .replace(/<script src="\.\.\/vendor\/(peerjs\.min|qrcode)\.js"><\/script>/g, (_, f) => `<script>\n${read(path.join(SRC, 'vendor', `${f}.js`)).replace(/<\/script/gi, '<\\/script')}\n</script>`)
+    .replace(/<script src="\.\.\/vendor\/(peerjs\.min|qrcode|three\.min)\.js"><\/script>/g, (_, f) => `<script>\n${read(path.join(SRC, 'vendor', `${f}.js`)).replace(/<\/script/gi, '<\\/script')}\n</script>`)
     // The app starts once its saved data has loaded from IndexedDB (storage-boot.js).
     .replace(/<script type="module" src="app.js"><\/script>/, () =>
       `<script>window.DCUGEN_SHEET_TEMPLATE = "${template}";</script>\n<script>\n(window.__dcugenStorageReady || Promise.resolve()).then(() => {\n"use strict";\n${js}\n});\n</script>`);
