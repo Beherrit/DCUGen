@@ -19,7 +19,7 @@ import { receiveMapFromHost, onSharedMap, receiveMapAsset, serveMapAssets, recei
 import { initTable, renderTable, postRoll, joinFromLink, openPhoneTable } from './table.js';
 import { setLobbyHandlers, lobbySendRoster, lobbySendRemove, lobby, lobbySend, onLobby } from './lobby.js';
 import { snapshotAll, restoreAll } from './backup.js';
-import { getAppButton } from './getapp.js';
+import { getAppButton, registerServiceWorker } from './getapp.js';
 import { startSync, syncButton } from './syncfile.js';
 import { setHouseRules } from '../engine/house.js';
 import { state as st, upsert, removeFromRoster } from './store.js';
@@ -281,6 +281,7 @@ async function boot() {
   document.getElementById('roster-count').textContent = state.roster.length;
 
   const restored = restoreTabs();
+  registerServiceWorker();
   const loaded = await loadFromHash();
   // Only roll when asked: a first visit (or a reload with nothing open) shows the Roll button instead.
   if (!loaded && !restored) renderCurrent();

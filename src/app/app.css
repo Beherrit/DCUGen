@@ -1979,3 +1979,17 @@ div.play-line small { grid-column: 1; grid-row: 2; }
 .share-link { width: 100%; font: 12px/1.35 ui-monospace, Consolas, monospace; word-break: break-all; }
 .share-out .qr { max-width: 220px; }
 .share-names { margin: 6px 0; padding-left: 18px; max-height: 40vh; overflow: auto; }
+
+.getapp-phone { display: none; }
+@media (max-width: 520px) { .getapp-phone { display: inline-flex; } }
+.getapp-phone-box { display: grid; gap: 8px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2); }
+.getapp-phone-box.focus { border-color: var(--blue); }
+.getapp-phone-box h3, .getapp-qr-box + p, dialog section h3 { margin: 4px 0 2px; }
+.getapp-phone-row { display: flex; gap: 14px; align-items: flex-start; flex-wrap: wrap; }
+.getapp-qr { margin: 0; display: grid; gap: 4px; justify-items: center; max-width: 190px; }
+.getapp-qr .qr { width: 170px; background: #fff; padding: 6px; border-radius: 8px; }
+.getapp-qr .qr svg { width: 100%; height: auto; display: block; }
+.getapp-qr figcaption { font-size: 12px; color: var(--ink-3); text-align: center; }
+.getapp-steps { margin: 0 0 6px; padding-left: 20px; }
+.getapp-qr-box { margin: 8px 0; }
+.getapp-qr-box summary { cursor: pointer; font: 700 13px/1.6 var(--font-label); }

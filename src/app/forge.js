@@ -787,6 +787,16 @@ function drawCurrent(ch) {
   const toolbar = h('div', { class: 'toolbar' },
     h('button', { class: 'btn primary', type: 'button', title: `Saves to ${worldOf(ch) || 'The Multiverse Hub'} (change it at the bottom of the sheet)`, onClick: () => saveCurrent(ch) }, inRoster ? 'Update in roster' : 'Save to roster'),
     h('button', { class: 'btn', type: 'button', 'aria-pressed': String(state.editing), onClick: () => toggleEditing() }, state.editing ? 'Done editing' : 'Edit'),
+    menu('More', [
+      { label: '📏 Range', id: 'range-btn', hint: 'How far your powers reach, distances, travel, throwing', run: () => openRangeCalculator(ch, R) },
+      { label: 'Copy stat block', hint: 'Book-style text, ready to paste', run: async () => { const ok = await copyText(statBlockText(ch, R)); toast(ok ? 'Stat block copied' : 'Copy failed. Use Export > Text instead.'); } },
+      { label: '🔑 Share / Key', hint: 'A short key or link anyone can open', run: () => share(ch) },
+      { label: '🌐 World page', hint: 'This character in the World wiki', run: () => api.openWorld?.(ch) },
+      { label: 'New name', hint: 'Keep the build, roll a new name and story', run: () => { const c = rerollIdentity(R, ch, randomSeed()); c.rosterId = ch.rosterId; setCurrent(c, { fresh: true }); } },
+      { label: 'New build', hint: 'Keep the name and story, roll new powers and stats', run: () => rebuild(ch) },
+      ch.companionOf ? null : { label: '🐾 Add a companion', id: 'toolbar-companion', hint: 'A sidekick, minion or animal with a full sheet', run: () => addCompanionDialog(ch) },
+      hasForms(ch) ? null : { label: '🎭 Alternate forms', id: 'add-forms', hint: 'Up to 8 builds of the same person', run: addFormsFlow },
+    ]),
     h('span', { class: 'undo-group' },
       h('button', { class: 'btn ghost icon', type: 'button', id: 'undo', title: 'Undo (Ctrl+Z)', 'aria-label': 'Undo', disabled: !canUndo(), onClick: undo }, '↶'),
       h('button', { class: 'btn ghost icon', type: 'button', id: 'redo', title: 'Redo (Ctrl+Y)', 'aria-label': 'Redo', disabled: !canRedo(), onClick: redo }, '↷'),
@@ -804,17 +814,8 @@ function drawCurrent(ch) {
       ...(hasForms(ch) || companionsOf(ch).length ? [{ label: 'Excel workbook: every form and companion', hint: 'A summary page plus a sheet for each', run: () => exportDossierExcel(ch, R) }] : []),
       { label: 'Print or save as PDF', hint: 'This sheet, from your browser\'s print dialog', run: () => window.print() },
       { label: 'Print the full dossier', hint: 'Every form and companion, each on its own pages, plus the bio', run: () => printDossier(ch) },
-    ]),
-    menu('More', [
-      { label: '📏 Range', id: 'range-btn', hint: 'How far your powers reach, distances, travel, throwing', run: () => openRangeCalculator(ch, R) },
-      { label: 'Copy stat block', hint: 'Book-style text, ready to paste', run: async () => { const ok = await copyText(statBlockText(ch, R)); toast(ok ? 'Stat block copied' : 'Copy failed. Use Export > Text instead.'); } },
-      { label: '🔑 Share / Key', hint: 'A short key or link anyone can open', run: () => share(ch) },
-      { label: '🌐 World page', hint: 'This character in the World wiki', run: () => api.openWorld?.(ch) },
-      { label: 'New name', hint: 'Keep the build, roll a new name and story', run: () => { const c = rerollIdentity(R, ch, randomSeed()); c.rosterId = ch.rosterId; setCurrent(c, { fresh: true }); } },
-      { label: 'New build', hint: 'Keep the name and story, roll new powers and stats', run: () => rebuild(ch) },
-      ch.companionOf ? null : { label: '🐾 Add a companion', id: 'toolbar-companion', hint: 'A sidekick, minion or animal with a full sheet', run: () => addCompanionDialog(ch) },
-      hasForms(ch) ? null : { label: '🎭 Alternate forms', id: 'add-forms', hint: 'Up to 8 builds of the same person', run: addFormsFlow },
     ]));
+
   const onChange = (c) => { putActive(c); saveTabs(); fresh = false; renderCurrent(); };
   fileHost.append(viewSwitch(ch));
   root.querySelector('.forge')?.classList.toggle('playing', sheetView === 'play');
