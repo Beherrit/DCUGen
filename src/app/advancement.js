@@ -2,7 +2,9 @@
 
 import { h } from './dom.js';
 import { checkLimits } from '../engine/limits.js';
-import { advancementSummary, startAdvancement, awardPoints, recordChanges, revertChanges, removeEntry } from '../engine/advancement.js';
+import { advancementSummary, startAdvancement, recordChanges, revertChanges, removeEntry, setSavingGoal } from '../engine/advancement.js';
+import { costBreakdown } from '../engine/costs.js';
+import { awardEveryForm, hasForms } from '../engine/forms.js';
 
 const sign = (n) => (n > 0 ? `+${n}` : `${n}`);
 const TYPE_LABEL = { award: 'Earned', spend: 'Spent', refund: 'Refund', pl: 'Power level' };
@@ -27,7 +29,7 @@ export function advancementSection(ch, R, { change, onSpend, editing }) {
     h('button', { class: 'btn primary', type: 'button', onClick: () => {
       const n = Math.trunc(Number(pts.value));
       if (!n) { pts.setCustomValidity('Enter a number of points'); pts.reportValidity(); return; }
-      change((c) => awardPoints(c, R, n, note.value.trim()));
+      change((c) => awardEveryForm(c, R, n, note.value.trim()));
     } }, 'Add earned points'));
 
   const p = a.pending;
@@ -53,7 +55,8 @@ export function advancementSection(ch, R, { change, onSpend, editing }) {
       tile('Starting', a.startPoints, `PL ${a.startPl}`),
       tile('Earned', a.earned, 'from the GM', 'earned'),
       tile('Spent', a.spent, 'since starting', 'spent'),
-      tile('Unspent', a.unspent, `${a.total} of ${a.budget} used`, over ? 'bad' : a.unspent > 0 ? 'good' : '')),
+      tile('Saved', a.unspent, over ? `${-a.unspent} over: ${a.total} of ${a.budget}` : `${a.total} of ${a.budget} used`, over ? 'bad' : a.unspent > 0 ? 'good' : '')),
+    goalEditor(ch, R, a, change),
     h('p', { class: 'adv-guide' },
       a.suggestedPl > ch.pl
         ? `GM guideline: with ${a.earned} points earned, the series could be PL ${a.suggestedPl}. Raising PL is the GM's call and only raises the limits; it doesn't add points.`
@@ -76,4 +79,60 @@ export function advancementSection(ch, R, { change, onSpend, editing }) {
 
 function tile(label, value, sub, tone = '') {
   return h('div', { class: `adv-tile ${tone}` }, h('b', { class: 'num' }, value), h('span', { class: 'adv-tile-label' }, label), h('span', { class: 'adv-tile-sub' }, sub));
+}
+
+/** Saving up: what the saved points are for, with progress. */
+function goalEditor(ch, R, a, change) {
+  const note = h('input', { type: 'text', id: 'adv-goal-note', value: a.goal?.note || '', placeholder: 'Saving up for… (e.g. Flight 10, Regeneration 5)', 'aria-label': 'Saving up for' });
+  const target = h('input', { type: 'number', id: 'adv-goal-target', min: 0, max: 200, value: a.goal?.target || '', placeholder: 'pp', 'aria-label': 'Points needed', style: { maxWidth: '76px' } });
+  const save = () => change((c) => setSavingGoal(c, R, { note: note.value, target: target.value }));
+  return h('div', { class: 'adv-goal' },
+    a.goal ? goalBar(a) : null,
+    h('div', { class: 'add-row no-print' }, note, target,
+      h('button', { class: 'btn', type: 'button', onClick: save }, a.goal ? 'Update goal' : 'Set a goal'),
+      a.goal ? h('button', { class: 'btn ghost', type: 'button', onClick: () => change((c) => setSavingGoal(c, R, null)) }, 'Clear') : null));
+}
+
+function goalBar(a) {
+  const have = Math.max(0, a.unspent);
+  const t = a.goal.target || 0;
+  const pct = t ? Math.min(100, Math.round((have / t) * 100)) : 0;
+  return h('div', { class: 'goal' },
+    h('div', { class: 'goal-text' }, '🎯 Saving for ', h('b', null, a.goal.note), t ? h('span', { class: 'num' }, ` · ${have}/${t} pp${have >= t ? ' · ready to buy!' : ''}`) : null),
+    t ? h('div', { class: 'meter', role: 'img', 'aria-label': `${have} of ${t} points saved` }, h('i', { class: have >= t ? 'done' : '', style: { width: `${pct}%` } })) : null);
+}
+
+/**
+ * The power points bar at the top of the sheet: what the character is built on, what's spent, what's
+ * saved, and the two things players do with points: get them from the GM, and spend (or keep) them.
+ */
+export function pointsBar(ch, R, { change, onSpend, editing }) {
+  let cost;
+  try { cost = costBreakdown(ch, R); } catch { return null; }
+  const a = ch.advancement ? advancementSummary(ch, R) : null;
+  const saved = cost.budget - cost.total;
+  const pts = h('input', { type: 'number', id: 'pb-award-pts', min: 1, max: 100, value: 1, 'aria-label': 'Points from the GM', style: { width: '64px' } });
+  const note = h('input', { type: 'text', id: 'pb-award-note', placeholder: 'Why? (optional)', 'aria-label': 'Why the points were awarded' });
+  const awardRow = h('div', { class: 'pb-award no-print', hidden: true }, h('label', null, '🎁 The GM gave me', pts, 'points'), note,
+    h('button', { class: 'btn primary sm', type: 'button', id: 'pb-award-add', onClick: () => {
+      const n = Math.trunc(Number(pts.value));
+      if (!n) return;
+      change((c) => awardEveryForm(c, R, n, note.value.trim() || 'Points from the GM'));
+    } }, 'Add'),
+    h('small', { class: 'hint' }, hasForms(ch) ? 'Every form gets them. ' : '', 'Spend them now, or keep them: unspent points stay saved.'));
+  const figures = a
+    ? [fig('Built on', a.startPoints, `PL ${a.startPl} start`), fig('Earned', `+${a.earned}`, 'from the GM'), fig('Spent', cost.total, `of ${cost.budget}`), fig('Saved', saved, saved < 0 ? 'over budget' : saved ? 'to spend or keep' : 'all spent', saved < 0 ? 'bad' : saved > 0 ? 'good' : '')]
+    : [fig('Power level', ch.pl, `${ch.pl} × 15`), fig('Points', cost.budget, 'to build with'), fig('Spent', cost.total, ''), fig(saved >= 0 ? 'Left' : 'Over', Math.abs(saved), saved > 0 ? 'unspent' : saved < 0 ? 'over budget' : 'all spent', saved < 0 ? 'bad' : '')];
+  return h('section', { class: 'pts-bar no-print-controls', id: 'pts-bar' },
+    h('div', { class: 'pb-figs' }, figures),
+    h('div', { class: 'pb-actions no-print' },
+      h('button', { class: 'btn sm', type: 'button', id: 'pb-award', onClick: () => { awardRow.hidden = !awardRow.hidden; if (!awardRow.hidden) pts.focus(); } }, '🎁 Points from the GM'),
+      saved > 0 && !editing ? h('button', { class: 'btn sm primary', type: 'button', id: 'pb-spend', onClick: () => { if (!ch.advancement) change((c) => startAdvancement(c, R)); onSpend?.(); } }, `Spend ${saved} saved point${saved === 1 ? '' : 's'}`) : null,
+      a ? h('button', { class: 'btn sm ghost', type: 'button', onClick: () => document.querySelector('.adv-track')?.scrollIntoView({ behavior: 'smooth' }) }, 'Log & goal ↓') : null),
+    a?.goal ? goalBar(a) : null,
+    awardRow);
+}
+
+function fig(label, value, sub, tone = '') {
+  return h('div', { class: `pb-fig ${tone}` }, h('span', { class: 'pb-label' }, label), h('b', { class: 'num' }, value), sub ? h('small', null, sub) : null);
 }

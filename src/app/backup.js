@@ -7,6 +7,7 @@ import { h, toast, download, openDialog } from './dom.js';
 export const APP_KEYS_PREFIX = 'dcugen.';
 const MERGE_ROSTER = 'dcugen.roster.v1';
 const MERGE_WORLD = 'dcugen.world.v1';
+const DELETED = 'dcugen.roster.deleted.v1';
 
 /** Every dcugen.* key and its raw value. */
 export function snapshotAll() {
@@ -20,7 +21,18 @@ export function snapshotAll() {
   return { app: 'DCUGen', kind: 'backup', version: 1, savedAt: new Date().toISOString(), data };
 }
 
-function mergeRoster(current, incoming) {
+function mergeTombs(a = [], b = []) {
+  const by = new Map();
+  for (const t of [...a, ...b]) if (t?.rosterId && (!by.has(t.rosterId) || String(t.at) > String(by.get(t.rosterId).at))) by.set(t.rosterId, t);
+  return [...by.values()];
+}
+
+export function mergeRoster(current, incoming, tombs = []) {
+  const gone = new Map(tombs.map((t) => [t.rosterId, String(t.at || '')]));
+  // A character deleted after it was last saved stays deleted, here and in what comes in.
+  const alive = (ch) => !ch?.rosterId || !gone.has(ch.rosterId) || String(ch.savedAt || '') > gone.get(ch.rosterId);
+  current = current.filter(alive);
+  incoming = incoming.filter(alive);
   const out = [...current];
   for (const ch of incoming) {
     if (!ch?.rosterId) { out.push(ch); continue; }
@@ -42,14 +54,20 @@ function mergeWorld(current, incoming) {
 }
 
 /** Apply a backup. mode: 'merge' (default) keeps what is here and adds what is new; 'replace' overwrites. Returns counts. */
-export function restoreAll(backup, { mode = 'merge' } = {}) {
+export function restoreAll(backup, { mode = 'merge', skip = [] } = {}) {
   if (!backup || backup.app !== 'DCUGen' || !backup.data) throw new Error('That is not a DCUGen backup file.');
   let keys = 0;
+  let tombs = [];
+  if (mode === 'merge') {
+    try { tombs = mergeTombs(JSON.parse(localStorage.getItem(DELETED) || '[]'), JSON.parse(backup.data[DELETED] || '[]')); } catch { tombs = []; }
+    if (tombs.length) try { localStorage.setItem(DELETED, JSON.stringify(tombs)); } catch { /* full */ }
+  }
   for (const [k, v] of Object.entries(backup.data)) {
     if (!k.startsWith(APP_KEYS_PREFIX) || typeof v !== 'string') continue;
+    if (skip.includes(k) || (mode === 'merge' && k === DELETED)) continue;
     let value = v;
     if (mode === 'merge' && k === MERGE_ROSTER) {
-      try { value = JSON.stringify(mergeRoster(JSON.parse(localStorage.getItem(k) || '[]'), JSON.parse(v))); } catch { value = v; }
+      try { value = JSON.stringify(mergeRoster(JSON.parse(localStorage.getItem(k) || '[]'), JSON.parse(v), tombs)); } catch { value = v; }
     } else if (mode === 'merge' && k === MERGE_WORLD) {
       try { value = JSON.stringify(mergeWorld(JSON.parse(localStorage.getItem(k) || 'null'), JSON.parse(v))); } catch { value = v; }
     } else if (mode === 'merge' && ['dcugen.tab', 'dcugen.theme', 'dcugen.sheetview', 'dcugen.gmtab'].includes(k)) continue;
@@ -88,5 +106,37 @@ export function backupMenuItems() {
   return [
     { label: 'Back up everything (.json)', hint: 'Roster, world, battle, notes, screen, settings: one file to keep or move', run: downloadBackup },
     { label: 'Restore a backup…', hint: 'Merge or replace from a backup file', run: restoreDialog },
+    { label: 'Sync with a cloud folder…', hint: 'Keep everything in a file in Dropbox, OneDrive, Google Drive or iCloud, for every device', run: () => import_syncDialog() },
+    { label: `Storage: ${storageLine()}`, hint: 'Where your data lives in this browser', run: () => storageDialog() },
   ];
+}
+
+// ---- storage status ---------------------------------------------------------------------------------------------
+let syncDialogFn = null;
+/** The sync dialog lives in syncfile.js, which imports this file; it registers itself here. */
+export function registerSyncDialog(fn) { syncDialogFn = fn; }
+function import_syncDialog() { if (syncDialogFn) syncDialogFn(); else toast('Sync is not available here.'); }
+
+function storageLine() {
+  const s = window.__dcugenStorage;
+  if (!s) return 'browser storage';
+  return `${(s.bytes() / 1e6).toFixed(1)} MB in ${s.backend}`;
+}
+
+async function storageDialog() {
+  const s = window.__dcugenStorage;
+  let quota = null;
+  try { const e = await navigator.storage?.estimate?.(); if (e?.quota) quota = e; } catch { /* unsupported */ }
+  let persisted = null;
+  try { persisted = await navigator.storage?.persisted?.(); } catch { /* unsupported */ }
+  await openDialog({
+    title: 'Where your data lives',
+    body: [
+      h('p', { style: { margin: 0 } }, s?.backend === 'IndexedDB'
+        ? `Your roster, world, open characters and settings are kept in this browser's IndexedDB: ${(s.bytes() / 1e6).toFixed(1)} MB used. It holds hundreds of megabytes, so portraits no longer fill it up.`
+        : 'This browser only offers its small storage (about 5 MB). Back up now and then, or use the desktop app.'),
+      quota ? h('p', { class: 'hint', style: { margin: '8px 0 0' } }, `The browser allows this site about ${Math.round(quota.quota / 1e6)} MB${persisted ? ', and has promised not to clear it on its own' : ''}.`) : null,
+      h('p', { class: 'hint', style: { margin: '8px 0 0' } }, 'It still lives in this browser only. To have it on every device, use "Sync with a cloud folder". To keep a copy, use "Back up everything".'),
+    ],
+  });
 }

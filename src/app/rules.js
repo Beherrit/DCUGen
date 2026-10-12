@@ -4,6 +4,27 @@
 import { h, clear } from './dom.js';
 import { damageMatrix } from './gmplus.js';
 import { guideFor, skillGuideBody } from './skillguide.js';
+import { rangeCalculator } from './rangecalc.js';
+import { state, savePrefs, emit } from './store.js';
+import { houseRules, setHouseRules, HOUSE_DEFAULTS, isByTheBook } from '../engine/house.js';
+
+/** House rules: how strict the app is for this table. */
+function housePanel() {
+  const hr = houseRules();
+  const set = (k, v) => { state.prefs.house = { ...houseRules(), [k]: v }; setHouseRules(state.prefs.house); savePrefs(); emit('house'); renderRules(); };
+  const sel = (k, label, opts, hint) => h('label', { class: 'field' }, h('span', null, label),
+    h('select', { id: `house-${k}`, onChange: (e) => set(k, e.target.value === 'true' ? true : e.target.value === 'false' ? false : e.target.value) }, opts.map(([v, t]) => h('option', { value: String(v), selected: hr[k] === v }, t))),
+    hint ? h('small', { class: 'hint' }, hint) : null);
+  return h('details', { class: 'panel house-panel', open: !isByTheBook() },
+    h('summary', null, h('b', null, '⚖ House rules'), h('span', { class: 'chip' }, isByTheBook() ? 'By the book' : 'House rules on')),
+    h('p', { class: 'hint', style: { margin: '8px 0' } }, 'Play your table\'s way. These change what the Forge flags as a problem and how drains work, for every character in this browser (and on your other devices if you sync).'),
+    h('div', { class: 'grid2' },
+      sel('plLimits', 'Power level limits (attack + effect, defenses, skills)', [['error', 'By the book: over the limit is a rule issue'], ['warning', 'Allowed: shown as a warning'], ['off', 'Off: not checked']]),
+      sel('budget', 'Power point budget (PL × 15)', [['error', 'By the book: overspending is a rule issue'], ['warning', 'Allowed: shown as a warning'], ['off', 'Off: not checked']]),
+      sel('weaken', 'Weaken drains', [['margin', 'As many power points as the check missed by'], ['degrees', '1 power point per degree of failure']], 'Check this against Weaken in your book (DCA 122) and pick what it says, or what your GM rules.'),
+      sel('poolWarnings', 'Pool points over the PL limits', [[true, 'Warn me'], [false, 'Don\'t warn']])),
+    isByTheBook() ? null : h('button', { class: 'btn sm', type: 'button', onClick: () => { state.prefs.house = { ...HOUSE_DEFAULTS }; setHouseRules(state.prefs.house); savePrefs(); emit('house'); renderRules(); } }, 'Back to by the book'));
+}
 let R;
 let root;
 let query = '';
@@ -23,6 +44,7 @@ function buildCards() {
     table: [['Check result ≥', 'Degree', 'Example (DC 20)'], ['DC+15', 'Four (Success)', 35], ['DC+10', 'Three (Success)', 30], ['DC+5', 'Two (Success)', 25], ['DC', 'One (Success)', 20],
       ['DC−5', 'One (Failure)', 15], ['DC−10', 'Two (Failure)', 10], ['DC−15', 'Three (Failure)', 5], ['DC−20', 'Four (Failure)', 0]],
     rowClasses: ['s3', 's3', 's2', 's1', 'f1', 'f2', 'f3', 'f4'], source: 'DCA 14' });
+  add('Tables', { title: 'Range cheat sheet & calculator', meta: 'Range · distance · travel · throwing', summary: 'How far an attack reaches at each rank, which band a target is in, areas, distance by rank, travel time, lifting and throwing.', el: () => rangeCalculator(null, R), source: 'DCA 172-173' });
   add('Tables', { title: 'Damage resistance matrix', meta: 'Chart', summary: 'Find your Toughness check result (left) and the damage rank (top): white no effect, blue −1 penalty, green dazed, yellow staggered, red incapacitated.', el: () => damageMatrix({}), source: 'DCA 273' });
   if (ref.difficulty?.length) add('Tables', { title: 'Difficulty classes', meta: 'Table', table: [['DC', 'Difficulty', 'Example'], ...ref.difficulty.map((d) => [d.dc, d.label, d.example || ''])] });
   if (ref.damage) add('Combat', { title: 'Damage and Toughness', meta: `Toughness check vs. DC ${ref.damage.toughness_dc}`, details: ref.damage.notes, table: [['Result', 'Effect'], ...(ref.damage.results || []).map((r) => [r.degree, r.result])] });
@@ -95,6 +117,7 @@ export function renderRules() {
   root.append(
     h('div', { class: 'page-head' }, h('div', null, h('h1', null, 'Rules'),
       h('p', null, 'Quick reference for DC Adventures: actions, maneuvers, checks, combat, hazards, tables, conditions, every effect, extra, flaw, advantage and skill. Page numbers point to the Hero\'s Handbook.'))),
+    housePanel(),
     h('div', { class: 'roster-tools' },
       h('input', { type: 'search', id: 'rules-q', placeholder: 'Search the rules (grab, falling, Area, Luck...)', value: query, 'aria-label': 'Search the rules', onInput: (e) => { query = e.target.value; draw(); } }),
       countEl),

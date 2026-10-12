@@ -2,7 +2,9 @@
 
 import { h, clear, append } from './dom.js';
 import { guideFor, skillGuideBody } from './skillguide.js';
-import { advancementSection } from './advancement.js';
+import { advancementSection, pointsBar } from './advancement.js';
+import { rangeInfo, rangeBands, fmtFt, strengthReach, AREA_BASE } from '../engine/range.js';
+import { openRangeCalculator } from './rangecalc.js';
 import { inkFor } from './dom.js';
 import { sheet as makeSheet, describeEffect, explainPower } from '../engine/render.js';
 import { costMath } from '../engine/powersmith.js';
@@ -10,11 +12,12 @@ import { ABILITIES, BUYABLE_DEFENSES } from '../engine/rules.js';
 import { powerCost, primaryOwnCost } from '../engine/costs.js';
 import { gearCatalog, gearToEquipment, gearToDevice } from '../engine/gear.js';
 import { portraitBlock } from './portrait.js';
+import { houseRules } from '../engine/house.js';
 import { poolTargets, targetLabel, poolPowers, poolCapacity, poolSpent, poolAvailable, poolFeeder, costPerRank, drain, loseDrained, settlePools, fmtPoints } from '../engine/pools.js';
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const clone = (x) => JSON.parse(JSON.stringify(x));
 
-function stepper(value, onStep, { min = -Infinity, max = Infinity, label } = {}) {
+export function stepper(value, onStep, { min = -Infinity, max = Infinity, label } = {}) {
   return h('span', { class: 'stepper no-print' },
     h('button', { type: 'button', 'aria-label': `Lower ${label || ''}`, disabled: value <= min, onClick: () => onStep(-1) }, '−'),
     h('button', { type: 'button', 'aria-label': `Raise ${label || ''}`, disabled: value >= max, onClick: () => onStep(1) }, '+'));
@@ -36,7 +39,7 @@ function mathTable(p, R) {
  * A pool's tracker: where its power points are placed right now, with + and − for each, and a picker to
  * place more. Works outside edit mode, because this is what happens at the table.
  */
-function poolTracker(ch, p, path, change, R) {
+export function poolTracker(ch, p, path, change, R) {
   if (!p.pool) return null;
   const avail = poolAvailable(ch, p, R);
   const cap = poolCapacity(p, R);
@@ -80,7 +83,7 @@ function poolTracker(ch, p, path, change, R) {
  * Weaken: track the power points it has drained and still holds (DCA 122: the target loses points by how
  * much it missed the DC, and they come back over time). Pools it fills follow along.
  */
-function drainTracker(ch, p, path, change, R) {
+export function drainTracker(ch, p, path, change, R) {
   if (p.effect !== 'Weaken') return null;
   const held = p.drained || 0;
   const fills = poolPowers(ch).filter(({ power }) => power.feed === p.name).map(({ power }) => power.name);
@@ -94,12 +97,26 @@ function drainTracker(ch, p, path, change, R) {
       h('b', null, '🩸 Drain'),
       h('span', { class: 'pool-meter', role: 'img', 'aria-label': `${held} of ${p.rank} points drained` }, Array.from({ length: Math.min(p.rank, 40) }, (_, i) => h('i', { class: i < held ? 'on' : '' }))),
       h('span', { class: 'num pool-count' }, `${held}/${p.rank} pp held`)),
-    h('p', { class: 'hint pool-feed' }, `Target resists with ${resist} against DC ${10 + p.rank}. It loses as many power points as it missed by, ${p.rank} at most in all, and gets them back over time.${fills.length ? ` What you hold fills ${fills.join(' and ')}.` : ' Tick "Pool" on a power in the Power Lab and pick this one under "Filled by" to spend what you steal.'}`),
+    h('p', { class: 'hint pool-feed' }, `Target resists with ${resist} against DC ${10 + p.rank}. It loses ${houseRules().weaken === 'degrees' ? 'a power point per degree of failure (house rule)' : 'as many power points as it missed by'}, ${p.rank} at most in all, and gets them back over time.${fills.length ? ` What you hold fills ${fills.join(' and ')}.` : ' Tick "Pool" on a power in the Power Lab and pick this one under "Filled by" to spend what you steal.'}`),
     h('div', { class: 'pool-add no-print' },
       h('label', { class: 'drain-label' }, 'Missed by', missed),
       h('button', { class: 'btn sm', type: 'button', onClick: go, disabled: held >= p.rank }, 'Drain'),
       h('button', { class: 'btn sm', type: 'button', disabled: !held, title: 'A round passes (Fades) or a hit knocks a point loose', onClick: () => edit((q) => loseDrained(q, 1)) }, '−1 fades'),
       h('button', { class: 'btn sm ghost', type: 'button', disabled: !held, title: 'Everything drained goes back', onClick: () => edit((q) => loseDrained(q, q.drained || 0)) }, 'All back')));
+}
+
+/** "📏 Range: …" under a power. */
+function rangeLine(p, R) {
+  const r = rangeInfo(p, R);
+  if (!r) return null;
+  return h('div', { class: 'power-range' }, h('b', null, `📏 ${r.kind}: `), r.text);
+}
+
+/** Short range text for the offense table. */
+function attackRange(a, R) {
+  if (a.power) { const r = rangeInfo(a.power, R); if (r?.kind === 'Ranged') return r.bands.map((b) => fmtFt(b.ft).replace(' ft', '')).join('/') + ' ft'; if (r?.kind === 'Area') return `${r.area.shape}${r.area.ft ? ` ${fmtFt(r.area.ft)}` : ''}`; return r ? r.kind : ''; }
+  if (a.kind === 'ranged') return `${rangeBands(a.rank).map((b) => b.ft).join('/')} ft`;
+  return a.kind === 'close' ? 'Close' : a.kind;
 }
 
 /** The player's own words for a power: how it looks and what it can do. */
@@ -162,7 +179,15 @@ export function renderFile(ch, R, opts = {}) {
       h('span', { class: 'abbr' }, a.abbr),
       h('span', { class: 'val num' }, a.total ?? '—'),
       a.total !== a.base && a.base != null ? h('span', { class: 'sub' }, `base ${a.base}`) : null,
-      editing ? stepper(a.base ?? 0, (d) => change((c) => { c.abilities[a.name] = (c.abilities[a.name] ?? 0) + d; }), { min: -5, label: a.name }) : null))));
+      editing ? stepper(a.base ?? 0, (d) => change((c) => { c.abilities[a.name] = (c.abilities[a.name] ?? 0) + d; }), { min: -5, label: a.name }) : null))),
+    (() => {
+      const str = s.d.abilities.Strength;
+      const reach = strengthReach(str, R);
+      if (!reach) return null;
+      return h('p', { class: 'ability-reach' }, h('b', null, '💪 Strength reach: '), `lifts ${reach.lift}`,
+        reach.throwPerson ? ` · throws a person ${reach.throwPerson}` : '', reach.throwCar ? ` · a car ${reach.throwCar}` : '',
+        ` · unarmed: close`, h('button', { class: 'linkish no-print', type: 'button', onClick: () => openRangeCalculator(ch, R) }, ' 📏 Range calculator'));
+    })());
 
   // ---- defenses ----
   const pl = ch.pl;
@@ -205,7 +230,7 @@ export function renderFile(ch, R, opts = {}) {
   const offense = h('section', { class: 'sec' },
     h('h3', null, 'Offense', h('span', { class: 'pts' }, `Initiative ${sign(s.d.initiative)}`)),
     h('div', { class: 'table-wrap' }, h('table', { class: 'offense' },
-      h('thead', null, h('tr', null, h('th', null, 'Attack'), h('th', null, 'Check'), h('th', null, 'Effect'), h('th', null, 'PL limit'))),
+      h('thead', null, h('tr', null, h('th', null, 'Attack'), h('th', null, 'Check'), h('th', null, 'Effect'), h('th', { title: 'Short / medium (−2) / long (−5)' }, 'Range'), h('th', null, 'PL limit'))),
       h('tbody', null, s.d.attacks.map((a) => {
         const used = a.roll ? a.bonus + a.rank : a.rank;
         const limit = a.roll ? 2 * pl : pl;
@@ -213,6 +238,7 @@ export function renderFile(ch, R, opts = {}) {
           h('td', null, a.name, a.alternate ? h('span', { style: { color: 'var(--ink-3)' } }, ' (AE)') : null),
           h('td', { class: 'n' }, a.roll ? sign(a.bonus) : a.kind === 'area' ? 'Area' : 'Perc.'),
           h('td', null, `${a.effect} ${a.rank}${a.resistance ? ` · ${a.resistance}` : ''}${a.crit && a.crit < 20 ? ` · crit ${a.crit}-20` : ''}`),
+          h('td', { class: 'range-cell' }, attackRange(a, R)),
           h('td', null, h('span', { class: 'ok', style: used > limit ? { color: 'var(--bad)' } : null }, `${used}/${limit}`)));
       })))));
 
@@ -233,13 +259,14 @@ export function renderFile(ch, R, opts = {}) {
           h('button', { class: 'btn sm', type: 'button', onClick: () => opts.onEditPower?.(path) }, 'Open in Lab'),
           h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${p.name}`, onClick: () => change((c) => removeAt(c, path)) }, '✕')) : null),
       h('div', { class: 'power-text' }, describeEffect(p, R)),
+      rangeLine(p, R),
       aboutPower(p),
       linkedAbout(p),
       drainTracker(ch, p, path, change, R),
       poolTracker(ch, p, path, change, R),
       whatItDoes(p, R),
       alts.map((a, i) => h('div', { class: 'ae' },
-        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), aboutPower(a), linkedAbout(a), drainTracker(ch, a, { ...path, alt: i }, change, R), poolTracker(ch, a, { ...path, alt: i }, change, R), whatItDoes(a, R, true),
+        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), rangeLine(a, R), aboutPower(a), linkedAbout(a), drainTracker(ch, a, { ...path, alt: i }, change, R), poolTracker(ch, a, { ...path, alt: i }, change, R), whatItDoes(a, R, true),
         editing ? h('span', { class: 'no-print' }, ' ',
           stepper(a.rank, (d) => change((c) => { const q = getPower(c, { ...path, alt: i }); q.rank = Math.max(1, q.rank + d); }), { min: 1, label: `${a.name} rank` }),
           h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${a.name}`, onClick: () => change((c) => removeAt(c, { ...path, alt: i })) }, '✕')) : null)),
@@ -427,11 +454,12 @@ export function renderFile(ch, R, opts = {}) {
     h('div', { class: 'points-bar', role: 'img', 'aria-label': parts.map(([n, v]) => `${n} ${v}`).join(', ') },
       parts.map(([, v, col]) => h('i', { style: { width: `${(Math.max(0, v) / denom) * 100}%`, background: col } }))),
     h('div', { class: 'legend' }, parts.map(([n, v, col]) => h('span', { style: { '--c': col } }, `${n} ${v}`))),
-    s.issues.length ? h('ul', { class: 'issues' }, s.issues.map((i) => h('li', { class: i.severity }, i.message))) : null);
+    s.issues.length ? h('ul', { class: 'issues' }, s.issues.map((i) => h('li', { class: i.severity }, i.message, i.source ? h('span', { class: 'src' }, ` (${i.source})`) : null))) : null);
 
   const file = h('article', { class: `file ${opts.fresh ? 'fresh' : ''}` },
     head,
     opts.toolbar || null,
+    opts.onChange && !opts.noAdvancement ? pointsBar(ch, R, { change, onSpend: opts.onSpend, editing }) : null,
     h('div', { class: 'file-body' },
       h('div', { class: 'col' }, abilities, defenses, offense, powers),
       h('div', { class: 'col' }, advantages, skills, equipment, story, points,

@@ -3,7 +3,7 @@
 import { RULES } from '../engine/index.js';
 import { state, onChange } from './store.js';
 import { toast } from './dom.js';
-import { initForge, roll, setCurrent, renderCurrent, restoreTabs } from './forge.js';
+import { initForge, roll, setCurrent, renderCurrent, restoreTabs, undo, redo } from './forge.js';
 import { initRoster, renderRoster } from './roster.js';
 import { initLab, openInLab, renderLab } from './lab.js';
 import { initGm, renderGm, addToInitiative } from './gm.js';
@@ -17,6 +17,8 @@ import { initTable, renderTable, postRoll } from './table.js';
 import { setLobbyHandlers, lobbySendRoster, lobbySendRemove, lobby } from './lobby.js';
 import { snapshotAll, restoreAll } from './backup.js';
 import { getAppButton } from './getapp.js';
+import { startSync, syncButton } from './syncfile.js';
+import { setHouseRules } from '../engine/house.js';
 import { state as st, upsert, removeFromRoster } from './store.js';
 import { decodeCharacter } from './share.js';
 import { setImportHooks, enableDropImport, setImportRules, openAnything } from './importer.js';
@@ -143,10 +145,13 @@ async function desktopSync() {
 }
 
 async function boot() {
+  setHouseRules(st.prefs.house);
   initTheme();
   await desktopSync();
   const getApp = getAppButton();
   if (getApp) document.getElementById('theme-toggle').before(getApp);
+  document.getElementById('theme-toggle').before(syncButton());
+  startSync();
   for (const v of views) {
     document.getElementById(`tab-${v}`).addEventListener('click', () => showTab(v));
   }
@@ -207,6 +212,7 @@ async function boot() {
   enableDropImport();
 
   onChange((what) => {
+    if (what === 'house') renderCurrent();
     if (what === 'roster') {
       document.getElementById('roster-count').textContent = state.roster.length;
       renderCurrent();
@@ -224,6 +230,12 @@ async function boot() {
   showTab(loaded ? 'forge' : tab);
 
   document.addEventListener('keydown', (e) => {
+    // Undo / redo on the Forge (not while typing in a field, where the browser's own undo applies).
+    if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.target.closest('input, textarea, select, [contenteditable]') && !document.getElementById('view-forge').hidden && !document.getElementById('dialog')?.open) {
+      const k = e.key.toLowerCase();
+      if (k === 'z' && !e.shiftKey) { e.preventDefault(); undo(); return; }
+      if (k === 'y' || (k === 'z' && e.shiftKey)) { e.preventDefault(); redo(); return; }
+    }
     if (e.target.closest('input, textarea, select, [contenteditable]') || e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key === 'r' || e.key === 'R') {
       if (document.getElementById('view-forge').hidden) return;

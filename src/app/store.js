@@ -2,6 +2,8 @@
 
 const ROSTER_KEY = 'dcugen.roster.v1';
 const PREFS_KEY = 'dcugen.prefs.v1';
+// Deleted characters, so a sync or a merged backup doesn't bring them back: [{ rosterId, at }].
+export const DELETED_KEY = 'dcugen.roster.deleted.v1';
 
 function readJson(key, fallback) {
   try {
@@ -62,6 +64,8 @@ export function upsert(ch) {
   copy.savedAt = new Date().toISOString();
   const i = state.roster.findIndex((x) => x.rosterId === copy.rosterId);
   if (i >= 0) state.roster[i] = copy; else state.roster.unshift(copy);
+  const tombs = readJson(DELETED_KEY, []);
+  if (tombs.some((t) => t.rosterId === copy.rosterId)) writeJson(DELETED_KEY, tombs.filter((t) => t.rosterId !== copy.rosterId));
   saveRoster();
   state.lastUpsert = copy;
   emit('roster-upsert');
@@ -70,6 +74,7 @@ export function upsert(ch) {
 
 export function removeFromRoster(rosterId) {
   state.roster = state.roster.filter((x) => x.rosterId !== rosterId);
+  writeJson(DELETED_KEY, [...readJson(DELETED_KEY, []).filter((t) => t.rosterId !== rosterId), { rosterId, at: new Date().toISOString() }].slice(-500));
   saveRoster();
   state.lastRemoved = rosterId;
   emit('roster-remove');

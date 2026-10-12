@@ -70,6 +70,23 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
   steampunk, wild west, pulp, cyberpunk, post-apocalyptic, occult, superhero gadgets...), a custom item maker, 169
   vehicles including 80 starships, headquarters, a builder for your own vehicles and bases, and space-game rules:
   travel times, sensors, ship combat, hazards and a random planet generator.
+- **Power points from the GM** – a points bar at the top of every sheet: what the character is built on, what the
+  GM has awarded, what's spent and what's **saved**. "🎁 Points from the GM" adds an award (every alternate form gets
+  it), "Spend" opens edit mode and logs what you buy, and points you don't spend stay saved. Set a goal ("Flight 10,
+  12 pp") and watch the bar fill. The full log is in Advancement (DCA 190); each form keeps its own ledger.
+- **Range** – every power shows how far it reaches (ranged bands, close, perception, area size and where it's placed,
+  movement per action), the Offense table has a Range column, and Strength shows what you lift and how far you
+  throw a person or a car. 📏 Range (Forge, Play view, and the Rules tab) is a cheat sheet and calculator: pick a
+  power and a distance to get the band and penalty (or the Extended Range that would reach it), area sizes,
+  distance by rank, travel time at a speed rank, lifting and throwing (DCA 126, 129, 172-173).
+- **Play view** (▶ Play on the Forge) – one screen for running a character at the table, made for phones: hero
+  points, bruises and the damage track (type the damage rank of a hit and press Resist: the Toughness check is rolled
+  and the bruise, dazed, staggered or incapacitated applied), fatigue and extra effort, conditions (vulnerable halves
+  Dodge and Parry, impaired and disabled count on every check), tap-to-roll defenses, attacks and skills (results go
+  to the Table), drain and pool trackers, companions, and an end-of-scene reset. It stays with the character.
+- **Undo and history** – every change on the Forge can be undone and redone (↶ ↷, Ctrl+Z / Ctrl+Y): edits, re-rolls,
+  form switches, drains. 🕘 History keeps named versions of each character (one every time it is saved to the roster,
+  or save one by hand) to restore later.
 - **Battle Room** – a fight simulator on the DC Adventures combat rules. Throw in anyone (the open character, roster
   cards, any Bestiary creature, a whole Workshop minion squad), pick sides, and watch it play out turn by turn with a
   full log of every attack roll, resistance check, condition, hero point and extra effort. Pause, step, run a round, or
@@ -131,6 +148,15 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
   "Restore" merges or replaces. The desktop app also mirrors everything to a folder on disk, with daily backups.
 - **Advancement** – track the power points the GM awards (DCA 190): earned, spent and unspent, with a history log
   that records exactly what each point bought, tied to the journal session it came from.
+- **Your data** – kept in the browser's IndexedDB (hundreds of MB, so saved portraits no longer fill it up), and
+  mirrored to its small storage when it fits. **Sync with a cloud folder** (Roster > Backup) keeps everything in one
+  file in Dropbox, OneDrive, Google Drive or iCloud Drive and merges it between computers, deletions included
+  (Chrome, Edge, Opera and the desktop app; elsewhere use Back up / Restore).
+- **Exports** – the text stat block, an Excel workbook and a printed dossier carry every alternate form and companion
+  (and the pool and drain state); the .json character file carries everything.
+- **House rules** (Rules tab) – PL limits and the point budget by the book, as warnings, or off; Weaken drains by how
+  much the check missed or 1 point per degree; warnings for pool points over the limits. Rule problems show the book
+  page where the data has one.
 - **Roster** – save characters, teams and creatures in the browser; search, duplicate, delete.
   **Worlds** for a multiverse (Earth-1, Earth-2, a homebrew setting), with folders inside them ("Earth-2/Villains");
   **The Multiverse Hub** lists everyone you've made, in every world. Pick the world with the "Save to world" dropdown

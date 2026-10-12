@@ -12,6 +12,7 @@
 
 import { ABILITIES, BUYABLE_DEFENSES, traitKind } from './rules.js';
 import { effectCost } from './costs.js';
+import { weakenPoints } from './house.js';
 
 /** Every pool power with where it lives (path as the sheet uses it). */
 export function poolPowers(ch) {
@@ -108,7 +109,7 @@ export function trimPool(ch, p, R) {
  */
 export function drain(weaken, missedBy) {
   const room = Math.max(0, weaken.rank - (weaken.drained || 0));
-  const took = Math.max(0, Math.min(room, Math.floor(missedBy)));
+  const took = Math.max(0, Math.min(room, weakenPoints(missedBy)));
   weaken.drained = (weaken.drained || 0) + took;
   return took;
 }

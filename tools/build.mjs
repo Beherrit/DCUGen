@@ -102,8 +102,10 @@ function bundle() {
   let html = read(path.join(SRC, 'app', 'index.html'));
   html = html
     .replace(/<link rel="stylesheet" href="app.css">/, () => `<style>\n${css}\n</style>`)
+    .replace(/<script src="storage-boot.js"><\/script>/, () => `<script>\n${read(path.join(SRC, 'app', 'storage-boot.js'))}\n</script>`)
+    // The app starts once its saved data has loaded from IndexedDB (storage-boot.js).
     .replace(/<script type="module" src="app.js"><\/script>/, () =>
-      `<script>window.DCUGEN_SHEET_TEMPLATE = "${template}";</script>\n<script>\n(() => {\n"use strict";\n${js}\n})();\n</script>`);
+      `<script>window.DCUGEN_SHEET_TEMPLATE = "${template}";</script>\n<script>\n(window.__dcugenStorageReady || Promise.resolve()).then(() => {\n"use strict";\n${js}\n});\n</script>`);
   // The whole app in one file at the repository root: open it, or send it to anyone.
   fs.writeFileSync(path.join(ROOT, 'DCUGen.html'), html);
   console.log(`bundle: ${files.length} modules -> DCUGen.html (${Math.round(html.length / 1024)} KB)`);

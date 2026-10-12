@@ -5,6 +5,7 @@ import { costBreakdown, powerCost, deviceCost, effectCost, primaryOwnCost } from
 import { deriveAll } from './derive.js';
 import { checkLimits } from './limits.js';
 import { poolCapacity } from './pools.js';
+import { houseRules } from './house.js';
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
@@ -68,7 +69,7 @@ export function explainPower(p, R) {
       parts.push(`Imposes conditions: the target resists with ${resist || 'Fortitude or Will'} against DC ${10 + rank}${conditions ? `. Each failure degree is worse: ${conditions}` : ''}. The target repeats the check at the end of each turn to shake it off.`);
       break;
     case 'Weaken':
-      parts.push(`Drains a trait${p.detail ? ` (${p.detail.split(';')[0]})` : ''}: the target resists against DC ${10 + rank} and loses as many power points of it as the check missed by (${rank} at most), getting them back over time. An ability loses a rank per 2 points, a defense a rank per point.`);
+      parts.push(`Drains a trait${p.detail ? ` (${p.detail.split(';')[0]})` : ''}: the target resists against DC ${10 + rank} and loses ${houseRules().weaken === 'degrees' ? 'a power point of it per degree of failure' : 'as many power points of it as the check missed by'} (${rank} at most), getting them back over time. An ability loses a rank per 2 points, a defense a rank per point.`);
       break;
     case 'Nullify':
       parts.push(`Shuts down powers${p.detail ? ` (${p.detail})` : ''}: make an opposed check of Nullify ${rank} against the target's power rank or Will; if you win, the effect turns off.`);

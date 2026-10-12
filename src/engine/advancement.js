@@ -5,7 +5,9 @@
 //   startPl: 10,
 //   snapshot: {...},           // the character as of the last recorded entry (traits only)
 //   log: [{ id, date, type: 'award'|'spend'|'refund'|'pl', points, note, changes: [string] }],
+//   goal: { note, target },    // optional: what the saved points are for ("Flight 10", 12 points)
 // }
+// Points earned and not spent are saved: they stay on the character until you spend them.
 // With advancement on, the budget is startPoints + earned points. Raising the power level does not
 // add points by itself (it only raises the limits), as in the book.
 
@@ -213,5 +215,14 @@ export function advancementSummary(ch, R) {
     toNextPl: PP_PER_PL - (earned % PP_PER_PL),
     suggestedPl,
     pending: pendingChanges(ch, R),
+    goal: adv?.goal?.note ? { note: adv.goal.note, target: Math.max(0, Number(adv.goal.target) || 0) } : null,
   };
+}
+
+/** What the saved points are for: { note, target } or null to clear. */
+export function setSavingGoal(ch, R, goal) {
+  startAdvancement(ch, R);
+  if (goal?.note) ch.advancement.goal = { note: String(goal.note).trim(), target: Math.max(0, Math.round(Number(goal.target) || 0)) };
+  else delete ch.advancement.goal;
+  return ch;
 }
