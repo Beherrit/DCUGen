@@ -15,7 +15,7 @@ import { initBattle, renderBattle, throwIn } from './battle.js';
 import { initWorld, renderWorld, openWorldPage, recordBattleInWorld, worldSaved, worldApply, openWorldKey, openPaperKey, openPaperObject, openHandoutKey, openHandoutObject, addWorldEvent, worldName } from './world.js';
 import { initGmScreen, renderGmScreen, receiveStatus, afterBattleRecorded } from './gmscreen.js';
 import { statusOf, resolveHit, describeHit } from '../engine/gmboard.js';
-import { receiveMapFromHost, onSharedMap } from './battlemap.js';
+import { receiveMapFromHost, onSharedMap, receiveMapAsset, serveMapAssets, receiveMapMove } from './battlemap.js';
 import { initTable, renderTable, postRoll, joinFromLink, openPhoneTable } from './table.js';
 import { setLobbyHandlers, lobbySendRoster, lobbySendRemove, lobby, lobbySend, onLobby } from './lobby.js';
 import { snapshotAll, restoreAll } from './backup.js';
@@ -128,6 +128,9 @@ function wireLobby() {
     message: (msg) => {
       if (msg.t === 'status' && lobby.role === 'host') receiveStatus(msg.status, msg.fromName);
       if (msg.t === 'map' && lobby.role !== 'host') receiveMapFromHost(msg.map);
+      if (msg.t === 'map-asset' && lobby.role !== 'host') receiveMapAsset(msg.id, msg.data);
+      if (msg.t === 'map-assets' && lobby.role === 'host') serveMapAssets(msg.ids, msg.from);
+      if (msg.t === 'map-move' && lobby.role === 'host') receiveMapMove(msg);
       if (msg.t === 'status-request' && lobby.role !== 'host') sendStatuses();
       if (msg.t === 'hit' && lobby.role !== 'host' && msg.rosterId) {
         let res = null;

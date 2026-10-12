@@ -114,9 +114,30 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
   backstories, ranked. "Make the villain" builds one as a legal character aimed at that hero: the main attack goes
   after their weakest defense, their defenses harden against the hero's best attack, with an Obsession complication
   and an origin that ties back to the story.
-- **Battle map** (GM Screen > 🗺 Map) – a grid of everyone on the board: drag tokens, select one to see every
-  distance with its range band and penalty, drop a burst, cone or line template sized by Area rank, and "Hit everyone
-  in it" sends an area hit (Dodge for half) through the GM Screen. Players see the map live in their Play view.
+- **Battle map** (GM Screen > 🗺 Map) – a virtual tabletop. Keep as many maps as you like (new, rename, duplicate,
+  switch), from 5 to 200 squares a side, with zoom and drag-to-scroll.
+  - **Your own map picture**: upload one, say how many squares across it is, fine-tune the alignment, and the grid
+    sits on top.
+  - **🏠 Build**: 78 Monopoly-style pieces in seven groups. City (roads, crosswalks, sidewalks, parking, lamps,
+    traffic lights, benches, bus stops), buildings (small houses to 60-floor towers, shops, diners, a church,
+    a police station, a gas station), vehicles (cars, taxis, police cars, vans, trucks, buses, a tank, a
+    helicopter), construction (a tower crane, scaffolding, an excavator, girders, cones, containers), nature and
+    parks (trees in three sizes, oaks, palms, ponds, lakes, park lawns, fountains, swings), people (civilians,
+    crowds, police, workers, paramedics, reporters, kids, dogs), and space and caves (stalagmites, crystals, lava,
+    craters, consoles, power cores, escape pods). Drag them, stretch them, add floors, recolour, turn, copy.
+  - **🧱 Paint**: walls, total and partial cover, difficult ground, water and hazards, square by square or in a box.
+  - **Ground, weather and light**: grass, city streets, desert, snow, dirt, dungeon, cavern, moon, deep space or a
+    starship deck; clear, rain, a thunderstorm, snow, a blizzard, fog, a sandstorm or ash; day, dusk or night,
+    with a reminder of what each does at the table.
+  - **Rules on the grid**: pick a token to see every distance with its range band and penalty, whether a wall
+    blocks the line, and partial (−2) or total (−5) cover from walls, buildings, trees, cars and crates.
+  - **💥 Templates**: burst, cone, line, cloud or cylinder, sized by Area rank. Drag one to move it, drag its tip
+    to aim, or let it follow a token. "Hit everyone in it" sends an area hit (Dodge for half) through the GM Screen.
+    Big creatures take 2×2 up to 6×6 squares, and tokens can be hidden from players.
+  - **🧊 3D view**: the whole map in 3D, with the buildings, cars and trees as models, falling rain and snow,
+    lightning, lit windows and street lamps at night, and tokens as standees with their portraits. Orbit around it,
+    look from the top, or stand in any character's shoes and look around.
+  - **Players see it live** on their phones (not hidden tokens), drag their own token, and open the 3D view too.
 - **Battle Room** – a fight simulator on the DC Adventures combat rules. Throw in anyone (the open character, roster
   cards, any Bestiary creature, a whole Workshop minion squad), pick sides, and watch it play out turn by turn with a
   full log of every attack roll, resistance check, condition, hero point and extra effort. Pause, step, run a round, or

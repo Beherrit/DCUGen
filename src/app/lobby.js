@@ -182,6 +182,32 @@ export function lobbySend(msg) { if (lobby.status === 'on') send(msg); }
 
 // ---- phone tables: browser to browser -------------------------------------------------------------------
 
+// PeerJS refuses JSON messages over about 16 KB (in bytes, after it encodes them again), and a roster
+// with portraits or a map picture is far bigger. Big messages go out in parts small enough for that, even
+// with every character escaped or multi-byte, and are put back together on the other side.
+const PART = 4800;
+let partSeq = 0;
+function wire(m) {
+  const s = JSON.stringify(m);
+  if (s.length <= PART) return [s];
+  const id = `${Date.now().toString(36)}-${partSeq++}`;
+  const n = Math.ceil(s.length / PART);
+  return Array.from({ length: n }, (_, i) => JSON.stringify({ t: '~part', id, i, n, d: s.slice(i * PART, (i + 1) * PART) }));
+}
+function assembler() {
+  const open = new Map();
+  return (m) => {
+    if (m?.t !== '~part') return m;
+    let p = open.get(m.id);
+    if (!p) { p = { got: 0, d: [] }; open.set(m.id, p); }
+    if (p.d[m.i] == null) { p.d[m.i] = m.d; p.got++; }
+    if (p.got < m.n) return null;
+    open.delete(m.id);
+    try { return JSON.parse(p.d.join('')); } catch { return null; }
+  };
+}
+const parse = (d) => { try { return typeof d === 'string' ? JSON.parse(d) : d; } catch { return null; } };
+
 const rid = (n = 8) => Array.from(crypto.getRandomValues(new Uint8Array(n)), (b) => 'abcdefghijkmnpqrstuvwxyz23456789'[b % 32]).join('');
 function needPeer() {
   const P = window.peerjs?.Peer;
@@ -211,7 +237,7 @@ export function hostPeerTable({ name, tableName } = {}) {
   lobby.status = 'connecting'; lobby.role = 'host'; lobby.name = name || 'GM'; lobby.error = null; lobby.hostGone = false; lobby.mode = 'phone';
   emit('status');
   const members = () => [{ id: 'h', name: lobby.name, role: 'host' }, ...[...clients.values()].filter((c) => c.hello).map((c) => ({ id: c.id, name: c.name, role: 'player' }))];
-  const toClient = (c, m) => { try { if (c.conn.open) c.conn.send(JSON.stringify(m)); } catch { /* gone */ } };
+  const toClient = (c, m) => { try { if (c.conn.open) for (const s of wire(m)) c.conn.send(s); } catch { /* gone */ } };
   const broadcastMembers = () => { const list = members(); for (const c of clients.values()) if (c.hello) toClient(c, { t: 'members', members: list }); handle({ t: 'members', members: list }); };
   // what a player sends: the hello, then everything goes to this tab (the host)
   const fromPlayer = (c, msg) => {
@@ -247,7 +273,8 @@ export function hostPeerTable({ name, tableName } = {}) {
     peer.on('connection', (conn) => {
       const c = { id: `p${++n}`, name: 'Player', conn, hello: false };
       clients.set(conn, c);
-      conn.on('data', (d) => { let m; try { m = typeof d === 'string' ? JSON.parse(d) : d; } catch { return; } fromPlayer(c, m); });
+      const whole = assembler();
+      conn.on('data', (d) => { const m = whole(parse(d)); if (m) fromPlayer(c, m); });
       conn.on('close', () => { clients.delete(conn); if (c.hello) broadcastMembers(); });
       conn.on('error', () => { clients.delete(conn); });
     });
@@ -274,10 +301,11 @@ export function joinPeerTable(key, { name } = {}) {
   peer.on('open', () => {
     conn = peer.connect(info.hostId, { reliable: true, serialization: 'json' });
     conn.on('open', () => {
-      transport = { send: (m) => { try { conn.send(JSON.stringify(m)); } catch { /* closed */ } }, close: () => { try { peer.destroy(); } catch { /* ignore */ } } };
+      transport = { send: (m) => { try { for (const s of wire(m)) conn.send(s); } catch { /* closed */ } }, close: () => { try { peer.destroy(); } catch { /* ignore */ } } };
       transport.send({ t: 'hello', name: lobby.name, token: info.token, role: 'player' });
     });
-    conn.on('data', (d) => { let m; try { m = typeof d === 'string' ? JSON.parse(d) : d; } catch { return; } if (m.t === 'welcome') clearTimeout(timer); handle(m); });
+    const whole = assembler();
+    conn.on('data', (d) => { const m = whole(parse(d)); if (!m) return; if (m.t === 'welcome') clearTimeout(timer); handle(m); });
     conn.on('close', () => { if (lobby.status === 'on') { lobby.hostGone = true; lobby.status = 'off'; transport = null; emit('status'); } });
   });
   peer.on('error', (err) => { clearTimeout(timer); fail(peerError(err)); });

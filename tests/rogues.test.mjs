@@ -33,3 +33,15 @@ test('a rogue is a legal villain built as the hero foil, with the shared past', 
   // made once: it drops off the list
   assert.ok(!rogueCandidates([h], [v]).some((x) => x.person.name === person.name));
 });
+
+test('reshaping the main attack drops modifiers that only fit the old effect', () => {
+  for (let i = 0; i < 40; i++) {
+    const h = { ...generateCharacter(R, { seed: `rgx${i}`, pl: 10, alignment: 'hero' }), rosterId: `r${i}` };
+    const person = rogueCandidates([h], [])[0]?.person || { name: `Foe ${i}`, relation: 'enemy' };
+    const { ch } = makeRogue(R, h, person);
+    for (const p of ch.powers || []) {
+      for (const m of p.extras || []) assert.ok(R.hasModifier('extra', m.name, p.effect), `${m.name} on ${p.effect}`);
+      for (const m of p.flaws || []) assert.ok(R.hasModifier('flaw', m.name, p.effect), `${m.name} on ${p.effect}`);
+    }
+  }
+});

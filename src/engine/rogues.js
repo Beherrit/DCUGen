@@ -64,13 +64,16 @@ export function heroProfile(hero, R) {
 }
 
 // The main attack, reshaped to go after a defense.
-function aimAt(p, weakest) {
+function aimAt(p, weakest, R) {
   p.extras = (p.extras || []).filter((m) => m.name !== 'Area');
   if (weakest === 'Will') Object.assign(p, { effect: 'Affliction', range: 'Perception', detail: 'Resisted by Will; Dazed, Compelled, Controlled', name: 'Mind Lash' });
   else if (weakest === 'Fortitude') Object.assign(p, { effect: 'Affliction', range: 'Ranged', detail: 'Resisted by Fortitude; Fatigued, Exhausted, Incapacitated', name: 'Withering Touch' });
   else if (weakest === 'Dodge') Object.assign(p, { effect: 'Damage', range: 'Ranged', detail: undefined });
   else if (weakest === 'Parry') Object.assign(p, { effect: 'Damage', range: 'Close', detail: undefined });
   else Object.assign(p, { effect: 'Damage', detail: undefined });
+  // extras and flaws of the old effect (Cumulative on an Affliction...) don't carry over
+  p.extras = p.extras.filter((m) => R.hasModifier('extra', m.name, p.effect));
+  p.flaws = (p.flaws || []).filter((m) => R.hasModifier('flaw', m.name, p.effect));
 }
 
 const plErrors = (ch, R) => checkLimits(ch, R).filter((i) => i.severity === 'error' && (i.pl || i.rule === 'budget')).length;
@@ -86,7 +89,7 @@ export function makeRogue(R, hero, person, { turn = turnOf(person.relation) || '
   const changes = [];
   if (main) {
     const before = JSON.stringify(main);
-    aimAt(main, prof.weakest);
+    aimAt(main, prof.weakest, R);
     // keep it legal: lower the rank until the PL limits and budget hold
     let guard = 0;
     while (plErrors(v, R) > 0 && main.rank > 1 && guard++ < 30) main.rank -= 1;
