@@ -11,6 +11,7 @@ import { companionsOf } from '../engine/companions.js';
 import { costBreakdown } from '../engine/costs.js';
 import { openRangeCalculator } from './rangecalc.js';
 import { rangeInfo } from '../engine/range.js';
+import { sharedMapView } from './battlemap.js';
 
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const recent = []; // this visit's rolls, newest first
@@ -123,5 +124,5 @@ export function renderPlay(ch, R, opts) {
 
   const log = recent.length ? h('section', { class: 'play-card' }, h('h3', null, 'Recent rolls'), h('ol', { class: 'play-log' }, recent.map((t) => h('li', null, t)))) : null;
 
-  return h('div', { class: 'play' }, status, defenses, attacks, skills, conditions, powers, companions, log);
+  return h('div', { class: 'play' }, status, sharedMapView(ch.rosterId ? [ch.rosterId] : []), defenses, attacks, skills, conditions, powers, companions, log);
 }

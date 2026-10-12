@@ -7,6 +7,7 @@ import { playState, effectiveDefenses, applyDamage, checkPenalty, QUICK_CONDITIO
 import { poolPowers, poolSpent, poolAvailable } from './pools.js';
 import { weakenPoints } from './house.js';
 import { hasForms, activeForm } from './forms.js';
+import { rangeInfo } from './range.js';
 
 // ---- status ----------------------------------------------------------------------------------------------
 
@@ -34,6 +35,8 @@ export function statusOf(ch, R) {
     pools: poolPowers(ch).map(({ power }) => ({ name: power.name, spent: poolSpent(ch, power, R), avail: poolAvailable(ch, power, R) })),
     drains,
     complications: (ch.complications || []).map((c) => ({ type: c.type || '', text: c.text || '' })),
+    // How far each attack reaches, for the battle map's range rings (feet).
+    ranges: d.attacks.filter((a) => a.power).map((a) => { const r = rangeInfo(a.power, R); return r?.kind === 'Ranged' ? { name: a.name, short: r.bands[0].ft, medium: r.bands[1].ft, long: r.bands[2].ft } : { name: a.name, kind: r?.kind || a.kind }; }),
     at: Date.now(),
   };
 }

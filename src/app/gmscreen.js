@@ -18,6 +18,12 @@ import { postRoll, feedEntries } from './table.js';
 import { statusOf, parseHit, describeHit, resolveHit, spotlight, complicationPrompts, QUICK_CONDITIONS } from '../engine/gmboard.js';
 import { makeNemesis, lessonsFromBattle, adaptNemesis, advanceScheme, schemeLabel } from '../engine/nemesis.js';
 import { buildRecap, recapSvg } from '../engine/recap.js';
+import { imageDialog } from './imageshare.js';
+import { prepSession } from '../engine/prep.js';
+import { rogueCandidates, makeRogue } from '../engine/rogues.js';
+import { DIFFICULTIES } from '../engine/balance.js';
+import { randomSeed } from '../engine/rng.js';
+import { mapPanel } from './battlemap.js';
 import { playState } from '../engine/play.js';
 
 const KEY = 'dcugen.gmscreen.v1';
@@ -309,31 +315,94 @@ async function endSession(people, spot) {
     entries: feedEntries(), events: s.events, spotlight: spot, complications: s.complications, since: s.startedAt,
   });
   const svg = recapSvg(r);
-  const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-  const toPng = () => new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => { const c = document.createElement('canvas'); c.width = 800; c.height = 1200; c.getContext('2d').drawImage(img, 0, 0); c.toBlob((b) => resolve(b), 'image/png'); };
-    img.onerror = () => resolve(null);
-    img.src = url;
-  });
   postRoll({ who: 'GM', kind: 'chat', text: `🎬 Session ${s.number} ends. ${r.headline}` });
   hooks.addWorldEvent?.({ name: `${r.campaign} #${r.issue}: ${r.headline}`, summary: r.blurbs.join(' '), tags: ['recap', 'session'], fields: { Kind: 'Session recap', Session: s.number }, people: r.cast.map((c) => c.name) });
   gs.lastRecap = r; gs.session = null; gs.init = null;
   save();
   renderGmScreen();
-  await openDialog({
-    title: `Recap: ${r.campaign} #${r.issue}`,
-    body: [
-      h('img', { src: url, alt: `Comic cover: ${r.headline}`, class: 'recap-cover' }),
-      h('pre', { class: 'recap-text' }, r.text),
-      h('div', { class: 'btn-row' },
-        h('button', { class: 'btn primary', type: 'button', onClick: async () => toast((await copyText(r.text)) ? 'Recap copied: paste it in your group chat' : 'Select the text and copy it') }, 'Copy for the group chat'),
-        h('button', { class: 'btn', type: 'button', onClick: async () => { const b = await toPng(); if (b) download(`${r.campaign}-${r.issue}.png`, b); else download(`${r.campaign}-${r.issue}.svg`, svg, 'image/svg+xml'); } }, 'Download the cover'),
-        h('button', { class: 'btn', type: 'button', onClick: async () => { const b = await toPng(); if (b && navigator.share && navigator.canShare?.({ files: [new File([b], 'recap.png', { type: 'image/png' })] })) { try { await navigator.share({ files: [new File([b], 'recap.png', { type: 'image/png' })], text: r.text }); } catch { /* cancelled */ } } else toast('Sharing isn\'t available here: download the cover and copy the text instead.'); } }, 'Share…')),
-      h('p', { class: 'hint' }, 'Also saved in the World as an event, so it shows on the campaign timeline and in the Newsstand.'),
-    ],
-  });
+  await imageDialog({ title: `Recap: ${r.campaign} #${r.issue}`, svg, text: r.text, file: `${r.campaign}-${r.issue}`, alt: `Comic cover: ${r.headline}`, note: 'Also saved in the World as an event, so it shows on the campaign timeline and in the Newsstand.' });
 }
+
+// ---- prep: Session in a Box, rogues' gallery -----------------------------------------------------------------
+
+/** The party: heroes on the board, or else the heroes saved on the roster. */
+function partyChars() {
+  const onBoard = boardPeople().filter((p) => !p.status.villain).map((p) => state.roster.find((c) => c.rosterId === p.key)).filter(Boolean);
+  if (onBoard.length) return onBoard;
+  return state.roster.filter((c) => c.alignment !== 'villain' && !c.minion && !c.catalogId && !c.companionKind).slice(0, 6);
+}
+
+/** Save a character for tonight (in a "Session N" folder) and put it on the board. */
+function toBoard(ch, folder) {
+  const saved = ch.rosterId && state.roster.some((c) => c.rosterId === ch.rosterId) ? ch : upsert({ ...ch, folder: ch.folder || folder });
+  if (!gs.board.some((e) => e.rosterId === saved.rosterId)) gs.board.push({ rosterId: saved.rosterId });
+  save();
+  return saved;
+}
+
+function prepPanel() {
+  const party = partyChars();
+  const plan = gs.plan;
+  const diff = h('select', { id: 'prep-diff', 'aria-label': 'How hard' }, Object.entries(DIFFICULTIES).map(([k, d]) => h('option', { value: k, selected: k === (gs.prepDifficulty || 'tense') }, d.label)));
+  const run = () => {
+    if (!party.length) { toast('Save the heroes to the roster (or put them on the board) first.'); return; }
+    gs.prepDifficulty = diff.value;
+    ui.busy = true; renderGmScreen();
+    setTimeout(() => {
+      try {
+        const quiet = spotlight(party.map((c) => ({ key: c.rosterId, name: c.identity?.codename })), feedEntries(), gs.session?.taps || {}, gs.session?.startedAt || 0).map((x) => x.name);
+        const p = prepSession(R, { heroes: party, roster: state.roster, quiet, difficulty: diff.value, seed: randomSeed(), n: 40 });
+        gs.plan = { ...p, made: new Date().toISOString() };
+        save();
+      } catch (e) { toast(e.message); }
+      ui.busy = false; renderGmScreen();
+    }, 30);
+  };
+  const folder = `Session ${(gs.lastSession || 0) + 1}`;
+  return h('section', { class: 'panel gm-prep' },
+    h('div', { class: 'gm-head' }, h('h2', null, '🧰 Session in a Box'), h('span', { class: 'spacer' }),
+      h('label', { class: 'wd-inline' }, 'Showdown', diff),
+      h('button', { class: 'btn primary', type: 'button', id: 'prep-go', disabled: ui.busy, onClick: run }, ui.busy ? 'Building…' : plan ? '↻ Prep again' : 'Prep next session')),
+    h('p', { class: 'hint', style: { margin: '4px 0 10px' } }, party.length ? `For ${party.map((c) => c.identity?.codename).join(', ')}. Scenes come from their bios and complications; the quiet players get the first scenes; the showdown is checked against the party in the Battle Room.` : 'Save your heroes to the roster (or put them on the board) and five minutes of prep become one click.'),
+    plan ? [
+      h('div', { class: 'prep-villain', style: { '--c': plan.villain.ch.theme?.color || '#a33' } },
+        h('div', { class: 'gm-card-head' }, h('span', { class: 'swatch' }), h('b', null, `Villain: ${plan.villain.ch.identity?.codename}`), h('span', { class: 'chip' }, `PL ${plan.villain.ch.pl}`), plan.villain.odds != null ? h('span', { class: 'chip' }, `Heroes win ~${Math.round(plan.villain.odds * 100)}%`) : null),
+        h('p', { class: 'hint', style: { margin: '4px 0' } }, plan.villain.why),
+        h('div', { class: 'gm-actions' },
+          h('button', { class: 'btn sm primary', type: 'button', onClick: () => { const v = toBoard(plan.villain.ch, folder); plan.villain.ch = v; save(); toast(`${v.identity?.codename} is on the board (saved in ${folder})`); renderGmScreen(); } }, 'Put on the board'),
+          h('button', { class: 'btn sm', type: 'button', onClick: () => hooks.open?.(plan.villain.ch) }, 'Open sheet'),
+          h('button', { class: 'btn sm', type: 'button', onClick: () => { hooks.throwIn?.(plan.villain.ch, { team: 'B' }); for (const c of party) hooks.throwIn?.(c, { team: 'A' }); toast('Party on A, villain on B: the Battle Room is set'); } }, '⚔ Set up the fight'))),
+      h('div', { class: 'prep-minions' }, h('b', null, `Minions: ${plan.minions.count} × ${plan.minions.name}`), h('span', { class: 'hint' }, ` PL ${plan.minions.rank} · ${plan.minions.villainCost.minionAdvantage.text}`),
+        h('button', { class: 'btn sm', type: 'button', onClick: () => { const m = { ...plan.minions.member, minion: true, identity: { ...plan.minions.member.identity, codename: `${plan.minions.name} (×${plan.minions.count})` } }; toBoard(m, folder); toast('Squad on the board'); renderGmScreen(); } }, 'Put on the board')),
+      h('ol', { class: 'prep-scenes' }, plan.scenes.map((sc) => h('li', { class: `prep-scene ${sc.kind}` },
+        h('div', { class: 'gm-card-head' }, h('b', null, sc.title), h('span', { class: 'chip' }, `🔦 ${sc.spotlight}`), sc.complication ? h('span', { class: 'chip warn' }, `🎭 ${sc.complication.hero}`) : null),
+        h('p', null, sc.text), h('p', { class: 'hint' }, sc.stakes),
+        h('div', { class: 'gm-actions' },
+          h('button', { class: 'btn sm', type: 'button', onClick: () => { gs.scene = sc.scene; gs.view = 'run'; save(); renderGmScreen(); toast('Scene set: its complications are up on the Run page'); } }, 'Play this scene'),
+          sc.minions || sc.villain ? h('button', { class: 'btn sm', type: 'button', onClick: () => { if (sc.villain) hooks.throwIn?.(plan.villain.ch, { team: 'B' }); else hooks.throwIn?.({ ...plan.minions.member, minion: true }, { team: 'B', copies: plan.minions.count }); for (const c of party) hooks.throwIn?.(c, { team: 'A' }); toast('The Battle Room is set'); } }, '⚔ To the Battle Room') : null)))),
+      h('div', { class: 'prep-rumor' }, h('span', null, `📰 Rumor: ${plan.rumor}`), h('button', { class: 'btn sm', type: 'button', onClick: () => { hooks.addWorldEvent?.({ name: plan.rumor, summary: `Rumor ahead of session ${(gs.lastSession || 0) + 1}.`, tags: ['rumor'], fields: { Kind: 'Rumor' } }); toast('In the World: the Newsstand will run it'); } }, 'Put it in the newspaper')),
+    ] : null);
+}
+
+function roguesPanel() {
+  const party = partyChars();
+  const list = rogueCandidates(party, state.roster).slice(0, 8);
+  const made = state.roster.filter((c) => c.foilOf);
+  return h('section', { class: 'panel gm-rogues' },
+    h('h2', null, '🦹 Rogues\' gallery'),
+    h('p', { class: 'hint', style: { margin: '0 0 8px' } }, 'People from the heroes\' own pasts, back as villains built to beat them: their attack goes after that hero\'s weakest defense, and they\'re hardened against the hero\'s best attack.'),
+    list.length ? h('div', { class: 'rogue-list' }, list.map((c) => h('div', { class: 'rogue' },
+      h('div', null, h('b', null, c.person.name), h('span', { class: 'chip' }, `${c.hero.identity?.codename}'s ${String(c.person.relation).toLowerCase()}`), h('div', { class: 'hint' }, c.person.who)),
+      h('button', { class: 'btn sm primary', type: 'button', onClick: () => {
+        const r = makeRogue(R, c.hero, c.person);
+        const saved = upsert({ ...r.ch, folder: c.hero.folder || 'Villains' });
+        toast(r.text);
+        hooks.open?.(saved);
+      } }, 'Make the villain')))) : h('p', { class: 'hint' }, party.length ? 'Everyone in their pasts has already turned (or their bios are empty: roll a bio on the Bio page).' : 'Save the heroes to the roster first.'),
+    made.length ? [h('div', { class: 'label', style: { marginTop: '10px' } }, 'Already back'), h('div', { class: 'tagwrap' }, made.map((v) => h('button', { class: 'chip', type: 'button', title: v.notes || '', onClick: () => hooks.open?.(v) }, `${v.identity?.codename} (${v.foilOf.name}'s ${String(v.foilOf.relation).toLowerCase()})`)))] : null);
+}
+
+const ui = { busy: false };
 
 // ---- the page -----------------------------------------------------------------------------------------------
 
@@ -343,8 +412,8 @@ export function renderGmScreen() {
   const people = boardPeople();
   const spot = spotlight(people.filter((p) => !p.status.villain).map((p) => ({ key: p.key, name: p.status.name })), feedEntries(), gs.session?.taps || {}, gs.session?.startedAt || 0);
   const lobbyLine = lobby.status === 'on'
-    ? (lobby.role === 'host' ? `Lobby open: ${lobby.members.filter((m) => m.role !== 'host').length} player(s). Their characters appear here live once they open them.` : 'You joined as a player: the GM screen is for the host.')
-    : 'No lobby: run everyone on this screen, or host a lobby from the desktop app (Table tab) so players\' apps roll their own hits.';
+    ? (lobby.role === 'host' ? `Table open: ${lobby.members.filter((m) => m.role !== 'host').length} player(s) connected. Their characters appear here live once they open them.` : 'You joined as a player: the GM screen is for the host.')
+    : 'No table open: run everyone on this screen, or open a table for phones so players join with a QR code and roll their own hits.';
   root.append(
     h('div', { class: 'page-head' },
       h('div', null, h('h1', null, 'GM Screen'), h('p', null, 'Everyone at the table on one screen, live. Type a hit and their apps roll it. Track initiative, give the quiet player the spotlight, cash in complications for hero points, and send the recap when you\'re done.')),
@@ -353,12 +422,19 @@ export function renderGmScreen() {
         gs.session ? h('span', { class: 'chip gm-session' }, `🎬 Session ${gs.session.number} · since ${new Date(gs.session.startedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`) : null,
         gs.session ? h('button', { class: 'btn primary', type: 'button', id: 'gm-end', onClick: () => endSession(people, spot) }, 'End session & make the recap') : h('button', { class: 'btn primary', type: 'button', id: 'gm-start', onClick: () => { startSession(); renderGmScreen(); } }, '🎬 Start a session'),
         h('button', { class: 'btn', type: 'button', id: 'gm-add', onClick: addToBoard }, '+ Characters'),
+        h('button', { class: 'btn', type: 'button', id: 'gm-invite', title: 'Players scan a QR code and join from their phones', onClick: async () => { await hooks.invite?.(); renderGmScreen(); } }, lobby.status === 'on' && lobby.role === 'host' ? '📱 Invite players' : '📱 Open a table for phones'),
         lobby.status === 'on' && lobby.role === 'host' ? h('button', { class: 'btn', type: 'button', onClick: requestStatuses }, '⟳ Refresh players') : null)),
     h('p', { class: 'hint gm-lobby' }, lobbyLine),
-    h('div', { class: 'gm-layout' },
-      h('div', { class: 'gm-main' },
-        hitConsole(people),
-        people.length ? h('div', { class: 'gm-board' }, people.map((p) => card(p, spot)))
-          : h('div', { class: 'empty' }, h('h2', null, 'Nobody on the board yet'), h('p', null, 'Add characters from your roster, or open a lobby so your players\' characters show up live.'), h('button', { class: 'btn primary', type: 'button', onClick: addToBoard }, '+ Characters'))),
-      h('div', { class: 'gm-side' }, initiativePanel(people), spotlightPanel(spot), complicationsPanel(people), nemesisPanel())));
+    h('div', { class: 'seg gm-views', role: 'tablist', 'aria-label': 'GM screen' },
+      [['run', '▶ Run the session'], ['prep', '🧰 Prep'], ['map', '🗺 Map']].map(([v, t]) => h('button', { type: 'button', role: 'tab', id: `gm-view-${v}`, 'aria-pressed': String((gs.view || 'run') === v), onClick: () => { gs.view = v; save(); renderGmScreen(); } }, t))),
+    (gs.view || 'run') === 'prep'
+      ? h('div', { class: 'gm-layout' }, h('div', { class: 'gm-main' }, prepPanel()), h('div', { class: 'gm-side' }, roguesPanel(), nemesisPanel()))
+      : gs.view === 'map'
+        ? mapPanel({ R, people, gs, save, rerender: renderGmScreen, applyHit: (hit) => applyHit(hit, people) })
+        : h('div', { class: 'gm-layout' },
+          h('div', { class: 'gm-main' },
+            hitConsole(people),
+            people.length ? h('div', { class: 'gm-board' }, people.map((p) => card(p, spot)))
+              : h('div', { class: 'empty' }, h('h2', null, 'Nobody on the board yet'), h('p', null, 'Add characters from your roster, prep a session, or open a table so your players\' characters show up live.'), h('button', { class: 'btn primary', type: 'button', onClick: addToBoard }, '+ Characters'))),
+          h('div', { class: 'gm-side' }, initiativePanel(people), spotlightPanel(spot), complicationsPanel(people))));
 }
