@@ -87,10 +87,22 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
 - **Undo and history** – every change on the Forge can be undone and redone (↶ ↷, Ctrl+Z / Ctrl+Y): edits, re-rolls,
   form switches, drains. 🕘 History keeps named versions of each character (one every time it is saved to the roster,
   or save one by hand) to restore later.
+- **GM Screen** – the table runs itself. Every character in play on one board: players' characters live from their
+  apps over the lobby (damage, conditions, hero points, pools, drains, initiative), plus villains and NPCs the GM
+  runs here. Type a hit in plain words ("Burst Damage 10 hits Shadowshot and Spark", "Affliction 8 vs Fortitude on
+  Spark") and each player's app rolls its own Dodge for half and resistance and applies the result; the GM's own
+  characters roll here; everything goes to the Table feed. Initiative for everyone with turns and rounds; ★ moments
+  and a **spotlight** meter that names who hasn't had one; describe the scene and the **complications** it could bring
+  into play come up, +1 hero point in one tap; **recurring villains** who learn from every defeat recorded in the
+  World (points spent on the defense that kept failing, inside the PL limits) and work a **scheme clock** between
+  sessions that leaves hints in the World for the Newsstand; and **End session** makes a comic-book cover recap and
+  a few lines for the group chat (also saved in the World). Live play needs a lobby, hosted from the desktop app.
 - **Battle Room** – a fight simulator on the DC Adventures combat rules. Throw in anyone (the open character, roster
   cards, any Bestiary creature, a whole Workshop minion squad), pick sides, and watch it play out turn by turn with a
   full log of every attack roll, resistance check, condition, hero point and extra effort. Pause, step, run a round, or
-  run to the end; replay the same seed or rematch with new dice; run the match-up 100 times for the odds. Every fighter
+  run to the end; replay the same seed or rematch with new dice; run the match-up 100 times for the odds. **Will this fight wreck
+  the party?** checks the heroes' odds over 100 fights and tunes the opposition (attacks and defenses up or down) to
+  an easy win, a tense win, a coin flip, a deadly fight or a planned defeat. Every fighter
   fights in a style that fits its build: brawlers close in and go all-out, skilled fighters feint and chain Takedowns,
   gear fighters and blasters keep their range and trade accuracy for effect, spellcasters rotate effects to the weak
   defense, mentalists turn controlled enemies on their friends, beasts lunge and grab, minions mob and break.

@@ -7,6 +7,7 @@ import { state } from './store.js';
 import { randomSeed } from '../engine/rng.js';
 import { catalogEntries } from '../engine/workshop.js';
 import { catalogToCharacter } from '../engine/catalog.js';
+import { DIFFICULTIES, verdict, heroOdds, tuneBattle, scaleCharacter } from '../engine/balance.js';
 import { createBattle, addCombatant, removeCombatant, makeCombatant, joinBattle, startBattle, step, runRound, runToEnd, battleText, simulateMany, serializeBattle, reviveBattle, placeAll, STYLES, TACTICS, ARENA, statusLine, conditionLabels, detectStyle, rebuildCombatant } from '../engine/battle.js';
 
 const KEY = 'dcugen.battle.v1';
@@ -377,6 +378,59 @@ function oddsPanel() {
           h('td', { class: 'num' }, `${Math.round(((mc.survived[c.id] || 0) / mc.n) * 100)}%`), h('td', { class: 'num' }, `${Math.round(((mc.out[c.id] || 0) / mc.n) * 100)}%`), h('td', { class: 'num' }, ((mc.kos[c.id] || 0) / mc.n).toFixed(2))))))) : null);
 }
 
+// ---- balance: will this fight wreck the party? -------------------------------------------------------------
+
+function balancePanel() {
+  const teams = [...new Set(battle.combatants.map((c) => c.team))].sort();
+  if (!ui.heroTeam || !teams.includes(ui.heroTeam)) ui.heroTeam = teams[0] || 'A';
+  const bal = ui.balance;
+  const heroSel = h('select', { 'aria-label': 'The heroes are', id: 'bal-heroes', onChange: (e) => { ui.heroTeam = e.target.value; ui.balance = null; renderBattle(); } }, teams.map((t) => h('option', { value: t, selected: t === ui.heroTeam }, `Team ${t}`)));
+  const goalSel = h('select', { 'aria-label': 'The fight should be', id: 'bal-goal', onChange: (e) => { ui.balanceGoal = e.target.value; } }, Object.entries(DIFFICULTIES).map(([k, d]) => h('option', { value: k, selected: k === (ui.balanceGoal || 'tense') }, `${d.label} (~${Math.round(d.target * 100)}%)`)));
+  const busy = (fn) => {
+    if (teams.length < 2) { toast('Put the heroes and the opposition on two teams first.'); return; }
+    ui.balanceBusy = true; renderBattle();
+    setTimeout(() => { try { fn(); } catch (e) { toast(e.message); } ui.balanceBusy = false; renderBattle(); }, 30);
+  };
+  const check = () => busy(() => { ui.balance = { odds: heroOdds(battle, R, ui.heroTeam, 100, `${battle.seed}-check-${Date.now().toString(36)}`) }; });
+  const tune = () => busy(() => {
+    const goal = DIFFICULTIES[ui.balanceGoal || 'tense'];
+    const t = tuneBattle(battle, R, { heroTeam: ui.heroTeam, target: goal.target, n: 100 });
+    ui.balance = { ...(ui.balance || {}), odds: ui.balance?.odds || { rate: t.before, n: 60 }, tune: { ...t, goal } };
+  });
+  const apply = () => {
+    const k = bal?.tune?.best.k;
+    if (!k) return;
+    for (const c of battle.combatants) {
+      if (c.team === ui.heroTeam) continue;
+      const ch = scaleCharacter(c.ch, k, R);
+      Object.assign(c, makeCombatant(R, ch, { id: c.id, team: c.team, style: c.style, tactics: c.tactics, heroPoints: c.heroPoints, name: ch.identity.codename }));
+    }
+    placeAll(battle);
+    save();
+    ui.balance = null; ui.mc = null;
+    toast(`Opposition ${k > 0 ? 'strengthened' : 'weakened'} by ${Math.abs(k)} rank${Math.abs(k) === 1 ? '' : 's'} (attacks and defenses). Run the odds again to check.`);
+    renderBattle();
+  };
+  const pct = (r) => `${Math.round(r * 100)}%`;
+  const odds = bal?.odds;
+  const tuned = bal?.tune;
+  const foes = battle.combatants.filter((c) => c.team !== ui.heroTeam).map((c) => c.name).join(', ') || 'the other side';
+  return h('section', { class: 'panel bt-balance', id: 'balance' },
+    h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' } },
+      h('h2', null, '⚖ Will this fight wreck the party?'), h('span', { style: { flex: 1 } })),
+    h('div', { class: 'rc-row' }, h('label', null, 'Heroes are', heroSel), h('label', null, 'The fight should be', goalSel),
+      h('button', { class: 'btn sm', type: 'button', id: 'bal-check', disabled: ui.balanceBusy, onClick: check }, ui.balanceBusy ? 'Running…' : 'Check the odds'),
+      h('button', { class: 'btn sm primary', type: 'button', id: 'bal-tune', disabled: ui.balanceBusy, onClick: tune }, 'Tune the opposition')),
+    odds ? h('p', { class: `bal-verdict ${odds.rate < 0.4 ? 'bad' : odds.rate >= 0.85 ? 'easy' : 'ok'}` }, h('b', null, `Heroes win ${pct(odds.rate)}`), ` of ${odds.n} fights: ${verdict(odds.rate)}.`) : h('p', { class: 'hint', style: { margin: '6px 0 0' } }, 'Runs this match-up 100 times with fresh dice and tells you how often the heroes win. "Tune" finds how much stronger or weaker the opposition should be.'),
+    tuned ? h('div', { class: 'bal-tune' },
+      tuned.best.k
+        ? h('p', null, `For ${tuned.goal.label.toLowerCase()} (~${pct(tuned.goal.target)}), make ${foes} `, h('b', null, `${tuned.best.k > 0 ? '+' : ''}${tuned.best.k} rank${Math.abs(tuned.best.k) === 1 ? '' : 's'}`), ` on attacks and defenses: heroes then win about ${pct(tuned.best.rate)}.`)
+        : h('p', null, `It's already about right for ${tuned.goal.label.toLowerCase()}: heroes win ${pct(tuned.before)}.`),
+      h('div', { class: 'bal-steps' }, tuned.tried.map((t) => h('span', { class: `chip ${t.k === tuned.best.k ? 'pick' : ''}` }, `${t.k > 0 ? '+' : ''}${t.k}: ${pct(t.rate)}`))),
+      tuned.best.k ? h('button', { class: 'btn sm primary', type: 'button', id: 'bal-apply', onClick: apply }, `Apply ${tuned.best.k > 0 ? '+' : ''}${tuned.best.k} to ${foes}`) : null,
+      h('p', { class: 'hint', style: { margin: '6px 0 0' } }, 'Applying changes the fighters in this Battle Room only. To keep the tuned villain, open them from their card and save to the roster.')) : null);
+}
+
 function helpPanel() {
   return h('section', { class: 'panel bt-help' },
     h('h2', null, 'How the fight is run'),
@@ -450,6 +504,7 @@ export function renderBattle() {
       h('section', { class: 'panel bt-panel' },
         h('div', { style: { display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' } }, h('h2', null, 'Fight log'), h('span', { class: 'hint' }, `${battle.log.length} entries`), h('span', { style: { flex: 1 } }), filter),
         logHost),
+      balancePanel(),
       oddsPanel())));
   renderLog();
 }

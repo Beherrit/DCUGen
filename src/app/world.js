@@ -101,6 +101,21 @@ export async function openWorldKey(text) {
   return true;
 }
 
+/** Add an event page to the World (a scheme hint, a session recap), tied to the people it names. */
+export function addWorldEvent({ name, summary = '', tags = [], fields = {}, people = [] }) {
+  rebuild();
+  const ev = createEntity(saved, { type: 'event', name, summary, tags, fields: { Date: new Date().toISOString().slice(0, 10), ...fields } });
+  for (const who of people) {
+    const e = [...world.entities.values()].find((x) => x.type === 'person' && x.name.toLowerCase() === String(who).toLowerCase());
+    if (e) addLink(saved, { from: e.id, to: ev.id, rel: 'involved', note: fields.Kind || '' });
+  }
+  save();
+  return ev;
+}
+
+/** The World's name (the campaign). */
+export function worldName() { return saved?.name && saved.name !== 'My World' ? saved.name : 'Our Campaign'; }
+
 export function recordBattleInWorld(battle) {
   rebuild();
   const ev = recordBattle(saved, battle, world);

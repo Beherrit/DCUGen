@@ -63,3 +63,23 @@ test('lobby keys round-trip', async () => {
   assert.deepEqual(p, { name: 'Friday night', addresses: ['192.168.1.20', '10.0.0.5'], port: 7777, token: 'abc_-123' });
   assert.throws(() => parseLobbyKey('DCU1.xyz'));
 });
+
+test('the GM screen messages: player statuses reach the host, hits and hero points reach players', async () => {
+  const server = await startLobbyServer({ port: 0, name: 'GM table' });
+  try {
+    const host = await connect(server.port, { name: 'GM', token: server.token, role: 'host' });
+    await host.next(); await host.next();
+    const player = await connect(server.port, { name: 'Ann', token: server.token, role: 'player' });
+    await player.next(); await host.next(); await host.next(); await player.next();
+    player.send({ t: 'status', status: { rosterId: 'r1', name: 'Spark', play: { bruises: 1 } } });
+    const got = await host.next();
+    assert.equal(got.t, 'status'); assert.equal(got.fromName, 'Ann'); assert.equal(got.status.name, 'Spark');
+    host.send({ t: 'hit', rosterId: 'r1', hit: { effect: 'Damage', rank: 10, resist: 'Toughness', dc: 25, area: true, targets: ['Spark'] } });
+    const hit = await player.next();
+    assert.equal(hit.t, 'hit'); assert.equal(hit.hit.rank, 10);
+    host.send({ t: 'hp', rosterId: 'r1', n: 1, why: 'complication' });
+    const hp = await player.next();
+    assert.deepEqual([hp.t, hp.n, hp.why], ['hp', 1, 'complication']);
+    host.ws.close(); player.ws.close();
+  } finally { await server.close(); }
+});
