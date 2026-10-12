@@ -12,6 +12,11 @@ players and they can use it too. No install, works offline (fonts fall back to s
 [all releases](https://github.com/Beherrit/DCUGen/releases). GitHub builds a new release from every push to `main`, and
 installed apps update themselves. Your data lives in a folder on your own disk, and you can host a table for your players.
 
+**On a phone or tablet:** open [forgedcugen.vercel.app](https://forgedcugen.vercel.app/) and add it to your home screen
+(iPhone: Share > Add to Home Screen; Android: ⋮ > Install app). It opens full screen with its own icon and works
+offline. The site's **📲 App** button (phones) and the **▾** next to Download app (computers) show the steps and QR codes:
+one to open DCUGen on your phone, one for each desktop download.
+
 ## What's inside
 
 - **Forge** – roll a complete, legal character in one click. Pick power level, archetype (20 including androids

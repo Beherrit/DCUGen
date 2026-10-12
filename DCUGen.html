@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DCUGen Hero Forge</title>
+<meta name="theme-color" content="#0d1117">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DCUGen">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="description" content="Random and custom character generator and GM toolkit for the DC Adventures RPG, built on the Mutants & Masterminds 3e rules.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1990,6 +1998,20 @@ div.play-line small { grid-column: 1; grid-row: 2; }
 .share-link { width: 100%; font: 12px/1.35 ui-monospace, Consolas, monospace; word-break: break-all; }
 .share-out .qr { max-width: 220px; }
 .share-names { margin: 6px 0; padding-left: 18px; max-height: 40vh; overflow: auto; }
+
+.getapp-phone { display: none; }
+@media (max-width: 520px) { .getapp-phone { display: inline-flex; } }
+.getapp-phone-box { display: grid; gap: 8px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2); }
+.getapp-phone-box.focus { border-color: var(--blue); }
+.getapp-phone-box h3, .getapp-qr-box + p, dialog section h3 { margin: 4px 0 2px; }
+.getapp-phone-row { display: flex; gap: 14px; align-items: flex-start; flex-wrap: wrap; }
+.getapp-qr { margin: 0; display: grid; gap: 4px; justify-items: center; max-width: 190px; }
+.getapp-qr .qr { width: 170px; background: #fff; padding: 6px; border-radius: 8px; }
+.getapp-qr .qr svg { width: 100%; height: auto; display: block; }
+.getapp-qr figcaption { font-size: 12px; color: var(--ink-3); text-align: center; }
+.getapp-steps { margin: 0 0 6px; padding-left: 20px; }
+.getapp-qr-box { margin: 8px 0; }
+.getapp-qr-box summary { cursor: pointer; font: 700 13px/1.6 var(--font-label); }
 
 </style>
 </head>
@@ -26963,9 +26985,25 @@ return { initGmScreen, receiveStatus, requestStatuses, afterBattleRecorded, rend
 })();
 
 __mods["src/app/getapp.js"] = (() => {
-// "Get the app": links to the desktop installers that GitHub builds from every release of the site.
+// "Get the app": the desktop installers GitHub builds from every release of the site, and the phone app
+// (the site itself, installed to the home screen). QR codes carry either to another device.
 
-const { h, openDialog } = __mods["src/app/dom.js"];
+const { h, openDialog, toast } = __mods["src/app/dom.js"];
+const { qrSvg } = __mods["src/app/lobby.js"];
+const SITE = 'https://forgedcugen.vercel.app/';
+const isPhone = () => /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+const isIos = () => /iPhone|iPad|iPod/i.test(navigator.userAgent);
+const installed = () => window.matchMedia?.('(display-mode: standalone)').matches || navigator.standalone === true;
+
+// Android/Chrome offer a one-tap install; keep the offer for our own button.
+let installOffer = null;
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); installOffer = e; });
+/** The phone app works offline once installed. */
+function registerServiceWorker() {
+  if (!('serviceWorker' in navigator) || location.protocol !== 'https:' || window.dcugenDesktop) return;
+  navigator.serviceWorker.register('sw.js').catch(() => { /* not on this host */ });
+}
+
 const RELEASES = 'https://github.com/Beherrit/DCUGen/releases/latest';
 const DL = `${RELEASES}/download`;
 const DOWNLOADS = {
@@ -26986,6 +27024,7 @@ function guess() {
 /** One click downloads the installer for this computer; the small arrow opens the other builds. */
 function getAppButton() {
   if (window.dcugenDesktop) return null;
+  if (isPhone()) return installed() ? null : h('button', { class: 'btn sm getapp-phone', type: 'button', id: 'getapp-phone', title: 'Put DCUGen on your home screen as an app', onClick: () => getAppDialog('phone') }, '📲 App');
   const mine = guess();
   const d = DOWNLOADS[mine];
   return h('span', { class: 'getapp-wrap' },
@@ -26993,24 +27032,47 @@ function getAppButton() {
     h('button', { class: 'btn sm getapp-more', type: 'button', title: 'Other downloads and what the app does', 'aria-label': 'Other downloads', onClick: getAppDialog }, '▾'));
 }
 
-async function getAppDialog() {
+const qr = (text, label) => { const svg = qrSvg(text, 4); return svg ? h('figure', { class: 'getapp-qr' }, h('div', { class: 'qr', html: svg }), h('figcaption', null, label)) : null; };
+
+function phoneSection(focus) {
+  const steps = isIos()
+    ? ['Open this page in Safari.', 'Tap the Share button (the square with the arrow).', 'Tap "Add to Home Screen", then "Add".']
+    : ['Open this page in Chrome.', 'Tap the ⋮ menu.', 'Tap "Install app" (or "Add to Home screen").'];
+  return h('section', { class: `getapp-phone-box ${focus ? 'focus' : ''}` },
+    h('h3', null, '📱 On your phone or tablet'),
+    h('p', { style: { margin: 0 } }, 'DCUGen runs right in your phone\'s browser, and you can install it like an app: its own icon on the home screen, full screen, and it opens even without signal. Phones and tablets use this; the downloads are for computers.'),
+    h('div', { class: 'getapp-phone-row' },
+      isPhone() ? null : qr(SITE, 'Scan with your phone\'s camera to open DCUGen'),
+      h('div', null,
+        installOffer ? h('button', { class: 'btn primary', type: 'button', id: 'getapp-install', onClick: async () => { installOffer.prompt(); const r = await installOffer.userChoice.catch(() => null); if (r?.outcome === 'accepted') toast('Installed: DCUGen is on your home screen'); installOffer = null; } }, '📲 Install DCUGen') : null,
+        installed() ? h('p', { class: 'hint' }, 'You are using the installed app.') : h('ol', { class: 'getapp-steps' }, (isPhone() ? steps : ['Scan the code (or open ' + SITE.replace('https://', '') + ').', ...steps.slice(1)]).map((t) => h('li', null, t))),
+        h('p', { class: 'hint', style: { margin: 0 } }, 'Your characters live on each device; use Roster > 🔗 Share as a link, or Backup > Sync with a cloud folder, to carry them across.'))));
+}
+
+async function getAppDialog(focus) {
   const mine = guess();
   const row = (key) => {
     const d = DOWNLOADS[key];
     return h('a', { class: `getapp-row ${key === mine ? 'mine' : ''}`, href: `${DL}/${d.file}` }, h('b', null, d.label), h('span', null, d.hint), h('small', null, d.file));
   };
+  const which = h('select', { 'aria-label': 'Which download the code is for', id: 'getapp-qr-for' }, Object.entries(DOWNLOADS).map(([k, d]) => h('option', { value: k, selected: k === mine }, d.label)));
+  const qrHost = h('div');
+  const drawQr = () => { qrHost.replaceChildren(qr(`${DL}/${DOWNLOADS[which.value].file}`, 'Scan to download it on another computer (or send it to yourself)') || ''); };
+  which.addEventListener('change', drawQr); drawQr();
+  const phone = phoneSection(focus === 'phone' || isPhone());
+  const desktop = h('section', null,
+    h('h3', null, '💻 On your computer'),
+    h('p', { style: { margin: 0 } }, 'The same DCUGen, as a desktop app: your characters and world live in a folder on your own computer, it works offline, and you can host a table for your players. It updates itself whenever the site updates.'),
+    h('div', { class: 'getapp-list' }, row('windows'), row('portable'), row('mac'), row('linux')),
+    h('details', { class: 'getapp-qr-box' }, h('summary', null, '▦ QR code for a download'), h('label', { class: 'field' }, h('span', null, 'For'), which), qrHost),
+    h('p', { class: 'hint', style: { margin: 0 } }, 'Windows may warn that the publisher is unknown the first time: choose "More info" and "Run anyway". The builds are made by GitHub from the public source. ', h('a', { href: RELEASES, target: '_blank', rel: 'noopener' }, 'All releases')));
   await openDialog({
-    title: 'DCUGen for your desktop',
-    body: [
-      h('p', { style: { margin: 0 } }, 'The same DCUGen, as an app: your characters and world live in a folder on your own computer, it works offline, and you can host a table for your players (they join with a key and roll their own dice). It updates itself whenever the site updates.'),
-      h('div', { class: 'getapp-list' }, row('windows'), row('portable'), row('mac'), row('linux')),
-      h('p', { class: 'hint', style: { margin: 0 } }, 'Players: the Windows installer is one click. Run it, and DCUGen opens; it keeps itself up to date with the site from then on.'),
-      h('p', { class: 'hint', style: { margin: 0 } }, 'Windows may warn that the publisher is unknown the first time: choose "More info" and "Run anyway". The builds are made by GitHub from the public source. ', h('a', { href: RELEASES, target: '_blank', rel: 'noopener' }, 'All releases')),
-    ],
+    title: 'Get DCUGen',
+    body: isPhone() ? [phone, desktop] : [desktop, phone],
   });
 }
 
-return { RELEASES, DOWNLOADS, getAppButton, getAppDialog };
+return { SITE, registerServiceWorker, RELEASES, DOWNLOADS, getAppButton, getAppDialog };
 })();
 
 __mods["src/app/syncfile.js"] = (() => {
@@ -27206,7 +27268,7 @@ const { receiveMapFromHost, onSharedMap, receiveMapAsset, serveMapAssets, receiv
 const { initTable, renderTable, postRoll, joinFromLink, openPhoneTable } = __mods["src/app/table.js"];
 const { setLobbyHandlers, lobbySendRoster, lobbySendRemove, lobby, lobbySend, onLobby } = __mods["src/app/lobby.js"];
 const { snapshotAll, restoreAll } = __mods["src/app/backup.js"];
-const { getAppButton } = __mods["src/app/getapp.js"];
+const { getAppButton, registerServiceWorker } = __mods["src/app/getapp.js"];
 const { startSync, syncButton } = __mods["src/app/syncfile.js"];
 const { setHouseRules } = __mods["src/engine/house.js"];
 const { state: st, upsert, removeFromRoster } = __mods["src/app/store.js"];
@@ -27468,6 +27530,7 @@ async function boot() {
   document.getElementById('roster-count').textContent = state.roster.length;
 
   const restored = restoreTabs();
+  registerServiceWorker();
   const loaded = await loadFromHash();
   // Only roll when asked: a first visit (or a reload with nothing open) shows the Roll button instead.
   if (!loaded && !restored) renderCurrent();
