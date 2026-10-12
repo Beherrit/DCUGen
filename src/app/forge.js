@@ -16,6 +16,9 @@ import { rollMenu } from './dice.js';
 import { lobby } from './lobby.js';
 import { claimCharacter } from './table.js';
 import { worldSelect } from './roster.js';
+import { hasForms, activeForm, addForm, switchForm, renameForm, removeForm, MAX_FORMS } from '../engine/forms.js';
+import { COMPANION_KINDS, companionsOf, companionBudget, asCompanion, blankCompanion, suggestedPl } from '../engine/companions.js';
+import { catalogToCharacter } from '../engine/catalog.js';
 let R;
 let root;
 let fileHost;
@@ -455,8 +458,178 @@ function saveBar(ch) {
       : 'Saves to The Multiverse Hub, the list of everyone you make. Pick a world to file them in one, or make a new world.'));
 }
 
+/** Replace the open character with a changed copy (unsaved, like any edit). */
+function commit(c) {
+  state.current = c; state.tabs[state.active] = c; saveTabs(); fresh = false; renderCurrent(); emit('current');
+}
+
+/**
+ * Alternate forms: numbered tabs for up to 8 builds of the same character. Each is a whole build (its
+ * own PL, traits, powers, codename, picture); the person, bio and journal are shared.
+ */
+function formStrip(ch) {
+  if (!hasForms(ch)) return null;
+  const cur = activeForm(ch);
+  const rename = async (i) => {
+    const input = h('input', { type: 'text', value: ch.forms[i].name, 'aria-label': 'Form name' });
+    const ok = await openDialog({ title: 'Name this form', body: [h('label', { class: 'field' }, h('span', null, 'Name'), input), h('p', { class: 'hint', style: { margin: 0 } }, 'E.g. Civilian, Armored, Wolf, Hybrid. The codename shown on the sheet is set per form in Edit mode.')], buttons: [{ label: 'Cancel', value: false }, { label: 'Save', value: true, primary: true }] });
+    if (ok) commit(renameForm(state.current, i, input.value));
+  };
+  const add = async () => {
+    const ok = await openDialog({
+      title: 'Add a form',
+      body: h('p', { style: { margin: 0 } }, `Start the new form as a copy of ${ch.forms[cur].name} and change what's different, or from a blank build at PL ${ch.pl}.`),
+      buttons: [{ label: 'Cancel', value: null }, { label: 'Blank build', value: 'blank' }, { label: `Copy ${ch.forms[cur].name}`, value: 'copy', primary: true }],
+    });
+    if (!ok) return;
+    try {
+      const c = addForm(state.current, { copy: ok === 'copy' });
+      commit(switchForm(c, c.forms.length - 1));
+      toast(`${c.forms[c.forms.length - 1].name} added. Edit it like any character; the others keep their own builds.`);
+    } catch (e) { toast(e.message); }
+  };
+  return h('div', { class: 'form-strip no-print', role: 'tablist', 'aria-label': 'Alternate forms' },
+    h('span', { class: 'form-strip-label' }, '🎭 Forms'),
+    ch.forms.map((f, i) => h('span', { class: `form-tab ${i === cur ? 'active' : ''}` },
+      h('button', { type: 'button', role: 'tab', 'aria-selected': String(i === cur), class: 'form-tab-btn', title: i === cur ? 'This form is showing. Click again to rename it.' : `Switch to ${f.name}`, onClick: () => (i === cur ? rename(i) : commit(switchForm(state.current, i))) },
+        h('b', { class: 'num' }, i + 1), ' ', f.name),
+      i !== cur ? h('button', { type: 'button', class: 'x', 'aria-label': `Remove ${f.name}`, title: `Remove ${f.name}`, onClick: async () => {
+        const ok = await openDialog({ title: `Remove ${f.name}?`, body: h('p', { style: { margin: 0 } }, 'Its whole build goes. The other forms and the character stay.'), buttons: [{ label: 'Keep', value: false }, { label: 'Remove', value: true, danger: true }] });
+        if (ok) commit(removeForm(state.current, i));
+      } }, '✕') : null)),
+    ch.forms.length < MAX_FORMS ? h('button', { type: 'button', class: 'form-add', onClick: add, title: `Add a form (up to ${MAX_FORMS})` }, '+ Form') : null);
+}
+
+// ---- companions: sidekicks, minions, pets, each with a full sheet ------------------------------------------
+const openCompanion = new Set(); // ids of companions whose sheets are unfolded
+const editingCompanion = new Set();
+
+function companionsSection(ch) {
+  const list = companionsOf(ch);
+  const setAt = (i, c) => { const o = JSON.parse(JSON.stringify(state.current)); o.companions[i] = c; commit(o); };
+  const cards = list.map((comp, i) => {
+    const kind = COMPANION_KINDS[comp.companionKind] || COMPANION_KINDS.companion;
+    const b = companionBudget(ch, comp, R);
+    const open = openCompanion.has(comp.id);
+    const editing = editingCompanion.has(comp.id);
+    const head = h('div', { class: 'comp-head' },
+      h('span', { class: 'swatch', style: { '--c': comp.theme?.color || '#5b6b4a' } }),
+      h('b', { class: 'comp-name' }, comp.identity?.codename || 'Companion'),
+      h('span', { class: 'chip' }, kind.label),
+      h('span', { class: 'chip num' }, `PL ${comp.pl}`),
+      h('span', { class: `status ${b.ok ? 'ok' : 'warn'}`, title: b.message }, b.budget != null ? `${b.cost}/${b.budget} pp` : b.ok ? `${b.cost ?? '?'} pp` : 'Needs the advantage'),
+      h('span', { class: 'spacer' }),
+      h('button', { class: 'btn sm', type: 'button', 'aria-expanded': String(open), onClick: () => { if (open) openCompanion.delete(comp.id); else openCompanion.add(comp.id); renderCurrent(); } }, open ? 'Hide sheet' : 'Show sheet'),
+      open ? h('button', { class: 'btn sm', type: 'button', 'aria-pressed': String(editing), onClick: () => { if (editing) editingCompanion.delete(comp.id); else editingCompanion.add(comp.id); renderCurrent(); } }, editing ? 'Done editing' : 'Edit') : null,
+      h('button', { class: 'btn sm', type: 'button', title: 'Open as its own tab (Power Lab, Bio, exports), then save it back', onClick: () => setCurrent({ ...JSON.parse(JSON.stringify(comp)), companionOf: { ownerId: ch.id, ownerName: ch.identity?.codename || 'their hero', index: i } }, { newTab: true }) }, 'Open in a tab'),
+      h('button', { class: 'btn sm', type: 'button', title: 'Add to the Battle Room', onClick: () => api.throwIn?.(comp) }, '⚔'),
+      h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${comp.identity?.codename}`, onClick: async () => {
+        const ok = await openDialog({ title: `Remove ${comp.identity?.codename}?`, body: h('p', { style: { margin: 0 } }, 'Their sheet goes with them. Save them to the roster first if you want to keep a copy.'), buttons: [{ label: 'Keep', value: false }, { label: 'Remove', value: true, danger: true }] });
+        if (ok) { const o = JSON.parse(JSON.stringify(state.current)); o.companions.splice(i, 1); if (!o.companions.length) delete o.companions; commit(o); }
+      } }, '✕'));
+    const body = open ? renderFile(comp, R, { editing, onChange: (c) => setAt(i, c), noPortrait: false }).el : null;
+    return h('div', { class: 'comp-card' }, head, !b.ok || b.budget != null ? h('p', { class: `hint comp-budget ${b.ok ? '' : 'bad'}` }, b.message) : null, body ? h('div', { class: 'comp-sheet' }, body) : null);
+  });
+  return h('section', { class: 'companions no-print-empty', id: 'companions' },
+    h('div', { class: 'comp-title' }, h('h3', null, 'Companions'), h('span', { class: 'hint' }, 'Sidekicks, minions, animals and other followers, each with a full sheet.'),
+      h('span', { class: 'spacer' }), h('button', { class: 'btn sm', type: 'button', id: 'add-companion', onClick: () => addCompanionDialog(ch) }, '+ Companion')),
+    cards);
+}
+
+async function addCompanionDialog(owner) {
+  const kindSel = h('select', { id: 'comp-kind' }, Object.entries(COMPANION_KINDS).map(([k, v]) => h('option', { value: k }, v.label)));
+  const kindHint = h('p', { class: 'hint', style: { margin: '2px 0 0' } }, COMPANION_KINDS.sidekick.blurb);
+  const rankIn = h('input', { type: 'number', min: 1, max: 40, value: 4, id: 'comp-rank' });
+  const rankRow = h('label', { class: 'field' }, h('span', null, 'Advantage rank (adds it to the hero if they lack it)'), rankIn);
+  const nameIn = h('input', { type: 'text', id: 'comp-name', placeholder: 'Name, e.g. Kid Flash, Ace the Bat-Hound' });
+  const srcSel = h('select', { id: 'comp-source' },
+    h('option', { value: 'roll' }, 'Roll a new character'),
+    h('option', { value: 'blank' }, 'Blank sheet (build it yourself)'),
+    h('option', { value: 'bestiary' }, 'An animal or creature from the Bestiary'),
+    state.roster.length ? h('option', { value: 'roster' }, 'Someone from your roster (a copy)') : null);
+  const plIn = h('input', { type: 'number', min: 0, max: 20, value: suggestedPl(owner, 'sidekick', 4), id: 'comp-pl' });
+  const creatures = Object.values(R.raw.catalog || {}).flat().sort((a, b) => a.name.localeCompare(b.name));
+  const find = h('input', { type: 'search', placeholder: 'Search: wolf, hawk, dragon, robot…', id: 'comp-find' });
+  const creatureSel = h('select', { id: 'comp-creature', size: 6 }, creatures.map((e) => h('option', { value: e.id }, `${e.name} · PL ${e.pl}${e.category ? ` · ${e.category}` : ''}`)));
+  find.addEventListener('input', () => { const q = find.value.toLowerCase(); for (const o of creatureSel.options) o.hidden = q && !o.textContent.toLowerCase().includes(q); });
+  const rosterSel = h('select', { id: 'comp-roster' }, state.roster.filter((c) => c.rosterId !== owner.rosterId).map((c) => h('option', { value: c.rosterId }, `${c.identity?.codename || 'Unnamed'} · PL ${c.pl}`)));
+  const plRow = h('label', { class: 'field' }, h('span', null, 'Power level'), plIn);
+  const creatureRow = h('div', { class: 'field', hidden: true }, h('span', null, 'Creature'), find, creatureSel);
+  const rosterRow = h('label', { class: 'field', hidden: true }, h('span', null, 'From the roster'), rosterSel);
+  const sync = () => {
+    const k = kindSel.value;
+    kindHint.textContent = COMPANION_KINDS[k].blurb;
+    rankRow.hidden = !COMPANION_KINDS[k].advantage;
+    plIn.value = suggestedPl(owner, k, Number(rankIn.value) || 1);
+    plRow.hidden = !['roll', 'blank'].includes(srcSel.value);
+    creatureRow.hidden = srcSel.value !== 'bestiary';
+    rosterRow.hidden = srcSel.value !== 'roster';
+  };
+  kindSel.addEventListener('change', sync); srcSel.addEventListener('change', sync); rankIn.addEventListener('input', sync);
+  const ok = await openDialog({
+    title: `A companion for ${owner.identity?.codename || 'this character'}`,
+    body: [h('label', { class: 'field' }, h('span', null, 'Kind'), kindSel), kindHint, rankRow,
+      h('label', { class: 'field' }, h('span', null, 'Start from'), srcSel), plRow, creatureRow, rosterRow,
+      h('label', { class: 'field' }, h('span', null, 'Name (optional)'), nameIn)],
+    buttons: [{ label: 'Cancel', value: false }, { label: 'Add companion', value: true, primary: true }],
+  });
+  if (!ok) return;
+  const kind = kindSel.value;
+  const pl = Math.max(0, Math.min(20, Number(plIn.value) || 1));
+  let base;
+  try {
+    if (srcSel.value === 'roll') base = generateCharacter(R, { seed: randomSeed(), pl, alignment: owner.alignment || 'hero', chaos: state.prefs.chaos });
+    else if (srcSel.value === 'bestiary') { const e = creatures.find((x) => x.id === creatureSel.value) || creatures[0]; base = catalogToCharacter(e); }
+    else if (srcSel.value === 'roster') base = state.roster.find((c) => c.rosterId === rosterSel.value);
+    else base = blankCompanion(pl, nameIn.value.trim());
+  } catch (e) { toast(e.message); return; }
+  if (!base) { toast('Pick someone first.'); return; }
+  const comp = asCompanion(base, kind);
+  if (nameIn.value.trim()) comp.identity = { ...comp.identity, codename: nameIn.value.trim() };
+  const o = JSON.parse(JSON.stringify(state.current));
+  o.companions = [...companionsOf(o), comp];
+  const adv = COMPANION_KINDS[kind].advantage;
+  if (adv) {
+    const rank = Math.max(1, Number(rankIn.value) || 1);
+    const name = comp.identity?.codename;
+    const have = (o.advantages || []).find((a) => a.name === adv && String(a.param || '').toLowerCase() === String(name || '').toLowerCase());
+    if (have) have.rank = Math.max(have.rank || 1, rank); else o.advantages = [...(o.advantages || []), { name: adv, rank, param: name }];
+  }
+  openCompanion.add(comp.id);
+  commit(o);
+  setTimeout(() => document.getElementById('companions')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  toast(`${comp.identity?.codename || 'Companion'} joins ${owner.identity?.codename || 'the character'}${adv ? ` (${adv} ${Math.max(1, Number(rankIn.value) || 1)} added to the sheet)` : ''}`);
+}
+
+/** A companion opened in its own tab: send the changes back to its hero. */
+function companionBanner(ch) {
+  if (!ch.companionOf) return null;
+  const back = () => {
+    const { ownerId, index } = ch.companionOf;
+    const copy = JSON.parse(JSON.stringify(ch)); delete copy.companionOf;
+    const ti = state.tabs.findIndex((t) => t.id === ownerId);
+    if (ti >= 0) {
+      const o = JSON.parse(JSON.stringify(state.tabs[ti]));
+      o.companions = companionsOf(o); o.companions[index] = copy;
+      state.tabs[ti] = o; state.active = ti; state.current = o; saveTabs(); renderCurrent(); emit('current');
+      toast(`Saved into ${o.identity?.codename}. Save them to the roster to keep it.`);
+      return;
+    }
+    const r = state.roster.find((x) => x.id === ownerId);
+    if (r) { const o = JSON.parse(JSON.stringify(r)); o.companions = companionsOf(o); o.companions[index] = copy; upsert(o); toast(`Saved into ${o.identity?.codename} on your roster.`); return; }
+    toast(`Open ${ch.companionOf.ownerName} first, then save back.`);
+  };
+  return h('div', { class: 'comp-banner no-print' },
+    h('span', null, `🐾 ${ch.identity?.codename || 'This companion'} belongs to ${ch.companionOf.ownerName}. Changes here stay in this tab until you save them back.`),
+    h('button', { class: 'btn sm primary', type: 'button', onClick: back }, `Save back to ${ch.companionOf.ownerName}`));
+}
+
 function drawCurrent(ch) {
   fileHost.append(tabStrip());
+  const banner = companionBanner(ch);
+  if (banner) fileHost.append(banner);
+  const forms = formStrip(ch);
+  if (forms) fileHost.append(forms);
   const inRoster = ch.rosterId && state.roster.some((x) => x.rosterId === ch.rosterId);
   const toolbar = h('div', { class: 'toolbar' },
     h('button', { class: 'btn primary', type: 'button', title: `Saves to ${worldOf(ch) || 'The Multiverse Hub'} (change it at the bottom of the sheet)`, onClick: () => saveCurrent(ch) }, inRoster ? 'Update in roster' : 'Save to roster'),
@@ -465,6 +638,19 @@ function drawCurrent(ch) {
       const c = rerollIdentity(R, ch, randomSeed()); c.rosterId = ch.rosterId; setCurrent(c, { fresh: true });
     } }, 'New name'),
     h('button', { class: 'btn ghost', type: 'button', title: 'Keep the name and story, roll new powers and stats', onClick: () => rebuild(ch) }, 'New build'),
+    ch.companionOf ? null : h('button', { class: 'btn ghost', type: 'button', id: 'toolbar-companion', title: 'Add a sidekick, minion, animal or other follower with a full sheet', onClick: () => addCompanionDialog(ch) }, '🐾 Companion'),
+    hasForms(ch) ? null : h('button', { class: 'btn ghost', type: 'button', id: 'add-forms', title: 'Give this character alternate forms (up to 8 builds of the same person)', onClick: async () => {
+      const ok = await openDialog({
+        title: 'Alternate forms',
+        body: [h('p', { style: { margin: 0 } }, 'Give this character up to 8 forms: civilian and costumed, armor on and off, a shapeshifter\'s shapes. Each form is a whole build of its own (power level, abilities, powers, gear, codename, picture), checked on its own. The person, bio, journal and roster entry are shared.'),
+          h('p', { class: 'hint', style: { margin: '8px 0 0' } }, 'The book builds a single power-based change as the Alternate Form effect (DCA 88: a package of effects bought with Activation) or as an array. Use forms when the builds are different enough to need their own sheets.')],
+        buttons: [{ label: 'Cancel', value: null }, { label: 'Blank second form', value: 'blank' }, { label: 'Copy this build as Form 2', value: 'copy', primary: true }],
+      });
+      if (!ok) return;
+      const c = addForm(ch, { copy: ok === 'copy' });
+      commit(switchForm(c, 1));
+      toast('Form 2 added. Switch between forms with the numbered tabs above the sheet.');
+    } }, '🎭 Forms'),
     rollMenu(ch, R),
     lobby.status === 'on' && ch.rosterId && !ch.lobbyOwner ? h('button', { class: 'btn ghost', type: 'button', title: 'Tell the table this character is yours', onClick: () => claimCharacter(ch) }, '✋ Mine') : null,
     ch.lobbyOwner ? h('span', { class: 'chip', title: 'Claimed at the table' }, `${ch.lobbyOwner === lobby.id ? 'Yours' : `Played by ${ch.lobbyOwnerName || 'a player'}`}`) : null,
@@ -500,6 +686,7 @@ function drawCurrent(ch) {
   });
   fresh = false;
   fileHost.append(el);
+  if (!ch.companionOf) fileHost.append(companionsSection(ch));
   fileHost.append(saveBar(ch));
 }
 

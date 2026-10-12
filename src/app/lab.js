@@ -6,6 +6,7 @@ import { getPower, setPower, whatItDoes } from './sheetview.js';
 import { costMath, availableModifiers, randomPower } from '../engine/powersmith.js';
 import { powerCost, alternateOwnCost, primaryOwnCost } from '../engine/costs.js';
 import { describeEffect } from '../engine/render.js';
+import { poolCapacity } from '../engine/pools.js';
 import { RANGE_STEPS, ABILITIES, BUYABLE_DEFENSES } from '../engine/rules.js';
 let R;
 let root;
@@ -195,7 +196,11 @@ function render() {
         onChange: (e) => update((q) => { q.description = e.target.value.trim() || undefined; }) }, p.description || '')),
     linkSel == null ? h('label', { class: 'lab-pool', title: 'For drains, stolen or redistributed points, boosts: anything you place where you want during play' },
       h('input', { type: 'checkbox', id: 'lab-pool', checked: !!p.pool, onChange: (e) => update((q) => { if (e.target.checked) q.pool = true; else { delete q.pool; delete q.placed; } }) }),
-      h('span', null, h('b', null, 'Pool, not always on. '), `Up to ${p.rank} points you place during play (with + and − on the sheet) on any ability, defense, skill, power or something else. Nothing counts until you place it, and PL limits are checked without it. The cost stays as priced here.`)) : null,
+      h('span', null, h('b', null, 'Pool, not always on. '), `Holds ${poolCapacity(p, R)} power points you place during play (with + and − on the sheet) on any ability, defense, skill, power or something else, at what each costs (an ability rank 2, a defense rank 1). Nothing counts until you place it, and PL limits are checked without it. The cost stays as priced here.`)) : null,
+    linkSel == null && p.pool ? h('label', { class: 'field' }, h('span', null, 'Filled by (a Weaken that steals what it drains)'),
+      h('select', { id: 'lab-feed', onChange: (e) => update((q) => { if (e.target.value) q.feed = e.target.value; else delete q.feed; }) },
+        h('option', { value: '' }, 'Nothing: the pool is always full'),
+        weakenNames(ch).map((n) => h('option', { value: n, selected: p.feed === n }, n)))) : null,
     p.effect === 'Damage' ? h('label', { style: { display: 'flex', gap: '8px', alignItems: 'center', fontSize: '14px' } },
       h('input', { type: 'checkbox', checked: !!p.strengthBased, onChange: (e) => update((q) => { q.strengthBased = e.target.checked || undefined; }) }), 'Strength-based (adds Strength to the damage rank)') : null,
     modEditor('extra'),
@@ -255,6 +260,16 @@ function render() {
   if (sel) sel.value = p.effect;
   const opt = root.querySelector('#lab-option');
   if (opt && p.option) opt.value = p.option;
+}
+
+/** Weaken powers on the open character, which can fill a pool. */
+function weakenNames(ch) {
+  const out = [];
+  const visit = (list) => (list || []).forEach((p) => { if (p.effect === 'Weaken') out.push(p.name); for (const l of p.linked || []) if (l.effect === 'Weaken') out.push(l.name); for (const a of p.alternates || []) visit([a]); });
+  visit(ch?.powers);
+  for (const d of ch?.devices || []) visit(d.powers);
+  if (state.lab?.effect === 'Weaken') out.push(state.lab.name);
+  return [...new Set(out)];
 }
 
 function statLine(arr) {

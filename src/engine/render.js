@@ -4,6 +4,7 @@ import { ABILITIES, ABBR, traitKind } from './rules.js';
 import { costBreakdown, powerCost, deviceCost, effectCost, primaryOwnCost } from './costs.js';
 import { deriveAll } from './derive.js';
 import { checkLimits } from './limits.js';
+import { poolCapacity } from './pools.js';
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
@@ -67,7 +68,7 @@ export function explainPower(p, R) {
       parts.push(`Imposes conditions: the target resists with ${resist || 'Fortitude or Will'} against DC ${10 + rank}${conditions ? `. Each failure degree is worse: ${conditions}` : ''}. The target repeats the check at the end of each turn to shake it off.`);
       break;
     case 'Weaken':
-      parts.push(`Drains a trait${p.detail ? ` (${p.detail.split(';')[0]})` : ''}: the target resists against DC ${10 + rank} and loses 1 rank per degree of failure, recovering 1 point per round.`);
+      parts.push(`Drains a trait${p.detail ? ` (${p.detail.split(';')[0]})` : ''}: the target resists against DC ${10 + rank} and loses as many power points of it as the check missed by (${rank} at most), getting them back over time. An ability loses a rank per 2 points, a defense a rank per point.`);
       break;
     case 'Nullify':
       parts.push(`Shuts down powers${p.detail ? ` (${p.detail})` : ''}: make an opposed check of Nullify ${rank} against the target's power rank or Will; if you win, the effect turns off.`);
@@ -202,7 +203,7 @@ export function explainPower(p, R) {
       notes.push({ name: m.name + (m.detail ? ` (${m.detail})` : ''), kind, text: def?.summary || '' });
     }
   }
-  if (p.pool) notes.push({ name: `Pool of ${p.rank} points`, kind: 'extra', text: 'Not always on: during play you place up to this many points on any ability, defense, skill, power or something else, and they count only while placed. Power level limits are checked without them.' });
+  if (p.pool) notes.push({ name: `Pool of ${poolCapacity(p, R)} power points`, kind: 'extra', text: `Not always on: during play you place these points on any ability, defense, skill, power or something else, at what each costs (an ability rank 2, a defense rank 1), and they count only while placed.${p.feed ? ` Filled by what ${p.feed} drains.` : ''} Power level limits are checked without them.` });
   for (const l of p.linked || []) {
     let what = '';
     try { what = explainPower(l, R).what; } catch { /* unknown effect */ }
@@ -210,7 +211,7 @@ export function explainPower(p, R) {
   }
   if ((p.alternates || []).length) notes.push({ name: `${p.dynamic ? 'Dynamic ' : ''}Alternate Effects`, kind: 'extra', text: `Use one effect of this array at a time${p.dynamic ? `, or split its ${primaryOwnCost(p, R)}-point pool between them` : ''}; switching is a free action.` });
   const what = p.pool
-    ? `A pool of ${p.rank} points, not always on: place them during play with + and − on the sheet, wherever they're needed.`
+    ? `A pool of ${poolCapacity(p, R)} power points, not always on: place them during play with + and − on the sheet, wherever they're needed.`
     : parts.filter(Boolean).join(' ');
   return { what, notes };
 }

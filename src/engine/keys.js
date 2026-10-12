@@ -60,8 +60,8 @@ const inflate = async (bytes) => new TextDecoder().decode(await pipe(bytes, new 
 
 /** The parts of a character that a key must reproduce exactly. */
 function fingerprint(ch) {
-  const pick = (({ pl, abilities, defenses, skills, advantages, powers, devices, equipment, identity, alignment, complications, notes }) =>
-    ({ pl, abilities, defenses, skills, advantages, powers, devices, equipment, identity, alignment, complications, notes }))(ch);
+  const pick = (({ pl, abilities, defenses, skills, advantages, powers, devices, equipment, identity, alignment, complications, notes, forms, activeForm, companions }) =>
+    ({ pl, abilities, defenses, skills, advantages, powers, devices, equipment, identity, alignment, complications, notes, forms, activeForm, companions }))(ch);
   return JSON.stringify([pick, ch.bio?.summary || null, ch.bio?.timeline?.length || 0, ch.journal?.entries?.length || 0]);
 }
 
@@ -262,6 +262,10 @@ function forPatch(ch) {
   const out = {};
   for (const [k, v] of Object.entries(ch || {})) if (!PATCH_SKIP.has(k) && v !== undefined) out[k] = v;
   if (out.portrait?.image) { const { image, aiSaved, ...p } = out.portrait; out.portrait = p; }
+  // Pictures inside other forms and companions stay home too.
+  const noPicture = (x) => (x?.portrait?.image ? { ...x, portrait: (({ image, aiSaved, ...p }) => p)(x.portrait) } : x);
+  if (out.forms) out.forms = out.forms.map(noPicture);
+  if (out.companions) out.companions = out.companions.map(noPicture);
   return out;
 }
 

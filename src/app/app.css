@@ -1649,3 +1649,34 @@ body.eb-printing .eb-wrap { max-height: none; overflow: visible; border-width: 4
 .pool-add select, .pool-add input { flex: 1 1 160px; min-width: 0; }
 .lab-pool { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; margin: 4px 0; }
 .lab-pool input { margin-top: 3px; }
+.pool-meter i.off { opacity: .25; border-style: dashed; }
+.pool-feed { margin: 4px 0; }
+.pool-pp { font-size: 12px; color: var(--ink-3); min-width: 44px; text-align: right; }
+.drain .pool-meter i.on { background: var(--accent); border-color: var(--accent); }
+.drain-label { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
+.drain-missed { width: 72px; }
+
+/* ---- alternate forms ---- */
+.form-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 10px; }
+.form-strip-label { font-size: 13px; font-weight: 700; color: var(--ink-2); margin-right: 2px; }
+.form-tab { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+.form-tab.active { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.form-tab-btn { border: 0; background: none; color: inherit; padding: 4px 10px; font: inherit; font-size: 13px; cursor: pointer; }
+.form-tab .x { border: 0; background: none; color: inherit; opacity: .6; padding: 0 8px 0 0; cursor: pointer; }
+.form-add { border: 1px dashed var(--line); background: none; color: var(--ink-2); border-radius: 999px; padding: 4px 10px; font-size: 13px; cursor: pointer; }
+
+/* ---- companions ---- */
+.companions { margin-top: 16px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.comp-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; }
+.comp-title h3 { margin: 0; }
+.comp-title .spacer, .comp-head .spacer { flex: 1; }
+.companions > .comp-card + .comp-card { margin-top: 8px; }
+.comp-card { margin-top: 10px; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--surface-2); }
+.comp-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.comp-head .swatch { width: 12px; height: 12px; border-radius: 3px; background: var(--c); }
+.comp-name { font-size: 15px; }
+.comp-budget { margin: 6px 0 0; }
+.comp-budget.bad { color: var(--bad); }
+.comp-sheet { margin-top: 10px; }
+.comp-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 10px; padding: 8px 12px; border: 1px solid var(--blue); border-radius: 8px; background: var(--surface); }
+.comp-banner span { flex: 1 1 260px; }
