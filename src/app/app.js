@@ -4,7 +4,7 @@ import { RULES } from '../engine/index.js';
 import { state, onChange } from './store.js';
 import { toast } from './dom.js';
 import { initForge, roll, setCurrent, renderCurrent, restoreTabs, undo, redo, updateOpen } from './forge.js';
-import { initRoster, renderRoster } from './roster.js';
+import { initRoster, renderRoster, openRosterKey } from './roster.js';
 import { initLab, openInLab, renderLab } from './lab.js';
 import { initGm, renderGm, addToInitiative } from './gm.js';
 import { initWorkshop, renderWorkshop } from './workshop.js';
@@ -69,6 +69,10 @@ function initTheme() {
 async function loadFromHash() {
   const j = /[#&]join=(DCUP1\.[A-Za-z0-9_-]+)/.exec(location.hash);
   if (j) { history.replaceState(null, '', location.pathname + location.search); setTimeout(() => joinFromLink(j[1]), 300); return false; }
+  const rk = /[#&]r=(DCUR1\.[A-Za-z0-9_-]+)/.exec(location.hash);
+  if (rk) { history.replaceState(null, '', location.pathname + location.search); showTab('roster'); setTimeout(() => openRosterKey(rk[1]), 200); return false; }
+  const wk = /[#&]w=(DCUW1\.[A-Za-z0-9_-]+)/.exec(location.hash);
+  if (wk) { history.replaceState(null, '', location.pathname + location.search); showTab('world'); setTimeout(() => openWorldKey(wk[1]), 200); return false; }
   const hk = /[#&]h=(DCUH1\.[A-Za-z0-9_-]+)/.exec(location.hash);
   if (hk) { showTab('world'); const ok = await openHandoutKey(hk[1]); if (ok) history.replaceState(null, '', location.pathname + location.search); return ok; }
   const n = /[#&]n=(DCUN1\.[A-Za-z0-9_-]+)/.exec(location.hash);
@@ -232,6 +236,7 @@ async function boot() {
     goBattle: () => showTab('battle'),
     openWorld: (ch) => { openWorldPage(ch); showTab('world'); },
     openWorldKey: async (text) => { showTab('world'); await openWorldKey(text); },
+    openRosterKey: async (text) => { showTab('roster'); await openRosterKey(text); },
     openPaperKey: async (text) => { showTab('world'); await openPaperKey(text); },
     openHandoutKey: async (text) => { showTab('world'); await openHandoutKey(text); },
   });

@@ -83,6 +83,43 @@ export async function decodeWorld(input) {
   return data;
 }
 
+/** The whole world as a link: opening it offers to merge or replace. */
+// Links point at this page when it is on the web, else (a saved file, the desktop app) at the public site.
+const webBase = () => (/^https?:$/.test(location.protocol) ? location.href.split('#')[0] : 'https://forgedcugen.vercel.app/');
+export function worldLink(key) { return `${webBase()}#w=${key}`; }
+
+// ---- a group of characters in one key ---------------------------------------------------------------------
+// "DCUR1." + base64url(deflate(JSON { characters, folders })): everyone in the Hub, one world or folder, or a
+// hand-picked few, with the worlds and folders they live in. Painted portraits are left out unless asked for
+// (the receiver's app repaints them); uploaded pictures go along only when asked, because they make it big.
+
+const ROSTER_PREFIX = 'DCUR1.';
+export function isRosterKey(text) { return /DCUR1\.[A-Za-z0-9_-]{8,}/.test(String(text || '')); }
+
+function slimForRoster(ch, pictures) {
+  const { savedAt, lobbyShared, lobbyOwner, lobbyOwnerName, ...rest } = ch;
+  if (rest.portrait?.image && (rest.portrait.aiSaved || !pictures)) { const { image, aiSaved, ...p } = rest.portrait; rest.portrait = { ...p, ...(p.source === 'upload' ? { source: 'builtin' } : {}) }; }
+  return rest;
+}
+
+export async function encodeRoster(characters, { name = '', folders = [], pictures = false } = {}) {
+  const payload = { app: 'DCUGen', kind: 'roster', v: 1, name: name || 'Characters', madeAt: new Date().toISOString(), folders, characters: (characters || []).map((c) => slimForRoster(c, pictures)) };
+  const json = new TextEncoder().encode(JSON.stringify(payload));
+  const packed = await pipe(json, new CompressionStream('deflate-raw'));
+  return ROSTER_PREFIX + toBase64Url(packed);
+}
+
+export async function decodeRoster(input) {
+  const m = /DCUR1\.([A-Za-z0-9_-]+)/.exec(String(input || ''));
+  if (!m) throw new Error('That is not a roster key. Roster keys start with "DCUR1."');
+  const bytes = await inflateRaw(fromBase64Url(m[1]));
+  const data = JSON.parse(new TextDecoder().decode(bytes));
+  if (data.kind !== 'roster' || !Array.isArray(data.characters)) throw new Error('That key does not hold any characters.');
+  return data;
+}
+
+export function rosterLink(key) { return `${webBase()}#r=${key}`; }
+
 /** Rough size for the user: "38 KB". */
 export function keySize(key) { const n = key.length; return n < 1024 ? `${n} chars` : `${Math.round(n / 1024)} KB`; }
 
