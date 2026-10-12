@@ -20,7 +20,10 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
   rolls repeatable. *New name* keeps the build; *New build* keeps the name and story. *Roll a team* makes a squad.
 - **Edit** – change any trait with +/−. Costs and PL limits update live, and problems are listed.
 - **Power Lab** – build custom powers from all 61 DC Adventures effects with their extras and flaws, with the point
-  math shown step by step. Random powers only use modifiers that fit the effect.
+  math shown step by step. Random powers only use modifiers that fit the effect. Give any effect descriptors and your
+  own description (how it looks, what it can do), which shows on the sheet and in the stat block. Build arrays of
+  Alternate Effects (1 point each), switch on Dynamic to share the primary's points as a pool (2 points each), and add
+  Linked effects that work together with one action (full cost each).
 - **Workshop**
   - *Gear loadouts* for an equipment-point budget, in styles from street tough to sci-fi.
   - *Gadgets and magic items*: named devices with real powers, priced with the Removable rule, legal at your PL.

@@ -7,7 +7,7 @@ import { inkFor } from './dom.js';
 import { sheet as makeSheet, describeEffect, explainPower } from '../engine/render.js';
 import { costMath } from '../engine/powersmith.js';
 import { ABILITIES, BUYABLE_DEFENSES } from '../engine/rules.js';
-import { powerCost } from '../engine/costs.js';
+import { powerCost, primaryOwnCost } from '../engine/costs.js';
 import { gearCatalog, gearToEquipment, gearToDevice } from '../engine/gear.js';
 import { portraitBlock } from './portrait.js';
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
@@ -31,6 +31,17 @@ function mathTable(p, R) {
 }
 
 /** The plain-English "what it does" block under a power. */
+/** The player's own words for a power: how it looks and what it can do. */
+function aboutPower(p) {
+  return p?.description ? h('div', { class: 'power-about' }, p.description) : null;
+}
+
+/** Linked effects (both work at once): their own name and description, under the effect they belong to. */
+function linkedAbout(p) {
+  const withWords = (p.linked || []).filter((l) => l.description);
+  return withWords.length ? withWords.map((l) => h('div', { class: 'power-about linked' }, h('b', null, `🔗 ${l.name || l.effect}: `), l.description)) : null;
+}
+
 export function whatItDoes(p, R, compact = false) {
   let ex;
   try { ex = explainPower(p, R); } catch { return null; }
@@ -141,16 +152,19 @@ export function renderFile(ch, R, opts = {}) {
     return h('div', { class: 'power' },
       h('div', { class: 'power-top' },
         h('span', { class: 'power-name' }, p.name),
-        alts.length ? h('span', { class: 'chip' }, `${p.dynamic ? 'Dynamic ' : ''}Array`) : null,
+        alts.length ? h('span', { class: 'chip', title: p.dynamic ? 'Dynamic: split the pool between several effects at once' : 'Alternate Effects: one effect at a time' }, p.dynamic ? `Dynamic Array · ${primaryOwnCost(p, R)}-pp pool` : 'Array') : null,
+        p.linked?.length ? h('span', { class: 'chip', title: 'Linked effects work together, with one action' }, '🔗 Linked') : null,
         h('span', { class: 'power-cost num' }, inDevice ? `${cost} pp in device` : `${cost} pp`),
         editing ? h('span', { class: 'btn-row no-print' },
           stepper(p.rank, (d) => change((c) => { const q = getPower(c, path); q.rank = Math.max(1, q.rank + d); }), { min: 1, label: `${p.name} rank` }),
           h('button', { class: 'btn sm', type: 'button', onClick: () => opts.onEditPower?.(path) }, 'Open in Lab'),
           h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${p.name}`, onClick: () => change((c) => removeAt(c, path)) }, '✕')) : null),
       h('div', { class: 'power-text' }, describeEffect(p, R)),
+      aboutPower(p),
+      linkedAbout(p),
       whatItDoes(p, R),
       alts.map((a, i) => h('div', { class: 'ae' },
-        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), whatItDoes(a, R, true),
+        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), aboutPower(a), linkedAbout(a), whatItDoes(a, R, true),
         editing ? h('span', { class: 'no-print' }, ' ',
           stepper(a.rank, (d) => change((c) => { const q = getPower(c, { ...path, alt: i }); q.rank = Math.max(1, q.rank + d); }), { min: 1, label: `${a.name} rank` }),
           h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${a.name}`, onClick: () => change((c) => removeAt(c, { ...path, alt: i })) }, '✕')) : null)),

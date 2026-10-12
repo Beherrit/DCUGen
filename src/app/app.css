@@ -1622,3 +1622,14 @@ body.eb-printing .eb-wrap { max-height: none; overflow: visible; border-width: 4
 .save-bar .field { margin: 0; min-width: 220px; flex: 0 1 300px; }
 .save-bar .hint { flex: 1 1 100%; margin: 0; }
 .forge-empty { margin-top: 24px; }
+
+/* ---- power descriptions, linked effects, dynamic pools ---- */
+.power-about { margin: 4px 0 2px; font-style: italic; color: var(--ink-2); white-space: pre-wrap; }
+.power-about.linked { font-style: normal; }
+.power-about.linked b { font-style: normal; }
+.ae .power-about { margin-left: 0; }
+.ae-tabs .ae-linked { border-style: dashed; }
+.ae-tabs .ae-dynamic { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; margin-left: auto; }
+.lab-note { margin: 0 0 8px; }
+.pool-line { margin: -4px 0 10px; font-size: 14px; color: var(--ink-2); }
+#lab-about { resize: vertical; min-height: 64px; font: inherit; }
