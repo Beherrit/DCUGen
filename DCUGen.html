@@ -1752,6 +1752,49 @@ div.play-line small { grid-column: 1; grid-row: 2; }
 .house-panel .field small { display: block; margin-top: 4px; }
 .issues .src { color: var(--ink-3); font-size: 12px; }
 
+/* ---- power points bar (top of the sheet) ---- */
+.pts-bar { display: grid; gap: 8px; margin: 10px 0 12px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2); }
+.pb-figs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.pb-fig { display: grid; gap: 1px; }
+.pb-label { font: 700 11px/1.2 var(--font-label); text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); }
+.pb-fig b { font-size: 22px; line-height: 1.1; }
+.pb-fig small { color: var(--ink-3); font-size: 12px; }
+.pb-fig.good b { color: var(--good); }
+.pb-fig.bad b { color: var(--bad); }
+.pb-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.pb-award { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.pb-award label { display: inline-flex; gap: 6px; align-items: center; }
+.pb-award input[type=text] { flex: 1 1 160px; min-width: 0; }
+.pb-award small { flex-basis: 100%; }
+.goal { display: grid; gap: 4px; }
+.goal .meter { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.goal .meter i { display: block; height: 100%; background: var(--blue); }
+.goal .meter i.done { background: var(--good); }
+.adv-goal { margin: 10px 0; display: grid; gap: 6px; }
+@media (max-width: 560px) { .pb-figs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media print { .pts-bar .pb-actions, .pts-bar .pb-award { display: none !important; } }
+
+/* ---- range ---- */
+.power-range { font-size: 13px; color: var(--ink-2); margin: 3px 0; }
+.ae .power-range { margin-left: 0; }
+.range-cell { white-space: nowrap; font-size: 12px; color: var(--ink-2); }
+.ability-reach { margin: 8px 0 0; font-size: 13px; color: var(--ink-2); }
+.linkish { border: 0; background: none; color: var(--blue); cursor: pointer; font: inherit; padding: 0; }
+.rangecalc { display: grid; gap: 14px; }
+.rangecalc h4 { margin: 0 0 6px; }
+.rangecalc section { border-top: 1px solid var(--line); padding-top: 10px; }
+.rangecalc section:first-child { border-top: 0; padding-top: 0; }
+.rc-row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.rc-row label { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; }
+.rc-row input[type=number] { width: 80px; }
+.rc-table { border-collapse: collapse; margin-top: 6px; font-size: 14px; }
+.rc-table td { padding: 3px 10px 3px 0; }
+.rc-table tr.hit td { font-weight: 700; color: var(--blue); }
+.rc-verdict { margin: 6px 0 0; font-weight: 600; }
+.rc-verdict.bad { color: var(--bad); }
+.rc-out p, .rc-note { margin: 6px 0 0; }
+.rangecalc .hint { margin: 6px 0 0; }
+
 </style>
 </head>
 <body>
@@ -3203,7 +3246,9 @@ __mods["src/engine/advancement.js"] = (() => {
 //   startPl: 10,
 //   snapshot: {...},           // the character as of the last recorded entry (traits only)
 //   log: [{ id, date, type: 'award'|'spend'|'refund'|'pl', points, note, changes: [string] }],
+//   goal: { note, target },    // optional: what the saved points are for ("Flight 10", 12 points)
 // }
+// Points earned and not spent are saved: they stay on the character until you spend them.
 // With advancement on, the budget is startPoints + earned points. Raising the power level does not
 // add points by itself (it only raises the limits), as in the book.
 
@@ -3410,10 +3455,141 @@ function advancementSummary(ch, R) {
     toNextPl: PP_PER_PL - (earned % PP_PER_PL),
     suggestedPl,
     pending: pendingChanges(ch, R),
+    goal: adv?.goal?.note ? { note: adv.goal.note, target: Math.max(0, Number(adv.goal.target) || 0) } : null,
   };
 }
 
-return { traitSnapshot, earnedPoints, pointBudget, startAdvancement, awardPoints, removeEntry, diffTraits, pendingChanges, recordChanges, revertChanges, advancementSummary };
+/** What the saved points are for: { note, target } or null to clear. */
+function setSavingGoal(ch, R, goal) {
+  startAdvancement(ch, R);
+  if (goal?.note) ch.advancement.goal = { note: String(goal.note).trim(), target: Math.max(0, Math.round(Number(goal.target) || 0)) };
+  else delete ch.advancement.goal;
+  return ch;
+}
+
+return { traitSnapshot, earnedPoints, pointBudget, startAdvancement, awardPoints, removeEntry, diffTraits, pendingChanges, recordChanges, revertChanges, advancementSummary, setSavingGoal };
+})();
+
+__mods["src/engine/forms.js"] = (() => {
+// Alternate forms: one character, up to 8 builds (a human identity and a powered one, armor on and off,
+// a werewolf's three shapes...). Each form is a whole build with its own power level, traits, powers,
+// gear, codename and picture, checked on its own. Everything about the person (name, bio, journal,
+// factions, world, roster entry) is shared.
+//
+// The active form lives at the top level of the character, so every part of the app (sheet, limits,
+// Battle Room, exports) works on it unchanged; the others wait in ch.forms[i]. Switching swaps them.
+
+const MAX_FORMS = 8;
+// Each form keeps its own points ledger (advancement), because each form is its own build.
+const FORM_FIELDS = ['pl', 'abilities', 'defenses', 'skills', 'advantages', 'powers', 'devices', 'equipment', 'portrait', 'theme', 'advancement'];
+
+const { awardPoints } = __mods["src/engine/advancement.js"];
+const clone = (x) => (x === undefined ? undefined : JSON.parse(JSON.stringify(x)));
+
+const hasForms = (ch) => Array.isArray(ch?.forms) && ch.forms.length > 1;
+const activeForm = (ch) => (hasForms(ch) ? Math.max(0, Math.min(ch.activeForm || 0, ch.forms.length - 1)) : 0);
+
+/** A form's build, stored or live. */
+function formBuild(ch, i) {
+  if (i === activeForm(ch) || !hasForms(ch)) {
+    const out = {};
+    for (const k of FORM_FIELDS) if (ch[k] !== undefined) out[k] = ch[k];
+    return out;
+  }
+  return ch.forms[i];
+}
+
+function snapshot(ch) {
+  const out = {};
+  for (const k of FORM_FIELDS) if (ch[k] !== undefined) out[k] = clone(ch[k]);
+  return out;
+}
+
+function blankBuild(pl) {
+  return {
+    pl,
+    abilities: { Strength: 0, Stamina: 0, Agility: 0, Dexterity: 0, Fighting: 0, Intellect: 0, Awareness: 0, Presence: 0 },
+    defenses: { Dodge: 0, Parry: 0, Fortitude: 0, Will: 0 },
+    skills: [], advantages: [], powers: [], devices: [], equipment: [],
+  };
+}
+
+/** Add a form (a copy of the active one, or a blank build) and return the new character. */
+function addForm(ch, { copy = true, name } = {}) {
+  const c = clone(ch);
+  if (!hasForms(c)) { c.forms = [{ name: 'Form 1', codename: c.identity?.codename || '' }]; c.activeForm = 0; }
+  if (c.forms.length >= MAX_FORMS) throw new Error(`A character can have ${MAX_FORMS} forms at most.`);
+  const n = c.forms.length + 1;
+  const build = copy ? snapshot(c) : blankBuild(c.pl);
+  if (!copy) build.theme = clone(c.theme);
+  c.forms.push({ name: name || `Form ${n}`, codename: c.identity?.codename || '', ...build });
+  return c;
+}
+
+/** Make form i the active one. Returns the new character. */
+function switchForm(ch, i) {
+  if (!hasForms(ch)) return ch;
+  const cur = activeForm(ch);
+  if (i === cur || i < 0 || i >= ch.forms.length) return ch;
+  const c = clone(ch);
+  // put the live build away
+  c.forms[cur] = { name: c.forms[cur].name, codename: c.identity?.codename || c.forms[cur].codename || '', ...snapshot(c) };
+  // bring the other one out
+  const next = c.forms[i];
+  for (const k of FORM_FIELDS) { if (next[k] !== undefined) c[k] = next[k]; else delete c[k]; }
+  if (next.codename) c.identity = { ...c.identity, codename: next.codename };
+  c.forms[i] = { name: next.name, codename: next.codename || '' };
+  c.activeForm = i;
+  return c;
+}
+
+function renameForm(ch, i, name) {
+  const c = clone(ch);
+  if (hasForms(c) && c.forms[i]) c.forms[i].name = String(name || '').trim() || `Form ${i + 1}`;
+  return c;
+}
+
+/** Remove a form that isn't the active one. With one form left, the character has no forms any more. */
+function removeForm(ch, i) {
+  if (!hasForms(ch) || i === activeForm(ch)) return ch;
+  const c = clone(ch);
+  c.forms.splice(i, 1);
+  if (i < c.activeForm) c.activeForm -= 1;
+  if (c.forms.length < 2) { delete c.forms; delete c.activeForm; }
+  return c;
+}
+
+/** Every form as a full character of its own (for exports, stat blocks and checking each build). */
+function formCharacters(ch) {
+  if (!hasForms(ch)) return [ch];
+  return ch.forms.map((f, i) => {
+    if (i === activeForm(ch)) return ch;
+    const c = clone(ch);
+    for (const k of FORM_FIELDS) { if (f[k] !== undefined) c[k] = clone(f[k]); else delete c[k]; }
+    if (f.codename) c.identity = { ...c.identity, codename: f.codename };
+    c.activeForm = i;
+    return c;
+  });
+}
+
+/**
+ * The GM awards points to the character: every form gets them (each form is a build that grows).
+ * Mutates ch (the active form at the top level, the others in ch.forms).
+ */
+function awardEveryForm(ch, R, points, note) {
+  awardPoints(ch, R, points, note);
+  if (!hasForms(ch)) return ch;
+  ch.forms.forEach((f, i) => {
+    if (i === activeForm(ch)) return;
+    const temp = {};
+    for (const k of FORM_FIELDS) if (f[k] !== undefined) temp[k] = f[k];
+    awardPoints(temp, R, points, note);
+    f.advancement = temp.advancement;
+  });
+  return ch;
+}
+
+return { MAX_FORMS, FORM_FIELDS, hasForms, activeForm, formBuild, addForm, switchForm, renameForm, removeForm, formCharacters, awardEveryForm };
 })();
 
 __mods["src/app/advancement.js"] = (() => {
@@ -3421,7 +3597,9 @@ __mods["src/app/advancement.js"] = (() => {
 
 const { h } = __mods["src/app/dom.js"];
 const { checkLimits } = __mods["src/engine/limits.js"];
-const { advancementSummary, startAdvancement, awardPoints, recordChanges, revertChanges, removeEntry } = __mods["src/engine/advancement.js"];
+const { advancementSummary, startAdvancement, recordChanges, revertChanges, removeEntry, setSavingGoal } = __mods["src/engine/advancement.js"];
+const { costBreakdown } = __mods["src/engine/costs.js"];
+const { awardEveryForm, hasForms } = __mods["src/engine/forms.js"];
 const sign = (n) => (n > 0 ? `+${n}` : `${n}`);
 const TYPE_LABEL = { award: 'Earned', spend: 'Spent', refund: 'Refund', pl: 'Power level' };
 
@@ -3445,7 +3623,7 @@ function advancementSection(ch, R, { change, onSpend, editing }) {
     h('button', { class: 'btn primary', type: 'button', onClick: () => {
       const n = Math.trunc(Number(pts.value));
       if (!n) { pts.setCustomValidity('Enter a number of points'); pts.reportValidity(); return; }
-      change((c) => awardPoints(c, R, n, note.value.trim()));
+      change((c) => awardEveryForm(c, R, n, note.value.trim()));
     } }, 'Add earned points'));
 
   const p = a.pending;
@@ -3471,7 +3649,8 @@ function advancementSection(ch, R, { change, onSpend, editing }) {
       tile('Starting', a.startPoints, `PL ${a.startPl}`),
       tile('Earned', a.earned, 'from the GM', 'earned'),
       tile('Spent', a.spent, 'since starting', 'spent'),
-      tile('Unspent', a.unspent, `${a.total} of ${a.budget} used`, over ? 'bad' : a.unspent > 0 ? 'good' : '')),
+      tile('Saved', a.unspent, over ? `${-a.unspent} over: ${a.total} of ${a.budget}` : `${a.total} of ${a.budget} used`, over ? 'bad' : a.unspent > 0 ? 'good' : '')),
+    goalEditor(ch, R, a, change),
     h('p', { class: 'adv-guide' },
       a.suggestedPl > ch.pl
         ? `GM guideline: with ${a.earned} points earned, the series could be PL ${a.suggestedPl}. Raising PL is the GM's call and only raises the limits; it doesn't add points.`
@@ -3496,7 +3675,301 @@ function tile(label, value, sub, tone = '') {
   return h('div', { class: `adv-tile ${tone}` }, h('b', { class: 'num' }, value), h('span', { class: 'adv-tile-label' }, label), h('span', { class: 'adv-tile-sub' }, sub));
 }
 
-return { advancementSection };
+/** Saving up: what the saved points are for, with progress. */
+function goalEditor(ch, R, a, change) {
+  const note = h('input', { type: 'text', id: 'adv-goal-note', value: a.goal?.note || '', placeholder: 'Saving up for… (e.g. Flight 10, Regeneration 5)', 'aria-label': 'Saving up for' });
+  const target = h('input', { type: 'number', id: 'adv-goal-target', min: 0, max: 200, value: a.goal?.target || '', placeholder: 'pp', 'aria-label': 'Points needed', style: { maxWidth: '76px' } });
+  const save = () => change((c) => setSavingGoal(c, R, { note: note.value, target: target.value }));
+  return h('div', { class: 'adv-goal' },
+    a.goal ? goalBar(a) : null,
+    h('div', { class: 'add-row no-print' }, note, target,
+      h('button', { class: 'btn', type: 'button', onClick: save }, a.goal ? 'Update goal' : 'Set a goal'),
+      a.goal ? h('button', { class: 'btn ghost', type: 'button', onClick: () => change((c) => setSavingGoal(c, R, null)) }, 'Clear') : null));
+}
+
+function goalBar(a) {
+  const have = Math.max(0, a.unspent);
+  const t = a.goal.target || 0;
+  const pct = t ? Math.min(100, Math.round((have / t) * 100)) : 0;
+  return h('div', { class: 'goal' },
+    h('div', { class: 'goal-text' }, '🎯 Saving for ', h('b', null, a.goal.note), t ? h('span', { class: 'num' }, ` · ${have}/${t} pp${have >= t ? ' · ready to buy!' : ''}`) : null),
+    t ? h('div', { class: 'meter', role: 'img', 'aria-label': `${have} of ${t} points saved` }, h('i', { class: have >= t ? 'done' : '', style: { width: `${pct}%` } })) : null);
+}
+
+/**
+ * The power points bar at the top of the sheet: what the character is built on, what's spent, what's
+ * saved, and the two things players do with points: get them from the GM, and spend (or keep) them.
+ */
+function pointsBar(ch, R, { change, onSpend, editing }) {
+  let cost;
+  try { cost = costBreakdown(ch, R); } catch { return null; }
+  const a = ch.advancement ? advancementSummary(ch, R) : null;
+  const saved = cost.budget - cost.total;
+  const pts = h('input', { type: 'number', id: 'pb-award-pts', min: 1, max: 100, value: 1, 'aria-label': 'Points from the GM', style: { width: '64px' } });
+  const note = h('input', { type: 'text', id: 'pb-award-note', placeholder: 'Why? (optional)', 'aria-label': 'Why the points were awarded' });
+  const awardRow = h('div', { class: 'pb-award no-print', hidden: true }, h('label', null, '🎁 The GM gave me', pts, 'points'), note,
+    h('button', { class: 'btn primary sm', type: 'button', id: 'pb-award-add', onClick: () => {
+      const n = Math.trunc(Number(pts.value));
+      if (!n) return;
+      change((c) => awardEveryForm(c, R, n, note.value.trim() || 'Points from the GM'));
+    } }, 'Add'),
+    h('small', { class: 'hint' }, hasForms(ch) ? 'Every form gets them. ' : '', 'Spend them now, or keep them: unspent points stay saved.'));
+  const figures = a
+    ? [fig('Built on', a.startPoints, `PL ${a.startPl} start`), fig('Earned', `+${a.earned}`, 'from the GM'), fig('Spent', cost.total, `of ${cost.budget}`), fig('Saved', saved, saved < 0 ? 'over budget' : saved ? 'to spend or keep' : 'all spent', saved < 0 ? 'bad' : saved > 0 ? 'good' : '')]
+    : [fig('Power level', ch.pl, `${ch.pl} × 15`), fig('Points', cost.budget, 'to build with'), fig('Spent', cost.total, ''), fig(saved >= 0 ? 'Left' : 'Over', Math.abs(saved), saved > 0 ? 'unspent' : saved < 0 ? 'over budget' : 'all spent', saved < 0 ? 'bad' : '')];
+  return h('section', { class: 'pts-bar no-print-controls', id: 'pts-bar' },
+    h('div', { class: 'pb-figs' }, figures),
+    h('div', { class: 'pb-actions no-print' },
+      h('button', { class: 'btn sm', type: 'button', id: 'pb-award', onClick: () => { awardRow.hidden = !awardRow.hidden; if (!awardRow.hidden) pts.focus(); } }, '🎁 Points from the GM'),
+      saved > 0 && !editing ? h('button', { class: 'btn sm primary', type: 'button', id: 'pb-spend', onClick: () => { if (!ch.advancement) change((c) => startAdvancement(c, R)); onSpend?.(); } }, `Spend ${saved} saved point${saved === 1 ? '' : 's'}`) : null,
+      a ? h('button', { class: 'btn sm ghost', type: 'button', onClick: () => document.querySelector('.adv-track')?.scrollIntoView({ behavior: 'smooth' }) }, 'Log & goal ↓') : null),
+    a?.goal ? goalBar(a) : null,
+    awardRow);
+}
+
+function fig(label, value, sub, tone = '') {
+  return h('div', { class: `pb-fig ${tone}` }, h('span', { class: 'pb-label' }, label), h('b', { class: 'num' }, value), sub ? h('small', null, sub) : null);
+}
+
+return { advancementSection, pointsBar };
+})();
+
+__mods["src/engine/range.js"] = (() => {
+// Range and distance: how far a power reaches, how far you move, lift and throw, and a calculator.
+//
+//   Ranged attacks (DCA 172-173): short up to rank x 25 ft (no penalty), medium rank x 50 ft (-2),
+//     long rank x 100 ft (-5); beyond long range you can't attack. Extended Range doubles them per rank.
+//   Close: targets you can touch. Perception: anything you can accurately perceive, no attack roll.
+//   Area (DCA 126): a shape instead of an attack roll; each +1 Area beyond the first doubles its size.
+//   Measurements: every rank doubles (distance rank 0 = 30 ft). Distance rank = speed rank + time rank;
+//     throwing distance rank = Strength rank - the object's mass rank; you lift the mass of your Strength rank.
+
+const FT_PER_MILE = 5280;
+// Base area sizes for one rank of Area (standard M&M 3e values; check DCA 126).
+const AREA_BASE = {
+  Burst: { ft: 30, text: (f) => `${fmtFt(f)} radius burst` },
+  Cloud: { ft: 15, text: (f) => `${fmtFt(f)} radius cloud that lingers a round` },
+  Cone: { ft: 60, text: (f) => `${fmtFt(f)} long cone` },
+  Cylinder: { ft: 30, text: (f) => `${fmtFt(f)} radius, ${fmtFt(f)} tall cylinder` },
+  Line: { ft: 30, text: (f) => `${fmtFt(f)} long, ${fmtFt(Math.max(5, f / 6))} wide line` },
+  Shapeable: { ft: 30, text: (f) => `shapeable area of about ${Math.round((f / 30) ** 3 * 30)} 5-ft cubes` },
+  Perception: { ft: null, text: () => 'everyone in an area you can perceive' },
+};
+
+/** "250 ft", "1.5 miles", "4,000 miles". */
+function fmtFt(ft) {
+  if (ft == null || !isFinite(ft)) return '—';
+  if (ft < FT_PER_MILE) return `${Math.round(ft).toLocaleString('en-US')} ft`;
+  const mi = ft / FT_PER_MILE;
+  return `${mi < 10 ? Math.round(mi * 10) / 10 : Math.round(mi).toLocaleString('en-US')} mile${mi === 1 ? '' : 's'}`;
+}
+
+/** Distance of a distance rank in feet (rank 0 = 30 ft, each rank doubles). */
+const rankFt = (rank) => 30 * 2 ** rank;
+
+/** The smallest distance rank that covers a distance in feet. */
+function ftToRank(ft) {
+  if (!(ft > 0)) return -Infinity;
+  return Math.ceil(Math.log2(ft / 30) - 1e-9) + 0;
+}
+
+/** The measurements table row for a rank, or a computed one past its ends. */
+function measure(rank, R) {
+  const row = (R?.raw?.reference?.measurements || []).find((m) => m.rank === rank);
+  return row || { rank, distance: fmtFt(rankFt(rank)) };
+}
+
+const steps = (p, name) => (p.extras || []).filter((m) => m.name === name).reduce((s, m) => s + (m.steps ?? 1), 0);
+
+/** The three range bands of a ranged effect: [{ band, ft, penalty }]. */
+function rangeBands(rank, extended = 0) {
+  const m = 2 ** extended;
+  return [{ band: 'short', ft: 25 * rank * m, penalty: 0 }, { band: 'medium', ft: 50 * rank * m, penalty: -2 }, { band: 'long', ft: 100 * rank * m, penalty: -5 }];
+}
+
+/** Which band a distance falls in: { band, penalty } or { band: 'out' }. */
+function bandFor(ft, rank, extended = 0) {
+  for (const b of rangeBands(rank, extended)) if (ft <= b.ft) return b;
+  return { band: 'out', ft: null, penalty: null };
+}
+
+const MOVE = { Flight: 0, Speed: 0, Swimming: 0, 'Wall-Crawling': 0, Leaping: -2, Burrowing: -5, Teleport: 0 };
+
+/**
+ * How far a power reaches, as short text plus the numbers:
+ * { kind, text, bands?, area?, move? }
+ */
+function rangeInfo(p, R) {
+  let eff;
+  try { eff = R.effect(p.effect); } catch { return null; }
+  const range = p.range || eff.range;
+  const rank = p.rank || 0;
+  const area = (p.extras || []).find((m) => m.name === 'Area');
+  if (p.effect in MOVE) {
+    const r = rank + MOVE[p.effect];
+    const d = measure(r, R).distance;
+    const verb = p.effect === 'Teleport' ? 'teleport' : p.effect === 'Leaping' ? 'jump' : 'move';
+    return { kind: 'Movement', text: `${verb} ${d} per ${p.effect === 'Leaping' ? 'leap' : 'move action'} (distance rank ${r})`, move: { rank: r, distance: d } };
+  }
+  if (area) {
+    const shape = area.option || 'Burst';
+    const base = AREA_BASE[shape] || AREA_BASE.Burst;
+    const ft = base.ft == null ? null : base.ft * 2 ** Math.max(0, (area.steps ?? 1) - 1);
+    const where = range === 'Ranged' ? `placed up to ${fmtFt(25 * rank * 2 ** steps(p, 'Extended Range'))} away` : range === 'Perception' ? 'anywhere you can perceive' : 'centred on you';
+    return { kind: 'Area', text: `${base.text(ft)}, ${where}; targets in it make a Dodge check (DC 10 + rank) for half`, area: { shape, ft } };
+  }
+  if (range === 'Ranged') {
+    const ext = steps(p, 'Extended Range');
+    const b = rangeBands(rank, ext);
+    return { kind: 'Ranged', text: `short ${fmtFt(b[0].ft)} · medium ${fmtFt(b[1].ft)} (−2) · long ${fmtFt(b[2].ft)} (−5)${ext ? ` · Extended Range ${ext}` : ''}`, bands: b, extended: ext };
+  }
+  if (range === 'Perception') return { kind: 'Perception', text: 'anything you can accurately perceive (no attack roll)' };
+  if (range === 'Close') return { kind: 'Close', text: 'targets you can touch' };
+  if (range === 'Personal') return { kind: 'Personal', text: 'you only' };
+  if (range === 'Rank') return { kind: 'Rank', text: `up to ${measure(rank, R).distance} (distance rank ${rank})` };
+  return { kind: range, text: String(range).toLowerCase() };
+}
+
+/** Lifting and throwing for a Strength rank. */
+function strengthReach(str, R) {
+  if (str == null) return null;
+  const lift = measure(str, R).mass || null;
+  // A person is about mass rank 2 (200 lbs.); a car about 6 (1.5 tons).
+  const throwOf = (massRank) => measure(str - massRank, R).distance;
+  return { lift, throwPerson: str - 2 >= -5 ? throwOf(2) : null, throwCar: str - 6 >= -5 ? throwOf(6) : null, throwOf };
+}
+
+/** Time to cover a distance at a speed rank: { rank, time } (time rank = distance rank - speed rank). */
+function travelTime(ft, speedRank, R) {
+  const t = ftToRank(ft) - speedRank;
+  return { rank: t, time: measure(t, R).time || `time rank ${t}` };
+}
+
+return { AREA_BASE, fmtFt, rankFt, ftToRank, measure, rangeBands, bandFor, rangeInfo, strengthReach, travelTime };
+})();
+
+__mods["src/app/rangecalc.js"] = (() => {
+// The range cheat sheet and calculator: how far an attack reaches, what band a target is in, distances
+// by rank, how fast you get somewhere, and how far you can throw. Opens from the Forge, the Play view
+// and the Rules tab, with the open character's powers ready to pick.
+
+const { h, openDialog } = __mods["src/app/dom.js"];
+const { rangeBands, bandFor, rangeInfo, fmtFt, ftToRank, measure, travelTime, strengthReach, AREA_BASE } = __mods["src/engine/range.js"];
+const { deriveAll } = __mods["src/engine/derive.js"];
+const num = (v, d = 0) => (Number.isFinite(Number(v)) && v !== '' ? Number(v) : d);
+const toFt = (v, unit) => num(v) * (unit === 'mi' ? 5280 : 1);
+
+/** All of the character's powers and attacks that have a range, for the picker. */
+function rangedPowers(ch, R) {
+  const out = [];
+  const visit = (list) => (list || []).forEach((p) => {
+    const info = rangeInfo(p, R);
+    if (info) out.push({ name: p.name, rank: p.rank, info });
+    for (const a of p.alternates || []) visit([a]);
+  });
+  visit(ch?.powers);
+  for (const d of ch?.devices || []) visit(d.powers);
+  return out;
+}
+
+function rangeCalculator(ch, R) {
+  const powers = ch ? rangedPowers(ch, R) : [];
+  const out = (el) => h('div', { class: 'rc-out' }, el);
+
+  // 1. Attack range
+  const rank = h('input', { type: 'number', min: 1, max: 40, value: powers.find((p) => p.info.kind === 'Ranged')?.rank || 10, 'aria-label': 'Effect rank', class: 'rc-rank' });
+  const ext = h('input', { type: 'number', min: 0, max: 10, value: powers.find((p) => p.info.kind === 'Ranged')?.info.extended || 0, 'aria-label': 'Extended Range ranks', class: 'rc-ext' });
+  const dist = h('input', { type: 'number', min: 0, placeholder: 'how far?', 'aria-label': 'Distance to the target', class: 'rc-dist' });
+  const unit = h('select', { 'aria-label': 'Unit', class: 'rc-unit' }, h('option', { value: 'ft' }, 'feet'), h('option', { value: 'mi' }, 'miles'));
+  const pick = powers.length ? h('select', { 'aria-label': 'Use a power', class: 'rc-power' }, h('option', { value: '' }, 'Pick a power…'),
+    powers.map((p, i) => h('option', { value: i }, `${p.name} (${p.info.kind}${p.rank ? ` ${p.rank}` : ''})`))) : null;
+  const attackOut = out(null);
+  const drawAttack = () => {
+    const r = Math.max(1, num(rank.value, 1));
+    const x = Math.max(0, num(ext.value));
+    const bands = rangeBands(r, x);
+    const ft = toFt(dist.value, unit.value);
+    const b = dist.value !== '' ? bandFor(ft, r, x) : null;
+    const chosen = pick && pick.value !== '' ? powers[Number(pick.value)] : null;
+    attackOut.replaceChildren(...[
+      chosen && chosen.info.kind !== 'Ranged' ? h('p', { class: 'rc-note' }, h('b', null, `${chosen.name}: `), chosen.info.text) : null,
+      h('table', { class: 'rc-table' }, h('tbody', null,
+        bands.map((band) => h('tr', { class: b && b.band === band.band ? 'hit' : '' }, h('td', null, band.band[0].toUpperCase() + band.band.slice(1)), h('td', { class: 'num' }, `up to ${fmtFt(band.ft)}`), h('td', { class: 'num' }, band.penalty ? `${band.penalty} to hit` : 'no penalty'))))),
+      b ? h('p', { class: `rc-verdict ${b.band === 'out' ? 'bad' : ''}` }, b.band === 'out'
+        ? `${fmtFt(ft)} is out of range. Extended Range ${Math.max(x + 1, Math.ceil(Math.log2(ft / (100 * r))))} reaches it at long range (−5), Extended Range ${Math.ceil(Math.log2(ft / (25 * r)))} at short range. Without it, rank ${Math.ceil(ft / 100)} reaches it at long range.`
+        : `${fmtFt(ft)} is ${b.band} range: ${b.penalty ? `${b.penalty} to the attack check` : 'no penalty'}.`) : null].filter(Boolean));
+  };
+  pick?.addEventListener('change', () => {
+    const p = powers[Number(pick.value)];
+    if (p?.info.kind === 'Ranged') { rank.value = p.rank; ext.value = p.info.extended || 0; }
+    drawAttack();
+  });
+  for (const el of [rank, ext, dist, unit]) el.addEventListener('input', drawAttack);
+  drawAttack();
+
+  // 2. Distance ranks
+  const mRank = h('input', { type: 'number', min: -5, max: 40, value: 0, 'aria-label': 'Rank', class: 'rc-mrank' });
+  const mDist = h('input', { type: 'number', min: 0, placeholder: 'or a distance', 'aria-label': 'Distance', class: 'rc-mdist' });
+  const mUnit = h('select', { 'aria-label': 'Unit' }, h('option', { value: 'ft' }, 'feet'), h('option', { value: 'mi' }, 'miles'));
+  const measureOut = out(null);
+  const drawMeasure = () => {
+    let r = num(mRank.value);
+    if (mDist.value !== '') { r = ftToRank(toFt(mDist.value, mUnit.value)); }
+    const row = measure(r, R);
+    measureOut.replaceChildren(h('p', null, h('b', null, `Rank ${r}: `), `distance ${row.distance}`, row.time ? ` · time ${row.time}` : '', row.mass ? ` · mass ${row.mass}` : '', row.volume ? ` · volume ${row.volume}` : ''));
+  };
+  for (const el of [mRank, mDist, mUnit]) el.addEventListener('input', drawMeasure);
+  drawMeasure();
+
+  // 3. Travel
+  const moves = powers.filter((p) => p.info.kind === 'Movement');
+  const sRank = h('input', { type: 'number', min: -5, max: 40, value: moves[0]?.info.move.rank ?? 0, 'aria-label': 'Speed rank', class: 'rc-speed' });
+  const tDist = h('input', { type: 'number', min: 0, value: 1, 'aria-label': 'Distance to travel', class: 'rc-tdist' });
+  const tUnit = h('select', { 'aria-label': 'Unit' }, h('option', { value: 'mi' }, 'miles'), h('option', { value: 'ft' }, 'feet'));
+  const travelOut = out(null);
+  const drawTravel = () => {
+    const sr = num(sRank.value);
+    const t = travelTime(toFt(tDist.value, tUnit.value), sr, R);
+    travelOut.replaceChildren(h('p', null, `Speed ${sr} covers ${measure(sr, R).distance} per move action. ${tDist.value} ${tUnit.value === 'mi' ? 'miles' : 'feet'} takes about `, h('b', null, t.time), ` (time rank ${t.rank}).`));
+  };
+  for (const el of [sRank, tDist, tUnit]) el.addEventListener('input', drawTravel);
+  drawTravel();
+
+  // 4. Throwing
+  let str = 0;
+  try { str = ch ? deriveAll(ch, R).abilities.Strength ?? 0 : 0; } catch { str = 0; }
+  const sIn = h('input', { type: 'number', min: -5, max: 40, value: str, 'aria-label': 'Strength', class: 'rc-str' });
+  const masses = (R.raw.reference?.measurements || []).filter((m) => m.rank >= -5 && m.rank <= 25);
+  const mass = h('select', { 'aria-label': 'Object mass', class: 'rc-mass' }, masses.map((m) => h('option', { value: m.rank, selected: m.rank === 2 }, `${m.mass} (mass rank ${m.rank})`)));
+  const throwOut = out(null);
+  const drawThrow = () => {
+    const s = num(sIn.value);
+    const mr = num(mass.value);
+    const reach = strengthReach(s, R);
+    throwOut.replaceChildren(h('p', null, `Strength ${s} lifts `, h('b', null, reach?.lift || '—'), '. ',
+      s - mr >= -5 ? ['Throws that ', h('b', null, measure(s - mr, R).distance), ` (distance rank ${s - mr}).`] : 'Too heavy to throw.'));
+  };
+  for (const el of [sIn, mass]) el.addEventListener('input', drawThrow);
+  drawThrow();
+
+  return h('div', { class: 'rangecalc' },
+    h('section', null, h('h4', null, '🎯 Attack range'), h('div', { class: 'rc-row' }, pick, h('label', null, 'Rank', rank), h('label', null, 'Extended Range', ext), h('label', null, 'Target is', dist, unit)), attackOut,
+      h('p', { class: 'hint' }, 'Ranged: short rank × 25 ft, medium × 50 ft (−2), long × 100 ft (−5); Extended Range doubles them per rank (DCA 129, 172-173). Close: touch. Perception: anything you can perceive, no roll.')),
+    h('section', null, h('h4', null, '📐 Areas'), h('table', { class: 'rc-table' }, h('tbody', null, Object.entries(AREA_BASE).map(([k, v]) => h('tr', null, h('td', null, k), h('td', null, v.text(v.ft)))))),
+      h('p', { class: 'hint' }, 'One rank of Area; each +1 Area doubles it. Targets inside make a Dodge check (DC 10 + rank) for half (DCA 126).')),
+    h('section', null, h('h4', null, '📏 Distance by rank'), h('div', { class: 'rc-row' }, h('label', null, 'Rank', mRank), h('label', null, 'or', mDist, mUnit)), measureOut,
+      h('p', { class: 'hint' }, 'Every rank doubles: rank 0 is 30 ft, rank 7 about half a mile, rank 15 about 60 miles.')),
+    h('section', null, h('h4', null, '🏃 Travel time'), h('div', { class: 'rc-row' }, h('label', null, 'Speed rank', sRank), h('label', null, 'Distance', tDist, tUnit)), travelOut,
+      h('p', { class: 'hint' }, 'Time rank = distance rank − speed rank. Flight, Speed and Swimming ranks are speed ranks.')),
+    h('section', null, h('h4', null, '💪 Lifting & throwing'), h('div', { class: 'rc-row' }, h('label', null, 'Strength', sIn), h('label', null, 'Object', mass)), throwOut,
+      h('p', { class: 'hint' }, 'You lift the mass of your Strength rank. Throwing distance rank = Strength rank − the object’s mass rank.')));
+}
+
+function openRangeCalculator(ch, R) {
+  return openDialog({ title: `Range${ch?.identity?.codename ? ` · ${ch.identity.codename}` : ''}`, body: rangeCalculator(ch, R) });
+}
+
+return { rangeCalculator, openRangeCalculator };
 })();
 
 __mods["src/engine/render.js"] = (() => {
@@ -4825,7 +5298,9 @@ __mods["src/app/sheetview.js"] = (() => {
 
 const { h, clear, append } = __mods["src/app/dom.js"];
 const { guideFor, skillGuideBody } = __mods["src/app/skillguide.js"];
-const { advancementSection } = __mods["src/app/advancement.js"];
+const { advancementSection, pointsBar } = __mods["src/app/advancement.js"];
+const { rangeInfo, rangeBands, fmtFt, strengthReach, AREA_BASE } = __mods["src/engine/range.js"];
+const { openRangeCalculator } = __mods["src/app/rangecalc.js"];
 const { inkFor } = __mods["src/app/dom.js"];
 const { sheet: makeSheet, describeEffect, explainPower } = __mods["src/engine/render.js"];
 const { costMath } = __mods["src/engine/powersmith.js"];
@@ -4926,6 +5401,20 @@ function drainTracker(ch, p, path, change, R) {
       h('button', { class: 'btn sm ghost', type: 'button', disabled: !held, title: 'Everything drained goes back', onClick: () => edit((q) => loseDrained(q, q.drained || 0)) }, 'All back')));
 }
 
+/** "📏 Range: …" under a power. */
+function rangeLine(p, R) {
+  const r = rangeInfo(p, R);
+  if (!r) return null;
+  return h('div', { class: 'power-range' }, h('b', null, `📏 ${r.kind}: `), r.text);
+}
+
+/** Short range text for the offense table. */
+function attackRange(a, R) {
+  if (a.power) { const r = rangeInfo(a.power, R); if (r?.kind === 'Ranged') return r.bands.map((b) => fmtFt(b.ft).replace(' ft', '')).join('/') + ' ft'; if (r?.kind === 'Area') return `${r.area.shape}${r.area.ft ? ` ${fmtFt(r.area.ft)}` : ''}`; return r ? r.kind : ''; }
+  if (a.kind === 'ranged') return `${rangeBands(a.rank).map((b) => b.ft).join('/')} ft`;
+  return a.kind === 'close' ? 'Close' : a.kind;
+}
+
 /** The player's own words for a power: how it looks and what it can do. */
 function aboutPower(p) {
   return p?.description ? h('div', { class: 'power-about' }, p.description) : null;
@@ -4986,7 +5475,15 @@ function renderFile(ch, R, opts = {}) {
       h('span', { class: 'abbr' }, a.abbr),
       h('span', { class: 'val num' }, a.total ?? '—'),
       a.total !== a.base && a.base != null ? h('span', { class: 'sub' }, `base ${a.base}`) : null,
-      editing ? stepper(a.base ?? 0, (d) => change((c) => { c.abilities[a.name] = (c.abilities[a.name] ?? 0) + d; }), { min: -5, label: a.name }) : null))));
+      editing ? stepper(a.base ?? 0, (d) => change((c) => { c.abilities[a.name] = (c.abilities[a.name] ?? 0) + d; }), { min: -5, label: a.name }) : null))),
+    (() => {
+      const str = s.d.abilities.Strength;
+      const reach = strengthReach(str, R);
+      if (!reach) return null;
+      return h('p', { class: 'ability-reach' }, h('b', null, '💪 Strength reach: '), `lifts ${reach.lift}`,
+        reach.throwPerson ? ` · throws a person ${reach.throwPerson}` : '', reach.throwCar ? ` · a car ${reach.throwCar}` : '',
+        ` · unarmed: close`, h('button', { class: 'linkish no-print', type: 'button', onClick: () => openRangeCalculator(ch, R) }, ' 📏 Range calculator'));
+    })());
 
   // ---- defenses ----
   const pl = ch.pl;
@@ -5029,7 +5526,7 @@ function renderFile(ch, R, opts = {}) {
   const offense = h('section', { class: 'sec' },
     h('h3', null, 'Offense', h('span', { class: 'pts' }, `Initiative ${sign(s.d.initiative)}`)),
     h('div', { class: 'table-wrap' }, h('table', { class: 'offense' },
-      h('thead', null, h('tr', null, h('th', null, 'Attack'), h('th', null, 'Check'), h('th', null, 'Effect'), h('th', null, 'PL limit'))),
+      h('thead', null, h('tr', null, h('th', null, 'Attack'), h('th', null, 'Check'), h('th', null, 'Effect'), h('th', { title: 'Short / medium (−2) / long (−5)' }, 'Range'), h('th', null, 'PL limit'))),
       h('tbody', null, s.d.attacks.map((a) => {
         const used = a.roll ? a.bonus + a.rank : a.rank;
         const limit = a.roll ? 2 * pl : pl;
@@ -5037,6 +5534,7 @@ function renderFile(ch, R, opts = {}) {
           h('td', null, a.name, a.alternate ? h('span', { style: { color: 'var(--ink-3)' } }, ' (AE)') : null),
           h('td', { class: 'n' }, a.roll ? sign(a.bonus) : a.kind === 'area' ? 'Area' : 'Perc.'),
           h('td', null, `${a.effect} ${a.rank}${a.resistance ? ` · ${a.resistance}` : ''}${a.crit && a.crit < 20 ? ` · crit ${a.crit}-20` : ''}`),
+          h('td', { class: 'range-cell' }, attackRange(a, R)),
           h('td', null, h('span', { class: 'ok', style: used > limit ? { color: 'var(--bad)' } : null }, `${used}/${limit}`)));
       })))));
 
@@ -5057,13 +5555,14 @@ function renderFile(ch, R, opts = {}) {
           h('button', { class: 'btn sm', type: 'button', onClick: () => opts.onEditPower?.(path) }, 'Open in Lab'),
           h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${p.name}`, onClick: () => change((c) => removeAt(c, path)) }, '✕')) : null),
       h('div', { class: 'power-text' }, describeEffect(p, R)),
+      rangeLine(p, R),
       aboutPower(p),
       linkedAbout(p),
       drainTracker(ch, p, path, change, R),
       poolTracker(ch, p, path, change, R),
       whatItDoes(p, R),
       alts.map((a, i) => h('div', { class: 'ae' },
-        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), aboutPower(a), linkedAbout(a), drainTracker(ch, a, { ...path, alt: i }, change, R), poolTracker(ch, a, { ...path, alt: i }, change, R), whatItDoes(a, R, true),
+        h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), rangeLine(a, R), aboutPower(a), linkedAbout(a), drainTracker(ch, a, { ...path, alt: i }, change, R), poolTracker(ch, a, { ...path, alt: i }, change, R), whatItDoes(a, R, true),
         editing ? h('span', { class: 'no-print' }, ' ',
           stepper(a.rank, (d) => change((c) => { const q = getPower(c, { ...path, alt: i }); q.rank = Math.max(1, q.rank + d); }), { min: 1, label: `${a.name} rank` }),
           h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${a.name}`, onClick: () => change((c) => removeAt(c, { ...path, alt: i })) }, '✕')) : null)),
@@ -5256,6 +5755,7 @@ function renderFile(ch, R, opts = {}) {
   const file = h('article', { class: `file ${opts.fresh ? 'fresh' : ''}` },
     head,
     opts.toolbar || null,
+    opts.onChange && !opts.noAdvancement ? pointsBar(ch, R, { change, onSpend: opts.onSpend, editing }) : null,
     h('div', { class: 'file-body' },
       h('div', { class: 'col' }, abilities, defenses, offense, powers),
       h('div', { class: 'col' }, advantages, skills, equipment, story, points,
@@ -6013,109 +6513,6 @@ function rosterWorkbook(characters, R) {
 }
 
 return { unzip, zip, colToNum, numToCol, resizedStyle, setCell, worksheetXml, buildWorkbook, DATA_SHEET, dataSheetRows, readWorkbookCharacters, statBlockRows, templateCells, embedImage, PORTRAIT_SLOT, fillCharacterSheet, rosterWorkbook };
-})();
-
-__mods["src/engine/forms.js"] = (() => {
-// Alternate forms: one character, up to 8 builds (a human identity and a powered one, armor on and off,
-// a werewolf's three shapes...). Each form is a whole build with its own power level, traits, powers,
-// gear, codename and picture, checked on its own. Everything about the person (name, bio, journal,
-// factions, world, roster entry) is shared.
-//
-// The active form lives at the top level of the character, so every part of the app (sheet, limits,
-// Battle Room, exports) works on it unchanged; the others wait in ch.forms[i]. Switching swaps them.
-
-const MAX_FORMS = 8;
-const FORM_FIELDS = ['pl', 'abilities', 'defenses', 'skills', 'advantages', 'powers', 'devices', 'equipment', 'portrait', 'theme'];
-
-const clone = (x) => (x === undefined ? undefined : JSON.parse(JSON.stringify(x)));
-
-const hasForms = (ch) => Array.isArray(ch?.forms) && ch.forms.length > 1;
-const activeForm = (ch) => (hasForms(ch) ? Math.max(0, Math.min(ch.activeForm || 0, ch.forms.length - 1)) : 0);
-
-/** A form's build, stored or live. */
-function formBuild(ch, i) {
-  if (i === activeForm(ch) || !hasForms(ch)) {
-    const out = {};
-    for (const k of FORM_FIELDS) if (ch[k] !== undefined) out[k] = ch[k];
-    return out;
-  }
-  return ch.forms[i];
-}
-
-function snapshot(ch) {
-  const out = {};
-  for (const k of FORM_FIELDS) if (ch[k] !== undefined) out[k] = clone(ch[k]);
-  return out;
-}
-
-function blankBuild(pl) {
-  return {
-    pl,
-    abilities: { Strength: 0, Stamina: 0, Agility: 0, Dexterity: 0, Fighting: 0, Intellect: 0, Awareness: 0, Presence: 0 },
-    defenses: { Dodge: 0, Parry: 0, Fortitude: 0, Will: 0 },
-    skills: [], advantages: [], powers: [], devices: [], equipment: [],
-  };
-}
-
-/** Add a form (a copy of the active one, or a blank build) and return the new character. */
-function addForm(ch, { copy = true, name } = {}) {
-  const c = clone(ch);
-  if (!hasForms(c)) { c.forms = [{ name: 'Form 1', codename: c.identity?.codename || '' }]; c.activeForm = 0; }
-  if (c.forms.length >= MAX_FORMS) throw new Error(`A character can have ${MAX_FORMS} forms at most.`);
-  const n = c.forms.length + 1;
-  const build = copy ? snapshot(c) : blankBuild(c.pl);
-  if (!copy) build.theme = clone(c.theme);
-  c.forms.push({ name: name || `Form ${n}`, codename: c.identity?.codename || '', ...build });
-  return c;
-}
-
-/** Make form i the active one. Returns the new character. */
-function switchForm(ch, i) {
-  if (!hasForms(ch)) return ch;
-  const cur = activeForm(ch);
-  if (i === cur || i < 0 || i >= ch.forms.length) return ch;
-  const c = clone(ch);
-  // put the live build away
-  c.forms[cur] = { name: c.forms[cur].name, codename: c.identity?.codename || c.forms[cur].codename || '', ...snapshot(c) };
-  // bring the other one out
-  const next = c.forms[i];
-  for (const k of FORM_FIELDS) { if (next[k] !== undefined) c[k] = next[k]; else delete c[k]; }
-  if (next.codename) c.identity = { ...c.identity, codename: next.codename };
-  c.forms[i] = { name: next.name, codename: next.codename || '' };
-  c.activeForm = i;
-  return c;
-}
-
-function renameForm(ch, i, name) {
-  const c = clone(ch);
-  if (hasForms(c) && c.forms[i]) c.forms[i].name = String(name || '').trim() || `Form ${i + 1}`;
-  return c;
-}
-
-/** Remove a form that isn't the active one. With one form left, the character has no forms any more. */
-function removeForm(ch, i) {
-  if (!hasForms(ch) || i === activeForm(ch)) return ch;
-  const c = clone(ch);
-  c.forms.splice(i, 1);
-  if (i < c.activeForm) c.activeForm -= 1;
-  if (c.forms.length < 2) { delete c.forms; delete c.activeForm; }
-  return c;
-}
-
-/** Every form as a full character of its own (for exports, stat blocks and checking each build). */
-function formCharacters(ch) {
-  if (!hasForms(ch)) return [ch];
-  return ch.forms.map((f, i) => {
-    if (i === activeForm(ch)) return ch;
-    const c = clone(ch);
-    for (const k of FORM_FIELDS) { if (f[k] !== undefined) c[k] = clone(f[k]); else delete c[k]; }
-    if (f.codename) c.identity = { ...c.identity, codename: f.codename };
-    c.activeForm = i;
-    return c;
-  });
-}
-
-return { MAX_FORMS, FORM_FIELDS, hasForms, activeForm, formBuild, addForm, switchForm, renameForm, removeForm, formCharacters };
 })();
 
 __mods["src/engine/companions.js"] = (() => {
@@ -12164,6 +12561,9 @@ const { rollCheck } = __mods["src/app/dice.js"];
 const { stepper, poolTracker, drainTracker } = __mods["src/app/sheetview.js"];
 const { playState, effectiveDefenses, checkPenalty, applyDamage, endScene, DAMAGE_STATES, FATIGUE, QUICK_CONDITIONS } = __mods["src/engine/play.js"];
 const { companionsOf } = __mods["src/engine/companions.js"];
+const { costBreakdown } = __mods["src/engine/costs.js"];
+const { openRangeCalculator } = __mods["src/app/rangecalc.js"];
+const { rangeInfo } = __mods["src/engine/range.js"];
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const recent = []; // this visit's rolls, newest first
 
@@ -12196,8 +12596,11 @@ function renderPlay(ch, R, opts) {
     setPlay((st) => Object.assign(st, r.state));
     toast(`${e.text} → ${r.text}`);
   };
+  let saved = 0;
+  try { const c = costBreakdown(ch, R); saved = c.budget - c.total; } catch { /* unknown */ }
   const status = h('section', { class: 'play-card play-status' },
     h('div', { class: 'play-row' },
+      saved > 0 ? h('div', { class: 'play-hp', title: 'Power points from the GM not spent yet' }, h('span', { class: 'label' }, 'Saved pp'), h('b', { class: 'num' }, saved)) : null,
       h('div', { class: 'play-hp' }, h('span', { class: 'label' }, 'Hero points'), h('b', { class: 'num' }, s.heroPoints),
         stepper(s.heroPoints, (x) => setPlay((st) => { st.heroPoints = Math.max(0, st.heroPoints + x); }), { min: 0, label: 'hero points' })),
       h('div', { class: 'play-hp' }, h('span', { class: 'label' }, 'Bruises'), h('b', { class: 'num' }, s.bruises),
@@ -12232,8 +12635,9 @@ function renderPlay(ch, R, opts) {
     h('div', { class: 'play-list' }, d.attacks.map((a) => {
       const dc = (a.effect === 'Damage' || a.resistance === 'Toughness' ? 15 : 10) + a.rank;
       return h('button', { type: 'button', class: 'play-line', onClick: () => (a.roll ? roll(`${a.name} attack`, a.bonus, { note: `${a.effect} ${a.rank}: ${a.resistance || 'resist'} DC ${dc}` }) : toast(`${a.name}: no attack roll. ${a.effect} ${a.rank}: targets resist with ${a.resistance} against DC ${dc}.`)) },
-        h('b', null, a.name), h('span', { class: 'num' }, a.roll ? sign(a.bonus + pen) : a.kind), h('small', null, `${a.effect} ${a.rank} · ${a.resistance || ''} DC ${dc}`));
-    })));
+        h('b', null, a.name), h('span', { class: 'num' }, a.roll ? sign(a.bonus + pen) : a.kind), h('small', null, `${a.effect} ${a.rank} · ${a.resistance || ''} DC ${dc}${a.power ? ` · 📏 ${rangeInfo(a.power, R)?.text || ''}` : a.kind === 'close' ? ' · 📏 close' : ''}`));
+    })),
+    h('button', { class: 'btn sm', type: 'button', style: { marginTop: '8px' }, onClick: () => openRangeCalculator(ch, R) }, '📏 Range calculator'));
 
   // ---- skills ----
   const skills = h('section', { class: 'play-card' }, h('h3', null, 'Skills'),
@@ -12302,6 +12706,7 @@ const { COMPANION_KINDS, companionsOf, companionBudget, asCompanion, blankCompan
 const { catalogToCharacter } = __mods["src/engine/catalog.js"];
 const { addVersion, versionsOf, removeVersion, restoreVersion, historyKey, moveHistory } = __mods["src/app/history.js"];
 const { renderPlay } = __mods["src/app/play.js"];
+const { openRangeCalculator } = __mods["src/app/rangecalc.js"];
 let R;
 let root;
 let fileHost;
@@ -13044,6 +13449,7 @@ function drawCurrent(ch) {
       { label: 'Print the full dossier', hint: 'Every form and companion, each on its own pages, plus the bio', run: () => printDossier(ch) },
     ]),
     h('button', { class: 'btn', type: 'button', title: 'Add this character to the Battle Room', onClick: () => api.throwIn?.(ch) }, '⚔ Throw in Battle Room'),
+    h('button', { class: 'btn', type: 'button', id: 'range-btn', title: 'Range cheat sheet: how far your powers reach, distances, travel, throwing', onClick: () => openRangeCalculator(ch, R) }, '📏 Range'),
     h('button', { class: 'btn', type: 'button', title: 'This character\'s page in the World wiki', onClick: () => api.openWorld?.(ch) }, '🌐 World'),
     h('button', { class: 'btn', type: 'button', onClick: () => share(ch) }, '🔑 Share / Key'));
   const onChange = (c) => { putActive(c); saveTabs(); fresh = false; renderCurrent(); };
@@ -13134,7 +13540,9 @@ function status(ch) {
   if (errs.length) return h('span', { class: 'status bad', title: errs.map((e) => e.message).join('\n') }, `✕ ${errs.length} rule issue${errs.length > 1 ? 's' : ''}`);
   if (ch.pl === 0 && !ch.advancement) return h('span', { class: 'status ok', title: 'PL 0 is for ordinary people: up to 14 points, no limits to check' }, `✓ Ordinary person · ${s.cost.total} pp`);
   if (s.cost.total > s.cost.budget) return h('span', { class: 'status ok', title: 'A supporting character: built as a stat block, so points over PL x 15 are allowed (DCA 194)' }, `✓ Legal · ${s.cost.total} pp (supporting character)`);
-  if (s.cost.total < s.cost.budget) return h('span', { class: 'status warn' }, `Legal · ${s.cost.budget - s.cost.total} pp unspent`);
+  if (s.cost.total < s.cost.budget) return ch.advancement
+    ? h('span', { class: 'status ok', title: 'Points from the GM you haven\'t spent yet. They stay saved until you spend them.' }, `✓ Legal · ${s.cost.budget - s.cost.total} pp saved`)
+    : h('span', { class: 'status warn' }, `Legal · ${s.cost.budget - s.cost.total} pp unspent`);
   return h('span', { class: 'status ok' }, `✓ Legal · ${s.cost.total}/${s.cost.budget} pp`);
 }
 
@@ -15127,6 +15535,7 @@ __mods["src/app/rules.js"] = (() => {
 const { h, clear } = __mods["src/app/dom.js"];
 const { damageMatrix } = __mods["src/app/gmplus.js"];
 const { guideFor, skillGuideBody } = __mods["src/app/skillguide.js"];
+const { rangeCalculator } = __mods["src/app/rangecalc.js"];
 const { state, savePrefs, emit } = __mods["src/app/store.js"];
 const { houseRules, setHouseRules, HOUSE_DEFAULTS, isByTheBook } = __mods["src/engine/house.js"];
 /** House rules: how strict the app is for this table. */
@@ -15165,6 +15574,7 @@ function buildCards() {
     table: [['Check result ≥', 'Degree', 'Example (DC 20)'], ['DC+15', 'Four (Success)', 35], ['DC+10', 'Three (Success)', 30], ['DC+5', 'Two (Success)', 25], ['DC', 'One (Success)', 20],
       ['DC−5', 'One (Failure)', 15], ['DC−10', 'Two (Failure)', 10], ['DC−15', 'Three (Failure)', 5], ['DC−20', 'Four (Failure)', 0]],
     rowClasses: ['s3', 's3', 's2', 's1', 'f1', 'f2', 'f3', 'f4'], source: 'DCA 14' });
+  add('Tables', { title: 'Range cheat sheet & calculator', meta: 'Range · distance · travel · throwing', summary: 'How far an attack reaches at each rank, which band a target is in, areas, distance by rank, travel time, lifting and throwing.', el: () => rangeCalculator(null, R), source: 'DCA 172-173' });
   add('Tables', { title: 'Damage resistance matrix', meta: 'Chart', summary: 'Find your Toughness check result (left) and the damage rank (top): white no effect, blue −1 penalty, green dazed, yellow staggered, red incapacitated.', el: () => damageMatrix({}), source: 'DCA 273' });
   if (ref.difficulty?.length) add('Tables', { title: 'Difficulty classes', meta: 'Table', table: [['DC', 'Difficulty', 'Example'], ...ref.difficulty.map((d) => [d.dc, d.label, d.example || ''])] });
   if (ref.damage) add('Combat', { title: 'Damage and Toughness', meta: `Toughness check vs. DC ${ref.damage.toughness_dc}`, details: ref.damage.notes, table: [['Result', 'Effect'], ...(ref.damage.results || []).map((r) => [r.degree, r.result])] });

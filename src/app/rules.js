@@ -4,6 +4,7 @@
 import { h, clear } from './dom.js';
 import { damageMatrix } from './gmplus.js';
 import { guideFor, skillGuideBody } from './skillguide.js';
+import { rangeCalculator } from './rangecalc.js';
 import { state, savePrefs, emit } from './store.js';
 import { houseRules, setHouseRules, HOUSE_DEFAULTS, isByTheBook } from '../engine/house.js';
 
@@ -43,6 +44,7 @@ function buildCards() {
     table: [['Check result ≥', 'Degree', 'Example (DC 20)'], ['DC+15', 'Four (Success)', 35], ['DC+10', 'Three (Success)', 30], ['DC+5', 'Two (Success)', 25], ['DC', 'One (Success)', 20],
       ['DC−5', 'One (Failure)', 15], ['DC−10', 'Two (Failure)', 10], ['DC−15', 'Three (Failure)', 5], ['DC−20', 'Four (Failure)', 0]],
     rowClasses: ['s3', 's3', 's2', 's1', 'f1', 'f2', 'f3', 'f4'], source: 'DCA 14' });
+  add('Tables', { title: 'Range cheat sheet & calculator', meta: 'Range · distance · travel · throwing', summary: 'How far an attack reaches at each rank, which band a target is in, areas, distance by rank, travel time, lifting and throwing.', el: () => rangeCalculator(null, R), source: 'DCA 172-173' });
   add('Tables', { title: 'Damage resistance matrix', meta: 'Chart', summary: 'Find your Toughness check result (left) and the damage rank (top): white no effect, blue −1 penalty, green dazed, yellow staggered, red incapacitated.', el: () => damageMatrix({}), source: 'DCA 273' });
   if (ref.difficulty?.length) add('Tables', { title: 'Difficulty classes', meta: 'Table', table: [['DC', 'Difficulty', 'Example'], ...ref.difficulty.map((d) => [d.dc, d.label, d.example || ''])] });
   if (ref.damage) add('Combat', { title: 'Damage and Toughness', meta: `Toughness check vs. DC ${ref.damage.toughness_dc}`, details: ref.damage.notes, table: [['Result', 'Effect'], ...(ref.damage.results || []).map((r) => [r.degree, r.result])] });

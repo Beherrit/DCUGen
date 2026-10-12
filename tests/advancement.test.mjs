@@ -48,3 +48,32 @@ test('undo restores the last recorded build; removing an award lowers the budget
   removeEntry(ch, ch.advancement.log[0].id);
   assert.equal(costBreakdown(ch, R).budget, 150);
 });
+
+import { setSavingGoal, advancementSummary as summary2 } from '../src/engine/advancement.js';
+import { addForm, switchForm, awardEveryForm } from '../src/engine/forms.js';
+import fs2 from 'node:fs';
+
+test('saving up: earned points stay saved, with an optional goal', () => {
+  const ch = JSON.parse(fs2.readFileSync(new URL('./fixtures/shadowshot.json', import.meta.url)));
+  awardEveryForm(ch, R, 10, 'Session 3');
+  setSavingGoal(ch, R, { note: 'Flight 10', target: 12 });
+  const a = summary2(ch, R);
+  assert.equal(a.earned, 10);
+  assert.equal(a.unspent, a.budget - a.total);
+  assert.ok(a.unspent >= 10);
+  assert.deepEqual(a.goal, { note: 'Flight 10', target: 12 });
+  setSavingGoal(ch, R, null);
+  assert.equal(summary2(ch, R).goal, null);
+});
+
+test('each form keeps its own ledger, and a GM award reaches every form', () => {
+  let ch = JSON.parse(fs2.readFileSync(new URL('./fixtures/shadowshot.json', import.meta.url)));
+  ch = addForm(ch, { copy: false });
+  awardEveryForm(ch, R, 5, 'Adventure');
+  ch = switchForm(ch, 1);
+  assert.equal(summary2(ch, R).earned, 5);
+  assert.equal(summary2(ch, R).pending.changes.length, 0, 'switching forms is not a change to spend points on');
+  ch = switchForm(ch, 0);
+  assert.equal(summary2(ch, R).earned, 5);
+  assert.equal(summary2(ch, R).pending.changes.length, 0);
+});

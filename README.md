@@ -70,6 +70,15 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
   steampunk, wild west, pulp, cyberpunk, post-apocalyptic, occult, superhero gadgets...), a custom item maker, 169
   vehicles including 80 starships, headquarters, a builder for your own vehicles and bases, and space-game rules:
   travel times, sensors, ship combat, hazards and a random planet generator.
+- **Power points from the GM** – a points bar at the top of every sheet: what the character is built on, what the
+  GM has awarded, what's spent and what's **saved**. "🎁 Points from the GM" adds an award (every alternate form gets
+  it), "Spend" opens edit mode and logs what you buy, and points you don't spend stay saved. Set a goal ("Flight 10,
+  12 pp") and watch the bar fill. The full log is in Advancement (DCA 190); each form keeps its own ledger.
+- **Range** – every power shows how far it reaches (ranged bands, close, perception, area size and where it's placed,
+  movement per action), the Offense table has a Range column, and Strength shows what you lift and how far you
+  throw a person or a car. 📏 Range (Forge, Play view, and the Rules tab) is a cheat sheet and calculator: pick a
+  power and a distance to get the band and penalty (or the Extended Range that would reach it), area sizes,
+  distance by rank, travel time at a speed rank, lifting and throwing (DCA 126, 129, 172-173).
 - **Play view** (▶ Play on the Forge) – one screen for running a character at the table, made for phones: hero
   points, bruises and the damage track (type the damage rank of a hit and press Resist: the Toughness check is rolled
   and the bruise, dazed, staggered or incapacitated applied), fatigue and extra effort, conditions (vulnerable halves

@@ -7,7 +7,10 @@
 // Battle Room, exports) works on it unchanged; the others wait in ch.forms[i]. Switching swaps them.
 
 export const MAX_FORMS = 8;
-export const FORM_FIELDS = ['pl', 'abilities', 'defenses', 'skills', 'advantages', 'powers', 'devices', 'equipment', 'portrait', 'theme'];
+// Each form keeps its own points ledger (advancement), because each form is its own build.
+export const FORM_FIELDS = ['pl', 'abilities', 'defenses', 'skills', 'advantages', 'powers', 'devices', 'equipment', 'portrait', 'theme', 'advancement'];
+
+import { awardPoints } from './advancement.js';
 
 const clone = (x) => (x === undefined ? undefined : JSON.parse(JSON.stringify(x)));
 
@@ -95,4 +98,21 @@ export function formCharacters(ch) {
     c.activeForm = i;
     return c;
   });
+}
+
+/**
+ * The GM awards points to the character: every form gets them (each form is a build that grows).
+ * Mutates ch (the active form at the top level, the others in ch.forms).
+ */
+export function awardEveryForm(ch, R, points, note) {
+  awardPoints(ch, R, points, note);
+  if (!hasForms(ch)) return ch;
+  ch.forms.forEach((f, i) => {
+    if (i === activeForm(ch)) return;
+    const temp = {};
+    for (const k of FORM_FIELDS) if (f[k] !== undefined) temp[k] = f[k];
+    awardPoints(temp, R, points, note);
+    f.advancement = temp.advancement;
+  });
+  return ch;
 }

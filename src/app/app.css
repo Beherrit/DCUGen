@@ -1740,3 +1740,46 @@ div.play-line small { grid-column: 1; grid-row: 2; }
 .house-panel summary { display: flex; gap: 10px; align-items: center; cursor: pointer; }
 .house-panel .field small { display: block; margin-top: 4px; }
 .issues .src { color: var(--ink-3); font-size: 12px; }
+
+/* ---- power points bar (top of the sheet) ---- */
+.pts-bar { display: grid; gap: 8px; margin: 10px 0 12px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2); }
+.pb-figs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.pb-fig { display: grid; gap: 1px; }
+.pb-label { font: 700 11px/1.2 var(--font-label); text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); }
+.pb-fig b { font-size: 22px; line-height: 1.1; }
+.pb-fig small { color: var(--ink-3); font-size: 12px; }
+.pb-fig.good b { color: var(--good); }
+.pb-fig.bad b { color: var(--bad); }
+.pb-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.pb-award { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.pb-award label { display: inline-flex; gap: 6px; align-items: center; }
+.pb-award input[type=text] { flex: 1 1 160px; min-width: 0; }
+.pb-award small { flex-basis: 100%; }
+.goal { display: grid; gap: 4px; }
+.goal .meter { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.goal .meter i { display: block; height: 100%; background: var(--blue); }
+.goal .meter i.done { background: var(--good); }
+.adv-goal { margin: 10px 0; display: grid; gap: 6px; }
+@media (max-width: 560px) { .pb-figs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media print { .pts-bar .pb-actions, .pts-bar .pb-award { display: none !important; } }
+
+/* ---- range ---- */
+.power-range { font-size: 13px; color: var(--ink-2); margin: 3px 0; }
+.ae .power-range { margin-left: 0; }
+.range-cell { white-space: nowrap; font-size: 12px; color: var(--ink-2); }
+.ability-reach { margin: 8px 0 0; font-size: 13px; color: var(--ink-2); }
+.linkish { border: 0; background: none; color: var(--blue); cursor: pointer; font: inherit; padding: 0; }
+.rangecalc { display: grid; gap: 14px; }
+.rangecalc h4 { margin: 0 0 6px; }
+.rangecalc section { border-top: 1px solid var(--line); padding-top: 10px; }
+.rangecalc section:first-child { border-top: 0; padding-top: 0; }
+.rc-row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.rc-row label { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; }
+.rc-row input[type=number] { width: 80px; }
+.rc-table { border-collapse: collapse; margin-top: 6px; font-size: 14px; }
+.rc-table td { padding: 3px 10px 3px 0; }
+.rc-table tr.hit td { font-weight: 700; color: var(--blue); }
+.rc-verdict { margin: 6px 0 0; font-weight: 600; }
+.rc-verdict.bad { color: var(--bad); }
+.rc-out p, .rc-note { margin: 6px 0 0; }
+.rangecalc .hint { margin: 6px 0 0; }

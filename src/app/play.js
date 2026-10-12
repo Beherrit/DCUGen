@@ -8,6 +8,9 @@ import { rollCheck } from './dice.js';
 import { stepper, poolTracker, drainTracker } from './sheetview.js';
 import { playState, effectiveDefenses, checkPenalty, applyDamage, endScene, DAMAGE_STATES, FATIGUE, QUICK_CONDITIONS } from '../engine/play.js';
 import { companionsOf } from '../engine/companions.js';
+import { costBreakdown } from '../engine/costs.js';
+import { openRangeCalculator } from './rangecalc.js';
+import { rangeInfo } from '../engine/range.js';
 
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const recent = []; // this visit's rolls, newest first
@@ -41,8 +44,11 @@ export function renderPlay(ch, R, opts) {
     setPlay((st) => Object.assign(st, r.state));
     toast(`${e.text} → ${r.text}`);
   };
+  let saved = 0;
+  try { const c = costBreakdown(ch, R); saved = c.budget - c.total; } catch { /* unknown */ }
   const status = h('section', { class: 'play-card play-status' },
     h('div', { class: 'play-row' },
+      saved > 0 ? h('div', { class: 'play-hp', title: 'Power points from the GM not spent yet' }, h('span', { class: 'label' }, 'Saved pp'), h('b', { class: 'num' }, saved)) : null,
       h('div', { class: 'play-hp' }, h('span', { class: 'label' }, 'Hero points'), h('b', { class: 'num' }, s.heroPoints),
         stepper(s.heroPoints, (x) => setPlay((st) => { st.heroPoints = Math.max(0, st.heroPoints + x); }), { min: 0, label: 'hero points' })),
       h('div', { class: 'play-hp' }, h('span', { class: 'label' }, 'Bruises'), h('b', { class: 'num' }, s.bruises),
@@ -77,8 +83,9 @@ export function renderPlay(ch, R, opts) {
     h('div', { class: 'play-list' }, d.attacks.map((a) => {
       const dc = (a.effect === 'Damage' || a.resistance === 'Toughness' ? 15 : 10) + a.rank;
       return h('button', { type: 'button', class: 'play-line', onClick: () => (a.roll ? roll(`${a.name} attack`, a.bonus, { note: `${a.effect} ${a.rank}: ${a.resistance || 'resist'} DC ${dc}` }) : toast(`${a.name}: no attack roll. ${a.effect} ${a.rank}: targets resist with ${a.resistance} against DC ${dc}.`)) },
-        h('b', null, a.name), h('span', { class: 'num' }, a.roll ? sign(a.bonus + pen) : a.kind), h('small', null, `${a.effect} ${a.rank} · ${a.resistance || ''} DC ${dc}`));
-    })));
+        h('b', null, a.name), h('span', { class: 'num' }, a.roll ? sign(a.bonus + pen) : a.kind), h('small', null, `${a.effect} ${a.rank} · ${a.resistance || ''} DC ${dc}${a.power ? ` · 📏 ${rangeInfo(a.power, R)?.text || ''}` : a.kind === 'close' ? ' · 📏 close' : ''}`));
+    })),
+    h('button', { class: 'btn sm', type: 'button', style: { marginTop: '8px' }, onClick: () => openRangeCalculator(ch, R) }, '📏 Range calculator'));
 
   // ---- skills ----
   const skills = h('section', { class: 'play-card' }, h('h3', null, 'Skills'),

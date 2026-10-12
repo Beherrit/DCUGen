@@ -22,6 +22,7 @@ import { COMPANION_KINDS, companionsOf, companionBudget, asCompanion, blankCompa
 import { catalogToCharacter } from '../engine/catalog.js';
 import { addVersion, versionsOf, removeVersion, restoreVersion, historyKey, moveHistory } from './history.js';
 import { renderPlay } from './play.js';
+import { openRangeCalculator } from './rangecalc.js';
 let R;
 let root;
 let fileHost;
@@ -764,6 +765,7 @@ function drawCurrent(ch) {
       { label: 'Print the full dossier', hint: 'Every form and companion, each on its own pages, plus the bio', run: () => printDossier(ch) },
     ]),
     h('button', { class: 'btn', type: 'button', title: 'Add this character to the Battle Room', onClick: () => api.throwIn?.(ch) }, '⚔ Throw in Battle Room'),
+    h('button', { class: 'btn', type: 'button', id: 'range-btn', title: 'Range cheat sheet: how far your powers reach, distances, travel, throwing', onClick: () => openRangeCalculator(ch, R) }, '📏 Range'),
     h('button', { class: 'btn', type: 'button', title: 'This character\'s page in the World wiki', onClick: () => api.openWorld?.(ch) }, '🌐 World'),
     h('button', { class: 'btn', type: 'button', onClick: () => share(ch) }, '🔑 Share / Key'));
   const onChange = (c) => { putActive(c); saveTabs(); fresh = false; renderCurrent(); };
@@ -854,7 +856,9 @@ function status(ch) {
   if (errs.length) return h('span', { class: 'status bad', title: errs.map((e) => e.message).join('\n') }, `✕ ${errs.length} rule issue${errs.length > 1 ? 's' : ''}`);
   if (ch.pl === 0 && !ch.advancement) return h('span', { class: 'status ok', title: 'PL 0 is for ordinary people: up to 14 points, no limits to check' }, `✓ Ordinary person · ${s.cost.total} pp`);
   if (s.cost.total > s.cost.budget) return h('span', { class: 'status ok', title: 'A supporting character: built as a stat block, so points over PL x 15 are allowed (DCA 194)' }, `✓ Legal · ${s.cost.total} pp (supporting character)`);
-  if (s.cost.total < s.cost.budget) return h('span', { class: 'status warn' }, `Legal · ${s.cost.budget - s.cost.total} pp unspent`);
+  if (s.cost.total < s.cost.budget) return ch.advancement
+    ? h('span', { class: 'status ok', title: 'Points from the GM you haven\'t spent yet. They stay saved until you spend them.' }, `✓ Legal · ${s.cost.budget - s.cost.total} pp saved`)
+    : h('span', { class: 'status warn' }, `Legal · ${s.cost.budget - s.cost.total} pp unspent`);
   return h('span', { class: 'status ok' }, `✓ Legal · ${s.cost.total}/${s.cost.budget} pp`);
 }
 
