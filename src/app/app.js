@@ -3,7 +3,7 @@
 import { RULES } from '../engine/index.js';
 import { state, onChange } from './store.js';
 import { toast } from './dom.js';
-import { initForge, roll, setCurrent, renderCurrent, restoreTabs, undo, redo } from './forge.js';
+import { initForge, roll, setCurrent, renderCurrent, restoreTabs, undo, redo, updateOpen } from './forge.js';
 import { initRoster, renderRoster } from './roster.js';
 import { initLab, openInLab, renderLab } from './lab.js';
 import { initGm, renderGm, addToInitiative } from './gm.js';
@@ -12,9 +12,11 @@ import { initRules, renderRules } from './rules.js';
 import { initBestiary, renderBestiary } from './bestiary.js';
 import { initGarage, renderGarage } from './garage.js';
 import { initBattle, renderBattle, throwIn } from './battle.js';
-import { initWorld, renderWorld, openWorldPage, recordBattleInWorld, worldSaved, worldApply, openWorldKey, openPaperKey, openPaperObject, openHandoutKey, openHandoutObject } from './world.js';
+import { initWorld, renderWorld, openWorldPage, recordBattleInWorld, worldSaved, worldApply, openWorldKey, openPaperKey, openPaperObject, openHandoutKey, openHandoutObject, addWorldEvent, worldName } from './world.js';
+import { initGmScreen, renderGmScreen, receiveStatus, afterBattleRecorded } from './gmscreen.js';
+import { statusOf, resolveHit, describeHit } from '../engine/gmboard.js';
 import { initTable, renderTable, postRoll } from './table.js';
-import { setLobbyHandlers, lobbySendRoster, lobbySendRemove, lobby } from './lobby.js';
+import { setLobbyHandlers, lobbySendRoster, lobbySendRemove, lobby, lobbySend, onLobby } from './lobby.js';
 import { snapshotAll, restoreAll } from './backup.js';
 import { getAppButton } from './getapp.js';
 import { startSync, syncButton } from './syncfile.js';
@@ -23,7 +25,7 @@ import { state as st, upsert, removeFromRoster } from './store.js';
 import { decodeCharacter } from './share.js';
 import { setImportHooks, enableDropImport, setImportRules, openAnything } from './importer.js';
 const R = RULES;
-const views = ['forge', 'roster', 'lab', 'bestiary', 'workshop', 'garage', 'battle', 'world', 'table', 'gm', 'rules'];
+const views = ['forge', 'roster', 'lab', 'bestiary', 'workshop', 'garage', 'battle', 'world', 'table', 'screen', 'gm', 'rules'];
 
 function showTab(name) {
   if (!views.includes(name)) name = 'forge';
@@ -41,6 +43,7 @@ function showTab(name) {
   if (name === 'battle') renderBattle();
   if (name === 'world') renderWorld();
   if (name === 'table') renderTable();
+  if (name === 'screen') renderGmScreen();
   if (name === 'rules') renderRules();
   try { localStorage.setItem('dcugen.tab', name); } catch { /* storage unavailable */ }
   window.scrollTo({ top: 0 });
@@ -117,7 +120,38 @@ function wireLobby() {
       return kept;
     }),
     feed: (entry, from) => { if (from !== me()) postRoll(entry, { fromLobby: true }); },
+    message: (msg) => {
+      if (msg.t === 'status' && lobby.role === 'host') receiveStatus(msg.status, msg.fromName);
+      if (msg.t === 'status-request' && lobby.role !== 'host') sendStatuses();
+      if (msg.t === 'hit' && lobby.role !== 'host' && msg.rosterId) {
+        let res = null;
+        const ch = updateOpen(msg.rosterId, (c) => { res = resolveHit(c, msg.hit, R); c.play = res.play; });
+        if (ch && res) {
+          const e = postRoll({ who: ch.identity?.codename || 'Someone', text: `GM: ${describeHit(msg.hit)} → ${res.text}`, dice: res.dice[res.dice.length - 1] });
+          toast(e.text);
+        }
+      }
+      if (msg.t === 'hp' && lobby.role !== 'host' && msg.rosterId) {
+        const ch = updateOpen(msg.rosterId, (c) => { c.play = { ...(c.play || {}), heroPoints: ((c.play?.heroPoints ?? 1) + (msg.n || 1)) }; });
+        if (ch) toast(`⭐ The GM gives ${ch.identity?.codename || 'you'} a hero point${msg.why ? `: ${msg.why}` : ''}`);
+      }
+    },
   });
+  // Players: tell the GM screen how their characters stand, whenever something changes.
+  let statusTimer = null;
+  function sendStatuses() {
+    if (lobby.status !== 'on' || lobby.role === 'host') return;
+    const seen = new Set();
+    for (const t of st.tabs || []) {
+      if (!t?.rosterId || seen.has(t.rosterId) || t.companionOf) continue;
+      seen.add(t.rosterId);
+      const s2 = statusOf(t, R);
+      if (s2) lobbySend({ t: 'status', status: s2 });
+    }
+  }
+  const soon = () => { clearTimeout(statusTimer); statusTimer = setTimeout(sendStatuses, 300); };
+  onChange((what) => { if (what === 'current' || what === 'roster-upsert') soon(); });
+  onLobby((event) => { if (event === 'status' && lobby.status === 'on') soon(); });
   // Any roster change goes to the table while connected.
   onChange((what) => {
     if (applying || lobby.status !== 'on') return;
@@ -163,7 +197,16 @@ async function boot() {
     toast(`${r.count > 1 ? `${r.count} × ` : ''}${r.names[0] || 'Fighter'} join${r.count > 1 ? '' : 's'} team ${r.team} in the Battle Room`);
     return r;
   };
-  initBattle(R, document.getElementById('view-battle'), { goBestiary: () => showTab('bestiary'), recordBattle: (b) => { const ev = recordBattleInWorld(b); toast(`Recorded in the World: ${ev.name}`); } });
+  initBattle(R, document.getElementById('view-battle'), { goBestiary: () => showTab('bestiary'), recordBattle: (b) => {
+    const ev = recordBattleInWorld(b);
+    const learned = afterBattleRecorded(b, ev);
+    toast([`Recorded in the World: ${ev.name}`, ...learned].join(' · '));
+  } });
+  initGmScreen(R, document.getElementById('view-screen'), {
+    open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
+    addWorldEvent: (e) => addWorldEvent(e),
+    campaign: () => worldName(),
+  });
   initWorld(R, document.getElementById('view-world'), {
     open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
     throwIn: throwInBattle,

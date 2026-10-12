@@ -162,6 +162,26 @@ export function redo() {
 }
 
 /**
+ * Change a character that is open in a tab (or else on the roster) from outside the Forge: a GM's hit
+ * or hero point arriving over the lobby. fn gets a copy to change. Returns the changed copy, or null.
+ */
+export function updateOpen(rosterId, fn) {
+  const i = state.tabs.findIndex((t) => t.rosterId === rosterId);
+  if (i >= 0) {
+    const c = JSON.parse(JSON.stringify(state.tabs[i]));
+    fn(c);
+    if (i === state.active) putActive(c); else { remember(i, state.tabs[i]); state.tabs[i] = c; }
+    saveTabs(); renderCurrent(); emit('current');
+    return c;
+  }
+  const r = state.roster.find((x) => x.rosterId === rosterId);
+  if (!r) return null;
+  const c = JSON.parse(JSON.stringify(r));
+  fn(c);
+  return upsert(c);
+}
+
+/**
  * Show a character. By default it replaces the active tab; newTab opens it in a new tab
  * (or switches to the tab already showing that saved character).
  */

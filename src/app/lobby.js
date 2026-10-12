@@ -129,7 +129,10 @@ function handle(msg) {
       handlers.feed?.(msg.entry, msg.from);
       if (lobby.role === 'host') send({ t: 'feed', entry: msg.entry });
       break;
-    default: break;
+    default:
+      // Anything else (the GM screen's status, hit and hero point messages) goes to the app.
+      handlers.message?.(msg);
+      break;
   }
 }
 
@@ -141,3 +144,5 @@ export function lobbySendWorld(saved) { if (lobby.status === 'on') send({ t: 'wo
 export function lobbySendFeed(entry) { if (lobby.status === 'on') send({ t: 'feed', entry }); }
 export function lobbyClaim(rosterId) { if (lobby.status === 'on') send({ t: 'claim', rosterId }); }
 export function lobbyConnected() { return lobby.status === 'on'; }
+/** Send any message: from a player it goes to the host; from the host to everyone (or msg.to). */
+export function lobbySend(msg) { if (lobby.status === 'on') send(msg); }
