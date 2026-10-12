@@ -3,7 +3,8 @@
 import { h, clear, toast, copyText, openDialog, inkFor } from './dom.js';
 import { state, emit, savePrefs, upsert } from './store.js';
 import { renderFile } from './sheetview.js';
-import { exportExcel, exportJson, exportText } from './exporters.js';
+import { exportExcel, exportJson, exportText, exportDossierExcel } from './exporters.js';
+import { dossierEntries } from '../engine/dossier.js';
 import { encodeCharacter, shareLink, keySize } from './share.js';
 import { renderBio } from './bio.js';
 import { characterKey, keyFor, personKey, fromKeySync } from '../engine/keys.js';
@@ -19,6 +20,8 @@ import { worldSelect } from './roster.js';
 import { hasForms, activeForm, addForm, switchForm, renameForm, removeForm, MAX_FORMS } from '../engine/forms.js';
 import { COMPANION_KINDS, companionsOf, companionBudget, asCompanion, blankCompanion, suggestedPl } from '../engine/companions.js';
 import { catalogToCharacter } from '../engine/catalog.js';
+import { addVersion, versionsOf, removeVersion, restoreVersion, historyKey, moveHistory } from './history.js';
+import { renderPlay } from './play.js';
 let R;
 let root;
 let fileHost;
@@ -117,6 +120,46 @@ export function restoreTabs() {
   return true;
 }
 
+// ---- undo / redo ------------------------------------------------------------------------------------
+// Every change to an open character (an edit, a re-roll in the same tab, a form switch, a drain, a save)
+// keeps the version before it, per tab, so Ctrl+Z / Ctrl+Y walk back and forth. Kept for this visit only.
+const UNDO_DEPTH = 80;
+const undoStacks = []; // parallel to state.tabs: { past: [], future: [] }
+function stackAt(i) {
+  while (undoStacks.length < state.tabs.length) undoStacks.push({ past: [], future: [] });
+  return undoStacks[i];
+}
+function remember(i, prev) {
+  if (!prev) return;
+  const s = stackAt(i);
+  s.past.push(prev);
+  if (s.past.length > UNDO_DEPTH) s.past.shift();
+  s.future = [];
+}
+/** Replace the active tab's character, remembering the old one. */
+function putActive(c) {
+  if (state.tabs[state.active] && state.tabs[state.active] !== c) remember(state.active, state.tabs[state.active]);
+  state.current = c; state.tabs[state.active] = c;
+}
+export function canUndo() { return !!stackAt(state.active)?.past.length; }
+export function canRedo() { return !!stackAt(state.active)?.future.length; }
+export function undo() {
+  const s = stackAt(state.active);
+  if (!s?.past.length) { toast('Nothing to undo'); return; }
+  s.future.push(state.tabs[state.active]);
+  const prev = s.past.pop();
+  state.tabs[state.active] = prev; state.current = prev; state.editing = state.editing && true;
+  saveTabs(); renderCurrent(); emit('current');
+}
+export function redo() {
+  const s = stackAt(state.active);
+  if (!s?.future.length) { toast('Nothing to redo'); return; }
+  s.past.push(state.tabs[state.active]);
+  const next = s.future.pop();
+  state.tabs[state.active] = next; state.current = next;
+  saveTabs(); renderCurrent(); emit('current');
+}
+
 /**
  * Show a character. By default it replaces the active tab; newTab opens it in a new tab
  * (or switches to the tab already showing that saved character).
@@ -125,15 +168,18 @@ export function setCurrent(ch, { fresh: isFresh = false, editing = false, newTab
   if (newTab || !state.tabs.length) {
     const existing = ch.rosterId ? state.tabs.findIndex((t) => t.rosterId === ch.rosterId) : -1;
     if (existing >= 0) {
+      if (state.tabs[existing] !== ch) remember(existing, state.tabs[existing]);
       state.tabs[existing] = ch;
       state.active = existing;
     } else {
-      if (state.tabs.length >= MAX_TABS) state.tabs.shift();
+      stackAt(state.tabs.length - 1);
+      if (state.tabs.length >= MAX_TABS) { state.tabs.shift(); undoStacks.shift(); }
       state.tabs.push(ch);
+      undoStacks[state.tabs.length - 1] = { past: [], future: [] };
       state.active = state.tabs.length - 1;
     }
   } else {
-    state.tabs[state.active] = ch;
+    putActive(ch);
   }
   state.current = ch;
   state.editing = editing;
@@ -155,6 +201,7 @@ function switchTab(i) {
 
 function closeTab(i) {
   state.tabs.splice(i, 1);
+  undoStacks.splice(i, 1);
   if (!state.tabs.length) { state.active = 0; state.current = null; state.editing = false; saveTabs(); renderCurrent(); emit('current'); return; }
   if (i < state.active || state.active >= state.tabs.length) state.active -= 1;
   state.active = Math.max(0, Math.min(state.active, state.tabs.length - 1));
@@ -427,8 +474,11 @@ function saveCurrent(ch) {
   const world = worldOf(ch);
   const copy = { ...ch };
   if (world) copy.folder = world; else delete copy.folder;
+  const before = historyKey(copy);
   const saved = upsert(copy);
-  state.current = saved; state.tabs[state.active] = saved; saveTabs(); renderCurrent();
+  moveHistory(before, historyKey(saved));
+  addVersion(saved, was ? 'Updated in the roster' : 'Saved to the roster', R);
+  putActive(saved); saveTabs(); renderCurrent();
   toast(`${was ? 'Updated' : 'Saved'} in ${world || 'The Multiverse Hub'}`);
 }
 
@@ -438,10 +488,10 @@ function pickWorld(ch, world) {
   if (inRosterNow(ch)) {
     if (!world) delete c.folder;
     const saved = upsert(c);
-    state.current = saved; state.tabs[state.active] = saved;
+    putActive(saved);
     toast(`Moved to ${world || 'The Multiverse Hub only'}`);
   } else {
-    state.current = c; state.tabs[state.active] = c;
+    putActive(c);
   }
   saveTabs(); renderCurrent();
 }
@@ -460,7 +510,7 @@ function saveBar(ch) {
 
 /** Replace the open character with a changed copy (unsaved, like any edit). */
 function commit(c) {
-  state.current = c; state.tabs[state.active] = c; saveTabs(); fresh = false; renderCurrent(); emit('current');
+  putActive(c); saveTabs(); fresh = false; renderCurrent(); emit('current');
 }
 
 /**
@@ -624,6 +674,50 @@ function companionBanner(ch) {
     h('button', { class: 'btn sm primary', type: 'button', onClick: back }, `Save back to ${ch.companionOf.ownerName}`));
 }
 
+/** Print every form and companion, each a full sheet on its own pages. */
+function printDossier(ch) {
+  document.getElementById('print-dossier')?.remove();
+  const host = h('div', { id: 'print-dossier' });
+  for (const e of dossierEntries(ch, R)) {
+    host.append(h('section', { class: 'dossier-page' },
+      h('div', { class: 'dossier-title' }, h('b', null, e.title), e.note ? h('span', null, ` · ${e.note}`) : null),
+      renderFile(e.ch, R, { editing: false }).el));
+  }
+  if (ch.bio) host.append(h('section', { class: 'dossier-page' }, h('div', { class: 'dossier-title' }, h('b', null, 'Bio')), renderBio(ch, R, { change: () => {}, onOpenPerson: () => {} })));
+  document.body.append(host);
+  document.body.classList.add('printing-dossier');
+  const done = () => { document.body.classList.remove('printing-dossier'); host.remove(); window.removeEventListener('afterprint', done); };
+  window.addEventListener('afterprint', done);
+  setTimeout(() => window.print(), 300); // let portraits load
+}
+
+async function historyDialog() {
+  const ch = state.current;
+  if (!ch) return;
+  const label = h('input', { type: 'text', id: 'version-label', placeholder: 'e.g. Before the respec, Session 4' });
+  const list = h('div', { class: 'versions' });
+  const draw = () => {
+    list.replaceChildren();
+    const vs = versionsOf(ch);
+    if (!vs.length) { list.append(h('p', { class: 'hint', style: { margin: 0 } }, 'No versions yet. One is kept every time you save to the roster, or save one here.')); return; }
+    for (const v of vs) {
+      list.append(h('div', { class: 'version-row' },
+        h('div', { class: 'version-what' }, h('b', null, v.label), h('small', null, `${new Date(v.at).toLocaleString()} · ${v.ch.identity?.codename || 'Unnamed'} · PL ${v.ch.pl}${v.pp != null ? ` · ${v.pp} pp` : ''}`)),
+        h('button', { class: 'btn sm', type: 'button', onClick: () => { putActive(restoreVersion(state.current, v)); saveTabs(); fresh = false; renderCurrent(); emit('current'); document.getElementById('dialog')?.close(); toast(`Restored "${v.label}". Ctrl+Z puts it back.`); } }, 'Restore'),
+        h('button', { class: 'x', type: 'button', 'aria-label': `Delete version ${v.label}`, onClick: () => { removeVersion(ch, v.id); draw(); } }, '✕')));
+    }
+  };
+  draw();
+  await openDialog({
+    title: `History of ${ch.identity?.codename || 'this character'}`,
+    body: [
+      h('div', { class: 'seed-row' }, label, h('button', { class: 'btn', type: 'button', onClick: () => { addVersion(state.current, label.value.trim() || 'Saved by hand', R); label.value = ''; draw(); toast('Version saved'); } }, 'Save this version')),
+      h('p', { class: 'hint', style: { margin: '6px 0 10px' } }, 'Versions stay in this browser (and go with sync and backups). Restoring replaces what\'s on the Forge; Ctrl+Z undoes it.'),
+      list,
+    ],
+  });
+}
+
 function drawCurrent(ch) {
   fileHost.append(tabStrip());
   const banner = companionBanner(ch);
@@ -634,6 +728,10 @@ function drawCurrent(ch) {
   const toolbar = h('div', { class: 'toolbar' },
     h('button', { class: 'btn primary', type: 'button', title: `Saves to ${worldOf(ch) || 'The Multiverse Hub'} (change it at the bottom of the sheet)`, onClick: () => saveCurrent(ch) }, inRoster ? 'Update in roster' : 'Save to roster'),
     h('button', { class: 'btn', type: 'button', 'aria-pressed': String(state.editing), onClick: () => toggleEditing() }, state.editing ? 'Done editing' : 'Edit'),
+    h('span', { class: 'undo-group' },
+      h('button', { class: 'btn ghost icon', type: 'button', id: 'undo', title: 'Undo (Ctrl+Z)', 'aria-label': 'Undo', disabled: !canUndo(), onClick: undo }, '↶'),
+      h('button', { class: 'btn ghost icon', type: 'button', id: 'redo', title: 'Redo (Ctrl+Y)', 'aria-label': 'Redo', disabled: !canRedo(), onClick: redo }, '↷'),
+      h('button', { class: 'btn ghost', type: 'button', id: 'history', title: 'Saved versions of this character', onClick: () => historyDialog() }, '🕘 History')),
     h('button', { class: 'btn ghost', type: 'button', title: 'Keep the build, roll a new name and story', onClick: () => {
       const c = rerollIdentity(R, ch, randomSeed()); c.rosterId = ch.rosterId; setCurrent(c, { fresh: true });
     } }, 'New name'),
@@ -660,14 +758,26 @@ function drawCurrent(ch) {
     menu('Export', [
       { label: 'Excel character sheet (.xlsx)', hint: 'Your classic sheet, filled in. DCUGen can import it back, too', run: () => exportExcel(ch, R) },
       { label: 'Character file (.json)', hint: 'Small file to send to your GM or players; they Import it', run: () => exportJson(ch) },
-      { label: 'Stat block (.txt)', hint: 'Book-style text', run: () => exportText(ch, R) },
-      { label: 'Print or save as PDF', hint: 'Uses your browser\'s print dialog', run: () => window.print() },
+      { label: 'Stat block (.txt)', hint: hasForms(ch) || companionsOf(ch).length ? 'Book-style text, every form and companion' : 'Book-style text', run: () => exportText(ch, R) },
+      ...(hasForms(ch) || companionsOf(ch).length ? [{ label: 'Excel workbook: every form and companion', hint: 'A summary page plus a sheet for each', run: () => exportDossierExcel(ch, R) }] : []),
+      { label: 'Print or save as PDF', hint: 'This sheet, from your browser\'s print dialog', run: () => window.print() },
+      { label: 'Print the full dossier', hint: 'Every form and companion, each on its own pages, plus the bio', run: () => printDossier(ch) },
     ]),
     h('button', { class: 'btn', type: 'button', title: 'Add this character to the Battle Room', onClick: () => api.throwIn?.(ch) }, '⚔ Throw in Battle Room'),
     h('button', { class: 'btn', type: 'button', title: 'This character\'s page in the World wiki', onClick: () => api.openWorld?.(ch) }, '🌐 World'),
     h('button', { class: 'btn', type: 'button', onClick: () => share(ch) }, '🔑 Share / Key'));
-  const onChange = (c) => { state.current = c; state.tabs[state.active] = c; saveTabs(); fresh = false; renderCurrent(); };
+  const onChange = (c) => { putActive(c); saveTabs(); fresh = false; renderCurrent(); };
   fileHost.append(viewSwitch(ch));
+  root.querySelector('.forge')?.classList.toggle('playing', sheetView === 'play');
+  if (sheetView === 'play') {
+    fileHost.append(h('div', { class: 'toolbar play-toolbar' }, toolbar.querySelector('#undo')?.parentElement || null));
+    fileHost.append(renderPlay(ch, R, {
+      change: (fn) => { const c = JSON.parse(JSON.stringify(ch)); fn(c); onChange(c); },
+      openCompanion: (i) => { const comp = companionsOf(ch)[i]; if (comp) setCurrent({ ...JSON.parse(JSON.stringify(comp)), companionOf: { ownerId: ch.id, ownerName: ch.identity?.codename || 'their hero', index: i } }, { newTab: true }); },
+    }));
+    fresh = false;
+    return;
+  }
   if (sheetView === 'bio') {
     fileHost.append(renderBio(ch, R, { toolbar, change: (fn) => { const c = JSON.parse(JSON.stringify(ch)); fn(c); onChange(c); }, onOpenPerson: (p, kind) => openPerson(ch, p, kind) }));
     fileHost.append(saveBar(ch));
@@ -717,8 +827,9 @@ let sheetView = (() => { try { return localStorage.getItem('dcugen.sheetview') |
 function viewSwitch(ch) {
   const set = (v) => { sheetView = v; try { localStorage.setItem('dcugen.sheetview', v); } catch { /* ignore */ } renderCurrent(); };
   return h('div', { class: 'view-switch no-print', role: 'group', 'aria-label': 'Show' },
-    h('button', { type: 'button', 'aria-pressed': String(sheetView !== 'bio'), onClick: () => set('sheet') }, 'Character sheet'),
-    h('button', { type: 'button', 'aria-pressed': String(sheetView === 'bio'), onClick: () => set('bio') }, ch.bio ? 'Bio' : 'Bio (roll one)'));
+    h('button', { type: 'button', 'aria-pressed': String(sheetView !== 'bio' && sheetView !== 'play'), onClick: () => set('sheet') }, 'Character sheet'),
+    h('button', { type: 'button', 'aria-pressed': String(sheetView === 'bio'), onClick: () => set('bio') }, ch.bio ? 'Bio' : 'Bio (roll one)'),
+    h('button', { type: 'button', id: 'view-play', 'aria-pressed': String(sheetView === 'play'), title: 'At the table: damage, conditions, hero points, quick rolls', onClick: () => set('play') }, '▶ Play'));
 }
 
 /** Leaving edit mode records any spending in the advancement log (when it's switched on). */
@@ -728,7 +839,7 @@ function toggleEditing() {
     const before = c.advancement.log.length;
     recordChanges(c, R);
     if (c.advancement.log.length !== before) {
-      state.current = c; state.tabs[state.active] = c; saveTabs();
+      putActive(c); saveTabs();
       const e = c.advancement.log[c.advancement.log.length - 1];
       toast(e.points > 0 ? `Logged: ${e.points} point${e.points === 1 ? '' : 's'} spent` : e.points < 0 ? `Logged: ${-e.points} points back` : 'Logged the change');
     }

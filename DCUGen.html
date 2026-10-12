@@ -1691,6 +1691,66 @@ body.eb-printing .eb-wrap { max-height: none; overflow: visible; border-width: 4
 .comp-sheet { margin-top: 10px; }
 .comp-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 10px; padding: 8px 12px; border: 1px solid var(--blue); border-radius: 8px; background: var(--surface); }
 .comp-banner span { flex: 1 1 260px; }
+.sync-btn.warn { color: var(--accent); }
+
+/* ---- undo / history ---- */
+.undo-group { display: inline-flex; gap: 2px; }
+.btn.icon { min-width: 34px; padding-left: 8px; padding-right: 8px; font-size: 16px; }
+.versions { display: grid; gap: 6px; max-height: 50vh; overflow: auto; }
+.version-row { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; }
+.version-what { flex: 1; min-width: 0; display: grid; }
+.version-what small { color: var(--ink-3); }
+
+/* ---- Play view ---- */
+.play { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start; }
+.play-card { padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); min-width: 0; }
+.play-card h3 { margin: 0 0 8px; display: flex; gap: 8px; align-items: center; }
+.play-status { grid-column: 1 / -1; display: grid; gap: 10px; }
+.play-row { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+.play-hp { display: flex; align-items: center; gap: 8px; }
+.play-hp b { font-size: 28px; min-width: 1.4em; text-align: center; }
+.play .label { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); font-weight: 700; }
+.play-seg { width: 100%; max-width: 520px; }
+.play-seg.small { max-width: 420px; flex: 1; }
+.play-hit-row label { display: inline-flex; align-items: center; gap: 6px; }
+.play-hit { width: 76px; }
+.play-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.play-tile { display: grid; gap: 2px; padding: 10px 6px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2); color: var(--ink); font: inherit; cursor: pointer; text-align: center; }
+.play-tile b { font-size: 24px; }
+.play-tile small { color: var(--ink-3); font-size: 11px; }
+.play-tile:active { transform: scale(.97); }
+.play-list { display: grid; gap: 6px; }
+.play-line { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2); color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+div.play-line { grid-template-columns: 1fr auto auto; cursor: default; }
+.play-line small { grid-column: 1 / -1; color: var(--ink-3); }
+div.play-line small { grid-column: 1; grid-row: 2; }
+.play-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.play-chip { cursor: pointer; font: inherit; font-size: 13px; }
+.play-chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink, #fff); border-color: var(--accent); }
+.play-cond-notes { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink-2); }
+.play-tracker > b { display: block; margin-top: 6px; }
+.play-log { margin: 0; padding-left: 18px; font-size: 13px; display: grid; gap: 4px; }
+.chip.warn { background: var(--accent); color: #fff; }
+@media (max-width: 560px) { .play { grid-template-columns: 1fr; } .play-tiles { grid-template-columns: repeat(2, 1fr); } }
+/* At the table on a phone, the roll options get out of the way. */
+@media (max-width: 900px) { .forge.playing > .rail { display: none; } }
+
+/* ---- full dossier print ---- */
+#print-dossier { display: none; }
+@media print {
+  body.printing-dossier .app { display: none !important; }
+  body.printing-dossier #print-dossier { display: block; }
+  .dossier-page { break-after: page; }
+  .dossier-page:last-child { break-after: auto; }
+  .dossier-title { font: 700 14px/1.3 var(--font-label); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 6px; }
+  #print-dossier .no-print, #print-dossier .pool-add, #print-dossier .stepper { display: none !important; }
+}
+
+/* ---- house rules ---- */
+.house-panel { margin: 0 0 14px; }
+.house-panel summary { display: flex; gap: 10px; align-items: center; cursor: pointer; }
+.house-panel .field small { display: block; margin-top: 4px; }
+.issues .src { color: var(--ink-3); font-size: 12px; }
 
 </style>
 </head>
@@ -1734,9 +1794,139 @@ body.eb-printing .eb-wrap { max-height: none; overflow: visible; border-width: 4
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <dialog class="dialog" id="dialog"></dialog>
 </div>
+<script>
+// Storage that doesn't fill up. Runs before the app (a plain script, not a module).
+//
+// The app reads and writes localStorage everywhere, synchronously. Browsers cap localStorage at about
+// 5 MB, and saved portraits fill that fast (then saves fail and work is lost). This puts localStorage on
+// top of IndexedDB, which holds hundreds of MB: reads come from memory, every write goes to IndexedDB
+// (batched), and is mirrored to the real localStorage too whenever it still fits, so nothing changes
+// for code that uses localStorage, older versions of the app, or the desktop app's vault mirror.
+// The built app waits for window.__dcugenStorageReady before it starts.
+(() => {
+  let real;
+  try { real = window.localStorage; } catch { real = null; }
+  if (!real || !window.indexedDB || !window.Storage) { window.__dcugenStorageReady = Promise.resolve(); return; }
+  const proto = Storage.prototype;
+  const orig = {
+    get: proto.getItem, set: proto.setItem, remove: proto.removeItem, key: proto.key, clear: proto.clear,
+    length: Object.getOwnPropertyDescriptor(proto, 'length').get,
+  };
+  const map = new Map();
+  try { for (let i = 0; i < orig.length.call(real); i++) { const k = orig.key.call(real, i); if (k != null) map.set(k, orig.get.call(real, k)); } } catch { /* blocked */ }
+
+  let db = null;
+  let failed = false;
+  const dirty = new Map();
+  let timer = null;
+  const open = () => new Promise((resolve, reject) => {
+    const r = indexedDB.open('dcugen', 2);
+    r.onupgradeneeded = () => {
+      if (!r.result.objectStoreNames.contains('kv')) r.result.createObjectStore('kv');
+      if (!r.result.objectStoreNames.contains('handles')) r.result.createObjectStore('handles');
+    };
+    r.onsuccess = () => resolve(r.result);
+    r.onerror = () => reject(r.error);
+    r.onblocked = () => reject(new Error('blocked'));
+  });
+  const flush = () => {
+    if (timer) { clearTimeout(timer); timer = null; }
+    if (!db || !dirty.size) return;
+    try {
+      const tx = db.transaction('kv', 'readwrite');
+      const st = tx.objectStore('kv');
+      for (const [k, v] of dirty) { if (v === null) st.delete(k); else st.put(v, k); }
+      dirty.clear();
+    } catch { /* closing */ }
+  };
+  const schedule = () => { if (!timer) timer = setTimeout(flush, 200); };
+
+  proto.getItem = function getItem(k) {
+    if (this !== real) return orig.get.call(this, k);
+    k = String(k);
+    return map.has(k) ? map.get(k) : null;
+  };
+  proto.setItem = function setItem(k, v) {
+    if (this !== real) return orig.set.call(this, k, v);
+    k = String(k); v = String(v);
+    let mirrored = true;
+    try { orig.set.call(real, k, v); } catch (e) {
+      mirrored = false;
+      // Too big for localStorage: drop the stale copy there so it can't come back, keep it in IndexedDB.
+      try { orig.remove.call(real, k); } catch { /* ignore */ }
+      if (failed) throw e; // no IndexedDB either: behave like before (callers handle a full store)
+    }
+    map.set(k, v);
+    dirty.set(k, v);
+    schedule();
+    return mirrored ? undefined : undefined;
+  };
+  proto.removeItem = function removeItem(k) {
+    if (this !== real) return orig.remove.call(this, k);
+    k = String(k);
+    map.delete(k); dirty.set(k, null); schedule();
+    try { orig.remove.call(real, k); } catch { /* ignore */ }
+  };
+  proto.key = function key(i) {
+    if (this !== real) return orig.key.call(this, i);
+    return [...map.keys()][i] ?? null;
+  };
+  proto.clear = function clear() {
+    if (this !== real) return orig.clear.call(this);
+    for (const k of map.keys()) dirty.set(k, null);
+    map.clear(); schedule();
+    try { orig.clear.call(real); } catch { /* ignore */ }
+  };
+  Object.defineProperty(proto, 'length', { configurable: true, get() { return this === real ? map.size : orig.length.call(this); } });
+
+  // Save before the page goes away.
+  addEventListener('pagehide', flush);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flush(); });
+
+  const hydrate = open().then((d) => new Promise((resolve) => {
+    db = d;
+    const tx = db.transaction('kv', 'readonly');
+    const req = tx.objectStore('kv').openCursor();
+    const fromIdb = new Map();
+    req.onsuccess = () => { const c = req.result; if (c) { fromIdb.set(String(c.key), c.value); c.continue(); } else resolve(fromIdb); };
+    req.onerror = () => resolve(fromIdb);
+  })).then((fromIdb) => {
+    // localStorage holds everything that fit, written synchronously, so it is never older than IndexedDB.
+    // What is only in IndexedDB is what didn't fit there: take it.
+    for (const [k, v] of fromIdb) if (!map.has(k)) map.set(k, v);
+    // First run (or anything new in localStorage): copy it all into IndexedDB.
+    for (const [k, v] of map) if (fromIdb.get(k) !== v) dirty.set(k, v);
+    flush();
+    try { navigator.storage?.persist?.(); } catch { /* best effort: ask the browser not to evict */ }
+  }).catch(() => { failed = true; });
+
+  const timeout = new Promise((r) => setTimeout(r, 2500));
+  window.__dcugenStorageReady = Promise.race([hydrate, timeout]);
+  window.__dcugenStorage = {
+    flush,
+    get db() { return db; },
+    get backend() { return db ? 'IndexedDB' : 'localStorage'; },
+    /** Bytes used by the app's data (rough: string lengths × 2). */
+    bytes() { let n = 0; for (const [k, v] of map) if (k.startsWith('dcugen.')) n += (k.length + (v ? v.length : 0)) * 2; return n; },
+    handle(name, value) {
+      if (!db) return Promise.resolve(null);
+      return new Promise((resolve) => {
+        try {
+          const tx = db.transaction('handles', value === undefined ? 'readonly' : 'readwrite');
+          const st = tx.objectStore('handles');
+          const req = value === undefined ? st.get(name) : value === null ? st.delete(name) : st.put(value, name);
+          req.onsuccess = () => resolve(value === undefined ? req.result || null : true);
+          req.onerror = () => resolve(null);
+        } catch { resolve(null); }
+      });
+    },
+  };
+})();
+
+</script>
 <script>window.DCUGEN_SHEET_TEMPLATE = "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";</script>
 <script>
-(() => {
+(window.__dcugenStorageReady || Promise.resolve()).then(() => {
 "use strict";
 const __mods = {};
 __mods["src/generated/rulesdata.js"] = (() => {
@@ -1833,6 +2023,8 @@ __mods["src/app/store.js"] = (() => {
 
 const ROSTER_KEY = 'dcugen.roster.v1';
 const PREFS_KEY = 'dcugen.prefs.v1';
+// Deleted characters, so a sync or a merged backup doesn't bring them back: [{ rosterId, at }].
+const DELETED_KEY = 'dcugen.roster.deleted.v1';
 
 function readJson(key, fallback) {
   try {
@@ -1893,6 +2085,8 @@ function upsert(ch) {
   copy.savedAt = new Date().toISOString();
   const i = state.roster.findIndex((x) => x.rosterId === copy.rosterId);
   if (i >= 0) state.roster[i] = copy; else state.roster.unshift(copy);
+  const tombs = readJson(DELETED_KEY, []);
+  if (tombs.some((t) => t.rosterId === copy.rosterId)) writeJson(DELETED_KEY, tombs.filter((t) => t.rosterId !== copy.rosterId));
   saveRoster();
   state.lastUpsert = copy;
   emit('roster-upsert');
@@ -1901,12 +2095,13 @@ function upsert(ch) {
 
 function removeFromRoster(rosterId) {
   state.roster = state.roster.filter((x) => x.rosterId !== rosterId);
+  writeJson(DELETED_KEY, [...readJson(DELETED_KEY, []).filter((t) => t.rosterId !== rosterId), { rosterId, at: new Date().toISOString() }].slice(-500));
   saveRoster();
   state.lastRemoved = rosterId;
   emit('roster-remove');
 }
 
-return { state, onChange, emit, savePrefs, saveRoster, newId, upsert, removeFromRoster };
+return { DELETED_KEY, state, onChange, emit, savePrefs, saveRoster, newId, upsert, removeFromRoster };
 })();
 
 __mods["src/app/dom.js"] = (() => {
@@ -2219,6 +2414,32 @@ function costBreakdown(ch, R) {
 return { modifierValue, baseCostPerRank, rangeDelta, effectCost, powerCost, alternateOwnCost, primaryOwnCost, deviceCost, equipmentPoints, equipmentRanksNeeded, skillRanksTotal, costBreakdown };
 })();
 
+__mods["src/engine/house.js"] = (() => {
+// House rules: how strict the app is, set per table (Rules > House rules, kept in preferences).
+//
+//   plLimits      'error' (by the book) | 'warning' (shown, not counted against legality) | 'off'
+//   budget        'error' | 'warning' | 'off'   (spending more power points than the PL allows)
+//   weaken        'margin'  (lose as many power points as the check missed by; the app's reading of DCA 122)
+//                 'degrees' (lose 1 point per degree of failure)
+//   poolWarnings  true | false (warn when placed pool points push a defense pair over the limit)
+
+const HOUSE_DEFAULTS = Object.freeze({ plLimits: 'error', budget: 'error', weaken: 'margin', poolWarnings: true });
+let house = { ...HOUSE_DEFAULTS };
+
+function setHouseRules(h) { house = { ...HOUSE_DEFAULTS, ...(h || {}) }; }
+function houseRules() { return house; }
+function isByTheBook() { return Object.entries(HOUSE_DEFAULTS).every(([k, v]) => house[k] === v); }
+
+/** Power points a Weaken drains when the target missed by `missedBy`. */
+function weakenPoints(missedBy) {
+  const m = Math.max(0, Math.floor(missedBy));
+  if (!m) return 0;
+  return house.weaken === 'degrees' ? 1 + Math.floor((m - 1) / 5) : m;
+}
+
+return { HOUSE_DEFAULTS, setHouseRules, houseRules, isByTheBook, weakenPoints };
+})();
+
 __mods["src/engine/pools.js"] = (() => {
 // Pools: powers that are not always on. A drain that steals points, a boost, a "redistribute my stats"
 // power: the character holds up to N power points and places them during play, on any ability, defense,
@@ -2234,6 +2455,7 @@ __mods["src/engine/pools.js"] = (() => {
 
 const { ABILITIES, BUYABLE_DEFENSES, traitKind } = __mods["src/engine/rules.js"];
 const { effectCost } = __mods["src/engine/costs.js"];
+const { weakenPoints } = __mods["src/engine/house.js"];
 /** Every pool power with where it lives (path as the sheet uses it). */
 function poolPowers(ch) {
   const out = [];
@@ -2329,7 +2551,7 @@ function trimPool(ch, p, R) {
  */
 function drain(weaken, missedBy) {
   const room = Math.max(0, weaken.rank - (weaken.drained || 0));
-  const took = Math.max(0, Math.min(room, Math.floor(missedBy)));
+  const took = Math.max(0, Math.min(room, weakenPoints(missedBy)));
   weaken.drained = (weaken.drained || 0) + took;
   return took;
 }
@@ -2832,8 +3054,21 @@ const { costBreakdown, alternateOwnCost, primaryOwnCost, equipmentPoints } = __m
 const { EP_PER_EQUIPMENT_RANK } = __mods["src/engine/rules.js"];
 const { powerTags } = __mods["src/engine/powersmith.js"];
 const { withoutPlaced, hasPlaced, poolPowers, poolSpent, poolAvailable, fmtPoints } = __mods["src/engine/pools.js"];
-function issue(rule, message, severity = 'error') {
-  return { rule, message, severity };
+const { houseRules } = __mods["src/engine/house.js"];
+function issue(rule, message, severity = 'error', extra = {}) {
+  return { rule, message, severity, ...extra };
+}
+
+/** Apply the table's house rules to the list of issues. */
+function house(out) {
+  const hr = houseRules();
+  const soften = (i, mode) => (mode === 'off' ? null : mode === 'warning' && i.severity === 'error' ? { ...i, severity: 'warning', message: `${i.message} (house rule: allowed)` } : i);
+  return out.map((i) => {
+    if (i.pl) return soften(i, hr.plLimits);
+    if (i.rule === 'budget' && i.severity === 'error') return soften(i, hr.budget);
+    if (i.rule === 'pool' && i.severity === 'warning' && !hr.poolWarnings) return null;
+    return i;
+  }).filter(Boolean);
 }
 
 function checkLimits(ch, R) {
@@ -2858,10 +3093,10 @@ function checkLimits(ch, R) {
   for (const atk of d.attacks) {
     if (atk.roll) {
       if (atk.bonus + atk.rank > 2 * pl) {
-        out.push(issue('attack', `${atk.name}: attack +${atk.bonus} plus rank ${atk.rank} is ${atk.bonus + atk.rank}; the limit is ${2 * pl}.`));
+        out.push(issue('attack', `${atk.name}: attack +${atk.bonus} plus rank ${atk.rank} is ${atk.bonus + atk.rank}; the limit is ${2 * pl}.`, 'error', { pl: true }));
       }
     } else if (atk.rank > pl) {
-      out.push(issue('attack', `${atk.name}: ${atk.kind} effects have no attack check, so rank ${atk.rank} may not exceed PL ${pl}.`));
+      out.push(issue('attack', `${atk.name}: ${atk.kind} effects have no attack check, so rank ${atk.rank} may not exceed PL ${pl}.`, 'error', { pl: true }));
     }
   }
 
@@ -2871,7 +3106,7 @@ function checkLimits(ch, R) {
   for (const [a, b] of pairs) {
     if (def.immune?.[a] || def.immune?.[b]) continue; // an immune defense has no rank to pair
     if (def[a] + def[b] > 2 * pl) {
-      out.push(issue('defense', `${a} ${def[a]} + ${b} ${def[b]} = ${def[a] + def[b]}; the limit is ${2 * pl}.`));
+      out.push(issue('defense', `${a} ${def[a]} + ${b} ${def[b]} = ${def[a] + def[b]}; the limit is ${2 * pl}.`, 'error', { pl: true }));
     }
   }
 
@@ -2883,12 +3118,12 @@ function checkLimits(ch, R) {
 
   // Skills (trained and untrained)
   for (const s of d.skills) {
-    if (s.bonus > pl + 10) out.push(issue('skill', `${s.name}${s.spec ? ` (${s.spec})` : ''} +${s.bonus} exceeds PL + 10 (${pl + 10}).`));
+    if (s.bonus > pl + 10) out.push(issue('skill', `${s.name}${s.spec ? ` (${s.spec})` : ''} +${s.bonus} exceeds PL + 10 (${pl + 10}).`, 'error', { pl: true }));
   }
   for (const a of ABILITIES) {
     if (a === 'Stamina') continue; // no skills use Stamina
     const v = d.abilities[a];
-    if (v != null && v > pl + 10) out.push(issue('skill', `${a} ${v} makes untrained skills exceed PL + 10 (${pl + 10}).`));
+    if (v != null && v > pl + 10) out.push(issue('skill', `${a} ${v} makes untrained skills exceed PL + 10 (${pl + 10}).`, 'error', { pl: true }));
   }
 
   // Advantages
@@ -2896,9 +3131,9 @@ function checkLimits(ch, R) {
     const def = R.advantage(adv.name);
     if (!def) { out.push(issue('data', `Unknown advantage "${adv.name}".`)); continue; }
     const rank = adv.rank || 1;
-    if (!def.ranked && rank > 1) out.push(issue('advantage', `${adv.name} is not a ranked advantage.`));
+    if (!def.ranked && rank > 1) out.push(issue('advantage', `${adv.name} is not a ranked advantage.`, 'error', { source: def.source }));
     const max = def.max_rank === 'half_pl' ? Math.floor(pl / 2) : def.max_rank;
-    if (max != null && rank > max) out.push(issue('advantage', `${adv.name} ${rank} exceeds its maximum of ${max}.`));
+    if (max != null && rank > max) out.push(issue('advantage', `${adv.name} ${rank} exceeds its maximum of ${max}.`, 'error', { source: def.source }));
   }
   const eqRanks = (ch.advantages || []).filter((a) => a.name === 'Equipment').reduce((s, a) => s + (a.rank || 1), 0);
   const ep = equipmentPoints(ch);
@@ -2911,7 +3146,7 @@ function checkLimits(ch, R) {
     let eff;
     try { eff = R.effect(p.effect); } catch (e) { out.push(issue('data', e.message)); continue; }
     if (eff.max_rank != null && p.rank > eff.max_rank) {
-      out.push(issue('power', `${p.name}: ${eff.name} has a maximum rank of ${eff.max_rank}.`));
+      out.push(issue('power', `${p.name}: ${eff.name} has a maximum rank of ${eff.max_rank}.`, 'error', { source: eff.source }));
     }
     if (!eff.fixed_cost && !(p.rank > 0)) out.push(issue('power', `${p.name} needs at least rank 1.`));
     const tags = powerTags(p, R);
@@ -2920,10 +3155,10 @@ function checkLimits(ch, R) {
         let mdef;
         try { mdef = R.modifier(kind, m.name, p.effect); } catch (e) { out.push(issue('data', e.message)); continue; }
         for (const req of mdef.requires || []) {
-          if (!tags.has(req)) out.push(issue('power', `${p.name}: ${m.name} needs an effect that is "${req}".`, 'warning'));
+          if (!tags.has(req)) out.push(issue('power', `${p.name}: ${m.name} needs an effect that is "${req}".`, 'warning', { source: mdef.source }));
         }
         if (mdef.max_steps != null && (m.steps ?? 1) > mdef.max_steps) {
-          out.push(issue('power', `${p.name}: ${m.name} can only be applied ${mdef.max_steps} time(s).`));
+          out.push(issue('power', `${p.name}: ${m.name} can only be applied ${mdef.max_steps} time(s).`, 'error', { source: mdef.source }));
         }
       }
     }
@@ -2945,7 +3180,7 @@ function checkLimits(ch, R) {
   } else if (cost.total > cost.budget) out.push(issue('budget', ch.advancement ? `Spent ${cost.total} power points; starting points plus GM awards give ${cost.budget}.` : `Spent ${cost.total} power points; PL ${pl} allows ${cost.budget}.`));
   else if (cost.total < cost.budget) out.push(issue('budget', `${cost.budget - cost.total} power points unspent.`, 'info'));
 
-  return out;
+  return house(out);
 }
 
 /** Supporting characters, minions and creatures: built as stat blocks, so the point budget is advisory. */
@@ -3272,6 +3507,7 @@ const { costBreakdown, powerCost, deviceCost, effectCost, primaryOwnCost } = __m
 const { deriveAll } = __mods["src/engine/derive.js"];
 const { checkLimits } = __mods["src/engine/limits.js"];
 const { poolCapacity } = __mods["src/engine/pools.js"];
+const { houseRules } = __mods["src/engine/house.js"];
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
@@ -3335,7 +3571,7 @@ function explainPower(p, R) {
       parts.push(`Imposes conditions: the target resists with ${resist || 'Fortitude or Will'} against DC ${10 + rank}${conditions ? `. Each failure degree is worse: ${conditions}` : ''}. The target repeats the check at the end of each turn to shake it off.`);
       break;
     case 'Weaken':
-      parts.push(`Drains a trait${p.detail ? ` (${p.detail.split(';')[0]})` : ''}: the target resists against DC ${10 + rank} and loses as many power points of it as the check missed by (${rank} at most), getting them back over time. An ability loses a rank per 2 points, a defense a rank per point.`);
+      parts.push(`Drains a trait${p.detail ? ` (${p.detail.split(';')[0]})` : ''}: the target resists against DC ${10 + rank} and loses ${houseRules().weaken === 'degrees' ? 'a power point of it per degree of failure' : 'as many power points of it as the check missed by'} (${rank} at most), getting them back over time. An ability loses a rank per 2 points, a defense a rank per point.`);
       break;
     case 'Nullify':
       parts.push(`Shuts down powers${p.detail ? ` (${p.detail})` : ''}: make an opposed check of Nullify ${rank} against the target's power rank or Will; if you win, the effect turns off.`);
@@ -4597,6 +4833,7 @@ const { ABILITIES, BUYABLE_DEFENSES } = __mods["src/engine/rules.js"];
 const { powerCost, primaryOwnCost } = __mods["src/engine/costs.js"];
 const { gearCatalog, gearToEquipment, gearToDevice } = __mods["src/engine/gear.js"];
 const { portraitBlock } = __mods["src/app/portrait.js"];
+const { houseRules } = __mods["src/engine/house.js"];
 const { poolTargets, targetLabel, poolPowers, poolCapacity, poolSpent, poolAvailable, poolFeeder, costPerRank, drain, loseDrained, settlePools, fmtPoints } = __mods["src/engine/pools.js"];
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const clone = (x) => JSON.parse(JSON.stringify(x));
@@ -4681,7 +4918,7 @@ function drainTracker(ch, p, path, change, R) {
       h('b', null, '🩸 Drain'),
       h('span', { class: 'pool-meter', role: 'img', 'aria-label': `${held} of ${p.rank} points drained` }, Array.from({ length: Math.min(p.rank, 40) }, (_, i) => h('i', { class: i < held ? 'on' : '' }))),
       h('span', { class: 'num pool-count' }, `${held}/${p.rank} pp held`)),
-    h('p', { class: 'hint pool-feed' }, `Target resists with ${resist} against DC ${10 + p.rank}. It loses as many power points as it missed by, ${p.rank} at most in all, and gets them back over time.${fills.length ? ` What you hold fills ${fills.join(' and ')}.` : ' Tick "Pool" on a power in the Power Lab and pick this one under "Filled by" to spend what you steal.'}`),
+    h('p', { class: 'hint pool-feed' }, `Target resists with ${resist} against DC ${10 + p.rank}. It loses ${houseRules().weaken === 'degrees' ? 'a power point per degree of failure (house rule)' : 'as many power points as it missed by'}, ${p.rank} at most in all, and gets them back over time.${fills.length ? ` What you hold fills ${fills.join(' and ')}.` : ' Tick "Pool" on a power in the Power Lab and pick this one under "Filled by" to spend what you steal.'}`),
     h('div', { class: 'pool-add no-print' },
       h('label', { class: 'drain-label' }, 'Missed by', missed),
       h('button', { class: 'btn sm', type: 'button', onClick: go, disabled: held >= p.rank }, 'Drain'),
@@ -5014,7 +5251,7 @@ function renderFile(ch, R, opts = {}) {
     h('div', { class: 'points-bar', role: 'img', 'aria-label': parts.map(([n, v]) => `${n} ${v}`).join(', ') },
       parts.map(([, v, col]) => h('i', { style: { width: `${(Math.max(0, v) / denom) * 100}%`, background: col } }))),
     h('div', { class: 'legend' }, parts.map(([n, v, col]) => h('span', { style: { '--c': col } }, `${n} ${v}`))),
-    s.issues.length ? h('ul', { class: 'issues' }, s.issues.map((i) => h('li', { class: i.severity }, i.message))) : null);
+    s.issues.length ? h('ul', { class: 'issues' }, s.issues.map((i) => h('li', { class: i.severity }, i.message, i.source ? h('span', { class: 'src' }, ` (${i.source})`) : null))) : null);
 
   const file = h('article', { class: `file ${opts.fresh ? 'fresh' : ''}` },
     head,
@@ -5050,7 +5287,7 @@ function setPower(ch, path, p) {
 }
 
 
-return { ABILITIES, whatItDoes, renderFile, getPower, removeAt, setPower };
+return { ABILITIES, stepper, poolTracker, drainTracker, whatItDoes, renderFile, getPower, removeAt, setPower };
 })();
 
 __mods["src/app/share.js"] = (() => {
@@ -5778,14 +6015,244 @@ function rosterWorkbook(characters, R) {
 return { unzip, zip, colToNum, numToCol, resizedStyle, setCell, worksheetXml, buildWorkbook, DATA_SHEET, dataSheetRows, readWorkbookCharacters, statBlockRows, templateCells, embedImage, PORTRAIT_SLOT, fillCharacterSheet, rosterWorkbook };
 })();
 
+__mods["src/engine/forms.js"] = (() => {
+// Alternate forms: one character, up to 8 builds (a human identity and a powered one, armor on and off,
+// a werewolf's three shapes...). Each form is a whole build with its own power level, traits, powers,
+// gear, codename and picture, checked on its own. Everything about the person (name, bio, journal,
+// factions, world, roster entry) is shared.
+//
+// The active form lives at the top level of the character, so every part of the app (sheet, limits,
+// Battle Room, exports) works on it unchanged; the others wait in ch.forms[i]. Switching swaps them.
+
+const MAX_FORMS = 8;
+const FORM_FIELDS = ['pl', 'abilities', 'defenses', 'skills', 'advantages', 'powers', 'devices', 'equipment', 'portrait', 'theme'];
+
+const clone = (x) => (x === undefined ? undefined : JSON.parse(JSON.stringify(x)));
+
+const hasForms = (ch) => Array.isArray(ch?.forms) && ch.forms.length > 1;
+const activeForm = (ch) => (hasForms(ch) ? Math.max(0, Math.min(ch.activeForm || 0, ch.forms.length - 1)) : 0);
+
+/** A form's build, stored or live. */
+function formBuild(ch, i) {
+  if (i === activeForm(ch) || !hasForms(ch)) {
+    const out = {};
+    for (const k of FORM_FIELDS) if (ch[k] !== undefined) out[k] = ch[k];
+    return out;
+  }
+  return ch.forms[i];
+}
+
+function snapshot(ch) {
+  const out = {};
+  for (const k of FORM_FIELDS) if (ch[k] !== undefined) out[k] = clone(ch[k]);
+  return out;
+}
+
+function blankBuild(pl) {
+  return {
+    pl,
+    abilities: { Strength: 0, Stamina: 0, Agility: 0, Dexterity: 0, Fighting: 0, Intellect: 0, Awareness: 0, Presence: 0 },
+    defenses: { Dodge: 0, Parry: 0, Fortitude: 0, Will: 0 },
+    skills: [], advantages: [], powers: [], devices: [], equipment: [],
+  };
+}
+
+/** Add a form (a copy of the active one, or a blank build) and return the new character. */
+function addForm(ch, { copy = true, name } = {}) {
+  const c = clone(ch);
+  if (!hasForms(c)) { c.forms = [{ name: 'Form 1', codename: c.identity?.codename || '' }]; c.activeForm = 0; }
+  if (c.forms.length >= MAX_FORMS) throw new Error(`A character can have ${MAX_FORMS} forms at most.`);
+  const n = c.forms.length + 1;
+  const build = copy ? snapshot(c) : blankBuild(c.pl);
+  if (!copy) build.theme = clone(c.theme);
+  c.forms.push({ name: name || `Form ${n}`, codename: c.identity?.codename || '', ...build });
+  return c;
+}
+
+/** Make form i the active one. Returns the new character. */
+function switchForm(ch, i) {
+  if (!hasForms(ch)) return ch;
+  const cur = activeForm(ch);
+  if (i === cur || i < 0 || i >= ch.forms.length) return ch;
+  const c = clone(ch);
+  // put the live build away
+  c.forms[cur] = { name: c.forms[cur].name, codename: c.identity?.codename || c.forms[cur].codename || '', ...snapshot(c) };
+  // bring the other one out
+  const next = c.forms[i];
+  for (const k of FORM_FIELDS) { if (next[k] !== undefined) c[k] = next[k]; else delete c[k]; }
+  if (next.codename) c.identity = { ...c.identity, codename: next.codename };
+  c.forms[i] = { name: next.name, codename: next.codename || '' };
+  c.activeForm = i;
+  return c;
+}
+
+function renameForm(ch, i, name) {
+  const c = clone(ch);
+  if (hasForms(c) && c.forms[i]) c.forms[i].name = String(name || '').trim() || `Form ${i + 1}`;
+  return c;
+}
+
+/** Remove a form that isn't the active one. With one form left, the character has no forms any more. */
+function removeForm(ch, i) {
+  if (!hasForms(ch) || i === activeForm(ch)) return ch;
+  const c = clone(ch);
+  c.forms.splice(i, 1);
+  if (i < c.activeForm) c.activeForm -= 1;
+  if (c.forms.length < 2) { delete c.forms; delete c.activeForm; }
+  return c;
+}
+
+/** Every form as a full character of its own (for exports, stat blocks and checking each build). */
+function formCharacters(ch) {
+  if (!hasForms(ch)) return [ch];
+  return ch.forms.map((f, i) => {
+    if (i === activeForm(ch)) return ch;
+    const c = clone(ch);
+    for (const k of FORM_FIELDS) { if (f[k] !== undefined) c[k] = clone(f[k]); else delete c[k]; }
+    if (f.codename) c.identity = { ...c.identity, codename: f.codename };
+    c.activeForm = i;
+    return c;
+  });
+}
+
+return { MAX_FORMS, FORM_FIELDS, hasForms, activeForm, formBuild, addForm, switchForm, renameForm, removeForm, formCharacters };
+})();
+
+__mods["src/engine/companions.js"] = (() => {
+// Companions: sidekicks, minions, pets and other followers attached to a character, each a full
+// character sheet of its own (ch.companions[i]). They travel with the character: roster, exports, keys.
+//
+//   Sidekick advantage: 5 power points per rank for the sidekick's build (DCA 78)
+//   Minion advantage:  15 power points per rank, and the follower uses the minion rules (DCA 77)
+//   Other: summoned creatures, pets bought as a power, story NPCs. No budget is checked.
+
+const { costBreakdown } = __mods["src/engine/costs.js"];
+const COMPANION_KINDS = {
+  sidekick: { label: 'Sidekick', advantage: 'Sidekick', perRank: 5, blurb: 'A full character built on 5 power points per rank of the Sidekick advantage.' },
+  minion: { label: 'Minion', advantage: 'Minion', perRank: 15, blurb: 'A follower built on 15 power points per rank of the Minion advantage; uses the minion rules.' },
+  companion: { label: 'Companion', advantage: null, perRank: 0, blurb: 'An animal companion, summoned creature, ally or anyone else. No point budget is checked.' },
+};
+
+const companionsOf = (ch) => (Array.isArray(ch?.companions) ? ch.companions : []);
+const nameOf = (c) => c.identity?.codename || c.identity?.realName || 'Companion';
+
+/** The owner's advantage entry that pays for a companion, if any. */
+function payingAdvantage(owner, comp) {
+  const kind = COMPANION_KINDS[comp.companionKind];
+  if (!kind?.advantage) return null;
+  const list = (owner.advantages || []).filter((a) => a.name === kind.advantage);
+  const name = nameOf(comp).toLowerCase();
+  return list.find((a) => String(a.param || '').toLowerCase() === name) || (list.length === 1 ? list[0] : null);
+}
+
+/** { budget, cost, advantage, ok, message } for a companion. budget is null when nothing is checked. */
+function companionBudget(owner, comp, R) {
+  const kind = COMPANION_KINDS[comp.companionKind] || COMPANION_KINDS.companion;
+  let cost = null;
+  try { cost = costBreakdown(comp, R).total; } catch { /* unknown traits */ }
+  if (!kind.advantage) return { budget: null, cost, advantage: null, ok: true, message: 'No point budget is checked.' };
+  const adv = payingAdvantage(owner, comp);
+  if (!adv) return { budget: null, cost, advantage: null, ok: false, message: `${nameOf(owner)} needs the ${kind.advantage} advantage to pay for ${nameOf(comp)} (${kind.perRank} power points per rank). Add ${kind.advantage} ${Math.max(1, Math.ceil((cost || 0) / kind.perRank))}${nameOf(comp) ? ` (${nameOf(comp)})` : ''} in Edit mode.` };
+  const budget = (adv.rank || 1) * kind.perRank;
+  return { budget, cost, advantage: adv, ok: cost == null || cost <= budget, message: cost != null && cost > budget ? `${cost} power points, but ${kind.advantage} ${adv.rank || 1} pays for ${budget}. Raise the advantage to ${Math.ceil(cost / kind.perRank)} or trim the build.` : `${kind.advantage} ${adv.rank || 1}: ${budget} power points, ${cost ?? '?'} spent.` };
+}
+
+/** Prepare a character to be someone's companion. */
+function asCompanion(c, kind) {
+  const out = JSON.parse(JSON.stringify(c));
+  for (const k of ['rosterId', 'savedAt', 'folder', 'companions', 'companionOf', 'lobbyOwner', 'lobbyOwnerName', 'lobbyShared']) delete out[k];
+  out.companionKind = COMPANION_KINDS[kind] ? kind : 'companion';
+  out.id = out.id || `c-comp-${Date.now().toString(36)}-${Math.floor(Math.random() * 1e6).toString(36)}`;
+  if (out.companionKind === 'minion') out.minion = true;
+  return out;
+}
+
+function blankCompanion(pl, name) {
+  return {
+    pl,
+    abilities: { Strength: 0, Stamina: 0, Agility: 0, Dexterity: 0, Fighting: 0, Intellect: 0, Awareness: 0, Presence: 0 },
+    defenses: { Dodge: 0, Parry: 0, Fortitude: 0, Will: 0 },
+    skills: [], advantages: [], powers: [], devices: [], equipment: [],
+    archetype: { id: 'custom', name: 'Custom' },
+    theme: { id: 'custom', name: 'Custom', color: '#5b6b4a' },
+    alignment: 'hero',
+    identity: { codename: name || 'New companion', realName: '', languages: ['English'] },
+    complications: [], notes: '',
+    createdAt: new Date().toISOString(),
+  };
+}
+
+/** A sensible power level for a companion: what its budget buys at 15 points per PL. */
+function suggestedPl(owner, kind, rank) {
+  const k = COMPANION_KINDS[kind];
+  if (!k?.perRank || !rank) return Math.max(1, (owner.pl || 10) - 2);
+  return Math.max(1, Math.min(owner.pl || 10, Math.floor((rank * k.perRank) / 15)));
+}
+
+return { COMPANION_KINDS, companionsOf, payingAdvantage, companionBudget, asCompanion, blankCompanion, suggestedPl };
+})();
+
+__mods["src/engine/dossier.js"] = (() => {
+// The whole character in one place: every alternate form and every companion, for exports and print.
+
+const { statBlockText } = __mods["src/engine/render.js"];
+const { formCharacters, hasForms } = __mods["src/engine/forms.js"];
+const { companionsOf, companionBudget, COMPANION_KINDS } = __mods["src/engine/companions.js"];
+const { poolPowers, poolSpent, poolAvailable, fmtPoints } = __mods["src/engine/pools.js"];
+/** Every build to show, labeled: [{ title, ch, kind: 'form' | 'companion', note }]. */
+function dossierEntries(ch, R) {
+  const out = [];
+  const forms = formCharacters(ch);
+  forms.forEach((f, i) => {
+    const label = hasForms(ch) ? `Form ${i + 1}: ${ch.forms[i].name}` : (ch.identity?.codename || 'Character');
+    // Exports that name things by codename need each form to stand out.
+    const named = hasForms(ch) ? { ...f, identity: { ...f.identity, codename: `${f.identity?.codename || 'Unnamed'} (${ch.forms[i].name})` } } : f;
+    out.push({ title: label, ch: named, kind: 'form', note: hasForms(ch) && i === (ch.activeForm || 0) ? 'the form in play now' : '' });
+  });
+  for (const comp of companionsOf(ch)) {
+    const kind = COMPANION_KINDS[comp.companionKind] || COMPANION_KINDS.companion;
+    const b = companionBudget(ch, comp, R);
+    out.push({ title: `${kind.label}: ${comp.identity?.codename || 'Companion'}`, ch: comp, kind: 'companion', note: b.message });
+  }
+  return out;
+}
+
+/** Pool and drain state, as text lines. */
+function trackerLines(ch, R) {
+  const lines = [];
+  for (const { power } of poolPowers(ch)) {
+    lines.push(`${power.name}: pool ${fmtPoints(poolSpent(ch, power, R))}/${fmtPoints(poolAvailable(ch, power, R))} pp placed${(power.placed || []).length ? ` (${power.placed.map((x) => `${x.target === 'other' ? x.note || 'other' : x.target.replace(/^(skill|power):/, '')} +${x.points}`).join(', ')})` : ''}`);
+  }
+  const visit = (list) => (list || []).forEach((p) => { if (p.effect === 'Weaken' && p.drained) lines.push(`${p.name}: ${p.drained}/${p.rank} power points drained and held`); });
+  visit(ch.powers);
+  return lines;
+}
+
+/** One text file with every form and companion. */
+function dossierText(ch, R) {
+  const entries = dossierEntries(ch, R);
+  if (entries.length === 1) {
+    const t = trackerLines(ch, R);
+    return statBlockText(ch, R) + (t.length ? `\n\nIn play now:\n  ${t.join('\n  ')}\n` : '');
+  }
+  const bar = '='.repeat(64);
+  return entries.map((e) => {
+    const t = trackerLines(e.ch, R);
+    return `${bar}\n${e.title.toUpperCase()}${e.note ? `  (${e.note})` : ''}\n${bar}\n${statBlockText(e.ch, R)}${t.length ? `\n\nIn play now:\n  ${t.join('\n  ')}` : ''}`;
+  }).join('\n\n\n') + '\n';
+}
+
+return { dossierEntries, dossierText };
+})();
+
 __mods["src/app/exporters.js"] = (() => {
 // File exports: the filled Excel character sheet, roster workbooks, JSON and text.
 
 const { download, slug, toast } = __mods["src/app/dom.js"];
 const { inflateRaw } = __mods["src/app/share.js"];
 const { fillCharacterSheet, rosterWorkbook, readWorkbookCharacters } = __mods["src/engine/xlsx.js"];
-const { statBlockText } = __mods["src/engine/render.js"];
 const { portraitPng } = __mods["src/app/portrait.js"];
+const { dossierText, dossierEntries } = __mods["src/engine/dossier.js"];
 const XLSX_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 async function loadTemplate() {
@@ -5828,9 +6295,17 @@ function exportRosterJson(characters) {
   toast('Roster file saved');
 }
 
+/** Stat block text: every form and companion when there are any. */
 function exportText(ch, R) {
-  download(`${slug(ch.identity?.codename)}.txt`, statBlockText(ch, R), 'text/plain');
-  toast('Stat block saved');
+  const entries = dossierEntries(ch, R);
+  download(`${slug(ch.identity?.codename)}.txt`, dossierText(ch, R), 'text/plain');
+  toast(entries.length > 1 ? `Stat blocks saved: ${entries.length} (every form and companion)` : 'Stat block saved');
+}
+
+/** An Excel workbook with a summary and a sheet for every form and companion. */
+function exportDossierExcel(ch, R) {
+  const list = dossierEntries(ch, R).map((e) => (e.kind === 'companion' ? { ...e.ch, identity: { ...e.ch.identity, codename: `${e.ch.identity?.codename || 'Companion'} (companion)` } } : e.ch));
+  exportRosterExcel(list, R, `${ch.identity?.codename || 'character'} dossier`);
 }
 
 /** Read characters from a DCUGen file: a character or roster .json, or a DCUGen Excel export (.xlsx). */
@@ -5845,7 +6320,7 @@ async function readCharactersFile(file) {
   return valid(Array.isArray(data) ? data : Array.isArray(data.characters) ? data.characters : [data]);
 }
 
-return { exportExcel, exportRosterExcel, exportJson, exportRosterJson, exportText, readCharactersFile };
+return { exportExcel, exportRosterExcel, exportJson, exportRosterJson, exportText, exportDossierExcel, readCharactersFile };
 })();
 
 __mods["src/engine/flavor.js"] = (() => {
@@ -10984,6 +11459,7 @@ const { h, toast, download, openDialog } = __mods["src/app/dom.js"];
 const APP_KEYS_PREFIX = 'dcugen.';
 const MERGE_ROSTER = 'dcugen.roster.v1';
 const MERGE_WORLD = 'dcugen.world.v1';
+const DELETED = 'dcugen.roster.deleted.v1';
 
 /** Every dcugen.* key and its raw value. */
 function snapshotAll() {
@@ -10997,7 +11473,18 @@ function snapshotAll() {
   return { app: 'DCUGen', kind: 'backup', version: 1, savedAt: new Date().toISOString(), data };
 }
 
-function mergeRoster(current, incoming) {
+function mergeTombs(a = [], b = []) {
+  const by = new Map();
+  for (const t of [...a, ...b]) if (t?.rosterId && (!by.has(t.rosterId) || String(t.at) > String(by.get(t.rosterId).at))) by.set(t.rosterId, t);
+  return [...by.values()];
+}
+
+function mergeRoster(current, incoming, tombs = []) {
+  const gone = new Map(tombs.map((t) => [t.rosterId, String(t.at || '')]));
+  // A character deleted after it was last saved stays deleted, here and in what comes in.
+  const alive = (ch) => !ch?.rosterId || !gone.has(ch.rosterId) || String(ch.savedAt || '') > gone.get(ch.rosterId);
+  current = current.filter(alive);
+  incoming = incoming.filter(alive);
   const out = [...current];
   for (const ch of incoming) {
     if (!ch?.rosterId) { out.push(ch); continue; }
@@ -11019,14 +11506,20 @@ function mergeWorld(current, incoming) {
 }
 
 /** Apply a backup. mode: 'merge' (default) keeps what is here and adds what is new; 'replace' overwrites. Returns counts. */
-function restoreAll(backup, { mode = 'merge' } = {}) {
+function restoreAll(backup, { mode = 'merge', skip = [] } = {}) {
   if (!backup || backup.app !== 'DCUGen' || !backup.data) throw new Error('That is not a DCUGen backup file.');
   let keys = 0;
+  let tombs = [];
+  if (mode === 'merge') {
+    try { tombs = mergeTombs(JSON.parse(localStorage.getItem(DELETED) || '[]'), JSON.parse(backup.data[DELETED] || '[]')); } catch { tombs = []; }
+    if (tombs.length) try { localStorage.setItem(DELETED, JSON.stringify(tombs)); } catch { /* full */ }
+  }
   for (const [k, v] of Object.entries(backup.data)) {
     if (!k.startsWith(APP_KEYS_PREFIX) || typeof v !== 'string') continue;
+    if (skip.includes(k) || (mode === 'merge' && k === DELETED)) continue;
     let value = v;
     if (mode === 'merge' && k === MERGE_ROSTER) {
-      try { value = JSON.stringify(mergeRoster(JSON.parse(localStorage.getItem(k) || '[]'), JSON.parse(v))); } catch { value = v; }
+      try { value = JSON.stringify(mergeRoster(JSON.parse(localStorage.getItem(k) || '[]'), JSON.parse(v), tombs)); } catch { value = v; }
     } else if (mode === 'merge' && k === MERGE_WORLD) {
       try { value = JSON.stringify(mergeWorld(JSON.parse(localStorage.getItem(k) || 'null'), JSON.parse(v))); } catch { value = v; }
     } else if (mode === 'merge' && ['dcugen.tab', 'dcugen.theme', 'dcugen.sheetview', 'dcugen.gmtab'].includes(k)) continue;
@@ -11065,10 +11558,42 @@ function backupMenuItems() {
   return [
     { label: 'Back up everything (.json)', hint: 'Roster, world, battle, notes, screen, settings: one file to keep or move', run: downloadBackup },
     { label: 'Restore a backup…', hint: 'Merge or replace from a backup file', run: restoreDialog },
+    { label: 'Sync with a cloud folder…', hint: 'Keep everything in a file in Dropbox, OneDrive, Google Drive or iCloud, for every device', run: () => import_syncDialog() },
+    { label: `Storage: ${storageLine()}`, hint: 'Where your data lives in this browser', run: () => storageDialog() },
   ];
 }
 
-return { APP_KEYS_PREFIX, snapshotAll, restoreAll, downloadBackup, restoreDialog, backupMenuItems };
+// ---- storage status ---------------------------------------------------------------------------------------------
+let syncDialogFn = null;
+/** The sync dialog lives in syncfile.js, which imports this file; it registers itself here. */
+function registerSyncDialog(fn) { syncDialogFn = fn; }
+function import_syncDialog() { if (syncDialogFn) syncDialogFn(); else toast('Sync is not available here.'); }
+
+function storageLine() {
+  const s = window.__dcugenStorage;
+  if (!s) return 'browser storage';
+  return `${(s.bytes() / 1e6).toFixed(1)} MB in ${s.backend}`;
+}
+
+async function storageDialog() {
+  const s = window.__dcugenStorage;
+  let quota = null;
+  try { const e = await navigator.storage?.estimate?.(); if (e?.quota) quota = e; } catch { /* unsupported */ }
+  let persisted = null;
+  try { persisted = await navigator.storage?.persisted?.(); } catch { /* unsupported */ }
+  await openDialog({
+    title: 'Where your data lives',
+    body: [
+      h('p', { style: { margin: 0 } }, s?.backend === 'IndexedDB'
+        ? `Your roster, world, open characters and settings are kept in this browser's IndexedDB: ${(s.bytes() / 1e6).toFixed(1)} MB used. It holds hundreds of megabytes, so portraits no longer fill it up.`
+        : 'This browser only offers its small storage (about 5 MB). Back up now and then, or use the desktop app.'),
+      quota ? h('p', { class: 'hint', style: { margin: '8px 0 0' } }, `The browser allows this site about ${Math.round(quota.quota / 1e6)} MB${persisted ? ', and has promised not to clear it on its own' : ''}.`) : null,
+      h('p', { class: 'hint', style: { margin: '8px 0 0' } }, 'It still lives in this browser only. To have it on every device, use "Sync with a cloud folder". To keep a copy, use "Back up everything".'),
+    ],
+  });
+}
+
+return { APP_KEYS_PREFIX, snapshotAll, mergeRoster, restoreAll, downloadBackup, restoreDialog, backupMenuItems, registerSyncDialog };
 })();
 
 __mods["src/app/roster.js"] = (() => {
@@ -11492,181 +12017,264 @@ function backupMenu() {
 return { saveRoster, initRoster, worldSelect, renderRoster };
 })();
 
-__mods["src/engine/forms.js"] = (() => {
-// Alternate forms: one character, up to 8 builds (a human identity and a powered one, armor on and off,
-// a werewolf's three shapes...). Each form is a whole build with its own power level, traits, powers,
-// gear, codename and picture, checked on its own. Everything about the person (name, bio, journal,
-// factions, world, roster entry) is shared.
-//
-// The active form lives at the top level of the character, so every part of the app (sheet, limits,
-// Battle Room, exports) works on it unchanged; the others wait in ch.forms[i]. Switching swaps them.
-
-const MAX_FORMS = 8;
-const FORM_FIELDS = ['pl', 'abilities', 'defenses', 'skills', 'advantages', 'powers', 'devices', 'equipment', 'portrait', 'theme'];
-
-const clone = (x) => (x === undefined ? undefined : JSON.parse(JSON.stringify(x)));
-
-const hasForms = (ch) => Array.isArray(ch?.forms) && ch.forms.length > 1;
-const activeForm = (ch) => (hasForms(ch) ? Math.max(0, Math.min(ch.activeForm || 0, ch.forms.length - 1)) : 0);
-
-/** A form's build, stored or live. */
-function formBuild(ch, i) {
-  if (i === activeForm(ch) || !hasForms(ch)) {
-    const out = {};
-    for (const k of FORM_FIELDS) if (ch[k] !== undefined) out[k] = ch[k];
-    return out;
-  }
-  return ch.forms[i];
-}
-
-function snapshot(ch) {
-  const out = {};
-  for (const k of FORM_FIELDS) if (ch[k] !== undefined) out[k] = clone(ch[k]);
-  return out;
-}
-
-function blankBuild(pl) {
-  return {
-    pl,
-    abilities: { Strength: 0, Stamina: 0, Agility: 0, Dexterity: 0, Fighting: 0, Intellect: 0, Awareness: 0, Presence: 0 },
-    defenses: { Dodge: 0, Parry: 0, Fortitude: 0, Will: 0 },
-    skills: [], advantages: [], powers: [], devices: [], equipment: [],
-  };
-}
-
-/** Add a form (a copy of the active one, or a blank build) and return the new character. */
-function addForm(ch, { copy = true, name } = {}) {
-  const c = clone(ch);
-  if (!hasForms(c)) { c.forms = [{ name: 'Form 1', codename: c.identity?.codename || '' }]; c.activeForm = 0; }
-  if (c.forms.length >= MAX_FORMS) throw new Error(`A character can have ${MAX_FORMS} forms at most.`);
-  const n = c.forms.length + 1;
-  const build = copy ? snapshot(c) : blankBuild(c.pl);
-  if (!copy) build.theme = clone(c.theme);
-  c.forms.push({ name: name || `Form ${n}`, codename: c.identity?.codename || '', ...build });
-  return c;
-}
-
-/** Make form i the active one. Returns the new character. */
-function switchForm(ch, i) {
-  if (!hasForms(ch)) return ch;
-  const cur = activeForm(ch);
-  if (i === cur || i < 0 || i >= ch.forms.length) return ch;
-  const c = clone(ch);
-  // put the live build away
-  c.forms[cur] = { name: c.forms[cur].name, codename: c.identity?.codename || c.forms[cur].codename || '', ...snapshot(c) };
-  // bring the other one out
-  const next = c.forms[i];
-  for (const k of FORM_FIELDS) { if (next[k] !== undefined) c[k] = next[k]; else delete c[k]; }
-  if (next.codename) c.identity = { ...c.identity, codename: next.codename };
-  c.forms[i] = { name: next.name, codename: next.codename || '' };
-  c.activeForm = i;
-  return c;
-}
-
-function renameForm(ch, i, name) {
-  const c = clone(ch);
-  if (hasForms(c) && c.forms[i]) c.forms[i].name = String(name || '').trim() || `Form ${i + 1}`;
-  return c;
-}
-
-/** Remove a form that isn't the active one. With one form left, the character has no forms any more. */
-function removeForm(ch, i) {
-  if (!hasForms(ch) || i === activeForm(ch)) return ch;
-  const c = clone(ch);
-  c.forms.splice(i, 1);
-  if (i < c.activeForm) c.activeForm -= 1;
-  if (c.forms.length < 2) { delete c.forms; delete c.activeForm; }
-  return c;
-}
-
-/** Every form as a full character of its own (for exports, stat blocks and checking each build). */
-function formCharacters(ch) {
-  if (!hasForms(ch)) return [ch];
-  return ch.forms.map((f, i) => {
-    if (i === activeForm(ch)) return ch;
-    const c = clone(ch);
-    for (const k of FORM_FIELDS) { if (f[k] !== undefined) c[k] = clone(f[k]); else delete c[k]; }
-    if (f.codename) c.identity = { ...c.identity, codename: f.codename };
-    c.activeForm = i;
-    return c;
-  });
-}
-
-return { MAX_FORMS, FORM_FIELDS, hasForms, activeForm, formBuild, addForm, switchForm, renameForm, removeForm, formCharacters };
-})();
-
-__mods["src/engine/companions.js"] = (() => {
-// Companions: sidekicks, minions, pets and other followers attached to a character, each a full
-// character sheet of its own (ch.companions[i]). They travel with the character: roster, exports, keys.
-//
-//   Sidekick advantage: 5 power points per rank for the sidekick's build (DCA 78)
-//   Minion advantage:  15 power points per rank, and the follower uses the minion rules (DCA 77)
-//   Other: summoned creatures, pets bought as a power, story NPCs. No budget is checked.
+__mods["src/app/history.js"] = (() => {
+// Version history: named snapshots of a character, kept in this browser (and in sync/backups). A version
+// is taken every time the character is saved to the roster, and whenever you save one by hand ("before
+// the respec"). Restoring puts it back on the Forge, as an edit you can undo.
 
 const { costBreakdown } = __mods["src/engine/costs.js"];
-const COMPANION_KINDS = {
-  sidekick: { label: 'Sidekick', advantage: 'Sidekick', perRank: 5, blurb: 'A full character built on 5 power points per rank of the Sidekick advantage.' },
-  minion: { label: 'Minion', advantage: 'Minion', perRank: 15, blurb: 'A follower built on 15 power points per rank of the Minion advantage; uses the minion rules.' },
-  companion: { label: 'Companion', advantage: null, perRank: 0, blurb: 'An animal companion, summoned creature, ally or anyone else. No point budget is checked.' },
+const KEY = 'dcugen.history.v1'; // { [characterKey]: [{ id, at, label, pp, ch }] }
+const PER_CHARACTER = 40;
+
+const read = () => { try { return JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch { return {}; } };
+const write = (all) => { try { localStorage.setItem(KEY, JSON.stringify(all)); return true; } catch { return false; } };
+
+/** Which history a character belongs to: its roster entry, or its own id. */
+const historyKey = (ch) => ch?.rosterId || ch?.id || null;
+
+const strip = (ch) => {
+  const c = JSON.parse(JSON.stringify(ch));
+  // Pictures are big and the roster keeps the current one; versions keep the rest.
+  if (c.portrait?.image) { delete c.portrait.image; delete c.portrait.aiSaved; c.portrait.source = c.portrait.source === 'upload' ? undefined : c.portrait.source; }
+  for (const k of ['savedAt']) delete c[k];
+  return c;
 };
 
-const companionsOf = (ch) => (Array.isArray(ch?.companions) ? ch.companions : []);
-const nameOf = (c) => c.identity?.codename || c.identity?.realName || 'Companion';
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
-/** The owner's advantage entry that pays for a companion, if any. */
-function payingAdvantage(owner, comp) {
-  const kind = COMPANION_KINDS[comp.companionKind];
-  if (!kind?.advantage) return null;
-  const list = (owner.advantages || []).filter((a) => a.name === kind.advantage);
-  const name = nameOf(comp).toLowerCase();
-  return list.find((a) => String(a.param || '').toLowerCase() === name) || (list.length === 1 ? list[0] : null);
+/** Save a version. Skips it when nothing changed since the last one (unless it has a new label). */
+function addVersion(ch, label, R) {
+  const key = historyKey(ch);
+  if (!key) return null;
+  const all = read();
+  const list = all[key] || [];
+  const snap = strip(ch);
+  const last = list[list.length - 1];
+  if (last && same(last.ch, snap) && (!label || label === last.label)) return last;
+  let pp = null;
+  try { pp = costBreakdown(ch, R).total; } catch { /* unknown */ }
+  const v = { id: `v-${Date.now().toString(36)}-${Math.floor(Math.random() * 1e4).toString(36)}`, at: new Date().toISOString(), label: label || 'Saved', pp, ch: snap };
+  all[key] = [...list, v].slice(-PER_CHARACTER);
+  write(all);
+  return v;
 }
 
-/** { budget, cost, advantage, ok, message } for a companion. budget is null when nothing is checked. */
-function companionBudget(owner, comp, R) {
-  const kind = COMPANION_KINDS[comp.companionKind] || COMPANION_KINDS.companion;
-  let cost = null;
-  try { cost = costBreakdown(comp, R).total; } catch { /* unknown traits */ }
-  if (!kind.advantage) return { budget: null, cost, advantage: null, ok: true, message: 'No point budget is checked.' };
-  const adv = payingAdvantage(owner, comp);
-  if (!adv) return { budget: null, cost, advantage: null, ok: false, message: `${nameOf(owner)} needs the ${kind.advantage} advantage to pay for ${nameOf(comp)} (${kind.perRank} power points per rank). Add ${kind.advantage} ${Math.max(1, Math.ceil((cost || 0) / kind.perRank))}${nameOf(comp) ? ` (${nameOf(comp)})` : ''} in Edit mode.` };
-  const budget = (adv.rank || 1) * kind.perRank;
-  return { budget, cost, advantage: adv, ok: cost == null || cost <= budget, message: cost != null && cost > budget ? `${cost} power points, but ${kind.advantage} ${adv.rank || 1} pays for ${budget}. Raise the advantage to ${Math.ceil(cost / kind.perRank)} or trim the build.` : `${kind.advantage} ${adv.rank || 1}: ${budget} power points, ${cost ?? '?'} spent.` };
+function versionsOf(ch) {
+  const key = historyKey(ch);
+  return key ? [...(read()[key] || [])].reverse() : [];
 }
 
-/** Prepare a character to be someone's companion. */
-function asCompanion(c, kind) {
-  const out = JSON.parse(JSON.stringify(c));
-  for (const k of ['rosterId', 'savedAt', 'folder', 'companions', 'companionOf', 'lobbyOwner', 'lobbyOwnerName', 'lobbyShared']) delete out[k];
-  out.companionKind = COMPANION_KINDS[kind] ? kind : 'companion';
-  out.id = out.id || `c-comp-${Date.now().toString(36)}-${Math.floor(Math.random() * 1e6).toString(36)}`;
-  if (out.companionKind === 'minion') out.minion = true;
-  return out;
+function removeVersion(ch, id) {
+  const key = historyKey(ch);
+  const all = read();
+  if (!all[key]) return;
+  all[key] = all[key].filter((v) => v.id !== id);
+  if (!all[key].length) delete all[key];
+  write(all);
 }
 
-function blankCompanion(pl, name) {
+/** A version brought back onto the current character (keeps its roster entry and current picture). */
+function restoreVersion(current, v) {
+  const c = JSON.parse(JSON.stringify(v.ch));
+  if (current.rosterId) c.rosterId = current.rosterId;
+  if (current.portrait?.image && !c.portrait?.image) c.portrait = { ...(c.portrait || {}), image: current.portrait.image, aiSaved: current.portrait.aiSaved, source: current.portrait.source };
+  return c;
+}
+
+/** Re-key a character's history (a roll that got a roster entry on its first save). */
+function moveHistory(fromKey, toKey) {
+  if (!fromKey || !toKey || fromKey === toKey) return;
+  const all = read();
+  if (!all[fromKey]) return;
+  all[toKey] = [...(all[toKey] || []), ...all[fromKey]].slice(-PER_CHARACTER);
+  delete all[fromKey];
+  write(all);
+}
+
+return { historyKey, addVersion, versionsOf, removeVersion, restoreVersion, moveHistory };
+})();
+
+__mods["src/engine/play.js"] = (() => {
+// At the table: the state of a character in play (damage, conditions, hero points, fatigue) and what it
+// does to the numbers. Kept on the character as ch.play, so it survives a reload and travels with it.
+//
+// Damage (DCA, Toughness vs DC 15 + rank): fail by 1-5 = a bruise (-1 Toughness); by 6-10 = a bruise and
+// dazed; by 11-15 = a bruise and staggered; more = incapacitated. Staggered twice = incapacitated.
+
+const DAMAGE_STATES = ['none', 'dazed', 'staggered', 'incapacitated'];
+const FATIGUE = ['none', 'fatigued', 'exhausted', 'incapacitated'];
+const QUICK_CONDITIONS = ['Prone', 'Vulnerable', 'Defenseless', 'Hindered', 'Impaired', 'Disabled', 'Immobile', 'Stunned', 'Surprised', 'Entranced', 'Compelled', 'Controlled', 'Blind', 'Deaf', 'Unaware', 'Asleep', 'Bound', 'Restrained', 'Paralyzed', 'Transformed', 'Weakened'];
+
+function playState(ch) {
+  const p = ch.play || {};
+  return { bruises: p.bruises || 0, damage: DAMAGE_STATES.includes(p.damage) ? p.damage : 'none', heroPoints: p.heroPoints ?? 1, conditions: p.conditions || [], fatigue: FATIGUE.includes(p.fatigue) ? p.fatigue : 'none' };
+}
+
+const has = (s, c) => s.conditions.includes(c);
+
+/** Penalty on checks from conditions and damage. */
+function checkPenalty(s) {
+  if (has(s, 'Disabled') || s.fatigue === 'exhausted') return -5;
+  if (has(s, 'Impaired')) return -2;
+  return 0;
+}
+
+/** Defenses as they stand right now. */
+function effectiveDefenses(d, s) {
+  const active = (v) => (has(s, 'Defenseless') || s.damage === 'incapacitated' || has(s, 'Asleep') || has(s, 'Paralyzed') ? 0 : has(s, 'Vulnerable') || has(s, 'Stunned') || has(s, 'Surprised') || has(s, 'Bound') ? Math.ceil(v / 2) : v);
   return {
-    pl,
-    abilities: { Strength: 0, Stamina: 0, Agility: 0, Dexterity: 0, Fighting: 0, Intellect: 0, Awareness: 0, Presence: 0 },
-    defenses: { Dodge: 0, Parry: 0, Fortitude: 0, Will: 0 },
-    skills: [], advantages: [], powers: [], devices: [], equipment: [],
-    archetype: { id: 'custom', name: 'Custom' },
-    theme: { id: 'custom', name: 'Custom', color: '#5b6b4a' },
-    alignment: 'hero',
-    identity: { codename: name || 'New companion', realName: '', languages: ['English'] },
-    complications: [], notes: '',
-    createdAt: new Date().toISOString(),
+    Dodge: active(d.defenses.Dodge),
+    Parry: active(d.defenses.Parry),
+    Toughness: d.defenses.Toughness - s.bruises,
+    Fortitude: d.defenses.immune?.Fortitude ? null : d.defenses.Fortitude,
+    Will: d.defenses.immune?.Will ? null : d.defenses.Will,
   };
 }
 
-/** A sensible power level for a companion: what its budget buys at 15 points per PL. */
-function suggestedPl(owner, kind, rank) {
-  const k = COMPANION_KINDS[kind];
-  if (!k?.perRank || !rank) return Math.max(1, (owner.pl || 10) - 2);
-  return Math.max(1, Math.min(owner.pl || 10, Math.floor((rank * k.perRank) / 15)));
+/** Apply a failed (or passed) Toughness check: returns the new play state and what happened. */
+function applyDamage(s, { total, dc }) {
+  const out = { ...s, conditions: [...s.conditions] };
+  if (total >= dc) return { state: out, text: 'no damage' };
+  const degrees = 1 + Math.floor((dc - total - 1) / 5);
+  out.bruises += 1;
+  let text = 'a bruise (−1 Toughness)';
+  const worse = (st) => { if (DAMAGE_STATES.indexOf(st) > DAMAGE_STATES.indexOf(out.damage)) out.damage = st; };
+  if (degrees === 2) { worse('dazed'); text += ', dazed'; }
+  if (degrees === 3) { if (out.damage === 'staggered') { worse('incapacitated'); text += ', staggered again: incapacitated'; } else { worse('staggered'); text += ', staggered'; } }
+  if (degrees >= 4) { worse('incapacitated'); text = 'incapacitated'; }
+  return { state: out, text: `${degrees} degree${degrees > 1 ? 's' : ''} of failure: ${text}` };
 }
 
-return { COMPANION_KINDS, companionsOf, payingAdvantage, companionBudget, asCompanion, blankCompanion, suggestedPl };
+/** End of the scene: damage and conditions clear, hero points stay. */
+function endScene(s) {
+  return { ...s, bruises: 0, damage: 'none', conditions: [], fatigue: 'none' };
+}
+
+return { DAMAGE_STATES, FATIGUE, QUICK_CONDITIONS, playState, checkPenalty, effectiveDefenses, applyDamage, endScene };
+})();
+
+__mods["src/app/play.js"] = (() => {
+// Play view: one screen for running a character at the table, made for a phone. Damage track, hero
+// points, conditions and fatigue; tap a defense, attack or skill to roll it (results go to the Table
+// feed, with condition penalties already counted); drain and pool trackers; the character's companions.
+
+const { h, toast } = __mods["src/app/dom.js"];
+const { deriveAll } = __mods["src/engine/derive.js"];
+const { rollCheck } = __mods["src/app/dice.js"];
+const { stepper, poolTracker, drainTracker } = __mods["src/app/sheetview.js"];
+const { playState, effectiveDefenses, checkPenalty, applyDamage, endScene, DAMAGE_STATES, FATIGUE, QUICK_CONDITIONS } = __mods["src/engine/play.js"];
+const { companionsOf } = __mods["src/engine/companions.js"];
+const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
+const recent = []; // this visit's rolls, newest first
+
+/**
+ * opts: { change(fn) — apply fn to a copy of the character and keep it, openCompanion(i) }
+ */
+function renderPlay(ch, R, opts) {
+  const s = playState(ch);
+  const setPlay = (fn) => opts.change((c) => { const st = playState(c); fn(st); c.play = st; });
+  let d;
+  try { d = deriveAll(ch, R); } catch (e) { return h('p', null, e.message); }
+  const who = ch.identity?.codename || 'Someone';
+  const pen = checkPenalty(s);
+  const roll = (label, mod, extra = {}) => {
+    const e = rollCheck({ who, label, mod: mod + pen, note: pen ? `${sign(pen)} from conditions` : '', ...extra });
+    recent.unshift(e.text); recent.length = Math.min(recent.length, 8);
+    toast(e.text);
+    return e;
+  };
+  const def = effectiveDefenses(d, s);
+
+  // ---- status: hero points, damage, fatigue ----
+  const hitRank = h('input', { type: 'number', min: 1, max: 40, placeholder: 'rank', class: 'play-hit', 'aria-label': 'Damage rank of the hit' });
+  const takeHit = () => {
+    const rank = Number(hitRank.value);
+    if (!(rank > 0)) { toast('Type the damage rank of the hit first'); return; }
+    const e = roll('Toughness vs damage', def.Toughness + 0 - pen, { dc: 15 + rank });
+    const { total, dc } = e.dice || {};
+    const r = applyDamage(s, { total, dc });
+    setPlay((st) => Object.assign(st, r.state));
+    toast(`${e.text} → ${r.text}`);
+  };
+  const status = h('section', { class: 'play-card play-status' },
+    h('div', { class: 'play-row' },
+      h('div', { class: 'play-hp' }, h('span', { class: 'label' }, 'Hero points'), h('b', { class: 'num' }, s.heroPoints),
+        stepper(s.heroPoints, (x) => setPlay((st) => { st.heroPoints = Math.max(0, st.heroPoints + x); }), { min: 0, label: 'hero points' })),
+      h('div', { class: 'play-hp' }, h('span', { class: 'label' }, 'Bruises'), h('b', { class: 'num' }, s.bruises),
+        stepper(s.bruises, (x) => setPlay((st) => { st.bruises = Math.max(0, st.bruises + x); }), { min: 0, label: 'bruises' }))),
+    h('div', { class: 'seg play-seg', role: 'group', 'aria-label': 'Damage condition' },
+      DAMAGE_STATES.map((st) => h('button', { type: 'button', 'aria-pressed': String(s.damage === st), onClick: () => setPlay((x) => { x.damage = st; }) }, st === 'none' ? 'OK' : st[0].toUpperCase() + st.slice(1)))),
+    h('div', { class: 'play-row play-hit-row' },
+      h('label', null, 'Hit by Damage', hitRank), h('button', { class: 'btn primary', type: 'button', onClick: takeHit }, 'Resist'),
+      h('button', { class: 'btn', type: 'button', title: 'Recover a bruise (a minute of rest, or a recovery action)', disabled: !s.bruises, onClick: () => setPlay((st) => { st.bruises = Math.max(0, st.bruises - 1); }) }, 'Recover 1')),
+    h('div', { class: 'play-row' },
+      h('span', { class: 'label' }, 'Fatigue'),
+      h('div', { class: 'seg play-seg small', role: 'group', 'aria-label': 'Fatigue' },
+        FATIGUE.map((f) => h('button', { type: 'button', 'aria-pressed': String(s.fatigue === f), onClick: () => setPlay((x) => { x.fatigue = f; }) }, f === 'none' ? 'Fresh' : f[0].toUpperCase() + f.slice(1))))),
+    h('div', { class: 'play-row' },
+      h('button', { class: 'btn', type: 'button', title: 'Extra effort: +1 rank, a power stunt, an extra action... then fatigued next turn unless you spend a hero point', onClick: () => {
+        setPlay((st) => { const i = FATIGUE.indexOf(st.fatigue); st.fatigue = FATIGUE[Math.min(FATIGUE.length - 1, i + 1)]; });
+        toast('Extra effort: you become more fatigued (spend a hero point to cancel it: press − on Hero points and set Fatigue back)');
+      } }, '💪 Extra effort'),
+      h('button', { class: 'btn', type: 'button', disabled: !s.heroPoints, title: 'Spend a hero point: re-roll, improve a check, recover...', onClick: () => setPlay((st) => { st.heroPoints = Math.max(0, st.heroPoints - 1); }) }, '⭐ Spend hero point'),
+      h('button', { class: 'btn ghost', type: 'button', title: 'Damage, conditions and fatigue clear; hero points stay', onClick: () => setPlay((st) => Object.assign(st, endScene(st))) }, 'End of scene')));
+
+  // ---- defenses ----
+  const defTile = (name, v, label) => h('button', { type: 'button', class: 'play-tile', disabled: v == null, onClick: () => roll(`${name} check`, v) },
+    h('span', { class: 'label' }, label || name), h('b', { class: 'num' }, v == null ? '—' : v), h('small', null, v == null ? 'immune' : 'tap to roll'));
+  const defenses = h('section', { class: 'play-card' }, h('h3', null, 'Defenses', pen ? h('span', { class: 'chip warn' }, `${sign(pen)} on checks`) : null),
+    h('div', { class: 'play-tiles' },
+      defTile('Dodge', def.Dodge), defTile('Parry', def.Parry), defTile('Toughness', def.Toughness, s.bruises ? `Toughness (−${s.bruises})` : 'Toughness'), defTile('Fortitude', def.Fortitude), defTile('Will', def.Will),
+      h('button', { type: 'button', class: 'play-tile', onClick: () => roll('initiative', d.initiative) }, h('span', { class: 'label' }, 'Initiative'), h('b', { class: 'num' }, sign(d.initiative)), h('small', null, 'tap to roll'))));
+
+  // ---- attacks ----
+  const attacks = h('section', { class: 'play-card' }, h('h3', null, 'Attacks'),
+    h('div', { class: 'play-list' }, d.attacks.map((a) => {
+      const dc = (a.effect === 'Damage' || a.resistance === 'Toughness' ? 15 : 10) + a.rank;
+      return h('button', { type: 'button', class: 'play-line', onClick: () => (a.roll ? roll(`${a.name} attack`, a.bonus, { note: `${a.effect} ${a.rank}: ${a.resistance || 'resist'} DC ${dc}` }) : toast(`${a.name}: no attack roll. ${a.effect} ${a.rank}: targets resist with ${a.resistance} against DC ${dc}.`)) },
+        h('b', null, a.name), h('span', { class: 'num' }, a.roll ? sign(a.bonus + pen) : a.kind), h('small', null, `${a.effect} ${a.rank} · ${a.resistance || ''} DC ${dc}`));
+    })));
+
+  // ---- skills ----
+  const skills = h('section', { class: 'play-card' }, h('h3', null, 'Skills'),
+    h('div', { class: 'play-chips' }, [...d.skills].sort((a, b) => a.name.localeCompare(b.name)).map((sk) => h('button', { type: 'button', class: 'chip play-chip', onClick: () => roll(`${sk.name}${sk.spec ? ` (${sk.spec})` : ''}`, sk.bonus) }, `${sk.name}${sk.spec ? ` (${sk.spec})` : ''} ${sign(sk.bonus + pen)}`)),
+      h('button', { type: 'button', class: 'chip play-chip', onClick: () => roll('d20', 0) }, 'd20')));
+
+  // ---- conditions ----
+  const conds = (R.raw.gm?.conditions?.conditions) || {};
+  const conditions = h('section', { class: 'play-card' }, h('h3', null, 'Conditions'),
+    h('div', { class: 'play-chips' }, QUICK_CONDITIONS.map((c) => h('button', { type: 'button', class: 'chip play-chip', 'aria-pressed': String(s.conditions.includes(c)), title: conds[c] || '', onClick: () => setPlay((st) => { st.conditions = st.conditions.includes(c) ? st.conditions.filter((x) => x !== c) : [...st.conditions, c]; }) }, c))),
+    s.conditions.length ? h('ul', { class: 'play-cond-notes' }, s.conditions.map((c) => h('li', null, h('b', null, `${c}: `), conds[c] || ''))) : null);
+
+  // ---- drain & pools ----
+  const trackers = [];
+  const change = (fn) => opts.change(fn);
+  (ch.powers || []).forEach((p, index) => {
+    const path = { device: null, index };
+    const t = [drainTracker(ch, p, path, change, R), poolTracker(ch, p, path, change, R)].filter(Boolean);
+    if (t.length) trackers.push(h('div', { class: 'play-tracker' }, h('b', null, p.name), t));
+  });
+  const powers = trackers.length ? h('section', { class: 'play-card' }, h('h3', null, 'Drain & pools'), trackers) : null;
+
+  // ---- companions ----
+  const comps = companionsOf(ch);
+  const companions = comps.length ? h('section', { class: 'play-card' }, h('h3', null, 'Companions'),
+    h('div', { class: 'play-list' }, comps.map((c, i) => {
+      let cd = null;
+      try { cd = deriveAll(c, R); } catch { /* unknown */ }
+      return h('div', { class: 'play-line' },
+        h('b', null, c.identity?.codename || 'Companion'),
+        h('small', null, cd ? `Dodge ${cd.defenses.Dodge} · Parry ${cd.defenses.Parry} · Tough ${cd.defenses.Toughness}` : ''),
+        cd?.attacks?.[1] || cd?.attacks?.[0] ? h('button', { class: 'btn sm', type: 'button', onClick: () => { const a = cd.attacks.find((x) => x.name !== 'Unarmed') || cd.attacks[0]; const e = rollCheck({ who: c.identity?.codename || 'Companion', label: `${a.name} attack`, mod: a.bonus ?? 0, note: `${a.effect} ${a.rank}` }); toast(e.text); } }, '🎲 Attack') : null,
+        h('button', { class: 'btn sm', type: 'button', onClick: () => opts.openCompanion?.(i) }, 'Sheet'));
+    }))) : null;
+
+  const log = recent.length ? h('section', { class: 'play-card' }, h('h3', null, 'Recent rolls'), h('ol', { class: 'play-log' }, recent.map((t) => h('li', null, t)))) : null;
+
+  return h('div', { class: 'play' }, status, defenses, attacks, skills, conditions, powers, companions, log);
+}
+
+return { renderPlay };
 })();
 
 __mods["src/app/forge.js"] = (() => {
@@ -11675,7 +12283,8 @@ __mods["src/app/forge.js"] = (() => {
 const { h, clear, toast, copyText, openDialog, inkFor } = __mods["src/app/dom.js"];
 const { state, emit, savePrefs, upsert } = __mods["src/app/store.js"];
 const { renderFile } = __mods["src/app/sheetview.js"];
-const { exportExcel, exportJson, exportText } = __mods["src/app/exporters.js"];
+const { exportExcel, exportJson, exportText, exportDossierExcel } = __mods["src/app/exporters.js"];
+const { dossierEntries } = __mods["src/engine/dossier.js"];
 const { encodeCharacter, shareLink, keySize } = __mods["src/app/share.js"];
 const { renderBio } = __mods["src/app/bio.js"];
 const { characterKey, keyFor, personKey, fromKeySync } = __mods["src/engine/keys.js"];
@@ -11691,6 +12300,8 @@ const { worldSelect } = __mods["src/app/roster.js"];
 const { hasForms, activeForm, addForm, switchForm, renameForm, removeForm, MAX_FORMS } = __mods["src/engine/forms.js"];
 const { COMPANION_KINDS, companionsOf, companionBudget, asCompanion, blankCompanion, suggestedPl } = __mods["src/engine/companions.js"];
 const { catalogToCharacter } = __mods["src/engine/catalog.js"];
+const { addVersion, versionsOf, removeVersion, restoreVersion, historyKey, moveHistory } = __mods["src/app/history.js"];
+const { renderPlay } = __mods["src/app/play.js"];
 let R;
 let root;
 let fileHost;
@@ -11789,6 +12400,46 @@ function restoreTabs() {
   return true;
 }
 
+// ---- undo / redo ------------------------------------------------------------------------------------
+// Every change to an open character (an edit, a re-roll in the same tab, a form switch, a drain, a save)
+// keeps the version before it, per tab, so Ctrl+Z / Ctrl+Y walk back and forth. Kept for this visit only.
+const UNDO_DEPTH = 80;
+const undoStacks = []; // parallel to state.tabs: { past: [], future: [] }
+function stackAt(i) {
+  while (undoStacks.length < state.tabs.length) undoStacks.push({ past: [], future: [] });
+  return undoStacks[i];
+}
+function remember(i, prev) {
+  if (!prev) return;
+  const s = stackAt(i);
+  s.past.push(prev);
+  if (s.past.length > UNDO_DEPTH) s.past.shift();
+  s.future = [];
+}
+/** Replace the active tab's character, remembering the old one. */
+function putActive(c) {
+  if (state.tabs[state.active] && state.tabs[state.active] !== c) remember(state.active, state.tabs[state.active]);
+  state.current = c; state.tabs[state.active] = c;
+}
+function canUndo() { return !!stackAt(state.active)?.past.length; }
+function canRedo() { return !!stackAt(state.active)?.future.length; }
+function undo() {
+  const s = stackAt(state.active);
+  if (!s?.past.length) { toast('Nothing to undo'); return; }
+  s.future.push(state.tabs[state.active]);
+  const prev = s.past.pop();
+  state.tabs[state.active] = prev; state.current = prev; state.editing = state.editing && true;
+  saveTabs(); renderCurrent(); emit('current');
+}
+function redo() {
+  const s = stackAt(state.active);
+  if (!s?.future.length) { toast('Nothing to redo'); return; }
+  s.past.push(state.tabs[state.active]);
+  const next = s.future.pop();
+  state.tabs[state.active] = next; state.current = next;
+  saveTabs(); renderCurrent(); emit('current');
+}
+
 /**
  * Show a character. By default it replaces the active tab; newTab opens it in a new tab
  * (or switches to the tab already showing that saved character).
@@ -11797,15 +12448,18 @@ function setCurrent(ch, { fresh: isFresh = false, editing = false, newTab = fals
   if (newTab || !state.tabs.length) {
     const existing = ch.rosterId ? state.tabs.findIndex((t) => t.rosterId === ch.rosterId) : -1;
     if (existing >= 0) {
+      if (state.tabs[existing] !== ch) remember(existing, state.tabs[existing]);
       state.tabs[existing] = ch;
       state.active = existing;
     } else {
-      if (state.tabs.length >= MAX_TABS) state.tabs.shift();
+      stackAt(state.tabs.length - 1);
+      if (state.tabs.length >= MAX_TABS) { state.tabs.shift(); undoStacks.shift(); }
       state.tabs.push(ch);
+      undoStacks[state.tabs.length - 1] = { past: [], future: [] };
       state.active = state.tabs.length - 1;
     }
   } else {
-    state.tabs[state.active] = ch;
+    putActive(ch);
   }
   state.current = ch;
   state.editing = editing;
@@ -11827,6 +12481,7 @@ function switchTab(i) {
 
 function closeTab(i) {
   state.tabs.splice(i, 1);
+  undoStacks.splice(i, 1);
   if (!state.tabs.length) { state.active = 0; state.current = null; state.editing = false; saveTabs(); renderCurrent(); emit('current'); return; }
   if (i < state.active || state.active >= state.tabs.length) state.active -= 1;
   state.active = Math.max(0, Math.min(state.active, state.tabs.length - 1));
@@ -12099,8 +12754,11 @@ function saveCurrent(ch) {
   const world = worldOf(ch);
   const copy = { ...ch };
   if (world) copy.folder = world; else delete copy.folder;
+  const before = historyKey(copy);
   const saved = upsert(copy);
-  state.current = saved; state.tabs[state.active] = saved; saveTabs(); renderCurrent();
+  moveHistory(before, historyKey(saved));
+  addVersion(saved, was ? 'Updated in the roster' : 'Saved to the roster', R);
+  putActive(saved); saveTabs(); renderCurrent();
   toast(`${was ? 'Updated' : 'Saved'} in ${world || 'The Multiverse Hub'}`);
 }
 
@@ -12110,10 +12768,10 @@ function pickWorld(ch, world) {
   if (inRosterNow(ch)) {
     if (!world) delete c.folder;
     const saved = upsert(c);
-    state.current = saved; state.tabs[state.active] = saved;
+    putActive(saved);
     toast(`Moved to ${world || 'The Multiverse Hub only'}`);
   } else {
-    state.current = c; state.tabs[state.active] = c;
+    putActive(c);
   }
   saveTabs(); renderCurrent();
 }
@@ -12132,7 +12790,7 @@ function saveBar(ch) {
 
 /** Replace the open character with a changed copy (unsaved, like any edit). */
 function commit(c) {
-  state.current = c; state.tabs[state.active] = c; saveTabs(); fresh = false; renderCurrent(); emit('current');
+  putActive(c); saveTabs(); fresh = false; renderCurrent(); emit('current');
 }
 
 /**
@@ -12296,6 +12954,50 @@ function companionBanner(ch) {
     h('button', { class: 'btn sm primary', type: 'button', onClick: back }, `Save back to ${ch.companionOf.ownerName}`));
 }
 
+/** Print every form and companion, each a full sheet on its own pages. */
+function printDossier(ch) {
+  document.getElementById('print-dossier')?.remove();
+  const host = h('div', { id: 'print-dossier' });
+  for (const e of dossierEntries(ch, R)) {
+    host.append(h('section', { class: 'dossier-page' },
+      h('div', { class: 'dossier-title' }, h('b', null, e.title), e.note ? h('span', null, ` · ${e.note}`) : null),
+      renderFile(e.ch, R, { editing: false }).el));
+  }
+  if (ch.bio) host.append(h('section', { class: 'dossier-page' }, h('div', { class: 'dossier-title' }, h('b', null, 'Bio')), renderBio(ch, R, { change: () => {}, onOpenPerson: () => {} })));
+  document.body.append(host);
+  document.body.classList.add('printing-dossier');
+  const done = () => { document.body.classList.remove('printing-dossier'); host.remove(); window.removeEventListener('afterprint', done); };
+  window.addEventListener('afterprint', done);
+  setTimeout(() => window.print(), 300); // let portraits load
+}
+
+async function historyDialog() {
+  const ch = state.current;
+  if (!ch) return;
+  const label = h('input', { type: 'text', id: 'version-label', placeholder: 'e.g. Before the respec, Session 4' });
+  const list = h('div', { class: 'versions' });
+  const draw = () => {
+    list.replaceChildren();
+    const vs = versionsOf(ch);
+    if (!vs.length) { list.append(h('p', { class: 'hint', style: { margin: 0 } }, 'No versions yet. One is kept every time you save to the roster, or save one here.')); return; }
+    for (const v of vs) {
+      list.append(h('div', { class: 'version-row' },
+        h('div', { class: 'version-what' }, h('b', null, v.label), h('small', null, `${new Date(v.at).toLocaleString()} · ${v.ch.identity?.codename || 'Unnamed'} · PL ${v.ch.pl}${v.pp != null ? ` · ${v.pp} pp` : ''}`)),
+        h('button', { class: 'btn sm', type: 'button', onClick: () => { putActive(restoreVersion(state.current, v)); saveTabs(); fresh = false; renderCurrent(); emit('current'); document.getElementById('dialog')?.close(); toast(`Restored "${v.label}". Ctrl+Z puts it back.`); } }, 'Restore'),
+        h('button', { class: 'x', type: 'button', 'aria-label': `Delete version ${v.label}`, onClick: () => { removeVersion(ch, v.id); draw(); } }, '✕')));
+    }
+  };
+  draw();
+  await openDialog({
+    title: `History of ${ch.identity?.codename || 'this character'}`,
+    body: [
+      h('div', { class: 'seed-row' }, label, h('button', { class: 'btn', type: 'button', onClick: () => { addVersion(state.current, label.value.trim() || 'Saved by hand', R); label.value = ''; draw(); toast('Version saved'); } }, 'Save this version')),
+      h('p', { class: 'hint', style: { margin: '6px 0 10px' } }, 'Versions stay in this browser (and go with sync and backups). Restoring replaces what\'s on the Forge; Ctrl+Z undoes it.'),
+      list,
+    ],
+  });
+}
+
 function drawCurrent(ch) {
   fileHost.append(tabStrip());
   const banner = companionBanner(ch);
@@ -12306,6 +13008,10 @@ function drawCurrent(ch) {
   const toolbar = h('div', { class: 'toolbar' },
     h('button', { class: 'btn primary', type: 'button', title: `Saves to ${worldOf(ch) || 'The Multiverse Hub'} (change it at the bottom of the sheet)`, onClick: () => saveCurrent(ch) }, inRoster ? 'Update in roster' : 'Save to roster'),
     h('button', { class: 'btn', type: 'button', 'aria-pressed': String(state.editing), onClick: () => toggleEditing() }, state.editing ? 'Done editing' : 'Edit'),
+    h('span', { class: 'undo-group' },
+      h('button', { class: 'btn ghost icon', type: 'button', id: 'undo', title: 'Undo (Ctrl+Z)', 'aria-label': 'Undo', disabled: !canUndo(), onClick: undo }, '↶'),
+      h('button', { class: 'btn ghost icon', type: 'button', id: 'redo', title: 'Redo (Ctrl+Y)', 'aria-label': 'Redo', disabled: !canRedo(), onClick: redo }, '↷'),
+      h('button', { class: 'btn ghost', type: 'button', id: 'history', title: 'Saved versions of this character', onClick: () => historyDialog() }, '🕘 History')),
     h('button', { class: 'btn ghost', type: 'button', title: 'Keep the build, roll a new name and story', onClick: () => {
       const c = rerollIdentity(R, ch, randomSeed()); c.rosterId = ch.rosterId; setCurrent(c, { fresh: true });
     } }, 'New name'),
@@ -12332,14 +13038,26 @@ function drawCurrent(ch) {
     menu('Export', [
       { label: 'Excel character sheet (.xlsx)', hint: 'Your classic sheet, filled in. DCUGen can import it back, too', run: () => exportExcel(ch, R) },
       { label: 'Character file (.json)', hint: 'Small file to send to your GM or players; they Import it', run: () => exportJson(ch) },
-      { label: 'Stat block (.txt)', hint: 'Book-style text', run: () => exportText(ch, R) },
-      { label: 'Print or save as PDF', hint: 'Uses your browser\'s print dialog', run: () => window.print() },
+      { label: 'Stat block (.txt)', hint: hasForms(ch) || companionsOf(ch).length ? 'Book-style text, every form and companion' : 'Book-style text', run: () => exportText(ch, R) },
+      ...(hasForms(ch) || companionsOf(ch).length ? [{ label: 'Excel workbook: every form and companion', hint: 'A summary page plus a sheet for each', run: () => exportDossierExcel(ch, R) }] : []),
+      { label: 'Print or save as PDF', hint: 'This sheet, from your browser\'s print dialog', run: () => window.print() },
+      { label: 'Print the full dossier', hint: 'Every form and companion, each on its own pages, plus the bio', run: () => printDossier(ch) },
     ]),
     h('button', { class: 'btn', type: 'button', title: 'Add this character to the Battle Room', onClick: () => api.throwIn?.(ch) }, '⚔ Throw in Battle Room'),
     h('button', { class: 'btn', type: 'button', title: 'This character\'s page in the World wiki', onClick: () => api.openWorld?.(ch) }, '🌐 World'),
     h('button', { class: 'btn', type: 'button', onClick: () => share(ch) }, '🔑 Share / Key'));
-  const onChange = (c) => { state.current = c; state.tabs[state.active] = c; saveTabs(); fresh = false; renderCurrent(); };
+  const onChange = (c) => { putActive(c); saveTabs(); fresh = false; renderCurrent(); };
   fileHost.append(viewSwitch(ch));
+  root.querySelector('.forge')?.classList.toggle('playing', sheetView === 'play');
+  if (sheetView === 'play') {
+    fileHost.append(h('div', { class: 'toolbar play-toolbar' }, toolbar.querySelector('#undo')?.parentElement || null));
+    fileHost.append(renderPlay(ch, R, {
+      change: (fn) => { const c = JSON.parse(JSON.stringify(ch)); fn(c); onChange(c); },
+      openCompanion: (i) => { const comp = companionsOf(ch)[i]; if (comp) setCurrent({ ...JSON.parse(JSON.stringify(comp)), companionOf: { ownerId: ch.id, ownerName: ch.identity?.codename || 'their hero', index: i } }, { newTab: true }); },
+    }));
+    fresh = false;
+    return;
+  }
   if (sheetView === 'bio') {
     fileHost.append(renderBio(ch, R, { toolbar, change: (fn) => { const c = JSON.parse(JSON.stringify(ch)); fn(c); onChange(c); }, onOpenPerson: (p, kind) => openPerson(ch, p, kind) }));
     fileHost.append(saveBar(ch));
@@ -12389,8 +13107,9 @@ let sheetView = (() => { try { return localStorage.getItem('dcugen.sheetview') |
 function viewSwitch(ch) {
   const set = (v) => { sheetView = v; try { localStorage.setItem('dcugen.sheetview', v); } catch { /* ignore */ } renderCurrent(); };
   return h('div', { class: 'view-switch no-print', role: 'group', 'aria-label': 'Show' },
-    h('button', { type: 'button', 'aria-pressed': String(sheetView !== 'bio'), onClick: () => set('sheet') }, 'Character sheet'),
-    h('button', { type: 'button', 'aria-pressed': String(sheetView === 'bio'), onClick: () => set('bio') }, ch.bio ? 'Bio' : 'Bio (roll one)'));
+    h('button', { type: 'button', 'aria-pressed': String(sheetView !== 'bio' && sheetView !== 'play'), onClick: () => set('sheet') }, 'Character sheet'),
+    h('button', { type: 'button', 'aria-pressed': String(sheetView === 'bio'), onClick: () => set('bio') }, ch.bio ? 'Bio' : 'Bio (roll one)'),
+    h('button', { type: 'button', id: 'view-play', 'aria-pressed': String(sheetView === 'play'), title: 'At the table: damage, conditions, hero points, quick rolls', onClick: () => set('play') }, '▶ Play'));
 }
 
 /** Leaving edit mode records any spending in the advancement log (when it's switched on). */
@@ -12400,7 +13119,7 @@ function toggleEditing() {
     const before = c.advancement.log.length;
     recordChanges(c, R);
     if (c.advancement.log.length !== before) {
-      state.current = c; state.tabs[state.active] = c; saveTabs();
+      putActive(c); saveTabs();
       const e = c.advancement.log[c.advancement.log.length - 1];
       toast(e.points > 0 ? `Logged: ${e.points} point${e.points === 1 ? '' : 's'} spent` : e.points < 0 ? `Logged: ${-e.points} points back` : 'Logged the change');
     }
@@ -12469,7 +13188,7 @@ async function share(ch) {
 }
 
 
-return { inkFor, initForge, roll, restoreTabs, setCurrent, renderCurrent };
+return { inkFor, initForge, roll, restoreTabs, canUndo, canRedo, undo, redo, setCurrent, renderCurrent };
 })();
 
 __mods["src/app/lab.js"] = (() => {
@@ -14408,6 +15127,25 @@ __mods["src/app/rules.js"] = (() => {
 const { h, clear } = __mods["src/app/dom.js"];
 const { damageMatrix } = __mods["src/app/gmplus.js"];
 const { guideFor, skillGuideBody } = __mods["src/app/skillguide.js"];
+const { state, savePrefs, emit } = __mods["src/app/store.js"];
+const { houseRules, setHouseRules, HOUSE_DEFAULTS, isByTheBook } = __mods["src/engine/house.js"];
+/** House rules: how strict the app is for this table. */
+function housePanel() {
+  const hr = houseRules();
+  const set = (k, v) => { state.prefs.house = { ...houseRules(), [k]: v }; setHouseRules(state.prefs.house); savePrefs(); emit('house'); renderRules(); };
+  const sel = (k, label, opts, hint) => h('label', { class: 'field' }, h('span', null, label),
+    h('select', { id: `house-${k}`, onChange: (e) => set(k, e.target.value === 'true' ? true : e.target.value === 'false' ? false : e.target.value) }, opts.map(([v, t]) => h('option', { value: String(v), selected: hr[k] === v }, t))),
+    hint ? h('small', { class: 'hint' }, hint) : null);
+  return h('details', { class: 'panel house-panel', open: !isByTheBook() },
+    h('summary', null, h('b', null, '⚖ House rules'), h('span', { class: 'chip' }, isByTheBook() ? 'By the book' : 'House rules on')),
+    h('p', { class: 'hint', style: { margin: '8px 0' } }, 'Play your table\'s way. These change what the Forge flags as a problem and how drains work, for every character in this browser (and on your other devices if you sync).'),
+    h('div', { class: 'grid2' },
+      sel('plLimits', 'Power level limits (attack + effect, defenses, skills)', [['error', 'By the book: over the limit is a rule issue'], ['warning', 'Allowed: shown as a warning'], ['off', 'Off: not checked']]),
+      sel('budget', 'Power point budget (PL × 15)', [['error', 'By the book: overspending is a rule issue'], ['warning', 'Allowed: shown as a warning'], ['off', 'Off: not checked']]),
+      sel('weaken', 'Weaken drains', [['margin', 'As many power points as the check missed by'], ['degrees', '1 power point per degree of failure']], 'Check this against Weaken in your book (DCA 122) and pick what it says, or what your GM rules.'),
+      sel('poolWarnings', 'Pool points over the PL limits', [[true, 'Warn me'], [false, 'Don\'t warn']])),
+    isByTheBook() ? null : h('button', { class: 'btn sm', type: 'button', onClick: () => { state.prefs.house = { ...HOUSE_DEFAULTS }; setHouseRules(state.prefs.house); savePrefs(); emit('house'); renderRules(); } }, 'Back to by the book'));
+}
 let R;
 let root;
 let query = '';
@@ -14499,6 +15237,7 @@ function renderRules() {
   root.append(
     h('div', { class: 'page-head' }, h('div', null, h('h1', null, 'Rules'),
       h('p', null, 'Quick reference for DC Adventures: actions, maneuvers, checks, combat, hazards, tables, conditions, every effect, extra, flaw, advantage and skill. Page numbers point to the Hero\'s Handbook.'))),
+    housePanel(),
     h('div', { class: 'roster-tools' },
       h('input', { type: 'search', id: 'rules-q', placeholder: 'Search the rules (grab, falling, Area, Luck...)', value: query, 'aria-label': 'Search the rules', onInput: (e) => { query = e.target.value; draw(); } }),
       countEl),
@@ -19680,13 +20419,184 @@ async function getAppDialog() {
 return { RELEASES, DOWNLOADS, getAppButton, getAppDialog };
 })();
 
+__mods["src/app/syncfile.js"] = (() => {
+// Sync through a file in a cloud folder (Dropbox, OneDrive, Google Drive, iCloud Drive...). The app keeps
+// one JSON file there up to date; every device that points at the same file merges what the others wrote
+// (characters by the time they were saved, deletions included, world pages joined) and writes back. No
+// account or server needed: the cloud folder app moves the file between devices.
+//
+// Uses the File System Access API (Chrome, Edge, Opera, and the desktop app). Other browsers keep using
+// "Back up everything" / "Restore".
+
+const { h, toast, openDialog } = __mods["src/app/dom.js"];
+const { snapshotAll, restoreAll, registerSyncDialog } = __mods["src/app/backup.js"];
+const META = 'dcugen.sync.v1'; // { device, name, lastPullAt, lastPushAt }
+// Things that belong to this device: open tabs, current page, theme, how lists are shown.
+const LOCAL_ONLY = ['dcugen.tabs.v1', 'dcugen.tab', 'dcugen.theme', 'dcugen.sheetview', 'dcugen.gmtab', 'dcugen.roster.view', META];
+
+const syncSupported = () => typeof window.showSaveFilePicker === 'function' && !!window.__dcugenStorage?.db;
+
+function meta() { try { return JSON.parse(localStorage.getItem(META) || 'null') || {}; } catch { return {}; } }
+function setMeta(m) { try { localStorage.setItem(META, JSON.stringify(m)); } catch { /* ignore */ } }
+function device() {
+  const m = meta();
+  if (!m.device) { m.device = `d-${Date.now().toString(36)}-${Math.floor(Math.random() * 1e6).toString(36)}`; setMeta(m); }
+  return m.device;
+}
+
+const handle = () => window.__dcugenStorage?.handle('syncfile');
+let dirty = false;
+let busy = false;
+let status = 'off'; // off | ok | needs-permission | error
+const listeners = new Set();
+const setStatus = (s) => { status = s; for (const fn of listeners) fn(s); };
+
+async function permitted(fh, ask) {
+  const opts = { mode: 'readwrite' };
+  try {
+    if ((await fh.queryPermission(opts)) === 'granted') return true;
+    if (ask && (await fh.requestPermission(opts)) === 'granted') return true;
+  } catch { /* old browser */ }
+  return false;
+}
+
+async function readFile(fh) {
+  const text = await (await fh.getFile()).text();
+  if (!text.trim()) return null;
+  const data = JSON.parse(text);
+  if (data?.app !== 'DCUGen') throw new Error('That file is not a DCUGen sync file.');
+  return data;
+}
+
+async function writeFile(fh) {
+  const snap = snapshotAll();
+  for (const k of LOCAL_ONLY) delete snap.data[k];
+  snap.kind = 'sync'; snap.device = device();
+  const w = await fh.createWritable();
+  await w.write(JSON.stringify(snap));
+  await w.close();
+  setMeta({ ...meta(), lastPushAt: snap.savedAt });
+  return snap;
+}
+
+/**
+ * Pull what other devices wrote, then push the merged result. Returns { pulled } (true when something
+ * came in, and the page should reload to show it).
+ */
+async function syncNow({ ask = false, quiet = false } = {}) {
+  if (busy) return { pulled: false };
+  const fh = await handle();
+  if (!fh) { setStatus('off'); return { pulled: false }; }
+  if (!(await permitted(fh, ask))) { setStatus('needs-permission'); return { pulled: false }; }
+  busy = true;
+  try {
+    let pulled = false;
+    const remote = await readFile(fh);
+    const m = meta();
+    if (remote && remote.device !== device() && String(remote.savedAt) > String(m.lastPullAt || '')) {
+      restoreAll(remote, { mode: 'merge', skip: LOCAL_ONLY });
+      setMeta({ ...meta(), lastPullAt: remote.savedAt });
+      pulled = true;
+    }
+    await writeFile(fh);
+    dirty = false;
+    setStatus('ok');
+    if (!quiet) toast(pulled ? 'Synced: changes from your other devices came in' : 'Synced');
+    return { pulled };
+  } catch (e) {
+    setStatus('error');
+    if (!quiet) toast(`Sync failed: ${e.message}`);
+    return { pulled: false };
+  } finally { busy = false; }
+}
+
+async function connect(existing) {
+  try {
+    const opts = { types: [{ description: 'DCUGen sync file', accept: { 'application/json': ['.json'] } }] };
+    const fh = existing ? (await window.showOpenFilePicker(opts))[0] : await window.showSaveFilePicker({ ...opts, suggestedName: 'DCUGen-sync.json' });
+    await window.__dcugenStorage.handle('syncfile', fh);
+    setMeta({ ...meta(), name: fh.name, lastPullAt: '' });
+    const { pulled } = await syncNow({ ask: true, quiet: true });
+    toast(pulled ? `Connected to ${fh.name}. Pulled in your other devices' data. Reloading…` : `Connected to ${fh.name}. Changes save there from now on.`);
+    if (pulled) setTimeout(() => location.reload(), 700);
+  } catch (e) { if (e?.name !== 'AbortError') toast(`Couldn't use that file: ${e.message}`); }
+}
+
+async function syncDialog() {
+  if (!syncSupported()) {
+    await openDialog({ title: 'Sync with a cloud folder', body: [
+      h('p', { style: { margin: 0 } }, 'This browser can\'t keep a file updated on its own. Sync works in Chrome, Edge and Opera on a computer, and in the DCUGen desktop app.'),
+      h('p', { class: 'hint', style: { margin: '8px 0 0' } }, 'Here, use Backup > "Back up everything" and open the file on your other device with "Restore a backup".')] });
+    return;
+  }
+  const fh = await handle();
+  const m = meta();
+  const when = (t) => (t ? new Date(t).toLocaleString() : 'never');
+  const body = [
+    h('p', { style: { margin: 0 } }, 'Keep everything (roster, world, battles, notes, settings) in one file inside a folder your cloud app syncs: Dropbox, OneDrive, Google Drive or iCloud Drive. Point every computer at the same file and they stay in step. Open characters and the theme stay per device.'),
+    fh ? h('p', { style: { margin: '10px 0 0' } }, h('b', null, `Syncing with ${m.name || fh.name}. `), `Last sent ${when(m.lastPushAt)}, last received ${when(m.lastPullAt)}.`)
+      : h('p', { class: 'hint', style: { margin: '10px 0 0' } }, 'First computer: "Create a sync file" and save it in your cloud folder. Other computers: "Use an existing sync file" and pick that same file.'),
+  ];
+  const v = await openDialog({
+    title: 'Sync with a cloud folder',
+    body,
+    buttons: fh
+      ? [{ label: 'Stop syncing', value: 'stop' }, { label: 'Use a different file', value: 'open' }, { label: 'Sync now', value: 'now', primary: true }]
+      : [{ label: 'Cancel', value: null }, { label: 'Use an existing sync file', value: 'open' }, { label: 'Create a sync file', value: 'create', primary: true }],
+  });
+  if (v === 'create') await connect(false);
+  if (v === 'open') await connect(true);
+  if (v === 'now') { const { pulled } = await syncNow({ ask: true }); if (pulled) setTimeout(() => location.reload(), 700); }
+  if (v === 'stop') { await window.__dcugenStorage.handle('syncfile', null); setMeta({ device: device() }); setStatus('off'); toast('Sync stopped. Your data stays here, and the file stays in your cloud folder.'); }
+}
+registerSyncDialog(syncDialog);
+
+/** A small button in the top bar showing sync state; click to sync, reconnect or set up. */
+function syncButton() {
+  const btn = h('button', { class: 'icon-btn sync-btn', type: 'button', id: 'sync-btn', hidden: true, onClick: async () => {
+    if (status === 'needs-permission' || status === 'error') { const { pulled } = await syncNow({ ask: true }); if (pulled) setTimeout(() => location.reload(), 700); } else syncDialog();
+  } });
+  const paint = (s) => {
+    btn.hidden = s === 'off';
+    btn.textContent = s === 'ok' ? '⟳' : '⚠';
+    btn.title = s === 'ok' ? 'Synced with your cloud folder. Click for details.' : s === 'needs-permission' ? 'Click to reconnect your sync file (the browser asks once per visit)' : 'Sync had a problem. Click to try again.';
+    btn.classList.toggle('warn', s !== 'ok');
+  };
+  listeners.add(paint);
+  paint(status);
+  return btn;
+}
+
+/** At start: sync if allowed, then send changes every few seconds. */
+async function startSync() {
+  if (!syncSupported()) return;
+  // Note every change to the app's data (except what stays on this device).
+  const set = Storage.prototype.setItem;
+  Storage.prototype.setItem = function setItem(k, v) { set.call(this, k, v); if (this === localStorage && String(k).startsWith('dcugen.') && !LOCAL_ONLY.includes(String(k))) dirty = true; };
+  const fh = await handle();
+  if (!fh) return;
+  const { pulled } = await syncNow({ quiet: true });
+  if (pulled && !sessionStorage.getItem('dcugen.sync.reloaded')) {
+    sessionStorage.setItem('dcugen.sync.reloaded', '1');
+    toast('Changes from your other devices came in. Reloading…');
+    setTimeout(() => location.reload(), 700);
+    return;
+  }
+  sessionStorage.removeItem('dcugen.sync.reloaded');
+  setInterval(() => { if (dirty && status === 'ok') syncNow({ quiet: true }); }, 5000);
+  addEventListener('pagehide', () => { if (dirty && status === 'ok') syncNow({ quiet: true }); });
+}
+
+return { syncSupported, syncNow, syncDialog, syncButton, startSync };
+})();
+
 __mods["src/app/app.js"] = (() => {
 // DCUGen Hero Forge: app entry point.
 
 const { RULES } = __mods["src/engine/index.js"];
 const { state, onChange } = __mods["src/app/store.js"];
 const { toast } = __mods["src/app/dom.js"];
-const { initForge, roll, setCurrent, renderCurrent, restoreTabs } = __mods["src/app/forge.js"];
+const { initForge, roll, setCurrent, renderCurrent, restoreTabs, undo, redo } = __mods["src/app/forge.js"];
 const { initRoster, renderRoster } = __mods["src/app/roster.js"];
 const { initLab, openInLab, renderLab } = __mods["src/app/lab.js"];
 const { initGm, renderGm, addToInitiative } = __mods["src/app/gm.js"];
@@ -19700,6 +20610,8 @@ const { initTable, renderTable, postRoll } = __mods["src/app/table.js"];
 const { setLobbyHandlers, lobbySendRoster, lobbySendRemove, lobby } = __mods["src/app/lobby.js"];
 const { snapshotAll, restoreAll } = __mods["src/app/backup.js"];
 const { getAppButton } = __mods["src/app/getapp.js"];
+const { startSync, syncButton } = __mods["src/app/syncfile.js"];
+const { setHouseRules } = __mods["src/engine/house.js"];
 const { state: st, upsert, removeFromRoster } = __mods["src/app/store.js"];
 const { decodeCharacter } = __mods["src/app/share.js"];
 const { setImportHooks, enableDropImport, setImportRules, openAnything } = __mods["src/app/importer.js"];
@@ -19826,10 +20738,13 @@ async function desktopSync() {
 }
 
 async function boot() {
+  setHouseRules(st.prefs.house);
   initTheme();
   await desktopSync();
   const getApp = getAppButton();
   if (getApp) document.getElementById('theme-toggle').before(getApp);
+  document.getElementById('theme-toggle').before(syncButton());
+  startSync();
   for (const v of views) {
     document.getElementById(`tab-${v}`).addEventListener('click', () => showTab(v));
   }
@@ -19890,6 +20805,7 @@ async function boot() {
   enableDropImport();
 
   onChange((what) => {
+    if (what === 'house') renderCurrent();
     if (what === 'roster') {
       document.getElementById('roster-count').textContent = state.roster.length;
       renderCurrent();
@@ -19907,6 +20823,12 @@ async function boot() {
   showTab(loaded ? 'forge' : tab);
 
   document.addEventListener('keydown', (e) => {
+    // Undo / redo on the Forge (not while typing in a field, where the browser's own undo applies).
+    if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.target.closest('input, textarea, select, [contenteditable]') && !document.getElementById('view-forge').hidden && !document.getElementById('dialog')?.open) {
+      const k = e.key.toLowerCase();
+      if (k === 'z' && !e.shiftKey) { e.preventDefault(); undo(); return; }
+      if (k === 'y' || (k === 'z' && e.shiftKey)) { e.preventDefault(); redo(); return; }
+    }
     if (e.target.closest('input, textarea, select, [contenteditable]') || e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key === 'r' || e.key === 'R') {
       if (document.getElementById('view-forge').hidden) return;
@@ -19920,7 +20842,7 @@ boot();
 
 return {  };
 })();
-})();
+});
 </script>
 </body>
 </html>

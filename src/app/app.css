@@ -1680,3 +1680,63 @@ body.eb-printing .eb-wrap { max-height: none; overflow: visible; border-width: 4
 .comp-sheet { margin-top: 10px; }
 .comp-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 10px; padding: 8px 12px; border: 1px solid var(--blue); border-radius: 8px; background: var(--surface); }
 .comp-banner span { flex: 1 1 260px; }
+.sync-btn.warn { color: var(--accent); }
+
+/* ---- undo / history ---- */
+.undo-group { display: inline-flex; gap: 2px; }
+.btn.icon { min-width: 34px; padding-left: 8px; padding-right: 8px; font-size: 16px; }
+.versions { display: grid; gap: 6px; max-height: 50vh; overflow: auto; }
+.version-row { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; }
+.version-what { flex: 1; min-width: 0; display: grid; }
+.version-what small { color: var(--ink-3); }
+
+/* ---- Play view ---- */
+.play { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start; }
+.play-card { padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); min-width: 0; }
+.play-card h3 { margin: 0 0 8px; display: flex; gap: 8px; align-items: center; }
+.play-status { grid-column: 1 / -1; display: grid; gap: 10px; }
+.play-row { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+.play-hp { display: flex; align-items: center; gap: 8px; }
+.play-hp b { font-size: 28px; min-width: 1.4em; text-align: center; }
+.play .label { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); font-weight: 700; }
+.play-seg { width: 100%; max-width: 520px; }
+.play-seg.small { max-width: 420px; flex: 1; }
+.play-hit-row label { display: inline-flex; align-items: center; gap: 6px; }
+.play-hit { width: 76px; }
+.play-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.play-tile { display: grid; gap: 2px; padding: 10px 6px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2); color: var(--ink); font: inherit; cursor: pointer; text-align: center; }
+.play-tile b { font-size: 24px; }
+.play-tile small { color: var(--ink-3); font-size: 11px; }
+.play-tile:active { transform: scale(.97); }
+.play-list { display: grid; gap: 6px; }
+.play-line { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2); color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+div.play-line { grid-template-columns: 1fr auto auto; cursor: default; }
+.play-line small { grid-column: 1 / -1; color: var(--ink-3); }
+div.play-line small { grid-column: 1; grid-row: 2; }
+.play-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.play-chip { cursor: pointer; font: inherit; font-size: 13px; }
+.play-chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink, #fff); border-color: var(--accent); }
+.play-cond-notes { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink-2); }
+.play-tracker > b { display: block; margin-top: 6px; }
+.play-log { margin: 0; padding-left: 18px; font-size: 13px; display: grid; gap: 4px; }
+.chip.warn { background: var(--accent); color: #fff; }
+@media (max-width: 560px) { .play { grid-template-columns: 1fr; } .play-tiles { grid-template-columns: repeat(2, 1fr); } }
+/* At the table on a phone, the roll options get out of the way. */
+@media (max-width: 900px) { .forge.playing > .rail { display: none; } }
+
+/* ---- full dossier print ---- */
+#print-dossier { display: none; }
+@media print {
+  body.printing-dossier .app { display: none !important; }
+  body.printing-dossier #print-dossier { display: block; }
+  .dossier-page { break-after: page; }
+  .dossier-page:last-child { break-after: auto; }
+  .dossier-title { font: 700 14px/1.3 var(--font-label); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 6px; }
+  #print-dossier .no-print, #print-dossier .pool-add, #print-dossier .stepper { display: none !important; }
+}
+
+/* ---- house rules ---- */
+.house-panel { margin: 0 0 14px; }
+.house-panel summary { display: flex; gap: 10px; align-items: center; cursor: pointer; }
+.house-panel .field small { display: block; margin-top: 4px; }
+.issues .src { color: var(--ink-3); font-size: 12px; }

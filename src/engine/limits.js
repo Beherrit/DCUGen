@@ -12,8 +12,21 @@ import { costBreakdown, alternateOwnCost, primaryOwnCost, equipmentPoints } from
 import { EP_PER_EQUIPMENT_RANK } from './rules.js';
 import { powerTags } from './powersmith.js';
 import { withoutPlaced, hasPlaced, poolPowers, poolSpent, poolAvailable, fmtPoints } from './pools.js';
-function issue(rule, message, severity = 'error') {
-  return { rule, message, severity };
+import { houseRules } from './house.js';
+function issue(rule, message, severity = 'error', extra = {}) {
+  return { rule, message, severity, ...extra };
+}
+
+/** Apply the table's house rules to the list of issues. */
+function house(out) {
+  const hr = houseRules();
+  const soften = (i, mode) => (mode === 'off' ? null : mode === 'warning' && i.severity === 'error' ? { ...i, severity: 'warning', message: `${i.message} (house rule: allowed)` } : i);
+  return out.map((i) => {
+    if (i.pl) return soften(i, hr.plLimits);
+    if (i.rule === 'budget' && i.severity === 'error') return soften(i, hr.budget);
+    if (i.rule === 'pool' && i.severity === 'warning' && !hr.poolWarnings) return null;
+    return i;
+  }).filter(Boolean);
 }
 
 export function checkLimits(ch, R) {
@@ -38,10 +51,10 @@ export function checkLimits(ch, R) {
   for (const atk of d.attacks) {
     if (atk.roll) {
       if (atk.bonus + atk.rank > 2 * pl) {
-        out.push(issue('attack', `${atk.name}: attack +${atk.bonus} plus rank ${atk.rank} is ${atk.bonus + atk.rank}; the limit is ${2 * pl}.`));
+        out.push(issue('attack', `${atk.name}: attack +${atk.bonus} plus rank ${atk.rank} is ${atk.bonus + atk.rank}; the limit is ${2 * pl}.`, 'error', { pl: true }));
       }
     } else if (atk.rank > pl) {
-      out.push(issue('attack', `${atk.name}: ${atk.kind} effects have no attack check, so rank ${atk.rank} may not exceed PL ${pl}.`));
+      out.push(issue('attack', `${atk.name}: ${atk.kind} effects have no attack check, so rank ${atk.rank} may not exceed PL ${pl}.`, 'error', { pl: true }));
     }
   }
 
@@ -51,7 +64,7 @@ export function checkLimits(ch, R) {
   for (const [a, b] of pairs) {
     if (def.immune?.[a] || def.immune?.[b]) continue; // an immune defense has no rank to pair
     if (def[a] + def[b] > 2 * pl) {
-      out.push(issue('defense', `${a} ${def[a]} + ${b} ${def[b]} = ${def[a] + def[b]}; the limit is ${2 * pl}.`));
+      out.push(issue('defense', `${a} ${def[a]} + ${b} ${def[b]} = ${def[a] + def[b]}; the limit is ${2 * pl}.`, 'error', { pl: true }));
     }
   }
 
@@ -63,12 +76,12 @@ export function checkLimits(ch, R) {
 
   // Skills (trained and untrained)
   for (const s of d.skills) {
-    if (s.bonus > pl + 10) out.push(issue('skill', `${s.name}${s.spec ? ` (${s.spec})` : ''} +${s.bonus} exceeds PL + 10 (${pl + 10}).`));
+    if (s.bonus > pl + 10) out.push(issue('skill', `${s.name}${s.spec ? ` (${s.spec})` : ''} +${s.bonus} exceeds PL + 10 (${pl + 10}).`, 'error', { pl: true }));
   }
   for (const a of ABILITIES) {
     if (a === 'Stamina') continue; // no skills use Stamina
     const v = d.abilities[a];
-    if (v != null && v > pl + 10) out.push(issue('skill', `${a} ${v} makes untrained skills exceed PL + 10 (${pl + 10}).`));
+    if (v != null && v > pl + 10) out.push(issue('skill', `${a} ${v} makes untrained skills exceed PL + 10 (${pl + 10}).`, 'error', { pl: true }));
   }
 
   // Advantages
@@ -76,9 +89,9 @@ export function checkLimits(ch, R) {
     const def = R.advantage(adv.name);
     if (!def) { out.push(issue('data', `Unknown advantage "${adv.name}".`)); continue; }
     const rank = adv.rank || 1;
-    if (!def.ranked && rank > 1) out.push(issue('advantage', `${adv.name} is not a ranked advantage.`));
+    if (!def.ranked && rank > 1) out.push(issue('advantage', `${adv.name} is not a ranked advantage.`, 'error', { source: def.source }));
     const max = def.max_rank === 'half_pl' ? Math.floor(pl / 2) : def.max_rank;
-    if (max != null && rank > max) out.push(issue('advantage', `${adv.name} ${rank} exceeds its maximum of ${max}.`));
+    if (max != null && rank > max) out.push(issue('advantage', `${adv.name} ${rank} exceeds its maximum of ${max}.`, 'error', { source: def.source }));
   }
   const eqRanks = (ch.advantages || []).filter((a) => a.name === 'Equipment').reduce((s, a) => s + (a.rank || 1), 0);
   const ep = equipmentPoints(ch);
@@ -91,7 +104,7 @@ export function checkLimits(ch, R) {
     let eff;
     try { eff = R.effect(p.effect); } catch (e) { out.push(issue('data', e.message)); continue; }
     if (eff.max_rank != null && p.rank > eff.max_rank) {
-      out.push(issue('power', `${p.name}: ${eff.name} has a maximum rank of ${eff.max_rank}.`));
+      out.push(issue('power', `${p.name}: ${eff.name} has a maximum rank of ${eff.max_rank}.`, 'error', { source: eff.source }));
     }
     if (!eff.fixed_cost && !(p.rank > 0)) out.push(issue('power', `${p.name} needs at least rank 1.`));
     const tags = powerTags(p, R);
@@ -100,10 +113,10 @@ export function checkLimits(ch, R) {
         let mdef;
         try { mdef = R.modifier(kind, m.name, p.effect); } catch (e) { out.push(issue('data', e.message)); continue; }
         for (const req of mdef.requires || []) {
-          if (!tags.has(req)) out.push(issue('power', `${p.name}: ${m.name} needs an effect that is "${req}".`, 'warning'));
+          if (!tags.has(req)) out.push(issue('power', `${p.name}: ${m.name} needs an effect that is "${req}".`, 'warning', { source: mdef.source }));
         }
         if (mdef.max_steps != null && (m.steps ?? 1) > mdef.max_steps) {
-          out.push(issue('power', `${p.name}: ${m.name} can only be applied ${mdef.max_steps} time(s).`));
+          out.push(issue('power', `${p.name}: ${m.name} can only be applied ${mdef.max_steps} time(s).`, 'error', { source: mdef.source }));
         }
       }
     }
@@ -125,7 +138,7 @@ export function checkLimits(ch, R) {
   } else if (cost.total > cost.budget) out.push(issue('budget', ch.advancement ? `Spent ${cost.total} power points; starting points plus GM awards give ${cost.budget}.` : `Spent ${cost.total} power points; PL ${pl} allows ${cost.budget}.`));
   else if (cost.total < cost.budget) out.push(issue('budget', `${cost.budget - cost.total} power points unspent.`, 'info'));
 
-  return out;
+  return house(out);
 }
 
 /** Supporting characters, minions and creatures: built as stat blocks, so the point budget is advisory. */

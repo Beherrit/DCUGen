@@ -10,11 +10,12 @@ import { ABILITIES, BUYABLE_DEFENSES } from '../engine/rules.js';
 import { powerCost, primaryOwnCost } from '../engine/costs.js';
 import { gearCatalog, gearToEquipment, gearToDevice } from '../engine/gear.js';
 import { portraitBlock } from './portrait.js';
+import { houseRules } from '../engine/house.js';
 import { poolTargets, targetLabel, poolPowers, poolCapacity, poolSpent, poolAvailable, poolFeeder, costPerRank, drain, loseDrained, settlePools, fmtPoints } from '../engine/pools.js';
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const clone = (x) => JSON.parse(JSON.stringify(x));
 
-function stepper(value, onStep, { min = -Infinity, max = Infinity, label } = {}) {
+export function stepper(value, onStep, { min = -Infinity, max = Infinity, label } = {}) {
   return h('span', { class: 'stepper no-print' },
     h('button', { type: 'button', 'aria-label': `Lower ${label || ''}`, disabled: value <= min, onClick: () => onStep(-1) }, '−'),
     h('button', { type: 'button', 'aria-label': `Raise ${label || ''}`, disabled: value >= max, onClick: () => onStep(1) }, '+'));
@@ -36,7 +37,7 @@ function mathTable(p, R) {
  * A pool's tracker: where its power points are placed right now, with + and − for each, and a picker to
  * place more. Works outside edit mode, because this is what happens at the table.
  */
-function poolTracker(ch, p, path, change, R) {
+export function poolTracker(ch, p, path, change, R) {
   if (!p.pool) return null;
   const avail = poolAvailable(ch, p, R);
   const cap = poolCapacity(p, R);
@@ -80,7 +81,7 @@ function poolTracker(ch, p, path, change, R) {
  * Weaken: track the power points it has drained and still holds (DCA 122: the target loses points by how
  * much it missed the DC, and they come back over time). Pools it fills follow along.
  */
-function drainTracker(ch, p, path, change, R) {
+export function drainTracker(ch, p, path, change, R) {
   if (p.effect !== 'Weaken') return null;
   const held = p.drained || 0;
   const fills = poolPowers(ch).filter(({ power }) => power.feed === p.name).map(({ power }) => power.name);
@@ -94,7 +95,7 @@ function drainTracker(ch, p, path, change, R) {
       h('b', null, '🩸 Drain'),
       h('span', { class: 'pool-meter', role: 'img', 'aria-label': `${held} of ${p.rank} points drained` }, Array.from({ length: Math.min(p.rank, 40) }, (_, i) => h('i', { class: i < held ? 'on' : '' }))),
       h('span', { class: 'num pool-count' }, `${held}/${p.rank} pp held`)),
-    h('p', { class: 'hint pool-feed' }, `Target resists with ${resist} against DC ${10 + p.rank}. It loses as many power points as it missed by, ${p.rank} at most in all, and gets them back over time.${fills.length ? ` What you hold fills ${fills.join(' and ')}.` : ' Tick "Pool" on a power in the Power Lab and pick this one under "Filled by" to spend what you steal.'}`),
+    h('p', { class: 'hint pool-feed' }, `Target resists with ${resist} against DC ${10 + p.rank}. It loses ${houseRules().weaken === 'degrees' ? 'a power point per degree of failure (house rule)' : 'as many power points as it missed by'}, ${p.rank} at most in all, and gets them back over time.${fills.length ? ` What you hold fills ${fills.join(' and ')}.` : ' Tick "Pool" on a power in the Power Lab and pick this one under "Filled by" to spend what you steal.'}`),
     h('div', { class: 'pool-add no-print' },
       h('label', { class: 'drain-label' }, 'Missed by', missed),
       h('button', { class: 'btn sm', type: 'button', onClick: go, disabled: held >= p.rank }, 'Drain'),
@@ -427,7 +428,7 @@ export function renderFile(ch, R, opts = {}) {
     h('div', { class: 'points-bar', role: 'img', 'aria-label': parts.map(([n, v]) => `${n} ${v}`).join(', ') },
       parts.map(([, v, col]) => h('i', { style: { width: `${(Math.max(0, v) / denom) * 100}%`, background: col } }))),
     h('div', { class: 'legend' }, parts.map(([n, v, col]) => h('span', { style: { '--c': col } }, `${n} ${v}`))),
-    s.issues.length ? h('ul', { class: 'issues' }, s.issues.map((i) => h('li', { class: i.severity }, i.message))) : null);
+    s.issues.length ? h('ul', { class: 'issues' }, s.issues.map((i) => h('li', { class: i.severity }, i.message, i.source ? h('span', { class: 'src' }, ` (${i.source})`) : null))) : null);
 
   const file = h('article', { class: `file ${opts.fresh ? 'fresh' : ''}` },
     head,

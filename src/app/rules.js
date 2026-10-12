@@ -4,6 +4,26 @@
 import { h, clear } from './dom.js';
 import { damageMatrix } from './gmplus.js';
 import { guideFor, skillGuideBody } from './skillguide.js';
+import { state, savePrefs, emit } from './store.js';
+import { houseRules, setHouseRules, HOUSE_DEFAULTS, isByTheBook } from '../engine/house.js';
+
+/** House rules: how strict the app is for this table. */
+function housePanel() {
+  const hr = houseRules();
+  const set = (k, v) => { state.prefs.house = { ...houseRules(), [k]: v }; setHouseRules(state.prefs.house); savePrefs(); emit('house'); renderRules(); };
+  const sel = (k, label, opts, hint) => h('label', { class: 'field' }, h('span', null, label),
+    h('select', { id: `house-${k}`, onChange: (e) => set(k, e.target.value === 'true' ? true : e.target.value === 'false' ? false : e.target.value) }, opts.map(([v, t]) => h('option', { value: String(v), selected: hr[k] === v }, t))),
+    hint ? h('small', { class: 'hint' }, hint) : null);
+  return h('details', { class: 'panel house-panel', open: !isByTheBook() },
+    h('summary', null, h('b', null, '⚖ House rules'), h('span', { class: 'chip' }, isByTheBook() ? 'By the book' : 'House rules on')),
+    h('p', { class: 'hint', style: { margin: '8px 0' } }, 'Play your table\'s way. These change what the Forge flags as a problem and how drains work, for every character in this browser (and on your other devices if you sync).'),
+    h('div', { class: 'grid2' },
+      sel('plLimits', 'Power level limits (attack + effect, defenses, skills)', [['error', 'By the book: over the limit is a rule issue'], ['warning', 'Allowed: shown as a warning'], ['off', 'Off: not checked']]),
+      sel('budget', 'Power point budget (PL × 15)', [['error', 'By the book: overspending is a rule issue'], ['warning', 'Allowed: shown as a warning'], ['off', 'Off: not checked']]),
+      sel('weaken', 'Weaken drains', [['margin', 'As many power points as the check missed by'], ['degrees', '1 power point per degree of failure']], 'Check this against Weaken in your book (DCA 122) and pick what it says, or what your GM rules.'),
+      sel('poolWarnings', 'Pool points over the PL limits', [[true, 'Warn me'], [false, 'Don\'t warn']])),
+    isByTheBook() ? null : h('button', { class: 'btn sm', type: 'button', onClick: () => { state.prefs.house = { ...HOUSE_DEFAULTS }; setHouseRules(state.prefs.house); savePrefs(); emit('house'); renderRules(); } }, 'Back to by the book'));
+}
 let R;
 let root;
 let query = '';
@@ -95,6 +115,7 @@ export function renderRules() {
   root.append(
     h('div', { class: 'page-head' }, h('div', null, h('h1', null, 'Rules'),
       h('p', null, 'Quick reference for DC Adventures: actions, maneuvers, checks, combat, hazards, tables, conditions, every effect, extra, flaw, advantage and skill. Page numbers point to the Hero\'s Handbook.'))),
+    housePanel(),
     h('div', { class: 'roster-tools' },
       h('input', { type: 'search', id: 'rules-q', placeholder: 'Search the rules (grab, falling, Area, Luck...)', value: query, 'aria-label': 'Search the rules', onInput: (e) => { query = e.target.value; draw(); } }),
       countEl),
