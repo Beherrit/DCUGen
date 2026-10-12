@@ -1975,3 +1975,7 @@ div.play-line small { grid-column: 1; grid-row: 2; }
 .qr { display: grid; place-items: center; background: #fff; border-radius: 10px; padding: 8px; max-width: 320px; margin: 0 auto; }
 .qr svg { width: 100%; height: auto; }
 .tb-server { margin-top: 8px; font-size: 13px; }
+.share-out { display: grid; gap: 8px; margin-top: 8px; }
+.share-link { width: 100%; font: 12px/1.35 ui-monospace, Consolas, monospace; word-break: break-all; }
+.share-out .qr { max-width: 220px; }
+.share-names { margin: 6px 0; padding-left: 18px; max-height: 40vh; overflow: auto; }

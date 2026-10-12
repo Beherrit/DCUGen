@@ -6,7 +6,7 @@
 // by side, cards or a compact list. The folder travels with the character (ch.folder), so exports,
 // backups, world keys and the lobby carry it.
 
-import { h, clear, toast, openDialog, inkFor } from './dom.js';
+import { h, clear, toast, openDialog, inkFor, copyText, download } from './dom.js';
 import { state, saveRoster, upsert, removeFromRoster, newId } from './store.js';
 import { exportExcel, exportJson, exportRosterExcel, exportRosterJson } from './exporters.js';
 import { importDialog as importAndOpen } from './importer.js';
@@ -14,6 +14,8 @@ import { sheet as makeSheet } from '../engine/render.js';
 import { backupMenuItems } from './backup.js';
 import { paintRoster } from './portrait.js';
 import { setPortrait, portraitOf } from '../engine/portrait.js';
+import { encodeRoster, decodeRoster, rosterLink, keySize } from './share.js';
+import { qrSvg } from './lobby.js';
 
 const FOLDERS_KEY = 'dcugen.roster.folders.v1';
 const VIEW_KEY = 'dcugen.roster.view';
@@ -290,6 +292,7 @@ function bulkBar() {
     h('button', { class: 'btn sm', type: 'button', onClick: () => { ui.selected.clear(); ui.selecting = false; renderRoster(); } }, 'Clear'),
     h('span', { class: 'spacer' }),
     folderPicker(null, (p) => { const k = moveTo(chars, p); ui.selected.clear(); ui.selecting = false; renderRoster(); toast(`${k} moved to ${p || 'no folder'}`); }, { label: n ? 'Move selected to…' : 'Move to…' }),
+    h('button', { class: 'btn sm', type: 'button', disabled: !n, onClick: () => shareRosterDialog('selected') }, '🔗 Link'),
     h('button', { class: 'btn sm', type: 'button', disabled: !n, onClick: () => exportRosterExcel(chars, R) }, 'Excel'),
     h('button', { class: 'btn sm', type: 'button', disabled: !n, onClick: () => exportRosterJson(chars) }, 'JSON'),
     h('button', { class: 'btn sm', type: 'button', disabled: !n, onClick: () => { for (const c of chars) hooks.throwIn?.(c); toast(`${n} thrown in the Battle Room`); } }, '⚔ Battle Room'),
@@ -299,6 +302,92 @@ function bulkBar() {
 async function importDialog() {
   await importAndOpen({ open: false });
   renderRoster();
+}
+
+// ---- sharing a group of characters as one link ----------------------------------------------------------------
+
+/** Who a share covers: everyone, the open world or folder, the selected cards, or any world. */
+function shareScopes() {
+  const out = [['all', `🌌 Everyone (The Multiverse Hub, ${state.roster.length})`, () => state.roster]];
+  const sel = state.roster.filter((c) => ui.selected.has(c.rosterId));
+  if (sel.length) out.push(['selected', `☑ The ${sel.length} selected`, () => sel]);
+  for (const p of allFolders()) {
+    const n = state.roster.filter((c) => inFolder(c, p)).length;
+    if (n) out.push([`f:${p}`, `${p.includes('/') ? '📁' : '🌍'} ${p} (${n})`, () => state.roster.filter((c) => inFolder(c, p))]);
+  }
+  return out;
+}
+
+export async function shareRosterDialog(start) {
+  const scopes = shareScopes();
+  const first = start === 'selected' && scopes.some(([k]) => k === 'selected') ? 'selected' : ui.folder ? `f:${ui.folder}` : 'all';
+  const pick = h('select', { id: 'share-scope', 'aria-label': 'Who to share' }, scopes.map(([k, label]) => h('option', { value: k, selected: k === first }, label)));
+  const pics = h('input', { type: 'checkbox', id: 'share-pics' });
+  const out = h('div', { class: 'share-out' });
+  const make = async () => {
+    const [, , get] = scopes.find(([k]) => k === pick.value) || scopes[0];
+    const chars = get();
+    const used = new Set(chars.map((c) => c.folder).filter(Boolean).flatMap((f) => f.split('/').map((_, i, a) => a.slice(0, i + 1).join('/'))));
+    const name = pick.value.startsWith('f:') ? leafOf(pick.value.slice(2)) : pick.value === 'selected' ? `${chars.length} characters` : 'The Multiverse Hub';
+    const key = await encodeRoster(chars, { name, pictures: pics.checked, folders: folders.list.filter((f) => used.has(f.path)) });
+    const link = rosterLink(key);
+    clear(out);
+    const qr = link.length < 2300 ? qrSvg(link, 4) : null;
+    out.append(...[
+      h('p', { class: 'hint', style: { margin: '0 0 6px' } }, `${chars.length} character${chars.length === 1 ? '' : 's'}: ${chars.slice(0, 8).map((c) => c.identity?.codename || 'Unnamed').join(', ')}${chars.length > 8 ? '…' : ''}. Link: ${keySize(link)}.`),
+      h('textarea', { readonly: true, class: 'share-link', id: 'share-link', rows: 3 }, link),
+      h('div', { class: 'btn-row' },
+        h('button', { class: 'btn primary', type: 'button', id: 'share-copy', onClick: async () => toast((await copyText(link)) ? 'Link copied: paste it anywhere' : 'Select the link and copy it') }, 'Copy link'),
+        h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(key)) ? 'Key copied: paste it into "Open a key" on the Forge' : 'Copy failed') }, 'Copy key only'),
+        h('button', { class: 'btn', type: 'button', onClick: () => { download(`${name.replace(/[^\w-]+/g, '-')}-characters.txt`, `${link}\n`, 'text/plain'); toast('Saved'); } }, 'Save as a file')),
+      qr ? h('div', { class: 'qr', html: qr }) : null,
+      h('p', { class: 'hint', style: { margin: '6px 0 0' } }, link.length > 30000 ? 'This link is long. Some chat apps cut long links short; if it doesn\'t open, send the file instead (they paste what\'s in it into "Open a key" on the Forge).' : 'Whoever opens it gets these characters added to their roster, in the same worlds and folders. Nothing is uploaded anywhere: everything is inside the link.')].filter(Boolean));
+  };
+  pick.addEventListener('change', make); pics.addEventListener('change', make);
+  await make();
+  await openDialog({
+    title: '🔗 Share characters as a link',
+    body: [h('label', { class: 'field' }, h('span', null, 'Who'), pick),
+      h('label', { class: 'bm-check' }, pics, 'Include uploaded pictures (the link gets much longer)'),
+      out],
+    buttons: [{ label: 'Close', value: true, primary: true }],
+  });
+}
+
+/** Someone opened a roster link or pasted a roster key: show who's in it and add them. */
+export async function openRosterKey(text) {
+  let data;
+  try { data = await decodeRoster(text); } catch (e) { toast(e.message); return false; }
+  const chars = data.characters.filter((c) => c?.abilities && c.pl != null);
+  if (!chars.length) { toast('That link has no characters in it.'); return false; }
+  const known = chars.filter((c) => c.rosterId && state.roster.some((x) => x.rosterId === c.rosterId)).length;
+  const where = h('select', { id: 'roster-into', 'aria-label': 'Where they go' },
+    h('option', { value: 'keep' }, 'Keep their worlds and folders'),
+    h('option', { value: 'new' }, `Put them all in a new world: "${data.name || 'Shared'}"`),
+    h('option', { value: 'hub' }, 'The Multiverse Hub only (no world)'));
+  const ok = await openDialog({
+    title: `Add ${chars.length} character${chars.length === 1 ? '' : 's'}?`,
+    body: [h('p', { style: { margin: 0 } }, `From "${data.name || 'a shared roster'}"${data.madeAt ? `, made ${data.madeAt.slice(0, 10)}` : ''}:`),
+      h('ul', { class: 'share-names' }, chars.slice(0, 20).map((c) => h('li', null, h('b', null, c.identity?.codename || 'Unnamed'), ` PL ${c.pl}`, c.folder ? h('span', { class: 'hint' }, ` · ${c.folder}`) : null))),
+      chars.length > 20 ? h('p', { class: 'hint' }, `…and ${chars.length - 20} more.`) : null,
+      known ? h('p', { class: 'hint' }, `${known} of them ${known === 1 ? 'is' : 'are'} already on your roster and will be updated.`) : null,
+      h('label', { class: 'field' }, h('span', null, 'Where they go'), where)],
+    buttons: [{ label: 'Cancel', value: false }, { label: `Add ${chars.length}`, value: true, primary: true }],
+  });
+  if (!ok) return false;
+  for (const f of data.folders || []) if (f?.path) ensureFolder(f.path, { ...(f.color ? { color: f.color } : {}) });
+  const newWorld = where.value === 'new' ? ensureFolder(data.name || 'Shared') : null;
+  for (const ch of [...chars].reverse()) { // newest first on the roster, so add the last one first
+    const copy = { ...ch };
+    if (where.value === 'new') copy.folder = newWorld; else if (where.value === 'hub') delete copy.folder;
+    else if (copy.folder) ensureFolder(copy.folder);
+    upsert(copy);
+  }
+  if (where.value === 'new') ui.folder = newWorld; else ui.folder = null;
+  saveView();
+  renderRoster();
+  toast(`${chars.length} character${chars.length === 1 ? '' : 's'} added to your roster`);
+  return true;
 }
 
 // ---- the page --------------------------------------------------------------------------------------------------------
@@ -319,6 +408,7 @@ export function renderRoster() {
     h('div', { class: 'btn-row' },
       paintButton(),
       backupMenu(),
+      h('button', { class: 'btn primary', type: 'button', id: 'roster-share', disabled: !state.roster.length, title: 'A link that adds these characters to anyone\'s roster', onClick: () => shareRosterDialog() }, '🔗 Share as a link'),
       h('button', { class: 'btn', type: 'button', onClick: importDialog }, 'Import'),
       h('button', { class: 'btn', type: 'button', disabled: !list.length, title: `Everyone shown (${here})`, onClick: () => exportRosterExcel(list, R, ui.folder ? leafOf(ui.folder) : undefined) }, 'Export to Excel'),
       h('button', { class: 'btn', type: 'button', disabled: !list.length, onClick: () => exportRosterJson(list) }, 'Export JSON'))));

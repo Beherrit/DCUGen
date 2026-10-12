@@ -214,6 +214,10 @@ installed apps update themselves. Your data lives in a folder on your own disk, 
   much the check missed or 1 point per degree; warnings for pool points over the limits. Rule problems show the book
   page where the data has one.
 - **Roster** – save characters, teams and creatures in the browser; search, duplicate, delete.
+  **🔗 Share as a link**: everyone in The Multiverse Hub, one world or folder, or the cards you selected, in one
+  link (or a short key). Whoever opens it gets those characters added to their roster, in the same worlds and
+  folders. Nothing is uploaded: everything is inside the link. The World's Vault page has a **🔗 Copy world link**
+  for the whole campaign (pages, ties and roster) too.
   **Worlds** for a multiverse (Earth-1, Earth-2, a homebrew setting), with folders inside them ("Earth-2/Villains");
   **The Multiverse Hub** lists everyone you've made, in every world. Pick the world with the "Save to world" dropdown
   at the end of the Forge sheet (rolled, built from scratch, or a whole rolled team), or later: drag a card onto a
