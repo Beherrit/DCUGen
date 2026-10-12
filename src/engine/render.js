@@ -1,7 +1,7 @@
 // Turn a character into the stat-block shape used by DC Adventures books, as data and as text.
 
 import { ABILITIES, ABBR, traitKind } from './rules.js';
-import { costBreakdown, powerCost, deviceCost, effectCost } from './costs.js';
+import { costBreakdown, powerCost, deviceCost, effectCost, primaryOwnCost } from './costs.js';
 import { deriveAll } from './derive.js';
 import { checkLimits } from './limits.js';
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
@@ -202,7 +202,12 @@ export function explainPower(p, R) {
       notes.push({ name: m.name + (m.detail ? ` (${m.detail})` : ''), kind, text: def?.summary || '' });
     }
   }
-  if ((p.alternates || []).length) notes.push({ name: `${p.dynamic ? 'Dynamic ' : ''}Alternate Effects`, kind: 'extra', text: `Use one effect of this array at a time${p.dynamic ? ', or split its points between them' : ''}; switching is a free action.` });
+  for (const l of p.linked || []) {
+    let what = '';
+    try { what = explainPower(l, R).what; } catch { /* unknown effect */ }
+    notes.push({ name: `Linked: ${l.name || l.effect}`, kind: 'extra', text: `Happens at the same time, with the same action. ${what}`.trim() });
+  }
+  if ((p.alternates || []).length) notes.push({ name: `${p.dynamic ? 'Dynamic ' : ''}Alternate Effects`, kind: 'extra', text: `Use one effect of this array at a time${p.dynamic ? `, or split its ${primaryOwnCost(p, R)}-point pool between them` : ''}; switching is a free action.` });
   return { what: parts.filter(Boolean).join(' '), notes };
 }
 
@@ -314,6 +319,7 @@ export function statBlockText(ch, R) {
     const [first, ...alts] = p.lines;
     let line = `${first.name}: ${first.text} • ${plural(first.cost, 'point')}`;
     if (alts.length) line += `; ${alts.map((a) => `${a.dynamic ? 'DAE' : 'AE'}: ${a.name}: ${a.text} • ${plural(a.cost, 'point')}`).join('; ')}`;
+    if (alts.length && alts[0].dynamic) line += ` (${plural(first.cost, 'point')} Dynamic pool)`;
     powerBits.push(line);
   }
   for (const dev of s.devices) {
@@ -327,6 +333,16 @@ export function statBlockText(ch, R) {
     powerBits.push(`${dev.name}: ${kind} (-${dev.discount} points) • ${plural(dev.total, 'point')}. ${inner}`);
   }
   if (powerBits.length) out.push(`Powers: ${powerBits.join('. ')}.`);
+  // The player's own descriptions of their powers, after the book-style line.
+  const about = [];
+  const addAbout = (p) => {
+    if (p.description) about.push(`  ${p.name}: ${p.description}`);
+    for (const l of p.linked || []) if (l.description) about.push(`  ${l.name || l.effect} (linked): ${l.description}`);
+    for (const a of p.alternates || []) addAbout(a);
+  };
+  for (const p of ch.powers || []) addAbout(p);
+  for (const dev of ch.devices || []) for (const p of dev.powers || []) addAbout(p);
+  if (about.length) out.push('Power descriptions:', ...about);
   if (s.equipment.length) out.push(`Equipment: ${s.equipment.map((e) => `${e.name}${e.effect ? ` (${e.effect})` : ''}`).join(', ')}.`);
   if (s.advantages.length) out.push(`Advantages: ${s.advantages.map((a) => a.label).join(', ')}.`);
   if (s.skills.length) out.push(`Skills: ${s.skills.map((k) => `${k.label} ${k.ranks} (${sign(k.bonus)})`).join(', ')}.`);
