@@ -6,13 +6,15 @@ name: Desktop app
 on:
   push:
     branches: [main]
+  # Pull requests only run the tests; the release and builds below are for main.
+  pull_request:
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: desktop-release
+  group: desktop-${{ github.event_name == 'pull_request' && github.ref || 'release' }}
   cancel-in-progress: false
 
 jobs:
@@ -34,6 +36,7 @@ jobs:
   # jobs at once failed with "already_exists" for whichever came last).
   release:
     needs: test
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.v.outputs.version }}
