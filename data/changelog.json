@@ -1,5 +1,19 @@
 [
   {
+    "id": "2026-10-17",
+    "date": "2026-10-17",
+    "title": "A Battle Room that plays by the book, and easier reading",
+    "items": [
+      "Easier reading (Aa at the top): bigger text, colour-coded powers and advantages, an easy-read font, stronger contrast.",
+      "Battle Room: one Fight! button, A/B buttons on every fighter, a turn-by-turn log beside the fight, sorting by name or PL.",
+      "Fights follow the Hero's Handbook more closely: critical hits, minions, hero point re-rolls, concealment, Charge, Aim, Recover, Defend and minion team attacks.",
+      "Immunities work by descriptor (immune to physical damage stops fists and weapons), and fighters don't waste turns on attacks that can't hurt.",
+      "Characters with alternate forms pick their form in the Battle Room.",
+      "Power modifiers the Hero's Handbook lists were added for 24 effects.",
+      "An empty Forge shows where to start, the tabs are grouped, and players can hide the GM sections."
+    ]
+  },
+  {
     "id": "2026-10-16b",
     "date": "2026-10-16",
     "title": "Homebrew packs, search everything, and rules at a tap",

@@ -19,6 +19,11 @@ one to open DCUGen on your phone, one for each desktop download.
 
 ## What's inside
 
+- **Easier reading** – **Aa** at the top: bigger text (up to Huge), colour-coded powers and advantages (the name, how
+  it works and what it does each in its own colour and type), the Atkinson Hyperlegible font for low vision, and
+  stronger contrast.
+- **Start here and player view** – an empty Forge shows where to start (roll, build, open yours, a fight, a table, a
+  campaign). The tabs are grouped, and players can hide the GM sections with one click (search still finds everything).
 - **Search everything** – **Ctrl+K** (⌘K on a Mac, or 🔍 at the top): one box for every section, the things you do
   most, every character, World page, rule card and Bestiary creature.
 - **Help** – the **?** at the top: a short tour for players and one for GMs (offered on a first visit), What's new
@@ -159,9 +164,11 @@ one to open DCUGen on your phone, one for each desktop download.
     lightning, lit windows and street lamps at night, and tokens as standees with their portraits. Orbit around it,
     look from the top, or stand in any character's shoes and look around.
   - **Players see it live** on their phones (not hidden tokens), drag their own token, and open the 3D view too.
-- **Battle Room** – a fight simulator on the DC Adventures combat rules. Throw in anyone (the open character, roster
-  cards, any Bestiary creature, a whole Workshop minion squad), pick sides, and watch it play out turn by turn with a
-  full log of every attack roll, resistance check, condition, hero point and extra effort. Pause, step, run a round, or
+- **Battle Room** – a fight simulator on the DC Adventures combat rules. Put anyone against anyone: every character
+  and Bestiary creature in the list has A and B buttons (C and D for bigger brawls), the lists sort by name or PL, and a
+  versus bar shows the match-up. **Fight!** starts and plays it (or step through it one action at a time); **What
+  happened** sits beside the fight and reads turn by turn, every roll written out, filtered to one fighter if you like.
+  A character with alternate forms fights in the form picked on their card. Pause, step, run a round, or
   run to the end; replay the same seed or rematch with new dice; run the match-up 100 times for the odds. **Will this fight wreck
   the party?** checks the heroes' odds over 100 fights and tunes the opposition (attacks and defenses up or down) to
   an easy win, a tense win, a coin flip, a deadly fight or a planned defeat. **📖 Make the comic** turns the finished
@@ -171,7 +178,11 @@ one to open DCUGen on your phone, one for each desktop download.
   gear fighters and blasters keep their range and trade accuracy for effect, spellcasters rotate effects to the weak
   defense, mentalists turn controlled enemies on their friends, beasts lunge and grab, minions mob and break.
   Afflictions with all three degrees and recovery checks, area effects with Dodge for half, Multiattack, Impervious vs
-  Penetrating, Immunity, Concealment, Healing, Regeneration, grabs, Interpose, Evasion and more.
+  Penetrating, Immunity by descriptor (fists and weapons are physical; "fire damage" isn't "fire effects"; half-effect
+  immunities), Concealment (−2/−5), Healing, Regeneration, grabs and escapes, Interpose, Evasion, critical hits and
+  minions as the Hero's Handbook has them, Charge and Slam, Aim, Recover, Defend, minion team attacks, and hero points
+  that keep the better roll. Fighters pick targets by what their attacks can do, how dangerous each enemy is, and who
+  is nearly down.
 - **Campaign journal** – on the Bio page: sessions played, what happened, who was met (added to "People in their life"
   or with their status updated), points earned and what they bought, and a rolled "between adventures" event from the
   life tables. Sessions join the life timeline as "In play" and go into every export.
