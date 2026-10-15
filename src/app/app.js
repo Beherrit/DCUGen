@@ -10,7 +10,7 @@ import { initRoster, renderRoster, openRosterKey } from './roster.js';
 import { initLab, openInLab, renderLab } from './lab.js';
 import { initGm, renderGm, addToInitiative } from './gm.js';
 import { initWorkshop, renderWorkshop } from './workshop.js';
-import { initRules, renderRules } from './rules.js';
+import { initRules, renderRules, enableRuleLinks } from './rules.js';
 import { initBestiary, renderBestiary } from './bestiary.js';
 import { initGarage, renderGarage } from './garage.js';
 import { initBattle, renderBattle, throwIn } from './battle.js';
@@ -309,6 +309,7 @@ async function boot() {
   initTable(R, document.getElementById('view-table'), { open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); } });
   wireLobby();
   initRules(R, document.getElementById('view-rules'));
+  enableRuleLinks();
   initGarage(R, document.getElementById('view-garage'), { applyToCurrent: (ch) => setCurrent(ch) });
   initBestiary(R, document.getElementById('view-bestiary'), {
     openInForge: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },

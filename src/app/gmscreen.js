@@ -248,7 +248,7 @@ function card(p, spot) {
     h('div', { class: 'gm-state' },
       h('span', { class: 'gm-hp', title: 'Hero points' }, '⭐ ', h('b', { class: 'num' }, pl.heroPoints)),
       h('span', { class: 'gm-bruise', title: 'Bruises (−1 Toughness each)' }, '🩹 ', h('b', { class: 'num' }, pl.bruises)),
-      conds.length ? conds.map((c) => h('span', { class: `chip cond ${/Incapacitated|Stunned|Staggered/.test(c) ? 'bad' : ''}` }, c)) : h('span', { class: 'hint' }, 'fine'),
+      conds.length ? conds.map((c) => h('span', { class: `chip cond ${/Incapacitated|Stunned|Staggered/.test(c) ? 'bad' : ''}`, 'data-rule': c, 'data-rule-cat': 'Conditions', role: 'button', tabindex: 0, title: `${c}: what the rules say` }, c)) : h('span', { class: 'hint' }, 'fine'),
       s.penalty ? h('span', { class: 'chip warn' }, `${sign(s.penalty)} checks`) : null),
     s.pools.length || s.drains.length ? h('div', { class: 'gm-pools' },
       s.drains.map((d) => h('span', { class: 'chip' }, `🩸 ${d.name} ${d.held}/${d.rank}`)),

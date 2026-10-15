@@ -2158,3 +2158,10 @@ body.has-tbar .toast { bottom: calc(var(--tbar-h, 84px) + 12px); }
 .crash-bar { position: fixed; left: 50%; top: 12px; transform: translateX(-50%); z-index: 70; width: min(560px, calc(100vw - 24px)); padding: 12px 14px; border-radius: 10px; background: var(--bad-bg); color: var(--ink); border: 1px solid var(--bad); box-shadow: var(--shadow); display: grid; gap: 8px; }
 .crash-bar p { margin: 0; }
 .crash-bar pre { margin: 6px 0 0; max-height: 160px; overflow: auto; font: 12px/1.4 ui-monospace, Consolas, monospace; white-space: pre-wrap; }
+
+/* ---------- tap a rule name to read the rule ---------- */
+.rule-link { border: 0; background: none; padding: 0; font: inherit; color: inherit; cursor: help; text-decoration: underline dotted; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
+.rule-link:hover { text-decoration-style: solid; color: var(--accent); }
+.power-top .rule-link { font: 600 12px/1 var(--font-label); color: var(--ink-3); margin-left: 4px; }
+[data-rule][role="button"] { cursor: help; }
+@media print { .rule-link { text-decoration: none; } .power-top .rule-link { display: none; } }

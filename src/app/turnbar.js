@@ -68,7 +68,7 @@ function draw() {
       init ? h('button', { class: 'btn sm ghost', type: 'button', title: 'The whole turn order', 'aria-label': 'Turn order', onClick: () => toast(init.order.map((o, i) => `${i === init.turn ? '▶ ' : ''}${o.name}`).join(' · ')) }, '☰') : null),
     remind && (remind.lines.length || remind.tip || !remind.canAct) ? h('div', { class: 'tbar-remind' },
       !remind.canAct ? h('div', null, h('b', null, 'You can\'t act this turn.')) : null,
-      remind.lines.map((l) => h('div', null, l)),
+      remind.lines.map((l) => { const [c, ...rest] = l.split(': '); return h('div', null, h('button', { type: 'button', class: 'rule-link', 'data-rule': c, 'data-rule-cat': 'Conditions' }, c), `: ${rest.join(': ')}`); }),
       remind.tip ? h('div', { class: 'hint' }, remind.tip) : null) : null,
     openParty && party.length ? h('div', { class: 'tbar-party' }, party.map(chip)) : null);
 }

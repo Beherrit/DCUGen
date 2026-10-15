@@ -3,6 +3,7 @@
 // feed, with condition penalties already counted); drain and pool trackers; the character's companions.
 
 import { h, toast } from './dom.js';
+import { ruleLink } from './rules.js';
 import { deriveAll } from '../engine/derive.js';
 import { rollCheck } from './dice.js';
 import { stepper, poolTracker, drainTracker } from './sheetview.js';
@@ -97,7 +98,7 @@ export function renderPlay(ch, R, opts) {
   const conds = (R.raw.gm?.conditions?.conditions) || {};
   const conditions = h('section', { class: 'play-card' }, h('h3', null, 'Conditions'),
     h('div', { class: 'play-chips' }, QUICK_CONDITIONS.map((c) => h('button', { type: 'button', class: 'chip play-chip', 'aria-pressed': String(s.conditions.includes(c)), title: conds[c] || '', onClick: () => setPlay((st) => { st.conditions = st.conditions.includes(c) ? st.conditions.filter((x) => x !== c) : [...st.conditions, c]; }) }, c))),
-    s.conditions.length ? h('ul', { class: 'play-cond-notes' }, s.conditions.map((c) => h('li', null, h('b', null, `${c}: `), conds[c] || ''))) : null);
+    s.conditions.length ? h('ul', { class: 'play-cond-notes' }, s.conditions.map((c) => h('li', null, h('b', null, ruleLink(c, c, 'Conditions'), ': '), conds[c] || ''))) : null);
 
   // ---- drain & pools ----
   const trackers = [];
