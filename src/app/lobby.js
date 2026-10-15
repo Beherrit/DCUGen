@@ -14,6 +14,7 @@
 // server, so everything else works the same. Key: DCUP1.<base64url JSON { n: name, i: host peer id, k: token, s: server }>
 
 import { memberIdFor } from '../engine/tabletrust.js';
+import { explainJoinFailure, hasRelay, reconnectDelay, DEFAULT_STUN } from '../engine/netdiag.js';
 
 const KEY_PREFIX = 'DCUL1.';
 const b64 = (s) => btoa(unescape(encodeURIComponent(s))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
@@ -51,9 +52,24 @@ export function peerServer() {
   try { const s = JSON.parse(localStorage.getItem('dcugen.peer.server') || 'null'); if (s?.host) return s; } catch { /* ignore */ }
   return null;
 }
+/** Relay (TURN) and extra STUN servers this GM set (Connection settings in the Table tab). */
+export function peerIce() {
+  try { const l = JSON.parse(localStorage.getItem('dcugen.peer.ice') || '[]'); return Array.isArray(l) ? l : []; } catch { return []; }
+}
+export function setPeerIce(list) {
+  try { if (list?.length) localStorage.setItem('dcugen.peer.ice', JSON.stringify(list)); else localStorage.removeItem('dcugen.peer.ice'); } catch { /* ignore */ }
+}
+/** The ICE servers a connection uses: STUN plus the table's relays, or PeerJS's own defaults when none are set. */
+export function iceServersFor(server) {
+  const ice = server ? (server.ice || []) : peerIce();
+  return ice.length ? [...DEFAULT_STUN, ...ice] : null;
+}
 function peerOptions(server) {
   const s = server || peerServer();
-  return s ? { host: s.host, port: s.port || (s.secure === false ? 80 : 443), path: s.path || '/', secure: s.secure !== false, debug: 0 } : { debug: 0 };
+  const ice = iceServersFor(server);
+  const opts = s?.host ? { host: s.host, port: s.port || (s.secure === false ? 80 : 443), path: s.path || '/', secure: s.secure !== false, debug: 0 } : { debug: 0 };
+  if (ice) opts.config = { iceServers: ice };
+  return opts;
 }
 let transport = null; // { send(msg), close() } for the current connection, whatever it runs on
 
@@ -70,6 +86,8 @@ export const lobby = {
   members: [],         // [{ id, name, role }]
   id: null,
   error: null,
+  tips: [],            // what to try, when a join failed
+  reconnecting: 0,     // attempts so far while a dropped player gets back in
   ws: null,
   hostGone: false,
 };
@@ -129,7 +147,8 @@ function virtualScore(addr) {
   return 1;
 }
 
-export function leaveLobby({ silent = false } = {}) {
+export function leaveLobby({ silent = false, keepRejoin = false } = {}) {
+  if (!keepRejoin) stopRejoin();
   if (transport) { try { transport.close(); } catch { /* ignore */ } transport = null; }
   if (lobby.ws) { try { lobby.ws.close(); } catch { /* ignore */ } }
   lobby.ws = null; lobby.status = 'off'; lobby.role = null; lobby.members = []; lobby.id = null; lobby.info = null; lobby.key = null;
@@ -242,7 +261,9 @@ export function hostPeerTable({ name, tableName } = {}) {
   const Peer = needPeer();
   leaveLobby({ silent: true });
   const token = rid(10);
-  const server = peerServer();
+  // The table's own PeerJS server and relays travel in the link, so players use the same ones.
+  const ice = peerIce();
+  const server = peerServer() || ice.length ? { ...(peerServer() || {}), ...(ice.length ? { ice } : {}) } : null;
   const peer = new Peer(`dcugen-${rid(12)}`, peerOptions(server));
   const clients = new Map(); // conn -> { id, name, role, conn, hello }
   let n = 0;
@@ -301,28 +322,89 @@ export function hostPeerTable({ name, tableName } = {}) {
   });
 }
 
-/** Join a phone table from its link or key. */
-export function joinPeerTable(key, { name } = {}) {
+/**
+ * Join a phone table from its link or key. A player who drops (a phone going to sleep, a network change)
+ * gets back in by itself: the table knows this browser, so its characters stay theirs.
+ */
+let rejoin = null; // { key, name, timer }
+export function joinPeerTable(key, { name, retry = 0 } = {}) {
   const Peer = needPeer();
   const info = parsePeerKey(key);
-  leaveLobby({ silent: true });
-  lobby.status = 'connecting'; lobby.role = 'player'; lobby.name = name || 'Player'; lobby.key = key; lobby.info = { name: info.name }; lobby.error = null; lobby.hostGone = false; lobby.mode = 'phone';
+  if (!retry) stopRejoin();
+  leaveLobby({ silent: true, keepRejoin: true });
+  lobby.status = 'connecting'; lobby.role = 'player'; lobby.name = name || 'Player'; lobby.key = key; lobby.info = { name: info.name }; lobby.error = null; lobby.tips = []; lobby.hostGone = false; lobby.mode = 'phone'; lobby.reconnecting = retry;
   emit('status');
   const peer = new Peer(undefined, peerOptions(info.server));
+  const relay = hasRelay(info.server?.ice);
   let conn = null;
-  const fail = (msg) => { lobby.status = 'error'; lobby.error = msg; transport = null; emit('status'); try { peer.destroy(); } catch { /* ignore */ } };
-  const timer = setTimeout(() => { if (lobby.status === 'connecting') fail('The table didn\'t answer. Is the GM\'s page still open?'); }, 15000);
+  let stage = 'broker'; // how far it got: broker -> reach -> hello -> in
+  let done = false;
+  const fail = (errType) => {
+    if (done) return;
+    done = true;
+    clearTimeout(timer);
+    try { peer.destroy(); } catch { /* ignore */ }
+    transport = null;
+    // A dropped player keeps trying for a while before giving up.
+    if (retry > 0 && retry < 6 && errType !== 'peer-unavailable') { scheduleRejoin(key, lobby.name, retry); return; }
+    const why = explainJoinFailure({ stage, error: errType, relay });
+    lobby.status = 'error'; lobby.error = `${why.title}. ${why.text}`; lobby.tips = why.tips; lobby.reconnecting = 0;
+    emit('status');
+  };
+  const timer = setTimeout(() => { if (lobby.status === 'connecting') fail(''); }, 15000);
   peer.on('open', () => {
+    stage = 'reach';
     conn = peer.connect(info.hostId, { reliable: true, serialization: 'json' });
+    // When the networks can't see each other, the browser says so long before the timeout.
+    const watchIce = () => {
+      const pc = conn.peerConnection;
+      if (!pc) return;
+      pc.addEventListener('iceconnectionstatechange', () => { if (pc.iceConnectionState === 'failed' && stage === 'reach') fail(''); });
+    };
+    try { watchIce(); } catch { /* older PeerJS */ }
     conn.on('open', () => {
+      stage = 'hello';
       transport = { send: (m) => { try { for (const s of wire(m)) conn.send(s); } catch { /* closed */ } }, close: () => { try { peer.destroy(); } catch { /* ignore */ } } };
       transport.send({ t: 'hello', name: lobby.name, token: info.token, role: 'player', device: deviceSecret() });
     });
     const whole = assembler();
-    conn.on('data', (d) => { const m = whole(parse(d)); if (!m) return; if (m.t === 'welcome') clearTimeout(timer); handle(m); });
-    conn.on('close', () => { if (lobby.status === 'on') { lobby.hostGone = true; lobby.status = 'off'; transport = null; emit('status'); } });
+    conn.on('data', (d) => {
+      const m = whole(parse(d)); if (!m) return;
+      if (m.t === 'welcome') { stage = 'in'; done = true; clearTimeout(timer); lobby.reconnecting = 0; rejoin = { key, name: lobby.name, timer: null }; }
+      handle(m);
+    });
+    conn.on('close', () => {
+      if (lobby.status !== 'on') { if (stage !== 'in') fail(''); return; }
+      transport = null;
+      // The GM closed the table, or this player dropped: try to get back in (stopped by Leave).
+      if (rejoin) { lobby.status = 'connecting'; lobby.reconnecting = 1; emit('status'); scheduleRejoin(key, lobby.name, 0); return; }
+      lobby.hostGone = true; lobby.status = 'off'; emit('status');
+    });
   });
-  peer.on('error', (err) => { clearTimeout(timer); fail(peerError(err)); });
+  peer.on('error', (err) => { fail(String(err?.type || '')); });
+}
+
+function scheduleRejoin(key, name, n) {
+  if (!rejoin) rejoin = { key, name, timer: null };
+  clearTimeout(rejoin.timer);
+  lobby.status = 'connecting'; lobby.reconnecting = n + 1; emit('status');
+  rejoin.timer = setTimeout(() => { if (rejoin?.key === key) joinPeerTable(key, { name, retry: n + 1 }); }, reconnectDelay(n));
+}
+function stopRejoin() { if (rejoin) clearTimeout(rejoin.timer); rejoin = null; }
+
+/** Try the last table again now (the Try again button, or a phone waking up). */
+export function retryTable() {
+  const k = rejoin?.key || (lobby.mode === 'phone' && lobby.role === 'player' ? lobby.key : null);
+  if (!k) return false;
+  const name = rejoin?.name || lobby.name;
+  stopRejoin();
+  joinPeerTable(k, { name });
+  return true;
+}
+if (typeof document !== 'undefined') {
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && rejoin && lobby.status !== 'on') { clearTimeout(rejoin.timer); joinPeerTable(rejoin.key, { name: rejoin.name, retry: Math.max(1, lobby.reconnecting) }); }
+  });
 }
 
 /** A QR code for a link, as an SVG string (or null if the encoder isn't there). */

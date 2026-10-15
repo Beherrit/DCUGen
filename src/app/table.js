@@ -4,7 +4,8 @@
 
 import { h, clear, toast, copyText, openDialog } from './dom.js';
 import { state, upsert } from './store.js';
-import { lobby, onLobby, joinLobby, leaveLobby, lobbySendFeed, lobbyClaim, lobbySendRemove, makeLobbyKey, isLobbyKey, hostPeerTable, joinLink, qrSvg, isPeerKey, peerServer } from './lobby.js';
+import { lobby, onLobby, joinLobby, leaveLobby, lobbySendFeed, lobbyClaim, lobbySendRemove, makeLobbyKey, isLobbyKey, hostPeerTable, joinLink, qrSvg, isPeerKey, peerServer, retryTable } from './lobby.js';
+import { connectionSettings, testConnection } from './nettest.js';
 
 /** Open a table for phones in this tab, and show the QR code and link for players. Shared with the GM screen. */
 export async function openPhoneTable() {
@@ -152,20 +153,17 @@ function lobbyPanel() {
       h('ul', { class: 'tb-members' }, members.map((m) => h('li', null, h('span', { class: `tb-dot ${m.role}` }), m.name, m.role === 'host' ? h('small', null, ' · host') : null, m.id === lobby.id ? h('small', null, ' · you') : null))),
       h('div', { class: 'btn-row' }, h('button', { class: 'btn', type: 'button', onClick: lobby.role === 'host' ? stopHost : () => { leaveLobby(); renderTable(); } }, lobby.role === 'host' ? 'Close the table' : 'Leave')),
     ] : [
-      status === 'connecting' ? h('div', { class: 'tb-status' }, 'Connecting…') : null,
-      status === 'error' ? h('div', { class: 'tb-status bad' }, lobby.error || 'Connection failed') : null,
+      status === 'connecting' ? h('div', { class: 'tb-status' }, lobby.reconnecting ? `Reconnecting to ${lobby.info?.name || 'the table'}… (try ${lobby.reconnecting})` : 'Connecting…',
+        lobby.reconnecting ? h('button', { class: 'btn sm', type: 'button', style: { marginLeft: '8px' }, onClick: () => { leaveLobby(); renderTable(); } }, 'Stop') : null) : null,
+      status === 'error' ? h('div', { class: 'tb-status bad', id: 'tb-error' }, h('div', null, lobby.error || 'Connection failed'),
+        lobby.tips?.length ? h('ul', { class: 'tb-tips' }, lobby.tips.map((t) => h('li', null, t))) : null,
+        h('div', { class: 'btn-row' },
+          lobby.mode === 'phone' && lobby.key ? h('button', { class: 'btn sm', type: 'button', onClick: () => { retryTable(); } }, 'Try again') : null,
+          h('button', { class: 'btn sm', type: 'button', onClick: testConnection }, 'Test my connection'))) : null,
       h('label', { class: 'field' }, h('span', null, 'Your name'), nameIn),
       h('div', { class: 'tb-host' }, h('button', { class: 'btn primary', type: 'button', id: 'tb-phone', onClick: async () => { setTableName(nameIn.value); await openPhoneTable(); renderTable(); } }, '📱 Open a table for phones'), h('p', { class: 'hint', style: { margin: '4px 0 0' } }, 'Players scan a QR code and join from any phone or browser, no install. This page is the table: keep it open while you play.')),
       desktop ? h('div', { class: 'tb-host' }, h('button', { class: 'btn', type: 'button', onClick: host }, '⌂ Host on this computer (local network)'), h('p', { class: 'hint', style: { margin: '4px 0 0' } }, 'The desktop app\'s own server: for players on your network using the desktop app. Your world and the characters you share are sent to them; players claim their own characters and roll for them.')) : null,
-      h('details', { class: 'tb-server' }, h('summary', null, 'Use your own PeerJS server'), (() => {
-        const cur = peerServer();
-        const inp = h('input', { type: 'text', placeholder: 'host[:port][/path], e.g. peer.example.com/myapp', value: cur ? `${cur.host}${cur.port ? `:${cur.port}` : ''}${cur.path && cur.path !== '/' ? cur.path : ''}` : '', 'aria-label': 'PeerJS server' });
-        return h('div', null, h('p', { class: 'hint' }, 'Optional. Leave empty to use the free public server. Everyone at the table uses the GM\'s choice (it travels in the link).'),
-          h('div', { class: 'add-row' }, inp, h('button', { class: 'btn sm', type: 'button', onClick: () => {
-            const m = /^(?:https?:\/\/)?([^:/]+)(?::(\d+))?(\/.*)?$/.exec(inp.value.trim());
-            try { if (!inp.value.trim()) localStorage.removeItem('dcugen.peer.server'); else if (m) localStorage.setItem('dcugen.peer.server', JSON.stringify({ host: m[1], port: m[2] ? Number(m[2]) : undefined, path: m[3] || '/', secure: !/^http:/.test(inp.value) && m[1] !== 'localhost' })); toast('Saved'); } catch { toast('Couldn\'t save'); }
-          } }, 'Save')));
-      })()),
+      connectionSettings(),
       h('div', { class: 'label', style: { marginTop: '6px' } }, 'Join a table'),
       h('div', { class: 'add-row', style: { marginTop: 0 } }, keyIn, h('button', { class: 'btn', type: 'button', onClick: join }, 'Join')),
     ]);
