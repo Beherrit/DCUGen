@@ -1,5 +1,7 @@
 // DCUGen Hero Forge: app entry point.
 
+// First, so it catches anything that breaks from here on.
+import { reportCrash } from './crash.js';
 import { RULES } from '../engine/index.js';
 import { state, onChange } from './store.js';
 import { toast } from './dom.js';
@@ -357,4 +359,4 @@ async function boot() {
   });
 }
 
-boot();
+boot().catch(reportCrash);

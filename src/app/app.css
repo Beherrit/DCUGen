@@ -2153,3 +2153,8 @@ body.has-tbar .toast { bottom: calc(var(--tbar-h, 84px) + 12px); }
 .ses-card-title { font-weight: 600; }
 .ses-prev-title { margin: 0; font: italic 600 15px/1.3 var(--font-body); }
 .ses-prev ul { margin: 6px 0; padding-left: 18px; }
+
+/* ---------- something broke ---------- */
+.crash-bar { position: fixed; left: 50%; top: 12px; transform: translateX(-50%); z-index: 70; width: min(560px, calc(100vw - 24px)); padding: 12px 14px; border-radius: 10px; background: var(--bad-bg); color: var(--ink); border: 1px solid var(--bad); box-shadow: var(--shadow); display: grid; gap: 8px; }
+.crash-bar p { margin: 0; }
+.crash-bar pre { margin: 6px 0 0; max-height: 160px; overflow: auto; font: 12px/1.4 ui-monospace, Consolas, monospace; white-space: pre-wrap; }

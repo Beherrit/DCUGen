@@ -94,6 +94,8 @@ function checkForms(file, code) {
   const bad = [];
   code.split(/\r?\n/).forEach((line, i) => {
     if (/^\s*import\s/.test(line) && !/^import\s+\{/.test(line)) bad.push(`${rel}:${i + 1}: only "import { a, b } from './x.js';" is supported`);
+    // Nothing after the semicolon (a trailing comment hides the import from the bundler).
+    if (/^import\s+\{.*\}\s*from\s/.test(line) && !/^import\s+\{.*\}\s*from\s+['"][^'"]+['"];?\s*$/.test(line)) bad.push(`${rel}:${i + 1}: put nothing after an import (move the comment above it)`);
     if (/^\s*import\s*\(/.test(line) || /[^.\w]import\s*\(\s*['"`]/.test(line)) bad.push(`${rel}:${i + 1}: dynamic import() is not supported`);
     if (/^export\s+\*/.test(line)) bad.push(`${rel}:${i + 1}: "export *" is not supported`);
     if (/^export\s+default\s+(?!(async\s+)?function|class)/.test(line)) bad.push(`${rel}:${i + 1}: "export default <expression>" is not supported`);
