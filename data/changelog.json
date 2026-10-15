@@ -1,5 +1,18 @@
 [
   {
+    "id": "2026-10-16b",
+    "date": "2026-10-16",
+    "title": "Homebrew packs, search everything, and rules at a tap",
+    "items": [
+      "Homebrew (Workshop): your own power themes, archetypes and Bestiary creatures, in packs you switch on and off and share as a file or a code.",
+      "Ctrl+K (or 🔍) searches everything: sections, characters, World pages, rules, creatures, and the things you do most.",
+      "Tap an advantage or a power's effect on a sheet, or a condition, to read the rule.",
+      "If something breaks, DCUGen says so, keeps your data safe, and lets you send the details.",
+      "Starts faster on phones.",
+      "The Battle Room's \"Save this fight to the campaign\" says what it does."
+    ]
+  },
+  {
     "id": "2026-10-16",
     "date": "2026-10-16",
     "title": "Live turns, a session planner, and tables that connect",

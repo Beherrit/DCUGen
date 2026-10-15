@@ -19,6 +19,8 @@ one to open DCUGen on your phone, one for each desktop download.
 
 ## What's inside
 
+- **Search everything** – **Ctrl+K** (⌘K on a Mac, or 🔍 at the top): one box for every section, the things you do
+  most, every character, World page, rule card and Bestiary creature.
 - **Help** – the **?** at the top: a short tour for players and one for GMs (offered on a first visit), What's new
   after an update, and the version you're on.
 - **Forge** – roll a complete, legal character in one click. Pick power level, archetype (20 including androids
@@ -59,6 +61,11 @@ one to open DCUGen on your phone, one for each desktop download.
   - *Animals and creatures*: the DC Adventures animals plus 142 stat blocks of everyday animals, wild beasts,
     monsters and people, with templates (young, alpha, dire, giant, mutant, cybernetic, undead, spectral).
   - *Monster maker*: new monsters built to any PL.
+  - *Homebrew*: your own power themes (from a built-in one: rename its powers, your colours, codename words,
+    weaknesses), archetypes (ability ranges, which themes they roll with) and Bestiary creatures (any sheet built
+    on the Forge, with tactics and a weakness). Keep them in packs, switch packs on and off, and share a pack as a
+    file or a code your players load. Random rolls only use homebrew when you pick it, so seeds and keys stay the
+    same for everyone; a homebrew character shares as a full code.
 - **Bestiary** – 429 stat blocks, all legal for their PL: fantasy (dragons, giants, fey, elementals, dungeon
   aberrations), horror and undead, world myth and cryptids, aliens and cosmic entities, robots, mechs, clockwork and
   golems, kaiju, everyday animals and people. Each has tactics, habitat and a weakness; open it as a full sheet, apply
@@ -251,7 +258,8 @@ one to open DCUGen on your phone, one for each desktop download.
   calculator (hit and outcome odds, or roll it), the book's Damage Resistance Matrix, a GM screen with live hero point / Toughness /
   condition trackers, GM notes, and encounter, hideout and vehicle generators.
 - **Rules** – searchable reference cards: actions, maneuvers, checks, combat, hazards, conditions, the DC,
-  degrees and measurement tables, and every effect, extra, flaw, advantage and skill, with page numbers.
+  degrees and measurement tables, and every effect, extra, flaw, advantage and skill, with page numbers. Tap an
+  advantage or a power's effect on a sheet, or a condition in Play, on the GM Screen or the turn bar, to read its card.
 
 ## Desktop app
 
@@ -271,6 +279,7 @@ Needs Node 18 or newer, nothing else.
 
 ```bash
 npm test          # rules engine, generators, exports
+npm run lint      # ESLint: undefined names, unused imports, a local hiding the World's or Forge's shared state
 npm run e2e       # builds DCUGen.html and drives it in a browser (Playwright; first time: npx playwright install chromium)
 npm run build     # builds DCUGen.html (not committed: CI attaches it to every release)
 npm run dev       # http://localhost:5178/src/app/index.html (live) and http://localhost:5178/ (built)
