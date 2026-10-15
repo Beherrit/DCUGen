@@ -1,0 +1,282 @@
+{
+  "kind": "dcugen-pack",
+  "v": 1,
+  "id": "hb-power-profiles",
+  "name": "Power Profiles",
+  "author": "Themes from Mutants & Masterminds Power Profiles (Green Ronin)",
+  "notes": "Ten extra power themes built from the Power Profiles book: armor, dimensions, dreams, illusion, kinetic force, life, luck, the senses, natural talent and teleportation.",
+  "themes": [
+    {
+      "id": "hb-pp-armor",
+      "name": "Power Armor",
+      "source": "Power Profiles p11",
+      "color": "#8a96a8",
+      "attack_skill": "Armor Weapons",
+      "descriptors": ["armor", "technological", "magical"],
+      "origin_hint": "a prototype suit built in a garage, a war machine stolen from its makers, or enchanted plate passed down a knightly line",
+      "environment": "Urban",
+      "weakness": ["power cells running dry", "being caught outside the suit", "hackers and system faults"],
+      "codename": {
+        "words": ["Ironclad", "Rivet", "Bulwark", "Paladin", "Exo", "Juggernaut", "Gauntlet", "Sentinel", "Vanguard", "Titanium", "Warhead", "Cuirass"],
+        "adjectives": ["Armored", "Steel", "Iron", "Heavy", "Mark II"]
+      },
+      "costume": ["gunmetal grey with glowing blue joints", "crimson and gold plating", "battered olive-drab with hazard stripes", "silver mail with an enchanted sigil"],
+      "powers": [
+        { "role": "attack", "names": ["Blaster", "Repulsor Blaster"], "effect": "Damage", "range": "Ranged", "rank": "attack", "weight": 5 },
+        { "role": "attack", "names": ["Micro-Missiles"], "effect": "Damage", "range": "Ranged", "rank": "pl", "extras": [{ "name": "Area", "option": "Burst" }], "weight": 2 },
+        { "role": "attack", "names": ["Machine-Gun"], "effect": "Damage", "range": "Ranged", "rank": "attack", "extras": [{ "name": "Multiattack" }], "weight": 2 },
+        { "role": "attack", "names": ["Capture Weapon"], "effect": "Affliction", "range": "Ranged", "rank": "attack", "detail": "Resisted by Fortitude; Impaired, Disabled, Incapacitated", "weight": 2 },
+        { "role": "attack", "names": ["Surface Shock"], "effect": "Affliction", "range": "Close", "rank": "attack", "detail": "Resisted by Fortitude; Dazed, Stunned, Incapacitated", "weight": 2 },
+        { "role": "defense", "names": ["Armor", "Force Field"], "effect": "Protection", "rank": "toughness", "weight": 5 },
+        { "role": "movement", "names": ["Thrusters"], "effect": "Flight", "rank": "pl/2..pl/2+4", "weight": 6 },
+        { "role": "utility", "names": ["Life Support System"], "effect": "Immunity", "rank": "10", "detail": "Life Support", "weight": 4 },
+        { "role": "sense", "names": ["Sensors"], "effect": "Senses", "rank": "2..4", "detail": "Infravision, Radio, Extended Vision", "weight": 3 }
+      ]
+    },
+    {
+      "id": "hb-pp-dimension",
+      "name": "Dimensional",
+      "source": "Power Profiles p43",
+      "color": "#5b3b8c",
+      "attack_skill": "Dimensional Powers",
+      "descriptors": ["dimensional", "extradimensional", "outsider"],
+      "origin_hint": "being born on the far side of a rift, an accident in a multiverse lab, or a key that opens doors between worlds",
+      "environment": "Any",
+      "weakness": ["dimensional anchors", "losing the way home", "realities with alien physics"],
+      "codename": {
+        "words": ["Rift", "Tesseract", "Threshold", "Nexus", "Fold", "Vortex", "Wayfarer", "Breach", "Parallax", "Outlander", "Gate", "Kaleido"],
+        "adjectives": ["Dimensional", "Parallel", "Other", "Fourth", "Shifting"]
+      },
+      "costume": ["deep violet with a shifting fractal pattern", "black and silver with a keyhole emblem", "shimmering prism colors that never sit still"],
+      "powers": [
+        { "role": "attack", "names": ["Dimensional Banishment"], "effect": "Affliction", "range": "Ranged", "rank": "attack", "detail": "Resisted by Dodge, overcome by Will; Hindered, Immobile, Transported (shunted into another dimension)", "extras": [{ "name": "Extra Condition" }], "flaws": [{ "name": "Limited Degree" }], "weight": 4 },
+        { "role": "attack", "names": ["Dimensional Blade"], "effect": "Damage", "range": "Close", "rank": "attack", "extras": [{ "name": "Penetrating" }], "weight": 3 },
+        { "role": "attack", "names": ["Dimensional Cascade"], "effect": "Damage", "range": "Close", "rank": "pl", "extras": [{ "name": "Area", "option": "Cone" }], "detail": "Spills hazards from another reality", "weight": 2 },
+        { "role": "utility", "names": ["Dimensional Shunt"], "effect": "Deflect", "rank": "pl/2..pl", "weight": 2 },
+        { "role": "utility", "names": ["Dimensional Shift"], "effect": "Insubstantial", "rank": "4", "weight": 2 },
+        { "role": "movement", "names": ["Dimension Walk", "Dimensional Jump"], "effect": "Movement", "rank": "1..3", "detail": "Dimensional Travel", "weight": 5 },
+        { "role": "movement", "names": ["Dimensional Portal"], "effect": "Teleport", "rank": "pl/2..pl", "extras": [{ "name": "Portal" }], "weight": 2 },
+        { "role": "utility", "names": ["Dimensional Adaptation"], "effect": "Immunity", "rank": "10", "detail": "Life Support", "flaws": [{ "name": "Limited", "detail": "to hostile dimensions" }], "weight": 3 },
+        { "role": "sense", "names": ["Dimension Sense", "Dimensional Perspective"], "effect": "Senses", "rank": "2..4", "detail": "Detect Dimension (acute), vision penetrates concealment", "weight": 3 }
+      ]
+    },
+    {
+      "id": "hb-pp-dream",
+      "name": "Dream",
+      "source": "Power Profiles p48",
+      "color": "#7d6bc4",
+      "attack_skill": "Dream Powers",
+      "descriptors": ["dream", "sleep", "nightmare", "mental"],
+      "origin_hint": "a coma that lasted years, a bargain with the lord of the dreaming, or a family of seers who never quite wake",
+      "environment": "Dreamscape",
+      "weakness": ["being kept awake", "wakeful, alert minds", "getting lost in the dreaming"],
+      "codename": {
+        "words": ["Reverie", "Somnus", "Nightmare", "Lullaby", "Sandman", "Slumber", "Morpheus", "Phantasm", "Dozer", "Hypnos", "Daydream", "Insomnia"],
+        "adjectives": ["Dreaming", "Sleepless", "Lucid", "Midnight", "Drowsy"]
+      },
+      "costume": ["midnight blue with silver stars", "pale lilac robes and a sleep mask", "black pajama-cut silks with a crescent moon"],
+      "powers": [
+        { "role": "attack", "names": ["Sleep"], "effect": "Affliction", "range": "Perception", "rank": "pl", "detail": "Resisted by Will; Fatigued, Exhausted, Asleep", "extras": [{ "name": "Cumulative" }], "weight": 4 },
+        { "role": "attack", "names": ["Nightmare Blast"], "effect": "Damage", "range": "Ranged", "rank": "attack", "detail": "Resisted by Will; waking nightmare", "extras": [{ "name": "Alternate Resistance", "option": "Equivalent resistance" }], "weight": 4 },
+        { "role": "attack", "names": ["Dream Trap"], "effect": "Affliction", "range": "Perception", "rank": "pl", "detail": "Resisted by Will; Dazed, Stunned, Asleep inside a dream", "flaws": [{ "name": "Limited", "detail": "to sleeping or drowsy targets" }], "weight": 2 },
+        { "role": "control", "names": ["Dream Control"], "effect": "Illusion", "option": "All sense types", "rank": "pl/2..pl-2", "flaws": [{ "name": "Limited", "detail": "to the minds of sleepers" }], "weight": 3 },
+        { "role": "movement", "names": ["Dream Travel"], "effect": "Movement", "rank": "1", "detail": "Dimensional Travel (the Dreaming)", "weight": 3 },
+        { "role": "movement", "names": ["Dreamport"], "effect": "Teleport", "rank": "pl/2..pl", "extras": [{ "name": "Accurate" }], "flaws": [{ "name": "Medium", "detail": "only to sleeping dreamers" }], "weight": 3 },
+        { "role": "utility", "names": ["Healing Trance"], "effect": "Regeneration", "rank": "2..pl/2", "flaws": [{ "name": "Source", "detail": "sleep" }], "weight": 2 },
+        { "role": "sense", "names": ["Dream Reading"], "effect": "Mind Reading", "rank": "pl/2..pl", "flaws": [{ "name": "Limited", "detail": "to sleeping subjects" }], "weight": 2 },
+        { "role": "sense", "names": ["Precognitive Dreams"], "effect": "Senses", "rank": "4", "detail": "Precognition", "flaws": [{ "name": "Limited", "detail": "while dreaming" }], "weight": 2 }
+      ]
+    },
+    {
+      "id": "hb-pp-illusion",
+      "name": "Illusion",
+      "source": "Power Profiles p79",
+      "color": "#c79a2e",
+      "attack_skill": "Illusions",
+      "descriptors": ["illusion", "hallucination", "sensory impression", "mental"],
+      "origin_hint": "a stage magician who stumbled on real power, a light-bending mutation, or a mask that shows people what they fear",
+      "environment": "Urban",
+      "weakness": ["those who refuse to believe", "cameras and mindless machines", "losing concentration"],
+      "codename": {
+        "words": ["Mirage", "Phantasm", "Glamour", "Facade", "Chimera", "Trickster", "Veil", "Fata Morgana", "Hallucinator", "Masque", "Spectacle", "Smoke"],
+        "adjectives": ["Illusory", "Mirror", "Phantom", "False", "Grand"]
+      },
+      "costume": ["a magician's tuxedo in gold and black", "a featureless mirrored mask and grey suit", "iridescent mother-of-pearl"],
+      "powers": [
+        { "role": "attack", "names": ["Illusory Damage"], "effect": "Damage", "range": "Perception", "rank": "pl", "detail": "Resisted by Will; seeing through the illusion ends it", "extras": [{ "name": "Alternate Resistance", "option": "Equivalent resistance" }], "weight": 4 },
+        { "role": "attack", "names": ["Illusory Affliction"], "effect": "Affliction", "range": "Perception", "rank": "pl", "detail": "Resisted by Will; Dazed, Stunned, Incapacitated (shaped by the illusion)", "extras": [{ "name": "Subtle", "option": "Hard to notice" }], "weight": 3 },
+        { "role": "attack", "names": ["Vertigo"], "effect": "Affliction", "range": "Perception", "rank": "pl", "detail": "Resisted by Will; Impaired, Prone, Incapacitated", "extras": [{ "name": "Cumulative" }], "weight": 2 },
+        { "role": "attack", "names": ["Sensory Deprivation"], "effect": "Affliction", "range": "Ranged", "rank": "attack", "detail": "Resisted by Will; senses Impaired, Disabled, Unaware", "extras": [{ "name": "Cumulative" }], "weight": 3 },
+        { "role": "control", "names": ["Illusion", "Illusory Double"], "effect": "Illusion", "option": "All sense types", "rank": "pl/2..pl-2", "weight": 5 },
+        { "role": "defense", "names": ["Hidden Cover"], "effect": "Protection", "rank": "toughness", "detail": "Attacks strike an illusory decoy", "extras": [{ "name": "Sustained" }], "weight": 4 },
+        { "role": "utility", "names": ["Illusory Concealment"], "effect": "Concealment", "rank": "4", "detail": "All visual senses", "flaws": [{ "name": "Blending" }], "weight": 3 },
+        { "role": "utility", "names": ["Illusory Disguise"], "effect": "Morph", "rank": "1..2", "flaws": [{ "name": "Resistible" }], "weight": 2 },
+        { "role": "sense", "names": ["True Perception"], "effect": "Senses", "rank": "3..5", "detail": "Senses counter illusions", "weight": 2 }
+      ]
+    },
+    {
+      "id": "hb-pp-kinetic",
+      "name": "Kinetic",
+      "source": "Power Profiles p85",
+      "color": "#e2873a",
+      "attack_skill": "Kinetic Powers",
+      "descriptors": ["kinetic", "force", "friction", "inertia"],
+      "origin_hint": "absorbing the shock of a particle-collider crash, a mutation that stores every impact, or a stone that remembers motion",
+      "environment": "Urban",
+      "weakness": ["stillness with nothing to push against", "storing more force than the body can hold"],
+      "codename": {
+        "words": ["Momentum", "Impact", "Inertia", "Recoil", "Kinesis", "Rebound", "Shockwave", "Friction", "Ricochet", "Torque", "Thrust", "Velocity"],
+        "adjectives": ["Kinetic", "Unstoppable", "Charged", "Immovable", "Full-Force"]
+      },
+      "costume": ["orange and charcoal with motion lines", "white with copper force-ripples", "black bodysuit with a glowing impact crater emblem"],
+      "powers": [
+        { "role": "attack", "names": ["Kinetic Blast", "Kinetic Bullet"], "effect": "Damage", "range": "Ranged", "rank": "attack", "weight": 5 },
+        { "role": "attack", "names": ["Kinetic Burst"], "effect": "Damage", "range": "Ranged", "rank": "pl", "extras": [{ "name": "Area", "option": "Burst" }], "weight": 2 },
+        { "role": "attack", "names": ["Kinetic Weapon"], "effect": "Damage", "range": "Close", "rank": "attack", "weight": 2 },
+        { "role": "attack", "names": ["Suffocating Bubble"], "effect": "Affliction", "range": "Ranged", "rank": "attack", "detail": "Resisted by Fortitude; Fatigued, Exhausted, Incapacitated", "extras": [{ "name": "Progressive" }], "weight": 2 },
+        { "role": "attack", "names": ["Momentum Drain", "Friction Heat"], "effect": "Weaken", "range": "Ranged", "rank": "attack", "detail": "Movement effects; resisted by Fortitude", "extras": [{ "name": "Broad" }], "weight": 1 },
+        { "role": "control", "names": ["Telekinesis", "Psychokinesis"], "effect": "Move Object", "range": "Ranged", "rank": "pl/2..pl", "weight": 4 },
+        { "role": "defense", "names": ["Kinetic Shield"], "effect": "Protection", "rank": "toughness", "extras": [{ "name": "Sustained" }], "weight": 5 },
+        { "role": "utility", "names": ["Immovable"], "effect": "Immunity", "rank": "10", "detail": "Being moved", "weight": 2 },
+        { "role": "movement", "names": ["Kinetic Rebound", "Friction Cling"], "effect": "Movement", "rank": "1..2", "detail": "Safe Fall, Wall-crawling", "weight": 3 }
+      ]
+    },
+    {
+      "id": "hb-pp-life",
+      "name": "Life Force",
+      "source": "Power Profiles p89",
+      "color": "#d9485f",
+      "attack_skill": "Life Powers",
+      "descriptors": ["life", "biological", "life force"],
+      "origin_hint": "a medical trial that went too well, a blessing from a goddess of healing, or a heart that beats with the planet's own pulse",
+      "environment": "Any",
+      "weakness": ["constructs and the undead", "plagues and blights", "the pain of everyone they heal"],
+      "codename": {
+        "words": ["Vital", "Pulse", "Anima", "Lifeblood", "Panacea", "Remedy", "Bloom", "Genesis", "Vigor", "Mender", "Quickening", "Heartbeat"],
+        "adjectives": ["Living", "Vital", "Crimson", "Healing", "Wild"]
+      },
+      "costume": ["white and red with a heartbeat line", "leaf green and gold", "scrubs-blue with a glowing caduceus"],
+      "powers": [
+        { "role": "attack", "names": ["Bio-Disruption"], "effect": "Affliction", "range": "Close", "rank": "attack", "detail": "Resisted by Fortitude; Dazed, Stunned, Incapacitated", "extras": [{ "name": "Cumulative" }], "weight": 3 },
+        { "role": "attack", "names": ["Cellular Disruption"], "effect": "Damage", "range": "Ranged", "rank": "attack", "detail": "Resisted by Fortitude", "extras": [{ "name": "Alternate Resistance", "option": "Equivalent resistance" }], "weight": 4 },
+        { "role": "attack", "names": ["Bio-Override"], "effect": "Affliction", "range": "Perception", "rank": "pl", "detail": "Resisted by Fortitude; Entranced, Compelled, Controlled", "extras": [{ "name": "Cumulative" }], "weight": 2 },
+        { "role": "attack", "names": ["Pathogen"], "effect": "Affliction", "range": "Close", "rank": "attack", "detail": "Resisted by Fortitude; Impaired, Disabled, Incapacitated", "extras": [{ "name": "Progressive" }], "weight": 2 },
+        { "role": "support", "names": ["Total Healing", "Pharmacopeia"], "effect": "Healing", "rank": "pl/2..pl", "extras": [{ "name": "Restorative" }], "weight": 4 },
+        { "role": "utility", "names": ["Total Self Healing"], "effect": "Regeneration", "rank": "2..pl/2", "weight": 3 },
+        { "role": "utility", "names": ["Adrenal Control"], "effect": "Enhanced Trait", "option": "Strength", "rank": "1..3", "flaws": [{ "name": "Fades" }], "weight": 2 },
+        { "role": "utility", "names": ["Enhanced Immune System"], "effect": "Immunity", "rank": "2", "detail": "Disease and poison", "weight": 2 },
+        { "role": "sense", "names": ["Life Sense", "Psychic Diagnosis"], "effect": "Senses", "rank": "3", "detail": "Detect Life (ranged, acute)", "weight": 3 }
+      ]
+    },
+    {
+      "id": "hb-pp-luck",
+      "name": "Luck",
+      "source": "Power Profiles p99",
+      "color": "#1f9e6e",
+      "attack_skill": "Luck Powers",
+      "descriptors": ["luck", "probability", "coincidence", "good fortune"],
+      "origin_hint": "surviving a one-in-a-billion accident, a cursed rabbit's foot, or a gambler's deal with a goddess of chance",
+      "environment": "Urban",
+      "weakness": ["luck that runs out at the worst moment", "jinxes and curses", "the cosmic bill coming due"],
+      "codename": {
+        "words": ["Jackpot", "Longshot", "Domino", "Jinx", "Fortune", "Wildcard", "Snake Eyes", "Clover", "Black Cat", "Lady Luck", "Ace", "Hex"],
+        "adjectives": ["Lucky", "Unlucky", "Fortunate", "Wild", "Golden"]
+      },
+      "costume": ["emerald green with gold four-leaf clovers", "black and white like a domino", "a card-suit harlequin pattern"],
+      "powers": [
+        { "role": "attack", "names": ["Jinx"], "effect": "Affliction", "range": "Perception", "rank": "pl", "detail": "Resisted by Will; Impaired and Vulnerable, Disabled and Defenseless", "extras": [{ "name": "Extra Condition" }, { "name": "Subtle", "option": "Hard to notice" }], "flaws": [{ "name": "Limited Degree" }], "weight": 4 },
+        { "role": "attack", "names": ["Catastrophe"], "effect": "Damage", "range": "Perception", "rank": "pl", "detail": "A freak accident strikes the target", "extras": [{ "name": "Subtle", "option": "Hard to notice" }], "weight": 3 },
+        { "role": "attack", "names": ["Lucky Shot"], "effect": "Damage", "range": "Ranged", "rank": "attack", "detail": "An improbable ricochet finds its mark", "extras": [{ "name": "Ricochet" }], "weight": 3 },
+        { "role": "control", "names": ["Poltergeist"], "effect": "Move Object", "range": "Ranged", "rank": "pl/2..pl", "extras": [{ "name": "Precise" }], "weight": 2 },
+        { "role": "utility", "names": ["Lucky", "Reality Control"], "effect": "Luck Control", "rank": "1..3", "weight": 3 },
+        { "role": "defense", "names": ["Defensive Luck"], "effect": "Protection", "rank": "toughness", "extras": [{ "name": "Sustained" }], "weight": 5 },
+        { "role": "utility", "names": ["Lucky Dodge"], "effect": "Enhanced Trait", "option": "Dodge", "rank": "1..3", "weight": 2 },
+        { "role": "movement", "names": ["Breakfall", "Ease of Movement"], "effect": "Movement", "rank": "1..2", "detail": "Safe Fall, Sure-footed", "weight": 2 },
+        { "role": "sense", "names": ["Sense of Luck"], "effect": "Senses", "rank": "1", "detail": "Luck Awareness", "weight": 2 }
+      ]
+    },
+    {
+      "id": "hb-pp-sensory",
+      "name": "Super-Senses",
+      "source": "Power Profiles p154",
+      "color": "#e6b800",
+      "attack_skill": "Sensory Powers",
+      "descriptors": ["sensory", "perception", "precise"],
+      "origin_hint": "a childhood accident that took one sense and sharpened the rest, cybernetic eyes and ears, or a mutation that tunes into every frequency",
+      "environment": "Urban",
+      "weakness": ["sensory overload from loud noise and bright light", "jamming and scrambled signals"],
+      "codename": {
+        "words": ["Radar", "Echo", "Lookout", "Hawkeye", "Overwatch", "Spectrum", "Sonar", "Witness", "Sentry", "Periscope", "Clarity", "Scope"],
+        "adjectives": ["All-Seeing", "Sharp", "Keen", "Watchful", "Wide-Eyed"]
+      },
+      "costume": ["yellow and black with a visor", "slate grey with lens-like goggles", "dark red with a stylized eye on the chest"],
+      "powers": [
+        { "role": "attack", "names": ["Dazzle"], "effect": "Affliction", "range": "Ranged", "rank": "attack", "detail": "Resisted by Dodge, overcome by Fortitude; senses Impaired, Disabled, Unaware", "extras": [{ "name": "Cumulative" }], "flaws": [{ "name": "Limited", "detail": "to one sense" }], "weight": 4 },
+        { "role": "attack", "names": ["Sensory Overload"], "effect": "Affliction", "range": "Ranged", "rank": "attack", "detail": "Resisted by Dodge, overcome by Fortitude; Dazed, Stunned, Incapacitated", "extras": [{ "name": "Cumulative" }], "weight": 4 },
+        { "role": "sense", "names": ["X-Ray Vision"], "effect": "Senses", "rank": "4", "detail": "Vision penetrates concealment", "weight": 3 },
+        { "role": "sense", "names": ["Radar", "Sonar"], "effect": "Senses", "rank": "2..3", "detail": "Accurate radio or ultra-hearing", "weight": 3 },
+        { "role": "sense", "names": ["Spatial Awareness"], "effect": "Senses", "rank": "4", "detail": "Accurate, radius, ranged tactile sense", "weight": 2 },
+        { "role": "sense", "names": ["Aura Reading"], "effect": "Senses", "rank": "3..5", "detail": "Detect mood and health (ranged)", "weight": 2 },
+        { "role": "utility", "names": ["Danger Sense"], "effect": "Senses", "rank": "1", "detail": "Danger Sense", "weight": 3 },
+        { "role": "utility", "names": ["Sensory Shield"], "effect": "Immunity", "rank": "2", "detail": "Effects against one sense", "weight": 2 },
+        { "role": "utility", "names": ["Invisibility", "Silence"], "effect": "Concealment", "rank": "2", "detail": "Normal sight", "weight": 2 }
+      ]
+    },
+    {
+      "id": "hb-pp-talent",
+      "name": "Peak Talent",
+      "source": "Power Profiles p187",
+      "color": "#a0522d",
+      "attack_skill": "Unarmed",
+      "descriptors": ["talent", "training", "innate"],
+      "origin_hint": "a gifted kid pushed to the limit, a lifetime of practice and grit, or simply being born the best at what they do",
+      "environment": "Urban",
+      "weakness": ["being only human", "superhuman strength they can't match", "pride in their own skill"],
+      "codename": {
+        "words": ["Prodigy", "Virtuoso", "Ace", "Natural", "Daredevil", "Maestro", "Savant", "Paragon", "Wildcat", "Acrobat", "Expert", "Nimble"],
+        "adjectives": ["Peerless", "Gifted", "Human", "Perfect", "Uncanny"]
+      },
+      "costume": ["a brown leather jacket and goggles", "a navy bodysuit with white trim", "street clothes and a domino mask"],
+      "powers": [
+        { "role": "attack", "names": ["Striking Power"], "effect": "Damage", "range": "Close", "rank": "attack", "strengthBased": true, "weight": 4 },
+        { "role": "attack", "names": ["Pressure Points"], "effect": "Affliction", "range": "Close", "rank": "attack", "detail": "Resisted by Fortitude; Dazed, Stunned, Incapacitated", "weight": 3 },
+        { "role": "attack", "names": ["Fearsome Presence"], "effect": "Affliction", "range": "Close", "rank": "pl", "detail": "Resisted by Will; Impaired, Disabled, Paralyzed", "extras": [{ "name": "Area", "option": "Perception" }, { "name": "Selective" }], "weight": 2 },
+        { "role": "defense", "names": ["Tough"], "effect": "Protection", "rank": "toughness", "weight": 4 },
+        { "role": "utility", "names": ["Acquired Immunity"], "effect": "Immunity", "rank": "2", "detail": "Disease and poison", "weight": 2 },
+        { "role": "movement", "names": ["Parkour", "Perfect Balance"], "effect": "Movement", "rank": "1..2", "detail": "Sure-footed, Wall-crawling", "weight": 3 },
+        { "role": "utility", "names": ["Daredevil"], "effect": "Luck Control", "rank": "1..2", "weight": 2 },
+        { "role": "sense", "names": ["Situational Awareness", "Eagle-Eyed"], "effect": "Senses", "rank": "1..2", "detail": "Danger Sense (visual), Extended Vision", "weight": 3 },
+        { "role": "utility", "names": ["Master of Disguise"], "effect": "Morph", "rank": "1..2", "detail": "Other people", "weight": 2 }
+      ]
+    },
+    {
+      "id": "hb-pp-teleport",
+      "name": "Teleportation",
+      "source": "Power Profiles p199",
+      "color": "#12a5c9",
+      "attack_skill": "Teleport Powers",
+      "descriptors": ["teleport", "spatial", "warp"],
+      "origin_hint": "a jump-gate experiment that left them out of phase with distance, an alien bloodline, or a stolen ring that folds space",
+      "environment": "Any",
+      "weakness": ["unfamiliar destinations", "teleport-blocking fields", "nausea after long jumps"],
+      "codename": {
+        "words": ["Blink", "Jaunt", "Warp", "Shift", "Displacer", "Flicker", "Portal", "Leap", "Bamf", "Transit", "Skip", "Jumpgate"],
+        "adjectives": ["Blinking", "Elsewhere", "Instant", "Folded", "Flickering"]
+      },
+      "costume": ["teal and black with a broken-circle emblem", "smoky grey that trails afterimages", "white with blue spatial gridlines"],
+      "powers": [
+        { "role": "attack", "names": ["Portal Punch", "Portal Blast"], "effect": "Damage", "range": "Ranged", "rank": "attack", "weight": 4 },
+        { "role": "attack", "names": ["Apportive Attack"], "effect": "Damage", "range": "Perception", "rank": "pl", "detail": "Resisted by Fortitude; pieces of the target are teleported away", "extras": [{ "name": "Alternate Resistance", "option": "Equivalent resistance" }], "weight": 2 },
+        { "role": "attack", "names": ["Teleporting Flurry"], "effect": "Damage", "range": "Ranged", "rank": "pl", "extras": [{ "name": "Area", "option": "Shapeable" }, { "name": "Selective" }], "weight": 2 },
+        { "role": "attack", "names": ["Teleport Sickness"], "effect": "Affliction", "range": "Close", "rank": "attack", "detail": "Resisted by Fortitude; Dazed, Stunned, Incapacitated", "weight": 2 },
+        { "role": "movement", "names": ["Teleport", "Blink Teleport"], "effect": "Teleport", "rank": "pl/2..pl+2", "weight": 7 },
+        { "role": "utility", "names": ["Teleportal"], "effect": "Teleport", "rank": "pl/2..pl", "extras": [{ "name": "Portal" }], "weight": 2 },
+        { "role": "utility", "names": ["Redirecting Warp"], "effect": "Deflect", "rank": "pl/2..pl", "weight": 2 },
+        { "role": "utility", "names": ["Teleporting Dodge"], "effect": "Enhanced Trait", "option": "Dodge", "rank": "1..3", "weight": 2 },
+        { "role": "sense", "names": ["Teleport Awareness"], "effect": "Senses", "rank": "1", "detail": "Teleport Awareness (mental)", "weight": 2 }
+      ]
+    }
+  ],
+  "archetypes": [],
+  "creatures": []
+}

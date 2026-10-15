@@ -93,3 +93,15 @@ test('a pack file is checked before it loads', () => {
   assert.equal(broken.pack.creatures[0].id, 'hb-c', 'ids are kept apart from the book\'s');
   assert.match(broken.errors[0], /Theme 1/);
 });
+
+test('the Power Profiles pack that ships with DCUGen loads and every theme rolls legal characters', async () => {
+  const fs = await import('node:fs');
+  const raw = JSON.parse(fs.readFileSync(new URL('../data/packs/power-profiles.json', import.meta.url), 'utf8'));
+  const { ok, errors, pack } = validatePack(raw);
+  assert.equal(ok, true); assert.deepEqual(errors, []);
+  assert.ok(pack.themes.length >= 10);
+  applyPacks(R, [pack]);
+  try {
+    for (const t of pack.themes) for (const pl of [4, 8, 12]) legal(generateCharacter(R, { seed: `pp-${t.id}-${pl}`, pl, theme: t.id }));
+  } finally { clearPacks(R); }
+});
