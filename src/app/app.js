@@ -26,6 +26,8 @@ import { state as st, upsert, removeFromRoster } from './store.js';
 import { decodeCharacter } from './share.js';
 import { tableRoster, hostAcceptsEdit, hostAcceptsRemove, hostAcceptsClaim, shouldSendToTable } from '../engine/tabletrust.js';
 import { initHelp } from './help.js';
+import { initTurnBar, setTableInit, setParty, refreshTurnBar } from './turnbar.js';
+import { endOfTurn } from '../engine/turns.js';
 import { setImportHooks, enableDropImport, setImportRules, openAnything } from './importer.js';
 const R = RULES;
 const views = ['forge', 'roster', 'lab', 'bestiary', 'workshop', 'garage', 'battle', 'world', 'table', 'screen', 'gm', 'rules'];
@@ -155,6 +157,15 @@ function wireLobby() {
           toast(e.text);
         }
       }
+      // The turn order and the party, from the GM.
+      if (msg.t === 'init' && lobby.role !== 'host') setTableInit(msg.init);
+      if (msg.t === 'party' && lobby.role !== 'host') setParty(msg.list);
+      // The GM ended this character's turn: this app rolls its recovery checks, like a hit.
+      if (msg.t === 'end-turn' && lobby.role !== 'host' && msg.rosterId) {
+        let res = null;
+        const ch = updateOpen(msg.rosterId, (c) => { res = endOfTurn(c, R); c.play = res.play; });
+        if (ch && res?.changed) postRoll({ who: ch.identity?.codename || 'Someone', text: res.text, dice: res.dice[res.dice.length - 1] });
+      }
       if (msg.t === 'hp' && lobby.role !== 'host' && msg.rosterId) {
         const ch = updateOpen(msg.rosterId, (c) => { c.play = { ...(c.play || {}), heroPoints: ((c.play?.heroPoints ?? 1) + (msg.n || 1)) }; });
         if (ch) toast(`⭐ The GM gives ${ch.identity?.codename || 'you'} a hero point${msg.why ? `: ${msg.why}` : ''}`);
@@ -174,7 +185,7 @@ function wireLobby() {
     }
   }
   const soon = () => { clearTimeout(statusTimer); statusTimer = setTimeout(sendStatuses, 300); };
-  onChange((what) => { if (what === 'current' || what === 'roster-upsert') soon(); });
+  onChange((what) => { if (what === 'current' || what === 'roster-upsert') { soon(); refreshTurnBar(); } });
   onLobby((event) => { if (event === 'status' && lobby.status === 'on') soon(); });
   // Any roster change goes to the table while connected.
   onChange((what) => {
@@ -229,6 +240,7 @@ async function boot() {
   if (getApp) document.getElementById('theme-toggle').before(getApp);
   document.getElementById('theme-toggle').before(syncButton());
   initHelp({ showTab });
+  initTurnBar();
   startSync();
   for (const v of views) {
     document.getElementById(`tab-${v}`).addEventListener('click', () => showTab(v));

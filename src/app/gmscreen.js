@@ -26,6 +26,7 @@ import { randomSeed } from '../engine/rng.js';
 import { mapPanel } from './battlemap.js';
 import { portraitOf } from '../engine/portrait.js';
 import { playState } from '../engine/play.js';
+import { endOfTurn, turnReminder, initView, advanceTurn, delayTurn, partyEntry } from '../engine/turns.js';
 
 const KEY = 'dcugen.gmscreen.v1';
 let R; let root; let hooks = {};
@@ -39,7 +40,34 @@ function load() {
 function save() { try { localStorage.setItem(KEY, JSON.stringify(gs)); } catch { /* full */ } }
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 
-export function initGmScreen(rules, el, h2 = {}) { R = rules; root = el; hooks = h2; onLobby(() => { if (root && !root.hidden) renderGmScreen(); }); }
+export function initGmScreen(rules, el, h2 = {}) {
+  R = rules; root = el; hooks = h2;
+  onLobby((event) => {
+    if (root && !root.hidden) renderGmScreen();
+    // Someone joined (or came back): bring them up to date with the turn order and the party.
+    if ((event === 'members' || event === 'status') && lobby.status === 'on' && lobby.role === 'host') { broadcastInit(); scheduleParty(); }
+  });
+}
+
+// ---- what the players see: the turn order and the party ---------------------------------------------------------
+
+/** Send the turn order to the table (names only), or that it ended. */
+function broadcastInit() {
+  if (lobby.status !== 'on' || lobby.role !== 'host') return;
+  lobbySend({ t: 'init', init: initView(gs.init) });
+}
+
+let partyTimer = null;
+/** Players see how their teammates stand (conditions and hero points; never the villains). */
+function scheduleParty() {
+  if (lobby.status !== 'on' || lobby.role !== 'host') return;
+  clearTimeout(partyTimer);
+  partyTimer = setTimeout(() => {
+    const list = boardPeople().filter((p) => !p.status.villain).map((p) => partyEntry(p.status, p.kind === 'live' ? p.player : null));
+    lobbySend({ t: 'party', list });
+  }, 400);
+}
+
 
 // ---- the people on the board ----------------------------------------------------------------------------------
 
@@ -74,6 +102,7 @@ function boardPeople() {
 export function receiveStatus(status, playerName) {
   if (!status?.rosterId) return;
   live.set(status.rosterId, { ...status, player: playerName || 'Player' });
+  scheduleParty();
   if (root && !root.hidden) renderGmScreen();
 }
 
@@ -86,6 +115,7 @@ function changeLocal(rosterId, fn) {
   fn(st);
   e.play = st;
   save();
+  scheduleParty();
 }
 
 function awardHeroPoint(person, why) {
@@ -135,6 +165,22 @@ function hitConsole(people) {
 
 // ---- initiative -----------------------------------------------------------------------------------------------
 
+/**
+ * The end of someone's turn: a player's own app rolls for their character (like a hit); the GM's characters
+ * are rolled here. Recovery checks, dazes wearing off, weakened traits coming back.
+ */
+function endTurnFor(entry, people) {
+  const p = people.find((x) => x.key === entry?.key);
+  if (!p) return;
+  if (p.kind === 'live') { lobbySend({ t: 'end-turn', rosterId: p.key }); return; }
+  const ch = localChar(p.entry);
+  if (!ch) return;
+  const r = endOfTurn(ch, R);
+  if (!r.changed) return;
+  changeLocal(p.key, (st) => { for (const k of Object.keys(st)) delete st[k]; Object.assign(st, r.play); });
+  postRoll({ who: p.status.name, text: r.text, dice: r.dice[r.dice.length - 1] ? { ...r.dice[r.dice.length - 1] } : undefined });
+}
+
 function initiativePanel(people) {
   const init = gs.init;
   const roll = () => {
@@ -142,16 +188,40 @@ function initiativePanel(people) {
     gs.init = { order, turn: 0, round: 1 };
     save();
     postRoll({ who: 'GM', kind: 'chat', text: `Initiative: ${order.map((o) => `${o.name} ${o.total}`).join(', ')}.` });
+    broadcastInit();
     renderGmScreen();
   };
-  const next = () => { if (!gs.init) return; gs.init.turn += 1; if (gs.init.turn >= gs.init.order.length) { gs.init.turn = 0; gs.init.round += 1; } save(); renderGmScreen(); };
+  const next = () => {
+    if (!gs.init) return;
+    const n = advanceTurn(gs.init);
+    endTurnFor(n.ended, people);
+    delete n.ended;
+    if (n.round !== gs.init.round) postRoll({ who: 'GM', kind: 'chat', text: `⏱ Round ${n.round}.` });
+    gs.init = n;
+    save(); broadcastInit(); renderGmScreen();
+  };
+  const delay = () => { if (!gs.init) return; const who = gs.init.order[gs.init.turn]?.name; gs.init = delayTurn(gs.init); save(); broadcastInit(); toast(`${who} delays`); renderGmScreen(); };
+  const end = () => { gs.init = null; save(); broadcastInit(); renderGmScreen(); };
+  // Remove anyone who left the board from the order, so the turn never lands on nobody.
+  if (init) {
+    const keys = new Set(people.map((p) => p.key));
+    const kept = init.order.filter((o) => keys.has(o.key));
+    if (kept.length !== init.order.length && kept.length) { const cur = init.order[init.turn]?.key; init.order = kept; init.turn = Math.max(0, kept.findIndex((o) => o.key === cur)); save(); }
+  }
+  const acting = init ? people.find((p) => p.key === init.order[init.turn]?.key) : null;
+  const remind = acting ? turnReminder(acting.status.play) : null;
   return h('section', { class: 'panel gm-init' },
     h('div', { class: 'gm-head' }, h('h2', null, '⏱ Initiative'), init ? h('span', { class: 'chip' }, `Round ${init.round}`) : null, h('span', { class: 'spacer' }),
       h('button', { class: 'btn sm', type: 'button', id: 'gm-init-roll', disabled: !people.length, onClick: roll }, init ? 'Re-roll' : 'Roll for everyone'),
-      init ? h('button', { class: 'btn sm primary', type: 'button', id: 'gm-next', onClick: next }, 'Next turn ▶') : null,
-      init ? h('button', { class: 'btn sm ghost', type: 'button', onClick: () => { gs.init = null; save(); renderGmScreen(); } }, 'End') : null),
+      init ? h('button', { class: 'btn sm', type: 'button', id: 'gm-delay', title: 'The acting character waits: they go after the next one', onClick: delay }, 'Delay') : null,
+      init ? h('button', { class: 'btn sm primary', type: 'button', id: 'gm-next', title: 'Ends this turn (recovery checks, dazes wear off) and starts the next', onClick: next }, 'Next turn ▶') : null,
+      init ? h('button', { class: 'btn sm ghost', type: 'button', onClick: end }, 'End') : null),
     init ? h('ol', { class: 'gm-order' }, init.order.map((o, i) => h('li', { class: i === init.turn ? 'now' : '' }, h('b', { class: 'num' }, o.total), ' ', o.name, i === init.turn ? h('span', { class: 'chip' }, 'acting') : null)))
-      : h('p', { class: 'hint', style: { margin: 0 } }, 'Rolls d20 + initiative for everyone on the board and keeps the turn order.'));
+      : h('p', { class: 'hint', style: { margin: 0 } }, 'Rolls d20 + initiative for everyone on the board and keeps the turn order. Players see it on their phones, with a nudge when it\'s their turn.'),
+    remind && (remind.lines.length || remind.tip) ? h('div', { class: 'gm-remind', id: 'gm-remind' },
+      h('b', null, `${acting.status.name}${remind.canAct ? '' : ' can\'t act'}`),
+      h('ul', null, remind.lines.map((l) => h('li', null, l))),
+      remind.tip ? h('p', { class: 'hint', style: { margin: 0 } }, remind.tip) : null) : null);
 }
 
 // ---- the board ------------------------------------------------------------------------------------------------
