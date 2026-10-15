@@ -221,7 +221,7 @@ function resetCombatant(c) {
     conditions: [],        // [{ name, degree, from, source, dc, resist, cumulative, progressive, tiers, extraCondition, until }]
     weakened: {},          // trait -> ranks lost
     fatigue: 0, defMod: 0, feinted: false, grabbedBy: null, holding: null, nullified: 0, regen: 0, interposed: false,
-    lastAttackId: null, usedEffort: 0,
+    lastAttackId: null, usedEffort: 0, teamedRound: null,
     recovered: false,      // the Recover action: once per conflict (DCA 177)
     aiming: null,          // { target, bonus } after an Aim action (DCA 175)
     defending: false,      // the Defend action, until the start of their next turn (DCA 175)
@@ -544,6 +544,8 @@ export function step(b, R) {
   const c = byId(b, b.order[b.turn]);
   b.turn += 1;
   if (!c || c.out || c.fled) return b.log.length - before;
+  // Joined an earlier team attack this round: that was this fighter's turn (they delayed into it).
+  if (c.teamedRound === b.round) return b.log.length - before;
   const rng = rngFor(b);
   try { takeTurn(b, R, c, rng); } catch (e) { log(b, { kind: 'note', actor: c.id, text: `${c.name} hesitates (${e.message}).` }); }
   endOfTurn(b, c, rng);
@@ -738,12 +740,36 @@ function takeTurn(b, R, c, rng) {
   if (b.options.extraEffort && c.fatigue < 2 && attack.power && !attack.equipment && (hurt || (b.round >= 3 && target.bruises === 0)) && ['mage', 'omni', 'blaster', 'tank', 'brawler', 'mentalist'].includes(c.style) && rng.chance(0.45)) {
     effort = 'power';
   }
+  // Team attack (DCA 178): minions of a squad who haven't acted yet delay to strike together. Each helper's
+  // degrees of success add to the lead attack: one degree +2 rank, three or more +5.
+  let team = 0;
+  if (c.minion && attack.roll && !attack.area) {
+    const order = b.order.slice(b.turn);
+    const helpers = alliesOf(b, c).filter((a) => a.minion && a.teamedRound !== b.round && order.includes(a.id) && canAct(a) === 'full'
+      && Math.abs(a.pos - target.pos) <= moveZones(a)).slice(0, 5);
+    if (helpers.length >= 2) {
+      let deg = 0; const parts = [];
+      for (const a of helpers) {
+        const atk = a.attacks.find((x) => x.effect === attack.effect && x.resistance === attack.resistance && Math.abs(x.rank - attack.rank) <= 5 && x.roll && (x.kind !== 'close' || Math.abs(a.pos - target.pos) <= moveZones(a)));
+        if (!atk) continue;
+        a.teamedRound = b.round;
+        if (atk.kind === 'close' && a.pos !== target.pos) a.pos = target.pos;
+        const def = defenseOf(target, atk.kind === 'close' ? 'Parry' : 'Dodge');
+        const r = d20(rng); const tot = r + atk.bonus - checkPenalty(a);
+        const d = r === 20 || tot >= 10 + def ? 1 + Math.floor((tot - 10 - def) / 5) : 0;
+        deg += Math.max(0, d);
+        parts.push(`${a.name} ${d > 0 ? `${d} degree${d > 1 ? 's' : ''}` : 'misses'}`);
+      }
+      team = deg >= 3 ? 5 : deg >= 1 ? 2 : 0;
+      if (parts.length) log(b, { kind: 'note', actor: c.id, target: target.id, text: `Team attack: ${parts.join(', ')} — ${team ? `+${team} to ${c.name}'s ${attack.effect} rank` : 'no help lands'}.`, important: !!team });
+    }
+  }
   // Slam: a charging fighter with real speed crashes into the target (DCA 178)
   let slam = null;
   if (charge && attack.effect === 'Damage' && (c.moveRank || 0) >= attack.rank + 1 && ['brawler', 'tank', 'speedster', 'beast'].includes(c.style)) slam = Math.max(c.moveRank, attack.rank + 1);
   // Defend (DCA 175): a hurt support or skilled fighter with nothing good to do digs in instead.
   // Takedown chains and the attack itself
-  resolveAttack(b, R, c, attack, target, rng, { trade: charge ? 0 : trade, allOut: charge ? 0 : allOut, defensive: charge ? 0 : defensive, effort, charge, slam });
+  resolveAttack(b, R, c, attack, target, rng, { trade: charge ? 0 : trade, allOut: charge ? 0 : allOut, defensive: charge ? 0 : defensive, effort, charge, slam, team });
 
   // Hit and run
   if (S.hitAndRun && c.adv['Move-by Action'] && mode === 'full' && attack.kind === 'close' && !c.holding) {
@@ -886,7 +912,7 @@ function attackVerb(c, atk, t, rng) {
   return `${v} ${t.name} with ${atk.name}`;
 }
 
-function resolveAttack(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive = 0, effort = null, charge = false, slam = null, aimed = 0 } = {}) {
+function resolveAttack(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive = 0, effort = null, charge = false, slam = null, aimed = 0, team = 0 } = {}) {
   c.lastAttackId = atk.id;
   c.stats.attacks++;
   // Maneuvers only apply to attacks with an attack check (DCA 178)
@@ -895,6 +921,7 @@ function resolveAttack(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive 
   const notes = [];
   if (charge) notes.push('charge: −2 to hit');
   if (slam) { rankShift += slam - atk.rank; notes.push(`slam: Damage ${slam} from momentum`); }
+  if (team) { rankShift += team; notes.push(`team attack: +${team} rank`); }
   if (trade > 0) notes.push(`Power Attack${trade > 2 ? ' (advantage)' : ''}: −${trade} to hit, +${trade} effect`);
   if (trade < 0) notes.push(`Accurate Attack: +${-trade} to hit, ${trade} effect`);
   if (allOut) notes.push(`All-out Attack: +${allOut} to hit, −${allOut} defenses until next turn`);

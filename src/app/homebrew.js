@@ -5,6 +5,7 @@ import { h, clear, toast, download, openDialog, copyText, slug } from './dom.js'
 import { state } from './store.js';
 import { emptyPack, makeTheme, makeArchetype, creatureFromCharacter, validatePack, applyPacks } from '../engine/homebrew.js';
 import { ABILITIES } from '../engine/rules.js';
+import { PACKS } from '../generated/rulesdata.js';
 
 const KEY = 'dcugen.homebrew.v1';
 let R; let hooks = {};
@@ -231,6 +232,16 @@ export function homebrewPage() {
       h('div', { class: 'btn-row' },
         h('button', { class: 'btn primary', type: 'button', id: 'hb-new', onClick: () => { const n = { ...emptyPack(packs.length ? `Homebrew ${packs.length + 1}` : 'My homebrew'), enabled: true }; packs.push(n); openId = n.id; changed(); } }, '+ New pack'),
         h('button', { class: 'btn', type: 'button', onClick: () => fileIn.click() }, 'Load a pack file'), fileIn),
-      h('div', { class: 'add-row' }, codeIn, h('button', { class: 'btn', type: 'button', id: 'hb-code-go', onClick: async () => { if (await importPack(codeIn.value.trim())) codeIn.value = ''; } }, 'Load code'))),
+      h('div', { class: 'add-row' }, codeIn, h('button', { class: 'btn', type: 'button', id: 'hb-code-go', onClick: async () => { if (await importPack(codeIn.value.trim())) codeIn.value = ''; } }, 'Load code')),
+      PACKS.length ? [
+        h('div', { class: 'label' }, 'Packs that come with DCUGen'),
+        h('ul', { class: 'hb-pack-list' }, PACKS.map((bp) => {
+          const have = packs.some((x) => x.id === bp.id);
+          return h('li', { class: 'hb-pack-row' },
+            h('b', null, bp.name), h('small', { class: 'hint' }, `${count(bp.themes.length, 'theme')} · ${count(bp.archetypes.length, 'archetype')} · ${count(bp.creatures.length, 'creature')}${bp.author ? ` · ${bp.author}` : ''}`),
+            bp.notes ? h('small', { class: 'hint', style: { flexBasis: '100%' } }, bp.notes) : null,
+            h('span', { class: 'spacer' }),
+            h('button', { class: 'btn sm', type: 'button', 'data-pack': bp.id, disabled: have, onClick: () => importPack(JSON.parse(JSON.stringify(bp))) }, have ? '✓ Added' : '+ Add'));
+        }))] : null),
     p ? packPanel(p) : null);
 }

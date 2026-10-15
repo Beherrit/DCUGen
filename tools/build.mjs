@@ -70,7 +70,9 @@ function buildData() {
       + `export const DATA_VERSION = ${JSON.stringify(crypto.createHash('sha1').update(JSON.stringify(raw)).digest('hex').slice(0, 6))};\n`
       // Outside RAW on purpose: release notes and the version must not change DATA_VERSION (and so old keys).
       + `export const APP_VERSION = ${JSON.stringify(appVersion())};\n`
-      + `export const CHANGELOG = ${JSON.stringify(opt('changelog.json', []))};\n`,
+      + `export const CHANGELOG = ${JSON.stringify(opt('changelog.json', []))};\n`
+      // Homebrew packs that ship with the app (data/packs): switched on by choice, so seeds never change.
+      + `export const PACKS = ${JSON.stringify(Object.values(jsonFolder('packs')))};\n`,
   );
   const catalogCount = Object.values(raw.catalog).reduce((s, l) => s + l.length, 0);
   console.log(`data: ${raw.effects.length} effects, ${raw.advantages.length} advantages, ${raw.archetypes.length} archetypes, ${raw.themes.length} themes, ${catalogCount} catalog entries`);

@@ -2225,3 +2225,4 @@ body.has-tbar .toast { bottom: calc(var(--tbar-h, 84px) + 12px); }
 .bt-pick { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; }
 .bt-pick-text { display: grid; min-width: 0; }
 .bt-pick-text .bt-pick-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hb-pack-row .spacer { flex: 1; }

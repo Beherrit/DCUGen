@@ -86,3 +86,9 @@ test('fights still end: no stalemates from the new actions', () => {
   const stale = all.filter((b) => !b.winner).length;
   assert.ok(stale <= all.length * 0.1, `${stale} of ${all.length} stalemates`);
 });
+
+test('a squad of minions makes team attacks, and helpers spend their turn on it', () => {
+  const team = entries.filter((e) => /^Team attack:/.test(e.text));
+  assert.ok(team.length > 0, 'some team attacks');
+  for (const e of team) assert.match(e.text, /\+[25] to|no help lands/);
+});
