@@ -3,7 +3,7 @@
 import { h, clear, append } from './dom.js';
 import { guideFor, skillGuideBody } from './skillguide.js';
 import { advancementSection, pointsBar } from './advancement.js';
-import { rangeInfo, rangeBands, fmtFt, strengthReach, AREA_BASE } from '../engine/range.js';
+import { rangeInfo, rangeBands, fmtFt, strengthReach } from '../engine/range.js';
 import { openRangeCalculator } from './rangecalc.js';
 import { inkFor } from './dom.js';
 import { sheet as makeSheet, describeEffect, explainPower } from '../engine/render.js';

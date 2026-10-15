@@ -11,10 +11,13 @@
     "e2e": "node tools/build.mjs all && playwright test",
     "dev": "node tools/serve.mjs",
     "validate": "node tools/validate-catalog.mjs",
+    "lint": "eslint .",
     "desktop": "node tools/build.mjs all && cd desktop && npm install && npm start",
     "desktop:dist": "node tools/build.mjs all && cd desktop && npm install && npm run dist"
   },
   "devDependencies": {
-    "@playwright/test": "^1.64.1"
+    "@playwright/test": "^1.64.1",
+    "eslint": "^9.39.5",
+    "globals": "^17.13.0"
   }
 }

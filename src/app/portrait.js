@@ -5,7 +5,7 @@
 // stands in), the built-in comic art drawn by the app, or a picture you upload yourself.
 
 import { h, toast, copyText, openDialog } from './dom.js';
-import { portraitOf, setPortrait, clearPortrait, newPortraitSeed, portraitPrompt, PORTRAIT_SERVICE, PORTRAIT_SERVICES, PORTRAIT_SOURCES, PORTRAIT_STYLES, PORTRAIT_NEGATIVE, setPortraitDefaults, portraitDefaults } from '../engine/portrait.js';
+import { portraitOf, setPortrait, clearPortrait, newPortraitSeed, portraitPrompt, PORTRAIT_SERVICE, PORTRAIT_SERVICES, PORTRAIT_SOURCES, PORTRAIT_STYLES, PORTRAIT_NEGATIVE, setPortraitDefaults } from '../engine/portrait.js';
 
 const CREDIT = `AI portraits come from a free, open source service (AI Horde by default: volunteers' GPUs running real Stable Diffusion models, so semi-realistic and anime styles work; or ${PORTRAIT_SERVICE.name}). Only the prompt is sent. Portraits paint one at a time while the built-in art stands in. Built-in comic art is drawn by the app itself and works offline.`;
 

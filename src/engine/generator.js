@@ -9,7 +9,7 @@
 
 import { makeRng, randomSeed } from './rng.js';
 import { ABILITIES, BUYABLE_DEFENSES, PP_PER_PL, EP_PER_EQUIPMENT_RANK } from './rules.js';
-import { costBreakdown, powerCost, alternateOwnCost, primaryOwnCost, effectCost, equipmentPoints } from './costs.js';
+import { costBreakdown, powerCost, alternateOwnCost, primaryOwnCost, equipmentPoints } from './costs.js';
 import { deriveAll, advantageRank, attackKind, allPowers } from './derive.js';
 import { checkLimits } from './limits.js';
 import { rollSpec, rangeOf, evalExpr } from './expr.js';
@@ -243,7 +243,7 @@ function tryStep(ch, R, budget, fn) {
 }
 
 function balance(ch, R, ctx) {
-  const { rng, arch, themes, budget } = ctx;
+  const { rng, arch, budget } = ctx;
   const skillWeights = Object.entries(arch.skills || {}).map(([name, weight]) => ({ name, weight }));
   const advWeights = advantagePool(ctx);
 

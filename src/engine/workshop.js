@@ -5,10 +5,9 @@ import { makeRng, randomSeed } from './rng.js';
 import { ABILITIES, EP_PER_EQUIPMENT_RANK } from './rules.js';
 import { powerCost, deviceCost, costBreakdown, primaryOwnCost, alternateOwnCost } from './costs.js';
 import { checkLimits } from './limits.js';
-import { generateCharacter, instantiate, templateKind, templateRolls, parseItem, repairCharacter, utilityBeltCost } from './generator.js';
+import { generateCharacter, instantiate, templateRolls, parseItem, repairCharacter, utilityBeltCost } from './generator.js';
 import { catalogToCharacter } from './catalog.js';
 import { rollSpec } from './expr.js';
-const clone = (x) => JSON.parse(JSON.stringify(x));
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
 

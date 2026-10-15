@@ -24,7 +24,6 @@ import { getAppButton, registerServiceWorker } from './getapp.js';
 import { startSync, syncButton } from './syncfile.js';
 import { setHouseRules } from '../engine/house.js';
 import { state as st, upsert, removeFromRoster } from './store.js';
-import { decodeCharacter } from './share.js';
 import { tableRoster, hostAcceptsEdit, hostAcceptsRemove, hostAcceptsClaim, shouldSendToTable } from '../engine/tabletrust.js';
 import { initHelp } from './help.js';
 import { initTurnBar, setTableInit, setParty, refreshTurnBar } from './turnbar.js';

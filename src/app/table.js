@@ -4,7 +4,7 @@
 
 import { h, clear, toast, copyText, openDialog } from './dom.js';
 import { state, upsert } from './store.js';
-import { lobby, onLobby, joinLobby, leaveLobby, lobbySendFeed, lobbyClaim, lobbySendRemove, makeLobbyKey, isLobbyKey, hostPeerTable, joinLink, qrSvg, isPeerKey, peerServer, retryTable } from './lobby.js';
+import { lobby, onLobby, joinLobby, leaveLobby, lobbySendFeed, lobbyClaim, lobbySendRemove, makeLobbyKey, isLobbyKey, hostPeerTable, joinLink, qrSvg, peerServer, retryTable } from './lobby.js';
 import { connectionSettings, testConnection } from './nettest.js';
 
 /** Open a table for phones in this tab, and show the QR code and link for players. Shared with the GM screen. */
@@ -56,7 +56,7 @@ export async function joinFromLink(key) {
 
 const FEED_KEY = 'dcugen.table.v1';
 const NAME_KEY = 'dcugen.table.name';
-let R; let root; let hooks = {};
+let root; let hooks = {};
 let feed = [];
 let myName = '';
 const MAX_FEED = 400;
@@ -95,7 +95,7 @@ function bumpBadge() {
 }
 
 export function initTable(rules, el, h2 = {}) {
-  R = rules; root = el; hooks = h2;
+  root = el; hooks = h2;
   load();
   onLobby(() => { if (root && !root.hidden) renderTable(); bumpBadge(); });
 }

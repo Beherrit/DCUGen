@@ -6,7 +6,6 @@ import { addJournalEntry, updateJournalEntry, removeJournalEntry, journalEntries
 import { rollDowntimeEvent } from '../engine/lifepath.js';
 import { randomSeed } from '../engine/rng.js';
 
-const sign = (n) => (n > 0 ? `+${n}` : `${n}`);
 let editing = null; // id of the entry being edited, or 'new'
 
 /**

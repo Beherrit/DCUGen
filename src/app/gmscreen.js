@@ -11,7 +11,7 @@
 //   Nemeses      recurring villains: grudge, what they learned from defeats, and the scheme clock.
 //   Recap        end the session: a comic-book cover and a few lines for the group chat.
 
-import { h, clear, toast, copyText, openDialog, download } from './dom.js';
+import { h, clear, toast, openDialog } from './dom.js';
 import { state, upsert } from './store.js';
 import { lobby, onLobby, lobbySend } from './lobby.js';
 import { postRoll, feedEntries } from './table.js';

@@ -27,6 +27,10 @@ jobs:
         with:
           # 22, not 20: Node 20's test runner doesn't expand the tests/**/*.test.mjs pattern in npm test.
           node-version: 22
+      - run: npm ci --no-audit --no-fund
+      # Names used before they exist or never defined, unused imports, a local hiding W or F.
+      - name: Lint
+        run: npm run lint
       - name: Test
         run: npm test
       - name: Check every catalog creature against the PL limits
