@@ -1,6 +1,6 @@
 {
   "name": "dcugen",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "description": "Character generator and GM toolkit for the DC Adventures RPG (Mutants & Masterminds 3e rules).",
   "private": true,
   "type": "module",

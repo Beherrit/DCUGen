@@ -2067,3 +2067,25 @@ main.wd-content { margin: 0; padding: 0; max-width: none; width: 100%; }
 .wd-addlink .add-row > #wd-link-target { flex: 3 1 240px; }
 .wd-glance-row { align-items: start; }
 .wd-glance-label { padding-top: 6px; }
+
+/* ---------- help menu, tours, what's new ---------- */
+.help-menu { position: relative; }
+.help-btn { font: 800 16px/1 var(--font-label); min-width: 34px; }
+.help-menu.has-news .help-btn::after { content: ""; position: absolute; top: 4px; right: 4px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.top-tools .menu-list { color: var(--ink); }
+.help-version { padding: 8px 10px 4px; margin-top: 4px; border-top: 1px solid var(--line); font: 400 12px/1.3 var(--font-body); color: var(--ink-3); }
+.tour { position: fixed; inset: 0; z-index: 60; }
+.tour-dim { position: fixed; inset: 0; background: rgba(5, 8, 12, .6); }
+.tour-spot { position: fixed; border-radius: 8px; outline: 2px solid var(--accent); pointer-events: none; }
+.tour-card { position: fixed; width: min(360px, calc(100vw - 16px)); background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); padding: 14px 16px 12px; }
+.tour-card.center { left: 50% !important; top: 50% !important; transform: translate(-50%, -50%); }
+.tour-card h3 { font: 800 20px/1.1 var(--font-display); text-transform: uppercase; letter-spacing: .03em; margin: 2px 0 6px; }
+.tour-card p { margin: 0 0 12px; }
+.tour-count { font: 600 12px/1 var(--font-label); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.tour-foot { display: flex; gap: 8px; align-items: center; }
+.tour-foot .spacer { flex: 1; }
+.whatsnew { display: grid; gap: 14px; }
+.whatsnew h3 { font: 700 16px/1.2 var(--font-label); }
+.whatsnew h3 small { font-weight: 400; color: var(--ink-3); }
+.whatsnew ul { margin: 6px 0 0; padding-left: 20px; }
+.whatsnew section:not(.latest) { opacity: .8; }

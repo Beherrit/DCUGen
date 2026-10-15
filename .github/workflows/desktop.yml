@@ -63,17 +63,22 @@ jobs:
     outputs:
       version: ${{ steps.v.outputs.version }}
     steps:
-      - name: Pick the version (6.1.<build number>)
+      - uses: actions/checkout@v4
+      # The major and minor come from package.json ("6.1.0" -> 6.1); the build number is the patch.
+      - name: Pick the version (<major>.<minor>.<build number>)
         id: v
-        run: echo "version=6.1.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(node -p "require('./package.json').version.split('.').slice(0, 2).join('.')").${{ github.run_number }}" >> "$GITHUB_OUTPUT"
       - name: Make the release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           V: ${{ steps.v.outputs.version }}
         run: |
+          # The newest entry of data/changelog.json (the app's What's new) leads the release notes.
+          news=$(node -e "const c=require('./data/changelog.json')[0]; if (c) console.log('## ' + c.title + '\n\n' + c.items.map((i) => '- ' + i).join('\n') + '\n')")
           gh release view "v$V" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 \
             || gh release create "v$V" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "DCUGen $V" --latest \
-                 --notes "Desktop app build $V from $GITHUB_SHA. The single-file app: DCUGen.html (open it in any browser). Windows: DCUGen-Setup.exe (installer, updates itself) or DCUGen-Portable.exe. macOS: DCUGen.dmg. Linux: DCUGen.AppImage."
+                 --notes "${news}
+          Desktop app build $V from $GITHUB_SHA. The single-file app: DCUGen.html (open it in any browser). Windows: DCUGen-Setup.exe (installer, updates itself) or DCUGen-Portable.exe. macOS: DCUGen.dmg. Linux: DCUGen.AppImage."
 
   build:
     needs: release
@@ -95,6 +100,8 @@ jobs:
           node-version: 20
       - name: Build the web app
         run: npm run build
+        env:
+          DCUGEN_VERSION: ${{ needs.release.outputs.version }}
       # The single-file app is built here rather than committed (it is 4 MB, and a copy per commit made the
       # repository huge). The README's download link points at this asset of the latest release.
       - name: Publish DCUGen.html with the release
@@ -102,7 +109,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload "v${{ needs.release.outputs.version }}" DCUGen.html --clobber --repo "$GITHUB_REPOSITORY"
-      - name: Stamp the version (6.1.<build number>)
+      - name: Stamp the version
         shell: bash
         run: |
           cd desktop

@@ -25,6 +25,7 @@ import { setHouseRules } from '../engine/house.js';
 import { state as st, upsert, removeFromRoster } from './store.js';
 import { decodeCharacter } from './share.js';
 import { tableRoster, hostAcceptsEdit, hostAcceptsRemove, hostAcceptsClaim, shouldSendToTable } from '../engine/tabletrust.js';
+import { initHelp } from './help.js';
 import { setImportHooks, enableDropImport, setImportRules, openAnything } from './importer.js';
 const R = RULES;
 const views = ['forge', 'roster', 'lab', 'bestiary', 'workshop', 'garage', 'battle', 'world', 'table', 'screen', 'gm', 'rules'];
@@ -227,6 +228,7 @@ async function boot() {
   const getApp = getAppButton();
   if (getApp) document.getElementById('theme-toggle').before(getApp);
   document.getElementById('theme-toggle').before(syncButton());
+  initHelp({ showTab });
   startSync();
   for (const v of views) {
     document.getElementById(`tab-${v}`).addEventListener('click', () => showTab(v));

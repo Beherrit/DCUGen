@@ -1,0 +1,46 @@
+[
+  {
+    "id": "2026-10-15",
+    "date": "2026-10-15",
+    "title": "Safer sync and table trust, a reworked World",
+    "items": [
+      "Cloud-folder sync merges changes from two devices instead of overwriting one with the other.",
+      "At the Table, the GM's copy is the authority: players can only change characters they've claimed.",
+      "The World page was reworked, and two worlds merge cleanly.",
+      "Storage and desktop app fixes."
+    ]
+  },
+  {
+    "id": "2026-10-12b",
+    "date": "2026-10-12",
+    "title": "Phone app, share links and Battle map 2.0",
+    "items": [
+      "Install DCUGen to a phone's home screen; it opens full screen and works offline.",
+      "Share a whole roster, world or folder as one link.",
+      "Battle map 2.0: build a city, weather, grounds and a 3D view.",
+      "Session in a Box, phone tables, the rogues' gallery and fight comics."
+    ]
+  },
+  {
+    "id": "2026-10-12a",
+    "date": "2026-10-12",
+    "title": "GM Screen, undo and history, alternate forms",
+    "items": [
+      "GM Screen with a balance check, adapting villains, spotlight and recaps.",
+      "Points from the GM, saved points and goals on the sheet; a range calculator.",
+      "Undo and history, cloud-folder sync, the Play view, full exports and house rules.",
+      "Drain that follows the rules, alternate forms, and companions with full sheets.",
+      "Power Lab: descriptions, Linked effects and Dynamic arrays."
+    ]
+  },
+  {
+    "id": "2026-10-07",
+    "date": "2026-10-07",
+    "title": "Worlds, handouts and the Newsstand",
+    "items": [
+      "Worlds and the Multiverse Hub; the open character survives a reload.",
+      "Handouts and the evidence board.",
+      "Newsstand: front pages of the campaign's newspapers."
+    ]
+  }
+]
