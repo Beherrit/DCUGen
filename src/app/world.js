@@ -4,9 +4,9 @@
 // Court", "he died") and the world changes with it: ties start and end at a session, pages carry a
 // status, the timeline shows when, and the graph can be wound back to any session.
 
-import { h, clear, toast, copyText, download, openDialog, inkFor } from './dom.js';
+import { h, clear, toast, copyText, download, openDialog, inkFor, menu } from './dom.js';
 import { state, upsert } from './store.js';
-import { buildWorld, emptyWorld, ENTITY_TYPES, RELATIONS, RELATION_GROUPS, groupedConnections, entityTimeline, campaignTimeline, searchWorld, createEntity, updateEntity, deleteEntity, addLink, removeLink, layoutGraph, vaultMarkdown, recordBattle, slug, MOMENT_KINDS, MOMENT_GROUPS, momentKindsFor, momentSentence, recordMoment, removeMoment, updateMoment, linksAsOf, lastSession } from '../engine/world.js';
+import { buildWorld, emptyWorld, ENTITY_TYPES, RELATIONS, RELATION_GROUPS, groupedConnections, entityTimeline, campaignTimeline, searchWorld, createEntity, updateEntity, deleteEntity, addLink, removeLink, mergeWorldSaved, layoutComponents, layoutGraph, vaultMarkdown, recordBattle, slug, MOMENT_KINDS, MOMENT_GROUPS, momentKindsFor, momentSentence, recordMoment, removeMoment, updateMoment, linksAsOf, lastSession } from '../engine/world.js';
 import { zip } from '../engine/xlsx.js';
 import { sheet as makeSheet } from '../engine/render.js';
 import { fromKeySync } from '../engine/keys.js';
@@ -21,7 +21,7 @@ const KEY = 'dcugen.world.v1';
 let R; let root; let hooks = {};
 let saved;
 let world;
-const ui = { page: 'home', q: '', edit: false, graphTypes: new Set(Object.keys(ENTITY_TYPES)), graphGroups: new Set(RELATION_GROUPS), open: {}, showAll: {}, history: [], tlFilter: 'all', asOf: null, showPast: false, linkPreset: null };
+const ui = { page: 'home', q: '', edit: false, index: null, graphZoom: 1, addTie: false, graphTypes: new Set(Object.keys(ENTITY_TYPES)), graphGroups: new Set(RELATION_GROUPS), open: {}, showAll: {}, history: [], tlFilter: 'all', asOf: null, showPast: false, linkPreset: null };
 
 function load() {
   try { const raw = JSON.parse(localStorage.getItem(KEY) || 'null'); if (raw?.v) return { ...emptyWorld(), ...raw }; } catch { /* ignore */ }
@@ -55,15 +55,7 @@ export function worldSaved() { if (!saved) saved = load(); return saved; }
 export function worldApply(incoming) {
   if (!saved) saved = load();
   if (!incoming?.v) return;
-  saved.entities = { ...saved.entities, ...(incoming.entities || {}) };
-  saved.overrides = { ...saved.overrides, ...(incoming.overrides || {}) };
-  for (const l of incoming.links || []) if (!saved.links.some((x) => x.id === l.id)) saved.links.push(l);
-  for (const m of incoming.moments || []) if (!(saved.moments || []).some((x) => x.id === m.id)) (saved.moments = saved.moments || []).push(m);
-  saved.linkEnds = { ...(saved.linkEnds || {}), ...(incoming.linkEnds || {}) };
-  if (incoming.board && !saved.board) saved.board = incoming.board;
-  saved.hidden = [...new Set([...(saved.hidden || []), ...(incoming.hidden || [])])];
-  saved.hiddenLinks = [...new Set([...(saved.hiddenLinks || []), ...(incoming.hiddenLinks || [])])];
-  if (incoming.name && (!saved.name || saved.name === 'My World')) { saved.name = incoming.name; saved.tagline = incoming.tagline || saved.tagline; saved.description = incoming.description || saved.description; }
+  saved = mergeWorldSaved(saved, incoming);
   save();
   if (root && !root.hidden) renderWorld();
 }
@@ -158,7 +150,7 @@ export function openPaperObject(paper) { if (!saved) saved = load(); rebuild(); 
 
 function go(page, { replace = false } = {}) {
   if (!replace && page !== ui.page) { ui.history.push(ui.page); if (ui.history.length > 40) ui.history.shift(); }
-  ui.page = page; ui.edit = false; ui.linkPreset = null; renderWorld(); window.scrollTo({ top: 0 });
+  ui.page = page; ui.edit = false; ui.linkPreset = null; ui.addTie = false; ui.q = ''; renderWorld(); window.scrollTo({ top: 0 });
 }
 function back() { const prev = ui.history.pop(); if (prev != null) { ui.page = prev; ui.edit = false; ui.linkPreset = null; renderWorld(); } }
 const typeMeta = (t) => ENTITY_TYPES[t] || { label: t, one: t, glyph: '✦', color: '#666' };
@@ -176,43 +168,71 @@ function pageLink(e, { chip = false, note = null, rel = null } = {}) {
 const initialsOf = (name) => name.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
 const findByName = (name, type = null) => { const n = String(name || '').trim().toLowerCase(); return [...world.entities.values()].find((x) => (!type || x.type === type) && (x.name.toLowerCase() === n || x.aliases?.some((a) => String(a).toLowerCase() === n))) || null; };
 
-function sidebar() {
-  const q = h('input', { type: 'search', id: 'wd-q', placeholder: 'Search the world…  ( / )', value: ui.q, 'aria-label': 'Search the world', onInput: (e) => { ui.q = e.target.value; drawResults(); }, onKeydown: (e) => { if (e.key === 'Enter') { const f = searchWorld(world, ui.q, { limit: 1 })[0]; if (f) go(f.id); } } });
-  const results = h('div', { class: 'wd-results' });
+// The World's own bar: where you are, the pages that aren't people or places, search, and the two things you
+// do most (record what happened, make a page). Everything else lives one click down.
+const TABS = [['home', 'Home', '⌂'], ['timeline', 'Timeline', '🕰'], ['graph', 'Graph', '◉'], ['board', 'Board', '📌'], ['newsstand', 'Newsstand', '📰'], ['handouts', 'Handouts', '🗂'], ['vault', 'Share & export', '🗄']];
+const TAB_OF = { 'paper-edit': 'newsstand', 'handout-edit': 'handouts' };
+
+function newMenu() {
+  return menu('＋ New', [
+    ...Object.entries(ENTITY_TYPES).filter(([t]) => t !== 'paper' && t !== 'handout').map(([t, m]) => ({ label: `${m.glyph} ${m.one}`, hint: NEW_HINTS[t] || '', run: () => newPageDialog(t) })),
+    { label: '📰 Front page', hint: 'Draft a newspaper from the campaign, or write one', run: () => startPaper(ctx(), { draft: true }) },
+    { label: '📜 Handout', hint: 'A wanted poster, case file, letter, texts or report', run: () => newHandoutDialog(ctx()) },
+  ], { cls: 'btn sm' });
+}
+const NEW_HINTS = { person: 'Anyone the roster does not know yet', faction: 'A team, agency, gang, court or cult', location: 'A city, a base, a bar, a planet', event: 'A battle, a wedding, a heist, a funeral', item: 'An artefact, a weapon, a vehicle, a MacGuffin' };
+
+function topbar() {
+  const results = h('div', { class: 'wd-results', role: 'listbox', hidden: !ui.q.trim() });
   const drawResults = () => {
     clear(results);
-    if (!ui.q.trim()) return;
-    const found = searchWorld(world, ui.q, { limit: 14 });
-    if (!found.length) { results.append(h('p', { class: 'hint', style: { margin: 0 } }, 'Nothing by that name. '), h('button', { type: 'button', class: 'linkish', onClick: () => newPageDialog('person', ui.q.trim()) }, `Make a page for "${ui.q.trim()}"`)); return; }
-    for (const e of found) results.append(pageLink(e, { note: typeMeta(e.type).one }));
+    results.hidden = !ui.q.trim();
+    if (results.hidden) return;
+    const found = searchWorld(world, ui.q, { limit: 12 });
+    if (!found.length) { results.append(h('p', { class: 'hint', style: { margin: '4px 6px' } }, 'Nothing by that name. '), h('button', { type: 'button', class: 'linkish', style: { margin: '0 6px 6px' }, onClick: () => newPageDialog('person', ui.q.trim()) }, `Make a page for "${ui.q.trim()}"`)); return; }
+    for (const e of found) results.append(h('div', { class: 'wd-result' }, pageLink(e, { note: typeMeta(e.type).one })));
   };
+  const q = h('input', { type: 'search', id: 'wd-q', placeholder: 'Search pages…  ( / )', value: ui.q, 'aria-label': 'Search the world', autocomplete: 'off',
+    onInput: (e) => { ui.q = e.target.value; drawResults(); },
+    onKeydown: (e) => { if (e.key === 'Enter') { const f = searchWorld(world, ui.q, { limit: 1 })[0]; if (f) { ui.q = ''; go(f.id); } } if (e.key === 'Escape') { ui.q = ''; e.target.value = ''; drawResults(); } } });
   drawResults();
-  const counts = Object.fromEntries(Object.keys(ENTITY_TYPES).map((t) => [t, [...world.entities.values()].filter((e) => e.type === t).length]));
-  const navBtn = (id, label, glyph) => h('button', { type: 'button', class: `wd-nav ${ui.page === id ? 'active' : ''}`, onClick: () => go(id) }, h('span', { class: 'wd-glyph' }, glyph), label);
+  const active = TAB_OF[ui.page] || ui.page;
+  return h('div', { class: 'wd-topbar' },
+    h('div', { class: 'wd-topbar-row' },
+      h('button', { type: 'button', class: 'wd-world-name', onClick: () => go('home'), title: 'The world\'s home page' }, h('span', { class: 'wd-glyph' }, '🌐'), h('b', null, world.name || 'My World')),
+      h('div', { class: 'wd-search' }, q, results),
+      h('div', { class: 'wd-topbar-actions' },
+        h('button', { class: 'btn sm primary', type: 'button', title: 'Record something that happened: a new tie, a betrayal, a death, a move, a faction joined or left', onClick: () => momentDialog({}) }, '⚡ What happened'),
+        newMenu())),
+    h('nav', { class: 'wd-tabs', 'aria-label': 'World pages' }, TABS.map(([id, label, glyph]) => h('button', { type: 'button', class: `wd-tab ${active === id ? 'active' : ''}`, 'aria-current': active === id ? 'page' : null, onClick: () => go(id) }, h('span', { class: 'wd-glyph', 'aria-hidden': 'true' }, glyph), label))));
+}
+
+/** Every page, by kind. On a phone it starts folded, so the page you opened comes first. */
+function indexPanel() {
+  const narrow = typeof matchMedia === 'function' && matchMedia('(max-width: 1000px)').matches;
+  const open = ui.index ?? !narrow;
+  const total = world.entities.size;
   const sections = Object.entries(ENTITY_TYPES).map(([t, meta]) => {
     const list = [...world.entities.values()].filter((e) => e.type === t).sort((a, b) => (b.character ? 1 : 0) - (a.character ? 1 : 0) || b.degree - a.degree || a.name.localeCompare(b.name));
-    const open = ui.open[t] ?? (t === 'person');
+    if (!list.length && (t === 'paper' || t === 'handout')) return null;
+    const sOpen = ui.open[t] ?? (t === 'person' || t === 'faction');
     const showAll = ui.showAll[t];
     const shown = showAll ? list : list.slice(0, 12);
     return h('div', { class: 'wd-section' },
-      h('button', { type: 'button', class: 'wd-section-head', 'aria-expanded': String(open), onClick: () => { ui.open[t] = !open; renderWorld(); } },
-        h('span', { class: 'wd-caret' }, open ? '▾' : '▸'), h('span', { class: 'wd-glyph' }, meta.glyph), meta.label, h('span', { class: 'count' }, counts[t]),
-        h('span', { class: 'wd-section-add', role: 'button', title: `New ${meta.one.toLowerCase()}`, onClick: (e) => { e.stopPropagation(); if (t === 'paper') startPaper(ctx(), { draft: true }); else if (t === 'handout') newHandoutDialog(ctx()); else newPageDialog(t); } }, '+')),
-      open ? h('div', { class: 'wd-section-list' },
-        shown.map((e) => h('button', { type: 'button', class: `wd-tree ${ui.page === e.id ? 'active' : ''} ${shortStatus(e) ? 'has-status' : ''}`, style: { '--c': e.color || meta.color }, title: e.status || '', onClick: () => go(e.id) }, h('span', { class: 'swatch' }), h('span', { class: 'wd-tree-name' }, e.name), e.character ? h('span', { class: 'wd-tree-pl num' }, `PL ${e.character.pl}`) : shortStatus(e) ? h('span', { class: 'wd-tree-pl' }, e.status) : null)),
-        list.length > 12 ? h('button', { type: 'button', class: 'linkish', style: { fontSize: '12px', margin: '2px 0 0 22px' }, onClick: () => { ui.showAll[t] = !showAll; renderWorld(); } }, showAll ? 'Show fewer' : `Show all ${list.length}`) : null,
-        !list.length ? h('p', { class: 'hint', style: { margin: '0 0 0 22px' } }, t === 'person' ? 'Save characters to the roster.' : t === 'paper' ? 'Draft one at the newsstand.' : t === 'handout' ? 'Posters, files, letters: see Handouts.' : `No ${meta.label.toLowerCase()} yet.`) : null) : null);
-  });
-  return h('aside', { class: 'wd-side', 'aria-label': 'World index' },
-    h('div', { class: 'wd-side-top' },
-      h('button', { type: 'button', class: 'wd-world-name', onClick: () => go('home'), title: 'Home' }, h('span', { class: 'wd-glyph' }, '🌐'), h('b', null, world.name || 'My World'))),
-    h('div', { class: 'btn-row', style: { gap: '6px' } },
-      h('button', { class: 'btn sm primary', type: 'button', title: 'Record something that happened: a new tie, a betrayal, a death, a move, a faction joined or left', onClick: () => momentDialog({}) }, '⚡ What happened'),
-      h('button', { class: 'btn sm', type: 'button', onClick: () => newPageDialog() }, '+ Page'),
-      h('button', { class: 'btn sm', type: 'button', title: 'Copy a key that holds this whole world and roster, to paste to your players', onClick: copyWorldKey }, '🔑 Share')),
-    q, results,
-    h('nav', { class: 'wd-navs' }, navBtn('home', 'Home', '⌂'), navBtn('timeline', 'Campaign timeline', '🕰'), navBtn('graph', 'Relationship graph', '◉'), navBtn('newsstand', 'Newsstand: front pages', '📰'), navBtn('handouts', 'Handouts: posters, files, letters', '🗂'), navBtn('board', 'Evidence board', '📌'), navBtn('vault', 'Vault: import / export', '🗄')),
+      h('div', { class: 'wd-section-head-row' },
+        h('button', { type: 'button', class: 'wd-section-head', 'aria-expanded': String(sOpen), onClick: () => { ui.open[t] = !sOpen; renderWorld(); } },
+          h('span', { class: 'wd-caret' }, sOpen ? '▾' : '▸'), h('span', { class: 'wd-glyph' }, meta.glyph), meta.label, h('span', { class: 'count' }, list.length)),
+        h('button', { type: 'button', class: 'wd-section-add', title: `New ${meta.one.toLowerCase()}`, 'aria-label': `New ${meta.one.toLowerCase()}`, onClick: () => { if (t === 'paper') startPaper(ctx(), { draft: true }); else if (t === 'handout') newHandoutDialog(ctx()); else newPageDialog(t); } }, '+')),
+      sOpen ? h('div', { class: 'wd-section-list' },
+        shown.map((e) => h('button', { type: 'button', class: `wd-tree ${ui.page === e.id ? 'active' : ''}`, style: { '--c': e.color || meta.color }, title: e.status || '', onClick: () => go(e.id) }, h('span', { class: 'swatch' }), h('span', { class: 'wd-tree-name' }, e.name), e.character ? h('span', { class: 'wd-tree-pl num' }, `PL ${e.character.pl}`) : shortStatus(e) ? h('span', { class: 'wd-tree-pl' }, e.status) : null)),
+        list.length > 12 ? h('button', { type: 'button', class: 'linkish wd-more', onClick: () => { ui.showAll[t] = !showAll; renderWorld(); } }, showAll ? 'Show fewer' : `Show all ${list.length}`) : null,
+        !list.length ? h('p', { class: 'hint wd-none' }, t === 'person' ? 'Save characters to the roster.' : `None yet: + makes one.`) : null) : null);
+  }).filter(Boolean);
+  const el = h('details', { class: 'wd-side', open, 'aria-label': 'All pages' },
+    h('summary', { class: 'wd-side-summary' }, h('span', null, 'All pages'), h('span', { class: 'count' }, total)),
     h('div', { class: 'wd-sections' }, sections));
+  el.addEventListener('toggle', () => { ui.index = el.open; });
+  return el;
 }
 
 // ---- home ------------------------------------------------------------------------------------------------------------
@@ -225,7 +245,8 @@ function home() {
   const connected = ents.filter((e) => !e.character && e.type !== 'faction' && e.degree > 0).sort((a, b) => b.degree - a.degree).slice(0, 12);
   const latest = campaignTimeline(world).slice(-6).reverse();
   const papers = ents.filter((e) => e.type === 'paper' && e.paper).sort((a, b) => String(b.updated || b.created || '').localeCompare(String(a.updated || a.created || ''))).slice(0, 3);
-  const editBtn = h('button', { class: 'btn sm', type: 'button', onClick: async () => {
+  const latestBlock = latest.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Latest in the campaign', h('button', { class: 'linkish', type: 'button', style: { marginLeft: '10px', fontSize: '13px' }, onClick: () => go('timeline') }, 'full timeline')), h('div', { class: 'wd-tl' }, latest.map(timelineItem))) : null;
+  const editBtn = h('button', { class: 'btn sm wd-hero-edit', type: 'button', onClick: async () => {
     const name = h('input', { type: 'text', value: world.name || '' });
     const tag = h('input', { type: 'text', value: world.tagline || '' });
     const desc = h('textarea', { style: { minHeight: '100px' } }, world.description || '');
@@ -233,27 +254,28 @@ function home() {
     if (ok) { saved.name = name.value.trim() || 'My World'; saved.tagline = tag.value.trim(); saved.description = desc.value.trim(); save(); renderWorld(); }
   } }, 'Edit');
   const quick = (glyph, label, hint, fn, primary = false) => h('button', { type: 'button', class: `wd-quick ${primary ? 'primary' : ''}`, title: hint, onClick: fn }, h('span', { class: 'wd-quick-glyph' }, glyph), h('b', null, label), h('small', null, hint));
+  // Until something has been written by hand, show where to start; after that the bar above has it all.
+  const fresh = !Object.keys(saved.entities).length && !(saved.moments || []).length && !saved.links.length;
+  const shownCounts = counts.filter(({ n }) => n > 0);
   return h('div', { class: 'wd-page' },
     h('header', { class: 'wd-hero' },
-      h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'World'), h('h1', null, world.name || 'My World'), h('p', { class: 'wd-tagline' }, world.tagline || ''), world.description ? h('p', null, world.description) : null, editBtn),
-      h('div', { class: 'wd-counts' }, counts.map(({ t, meta, n }) => h('button', { type: 'button', class: 'wd-count', style: { '--c': meta.color }, onClick: () => { ui.open[t] = true; ui.showAll[t] = true; renderWorld(); } }, h('b', { class: 'num' }, n), h('span', null, meta.label))))),
-    h('div', { class: 'wd-quicks' },
-      quick('⚡', 'What happened', 'Two people became enemies, someone joined a faction, moved, died…', () => momentDialog({}), true),
-      quick('🏛', 'New faction', 'A team, agency, gang, court or cult', () => newPageDialog('faction')),
-      quick('📍', 'New location', 'A city, a base, a bar, a planet', () => newPageDialog('location')),
-      quick('📅', 'New event', 'A battle, a wedding, a heist, a funeral', () => newPageDialog('event')),
-      quick('🗝', 'New item', 'An artefact, a weapon, a vehicle, a MacGuffin', () => newPageDialog('item')),
-      quick('🧑', 'New person', 'Anyone the roster does not know yet', () => newPageDialog('person')),
-      quick('📰', 'Front page', 'Draft a newspaper from the campaign, or write one', () => go('newsstand')),
-      quick('📜', 'Wanted poster', 'A villain\'s poster, case file, letter, texts or report', () => newHandoutDialog(ctx())),
-      quick('📌', 'Evidence board', 'Pin people, string the ties, stick the theories', () => go('board'))),
+      h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'World'), h('h1', null, world.name || 'My World'), h('p', { class: 'wd-tagline' }, world.tagline || ''), world.description ? h('p', null, world.description) : null,
+        shownCounts.length ? h('div', { class: 'wd-counts' }, shownCounts.map(({ t, meta, n }) => h('button', { type: 'button', class: 'wd-count', style: { '--c': meta.color }, title: `Show all ${meta.label.toLowerCase()} in the list of pages`, onClick: () => { ui.index = true; ui.open[t] = true; ui.showAll[t] = true; renderWorld(); } }, h('b', { class: 'num' }, n), h('span', null, meta.label)))) : null),
+      editBtn),
+    fresh && ents.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Start here'),
+      h('div', { class: 'wd-quicks' },
+        quick('⚡', 'What happened', 'Two people became enemies, someone joined a faction, moved, died…', () => momentDialog({}), true),
+        quick('🏛', 'New faction', 'A team, agency, gang, court or cult', () => newPageDialog('faction')),
+        quick('📍', 'New location', 'A city, a base, a bar, a planet', () => newPageDialog('location')),
+        quick('📌', 'Evidence board', 'Pin people, string the ties, stick the theories', () => go('board')))) : null,
     !ents.length ? h('div', { class: 'empty' }, h('h2', null, 'An empty world'), h('p', null, 'Save characters to your roster and they appear here with everyone in their lives: parents, mentors, rivals, enemies, their city and their team. Then record what happens to them with "What happened".')) : null,
+    latestBlock,
     papers.length ? h('section', { class: 'wd-block' }, h('h2', null, 'On the newsstand', h('button', { class: 'linkish', type: 'button', style: { marginLeft: '10px', fontSize: '13px' }, onClick: () => go('newsstand') }, 'all front pages')), h('div', { class: 'np-stand small' }, papers.map((e) => h('div', { class: 'np-card' }, paperThumb(e.paper, () => go(e.id)), h('div', { class: 'np-card-text' }, h('b', null, e.paper.masthead), h('span', null, [e.paper.edition, e.paper.date].filter(Boolean).join(' · '))))))) : null,
-    latest.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Latest in the campaign', h('button', { class: 'linkish', type: 'button', style: { marginLeft: '10px', fontSize: '13px' }, onClick: () => go('timeline') }, 'full timeline')), h('div', { class: 'wd-tl' }, latest.map(timelineItem))) : null,
-    chars.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Heroes, villains and everyone saved'), h('div', { class: 'wd-cards' }, chars.map(personCard))) : null,
+    chars.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Heroes, villains and everyone saved', h('span', { class: 'pts' }, chars.length)), h('div', { class: 'wd-cards' }, (ui.showAll.homeChars ? chars : chars.slice(0, 9)).map(personCard)),
+      chars.length > 9 ? h('button', { type: 'button', class: 'btn sm ghost', style: { justifySelf: 'start' }, onClick: () => { ui.showAll.homeChars = !ui.showAll.homeChars; renderWorld(); } }, ui.showAll.homeChars ? 'Show fewer' : `Show all ${chars.length}`) : null) : null,
     factions.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Factions'), h('div', { class: 'wd-cards' }, factions.map(factionCard))) : null,
     connected.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Most connected'), h('div', { class: 'wd-chips' }, connected.map((e) => pageLink(e, { chip: true, note: `${e.degree} tie${e.degree === 1 ? '' : 's'}` })))) : null,
-    h('p', { class: 'hint' }, 'Everything here is clickable. Pages for saved characters follow the roster: edit a character, roll a new bio, add factions or a journal session and the world updates. What you record here (pages, ties, what happened) lives in the vault and goes out with backups and lobby keys. Press / to search.'));
+    h('p', { class: 'hint' }, 'Pages for saved characters follow the roster: edit a character, roll a new bio, add factions or a journal session and the world updates. What you record here (pages, ties, what happened) is kept with your data and goes out with backups, sync and world keys. Press / to search.'));
 }
 
 function personCard(e) {
@@ -265,9 +287,9 @@ function personCard(e) {
   return h('article', { class: 'wd-card', style: { '--c': color, '--c-ink': inkFor(color) } },
     h('button', { type: 'button', class: `wd-card-head ${img ? 'has-img' : ''}`, onClick: () => go(e.id) }, img ? h('span', { class: 'wd-card-img' }, img) : null, h('span', { class: 'wd-card-titles' }, h('span', { class: 'wd-card-name' }, e.name), h('span', { class: 'wd-card-sub' }, [e.aliases[0], ch ? `PL ${ch.pl}` : null, e.fields?.Side, shortStatus(e)].filter(Boolean).join(' · ')))),
     h('div', { class: 'wd-card-body' },
-      e.summary ? h('p', null, String(e.summary).length > 160 ? `${String(e.summary).slice(0, 157)}…` : e.summary) : null,
+      e.summary ? h('p', null, String(e.summary).length > 120 ? `${String(e.summary).slice(0, 117)}…` : e.summary) : null,
       s ? h('div', { class: 'card-stats' }, [['Dodge', s.d.defenses.Dodge], ['Parry', s.d.defenses.Parry], ['Tough', s.d.defenses.Toughness], ['Will', s.d.defenses.Will]].map(([k, v]) => h('div', null, h('b', { class: 'num' }, v), h('span', null, k.toUpperCase())))) : null,
-      h('div', { class: 'wd-card-links' }, e.connections.slice(0, 5).map((c) => pageLink(c.other, { chip: true, rel: c.rel, note: c.label.toLowerCase() })), e.connections.length > 5 ? h('span', { class: 'hint' }, `+${e.connections.length - 5} more`) : null)));
+      h('div', { class: 'wd-card-links' }, e.connections.slice(0, 3).map((c) => pageLink(c.other, { chip: true, rel: c.rel, note: c.label.toLowerCase() })), e.connections.length > 3 ? h('button', { type: 'button', class: 'linkish', style: { fontSize: '12.5px' }, onClick: () => go(e.id) }, `+${e.connections.length - 3} more`) : null)));
 }
 
 function factionCard(e) {
@@ -359,19 +381,20 @@ function addLinkForm(e) {
     if (!other && name) { other = createEntity(saved, { type: newType.value, name }); toast(`Made a ${typeMeta(newType.value).one.toLowerCase()} page for ${name}`); }
     if (!other) { target.setCustomValidity('Pick someone, or type a new name'); target.reportValidity(); return; }
     addLink(saved, { from: e.id, to: other.id, rel: rel.value, note: note.value.trim(), since: since.value ? { session: Number(since.value) } : null });
-    ui.linkPreset = null;
+    ui.linkPreset = null; ui.addTie = true;
     save(); renderWorld();
     toast(`${other.name}: ${RELATIONS[rel.value].label.toLowerCase()} of ${e.name}`);
   };
   target.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') { ev.preventDefault(); submit(); } });
   const quick = (QUICK_LINKS[e.type] || []).map(([label, r, t]) => h('button', { type: 'button', class: `wd-quicklink ${preset.rel === r ? 'active' : ''}`, style: { '--rc': RELATIONS[r]?.color }, onClick: () => { ui.linkPreset = { rel: r, newType: t }; renderWorld(); setTimeout(() => root.querySelector('#wd-link-target')?.focus(), 0); } }, label));
-  const el = h('div', { class: 'wd-addlink' },
+  const el = h('details', { class: 'wd-addlink', open: ui.addTie || !!ui.linkPreset },
+    h('summary', null, '＋ Add a tie'),
     h('datalist', { id: 'wd-all' }, all.map((x) => h('option', { value: x.name }, typeMeta(x.type).one))),
-    h('div', { class: 'label' }, 'Add a tie'),
     h('div', { class: 'wd-quicklinks' }, quick),
     h('div', { class: 'add-row' }, target, rel, newType, since, h('button', { class: 'btn primary', type: 'button', onClick: submit }, 'Link')),
     h('div', { class: 'add-row' }, note),
     h('p', { class: 'hint', style: { margin: '4px 0 0' } }, `Reads as "<name> is ${e.name}'s <relationship>". The other page gets the inverse. Prefer "⚡ What happened" when the tie starts in play: it also ends what it replaces and lands on the timeline.`));
+  el.addEventListener('toggle', () => { ui.addTie = el.open; });
   return el;
 }
 
@@ -429,22 +452,28 @@ function entityPage(e) {
     const key = Object.values(e.keys || {}).find(Boolean);
     try { const person = fromKeySync(R, key).character; hooks.open?.(person); toast(`Opened ${person.identity?.realName || e.name}. Save to roster to give them a full page.`); } catch (err) { toast(`Couldn't build ${e.name}: ${err.message}`); }
   };
+  const removePage = async () => {
+    const ok = await openDialog({ title: `Remove ${e.name}?`, body: h('p', { style: { margin: 0 } }, e.source === 'manual' ? 'This page and its links are deleted from the vault.' : 'This page is hidden from the world. The character or bio it came from is not touched.'), buttons: [{ label: 'Keep', value: false }, { label: 'Remove', value: true, danger: true }] });
+    if (ok) { deleteEntity(saved, e.id); save(); go('home'); }
+  };
+  const copyMd = async () => toast((await copyText(vaultMarkdown(world)[Object.keys(vaultMarkdown(world)).find((k) => k.endsWith(`/${e.name.replace(/[\\/:*?"<>|#^[\]]/g, '')}.md`)) || ''] || '')) ? 'Page copied as Markdown' : 'Copy failed');
+  // The few things you do on a page are buttons; the rest is one menu.
   const actions = h('div', { class: 'toolbar wd-actions' },
-    ui.history.length ? h('button', { class: 'btn', type: 'button', title: 'Back to the previous page', onClick: back }, '← Back') : null,
+    ui.history.length ? h('button', { class: 'btn ghost', type: 'button', title: 'Back to the previous page', onClick: back }, '← Back') : null,
     h('button', { class: 'btn primary', type: 'button', title: 'Record something that happened to them', onClick: () => momentDialog({ a: e.id }) }, '⚡ What happened'),
+    h('button', { class: 'btn', type: 'button', title: 'Add a friend, enemy, faction, home…', onClick: () => { ui.addTie = true; renderWorld(); setTimeout(() => { const f = root.querySelector('#wd-link-target'); f?.scrollIntoView({ block: 'center' }); f?.focus(); }, 0); } }, '＋ Tie'),
+    h('button', { class: 'btn', type: 'button', 'aria-pressed': String(ui.edit), onClick: () => { ui.edit = !ui.edit; renderWorld(); } }, ui.edit ? '✓ Done editing' : '✎ Edit'),
     ch ? h('button', { class: 'btn', type: 'button', onClick: () => hooks.open?.(ch) }, 'Open on the Forge') : null,
     canOpenAsCharacter ? h('button', { class: 'btn', type: 'button', title: 'Rebuild this person as a full character from their key', onClick: openAsCharacter }, 'Open as a character') : null,
-    ch ? h('button', { class: 'btn', type: 'button', onClick: () => hooks.throwIn?.(ch) }, '⚔ Battle Room') : null,
-    h('button', { class: 'btn', type: 'button', 'aria-pressed': String(ui.edit), onClick: () => { ui.edit = !ui.edit; renderWorld(); } }, ui.edit ? 'Done editing' : '✎ Edit page'),
-    e.type === 'person' ? h('button', { class: 'btn', type: 'button', title: 'A WANTED poster for this page, drafted from their ties and what happened', onClick: () => startHandout(ctx(), draftHandout(world, 'wanted', { a: e })) }, '📜 Wanted poster') : null,
-    e.type === 'person' ? h('button', { class: 'btn', type: 'button', title: 'An agency case file, drafted from this page', onClick: () => startHandout(ctx(), draftHandout(world, 'casefile', { a: e })) }, '🗂 Case file') : null,
-    h('button', { class: 'btn', type: 'button', title: 'Pin this page to the evidence board', onClick: () => { pinToBoard(saved, e.id); save(); go('board'); } }, '📌 Pin'),
     h('span', { class: 'spacer' }),
-    h('button', { class: 'btn ghost', type: 'button', onClick: async () => toast((await copyText(vaultMarkdown(world)[Object.keys(vaultMarkdown(world)).find((k) => k.endsWith(`/${e.name.replace(/[\\/:*?"<>|#^[\]]/g, '')}.md`)) || ''] || '')) ? 'Page copied as Markdown' : 'Copy failed') }, 'Copy as Markdown'),
-    h('button', { class: 'btn ghost danger', type: 'button', onClick: async () => {
-      const ok = await openDialog({ title: `Remove ${e.name}?`, body: h('p', { style: { margin: 0 } }, e.source === 'manual' ? 'This page and its links are deleted from the vault.' : 'This page is hidden from the world. The character or bio it came from is not touched.'), buttons: [{ label: 'Keep', value: false }, { label: 'Remove', value: true, danger: true }] });
-      if (ok) { deleteEntity(saved, e.id); save(); go('home'); }
-    } }, 'Remove'));
+    menu('More', [
+      ch ? { label: '⚔ Battle Room', hint: 'Throw them into a fight', run: () => hooks.throwIn?.(ch) } : null,
+      e.type === 'person' ? { label: '📜 Wanted poster', hint: 'Drafted from their ties and what happened', run: () => startHandout(ctx(), draftHandout(world, 'wanted', { a: e })) } : null,
+      e.type === 'person' ? { label: '🗂 Case file', hint: 'An agency case file, drafted from this page', run: () => startHandout(ctx(), draftHandout(world, 'casefile', { a: e })) } : null,
+      { label: '📌 Pin to the evidence board', run: () => { pinToBoard(saved, e.id); save(); go('board'); } },
+      { label: 'Copy as Markdown', hint: 'For notes, Obsidian or a chat', run: copyMd },
+      { label: e.source === 'manual' ? 'Delete this page' : 'Hide this page', hint: e.source === 'manual' ? 'Removes it and its ties' : 'The character or bio it came from is not touched', danger: true, run: removePage },
+    ], { cls: 'btn' }));
 
   const por = ch ? portraitImg(ch) : null;
   const head = h('header', { class: `wd-head ${e.status === 'Dead' || e.status === 'Destroyed' ? 'gone' : ''}`, style: { '--c': color, '--c-ink': inkFor(color) } },
@@ -465,7 +494,7 @@ function entityPage(e) {
     h('h3', null, 'Ties', h('span', { class: 'pts' }, `${e.connections.length}${e.past.length ? ` · ${e.past.length} past` : ''}`)),
     groups.length ? groups.map((g) => h('div', { class: 'wd-group' },
       h('div', { class: 'wd-group-name', style: { '--rc': RELATIONS[g.items[0].rel]?.color } }, g.group),
-      h('ul', { class: 'wd-conns' }, g.items.map(connRow)))) : h('p', { class: 'hint', style: { margin: 0 } }, 'No ties yet. Add one below, or record what happened.'),
+      h('ul', { class: 'wd-conns' }, g.items.map(connRow)))) : h('p', { class: 'hint', style: { margin: 0 } }, 'No ties yet. Add one, or record what happened.'),
     past.length ? h('details', { class: 'wd-past' }, h('summary', null, `Formerly (${e.past.length})`), past.map((g) => h('div', { class: 'wd-group' }, h('div', { class: 'wd-group-name', style: { '--rc': RELATIONS[g.items[0].rel]?.color } }, g.group), h('ul', { class: 'wd-conns' }, g.items.map(connRow))))) : null,
     addLinkForm(e));
 
@@ -714,8 +743,15 @@ function graphPage() {
   const edges = base.filter((l) => ids.has(l.from) && ids.has(l.to) && ui.graphGroups.has(RELATIONS[l.rel]?.group));
   const linked = new Set(edges.flatMap((l) => [l.from, l.to]));
   const shown = nodes.filter((n) => linked.has(n.id) || n.character);
-  const W = 1100; const H = Math.max(520, Math.min(900, 300 + shown.length * 9));
-  const pos = layoutGraph(shown.map((n) => ({ id: n.id })), edges, { width: W, height: H, iterations: 260, seed: shown.length * 7 + edges.length, margin: 80 });
+  // Each family, team or circle gets its own patch, so they don't push each other into the edges.
+  const lay = layoutComponents(shown.map((n) => ({ id: n.id })), edges, { width: 1100, seed: shown.length * 7 + edges.length });
+  const pos = lay.pos;
+  const PAD = 40; const W = lay.width + PAD * 2; const H = lay.height + PAD * 2;
+  for (const p of pos.values()) { p.x += PAD; p.y += PAD; }
+  // Names on the busy nodes; the rest show theirs on hover, so the picture stays readable.
+  const named = (n) => n.character || n.degree >= 4 || n.type === 'faction' || shown.length <= 40;
+  const zoom = ui.graphZoom || 1;
+  const setZoom = (z) => { ui.graphZoom = Math.max(1, Math.min(4, z)); renderWorld(); };
   const typeToggle = (t) => h('label', { class: 'wd-toggle', style: { '--c': typeMeta(t).color } }, h('input', { type: 'checkbox', checked: ui.graphTypes.has(t), onChange: (e) => { if (e.target.checked) ui.graphTypes.add(t); else ui.graphTypes.delete(t); renderWorld(); } }), `${typeMeta(t).glyph} ${typeMeta(t).label}`);
   const groupToggle = (g) => h('label', { class: 'wd-toggle', style: { '--c': RELATIONS[Object.keys(RELATIONS).find((k) => RELATIONS[k].group === g)]?.color } }, h('input', { type: 'checkbox', checked: ui.graphGroups.has(g), onChange: (e) => { if (e.target.checked) ui.graphGroups.add(g); else ui.graphGroups.delete(g); renderWorld(); } }), g);
   const slider = last > 0 ? h('div', { class: 'wd-asof' },
@@ -725,15 +761,21 @@ function graphPage() {
     asOf == null ? h('label', { class: 'wd-toggle', style: { '--c': '#9a8fb5' } }, h('input', { type: 'checkbox', checked: ui.showPast, onChange: (e) => { ui.showPast = e.target.checked; renderWorld(); } }), 'Show past ties (dashed)') : null) : null;
   return h('div', { class: 'wd-page' },
     h('header', { class: 'wd-hero small' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'Everyone'), h('h1', null, 'Relationship graph'), h('p', { class: 'wd-tagline' }, `${shown.length} pages, ${edges.length} ties${asOf != null ? ` as they stood at session ${asOf}` : ''}. Lines are coloured by the kind of tie; click a node to open its page. Wind the slider back to see the world before a betrayal, a death or a move.`))),
-    h('div', { class: 'wd-filters' }, slider, h('div', { class: 'wd-filter-row' }, Object.keys(ENTITY_TYPES).map(typeToggle)), h('div', { class: 'wd-filter-row' }, RELATION_GROUPS.map(groupToggle))),
+    h('div', { class: 'wd-filters' }, slider,
+      h('details', { class: 'wd-graph-filters' }, h('summary', null, 'Show which pages and ties'),
+        h('div', { class: 'wd-filter-row' }, Object.keys(ENTITY_TYPES).map(typeToggle)), h('div', { class: 'wd-filter-row' }, RELATION_GROUPS.map(groupToggle)))),
     shown.length ? h('div', { class: 'wd-graph-wrap big' },
-      svg('svg', { viewBox: `0 0 ${W} ${H}`, class: 'wd-graph', role: 'img', 'aria-label': 'Relationship graph' },
+      h('div', { class: 'wd-graph-tools' }, h('span', { class: 'hint' }, 'Click a node to open its page. Hover for a name.'), h('span', { class: 'spacer' }),
+        h('button', { class: 'btn sm ghost', type: 'button', 'aria-label': 'Zoom out', disabled: zoom <= 1, onClick: () => setZoom(zoom / 1.5) }, '−'),
+        h('span', { class: 'num', style: { minWidth: '44px', textAlign: 'center' } }, `${Math.round(zoom * 100)}%`),
+        h('button', { class: 'btn sm ghost', type: 'button', 'aria-label': 'Zoom in', disabled: zoom >= 4, onClick: () => setZoom(zoom * 1.5) }, '+')),
+      h('div', { class: 'wd-graph-scroll' }, svg('svg', { viewBox: `0 0 ${W} ${H}`, class: 'wd-graph', role: 'img', 'aria-label': 'Relationship graph', style: `width:${zoom * 100}%` },
         edges.map((l) => { const a = pos.get(l.from); const b = pos.get(l.to); return svg('line', { x1: a.x, y1: a.y, x2: b.x, y2: b.y, stroke: RELATIONS[l.rel]?.color || '#999', 'stroke-width': 1.6, 'stroke-opacity': l.until ? 0.35 : 0.7, 'stroke-dasharray': l.until ? '5 4' : null }, svg('title', null, `${world.entities.get(l.to).name} is ${world.entities.get(l.from).name}'s ${RELATIONS[l.rel]?.label.toLowerCase()}${l.since?.session != null ? ` since S${l.since.session}` : ''}${l.until ? ` (ended ${whenText(l.until)})` : ''}`)); }),
         shown.map((n) => { const p = pos.get(n.id); const color = n.color || typeMeta(n.type).color; const r = Math.min(22, 8 + Math.sqrt(n.degree) * 3 + (n.character ? 4 : 0)); return svg('g', { class: 'wd-node', transform: `translate(${p.x},${p.y})`, style: 'cursor:pointer', onClick: () => go(n.id) },
           svg('title', null, `${n.name} (${typeMeta(n.type).one}, ${n.degree} ties${n.status ? `, ${n.status}` : ''})`),
           svg('circle', { r, fill: color, stroke: 'var(--surface)', 'stroke-width': 2, 'stroke-dasharray': n.status === 'Dead' || n.status === 'Destroyed' || n.status === 'Disbanded' ? '3 2' : null }),
           svg('text', { 'text-anchor': 'middle', dy: 4, fill: inkFor(color), 'font-size': Math.max(8, r * 0.7), 'font-weight': 700 }, n.type === 'person' ? initialsOf(n.name) : typeMeta(n.type).glyph),
-          svg('text', { 'text-anchor': 'middle', dy: r + 12, fill: 'var(--ink)', 'font-size': 10.5, 'font-weight': n.character ? 800 : 500 }, n.name.length > 22 ? `${n.name.slice(0, 21)}…` : n.name)); }))) : h('div', { class: 'empty' }, h('h2', null, 'No one to draw yet'), h('p', null, 'Save characters to the roster; their families, mentors, rivals and enemies fill the graph.')));
+          svg('text', { class: named(n) ? 'lbl' : 'lbl minor', 'text-anchor': 'middle', dy: r + 12, fill: 'var(--ink)', 'font-size': 10.5, 'font-weight': n.character ? 800 : 500 }, n.name.length > 22 ? `${n.name.slice(0, 21)}…` : n.name)); })))) : h('div', { class: 'empty' }, h('h2', null, 'No one to draw yet'), h('p', null, 'Save characters to the roster; their families, mentors, rivals and enemies fill the graph.')));
 }
 
 async function copyWorldKey() {
@@ -748,13 +790,8 @@ function vaultPage() {
       const data = JSON.parse(await f.text());
       const w = data.world || data;
       if (!w?.v) throw new Error('Not a DCUGen vault file');
-      let n = 0;
-      for (const [id, ent] of Object.entries(w.entities || {})) { saved.entities[id] = ent; n++; }
-      for (const l of w.links || []) if (!saved.links.some((x) => x.id === l.id)) saved.links.push(l);
-      for (const m of w.moments || []) if (!(saved.moments || []).some((x) => x.id === m.id)) (saved.moments = saved.moments || []).push(m);
-      saved.linkEnds = { ...(saved.linkEnds || {}), ...(w.linkEnds || {}) };
-      saved.overrides = { ...saved.overrides, ...(w.overrides || {}) };
-      if (w.name && (!saved.name || saved.name === 'My World')) { saved.name = w.name; saved.tagline = w.tagline || saved.tagline; saved.description = w.description || saved.description; }
+      const n = Object.keys(w.entities || {}).length;
+      saved = mergeWorldSaved(saved, w);
       let chars = 0;
       for (const ch of data.characters || []) { if (ch?.abilities && ch.pl != null) { const c = { ...ch }; delete c.savedAt; upsert(c); chars++; } }
       save(); renderWorld();
@@ -804,5 +841,5 @@ export function renderWorld() {
   else if (ui.page === 'board') page = boardPage(ctx());
   else if (world.entities.has(ui.page)) { const e = world.entities.get(ui.page); page = e.type === 'paper' && e.paper ? paperPage(ctx(), e) : e.type === 'handout' && e.handout ? handoutPage(ctx(), e) : entityPage(e); }
   else { ui.page = 'home'; page = home(); }
-  root.append(h('div', { class: 'wd-layout' }, sidebar(), h('main', { class: 'wd-content' }, page)));
+  root.append(h('div', { class: 'wd-shell' }, topbar(), h('div', { class: 'wd-layout' }, indexPanel(), h('main', { class: 'wd-content' }, page))));
 }

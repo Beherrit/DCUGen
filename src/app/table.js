@@ -3,8 +3,8 @@
 // group and the group's rolls come back.
 
 import { h, clear, toast, copyText, openDialog } from './dom.js';
-import { state } from './store.js';
-import { lobby, onLobby, joinLobby, leaveLobby, lobbySendFeed, lobbyClaim, makeLobbyKey, isLobbyKey, hostPeerTable, joinLink, qrSvg, isPeerKey, peerServer } from './lobby.js';
+import { state, upsert } from './store.js';
+import { lobby, onLobby, joinLobby, leaveLobby, lobbySendFeed, lobbyClaim, lobbySendRemove, makeLobbyKey, isLobbyKey, hostPeerTable, joinLink, qrSvg, isPeerKey, peerServer } from './lobby.js';
 
 /** Open a table for phones in this tab, and show the QR code and link for players. Shared with the GM screen. */
 export async function openPhoneTable() {
@@ -133,7 +133,7 @@ function lobbyPanel() {
     try {
       const info = await desktop.lobbyStart({ name: `${tableName()}'s table` });
       const key = makeLobbyKey({ name: info.name, addresses: info.addresses, port: info.port, token: info.token });
-      joinLobby(key, { name: tableName(), role: 'host', address: '127.0.0.1' });
+      joinLobby(key, { name: tableName(), role: 'host', address: '127.0.0.1', hostToken: info.hostToken });
       const v = await openDialog({ title: 'Your table is open', body: [h('p', { style: { margin: 0 } }, 'Send this key to your players. They paste it into "Join a table" in their DCUGen app. Everyone on your network can join; for players elsewhere, forward the port on your router (or run a tunnel) and give them the key.'), h('div', { class: 'key-box' }, h('div', { class: 'label' }, 'Lobby key'), h('code', null, key)), h('p', { class: 'hint', style: { margin: 0 } }, `Port ${info.port} · addresses ${info.addresses.join(', ')}`)], buttons: [{ label: 'Copy key', value: 'copy', primary: true }, { label: 'Close', value: null }] });
       if (v === 'copy') toast((await copyText(key)) ? 'Key copied' : 'Select the key and copy it');
     } catch (e) { toast(`Couldn't host: ${e.message}`); }
@@ -147,6 +147,7 @@ function lobbyPanel() {
       h('div', { class: 'tb-status on' }, h('b', null, lobby.role === 'host' ? 'Hosting' : 'Joined'), ` ${lobby.info?.name || ''}${lobby.hostGone ? ' · the host left' : ''}`),
       lobby.role === 'host' && lobby.mode === 'phone' ? h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', type: 'button', onClick: showInvite }, '📱 Show the QR code')) : null,
       lobby.role === 'host' && lobby.mode !== 'phone' ? h('div', { class: 'key-box' }, h('div', { class: 'label' }, 'Lobby key: send it to your players'), h('code', null, lobby.key), h('div', { class: 'btn-row', style: { marginTop: '6px' } }, h('button', { class: 'btn sm primary', type: 'button', onClick: async () => toast((await copyText(lobby.key)) ? 'Key copied' : 'Copy failed') }, 'Copy key'))) : null,
+      lobby.role === 'host' ? sharePicker() : null,
       h('div', { class: 'label' }, `At the table (${members.length})`),
       h('ul', { class: 'tb-members' }, members.map((m) => h('li', null, h('span', { class: `tb-dot ${m.role}` }), m.name, m.role === 'host' ? h('small', null, ' · host') : null, m.id === lobby.id ? h('small', null, ' · you') : null))),
       h('div', { class: 'btn-row' }, h('button', { class: 'btn', type: 'button', onClick: lobby.role === 'host' ? stopHost : () => { leaveLobby(); renderTable(); } }, lobby.role === 'host' ? 'Close the table' : 'Leave')),
@@ -155,7 +156,7 @@ function lobbyPanel() {
       status === 'error' ? h('div', { class: 'tb-status bad' }, lobby.error || 'Connection failed') : null,
       h('label', { class: 'field' }, h('span', null, 'Your name'), nameIn),
       h('div', { class: 'tb-host' }, h('button', { class: 'btn primary', type: 'button', id: 'tb-phone', onClick: async () => { setTableName(nameIn.value); await openPhoneTable(); renderTable(); } }, '📱 Open a table for phones'), h('p', { class: 'hint', style: { margin: '4px 0 0' } }, 'Players scan a QR code and join from any phone or browser, no install. This page is the table: keep it open while you play.')),
-      desktop ? h('div', { class: 'tb-host' }, h('button', { class: 'btn', type: 'button', onClick: host }, '⌂ Host on this computer (local network)'), h('p', { class: 'hint', style: { margin: '4px 0 0' } }, 'The desktop app\'s own server: for players on your network using the desktop app. Your roster and world are shared; players claim their own characters and roll for them.')) : null,
+      desktop ? h('div', { class: 'tb-host' }, h('button', { class: 'btn', type: 'button', onClick: host }, '⌂ Host on this computer (local network)'), h('p', { class: 'hint', style: { margin: '4px 0 0' } }, 'The desktop app\'s own server: for players on your network using the desktop app. Your world and the characters you share are sent to them; players claim their own characters and roll for them.')) : null,
       h('details', { class: 'tb-server' }, h('summary', null, 'Use your own PeerJS server'), (() => {
         const cur = peerServer();
         const inp = h('input', { type: 'text', placeholder: 'host[:port][/path], e.g. peer.example.com/myapp', value: cur ? `${cur.host}${cur.port ? `:${cur.port}` : ''}${cur.path && cur.path !== '/' ? cur.path : ''}` : '', 'aria-label': 'PeerJS server' });
@@ -198,13 +199,35 @@ export function renderTable() {
   clear(root);
   unread = 0; bumpBadge();
   feedHost = h('div', { class: 'tb-feed', 'aria-live': 'polite' });
-  root.append(h('div', { class: 'page-head' }, h('div', null, h('h1', null, 'The Table'), h('p', null, 'Every roll from every "Roll" menu lands here, with the dice shown. Open a table for phones and your players scan the QR code or tap the link: no app, no install. They see your world and roster, claim their own characters, roll for them, and everyone sees it.'))));
+  root.append(h('div', { class: 'page-head' }, h('div', null, h('h1', null, 'The Table'), h('p', null, 'Every roll from every "Roll" menu lands here, with the dice shown. Open a table for phones and your players scan the QR code or tap the link: no app, no install. They see your world and the characters you share, claim their own characters, roll for them, and everyone sees it.'))));
   root.append(h('div', { class: 'tb-layout' },
     h('section', { class: 'panel tb-main' },
       h('div', { style: { display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' } }, h('h2', null, 'Rolls & chat'), h('span', { class: 'hint' }, `${feed.length} entries`), h('span', { style: { flex: 1 } }), h('button', { class: 'btn sm ghost', type: 'button', onClick: () => { clearFeed(); } }, 'Clear')),
       feedHost, quickRoller()),
     lobbyPanel()));
   drawFeed();
+}
+
+/** Host: share a character with the table, or stop sharing it (players drop their copy). */
+export function setTableShared(ch, on) {
+  if (!ch?.rosterId || ch.lobbyOwner) return ch;
+  const kept = upsert({ ...ch, tableShared: !!on });
+  if (!on && lobby.status === 'on' && lobby.role === 'host') lobbySendRemove(ch.rosterId);
+  return kept;
+}
+
+/** Host: pick which of your characters the players see. Players' own characters are always there. */
+function sharePicker() {
+  const mine = state.roster.filter((c) => !c.lobbyOwner && !c.companionOf);
+  const players = state.roster.filter((c) => c.lobbyOwner);
+  const n = mine.filter((c) => c.tableShared).length;
+  return h('details', { class: 'tb-share', open: !n && mine.length > 0 },
+    h('summary', null, `Characters shared with the table (${n + players.length})`),
+    h('p', { class: 'hint', style: { margin: '4px 0 6px' } }, 'Players only see what you tick here (pre-made heroes for them to claim, allies, a villain they have met), plus their own characters. Everything else in your roster stays private.'),
+    mine.length ? h('ul', { class: 'tb-share-list' }, mine.map((c) => h('li', null, h('label', { class: 'check' },
+      h('input', { type: 'checkbox', checked: !!c.tableShared, onChange: (e) => { setTableShared(c, e.target.checked); renderTable(); } }),
+      ` ${c.identity?.codename || c.identity?.realName || 'Unnamed'}`, c.alignment === 'villain' ? h('small', null, ' · villain') : null)))) : h('p', { class: 'hint' }, 'Your roster is empty.'),
+    players.length ? h('p', { class: 'hint', style: { margin: '6px 0 0' } }, `Players' characters: ${players.map((c) => `${c.identity?.codename || 'Unnamed'} (${c.lobbyOwnerName || 'a player'})`).join(', ')}.`) : null);
 }
 
 /** For the lobby: which of my characters are claimed, and claim one. */

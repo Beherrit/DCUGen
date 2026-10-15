@@ -1,6 +1,6 @@
 // The Forge: roll controls, the current character, and its actions.
 
-import { h, clear, toast, copyText, openDialog, inkFor } from './dom.js';
+import { h, clear, toast, copyText, openDialog, inkFor, menu } from './dom.js';
 import { state, emit, savePrefs, upsert } from './store.js';
 import { renderFile } from './sheetview.js';
 import { exportExcel, exportJson, exportText, exportDossierExcel } from './exporters.js';
@@ -15,7 +15,7 @@ import { statBlockText, sheet as makeSheet } from '../engine/render.js';
 import { recordChanges } from '../engine/advancement.js';
 import { rollMenu } from './dice.js';
 import { lobby } from './lobby.js';
-import { claimCharacter } from './table.js';
+import { claimCharacter, setTableShared } from './table.js';
 import { worldSelect } from './roster.js';
 import { hasForms, activeForm, addForm, switchForm, renameForm, removeForm, MAX_FORMS } from '../engine/forms.js';
 import { COMPANION_KINDS, companionsOf, companionBudget, asCompanion, blankCompanion, suggestedPl } from '../engine/companions.js';
@@ -433,34 +433,6 @@ async function rollTeam() {
   }
 }
 
-function menu(label, items) {
-  const list = h('div', { class: 'menu-list', hidden: true, role: 'menu' });
-  const btn = h('button', { class: 'btn', type: 'button', 'aria-haspopup': 'menu', 'aria-expanded': 'false', onClick: (e) => {
-    e.stopPropagation();
-    const open = list.hidden;
-    document.querySelectorAll('.menu-list').forEach((m) => { m.hidden = true; });
-    list.hidden = !open;
-    btn.setAttribute('aria-expanded', String(open));
-    if (open) {
-      // Open upward only when it fits there and not below; otherwise bring the list into view.
-      list.classList.remove('up', 'left');
-      const b = btn.getBoundingClientRect();
-      const top = document.querySelector('.topbar')?.getBoundingClientRect().bottom || 0;
-      const fitsBelow = b.bottom + list.offsetHeight + 8 <= window.innerHeight;
-      if (!fitsBelow && b.top - top - 8 >= list.offsetHeight) list.classList.add('up');
-      else if (!fitsBelow) list.scrollIntoView({ block: 'nearest' });
-      const box = (btn.closest('.toolbar') || document.body).getBoundingClientRect();
-      if (b.right - list.offsetWidth < box.left) list.classList.add('left');
-    }
-  } }, label, ' ▾');
-  for (const it of items) {
-    if (!it) continue;
-    list.append(h('button', { type: 'button', role: 'menuitem', id: it.id || null, onClick: () => { list.hidden = true; it.run(); } }, it.label, it.hint ? h('small', null, it.hint) : null));
-  }
-  return h('div', { class: 'menu' }, btn, list);
-}
-
-document.addEventListener('click', () => document.querySelectorAll('.menu-list').forEach((m) => { m.hidden = true; }));
 
 /**
  * Every edit (+/−, a typed field, a bio change) rebuilds the whole case file. Clearing the page would
@@ -802,7 +774,8 @@ function drawCurrent(ch) {
       h('button', { class: 'btn ghost icon', type: 'button', id: 'redo', title: 'Redo (Ctrl+Y)', 'aria-label': 'Redo', disabled: !canRedo(), onClick: redo }, '↷'),
       h('button', { class: 'btn ghost', type: 'button', id: 'history', title: 'Saved versions of this character', onClick: () => historyDialog() }, '🕘 History')),
     rollMenu(ch, R),
-    lobby.status === 'on' && ch.rosterId && !ch.lobbyOwner ? h('button', { class: 'btn ghost', type: 'button', title: 'Tell the table this character is yours', onClick: () => claimCharacter(ch) }, '✋ Mine') : null,
+    lobby.status === 'on' && lobby.role !== 'host' && ch.rosterId && ch.lobbyShared && !ch.lobbyOwner ? h('button', { class: 'btn ghost', type: 'button', title: 'Tell the table this character is yours', onClick: () => claimCharacter(ch) }, '✋ Mine') : null,
+    lobby.status === 'on' && lobby.role === 'host' && ch.rosterId && !ch.lobbyOwner ? h('button', { class: `btn ghost${ch.tableShared ? ' on' : ''}`, type: 'button', 'aria-pressed': String(!!ch.tableShared), title: ch.tableShared ? 'Players can see this character. Click to stop sharing it.' : 'Let the players see this character (to claim, or as an ally or a known villain)', onClick: () => { ch.tableShared = !ch.tableShared; setTableShared(ch, ch.tableShared); renderCurrent(); } }, ch.tableShared ? '✓ Shared with table' : '📤 Share with table') : null,
     ch.lobbyOwner ? h('span', { class: 'chip', title: 'Claimed at the table' }, `${ch.lobbyOwner === lobby.id ? 'Yours' : `Played by ${ch.lobbyOwnerName || 'a player'}`}`) : null,
     h('span', { class: 'spacer' }),
     status(ch),

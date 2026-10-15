@@ -100,3 +100,32 @@ export function inkFor(hex) {
   return lum > 0.42 ? '#10141a' : '#ffffff';
 }
 
+/** A button with a drop-down list of actions: items are { label, hint, run, id, danger } (falsy items are skipped). */
+export function menu(label, items, { cls = 'btn' } = {}) {
+  const list = h('div', { class: 'menu-list', hidden: true, role: 'menu' });
+  const btn = h('button', { class: cls, type: 'button', 'aria-haspopup': 'menu', 'aria-expanded': 'false', onClick: (e) => {
+    e.stopPropagation();
+    const open = list.hidden;
+    document.querySelectorAll('.menu-list').forEach((m) => { m.hidden = true; });
+    list.hidden = !open;
+    btn.setAttribute('aria-expanded', String(open));
+    if (open) {
+      // Open upward only when it fits there and not below; otherwise bring the list into view.
+      list.classList.remove('up', 'left');
+      const b = btn.getBoundingClientRect();
+      const top = document.querySelector('.topbar')?.getBoundingClientRect().bottom || 0;
+      const fitsBelow = b.bottom + list.offsetHeight + 8 <= window.innerHeight;
+      if (!fitsBelow && b.top - top - 8 >= list.offsetHeight) list.classList.add('up');
+      else if (!fitsBelow) list.scrollIntoView({ block: 'nearest' });
+      const box = (btn.closest('.toolbar') || document.body).getBoundingClientRect();
+      if (b.right - list.offsetWidth < box.left) list.classList.add('left');
+    }
+  } }, label, ' ▾');
+  for (const it of items) {
+    if (!it) continue;
+    list.append(h('button', { type: 'button', role: 'menuitem', id: it.id || null, class: it.danger ? 'danger' : null, onClick: () => { list.hidden = true; it.run(); } }, it.label, it.hint ? h('small', null, it.hint) : null));
+  }
+  return h('div', { class: 'menu' }, btn, list);
+}
+
+if (typeof document !== 'undefined') document.addEventListener('click', () => document.querySelectorAll('.menu-list').forEach((m) => { m.hidden = true; }));

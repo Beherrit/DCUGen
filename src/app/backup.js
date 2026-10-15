@@ -3,11 +3,12 @@
 // replaces the rest. The desktop app uses the same snapshot to mirror the data to disk.
 
 import { h, toast, download, openDialog } from './dom.js';
+import { mergeWorldSaved } from '../engine/world.js';
 
 export const APP_KEYS_PREFIX = 'dcugen.';
-const MERGE_ROSTER = 'dcugen.roster.v1';
-const MERGE_WORLD = 'dcugen.world.v1';
-const DELETED = 'dcugen.roster.deleted.v1';
+export const MERGE_ROSTER = 'dcugen.roster.v1';
+export const MERGE_WORLD = 'dcugen.world.v1';
+export const DELETED = 'dcugen.roster.deleted.v1';
 
 /** Every dcugen.* key and its raw value. */
 export function snapshotAll() {
@@ -44,17 +45,11 @@ export function mergeRoster(current, incoming, tombs = []) {
 }
 
 function mergeWorld(current, incoming) {
-  if (!current) return incoming;
-  const out = { ...current, entities: { ...(current.entities || {}), ...(incoming.entities || {}) }, overrides: { ...(current.overrides || {}), ...(incoming.overrides || {}) } };
-  out.links = [...(current.links || [])];
-  for (const l of incoming.links || []) if (!out.links.some((x) => x.id === l.id)) out.links.push(l);
-  out.hidden = [...new Set([...(current.hidden || []), ...(incoming.hidden || [])])];
-  if (incoming.name && (!current.name || current.name === 'My World')) { out.name = incoming.name; out.tagline = incoming.tagline || current.tagline; out.description = incoming.description || current.description; }
-  return out;
+  return mergeWorldSaved(current, incoming);
 }
 
 /** Apply a backup. mode: 'merge' (default) keeps what is here and adds what is new; 'replace' overwrites. Returns counts. */
-export function restoreAll(backup, { mode = 'merge', skip = [] } = {}) {
+export function restoreAll(backup, { mode = 'merge', skip = [], only = null } = {}) {
   if (!backup || backup.app !== 'DCUGen' || !backup.data) throw new Error('That is not a DCUGen backup file.');
   let keys = 0;
   let tombs = [];
@@ -64,7 +59,7 @@ export function restoreAll(backup, { mode = 'merge', skip = [] } = {}) {
   }
   for (const [k, v] of Object.entries(backup.data)) {
     if (!k.startsWith(APP_KEYS_PREFIX) || typeof v !== 'string') continue;
-    if (skip.includes(k) || (mode === 'merge' && k === DELETED)) continue;
+    if (skip.includes(k) || (only && !only.includes(k)) || (mode === 'merge' && k === DELETED)) continue;
     let value = v;
     if (mode === 'merge' && k === MERGE_ROSTER) {
       try { value = JSON.stringify(mergeRoster(JSON.parse(localStorage.getItem(k) || '[]'), JSON.parse(v), tombs)); } catch { value = v; }

@@ -24,6 +24,7 @@ import { startSync, syncButton } from './syncfile.js';
 import { setHouseRules } from '../engine/house.js';
 import { state as st, upsert, removeFromRoster } from './store.js';
 import { decodeCharacter } from './share.js';
+import { tableRoster, hostAcceptsEdit, hostAcceptsRemove, hostAcceptsClaim, shouldSendToTable } from '../engine/tabletrust.js';
 import { setImportHooks, enableDropImport, setImportRules, openAnything } from './importer.js';
 const R = RULES;
 const views = ['forge', 'roster', 'lab', 'bestiary', 'workshop', 'garage', 'battle', 'world', 'table', 'screen', 'gm', 'rules'];
@@ -91,13 +92,14 @@ async function loadFromHash() {
   }
 }
 
-// ---- lobby: the host shares its roster and world; players claim characters and send edits ------------
+// ---- lobby: the host shares the characters it marks for the table and its world; players claim ----------
+// characters and send edits to their own. The host is the authority: see engine/tabletrust.js.
 function wireLobby() {
   const me = () => lobby.id;
   let applying = 0; // changes that came from the table must not be echoed back to it
   const quiet = (fn) => (...a) => { applying++; try { return fn(...a); } finally { applying--; } };
   setLobbyHandlers({
-    snapshot: () => ({ roster: st.roster, world: worldSaved(), feed: [] }),
+    snapshot: () => ({ roster: tableRoster(st.roster), world: worldSaved(), feed: [] }),
     worldSnapshot: () => worldSaved(),
     applySnapshot: quiet((msg) => {
       let n = 0;
@@ -110,19 +112,27 @@ function wireLobby() {
       if (!ch?.rosterId) return null;
       if (lobby.role === 'host') {
         const mine = st.roster.find((x) => x.rosterId === ch.rosterId);
-        if (mine && mine.lobbyOwner && mine.lobbyOwner !== from) { toast(`${ch.identity?.codename}: edit refused, that character belongs to someone else`); return null; }
-        const kept = { ...ch, lobbyOwner: mine?.lobbyOwner || ch.lobbyOwner || null, lobbyShared: true };
+        if (!hostAcceptsEdit(mine, from)) { toast(`${ch.identity?.codename || 'A character'}: a player's edit was refused (${mine?.lobbyOwner ? 'it belongs to someone else' : 'claim it with ✋ Mine first'})`); return null; }
+        // A character a player brings is theirs.
+        const who = lobby.members.find((m) => m.id === from)?.name || ch.lobbyOwnerName || 'a player';
+        const kept = { ...ch, lobbyOwner: from, lobbyOwnerName: mine?.lobbyOwnerName || who, lobbyShared: true };
         upsert(kept); renderCurrent(); return kept;
       }
       if (from === me()) return null;
       upsert({ ...ch, lobbyShared: true }); renderCurrent(); return ch;
     }),
-    removeRoster: quiet((id, from) => { if (lobby.role === 'host' && st.roster.find((x) => x.rosterId === id)?.lobbyOwner && st.roster.find((x) => x.rosterId === id).lobbyOwner !== from) return false; removeFromRoster(id); return true; }),
-    applyWorld: quiet((saved) => { worldApply(saved); }),
+    removeRoster: quiet((id, from) => {
+      const existing = st.roster.find((x) => x.rosterId === id);
+      if (lobby.role === 'host' && !hostAcceptsRemove(existing, from)) return false;
+      // A player drops a character the host stopped sharing: it was only ever a copy, so leave no tombstone.
+      if (existing) removeFromRoster(id, { tombstone: lobby.role === 'host' });
+      return true;
+    }),
+    // Only the host's world goes out to the table; a player's world never changes the GM's.
+    applyWorld: quiet((saved) => { if (lobby.role !== 'host') worldApply(saved); }),
     claim: quiet((rosterId, from) => {
       const ch = st.roster.find((x) => x.rosterId === rosterId);
-      if (!ch) return null;
-      if (ch.lobbyOwner && ch.lobbyOwner !== from) return null;
+      if (!hostAcceptsClaim(ch, from)) return null;
       const who = lobby.members.find((m) => m.id === from)?.name || 'a player';
       const kept = upsert({ ...ch, lobbyOwner: from, lobbyOwnerName: who });
       postRoll({ who: 'Table', kind: 'chat', text: `${who} now plays ${ch.identity?.codename}.` });
@@ -168,8 +178,9 @@ function wireLobby() {
   // Any roster change goes to the table while connected.
   onChange((what) => {
     if (applying || lobby.status !== 'on') return;
-    if (what === 'roster-upsert') lobbySendRoster(st.lastUpsert);
-    if (what === 'roster-remove') lobbySendRemove(st.lastRemoved);
+    const who = { role: lobby.role, me: lobby.id };
+    if (what === 'roster-upsert' && shouldSendToTable(st.lastUpsert, who)) lobbySendRoster(st.lastUpsert);
+    if (what === 'roster-remove' && shouldSendToTable(st.lastRemovedChar, who)) lobbySendRemove(st.lastRemoved);
   });
 }
 
@@ -182,12 +193,30 @@ async function desktopSync() {
     const haveLocal = (() => { try { return !!localStorage.getItem('dcugen.roster.v1'); } catch { return false; } })();
     if (!haveLocal && vault && Object.keys(vault).length) { restoreAll({ app: 'DCUGen', data: vault }, { mode: 'replace' }); location.reload(); return; }
   } catch { /* no vault yet */ }
-  let dirty = false;
-  const orig = Storage.prototype.setItem;
-  Storage.prototype.setItem = function (k, v) { orig.call(this, k, v); if (String(k).startsWith('dcugen.')) dirty = true; };
-  const flush = async () => { if (!dirty) return; dirty = false; try { await d.vaultSave(snapshotAll().data); } catch { dirty = true; } };
+  // Send only what changed (and what was removed), not the whole store every few seconds.
+  const changed = new Set();
+  const removed = new Set();
+  const proto = Storage.prototype;
+  const set = proto.setItem; const remove = proto.removeItem;
+  const ours = (store, k) => store === localStorage && String(k).startsWith('dcugen.');
+  proto.setItem = function setItem(k, v) { set.call(this, k, v); if (ours(this, k)) { changed.add(String(k)); removed.delete(String(k)); } };
+  proto.removeItem = function removeItem(k) { remove.call(this, k); if (ours(this, k)) { removed.add(String(k)); changed.delete(String(k)); } };
+  const take = () => {
+    const data = {};
+    for (const k of changed) { const v = localStorage.getItem(k); if (v !== null) data[k] = v; }
+    const change = { data, removed: [...removed] };
+    changed.clear(); removed.clear();
+    return change;
+  };
+  const flush = async () => {
+    if (!changed.size && !removed.size) return;
+    const change = take();
+    try { await (d.vaultUpdate ? d.vaultUpdate(change) : d.vaultSave(change.data)); } catch { for (const k of Object.keys(change.data)) changed.add(k); for (const k of change.removed) removed.add(k); }
+  };
+  // Start from a complete copy on disk.
+  try { await d.vaultSave(snapshotAll().data); } catch { /* retried with the next change */ }
   setInterval(flush, 4000);
-  window.addEventListener('beforeunload', () => { if (dirty) d.vaultSave(snapshotAll().data); });
+  window.addEventListener('beforeunload', () => { flush(); });
   document.body.classList.add('desktop');
 }
 

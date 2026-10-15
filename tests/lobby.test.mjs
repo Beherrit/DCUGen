@@ -18,7 +18,7 @@ function connect(port, hello) {
 test('the lobby relay: host joins, players join, host snapshots them, rolls flow host-wards and back', async () => {
   const server = await startLobbyServer({ port: 0, name: 'Test table' });
   try {
-    const host = await connect(server.port, { name: 'GM', token: server.token, role: 'host' });
+    const host = await connect(server.port, { name: 'GM', token: server.token, role: 'host', hostToken: server.hostToken });
     const w1 = await host.next();
     assert.equal(w1.t, 'welcome'); assert.equal(w1.role, 'host');
     await host.next(); // members
@@ -67,7 +67,7 @@ test('lobby keys round-trip', async () => {
 test('the GM screen messages: player statuses reach the host, hits and hero points reach players', async () => {
   const server = await startLobbyServer({ port: 0, name: 'GM table' });
   try {
-    const host = await connect(server.port, { name: 'GM', token: server.token, role: 'host' });
+    const host = await connect(server.port, { name: 'GM', token: server.token, role: 'host', hostToken: server.hostToken });
     await host.next(); await host.next();
     const player = await connect(server.port, { name: 'Ann', token: server.token, role: 'player' });
     await player.next(); await host.next(); await host.next(); await player.next();

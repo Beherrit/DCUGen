@@ -3,3 +3,5 @@ src/generated/
 *.log
 .DS_Store
 public/
+# Built by `npm run build` and published with every release; not committed.
+DCUGen.html

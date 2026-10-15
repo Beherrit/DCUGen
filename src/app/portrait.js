@@ -11,14 +11,25 @@ const CREDIT = `AI portraits come from a free, open source service (AI Horde by 
 
 // ---- preferences: service, default style, AI Horde key ---------------------------------------------------
 const PREFS_KEY = 'dcugen.portrait.prefs';
+// The API key is a secret: it lives under its own key outside "dcugen.*", so backups, the cloud sync file
+// and the desktop app's data folder (which all copy "dcugen.*") never carry it.
+const SECRET_KEY = 'dcugen-secret.horde-key';
 export const prefs = (() => { try { return { service: 'horde', style: 'comic', hordeKey: '', ...(JSON.parse(localStorage.getItem(PREFS_KEY) || 'null') || {}) }; } catch { return { service: 'horde', style: 'comic', hordeKey: '' }; } })();
+try {
+  if (prefs.hordeKey) { localStorage.setItem(SECRET_KEY, prefs.hordeKey); const { hordeKey, ...rest } = prefs; localStorage.setItem(PREFS_KEY, JSON.stringify(rest)); }
+  prefs.hordeKey = localStorage.getItem(SECRET_KEY) || '';
+} catch { /* storage unavailable */ }
 if (!PORTRAIT_SERVICES[prefs.service]) prefs.service = 'horde';
 if (!PORTRAIT_STYLES[prefs.style]) prefs.style = 'comic';
 setPortraitDefaults({ service: prefs.service, style: prefs.style });
 export function savePortraitPrefs(patch = {}) {
   Object.assign(prefs, patch);
   setPortraitDefaults({ service: prefs.service, style: prefs.style });
-  try { localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); } catch { /* full */ }
+  const { hordeKey, ...rest } = prefs;
+  try {
+    localStorage.setItem(PREFS_KEY, JSON.stringify(rest));
+    if (hordeKey) localStorage.setItem(SECRET_KEY, hordeKey); else localStorage.removeItem(SECRET_KEY);
+  } catch { /* full */ }
 }
 
 // ---- one-at-a-time painter ----------------------------------------------------------------------------

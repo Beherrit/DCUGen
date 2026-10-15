@@ -17,6 +17,17 @@
   };
   const map = new Map();
   try { for (let i = 0; i < orig.length.call(real); i++) { const k = orig.key.call(real, i); if (k != null) map.set(k, orig.get.call(real, k)); } } catch { /* blocked */ }
+  const inLocal = new Set(map.keys());
+  // Until IndexedDB has been read, a key that lives only there (too big for localStorage) looks empty.
+  // Writes made in that window are remembered, so they can never replace the real data (see hydrate).
+  let ready = false;
+  const early = new Set();
+
+  // Other tabs of the app: every write is announced, so this tab's copy never goes stale and can't
+  // overwrite newer data with an old in-memory state (see the end of this file).
+  let channel = null;
+  try { channel = new BroadcastChannel('dcugen-storage'); } catch { /* old browser */ }
+  const announce = (k, v) => { try { channel?.postMessage({ k, v }); } catch { /* too big or closed */ } };
 
   let db = null;
   let failed = false;
@@ -60,15 +71,19 @@
       if (failed) throw e; // no IndexedDB either: behave like before (callers handle a full store)
     }
     map.set(k, v);
+    if (!ready) early.add(k);
     dirty.set(k, v);
     schedule();
-    return mirrored ? undefined : undefined;
+    announce(k, v);
+    return undefined;
   };
   proto.removeItem = function removeItem(k) {
     if (this !== real) return orig.remove.call(this, k);
     k = String(k);
+    if (!ready) early.add(k);
     map.delete(k); dirty.set(k, null); schedule();
     try { orig.remove.call(real, k); } catch { /* ignore */ }
+    announce(k, null);
   };
   proto.key = function key(i) {
     if (this !== real) return orig.key.call(this, i);
@@ -76,7 +91,7 @@
   };
   proto.clear = function clear() {
     if (this !== real) return orig.clear.call(this);
-    for (const k of map.keys()) dirty.set(k, null);
+    for (const k of map.keys()) { dirty.set(k, null); announce(k, null); }
     map.clear(); schedule();
     try { orig.clear.call(real); } catch { /* ignore */ }
   };
@@ -95,16 +110,47 @@
     req.onerror = () => resolve(fromIdb);
   })).then((fromIdb) => {
     // localStorage holds everything that fit, written synchronously, so it is never older than IndexedDB.
-    // What is only in IndexedDB is what didn't fit there: take it.
-    for (const [k, v] of fromIdb) if (!map.has(k)) map.set(k, v);
+    // What is only in IndexedDB is what didn't fit there: take it. If the app already started (IndexedDB
+    // was slow) and wrote such a key, it wrote it without having seen the real value: the stored one wins.
+    const clobbered = [];
+    for (const [k, v] of fromIdb) {
+      if (!map.has(k) && !early.has(k)) map.set(k, v);
+      else if (early.has(k) && !inLocal.has(k) && map.get(k) !== v) { map.set(k, v); dirty.delete(k); clobbered.push(k); }
+    }
+    ready = true;
+    early.clear();
     // First run (or anything new in localStorage): copy it all into IndexedDB.
     for (const [k, v] of map) if (fromIdb.get(k) !== v) dirty.set(k, v);
     flush();
     try { navigator.storage?.persist?.(); } catch { /* best effort: ask the browser not to evict */ }
-  }).catch(() => { failed = true; });
+    // The app is running on data it never saw: start it again on the real data.
+    if (started && clobbered.length) location.reload();
+  }).catch(() => { failed = true; ready = true; });
 
-  const timeout = new Promise((r) => setTimeout(r, 2500));
-  window.__dcugenStorageReady = Promise.race([hydrate, timeout]);
+  // Normally IndexedDB answers in milliseconds. If it hangs, start anyway after a while (the guard above
+  // keeps the data safe) rather than show a blank page.
+  let started = false;
+  const timeout = new Promise((r) => setTimeout(() => { started = true; r(); }, 10000));
+  window.__dcugenStorageReady = Promise.race([hydrate.then(() => { started = true; }), timeout]);
+
+  // Another tab changed something: keep this tab's copy current. The app also holds data in memory, so
+  // start it again on the new data the next time this tab is looked at (nothing is lost: the other tab
+  // has already saved).
+  let stale = false;
+  let pendingReload = false;
+  const maybeReload = () => { if (stale && pendingReload && document.visibilityState === 'visible') { flush(); location.reload(); } };
+  if (channel) {
+    channel.onmessage = (ev) => {
+      const { k, v } = ev.data || {};
+      if (typeof k !== 'string') return;
+      if (v === null) map.delete(k); else map.set(k, String(v));
+      dirty.delete(k);
+      if (k.startsWith('dcugen.') && !/^dcugen\.(tab|theme|sheetview|gmtab|roster\.view|sync\.|table\.)/.test(k)) stale = true;
+      if (stale && document.visibilityState === 'hidden') pendingReload = true;
+    };
+  }
+  document.addEventListener('visibilitychange', maybeReload);
+  addEventListener('focus', () => { if (stale) { pendingReload = true; maybeReload(); } });
   window.__dcugenStorage = {
     flush,
     get db() { return db; },
