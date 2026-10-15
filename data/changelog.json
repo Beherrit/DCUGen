@@ -1,5 +1,18 @@
 [
   {
+    "id": "2026-10-16",
+    "date": "2026-10-16",
+    "title": "Live turns, a session planner, and tables that connect",
+    "items": [
+      "Whose turn it is shows on every player's phone, with a nudge on your own turn and what your conditions let you do.",
+      "Next turn on the GM Screen applies the end-of-turn rules: recovery checks against Afflictions, Dazed wearing off, weakened traits coming back. Delay lets someone wait.",
+      "Players can see how their teammates stand (the Party, on the turn bar).",
+      "World > Sessions plans game night: a date with a calendar file, scenes linked to the World, notes, the Session in a Box plan and plot threads. Starting a session sends \"Previously on…\" to the table.",
+      "Table joins that fail say why and what to try; Test my connection; relay (TURN) servers for strict networks; phones that drop get back in by themselves.",
+      "A short tour for players and GMs, this What's new, and the version in the ? menu."
+    ]
+  },
+  {
     "id": "2026-10-15",
     "date": "2026-10-15",
     "title": "Safer sync and table trust, a reworked World",

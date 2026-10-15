@@ -19,6 +19,8 @@ one to open DCUGen on your phone, one for each desktop download.
 
 ## What's inside
 
+- **Help** – the **?** at the top: a short tour for players and one for GMs (offered on a first visit), What's new
+  after an update, and the version you're on.
 - **Forge** – roll a complete, legal character in one click. Pick power level, archetype (20 including androids
   and combat robots), power theme (29), hero or villain, gender and how wild the dice should be, or hit
   *Surprise me*. Every character obeys every power level limit and spends exactly 15 points per PL. Seeds make
@@ -98,7 +100,11 @@ one to open DCUGen on your phone, one for each desktop download.
   apps over the lobby (damage, conditions, hero points, pools, drains, initiative), plus villains and NPCs the GM
   runs here. Type a hit in plain words ("Burst Damage 10 hits Shadowshot and Spark", "Affliction 8 vs Fortitude on
   Spark") and each player's app rolls its own Dodge for half and resistance and applies the result; the GM's own
-  characters roll here; everything goes to the Table feed. Initiative for everyone with turns and rounds; ★ moments
+  characters roll here; everything goes to the Table feed. Initiative for everyone with turns and rounds, shown on
+  every player's phone (a bar along the bottom: who's acting, who's next, and "Your turn" with what their conditions
+  allow). **Next turn** ends the acting character's turn by the rules: a resistance check against each Affliction
+  (each player's app rolls its own), Dazed from damage wearing off after their next turn, weakened traits coming back
+  a point a round; **Delay** lets someone wait. ★ moments
   and a **spotlight** meter that names who hasn't had one; describe the scene and the **complications** it could bring
   into play come up, +1 hero point in one tap; **recurring villains** who learn from every defeat recorded in the
   World (points spent on the defense that kept failing, inside the PL limits) and work a **scheme clock** between
@@ -108,8 +114,11 @@ one to open DCUGen on your phone, one for each desktop download.
 - **Join from any phone** – 📱 Open a table for phones (GM Screen or Table) shows a QR code and a link. Players scan
   it and they're in, in any browser, no install: they claim their character, roll on their phone, take hits and hero
   points from the GM Screen and see the battle map. The GM's page is the table (browser to browser over WebRTC via
-  PeerJS), so keep it open while you play. It uses the free public PeerJS server; a GM can set their own under
-  "Use your own PeerJS server".
+  PeerJS), so keep it open while you play. Players can open the **Party** on the turn bar to see how their
+  teammates stand. A phone that drops (it went to sleep) gets back in by itself. When a join fails, the Table says
+  how far it got and what to try, and **Test my connection** checks this network. It uses the free public PeerJS
+  server; under **Connection settings** a GM can set their own, and add a relay (TURN) server for strict networks
+  (school, work, some phone carriers). Both travel in the table link.
 - **Session in a Box** (GM Screen > 🧰 Prep) – press one button before game night and get a whole session: a villain
   (a recurring nemesis with an unfinished scheme first, then someone from the heroes' own backstories, else a new
   one) tuned in the Battle Room to the difficulty you pick, a minion squad, four scenes (hook, investigation with skill
@@ -159,6 +168,11 @@ one to open DCUGen on your phone, one for each desktop download.
 - **Campaign journal** – on the Bio page: sessions played, what happened, who was met (added to "People in their life"
   or with their status updated), points earned and what they bought, and a rolled "between adventures" event from the
   life tables. Sessions join the life timeline as "In play" and go into every export.
+- **Sessions** (World > 🗓 Sessions) – plan game night: the date (with a calendar file and an invite for the
+  players), the scenes you have in mind linked to World pages, notes, and the Session in a Box plan, which the GM
+  Screen keeps with the next session. **Plot threads** stay in view until they're tied up. Start a planned session
+  and "Previously on…" goes to the table: the last recap, what changed in the World, the open threads. End session
+  marks it played with its recap. Sessions travel in world keys.
 - **World** – a wiki of the whole campaign, Obsidian-style. Every saved character is a page; every parent, sibling,
   mentor, rival, enemy, ally and ex named in their life is a page too (and opens as a full character); teams, cities and
   homelands are pages; journal sessions and recorded battles are events. Links are typed and run both ways (mentor /
@@ -257,6 +271,7 @@ Needs Node 18 or newer, nothing else.
 
 ```bash
 npm test          # rules engine, generators, exports
+npm run e2e       # builds DCUGen.html and drives it in a browser (Playwright; first time: npx playwright install chromium)
 npm run build     # builds DCUGen.html (not committed: CI attaches it to every release)
 npm run dev       # http://localhost:5178/src/app/index.html (live) and http://localhost:5178/ (built)
 npm run validate  # check every catalog creature against the PL limits
@@ -267,5 +282,10 @@ npm run validate  # check every catalog creature against the PL limits
   and the world wiki model (`world.js`).
 - `src/app/` – the web app.
 - `desktop/` – the Electron app (main process, preload bridge, dependency-free WebSocket lobby relay).
+- `tests/e2e/` – browser tests of the built app: roll, edit, save, share, every tab, the World, the GM Screen,
+  the session planner, tables. CI runs them before every release. `E2E_NETWORK=1 npm run e2e` also runs a real
+  phone table through the public PeerJS server.
+- `data/changelog.json` – What's new in the app (the ? menu) and the top of each GitHub release's notes. Add an
+  entry for each release.
 - `tests/` – the engine reproduces the printed point costs of published Heroes & Villains characters, and
   thousands of random characters, items and creatures are checked against the rules.
