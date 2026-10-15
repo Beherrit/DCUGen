@@ -422,8 +422,20 @@ function weatherSystem(T, kind, map, top) {
 /**
  * Open the 3D view. { map, tokens: [{ key, x, y, size, name, color, img, villain, down, hidden }], bg, focus, gm }
  */
+/** The 3D library: in the built app it waits as text until the first 3D view (see tools/build.mjs). */
+export function loadThree() {
+  if (window.THREE) return window.THREE;
+  const src = document.getElementById('dcugen-three');
+  if (!src) return null;
+  const s = document.createElement('script');
+  s.textContent = src.textContent;
+  document.head.append(s);
+  src.remove();
+  return window.THREE || null;
+}
+
 export function open3D({ map, tokens, bg, focus = null, gm = false }) {
-  const T = window.THREE;
+  const T = loadThree();
   if (!T) { toast('3D needs a browser with WebGL.'); return null; }
   const host = h('div', { class: 'm3d', role: 'dialog', 'aria-label': '3D view' });
   const canvasWrap = h('div', { class: 'm3d-canvas' });
