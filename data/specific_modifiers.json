@@ -62,7 +62,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Can weaken any trait from a broad set, one at a time.",
-        "source": "DCA 121"
+        "source": "DCA 123"
       },
       {
         "name": "Simultaneous",
@@ -70,7 +70,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "A Broad Weaken affects all its traits at once.",
-        "source": "DCA 121"
+        "source": "DCA 123"
       },
       {
         "name": "Progressive",
@@ -78,7 +78,7 @@
         "value": 2,
         "max_steps": 1,
         "summary": "Keeps draining each round until resisted.",
-        "source": "DCA 121"
+        "source": "DCA 123"
       },
       {
         "name": "Concentration",
@@ -86,7 +86,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Keep forcing new checks after one hit.",
-        "source": "DCA 121"
+        "source": "DCA 123"
       },
       {
         "name": "Precise",
@@ -94,7 +94,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Choose which of several traits to reduce.",
-        "source": "DCA 121"
+        "source": "DCA 123"
       }
     ],
     "flaws": []
@@ -132,12 +132,53 @@
         "max_steps": 1,
         "summary": "Pick which effects to counter.",
         "source": "DCA 111"
+      },
+      {
+        "name": "Concentration",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Countered effects stay off while you concentrate.",
+        "source": "DCA 111"
+      },
+      {
+        "name": "Randomize",
+        "cost_type": "per_rank",
+        "value": 0,
+        "max_steps": 1,
+        "summary": "Targeted effects go out of control instead of shutting off.",
+        "source": "DCA 111"
+      },
+      {
+        "name": "Sustained",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Keeping effects suppressed takes only a free action.",
+        "source": "DCA 111"
       }
     ],
     "flaws": []
   },
   "Flight": {
-    "extras": [],
+    "extras": [
+      {
+        "name": "Aquatic",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Also move underwater at Flight rank minus 2.",
+        "source": "DCA 99"
+      },
+      {
+        "name": "Continuous",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Keeps you aloft (or lowers you gently) even if you are knocked out.",
+        "source": "DCA 99"
+      }
+    ],
     "flaws": [
       {
         "name": "Wings",
@@ -145,7 +186,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Flies on wings that can be bound or injured.",
-        "source": "DCA 98"
+        "source": "DCA 100"
       },
       {
         "name": "Platform",
@@ -153,7 +194,23 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Flies on a disc, board or similar platform.",
-        "source": "DCA 98"
+        "source": "DCA 100"
+      },
+      {
+        "name": "Gliding",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Glide on air currents; you must come down after a limited distance.",
+        "source": "DCA 100"
+      },
+      {
+        "name": "Levitation",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Only rise and sink straight up and down.",
+        "source": "DCA 100"
       }
     ]
   },
@@ -165,7 +222,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Teleport to places you can't sense.",
-        "source": "DCA 119"
+        "source": "DCA 120"
       },
       {
         "name": "Change Direction",
@@ -173,7 +230,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Change facing on arrival.",
-        "source": "DCA 119"
+        "source": "DCA 120"
       },
       {
         "name": "Change Velocity",
@@ -181,7 +238,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Arrive at rest.",
-        "source": "DCA 119"
+        "source": "DCA 120"
       },
       {
         "name": "Easy",
@@ -189,7 +246,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "No penalties for extended teleports.",
-        "source": "DCA 119"
+        "source": "DCA 120"
       },
       {
         "name": "Extended",
@@ -197,7 +254,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Make long-distance teleports with two move actions.",
-        "source": "DCA 119"
+        "source": "DCA 120"
       },
       {
         "name": "Portal",
@@ -205,7 +262,7 @@
         "value": 2,
         "max_steps": 1,
         "summary": "Open a gateway others can step through.",
-        "source": "DCA 119"
+        "source": "DCA 120"
       },
       {
         "name": "Turnabout",
@@ -213,10 +270,27 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Teleport, act, and teleport back.",
-        "source": "DCA 119"
+        "source": "DCA 120"
       }
     ],
-    "flaws": []
+    "flaws": [
+      {
+        "name": "Limited to Extended",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Only extended teleports; needs the Extended extra.",
+        "source": "DCA 120"
+      },
+      {
+        "name": "Medium",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Travel only between places where your medium (wires, shadows, water) exists.",
+        "source": "DCA 120"
+      }
+    ]
   },
   "Create": {
     "extras": [
@@ -226,7 +300,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Move your creations around.",
-        "source": "DCA 91"
+        "source": "DCA 93"
       },
       {
         "name": "Stationary",
@@ -234,7 +308,7 @@
         "value": 0,
         "max_steps": 1,
         "summary": "Creations can hang unsupported in the air.",
-        "source": "DCA 91"
+        "source": "DCA 93"
       },
       {
         "name": "Tether",
@@ -242,7 +316,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Stay connected to your creations.",
-        "source": "DCA 91"
+        "source": "DCA 93"
       },
       {
         "name": "Precise",
@@ -250,18 +324,35 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Detailed, precise creations.",
-        "source": "DCA 91"
+        "source": "DCA 93"
       },
+      {
+        "name": "Continuous",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Objects remain until destroyed or you dismiss them.",
+        "source": "DCA 92"
+      }
+    ],
+    "flaws": [
       {
         "name": "Permanent",
         "cost_type": "per_rank",
         "value": 0,
         "max_steps": 1,
-        "summary": "Always on; can't be switched off or boosted with extra effort.",
-        "source": "DCA 99"
+        "summary": "Objects last until destroyed; you can't dismiss, repair or alter them.",
+        "source": "DCA 93"
+      },
+      {
+        "name": "Proportional",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Volume and Toughness together share your Create rank.",
+        "source": "DCA 93"
       }
-    ],
-    "flaws": []
+    ]
   },
   "Move Object": {
     "extras": [
@@ -271,7 +362,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Can strike targets directly.",
-        "source": "DCA 109"
+        "source": "DCA 108"
       },
       {
         "name": "Precise",
@@ -279,10 +370,47 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Fine manipulation at a distance.",
+        "source": "DCA 108"
+      },
+      {
+        "name": "Continuous",
+        "cost_type": "per_rank",
+        "value": 2,
+        "max_steps": 1,
+        "summary": "Held objects stay put even if you can't keep concentrating.",
+        "source": "DCA 108"
+      },
+      {
+        "name": "Sustained",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Holding objects in place takes only a free action.",
         "source": "DCA 109"
       }
     ],
-    "flaws": []
+    "flaws": [
+      {
+        "name": "Limited Direction",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Move things only along one path, such as toward or away from you.",
+        "source": "DCA 109"
+      },
+      {
+        "name": "Limited Material",
+        "cost_type": "per_rank",
+        "value": 1,
+        "options": {
+          "Common material": 1,
+          "Very narrow material": 2
+        },
+        "max_steps": 1,
+        "summary": "Move only one kind of material, like metal or water.",
+        "source": "DCA 109"
+      }
+    ]
   },
   "Healing": {
     "extras": [
@@ -292,7 +420,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Also restores weakened traits.",
-        "source": "DCA 100"
+        "source": "DCA 101"
       },
       {
         "name": "Persistent",
@@ -300,10 +428,51 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Heals even incurable harm.",
+        "source": "DCA 101"
+      },
+      {
+        "name": "Energizing",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Also clears fatigue and exhaustion, which you take on yourself.",
         "source": "DCA 100"
+      },
+      {
+        "name": "Resurrection",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Bring back the recently dead with a DC 20 check.",
+        "source": "DCA 101"
+      },
+      {
+        "name": "Stabilize",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Stabilizes the dying automatically, no check needed.",
+        "source": "DCA 101"
       }
     ],
-    "flaws": []
+    "flaws": [
+      {
+        "name": "Empathic",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "You take on the conditions you cure.",
+        "source": "DCA 101"
+      },
+      {
+        "name": "Temporary",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Healed damage returns after an hour.",
+        "source": "DCA 101"
+      }
+    ]
   },
   "Regeneration": {
     "extras": [
@@ -313,7 +482,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Regenerates incurable damage too.",
-        "source": "DCA 114"
+        "source": "DCA 112"
       }
     ],
     "flaws": [
@@ -323,7 +492,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Only works with access to a particular source.",
-        "source": "DCA 114"
+        "source": "DCA 112"
       }
     ]
   },
@@ -335,7 +504,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Minions act fully each round.",
-        "source": "DCA 117"
+        "source": "DCA 118"
       },
       {
         "name": "Controlled",
@@ -343,7 +512,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Minions have no free will.",
-        "source": "DCA 117"
+        "source": "DCA 118"
       },
       {
         "name": "Heroic",
@@ -351,7 +520,7 @@
         "value": 2,
         "max_steps": 1,
         "summary": "Summoned allies aren't minions.",
-        "source": "DCA 117"
+        "source": "DCA 118"
       },
       {
         "name": "Horde",
@@ -359,7 +528,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Summon all your minions at once.",
-        "source": "DCA 117"
+        "source": "DCA 118"
       },
       {
         "name": "Mental Link",
@@ -367,7 +536,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Telepathic link with your minions.",
-        "source": "DCA 117"
+        "source": "DCA 118"
       },
       {
         "name": "Multiple Minions",
@@ -375,7 +544,7 @@
         "value": 2,
         "max_steps": null,
         "summary": "Each application doubles the number of minions.",
-        "source": "DCA 117"
+        "source": "DCA 119"
       },
       {
         "name": "Variable Type",
@@ -387,10 +556,31 @@
         },
         "max_steps": 1,
         "summary": "Summon different minions.",
-        "source": "DCA 117"
+        "source": "DCA 119"
+      },
+      {
+        "name": "Sacrifice",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Spend a hero point to shift an effect onto a minion.",
+        "source": "DCA 119"
       }
     ],
-    "flaws": []
+    "flaws": [
+      {
+        "name": "Attitude",
+        "cost_type": "per_rank",
+        "value": 1,
+        "options": {
+          "Indifferent": 1,
+          "Unfriendly": 2
+        },
+        "max_steps": 1,
+        "summary": "Summoned minions are indifferent or unfriendly and won't simply obey.",
+        "source": "DCA 119"
+      }
+    ]
   },
   "Mind Reading": {
     "extras": [
@@ -419,7 +609,40 @@
         "source": "DCA 107"
       }
     ],
-    "flaws": []
+    "flaws": [
+      {
+        "name": "Limited by Language",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Only understand minds that share your language.",
+        "source": "DCA 107"
+      },
+      {
+        "name": "Limited to Emotions",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Read only feelings, not thoughts or memories.",
+        "source": "DCA 107"
+      },
+      {
+        "name": "Limited to Sensory Link",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Only share senses; you can't read thoughts.",
+        "source": "DCA 107"
+      },
+      {
+        "name": "Limited to Surface Thoughts",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Can't go deeper than surface thoughts.",
+        "source": "DCA 107"
+      }
+    ]
   },
   "Shrinking": {
     "extras": [
@@ -432,18 +655,44 @@
         "source": "DCA 117"
       },
       {
+        "name": "Atomic",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "At Shrinking 20, slip between atoms to pass through solid objects.",
+        "source": "DCA 117"
+      }
+    ],
+    "flaws": [
+      {
         "name": "Permanent",
         "cost_type": "per_rank",
         "value": 0,
         "max_steps": 1,
-        "summary": "Always on; can't be switched off or boosted with extra effort.",
+        "summary": "Always on; can't be switched off or boosted with extra effort (Sustained made Permanent, +0).",
         "source": "DCA 99"
       }
-    ],
-    "flaws": []
+    ]
   },
   "Immunity": {
-    "extras": [],
+    "extras": [
+      {
+        "name": "Reflect",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Bounce attacks you are immune to back at the attacker.",
+        "source": "DCA 103"
+      },
+      {
+        "name": "Redirect",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Send reflected attacks at another target in range; needs Reflect.",
+        "source": "DCA 103"
+      }
+    ],
     "flaws": [
       {
         "name": "Limited to Half Effect",
@@ -451,7 +700,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Halves the effect instead of ignoring it.",
-        "source": "DCA 102"
+        "source": "DCA 103"
       }
     ]
   },
@@ -474,7 +723,16 @@
         "source": "DCA 101"
       }
     ],
-    "flaws": []
+    "flaws": [
+      {
+        "name": "Limited to One Subject",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Only one subject at a time sees the illusion.",
+        "source": "DCA 102"
+      }
+    ]
   },
   "Concealment": {
     "extras": [
@@ -484,7 +742,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Grant concealment to others.",
-        "source": "DCA 90"
+        "source": "DCA 91"
       },
       {
         "name": "Attack",
@@ -492,7 +750,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Impose concealment on a target.",
-        "source": "DCA 90"
+        "source": "DCA 91"
       }
     ],
     "flaws": [
@@ -502,7 +760,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Only works while standing still against a background.",
-        "source": "DCA 90"
+        "source": "DCA 91"
       },
       {
         "name": "Partial",
@@ -510,7 +768,15 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Partial rather than total concealment.",
-        "source": "DCA 90"
+        "source": "DCA 91"
+      },
+      {
+        "name": "Passive",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Drops as soon as you attack or make an effect check.",
+        "source": "DCA 91"
       }
     ]
   },
@@ -522,7 +788,7 @@
         "value": 1,
         "max_steps": 1,
         "summary": "Vary conditions within the area.",
-        "source": "DCA 96"
+        "source": "DCA 97"
       }
     ],
     "flaws": []
@@ -534,8 +800,8 @@
         "cost_type": "per_rank",
         "value": 0,
         "max_steps": 1,
-        "summary": "Always on; can't be switched off or boosted with extra effort.",
-        "source": "DCA 99"
+        "summary": "Stay at your enlarged size all the time.",
+        "source": "DCA 100"
       }
     ],
     "flaws": []
@@ -543,27 +809,249 @@
   "Insubstantial": {
     "extras": [
       {
+        "name": "Continuous",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Stay insubstantial until you choose to turn solid.",
+        "source": "DCA 104"
+      },
+      {
+        "name": "Progressive",
+        "cost_type": "per_rank",
+        "value": 0,
+        "max_steps": 1,
+        "summary": "Pass through each lower form in turn to reach higher ones.",
+        "source": "DCA 104"
+      }
+    ],
+    "flaws": [
+      {
         "name": "Permanent",
         "cost_type": "per_rank",
         "value": 0,
         "max_steps": 1,
-        "summary": "Always on; can't be switched off or boosted with extra effort.",
-        "source": "DCA 99"
+        "summary": "You're always insubstantial and can't turn solid.",
+        "source": "DCA 105"
+      },
+      {
+        "name": "Absent Strength",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Rank 1 only: no effective Strength in that form.",
+        "source": "DCA 105"
       }
-    ],
-    "flaws": []
+    ]
   },
   "Enhanced Trait": {
-    "extras": [
+    "extras": [],
+    "flaws": [
       {
         "name": "Permanent",
         "cost_type": "per_rank",
         "value": 0,
         "max_steps": 1,
         "summary": "Always on; can't be switched off or boosted with extra effort.",
-        "source": "DCA 99"
+        "source": "DCA 97"
+      },
+      {
+        "name": "Reduced Trait",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Another trait drops; worth the points that trait loses.",
+        "source": "DCA 97"
+      }
+    ]
+  },
+  "Communication": {
+    "extras": [
+      {
+        "name": "Rapid",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Communicate ten times faster per rank.",
+        "source": "DCA 89"
       }
     ],
     "flaws": []
+  },
+  "Comprehend": {
+    "extras": [],
+    "flaws": [
+      {
+        "name": "Type",
+        "cost_type": "per_rank",
+        "value": 1,
+        "options": {
+          "Broad type": 1,
+          "Narrow type": 2
+        },
+        "max_steps": 1,
+        "summary": "Comprehend only a broad or narrow type of subject.",
+        "source": "DCA 91"
+      }
+    ]
+  },
+  "Extra Limbs": {
+    "extras": [
+      {
+        "name": "Continuous",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Limbs stay until you dismiss them, even if you are knocked out.",
+        "source": "DCA 98"
+      },
+      {
+        "name": "Projection",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Limbs are projections, so harm aimed at them does nothing.",
+        "source": "DCA 98"
+      }
+    ],
+    "flaws": []
+  },
+  "Leaping": {
+    "extras": [],
+    "flaws": [
+      {
+        "name": "Acrobatics Check Required",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Leap distance depends on a DC 10 Acrobatics check.",
+        "source": "DCA 106"
+      },
+      {
+        "name": "Full Power",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Every leap is at full distance.",
+        "source": "DCA 106"
+      }
+    ]
+  },
+  "Luck Control": {
+    "extras": [
+      {
+        "name": "Luck",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Each rank grants a rank of the Luck advantage.",
+        "source": "DCA 106"
+      }
+    ],
+    "flaws": []
+  },
+  "Morph": {
+    "extras": [
+      {
+        "name": "Metamorph",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Each rank adds an alternate set of traits to switch into.",
+        "source": "DCA 108"
+      }
+    ],
+    "flaws": []
+  },
+  "Protection": {
+    "extras": [],
+    "flaws": [
+      {
+        "name": "Sustained",
+        "cost_type": "per_rank",
+        "value": 0,
+        "max_steps": 1,
+        "summary": "Can be switched on and off and boosted with extra effort.",
+        "source": "DCA 111"
+      }
+    ]
+  },
+  "Quickness": {
+    "extras": [],
+    "flaws": [
+      {
+        "name": "Limited to One Type",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Speeds up only physical or only mental tasks.",
+        "source": "DCA 112"
+      },
+      {
+        "name": "Limited to One Task",
+        "cost_type": "per_rank",
+        "value": 2,
+        "max_steps": 1,
+        "summary": "Speeds up only one particular task.",
+        "source": "DCA 112"
+      }
+    ]
+  },
+  "Remote Sensing": {
+    "extras": [
+      {
+        "name": "No Conduit",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Sensory effects can't reach you through the remote point.",
+        "source": "DCA 113"
+      },
+      {
+        "name": "Simultaneous",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Use your own senses and the remote ones at once.",
+        "source": "DCA 113"
+      }
+    ],
+    "flaws": [
+      {
+        "name": "Medium",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Sense only places where your medium (mirrors, flames) exists.",
+        "source": "DCA 113"
+      }
+    ]
+  },
+  "Variable": {
+    "extras": [
+      {
+        "name": "Action",
+        "cost_type": "per_rank",
+        "value": 1,
+        "options": {
+          "Move action": 1,
+          "Free action": 2,
+          "Reaction": 3
+        },
+        "max_steps": 1,
+        "summary": "Reconfigure faster: move action, free action or reaction.",
+        "source": "DCA 121"
+      }
+    ],
+    "flaws": [
+      {
+        "name": "Slow",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Reconfigure only outside action time.",
+        "source": "DCA 122"
+      }
+    ]
   }
 }

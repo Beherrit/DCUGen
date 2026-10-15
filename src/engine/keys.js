@@ -15,6 +15,7 @@
 // seed at all (built by hand, imported from a sheet, catalog creatures) are left to the share code.
 
 import { DATA_VERSION } from '../generated/rulesdata.js';
+import { usesHomebrew } from './homebrew.js';
 import { generateCharacter } from './generator.js';
 import { generateBio } from './lifepath.js';
 import { catalogToCharacter } from './catalog.js';
@@ -223,6 +224,8 @@ const cache = new Map();
 /** The short key for a character, or null if it has been edited (then share the full code). */
 export function characterKey(R, ch) {
   if (!ch) return null;
+  // A homebrew theme or archetype isn't on everyone's device: share the full code instead.
+  if (usesHomebrew(R, ch)) return null;
   const candidate = ch.personKey || (ch.seed && ch.options ? rollKey(ch) : null);
   if (!candidate) return null;
   const fp = fingerprint(ch);

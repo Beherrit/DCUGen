@@ -19,6 +19,14 @@ one to open DCUGen on your phone, one for each desktop download.
 
 ## What's inside
 
+- **Easier reading** – bigger text throughout, colour-coded powers and advantages (the name, how it works and what it
+  does each in its own colour and type), the Atkinson Hyperlegible font for low vision, and stronger contrast.
+- **Start here and player view** – an empty Forge shows where to start (roll, build, open yours, a fight, a table, a
+  campaign). The tabs are grouped, and players can hide the GM sections with one click (search still finds everything).
+- **Search everything** – **Ctrl+K** (⌘K on a Mac, or 🔍 at the top): one box for every section, the things you do
+  most, every character, World page, rule card and Bestiary creature.
+- **Help** – the **?** at the top: a short tour for players and one for GMs (offered on a first visit), What's new
+  after an update, and the version you're on.
 - **Forge** – roll a complete, legal character in one click. Pick power level, archetype (20 including androids
   and combat robots), power theme (29), hero or villain, gender and how wild the dice should be, or hit
   *Surprise me*. Every character obeys every power level limit and spends exactly 15 points per PL. Seeds make
@@ -57,6 +65,11 @@ one to open DCUGen on your phone, one for each desktop download.
   - *Animals and creatures*: the DC Adventures animals plus 142 stat blocks of everyday animals, wild beasts,
     monsters and people, with templates (young, alpha, dire, giant, mutant, cybernetic, undead, spectral).
   - *Monster maker*: new monsters built to any PL.
+  - *Homebrew*: your own power themes (from a built-in one: rename its powers, your colours, codename words,
+    weaknesses), archetypes (ability ranges, which themes they roll with) and Bestiary creatures (any sheet built
+    on the Forge, with tactics and a weakness). Keep them in packs, switch packs on and off, and share a pack as a
+    file or a code your players load. Random rolls only use homebrew when you pick it, so seeds and keys stay the
+    same for everyone; a homebrew character shares as a full code.
 - **Bestiary** – 429 stat blocks, all legal for their PL: fantasy (dragons, giants, fey, elementals, dungeon
   aberrations), horror and undead, world myth and cryptids, aliens and cosmic entities, robots, mechs, clockwork and
   golems, kaiju, everyday animals and people. Each has tactics, habitat and a weakness; open it as a full sheet, apply
@@ -98,7 +111,11 @@ one to open DCUGen on your phone, one for each desktop download.
   apps over the lobby (damage, conditions, hero points, pools, drains, initiative), plus villains and NPCs the GM
   runs here. Type a hit in plain words ("Burst Damage 10 hits Shadowshot and Spark", "Affliction 8 vs Fortitude on
   Spark") and each player's app rolls its own Dodge for half and resistance and applies the result; the GM's own
-  characters roll here; everything goes to the Table feed. Initiative for everyone with turns and rounds; ★ moments
+  characters roll here; everything goes to the Table feed. Initiative for everyone with turns and rounds, shown on
+  every player's phone (a bar along the bottom: who's acting, who's next, and "Your turn" with what their conditions
+  allow). **Next turn** ends the acting character's turn by the rules: a resistance check against each Affliction
+  (each player's app rolls its own), Dazed from damage wearing off after their next turn, weakened traits coming back
+  a point a round; **Delay** lets someone wait. ★ moments
   and a **spotlight** meter that names who hasn't had one; describe the scene and the **complications** it could bring
   into play come up, +1 hero point in one tap; **recurring villains** who learn from every defeat recorded in the
   World (points spent on the defense that kept failing, inside the PL limits) and work a **scheme clock** between
@@ -108,8 +125,11 @@ one to open DCUGen on your phone, one for each desktop download.
 - **Join from any phone** – 📱 Open a table for phones (GM Screen or Table) shows a QR code and a link. Players scan
   it and they're in, in any browser, no install: they claim their character, roll on their phone, take hits and hero
   points from the GM Screen and see the battle map. The GM's page is the table (browser to browser over WebRTC via
-  PeerJS), so keep it open while you play. It uses the free public PeerJS server; a GM can set their own under
-  "Use your own PeerJS server".
+  PeerJS), so keep it open while you play. Players can open the **Party** on the turn bar to see how their
+  teammates stand. A phone that drops (it went to sleep) gets back in by itself. When a join fails, the Table says
+  how far it got and what to try, and **Test my connection** checks this network. It uses the free public PeerJS
+  server; under **Connection settings** a GM can set their own, and add a relay (TURN) server for strict networks
+  (school, work, some phone carriers). Both travel in the table link.
 - **Session in a Box** (GM Screen > 🧰 Prep) – press one button before game night and get a whole session: a villain
   (a recurring nemesis with an unfinished scheme first, then someone from the heroes' own backstories, else a new
   one) tuned in the Battle Room to the difficulty you pick, a minion squad, four scenes (hook, investigation with skill
@@ -143,9 +163,11 @@ one to open DCUGen on your phone, one for each desktop download.
     lightning, lit windows and street lamps at night, and tokens as standees with their portraits. Orbit around it,
     look from the top, or stand in any character's shoes and look around.
   - **Players see it live** on their phones (not hidden tokens), drag their own token, and open the 3D view too.
-- **Battle Room** – a fight simulator on the DC Adventures combat rules. Throw in anyone (the open character, roster
-  cards, any Bestiary creature, a whole Workshop minion squad), pick sides, and watch it play out turn by turn with a
-  full log of every attack roll, resistance check, condition, hero point and extra effort. Pause, step, run a round, or
+- **Battle Room** – a fight simulator on the DC Adventures combat rules. Put anyone against anyone: every character
+  and Bestiary creature in the list has A and B buttons (C and D for bigger brawls), the lists sort by name or PL, and a
+  versus bar shows the match-up. **Fight!** starts and plays it (or step through it one action at a time); **What
+  happened** sits beside the fight and reads turn by turn, every roll written out, filtered to one fighter if you like.
+  A character with alternate forms fights in the form picked on their card. Pause, step, run a round, or
   run to the end; replay the same seed or rematch with new dice; run the match-up 100 times for the odds. **Will this fight wreck
   the party?** checks the heroes' odds over 100 fights and tunes the opposition (attacks and defenses up or down) to
   an easy win, a tense win, a coin flip, a deadly fight or a planned defeat. **📖 Make the comic** turns the finished
@@ -155,10 +177,19 @@ one to open DCUGen on your phone, one for each desktop download.
   gear fighters and blasters keep their range and trade accuracy for effect, spellcasters rotate effects to the weak
   defense, mentalists turn controlled enemies on their friends, beasts lunge and grab, minions mob and break.
   Afflictions with all three degrees and recovery checks, area effects with Dodge for half, Multiattack, Impervious vs
-  Penetrating, Immunity, Concealment, Healing, Regeneration, grabs, Interpose, Evasion and more.
+  Penetrating, Immunity by descriptor (fists and weapons are physical; "fire damage" isn't "fire effects"; half-effect
+  immunities), Concealment (−2/−5), Healing, Regeneration, grabs and escapes, Interpose, Evasion, critical hits and
+  minions as the Hero's Handbook has them, Charge and Slam, Aim, Recover, Defend, minion team attacks, and hero points
+  that keep the better roll. Fighters pick targets by what their attacks can do, how dangerous each enemy is, and who
+  is nearly down.
 - **Campaign journal** – on the Bio page: sessions played, what happened, who was met (added to "People in their life"
   or with their status updated), points earned and what they bought, and a rolled "between adventures" event from the
   life tables. Sessions join the life timeline as "In play" and go into every export.
+- **Sessions** (World > 🗓 Sessions) – plan game night: the date (with a calendar file and an invite for the
+  players), the scenes you have in mind linked to World pages, notes, and the Session in a Box plan, which the GM
+  Screen keeps with the next session. **Plot threads** stay in view until they're tied up. Start a planned session
+  and "Previously on…" goes to the table: the last recap, what changed in the World, the open threads. End session
+  marks it played with its recap. Sessions travel in world keys.
 - **World** – a wiki of the whole campaign, Obsidian-style. Every saved character is a page; every parent, sibling,
   mentor, rival, enemy, ally and ex named in their life is a page too (and opens as a full character); teams, cities and
   homelands are pages; journal sessions and recorded battles are events. Links are typed and run both ways (mentor /
@@ -237,7 +268,8 @@ one to open DCUGen on your phone, one for each desktop download.
   calculator (hit and outcome odds, or roll it), the book's Damage Resistance Matrix, a GM screen with live hero point / Toughness /
   condition trackers, GM notes, and encounter, hideout and vehicle generators.
 - **Rules** – searchable reference cards: actions, maneuvers, checks, combat, hazards, conditions, the DC,
-  degrees and measurement tables, and every effect, extra, flaw, advantage and skill, with page numbers.
+  degrees and measurement tables, and every effect, extra, flaw, advantage and skill, with page numbers. Tap an
+  advantage or a power's effect on a sheet, or a condition in Play, on the GM Screen or the turn bar, to read its card.
 
 ## Desktop app
 
@@ -257,6 +289,8 @@ Needs Node 18 or newer, nothing else.
 
 ```bash
 npm test          # rules engine, generators, exports
+npm run lint      # ESLint: undefined names, unused imports, a local hiding the World's or Forge's shared state
+npm run e2e       # builds DCUGen.html and drives it in a browser (Playwright; first time: npx playwright install chromium)
 npm run build     # builds DCUGen.html (not committed: CI attaches it to every release)
 npm run dev       # http://localhost:5178/src/app/index.html (live) and http://localhost:5178/ (built)
 npm run validate  # check every catalog creature against the PL limits
@@ -267,5 +301,10 @@ npm run validate  # check every catalog creature against the PL limits
   and the world wiki model (`world.js`).
 - `src/app/` – the web app.
 - `desktop/` – the Electron app (main process, preload bridge, dependency-free WebSocket lobby relay).
+- `tests/e2e/` – browser tests of the built app: roll, edit, save, share, every tab, the World, the GM Screen,
+  the session planner, tables. CI runs them before every release. `E2E_NETWORK=1 npm run e2e` also runs a real
+  phone table through the public PeerJS server.
+- `data/changelog.json` – What's new in the app (the ? menu) and the top of each GitHub release's notes. Add an
+  entry for each release.
 - `tests/` – the engine reproduces the printed point costs of published Heroes & Villains characters, and
   thousands of random characters, items and creatures are checked against the rules.

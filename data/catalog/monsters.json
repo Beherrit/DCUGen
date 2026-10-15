@@ -1942,13 +1942,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Chilling Touch",
@@ -3271,13 +3273,15 @@
         "rank": 1,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Pseudopods",

@@ -24,6 +24,7 @@ export const REALMS = [
   { id: 'Kaiju', glyph: '🦖', color: '#c2410c', blurb: 'City-wrecking giant monsters' },
   { id: 'Animals', glyph: '🐾', color: '#3f7d3a', blurb: 'Everyday and wild animals, dinosaurs and swarms' },
   { id: 'People', glyph: '🧑', color: '#8a5a44', blurb: 'Civilians, cops, soldiers, thugs, agents and cultists' },
+  { id: 'Homebrew', glyph: '🧪', color: '#a21caf', blurb: 'Your own creatures, from homebrew packs (Workshop)' },
 ];
 const realmInfo = (id) => REALMS.find((r) => r.id === id) || { id: id || 'Other', glyph: '✦', color: '#666666', blurb: '' };
 
@@ -104,6 +105,18 @@ function card(e) {
     e.summary ? h('p', { class: 'bst-sum' }, e.summary) : null,
     quickStats(e),
     mainPowers(e) ? h('div', { class: 'bst-pow' }, mainPowers(e)) : null);
+}
+
+/** Every creature's name, realm and PL, for the jump-anywhere search. */
+export function creatureList() { try { return all().map((e) => ({ name: e.name, pl: e.pl, category: e.category, realm: e.realm })); } catch { return []; } }
+
+/** Show one creature's sheet in the Bestiary (the tab must be open). */
+export function showCreature(name) {
+  const e = all().find((x) => x.name === name);
+  if (!e) return false;
+  Object.assign(f, { realm: '', category: '', q: '' });
+  select(e);
+  return true;
 }
 
 function select(entry, template = 'none') {

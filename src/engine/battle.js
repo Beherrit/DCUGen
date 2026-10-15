@@ -152,7 +152,7 @@ function buildAttack(c, a, R) {
     equipment: !!a.equipment, device: !!(p && (c.ch.devices || []).some((d) => d.powers.includes(p) || d.powers.some((q) => (q.alternates || []).includes(p)))),
     unarmed: a.name === 'Unarmed', alternate: !!a.alternate,
     crit: a.crit || (p ? Math.max(16, 20 - advantageRank(c.ch, 'Improved Critical', p.name) - advantageRank(c.ch, 'Improved Critical')) : 20),
-    descriptors: [...(p?.descriptors || []), ...(a.equipment ? ['weapon'] : []), ...(a.name === 'Unarmed' ? ['bludgeoning'] : [])],
+    descriptors: attackDescriptors(c, a, p),
     multiattack: hasExtra(p, 'Multiattack'), penetrating: hasExtra(p, 'Penetrating'), selective: hasExtra(p, 'Selective'),
     area: a.kind === 'area' ? (extraOpt(p, 'Area') || 'Burst') : null,
     perception: a.kind === 'perception',
@@ -185,12 +185,36 @@ function bestMoveRank(ch) {
   return { rank: best, flying };
 }
 
+/**
+ * What a fighter is immune to, from Immunity powers and absent defenses: lower-case phrases like "fire damage",
+ * "fortitude effects", "life support". Immunity with Limited to Half Effect is marked " #half" (DCA 104).
+ */
 function immunities(ch, d) {
   const words = [];
   if (d.defenses.immune?.Fortitude) words.push('fortitude effects');
   if (d.defenses.immune?.Will) words.push('will effects');
-  for (const { power: p } of allPowers(ch, { includeAlternates: false })) if (p.effect === 'Immunity' && p.detail) words.push(String(p.detail).toLowerCase());
+  for (const { power: p } of allPowers(ch, { includeAlternates: false })) {
+    if (p.effect !== 'Immunity' || !p.detail) continue;
+    const half = (p.flaws || []).some((f) => /half effect/i.test(f.name || f));
+    words.push(`${String(p.detail).toLowerCase()}${half ? ' #half' : ''}`);
+  }
   return words;
+}
+
+/**
+ * An attack's descriptors: its power's own, plus what it obviously is. Fists, claws, thrown cars and weapons
+ * are physical (and a weapon is a weapon); a power with an energy descriptor isn't physical.
+ */
+function attackDescriptors(c, a, p) {
+  const own = (p?.descriptors || []).map((x) => String(x).toLowerCase());
+  const out = new Set(own);
+  const energy = own.some((x) => /fire|heat|cold|ice|electric|lightning|light|laser|sonic|sound|radiation|cosmic|magic|mystic|psychic|mental|darkness|shadow|plasma|force|energy|acid|poison|chemical|toxic|disease|gravity|vibration/.test(x));
+  const strengthBased = a.name === 'Unarmed' || (a.kind === 'close' && !p) || (p && a.effect === 'Damage' && /strength/i.test(`${p.name} ${p.detail || ''}`));
+  if (a.name === 'Unarmed') { out.add('bludgeoning'); out.add('unarmed'); }
+  if (a.equipment) out.add('weapon');
+  if (!energy && a.effect === 'Damage' && (strengthBased || a.equipment || (p && /punch|fist|claw|bite|kick|strike|club|blade|sword|bullet|gun|arrow|projectile|thrown|slam|tail|horn|talon|fang/i.test(`${p.name} ${a.name}`)))) out.add('physical');
+  if (out.has('bullet') || out.has('bullets') || /gun|pistol|rifle|bullet/i.test(a.name)) out.add('ballistic');
+  return [...out];
 }
 
 /** Build a combatant from a character. opts: { team, style, tactics, heroPoints, name } */
@@ -221,7 +245,10 @@ function resetCombatant(c) {
     conditions: [],        // [{ name, degree, from, source, dc, resist, cumulative, progressive, tiers, extraCondition, until }]
     weakened: {},          // trait -> ranks lost
     fatigue: 0, defMod: 0, feinted: false, grabbedBy: null, holding: null, nullified: 0, regen: 0, interposed: false,
-    lastAttackId: null, usedEffort: 0,
+    lastAttackId: null, usedEffort: 0, teamedRound: null,
+    recovered: false,      // the Recover action: once per conflict (DCA 177)
+    aiming: null,          // { target, bonus } after an Aim action (DCA 175)
+    defending: false,      // the Defend action, until the start of their next turn (DCA 175)
     stats: { attacks: 0, hits: 0, crits: 0, degrees: 0, kos: 0, healed: 0, taken: 0 },
   });
 }
@@ -248,7 +275,8 @@ export function rebuildCombatant(c, R, d = deriveAll(c.ch, R)) {
   c.variable = variable ? { name: variable.name, points: variable.rank * 5 } : null;
   c.adv = Object.fromEntries(['Power Attack', 'Accurate Attack', 'All-out Attack', 'Defensive Attack', 'Takedown', 'Interpose', 'Evasion', 'Fearless', 'Seize Initiative', 'Move-by Action', 'Fast Grab', 'Improved Grab', 'Improved Hold', 'Chokehold', 'Agile Feint', 'Uncanny Dodge', 'Improved Initiative', 'Diehard', 'Instant Up', 'Luck'].map((n) => [n, advantageRank(c.ch, n)]));
   const sk = (name) => d.skills.find((s) => s.name === name)?.bonus ?? (d.abilities[R.skillAbility(name)] ?? 0);
-  c.skills = { Deception: sk('Deception'), Insight: sk('Insight'), Acrobatics: sk('Acrobatics'), Athletics: sk('Athletics'), Intimidation: sk('Intimidation') };
+  c.skills = { Deception: sk('Deception'), Insight: sk('Insight'), Acrobatics: sk('Acrobatics'), Athletics: sk('Athletics'), Intimidation: sk('Intimidation'), 'Sleight of Hand': sk('Sleight of Hand') };
+  c.moveRank = mv.rank;
   // Omni-powers: a Variable pool can be configured into an attack each turn.
   if (c.variable && c.style === 'omni') {
     const base = d.abilities.Dexterity ?? 0;
@@ -304,7 +332,7 @@ function defenseOf(c, which) {
   const s = activeConditions(c);
   let v = (c.d.defenses[which] ?? 0) + c.defMod - (c.weakened[which] || 0);
   if (s.has('Defenseless')) return 0;
-  if (s.has('Vulnerable')) v = Math.ceil(v / 2);
+  if (s.has('Vulnerable') || c.aiming) v = Math.ceil(v / 2); // aiming leaves you vulnerable (DCA 175)
   return v;
 }
 
@@ -355,35 +383,63 @@ function dcOf(atk, rank = atk.rank) {
   return (atk.effect === 'Damage' || atk.effect === 'Mental Blast' ? 15 : 10) + rank;
 }
 
+/**
+ * Is the target immune to this attack (DCA 103-104)? Returns the reason, or null. An Immunity to "<descriptor>
+ * damage" stops only Damage with that descriptor; "<descriptor> effects" (or just the descriptor) stops any
+ * effect with it. Limited to Half Effect immunities don't stop it: see halfImmune().
+ */
 function isImmune(target, atk) {
+  const why = immunityMatch(target, atk, false);
+  return why;
+}
+
+/** An Immunity limited to half effect that applies: the effect lands at half rank. Returns the reason or null. */
+function halfImmune(target, atk) { return immunityMatch(target, atk, true); }
+
+const NEVER_MATCH = ['variable', 'super-science', 'technology', 'power armor'];
+function immunityMatch(target, atk, wantHalf) {
   const res = String(atk.resistance || '').toLowerCase();
-  for (const w of target.immune) {
+  const damaging = atk.effect === 'Damage' || atk.effect === 'Mental Blast';
+  for (const raw of target.immune) {
+    const half = raw.endsWith(' #half');
+    if (half !== wantHalf) continue;
+    const w = raw.replace(/ #half$/, '');
     if (w.includes('fortitude effects') && res === 'fortitude') return 'immune to Fortitude effects';
     if (w.includes('will effects') && res === 'will') return 'immune to Will effects';
+    if (/life support/.test(w) && (atk.effect === 'Suffocation' || (atk.descriptors || []).some((d) => /disease|poison|toxin|vacuum|suffocat|drown|radiation/.test(d)))) return 'immune (Life Support)';
+    if (/\ball (damage|attacks)\b|\bdamage \(all\)/.test(w) && damaging) return 'immune to damage';
     for (const dsc of atk.descriptors || []) {
       const d = String(dsc).toLowerCase().replace(/\s*\(.*$/, '');
-      if (d.length > 2 && !['weapon', 'bludgeoning', 'variable', 'super-science', 'technology', 'power armor'].includes(d) && new RegExp(`\\b${d.replace(/[^a-z\-]/g, '')}\\b`).test(w) && /damage|effects|attacks|\ball\b|^[a-z, &-]+$/.test(w)) return `immune to ${dsc}`;
+      if (d.length <= 2 || NEVER_MATCH.includes(d)) continue;
+      // each comma or "and" separated part of the immunity is checked on its own
+      for (const part of w.split(/,|\band\b|;/).map((x) => x.trim()).filter(Boolean)) {
+        if (!new RegExp(`\\b${d.replace(/[^a-z\-]/g, '')}s?\\b`).test(part)) continue;
+        if (/damage|attacks/.test(part) && !damaging) continue; // "fire damage" doesn't stop a fire Affliction
+        return `immune to ${dsc}${/damage/.test(part) ? ' damage' : ''}`;
+      }
     }
     if (atk.effect === 'Mind Control' && /mind control|mental/.test(w)) return 'immune to mental effects';
+    if (atk.effect === 'Sleep' && /sleep/.test(w)) return 'immune to sleep';
   }
-  if (atk.fear && target.adv.Fearless) return 'Fearless';
-  if (target.minion === false && atk.effect === 'Sleep' && target.immune.some((w) => /sleep/.test(w))) return 'immune to sleep';
+  if (!wantHalf && atk.fear && target.adv.Fearless) return 'Fearless';
   return null;
 }
 
 /** Expected "harm" of an attack on a target: how much it would change the fight, in rough degrees. */
 function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, autoHit = false, dist = 0 } = {}) {
   if (isImmune(target, atk)) return 0;
-  const rank = atk.rank + rankShift;
+  let rank = atk.rank + rankShift;
+  if (halfImmune(target, atk)) rank = Math.floor(rank / 2);
   let hit = 1; let crit = 0;
   if (atk.roll && !autoHit) {
     const def = defenseOf(target, atk.kind === 'close' ? 'Parry' : 'Dodge');
     let bonus = atk.bonus + bonusShift - checkPenalty(c) - rangePenalty(atk, dist);
     if (activeConditions(target).has('Prone')) bonus += atk.kind === 'close' ? 5 : -5;
     if (activeConditions(c).has('Prone') && atk.kind === 'close') bonus -= 5;
+    bonus -= concealmentPenalty(c, target, atk);
+    if (c.aiming?.target === target.id) bonus += c.aiming.bonus;
     ({ hit, crit } = hitOdds(bonus, def));
-    if (target.concealment && !seesThrough(c, target)) hit *= target.concealment === 'total' ? 0.5 : 0.8;
-    if (activeConditions(c).has('Blinded')) hit *= 0.5;
+    if (target.defending) hit *= 0.55;
     if (activeConditions(target).has('Defenseless')) crit = hit;
   }
   if (atk.effect === 'Damage' && !atk.penetrating && rank <= Math.floor(target.impervious / 2)) return 0.05 * hit;
@@ -417,6 +473,14 @@ function rangePenalty(atk, dist) {
   if (dist <= 3) return 2;
   if (dist <= 5) return 5;
   return 99;
+}
+
+/** Concealment: −2 to the attack check for partial, −5 for total (DCA 174); blind attackers face total. */
+function concealmentPenalty(c, target, atk) {
+  if (activeConditions(c).has('Blind') || activeConditions(c).has('Blinded')) return 5;
+  if (!target.concealment || seesThrough(c, target)) return 0;
+  if (c.adv['Precise Attack'] && atk && c.adv['Precise Attack'] >= (atk.kind === 'close' ? 1 : 2)) return 0;
+  return target.concealment === 'total' ? 5 : 2;
 }
 
 function seesThrough(c, target) {
@@ -531,6 +595,8 @@ export function step(b, R) {
   const c = byId(b, b.order[b.turn]);
   b.turn += 1;
   if (!c || c.out || c.fled) return b.log.length - before;
+  // Joined an earlier team attack this round: that was this fighter's turn (they delayed into it).
+  if (c.teamedRound === b.round) return b.log.length - before;
   const rng = rngFor(b);
   try { takeTurn(b, R, c, rng); } catch (e) { log(b, { kind: 'note', actor: c.id, text: `${c.name} hesitates (${e.message}).` }); }
   endOfTurn(b, c, rng);
@@ -559,9 +625,10 @@ function takeTurn(b, R, c, rng) {
   c.defMod = 0;
   const mode = canAct(c);
   const conds = conditionLabels(c).filter((x) => x !== 'Fled');
+  c.defending = false;
   if (mode === 'none') {
-    // Hero point: recover from stunned / dazed / staggered (DCA 23)
-    if (b.options.heroPoints && c.heroPoints > 0 && (c.staggered || c.dazed || c.conditions.some((x) => ['Stunned', 'Entranced'].includes(x.name) && x.degree <= 2))) {
+    // Hero point: recover from stunned (DCA 21)
+    if (b.options.heroPoints && c.heroPoints > 0 && c.conditions.some((x) => x.name === 'Stunned' && x.degree <= 2)) {
       spendHeroPoint(b, c, 'recover');
       if (canAct(c) === 'none') { log(b, { kind: 'skip', actor: c.id, text: `${c.name} is ${conds.join(', ').toLowerCase()} and loses the turn.` }); return; }
     } else { log(b, { kind: 'skip', actor: c.id, text: `${c.name} is ${conds.join(', ').toLowerCase()} and can't act.` }); return; }
@@ -600,9 +667,29 @@ function takeTurn(b, R, c, rng) {
     else if (activeConditions(c).has('Bound')) return;
   }
 
-  // Hero point on a dazed-only turn: recover to act fully (if worth it)
-  if (mode === 'standard' && b.options.heroPoints && c.heroPoints > 0 && (c.dazed || c.staggered) && (hurt || rng.chance(0.3))) {
+  // Hero point on a dazed turn: recover to act fully (a hero point removes dazed, not staggered: DCA 21)
+  if (mode === 'standard' && b.options.heroPoints && c.heroPoints > 0 && c.dazed && !c.staggered && (hurt || rng.chance(0.4))) {
     spendHeroPoint(b, c, 'recover');
+  }
+
+  // Recover (once per conflict, DCA 177): badly hurt with no healer coming, catch your breath.
+  if (!c.recovered && !c.minion && (c.staggered || c.fatigue >= 2 || (c.bruises >= 3 && c.dazed)) && !alliesOf(b, c).some((a) => a.healing && !a.out)
+    && (c.style === 'tank' || c.style === 'support' || c.style === 'duelist' || alliesOf(b, c).length > 0 || rng.chance(0.5))) {
+    recoverAction(b, c);
+    return;
+  }
+
+  // An aimed attack: take the shot lined up last turn (DCA 175).
+  if (c.aiming) {
+    const t = byId(b, c.aiming.target);
+    const atk = c.attacks.find((a) => a.id === c.aiming.attack);
+    if (t && !t.out && !t.fled && atk && (atk.kind !== 'close' || t.pos === c.pos)) {
+      log(b, { kind: 'note', actor: c.id, target: t.id, text: `${c.name} takes the aimed shot (+${c.aiming.bonus}).` });
+      resolveAttack(b, R, c, atk, t, rng, { aimed: c.aiming.bonus });
+      c.aiming = null;
+      return;
+    }
+    c.aiming = null;
   }
 
   // Support: heal first if someone needs it
@@ -633,6 +720,13 @@ function takeTurn(b, R, c, rng) {
   if (!choice) { log(b, { kind: 'skip', actor: c.id, text: `${c.name} finds nothing worth doing and holds position.` }); return; }
   const { attack, target, plan } = choice;
 
+  // Defend (DCA 175): hurt, already recovered, outnumbered and with nothing that would land: dig in.
+  if (plan === 'attack' && c.staggered && c.recovered && (choice.ev ?? 1) < 0.12 && enemies.length > alliesOf(b, c).length && ['support', 'duelist', 'tank'].includes(c.style)) {
+    c.defending = true;
+    log(b, { kind: 'note', actor: c.id, text: `${c.name} goes on the defensive: attackers must beat a rolled defense until their next turn.` });
+    return;
+  }
+
   if (plan === 'move') {
     moveToward(b, c, target, rng, mode === 'full' ? 2 : 1);
     return;
@@ -657,10 +751,31 @@ function takeTurn(b, R, c, rng) {
       if (dest !== c.pos) moveTo(b, c, dest, `away from ${threat.name}`);
     }
   }
+  let charge = false;
   if (attack.kind === 'close' && target.pos !== c.pos) {
     if (mode !== 'full') { log(b, { kind: 'skip', actor: c.id, text: `${c.name} is ${conditionLabels(c).join(', ').toLowerCase()} and can't close the distance.` }); return; }
-    moveToward(b, c, target, rng);
-    if (target.pos !== c.pos) return; // couldn't reach; used the turn moving
+    const dist = Math.abs(c.pos - target.pos);
+    if (dist > moveZones(c) && dist <= moveZones(c) * 2) {
+      // Charge: a move and then a charge, twice the speed, the attack at −2 (DCA 175)
+      moveTo(b, c, target.pos, `and charges ${target.name}`);
+      charge = true;
+    } else {
+      moveToward(b, c, target, rng);
+      if (target.pos !== c.pos) return; // couldn't reach; used the turn moving
+    }
+  }
+
+  // Aim: a ranged fighter with poor odds and nobody on top of them lines up the shot for next turn (DCA 175).
+  if (!charge && attack.roll && attack.kind === 'ranged' && (c.style === 'gunner' || c.style === 'blaster') && !enemies.some((e) => e.pos === c.pos)) {
+    const dist = Math.abs(c.pos - target.pos);
+    const def = defenseOf(target, 'Dodge');
+    const now = hitOdds(attack.bonus - rangePenalty(attack, dist) - concealmentPenalty(c, target, attack), def).hit;
+    const bonus = dist <= 1 ? 5 : 2;
+    if (now < 0.4 && hitOdds(attack.bonus + bonus - rangePenalty(attack, dist) - concealmentPenalty(c, target, attack), def).hit >= now + 0.2 && rng.chance(0.7)) {
+      c.aiming = { target: target.id, attack: attack.id, bonus };
+      log(b, { kind: 'note', actor: c.id, target: target.id, text: `${c.name} takes aim at ${target.name} (+${bonus} next turn, vulnerable until then).` });
+      return;
+    }
   }
 
   // Trade-offs: shift accuracy for effect, or go all-out / defensive (DCA 190-191)
@@ -676,8 +791,36 @@ function takeTurn(b, R, c, rng) {
   if (b.options.extraEffort && c.fatigue < 2 && attack.power && !attack.equipment && (hurt || (b.round >= 3 && target.bruises === 0)) && ['mage', 'omni', 'blaster', 'tank', 'brawler', 'mentalist'].includes(c.style) && rng.chance(0.45)) {
     effort = 'power';
   }
+  // Team attack (DCA 178): minions of a squad who haven't acted yet delay to strike together. Each helper's
+  // degrees of success add to the lead attack: one degree +2 rank, three or more +5.
+  let team = 0;
+  if (c.minion && attack.roll && !attack.area) {
+    const order = b.order.slice(b.turn);
+    const helpers = alliesOf(b, c).filter((a) => a.minion && a.teamedRound !== b.round && order.includes(a.id) && canAct(a) === 'full'
+      && Math.abs(a.pos - target.pos) <= moveZones(a)).slice(0, 5);
+    if (helpers.length >= 2) {
+      let deg = 0; const parts = [];
+      for (const a of helpers) {
+        const atk = a.attacks.find((x) => x.effect === attack.effect && x.resistance === attack.resistance && Math.abs(x.rank - attack.rank) <= 5 && x.roll && (x.kind !== 'close' || Math.abs(a.pos - target.pos) <= moveZones(a)));
+        if (!atk) continue;
+        a.teamedRound = b.round;
+        if (atk.kind === 'close' && a.pos !== target.pos) a.pos = target.pos;
+        const def = defenseOf(target, atk.kind === 'close' ? 'Parry' : 'Dodge');
+        const r = d20(rng); const tot = r + atk.bonus - checkPenalty(a);
+        const d = r === 20 || tot >= 10 + def ? 1 + Math.floor((tot - 10 - def) / 5) : 0;
+        deg += Math.max(0, d);
+        parts.push(`${a.name} ${d > 0 ? `${d} degree${d > 1 ? 's' : ''}` : 'misses'}`);
+      }
+      team = deg >= 3 ? 5 : deg >= 1 ? 2 : 0;
+      if (parts.length) log(b, { kind: 'note', actor: c.id, target: target.id, text: `Team attack: ${parts.join(', ')} — ${team ? `+${team} to ${c.name}'s ${attack.effect} rank` : 'no help lands'}.`, important: !!team });
+    }
+  }
+  // Slam: a charging fighter with real speed crashes into the target (DCA 178)
+  let slam = null;
+  if (charge && attack.effect === 'Damage' && (c.moveRank || 0) >= attack.rank + 1 && ['brawler', 'tank', 'speedster', 'beast'].includes(c.style)) slam = Math.max(c.moveRank, attack.rank + 1);
+  // Defend (DCA 175): a hurt support or skilled fighter with nothing good to do digs in instead.
   // Takedown chains and the attack itself
-  resolveAttack(b, R, c, attack, target, rng, { trade, allOut, defensive, effort });
+  resolveAttack(b, R, c, attack, target, rng, { trade: charge ? 0 : trade, allOut: charge ? 0 : allOut, defensive: charge ? 0 : defensive, effort, charge, slam, team });
 
   // Hit and run
   if (S.hitAndRun && c.adv['Move-by Action'] && mode === 'full' && attack.kind === 'close' && !c.holding) {
@@ -688,14 +831,14 @@ function takeTurn(b, R, c, rng) {
 }
 
 /** Best attack for c against t, with the trade-off already folded in. */
-function bestAttackVs(c, t, rng, { dist = Math.abs(c.pos - t.pos), reachable = true } = {}) {
+function bestAttackVs(c, t, rng, { dist = Math.abs(c.pos - t.pos), reachable = true, charge = false } = {}) {
   const S = STYLES[c.style];
   let best = { attack: null, ev: 0, score: 0 };
   for (const atk of c.attacks) {
     if (atk.kind === 'close' && !reachable) continue;
     if (atk.kind === 'ranged' && rangePenalty(atk, reachable ? Math.min(dist, 1) : dist) > 50) continue;
     const trade = bestTradeoff(c, atk, t, atk.kind === 'close' ? 0 : dist);
-    const ev = expectedValue(c, atk, t, { bonusShift: -trade, rankShift: trade, dist: atk.kind === 'close' ? 0 : dist });
+    const ev = expectedValue(c, atk, t, { bonusShift: -trade - (charge && atk.kind === 'close' ? 2 : 0), rankShift: trade, dist: atk.kind === 'close' ? 0 : dist });
     let score = ev * (atk.kind === 'close' ? S.close : S.ranged);
     if (c.style === 'gunner' && (atk.equipment || atk.device)) score *= 1.3;
     if (c.style === 'mentalist' && atk.resistance === 'Will') score *= 1.3;
@@ -734,8 +877,9 @@ function choosePlan(b, R, c, enemies, rng, mode) {
   const scored = [];
   for (const t of enemies) {
     const dist = Math.abs(c.pos - t.pos);
-    const reachable = dist === 0 || (mode === 'full' && dist <= zones);
-    const pick = bestAttackVs(c, t, rng, { dist, reachable });
+    // In reach with a move, or with a move and a charge (twice the speed, −2 to hit: DCA 175)
+    const reachable = dist === 0 || (mode === 'full' && dist <= zones * 2);
+    const pick = bestAttackVs(c, t, rng, { dist, reachable, charge: dist > zones });
     let pref = 1;
     if (tactic === 'closest') pref = 1 / (1 + dist);
     if (tactic === 'weakest') pref = 1 + (30 - Math.min(30, defenseOf(t, 'Dodge') + resistOf(t, 'Toughness'))) / 20;
@@ -744,6 +888,11 @@ function choosePlan(b, R, c, enemies, rng, mode) {
     if (tactic === 'lowWill') pref = 1 + (20 - Math.min(20, resistOf(t, 'Will') ?? 20)) / 10;
     if (tactic === 'random') pref = 0.6 + rng.next() * 0.8;
     if (t.minion) pref *= 0.75;
+    // Smarter targeting: knock out whoever hurts us most, and finish fighters who are nearly down.
+    const threat = Math.max(0, ...t.attacks.map((a) => expectedValue(t, a, c, { dist: a.kind === 'close' ? 0 : dist })));
+    pref *= 1 + Math.min(1, threat) * 0.5;
+    if (t.staggered || activeConditions(t).has('Defenseless')) pref *= 1.35;
+    if (t.aiming || t.holding) pref *= 1.15; // break the aim, or free the friend in their grip
     scored.push({ t, dist, reachable, pick, score: (pick.score || 0.01) * pref });
   }
   scored.sort((x, y) => y.score - x.score);
@@ -760,11 +909,11 @@ function choosePlan(b, R, c, enemies, rng, mode) {
     return null;
   }
   // Grab: beasts, brawlers and tanks with the knack, against someone they can reach
-  if ((S.grabs || c.adv['Fast Grab'] || c.adv['Improved Grab'] || c.adv.Chokehold) && !c.holding && top.reachable && (c.d.abilities.Strength ?? 0) >= (t.d.abilities.Strength ?? 0) + 2 && !t.grabbedBy && !t.minion && rng.chance(c.style === 'beast' ? 0.45 : 0.3)) {
+  if ((S.grabs || c.adv['Fast Grab'] || c.adv['Improved Grab'] || c.adv.Chokehold) && !c.holding && top.reachable && top.dist <= zones && (c.d.abilities.Strength ?? 0) >= (t.d.abilities.Strength ?? 0) + 2 && !t.grabbedBy && !t.minion && rng.chance(c.style === 'beast' ? 0.45 : 0.3)) {
     return { target: t, attack: top.pick.attack, plan: 'grab' };
   }
   // Feint: skilled fighters against a defense they can't crack
-  if ((c.style === 'duelist' || c.adv['Agile Feint']) && top.pick.attack?.roll && top.reachable && !t.feinted && mode === 'full') {
+  if ((c.style === 'duelist' || c.adv['Agile Feint']) && top.pick.attack?.roll && top.reachable && top.dist <= zones && !t.feinted && mode === 'full') {
     const atk = top.pick.attack;
     const def = defenseOf(t, atk.kind === 'close' ? 'Parry' : 'Dodge');
     const now = hitOdds(atk.bonus, def).hit;
@@ -773,7 +922,7 @@ function choosePlan(b, R, c, enemies, rng, mode) {
     const pFeint = hitOdds(feintSkill, Math.max(t.skills.Insight, t.skills.Deception)).hit;
     if (after * pFeint > now * 2.1) return { target: t, attack: atk, plan: 'feint' };
   }
-  return { target: t, attack: top.pick.attack, plan: 'attack' };
+  return { target: t, attack: top.pick.attack, plan: 'attack', ev: top.pick.ev };
 }
 
 // ---- movement ------------------------------------------------------------------------------------------------
@@ -814,11 +963,16 @@ function attackVerb(c, atk, t, rng) {
   return `${v} ${t.name} with ${atk.name}`;
 }
 
-function resolveAttack(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive = 0, effort = null } = {}) {
+function resolveAttack(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive = 0, effort = null, charge = false, slam = null, aimed = 0, team = 0 } = {}) {
   c.lastAttackId = atk.id;
   c.stats.attacks++;
+  // Maneuvers only apply to attacks with an attack check (DCA 178)
+  if (!atk.roll || atk.area) { trade = 0; allOut = 0; defensive = 0; }
   let rankShift = trade;
   const notes = [];
+  if (charge) notes.push('charge: −2 to hit');
+  if (slam) { rankShift += slam - atk.rank; notes.push(`slam: Damage ${slam} from momentum`); }
+  if (team) { rankShift += team; notes.push(`team attack: +${team} rank`); }
   if (trade > 0) notes.push(`Power Attack${trade > 2 ? ' (advantage)' : ''}: −${trade} to hit, +${trade} effect`);
   if (trade < 0) notes.push(`Accurate Attack: +${-trade} to hit, ${trade} effect`);
   if (allOut) notes.push(`All-out Attack: +${allOut} to hit, −${allOut} defenses until next turn`);
@@ -841,34 +995,46 @@ function resolveAttack(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive 
   const which = atk.kind === 'close' ? 'Parry' : 'Dodge';
   const def = defenseOf(t, which);
   const dc = 10 + def;
-  let mod = atk.bonus - trade + allOut - defensive - checkPenalty(c) - rangePenalty(atk, dist);
+  const conceal = concealmentPenalty(c, t, atk);
+  let mod = atk.bonus - trade + allOut - defensive - checkPenalty(c) - rangePenalty(atk, dist) - conceal - (charge ? 2 : 0) + aimed;
   const tc = activeConditions(t); const cc = activeConditions(c);
   if (tc.has('Prone')) mod += atk.kind === 'close' ? 5 : -5;
   if (cc.has('Prone') && atk.kind === 'close') mod -= 5;
-  const roll = d20(rng);
+  if (conceal) notes.push(`${conceal === 5 ? 'total' : 'partial'} concealment: −${conceal}`);
+  // Defend (DCA 175): the target rolls its defense instead of the flat 10; a 10 or less counts as +10.
+  let defRoll = null;
+  let dcUsed = dc;
+  if (t.defending) {
+    const r = d20(rng); defRoll = r <= 10 ? r + 10 : r;
+    dcUsed = defRoll + def;
+    notes.push(`${t.name} is defending: d20 ${r}${r <= 10 ? ' (+10)' : ''} + ${def} = ${dcUsed}`);
+  }
+  // Against a minion, a non-minion can take the attack as a routine check (DCA 175): no roll when 10 does it.
+  const routine = t.minion && !c.minion && !t.defending && 10 + mod >= dcUsed;
+  const roll = routine ? 10 : d20(rng);
   let total = roll + mod;
-  let hit = roll === 20 || (roll !== 1 && total >= dc);
-  let crit = roll === 20 || (hit && roll >= atk.crit);
-  const dice = [{ label: 'Attack', roll, mod, total, dc }];
-  let text = `${c.name} ${attackVerb(c, atk, t, rng)}: d20 ${roll} ${sign(mod)} = ${total} vs ${which} DC ${dc}`;
+  let hit = routine || roll === 20 || (roll !== 1 && total >= dcUsed);
+  // A natural 20 always hits, but is a critical only if the total also reaches the defense (DCA 172).
+  const critOk = () => !(c.minion && !t.minion) && !routine; // minions don't crit non-minions (DCA 175)
+  let crit = critOk() && hit && (roll === 20 ? total >= dcUsed : roll >= atk.crit);
+  const dice = routine ? [] : [{ label: 'Attack', roll, mod, total, dc: dcUsed }];
+  let text = routine
+    ? `${c.name} ${attackVerb(c, atk, t, rng)}: routine attack against a minion, ${10 + mod} vs ${which} DC ${dcUsed}`
+    : `${c.name} ${attackVerb(c, atk, t, rng)}: d20 ${roll} ${sign(mod)} = ${total} vs ${which} ${t.defending ? '' : 'DC '}${dcUsed}`;
   if (t.feinted) { text += ' (feinted: defenses halved)'; t.feinted = false; }
-  // Concealment and blindness
-  let missChance = 0;
-  if (t.concealment && !seesThrough(c, t)) missChance = t.concealment === 'total' ? 0.5 : 0.2;
-  if (cc.has('Blinded')) missChance = Math.max(missChance, 0.5);
-  if (hit && missChance && rng.chance(missChance)) { hit = false; crit = false; text += `, but ${c.name} can't see ${t.name} and the attack goes wide`; }
-  // Hero point: improve a miss
+  // Hero point: re-roll a miss and take the better; 1-10 on the re-roll counts +10 (DCA 21)
   if (!hit && b.options.heroPoints && c.heroPoints > 0 && roll !== 1 && (c.style !== 'minion') && (t.staggered || c.staggered || rng.chance(0.5))) {
     c.heroPoints--;
     const r2 = d20(rng);
     const r2b = r2 <= 10 ? r2 + 10 : r2;
-    total = r2b + mod;
-    hit = r2 === 20 || total >= dc;
-    crit = r2 === 20 || (hit && r2b >= atk.crit);
-    dice.push({ label: 'Hero point re-roll', roll: r2b, mod, total, dc });
+    const better = Math.max(roll, r2b);
+    total = better + mod;
+    hit = r2 === 20 || total >= dcUsed;
+    crit = critOk() && hit && (r2 === 20 ? total >= dcUsed : better >= atk.crit);
+    dice.push({ label: 'Hero point re-roll', roll: r2b, mod, total, dc: dcUsed });
     text += `. Miss! ${c.name} spends a hero point to re-roll: ${r2}${r2 <= 10 ? ' (+10, below 11)' : ''} ${sign(mod)} = ${total}`;
   }
-  if (tc.has('Defenseless') && hit) crit = true;
+  if (tc.has('Defenseless') && hit && critOk()) crit = true;
   if (!hit) {
     log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${text} — ${roll === 1 ? 'natural 1, a clean miss' : 'miss'}${notes.length ? ` (${notes.join('; ')})` : ''}.`, dice });
     if (c.holding === t.id) {}
@@ -888,7 +1054,7 @@ function resolveAttack(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive 
   }
   let multi = 0;
   if (atk.multiattack) {
-    const deg = 1 + Math.floor((total - dc) / 5);
+    const deg = 1 + Math.floor((total - dcUsed) / 5);
     multi = deg >= 3 ? 5 : deg === 2 ? 2 : 0;
     if (multi) text += ` Multiattack: ${deg} degrees, +${multi} to the DC.`;
   }
@@ -919,7 +1085,7 @@ function resolveSimpleAttack(b, R, c, atk, t, rng, mod) {
   const roll = d20(rng);
   const total = roll + mod;
   const hit = roll === 20 || (roll !== 1 && total >= dc);
-  const crit = roll === 20 || (hit && roll >= atk.crit);
+  const crit = !(c.minion && !t.minion) && hit && (roll === 20 ? total >= dc : roll >= atk.crit);
   c.stats.attacks++;
   if (!hit) { log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${c.name} swings at ${t.name}: d20 ${roll} ${sign(mod)} = ${total} vs ${which} DC ${dc} — miss.`, dice: [{ label: 'Attack', roll, mod, total, dc }] }); return null; }
   c.stats.hits++;
@@ -950,9 +1116,11 @@ function areaAttack(b, R, c, atk, t, rng, rankShift, notes) {
 
 /** Resolve the effect of a hit (or an automatic effect). Returns { landed, ko, degrees }. */
 function applyEffect(b, R, c, atk, t, rng, { crit = false, rankShift = 0, multi = 0 } = {}) {
-  const rank = Math.max(0, atk.rank + rankShift);
+  let rank = Math.max(0, atk.rank + rankShift);
   const why = isImmune(t, atk);
   if (why) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name} is ${why}: no effect.` }); return { landed: false }; }
+  const half = halfImmune(t, atk);
+  if (half) { rank = Math.floor(rank / 2); log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name} is partly ${half.replace(/^immune/, 'immune')} (half effect): rank ${rank}.` }); rankShift = rank - atk.rank; }
   if (atk.effect === 'Damage' && !atk.penetrating && t.impervious && rank <= Math.floor(t.impervious / 2)) {
     log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name}'s Impervious ${t.impervious} shrugs off Damage ${rank} without a check.` });
     return { landed: false };
@@ -1078,8 +1246,10 @@ function grab(b, R, c, t, rng, { free = false } = {}) {
 
 function tryEscape(b, c, holder, rng) {
   const bound = activeConditions(c).has('Bound');
-  if (!bound && rng.chance(0.5)) return false; // restrained fighters often just fight on
-  const mine = Math.max(c.skills.Athletics, c.skills.Acrobatics, c.d.abilities.Strength ?? 0) - checkPenalty(c);
+  // Restrained but able to hit the one holding them: fight on instead (still immobile and vulnerable)
+  if (!bound && holder.pos === c.pos && c.attacks.some((a) => expectedValue(c, a, holder) > 0.15)) return false;
+  // Escape (DCA 176): Athletics or Sleight of Hand against the hold
+  const mine = Math.max(c.skills.Athletics, c.skills['Sleight of Hand'] ?? -99) - checkPenalty(c);
   const dc = 10 + (holder.d.abilities.Strength ?? 0) + (holder.adv['Improved Hold'] ? 5 : 0);
   const roll = d20(rng); const total = roll + mine;
   const ok = roll === 20 || total >= dc;
@@ -1113,15 +1283,31 @@ function spendHeroPoint(b, c, use) {
   if (c.heroPoints <= 0) return false;
   c.heroPoints--;
   if (use === 'recover') {
+    // A hero point removes dazed, fatigued or stunned, or turns exhausted into fatigued (DCA 21)
     const fixed = [];
-    if (c.staggered) { c.staggered = false; fixed.push('staggered'); }
-    if (c.dazed) { c.dazed = false; fixed.push('dazed'); }
-    const stun = c.conditions.find((x) => ['Stunned', 'Entranced'].includes(x.name));
-    if (stun) { c.conditions = c.conditions.filter((x) => x.source !== stun.source); fixed.push(stun.name.toLowerCase()); }
-    if (c.fatigue > 0 && !fixed.length) { c.fatigue--; fixed.push('fatigue'); }
+    if (c.dazed && !c.staggered) { c.dazed = false; fixed.push('dazed'); }
+    const stun = c.conditions.find((x) => x.name === 'Stunned');
+    if (stun) { c.conditions = c.conditions.filter((x) => x.source !== stun.source); fixed.push('stunned'); }
+    if (c.fatigue > 0 && !fixed.length) { c.fatigue--; fixed.push(c.fatigue ? 'exhausted (now fatigued)' : 'fatigue'); }
     log(b, { kind: 'hero', actor: c.id, text: `${c.name} spends a hero point to recover${fixed.length ? ` from being ${fixed.join(' and ')}` : ''} (${c.heroPoints} left).`, important: true });
   }
   return true;
+}
+
+/**
+ * Recover (DCA 177): the whole turn to catch your breath, once per conflict. Removes the highest level of damage
+ * or fatigue, and gives +2 to active defenses until the start of the next turn.
+ */
+function recoverAction(b, c) {
+  c.recovered = true;
+  let what;
+  if (c.staggered) { c.staggered = false; c.dazed = true; what = 'staggered (still dazed)'; }
+  else if (c.fatigue >= 2) { c.fatigue--; what = 'exhausted (now fatigued)'; }
+  else if (c.dazed) { c.dazed = false; what = 'dazed'; }
+  else if (c.fatigue) { c.fatigue--; what = 'fatigue'; }
+  else if (c.bruises) { c.bruises--; what = 'a bruise'; }
+  c.defMod = 2;
+  log(b, { kind: 'heal', actor: c.id, text: `${c.name} takes a moment to recover${what ? `: no longer ${what}` : ''}, +2 to defenses until their next turn (once per fight).`, important: true });
 }
 
 function regenerate(b, c) {

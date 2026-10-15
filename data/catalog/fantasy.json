@@ -2014,13 +2014,15 @@
         "rank": 8,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Sleep Sting",
@@ -2133,13 +2135,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Goblin Eyes",
@@ -2247,13 +2251,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Hex Bolt",
@@ -2753,13 +2759,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Darkvision",
@@ -4617,13 +4625,15 @@
         "detail": "A cloud of tiny fey; pours through gaps and shrugs off single blows",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Dragonfly Wings",
@@ -5004,13 +5014,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Bloody Scythe",
@@ -5106,13 +5118,15 @@
         "rank": 3,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Shocking Touch",
@@ -5676,13 +5690,15 @@
         "rank": 1,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Swimmer",
@@ -6309,13 +6325,15 @@
         "rank": 2,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Flight",
@@ -6730,13 +6748,15 @@
         "rank": 1,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Swimmer",
@@ -8053,13 +8073,15 @@
         "rank": 1,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Swimmer",
@@ -8133,13 +8155,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Keen Edge",
@@ -8250,13 +8274,15 @@
         "rank": 8,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Leather Binding",
@@ -8427,13 +8453,15 @@
         "detail": "Ten thousand beetles; shrugs off single blows",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Still as Treasure",
@@ -8632,13 +8660,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Petrifying Peck",

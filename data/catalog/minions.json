@@ -3775,13 +3775,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Laser",

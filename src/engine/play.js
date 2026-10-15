@@ -8,9 +8,13 @@ export const DAMAGE_STATES = ['none', 'dazed', 'staggered', 'incapacitated'];
 export const FATIGUE = ['none', 'fatigued', 'exhausted', 'incapacitated'];
 export const QUICK_CONDITIONS = ['Prone', 'Vulnerable', 'Defenseless', 'Hindered', 'Impaired', 'Disabled', 'Immobile', 'Stunned', 'Surprised', 'Entranced', 'Compelled', 'Controlled', 'Blind', 'Deaf', 'Unaware', 'Asleep', 'Bound', 'Restrained', 'Paralyzed', 'Transformed', 'Weakened'];
 
+/**
+ * The play state with its defaults. Anything else kept on it (afflictions to recover from, how long a daze
+ * lasts, weakened traits) is carried along.
+ */
 export function playState(ch) {
   const p = ch.play || {};
-  return { bruises: p.bruises || 0, damage: DAMAGE_STATES.includes(p.damage) ? p.damage : 'none', heroPoints: p.heroPoints ?? 1, conditions: p.conditions || [], fatigue: FATIGUE.includes(p.fatigue) ? p.fatigue : 'none' };
+  return { ...p, bruises: p.bruises || 0, damage: DAMAGE_STATES.includes(p.damage) ? p.damage : 'none', heroPoints: p.heroPoints ?? 1, conditions: p.conditions || [], fatigue: FATIGUE.includes(p.fatigue) ? p.fatigue : 'none' };
 }
 
 const has = (s, c) => s.conditions.includes(c);
@@ -42,7 +46,8 @@ export function applyDamage(s, { total, dc }) {
   out.bruises += 1;
   let text = 'a bruise (−1 Toughness)';
   const worse = (st) => { if (DAMAGE_STATES.indexOf(st) > DAMAGE_STATES.indexOf(out.damage)) out.damage = st; };
-  if (degrees === 2) { worse('dazed'); text += ', dazed'; }
+  // Dazed by damage lasts until the end of the character's next turn (engine/turns.js counts it down).
+  if (degrees === 2) { worse('dazed'); if (out.damage === 'dazed') out.dazedTurns = 1; text += ', dazed'; }
   if (degrees === 3) { if (out.damage === 'staggered') { worse('incapacitated'); text += ', staggered again: incapacitated'; } else { worse('staggered'); text += ', staggered'; } }
   if (degrees >= 4) { worse('incapacitated'); text = 'incapacitated'; }
   return { state: out, text: `${degrees} degree${degrees > 1 ? 's' : ''} of failure: ${text}` };
@@ -50,5 +55,7 @@ export function applyDamage(s, { total, dc }) {
 
 /** End of the scene: damage and conditions clear, hero points stay. */
 export function endScene(s) {
-  return { ...s, bruises: 0, damage: 'none', conditions: [], fatigue: 'none' };
+  const out = { ...s, bruises: 0, damage: 'none', conditions: [], fatigue: 'none' };
+  delete out.afflictions; delete out.dazedTurns; delete out.weakened;
+  return out;
 }

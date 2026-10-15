@@ -18,11 +18,13 @@ import { lobby } from './lobby.js';
 import { claimCharacter, setTableShared } from './table.js';
 import { worldSelect } from './roster.js';
 import { hasForms, activeForm, addForm, switchForm, renameForm, removeForm, MAX_FORMS } from '../engine/forms.js';
-import { COMPANION_KINDS, companionsOf, companionBudget, asCompanion, blankCompanion, suggestedPl } from '../engine/companions.js';
-import { catalogToCharacter } from '../engine/catalog.js';
+import { companionsOf } from '../engine/companions.js';
 import { addVersion, versionsOf, removeVersion, restoreVersion, historyKey, moveHistory } from './history.js';
 import { renderPlay } from './play.js';
 import { openRangeCalculator } from './rangecalc.js';
+import { F } from './forge-common.js';
+import { saveTabs, putActive, canUndo, canRedo, undo, redo, setCurrent, switchTab, tabStrip, restoreTabs, updateOpen } from './forge-tabs.js';
+import { companionsSection, addCompanionDialog, companionBanner } from './forge-companions.js';
 let R;
 let root;
 let fileHost;
@@ -49,197 +51,17 @@ function prefsToOptions(seed) {
   };
 }
 
-export function roll(seed = randomSeed(), { newTab = false } = {}) {
+export function roll(seed = randomSeed(), { newTab = false, archetype = null, theme = null } = {}) {
   try {
-    const ch = generateCharacter(R, prefsToOptions(seed));
+    const opts = prefsToOptions(seed);
+    if (archetype) opts.archetype = archetype;
+    if (theme) opts.theme = theme;
+    const ch = generateCharacter(R, opts);
     setCurrent(ch, { fresh: true, newTab });
     pushHistory(ch);
   } catch (e) {
     toast(e.message);
   }
-}
-
-// ---- open characters as tabs ----------------------------------------------------------------
-const TABS_KEY = 'dcugen.tabs.v1';
-const MAX_TABS = 12;
-if (!state.tabs) state.tabs = [];
-if (state.active == null) state.active = 0;
-
-// A saved character's portrait picture is already kept on the roster, so the open tabs point at it
-// instead of storing a second copy. Pictures are big, and this browser's storage is not.
-const FROM_ROSTER = '@roster';
-function slimTab(ch) {
-  const img = ch?.portrait?.image;
-  if (!img || !ch.rosterId) return ch;
-  if (state.roster.find((x) => x.rosterId === ch.rosterId)?.portrait?.image !== img) return ch;
-  return { ...ch, portrait: { ...ch.portrait, image: FROM_ROSTER } };
-}
-function fatTab(ch) {
-  if (ch?.portrait?.image !== FROM_ROSTER) return ch;
-  const img = state.roster.find((x) => x.rosterId === ch.rosterId)?.portrait?.image;
-  const portrait = { ...ch.portrait };
-  if (img) portrait.image = img; else { delete portrait.image; if (portrait.source === 'upload') delete portrait.source; }
-  return { ...ch, portrait };
-}
-const noPictures = (ch) => (ch?.portrait?.image ? { ...ch, portrait: { ...ch.portrait, image: undefined, source: undefined } } : ch);
-
-let warnedFull = false;
-/**
- * Keep the open tabs so a reload (or a redeploy) shows the same characters. When this browser's storage
- * is full, fall back to this window's session storage, then to a copy without uploaded pictures, so the
- * character being worked on is never lost to a new roll.
- */
-function saveTabs() {
-  const pack = (tabs) => JSON.stringify({ tabs, active: state.active, at: Date.now() });
-  const slim = pack(state.tabs.map(slimTab));
-  let where = null;
-  try { localStorage.setItem(TABS_KEY, slim); where = 'local'; } catch { /* storage full or blocked */ }
-  if (!where) try { sessionStorage.setItem(TABS_KEY, slim); where = 'session'; } catch { /* full too */ }
-  if (!where) try { localStorage.setItem(TABS_KEY, pack(state.tabs.map(slimTab).map(noPictures))); where = 'local'; } catch { /* nothing left */ }
-  if (where === 'local') try { sessionStorage.removeItem(TABS_KEY); } catch { /* ignore */ }
-  if (where !== 'local' && !warnedFull) {
-    warnedFull = true;
-    toast('This browser\'s storage is nearly full, so open characters may not survive closing the tab. Save them to the roster, or make room (Roster > Backup, then delete old characters or pictures).');
-  }
-}
-
-function readTabs(store) {
-  try { const t = JSON.parse(store.getItem(TABS_KEY) || 'null'); return t?.tabs?.length ? t : null; } catch { return null; }
-}
-
-/** Restore the open tabs from the last visit. Returns true if any were restored. */
-export function restoreTabs() {
-  let local = null; let session = null;
-  try { local = readTabs(localStorage); } catch { /* blocked */ }
-  try { session = readTabs(sessionStorage); } catch { /* blocked */ }
-  const saved = session && (!local || (session.at || 0) > (local.at || 0)) ? session : local;
-  if (!saved) return false;
-  state.tabs = saved.tabs.slice(0, MAX_TABS).map(fatTab);
-  state.active = Math.max(0, Math.min(saved.active || 0, state.tabs.length - 1));
-  state.current = state.tabs[state.active];
-  try { renderCurrent(); } catch (e) { console.error(e); }
-  return true;
-}
-
-// ---- undo / redo ------------------------------------------------------------------------------------
-// Every change to an open character (an edit, a re-roll in the same tab, a form switch, a drain, a save)
-// keeps the version before it, per tab, so Ctrl+Z / Ctrl+Y walk back and forth. Kept for this visit only.
-const UNDO_DEPTH = 80;
-const undoStacks = []; // parallel to state.tabs: { past: [], future: [] }
-function stackAt(i) {
-  while (undoStacks.length < state.tabs.length) undoStacks.push({ past: [], future: [] });
-  return undoStacks[i];
-}
-function remember(i, prev) {
-  if (!prev) return;
-  const s = stackAt(i);
-  s.past.push(prev);
-  if (s.past.length > UNDO_DEPTH) s.past.shift();
-  s.future = [];
-}
-/** Replace the active tab's character, remembering the old one. */
-function putActive(c) {
-  if (state.tabs[state.active] && state.tabs[state.active] !== c) remember(state.active, state.tabs[state.active]);
-  state.current = c; state.tabs[state.active] = c;
-}
-export function canUndo() { return !!stackAt(state.active)?.past.length; }
-export function canRedo() { return !!stackAt(state.active)?.future.length; }
-export function undo() {
-  const s = stackAt(state.active);
-  if (!s?.past.length) { toast('Nothing to undo'); return; }
-  s.future.push(state.tabs[state.active]);
-  const prev = s.past.pop();
-  state.tabs[state.active] = prev; state.current = prev; state.editing = state.editing && true;
-  saveTabs(); renderCurrent(); emit('current');
-}
-export function redo() {
-  const s = stackAt(state.active);
-  if (!s?.future.length) { toast('Nothing to redo'); return; }
-  s.past.push(state.tabs[state.active]);
-  const next = s.future.pop();
-  state.tabs[state.active] = next; state.current = next;
-  saveTabs(); renderCurrent(); emit('current');
-}
-
-/**
- * Change a character that is open in a tab (or else on the roster) from outside the Forge: a GM's hit
- * or hero point arriving over the lobby. fn gets a copy to change. Returns the changed copy, or null.
- */
-export function updateOpen(rosterId, fn) {
-  const i = state.tabs.findIndex((t) => t.rosterId === rosterId);
-  if (i >= 0) {
-    const c = JSON.parse(JSON.stringify(state.tabs[i]));
-    fn(c);
-    if (i === state.active) putActive(c); else { remember(i, state.tabs[i]); state.tabs[i] = c; }
-    saveTabs(); renderCurrent(); emit('current');
-    return c;
-  }
-  const r = state.roster.find((x) => x.rosterId === rosterId);
-  if (!r) return null;
-  const c = JSON.parse(JSON.stringify(r));
-  fn(c);
-  return upsert(c);
-}
-
-/**
- * Show a character. By default it replaces the active tab; newTab opens it in a new tab
- * (or switches to the tab already showing that saved character).
- */
-export function setCurrent(ch, { fresh: isFresh = false, editing = false, newTab = false } = {}) {
-  if (newTab || !state.tabs.length) {
-    const existing = ch.rosterId ? state.tabs.findIndex((t) => t.rosterId === ch.rosterId) : -1;
-    if (existing >= 0) {
-      if (state.tabs[existing] !== ch) remember(existing, state.tabs[existing]);
-      state.tabs[existing] = ch;
-      state.active = existing;
-    } else {
-      stackAt(state.tabs.length - 1);
-      if (state.tabs.length >= MAX_TABS) { state.tabs.shift(); undoStacks.shift(); }
-      state.tabs.push(ch);
-      undoStacks[state.tabs.length - 1] = { past: [], future: [] };
-      state.active = state.tabs.length - 1;
-    }
-  } else {
-    putActive(ch);
-  }
-  state.current = ch;
-  state.editing = editing;
-  fresh = isFresh;
-  saveTabs();
-  renderCurrent();
-  emit('current');
-}
-
-function switchTab(i) {
-  if (!state.tabs[i]) return;
-  state.active = i;
-  state.current = state.tabs[i];
-  state.editing = false;
-  saveTabs();
-  renderCurrent();
-  emit('current');
-}
-
-function closeTab(i) {
-  state.tabs.splice(i, 1);
-  undoStacks.splice(i, 1);
-  if (!state.tabs.length) { state.active = 0; state.current = null; state.editing = false; saveTabs(); renderCurrent(); emit('current'); return; }
-  if (i < state.active || state.active >= state.tabs.length) state.active -= 1;
-  state.active = Math.max(0, Math.min(state.active, state.tabs.length - 1));
-  state.current = state.tabs[state.active];
-  state.editing = false;
-  saveTabs();
-  renderCurrent();
-  emit('current');
-}
-
-function tabStrip() {
-  return h('div', { class: 'char-tabs', role: 'tablist', 'aria-label': 'Open characters' },
-    state.tabs.map((c, i) => h('div', { class: `char-tab ${i === state.active ? 'active' : ''}`, role: 'presentation', style: { '--c': c.theme?.color || '#888888' } },
-      h('button', { type: 'button', role: 'tab', 'aria-selected': String(i === state.active), class: 'char-tab-btn', title: `${c.identity?.codename || 'Unnamed'} · PL ${c.pl}`, onClick: () => switchTab(i) },
-        h('span', { class: 'swatch' }), h('span', { class: 'char-tab-name' }, c.identity?.codename || 'Unnamed'), h('span', { class: 'char-tab-pl num' }, c.pl)),
-      h('button', { type: 'button', class: 'x', 'aria-label': `Close ${c.identity?.codename || 'tab'}`, onClick: (e) => { e.stopPropagation(); closeTab(i); } }, '✕'))),
-    h('button', { type: 'button', class: 'char-tab-new', title: 'Roll a new character in a new tab', 'aria-label': 'New tab', onClick: () => roll(undefined, { newTab: true }) }, '+'));
 }
 
 function pushHistory(ch) {
@@ -262,8 +84,10 @@ function renderHistory() {
 function build() {
   clear(root);
   const p = state.prefs;
-  const archetypes = R.raw.archetypes.filter((a) => !a.hidden);
+  // Homebrew archetypes are hidden from random rolls but listed here (engine/homebrew.js).
+  const archetypes = R.raw.archetypes.filter((a) => !a.hidden || a.homebrew);
   const themes = R.raw.themes.slice().sort((a, b) => a.name.localeCompare(b.name));
+  const mark = (x) => (x.homebrew ? `${x.name} ✦` : x.name);
 
   const plOut = h('span', { class: 'pl-readout num' }, p.plRandom ? 'Any' : p.pl);
   const plRange = h('input', { type: 'range', min: 1, max: 20, value: p.pl, id: 'pl', 'aria-label': 'Power level', disabled: p.plRandom,
@@ -307,23 +131,31 @@ function build() {
         h('label', { style: { marginLeft: 'auto', display: 'flex', gap: '6px', alignItems: 'center', fontSize: '13px' } }, plAny, 'Surprise me')),
       plRange,
       h('div', { class: 'range-row' }, h('span', null, '1 street'), h('span', null, '10 super'), h('span', null, '20 cosmic'))),
-    select('archetype', 'Archetype', p.archetype, [['', 'Any archetype'], ...archetypes.map((a) => [a.id, a.name])], (v) => { p.archetype = v; }),
-    select('theme', 'Power theme', p.theme, [['', 'Any theme'], ...themes.map((t) => [t.id, t.name])], (v) => { p.theme = v; }),
+    select('archetype', 'Archetype', p.archetype, [['', 'Any archetype'], ...archetypes.map((a) => [a.id, mark(a)])], (v) => { p.archetype = v; }),
+    select('theme', 'Power theme', p.theme, [['', 'Any theme'], ...themes.map((t) => [t.id, mark(t)])], (v) => { p.theme = v; }),
     h('div', { class: 'field' }, h('span', null, 'Side'), h('div', { class: 'seg', role: 'group', 'aria-label': 'Hero or villain' }, segBtns)),
-    select('gender', 'Gender', p.gender, [['random', 'Any'], ['Female', 'Female'], ['Male', 'Male'], ['Nonbinary', 'Nonbinary']], (v) => { p.gender = v; }),
-    h('div', { class: 'field' },
-      h('span', null, 'Randomness ', chaosLabel),
-      h('input', { type: 'range', min: 0, max: 100, value: Math.round(p.chaos * 100), id: 'chaos', 'aria-label': 'Randomness',
-        onInput: (e) => { p.chaos = Number(e.target.value) / 100; chaosLabel.textContent = chaosWord(p.chaos); savePrefs(); } }),
-      h('div', { class: 'range-row' }, h('span', null, 'By the book'), h('span', null, 'Wild'))),
-    h('div', { class: 'field' }, h('span', null, 'Seed'),
-      h('div', { class: 'seed-row' }, seedIn,
-        h('button', { class: 'btn', type: 'button', title: 'Fill in a random seed', 'aria-label': 'Random seed', onClick: () => { seedIn.value = randomSeed(); } }, '🎲'))),
+    // The rest of the roll options are folded away: most rolls only need the ones above.
+    (() => {
+      const more = h('details', { class: 'rail-more', id: 'rail-more', open: !!p.railMore },
+        h('summary', null, 'More roll options', h('small', null, ' gender, randomness, seed')),
+        select('gender', 'Gender', p.gender, [['random', 'Any'], ['Female', 'Female'], ['Male', 'Male'], ['Nonbinary', 'Nonbinary']], (v) => { p.gender = v; }),
+        h('div', { class: 'field' },
+          h('span', null, 'Randomness ', chaosLabel),
+          h('input', { type: 'range', min: 0, max: 100, value: Math.round(p.chaos * 100), id: 'chaos', 'aria-label': 'Randomness',
+            onInput: (e) => { p.chaos = Number(e.target.value) / 100; chaosLabel.textContent = chaosWord(p.chaos); savePrefs(); } }),
+          h('div', { class: 'range-row' }, h('span', null, 'By the book'), h('span', null, 'Wild'))),
+        h('div', { class: 'field' }, h('span', null, 'Seed (the same seed rolls the same character)'),
+          h('div', { class: 'seed-row' }, seedIn,
+            h('button', { class: 'btn', type: 'button', title: 'Fill in a random seed', 'aria-label': 'Random seed', onClick: () => { seedIn.value = randomSeed(); } }, '🎲'))));
+      more.addEventListener('toggle', () => { p.railMore = more.open; savePrefs(); });
+      return more;
+    })(),
     h('button', { class: 'btn primary big', type: 'button', id: 'roll', onClick: () => roll(seedIn.value.trim() || undefined) }, 'Roll a character'),
     h('div', { class: 'btn-row' },
       h('button', { class: 'btn', type: 'button', onClick: surprise }, 'Surprise me'),
       h('button', { class: 'btn', type: 'button', onClick: rollTeam }, 'Roll a team'),
       h('button', { class: 'btn', type: 'button', id: 'build-scratch', onClick: buildFromScratch }, 'Build from scratch')),
+    h('div', { class: 'rail-divider', role: 'separator' }),
     (() => {
       const keyIn = h('input', { type: 'text', id: 'open-key', placeholder: 'Paste a key or link: character, roster, world, front page, handout', 'aria-label': 'Character key, share code or world key', autocomplete: 'off' });
       const go = async () => {
@@ -342,10 +174,10 @@ function build() {
         } catch (e) { toast(e.message); }
       };
       keyIn.addEventListener('keydown', (e) => { if (e.key === 'Enter') go(); });
-      return h('div', { class: 'field' }, h('span', null, '🔑 Open a key'), h('div', { class: 'seed-row' }, keyIn, h('button', { class: 'btn', type: 'button', onClick: go }, 'Open')));
+      return h('div', { class: 'field' }, h('span', null, 'Open what someone sent you'), h('div', { class: 'seed-row' }, keyIn, h('button', { class: 'btn', type: 'button', onClick: go }, 'Open')),
+        h('button', { class: 'linkish import-link', type: 'button', id: 'forge-import', title: 'Open a character your GM or another player sent you', onClick: () => importDialog() }, '⇪ or import a file (.xlsx, .json)'));
     })(),
-    h('button', { class: 'btn import-btn', type: 'button', id: 'forge-import', title: 'Open a character your GM or another player sent you', onClick: () => importDialog() }, '⇪ Import a character (.xlsx, .json, share code)'),
-    h('p', { class: 'hint' }, 'Press R to roll. Every rolled character is legal for its power level and spends exactly 15 points per PL. Build from scratch starts a blank sheet you fill in yourself.'),
+    h('p', { class: 'hint' }, 'Press R to roll. Every roll is legal for its power level and spends exactly 15 points per PL.'),
     h('div', { class: 'field' }, h('span', null, 'Recent rolls'), historyEl));
 
   fileHost = h('div', { class: 'file-host', style: { minWidth: 0 } });
@@ -472,12 +304,18 @@ export function renderCurrent() {
 
 /** Nothing open: characters are only rolled when you ask for one. */
 function drawEmpty() {
-  fileHost.append(h('div', { class: 'empty forge-empty' },
+  const card = (glyph, title, text, run, { primary = false, id = null } = {}) => h('button', { type: 'button', class: `start-card ${primary ? 'primary' : ''}`, id, onClick: run },
+    h('span', { class: 'start-glyph', 'aria-hidden': 'true' }, glyph), h('b', null, title), h('small', null, text));
+  fileHost.append(h('div', { class: 'forge-empty start-here' },
     h('h2', null, 'No character open'),
-    h('p', null, 'Roll one with the options on the left, build one from scratch, or open someone from your roster.'),
-    h('div', { class: 'btn-row', style: { justifyContent: 'center', marginTop: '12px' } },
-      h('button', { class: 'btn primary', type: 'button', onClick: () => roll() }, 'Roll a character'),
-      h('button', { class: 'btn', type: 'button', onClick: buildFromScratch }, 'Build from scratch'))));
+    h('p', { class: 'hint' }, 'What would you like to do?'),
+    h('div', { class: 'start-cards' },
+      card('🎲', 'Roll a character', 'A complete, legal hero in one click. Pick a power level or theme on the left first if you like.', () => roll(), { primary: true }),
+      card('✎', 'Build from scratch', 'A blank sheet you fill in yourself, with the costs and limits checked as you go.', buildFromScratch, { id: 'start-scratch' }),
+      card('📂', 'Open one of yours', state.roster.length ? `Your roster has ${state.roster.length} character${state.roster.length === 1 ? '' : 's'}.` : 'Characters you save show up on the Roster.', () => api.goTab?.('roster')),
+      card('⚔', 'Run a fight', 'Put anyone against anyone in the Battle Room and watch it play out.', () => api.goTab?.('battle')),
+      card('📱', 'Join a table', 'Your GM sent a link or a QR code? Join from here.', () => api.goTab?.('table')),
+      card('🗓', 'Run a campaign (GM)', 'Plan sessions, run the GM Screen, keep the World.', () => api.goTab?.('screen')))));
 }
 
 // ---- saving to a world -------------------------------------------------------------------------------
@@ -569,131 +407,6 @@ function formStrip(ch) {
     ch.forms.length < MAX_FORMS ? h('button', { type: 'button', class: 'form-add', onClick: add, title: `Add a form (up to ${MAX_FORMS})` }, '+ Form') : null);
 }
 
-// ---- companions: sidekicks, minions, pets, each with a full sheet ------------------------------------------
-const openCompanion = new Set(); // ids of companions whose sheets are unfolded
-const editingCompanion = new Set();
-
-function companionsSection(ch) {
-  const list = companionsOf(ch);
-  const setAt = (i, c) => { const o = JSON.parse(JSON.stringify(state.current)); o.companions[i] = c; commit(o); };
-  const cards = list.map((comp, i) => {
-    const kind = COMPANION_KINDS[comp.companionKind] || COMPANION_KINDS.companion;
-    const b = companionBudget(ch, comp, R);
-    const open = openCompanion.has(comp.id);
-    const editing = editingCompanion.has(comp.id);
-    const head = h('div', { class: 'comp-head' },
-      h('span', { class: 'swatch', style: { '--c': comp.theme?.color || '#5b6b4a' } }),
-      h('b', { class: 'comp-name' }, comp.identity?.codename || 'Companion'),
-      h('span', { class: 'chip' }, kind.label),
-      h('span', { class: 'chip num' }, `PL ${comp.pl}`),
-      h('span', { class: `status ${b.ok ? 'ok' : 'warn'}`, title: b.message }, b.budget != null ? `${b.cost}/${b.budget} pp` : b.ok ? `${b.cost ?? '?'} pp` : 'Needs the advantage'),
-      h('span', { class: 'spacer' }),
-      h('button', { class: 'btn sm', type: 'button', 'aria-expanded': String(open), onClick: () => { if (open) openCompanion.delete(comp.id); else openCompanion.add(comp.id); renderCurrent(); } }, open ? 'Hide sheet' : 'Show sheet'),
-      open ? h('button', { class: 'btn sm', type: 'button', 'aria-pressed': String(editing), onClick: () => { if (editing) editingCompanion.delete(comp.id); else editingCompanion.add(comp.id); renderCurrent(); } }, editing ? 'Done editing' : 'Edit') : null,
-      h('button', { class: 'btn sm', type: 'button', title: 'Open as its own tab (Power Lab, Bio, exports), then save it back', onClick: () => setCurrent({ ...JSON.parse(JSON.stringify(comp)), companionOf: { ownerId: ch.id, ownerName: ch.identity?.codename || 'their hero', index: i } }, { newTab: true }) }, 'Open in a tab'),
-      h('button', { class: 'btn sm', type: 'button', title: 'Add to the Battle Room', onClick: () => api.throwIn?.(comp) }, '⚔'),
-      h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${comp.identity?.codename}`, onClick: async () => {
-        const ok = await openDialog({ title: `Remove ${comp.identity?.codename}?`, body: h('p', { style: { margin: 0 } }, 'Their sheet goes with them. Save them to the roster first if you want to keep a copy.'), buttons: [{ label: 'Keep', value: false }, { label: 'Remove', value: true, danger: true }] });
-        if (ok) { const o = JSON.parse(JSON.stringify(state.current)); o.companions.splice(i, 1); if (!o.companions.length) delete o.companions; commit(o); }
-      } }, '✕'));
-    const body = open ? renderFile(comp, R, { editing, onChange: (c) => setAt(i, c), noPortrait: false }).el : null;
-    return h('div', { class: 'comp-card' }, head, !b.ok || b.budget != null ? h('p', { class: `hint comp-budget ${b.ok ? '' : 'bad'}` }, b.message) : null, body ? h('div', { class: 'comp-sheet' }, body) : null);
-  });
-  return h('section', { class: 'companions no-print-empty', id: 'companions' },
-    h('div', { class: 'comp-title' }, h('h3', null, 'Companions'), h('span', { class: 'hint' }, 'Sidekicks, minions, animals and other followers, each with a full sheet.'),
-      h('span', { class: 'spacer' }), h('button', { class: 'btn sm', type: 'button', id: 'add-companion', onClick: () => addCompanionDialog(ch) }, '+ Companion')),
-    cards);
-}
-
-async function addCompanionDialog(owner) {
-  const kindSel = h('select', { id: 'comp-kind' }, Object.entries(COMPANION_KINDS).map(([k, v]) => h('option', { value: k }, v.label)));
-  const kindHint = h('p', { class: 'hint', style: { margin: '2px 0 0' } }, COMPANION_KINDS.sidekick.blurb);
-  const rankIn = h('input', { type: 'number', min: 1, max: 40, value: 4, id: 'comp-rank' });
-  const rankRow = h('label', { class: 'field' }, h('span', null, 'Advantage rank (adds it to the hero if they lack it)'), rankIn);
-  const nameIn = h('input', { type: 'text', id: 'comp-name', placeholder: 'Name, e.g. Kid Flash, Ace the Bat-Hound' });
-  const srcSel = h('select', { id: 'comp-source' },
-    h('option', { value: 'roll' }, 'Roll a new character'),
-    h('option', { value: 'blank' }, 'Blank sheet (build it yourself)'),
-    h('option', { value: 'bestiary' }, 'An animal or creature from the Bestiary'),
-    state.roster.length ? h('option', { value: 'roster' }, 'Someone from your roster (a copy)') : null);
-  const plIn = h('input', { type: 'number', min: 0, max: 20, value: suggestedPl(owner, 'sidekick', 4), id: 'comp-pl' });
-  const creatures = Object.values(R.raw.catalog || {}).flat().sort((a, b) => a.name.localeCompare(b.name));
-  const find = h('input', { type: 'search', placeholder: 'Search: wolf, hawk, dragon, robot…', id: 'comp-find' });
-  const creatureSel = h('select', { id: 'comp-creature', size: 6 }, creatures.map((e) => h('option', { value: e.id }, `${e.name} · PL ${e.pl}${e.category ? ` · ${e.category}` : ''}`)));
-  find.addEventListener('input', () => { const q = find.value.toLowerCase(); for (const o of creatureSel.options) o.hidden = q && !o.textContent.toLowerCase().includes(q); });
-  const rosterSel = h('select', { id: 'comp-roster' }, state.roster.filter((c) => c.rosterId !== owner.rosterId).map((c) => h('option', { value: c.rosterId }, `${c.identity?.codename || 'Unnamed'} · PL ${c.pl}`)));
-  const plRow = h('label', { class: 'field' }, h('span', null, 'Power level'), plIn);
-  const creatureRow = h('div', { class: 'field', hidden: true }, h('span', null, 'Creature'), find, creatureSel);
-  const rosterRow = h('label', { class: 'field', hidden: true }, h('span', null, 'From the roster'), rosterSel);
-  const sync = () => {
-    const k = kindSel.value;
-    kindHint.textContent = COMPANION_KINDS[k].blurb;
-    rankRow.hidden = !COMPANION_KINDS[k].advantage;
-    plIn.value = suggestedPl(owner, k, Number(rankIn.value) || 1);
-    plRow.hidden = !['roll', 'blank'].includes(srcSel.value);
-    creatureRow.hidden = srcSel.value !== 'bestiary';
-    rosterRow.hidden = srcSel.value !== 'roster';
-  };
-  kindSel.addEventListener('change', sync); srcSel.addEventListener('change', sync); rankIn.addEventListener('input', sync);
-  const ok = await openDialog({
-    title: `A companion for ${owner.identity?.codename || 'this character'}`,
-    body: [h('label', { class: 'field' }, h('span', null, 'Kind'), kindSel), kindHint, rankRow,
-      h('label', { class: 'field' }, h('span', null, 'Start from'), srcSel), plRow, creatureRow, rosterRow,
-      h('label', { class: 'field' }, h('span', null, 'Name (optional)'), nameIn)],
-    buttons: [{ label: 'Cancel', value: false }, { label: 'Add companion', value: true, primary: true }],
-  });
-  if (!ok) return;
-  const kind = kindSel.value;
-  const pl = Math.max(0, Math.min(20, Number(plIn.value) || 1));
-  let base;
-  try {
-    if (srcSel.value === 'roll') base = generateCharacter(R, { seed: randomSeed(), pl, alignment: owner.alignment || 'hero', chaos: state.prefs.chaos });
-    else if (srcSel.value === 'bestiary') { const e = creatures.find((x) => x.id === creatureSel.value) || creatures[0]; base = catalogToCharacter(e); }
-    else if (srcSel.value === 'roster') base = state.roster.find((c) => c.rosterId === rosterSel.value);
-    else base = blankCompanion(pl, nameIn.value.trim());
-  } catch (e) { toast(e.message); return; }
-  if (!base) { toast('Pick someone first.'); return; }
-  const comp = asCompanion(base, kind);
-  if (nameIn.value.trim()) comp.identity = { ...comp.identity, codename: nameIn.value.trim() };
-  const o = JSON.parse(JSON.stringify(state.current));
-  o.companions = [...companionsOf(o), comp];
-  const adv = COMPANION_KINDS[kind].advantage;
-  if (adv) {
-    const rank = Math.max(1, Number(rankIn.value) || 1);
-    const name = comp.identity?.codename;
-    const have = (o.advantages || []).find((a) => a.name === adv && String(a.param || '').toLowerCase() === String(name || '').toLowerCase());
-    if (have) have.rank = Math.max(have.rank || 1, rank); else o.advantages = [...(o.advantages || []), { name: adv, rank, param: name }];
-  }
-  openCompanion.add(comp.id);
-  commit(o);
-  setTimeout(() => document.getElementById('companions')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
-  toast(`${comp.identity?.codename || 'Companion'} joins ${owner.identity?.codename || 'the character'}${adv ? ` (${adv} ${Math.max(1, Number(rankIn.value) || 1)} added to the sheet)` : ''}`);
-}
-
-/** A companion opened in its own tab: send the changes back to its hero. */
-function companionBanner(ch) {
-  if (!ch.companionOf) return null;
-  const back = () => {
-    const { ownerId, index } = ch.companionOf;
-    const copy = JSON.parse(JSON.stringify(ch)); delete copy.companionOf;
-    const ti = state.tabs.findIndex((t) => t.id === ownerId);
-    if (ti >= 0) {
-      const o = JSON.parse(JSON.stringify(state.tabs[ti]));
-      o.companions = companionsOf(o); o.companions[index] = copy;
-      state.tabs[ti] = o; state.active = ti; state.current = o; saveTabs(); renderCurrent(); emit('current');
-      toast(`Saved into ${o.identity?.codename}. Save them to the roster to keep it.`);
-      return;
-    }
-    const r = state.roster.find((x) => x.id === ownerId);
-    if (r) { const o = JSON.parse(JSON.stringify(r)); o.companions = companionsOf(o); o.companions[index] = copy; upsert(o); toast(`Saved into ${o.identity?.codename} on your roster.`); return; }
-    toast(`Open ${ch.companionOf.ownerName} first, then save back.`);
-  };
-  return h('div', { class: 'comp-banner no-print' },
-    h('span', null, `🐾 ${ch.identity?.codename || 'This companion'} belongs to ${ch.companionOf.ownerName}. Changes here stay in this tab until you save them back.`),
-    h('button', { class: 'btn sm primary', type: 'button', onClick: back }, `Save back to ${ch.companionOf.ownerName}`));
-}
-
-/** Print every form and companion, each a full sheet on its own pages. */
 function printDossier(ch) {
   document.getElementById('print-dossier')?.remove();
   const host = h('div', { id: 'print-dossier' });
@@ -933,3 +646,22 @@ async function share(ch) {
 }
 
 export { inkFor };
+
+/** Rebuild the roll options after homebrew packs change (new archetypes and themes in the lists). */
+export function refreshForgeLists() {
+  const p = state.prefs;
+  if (p.archetype && !R.raw.archetypes.some((a) => a.id === p.archetype)) p.archetype = '';
+  if (p.theme && !R.raw.themes.some((t) => t.id === p.theme)) p.theme = '';
+  build();
+  renderCurrent();
+}
+// app.js opens characters, restores tabs and undoes through the Forge.
+export { setCurrent, restoreTabs, undo, redo, updateOpen };
+
+// The pieces in other files reach this module through F.
+Object.defineProperties(F, {
+  R: { get: () => R, set: (v) => { R = v; } },
+  api: { get: () => api, set: (v) => { api = v; } },
+  fresh: { get: () => fresh, set: (v) => { fresh = v; } },
+});
+Object.assign(F, { commit: (...a) => commit(...a), renderCurrent: (...a) => renderCurrent(...a), roll: (...a) => roll(...a) });

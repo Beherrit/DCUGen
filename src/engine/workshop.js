@@ -5,10 +5,9 @@ import { makeRng, randomSeed } from './rng.js';
 import { ABILITIES, EP_PER_EQUIPMENT_RANK } from './rules.js';
 import { powerCost, deviceCost, costBreakdown, primaryOwnCost, alternateOwnCost } from './costs.js';
 import { checkLimits } from './limits.js';
-import { generateCharacter, instantiate, templateKind, templateRolls, parseItem, repairCharacter, utilityBeltCost } from './generator.js';
+import { generateCharacter, instantiate, templateRolls, parseItem, repairCharacter, utilityBeltCost } from './generator.js';
 import { catalogToCharacter } from './catalog.js';
 import { rollSpec } from './expr.js';
-const clone = (x) => JSON.parse(JSON.stringify(x));
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
 
@@ -314,7 +313,7 @@ export function creatureVariant(R, entry, templateId = 'none', { seed = randomSe
   for (const s of t.skills || []) ch.skills.push({ ...s });
   for (const a of t.advantages || []) if (!ch.advantages.some((x) => x.name === a) && R.advantage(a)) ch.advantages.push({ name: a, rank: 1 });
   if (t.themePower) {
-    const theme = rng.pick(R.raw.themes.filter((x) => !['martial', 'arsenal', 'tech'].includes(x.id)));
+    const theme = rng.pick(R.raw.themes.filter((x) => !x.homebrew && !['martial', 'arsenal', 'tech'].includes(x.id)));
     const tpl = rng.weighted((theme.powers || []).filter((x) => x.role === 'attack' && !x.strengthBased));
     if (tpl) {
       const p = instantiate(tpl, templateRolls(tpl, R) ? ch.pl : ch.pl, theme, rng);

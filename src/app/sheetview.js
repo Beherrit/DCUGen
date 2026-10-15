@@ -1,9 +1,10 @@
 // The character "case file": read view and edit view.
 
 import { h, clear, append } from './dom.js';
+import { ruleLink } from './rules.js';
 import { guideFor, skillGuideBody } from './skillguide.js';
 import { advancementSection, pointsBar } from './advancement.js';
-import { rangeInfo, rangeBands, fmtFt, strengthReach, AREA_BASE } from '../engine/range.js';
+import { rangeInfo, rangeBands, fmtFt, strengthReach } from '../engine/range.js';
 import { openRangeCalculator } from './rangecalc.js';
 import { inkFor } from './dom.js';
 import { sheet as makeSheet, describeEffect, explainPower } from '../engine/render.js';
@@ -249,6 +250,7 @@ export function renderFile(ch, R, opts = {}) {
     return h('div', { class: 'power' },
       h('div', { class: 'power-top' },
         h('span', { class: 'power-name' }, p.name),
+        p.effect ? ruleLink(p.effect === p.name ? 'ⓘ' : p.effect, p.effect, 'Effects') : null,
         alts.length ? h('span', { class: 'chip', title: p.dynamic ? 'Dynamic: split the pool between several effects at once' : 'Alternate Effects: one effect at a time' }, p.dynamic ? `Dynamic Array · ${primaryOwnCost(p, R)}-pp pool` : 'Array') : null,
         p.linked?.length ? h('span', { class: 'chip', title: 'Linked effects work together, with one action' }, '🔗 Linked') : null,
         p.pool ? h('span', { class: 'chip', title: 'Not always on: place its points during play' }, `⚡ Pool · ${fmtPoints(poolSpent(ch, p, R))}/${fmtPoints(poolAvailable(ch, p, R))} pp`) : null,
@@ -274,6 +276,7 @@ export function renderFile(ch, R, opts = {}) {
   };
   const powers = h('section', { class: 'sec' },
     h('h3', null, 'Powers', h('span', { class: 'pts' }, `${s.cost.powers} pp`)),
+    h('div', { class: 'read-legend no-print', 'aria-hidden': 'true' }, h('span', { class: 'lg-name' }, 'Name'), h('span', { class: 'lg-mech' }, 'How it works'), h('span', { class: 'lg-desc' }, 'What it does')),
     (ch.powers || []).map((p, i) => powerCard(p, { device: null, index: i })),
     (ch.devices || []).map((dev, di) => {
       const dc = s.devices[di];
@@ -300,7 +303,7 @@ export function renderFile(ch, R, opts = {}) {
       const longParam = !!a.param && a.param.length > 28;
       return h('div', { class: 'adv-row' },
         h('div', { class: 'adv-head' },
-          h('b', null, a.name), a.param && !longParam ? h('span', { class: 'adv-param' }, ` (${a.param})`) : null,
+          h('b', null, ruleLink(a.name, a.name, 'Advantages')), a.param && !longParam ? h('span', { class: 'adv-param' }, ` (${a.param})`) : null,
           (a.rank || 1) > 1 || def?.ranked ? h('span', { class: 'adv-rank num' }, `${a.rank || 1}${max ? ` / ${max}` : ''}`) : null,
           h('span', { class: 'adv-type' }, def ? `${def.type}${def.book ? ` · ${def.book}` : ''}` : ''),
           editing && def?.ranked ? stepper(a.rank || 1, (d) => change((c) => { const x = c.advantages[i]; x.rank = (x.rank || 1) + d; if (x.rank <= 0) c.advantages.splice(i, 1); }), { min: 0, label: a.name }) : null,

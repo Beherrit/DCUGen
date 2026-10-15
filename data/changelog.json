@@ -1,0 +1,87 @@
+[
+  {
+    "id": "2026-10-17",
+    "date": "2026-10-17",
+    "title": "A Battle Room that plays by the book, and easier reading",
+    "items": [
+      "Easier reading everywhere: bigger text, colour-coded powers and advantages, an easy-read font, stronger contrast.",
+      "Battle Room: one Fight! button, A/B buttons on every fighter, a turn-by-turn log beside the fight, sorting by name or PL.",
+      "Fights follow the Hero's Handbook more closely: critical hits, minions, hero point re-rolls, concealment, Charge, Aim, Recover, Defend and minion team attacks.",
+      "Immunities work by descriptor (immune to physical damage stops fists and weapons), and fighters don't waste turns on attacks that can't hurt.",
+      "Characters with alternate forms pick their form in the Battle Room.",
+      "Power modifiers the Hero's Handbook lists were added for 24 effects.",
+      "An empty Forge shows where to start, the tabs are grouped, and players can hide the GM sections.",
+      "A Power Profiles pack ships with DCUGen (Workshop > Homebrew): ten themes such as Power Armor, Luck, Kinetic, Illusion and Teleportation."
+    ]
+  },
+  {
+    "id": "2026-10-16b",
+    "date": "2026-10-16",
+    "title": "Homebrew packs, search everything, and rules at a tap",
+    "items": [
+      "Homebrew (Workshop): your own power themes, archetypes and Bestiary creatures, in packs you switch on and off and share as a file or a code.",
+      "Ctrl+K (or 🔍) searches everything: sections, characters, World pages, rules, creatures, and the things you do most.",
+      "Tap an advantage or a power's effect on a sheet, or a condition, to read the rule.",
+      "If something breaks, DCUGen says so, keeps your data safe, and lets you send the details.",
+      "Starts faster on phones.",
+      "The Battle Room's \"Save this fight to the campaign\" says what it does."
+    ]
+  },
+  {
+    "id": "2026-10-16",
+    "date": "2026-10-16",
+    "title": "Live turns, a session planner, and tables that connect",
+    "items": [
+      "Whose turn it is shows on every player's phone, with a nudge on your own turn and what your conditions let you do.",
+      "Next turn on the GM Screen applies the end-of-turn rules: recovery checks against Afflictions, Dazed wearing off, weakened traits coming back. Delay lets someone wait.",
+      "Players can see how their teammates stand (the Party, on the turn bar).",
+      "World > Sessions plans game night: a date with a calendar file, scenes linked to the World, notes, the Session in a Box plan and plot threads. Starting a session sends \"Previously on…\" to the table.",
+      "Table joins that fail say why and what to try; Test my connection; relay (TURN) servers for strict networks; phones that drop get back in by themselves.",
+      "A short tour for players and GMs, this What's new, and the version in the ? menu."
+    ]
+  },
+  {
+    "id": "2026-10-15",
+    "date": "2026-10-15",
+    "title": "Safer sync and table trust, a reworked World",
+    "items": [
+      "Cloud-folder sync merges changes from two devices instead of overwriting one with the other.",
+      "At the Table, the GM's copy is the authority: players can only change characters they've claimed.",
+      "The World page was reworked, and two worlds merge cleanly.",
+      "Storage and desktop app fixes."
+    ]
+  },
+  {
+    "id": "2026-10-12b",
+    "date": "2026-10-12",
+    "title": "Phone app, share links and Battle map 2.0",
+    "items": [
+      "Install DCUGen to a phone's home screen; it opens full screen and works offline.",
+      "Share a whole roster, world or folder as one link.",
+      "Battle map 2.0: build a city, weather, grounds and a 3D view.",
+      "Session in a Box, phone tables, the rogues' gallery and fight comics."
+    ]
+  },
+  {
+    "id": "2026-10-12a",
+    "date": "2026-10-12",
+    "title": "GM Screen, undo and history, alternate forms",
+    "items": [
+      "GM Screen with a balance check, adapting villains, spotlight and recaps.",
+      "Points from the GM, saved points and goals on the sheet; a range calculator.",
+      "Undo and history, cloud-folder sync, the Play view, full exports and house rules.",
+      "Drain that follows the rules, alternate forms, and companions with full sheets.",
+      "Power Lab: descriptions, Linked effects and Dynamic arrays."
+    ]
+  },
+  {
+    "id": "2026-10-07",
+    "date": "2026-10-07",
+    "title": "Worlds, handouts and the Newsstand",
+    "items": [
+      "Worlds and the Multiverse Hub; the open character survives a reload.",
+      "Handouts and the evidence board.",
+      "Newsstand: front pages of the campaign's newspapers."
+    ]
+  }
+]

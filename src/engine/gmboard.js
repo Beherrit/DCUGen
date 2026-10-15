@@ -128,6 +128,9 @@ export function resolveHit(ch, hit, R, roll = () => 1 + Math.floor(Math.random()
         if (c === 'Incapacitated') play.damage = 'incapacitated';
         else if (!play.conditions.includes(c)) play.conditions.push(c);
       }
+      // Kept so the end of each turn can roll to shake it off (engine/turns.js).
+      const tierSet = tiers.slice(0, 3);
+      play.afflictions = [...(play.afflictions || []), { id: `a${Date.now().toString(36)}${Math.floor(Math.random() * 1e4)}`, label: hit.label || `Affliction ${hit.rank}`, resist: hit.resist, dc, degree: Math.min(deg, tiers.length), tiers: tierSet, conditions: add, wasOut: s.damage === 'incapacitated' }];
       result = `${deg} degree${deg > 1 ? 's' : ''} of failure: ${add.join(' and ').toLowerCase()}`;
     }
   } else if (hit.effect === 'Weaken') {

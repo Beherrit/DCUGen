@@ -9,7 +9,7 @@
 
 import { makeRng, randomSeed } from './rng.js';
 import { ABILITIES, BUYABLE_DEFENSES, PP_PER_PL, EP_PER_EQUIPMENT_RANK } from './rules.js';
-import { costBreakdown, powerCost, alternateOwnCost, primaryOwnCost, effectCost, equipmentPoints } from './costs.js';
+import { costBreakdown, powerCost, alternateOwnCost, primaryOwnCost, equipmentPoints } from './costs.js';
 import { deriveAll, advantageRank, attackKind, allPowers } from './derive.js';
 import { checkLimits } from './limits.js';
 import { rollSpec, rangeOf, evalExpr } from './expr.js';
@@ -243,7 +243,7 @@ function tryStep(ch, R, budget, fn) {
 }
 
 function balance(ch, R, ctx) {
-  const { rng, arch, themes, budget } = ctx;
+  const { rng, arch, budget } = ctx;
   const skillWeights = Object.entries(arch.skills || {}).map(([name, weight]) => ({ name, weight }));
   const advWeights = advantagePool(ctx);
 
@@ -897,6 +897,8 @@ export function generateCharacter(R, opts = {}) {
 
   const archetypes = R.raw.archetypes;
   const themesAll = R.raw.themes;
+  // Random picks use the book's themes only: homebrew ones come in when chosen (engine/homebrew.js).
+  const themesRandom = themesAll.filter((t) => !t.homebrew);
   let arch = archetypes.find((a) => a.id === opts.archetype);
   if (!arch) {
     const visible = archetypes.filter((a) => !a.hidden);
@@ -908,12 +910,12 @@ export function generateCharacter(R, opts = {}) {
   if (!theme) {
     const weights = Object.entries(arch.themes || {}).map(([id, weight]) => ({ id, weight }));
     const wild = pick.chance(0.1 * chaos);
-    const id = wild ? pick.pick(themesAll).id : pick.weighted(weights)?.id;
-    theme = themesAll.find((t) => t.id === id) || pick.pick(themesAll);
+    const id = wild ? pick.pick(themesRandom).id : pick.weighted(weights)?.id;
+    theme = themesAll.find((t) => t.id === id) || pick.pick(themesRandom);
   }
   const themes = [theme];
   if (!arch.powerless && pick.chance(0.08 + 0.35 * chaos)) {
-    const other = pick.pick(themesAll.filter((t) => t.id !== theme.id && t.id !== 'martial'));
+    const other = pick.pick(themesRandom.filter((t) => t.id !== theme.id && t.id !== 'martial'));
     if (other) themes.push(other);
   }
   const styles = R.raw.styles || [];

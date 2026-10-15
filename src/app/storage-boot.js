@@ -63,9 +63,7 @@
   proto.setItem = function setItem(k, v) {
     if (this !== real) return orig.set.call(this, k, v);
     k = String(k); v = String(v);
-    let mirrored = true;
     try { orig.set.call(real, k, v); } catch (e) {
-      mirrored = false;
       // Too big for localStorage: drop the stale copy there so it can't come back, keep it in IndexedDB.
       try { orig.remove.call(real, k); } catch { /* ignore */ }
       if (failed) throw e; // no IndexedDB either: behave like before (callers handle a full store)

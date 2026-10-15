@@ -11,7 +11,8 @@
 //   Nemeses      recurring villains: grudge, what they learned from defeats, and the scheme clock.
 //   Recap        end the session: a comic-book cover and a few lines for the group chat.
 
-import { h, clear, toast, copyText, openDialog, download } from './dom.js';
+import { h, clear, toast, openDialog } from './dom.js';
+import { sortChars, sortSelect, sortPref } from './sorting.js';
 import { state, upsert } from './store.js';
 import { lobby, onLobby, lobbySend } from './lobby.js';
 import { postRoll, feedEntries } from './table.js';
@@ -26,6 +27,7 @@ import { randomSeed } from '../engine/rng.js';
 import { mapPanel } from './battlemap.js';
 import { portraitOf } from '../engine/portrait.js';
 import { playState } from '../engine/play.js';
+import { endOfTurn, turnReminder, initView, advanceTurn, delayTurn, partyEntry } from '../engine/turns.js';
 
 const KEY = 'dcugen.gmscreen.v1';
 let R; let root; let hooks = {};
@@ -39,7 +41,34 @@ function load() {
 function save() { try { localStorage.setItem(KEY, JSON.stringify(gs)); } catch { /* full */ } }
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 
-export function initGmScreen(rules, el, h2 = {}) { R = rules; root = el; hooks = h2; onLobby(() => { if (root && !root.hidden) renderGmScreen(); }); }
+export function initGmScreen(rules, el, h2 = {}) {
+  R = rules; root = el; hooks = h2;
+  onLobby((event) => {
+    if (root && !root.hidden) renderGmScreen();
+    // Someone joined (or came back): bring them up to date with the turn order and the party.
+    if ((event === 'members' || event === 'status') && lobby.status === 'on' && lobby.role === 'host') { broadcastInit(); scheduleParty(); }
+  });
+}
+
+// ---- what the players see: the turn order and the party ---------------------------------------------------------
+
+/** Send the turn order to the table (names only), or that it ended. */
+function broadcastInit() {
+  if (lobby.status !== 'on' || lobby.role !== 'host') return;
+  lobbySend({ t: 'init', init: initView(gs.init) });
+}
+
+let partyTimer = null;
+/** Players see how their teammates stand (conditions and hero points; never the villains). */
+function scheduleParty() {
+  if (lobby.status !== 'on' || lobby.role !== 'host') return;
+  clearTimeout(partyTimer);
+  partyTimer = setTimeout(() => {
+    const list = boardPeople().filter((p) => !p.status.villain).map((p) => partyEntry(p.status, p.kind === 'live' ? p.player : null));
+    lobbySend({ t: 'party', list });
+  }, 400);
+}
+
 
 // ---- the people on the board ----------------------------------------------------------------------------------
 
@@ -74,6 +103,7 @@ function boardPeople() {
 export function receiveStatus(status, playerName) {
   if (!status?.rosterId) return;
   live.set(status.rosterId, { ...status, player: playerName || 'Player' });
+  scheduleParty();
   if (root && !root.hidden) renderGmScreen();
 }
 
@@ -86,6 +116,7 @@ function changeLocal(rosterId, fn) {
   fn(st);
   e.play = st;
   save();
+  scheduleParty();
 }
 
 function awardHeroPoint(person, why) {
@@ -135,6 +166,22 @@ function hitConsole(people) {
 
 // ---- initiative -----------------------------------------------------------------------------------------------
 
+/**
+ * The end of someone's turn: a player's own app rolls for their character (like a hit); the GM's characters
+ * are rolled here. Recovery checks, dazes wearing off, weakened traits coming back.
+ */
+function endTurnFor(entry, people) {
+  const p = people.find((x) => x.key === entry?.key);
+  if (!p) return;
+  if (p.kind === 'live') { lobbySend({ t: 'end-turn', rosterId: p.key }); return; }
+  const ch = localChar(p.entry);
+  if (!ch) return;
+  const r = endOfTurn(ch, R);
+  if (!r.changed) return;
+  changeLocal(p.key, (st) => { for (const k of Object.keys(st)) delete st[k]; Object.assign(st, r.play); });
+  postRoll({ who: p.status.name, text: r.text, dice: r.dice[r.dice.length - 1] ? { ...r.dice[r.dice.length - 1] } : undefined });
+}
+
 function initiativePanel(people) {
   const init = gs.init;
   const roll = () => {
@@ -142,16 +189,40 @@ function initiativePanel(people) {
     gs.init = { order, turn: 0, round: 1 };
     save();
     postRoll({ who: 'GM', kind: 'chat', text: `Initiative: ${order.map((o) => `${o.name} ${o.total}`).join(', ')}.` });
+    broadcastInit();
     renderGmScreen();
   };
-  const next = () => { if (!gs.init) return; gs.init.turn += 1; if (gs.init.turn >= gs.init.order.length) { gs.init.turn = 0; gs.init.round += 1; } save(); renderGmScreen(); };
+  const next = () => {
+    if (!gs.init) return;
+    const n = advanceTurn(gs.init);
+    endTurnFor(n.ended, people);
+    delete n.ended;
+    if (n.round !== gs.init.round) postRoll({ who: 'GM', kind: 'chat', text: `⏱ Round ${n.round}.` });
+    gs.init = n;
+    save(); broadcastInit(); renderGmScreen();
+  };
+  const delay = () => { if (!gs.init) return; const who = gs.init.order[gs.init.turn]?.name; gs.init = delayTurn(gs.init); save(); broadcastInit(); toast(`${who} delays`); renderGmScreen(); };
+  const end = () => { gs.init = null; save(); broadcastInit(); renderGmScreen(); };
+  // Remove anyone who left the board from the order, so the turn never lands on nobody.
+  if (init) {
+    const keys = new Set(people.map((p) => p.key));
+    const kept = init.order.filter((o) => keys.has(o.key));
+    if (kept.length !== init.order.length && kept.length) { const cur = init.order[init.turn]?.key; init.order = kept; init.turn = Math.max(0, kept.findIndex((o) => o.key === cur)); save(); }
+  }
+  const acting = init ? people.find((p) => p.key === init.order[init.turn]?.key) : null;
+  const remind = acting ? turnReminder(acting.status.play) : null;
   return h('section', { class: 'panel gm-init' },
     h('div', { class: 'gm-head' }, h('h2', null, '⏱ Initiative'), init ? h('span', { class: 'chip' }, `Round ${init.round}`) : null, h('span', { class: 'spacer' }),
       h('button', { class: 'btn sm', type: 'button', id: 'gm-init-roll', disabled: !people.length, onClick: roll }, init ? 'Re-roll' : 'Roll for everyone'),
-      init ? h('button', { class: 'btn sm primary', type: 'button', id: 'gm-next', onClick: next }, 'Next turn ▶') : null,
-      init ? h('button', { class: 'btn sm ghost', type: 'button', onClick: () => { gs.init = null; save(); renderGmScreen(); } }, 'End') : null),
+      init ? h('button', { class: 'btn sm', type: 'button', id: 'gm-delay', title: 'The acting character waits: they go after the next one', onClick: delay }, 'Delay') : null,
+      init ? h('button', { class: 'btn sm primary', type: 'button', id: 'gm-next', title: 'Ends this turn (recovery checks, dazes wear off) and starts the next', onClick: next }, 'Next turn ▶') : null,
+      init ? h('button', { class: 'btn sm ghost', type: 'button', onClick: end }, 'End') : null),
     init ? h('ol', { class: 'gm-order' }, init.order.map((o, i) => h('li', { class: i === init.turn ? 'now' : '' }, h('b', { class: 'num' }, o.total), ' ', o.name, i === init.turn ? h('span', { class: 'chip' }, 'acting') : null)))
-      : h('p', { class: 'hint', style: { margin: 0 } }, 'Rolls d20 + initiative for everyone on the board and keeps the turn order.'));
+      : h('p', { class: 'hint', style: { margin: 0 } }, 'Rolls d20 + initiative for everyone on the board and keeps the turn order. Players see it on their phones, with a nudge when it\'s their turn.'),
+    remind && (remind.lines.length || remind.tip) ? h('div', { class: 'gm-remind', id: 'gm-remind' },
+      h('b', null, `${acting.status.name}${remind.canAct ? '' : ' can\'t act'}`),
+      h('ul', null, remind.lines.map((l) => h('li', null, l))),
+      remind.tip ? h('p', { class: 'hint', style: { margin: 0 } }, remind.tip) : null) : null);
 }
 
 // ---- the board ------------------------------------------------------------------------------------------------
@@ -178,7 +249,7 @@ function card(p, spot) {
     h('div', { class: 'gm-state' },
       h('span', { class: 'gm-hp', title: 'Hero points' }, '⭐ ', h('b', { class: 'num' }, pl.heroPoints)),
       h('span', { class: 'gm-bruise', title: 'Bruises (−1 Toughness each)' }, '🩹 ', h('b', { class: 'num' }, pl.bruises)),
-      conds.length ? conds.map((c) => h('span', { class: `chip cond ${/Incapacitated|Stunned|Staggered/.test(c) ? 'bad' : ''}` }, c)) : h('span', { class: 'hint' }, 'fine'),
+      conds.length ? conds.map((c) => h('span', { class: `chip cond ${/Incapacitated|Stunned|Staggered/.test(c) ? 'bad' : ''}`, 'data-rule': c, 'data-rule-cat': 'Conditions', role: 'button', tabindex: 0, title: `${c}: what the rules say` }, c)) : h('span', { class: 'hint' }, 'fine'),
       s.penalty ? h('span', { class: 'chip warn' }, `${sign(s.penalty)} checks`) : null),
     s.pools.length || s.drains.length ? h('div', { class: 'gm-pools' },
       s.drains.map((d) => h('span', { class: 'chip' }, `🩸 ${d.name} ${d.held}/${d.rank}`)),
@@ -196,10 +267,12 @@ function card(p, spot) {
 
 function addToBoard() {
   const have = new Set([...gs.board.map((e) => e.rosterId), ...live.keys()]);
-  const list = state.roster.filter((c) => !have.has(c.rosterId));
-  if (!list.length) { toast('Everyone on the roster is already on the board.'); return; }
+  const all = state.roster.filter((c) => !have.has(c.rosterId));
+  if (!all.length) { toast('Everyone on the roster is already on the board.'); return; }
+  const list = sortChars(all, sortPref('gm-add', 'name'));
   const sel = h('select', { multiple: true, size: Math.min(10, list.length), id: 'gm-add-list', style: { width: '100%' } }, list.map((c) => h('option', { value: c.rosterId }, `${c.identity?.codename || 'Unnamed'} · PL ${c.pl}${c.alignment === 'villain' ? ' · villain' : ''}${c.folder ? ` · ${c.folder}` : ''}`)));
-  openDialog({ title: 'Put characters on the board', body: [sel, h('p', { class: 'hint' }, 'Villains, NPCs, or the whole party if everyone plays on this screen. Players who join your lobby show up on their own, live. Ctrl/Cmd-click to pick several.')],
+  const resort = (mode) => { const keep = new Set([...sel.selectedOptions].map((o) => o.value)); const opts = [...sel.options]; const byId = new Map(opts.map((o) => [o.value, o])); for (const c of sortChars(all, mode)) { const o = byId.get(c.rosterId); o.selected = keep.has(c.rosterId); sel.append(o); } };
+  openDialog({ title: 'Put characters on the board', body: [h('div', { class: 'bt-list-head' }, h('span', { class: 'label' }, 'Your roster'), sortSelect('gm-add', resort, { fallback: 'name', id: 'gm-add-sort' })), sel, h('p', { class: 'hint' }, 'Villains, NPCs, or the whole party if everyone plays on this screen. Players who join your lobby show up on their own, live. Ctrl/Cmd-click to pick several.')],
     buttons: [{ label: 'Cancel', value: false }, { label: 'Add', value: () => [...sel.selectedOptions].map((o) => o.value), primary: true }] }).then((ids) => {
     if (!ids?.length) return;
     for (const id of ids) gs.board.push({ rosterId: id });
@@ -209,13 +282,25 @@ function addToBoard() {
 
 // ---- session, spotlight, complications ---------------------------------------------------------------------------
 
-function startSession() {
-  const n = (gs.lastSession || 0) + 1;
+/**
+ * Start a session. Its number is the one the World's session planner has for it (or the next after the last
+ * one played here); "Previously on…" from the planner goes to the table with it.
+ */
+export function startSession({ number = null, previously = null } = {}) {
+  const planned = number ?? hooks.plannedNumber?.() ?? null;
+  const n = planned && planned > (gs.lastSession || 0) ? planned : (gs.lastSession || 0) + 1;
   gs.session = { number: n, startedAt: new Date().toISOString(), taps: {}, complications: [], events: [], hits: 0 };
-  gs.lastSession = n;
+  gs.lastSession = Math.max(gs.lastSession || 0, n);
   save();
   postRoll({ who: 'GM', kind: 'chat', text: `🎬 Session ${n} begins.` });
+  const prev = previously ?? hooks.previously?.(n) ?? '';
+  if (prev) postRoll({ who: 'GM', kind: 'chat', text: prev });
+  if (root && !root.hidden) renderGmScreen();
+  return n;
 }
+
+/** The Session in a Box plan on the GM Screen, for the World's planner. */
+export function currentPlan() { return gs.plan || null; }
 
 function complicationsPanel(people) {
   const scene = h('textarea', { id: 'gm-scene', rows: 2, placeholder: 'The scene in a sentence: "A charity gala at the gold exchange, reporters everywhere"', 'aria-label': 'The scene' }, gs.scene || '');
@@ -325,8 +410,9 @@ async function endSession(people, spot) {
   const svg = recapSvg(r);
   postRoll({ who: 'GM', kind: 'chat', text: `🎬 Session ${s.number} ends. ${r.headline}` });
   hooks.addWorldEvent?.({ name: `${r.campaign} #${r.issue}: ${r.headline}`, summary: r.blurbs.join(' '), tags: ['recap', 'session'], fields: { Kind: 'Session recap', Session: s.number }, people: r.cast.map((c) => c.name) });
+  hooks.sessionPlayed?.(s.number, r);
   gs.lastRecap = r; gs.session = null; gs.init = null;
-  save();
+  save(); broadcastInit();
   renderGmScreen();
   await imageDialog({ title: `Recap: ${r.campaign} #${r.issue}`, svg, text: r.text, file: `${r.campaign}-${r.issue}`, alt: `Comic cover: ${r.headline}`, note: 'Also saved in the World as an event, so it shows on the campaign timeline and in the Newsstand.' });
 }
@@ -361,6 +447,9 @@ function prepPanel() {
         const quiet = spotlight(party.map((c) => ({ key: c.rosterId, name: c.identity?.codename })), feedEntries(), gs.session?.taps || {}, gs.session?.startedAt || 0).map((x) => x.name);
         const p = prepSession(R, { heroes: party, roster: state.roster, quiet, difficulty: diff.value, seed: randomSeed(), n: 40 });
         gs.plan = { ...p, made: new Date().toISOString() };
+        // The plan is also kept with the next session in the World's planner, so a new prep doesn't lose it.
+        const kept = hooks.keepPlan?.(gs.plan);
+        if (kept) toast(`Plan kept with session ${kept} (World > Sessions)`);
         save();
       } catch (e) { toast(e.message); }
       ui.busy = false; renderGmScreen();

@@ -27,31 +27,62 @@ jobs:
         with:
           # 22, not 20: Node 20's test runner doesn't expand the tests/**/*.test.mjs pattern in npm test.
           node-version: 22
+      - run: npm ci --no-audit --no-fund
+      # Names used before they exist or never defined, unused imports, a local hiding W or F.
+      - name: Lint
+        run: npm run lint
       - name: Test
         run: npm test
       - name: Check every catalog creature against the PL limits
         run: npm run validate
 
+  # The built app in a real browser: roll, edit, save, reload, share keys, every tab, a phone screen.
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium-headless-shell
+      - name: Browser tests
+        run: npm run e2e
+      - name: Keep the report when something fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+
   # One job makes the release first, so the three builders only upload into it (making it from three
   # jobs at once failed with "already_exists" for whichever came last).
   release:
-    needs: test
+    needs: [test, e2e]
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.v.outputs.version }}
     steps:
-      - name: Pick the version (6.1.<build number>)
+      - uses: actions/checkout@v4
+      # The major and minor come from package.json ("6.1.0" -> 6.1); the build number is the patch.
+      - name: Pick the version (<major>.<minor>.<build number>)
         id: v
-        run: echo "version=6.1.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(node -p "require('./package.json').version.split('.').slice(0, 2).join('.')").${{ github.run_number }}" >> "$GITHUB_OUTPUT"
       - name: Make the release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           V: ${{ steps.v.outputs.version }}
         run: |
+          # The newest entry of data/changelog.json (the app's What's new) leads the release notes.
+          news=$(node -e "const c=require('./data/changelog.json')[0]; if (c) console.log('## ' + c.title + '\n\n' + c.items.map((i) => '- ' + i).join('\n') + '\n')")
           gh release view "v$V" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 \
             || gh release create "v$V" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "DCUGen $V" --latest \
-                 --notes "Desktop app build $V from $GITHUB_SHA. The single-file app: DCUGen.html (open it in any browser). Windows: DCUGen-Setup.exe (installer, updates itself) or DCUGen-Portable.exe. macOS: DCUGen.dmg. Linux: DCUGen.AppImage."
+                 --notes "${news}
+          Desktop app build $V from $GITHUB_SHA. The single-file app: DCUGen.html (open it in any browser). Windows: DCUGen-Setup.exe (installer, updates itself) or DCUGen-Portable.exe. macOS: DCUGen.dmg. Linux: DCUGen.AppImage."
 
   build:
     needs: release
@@ -73,6 +104,8 @@ jobs:
           node-version: 20
       - name: Build the web app
         run: npm run build
+        env:
+          DCUGEN_VERSION: ${{ needs.release.outputs.version }}
       # The single-file app is built here rather than committed (it is 4 MB, and a copy per commit made the
       # repository huge). The README's download link points at this asset of the latest release.
       - name: Publish DCUGen.html with the release
@@ -80,7 +113,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload "v${{ needs.release.outputs.version }}" DCUGen.html --clobber --repo "$GITHUB_REPOSITORY"
-      - name: Stamp the version (6.1.<build number>)
+      - name: Stamp the version
         shell: bash
         run: |
           cd desktop

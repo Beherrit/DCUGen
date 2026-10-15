@@ -518,7 +518,7 @@
     "param": null,
     "requires": [],
     "source": "DCA 74",
-    "summary": "Take two extra-effort benefits at once at double the fatigue cost."
+    "summary": "Gain two extra-effort benefits at once; you start your next turn exhausted (incapacitated if already fatigued), and can't use it while exhausted."
   },
   {
     "name": "Fearless",
@@ -569,7 +569,7 @@
     "param": null,
     "requires": [],
     "source": "DCA 76",
-    "summary": "Once per round, step in front of an attack that hit an ally within your movement range."
+    "summary": "Reaction, once per round: take an attack that hit an ally within your movement range. Not against area or perception attacks."
   },
   {
     "name": "Minion",

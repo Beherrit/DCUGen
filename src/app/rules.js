@@ -1,7 +1,7 @@
 // Rules: searchable reference cards (actions, maneuvers, checks, hazards, tables, effects,
 // modifiers, advantages, skills and conditions) from the DC Adventures data.
 
-import { h, clear } from './dom.js';
+import { h, clear, openDialog } from './dom.js';
 import { damageMatrix } from './gmplus.js';
 import { guideFor, skillGuideBody } from './skillguide.js';
 import { rangeCalculator } from './rangecalc.js';
@@ -77,6 +77,54 @@ function buildCards() {
 }
 
 let cardsCache = null;
+
+/** The rule card for a name ("Dazed", "Improved Initiative", "Affliction"), optionally in one category. */
+export function findRule(title, cat = null) {
+  if (!R) return null;
+  if (!cardsCache) cardsCache = buildCards();
+  const t = String(title || '').trim().toLowerCase();
+  const all = cardsCache.filter((c) => c.title.toLowerCase() === t);
+  return all.find((c) => !cat || c.cat === cat) || all[0] || null;
+}
+
+/** Open a rule card in a dialog, from anywhere (a tap on a condition, advantage or effect). */
+export function openRule(title, cat = null) {
+  const c = findRule(title, cat);
+  if (!c) return false;
+  openDialog({ title: c.title, body: cardEl(c) });
+  return true;
+}
+
+/** Every rule card's title and category, for the jump-anywhere search. */
+export function allRules() {
+  if (!R) return [];
+  if (!cardsCache) cardsCache = buildCards();
+  return cardsCache.map((c) => ({ title: c.title, cat: c.cat }));
+}
+
+/** Make anything with data-rule="Name" (and data-rule-cat) open its rule card when tapped. */
+export function enableRuleLinks(doc = document) {
+  const go = (el) => { if (!openRule(el.dataset.rule, el.dataset.ruleCat || null)) return; };
+  doc.addEventListener('click', (e) => {
+    const el = e.target.closest?.('[data-rule]');
+    if (!el || el.closest('[contenteditable]')) return;
+    e.preventDefault(); e.stopPropagation();
+    go(el);
+  }, true);
+  // The chips that aren't buttons open with Enter or Space too.
+  doc.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const el = e.target.closest?.('[data-rule][role="button"]');
+    if (!el) return;
+    e.preventDefault();
+    go(el);
+  });
+}
+
+/** A tappable rule name: a small button that opens the card. */
+export function ruleLink(text, title = text, cat = null) {
+  return h('button', { type: 'button', class: 'rule-link', 'data-rule': title, 'data-rule-cat': cat, title: `${title}: what the rules say` }, text);
+}
 
 export function initRules(rules, el) {
   R = rules;

@@ -10,6 +10,7 @@
 // timelines ready for the UI and for the Markdown vault export.
 
 import { personKey } from './keys.js';
+import { mergeSessions } from './sessions.js';
 
 export const ENTITY_TYPES = {
   person: { label: 'People', one: 'Person', glyph: '🧑', color: '#2f6fde' },
@@ -667,6 +668,8 @@ export function mergeWorldSaved(current, incoming) {
     entities, overrides, links, moments, hidden, hiddenLinks, hiddenAt, gone,
     linkEnds: { ...(current.linkEnds || {}), ...(incoming.linkEnds || {}) },
     board: current.board || incoming.board || null,
+    // The session planner's sessions and plot threads (engine/sessions.js).
+    ...mergeSessions(current, incoming, gone),
   };
   if (incoming.name && (!current.name || current.name === 'My World')) { out.name = incoming.name; out.tagline = incoming.tagline || current.tagline; out.description = incoming.description || current.description; }
   return out;
