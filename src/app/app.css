@@ -2250,3 +2250,35 @@ body.player-mode .gm-only { display: none !important; }
 .rail-more[open] { display: grid; gap: 10px; padding-bottom: 10px; }
 .rail-divider { height: 1px; background: var(--line); margin: 4px 0; }
 .import-link { justify-self: start; margin-top: 4px; font-size: 13px; }
+
+/* ---------- easier reading (Aa in the top bar) ---------- */
+:root { --rd-name: #b3122a; --rd-mech: #1747a6; --rd-desc: #0b6b47; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --rd-name: #ff7480; --rd-mech: #8fb4ff; --rd-desc: #6fdcaa; } }
+:root[data-theme="dark"] { --rd-name: #ff7480; --rd-mech: #8fb4ff; --rd-desc: #6fdcaa; }
+html.read-zoom body { zoom: var(--read-zoom, 1); }
+html.read-font body, html.read-font button, html.read-font input, html.read-font select, html.read-font textarea { font-family: "Atkinson Hyperlegible", var(--font-body); }
+html.read-font { --font-body: "Atkinson Hyperlegible", "Barlow", system-ui, sans-serif; --font-label: "Atkinson Hyperlegible", "Barlow Semi Condensed", system-ui, sans-serif; }
+html.read-contrast { --ink-2: #26303c; --ink-3: #3c4654; --line: #9aa4b2; }
+@media (prefers-color-scheme: dark) { html.read-contrast:not([data-theme="light"]) { --ink-2: #d6dce4; --ink-3: #b9c1cc; --line: #56606e; } }
+html.read-contrast[data-theme="dark"] { --ink-2: #d6dce4; --ink-3: #b9c1cc; --line: #56606e; }
+.read-legend { display: none; gap: 12px; font: 700 12px/1 var(--font-label); text-transform: uppercase; letter-spacing: .06em; margin: -2px 0 8px; }
+html.read-color .read-legend { display: flex; }
+.read-legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+.read-legend .lg-name { color: var(--rd-name); } .read-legend .lg-name::before { background: var(--rd-name); }
+.read-legend .lg-mech { color: var(--rd-mech); } .read-legend .lg-mech::before { background: var(--rd-mech); }
+.read-legend .lg-desc { color: var(--rd-desc); } .read-legend .lg-desc::before { background: var(--rd-desc); }
+/* the name, how it works, what it does: each its own colour and type */
+html.read-color .power-name, html.read-color .adv-head > b, html.read-color .adv-head > b .rule-link, html.read-color .ae > b { color: var(--rd-name); }
+html.read-color .power-name { font-size: 19px; }
+html.read-color .power-text, html.read-color .power-range { color: var(--rd-mech); font-weight: 600; font-size: 15px; }
+html.read-color .power-text { border-left: 3px solid var(--rd-mech); padding-left: 8px; }
+html.read-color .power-about, html.read-color .power-what, html.read-color .adv-what { color: var(--rd-desc); font-size: 15px; line-height: 1.6; }
+html.read-color .power-what { border-left: 3px solid var(--rd-desc); background: color-mix(in srgb, var(--rd-desc) 7%, var(--surface)); }
+html.read-color .power-about { font-style: normal; }
+.read-btn { font: 800 16px/1 var(--font-label); }
+.read-sizes button { min-height: 40px; }
+.read-toggle { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+.read-toggle input { margin-top: 3px; width: 18px; height: 18px; }
+.read-toggle span { display: grid; gap: 2px; }
+.read-toggle small { color: var(--ink-2); }
+.read-sample { padding: 10px 12px; border: 1px dashed var(--line); border-radius: 8px; display: grid; gap: 4px; }

@@ -55,3 +55,18 @@ test('your characters sort by name or PL', async ({ page }) => {
   await showTab(page, 'battle');
   await expect(page.locator('#bt-mine-sort')).toHaveValue('plDesc');
 });
+
+test('a character with alternate forms fights in the form picked on their card', async ({ page }) => {
+  await openApp(page);
+  await rollCharacter(page, 'forms-1');
+  await page.getByRole('button', { name: /^More/ }).first().click();
+  await page.locator('#add-forms').click();
+  await page.locator('#dialog').getByRole('button', { name: /Blank second form/ }).click();
+  await page.locator('#save-bottom').click();
+  await showTab(page, 'battle');
+  await page.locator('#bt-mine .bt-pick').first().getByRole('button', { name: /team A$/ }).click();
+  const formSel = page.locator('.bt-card select[aria-label$="form"]');
+  await expect(formSel).toHaveCount(1);
+  await formSel.selectOption({ index: 0 });
+  await expect(page.locator('.bt-card .bt-names')).toContainText('🎭');
+});

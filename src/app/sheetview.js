@@ -276,6 +276,7 @@ export function renderFile(ch, R, opts = {}) {
   };
   const powers = h('section', { class: 'sec' },
     h('h3', null, 'Powers', h('span', { class: 'pts' }, `${s.cost.powers} pp`)),
+    h('div', { class: 'read-legend no-print', 'aria-hidden': 'true' }, h('span', { class: 'lg-name' }, 'Name'), h('span', { class: 'lg-mech' }, 'How it works'), h('span', { class: 'lg-desc' }, 'What it does')),
     (ch.powers || []).map((p, i) => powerCard(p, { device: null, index: i })),
     (ch.devices || []).map((dev, di) => {
       const dc = s.devices[di];

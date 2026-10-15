@@ -3,6 +3,7 @@
 // match a hundred times for the odds.
 
 import { sortChars, sortSelect, sortPref } from './sorting.js';
+import { hasForms, activeForm, switchForm } from '../engine/forms.js';
 import { h, clear, toast, copyText, download, inkFor, openDialog } from './dom.js';
 import { state } from './store.js';
 import { randomSeed } from '../engine/rng.js';
@@ -157,19 +158,25 @@ function fighterCard(c) {
   const tacSel = h('select', { class: 'bt-mini', 'aria-label': `${c.name} target choice`, onChange: (e) => { c.tactics = e.target.value; save(); } },
     Object.entries(TACTICS).map(([k, v]) => h('option', { value: k, selected: k === c.tactics }, k === 'auto' ? `Target: ${S.target === 'lowWill' ? 'weakest will' : TACTICS[S.target]?.toLowerCase() || 'by style'}` : v)));
   const teamSel = h('div', { class: 'bt-sides', role: 'group', 'aria-label': `${c.name} team` }, TEAMS.map((t) => h('button', { type: 'button', class: `bt-side ${t === c.team ? 'on' : ''}`, style: { '--t': teamColor(t) }, title: `Move to team ${t}`, 'aria-pressed': String(t === c.team), onClick: () => { c.team = t; placeAll(battle); save(); renderBattle(); } }, t)));
+  // Alternate forms: fight in any of them (DCA 88: each form is its own build)
+  const formSel = hasForms(c.ch) ? h('select', { class: 'bt-mini', 'aria-label': `${c.name} form`, title: 'Which form they fight in', onChange: (e) => {
+    const ch = switchForm(c.ch, Number(e.target.value));
+    Object.assign(c, makeCombatant(R, ch, { id: c.id, team: c.team, style: null, tactics: c.tactics, heroPoints: c.heroPoints, name: c.name }));
+    placeAll(battle); save(); renderBattle();
+  } }, c.ch.forms.map((f, i) => h('option', { value: i, selected: i === activeForm(c.ch) }, `🎭 ${f.name || `Form ${i + 1}`}`))) : null;
   const hp = h('input', { type: 'number', class: 'bt-hp', min: 0, max: 9, value: c.heroPoints, 'aria-label': `${c.name} hero points`, title: 'Hero points', onChange: (e) => { c.heroPoints = Math.max(0, Number(e.target.value) || 0); save(); } });
   return h('article', { class: `bt-card ${c.out ? 'out' : ''} ${c.fled ? 'fled' : ''}`, style: { '--c': c.color, '--t': teamColor(c.team), '--c-ink': inkFor(c.color) } },
     h('div', { class: 'bt-card-head' },
       h('span', { class: 'bt-token', title: `Zone ${c.pos + 1}` }, initials(c.name)),
       h('div', { class: 'bt-names' },
         h('b', null, c.name),
-        h('span', null, `PL ${c.pl} · ${S.glyph} ${S.label}${c.minion ? ' · minion' : ''}`)),
+        h('span', null, `PL ${c.pl} · ${S.glyph} ${S.label}${c.minion ? ' · minion' : ''}${hasForms(c.ch) ? ` · 🎭 ${c.ch.forms[activeForm(c.ch)]?.name || 'form'}` : ''}`)),
       h('span', { class: 'bt-team', style: { background: teamColor(c.team) } }, c.team),
       h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${c.name}`, title: 'Remove from the battle', onClick: () => { removeCombatant(battle, c.id); save(); renderBattle(); } }, '✕')),
     h('div', { class: 'bt-stats' },
       [['DOD', d.defenses.Dodge], ['PAR', d.defenses.Parry], ['TOU', d.defenses.Toughness - c.bruises], ['FOR', d.defenses.immune?.Fortitude ? '—' : d.defenses.Fortitude], ['WIL', d.defenses.immune?.Will ? '—' : d.defenses.Will], ['INI', (d.initiative >= 0 ? '+' : '') + d.initiative]].map(([k, v]) => h('div', null, h('b', { class: 'num' }, v), h('span', null, k)))),
     main ? h('div', { class: 'bt-main' }, `${main.name}: ${main.roll ? `+${main.bonus}, ` : `${main.area ? `${main.area} area` : 'perception'}, `}${main.effect} ${main.rank} (${main.resistance})`, c.attacks.length > 2 ? h('small', null, ` +${c.attacks.length - 1} more`) : null) : null,
-    setup ? h('div', { class: 'bt-opts' }, teamSel, styleSel, h('details', { class: 'bt-more' }, h('summary', null, 'More'), h('div', { class: 'bt-more-body' }, tacSel, h('label', { class: 'bt-hp-wrap', title: 'Hero points: re-roll a miss or shake off a daze' }, '★ Hero points', hp)))) : null,
+    setup ? h('div', { class: 'bt-opts' }, teamSel, formSel, styleSel, h('details', { class: 'bt-more' }, h('summary', null, 'More'), h('div', { class: 'bt-more-body' }, tacSel, h('label', { class: 'bt-hp-wrap', title: 'Hero points: re-roll a miss or shake off a daze' }, '★ Hero points', hp)))) : null,
     !setup ? h('div', { class: 'bt-state' }, dmg,
       h('div', { class: 'bt-conds' },
         c.fled ? h('span', { class: 'bt-cond fled' }, 'Fled') : c.out ? h('span', { class: 'bt-cond ko' }, statusLine(c)) : null,

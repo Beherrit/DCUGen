@@ -92,3 +92,34 @@ test('a squad of minions makes team attacks, and helpers spend their turn on it'
   assert.ok(team.length > 0, 'some team attacks');
   for (const e of team) assert.match(e.text, /\+[25] to|no help lands/);
 });
+
+test('immunities follow descriptors: immune to physical damage, and half-effect immunity', async () => {
+  const { makeCombatant: mk, createBattle: cb, addCombatant: add, startBattle: start, step: st } = await import('../src/engine/battle.js');
+  const hero = (immunity, flaws = []) => {
+    const ch = generateCharacter(R, { seed: 'imm-target', archetype: 'paragon', pl: 10 });
+    ch.powers = [...ch.powers, { id: 'imm', name: 'Immune', effect: 'Immunity', rank: 10, detail: immunity, extras: [], flaws }];
+    return ch;
+  };
+  const brawler = generateCharacter(R, { seed: 'imm-brawler', archetype: 'powerhouse', pl: 10 });
+  const fight = (target) => {
+    const b = cb({ seed: 'imm' });
+    add(b, mk(R, brawler, { team: 'A', name: 'Brute' }));
+    add(b, mk(R, target, { team: 'B', name: 'Target' }));
+    start(b, R);
+    for (let i = 0; i < 40 && b.status === 'running'; i++) st(b, R);
+    return b;
+  };
+  const brute = mk(R, brawler, { team: 'A' });
+  const fists = brute.attacks.find((a) => a.unarmed || a.kind === 'close');
+  assert.ok(fists.descriptors.includes('physical'), `close attack is physical: ${fists.descriptors}`);
+  // Immune to physical damage: the brute's fists do nothing.
+  // Immune to physical damage: the brute knows its fists can't hurt and doesn't waste its turns swinging.
+  const b1 = fight(hero('Physical damage'));
+  const bruteId = b1.combatants.find((x) => x.name === 'Brute').id;
+  assert.ok(!b1.log.some((e) => e.actor === bruteId && ['hit', 'crit', 'condition', 'ko'].includes(e.kind)), 'no damage gets through');
+  assert.ok(b1.log.some((e) => e.actor === bruteId && /nothing worth doing/.test(e.text)), 'the brute holds instead of swinging');
+  // Half effect: the hits land at half rank.
+  const b2 = fight(hero('Physical damage', [{ name: 'Limited to Half Effect' }]));
+  assert.ok(b2.log.some((e) => /half effect\): rank/.test(e.text)), 'half immunity halves the rank');
+  assert.ok(!b2.log.some((e) => /Target is immune to physical/.test(e.text)));
+});

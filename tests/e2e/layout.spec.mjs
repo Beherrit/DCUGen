@@ -34,3 +34,17 @@ test('the first-visit choice "I\'m a player" shows the player sections', async (
   await page.keyboard.press('Escape');
   await expect(page.locator('#tab-gm')).toBeHidden();
 });
+
+test('Easier reading: text size, colour-coded powers and the easy-read font stick after a reload', async ({ page }) => {
+  await openApp(page);
+  await page.locator('#read-btn').click();
+  await page.locator('.read-sizes [data-size="xl"]').click();
+  await page.locator('#read-font').check();
+  await page.getByRole('button', { name: 'Done' }).click();
+  await page.reload();
+  const html = page.locator('html');
+  await expect(html).toHaveClass(/read-zoom/);
+  await expect(html).toHaveClass(/read-color/);
+  await expect(html).toHaveClass(/read-font/);
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--read-zoom').trim())).toBe('1.3');
+});

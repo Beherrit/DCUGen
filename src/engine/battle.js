@@ -152,7 +152,7 @@ function buildAttack(c, a, R) {
     equipment: !!a.equipment, device: !!(p && (c.ch.devices || []).some((d) => d.powers.includes(p) || d.powers.some((q) => (q.alternates || []).includes(p)))),
     unarmed: a.name === 'Unarmed', alternate: !!a.alternate,
     crit: a.crit || (p ? Math.max(16, 20 - advantageRank(c.ch, 'Improved Critical', p.name) - advantageRank(c.ch, 'Improved Critical')) : 20),
-    descriptors: [...(p?.descriptors || []), ...(a.equipment ? ['weapon'] : []), ...(a.name === 'Unarmed' ? ['bludgeoning'] : [])],
+    descriptors: attackDescriptors(c, a, p),
     multiattack: hasExtra(p, 'Multiattack'), penetrating: hasExtra(p, 'Penetrating'), selective: hasExtra(p, 'Selective'),
     area: a.kind === 'area' ? (extraOpt(p, 'Area') || 'Burst') : null,
     perception: a.kind === 'perception',
@@ -185,12 +185,36 @@ function bestMoveRank(ch) {
   return { rank: best, flying };
 }
 
+/**
+ * What a fighter is immune to, from Immunity powers and absent defenses: lower-case phrases like "fire damage",
+ * "fortitude effects", "life support". Immunity with Limited to Half Effect is marked " #half" (DCA 104).
+ */
 function immunities(ch, d) {
   const words = [];
   if (d.defenses.immune?.Fortitude) words.push('fortitude effects');
   if (d.defenses.immune?.Will) words.push('will effects');
-  for (const { power: p } of allPowers(ch, { includeAlternates: false })) if (p.effect === 'Immunity' && p.detail) words.push(String(p.detail).toLowerCase());
+  for (const { power: p } of allPowers(ch, { includeAlternates: false })) {
+    if (p.effect !== 'Immunity' || !p.detail) continue;
+    const half = (p.flaws || []).some((f) => /half effect/i.test(f.name || f));
+    words.push(`${String(p.detail).toLowerCase()}${half ? ' #half' : ''}`);
+  }
   return words;
+}
+
+/**
+ * An attack's descriptors: its power's own, plus what it obviously is. Fists, claws, thrown cars and weapons
+ * are physical (and a weapon is a weapon); a power with an energy descriptor isn't physical.
+ */
+function attackDescriptors(c, a, p) {
+  const own = (p?.descriptors || []).map((x) => String(x).toLowerCase());
+  const out = new Set(own);
+  const energy = own.some((x) => /fire|heat|cold|ice|electric|lightning|light|laser|sonic|sound|radiation|cosmic|magic|mystic|psychic|mental|darkness|shadow|plasma|force|energy|acid|poison|chemical|toxic|disease|gravity|vibration/.test(x));
+  const strengthBased = a.name === 'Unarmed' || (a.kind === 'close' && !p) || (p && a.effect === 'Damage' && /strength/i.test(`${p.name} ${p.detail || ''}`));
+  if (a.name === 'Unarmed') { out.add('bludgeoning'); out.add('unarmed'); }
+  if (a.equipment) out.add('weapon');
+  if (!energy && a.effect === 'Damage' && (strengthBased || a.equipment || (p && /punch|fist|claw|bite|kick|strike|club|blade|sword|bullet|gun|arrow|projectile|thrown|slam|tail|horn|talon|fang/i.test(`${p.name} ${a.name}`)))) out.add('physical');
+  if (out.has('bullet') || out.has('bullets') || /gun|pistol|rifle|bullet/i.test(a.name)) out.add('ballistic');
+  return [...out];
 }
 
 /** Build a combatant from a character. opts: { team, style, tactics, heroPoints, name } */
@@ -359,26 +383,53 @@ function dcOf(atk, rank = atk.rank) {
   return (atk.effect === 'Damage' || atk.effect === 'Mental Blast' ? 15 : 10) + rank;
 }
 
+/**
+ * Is the target immune to this attack (DCA 103-104)? Returns the reason, or null. An Immunity to "<descriptor>
+ * damage" stops only Damage with that descriptor; "<descriptor> effects" (or just the descriptor) stops any
+ * effect with it. Limited to Half Effect immunities don't stop it: see halfImmune().
+ */
 function isImmune(target, atk) {
+  const why = immunityMatch(target, atk, false);
+  return why;
+}
+
+/** An Immunity limited to half effect that applies: the effect lands at half rank. Returns the reason or null. */
+function halfImmune(target, atk) { return immunityMatch(target, atk, true); }
+
+const NEVER_MATCH = ['variable', 'super-science', 'technology', 'power armor'];
+function immunityMatch(target, atk, wantHalf) {
   const res = String(atk.resistance || '').toLowerCase();
-  for (const w of target.immune) {
+  const damaging = atk.effect === 'Damage' || atk.effect === 'Mental Blast';
+  for (const raw of target.immune) {
+    const half = raw.endsWith(' #half');
+    if (half !== wantHalf) continue;
+    const w = raw.replace(/ #half$/, '');
     if (w.includes('fortitude effects') && res === 'fortitude') return 'immune to Fortitude effects';
     if (w.includes('will effects') && res === 'will') return 'immune to Will effects';
+    if (/life support/.test(w) && (atk.effect === 'Suffocation' || (atk.descriptors || []).some((d) => /disease|poison|toxin|vacuum|suffocat|drown|radiation/.test(d)))) return 'immune (Life Support)';
+    if (/\ball (damage|attacks)\b|\bdamage \(all\)/.test(w) && damaging) return 'immune to damage';
     for (const dsc of atk.descriptors || []) {
       const d = String(dsc).toLowerCase().replace(/\s*\(.*$/, '');
-      if (d.length > 2 && !['weapon', 'bludgeoning', 'variable', 'super-science', 'technology', 'power armor'].includes(d) && new RegExp(`\\b${d.replace(/[^a-z\-]/g, '')}\\b`).test(w) && /damage|effects|attacks|\ball\b|^[a-z, &-]+$/.test(w)) return `immune to ${dsc}`;
+      if (d.length <= 2 || NEVER_MATCH.includes(d)) continue;
+      // each comma or "and" separated part of the immunity is checked on its own
+      for (const part of w.split(/,|\band\b|;/).map((x) => x.trim()).filter(Boolean)) {
+        if (!new RegExp(`\\b${d.replace(/[^a-z\-]/g, '')}s?\\b`).test(part)) continue;
+        if (/damage|attacks/.test(part) && !damaging) continue; // "fire damage" doesn't stop a fire Affliction
+        return `immune to ${dsc}${/damage/.test(part) ? ' damage' : ''}`;
+      }
     }
     if (atk.effect === 'Mind Control' && /mind control|mental/.test(w)) return 'immune to mental effects';
+    if (atk.effect === 'Sleep' && /sleep/.test(w)) return 'immune to sleep';
   }
-  if (atk.fear && target.adv.Fearless) return 'Fearless';
-  if (target.minion === false && atk.effect === 'Sleep' && target.immune.some((w) => /sleep/.test(w))) return 'immune to sleep';
+  if (!wantHalf && atk.fear && target.adv.Fearless) return 'Fearless';
   return null;
 }
 
 /** Expected "harm" of an attack on a target: how much it would change the fight, in rough degrees. */
 function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, autoHit = false, dist = 0 } = {}) {
   if (isImmune(target, atk)) return 0;
-  const rank = atk.rank + rankShift;
+  let rank = atk.rank + rankShift;
+  if (halfImmune(target, atk)) rank = Math.floor(rank / 2);
   let hit = 1; let crit = 0;
   if (atk.roll && !autoHit) {
     const def = defenseOf(target, atk.kind === 'close' ? 'Parry' : 'Dodge');
@@ -1065,9 +1116,11 @@ function areaAttack(b, R, c, atk, t, rng, rankShift, notes) {
 
 /** Resolve the effect of a hit (or an automatic effect). Returns { landed, ko, degrees }. */
 function applyEffect(b, R, c, atk, t, rng, { crit = false, rankShift = 0, multi = 0 } = {}) {
-  const rank = Math.max(0, atk.rank + rankShift);
+  let rank = Math.max(0, atk.rank + rankShift);
   const why = isImmune(t, atk);
   if (why) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name} is ${why}: no effect.` }); return { landed: false }; }
+  const half = halfImmune(t, atk);
+  if (half) { rank = Math.floor(rank / 2); log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name} is partly ${half.replace(/^immune/, 'immune')} (half effect): rank ${rank}.` }); rankShift = rank - atk.rank; }
   if (atk.effect === 'Damage' && !atk.penetrating && t.impervious && rank <= Math.floor(t.impervious / 2)) {
     log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name}'s Impervious ${t.impervious} shrugs off Damage ${rank} without a check.` });
     return { landed: false };
