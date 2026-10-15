@@ -1,6 +1,7 @@
 // Companions on the Forge: sidekicks, minions and pets, each with a full sheet on the owner's page.
 
 import { h, toast, openDialog } from './dom.js';
+import { sortChars } from './sorting.js';
 import { state, emit, upsert } from './store.js';
 import { renderFile } from './sheetview.js';
 import { generateCharacter } from '../engine/generator.js';
@@ -62,7 +63,7 @@ export async function addCompanionDialog(owner) {
   const find = h('input', { type: 'search', placeholder: 'Search: wolf, hawk, dragon, robot…', id: 'comp-find' });
   const creatureSel = h('select', { id: 'comp-creature', size: 6 }, creatures.map((e) => h('option', { value: e.id }, `${e.name} · PL ${e.pl}${e.category ? ` · ${e.category}` : ''}`)));
   find.addEventListener('input', () => { const q = find.value.toLowerCase(); for (const o of creatureSel.options) o.hidden = q && !o.textContent.toLowerCase().includes(q); });
-  const rosterSel = h('select', { id: 'comp-roster' }, state.roster.filter((c) => c.rosterId !== owner.rosterId).map((c) => h('option', { value: c.rosterId }, `${c.identity?.codename || 'Unnamed'} · PL ${c.pl}`)));
+  const rosterSel = h('select', { id: 'comp-roster' }, sortChars(state.roster.filter((c) => c.rosterId !== owner.rosterId), 'name').map((c) => h('option', { value: c.rosterId }, `${c.identity?.codename || 'Unnamed'} · PL ${c.pl}`)));
   const plRow = h('label', { class: 'field' }, h('span', null, 'Power level'), plIn);
   const creatureRow = h('div', { class: 'field', hidden: true }, h('span', null, 'Creature'), find, creatureSel);
   const rosterRow = h('label', { class: 'field', hidden: true }, h('span', null, 'From the roster'), rosterSel);

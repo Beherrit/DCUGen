@@ -12,6 +12,7 @@
 //   Recap        end the session: a comic-book cover and a few lines for the group chat.
 
 import { h, clear, toast, openDialog } from './dom.js';
+import { sortChars, sortSelect, sortPref } from './sorting.js';
 import { state, upsert } from './store.js';
 import { lobby, onLobby, lobbySend } from './lobby.js';
 import { postRoll, feedEntries } from './table.js';
@@ -266,10 +267,12 @@ function card(p, spot) {
 
 function addToBoard() {
   const have = new Set([...gs.board.map((e) => e.rosterId), ...live.keys()]);
-  const list = state.roster.filter((c) => !have.has(c.rosterId));
-  if (!list.length) { toast('Everyone on the roster is already on the board.'); return; }
+  const all = state.roster.filter((c) => !have.has(c.rosterId));
+  if (!all.length) { toast('Everyone on the roster is already on the board.'); return; }
+  const list = sortChars(all, sortPref('gm-add', 'name'));
   const sel = h('select', { multiple: true, size: Math.min(10, list.length), id: 'gm-add-list', style: { width: '100%' } }, list.map((c) => h('option', { value: c.rosterId }, `${c.identity?.codename || 'Unnamed'} · PL ${c.pl}${c.alignment === 'villain' ? ' · villain' : ''}${c.folder ? ` · ${c.folder}` : ''}`)));
-  openDialog({ title: 'Put characters on the board', body: [sel, h('p', { class: 'hint' }, 'Villains, NPCs, or the whole party if everyone plays on this screen. Players who join your lobby show up on their own, live. Ctrl/Cmd-click to pick several.')],
+  const resort = (mode) => { const keep = new Set([...sel.selectedOptions].map((o) => o.value)); const opts = [...sel.options]; const byId = new Map(opts.map((o) => [o.value, o])); for (const c of sortChars(all, mode)) { const o = byId.get(c.rosterId); o.selected = keep.has(c.rosterId); sel.append(o); } };
+  openDialog({ title: 'Put characters on the board', body: [h('div', { class: 'bt-list-head' }, h('span', { class: 'label' }, 'Your roster'), sortSelect('gm-add', resort, { fallback: 'name', id: 'gm-add-sort' })), sel, h('p', { class: 'hint' }, 'Villains, NPCs, or the whole party if everyone plays on this screen. Players who join your lobby show up on their own, live. Ctrl/Cmd-click to pick several.')],
     buttons: [{ label: 'Cancel', value: false }, { label: 'Add', value: () => [...sel.selectedOptions].map((o) => o.value), primary: true }] }).then((ids) => {
     if (!ids?.length) return;
     for (const id of ids) gs.board.push({ rosterId: id });
