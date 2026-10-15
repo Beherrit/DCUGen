@@ -32,10 +32,32 @@ jobs:
       - name: Check every catalog creature against the PL limits
         run: npm run validate
 
+  # The built app in a real browser: roll, edit, save, reload, share keys, every tab, a phone screen.
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium-headless-shell
+      - name: Browser tests
+        run: npm run e2e
+      - name: Keep the report when something fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+
   # One job makes the release first, so the three builders only upload into it (making it from three
   # jobs at once failed with "already_exists" for whichever came last).
   release:
-    needs: test
+    needs: [test, e2e]
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     outputs:
