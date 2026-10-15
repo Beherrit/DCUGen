@@ -5,11 +5,12 @@ import { reportCrash } from './crash.js';
 import { RULES } from '../engine/index.js';
 import { state, onChange } from './store.js';
 import { toast } from './dom.js';
-import { initForge, roll, setCurrent, renderCurrent, restoreTabs, undo, redo, updateOpen } from './forge.js';
+import { initForge, roll, setCurrent, renderCurrent, restoreTabs, undo, redo, updateOpen, refreshForgeLists } from './forge.js';
+import { initHomebrew } from './homebrew.js';
 import { initRoster, renderRoster, openRosterKey } from './roster.js';
 import { initLab, openInLab, renderLab } from './lab.js';
 import { initGm, renderGm, addToInitiative } from './gm.js';
-import { initWorkshop, renderWorkshop } from './workshop.js';
+import { initWorkshop, renderWorkshop, openHomebrew } from './workshop.js';
 import { initRules, renderRules, enableRuleLinks, allRules, openRule } from './rules.js';
 import { initBestiary, renderBestiary, creatureList, showCreature } from './bestiary.js';
 import { initGarage, renderGarage } from './garage.js';
@@ -59,6 +60,7 @@ function searchables() {
     { id: 'do:tour-p', kind: 'Do', label: 'Player tour', run: () => startTour('player') },
     { id: 'do:tour-g', kind: 'Do', label: 'GM tour', run: () => startTour('gm') },
     { id: 'do:news', kind: 'Do', label: 'What\'s new', run: () => showWhatsNew() },
+    { id: 'do:homebrew', kind: 'Go to', label: 'Homebrew packs', hint: 'Workshop', run: () => { openHomebrew(); showTab('workshop'); } },
     { id: 'do:theme', kind: 'Do', label: 'Switch light or dark theme', run: () => document.getElementById('theme-toggle').click() },
   );
   const seen = new Set();
@@ -304,7 +306,7 @@ async function boot() {
   initBattle(R, document.getElementById('view-battle'), { goBestiary: () => showTab('bestiary'), recordBattle: (b) => {
     const ev = recordBattleInWorld(b);
     const learned = afterBattleRecorded(b, ev);
-    toast([`Recorded in the World: ${ev.name}`, ...learned].join(' · '));
+    toast([`Saved to the campaign: ${ev.name}`, ...learned].join(' · '));
   } });
   onSharedMap(() => renderCurrent());
   initGmScreen(R, document.getElementById('view-screen'), {
@@ -317,6 +319,13 @@ async function boot() {
     previously: (n) => previouslyText(n),
     keepPlan: (plan) => keepPlan(plan),
     sessionPlayed: (n, recap) => sessionPlayed(n, recap),
+  });
+  // Homebrew packs load into the rules before anything draws its lists.
+  initHomebrew(R, {
+    changed: () => { refreshForgeLists(); renderBestiary(); },
+    rerender: () => renderWorkshop(),
+    showCreature: (name) => { showTab('bestiary'); showCreature(name); },
+    roll: (o) => { showTab('forge'); roll(undefined, { newTab: true, ...o }); },
   });
   initWorld(R, document.getElementById('view-world'), {
     open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },

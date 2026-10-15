@@ -24,6 +24,7 @@ export const REALMS = [
   { id: 'Kaiju', glyph: '🦖', color: '#c2410c', blurb: 'City-wrecking giant monsters' },
   { id: 'Animals', glyph: '🐾', color: '#3f7d3a', blurb: 'Everyday and wild animals, dinosaurs and swarms' },
   { id: 'People', glyph: '🧑', color: '#8a5a44', blurb: 'Civilians, cops, soldiers, thugs, agents and cultists' },
+  { id: 'Homebrew', glyph: '🧪', color: '#a21caf', blurb: 'Your own creatures, from homebrew packs (Workshop)' },
 ];
 const realmInfo = (id) => REALMS.find((r) => r.id === id) || { id: id || 'Other', glyph: '✦', color: '#666666', blurb: '' };
 

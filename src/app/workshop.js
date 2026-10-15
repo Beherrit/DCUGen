@@ -1,6 +1,7 @@
 // Workshop: random gear, gadgets and magic items, minion squads, robots, creatures and monsters.
 
 import { h, clear, toast, copyText, download, slug, inkFor } from './dom.js';
+import { homebrewPage } from './homebrew.js';
 import { state, upsert } from './store.js';
 import { renderFile, whatItDoes } from './sheetview.js';
 import { exportExcel, exportJson, exportText } from './exporters.js';
@@ -25,7 +26,7 @@ const opts = {
 
 const SECTIONS = [
   ['gear', 'Gear loadout'], ['device', 'Gadgets & items'], ['squad', 'Minion squads'],
-  ['robot', 'Robots'], ['creature', 'Animals & creatures'], ['monster', 'Monster maker'],
+  ['robot', 'Robots'], ['creature', 'Animals & creatures'], ['monster', 'Monster maker'], ['homebrew', '🧪 Homebrew'],
 ];
 
 export function initWorkshop(rules, el, h2) {
@@ -243,6 +244,9 @@ function catalogBrowser() {
     listEl);
 }
 
+/** Open the Workshop on its Homebrew page (from the jump-anywhere search). */
+export function openHomebrew() { section = 'homebrew'; result = null; }
+
 export function renderWorkshop() {
   if (!root) return;
   clear(root);
@@ -252,6 +256,7 @@ export function renderWorkshop() {
   const tabs = h('div', { class: 'ae-tabs', role: 'group', 'aria-label': 'What to make', style: { marginBottom: '14px' } },
     SECTIONS.map(([id, label]) => h('button', { type: 'button', 'aria-pressed': String(section === id), onClick: () => { section = id; result = null; renderWorkshop(); } }, label)));
   root.append(tabs);
+  if (section === 'homebrew') { root.append(homebrewPage()); return; }
   const rail = h('aside', { class: 'rail', 'aria-label': 'Workshop options' },
     h('h2', null, SECTIONS.find(([id]) => id === section)[1]),
     controls(),

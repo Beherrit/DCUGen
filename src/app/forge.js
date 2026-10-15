@@ -51,9 +51,12 @@ function prefsToOptions(seed) {
   };
 }
 
-export function roll(seed = randomSeed(), { newTab = false } = {}) {
+export function roll(seed = randomSeed(), { newTab = false, archetype = null, theme = null } = {}) {
   try {
-    const ch = generateCharacter(R, prefsToOptions(seed));
+    const opts = prefsToOptions(seed);
+    if (archetype) opts.archetype = archetype;
+    if (theme) opts.theme = theme;
+    const ch = generateCharacter(R, opts);
     setCurrent(ch, { fresh: true, newTab });
     pushHistory(ch);
   } catch (e) {
@@ -81,8 +84,10 @@ function renderHistory() {
 function build() {
   clear(root);
   const p = state.prefs;
-  const archetypes = R.raw.archetypes.filter((a) => !a.hidden);
+  // Homebrew archetypes are hidden from random rolls but listed here (engine/homebrew.js).
+  const archetypes = R.raw.archetypes.filter((a) => !a.hidden || a.homebrew);
   const themes = R.raw.themes.slice().sort((a, b) => a.name.localeCompare(b.name));
+  const mark = (x) => (x.homebrew ? `${x.name} ✦` : x.name);
 
   const plOut = h('span', { class: 'pl-readout num' }, p.plRandom ? 'Any' : p.pl);
   const plRange = h('input', { type: 'range', min: 1, max: 20, value: p.pl, id: 'pl', 'aria-label': 'Power level', disabled: p.plRandom,
@@ -126,8 +131,8 @@ function build() {
         h('label', { style: { marginLeft: 'auto', display: 'flex', gap: '6px', alignItems: 'center', fontSize: '13px' } }, plAny, 'Surprise me')),
       plRange,
       h('div', { class: 'range-row' }, h('span', null, '1 street'), h('span', null, '10 super'), h('span', null, '20 cosmic'))),
-    select('archetype', 'Archetype', p.archetype, [['', 'Any archetype'], ...archetypes.map((a) => [a.id, a.name])], (v) => { p.archetype = v; }),
-    select('theme', 'Power theme', p.theme, [['', 'Any theme'], ...themes.map((t) => [t.id, t.name])], (v) => { p.theme = v; }),
+    select('archetype', 'Archetype', p.archetype, [['', 'Any archetype'], ...archetypes.map((a) => [a.id, mark(a)])], (v) => { p.archetype = v; }),
+    select('theme', 'Power theme', p.theme, [['', 'Any theme'], ...themes.map((t) => [t.id, mark(t)])], (v) => { p.theme = v; }),
     h('div', { class: 'field' }, h('span', null, 'Side'), h('div', { class: 'seg', role: 'group', 'aria-label': 'Hero or villain' }, segBtns)),
     select('gender', 'Gender', p.gender, [['random', 'Any'], ['Female', 'Female'], ['Male', 'Male'], ['Nonbinary', 'Nonbinary']], (v) => { p.gender = v; }),
     h('div', { class: 'field' },
@@ -627,6 +632,15 @@ async function share(ch) {
 }
 
 export { inkFor };
+
+/** Rebuild the roll options after homebrew packs change (new archetypes and themes in the lists). */
+export function refreshForgeLists() {
+  const p = state.prefs;
+  if (p.archetype && !R.raw.archetypes.some((a) => a.id === p.archetype)) p.archetype = '';
+  if (p.theme && !R.raw.themes.some((t) => t.id === p.theme)) p.theme = '';
+  build();
+  renderCurrent();
+}
 // app.js opens characters, restores tabs and undoes through the Forge.
 export { setCurrent, restoreTabs, undo, redo, updateOpen };
 
