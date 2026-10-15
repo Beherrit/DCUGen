@@ -95,6 +95,13 @@ export function openRule(title, cat = null) {
   return true;
 }
 
+/** Every rule card's title and category, for the jump-anywhere search. */
+export function allRules() {
+  if (!R) return [];
+  if (!cardsCache) cardsCache = buildCards();
+  return cardsCache.map((c) => ({ title: c.title, cat: c.cat }));
+}
+
 /** Make anything with data-rule="Name" (and data-rule-cat) open its rule card when tapped. */
 export function enableRuleLinks(doc = document) {
   const go = (el) => { if (!openRule(el.dataset.rule, el.dataset.ruleCat || null)) return; };

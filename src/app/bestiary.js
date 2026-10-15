@@ -106,6 +106,18 @@ function card(e) {
     mainPowers(e) ? h('div', { class: 'bst-pow' }, mainPowers(e)) : null);
 }
 
+/** Every creature's name, realm and PL, for the jump-anywhere search. */
+export function creatureList() { try { return all().map((e) => ({ name: e.name, pl: e.pl, category: e.category, realm: e.realm })); } catch { return []; } }
+
+/** Show one creature's sheet in the Bestiary (the tab must be open). */
+export function showCreature(name) {
+  const e = all().find((x) => x.name === name);
+  if (!e) return false;
+  Object.assign(f, { realm: '', category: '', q: '' });
+  select(e);
+  return true;
+}
+
 function select(entry, template = 'none') {
   try {
     selected = { entry, template, ch: toCharacter(entry, template) };

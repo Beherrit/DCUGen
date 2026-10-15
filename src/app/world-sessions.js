@@ -181,6 +181,15 @@ export function sessionsPage() {
 
 // ---- for the GM Screen ------------------------------------------------------------------------------------------
 
+/** Plan the next session and open it in the planner (from the jump-anywhere search). */
+export function planNextSession() {
+  W.rebuild();
+  const n = addSession(W.saved, { after: lastSession(W.world) });
+  W.ui.sessionId = n.id;
+  W.save();
+  return n;
+}
+
 /** The number the next session should have: the planned one, if the planner has it. */
 export function plannedNumber() { return W.saved ? nextSession(W.saved)?.number ?? null : null; }
 

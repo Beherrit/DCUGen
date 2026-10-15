@@ -10,13 +10,13 @@ import { initRoster, renderRoster, openRosterKey } from './roster.js';
 import { initLab, openInLab, renderLab } from './lab.js';
 import { initGm, renderGm, addToInitiative } from './gm.js';
 import { initWorkshop, renderWorkshop } from './workshop.js';
-import { initRules, renderRules, enableRuleLinks } from './rules.js';
-import { initBestiary, renderBestiary } from './bestiary.js';
+import { initRules, renderRules, enableRuleLinks, allRules, openRule } from './rules.js';
+import { initBestiary, renderBestiary, creatureList, showCreature } from './bestiary.js';
 import { initGarage, renderGarage } from './garage.js';
 import { initBattle, renderBattle, throwIn } from './battle.js';
-import { initWorld, renderWorld, openWorldPage, recordBattleInWorld, worldSaved, worldApply, openWorldKey, openPaperKey, openPaperObject, openHandoutKey, openHandoutObject, addWorldEvent, worldName } from './world.js';
+import { initWorld, renderWorld, openWorldPage, recordBattleInWorld, worldSaved, worldApply, openWorldKey, openPaperKey, openPaperObject, openHandoutKey, openHandoutObject, addWorldEvent, worldName, worldPages, openWorldPageById } from './world.js';
 import { initGmScreen, renderGmScreen, receiveStatus, afterBattleRecorded, startSession, currentPlan } from './gmscreen.js';
-import { plannedNumber, previouslyText, keepPlan, sessionPlayed } from './world-sessions.js';
+import { plannedNumber, previouslyText, keepPlan, sessionPlayed, planNextSession } from './world-sessions.js';
 import { statusOf, resolveHit, describeHit } from '../engine/gmboard.js';
 import { receiveMapFromHost, onSharedMap, receiveMapAsset, serveMapAssets, receiveMapMove } from './battlemap.js';
 import { initTable, renderTable, postRoll, joinFromLink, openPhoneTable } from './table.js';
@@ -27,12 +27,57 @@ import { startSync, syncButton } from './syncfile.js';
 import { setHouseRules } from '../engine/house.js';
 import { state as st, upsert, removeFromRoster } from './store.js';
 import { tableRoster, hostAcceptsEdit, hostAcceptsRemove, hostAcceptsClaim, shouldSendToTable } from '../engine/tabletrust.js';
-import { initHelp } from './help.js';
+import { initHelp, startTour, showWhatsNew } from './help.js';
+import { initPalette } from './palette.js';
+import { importDialog } from './importer.js';
 import { initTurnBar, setTableInit, setParty, refreshTurnBar } from './turnbar.js';
 import { endOfTurn } from '../engine/turns.js';
 import { setImportHooks, enableDropImport, setImportRules, openAnything } from './importer.js';
 const R = RULES;
 const views = ['forge', 'roster', 'lab', 'bestiary', 'workshop', 'garage', 'battle', 'world', 'table', 'screen', 'gm', 'rules'];
+
+/** Everything the jump-anywhere search (Ctrl+K) can open. */
+function searchables() {
+  const out = [];
+  const go = (v) => () => showTab(v);
+  for (const v of views) {
+    const label = document.getElementById(`tab-${v}`)?.firstChild?.textContent?.trim() || v;
+    out.push({ id: `tab:${v}`, kind: 'Go to', label, run: go(v), weight: 4 });
+  }
+  const world = (page) => () => { showTab('world'); openWorldPageById(page); };
+  out.push(
+    { id: 'do:roll', kind: 'Do', label: 'Roll a character', hint: 'R on the Forge', run: () => { showTab('forge'); roll(undefined, { newTab: true }); }, weight: 6 },
+    { id: 'do:import', kind: 'Do', label: 'Import a character', hint: 'Excel, .json or a key', run: () => { showTab('forge'); importDialog(); } },
+    { id: 'do:table', kind: 'Do', label: 'Open a table for phones', hint: 'QR code for your players', run: () => { showTab('table'); openPhoneTable(); } },
+    { id: 'do:session', kind: 'Do', label: 'Plan the next session', hint: 'World > Sessions', run: () => { planNextSession(); world('sessions')(); } },
+    { id: 'do:what', kind: 'Do', label: 'Record what happened', hint: 'In the World', run: world('home') },
+    { id: 'do:sessions', kind: 'Go to', label: 'Sessions', hint: 'World', run: world('sessions') },
+    { id: 'do:timeline', kind: 'Go to', label: 'Timeline', hint: 'World', run: world('timeline') },
+    { id: 'do:graph', kind: 'Go to', label: 'Relationship graph', hint: 'World', run: world('graph') },
+    { id: 'do:newsstand', kind: 'Go to', label: 'Newsstand', hint: 'World', run: world('newsstand') },
+    { id: 'do:handouts', kind: 'Go to', label: 'Handouts', hint: 'World', run: world('handouts') },
+    { id: 'do:tour-p', kind: 'Do', label: 'Player tour', run: () => startTour('player') },
+    { id: 'do:tour-g', kind: 'Do', label: 'GM tour', run: () => startTour('gm') },
+    { id: 'do:news', kind: 'Do', label: 'What\'s new', run: () => showWhatsNew() },
+    { id: 'do:theme', kind: 'Do', label: 'Switch light or dark theme', run: () => document.getElementById('theme-toggle').click() },
+  );
+  const seen = new Set();
+  for (const c of [...(state.tabs || []), ...state.roster]) {
+    const key = c.rosterId || c.seed || c.identity?.codename;
+    if (!c || seen.has(key)) continue;
+    seen.add(key);
+    out.push({ id: `ch:${key}`, kind: 'Character', label: c.identity?.codename || c.identity?.realName || 'Unnamed', hint: `PL ${c.pl}${c.folder ? ` · ${c.folder}` : ''}`, words: [c.identity?.realName, c.archetype, c.folder].filter(Boolean).join(' '), weight: 3, run: () => { setCurrent(c, { newTab: true }); showTab('forge'); } });
+  }
+  try {
+    for (const p of worldPages()) {
+      if (p.id.startsWith('char:')) continue; // the character itself is listed above
+      out.push({ id: `page:${p.id}`, kind: 'Page', label: p.name, hint: p.one, words: p.aliases.join(' '), weight: 1, run: () => { showTab('world'); openWorldPageById(p.id); } });
+    }
+  } catch { /* the World isn't ready */ }
+  for (const r of allRules()) out.push({ id: `rule:${r.cat}:${r.title}`, kind: 'Rule', label: r.title, hint: r.cat, run: () => openRule(r.title, r.cat) });
+  for (const c of creatureList()) out.push({ id: `cr:${c.name}`, kind: 'Creature', label: c.name, hint: `PL ${c.pl} · ${c.category}`, words: c.category, weight: -2, run: () => { showTab('bestiary'); showCreature(c.name); } });
+  return out;
+}
 
 function showTab(name) {
   if (!views.includes(name)) name = 'forge';
@@ -242,6 +287,7 @@ async function boot() {
   if (getApp) document.getElementById('theme-toggle').before(getApp);
   document.getElementById('theme-toggle').before(syncButton());
   initHelp({ showTab });
+  initPalette(searchables);
   initTurnBar();
   startSync();
   for (const v of views) {

@@ -107,6 +107,16 @@ export function addWorldEvent({ name, summary = '', tags = [], fields = {}, peop
   return ev;
 }
 
+/** Every page, for the jump-anywhere search: [{ id, name, type, aliases }]. */
+export function worldPages() {
+  if (!saved) saved = load();
+  rebuild();
+  return [...world.entities.values()].map((e) => ({ id: e.id, name: e.name, type: e.type, aliases: e.aliases || [], one: typeMeta(e.type).one }));
+}
+
+/** Open a World page (or one of the World's own pages: 'sessions', 'timeline'…) by id. */
+export function openWorldPageById(id) { ui.history = []; ui.page = id; ui.edit = false; if (root && !root.hidden) renderWorld(); }
+
 /** The World's name (the campaign). */
 export function worldName() { return saved?.name && saved.name !== 'My World' ? saved.name : 'Our Campaign'; }
 
