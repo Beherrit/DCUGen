@@ -16,9 +16,23 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Nothing is released unless every test passes: installed apps update themselves from these releases.
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Test
+        run: npm test
+      - name: Check every catalog creature against the PL limits
+        run: npm run validate
+
   # One job makes the release first, so the three builders only upload into it (making it from three
   # jobs at once failed with "already_exists" for whichever came last).
   release:
+    needs: test
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.v.outputs.version }}
@@ -33,7 +47,7 @@ jobs:
         run: |
           gh release view "v$V" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 \
             || gh release create "v$V" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "DCUGen $V" --latest \
-                 --notes "Desktop app build $V from $GITHUB_SHA. Windows: DCUGen-Setup.exe (installer, updates itself) or DCUGen-Portable.exe. macOS: DCUGen.dmg. Linux: DCUGen.AppImage."
+                 --notes "Desktop app build $V from $GITHUB_SHA. The single-file app: DCUGen.html (open it in any browser). Windows: DCUGen-Setup.exe (installer, updates itself) or DCUGen-Portable.exe. macOS: DCUGen.dmg. Linux: DCUGen.AppImage."
 
   build:
     needs: release
@@ -55,6 +69,13 @@ jobs:
           node-version: 20
       - name: Build the web app
         run: npm run build
+      # The single-file app is built here rather than committed (it is 4 MB, and a copy per commit made the
+      # repository huge). The README's download link points at this asset of the latest release.
+      - name: Publish DCUGen.html with the release
+        if: matrix.os == 'ubuntu-latest'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload "v${{ needs.release.outputs.version }}" DCUGen.html --clobber --repo "$GITHUB_REPOSITORY"
       - name: Stamp the version (6.1.<build number>)
         shell: bash
         run: |
