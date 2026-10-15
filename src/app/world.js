@@ -17,6 +17,7 @@ import { W, typeMeta, shortStatus, pageLink } from './world-common.js';
 import { entityPage, newPageDialog } from './world-page.js';
 import { momentDialog } from './world-moments.js';
 import { timelinePage, graphPage, vaultPage, timelineItem } from './world-views.js';
+import { sessionsPage } from './world-sessions.js';
 
 const KEY = 'dcugen.world.v1';
 let R; let root; let hooks = {};
@@ -153,7 +154,7 @@ function go(page, { replace = false } = {}) {
 function back() { const prev = ui.history.pop(); if (prev != null) { ui.page = prev; ui.edit = false; ui.linkPreset = null; renderWorld(); } }
 // The World's own bar: where you are, the pages that aren't people or places, search, and the two things you
 // do most (record what happened, make a page). Everything else lives one click down.
-const TABS = [['home', 'Home', '⌂'], ['timeline', 'Timeline', '🕰'], ['graph', 'Graph', '◉'], ['board', 'Board', '📌'], ['newsstand', 'Newsstand', '📰'], ['handouts', 'Handouts', '🗂'], ['vault', 'Share & export', '🗄']];
+const TABS = [['home', 'Home', '⌂'], ['sessions', 'Sessions', '🗓'], ['timeline', 'Timeline', '🕰'], ['graph', 'Graph', '◉'], ['board', 'Board', '📌'], ['newsstand', 'Newsstand', '📰'], ['handouts', 'Handouts', '🗂'], ['vault', 'Share & export', '🗄']];
 const TAB_OF = { 'paper-edit': 'newsstand', 'handout-edit': 'handouts' };
 
 function newMenu() {
@@ -299,6 +300,7 @@ export function renderWorld() {
   else if (ui.page === 'timeline') page = timelinePage();
   else if (ui.page === 'graph') page = graphPage();
   else if (ui.page === 'vault') page = vaultPage();
+  else if (ui.page === 'sessions') page = sessionsPage();
   else if (ui.page === 'newsstand') page = newsstandPage(ctx());
   else if (ui.page === 'paper-edit') page = editorPage(ctx());
   else if (ui.page === 'handouts') page = handoutsPage(ctx());

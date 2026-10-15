@@ -13,7 +13,8 @@ import { initBestiary, renderBestiary } from './bestiary.js';
 import { initGarage, renderGarage } from './garage.js';
 import { initBattle, renderBattle, throwIn } from './battle.js';
 import { initWorld, renderWorld, openWorldPage, recordBattleInWorld, worldSaved, worldApply, openWorldKey, openPaperKey, openPaperObject, openHandoutKey, openHandoutObject, addWorldEvent, worldName } from './world.js';
-import { initGmScreen, renderGmScreen, receiveStatus, afterBattleRecorded } from './gmscreen.js';
+import { initGmScreen, renderGmScreen, receiveStatus, afterBattleRecorded, startSession, currentPlan } from './gmscreen.js';
+import { plannedNumber, previouslyText, keepPlan, sessionPlayed } from './world-sessions.js';
 import { statusOf, resolveHit, describeHit } from '../engine/gmboard.js';
 import { receiveMapFromHost, onSharedMap, receiveMapAsset, serveMapAssets, receiveMapMove } from './battlemap.js';
 import { initTable, renderTable, postRoll, joinFromLink, openPhoneTable } from './table.js';
@@ -265,11 +266,19 @@ async function boot() {
     invite: () => openPhoneTable(),
     addWorldEvent: (e) => addWorldEvent(e),
     campaign: () => worldName(),
+    plannedNumber: () => plannedNumber(),
+    previously: (n) => previouslyText(n),
+    keepPlan: (plan) => keepPlan(plan),
+    sessionPlayed: (n, recap) => sessionPlayed(n, recap),
   });
   initWorld(R, document.getElementById('view-world'), {
     open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
     throwIn: throwInBattle,
     changed: () => renderCurrent(),
+    // The session planner: start a planned session on the GM Screen, use its prep, post to the table.
+    startSession: ({ number, previously }) => { startSession({ number, previously }); showTab('screen'); toast(`Session ${number} started`); },
+    gmPlan: () => currentPlan(),
+    postToTable: (text) => postRoll({ who: 'GM', kind: 'chat', text }),
   });
   initForge(R, document.getElementById('view-forge'), {
     editPower: (path) => { openInLab(state.current, path); showTab('lab'); },

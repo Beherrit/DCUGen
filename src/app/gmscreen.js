@@ -279,13 +279,25 @@ function addToBoard() {
 
 // ---- session, spotlight, complications ---------------------------------------------------------------------------
 
-function startSession() {
-  const n = (gs.lastSession || 0) + 1;
+/**
+ * Start a session. Its number is the one the World's session planner has for it (or the next after the last
+ * one played here); "Previously on…" from the planner goes to the table with it.
+ */
+export function startSession({ number = null, previously = null } = {}) {
+  const planned = number ?? hooks.plannedNumber?.() ?? null;
+  const n = planned && planned > (gs.lastSession || 0) ? planned : (gs.lastSession || 0) + 1;
   gs.session = { number: n, startedAt: new Date().toISOString(), taps: {}, complications: [], events: [], hits: 0 };
-  gs.lastSession = n;
+  gs.lastSession = Math.max(gs.lastSession || 0, n);
   save();
   postRoll({ who: 'GM', kind: 'chat', text: `🎬 Session ${n} begins.` });
+  const prev = previously ?? hooks.previously?.(n) ?? '';
+  if (prev) postRoll({ who: 'GM', kind: 'chat', text: prev });
+  if (root && !root.hidden) renderGmScreen();
+  return n;
 }
+
+/** The Session in a Box plan on the GM Screen, for the World's planner. */
+export function currentPlan() { return gs.plan || null; }
 
 function complicationsPanel(people) {
   const scene = h('textarea', { id: 'gm-scene', rows: 2, placeholder: 'The scene in a sentence: "A charity gala at the gold exchange, reporters everywhere"', 'aria-label': 'The scene' }, gs.scene || '');
@@ -395,8 +407,9 @@ async function endSession(people, spot) {
   const svg = recapSvg(r);
   postRoll({ who: 'GM', kind: 'chat', text: `🎬 Session ${s.number} ends. ${r.headline}` });
   hooks.addWorldEvent?.({ name: `${r.campaign} #${r.issue}: ${r.headline}`, summary: r.blurbs.join(' '), tags: ['recap', 'session'], fields: { Kind: 'Session recap', Session: s.number }, people: r.cast.map((c) => c.name) });
+  hooks.sessionPlayed?.(s.number, r);
   gs.lastRecap = r; gs.session = null; gs.init = null;
-  save();
+  save(); broadcastInit();
   renderGmScreen();
   await imageDialog({ title: `Recap: ${r.campaign} #${r.issue}`, svg, text: r.text, file: `${r.campaign}-${r.issue}`, alt: `Comic cover: ${r.headline}`, note: 'Also saved in the World as an event, so it shows on the campaign timeline and in the Newsstand.' });
 }
@@ -431,6 +444,9 @@ function prepPanel() {
         const quiet = spotlight(party.map((c) => ({ key: c.rosterId, name: c.identity?.codename })), feedEntries(), gs.session?.taps || {}, gs.session?.startedAt || 0).map((x) => x.name);
         const p = prepSession(R, { heroes: party, roster: state.roster, quiet, difficulty: diff.value, seed: randomSeed(), n: 40 });
         gs.plan = { ...p, made: new Date().toISOString() };
+        // The plan is also kept with the next session in the World's planner, so a new prep doesn't lose it.
+        const kept = hooks.keepPlan?.(gs.plan);
+        if (kept) toast(`Plan kept with session ${kept} (World > Sessions)`);
         save();
       } catch (e) { toast(e.message); }
       ui.busy = false; renderGmScreen();
