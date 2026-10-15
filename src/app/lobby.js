@@ -13,6 +13,8 @@
 // table can point at its own PeerJS server instead). The GM's tab runs the same relay as the desktop
 // server, so everything else works the same. Key: DCUP1.<base64url JSON { n: name, i: host peer id, k: token, s: server }>
 
+import { memberIdFor } from '../engine/tabletrust.js';
+
 const KEY_PREFIX = 'DCUL1.';
 const b64 = (s) => btoa(unescape(encodeURIComponent(s))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 const unb64 = (s) => decodeURIComponent(escape(atob(s.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((s.length + 3) % 4))));
@@ -72,6 +74,16 @@ export const lobby = {
   hostGone: false,
 };
 
+/** This browser's private table secret: the table knows us by a hash of it, so our characters stay ours. */
+function deviceSecret() {
+  const K = 'dcugen.table.device';
+  try {
+    let s = localStorage.getItem(K);
+    if (!s || !/^[A-Za-z0-9_-]{12,64}$/.test(s)) { s = rid(24); localStorage.setItem(K, s); }
+    return s;
+  } catch { return rid(24); }
+}
+
 let handlers = {};
 /** The app wires these: snapshot(), applyRoster(ch, from), removeRoster(id), applyWorld(saved), feed(entry), claim(rosterId, member) */
 export function setLobbyHandlers(h) { handlers = { ...handlers, ...h }; }
@@ -82,7 +94,7 @@ function send(msg) {
 }
 
 /** Connect to a lobby. role: 'player' (default) or 'host' (the desktop app that runs the server). */
-export function joinLobby(key, { name, role = 'player', address = null } = {}) {
+export function joinLobby(key, { name, role = 'player', address = null, hostToken = null } = {}) {
   if (isPeerKey(key)) { joinPeerTable(key, { name }); return; }
   const info = parseLobbyKey(key);
   leaveLobby({ silent: true });
@@ -100,7 +112,7 @@ export function joinLobby(key, { name, role = 'player', address = null } = {}) {
     lobby.ws = ws;
     let opened = false;
     const timer = setTimeout(() => { if (!opened) { try { ws.close(); } catch { /* ignore */ } } }, 6000);
-    ws.onopen = () => { opened = true; clearTimeout(timer); send({ t: 'hello', name: lobby.name, token: info.token, role }); };
+    ws.onopen = () => { opened = true; clearTimeout(timer); send({ t: 'hello', name: lobby.name, token: info.token, role, device: deviceSecret(), ...(hostToken ? { hostToken } : {}) }); };
     ws.onclose = () => { clearTimeout(timer); if (lobby.ws !== ws) return; if (!opened) { attempt(i + 1); return; } lobby.status = lobby.error ? 'error' : 'off'; lobby.ws = null; emit('status'); };
     ws.onerror = () => { /* onclose follows and moves to the next address */ };
     ws.onmessage = (ev) => { let msg; try { msg = JSON.parse(ev.data); } catch { return; } handle(msg); };
@@ -152,8 +164,8 @@ function handle(msg) {
       else handlers.removeRoster?.(msg.id, msg.from);
       break;
     case 'world':
-      if (lobby.role === 'host') { handlers.applyWorld?.(msg.saved, msg.from); send({ t: 'world', saved: handlers.worldSnapshot?.() || msg.saved }); }
-      else handlers.applyWorld?.(msg.saved, msg.from);
+      // The GM's world is the table's: players get it, the host never takes one from a player.
+      if (lobby.role !== 'host') handlers.applyWorld?.(msg.saved, msg.from);
       break;
     case 'claim':
       if (lobby.role === 'host') { const ch = handlers.claim?.(msg.rosterId, msg.from); if (ch) send({ t: 'roster', ch }); }
@@ -243,6 +255,8 @@ export function hostPeerTable({ name, tableName } = {}) {
   const fromPlayer = (c, msg) => {
     if (!c.hello) {
       if (msg.t !== 'hello' || msg.token !== token) { toClient(c, { t: 'refused', reason: 'Wrong table link.' }); setTimeout(() => c.conn.close(), 200); return; }
+      const stable = memberIdFor(msg.device);
+      if (stable && ![...clients.values()].some((o) => o !== c && o.hello && o.id === stable)) c.id = stable;
       c.hello = true; c.name = String(msg.name || 'Player').slice(0, 40);
       toClient(c, { t: 'welcome', id: c.id, role: 'player', members: members(), lobby: tableName || lobby.name });
       handle({ t: 'joined', id: c.id, name: c.name });
@@ -302,7 +316,7 @@ export function joinPeerTable(key, { name } = {}) {
     conn = peer.connect(info.hostId, { reliable: true, serialization: 'json' });
     conn.on('open', () => {
       transport = { send: (m) => { try { for (const s of wire(m)) conn.send(s); } catch { /* closed */ } }, close: () => { try { peer.destroy(); } catch { /* ignore */ } } };
-      transport.send({ t: 'hello', name: lobby.name, token: info.token, role: 'player' });
+      transport.send({ t: 'hello', name: lobby.name, token: info.token, role: 'player', device: deviceSecret() });
     });
     const whole = assembler();
     conn.on('data', (d) => { const m = whole(parse(d)); if (!m) return; if (m.t === 'welcome') clearTimeout(timer); handle(m); });

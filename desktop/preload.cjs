@@ -5,6 +5,7 @@ contextBridge.exposeInMainWorld('dcugenDesktop', {
   version: () => ipcRenderer.invoke('app:version'),
   vaultLoad: () => ipcRenderer.invoke('vault:load'),
   vaultSave: (data) => ipcRenderer.invoke('vault:save', data),
+  vaultUpdate: (change) => ipcRenderer.invoke('vault:update', change),
   vaultPath: () => ipcRenderer.invoke('vault:path'),
   openDataFolder: () => ipcRenderer.invoke('vault:open'),
   lobbyStart: (opts) => ipcRenderer.invoke('lobby:start', opts),

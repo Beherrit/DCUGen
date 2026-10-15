@@ -73,9 +73,25 @@ function collect(entry, seen = new Set(), order = []) {
   return order;
 }
 
+// The bundler only understands the forms the code base uses. Anything else fails the build loudly instead of
+// producing a page that breaks when it runs.
+function checkForms(file, code) {
+  const rel = path.relative(ROOT, file);
+  const bad = [];
+  code.split(/\r?\n/).forEach((line, i) => {
+    if (/^\s*import\s/.test(line) && !/^import\s+\{/.test(line)) bad.push(`${rel}:${i + 1}: only "import { a, b } from './x.js';" is supported`);
+    if (/^\s*import\s*\(/.test(line) || /[^.\w]import\s*\(\s*['"`]/.test(line)) bad.push(`${rel}:${i + 1}: dynamic import() is not supported`);
+    if (/^export\s+\*/.test(line)) bad.push(`${rel}:${i + 1}: "export *" is not supported`);
+    if (/^export\s+default\s+(?!(async\s+)?function|class)/.test(line)) bad.push(`${rel}:${i + 1}: "export default <expression>" is not supported`);
+    if (/^export\s+(var|let|const)\s*[{[]/.test(line)) bad.push(`${rel}:${i + 1}: destructuring exports are not supported`);
+  });
+  if (bad.length) throw new Error(`build: unsupported module syntax\n  ${bad.join('\n  ')}`);
+}
+
 function wrapModule(file) {
   const id = path.relative(ROOT, file).split(path.sep).join('/');
   let code = read(file);
+  checkForms(file, code);
   const exported = new Set();
   code = code.replace(IMPORT_RE, (_, names, from) => {
     const dep = path.relative(ROOT, path.resolve(path.dirname(file), from)).split(path.sep).join('/');

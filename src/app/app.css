@@ -1161,6 +1161,10 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 .tb-members { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 14px; }
 .tb-members li { display: flex; align-items: center; gap: 8px; }
 .tb-members small { color: var(--ink-3); }
+.tb-share { margin: 4px 0 10px; }
+.tb-share summary { cursor: pointer; font-weight: 600; }
+.tb-share-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; max-height: 240px; overflow: auto; font-size: 14px; }
+.tb-share-list small { color: var(--ink-3); }
 .tb-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--blue); }
 .tb-dot.host { background: var(--accent); }
 .tb-host { padding: 8px 10px; border: 1px dashed var(--line); border-radius: 6px; }
@@ -1993,3 +1997,73 @@ div.play-line small { grid-column: 1; grid-row: 2; }
 .getapp-steps { margin: 0 0 6px; padding-left: 20px; }
 .getapp-qr-box { margin: 8px 0; }
 .getapp-qr-box summary { cursor: pointer; font: 700 13px/1.6 var(--font-label); }
+
+/* ---------- World: the bar, the index and a calmer home (overrides the rules above) ---------- */
+.menu-list button.danger { color: var(--bad); }
+.wd-shell { display: grid; gap: 14px; }
+.wd-topbar { display: grid; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px 0; box-shadow: var(--shadow); }
+.wd-topbar-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.wd-topbar .wd-world-name { flex: 0 1 auto; max-width: 280px; }
+.wd-search { position: relative; flex: 1 1 220px; min-width: 180px; max-width: 460px; }
+.wd-search input { width: 100%; }
+.wd-results { position: absolute; z-index: 30; top: calc(100% + 4px); left: 0; right: 0; display: grid; gap: 0; max-height: 60vh; overflow-y: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, .18); padding: 4px; }
+.wd-result { padding: 5px 6px; border-radius: 6px; }
+.wd-result:hover { background: var(--surface-2); }
+.wd-topbar-actions { display: flex; gap: 6px; align-items: center; margin-left: auto; }
+.wd-tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: thin; margin: 0 -2px; }
+.wd-tab { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; border: 0; border-bottom: 3px solid transparent; background: none; padding: 8px 10px 7px; cursor: pointer; font: 600 13.5px/1.2 var(--font-label); color: var(--ink-2); }
+.wd-tab:hover { color: var(--ink); background: var(--surface-2); border-radius: 6px 6px 0 0; }
+.wd-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+.wd-layout { grid-template-columns: 250px minmax(0, 1fr); }
+.wd-side { display: block; padding: 10px 10px 12px; top: 70px; }
+.wd-side-summary { display: flex; align-items: center; gap: 8px; cursor: pointer; list-style: none; font: 800 12px/1 var(--font-label); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); padding: 4px 4px 8px; }
+.wd-side-summary::-webkit-details-marker { display: none; }
+.wd-side-summary::before { content: '▸'; color: var(--ink-3); }
+.wd-side[open] > .wd-side-summary::before { content: '▾'; }
+.wd-side-summary .count { margin-left: auto; font-weight: 600; color: var(--ink-3); background: var(--surface-2); padding: 2px 7px; border-radius: 8px; letter-spacing: 0; }
+.wd-section-head-row { display: flex; align-items: center; }
+.wd-section-head-row .wd-section-head { flex: 1; min-width: 0; }
+.wd-section-add { border: 0; background: none; cursor: pointer; font: 800 15px/1 var(--font-label); flex: 0 0 auto; }
+.wd-more { font-size: 12px; margin: 2px 0 0 22px; justify-self: start; }
+.wd-none { margin: 0 0 0 22px; font-size: 12.5px; }
+.wd-hero { align-items: flex-end; }
+.wd-hero .wd-hero-edit { align-self: flex-start; }
+.wd-counts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; grid-template-columns: none; }
+.wd-count { display: inline-flex; align-items: baseline; gap: 6px; min-width: 0; padding: 6px 12px; border-radius: 999px; box-shadow: inset 0 -3px 0 var(--c); }
+.wd-count b { font-size: 20px; }
+.wd-block h2 .pts { margin-left: 10px; font: 600 13px/1 var(--font-label); color: var(--ink-3); letter-spacing: 0; }
+.wd-cards { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.wd-actions { align-items: center; }
+.wd-addlink { padding: 0; border: 1px dashed var(--line); }
+.wd-addlink > summary { cursor: pointer; padding: 8px 10px; font: 700 13.5px/1.2 var(--font-label); color: var(--ink-2); }
+.wd-addlink[open] { padding: 0 10px 10px; }
+.wd-addlink[open] > summary { padding-left: 0; }
+.wd-graph-filters > summary { cursor: pointer; font: 600 13px/1.2 var(--font-label); color: var(--ink-2); padding: 4px 0; }
+.wd-graph-filters[open] { display: grid; gap: 6px; }
+.wd-graph-tools { display: flex; align-items: center; gap: 6px; padding: 2px 4px 6px; }
+.wd-graph-tools .spacer { flex: 1; }
+.wd-graph-scroll { overflow: auto; max-height: 78vh; border-radius: 8px; }
+.wd-graph-wrap.big .wd-graph { min-height: 0; }
+.wd-node text.minor { opacity: 0; transition: opacity .12s; }
+.wd-node:hover text.minor, .wd-node:focus text.minor { opacity: 1; }
+@media (max-width: 1000px) {
+  .wd-layout { grid-template-columns: minmax(0, 1fr); }
+  .wd-side { position: static; max-height: none; order: 2; }
+  .wd-content { order: 1; }
+  .wd-topbar .wd-world-name { max-width: none; flex: 1 1 100%; }
+  .wd-search { max-width: none; }
+}
+@media (max-width: 560px) {
+  .wd-topbar-actions { margin-left: 0; width: 100%; }
+  .wd-topbar-actions > * { flex: 1; }
+  .wd-topbar-actions .menu > .btn { width: 100%; }
+  .wd-hero h1 { font-size: 34px; }
+  .wd-actions .spacer { display: none; }
+}
+.wd-content > .wd-page { width: 100%; }
+.wd-graph-wrap.big { display: block; }
+/* the World's content column is a <main> inside the page's <main>: don't inherit the page's padding and centring */
+main.wd-content { margin: 0; padding: 0; max-width: none; width: 100%; }
+.wd-addlink .add-row > #wd-link-target { flex: 3 1 240px; }
+.wd-glance-row { align-items: start; }
+.wd-glance-label { padding-top: 6px; }

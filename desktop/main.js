@@ -5,6 +5,7 @@ import { app, BrowserWindow, ipcMain, dialog, shell, Menu } from 'electron';
 import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import crypto from 'node:crypto';
 import { startLobbyServer } from './lobby-server.js';
 import updaterPkg from 'electron-updater';
 
@@ -28,15 +29,32 @@ function vaultRead() {
   return out;
 }
 
-function vaultWrite(data) {
+// One file per key. The name is readable and the hash keeps two keys that look alike apart.
+const fileFor = (dir, key) => path.join(dir, `${safe(key).slice(0, 80)}-${crypto.createHash('sha1').update(String(key)).digest('hex').slice(0, 8)}.json`);
+
+/** Write the keys that changed and delete the ones the app removed; then, at most once an hour, the day's backup. */
+function vaultWrite(data, removed = []) {
   const dir = vaultDir();
   fs.mkdirSync(dir, { recursive: true });
   for (const [key, value] of Object.entries(data)) {
-    const file = path.join(dir, `${safe(key)}.json`);
+    const file = fileFor(dir, key);
     const tmp = `${file}.tmp`;
     fs.writeFileSync(tmp, JSON.stringify({ key, value, savedAt: new Date().toISOString() }));
     fs.renameSync(tmp, file);
+    // a file from before the hashed names
+    const old = path.join(dir, `${safe(key)}.json`);
+    if (old !== file && fs.existsSync(old)) { try { fs.unlinkSync(old); } catch { /* ignore */ } }
   }
+  for (const key of removed) {
+    for (const f of [fileFor(dir, key), path.join(dir, `${safe(key)}.json`)]) if (fs.existsSync(f)) { try { fs.unlinkSync(f); } catch { /* ignore */ } }
+  }
+  backupNow();
+}
+
+let lastBackup = 0;
+function backupNow(force = false) {
+  if (!force && Date.now() - lastBackup < 60 * 60 * 1000) return;
+  lastBackup = Date.now();
   // keep a rolling daily backup of the whole vault
   const bak = path.join(app.getPath('userData'), 'backups');
   fs.mkdirSync(bak, { recursive: true });
@@ -51,13 +69,15 @@ let lobbyServer = null;
 
 ipcMain.handle('vault:load', () => vaultRead());
 ipcMain.handle('vault:save', (_e, data) => { vaultWrite(data || {}); return true; });
+// Only what changed: { data: { key: value }, removed: [key] }.
+ipcMain.handle('vault:update', (_e, change) => { vaultWrite(change?.data || {}, Array.isArray(change?.removed) ? change.removed : []); return true; });
 ipcMain.handle('vault:path', () => vaultDir());
 ipcMain.handle('vault:open', () => shell.openPath(app.getPath('userData')));
 ipcMain.handle('lobby:start', async (_e, opts) => {
   if (lobbyServer) await lobbyServer.close();
   lobbyServer = await startLobbyServer({ port: Number(process.env.DCUGEN_LOBBY_PORT) || 7777, name: opts?.name || 'DCUGen table' }).catch(() => startLobbyServer({ port: 0, name: opts?.name || 'DCUGen table' }));
-  const { port, token, addresses, name } = lobbyServer;
-  return { port, token, addresses, name };
+  const { port, token, hostToken, addresses, name } = lobbyServer;
+  return { port, token, hostToken, addresses, name };
 });
 ipcMain.handle('lobby:stop', async () => { if (lobbyServer) { await lobbyServer.close(); lobbyServer = null; } return true; });
 ipcMain.handle('lobby:info', () => (lobbyServer ? { port: lobbyServer.port, members: lobbyServer.members() } : null));
@@ -88,10 +108,14 @@ function createWindow() {
     width: 1440, height: 920, minWidth: 900, minHeight: 600,
     title: 'DCUGen Hero Forge',
     backgroundColor: '#0c0f14',
-    webPreferences: { preload: path.join(__dirname, 'preload.cjs'), contextIsolation: true, nodeIntegration: false, sandbox: false },
+    webPreferences: { preload: path.join(__dirname, 'preload.cjs'), contextIsolation: true, nodeIntegration: false, sandbox: true },
   });
   win.loadFile(APP_HTML);
-  win.webContents.setWindowOpenHandler(({ url }) => { shell.openExternal(url); return { action: 'deny' }; });
+  // Links open in the user's browser, but only web and mail links: never file://, custom protocols or the like.
+  const external = (url) => { try { const u = new URL(url); if (['https:', 'http:', 'mailto:'].includes(u.protocol)) shell.openExternal(u.href); } catch { /* not a URL */ } };
+  win.webContents.setWindowOpenHandler(({ url }) => { external(url); return { action: 'deny' }; });
+  // The window only ever shows the app itself.
+  win.webContents.on('will-navigate', (e, url) => { if (url.split('#')[0] !== win.webContents.getURL().split('#')[0]) { e.preventDefault(); external(url); } });
   return win;
 }
 
@@ -108,4 +132,4 @@ app.whenReady().then(() => {
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });
 app.on('window-all-closed', async () => { if (lobbyServer) await lobbyServer.close(); if (process.platform !== 'darwin') app.quit(); });
-app.on('before-quit', async () => { if (lobbyServer) await lobbyServer.close(); });
+app.on('before-quit', async () => { try { backupNow(true); } catch { /* best effort */ } if (lobbyServer) await lobbyServer.close(); });

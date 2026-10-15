@@ -2,7 +2,7 @@
 
 A character generator and GM toolkit for the **DC Adventures RPG** (Mutants & Masterminds 3e rules).
 
-**Open [`DCUGen.html`](DCUGen.html) in any modern browser.** It is one self-contained file: send it to your
+**Download [`DCUGen.html`](https://github.com/Beherrit/DCUGen/releases/latest/download/DCUGen.html) and open it in any modern browser.** It is one self-contained file: send it to your
 players and they can use it too. No install, works offline (fonts fall back to system fonts without internet).
 
 **Or install the desktop app:** [Windows installer](https://github.com/Beherrit/DCUGen/releases/latest/download/DCUGen-Setup.exe) ·
@@ -257,7 +257,7 @@ Needs Node 18 or newer, nothing else.
 
 ```bash
 npm test          # rules engine, generators, exports
-npm run build     # rebuilds DCUGen.html
+npm run build     # builds DCUGen.html (not committed: CI attaches it to every release)
 npm run dev       # http://localhost:5178/src/app/index.html (live) and http://localhost:5178/ (built)
 npm run validate  # check every catalog creature against the PL limits
 ```

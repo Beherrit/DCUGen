@@ -7,11 +7,16 @@
 // "Back up everything" / "Restore".
 
 import { h, toast, openDialog } from './dom.js';
-import { snapshotAll, restoreAll, registerSyncDialog } from './backup.js';
+import { snapshotAll, restoreAll, registerSyncDialog, MERGE_ROSTER, MERGE_WORLD, DELETED } from './backup.js';
 
 const META = 'dcugen.sync.v1'; // { device, name, lastPullAt, lastPushAt }
+// When each key last changed on this device (or on the device it came from): { [key]: ISO time }.
+// Merging by these, key by key, means a pull never overwrites something edited here more recently.
+const STAMPS = 'dcugen.sync.stamps.v1';
 // Things that belong to this device: open tabs, current page, theme, how lists are shown.
-const LOCAL_ONLY = ['dcugen.tabs.v1', 'dcugen.tab', 'dcugen.theme', 'dcugen.sheetview', 'dcugen.gmtab', 'dcugen.roster.view', META];
+const LOCAL_ONLY = ['dcugen.tabs.v1', 'dcugen.tab', 'dcugen.theme', 'dcugen.sheetview', 'dcugen.gmtab', 'dcugen.roster.view', META, STAMPS];
+// Merged item by item (characters by save time, world pages and ties, deletions), not key by key.
+const ITEM_MERGED = [MERGE_ROSTER, MERGE_WORLD, DELETED];
 
 export const syncSupported = () => typeof window.showSaveFilePicker === 'function' && !!window.__dcugenStorage?.db;
 
@@ -23,8 +28,69 @@ function device() {
   return m.device;
 }
 
-const handle = () => window.__dcugenStorage?.handle('syncfile');
+let stampCache = null;
+function stamps() { if (!stampCache) { try { stampCache = JSON.parse(localStorage.getItem(STAMPS) || 'null') || {}; } catch { stampCache = {}; } } return stampCache; }
+function saveStamps() { try { localStorage.setItem(STAMPS, JSON.stringify(stamps())); } catch { /* ignore */ } }
+const synced = (k) => String(k).startsWith('dcugen.') && !LOCAL_ONLY.includes(String(k));
+let applying = false;
 let dirty = false;
+let stampTimer = null;
+
+// Note every change to the app's data as soon as this module loads (before the app starts writing), so
+// edits made while sync is off, offline or waiting for permission are known to be newer than the file's.
+(() => {
+  if (typeof Storage === 'undefined') return;
+  const proto = Storage.prototype;
+  const set = proto.setItem; const remove = proto.removeItem;
+  const note = (store, k) => {
+    if (applying || store !== localStorage || !synced(k)) return;
+    stamps()[String(k)] = new Date().toISOString();
+    dirty = true;
+    if (!stampTimer) stampTimer = setTimeout(() => { stampTimer = null; saveStamps(); }, 300);
+  };
+  // Only real changes count: the app re-saves unchanged values all the time, and stamping those would make
+  // this device look newer than edits made elsewhere.
+  proto.setItem = function setItem(k, v) { const before = this.getItem(k); set.call(this, k, v); if (before !== String(v)) note(this, k); };
+  proto.removeItem = function removeItem(k) { const had = this.getItem(k) !== null; remove.call(this, k); if (had) note(this, k); };
+  addEventListener('pagehide', () => { if (stampTimer) { clearTimeout(stampTimer); stampTimer = null; saveStamps(); } });
+})();
+
+/**
+ * Bring another device's file in. Characters, world pages and deletions merge item by item; every other
+ * key (journal, GM screen, battle, handouts, settings...) is taken from the file only when it changed there
+ * more recently than here, and a key deleted there more recently is deleted here. Exported for tests.
+ */
+export function mergeFromRemote(remote) {
+  const mine = stamps();
+  const theirs = remote.stamps || {};
+  // A file from before per-key stamps: treat everything in it as changed when it was saved.
+  const legacy = !remote.stamps;
+  const theirTime = (k) => theirs[k] || (legacy ? String(remote.savedAt || '') : '');
+  applying = true;
+  try {
+    restoreAll(remote, { mode: 'merge', only: ITEM_MERGED });
+    for (const k of ITEM_MERGED) { const t = theirTime(k); if (t > (mine[k] || '')) mine[k] = t; }
+    const keys = new Set([...Object.keys(remote.data || {}), ...Object.keys(theirs)]);
+    for (const k of keys) {
+      if (!synced(k) || ITEM_MERGED.includes(k)) continue;
+      const t = theirTime(k); const l = mine[k] || '';
+      const here = localStorage.getItem(k);
+      const there = remote.data?.[k];
+      if (there === undefined) {
+        // deleted there: follow only if that deletion is newer than our last change
+        if (here !== null && t && t > l) { localStorage.removeItem(k); mine[k] = t; }
+        continue;
+      }
+      if (typeof there !== 'string' || there === here) { if (t > l) mine[k] = t; continue; }
+      if (here === null ? t >= l : t > l) {
+        try { localStorage.setItem(k, there); mine[k] = t; } catch { /* full */ }
+      }
+    }
+  } finally { applying = false; }
+  saveStamps();
+}
+
+const handle = () => window.__dcugenStorage?.handle('syncfile');
 let busy = false;
 let status = 'off'; // off | ok | needs-permission | error
 const listeners = new Set();
@@ -50,6 +116,8 @@ async function readFile(fh) {
 async function writeFile(fh) {
   const snap = snapshotAll();
   for (const k of LOCAL_ONLY) delete snap.data[k];
+  const all = stamps();
+  snap.stamps = Object.fromEntries(Object.entries(all).filter(([k]) => synced(k)));
   snap.kind = 'sync'; snap.device = device();
   const w = await fh.createWritable();
   await w.write(JSON.stringify(snap));
@@ -73,7 +141,7 @@ export async function syncNow({ ask = false, quiet = false } = {}) {
     const remote = await readFile(fh);
     const m = meta();
     if (remote && remote.device !== device() && String(remote.savedAt) > String(m.lastPullAt || '')) {
-      restoreAll(remote, { mode: 'merge', skip: LOCAL_ONLY });
+      mergeFromRemote(remote);
       setMeta({ ...meta(), lastPullAt: remote.savedAt });
       pulled = true;
     }
@@ -149,9 +217,6 @@ export function syncButton() {
 /** At start: sync if allowed, then send changes every few seconds. */
 export async function startSync() {
   if (!syncSupported()) return;
-  // Note every change to the app's data (except what stays on this device).
-  const set = Storage.prototype.setItem;
-  Storage.prototype.setItem = function setItem(k, v) { set.call(this, k, v); if (this === localStorage && String(k).startsWith('dcugen.') && !LOCAL_ONLY.includes(String(k))) dirty = true; };
   const fh = await handle();
   if (!fh) return;
   const { pulled } = await syncNow({ quiet: true });

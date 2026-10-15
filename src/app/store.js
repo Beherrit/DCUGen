@@ -72,9 +72,10 @@ export function upsert(ch) {
   return copy;
 }
 
-export function removeFromRoster(rosterId) {
+export function removeFromRoster(rosterId, { tombstone = true } = {}) {
+  state.lastRemovedChar = state.roster.find((x) => x.rosterId === rosterId) || null;
   state.roster = state.roster.filter((x) => x.rosterId !== rosterId);
-  writeJson(DELETED_KEY, [...readJson(DELETED_KEY, []).filter((t) => t.rosterId !== rosterId), { rosterId, at: new Date().toISOString() }].slice(-500));
+  if (tombstone) writeJson(DELETED_KEY, [...readJson(DELETED_KEY, []).filter((t) => t.rosterId !== rosterId), { rosterId, at: new Date().toISOString() }].slice(-500));
   saveRoster();
   state.lastRemoved = rosterId;
   emit('roster-remove');

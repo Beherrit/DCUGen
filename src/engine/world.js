@@ -103,6 +103,11 @@ export function emptyWorld() {
   return { v: 1, name: 'My World', tagline: 'Everyone, everywhere, and how they are tied together', description: '', entities: {}, links: [], overrides: {}, hidden: [], hiddenLinks: [], linkEnds: {}, moments: [], board: null };
 }
 
+const nowIso = () => new Date().toISOString();
+/** Remember that something was deleted, so merging another copy of the world doesn't bring it back. */
+function bury(saved, id) { saved.gone = saved.gone || {}; saved.gone[id] = nowIso(); }
+function unbury(saved, id) { if (saved.gone?.[id]) delete saved.gone[id]; }
+
 const newId = (prefix) => `${prefix}:${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 
 // ---- building ---------------------------------------------------------------------------------------------------
@@ -387,7 +392,8 @@ export function searchWorld(world, q, { type = null, limit = 50 } = {}) {
 
 export function createEntity(saved, { type, name, summary = '', body = '', tags = [], fields = {}, aliases = [], color = null }) {
   const id = newId(type);
-  saved.entities[id] = { id, type, name: String(name).trim(), summary, body, tags, fields, aliases, color, created: new Date().toISOString() };
+  saved.entities[id] = { id, type, name: String(name).trim(), summary, body, tags, fields, aliases, color, created: nowIso() };
+  unbury(saved, id);
   return saved.entities[id];
 }
 
@@ -399,20 +405,29 @@ export function updateEntity(saved, world, id, patch) {
 }
 
 export function deleteEntity(saved, id) {
-  if (saved.entities[id]) delete saved.entities[id];
-  else if (!saved.hidden.includes(id)) saved.hidden.push(id);
+  if (saved.entities[id]) { delete saved.entities[id]; bury(saved, id); } else {
+    if (!saved.hidden.includes(id)) saved.hidden.push(id);
+    saved.hiddenAt = { ...(saved.hiddenAt || {}), [id]: nowIso() };
+    unbury(saved, `shown:${id}`);
+  }
+  for (const l of saved.links) if (l.from === id || l.to === id) bury(saved, l.id);
   saved.links = saved.links.filter((l) => l.from !== id && l.to !== id);
 }
 
-export function restoreHidden(saved, id) { saved.hidden = saved.hidden.filter((x) => x !== id); }
+export function restoreHidden(saved, id) {
+  saved.hidden = saved.hidden.filter((x) => x !== id);
+  if (saved.hiddenAt?.[id]) delete saved.hiddenAt[id];
+  bury(saved, `shown:${id}`);
+}
 
 export function addLink(saved, { from, to, rel, note = '', since = null }) {
   if (!from || !to || from === to || !RELATIONS[rel]) return null;
   const id = `${from}|${to}|${rel}`;
   saved.links = saved.links.filter((l) => l.id !== id);
-  const l = { id, from, to, rel, note, created: new Date().toISOString() };
+  const l = { id, from, to, rel, note, created: nowIso() };
   if (since) l.since = since;
   saved.links.push(l);
+  unbury(saved, id);
   if (saved.linkEnds?.[id]) delete saved.linkEnds[id];
   saved.hiddenLinks = (saved.hiddenLinks || []).filter((x) => x !== id);
   return l;
@@ -568,6 +583,8 @@ export function removeMoment(saved, id) {
   const m = (saved.moments || []).find((x) => x.id === id);
   if (!m) return false;
   saved.links = saved.links.filter((l) => !(m.created || []).includes(l.id));
+  for (const lid of m.created || []) bury(saved, lid);
+  bury(saved, id);
   for (const lid of m.ended || []) if (saved.linkEnds?.[lid]?.momentId === id) delete saved.linkEnds[lid];
   const revert = (eid, prev) => { const o = saved.overrides[eid]; if (!o?.fields) return; if (prev) o.fields.Status = prev; else delete o.fields.Status; };
   if (m.statusOf) revert(m.statusOf, m.prevStatus);
@@ -600,7 +617,59 @@ export function removeLink(saved, world, id) {
   if (saved.links.length === before) {
     // an automatic link: hide it
     saved.hiddenLinks = [...new Set([...(saved.hiddenLinks || []), id])];
+    saved.hiddenAt = { ...(saved.hiddenAt || {}), [id]: nowIso() };
+  } else bury(saved, id);
+}
+
+/**
+ * Merge two copies of the hand-made world (another device's, a backup, a table's). Everything both sides
+ * added stays; an edit wins when it is newer; and what one side deleted stays deleted unless the other side
+ * made it again afterwards. Returns a new object; neither input is changed.
+ */
+export function mergeWorldSaved(current, incoming) {
+  if (!incoming) return current;
+  if (!current) return { ...emptyWorld(), ...incoming };
+  const later = (a, b) => (String(a || '') >= String(b || '') ? a : b);
+  const gone = { ...(current.gone || {}) };
+  for (const [k, t] of Object.entries(incoming.gone || {})) gone[k] = later(gone[k], t);
+  const alive = (id, stamp) => !gone[id] || String(stamp || '') > gone[id];
+  const stampOf = (e) => e?.updated || e?.created || e?.at || '';
+
+  const entities = {};
+  for (const [id, e] of [...Object.entries(current.entities || {}), ...Object.entries(incoming.entities || {})]) {
+    if (!entities[id] || String(stampOf(e)) >= String(stampOf(entities[id]))) entities[id] = e;
   }
+  for (const [id, e] of Object.entries(entities)) if (!alive(id, stampOf(e))) delete entities[id];
+
+  const overrides = { ...(current.overrides || {}) };
+  for (const [id, o] of Object.entries(incoming.overrides || {})) {
+    const c = overrides[id] || {};
+    overrides[id] = { ...c, ...o, ...(c.fields || o.fields ? { fields: { ...(c.fields || {}), ...(o.fields || {}) } } : {}) };
+  }
+
+  const byId = new Map();
+  for (const l of [...(current.links || []), ...(incoming.links || [])]) {
+    if (!byId.has(l.id) || String(l.created || '') >= String(byId.get(l.id).created || '')) byId.set(l.id, l);
+  }
+  const links = [...byId.values()].filter((l) => alive(l.id, l.created) && alive(l.from, '') && alive(l.to, ''));
+
+  const moments = [];
+  for (const m of [...(current.moments || []), ...(incoming.moments || [])]) if (!moments.some((x) => x.id === m.id) && alive(m.id, m.at)) moments.push(m);
+
+  const hiddenAt = { ...(current.hiddenAt || {}) };
+  for (const [k, t] of Object.entries(incoming.hiddenAt || {})) hiddenAt[k] = later(hiddenAt[k], t);
+  const stillHidden = (id) => !gone[`shown:${id}`] || String(hiddenAt[id] || '') > gone[`shown:${id}`];
+  const hidden = [...new Set([...(current.hidden || []), ...(incoming.hidden || [])])].filter(stillHidden);
+  const hiddenLinks = [...new Set([...(current.hiddenLinks || []), ...(incoming.hiddenLinks || [])])].filter((id) => !links.some((l) => l.id === id && String(l.created || '') > String(hiddenAt[id] || '')));
+
+  const out = {
+    ...current,
+    entities, overrides, links, moments, hidden, hiddenLinks, hiddenAt, gone,
+    linkEnds: { ...(current.linkEnds || {}), ...(incoming.linkEnds || {}) },
+    board: current.board || incoming.board || null,
+  };
+  if (incoming.name && (!current.name || current.name === 'My World')) { out.name = incoming.name; out.tagline = incoming.tagline || current.tagline; out.description = incoming.description || current.description; }
+  return out;
 }
 
 /** Record a Battle Room fight as an event with everyone who fought in it. */
@@ -681,6 +750,86 @@ export function layoutGraph(nodes, edges, { width = 800, height = 600, iteration
     }
   }
   return pos;
+}
+
+/**
+ * Lay out a whole world: each group of connected pages gets its own patch (laid out with layoutGraph), and
+ * the patches are packed in rows, biggest first, with loose pages gathered in a grid at the end. Unlike one
+ * layout of everything, separate families and teams don't push each other into the edges.
+ * Returns { pos: Map(id -> {x, y}), width, height }.
+ */
+export function layoutComponents(nodes, edges, { width = 1100, gap = 36, seed = 1, cell = 92 } = {}) {
+  const ids = new Set(nodes.map((n) => n.id));
+  const nb = new Map(nodes.map((n) => [n.id, []]));
+  const es = edges.filter((e) => ids.has(e.from) && ids.has(e.to) && e.from !== e.to);
+  for (const e of es) { nb.get(e.from).push(e.to); nb.get(e.to).push(e.from); }
+  const seen = new Set();
+  const comps = []; const loose = [];
+  for (const n of nodes) {
+    if (seen.has(n.id)) continue;
+    const comp = []; const stack = [n.id]; seen.add(n.id);
+    while (stack.length) { const id = stack.pop(); comp.push(id); for (const o of nb.get(id)) if (!seen.has(o)) { seen.add(o); stack.push(o); } }
+    if (comp.length === 1) loose.push(comp[0]); else comps.push(comp);
+  }
+  comps.sort((a, b) => b.length - a.length);
+  // Each group as a "balloon" tree from its best-connected page: everyone they know in a ring around them,
+  // and anyone those people bring in, in a smaller ring around that person, facing outwards. A second hero
+  // tied in through a city keeps their own family around them instead of being smeared across the picture.
+  const boxes = comps.map((comp) => {
+    const hub = comp.reduce((best, id) => (nb.get(id).length > nb.get(best).length ? id : best), comp[0]);
+    const kids = new Map(comp.map((id) => [id, []]));
+    const seenT = new Set([hub]); const queue = [hub];
+    while (queue.length) { const id = queue.shift(); for (const o of [...nb.get(id)].sort()) if (!seenT.has(o)) { seenT.add(o); kids.get(id).push(o); queue.push(o); } }
+    const NODE = 16; const GAP = 10;
+    const ringR = new Map(); const discR = new Map();
+    const size = (id, root) => {
+      const ch = kids.get(id);
+      if (!ch.length) { discR.set(id, NODE); return NODE; }
+      for (const c of ch) size(c, false);
+      const total = ch.reduce((sum, c) => sum + 2 * discR.get(c) + GAP, 0);
+      const arc = root ? Math.PI * 2 : Math.PI * 1.5;
+      const r = Math.max(root ? 70 : 52, total / arc);
+      ringR.set(id, r);
+      const d = r + Math.max(...ch.map((c) => discR.get(c)));
+      discR.set(id, d);
+      return d;
+    };
+    size(hub, true);
+    const local = new Map([[hub, { x: 0, y: 0 }]]);
+    const place = (id, dir, root) => {
+      const ch = kids.get(id);
+      if (!ch.length) return;
+      const p = local.get(id); const r = ringR.get(id);
+      const widths = ch.map((c) => (2 * discR.get(c) + GAP) / r);
+      const used = widths.reduce((x, y) => x + y, 0);
+      let t = root ? -Math.PI / 2 : dir - used / 2;
+      ch.forEach((c, i) => {
+        const a2 = t + widths[i] / 2;
+        local.set(c, { x: p.x + Math.cos(a2) * r, y: p.y + Math.sin(a2) * r });
+        place(c, a2, false);
+        t += widths[i];
+      });
+    };
+    place(hub, 0, true);
+    const xs = [...local.values()].map((q) => q.x); const ys = [...local.values()].map((q) => q.y);
+    const m = 40; const x0 = Math.min(...xs) - m; const y0 = Math.min(...ys) - m;
+    for (const q of local.values()) { q.x -= x0; q.y -= y0; }
+    return { local, w: Math.ceil(Math.max(...xs) - x0 + m), h: Math.ceil(Math.max(...ys) - y0 + m) };
+  });
+  if (loose.length) {
+    const cols = Math.max(1, Math.min(loose.length, Math.floor(width / cell)));
+    const local = new Map(loose.map((id, i) => [id, { x: (i % cols) * cell + cell / 2, y: Math.floor(i / cols) * 70 + 35 }]));
+    boxes.push({ local, w: cols * cell, h: Math.ceil(loose.length / cols) * 70 });
+  }
+  // shelf packing
+  const pos = new Map();
+  let x = 0; let y = 0; let rowH = 0; let maxW = 0;
+  for (const b of boxes) {
+    if (x > 0 && x + b.w > width) { x = 0; y += rowH + gap; rowH = 0; }
+    for (const [id, p] of b.local) pos.set(id, { x: p.x + x, y: p.y + y });
+    x += b.w + gap; rowH = Math.max(rowH, b.h); maxW = Math.max(maxW, x - gap);
+  }
+  return { pos, width: Math.max(1, maxW), height: Math.max(1, y + rowH) };
 }
 
 /** A front page (see newspaper.js) as Markdown, for the vault export and "Copy as Markdown". */

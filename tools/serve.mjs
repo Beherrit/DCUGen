@@ -7,13 +7,17 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PORT = Number(process.env.PORT || 5178);
+// Only this computer by default; HOST=0.0.0.0 to try it from a phone on your network.
+const HOST = process.env.HOST || '127.0.0.1';
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', '.png': 'image/png' };
 
 http.createServer((req, res) => {
   let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
   if (p === '/') p = '/DCUGen.html';
   const file = path.join(ROOT, p);
-  if (!file.startsWith(ROOT) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404); res.end('Not found'); return; }
+  const rel = path.relative(ROOT, file);
+  const outside = rel.startsWith('..') || path.isAbsolute(rel) || rel.split(path.sep)[0] === '.git';
+  if (outside || !fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404); res.end('Not found'); return; }
   res.writeHead(200, { 'Content-Type': TYPES[path.extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
   fs.createReadStream(file).pipe(res);
-}).listen(PORT, () => console.log(`DCUGen dev server: http://localhost:${PORT}/`));
+}).listen(PORT, HOST, () => console.log(`DCUGen dev server: http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}/`));
