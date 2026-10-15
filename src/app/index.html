@@ -29,21 +29,28 @@
       <button class="icon-btn theme-toggle" id="theme-toggle" type="button" title="Switch light or dark theme" aria-label="Switch light or dark theme">◐</button>
     </div>
     <nav class="tabs" role="tablist" aria-label="Sections">
-      <button class="tab" role="tab" id="tab-forge" data-tab="forge" aria-selected="true">Forge</button>
-      <button class="tab" role="tab" id="tab-roster" data-tab="roster" aria-selected="false">Roster <span class="count" id="roster-count">0</span></button>
-      <button class="tab" role="tab" id="tab-table" data-tab="table" aria-selected="false">Table <span class="count" id="table-count" hidden></span></button>
+      <span class="tab-group" data-group="Characters">
+        <button class="tab" role="tab" id="tab-forge" data-tab="forge" aria-selected="true" title="Make and edit characters">Forge</button>
+        <button class="tab" role="tab" id="tab-roster" data-tab="roster" aria-selected="false" title="Everyone you've saved">Roster <span class="count" id="roster-count">0</span></button>
+        <button class="tab" role="tab" id="tab-lab" data-tab="lab" aria-selected="false" title="Build custom powers">Power Lab</button>
+        <button class="tab" role="tab" id="tab-garage" data-tab="garage" aria-selected="false" title="Equipment, vehicles and headquarters">Gear &amp; Vehicles</button>
+      </span>
       <span class="tab-sep" aria-hidden="true"></span>
-      <button class="tab" role="tab" id="tab-lab" data-tab="lab" aria-selected="false">Power Lab</button>
-      <button class="tab" role="tab" id="tab-garage" data-tab="garage" aria-selected="false">Gear &amp; Vehicles</button>
-      <button class="tab" role="tab" id="tab-workshop" data-tab="workshop" aria-selected="false">Workshop</button>
-      <button class="tab" role="tab" id="tab-bestiary" data-tab="bestiary" aria-selected="false">Bestiary</button>
+      <span class="tab-group" data-group="Play">
+        <button class="tab" role="tab" id="tab-table" data-tab="table" aria-selected="false" title="Dice, chat and joining a game">Table <span class="count" id="table-count" hidden></span></button>
+        <button class="tab" role="tab" id="tab-battle" data-tab="battle" aria-selected="false" title="Put anyone against anyone">Battle Room</button>
+      </span>
+      <span class="tab-sep gm-only" aria-hidden="true"></span>
+      <span class="tab-group gm-only" data-group="Run the game">
+        <button class="tab" role="tab" id="tab-screen" data-tab="screen" aria-selected="false" title="Run a live session">GM Screen</button>
+        <button class="tab" role="tab" id="tab-world" data-tab="world" aria-selected="false" title="The campaign: people, places, sessions">World</button>
+        <button class="tab" role="tab" id="tab-bestiary" data-tab="bestiary" aria-selected="false" title="Ready-made creatures and foes">Bestiary</button>
+        <button class="tab" role="tab" id="tab-workshop" data-tab="workshop" aria-selected="false" title="Generators and homebrew">Workshop</button>
+        <button class="tab" role="tab" id="tab-gm" data-tab="gm" aria-selected="false" title="Dice charts, calculators and generators">GM Tools</button>
+      </span>
       <span class="tab-sep" aria-hidden="true"></span>
-      <button class="tab" role="tab" id="tab-screen" data-tab="screen" aria-selected="false">GM Screen</button>
-      <button class="tab" role="tab" id="tab-battle" data-tab="battle" aria-selected="false">Battle Room</button>
-      <button class="tab" role="tab" id="tab-world" data-tab="world" aria-selected="false">World</button>
-      <button class="tab" role="tab" id="tab-gm" data-tab="gm" aria-selected="false">GM Tools</button>
-      <span class="tab-sep" aria-hidden="true"></span>
-      <button class="tab" role="tab" id="tab-rules" data-tab="rules" aria-selected="false">Rules</button>
+      <button class="tab" role="tab" id="tab-rules" data-tab="rules" aria-selected="false" title="Searchable rules reference">Rules</button>
+      <button class="tab tab-mode" type="button" id="mode-toggle" title="Show or hide the GM sections" aria-pressed="false">GM sections ▾</button>
     </nav>
   </header>
 

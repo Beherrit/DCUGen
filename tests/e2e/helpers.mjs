@@ -13,7 +13,10 @@ export async function openApp(page, hash = '') {
 }
 
 export async function rollCharacter(page, seed) {
-  if (seed) await page.locator('#seed').fill(seed);
+  if (seed) {
+    if (!(await page.locator('#seed').isVisible())) await page.locator('#rail-more summary').click();
+    await page.locator('#seed').fill(seed);
+  }
   await page.locator('#roll').click();
   await expect(page.locator('#save-bottom')).toBeVisible();
 }

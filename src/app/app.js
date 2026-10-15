@@ -83,6 +83,8 @@ function searchables() {
 
 function showTab(name) {
   if (!views.includes(name)) name = 'forge';
+  // Opening a GM section from a link or search shows the GM sections.
+  if (document.body.classList.contains('player-mode') && document.getElementById(`tab-${name}`)?.closest('.gm-only')) setMode('gm');
   for (const v of views) {
     document.getElementById(`view-${v}`).hidden = v !== name;
     const tab = document.getElementById(`tab-${v}`);
@@ -117,6 +119,22 @@ function initTheme() {
     rootEl.setAttribute('data-theme', next);
     try { localStorage.setItem('dcugen.theme', next); } catch { /* ignore */ }
   });
+}
+
+// ---- player or GM: players see the sections they use; the GM sections are one click (or Ctrl+K) away ----------
+const MODE_KEY = 'dcugen.mode';
+function setMode(mode) {
+  const player = mode === 'player';
+  document.body.classList.toggle('player-mode', player);
+  const btn = document.getElementById('mode-toggle');
+  if (btn) { btn.textContent = player ? 'Show GM sections' : 'Hide GM sections'; btn.setAttribute('aria-pressed', String(!player)); }
+  try { localStorage.setItem(MODE_KEY, player ? 'player' : 'gm'); } catch { /* ignore */ }
+}
+function initMode() {
+  let m = 'gm';
+  try { m = localStorage.getItem(MODE_KEY) || 'gm'; } catch { /* ignore */ }
+  setMode(m);
+  document.getElementById('mode-toggle')?.addEventListener('click', () => setMode(document.body.classList.contains('player-mode') ? 'gm' : 'player'));
 }
 
 async function loadFromHash() {
@@ -288,13 +306,11 @@ async function boot() {
   const getApp = getAppButton();
   if (getApp) document.getElementById('theme-toggle').before(getApp);
   document.getElementById('theme-toggle').before(syncButton());
-  initHelp({ showTab });
+  initHelp({ showTab, setMode: (m) => setMode(m) });
+  initMode();
   initPalette(searchables);
   initTurnBar();
   startSync();
-  for (const v of views) {
-    document.getElementById(`tab-${v}`).addEventListener('click', () => showTab(v));
-  }
   document.querySelectorAll('[data-tab]').forEach((el) => el.addEventListener('click', (e) => { e.preventDefault(); showTab(el.dataset.tab); }));
 
   const applyToCurrent = (ch) => { setCurrent(ch, { editing: true }); };
@@ -337,6 +353,7 @@ async function boot() {
     postToTable: (text) => postRoll({ who: 'GM', kind: 'chat', text }),
   });
   initForge(R, document.getElementById('view-forge'), {
+    goTab: (t) => showTab(t),
     editPower: (path) => { openInLab(state.current, path); showTab('lab'); },
     addPower: () => { openInLab(state.current, null); showTab('lab'); },
     browseGear: () => showTab('garage'),

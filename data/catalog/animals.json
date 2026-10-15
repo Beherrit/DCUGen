@@ -292,12 +292,13 @@
         "name": "Shrinking",
         "effect": "Shrinking",
         "rank": 8,
-        "extras": [
+        "extras": [],
+        "role": "utility",
+        "flaws": [
           {
             "name": "Permanent"
           }
-        ],
-        "role": "utility"
+        ]
       }
     ],
     "equipment": [],
@@ -727,13 +728,15 @@
         "rank": 8,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Keen Senses",
@@ -1141,13 +1144,15 @@
         "detail": "A mass of many small creatures; pours through any gap and is hard to hurt with single blows",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       }
     ],
     "equipment": [],
@@ -1206,13 +1211,15 @@
         "rank": 8,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Keen Senses",
@@ -1288,13 +1295,15 @@
         "detail": "A mass of many small creatures; pours through any gap and is hard to hurt with single blows",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Keen Senses",
@@ -1375,13 +1384,15 @@
         "detail": "A mass of many small creatures; pours through any gap and is hard to hurt with single blows",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Wings",
@@ -1454,13 +1465,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Keen Senses",
@@ -3025,13 +3038,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Talons",
@@ -3117,13 +3132,15 @@
         "rank": 8,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Wings",
@@ -3198,13 +3215,15 @@
         "rank": 8,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Wings",
@@ -3273,13 +3292,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Wings",
@@ -3644,13 +3665,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Venomous Bite",
@@ -3719,13 +3742,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Venomous Bite",
@@ -4140,13 +4165,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Extra Limbs",
@@ -4353,13 +4380,15 @@
         "detail": "A mass of many small creatures; pours through any gap and is hard to hurt with single blows",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Swimmer",
@@ -4431,13 +4460,15 @@
         "detail": "A mass of many small creatures; pours through any gap and is hard to hurt with single blows",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Drifting",
@@ -4650,13 +4681,15 @@
         "detail": "A mass of many small creatures; pours through any gap and is hard to hurt with single blows",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Wings",
@@ -4726,13 +4759,15 @@
         "detail": "A mass of many small creatures; pours through any gap and is hard to hurt with single blows",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Climbers",
@@ -4795,13 +4830,15 @@
         "rank": 8,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Sting",
@@ -4871,13 +4908,15 @@
         "rank": 8,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Venomous Bite",
@@ -4959,13 +4998,15 @@
         "detail": "A mass of many small creatures; pours through any gap and is hard to hurt with single blows",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Wings",

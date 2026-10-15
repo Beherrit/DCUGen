@@ -54,13 +54,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Robot",
@@ -463,13 +465,15 @@
         "detail": "Dozens of fist-sized mines; scatters around single blows",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Chain Detonation",
@@ -1161,13 +1165,15 @@
         "detail": "A shimmering silver fog",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "defense"
+        "role": "defense",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Disassemble",
@@ -1564,13 +1570,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Sentry",
@@ -2960,13 +2968,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Toy",
@@ -4808,13 +4818,15 @@
         "rank": 8,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Clockwork",
@@ -4923,13 +4935,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Clockwork",
@@ -6379,13 +6393,15 @@
         "role": "defense",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "detail": "Fluid mud; pours through gaps and slurps around blows"
+        "detail": "Fluid mud; pours through gaps and slurps around blows",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Slurp Back Together",
@@ -7241,13 +7257,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Homunculus",
@@ -7344,13 +7362,15 @@
         "rank": 8,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Haunted Doll",

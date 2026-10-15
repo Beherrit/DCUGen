@@ -2226,3 +2226,27 @@ body.has-tbar .toast { bottom: calc(var(--tbar-h, 84px) + 12px); }
 .bt-pick-text { display: grid; min-width: 0; }
 .bt-pick-text .bt-pick-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .hb-pack-row .spacer { flex: 1; }
+
+/* ---------- navigation groups and the player / GM switch ---------- */
+.tab-group { display: contents; }
+body.player-mode .gm-only { display: none !important; }
+.tab-mode { opacity: .55; font-size: 12px; margin-left: auto; }
+.tab-mode:hover { opacity: 1; }
+
+/* ---------- the Forge: where to start, folded roll options ---------- */
+.start-here { display: grid; gap: 10px; padding: 24px; border: 2px dashed var(--line); border-radius: 12px; text-align: center; }
+.start-here h2 { font: 800 26px/1 var(--font-display); text-transform: uppercase; }
+.start-here .hint { margin: 0; }
+.start-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; text-align: left; margin-top: 6px; }
+.start-card { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 10px; align-items: start; padding: 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; font: inherit; text-align: left; }
+.start-card:hover { border-color: var(--accent); box-shadow: var(--shadow); }
+.start-card.primary { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--surface)); }
+.start-glyph { grid-row: span 2; font-size: 26px; line-height: 1; }
+.start-card b { font: 800 16px/1.2 var(--font-label); }
+.start-card small { color: var(--ink-2); font-size: 13px; line-height: 1.35; }
+.rail-more { border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; }
+.rail-more > summary { cursor: pointer; font: 700 13px/1.4 var(--font-label); letter-spacing: .03em; }
+.rail-more > summary small { font-weight: 400; color: var(--ink-3); }
+.rail-more[open] { display: grid; gap: 10px; padding-bottom: 10px; }
+.rail-divider { height: 1px; background: var(--line); margin: 4px 0; }
+.import-link { justify-self: start; margin-top: 4px; font-size: 13px; }

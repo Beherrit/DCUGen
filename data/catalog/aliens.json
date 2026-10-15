@@ -1594,10 +1594,12 @@
         "role": "defense",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Permanent"
           }
         ]
       },
@@ -1743,10 +1745,12 @@
         "role": "defense",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Permanent"
           }
         ]
       },
@@ -2391,10 +2395,12 @@
         "role": "defense",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Permanent"
           }
         ]
       },
@@ -2510,10 +2516,12 @@
         "role": "defense",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Permanent"
           }
         ]
       },
@@ -2648,13 +2656,15 @@
         "rank": 8,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Neural Graft",
@@ -3979,10 +3989,12 @@
         "role": "defense",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Permanent"
           }
         ]
       },
@@ -4134,10 +4146,12 @@
         "role": "defense",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Permanent"
           }
         ]
       },
@@ -4623,10 +4637,12 @@
         "role": "defense",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Permanent"
           }
         ]
       },
@@ -4734,13 +4750,15 @@
         "rank": 4,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Burning Wing-Dust",
@@ -5103,13 +5121,15 @@
         "rank": 8,
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
           }
         ],
-        "role": "utility"
+        "role": "utility",
+        "flaws": [
+          {
+            "name": "Permanent"
+          }
+        ]
       },
       {
         "name": "Thought-Drain",
@@ -5264,10 +5284,12 @@
         "role": "defense",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Permanent"
           }
         ]
       },
@@ -5925,10 +5947,12 @@
         "role": "defense",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Permanent"
           }
         ]
       },
@@ -6224,10 +6248,12 @@
         "role": "defense",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Permanent"
           }
         ]
       },
@@ -8214,10 +8240,12 @@
         "role": "defense",
         "extras": [
           {
-            "name": "Permanent"
-          },
-          {
             "name": "Innate"
+          }
+        ],
+        "flaws": [
+          {
+            "name": "Permanent"
           }
         ]
       },

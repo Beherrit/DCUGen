@@ -134,20 +134,28 @@ function build() {
     select('archetype', 'Archetype', p.archetype, [['', 'Any archetype'], ...archetypes.map((a) => [a.id, mark(a)])], (v) => { p.archetype = v; }),
     select('theme', 'Power theme', p.theme, [['', 'Any theme'], ...themes.map((t) => [t.id, mark(t)])], (v) => { p.theme = v; }),
     h('div', { class: 'field' }, h('span', null, 'Side'), h('div', { class: 'seg', role: 'group', 'aria-label': 'Hero or villain' }, segBtns)),
-    select('gender', 'Gender', p.gender, [['random', 'Any'], ['Female', 'Female'], ['Male', 'Male'], ['Nonbinary', 'Nonbinary']], (v) => { p.gender = v; }),
-    h('div', { class: 'field' },
-      h('span', null, 'Randomness ', chaosLabel),
-      h('input', { type: 'range', min: 0, max: 100, value: Math.round(p.chaos * 100), id: 'chaos', 'aria-label': 'Randomness',
-        onInput: (e) => { p.chaos = Number(e.target.value) / 100; chaosLabel.textContent = chaosWord(p.chaos); savePrefs(); } }),
-      h('div', { class: 'range-row' }, h('span', null, 'By the book'), h('span', null, 'Wild'))),
-    h('div', { class: 'field' }, h('span', null, 'Seed'),
-      h('div', { class: 'seed-row' }, seedIn,
-        h('button', { class: 'btn', type: 'button', title: 'Fill in a random seed', 'aria-label': 'Random seed', onClick: () => { seedIn.value = randomSeed(); } }, '🎲'))),
+    // The rest of the roll options are folded away: most rolls only need the ones above.
+    (() => {
+      const more = h('details', { class: 'rail-more', id: 'rail-more', open: !!p.railMore },
+        h('summary', null, 'More roll options', h('small', null, ' gender, randomness, seed')),
+        select('gender', 'Gender', p.gender, [['random', 'Any'], ['Female', 'Female'], ['Male', 'Male'], ['Nonbinary', 'Nonbinary']], (v) => { p.gender = v; }),
+        h('div', { class: 'field' },
+          h('span', null, 'Randomness ', chaosLabel),
+          h('input', { type: 'range', min: 0, max: 100, value: Math.round(p.chaos * 100), id: 'chaos', 'aria-label': 'Randomness',
+            onInput: (e) => { p.chaos = Number(e.target.value) / 100; chaosLabel.textContent = chaosWord(p.chaos); savePrefs(); } }),
+          h('div', { class: 'range-row' }, h('span', null, 'By the book'), h('span', null, 'Wild'))),
+        h('div', { class: 'field' }, h('span', null, 'Seed (the same seed rolls the same character)'),
+          h('div', { class: 'seed-row' }, seedIn,
+            h('button', { class: 'btn', type: 'button', title: 'Fill in a random seed', 'aria-label': 'Random seed', onClick: () => { seedIn.value = randomSeed(); } }, '🎲'))));
+      more.addEventListener('toggle', () => { p.railMore = more.open; savePrefs(); });
+      return more;
+    })(),
     h('button', { class: 'btn primary big', type: 'button', id: 'roll', onClick: () => roll(seedIn.value.trim() || undefined) }, 'Roll a character'),
     h('div', { class: 'btn-row' },
       h('button', { class: 'btn', type: 'button', onClick: surprise }, 'Surprise me'),
       h('button', { class: 'btn', type: 'button', onClick: rollTeam }, 'Roll a team'),
       h('button', { class: 'btn', type: 'button', id: 'build-scratch', onClick: buildFromScratch }, 'Build from scratch')),
+    h('div', { class: 'rail-divider', role: 'separator' }),
     (() => {
       const keyIn = h('input', { type: 'text', id: 'open-key', placeholder: 'Paste a key or link: character, roster, world, front page, handout', 'aria-label': 'Character key, share code or world key', autocomplete: 'off' });
       const go = async () => {
@@ -166,10 +174,10 @@ function build() {
         } catch (e) { toast(e.message); }
       };
       keyIn.addEventListener('keydown', (e) => { if (e.key === 'Enter') go(); });
-      return h('div', { class: 'field' }, h('span', null, '🔑 Open a key'), h('div', { class: 'seed-row' }, keyIn, h('button', { class: 'btn', type: 'button', onClick: go }, 'Open')));
+      return h('div', { class: 'field' }, h('span', null, 'Open what someone sent you'), h('div', { class: 'seed-row' }, keyIn, h('button', { class: 'btn', type: 'button', onClick: go }, 'Open')),
+        h('button', { class: 'linkish import-link', type: 'button', id: 'forge-import', title: 'Open a character your GM or another player sent you', onClick: () => importDialog() }, '⇪ or import a file (.xlsx, .json)'));
     })(),
-    h('button', { class: 'btn import-btn', type: 'button', id: 'forge-import', title: 'Open a character your GM or another player sent you', onClick: () => importDialog() }, '⇪ Import a character (.xlsx, .json, share code)'),
-    h('p', { class: 'hint' }, 'Press R to roll. Every rolled character is legal for its power level and spends exactly 15 points per PL. Build from scratch starts a blank sheet you fill in yourself.'),
+    h('p', { class: 'hint' }, 'Press R to roll. Every roll is legal for its power level and spends exactly 15 points per PL.'),
     h('div', { class: 'field' }, h('span', null, 'Recent rolls'), historyEl));
 
   fileHost = h('div', { class: 'file-host', style: { minWidth: 0 } });
@@ -296,12 +304,18 @@ export function renderCurrent() {
 
 /** Nothing open: characters are only rolled when you ask for one. */
 function drawEmpty() {
-  fileHost.append(h('div', { class: 'empty forge-empty' },
+  const card = (glyph, title, text, run, { primary = false, id = null } = {}) => h('button', { type: 'button', class: `start-card ${primary ? 'primary' : ''}`, id, onClick: run },
+    h('span', { class: 'start-glyph', 'aria-hidden': 'true' }, glyph), h('b', null, title), h('small', null, text));
+  fileHost.append(h('div', { class: 'forge-empty start-here' },
     h('h2', null, 'No character open'),
-    h('p', null, 'Roll one with the options on the left, build one from scratch, or open someone from your roster.'),
-    h('div', { class: 'btn-row', style: { justifyContent: 'center', marginTop: '12px' } },
-      h('button', { class: 'btn primary', type: 'button', onClick: () => roll() }, 'Roll a character'),
-      h('button', { class: 'btn', type: 'button', onClick: buildFromScratch }, 'Build from scratch'))));
+    h('p', { class: 'hint' }, 'What would you like to do?'),
+    h('div', { class: 'start-cards' },
+      card('🎲', 'Roll a character', 'A complete, legal hero in one click. Pick a power level or theme on the left first if you like.', () => roll(), { primary: true }),
+      card('✎', 'Build from scratch', 'A blank sheet you fill in yourself, with the costs and limits checked as you go.', buildFromScratch, { id: 'start-scratch' }),
+      card('📂', 'Open one of yours', state.roster.length ? `Your roster has ${state.roster.length} character${state.roster.length === 1 ? '' : 's'}.` : 'Characters you save show up on the Roster.', () => api.goTab?.('roster')),
+      card('⚔', 'Run a fight', 'Put anyone against anyone in the Battle Room and watch it play out.', () => api.goTab?.('battle')),
+      card('📱', 'Join a table', 'Your GM sent a link or a QR code? Join from here.', () => api.goTab?.('table')),
+      card('🗓', 'Run a campaign (GM)', 'Plan sessions, run the GM Screen, keep the World.', () => api.goTab?.('screen')))));
 }
 
 // ---- saving to a world -------------------------------------------------------------------------------

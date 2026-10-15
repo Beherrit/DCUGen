@@ -218,7 +218,7 @@ function conditionsTool() {
 }
 
 let tab = 'table';
-const TABS = [['table', 'At the table'], ['screen', 'GM screen'], ['skills', 'Skills'], ['notes', 'Notes'], ['generators', 'Generators'], ['beasts', 'Beastiary']];
+const TABS = [['table', 'At the table'], ['screen', 'Quick trackers'], ['skills', 'Skills'], ['notes', 'Notes'], ['generators', 'Generators'], ['beasts', 'Beastiary']];
 
 export function initGm(rules, el) {
   R = rules;

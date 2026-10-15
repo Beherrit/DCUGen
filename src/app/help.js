@@ -42,6 +42,7 @@ export const TOURS = {
 };
 
 let showTabHook = () => {};
+let hooks = {};
 let running = null;
 
 function place(card, spot, dim, target) {
@@ -134,7 +135,8 @@ async function offerTour() {
     buttons: [{ label: 'No thanks', value: 'skip' }, { label: 'I\'m a GM', value: 'gm' }, { label: 'I\'m a player', value: 'player', primary: true }],
   });
   put(TOUR_KEY, 'done');
-  if (pick === 'player' || pick === 'gm') startTour(pick);
+  // A player sees the player sections; the GM sections are a click away (top bar), and a GM sees everything.
+  if (pick === 'player' || pick === 'gm') { hooks.setMode?.(pick); startTour(pick); }
 }
 
 // ---- What's new ----------------------------------------------------------------------------------------
@@ -159,8 +161,9 @@ export async function showWhatsNew() {
 }
 
 /** The ? menu in the top bar, and the first-visit welcome. `showTab` opens a section by name. */
-export function initHelp({ showTab }) {
+export function initHelp({ showTab, setMode }) {
   showTabHook = showTab;
+  hooks = { setMode };
   const m = menu('?', [
     { label: '🧭 Player tour', hint: 'Make a character and join a table', run: () => startTour('player') },
     { label: '🧭 GM tour', hint: 'Bestiary, GM Screen, Battle Room, World', run: () => startTour('gm') },
