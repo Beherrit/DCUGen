@@ -19,9 +19,8 @@ one to open DCUGen on your phone, one for each desktop download.
 
 ## What's inside
 
-- **Easier reading** – **Aa** at the top: bigger text (up to Huge), colour-coded powers and advantages (the name, how
-  it works and what it does each in its own colour and type), the Atkinson Hyperlegible font for low vision, and
-  stronger contrast.
+- **Easier reading** – bigger text throughout, colour-coded powers and advantages (the name, how it works and what it
+  does each in its own colour and type), the Atkinson Hyperlegible font for low vision, and stronger contrast.
 - **Start here and player view** – an empty Forge shows where to start (roll, build, open yours, a fight, a table, a
   campaign). The tabs are grouped, and players can hide the GM sections with one click (search still finds everything).
 - **Search everything** – **Ctrl+K** (⌘K on a Mac, or 🔍 at the top): one box for every section, the things you do

@@ -30,7 +30,7 @@ import { state as st, upsert, removeFromRoster } from './store.js';
 import { tableRoster, hostAcceptsEdit, hostAcceptsRemove, hostAcceptsClaim, shouldSendToTable } from '../engine/tabletrust.js';
 import { initHelp, startTour, showWhatsNew } from './help.js';
 import { initPalette } from './palette.js';
-import { initReading, readingDialog } from './reading.js';
+import { initReading } from './reading.js';
 import { importDialog } from './importer.js';
 import { initTurnBar, setTableInit, setParty, refreshTurnBar } from './turnbar.js';
 import { endOfTurn } from '../engine/turns.js';
@@ -62,7 +62,6 @@ function searchables() {
     { id: 'do:tour-g', kind: 'Do', label: 'GM tour', run: () => startTour('gm') },
     { id: 'do:news', kind: 'Do', label: 'What\'s new', run: () => showWhatsNew() },
     { id: 'do:homebrew', kind: 'Go to', label: 'Homebrew packs', hint: 'Workshop', run: () => { openHomebrew(); showTab('workshop'); } },
-    { id: 'do:read', kind: 'Do', label: 'Easier reading: bigger text, colours', run: () => readingDialog() },
     { id: 'do:theme', kind: 'Do', label: 'Switch light or dark theme', run: () => document.getElementById('theme-toggle').click() },
   );
   const seen = new Set();

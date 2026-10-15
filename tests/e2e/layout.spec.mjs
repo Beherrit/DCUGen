@@ -35,16 +35,9 @@ test('the first-visit choice "I\'m a player" shows the player sections', async (
   await expect(page.locator('#tab-gm')).toBeHidden();
 });
 
-test('Easier reading: text size, colour-coded powers and the easy-read font stick after a reload', async ({ page }) => {
+test('easier reading is on for everyone: bigger text, colour-coded powers, easy-read font, stronger contrast', async ({ page }) => {
   await openApp(page);
-  await page.locator('#read-btn').click();
-  await page.locator('.read-sizes [data-size="xl"]').click();
-  await page.locator('#read-font').check();
-  await page.getByRole('button', { name: 'Done' }).click();
-  await page.reload();
   const html = page.locator('html');
-  await expect(html).toHaveClass(/read-zoom/);
-  await expect(html).toHaveClass(/read-color/);
-  await expect(html).toHaveClass(/read-font/);
-  expect(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--read-zoom').trim())).toBe('1.3');
+  for (const c of ['read-zoom', 'read-color', 'read-font', 'read-contrast']) await expect(html).toHaveClass(new RegExp(c));
+  await expect(page.locator('#read-btn')).toHaveCount(0);
 });
