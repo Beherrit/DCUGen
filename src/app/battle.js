@@ -525,7 +525,10 @@ function resultPanel() {
         const svg = comicSvg(comic);
         imageDialog({ title: `📖 ${comic.title}`, svg, file: `${comic.title}-comic`, text: `📖 ${comic.title.toUpperCase()}: ${comic.subtitle}\n${comic.panels.map((p) => `• ${p.sfx} ${p.caption}`).join('\n')}`, alt: `Comic page of ${comic.title}` });
       } }, '📖 Make the comic'),
-      hooks.recordBattle ? h('button', { class: 'btn', type: 'button', disabled: battle.recorded, title: 'Adds an event page to the World wiki, linked to everyone who fought', onClick: () => { try { hooks.recordBattle(battle); battle.recorded = true; save(); renderBattle(); } catch (e) { toast(e.message); } } }, battle.recorded ? '✓ Recorded in the World' : '🌐 Record this fight in the World') : null));
+      hooks.recordBattle ? [
+        h('button', { class: 'btn', type: 'button', id: 'bt-record', disabled: battle.recorded, title: 'Adds the fight to the World: an event page on the campaign timeline, linked to everyone who fought (knocked out, fled or standing). It goes in the running session\'s recap, and a recurring villain who lost learns from it.', onClick: () => { try { hooks.recordBattle(battle); battle.recorded = true; save(); renderBattle(); } catch (e) { toast(e.message); } } }, battle.recorded ? '✓ Saved to the campaign' : '🌐 Save this fight to the campaign'),
+        battle.recorded ? null : h('p', { class: 'hint bt-record-hint' }, 'Puts it on the World\'s timeline with everyone who fought, in tonight\'s recap, and lets a recurring villain who lost learn from it.'),
+      ] : null));
 }
 
 export { STYLES, detectStyle };
