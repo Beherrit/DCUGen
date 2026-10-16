@@ -15,8 +15,12 @@ test('put a hero in play, note their condition and points, and open their sheet'
   await heroes.locator('.team-pick .chip', { hasText: hero }).click();
   const row = heroes.locator('.team-row', { hasText: hero });
   await expect(row).toBeVisible();
-  await row.getByLabel(`Condition for ${hero}`).selectOption('Dazed');
-  await expect(heroes.locator('.team-row .team-cond')).toContainText('Dazed');
+  await row.getByLabel(`Add a condition to ${hero}`).selectOption('Dazed');
+  await row.getByLabel(`Add a condition to ${hero}`).selectOption('Prone');
+  await row.getByLabel(`Add a condition to ${hero}`).selectOption('Vulnerable');
+  await expect(row.locator('.team-cond')).toHaveCount(3);
+  await row.getByLabel(`Remove Prone from ${hero}`).click();
+  await expect(row.locator('.team-cond')).toHaveText([/^✕Dazed:/, /^✕Vulnerable:/]);
   await heroes.getByLabel(`Raise bonus points for ${hero}`).click();
   await heroes.getByLabel(`Raise bonus points for ${hero}`).click();
   await heroes.getByLabel(`Notes for ${hero}`).fill('Owes the Penguin a favour');
@@ -27,7 +31,7 @@ test('put a hero in play, note their condition and points, and open their sheet'
   const again = page.locator('#team-heroes .team-row', { hasText: hero });
   await expect(again.locator('.team-field', { hasText: 'Bonus points' }).locator('.num')).toHaveText('2');
   await expect(again.getByLabel(`Notes for ${hero}`)).toHaveValue('Owes the Penguin a favour');
-  await expect(again.getByLabel(`Condition for ${hero}`)).toHaveValue('Dazed');
+  await expect(again.locator('.team-cond')).toHaveCount(2);
 
   await again.getByRole('button', { name: 'Open sheet' }).click();
   await expect(page.locator('#view-forge')).toBeVisible();
@@ -62,4 +66,21 @@ test('team-wide buttons: hero points, +1 for every hero, initiative and the Batt
   await expect(page.locator('#view-battle')).toBeVisible();
   await expect(page.locator('#view-battle')).toContainText(hero);
   expect(errors).toEqual([]);
+});
+
+test('picking a condition keeps the page where it was', async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 500 });
+  await openApp(page);
+  for (const seed of ['team-c', 'team-d', 'team-e']) { await rollCharacter(page, seed); await page.locator('#save-bottom').click(); }
+  await showTab(page, 'gm');
+  await page.locator('#view-gm .ae-tabs button', { hasText: 'In play' }).click();
+  const chips = page.locator('#team-heroes .team-pick .chip');
+  for (let i = 0; i < await chips.count(); i++) await chips.nth(i).click();
+  const last = page.locator('#team-heroes .team-row').last();
+  await last.scrollIntoViewIfNeeded();
+  const before = await page.evaluate(() => window.scrollY);
+  expect(before).toBeGreaterThan(100);
+  await last.locator('select').selectOption('Prone');
+  await expect(last.locator('.team-cond')).toHaveCount(1);
+  expect(Math.abs(await page.evaluate(() => window.scrollY) - before)).toBeLessThan(5);
 });

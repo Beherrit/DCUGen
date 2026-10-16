@@ -482,7 +482,9 @@ details > summary { cursor: pointer; color: var(--ink-2); font: 600 12.5px/1.4 v
 .team-field select { padding: 4px; max-width: 170px; }
 .team-xp { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); }
 .team-xp .num { min-width: 1.5em; text-align: center; font-size: 15px; }
-.team-cond { font-size: 13px; color: var(--ink-2); }
+.team-conds { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.team-cond { font-size: 13px; color: var(--ink-2); display: flex; gap: 6px; align-items: baseline; }
+.team-cond .x { flex: none; }
 .team-row textarea { min-height: 0; resize: vertical; }
 @media (max-width: 640px) { .notes-layout { grid-template-columns: minmax(0, 1fr); } }
 
