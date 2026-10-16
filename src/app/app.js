@@ -373,7 +373,7 @@ async function boot() {
     throwIn: (ch) => throwInBattle(ch),
   });
   initLab(R, document.getElementById('view-lab'), { applyToCurrent });
-  initGm(R, document.getElementById('view-gm'));
+  initGm(R, document.getElementById('view-gm'), { open: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); } });
   initWorkshop(R, document.getElementById('view-workshop'), {
     openInForge: (ch) => { setCurrent(ch, { newTab: true }); showTab('forge'); },
     addToInitiative: (ch) => addToInitiative(ch),

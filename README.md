@@ -264,7 +264,7 @@ one to open DCUGen on your phone, one for each desktop download.
 - **Export** – your Excel character sheet filled in (plus a *Full Stat Block* tab), a whole roster or team to one
   workbook, JSON files, book-style text and print/PDF. **Import** brings characters back from DCUGen Excel sheets, .json
   files, share codes or links (Forge > Import, or drag files onto the page).
-- **GM Tools** – dice with the book's coloured degrees-of-success chart, initiative with conditions, a combat
+- **GM Tools** – an In play list of the heroes playing and the villains in the session, with a condition, bonus points and notes on each and a link to the full sheet; dice with the book's coloured degrees-of-success chart, initiative with conditions, a combat
   calculator (hit and outcome odds, or roll it), the book's Damage Resistance Matrix, a GM screen with live hero point / Toughness /
   condition trackers, GM notes, and encounter, hideout and vehicle generators.
 - **Rules** – searchable reference cards: actions, maneuvers, checks, combat, hazards, conditions, the DC,
