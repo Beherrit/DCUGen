@@ -18,15 +18,31 @@ const APP_HTML = fs.existsSync(path.join(__dirname, 'DCUGen.html')) ? path.join(
 const vaultDir = () => path.join(app.getPath('userData'), 'vault');
 const safe = (key) => String(key).replace(/[^a-zA-Z0-9._-]/g, '_');
 
+// What each key's file holds, so a key is only written again when its value changed.
+const onDisk = new Map();
+
 function vaultRead() {
   const dir = vaultDir();
   const out = {};
   if (!fs.existsSync(dir)) return out;
   for (const f of fs.readdirSync(dir)) {
     if (!f.endsWith('.json')) continue;
-    try { const { key, value } = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')); if (key) out[key] = value; } catch { /* skip */ }
+    try { const { key, value } = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')); if (key) { out[key] = value; onDisk.set(key, value); } } catch { /* skip */ }
   }
   return out;
+}
+
+/**
+ * Write a file so that a crash or power cut leaves either the old file or the new one, never a torn or
+ * empty one: write a temporary file, force it onto the disk, then swap it in.
+ */
+function writeDurably(file, text) {
+  const tmp = `${file}.tmp`;
+  const fd = fs.openSync(tmp, 'w');
+  try { fs.writeSync(fd, text); fs.fsyncSync(fd); } finally { fs.closeSync(fd); }
+  fs.renameSync(tmp, file);
+  // Make the rename itself stick (Windows can't open a folder for this, and doesn't need it).
+  try { const d = fs.openSync(path.dirname(file), 'r'); try { fs.fsyncSync(d); } finally { fs.closeSync(d); } } catch { /* Windows */ }
 }
 
 // One file per key. The name is readable and the hash keeps two keys that look alike apart.
@@ -38,14 +54,15 @@ function vaultWrite(data, removed = []) {
   fs.mkdirSync(dir, { recursive: true });
   for (const [key, value] of Object.entries(data)) {
     const file = fileFor(dir, key);
-    const tmp = `${file}.tmp`;
-    fs.writeFileSync(tmp, JSON.stringify({ key, value, savedAt: new Date().toISOString() }));
-    fs.renameSync(tmp, file);
+    if (onDisk.get(key) === value && fs.existsSync(file)) continue;
+    writeDurably(file, JSON.stringify({ key, value, savedAt: new Date().toISOString() }));
+    onDisk.set(key, value);
     // a file from before the hashed names
     const old = path.join(dir, `${safe(key)}.json`);
     if (old !== file && fs.existsSync(old)) { try { fs.unlinkSync(old); } catch { /* ignore */ } }
   }
   for (const key of removed) {
+    onDisk.delete(key);
     for (const f of [fileFor(dir, key), path.join(dir, `${safe(key)}.json`)]) if (fs.existsSync(f)) { try { fs.unlinkSync(f); } catch { /* ignore */ } }
   }
   backupNow();
@@ -60,7 +77,7 @@ function backupNow(force = false) {
   fs.mkdirSync(bak, { recursive: true });
   const stamp = new Date().toISOString().slice(0, 10);
   const target = path.join(bak, `dcugen-${stamp}.json`);
-  fs.writeFileSync(target, JSON.stringify({ app: 'DCUGen', kind: 'backup', version: 1, savedAt: new Date().toISOString(), data: vaultRead() }));
+  writeDurably(target, JSON.stringify({ app: 'DCUGen', kind: 'backup', version: 1, savedAt: new Date().toISOString(), data: vaultRead() }));
   const old = fs.readdirSync(bak).filter((f) => /^dcugen-\d{4}-\d{2}-\d{2}\.json$/.test(f)).sort();
   for (const f of old.slice(0, Math.max(0, old.length - 14))) fs.unlinkSync(path.join(bak, f));
 }
@@ -71,6 +88,10 @@ ipcMain.handle('vault:load', () => vaultRead());
 ipcMain.handle('vault:save', (_e, data) => { vaultWrite(data || {}); return true; });
 // Only what changed: { data: { key: value }, removed: [key] }.
 ipcMain.handle('vault:update', (_e, change) => { vaultWrite(change?.data || {}, Array.isArray(change?.removed) ? change.removed : []); return true; });
+// The same, but the page waits for it: used as the window closes, when a later answer would be lost.
+ipcMain.on('vault:update-now', (e, change) => {
+  try { vaultWrite(change?.data || {}, Array.isArray(change?.removed) ? change.removed : []); e.returnValue = true; } catch { e.returnValue = false; }
+});
 ipcMain.handle('vault:path', () => vaultDir());
 ipcMain.handle('vault:open', () => shell.openPath(app.getPath('userData')));
 ipcMain.handle('lobby:start', async (_e, opts) => {
