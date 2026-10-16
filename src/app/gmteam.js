@@ -1,5 +1,5 @@
 // GM Tools, "In play": who is at the table tonight. Click the heroes that are playing and the villains
-// you've made, keep a condition, bonus points and a note on each, and open any of them as a full sheet.
+// you've made, keep their conditions, bonus points and a note on each, and open any of them as a full sheet.
 
 import { h, toast } from './dom.js';
 import { state, upsert } from './store.js';
@@ -28,13 +28,26 @@ const isVillain = (ch) => ch.alignment === 'villain';
 const nameOf = (ch) => ch.identity?.codename || ch.identity?.realName || 'Unnamed';
 
 /** The "In play" tab: two lists, the players' heroes and the villains. */
-export function teamTool(rerender) {
+export function teamTool(redraw) {
+  // Redrawing replaces the control you just used, so keep the scroll and focus where they were.
+  const rerender = () => {
+    const y = window.scrollY;
+    const label = document.activeElement?.getAttribute?.('aria-label');
+    redraw();
+    window.scrollTo(0, y);
+    if (label) [...document.querySelectorAll('#view-gm [aria-label]')].find((el) => el.getAttribute('aria-label') === label)?.focus({ preventScroll: true });
+    requestAnimationFrame(() => { if (Math.abs(window.scrollY - y) > 2) window.scrollTo(0, y); });
+  };
   const team = load();
   const save = () => store(team);
-  const conds = Object.keys(R.raw.gm?.conditions?.conditions || { Normal: '' });
+  const conds = Object.keys(R.raw.gm?.conditions?.conditions || {}).filter((c) => c !== 'Normal');
   const noteOf = (id) => {
     const n = team.notes[id] || (team.notes[id] = {});
-    return Object.assign(n, { cond: 'Normal', xp: 0, note: '', hp: 1, penalty: 0, ...n });
+    Object.assign(n, { xp: 0, note: '', hp: 1, penalty: 0, ...n });
+    // Earlier versions kept one condition as n.cond.
+    if (!Array.isArray(n.conds)) n.conds = n.cond && n.cond !== 'Normal' ? [n.cond] : [];
+    delete n.cond;
+    return n;
   };
   const inPlayOf = (kind) => team[kind].map((id) => state.roster.find((c) => c.rosterId === id)).filter(Boolean);
   /** A small − n + counter on a row. */
@@ -62,7 +75,6 @@ export function teamTool(rerender) {
     const row = (ch) => {
       const id = ch.rosterId;
       const n = noteOf(id);
-      const desc = n.cond !== 'Normal' ? R.raw.gm?.conditions?.conditions?.[n.cond] : '';
       return h('article', { class: 'team-row', style: { '--hero': ch.theme?.color || '#888' }, 'data-id': id },
         h('div', { class: 'team-top' },
           h('b', { class: 'team-name' }, nameOf(ch)),
@@ -71,9 +83,10 @@ export function teamTool(rerender) {
           h('button', { class: 'btn sm', type: 'button', onClick: () => hooks.open?.(ch) }, 'Open sheet'),
           h('button', { class: 'x', type: 'button', 'aria-label': `Take ${nameOf(ch)} out of play`, title: 'Take out of play', onClick: () => toggle(id) }, '✕')),
         h('div', { class: 'team-fields' },
-          h('label', { class: 'team-field' }, h('span', null, 'Condition'),
-            h('select', { 'aria-label': `Condition for ${nameOf(ch)}`, onChange: (e) => { n.cond = e.target.value; save(); rerender(); } },
-              conds.map((c) => h('option', { value: c, selected: c === n.cond }, c)))),
+          h('label', { class: 'team-field' }, h('span', null, 'Conditions'),
+            h('select', { 'aria-label': `Add a condition to ${nameOf(ch)}`, onChange: (e) => { if (e.target.value && !n.conds.includes(e.target.value)) { n.conds.push(e.target.value); save(); } rerender(); } },
+              h('option', { value: '' }, n.conds.length ? 'Add another…' : 'Normal · add…'),
+              conds.filter((c) => !n.conds.includes(c)).map((c) => h('option', { value: c }, c)))),
           villains ? null : counter(ch, n, 'hp', 'Hero points'),
           counter(ch, n, 'penalty', 'Toughness penalty'),
           villains ? null : h('span', { class: 'team-field' }, h('span', null, 'Bonus points'),
@@ -87,7 +100,9 @@ export function teamTool(rerender) {
                 toast(`${nameOf(ch)} gets ${n.xp} power point${n.xp > 1 ? 's' : ''}`);
                 n.xp = 0; save(); rerender();
               } }, 'Give to sheet') : null))),
-        desc ? h('div', { class: 'team-cond' }, h('b', null, `${n.cond}: `), desc) : null,
+        n.conds.length ? h('ul', { class: 'team-conds' }, n.conds.map((c) => h('li', { class: 'team-cond' },
+          h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${c} from ${nameOf(ch)}`, title: 'Remove', onClick: () => { n.conds = n.conds.filter((x) => x !== c); save(); rerender(); } }, '✕'),
+          h('b', null, `${c}: `), R.raw.gm?.conditions?.conditions?.[c] || ''))) : null,
         h('textarea', { rows: 2, placeholder: 'Notes', 'aria-label': `Notes for ${nameOf(ch)}`, onInput: (e) => { n.note = e.target.value; save(); } }, n.note));
     };
 
@@ -113,7 +128,7 @@ export function teamTool(rerender) {
     hooks.goBattle?.();
   };
   const toInitiative = () => {
-    for (const ch of everyone) hooks.addToInitiative?.(ch, { replace: true, cond: noteOf(ch.rosterId).cond });
+    for (const ch of everyone) hooks.addToInitiative?.(ch, { replace: true, cond: noteOf(ch.rosterId).conds.join(', ') || 'Normal' });
     toast(`Initiative rolled for ${everyone.length}`);
     hooks.showGmTab?.('table');
   };
@@ -122,7 +137,7 @@ export function teamTool(rerender) {
     save(); rerender(); toast(`+1 bonus point for ${heroes.length} hero${heroes.length > 1 ? 'es' : ''}`);
   };
   const newSession = () => {
-    for (const ch of everyone) Object.assign(noteOf(ch.rosterId), { hp: 1, penalty: 0, cond: 'Normal' });
+    for (const ch of everyone) Object.assign(noteOf(ch.rosterId), { hp: 1, penalty: 0, conds: [] });
     save(); rerender(); toast('Hero points back to 1, penalties and conditions cleared');
   };
   return h('div', { style: { display: 'grid', gap: '16px' } },
