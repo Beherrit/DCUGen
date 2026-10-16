@@ -32,13 +32,27 @@ export function teamTool(rerender) {
   const team = load();
   const save = () => store(team);
   const conds = Object.keys(R.raw.gm?.conditions?.conditions || { Normal: '' });
-  const noteOf = (id) => team.notes[id] || (team.notes[id] = { cond: 'Normal', xp: 0, note: '' });
+  const noteOf = (id) => {
+    const n = team.notes[id] || (team.notes[id] = {});
+    return Object.assign(n, { cond: 'Normal', xp: 0, note: '', hp: 1, penalty: 0, ...n });
+  };
+  const inPlayOf = (kind) => team[kind].map((id) => state.roster.find((c) => c.rosterId === id)).filter(Boolean);
+  /** A small − n + counter on a row. */
+  const counter = (ch, n, field, label) => {
+    const name = ch.identity?.codename || 'Unnamed';
+    const step = (d) => { n[field] = Math.max(0, n[field] + d); save(); rerender(); };
+    return h('span', { class: 'team-field' }, h('span', null, label),
+      h('span', { class: 'team-xp' },
+        h('button', { class: 'btn sm', type: 'button', 'aria-label': `Lower ${label.toLowerCase()} for ${name}`, disabled: n[field] <= 0, onClick: () => step(-1) }, '−'),
+        h('b', { class: 'num' }, n[field]),
+        h('button', { class: 'btn sm', type: 'button', 'aria-label': `Raise ${label.toLowerCase()} for ${name}`, onClick: () => step(1) }, '+')));
+  };
 
   const side = (kind) => {
     const villains = kind === 'villains';
     const ids = team[kind];
     const pool = state.roster.filter((c) => c.rosterId && isVillain(c) === villains);
-    const inPlay = ids.map((id) => state.roster.find((c) => c.rosterId === id)).filter(Boolean);
+    const inPlay = inPlayOf(kind);
     const toggle = (id) => {
       const i = ids.indexOf(id);
       if (i >= 0) ids.splice(i, 1); else ids.push(id);
@@ -60,6 +74,8 @@ export function teamTool(rerender) {
           h('label', { class: 'team-field' }, h('span', null, 'Condition'),
             h('select', { 'aria-label': `Condition for ${nameOf(ch)}`, onChange: (e) => { n.cond = e.target.value; save(); rerender(); } },
               conds.map((c) => h('option', { value: c, selected: c === n.cond }, c)))),
+          villains ? null : counter(ch, n, 'hp', 'Hero points'),
+          counter(ch, n, 'penalty', 'Toughness penalty'),
           villains ? null : h('span', { class: 'team-field' }, h('span', null, 'Bonus points'),
             h('span', { class: 'team-xp' },
               h('button', { class: 'btn sm', type: 'button', 'aria-label': `Lower bonus points for ${nameOf(ch)}`, disabled: n.xp <= 0, onClick: () => { n.xp = Math.max(0, n.xp - 1); save(); rerender(); } }, '−'),
@@ -89,7 +105,32 @@ export function teamTool(rerender) {
         : h('p', { class: 'hint', style: { margin: 0 } }, villains ? 'Click a villain above to put them in play.' : 'Click the heroes above who are playing tonight.'));
   };
 
+  const everyone = [...inPlayOf('heroes'), ...inPlayOf('villains')];
+  const heroes = inPlayOf('heroes');
+  const toBattle = () => {
+    for (const ch of everyone) hooks.throwIn?.(ch);
+    toast(`${everyone.length} in the Battle Room`);
+    hooks.goBattle?.();
+  };
+  const toInitiative = () => {
+    for (const ch of everyone) hooks.addToInitiative?.(ch, { replace: true, cond: noteOf(ch.rosterId).cond });
+    toast(`Initiative rolled for ${everyone.length}`);
+    hooks.showGmTab?.('table');
+  };
+  const awardAll = () => {
+    for (const ch of heroes) noteOf(ch.rosterId).xp += 1;
+    save(); rerender(); toast(`+1 bonus point for ${heroes.length} hero${heroes.length > 1 ? 'es' : ''}`);
+  };
+  const newSession = () => {
+    for (const ch of everyone) Object.assign(noteOf(ch.rosterId), { hp: 1, penalty: 0, cond: 'Normal' });
+    save(); rerender(); toast('Hero points back to 1, penalties and conditions cleared');
+  };
   return h('div', { style: { display: 'grid', gap: '16px' } },
-    h('p', { class: 'hint', style: { margin: 0 } }, 'Who is in play this session. Conditions, bonus points and notes are kept in this browser and go into backups.'),
+    h('p', { class: 'hint', style: { margin: 0 } }, 'Who is in play this session. Conditions, points and notes are kept in this browser and go into backups.'),
+    h('div', { class: 'btn-row', id: 'team-actions' },
+      h('button', { class: 'btn sm primary', type: 'button', disabled: !everyone.length, onClick: toBattle }, '⚔ Everyone to the Battle Room'),
+      h('button', { class: 'btn sm', type: 'button', disabled: !everyone.length, onClick: toInitiative }, 'Roll initiative for everyone'),
+      h('button', { class: 'btn sm', type: 'button', disabled: !heroes.length, onClick: awardAll }, '+1 bonus point to every hero'),
+      h('button', { class: 'btn sm ghost', type: 'button', disabled: !everyone.length, title: 'Hero points back to 1, Toughness penalties and conditions cleared', onClick: newSession }, 'Reset for a new session')),
     h('div', { class: 'gm' }, side('heroes'), side('villains')));
 }

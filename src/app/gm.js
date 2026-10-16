@@ -225,16 +225,18 @@ export function initGm(rules, el, hooks = {}) {
   R = rules;
   root = el;
   setRules(rules);
-  setTeamRules(rules, hooks);
+  setTeamRules(rules, { ...hooks, addToInitiative, showGmTab: (id) => { tab = id; try { localStorage.setItem('dcugen.gmtab', id); } catch { /* ignore */ } renderGm(); } });
   try { tab = localStorage.getItem('dcugen.gmtab') || 'table'; } catch { /* ignore */ }
   renderGm();
 }
 
 /** Add any character (hero, villain, creature) to the initiative order. */
-export function addToInitiative(ch) {
+export function addToInitiative(ch, { replace = false, cond = 'Normal' } = {}) {
   const r = d20();
   const bonus = deriveAll(ch, R).initiative;
-  init.list.push({ name: ch.identity?.codename || 'Character', bonus, roll: r, total: r + bonus, cond: 'Normal' });
+  const name = ch.identity?.codename || 'Character';
+  if (replace) init.list = init.list.filter((e) => e.name !== name);
+  init.list.push({ name, bonus, roll: r, total: r + bonus, cond });
   init.list.sort((a, c) => c.total - a.total || c.bonus - a.bonus);
 }
 
