@@ -9,6 +9,7 @@ import { randomVehicle, randomHeadquarters, vehicleStatLine, hqStatLine } from '
 import { catalogToCharacter } from '../engine/catalog.js';
 import { combatCalculator, gmScreen, notesTool, setRules, damageMatrixTool } from './gmplus.js';
 import { skillCheatSheet } from './skillguide.js';
+import { teamTool, setTeamRules } from './gmteam.js';
 let R;
 let root;
 const init = { list: [], turn: 0, round: 1 };
@@ -218,21 +219,24 @@ function conditionsTool() {
 }
 
 let tab = 'table';
-const TABS = [['table', 'At the table'], ['screen', 'Quick trackers'], ['skills', 'Skills'], ['notes', 'Notes'], ['generators', 'Generators'], ['beasts', 'Beastiary']];
+const TABS = [['team', 'In play'], ['table', 'At the table'], ['screen', 'Quick trackers'], ['skills', 'Skills'], ['notes', 'Notes'], ['generators', 'Generators'], ['beasts', 'Beastiary']];
 
-export function initGm(rules, el) {
+export function initGm(rules, el, hooks = {}) {
   R = rules;
   root = el;
   setRules(rules);
+  setTeamRules(rules, { ...hooks, addToInitiative, showGmTab: (id) => { tab = id; try { localStorage.setItem('dcugen.gmtab', id); } catch { /* ignore */ } renderGm(); } });
   try { tab = localStorage.getItem('dcugen.gmtab') || 'table'; } catch { /* ignore */ }
   renderGm();
 }
 
 /** Add any character (hero, villain, creature) to the initiative order. */
-export function addToInitiative(ch) {
+export function addToInitiative(ch, { replace = false, cond = 'Normal' } = {}) {
   const r = d20();
   const bonus = deriveAll(ch, R).initiative;
-  init.list.push({ name: ch.identity?.codename || 'Character', bonus, roll: r, total: r + bonus, cond: 'Normal' });
+  const name = ch.identity?.codename || 'Character';
+  if (replace) init.list = init.list.filter((e) => e.name !== name);
+  init.list.push({ name, bonus, roll: r, total: r + bonus, cond });
   init.list.sort((a, c) => c.total - a.total || c.bonus - a.bonus);
 }
 
@@ -240,9 +244,10 @@ export function renderGm() {
   if (!root) return;
   clear(root);
   root.append(h('div', { class: 'page-head' }, h('div', null, h('h1', null, 'GM Tools'),
-    h('p', null, 'Run the game: checks and combat odds, initiative with conditions, a GM screen with live trackers, your notes, and generators for encounters, hideouts and vehicles.'))));
+    h('p', null, 'Run the game: who is in play, checks and combat odds, initiative with conditions, a GM screen with live trackers, your notes, and generators for encounters, hideouts and vehicles.'))));
   root.append(h('div', { class: 'ae-tabs', role: 'group', 'aria-label': 'GM tools', style: { marginBottom: '14px' } },
     TABS.map(([id, label]) => h('button', { type: 'button', 'aria-pressed': String(tab === id), onClick: () => { tab = id; try { localStorage.setItem('dcugen.gmtab', id); } catch { /* ignore */ } renderGm(); } }, label))));
+  if (tab === 'team') root.append(teamTool(renderGm));
   if (tab === 'table') root.append(h('div', { class: 'gm' }, diceTool(), initiativeTool(), combatCalculator()), h('div', { style: { marginTop: '16px', display: 'grid', gap: '16px' } }, damageMatrixTool()));
   if (tab === 'screen') root.append(gmScreen(renderGm));
   if (tab === 'notes') root.append(notesTool(renderGm));

@@ -1,5 +1,16 @@
 [
   {
+    "id": "2026-10-18",
+    "date": "2026-10-18",
+    "title": "Who's in play",
+    "items": [
+      "GM Tools has an In play tab: click the heroes who are playing tonight and the villains you've made, keep a condition, bonus points and a note on each, and open any of them as a full sheet.",
+      "Hero points and a Toughness penalty on each row, +1 bonus point for every hero at once, and a reset for a new session.",
+      "Send everyone in play to the Battle Room, or roll initiative for all of them, in one click.",
+      "Give to sheet adds a hero's bonus points to their advancement."
+    ]
+  },
+  {
     "id": "2026-10-17",
     "date": "2026-10-17",
     "title": "A Battle Room that plays by the book, and easier reading",

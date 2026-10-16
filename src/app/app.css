@@ -471,6 +471,19 @@ details > summary { cursor: pointer; color: var(--ink-2); font: 600 12.5px/1.4 v
 .note-item small { color: var(--ink-3); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .note-item.active { border-color: var(--accent); background: var(--surface); }
 .screen-card { border-top: 4px solid var(--hero); gap: 10px; }
+.team-pick { display: flex; flex-wrap: wrap; gap: 6px; }
+.team-pick .chip[aria-pressed="true"] { background: var(--hero); color: #fff; border-color: var(--hero); text-shadow: 0 1px 1px rgba(0, 0, 0, .45); }
+.team-list { display: grid; gap: 10px; }
+.team-row { display: grid; gap: 8px; padding: 10px 12px; border: 1px solid var(--line); border-left: 4px solid var(--hero); border-radius: 8px; background: var(--surface); min-width: 0; }
+.team-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.team-name { font-size: 16px; overflow-wrap: anywhere; }
+.team-fields { display: flex; gap: 12px; flex-wrap: wrap; align-items: end; }
+.team-field { display: grid; gap: 2px; font-size: 12px; color: var(--ink-3); }
+.team-field select { padding: 4px; max-width: 170px; }
+.team-xp { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); }
+.team-xp .num { min-width: 1.5em; text-align: center; font-size: 15px; }
+.team-cond { font-size: 13px; color: var(--ink-2); }
+.team-row textarea { min-height: 0; resize: vertical; }
 @media (max-width: 640px) { .notes-layout { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- dialogs & toast ---------- */
