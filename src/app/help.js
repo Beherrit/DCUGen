@@ -2,7 +2,7 @@
 // after an update, and the version.
 
 import { h, clear, menu, openDialog, toast } from './dom.js';
-import { APP_VERSION, CHANGELOG } from '../generated/rulesdata.js';
+import { APP_VERSION, APP_COMMIT, CHANGELOG } from '../generated/rulesdata.js';
 
 const TOUR_KEY = 'dcugen.tour.v1';
 const SEEN_KEY = 'dcugen.whatsnew.v1';
@@ -149,8 +149,35 @@ export function whatsNewBody() {
     h('ul', null, c.items.map((it) => h('li', null, it))))));
 }
 
+const RELEASE_CACHE = 'dcugen-cache.release';
+
+/**
+ * The website is built by Vercel, which doesn't know the release number GitHub gives the same commit
+ * (6.1.<build number>). Ask GitHub which release was made from this commit, and remember the answer.
+ */
+async function releaseForCommit() {
+  if (!APP_COMMIT) return null;
+  try { const c = JSON.parse(localStorage.getItem(RELEASE_CACHE) || 'null'); if (c?.commit === APP_COMMIT) return c.version; } catch { /* storage unavailable */ }
+  try {
+    const ctl = new AbortController();
+    const t = setTimeout(() => ctl.abort(), 4000);
+    const res = await fetch('https://api.github.com/repos/Beherrit/DCUGen/releases?per_page=10', { signal: ctl.signal, headers: { Accept: 'application/vnd.github+json' } });
+    clearTimeout(t);
+    if (!res.ok) return null;
+    const hit = (await res.json()).find((r) => r.target_commitish === APP_COMMIT);
+    const version = hit?.tag_name?.replace(/^v/, '') || null;
+    if (version) try { localStorage.setItem(RELEASE_CACHE, JSON.stringify({ commit: APP_COMMIT, version })); } catch { /* storage unavailable */ }
+    return version;
+  } catch { return null; }
+}
+
 async function versionText() {
   try { if (window.dcugenDesktop?.version) return `DCUGen ${await window.dcugenDesktop.version()} (desktop app)`; } catch { /* web */ }
+  if (APP_VERSION.includes('+')) {
+    const [base, sha] = APP_VERSION.split('+');
+    const release = await releaseForCommit();
+    return release ? `DCUGen ${release} (website)` : `DCUGen ${base.split('.').slice(0, 2).join('.')} (website, build ${sha})`;
+  }
   return `DCUGen ${APP_VERSION}`;
 }
 
