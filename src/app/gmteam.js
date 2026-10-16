@@ -27,6 +27,25 @@ export function setTeamRules(rules, h2 = {}) {
 const isVillain = (ch) => ch.alignment === 'villain';
 const nameOf = (ch) => ch.identity?.codename || ch.identity?.realName || 'Unnamed';
 
+/**
+ * Who is in play right now, for the session planner's "Who played": each character with their conditions,
+ * note and the bonus XP of this session (still to give plus already given to the sheet).
+ */
+export function teamSnapshot() {
+  const team = load();
+  const out = [];
+  for (const kind of ['heroes', 'villains']) {
+    for (const id of team[kind]) {
+      const ch = state.roster.find((c) => c.rosterId === id);
+      if (!ch) continue;
+      const n = team.notes[id] || {};
+      const conds = Array.isArray(n.conds) ? n.conds : n.cond && n.cond !== 'Normal' ? [n.cond] : [];
+      out.push({ rosterId: id, name: nameOf(ch), villain: kind === 'villains', pl: ch.pl, conds, note: n.note || '', xp: (n.xp || 0) + (n.given || 0) });
+    }
+  }
+  return out;
+}
+
 /** The "In play" tab: two lists, the players' heroes and the villains. */
 export function teamTool(redraw) {
   // Redrawing replaces the control you just used, so keep the scroll and focus where they were.
@@ -43,7 +62,7 @@ export function teamTool(redraw) {
   const conds = Object.keys(R.raw.gm?.conditions?.conditions || {}).filter((c) => c !== 'Normal');
   const noteOf = (id) => {
     const n = team.notes[id] || (team.notes[id] = {});
-    Object.assign(n, { xp: 0, note: '', hp: 1, penalty: 0, ...n });
+    Object.assign(n, { xp: 0, given: 0, note: '', hp: 1, penalty: 0, ...n });
     // Earlier versions kept one condition as n.cond.
     if (!Array.isArray(n.conds)) n.conds = n.cond && n.cond !== 'Normal' ? [n.cond] : [];
     delete n.cond;
@@ -98,7 +117,7 @@ export function teamTool(redraw) {
                 const copy = awardPoints(JSON.parse(JSON.stringify(ch)), R, n.xp, 'Bonus points from the GM');
                 upsert(copy);
                 toast(`${nameOf(ch)} gets ${n.xp} power point${n.xp > 1 ? 's' : ''}`);
-                n.xp = 0; save(); rerender();
+                n.given = (n.given || 0) + n.xp; n.xp = 0; save(); rerender();
               } }, 'Give to sheet') : null))),
         n.conds.length ? h('ul', { class: 'team-conds' }, n.conds.map((c) => h('li', { class: 'team-cond' },
           h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${c} from ${nameOf(ch)}`, title: 'Remove', onClick: () => { n.conds = n.conds.filter((x) => x !== c); save(); rerender(); } }, '✕'),
@@ -137,7 +156,7 @@ export function teamTool(redraw) {
     save(); rerender(); toast(`+1 bonus point for ${heroes.length} hero${heroes.length > 1 ? 'es' : ''}`);
   };
   const newSession = () => {
-    for (const ch of everyone) Object.assign(noteOf(ch.rosterId), { hp: 1, penalty: 0, conds: [] });
+    for (const ch of everyone) Object.assign(noteOf(ch.rosterId), { hp: 1, penalty: 0, conds: [], given: 0 });
     save(); rerender(); toast('Hero points back to 1, penalties and conditions cleared');
   };
   return h('div', { style: { display: 'grid', gap: '16px' } },

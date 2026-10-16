@@ -5,6 +5,7 @@
 //
 // saved.sessions = [{ id, number, title, date ('2026-10-24T19:00'), status: 'planned' | 'played',
 //                     scenes: [{ id, text, done, links: [entityId] }], notes, plan, recap, created, updated }]
+//                     cast: [{ rosterId, name, villain, pl, conds: [], note, xp }]  (who played, from GM Tools' In play)
 // saved.threads  = [{ id, text, links: [entityId], opened: session number, closed: session number | null, created, updated }]
 
 const nowIso = () => new Date().toISOString();
@@ -107,14 +108,76 @@ export function attachPlan(saved, id, plan) {
 }
 
 /** The session played: its status, and the recap's headline and lines. */
-export function markPlayed(saved, number, recap = null) {
+export function markPlayed(saved, number, recap = null, cast = null) {
   let s = sessionByNumber(saved, number);
   if (!s) { s = addSession(saved, { after: number - 1 }); s.number = number; }
   s.status = 'played';
+  if (cast?.length && !s.cast?.length) s.cast = cleanCast(cast);
   if (!s.date) s.date = nowIso().slice(0, 16);
   if (recap) s.recap = { headline: recap.headline || '', lines: recap.blurbs || recap.lines || [], text: recap.text || '' };
   touch(s);
   return s;
+}
+
+// ---- who played ----------------------------------------------------------------------------------------------
+
+function cleanCast(cast) {
+  const seen = new Set();
+  return (cast || []).filter((c) => c && (c.rosterId || c.name) && !seen.has(c.rosterId || c.name) && seen.add(c.rosterId || c.name))
+    .map((c) => ({ rosterId: c.rosterId || null, name: String(c.name || 'Someone'), villain: !!c.villain, pl: c.pl ?? null,
+      conds: Array.isArray(c.conds) ? c.conds.map(String) : [], note: String(c.note || ''), xp: Math.max(0, Number(c.xp) || 0) }));
+}
+
+/** Who played in a session (replaces the list). */
+export function setCast(saved, id, cast) {
+  const s = getSession(saved, id);
+  if (!s) return null;
+  s.cast = cleanCast(cast);
+  touch(s);
+  return s.cast;
+}
+
+/** Add one person to a session's cast, or change what's kept about them. */
+export function updateCast(saved, id, member, patch = {}) {
+  const s = getSession(saved, id);
+  if (!s) return null;
+  const key = member.rosterId || member.name;
+  const list = s.cast || [];
+  const i = list.findIndex((c) => (c.rosterId || c.name) === key);
+  const next = cleanCast([{ ...(i >= 0 ? list[i] : member), ...patch }])[0];
+  if (i >= 0) list[i] = next; else list.push(next);
+  s.cast = list;
+  touch(s);
+  return next;
+}
+
+export function removeFromCast(saved, id, key) {
+  const s = getSession(saved, id);
+  if (!s) return;
+  s.cast = (s.cast || []).filter((c) => (c.rosterId || c.name) !== key);
+  touch(s);
+}
+
+/**
+ * Who played when, across the campaign: the sessions that have a cast, and for each character the session
+ * numbers they were in and the XP they earned. Heroes first, then villains, each by first appearance.
+ */
+export function attendance(saved) {
+  const sessions = sessionsOf(saved).filter((s) => s.cast?.length);
+  const people = new Map();
+  for (const s of sessions) {
+    for (const c of s.cast) {
+      const key = c.rosterId || c.name;
+      const p = people.get(key) || { key, rosterId: c.rosterId, name: c.name, villain: c.villain, sessions: {}, xp: 0, count: 0 };
+      p.name = c.name;
+      p.sessions[s.number] = { xp: c.xp || 0, conds: c.conds || [], note: c.note || '' };
+      p.xp += c.xp || 0;
+      p.count++;
+      people.set(key, p);
+    }
+  }
+  const list = [...people.values()];
+  return { sessions: sessions.map((s) => ({ id: s.id, number: s.number, title: s.title, date: s.date })), people: [...list.filter((p) => !p.villain), ...list.filter((p) => p.villain)] };
 }
 
 /**

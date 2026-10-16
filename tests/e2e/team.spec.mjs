@@ -84,3 +84,28 @@ test('picking a condition keeps the page where it was', async ({ page }) => {
   await expect(last.locator('.team-cond')).toHaveCount(1);
   expect(Math.abs(await page.evaluate(() => window.scrollY) - before)).toBeLessThan(5);
 });
+
+test('marking a session played keeps who was in play, with their XP, and the attendance table shows it', async ({ page }) => {
+  const errors = await openApp(page);
+  await rollCharacter(page, 'team-f');
+  const hero = (await codename(page).textContent()).trim();
+  await page.locator('#save-bottom').click();
+  await showTab(page, 'gm');
+  await page.locator('#view-gm .ae-tabs button', { hasText: 'In play' }).click();
+  await page.locator('#team-heroes .team-pick .chip', { hasText: hero }).click();
+  await page.getByLabel(`Raise bonus points for ${hero}`).click();
+  await page.getByLabel(`Raise bonus points for ${hero}`).click();
+  await page.getByLabel(`Add a condition to ${hero}`).selectOption('Fatigued');
+
+  await showTab(page, 'world');
+  await page.locator('.wd-tab', { hasText: 'Sessions' }).click();
+  await page.locator('#ses-new').click();
+  await page.locator('#ses-edit').getByRole('button', { name: 'Mark played' }).click();
+  const row = page.locator('#ses-cast .ses-cast-row', { hasText: hero });
+  await expect(row).toContainText('Fatigued');
+  await expect(row.locator('.num')).toHaveText('2');
+  await row.getByLabel(`Raise XP for ${hero}`).click();
+  const att = page.locator('#ses-attendance');
+  await expect(att.locator('tbody tr', { hasText: hero })).toContainText('✓ +3');
+  expect(errors).toEqual([]);
+});
