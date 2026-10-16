@@ -1,11 +1,14 @@
 // World: the session planner. The next game night (with a calendar file for the players), every session with
 // its scenes linked to World pages, notes and the Session in a Box plan made for it, the open plot threads, and
-// "Previously on…" to send to the table when the next session starts.
+// "Previously on…" to send to the table when the next session starts. Each session keeps who played (from GM
+// Tools' In play) with their XP, and the attendance table shows who was at which game.
 
 import { h, toast, copyText, download, openDialog } from './dom.js';
 import { lastSession, slug } from '../engine/world.js';
-import { sessionsOf, addSession, getSession, updateSession, removeSession, addScene, updateScene, removeScene, moveScene, markPlayed, nextSession, attachPlan, addThread, closeThread, reopenThread, removeThread, openThreads, previouslyOn, sessionIcs, whenLabel } from '../engine/sessions.js';
+import { setCast, updateCast, removeFromCast, attendance, sessionsOf, addSession, getSession, updateSession, removeSession, addScene, updateScene, removeScene, moveScene, markPlayed, nextSession, attachPlan, addThread, closeThread, reopenThread, removeThread, openThreads, previouslyOn, sessionIcs, whenLabel } from '../engine/sessions.js';
 import { W, pageLink, findByName } from './world-common.js';
+import { teamSnapshot } from './gmteam.js';
+import { state } from './store.js';
 
 const campaign = () => (W.saved?.name && W.saved.name !== 'My World' ? W.saved.name : 'Our Campaign');
 const commit = () => { W.save(); W.renderWorld(); };
@@ -102,13 +105,64 @@ function sessionEditor(s) {
       p.rumor ? h('div', null, `📰 Rumor: ${p.rumor}`) : null) : null,
     !p && gmPlan && s.status !== 'played' ? h('button', { class: 'btn sm', type: 'button', id: 'ses-attach', onClick: () => { attachPlan(W.saved, s.id, gmPlan); commit(); toast('The GM Screen\'s plan is kept with this session'); } }, '🧰 Keep the GM Screen\'s plan with this session') : null,
     h('h3', null, 'Notes'), notes,
+    castSection(s),
     s.recap ? h('div', { class: 'ses-recap' }, h('b', null, `🎬 ${s.recap.headline}`), (s.recap.lines || []).map((l) => h('div', null, l))) : null,
     h('div', { class: 'btn-row' },
       s.status !== 'played' ? h('button', { class: 'btn primary', type: 'button', id: 'ses-start', title: 'Starts the session on the GM Screen and sends "Previously on…" to the table', onClick: () => startHere(s) }, '▶ Start this session') : null,
-      s.status !== 'played' ? h('button', { class: 'btn', type: 'button', onClick: () => { markPlayed(W.saved, s.number); commit(); } }, 'Mark played') : h('button', { class: 'btn', type: 'button', onClick: () => { updateSession(W.saved, s.id, { status: 'planned' }); commit(); } }, 'Mark not played'),
+      s.status !== 'played' ? h('button', { class: 'btn', type: 'button', onClick: () => { markPlayed(W.saved, s.number, null, teamSnapshot()); commit(); } }, 'Mark played') : h('button', { class: 'btn', type: 'button', onClick: () => { updateSession(W.saved, s.id, { status: 'planned' }); commit(); } }, 'Mark not played'),
       h('button', { class: 'btn', type: 'button', disabled: !s.date, onClick: () => downloadIcs(s) }, '📅 Calendar file'),
       h('span', { class: 'spacer' }),
       h('button', { class: 'btn ghost danger', type: 'button', onClick: async () => { const ok = await openDialog({ title: `Delete session ${s.number}?`, body: h('p', { style: { margin: 0 } }, 'Its scenes, notes and plan go. The World\'s timeline keeps what happened.'), buttons: [{ label: 'Keep', value: false }, { label: 'Delete', value: true, danger: true }] }); if (ok) { removeSession(W.saved, s.id); W.ui.sessionId = null; commit(); } } }, 'Delete')));
+}
+
+// ---- who played --------------------------------------------------------------------------------------------------
+
+function castSection(s) {
+  const cast = s.cast || [];
+  const fill = () => {
+    const snap = teamSnapshot();
+    if (!snap.length) { toast('Nobody is in play: pick them on GM Tools > In play first'); return; }
+    setCast(W.saved, s.id, snap); commit(); toast(`${snap.length} from In play kept with session ${s.number}`);
+  };
+  const others = state.roster.filter((c) => c.rosterId && !cast.some((x) => x.rosterId === c.rosterId));
+  const add = h('select', { id: 'ses-cast-add', 'aria-label': 'Add someone who played', onChange: (e) => {
+    const ch = state.roster.find((c) => c.rosterId === e.target.value);
+    if (ch) { updateCast(W.saved, s.id, { rosterId: ch.rosterId, name: ch.identity?.codename || ch.identity?.realName || 'Someone', villain: ch.alignment === 'villain', pl: ch.pl }); commit(); }
+  } }, h('option', { value: '' }, 'Add someone…'), others.map((c) => h('option', { value: c.rosterId }, `${c.identity?.codename || 'Unnamed'}${c.alignment === 'villain' ? ' (villain)' : ''}`)));
+  const row = (c) => h('li', { class: `ses-cast-row ${c.villain ? 'villain' : ''}` },
+    h('div', { class: 'ses-cast-who' }, h('b', null, c.name), c.villain ? h('span', { class: 'chip' }, 'Villain') : null, c.pl != null ? h('small', { class: 'hint' }, ` PL ${c.pl}`) : null,
+      c.conds?.length ? h('small', { class: 'hint' }, ` · ${c.conds.join(', ')}`) : null),
+    h('input', { type: 'text', value: c.note || '', placeholder: 'Note', 'aria-label': `Note for ${c.name}`, onChange: (e) => { updateCast(W.saved, s.id, c, { note: e.target.value }); commit(); } }),
+    c.villain ? h('span') : h('span', { class: 'team-xp', title: 'Bonus XP earned this session' }, h('small', { class: 'hint' }, 'XP'),
+      h('button', { class: 'btn sm', type: 'button', 'aria-label': `Lower XP for ${c.name}`, disabled: !c.xp, onClick: () => { updateCast(W.saved, s.id, c, { xp: (c.xp || 0) - 1 }); commit(); } }, '−'),
+      h('b', { class: 'num' }, c.xp || 0),
+      h('button', { class: 'btn sm', type: 'button', 'aria-label': `Raise XP for ${c.name}`, onClick: () => { updateCast(W.saved, s.id, c, { xp: (c.xp || 0) + 1 }); commit(); } }, '+')),
+    h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${c.name} from this session`, onClick: () => { removeFromCast(W.saved, s.id, c.rosterId || c.name); commit(); } }, '✕'));
+  return h('div', { class: 'ses-cast', id: 'ses-cast' },
+    h('h3', null, 'Who played'),
+    cast.length ? h('ul', { class: 'ses-cast-list' }, cast.map(row))
+      : h('p', { class: 'hint', style: { margin: 0 } }, 'Nobody recorded yet. Marking the session played (or ending it on the GM Screen) keeps whoever is on GM Tools > In play.'),
+    h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', type: 'button', id: 'ses-cast-fill', onClick: fill }, cast.length ? 'Replace with In play' : 'Fill from In play'), add));
+}
+
+function attendancePanel() {
+  const a = attendance(W.saved);
+  if (!a.sessions.length) return null;
+  const cell = (p, s) => {
+    const x = p.sessions[s.number];
+    return h('td', { title: x ? [x.conds.join(', '), x.note].filter(Boolean).join(' · ') : '' }, x ? (x.xp ? `✓ +${x.xp}` : '✓') : '');
+  };
+  return h('section', { class: 'wd-block', id: 'ses-attendance' },
+    h('h2', null, 'Who played when'),
+    h('div', { class: 'ses-att-wrap' }, h('table', { class: 'ses-att' },
+      h('thead', null, h('tr', null, h('th', null, 'Character'),
+        a.sessions.map((s) => h('th', { title: [s.title, s.date ? whenLabel(s.date) : ''].filter(Boolean).join(' · ') },
+          h('button', { type: 'button', class: 'linkish', onClick: () => { W.ui.sessionId = s.id; commit(); } }, `S${s.number}`))),
+        h('th', null, 'Games'), h('th', null, 'XP'))),
+      h('tbody', null, a.people.map((p) => h('tr', { class: p.villain ? 'villain' : '' },
+        h('th', { scope: 'row' }, p.name, p.villain ? h('small', { class: 'hint' }, ' villain') : null),
+        a.sessions.map((s) => cell(p, s)),
+        h('td', { class: 'num' }, p.count), h('td', { class: 'num' }, p.villain ? '' : p.xp)))))));
 }
 
 function startHere(s) {
@@ -164,7 +218,7 @@ export function sessionsPage() {
     h('b', { class: 'num' }, `S${s.number}`),
     h('span', { class: 'ses-card-title' }, s.title || (s.status === 'played' ? 'Played' : 'Planned')),
     h('small', null, s.date ? whenLabel(s.date) : 'no date'),
-    h('small', { class: 'hint' }, `${(s.scenes || []).length} scene${(s.scenes || []).length === 1 ? '' : 's'}${s.status === 'played' ? ' · played' : ''}`));
+    h('small', { class: 'hint' }, `${(s.scenes || []).length} scene${(s.scenes || []).length === 1 ? '' : 's'}${s.cast?.length ? ` · ${s.cast.filter((c) => !c.villain).length} played` : ''}${s.status === 'played' ? ' · played' : ''}`));
   const upcoming = list.filter((s) => s.status !== 'played');
   const played = list.filter((s) => s.status === 'played').reverse();
   return h('div', { class: 'wd-page' },
@@ -175,7 +229,8 @@ export function sessionsPage() {
         nextPanel(),
         sel ? sessionEditor(sel) : null,
         upcoming.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Coming up'), h('div', { class: 'ses-cards' }, upcoming.map(card))) : null,
-        played.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Played'), h('div', { class: 'ses-cards' }, played.map(card))) : null),
+        played.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Played'), h('div', { class: 'ses-cards' }, played.map(card))) : null,
+        attendancePanel()),
       h('div', { class: 'ses-side' }, previouslyPanel(), threadsPanel())));
 }
 
@@ -214,6 +269,6 @@ export function keepPlan(plan) {
 /** The GM ended a session: the planner marks it played and keeps the recap. */
 export function sessionPlayed(number, recap) {
   if (!W.saved) return;
-  markPlayed(W.saved, number, recap);
+  markPlayed(W.saved, number, recap, teamSnapshot());
   W.save();
 }

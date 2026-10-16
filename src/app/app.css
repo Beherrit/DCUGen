@@ -2297,3 +2297,17 @@ html.read-color .power-about { font-style: normal; }
 .read-toggle span { display: grid; gap: 2px; }
 .read-toggle small { color: var(--ink-2); }
 .read-sample { padding: 10px 12px; border: 1px dashed var(--line); border-radius: 8px; display: grid; gap: 4px; }
+
+/* Sessions: who played */
+.ses-cast-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.ses-cast-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto auto; gap: 8px; align-items: center; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; }
+.ses-cast-row.villain { border-left: 4px solid var(--accent); }
+.ses-cast-who { min-width: 0; overflow-wrap: anywhere; }
+.ses-cast-row input { min-width: 0; padding: 4px 6px; }
+@media (max-width: 560px) { .ses-cast-row { grid-template-columns: minmax(0, 1fr) auto auto; } .ses-cast-row input { grid-column: 1 / -1; grid-row: 2; } }
+.ses-att-wrap { overflow-x: auto; }
+.ses-att { border-collapse: collapse; font-size: 14px; min-width: 100%; }
+.ses-att th, .ses-att td { padding: 5px 8px; border-bottom: 1px solid var(--line); text-align: center; white-space: nowrap; }
+.ses-att th[scope="row"] { text-align: left; }
+.ses-att tr.villain th[scope="row"] { color: var(--accent); }
+.ses-att .linkish { background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: inherit; cursor: pointer; text-decoration: underline; }

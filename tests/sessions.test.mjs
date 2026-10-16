@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { emptyWorld, mergeWorldSaved } from '../src/engine/world.js';
-import { addSession, sessionsOf, updateSession, removeSession, addScene, moveScene, updateScene, removeScene, attachPlan, markPlayed, nextSession, lastPlayed, addThread, closeThread, reopenThread, openThreads, previouslyOn, sessionIcs, whenLabel } from '../src/engine/sessions.js';
+import { setCast, updateCast, removeFromCast, attendance, addSession, sessionsOf, updateSession, removeSession, addScene, moveScene, updateScene, removeScene, attachPlan, markPlayed, nextSession, lastPlayed, addThread, closeThread, reopenThread, openThreads, previouslyOn, sessionIcs, whenLabel } from '../src/engine/sessions.js';
 
 test('sessions number on from the campaign, and scenes keep their order', () => {
   const w = emptyWorld();
@@ -105,4 +105,23 @@ test('two copies of a world merge their sessions and threads; deleted ones stay 
   const m = mergeWorldSaved(a, b);
   assert.deepEqual(sessionsOf(m).map((x) => x.title), ['One (moved)']);
   assert.equal(m.threads.length, 1);
+});
+
+test('who played: marking a session played keeps the cast once, and attendance adds up games and XP', () => {
+  const saved = {};
+  const s1 = addSession(saved, {});
+  const s2 = addSession(saved, {});
+  const cast = [{ rosterId: 'a', name: 'Spark', pl: 10, conds: ['Dazed'], xp: 1 }, { rosterId: 'v', name: 'Null', villain: true }, { rosterId: 'a', name: 'Spark again' }];
+  markPlayed(saved, s1.number, null, cast);
+  assert.equal(s1.cast.length, 2, 'duplicates are dropped');
+  markPlayed(saved, s1.number, null, [{ rosterId: 'b', name: 'Other' }]);
+  assert.equal(s1.cast[0].name, 'Spark', 'a recorded cast is not replaced');
+  setCast(saved, s2.id, [{ rosterId: 'a', name: 'Spark', xp: 2 }, { rosterId: 'b', name: 'Bolt' }]);
+  updateCast(saved, s2.id, { rosterId: 'b', name: 'Bolt' }, { xp: 3, note: 'late' });
+  updateCast(saved, s2.id, { rosterId: 'c', name: 'Echo' });
+  removeFromCast(saved, s2.id, 'c');
+  const a = attendance(saved);
+  assert.deepEqual(a.sessions.map((s) => s.number), [1, 2]);
+  assert.deepEqual(a.people.map((p) => [p.name, p.count, p.xp, p.villain]), [['Spark', 2, 3, false], ['Bolt', 1, 3, false], ['Null', 1, 0, true]]);
+  assert.equal(a.people[1].sessions[2].note, 'late');
 });

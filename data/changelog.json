@@ -1,5 +1,14 @@
 [
   {
+    "id": "2026-10-19",
+    "date": "2026-10-19",
+    "title": "Who played when",
+    "items": [
+      "Each session in World > Sessions keeps who played: marking it played (or ending it on the GM Screen) records everyone on GM Tools > In play, with their conditions, a note and the bonus XP they earned.",
+      "Who played when: a table of every character across the sessions, with how many games they played and their total XP."
+    ]
+  },
+  {
     "id": "2026-10-18",
     "date": "2026-10-18",
     "title": "Who's in play",
