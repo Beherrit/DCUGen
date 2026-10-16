@@ -85,9 +85,20 @@ ipcMain.handle('app:version', () => app.getVersion());
 
 // ---- updates: every push to the site makes a new release; installed apps pick it up ------------------
 let updateCheckByHand = false;
+// The portable .exe and the unsigned Mac app can't replace themselves, so they say a new version is out and
+// open its download page instead.
+const SELF_UPDATING = !process.env.PORTABLE_EXECUTABLE_FILE && process.platform !== 'darwin';
+let toldAbout = '';
+function offerDownload(version) {
+  if (!version || toldAbout === version) return;
+  toldAbout = version;
+  dialog.showMessageBox({ type: 'info', buttons: ['Download', 'Later'], defaultId: 0, title: 'Update available', message: `DCUGen ${version} is out (you have ${app.getVersion()}).`, detail: 'This copy cannot update itself. Download the new one; your data stays where it is.' })
+    .then((r) => { if (r.response === 0) shell.openExternal('https://github.com/Beherrit/DCUGen/releases/latest'); });
+}
 function setupUpdates() {
   if (!app.isPackaged) return;
-  autoUpdater.autoDownload = true;
+  autoUpdater.autoDownload = SELF_UPDATING;
+  autoUpdater.on('update-available', (info) => { if (!SELF_UPDATING) offerDownload(info.version); });
   autoUpdater.on('update-downloaded', async (info) => {
     const r = await dialog.showMessageBox({ type: 'info', buttons: ['Restart now', 'Later'], defaultId: 0, title: 'Update ready', message: `DCUGen ${info.version} is downloaded.`, detail: 'Restart to use it. Your data stays where it is.' });
     if (r.response === 0) autoUpdater.quitAndInstall();
@@ -95,7 +106,7 @@ function setupUpdates() {
   autoUpdater.on('update-not-available', () => { if (updateCheckByHand) { updateCheckByHand = false; dialog.showMessageBox({ type: 'info', message: `You have the latest DCUGen (${app.getVersion()}).` }); } });
   autoUpdater.on('error', (err) => { if (updateCheckByHand) { updateCheckByHand = false; dialog.showMessageBox({ type: 'warning', message: 'Could not check for updates.', detail: String(err?.message || err) }); } });
   autoUpdater.checkForUpdates().catch(() => {});
-  setInterval(() => autoUpdater.checkForUpdates().catch(() => {}), 4 * 60 * 60 * 1000);
+  setInterval(() => autoUpdater.checkForUpdates().catch(() => {}), 60 * 60 * 1000);
 }
 function checkForUpdatesByHand() {
   if (!app.isPackaged) { dialog.showMessageBox({ type: 'info', message: 'Updates apply to the installed app, not to a copy run from source.' }); return; }
