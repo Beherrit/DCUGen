@@ -13,12 +13,12 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | effect | 61 | 6 | 26 | 21 | 8 | 60% |
 | extra | 38 | 5 | 6 | 22 | 5 | 33% |
 | flaw | 22 | 0 | 1 | 18 | 3 | 5% |
-| advantage | 75 | 15 | 8 | 31 | 21 | 43% |
+| advantage | 75 | 16 | 7 | 31 | 21 | 43% |
 | action | 20 | 5 | 4 | 11 | 0 | 45% |
-| maneuver | 12 | 4 | 5 | 3 | 0 | 75% |
+| maneuver | 12 | 5 | 4 | 3 | 0 | 75% |
 | condition | 30 | 15 | 9 | 5 | 1 | 83% |
 | rule | 34 | 11 | 8 | 15 | 0 | 56% |
-| all | 292 | 61 | 67 | 126 | 38 | 50% |
+| all | 292 | 63 | 65 | 126 | 38 | 50% |
 
 ## Effects
 
@@ -215,7 +215,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Sidekick | n/a | Sidekicks are built as separate combatants. | DCA 78 |
 | Teamwork | none | Team checks are not simulated. | DCA 78 |
 | Trance | n/a | Has no combat rule. | DCA 79 |
-| Agile Feint | partial | Acrobatics can stand in for Deception on a feint, but the feint's effect is not applied (see Feint). | DCA 69 |
+| Agile Feint | full | Feint with Acrobatics instead of Deception; the feint makes the target vulnerable to the feinter's next attack. | DCA 69 |
 | Animal Empathy | n/a | Out of combat skill use. | DCA 69 |
 | Artificer | n/a | Out of combat crafting. | DCA 70 |
 | Attractive | n/a | Social only. | DCA 70 |
@@ -273,7 +273,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Slam Attack | partial | A charging fighter uses its movement rank as Damage; the extra +1 for a full move and the damage the slammer takes are not applied. |  |
 | Surprise Attack | partial | Only through the Ambush option; stealth and unusual tactics do not make a target vulnerable. |  |
 | Team Attack | partial | Only minion squads combine attacks (+2 or +5 rank); heroes never team up. |  |
-| Feint | partial | The Deception check against Insight is rolled and logged, but the target is not actually made vulnerable (the code sets a flag it never reads). |  |
+| Feint | full | Deception (or Acrobatics with Agile Feint) against Insight or Deception; on success the target is vulnerable to the feinter's next attack until the end of the feinter's next round (DCA 64). |  |
 | Trick | none | Tricks with Deception are not simulated. |  |
 | Demoralize | none | Intimidation to impair a foe is not simulated. |  |
 | Aid | none | Helping an ally with an attack check is not simulated. |  |

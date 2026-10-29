@@ -41,7 +41,7 @@ export function targetBias(b, c, t, { enemies }) {
     case 'bodyguard': return (t.vipHit?.[c.team] ?? -1) > (c.prevTurnTick ?? 0) ? 3 : 1;
     case 'lockdown': return lockdownBias(b, c, t);
     case 'pickoff': return pickoffBias(t, enemies);
-    case 'flank': return t.feinted || activeConditions(t).has('Vulnerable') ? 2.5 : 1;
+    case 'flank': return t.feinted?.by === c.id || activeConditions(t).has('Vulnerable') ? 2.5 : 1;
     default: return 1;
   }
 }

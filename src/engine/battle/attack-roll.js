@@ -1,7 +1,7 @@
 // The attack roll: how the attack is worded, the to-hit modifier, the roll against defense, and the hero point re-roll.
 
 import { sign, d20 } from './util.js';
-import { activeConditions, checkPenalty, defenseOf } from './conditions.js';
+import { activeConditions, checkPenalty, defenseVs, feintedBy } from './conditions.js';
 import { rangePenalty, concealmentPenalty } from './odds.js';
 import { spendOnMiss } from './tactics.js';
 
@@ -42,7 +42,7 @@ function toHitMod(c, atk, t, m, aimed, notes) {
  */
 export function rollToHit(b, c, atk, t, rng, m, aimed, notes) {
   const which = atk.kind === 'close' ? 'Parry' : 'Dodge';
-  const def = defenseOf(t, which);
+  const def = defenseVs(t, which, c);
   const mod = toHitMod(c, atk, t, m, aimed, notes);
   // Defend (DCA 175): the target rolls its defense instead of the flat 10; a 10 or less counts as +10.
   let dcUsed = 10 + def;
@@ -62,7 +62,7 @@ export function rollToHit(b, c, atk, t, rng, m, aimed, notes) {
   let text = routine
     ? `${c.name} ${attackVerb(c, atk, t, rng)}: routine attack against a minion, ${10 + mod} vs ${which} DC ${dcUsed}`
     : `${c.name} ${attackVerb(c, atk, t, rng)}: d20 ${roll} ${sign(mod)} = ${total} vs ${which} ${t.defending ? '' : 'DC '}${dcUsed}`;
-  if (t.feinted) { text += ' (feinted: defenses halved)'; t.feinted = false; }
+  if (feintedBy(t, c)) { text += ' (feinted: vulnerable to this attack)'; t.feinted = null; }
   const out = { roll, total, mod, hit, crit, dice, text, dcUsed, which };
   if (!hit && b.options.heroPoints && c.heroPoints > 0 && roll !== 1 && (c.style !== 'minion') && (spendOnMiss(b, c) || t.staggered || c.staggered || rng.chance(0.5))) rerollMiss(c, atk, t, rng, out, routine);
   if (activeConditions(t).has('Defenseless') && out.hit && critOk(c, t, routine)) out.crit = true;

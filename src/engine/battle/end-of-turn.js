@@ -6,6 +6,8 @@ import { releaseHolds } from './maneuvers.js';
 
 export function endOfTurn(b, c, rng) {
   c.interposed = false;
+  // A feint lasts until the end of the feinter's next round (DCA 64).
+  for (const t of b.combatants) if (t.feinted?.by === c.id && t.feinted.round < b.round) t.feinted = null;
   if (c.out) return;
   if (c.dazed && !c.staggered) { c.dazed = false; }
   if (c.dazed && c.staggered) { c.dazed = false; } // staggered keeps the hindered part; dazed wears off

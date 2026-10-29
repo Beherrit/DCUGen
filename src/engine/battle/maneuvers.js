@@ -10,7 +10,8 @@ export function feint(b, c, t, rng) {
   const theirs = Math.max(t.skills.Insight, t.skills.Deception);
   const r1 = d20(rng); const r2 = d20(rng);
   const ok = r1 + mine > r2 + theirs || r1 === 20;
-  if (ok) t.feinted = true;
+  // Vulnerable against the feinter's next attack, until the end of the feinter's next round (DCA 64).
+  if (ok) t.feinted = { by: c.id, round: b.round };
   log(b, { kind: ok ? 'condition' : 'miss', actor: c.id, target: t.id, text: `${c.name} feints ${useAcro ? 'with acrobatics' : ''}: ${useAcro ? 'Acrobatics' : 'Deception'} d20 ${r1} ${sign(mine)} = ${r1 + mine} vs ${t.name}'s Insight d20 ${r2} ${sign(theirs)} = ${r2 + theirs} — ${ok ? `${t.name} falls for it and is vulnerable to the next attack` : 'not fooled'}.`, dice: [{ label: 'Feint', roll: r1, mod: mine, total: r1 + mine, dc: r2 + theirs }] });
 }
 

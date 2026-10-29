@@ -1,294 +1,1950 @@
 [
-  {"kind":"effect","name":"Affliction","status":"partial","note":"Three degrees, Cumulative, Progressive, Extra Condition, Limited Degree and end-of-turn recovery work; Deaf, Transformed and other minor conditions do little and durations are ignored.","source":"DCA 87"},
-  {"kind":"effect","name":"Alternate Form","status":"none","note":"Alternate forms are not switched in a fight.","source":"DCA 88"},
-  {"kind":"effect","name":"Blast","status":"full","note":"Fights as Damage at range (DCA 89).","source":"DCA 89"},
-  {"kind":"effect","name":"Burrowing","status":"none","note":"Burrowing is not counted as movement and no one goes underground.","source":"DCA 89"},
-  {"kind":"effect","name":"Communication","status":"n/a","note":"Communication has no effect on a fight.","source":"DCA 89"},
-  {"kind":"effect","name":"Comprehend","status":"n/a","note":"Languages and comprehension do not matter in a fight.","source":"DCA 90"},
-  {"kind":"effect","name":"Concealment","status":"partial","note":"Visual concealment gives -2 or -5 to attacks against the holder; other senses and non-visual concealment are ignored.","source":"DCA 91"},
-  {"kind":"effect","name":"Create","status":"none","note":"Created objects and barriers are not simulated.","source":"DCA 91"},
-  {"kind":"effect","name":"Damage","status":"full","note":"Toughness check at 15 + rank with cumulative bruises, dazed, staggered and incapacitated; Strength gives built-in close Damage.","source":"DCA 93"},
-  {"kind":"effect","name":"Dazzle","status":"partial","note":"Fought as an Affliction (impaired, disabled, unaware) but the sense it blocks is not tracked.","source":"DCA 94"},
-  {"kind":"effect","name":"Deflect","status":"none","note":"There is no reaction to turn a ranged attack aside.","source":"DCA 95"},
-  {"kind":"effect","name":"Duplication","status":"none","note":"Duplicates are not created.","source":"DCA 94"},
-  {"kind":"effect","name":"Element Control","status":"none","note":"Control effects (Move Object style) are not simulated.","source":"DCA 95"},
-  {"kind":"effect","name":"Elongation","status":"none","note":"Stretching and extra reach are not modelled.","source":"DCA 96"},
-  {"kind":"effect","name":"Energy Absorption","status":"none","note":"Absorbing energy attacks into Enhanced Traits is not simulated.","source":"DCA 95"},
-  {"kind":"effect","name":"Energy Aura","status":"partial","note":"Fights as Damage that is used like a normal attack; its automatic Reaction against attackers is not simulated.","source":"DCA 97"},
-  {"kind":"effect","name":"Energy Control","status":"partial","note":"Fights as Damage at range; the other uses of an energy power are not simulated.","source":"DCA 97"},
-  {"kind":"effect","name":"Enhanced Trait","status":"partial","note":"Abilities, defenses and skills are added to the derived numbers; Enhanced Advantage is not.","source":"DCA 96"},
-  {"kind":"effect","name":"Environment","status":"none","note":"Environmental changes such as darkness or heat are not simulated.","source":"DCA 97"},
-  {"kind":"effect","name":"Extra Limbs","status":"none","note":"Extra limbs (holding while attacking) are not modelled.","source":"DCA 98"},
-  {"kind":"effect","name":"Feature","status":"n/a","note":"A feature is descriptive only.","source":"DCA 98"},
-  {"kind":"effect","name":"Flight","status":"partial","note":"Sets how far the fighter moves each turn and the log wording; nothing else about flying (height, ground effects) is modelled.","source":"DCA 99"},
-  {"kind":"effect","name":"Force Field","status":"full","note":"Counts as sustained Protection with Impervious; Nullify can switch it off.","source":"DCA 100"},
-  {"kind":"effect","name":"Growth","status":"partial","note":"Strength, Stamina, Dodge, Parry, Intimidation and Stealth change; extra reach and size effects do not.","source":"DCA 100"},
-  {"kind":"effect","name":"Healing","status":"partial","note":"Healers restore bruises, dazed and staggered at DC 10; Healing's other uses such as stabilizing a dying hero are not simulated.","source":"DCA 100"},
-  {"kind":"effect","name":"Illusion","status":"none","note":"Illusions are not simulated.","source":"DCA 101"},
-  {"kind":"effect","name":"Immortality","status":"none","note":"Returning after incapacitation is not simulated.","source":"DCA 102"},
-  {"kind":"effect","name":"Immunity","status":"partial","note":"Immunity is matched by text against attack descriptors and defenses, including half effect; unusual immunities may be missed.","source":"DCA 102"},
-  {"kind":"effect","name":"Insubstantial","status":"none","note":"Insubstantial forms and the damage they avoid are not simulated.","source":"DCA 103"},
-  {"kind":"effect","name":"Invisibility","status":"partial","note":"Treated as visual Concealment; other senses are ignored.","source":"DCA 104"},
-  {"kind":"effect","name":"Leaping","status":"partial","note":"Counts as half its rank toward movement; jumping over things is not modelled.","source":"DCA 105"},
-  {"kind":"effect","name":"Luck Control","status":"none","note":"Rerolls forced on other characters are not simulated.","source":"DCA 106"},
-  {"kind":"effect","name":"Magic","status":"partial","note":"Fights as Damage at range; the flexible casting that Magic allows is not simulated.","source":"DCA 105"},
-  {"kind":"effect","name":"Mental Blast","status":"full","note":"Perception range Damage resisted by Will, with no attack roll.","source":"DCA 107"},
-  {"kind":"effect","name":"Mimic","status":"none","note":"Copying traits from a target is not simulated.","source":"DCA 107"},
-  {"kind":"effect","name":"Mind Control","status":"partial","note":"Dazed, compelled and controlled work (a controlled fighter attacks its own side); the controller's other orders are not.","source":"DCA 107"},
-  {"kind":"effect","name":"Mind Reading","status":"n/a","note":"Reading minds has no combat effect here.","source":"DCA 106"},
-  {"kind":"effect","name":"Morph","status":"n/a","note":"Changing appearance has no combat effect here.","source":"DCA 108"},
-  {"kind":"effect","name":"Move Object","status":"none","note":"Moving or throwing objects with a power is not simulated.","source":"DCA 108"},
-  {"kind":"effect","name":"Movement","status":"none","note":"Special movement types are not counted.","source":"DCA 109"},
-  {"kind":"effect","name":"Nullify","status":"partial","note":"Opposed check against sustained protection only; other powers cannot be nullified.","source":"DCA 111"},
-  {"kind":"effect","name":"Power-Lifting","status":"n/a","note":"Only changes how much can be lifted.","source":"DCA 111"},
-  {"kind":"effect","name":"Protection","status":"full","note":"Adds to Toughness, with Impervious and Sustained handled.","source":"DCA 111"},
-  {"kind":"effect","name":"Quickness","status":"n/a","note":"Only speeds up routine tasks.","source":"DCA 112"},
-  {"kind":"effect","name":"Regeneration","status":"partial","note":"Recovers one damage condition per round using a simplified rank count; the book's recovery timings are not followed.","source":"DCA 112"},
-  {"kind":"effect","name":"Remote Sensing","status":"n/a","note":"Sensing from afar has no combat effect here.","source":"DCA 112"},
-  {"kind":"effect","name":"Senses","status":"partial","note":"Only senses that see through concealment (radar, tremor, danger sense and the like) are used.","source":"DCA 113"},
-  {"kind":"effect","name":"Shapeshift","status":"none","note":"Changing form in a fight is not simulated.","source":"DCA 116"},
-  {"kind":"effect","name":"Shrinking","status":"partial","note":"Strength, Dodge and Parry change; Stealth and small-size effects do not.","source":"DCA 117"},
-  {"kind":"effect","name":"Sleep","status":"partial","note":"Fought as Fortitude Affliction (fatigued, exhausted, asleep); waking from noise or damage is not simulated.","source":"DCA 116"},
-  {"kind":"effect","name":"Snare","status":"partial","note":"Hindered and vulnerable, then defenseless and immobile, resisted by Dodge; escaping by Strength is not simulated.","source":"DCA 117"},
-  {"kind":"effect","name":"Speed","status":"partial","note":"Sets how far the fighter moves each turn; Speed is not used for chasing or running away.","source":"DCA 117"},
-  {"kind":"effect","name":"Strike","status":"full","note":"Fights as Damage (DCA 117).","source":"DCA 117"},
-  {"kind":"effect","name":"Suffocation","status":"partial","note":"Fought as a progressive Fortitude Affliction; holding breath and the book's conditions are not followed.","source":"DCA 117"},
-  {"kind":"effect","name":"Summon","status":"none","note":"Summoned allies are not created.","source":"DCA 118"},
-  {"kind":"effect","name":"Super-Speed","status":"none","note":"Not counted as movement, and the Improved Initiative it grants is not applied.","source":"DCA 119"},
-  {"kind":"effect","name":"Swimming","status":"partial","note":"Counts as movement speed; water is not in the arena.","source":"DCA 119"},
-  {"kind":"effect","name":"Teleport","status":"partial","note":"Counts as movement speed; Teleport Attack and ranged placement are not simulated.","source":"DCA 120"},
-  {"kind":"effect","name":"Transform","status":"none","note":"Transformations are not simulated.","source":"DCA 120"},
-  {"kind":"effect","name":"Variable","status":"partial","note":"Only Omni-power fighters reconfigure, into four fixed attacks sized to half the points.","source":"DCA 121"},
-  {"kind":"effect","name":"Weaken","status":"partial","note":"Weakens one trait guessed from the power's detail and returns a rank each round; the book's recovery rate differs.","source":"DCA 122"},
-  {"kind":"extra","name":"Accurate","status":"full","note":"Adds +2 to the attack bonus per step.","source":"DCA 125"},
-  {"kind":"extra","name":"Affects Corporeal","status":"none","note":"Only matters with Insubstantial, which is not simulated.","source":"DCA 125"},
-  {"kind":"extra","name":"Affects Insubstantial","status":"none","note":"Insubstantial is not simulated.","source":"DCA 125"},
-  {"kind":"extra","name":"Affects Objects","status":"none","note":"Objects are not in the fight.","source":"DCA 125"},
-  {"kind":"extra","name":"Affects Others","status":"none","note":"Defenses and powers cannot be given to allies in a fight.","source":"DCA 125"},
-  {"kind":"extra","name":"Alternate Effect","status":"partial","note":"Alternate attacks are separate attack choices, switched for free; alternate defenses and utilities are ignored.","source":"DCA 125"},
-  {"kind":"extra","name":"Alternate Resistance","status":"partial","note":"The attack uses the resistance recorded on the power; the cost changes are not checked.","source":"DCA 126"},
-  {"kind":"extra","name":"Area","status":"partial","note":"Burst, Cone and the rest all hit everyone in one zone with Dodge for half; shapes are not modelled.","source":"DCA 126"},
-  {"kind":"extra","name":"Attack","status":"none","note":"An Attack extra on a non-attack effect does not make it an attack.","source":"DCA 128"},
-  {"kind":"extra","name":"Contagious","status":"none","note":"Spreading effects are not simulated.","source":"DCA 129"},
-  {"kind":"extra","name":"Dimensional","status":"none","note":"Dimensions are not simulated.","source":"DCA 129"},
-  {"kind":"extra","name":"Extended Range","status":"none","note":"Range bands in the fight do not scale with Extended Range.","source":"DCA 129"},
-  {"kind":"extra","name":"Feature","status":"n/a","note":"Descriptive only.","source":"DCA 129"},
-  {"kind":"extra","name":"Homing","status":"none","note":"Homing attacks are not simulated.","source":"DCA 129"},
-  {"kind":"extra","name":"Impervious","status":"full","note":"Impervious Protection ignores attacks of half its rank or less unless Penetrating.","source":"DCA 129"},
-  {"kind":"extra","name":"Increased Duration","status":"none","note":"Durations beyond instant are not tracked.","source":"DCA 129"},
-  {"kind":"extra","name":"Increased Mass","status":"none","note":"Needs Move Object, which is not simulated.","source":"DCA 130"},
-  {"kind":"extra","name":"Increased Range","status":"partial","note":"Changes the attack from close to ranged through the power's range; distance is counted in zones, not by rank.","source":"DCA 130"},
-  {"kind":"extra","name":"Incurable","status":"none","note":"Effects that resist Healing and Regeneration are not simulated.","source":"DCA 130"},
-  {"kind":"extra","name":"Indirect","status":"none","note":"Needs cover and line of sight, which are not simulated.","source":"DCA 130"},
-  {"kind":"extra","name":"Innate","status":"none","note":"Innate powers are not protected from Nullify.","source":"DCA 130"},
-  {"kind":"extra","name":"Insidious","status":"n/a","note":"Concerns detecting an effect after the fight.","source":"DCA 130"},
-  {"kind":"extra","name":"Linked","status":"partial","note":"Linked powers show as separate attacks instead of one combined action.","source":"DCA 130"},
-  {"kind":"extra","name":"Multiattack","status":"full","note":"Two degrees of success add +2 to the resistance DC, three or more add +5.","source":"DCA 131"},
-  {"kind":"extra","name":"Penetrating","status":"full","note":"Overcomes Impervious.","source":"DCA 131"},
-  {"kind":"extra","name":"Precise","status":"n/a","note":"Fine control has no combat meaning.","source":"DCA 131"},
-  {"kind":"extra","name":"Reach","status":"none","note":"Reach is not modelled.","source":"DCA 131"},
-  {"kind":"extra","name":"Reaction","status":"none","note":"Reactions are not simulated, apart from Energy Aura as a normal attack.","source":"DCA 131"},
-  {"kind":"extra","name":"Reversible","status":"n/a","note":"Reversing an effect has no combat meaning.","source":"DCA 132"},
-  {"kind":"extra","name":"Ricochet","status":"none","note":"Attacks cannot bounce.","source":"DCA 132"},
-  {"kind":"extra","name":"Secondary Effect","status":"none","note":"Second effects are not simulated.","source":"DCA 132"},
-  {"kind":"extra","name":"Selective","status":"full","note":"Area attacks skip allies.","source":"DCA 132"},
-  {"kind":"extra","name":"Sleep","status":"none","note":"Sleep instead of incapacitation is not applied to Damage; the Sleep effect is separate.","source":"DCA 132"},
-  {"kind":"extra","name":"Split","status":"none","note":"Splitting an attack among targets is not simulated.","source":"DCA 132"},
-  {"kind":"extra","name":"Subtle","status":"n/a","note":"Concerns being noticed.","source":"DCA 132"},
-  {"kind":"extra","name":"Sustained","status":"partial","note":"Only Sustained Protection is used (and can be nullified).","source":"DCA 132"},
-  {"kind":"extra","name":"Triggered","status":"none","note":"Triggered effects are not simulated.","source":"DCA 132"},
-  {"kind":"extra","name":"Variable Descriptor","status":"none","note":"Descriptors are fixed.","source":"DCA 133"},
-  {"kind":"flaw","name":"Activation","status":"none","note":"Activation time is not charged.","source":"DCA 133"},
-  {"kind":"flaw","name":"Check Required","status":"none","note":"Required checks are not rolled.","source":"DCA 134"},
-  {"kind":"flaw","name":"Concentration","status":"none","note":"Concentration is not tracked.","source":"DCA 135"},
-  {"kind":"flaw","name":"Diminished Range","status":"none","note":"Range is not reduced by the flaw.","source":"DCA 135"},
-  {"kind":"flaw","name":"Distracting","status":"none","note":"The vulnerability from using the power is not applied.","source":"DCA 135"},
-  {"kind":"flaw","name":"Fades","status":"none","note":"Fading uses are not tracked.","source":"DCA 135"},
-  {"kind":"flaw","name":"Feedback","status":"none","note":"Damage to the user is not applied.","source":"DCA 135"},
-  {"kind":"flaw","name":"Grab-Based","status":"none","note":"Grab-based powers are not tied to a hold.","source":"DCA 135"},
-  {"kind":"flaw","name":"Inaccurate","status":"none","note":"The -2 to hit is not applied.","source":"DCA 135"},
-  {"kind":"flaw","name":"Increased Action","status":"none","note":"Slower actions are not charged.","source":"DCA 135"},
-  {"kind":"flaw","name":"Limited","status":"partial","note":"Read only for Immunity (half effect), Concealment and Limited Degree; other limits are not enforced.","source":"DCA 135"},
-  {"kind":"flaw","name":"Noticeable","status":"n/a","note":"Concerns being noticed.","source":"DCA 135"},
-  {"kind":"flaw","name":"Permanent","status":"n/a","note":"Only changes cost.","source":"DCA 136"},
-  {"kind":"flaw","name":"Quirk","status":"n/a","note":"Roleplaying only.","source":"DCA 136"},
-  {"kind":"flaw","name":"Reduced Range","status":"none","note":"Range is not reduced by the flaw.","source":"DCA 136"},
-  {"kind":"flaw","name":"Removable","status":"none","note":"Items are never taken away.","source":"DCA 136"},
-  {"kind":"flaw","name":"Resistible","status":"none","note":"The extra resistance check is not applied.","source":"DCA 137"},
-  {"kind":"flaw","name":"Sense-Dependent","status":"none","note":"Senses are not tracked for powers.","source":"DCA 137"},
-  {"kind":"flaw","name":"Side Effect","status":"none","note":"Side effects are not applied.","source":"DCA 137"},
-  {"kind":"flaw","name":"Tiring","status":"none","note":"Fatigue from using the power is not applied.","source":"DCA 138"},
-  {"kind":"flaw","name":"Uncontrolled","status":"none","note":"Random results are not applied.","source":"DCA 138"},
-  {"kind":"flaw","name":"Unreliable","status":"none","note":"Uses that may fail are not rolled.","source":"DCA 138"},
-  {"kind":"advantage","name":"Accurate Attack","status":"full","note":"Trade rank for attack bonus, up to 5 with the advantage and 2 without.","source":"DCA 69"},
-  {"kind":"advantage","name":"All-out Attack","status":"full","note":"Trade defense for attack bonus, up to 4 with the advantage.","source":"DCA 69"},
-  {"kind":"advantage","name":"Chokehold","status":"partial","note":"Only makes the fighter likely to grab; the suffocation it causes is not applied.","source":"DCA 72"},
-  {"kind":"advantage","name":"Close Attack","status":"full","note":"Adds to the close attack bonus in derive.","source":"DCA 72"},
-  {"kind":"advantage","name":"Defensive Attack","status":"full","note":"Trade attack bonus for defense, up to 4 with the advantage.","source":"DCA 73"},
-  {"kind":"advantage","name":"Defensive Roll","status":"full","note":"Adds to Toughness in derive.","source":"DCA 73"},
-  {"kind":"advantage","name":"Evasion","status":"full","note":"Bonus to Dodge against area attacks, and a clean dodge on two degrees.","source":"DCA 74"},
-  {"kind":"advantage","name":"Fast Grab","status":"full","note":"A successful unarmed hit can turn into a grab as a free action.","source":"DCA 74"},
-  {"kind":"advantage","name":"Favored Environment","status":"none","note":"Environments are not simulated.","source":"DCA 74"},
-  {"kind":"advantage","name":"Grabbing Finesse","status":"none","note":"Grabs always use Strength and Fighting.","source":"DCA 75"},
-  {"kind":"advantage","name":"Improved Aim","status":"none","note":"Aim bonuses are the base +5 or +2.","source":"DCA 75"},
-  {"kind":"advantage","name":"Improved Critical","status":"full","note":"Widens the critical threat range per rank (16-20 at four).","source":"DCA 75"},
-  {"kind":"advantage","name":"Improved Defense","status":"none","note":"The extra bonus when defending is not applied.","source":"DCA 75"},
-  {"kind":"advantage","name":"Improved Disarm","status":"none","note":"Disarm is not simulated.","source":"DCA 75"},
-  {"kind":"advantage","name":"Improved Grab","status":"partial","note":"Only makes the fighter likely to grab; keeping a free hand is not modelled.","source":"DCA 75"},
-  {"kind":"advantage","name":"Improved Hold","status":"full","note":"Held foes face a harder escape (+5 to the hold DC).","source":"DCA 75"},
-  {"kind":"advantage","name":"Improved Initiative","status":"full","note":"+4 to initiative per rank.","source":"DCA 75"},
-  {"kind":"advantage","name":"Improved Smash","status":"none","note":"Smash is not simulated.","source":"DCA 75"},
-  {"kind":"advantage","name":"Improved Trip","status":"none","note":"Trip is not simulated.","source":"DCA 76"},
-  {"kind":"advantage","name":"Improvised Weapon","status":"none","note":"Improvised weapons are not simulated.","source":"DCA 76"},
-  {"kind":"advantage","name":"Move-by Action","status":"partial","note":"Speedster-style fighters hit and then step away; other fighters never split movement around an attack.","source":"DCA 77"},
-  {"kind":"advantage","name":"Power Attack","status":"full","note":"Trade attack bonus for rank, up to 5 with the advantage and 2 without.","source":"DCA 77"},
-  {"kind":"advantage","name":"Precise Attack","status":"partial","note":"Ignores concealment penalties; cover is not simulated.","source":"DCA 77"},
-  {"kind":"advantage","name":"Prone Fighting","status":"none","note":"The prone attack penalty is always applied.","source":"DCA 77"},
-  {"kind":"advantage","name":"Quick Draw","status":"none","note":"Drawing weapons is not simulated.","source":"DCA 77"},
-  {"kind":"advantage","name":"Ranged Attack","status":"full","note":"Adds to the ranged attack bonus in derive.","source":"DCA 77"},
-  {"kind":"advantage","name":"Redirect","status":"none","note":"Redirecting a missed attack is not simulated.","source":"DCA 78"},
-  {"kind":"advantage","name":"Set-up","status":"none","note":"Handing a bonus to an ally is not simulated.","source":"DCA 78"},
-  {"kind":"advantage","name":"Takedown","status":"full","note":"A free attack against the next minion after taking one out; chains up to five.","source":"DCA 78"},
-  {"kind":"advantage","name":"Throwing Mastery","status":"none","note":"Thrown weapons are not simulated.","source":"DCA 79"},
-  {"kind":"advantage","name":"Uncanny Dodge","status":"full","note":"The fighter is stunned but not vulnerable in a surprise round.","source":"DCA 79"},
-  {"kind":"advantage","name":"Weapon Bind","status":"none","note":"Reactions to disarm are not simulated.","source":"DCA 79"},
-  {"kind":"advantage","name":"Weapon Break","status":"none","note":"Reactions to attack weapons are not simulated.","source":"DCA 79"},
-  {"kind":"advantage","name":"Beginner's Luck","status":"none","note":"Skill ranks are not boosted in a fight.","source":"DCA 72"},
-  {"kind":"advantage","name":"Inspire","status":"none","note":"Granting bonuses to allies is not simulated.","source":"DCA 76"},
-  {"kind":"advantage","name":"Leadership","status":"none","note":"Removing conditions from allies with a hero point is not simulated.","source":"DCA 76"},
-  {"kind":"advantage","name":"Luck","status":"partial","note":"Adds one hero point per rank, usable on any hero point use, instead of a re-roll once per round.","source":"DCA 77"},
-  {"kind":"advantage","name":"Seize Initiative","status":"partial","note":"The fighter goes first, but no hero point is spent.","source":"DCA 78"},
-  {"kind":"advantage","name":"Ultimate Effort","status":"none","note":"Automatic 20s are not simulated.","source":"DCA 79"},
-  {"kind":"advantage","name":"Assessment","status":"none","note":"Insight reads of a foe's numbers are not simulated.","source":"DCA 70"},
-  {"kind":"advantage","name":"Benefit","status":"n/a","note":"A perk with no combat rule.","source":"DCA 72"},
-  {"kind":"advantage","name":"Diehard","status":"none","note":"There is no dying state to stabilize from.","source":"DCA 73"},
-  {"kind":"advantage","name":"Eidetic Memory","status":"n/a","note":"Memory has no combat rule.","source":"DCA 73"},
-  {"kind":"advantage","name":"Equipment","status":"n/a","note":"Gear is read from the character, not from the advantage.","source":"DCA 73"},
-  {"kind":"advantage","name":"Extraordinary Effort","status":"none","note":"Double extra effort is not simulated.","source":"DCA 74"},
-  {"kind":"advantage","name":"Fearless","status":"partial","note":"Immune to attacks the engine recognizes as fear effects (by wording) and never flees; Demoralize is not simulated.","source":"DCA 75"},
-  {"kind":"advantage","name":"Feature","status":"n/a","note":"Descriptive only.","source":"DCA 75"},
-  {"kind":"advantage","name":"Great Endurance","status":"none","note":"The bonus to resist fatigue is not applied.","source":"DCA 75"},
-  {"kind":"advantage","name":"Instant Up","status":"none","note":"Standing up is not simulated.","source":"DCA 76"},
-  {"kind":"advantage","name":"Interpose","status":"full","note":"A guard in the same zone takes a hit meant for a weaker ally once per round; not against area or perception attacks.","source":"DCA 76"},
-  {"kind":"advantage","name":"Minion","status":"n/a","note":"Minions are built as separate combatants.","source":"DCA 77"},
-  {"kind":"advantage","name":"Second Chance","status":"none","note":"Rerolls against hazards are not simulated.","source":"DCA 78"},
-  {"kind":"advantage","name":"Sidekick","status":"n/a","note":"Sidekicks are built as separate combatants.","source":"DCA 78"},
-  {"kind":"advantage","name":"Teamwork","status":"none","note":"Team checks are not simulated.","source":"DCA 78"},
-  {"kind":"advantage","name":"Trance","status":"n/a","note":"Has no combat rule.","source":"DCA 79"},
-  {"kind":"advantage","name":"Agile Feint","status":"partial","note":"Acrobatics can stand in for Deception on a feint, but the feint's effect is not applied (see Feint).","source":"DCA 69"},
-  {"kind":"advantage","name":"Animal Empathy","status":"n/a","note":"Out of combat skill use.","source":"DCA 69"},
-  {"kind":"advantage","name":"Artificer","status":"n/a","note":"Out of combat crafting.","source":"DCA 70"},
-  {"kind":"advantage","name":"Attractive","status":"n/a","note":"Social only.","source":"DCA 70"},
-  {"kind":"advantage","name":"Connected","status":"n/a","note":"Social only.","source":"DCA 72"},
-  {"kind":"advantage","name":"Contacts","status":"n/a","note":"Social only.","source":"DCA 72"},
-  {"kind":"advantage","name":"Daze","status":"none","note":"Dazing with Intimidation or Deception is not simulated.","source":"DCA 73"},
-  {"kind":"advantage","name":"Fascinate","status":"none","note":"Fascinating a foe is not simulated.","source":"DCA 74"},
-  {"kind":"advantage","name":"Favored Foe","status":"none","note":"The bonus against a chosen foe is not applied.","source":"DCA 75"},
-  {"kind":"advantage","name":"Hide in Plain Sight","status":"n/a","note":"Stealth is not simulated.","source":"DCA 75"},
-  {"kind":"advantage","name":"Improvised Tools","status":"n/a","note":"Out of combat skill use.","source":"DCA 76"},
-  {"kind":"advantage","name":"Inventor","status":"n/a","note":"Out of combat crafting.","source":"DCA 76"},
-  {"kind":"advantage","name":"Jack-of-all-trades","status":"n/a","note":"Untrained skill use is not simulated.","source":"DCA 76"},
-  {"kind":"advantage","name":"Languages","status":"n/a","note":"Language has no combat meaning.","source":"DCA 76"},
-  {"kind":"advantage","name":"Ritualist","status":"n/a","note":"Rituals are not simulated.","source":"DCA 78"},
-  {"kind":"advantage","name":"Skill Mastery","status":"n/a","note":"Skill checks are not simulated.","source":"DCA 78"},
-  {"kind":"advantage","name":"Startle","status":"none","note":"Startle as a feint is not simulated.","source":"DCA 78"},
-  {"kind":"advantage","name":"Taunt","status":"none","note":"Taunting is not simulated.","source":"DCA 78"},
-  {"kind":"advantage","name":"Tracking","status":"n/a","note":"Out of combat skill use.","source":"DCA 79"},
-  {"kind":"advantage","name":"Well-informed","status":"n/a","note":"Social only.","source":"DCA 79"},
-  {"kind":"action","name":"Aid","status":"none","note":"Helping an ally with an attack check is not simulated."},
-  {"kind":"action","name":"Aim","status":"full","note":"Aiming gives +5 (close) or +2 (farther), leaves the fighter vulnerable, and must be followed by the attack."},
-  {"kind":"action","name":"Attack","status":"full","note":"d20 against 10 + Parry or Dodge, natural 20 hits and natural 1 misses."},
-  {"kind":"action","name":"Charge","status":"full","note":"Move and then attack at -2, covering up to twice the speed."},
-  {"kind":"action","name":"Defend","status":"full","note":"Attackers face an opposed defense roll with 1-10 counting as 11-20; the AI only picks it when hurt and outnumbered."},
-  {"kind":"action","name":"Delay","status":"partial","note":"Only minion squads delay, to make a team attack."},
-  {"kind":"action","name":"Demoralize","status":"none","note":"Intimidation to impair a foe is not simulated."},
-  {"kind":"action","name":"Disarm","status":"none","note":"Disarming is not simulated."},
-  {"kind":"action","name":"Drop Prone","status":"none","note":"Fighters are knocked prone by effects but never drop prone on purpose."},
-  {"kind":"action","name":"Escape","status":"partial","note":"Athletics or Sleight of Hand against the hold ends a grab; the free move afterwards is not taken."},
-  {"kind":"action","name":"Grab","status":"partial","note":"Attack check then Strength against Strength or Dodge, restrained or bound; the holder's own penalties and later cumulative grabs are not applied."},
-  {"kind":"action","name":"Move","status":"partial","note":"Speed rank is turned into 1 to 5 arena zones per turn; real distances are not tracked."},
-  {"kind":"action","name":"Ready","status":"none","note":"Readied actions are not simulated."},
-  {"kind":"action","name":"Recover","status":"full","note":"Once per fight, whole turn, removes the worst damage or fatigue and gives +2 to defenses."},
-  {"kind":"action","name":"Smash","status":"none","note":"Attacking held objects is not simulated."},
-  {"kind":"action","name":"Stand","status":"none","note":"Standing from prone is not simulated."},
-  {"kind":"action","name":"Trick","status":"none","note":"Tricks with Deception are not simulated."},
-  {"kind":"action","name":"Trip","status":"none","note":"Tripping is not simulated."},
-  {"kind":"action","name":"Crawl","status":"none","note":"Prone fighters do not crawl at half speed."},
-  {"kind":"action","name":"Command","status":"none","note":"Orders to minions and thralls are not simulated."},
-  {"kind":"maneuver","name":"Accurate Attack","status":"full","note":"Trade rank for attack bonus, 2 by default and 5 with the advantage."},
-  {"kind":"maneuver","name":"All-out Attack","status":"full","note":"Trade defense for attack bonus, chosen by brawlers, tanks, beasts and minions."},
-  {"kind":"maneuver","name":"Defensive Attack","status":"full","note":"Trade attack bonus for defense, chosen by duelists and supports under pressure."},
-  {"kind":"maneuver","name":"Finishing Attack","status":"partial","note":"Any hit on a defenseless target is a critical; the routine check and the kill rule are not used."},
-  {"kind":"maneuver","name":"Power Attack","status":"full","note":"Trade attack bonus for rank, chosen when it raises the expected harm."},
-  {"kind":"maneuver","name":"Slam Attack","status":"partial","note":"A charging fighter uses its movement rank as Damage; the extra +1 for a full move and the damage the slammer takes are not applied."},
-  {"kind":"maneuver","name":"Surprise Attack","status":"partial","note":"Only through the Ambush option; stealth and unusual tactics do not make a target vulnerable."},
-  {"kind":"maneuver","name":"Team Attack","status":"partial","note":"Only minion squads combine attacks (+2 or +5 rank); heroes never team up."},
-  {"kind":"maneuver","name":"Feint","status":"partial","note":"The Deception check against Insight is rolled and logged, but the target is not actually made vulnerable (the code sets a flag it never reads)."},
-  {"kind":"maneuver","name":"Trick","status":"none","note":"Tricks with Deception are not simulated."},
-  {"kind":"maneuver","name":"Demoralize","status":"none","note":"Intimidation to impair a foe is not simulated."},
-  {"kind":"maneuver","name":"Aid","status":"none","note":"Helping an ally with an attack check is not simulated."},
-  {"kind":"condition","name":"Normal","status":"n/a","note":"The state of no condition."},
-  {"kind":"condition","name":"Asleep","status":"partial","note":"Asleep is out of the fight until recovered; noise does not wake the sleeper."},
-  {"kind":"condition","name":"Blind","status":"partial","note":"The blind fighter's attacks take total concealment penalties; being unable to see targets is not otherwise modelled."},
-  {"kind":"condition","name":"Bound","status":"full","note":"Defenseless, immobile and impaired (a hold that scored two degrees)."},
-  {"kind":"condition","name":"Compelled","status":"partial","note":"Limited to one standard action; the controller's choice of action is not simulated."},
-  {"kind":"condition","name":"Controlled","status":"partial","note":"The controlled fighter attacks one of its own side each turn; other orders are not simulated."},
-  {"kind":"condition","name":"Dazed","status":"full","note":"One standard action; wears off at the end of the target's next turn."},
-  {"kind":"condition","name":"Dead","status":"none","note":"Death is not simulated; the worst result is incapacitated."},
-  {"kind":"condition","name":"Debilitated","status":"none","note":"Abilities below -5 are not tracked."},
-  {"kind":"condition","name":"Deaf","status":"none","note":"Recognized in Affliction text but has no effect."},
-  {"kind":"condition","name":"Defenseless","status":"partial","note":"Defense counts as 0 and hits are critical; routine checks against defenseless targets are not used."},
-  {"kind":"condition","name":"Disabled","status":"full","note":"-5 on checks, applied to attacks and resistance."},
-  {"kind":"condition","name":"Dying","status":"none","note":"Incapacitated fighters never roll to stabilize or die."},
-  {"kind":"condition","name":"Entranced","status":"partial","note":"Treated as stunned; a hostile act does not break the trance."},
-  {"kind":"condition","name":"Exhausted","status":"full","note":"Impaired and hindered; from extra effort fatigue or an Affliction."},
-  {"kind":"condition","name":"Fatigued","status":"full","note":"Hindered; from extra effort or an Affliction."},
-  {"kind":"condition","name":"Hindered","status":"full","note":"Movement is halved."},
-  {"kind":"condition","name":"Immobile","status":"full","note":"Cannot move."},
-  {"kind":"condition","name":"Impaired","status":"full","note":"-2 on checks, applied to attacks and resistance."},
-  {"kind":"condition","name":"Incapacitated","status":"full","note":"Out of the fight."},
-  {"kind":"condition","name":"Paralyzed","status":"full","note":"Defenseless, immobile and stunned."},
-  {"kind":"condition","name":"Prone","status":"partial","note":"Attack modifiers and hindered movement apply; fighters cannot drop prone or stand up."},
-  {"kind":"condition","name":"Restrained","status":"full","note":"Hindered and vulnerable, from a hold or an Affliction."},
-  {"kind":"condition","name":"Staggered","status":"full","note":"Dazed and hindered until recovered; a second staggering result incapacitates."},
-  {"kind":"condition","name":"Stunned","status":"full","note":"Cannot act; a hero point can end it."},
-  {"kind":"condition","name":"Surprised","status":"full","note":"Stunned and vulnerable until the surprise round ends."},
-  {"kind":"condition","name":"Transformed","status":"none","note":"Recognized in Affliction text but has no effect."},
-  {"kind":"condition","name":"Unaware","status":"partial","note":"Cannot act; the unaware fighter is not treated as defenseless."},
-  {"kind":"condition","name":"Vulnerable","status":"full","note":"Active defenses are halved, rounded up."},
-  {"kind":"condition","name":"Weakened","status":"partial","note":"Weaken costs ranks that return one per round; the Weakened condition from other sources is not tracked."},
-  {"kind":"rule","name":"Hero point: Improve Roll","status":"partial","note":"Only a missed attack roll is re-rolled (1-10 counts as 11-20); resistance checks and other rolls are not."},
-  {"kind":"rule","name":"Hero point: Recover","status":"full","note":"Removes dazed, stunned or fatigue, or turns exhausted into fatigued."},
-  {"kind":"rule","name":"Hero point: Edit Scene","status":"none","note":"Scene edits are not simulated."},
-  {"kind":"rule","name":"Hero point: Heroic Feat","status":"none","note":"Borrowing an advantage with a hero point is not simulated."},
-  {"kind":"rule","name":"Hero point: Inspiration","status":"none","note":"Hints from the GM have no combat effect."},
-  {"kind":"rule","name":"Hero point: Instant Counter","status":"none","note":"Countering an effect as a reaction is not simulated."},
-  {"kind":"rule","name":"Extra effort: +1 power rank","status":"partial","note":"A fighter pushing an attack power gains +1 rank and a level of fatigue (applied at once, not at the start of the next turn)."},
-  {"kind":"rule","name":"Extra effort: extra action","status":"none","note":"Extra standard actions are not simulated."},
-  {"kind":"rule","name":"Extra effort: +2 on a check","status":"none","note":"Circumstance bonuses on checks are not simulated."},
-  {"kind":"rule","name":"Extra effort: power stunt","status":"none","note":"Temporary alternate effects are not simulated; Omni-power fighters reconfigure on their own."},
-  {"kind":"rule","name":"Extra effort: extra resistance check","status":"none","note":"Extra recovery checks are not simulated."},
-  {"kind":"rule","name":"Extra effort: +1 speed rank","status":"none","note":"Extra speed is not simulated."},
-  {"kind":"rule","name":"Extra effort: +1 Strength rank","status":"none","note":"Extra Strength is not simulated."},
-  {"kind":"rule","name":"Extra effort: cancel fatigue","status":"partial","note":"A hero point can cancel the fatigue, chosen by chance right after the effort."},
-  {"kind":"rule","name":"Minions: no critical hits on non-minions","status":"full","note":"Minions never crit heroes."},
-  {"kind":"rule","name":"Minions: routine attack checks","status":"full","note":"A non-minion hits a minion on a routine check when 10 does it."},
-  {"kind":"rule","name":"Minions: fail any Damage check and drop","status":"full","note":"A failed Toughness check incapacitates a minion."},
-  {"kind":"rule","name":"Minions: worst degree of other effects","status":"none","note":"Only Damage uses the minion rule; Afflictions and other effects use normal degrees."},
-  {"kind":"rule","name":"Range bands","status":"partial","note":"Distance in arena zones gives no penalty, -2, -5 or no attack; the rank-based feet of the book and Extended Range are not used."},
-  {"kind":"rule","name":"Cover","status":"none","note":"Cover and its penalties are not simulated."},
-  {"kind":"rule","name":"Concealment","status":"partial","note":"-2 or -5 to attack a target with Concealment or Invisibility; the environment itself never conceals."},
-  {"kind":"rule","name":"Knockback","status":"none","note":"Knockback is not simulated."},
-  {"kind":"rule","name":"Surprise round","status":"full","note":"The Ambush option gives a surprise round: surprised side stunned and vulnerable, ambushers act with one standard action."},
-  {"kind":"rule","name":"Initiative","status":"full","note":"d20 plus Agility plus Improved Initiative; late joiners roll and slot into the order."},
-  {"kind":"rule","name":"Recovery checks","status":"full","note":"Ongoing Affliction conditions are resisted at the end of each turn."},
-  {"kind":"rule","name":"Staggered","status":"full","note":"Three degrees of failure on Damage stagger the target; a second one incapacitates."},
-  {"kind":"rule","name":"Critical hits","status":"partial","note":"A critical adds +5 to the resistance DC (Increased Effect); Added Effect and Alternate Effect are not used."},
-  {"kind":"rule","name":"Death and dying","status":"none","note":"Nobody dies; the worst result is out of the fight."},
-  {"kind":"rule","name":"Ongoing effects","status":"full","note":"Afflictions are re-checked at the end of the target's turn."},
-  {"kind":"rule","name":"Area effects","status":"partial","note":"Everyone in the zone makes a Dodge check for half; shapes and cover are not modelled."},
-  {"kind":"rule","name":"Perception range","status":"full","note":"Perception-range effects need no attack check and cannot critically hit."},
-  {"kind":"rule","name":"Defense class","status":"full","note":"Close attacks hit 10 + Parry, ranged attacks 10 + Dodge, vulnerable halves defenses."},
-  {"kind":"rule","name":"Fatigue","status":"partial","note":"Extra effort and Afflictions cause fatigue; exhaustion at three levels incapacitates; rest and hazards are not simulated."},
-  {"kind":"rule","name":"Damaging objects","status":"none","note":"Objects and smashing are not simulated."}
+  {
+    "kind": "effect",
+    "name": "Affliction",
+    "status": "partial",
+    "note": "Three degrees, Cumulative, Progressive, Extra Condition, Limited Degree and end-of-turn recovery work; Deaf, Transformed and other minor conditions do little and durations are ignored.",
+    "source": "DCA 87"
+  },
+  {
+    "kind": "effect",
+    "name": "Alternate Form",
+    "status": "none",
+    "note": "Alternate forms are not switched in a fight.",
+    "source": "DCA 88"
+  },
+  {
+    "kind": "effect",
+    "name": "Blast",
+    "status": "full",
+    "note": "Fights as Damage at range (DCA 89).",
+    "source": "DCA 89"
+  },
+  {
+    "kind": "effect",
+    "name": "Burrowing",
+    "status": "none",
+    "note": "Burrowing is not counted as movement and no one goes underground.",
+    "source": "DCA 89"
+  },
+  {
+    "kind": "effect",
+    "name": "Communication",
+    "status": "n/a",
+    "note": "Communication has no effect on a fight.",
+    "source": "DCA 89"
+  },
+  {
+    "kind": "effect",
+    "name": "Comprehend",
+    "status": "n/a",
+    "note": "Languages and comprehension do not matter in a fight.",
+    "source": "DCA 90"
+  },
+  {
+    "kind": "effect",
+    "name": "Concealment",
+    "status": "partial",
+    "note": "Visual concealment gives -2 or -5 to attacks against the holder; other senses and non-visual concealment are ignored.",
+    "source": "DCA 91"
+  },
+  {
+    "kind": "effect",
+    "name": "Create",
+    "status": "none",
+    "note": "Created objects and barriers are not simulated.",
+    "source": "DCA 91"
+  },
+  {
+    "kind": "effect",
+    "name": "Damage",
+    "status": "full",
+    "note": "Toughness check at 15 + rank with cumulative bruises, dazed, staggered and incapacitated; Strength gives built-in close Damage.",
+    "source": "DCA 93"
+  },
+  {
+    "kind": "effect",
+    "name": "Dazzle",
+    "status": "partial",
+    "note": "Fought as an Affliction (impaired, disabled, unaware) but the sense it blocks is not tracked.",
+    "source": "DCA 94"
+  },
+  {
+    "kind": "effect",
+    "name": "Deflect",
+    "status": "none",
+    "note": "There is no reaction to turn a ranged attack aside.",
+    "source": "DCA 95"
+  },
+  {
+    "kind": "effect",
+    "name": "Duplication",
+    "status": "none",
+    "note": "Duplicates are not created.",
+    "source": "DCA 94"
+  },
+  {
+    "kind": "effect",
+    "name": "Element Control",
+    "status": "none",
+    "note": "Control effects (Move Object style) are not simulated.",
+    "source": "DCA 95"
+  },
+  {
+    "kind": "effect",
+    "name": "Elongation",
+    "status": "none",
+    "note": "Stretching and extra reach are not modelled.",
+    "source": "DCA 96"
+  },
+  {
+    "kind": "effect",
+    "name": "Energy Absorption",
+    "status": "none",
+    "note": "Absorbing energy attacks into Enhanced Traits is not simulated.",
+    "source": "DCA 95"
+  },
+  {
+    "kind": "effect",
+    "name": "Energy Aura",
+    "status": "partial",
+    "note": "Fights as Damage that is used like a normal attack; its automatic Reaction against attackers is not simulated.",
+    "source": "DCA 97"
+  },
+  {
+    "kind": "effect",
+    "name": "Energy Control",
+    "status": "partial",
+    "note": "Fights as Damage at range; the other uses of an energy power are not simulated.",
+    "source": "DCA 97"
+  },
+  {
+    "kind": "effect",
+    "name": "Enhanced Trait",
+    "status": "partial",
+    "note": "Abilities, defenses and skills are added to the derived numbers; Enhanced Advantage is not.",
+    "source": "DCA 96"
+  },
+  {
+    "kind": "effect",
+    "name": "Environment",
+    "status": "none",
+    "note": "Environmental changes such as darkness or heat are not simulated.",
+    "source": "DCA 97"
+  },
+  {
+    "kind": "effect",
+    "name": "Extra Limbs",
+    "status": "none",
+    "note": "Extra limbs (holding while attacking) are not modelled.",
+    "source": "DCA 98"
+  },
+  {
+    "kind": "effect",
+    "name": "Feature",
+    "status": "n/a",
+    "note": "A feature is descriptive only.",
+    "source": "DCA 98"
+  },
+  {
+    "kind": "effect",
+    "name": "Flight",
+    "status": "partial",
+    "note": "Sets how far the fighter moves each turn and the log wording; nothing else about flying (height, ground effects) is modelled.",
+    "source": "DCA 99"
+  },
+  {
+    "kind": "effect",
+    "name": "Force Field",
+    "status": "full",
+    "note": "Counts as sustained Protection with Impervious; Nullify can switch it off.",
+    "source": "DCA 100"
+  },
+  {
+    "kind": "effect",
+    "name": "Growth",
+    "status": "partial",
+    "note": "Strength, Stamina, Dodge, Parry, Intimidation and Stealth change; extra reach and size effects do not.",
+    "source": "DCA 100"
+  },
+  {
+    "kind": "effect",
+    "name": "Healing",
+    "status": "partial",
+    "note": "Healers restore bruises, dazed and staggered at DC 10; Healing's other uses such as stabilizing a dying hero are not simulated.",
+    "source": "DCA 100"
+  },
+  {
+    "kind": "effect",
+    "name": "Illusion",
+    "status": "none",
+    "note": "Illusions are not simulated.",
+    "source": "DCA 101"
+  },
+  {
+    "kind": "effect",
+    "name": "Immortality",
+    "status": "none",
+    "note": "Returning after incapacitation is not simulated.",
+    "source": "DCA 102"
+  },
+  {
+    "kind": "effect",
+    "name": "Immunity",
+    "status": "partial",
+    "note": "Immunity is matched by text against attack descriptors and defenses, including half effect; unusual immunities may be missed.",
+    "source": "DCA 102"
+  },
+  {
+    "kind": "effect",
+    "name": "Insubstantial",
+    "status": "none",
+    "note": "Insubstantial forms and the damage they avoid are not simulated.",
+    "source": "DCA 103"
+  },
+  {
+    "kind": "effect",
+    "name": "Invisibility",
+    "status": "partial",
+    "note": "Treated as visual Concealment; other senses are ignored.",
+    "source": "DCA 104"
+  },
+  {
+    "kind": "effect",
+    "name": "Leaping",
+    "status": "partial",
+    "note": "Counts as half its rank toward movement; jumping over things is not modelled.",
+    "source": "DCA 105"
+  },
+  {
+    "kind": "effect",
+    "name": "Luck Control",
+    "status": "none",
+    "note": "Rerolls forced on other characters are not simulated.",
+    "source": "DCA 106"
+  },
+  {
+    "kind": "effect",
+    "name": "Magic",
+    "status": "partial",
+    "note": "Fights as Damage at range; the flexible casting that Magic allows is not simulated.",
+    "source": "DCA 105"
+  },
+  {
+    "kind": "effect",
+    "name": "Mental Blast",
+    "status": "full",
+    "note": "Perception range Damage resisted by Will, with no attack roll.",
+    "source": "DCA 107"
+  },
+  {
+    "kind": "effect",
+    "name": "Mimic",
+    "status": "none",
+    "note": "Copying traits from a target is not simulated.",
+    "source": "DCA 107"
+  },
+  {
+    "kind": "effect",
+    "name": "Mind Control",
+    "status": "partial",
+    "note": "Dazed, compelled and controlled work (a controlled fighter attacks its own side); the controller's other orders are not.",
+    "source": "DCA 107"
+  },
+  {
+    "kind": "effect",
+    "name": "Mind Reading",
+    "status": "n/a",
+    "note": "Reading minds has no combat effect here.",
+    "source": "DCA 106"
+  },
+  {
+    "kind": "effect",
+    "name": "Morph",
+    "status": "n/a",
+    "note": "Changing appearance has no combat effect here.",
+    "source": "DCA 108"
+  },
+  {
+    "kind": "effect",
+    "name": "Move Object",
+    "status": "none",
+    "note": "Moving or throwing objects with a power is not simulated.",
+    "source": "DCA 108"
+  },
+  {
+    "kind": "effect",
+    "name": "Movement",
+    "status": "none",
+    "note": "Special movement types are not counted.",
+    "source": "DCA 109"
+  },
+  {
+    "kind": "effect",
+    "name": "Nullify",
+    "status": "partial",
+    "note": "Opposed check against sustained protection only; other powers cannot be nullified.",
+    "source": "DCA 111"
+  },
+  {
+    "kind": "effect",
+    "name": "Power-Lifting",
+    "status": "n/a",
+    "note": "Only changes how much can be lifted.",
+    "source": "DCA 111"
+  },
+  {
+    "kind": "effect",
+    "name": "Protection",
+    "status": "full",
+    "note": "Adds to Toughness, with Impervious and Sustained handled.",
+    "source": "DCA 111"
+  },
+  {
+    "kind": "effect",
+    "name": "Quickness",
+    "status": "n/a",
+    "note": "Only speeds up routine tasks.",
+    "source": "DCA 112"
+  },
+  {
+    "kind": "effect",
+    "name": "Regeneration",
+    "status": "partial",
+    "note": "Recovers one damage condition per round using a simplified rank count; the book's recovery timings are not followed.",
+    "source": "DCA 112"
+  },
+  {
+    "kind": "effect",
+    "name": "Remote Sensing",
+    "status": "n/a",
+    "note": "Sensing from afar has no combat effect here.",
+    "source": "DCA 112"
+  },
+  {
+    "kind": "effect",
+    "name": "Senses",
+    "status": "partial",
+    "note": "Only senses that see through concealment (radar, tremor, danger sense and the like) are used.",
+    "source": "DCA 113"
+  },
+  {
+    "kind": "effect",
+    "name": "Shapeshift",
+    "status": "none",
+    "note": "Changing form in a fight is not simulated.",
+    "source": "DCA 116"
+  },
+  {
+    "kind": "effect",
+    "name": "Shrinking",
+    "status": "partial",
+    "note": "Strength, Dodge and Parry change; Stealth and small-size effects do not.",
+    "source": "DCA 117"
+  },
+  {
+    "kind": "effect",
+    "name": "Sleep",
+    "status": "partial",
+    "note": "Fought as Fortitude Affliction (fatigued, exhausted, asleep); waking from noise or damage is not simulated.",
+    "source": "DCA 116"
+  },
+  {
+    "kind": "effect",
+    "name": "Snare",
+    "status": "partial",
+    "note": "Hindered and vulnerable, then defenseless and immobile, resisted by Dodge; escaping by Strength is not simulated.",
+    "source": "DCA 117"
+  },
+  {
+    "kind": "effect",
+    "name": "Speed",
+    "status": "partial",
+    "note": "Sets how far the fighter moves each turn; Speed is not used for chasing or running away.",
+    "source": "DCA 117"
+  },
+  {
+    "kind": "effect",
+    "name": "Strike",
+    "status": "full",
+    "note": "Fights as Damage (DCA 117).",
+    "source": "DCA 117"
+  },
+  {
+    "kind": "effect",
+    "name": "Suffocation",
+    "status": "partial",
+    "note": "Fought as a progressive Fortitude Affliction; holding breath and the book's conditions are not followed.",
+    "source": "DCA 117"
+  },
+  {
+    "kind": "effect",
+    "name": "Summon",
+    "status": "none",
+    "note": "Summoned allies are not created.",
+    "source": "DCA 118"
+  },
+  {
+    "kind": "effect",
+    "name": "Super-Speed",
+    "status": "none",
+    "note": "Not counted as movement, and the Improved Initiative it grants is not applied.",
+    "source": "DCA 119"
+  },
+  {
+    "kind": "effect",
+    "name": "Swimming",
+    "status": "partial",
+    "note": "Counts as movement speed; water is not in the arena.",
+    "source": "DCA 119"
+  },
+  {
+    "kind": "effect",
+    "name": "Teleport",
+    "status": "partial",
+    "note": "Counts as movement speed; Teleport Attack and ranged placement are not simulated.",
+    "source": "DCA 120"
+  },
+  {
+    "kind": "effect",
+    "name": "Transform",
+    "status": "none",
+    "note": "Transformations are not simulated.",
+    "source": "DCA 120"
+  },
+  {
+    "kind": "effect",
+    "name": "Variable",
+    "status": "partial",
+    "note": "Only Omni-power fighters reconfigure, into four fixed attacks sized to half the points.",
+    "source": "DCA 121"
+  },
+  {
+    "kind": "effect",
+    "name": "Weaken",
+    "status": "partial",
+    "note": "Weakens one trait guessed from the power's detail and returns a rank each round; the book's recovery rate differs.",
+    "source": "DCA 122"
+  },
+  {
+    "kind": "extra",
+    "name": "Accurate",
+    "status": "full",
+    "note": "Adds +2 to the attack bonus per step.",
+    "source": "DCA 125"
+  },
+  {
+    "kind": "extra",
+    "name": "Affects Corporeal",
+    "status": "none",
+    "note": "Only matters with Insubstantial, which is not simulated.",
+    "source": "DCA 125"
+  },
+  {
+    "kind": "extra",
+    "name": "Affects Insubstantial",
+    "status": "none",
+    "note": "Insubstantial is not simulated.",
+    "source": "DCA 125"
+  },
+  {
+    "kind": "extra",
+    "name": "Affects Objects",
+    "status": "none",
+    "note": "Objects are not in the fight.",
+    "source": "DCA 125"
+  },
+  {
+    "kind": "extra",
+    "name": "Affects Others",
+    "status": "none",
+    "note": "Defenses and powers cannot be given to allies in a fight.",
+    "source": "DCA 125"
+  },
+  {
+    "kind": "extra",
+    "name": "Alternate Effect",
+    "status": "partial",
+    "note": "Alternate attacks are separate attack choices, switched for free; alternate defenses and utilities are ignored.",
+    "source": "DCA 125"
+  },
+  {
+    "kind": "extra",
+    "name": "Alternate Resistance",
+    "status": "partial",
+    "note": "The attack uses the resistance recorded on the power; the cost changes are not checked.",
+    "source": "DCA 126"
+  },
+  {
+    "kind": "extra",
+    "name": "Area",
+    "status": "partial",
+    "note": "Burst, Cone and the rest all hit everyone in one zone with Dodge for half; shapes are not modelled.",
+    "source": "DCA 126"
+  },
+  {
+    "kind": "extra",
+    "name": "Attack",
+    "status": "none",
+    "note": "An Attack extra on a non-attack effect does not make it an attack.",
+    "source": "DCA 128"
+  },
+  {
+    "kind": "extra",
+    "name": "Contagious",
+    "status": "none",
+    "note": "Spreading effects are not simulated.",
+    "source": "DCA 129"
+  },
+  {
+    "kind": "extra",
+    "name": "Dimensional",
+    "status": "none",
+    "note": "Dimensions are not simulated.",
+    "source": "DCA 129"
+  },
+  {
+    "kind": "extra",
+    "name": "Extended Range",
+    "status": "none",
+    "note": "Range bands in the fight do not scale with Extended Range.",
+    "source": "DCA 129"
+  },
+  {
+    "kind": "extra",
+    "name": "Feature",
+    "status": "n/a",
+    "note": "Descriptive only.",
+    "source": "DCA 129"
+  },
+  {
+    "kind": "extra",
+    "name": "Homing",
+    "status": "none",
+    "note": "Homing attacks are not simulated.",
+    "source": "DCA 129"
+  },
+  {
+    "kind": "extra",
+    "name": "Impervious",
+    "status": "full",
+    "note": "Impervious Protection ignores attacks of half its rank or less unless Penetrating.",
+    "source": "DCA 129"
+  },
+  {
+    "kind": "extra",
+    "name": "Increased Duration",
+    "status": "none",
+    "note": "Durations beyond instant are not tracked.",
+    "source": "DCA 129"
+  },
+  {
+    "kind": "extra",
+    "name": "Increased Mass",
+    "status": "none",
+    "note": "Needs Move Object, which is not simulated.",
+    "source": "DCA 130"
+  },
+  {
+    "kind": "extra",
+    "name": "Increased Range",
+    "status": "partial",
+    "note": "Changes the attack from close to ranged through the power's range; distance is counted in zones, not by rank.",
+    "source": "DCA 130"
+  },
+  {
+    "kind": "extra",
+    "name": "Incurable",
+    "status": "none",
+    "note": "Effects that resist Healing and Regeneration are not simulated.",
+    "source": "DCA 130"
+  },
+  {
+    "kind": "extra",
+    "name": "Indirect",
+    "status": "none",
+    "note": "Needs cover and line of sight, which are not simulated.",
+    "source": "DCA 130"
+  },
+  {
+    "kind": "extra",
+    "name": "Innate",
+    "status": "none",
+    "note": "Innate powers are not protected from Nullify.",
+    "source": "DCA 130"
+  },
+  {
+    "kind": "extra",
+    "name": "Insidious",
+    "status": "n/a",
+    "note": "Concerns detecting an effect after the fight.",
+    "source": "DCA 130"
+  },
+  {
+    "kind": "extra",
+    "name": "Linked",
+    "status": "partial",
+    "note": "Linked powers show as separate attacks instead of one combined action.",
+    "source": "DCA 130"
+  },
+  {
+    "kind": "extra",
+    "name": "Multiattack",
+    "status": "full",
+    "note": "Two degrees of success add +2 to the resistance DC, three or more add +5.",
+    "source": "DCA 131"
+  },
+  {
+    "kind": "extra",
+    "name": "Penetrating",
+    "status": "full",
+    "note": "Overcomes Impervious.",
+    "source": "DCA 131"
+  },
+  {
+    "kind": "extra",
+    "name": "Precise",
+    "status": "n/a",
+    "note": "Fine control has no combat meaning.",
+    "source": "DCA 131"
+  },
+  {
+    "kind": "extra",
+    "name": "Reach",
+    "status": "none",
+    "note": "Reach is not modelled.",
+    "source": "DCA 131"
+  },
+  {
+    "kind": "extra",
+    "name": "Reaction",
+    "status": "none",
+    "note": "Reactions are not simulated, apart from Energy Aura as a normal attack.",
+    "source": "DCA 131"
+  },
+  {
+    "kind": "extra",
+    "name": "Reversible",
+    "status": "n/a",
+    "note": "Reversing an effect has no combat meaning.",
+    "source": "DCA 132"
+  },
+  {
+    "kind": "extra",
+    "name": "Ricochet",
+    "status": "none",
+    "note": "Attacks cannot bounce.",
+    "source": "DCA 132"
+  },
+  {
+    "kind": "extra",
+    "name": "Secondary Effect",
+    "status": "none",
+    "note": "Second effects are not simulated.",
+    "source": "DCA 132"
+  },
+  {
+    "kind": "extra",
+    "name": "Selective",
+    "status": "full",
+    "note": "Area attacks skip allies.",
+    "source": "DCA 132"
+  },
+  {
+    "kind": "extra",
+    "name": "Sleep",
+    "status": "none",
+    "note": "Sleep instead of incapacitation is not applied to Damage; the Sleep effect is separate.",
+    "source": "DCA 132"
+  },
+  {
+    "kind": "extra",
+    "name": "Split",
+    "status": "none",
+    "note": "Splitting an attack among targets is not simulated.",
+    "source": "DCA 132"
+  },
+  {
+    "kind": "extra",
+    "name": "Subtle",
+    "status": "n/a",
+    "note": "Concerns being noticed.",
+    "source": "DCA 132"
+  },
+  {
+    "kind": "extra",
+    "name": "Sustained",
+    "status": "partial",
+    "note": "Only Sustained Protection is used (and can be nullified).",
+    "source": "DCA 132"
+  },
+  {
+    "kind": "extra",
+    "name": "Triggered",
+    "status": "none",
+    "note": "Triggered effects are not simulated.",
+    "source": "DCA 132"
+  },
+  {
+    "kind": "extra",
+    "name": "Variable Descriptor",
+    "status": "none",
+    "note": "Descriptors are fixed.",
+    "source": "DCA 133"
+  },
+  {
+    "kind": "flaw",
+    "name": "Activation",
+    "status": "none",
+    "note": "Activation time is not charged.",
+    "source": "DCA 133"
+  },
+  {
+    "kind": "flaw",
+    "name": "Check Required",
+    "status": "none",
+    "note": "Required checks are not rolled.",
+    "source": "DCA 134"
+  },
+  {
+    "kind": "flaw",
+    "name": "Concentration",
+    "status": "none",
+    "note": "Concentration is not tracked.",
+    "source": "DCA 135"
+  },
+  {
+    "kind": "flaw",
+    "name": "Diminished Range",
+    "status": "none",
+    "note": "Range is not reduced by the flaw.",
+    "source": "DCA 135"
+  },
+  {
+    "kind": "flaw",
+    "name": "Distracting",
+    "status": "none",
+    "note": "The vulnerability from using the power is not applied.",
+    "source": "DCA 135"
+  },
+  {
+    "kind": "flaw",
+    "name": "Fades",
+    "status": "none",
+    "note": "Fading uses are not tracked.",
+    "source": "DCA 135"
+  },
+  {
+    "kind": "flaw",
+    "name": "Feedback",
+    "status": "none",
+    "note": "Damage to the user is not applied.",
+    "source": "DCA 135"
+  },
+  {
+    "kind": "flaw",
+    "name": "Grab-Based",
+    "status": "none",
+    "note": "Grab-based powers are not tied to a hold.",
+    "source": "DCA 135"
+  },
+  {
+    "kind": "flaw",
+    "name": "Inaccurate",
+    "status": "none",
+    "note": "The -2 to hit is not applied.",
+    "source": "DCA 135"
+  },
+  {
+    "kind": "flaw",
+    "name": "Increased Action",
+    "status": "none",
+    "note": "Slower actions are not charged.",
+    "source": "DCA 135"
+  },
+  {
+    "kind": "flaw",
+    "name": "Limited",
+    "status": "partial",
+    "note": "Read only for Immunity (half effect), Concealment and Limited Degree; other limits are not enforced.",
+    "source": "DCA 135"
+  },
+  {
+    "kind": "flaw",
+    "name": "Noticeable",
+    "status": "n/a",
+    "note": "Concerns being noticed.",
+    "source": "DCA 135"
+  },
+  {
+    "kind": "flaw",
+    "name": "Permanent",
+    "status": "n/a",
+    "note": "Only changes cost.",
+    "source": "DCA 136"
+  },
+  {
+    "kind": "flaw",
+    "name": "Quirk",
+    "status": "n/a",
+    "note": "Roleplaying only.",
+    "source": "DCA 136"
+  },
+  {
+    "kind": "flaw",
+    "name": "Reduced Range",
+    "status": "none",
+    "note": "Range is not reduced by the flaw.",
+    "source": "DCA 136"
+  },
+  {
+    "kind": "flaw",
+    "name": "Removable",
+    "status": "none",
+    "note": "Items are never taken away.",
+    "source": "DCA 136"
+  },
+  {
+    "kind": "flaw",
+    "name": "Resistible",
+    "status": "none",
+    "note": "The extra resistance check is not applied.",
+    "source": "DCA 137"
+  },
+  {
+    "kind": "flaw",
+    "name": "Sense-Dependent",
+    "status": "none",
+    "note": "Senses are not tracked for powers.",
+    "source": "DCA 137"
+  },
+  {
+    "kind": "flaw",
+    "name": "Side Effect",
+    "status": "none",
+    "note": "Side effects are not applied.",
+    "source": "DCA 137"
+  },
+  {
+    "kind": "flaw",
+    "name": "Tiring",
+    "status": "none",
+    "note": "Fatigue from using the power is not applied.",
+    "source": "DCA 138"
+  },
+  {
+    "kind": "flaw",
+    "name": "Uncontrolled",
+    "status": "none",
+    "note": "Random results are not applied.",
+    "source": "DCA 138"
+  },
+  {
+    "kind": "flaw",
+    "name": "Unreliable",
+    "status": "none",
+    "note": "Uses that may fail are not rolled.",
+    "source": "DCA 138"
+  },
+  {
+    "kind": "advantage",
+    "name": "Accurate Attack",
+    "status": "full",
+    "note": "Trade rank for attack bonus, up to 5 with the advantage and 2 without.",
+    "source": "DCA 69"
+  },
+  {
+    "kind": "advantage",
+    "name": "All-out Attack",
+    "status": "full",
+    "note": "Trade defense for attack bonus, up to 4 with the advantage.",
+    "source": "DCA 69"
+  },
+  {
+    "kind": "advantage",
+    "name": "Chokehold",
+    "status": "partial",
+    "note": "Only makes the fighter likely to grab; the suffocation it causes is not applied.",
+    "source": "DCA 72"
+  },
+  {
+    "kind": "advantage",
+    "name": "Close Attack",
+    "status": "full",
+    "note": "Adds to the close attack bonus in derive.",
+    "source": "DCA 72"
+  },
+  {
+    "kind": "advantage",
+    "name": "Defensive Attack",
+    "status": "full",
+    "note": "Trade attack bonus for defense, up to 4 with the advantage.",
+    "source": "DCA 73"
+  },
+  {
+    "kind": "advantage",
+    "name": "Defensive Roll",
+    "status": "full",
+    "note": "Adds to Toughness in derive.",
+    "source": "DCA 73"
+  },
+  {
+    "kind": "advantage",
+    "name": "Evasion",
+    "status": "full",
+    "note": "Bonus to Dodge against area attacks, and a clean dodge on two degrees.",
+    "source": "DCA 74"
+  },
+  {
+    "kind": "advantage",
+    "name": "Fast Grab",
+    "status": "full",
+    "note": "A successful unarmed hit can turn into a grab as a free action.",
+    "source": "DCA 74"
+  },
+  {
+    "kind": "advantage",
+    "name": "Favored Environment",
+    "status": "none",
+    "note": "Environments are not simulated.",
+    "source": "DCA 74"
+  },
+  {
+    "kind": "advantage",
+    "name": "Grabbing Finesse",
+    "status": "none",
+    "note": "Grabs always use Strength and Fighting.",
+    "source": "DCA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Aim",
+    "status": "none",
+    "note": "Aim bonuses are the base +5 or +2.",
+    "source": "DCA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Critical",
+    "status": "full",
+    "note": "Widens the critical threat range per rank (16-20 at four).",
+    "source": "DCA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Defense",
+    "status": "none",
+    "note": "The extra bonus when defending is not applied.",
+    "source": "DCA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Disarm",
+    "status": "none",
+    "note": "Disarm is not simulated.",
+    "source": "DCA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Grab",
+    "status": "partial",
+    "note": "Only makes the fighter likely to grab; keeping a free hand is not modelled.",
+    "source": "DCA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Hold",
+    "status": "full",
+    "note": "Held foes face a harder escape (+5 to the hold DC).",
+    "source": "DCA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Initiative",
+    "status": "full",
+    "note": "+4 to initiative per rank.",
+    "source": "DCA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Smash",
+    "status": "none",
+    "note": "Smash is not simulated.",
+    "source": "DCA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Trip",
+    "status": "none",
+    "note": "Trip is not simulated.",
+    "source": "DCA 76"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improvised Weapon",
+    "status": "none",
+    "note": "Improvised weapons are not simulated.",
+    "source": "DCA 76"
+  },
+  {
+    "kind": "advantage",
+    "name": "Move-by Action",
+    "status": "partial",
+    "note": "Speedster-style fighters hit and then step away; other fighters never split movement around an attack.",
+    "source": "DCA 77"
+  },
+  {
+    "kind": "advantage",
+    "name": "Power Attack",
+    "status": "full",
+    "note": "Trade attack bonus for rank, up to 5 with the advantage and 2 without.",
+    "source": "DCA 77"
+  },
+  {
+    "kind": "advantage",
+    "name": "Precise Attack",
+    "status": "partial",
+    "note": "Ignores concealment penalties; cover is not simulated.",
+    "source": "DCA 77"
+  },
+  {
+    "kind": "advantage",
+    "name": "Prone Fighting",
+    "status": "none",
+    "note": "The prone attack penalty is always applied.",
+    "source": "DCA 77"
+  },
+  {
+    "kind": "advantage",
+    "name": "Quick Draw",
+    "status": "none",
+    "note": "Drawing weapons is not simulated.",
+    "source": "DCA 77"
+  },
+  {
+    "kind": "advantage",
+    "name": "Ranged Attack",
+    "status": "full",
+    "note": "Adds to the ranged attack bonus in derive.",
+    "source": "DCA 77"
+  },
+  {
+    "kind": "advantage",
+    "name": "Redirect",
+    "status": "none",
+    "note": "Redirecting a missed attack is not simulated.",
+    "source": "DCA 78"
+  },
+  {
+    "kind": "advantage",
+    "name": "Set-up",
+    "status": "none",
+    "note": "Handing a bonus to an ally is not simulated.",
+    "source": "DCA 78"
+  },
+  {
+    "kind": "advantage",
+    "name": "Takedown",
+    "status": "full",
+    "note": "A free attack against the next minion after taking one out; chains up to five.",
+    "source": "DCA 78"
+  },
+  {
+    "kind": "advantage",
+    "name": "Throwing Mastery",
+    "status": "none",
+    "note": "Thrown weapons are not simulated.",
+    "source": "DCA 79"
+  },
+  {
+    "kind": "advantage",
+    "name": "Uncanny Dodge",
+    "status": "full",
+    "note": "The fighter is stunned but not vulnerable in a surprise round.",
+    "source": "DCA 79"
+  },
+  {
+    "kind": "advantage",
+    "name": "Weapon Bind",
+    "status": "none",
+    "note": "Reactions to disarm are not simulated.",
+    "source": "DCA 79"
+  },
+  {
+    "kind": "advantage",
+    "name": "Weapon Break",
+    "status": "none",
+    "note": "Reactions to attack weapons are not simulated.",
+    "source": "DCA 79"
+  },
+  {
+    "kind": "advantage",
+    "name": "Beginner's Luck",
+    "status": "none",
+    "note": "Skill ranks are not boosted in a fight.",
+    "source": "DCA 72"
+  },
+  {
+    "kind": "advantage",
+    "name": "Inspire",
+    "status": "none",
+    "note": "Granting bonuses to allies is not simulated.",
+    "source": "DCA 76"
+  },
+  {
+    "kind": "advantage",
+    "name": "Leadership",
+    "status": "none",
+    "note": "Removing conditions from allies with a hero point is not simulated.",
+    "source": "DCA 76"
+  },
+  {
+    "kind": "advantage",
+    "name": "Luck",
+    "status": "partial",
+    "note": "Adds one hero point per rank, usable on any hero point use, instead of a re-roll once per round.",
+    "source": "DCA 77"
+  },
+  {
+    "kind": "advantage",
+    "name": "Seize Initiative",
+    "status": "partial",
+    "note": "The fighter goes first, but no hero point is spent.",
+    "source": "DCA 78"
+  },
+  {
+    "kind": "advantage",
+    "name": "Ultimate Effort",
+    "status": "none",
+    "note": "Automatic 20s are not simulated.",
+    "source": "DCA 79"
+  },
+  {
+    "kind": "advantage",
+    "name": "Assessment",
+    "status": "none",
+    "note": "Insight reads of a foe's numbers are not simulated.",
+    "source": "DCA 70"
+  },
+  {
+    "kind": "advantage",
+    "name": "Benefit",
+    "status": "n/a",
+    "note": "A perk with no combat rule.",
+    "source": "DCA 72"
+  },
+  {
+    "kind": "advantage",
+    "name": "Diehard",
+    "status": "none",
+    "note": "There is no dying state to stabilize from.",
+    "source": "DCA 73"
+  },
+  {
+    "kind": "advantage",
+    "name": "Eidetic Memory",
+    "status": "n/a",
+    "note": "Memory has no combat rule.",
+    "source": "DCA 73"
+  },
+  {
+    "kind": "advantage",
+    "name": "Equipment",
+    "status": "n/a",
+    "note": "Gear is read from the character, not from the advantage.",
+    "source": "DCA 73"
+  },
+  {
+    "kind": "advantage",
+    "name": "Extraordinary Effort",
+    "status": "none",
+    "note": "Double extra effort is not simulated.",
+    "source": "DCA 74"
+  },
+  {
+    "kind": "advantage",
+    "name": "Fearless",
+    "status": "partial",
+    "note": "Immune to attacks the engine recognizes as fear effects (by wording) and never flees; Demoralize is not simulated.",
+    "source": "DCA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Feature",
+    "status": "n/a",
+    "note": "Descriptive only.",
+    "source": "DCA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Great Endurance",
+    "status": "none",
+    "note": "The bonus to resist fatigue is not applied.",
+    "source": "DCA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Instant Up",
+    "status": "none",
+    "note": "Standing up is not simulated.",
+    "source": "DCA 76"
+  },
+  {
+    "kind": "advantage",
+    "name": "Interpose",
+    "status": "full",
+    "note": "A guard in the same zone takes a hit meant for a weaker ally once per round; not against area or perception attacks.",
+    "source": "DCA 76"
+  },
+  {
+    "kind": "advantage",
+    "name": "Minion",
+    "status": "n/a",
+    "note": "Minions are built as separate combatants.",
+    "source": "DCA 77"
+  },
+  {
+    "kind": "advantage",
+    "name": "Second Chance",
+    "status": "none",
+    "note": "Rerolls against hazards are not simulated.",
+    "source": "DCA 78"
+  },
+  {
+    "kind": "advantage",
+    "name": "Sidekick",
+    "status": "n/a",
+    "note": "Sidekicks are built as separate combatants.",
+    "source": "DCA 78"
+  },
+  {
+    "kind": "advantage",
+    "name": "Teamwork",
+    "status": "none",
+    "note": "Team checks are not simulated.",
+    "source": "DCA 78"
+  },
+  {
+    "kind": "advantage",
+    "name": "Trance",
+    "status": "n/a",
+    "note": "Has no combat rule.",
+    "source": "DCA 79"
+  },
+  {
+    "kind": "advantage",
+    "name": "Agile Feint",
+    "status": "full",
+    "note": "Feint with Acrobatics instead of Deception; the feint makes the target vulnerable to the feinter's next attack.",
+    "source": "DCA 69"
+  },
+  {
+    "kind": "advantage",
+    "name": "Animal Empathy",
+    "status": "n/a",
+    "note": "Out of combat skill use.",
+    "source": "DCA 69"
+  },
+  {
+    "kind": "advantage",
+    "name": "Artificer",
+    "status": "n/a",
+    "note": "Out of combat crafting.",
+    "source": "DCA 70"
+  },
+  {
+    "kind": "advantage",
+    "name": "Attractive",
+    "status": "n/a",
+    "note": "Social only.",
+    "source": "DCA 70"
+  },
+  {
+    "kind": "advantage",
+    "name": "Connected",
+    "status": "n/a",
+    "note": "Social only.",
+    "source": "DCA 72"
+  },
+  {
+    "kind": "advantage",
+    "name": "Contacts",
+    "status": "n/a",
+    "note": "Social only.",
+    "source": "DCA 72"
+  },
+  {
+    "kind": "advantage",
+    "name": "Daze",
+    "status": "none",
+    "note": "Dazing with Intimidation or Deception is not simulated.",
+    "source": "DCA 73"
+  },
+  {
+    "kind": "advantage",
+    "name": "Fascinate",
+    "status": "none",
+    "note": "Fascinating a foe is not simulated.",
+    "source": "DCA 74"
+  },
+  {
+    "kind": "advantage",
+    "name": "Favored Foe",
+    "status": "none",
+    "note": "The bonus against a chosen foe is not applied.",
+    "source": "DCA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Hide in Plain Sight",
+    "status": "n/a",
+    "note": "Stealth is not simulated.",
+    "source": "DCA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improvised Tools",
+    "status": "n/a",
+    "note": "Out of combat skill use.",
+    "source": "DCA 76"
+  },
+  {
+    "kind": "advantage",
+    "name": "Inventor",
+    "status": "n/a",
+    "note": "Out of combat crafting.",
+    "source": "DCA 76"
+  },
+  {
+    "kind": "advantage",
+    "name": "Jack-of-all-trades",
+    "status": "n/a",
+    "note": "Untrained skill use is not simulated.",
+    "source": "DCA 76"
+  },
+  {
+    "kind": "advantage",
+    "name": "Languages",
+    "status": "n/a",
+    "note": "Language has no combat meaning.",
+    "source": "DCA 76"
+  },
+  {
+    "kind": "advantage",
+    "name": "Ritualist",
+    "status": "n/a",
+    "note": "Rituals are not simulated.",
+    "source": "DCA 78"
+  },
+  {
+    "kind": "advantage",
+    "name": "Skill Mastery",
+    "status": "n/a",
+    "note": "Skill checks are not simulated.",
+    "source": "DCA 78"
+  },
+  {
+    "kind": "advantage",
+    "name": "Startle",
+    "status": "none",
+    "note": "Startle as a feint is not simulated.",
+    "source": "DCA 78"
+  },
+  {
+    "kind": "advantage",
+    "name": "Taunt",
+    "status": "none",
+    "note": "Taunting is not simulated.",
+    "source": "DCA 78"
+  },
+  {
+    "kind": "advantage",
+    "name": "Tracking",
+    "status": "n/a",
+    "note": "Out of combat skill use.",
+    "source": "DCA 79"
+  },
+  {
+    "kind": "advantage",
+    "name": "Well-informed",
+    "status": "n/a",
+    "note": "Social only.",
+    "source": "DCA 79"
+  },
+  {
+    "kind": "action",
+    "name": "Aid",
+    "status": "none",
+    "note": "Helping an ally with an attack check is not simulated."
+  },
+  {
+    "kind": "action",
+    "name": "Aim",
+    "status": "full",
+    "note": "Aiming gives +5 (close) or +2 (farther), leaves the fighter vulnerable, and must be followed by the attack."
+  },
+  {
+    "kind": "action",
+    "name": "Attack",
+    "status": "full",
+    "note": "d20 against 10 + Parry or Dodge, natural 20 hits and natural 1 misses."
+  },
+  {
+    "kind": "action",
+    "name": "Charge",
+    "status": "full",
+    "note": "Move and then attack at -2, covering up to twice the speed."
+  },
+  {
+    "kind": "action",
+    "name": "Defend",
+    "status": "full",
+    "note": "Attackers face an opposed defense roll with 1-10 counting as 11-20; the AI only picks it when hurt and outnumbered."
+  },
+  {
+    "kind": "action",
+    "name": "Delay",
+    "status": "partial",
+    "note": "Only minion squads delay, to make a team attack."
+  },
+  {
+    "kind": "action",
+    "name": "Demoralize",
+    "status": "none",
+    "note": "Intimidation to impair a foe is not simulated."
+  },
+  {
+    "kind": "action",
+    "name": "Disarm",
+    "status": "none",
+    "note": "Disarming is not simulated."
+  },
+  {
+    "kind": "action",
+    "name": "Drop Prone",
+    "status": "none",
+    "note": "Fighters are knocked prone by effects but never drop prone on purpose."
+  },
+  {
+    "kind": "action",
+    "name": "Escape",
+    "status": "partial",
+    "note": "Athletics or Sleight of Hand against the hold ends a grab; the free move afterwards is not taken."
+  },
+  {
+    "kind": "action",
+    "name": "Grab",
+    "status": "partial",
+    "note": "Attack check then Strength against Strength or Dodge, restrained or bound; the holder's own penalties and later cumulative grabs are not applied."
+  },
+  {
+    "kind": "action",
+    "name": "Move",
+    "status": "partial",
+    "note": "Speed rank is turned into 1 to 5 arena zones per turn; real distances are not tracked."
+  },
+  {
+    "kind": "action",
+    "name": "Ready",
+    "status": "none",
+    "note": "Readied actions are not simulated."
+  },
+  {
+    "kind": "action",
+    "name": "Recover",
+    "status": "full",
+    "note": "Once per fight, whole turn, removes the worst damage or fatigue and gives +2 to defenses."
+  },
+  {
+    "kind": "action",
+    "name": "Smash",
+    "status": "none",
+    "note": "Attacking held objects is not simulated."
+  },
+  {
+    "kind": "action",
+    "name": "Stand",
+    "status": "none",
+    "note": "Standing from prone is not simulated."
+  },
+  {
+    "kind": "action",
+    "name": "Trick",
+    "status": "none",
+    "note": "Tricks with Deception are not simulated."
+  },
+  {
+    "kind": "action",
+    "name": "Trip",
+    "status": "none",
+    "note": "Tripping is not simulated."
+  },
+  {
+    "kind": "action",
+    "name": "Crawl",
+    "status": "none",
+    "note": "Prone fighters do not crawl at half speed."
+  },
+  {
+    "kind": "action",
+    "name": "Command",
+    "status": "none",
+    "note": "Orders to minions and thralls are not simulated."
+  },
+  {
+    "kind": "maneuver",
+    "name": "Accurate Attack",
+    "status": "full",
+    "note": "Trade rank for attack bonus, 2 by default and 5 with the advantage."
+  },
+  {
+    "kind": "maneuver",
+    "name": "All-out Attack",
+    "status": "full",
+    "note": "Trade defense for attack bonus, chosen by brawlers, tanks, beasts and minions."
+  },
+  {
+    "kind": "maneuver",
+    "name": "Defensive Attack",
+    "status": "full",
+    "note": "Trade attack bonus for defense, chosen by duelists and supports under pressure."
+  },
+  {
+    "kind": "maneuver",
+    "name": "Finishing Attack",
+    "status": "partial",
+    "note": "Any hit on a defenseless target is a critical; the routine check and the kill rule are not used."
+  },
+  {
+    "kind": "maneuver",
+    "name": "Power Attack",
+    "status": "full",
+    "note": "Trade attack bonus for rank, chosen when it raises the expected harm."
+  },
+  {
+    "kind": "maneuver",
+    "name": "Slam Attack",
+    "status": "partial",
+    "note": "A charging fighter uses its movement rank as Damage; the extra +1 for a full move and the damage the slammer takes are not applied."
+  },
+  {
+    "kind": "maneuver",
+    "name": "Surprise Attack",
+    "status": "partial",
+    "note": "Only through the Ambush option; stealth and unusual tactics do not make a target vulnerable."
+  },
+  {
+    "kind": "maneuver",
+    "name": "Team Attack",
+    "status": "partial",
+    "note": "Only minion squads combine attacks (+2 or +5 rank); heroes never team up."
+  },
+  {
+    "kind": "maneuver",
+    "name": "Feint",
+    "status": "full",
+    "note": "Deception (or Acrobatics with Agile Feint) against Insight or Deception; on success the target is vulnerable to the feinter's next attack until the end of the feinter's next round (DCA 64)."
+  },
+  {
+    "kind": "maneuver",
+    "name": "Trick",
+    "status": "none",
+    "note": "Tricks with Deception are not simulated."
+  },
+  {
+    "kind": "maneuver",
+    "name": "Demoralize",
+    "status": "none",
+    "note": "Intimidation to impair a foe is not simulated."
+  },
+  {
+    "kind": "maneuver",
+    "name": "Aid",
+    "status": "none",
+    "note": "Helping an ally with an attack check is not simulated."
+  },
+  {
+    "kind": "condition",
+    "name": "Normal",
+    "status": "n/a",
+    "note": "The state of no condition."
+  },
+  {
+    "kind": "condition",
+    "name": "Asleep",
+    "status": "partial",
+    "note": "Asleep is out of the fight until recovered; noise does not wake the sleeper."
+  },
+  {
+    "kind": "condition",
+    "name": "Blind",
+    "status": "partial",
+    "note": "The blind fighter's attacks take total concealment penalties; being unable to see targets is not otherwise modelled."
+  },
+  {
+    "kind": "condition",
+    "name": "Bound",
+    "status": "full",
+    "note": "Defenseless, immobile and impaired (a hold that scored two degrees)."
+  },
+  {
+    "kind": "condition",
+    "name": "Compelled",
+    "status": "partial",
+    "note": "Limited to one standard action; the controller's choice of action is not simulated."
+  },
+  {
+    "kind": "condition",
+    "name": "Controlled",
+    "status": "partial",
+    "note": "The controlled fighter attacks one of its own side each turn; other orders are not simulated."
+  },
+  {
+    "kind": "condition",
+    "name": "Dazed",
+    "status": "full",
+    "note": "One standard action; wears off at the end of the target's next turn."
+  },
+  {
+    "kind": "condition",
+    "name": "Dead",
+    "status": "none",
+    "note": "Death is not simulated; the worst result is incapacitated."
+  },
+  {
+    "kind": "condition",
+    "name": "Debilitated",
+    "status": "none",
+    "note": "Abilities below -5 are not tracked."
+  },
+  {
+    "kind": "condition",
+    "name": "Deaf",
+    "status": "none",
+    "note": "Recognized in Affliction text but has no effect."
+  },
+  {
+    "kind": "condition",
+    "name": "Defenseless",
+    "status": "partial",
+    "note": "Defense counts as 0 and hits are critical; routine checks against defenseless targets are not used."
+  },
+  {
+    "kind": "condition",
+    "name": "Disabled",
+    "status": "full",
+    "note": "-5 on checks, applied to attacks and resistance."
+  },
+  {
+    "kind": "condition",
+    "name": "Dying",
+    "status": "none",
+    "note": "Incapacitated fighters never roll to stabilize or die."
+  },
+  {
+    "kind": "condition",
+    "name": "Entranced",
+    "status": "partial",
+    "note": "Treated as stunned; a hostile act does not break the trance."
+  },
+  {
+    "kind": "condition",
+    "name": "Exhausted",
+    "status": "full",
+    "note": "Impaired and hindered; from extra effort fatigue or an Affliction."
+  },
+  {
+    "kind": "condition",
+    "name": "Fatigued",
+    "status": "full",
+    "note": "Hindered; from extra effort or an Affliction."
+  },
+  {
+    "kind": "condition",
+    "name": "Hindered",
+    "status": "full",
+    "note": "Movement is halved."
+  },
+  {
+    "kind": "condition",
+    "name": "Immobile",
+    "status": "full",
+    "note": "Cannot move."
+  },
+  {
+    "kind": "condition",
+    "name": "Impaired",
+    "status": "full",
+    "note": "-2 on checks, applied to attacks and resistance."
+  },
+  {
+    "kind": "condition",
+    "name": "Incapacitated",
+    "status": "full",
+    "note": "Out of the fight."
+  },
+  {
+    "kind": "condition",
+    "name": "Paralyzed",
+    "status": "full",
+    "note": "Defenseless, immobile and stunned."
+  },
+  {
+    "kind": "condition",
+    "name": "Prone",
+    "status": "partial",
+    "note": "Attack modifiers and hindered movement apply; fighters cannot drop prone or stand up."
+  },
+  {
+    "kind": "condition",
+    "name": "Restrained",
+    "status": "full",
+    "note": "Hindered and vulnerable, from a hold or an Affliction."
+  },
+  {
+    "kind": "condition",
+    "name": "Staggered",
+    "status": "full",
+    "note": "Dazed and hindered until recovered; a second staggering result incapacitates."
+  },
+  {
+    "kind": "condition",
+    "name": "Stunned",
+    "status": "full",
+    "note": "Cannot act; a hero point can end it."
+  },
+  {
+    "kind": "condition",
+    "name": "Surprised",
+    "status": "full",
+    "note": "Stunned and vulnerable until the surprise round ends."
+  },
+  {
+    "kind": "condition",
+    "name": "Transformed",
+    "status": "none",
+    "note": "Recognized in Affliction text but has no effect."
+  },
+  {
+    "kind": "condition",
+    "name": "Unaware",
+    "status": "partial",
+    "note": "Cannot act; the unaware fighter is not treated as defenseless."
+  },
+  {
+    "kind": "condition",
+    "name": "Vulnerable",
+    "status": "full",
+    "note": "Active defenses are halved, rounded up."
+  },
+  {
+    "kind": "condition",
+    "name": "Weakened",
+    "status": "partial",
+    "note": "Weaken costs ranks that return one per round; the Weakened condition from other sources is not tracked."
+  },
+  {
+    "kind": "rule",
+    "name": "Hero point: Improve Roll",
+    "status": "partial",
+    "note": "Only a missed attack roll is re-rolled (1-10 counts as 11-20); resistance checks and other rolls are not."
+  },
+  {
+    "kind": "rule",
+    "name": "Hero point: Recover",
+    "status": "full",
+    "note": "Removes dazed, stunned or fatigue, or turns exhausted into fatigued."
+  },
+  {
+    "kind": "rule",
+    "name": "Hero point: Edit Scene",
+    "status": "none",
+    "note": "Scene edits are not simulated."
+  },
+  {
+    "kind": "rule",
+    "name": "Hero point: Heroic Feat",
+    "status": "none",
+    "note": "Borrowing an advantage with a hero point is not simulated."
+  },
+  {
+    "kind": "rule",
+    "name": "Hero point: Inspiration",
+    "status": "none",
+    "note": "Hints from the GM have no combat effect."
+  },
+  {
+    "kind": "rule",
+    "name": "Hero point: Instant Counter",
+    "status": "none",
+    "note": "Countering an effect as a reaction is not simulated."
+  },
+  {
+    "kind": "rule",
+    "name": "Extra effort: +1 power rank",
+    "status": "partial",
+    "note": "A fighter pushing an attack power gains +1 rank and a level of fatigue (applied at once, not at the start of the next turn)."
+  },
+  {
+    "kind": "rule",
+    "name": "Extra effort: extra action",
+    "status": "none",
+    "note": "Extra standard actions are not simulated."
+  },
+  {
+    "kind": "rule",
+    "name": "Extra effort: +2 on a check",
+    "status": "none",
+    "note": "Circumstance bonuses on checks are not simulated."
+  },
+  {
+    "kind": "rule",
+    "name": "Extra effort: power stunt",
+    "status": "none",
+    "note": "Temporary alternate effects are not simulated; Omni-power fighters reconfigure on their own."
+  },
+  {
+    "kind": "rule",
+    "name": "Extra effort: extra resistance check",
+    "status": "none",
+    "note": "Extra recovery checks are not simulated."
+  },
+  {
+    "kind": "rule",
+    "name": "Extra effort: +1 speed rank",
+    "status": "none",
+    "note": "Extra speed is not simulated."
+  },
+  {
+    "kind": "rule",
+    "name": "Extra effort: +1 Strength rank",
+    "status": "none",
+    "note": "Extra Strength is not simulated."
+  },
+  {
+    "kind": "rule",
+    "name": "Extra effort: cancel fatigue",
+    "status": "partial",
+    "note": "A hero point can cancel the fatigue, chosen by chance right after the effort."
+  },
+  {
+    "kind": "rule",
+    "name": "Minions: no critical hits on non-minions",
+    "status": "full",
+    "note": "Minions never crit heroes."
+  },
+  {
+    "kind": "rule",
+    "name": "Minions: routine attack checks",
+    "status": "full",
+    "note": "A non-minion hits a minion on a routine check when 10 does it."
+  },
+  {
+    "kind": "rule",
+    "name": "Minions: fail any Damage check and drop",
+    "status": "full",
+    "note": "A failed Toughness check incapacitates a minion."
+  },
+  {
+    "kind": "rule",
+    "name": "Minions: worst degree of other effects",
+    "status": "none",
+    "note": "Only Damage uses the minion rule; Afflictions and other effects use normal degrees."
+  },
+  {
+    "kind": "rule",
+    "name": "Range bands",
+    "status": "partial",
+    "note": "Distance in arena zones gives no penalty, -2, -5 or no attack; the rank-based feet of the book and Extended Range are not used."
+  },
+  {
+    "kind": "rule",
+    "name": "Cover",
+    "status": "none",
+    "note": "Cover and its penalties are not simulated."
+  },
+  {
+    "kind": "rule",
+    "name": "Concealment",
+    "status": "partial",
+    "note": "-2 or -5 to attack a target with Concealment or Invisibility; the environment itself never conceals."
+  },
+  {
+    "kind": "rule",
+    "name": "Knockback",
+    "status": "none",
+    "note": "Knockback is not simulated."
+  },
+  {
+    "kind": "rule",
+    "name": "Surprise round",
+    "status": "full",
+    "note": "The Ambush option gives a surprise round: surprised side stunned and vulnerable, ambushers act with one standard action."
+  },
+  {
+    "kind": "rule",
+    "name": "Initiative",
+    "status": "full",
+    "note": "d20 plus Agility plus Improved Initiative; late joiners roll and slot into the order."
+  },
+  {
+    "kind": "rule",
+    "name": "Recovery checks",
+    "status": "full",
+    "note": "Ongoing Affliction conditions are resisted at the end of each turn."
+  },
+  {
+    "kind": "rule",
+    "name": "Staggered",
+    "status": "full",
+    "note": "Three degrees of failure on Damage stagger the target; a second one incapacitates."
+  },
+  {
+    "kind": "rule",
+    "name": "Critical hits",
+    "status": "partial",
+    "note": "A critical adds +5 to the resistance DC (Increased Effect); Added Effect and Alternate Effect are not used."
+  },
+  {
+    "kind": "rule",
+    "name": "Death and dying",
+    "status": "none",
+    "note": "Nobody dies; the worst result is out of the fight."
+  },
+  {
+    "kind": "rule",
+    "name": "Ongoing effects",
+    "status": "full",
+    "note": "Afflictions are re-checked at the end of the target's turn."
+  },
+  {
+    "kind": "rule",
+    "name": "Area effects",
+    "status": "partial",
+    "note": "Everyone in the zone makes a Dodge check for half; shapes and cover are not modelled."
+  },
+  {
+    "kind": "rule",
+    "name": "Perception range",
+    "status": "full",
+    "note": "Perception-range effects need no attack check and cannot critically hit."
+  },
+  {
+    "kind": "rule",
+    "name": "Defense class",
+    "status": "full",
+    "note": "Close attacks hit 10 + Parry, ranged attacks 10 + Dodge, vulnerable halves defenses."
+  },
+  {
+    "kind": "rule",
+    "name": "Fatigue",
+    "status": "partial",
+    "note": "Extra effort and Afflictions cause fatigue; exhaustion at three levels incapacitates; rest and hazards are not simulated."
+  },
+  {
+    "kind": "rule",
+    "name": "Damaging objects",
+    "status": "none",
+    "note": "Objects and smashing are not simulated."
+  }
 ]

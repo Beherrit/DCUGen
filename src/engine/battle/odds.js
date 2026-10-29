@@ -1,6 +1,6 @@
 // Probability helpers: hit and resistance odds, immunity, and the expected value of an attack on a target.
 
-import { activeConditions, checkPenalty, defenseOf, resistOf } from './conditions.js';
+import { activeConditions, checkPenalty, defenseVs, resistOf } from './conditions.js';
 import { effectWeights } from './combatant.js';
 
 export function hitOdds(bonus, defense) {
@@ -73,7 +73,7 @@ export function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, a
   if (halfImmune(target, atk)) rank = Math.floor(rank / 2);
   let hit = 1; let crit = 0;
   if (atk.roll && !autoHit) {
-    const def = defenseOf(target, atk.kind === 'close' ? 'Parry' : 'Dodge');
+    const def = defenseVs(target, atk.kind === 'close' ? 'Parry' : 'Dodge', c);
     let bonus = atk.bonus + bonusShift - checkPenalty(c) - rangePenalty(atk, dist);
     if (activeConditions(target).has('Prone')) bonus += atk.kind === 'close' ? 5 : -5;
     if (activeConditions(c).has('Prone') && atk.kind === 'close') bonus -= 5;

@@ -70,6 +70,16 @@ export function checkPenalty(c) {
   return (s.has('Disabled') ? 5 : s.has('Impaired') ? 2 : 0);
 }
 
+/** Did this attacker's feint leave the target vulnerable to them (DCA 64)? */
+export function feintedBy(t, c) { return !!(t.feinted && c && t.feinted.by === c.id); }
+
+/** The defense an attack from `attacker` faces: a successful feint makes the target vulnerable to the feinter's next attack. */
+export function defenseVs(t, which, attacker) {
+  const v = defenseOf(t, which);
+  const s = activeConditions(t);
+  return feintedBy(t, attacker) && !s.has('Vulnerable') && !s.has('Defenseless') ? Math.ceil(v / 2) : v;
+}
+
 export function defenseOf(c, which) {
   const s = activeConditions(c);
   let v = (c.d.defenses[which] ?? 0) + c.defMod - (c.weakened[which] || 0);
