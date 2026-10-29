@@ -356,7 +356,9 @@ test('kite: shooters aim and back away from melee enemies much more than with no
     return { aims, away };
   };
   const kite = tally('kite'); const none = tally(null);
-  assert.ok(kite.aims >= none.aims + 30, `aims: kite ${kite.aims}, none ${none.aims} (91 against 0)`);
+  // Every fighter on team B here can attack at range, so Kite never aims for free: aiming would cost a turn
+  // and leave the shooter vulnerable to return fire. It still backs away from melee.
+  assert.ok(kite.aims <= none.aims + 4, `aims against foes who shoot back: kite ${kite.aims}, none ${none.aims}`);
   assert.ok(kite.away >= none.away + 6, `steps away: kite ${kite.away}, none ${none.away} (20 against 7)`);
 });
 
@@ -373,6 +375,10 @@ test('kite: close attacks are a quarter as attractive for a fighter who also has
   assert.equal(aimsAlways(b, shooter, [enemy]), true);
   enemy.pos = shooter.pos + 2;
   assert.equal(aimsAlways(b, shooter, [enemy]), false);
+  // An enemy that can shoot back takes away the free aim, however far away it is.
+  enemy.pos = shooter.pos + 5;
+  const shotBack = { ...enemy, attacks: [...enemy.attacks, { name: 'Rock', kind: 'ranged', effect: 'Damage', rank: 6, roll: true, bonus: 4 }] };
+  assert.equal(aimsAlways(b, shooter, [shotBack]), false);
   const plain = arena(null, 'kite-0', [hero('weaponmaster', 'kw')], [hero('powerhouse', 'ks')]);
   startBattle(plain, R);
   assert.equal(wantsKite(plain, fighter(plain, 'A0')), false);

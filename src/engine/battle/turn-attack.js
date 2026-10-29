@@ -71,7 +71,7 @@ function closeIn(b, c, attack, target, mode, rng) {
 /** Aim: a ranged fighter with poor odds and nobody on top of them lines up the shot for next turn (DCA 175). True when the turn went on aiming. */
 function lineUpShot(b, c, attack, target, enemies, rng) {
   const always = aimsAlways(b, c, enemies);
-  if (!(attack.roll && attack.kind === 'ranged' && (always || ((c.style === 'gunner' || c.style === 'blaster') && !enemies.some((e) => e.pos === c.pos))))) return false;
+  if (!(attack.roll && attack.kind === 'ranged' && (always || ((c.style === 'gunner' || c.style === 'blaster' || wantsKite(b, c)) && !enemies.some((e) => e.pos === c.pos))))) return false;
   const dist = Math.abs(c.pos - target.pos);
   const def = defenseOf(target, 'Dodge');
   const now = hitOdds(attack.bonus - rangePenalty(attack, dist) - concealmentPenalty(c, target, attack) - coverPenalty(b, c, target, attack), def).hit;

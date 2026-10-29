@@ -14,10 +14,14 @@ const VERBS = {
   support: ['targets', 'attacks', 'turns on', 'moves against'], beast: ['lunges at', 'tears at', 'snaps at', 'claws at'],
   minion: ['takes a shot at', 'goes after', 'rushes', 'swings at'], omni: ['reconfigures and strikes', 'shifts form and hits', 'unleashes', 'turns'],
 };
+// Styles whose verbs only fit a blow; their ranged attacks use these instead.
+const MELEE_STYLES = ['brawler', 'duelist', 'tank', 'speedster', 'beast'];
+const RANGED_VERBS = ['hurls', 'throws', 'flings', 'lets fly with'];
 
 export function attackVerb(c, atk, t, rng) {
-  const v = rng.pick(VERBS[c.style] || VERBS.brawler);
-  if (c.style === 'blaster' || c.style === 'mage' || c.style === 'omni') return `${v} ${atk.name} at ${t.name}`;
+  const ranged = atk.kind !== 'close' && MELEE_STYLES.includes(c.style);
+  const v = rng.pick(ranged ? RANGED_VERBS : VERBS[c.style] || VERBS.brawler);
+  if (ranged || c.style === 'blaster' || c.style === 'mage' || c.style === 'omni') return `${v} ${atk.name} at ${t.name}`;
   if (atk.unarmed) return `${v} ${t.name}`;
   return `${v} ${t.name} with ${atk.name}`;
 }

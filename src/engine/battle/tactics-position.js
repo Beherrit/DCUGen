@@ -67,4 +67,5 @@ export function kiteZones(b, c, attack, target, dir) {
 }
 
 /** Kite: with nobody within two zones, line up a shot instead of firing at once. */
-export const aimsAlways = (b, c, enemies) => wantsKite(b, c) && !enemies.some((e) => Math.abs(e.pos - c.pos) <= 2);
+export const aimsAlways = (b, c, enemies) => wantsKite(b, c) && !enemies.some((e) => Math.abs(e.pos - c.pos) <= 2)
+  && !enemies.some((e) => e.attacks.some((a) => a.kind !== 'close'));

@@ -6,12 +6,15 @@ import { alliesOf } from './util.js';
 import { moveZones } from './conditions.js';
 import { moveTo } from './movement.js';
 import { tacticOf } from './tactics-list.js';
+import { STYLES } from './styles.js';
 import { piecesOf, coverLevel, shelterOf, takeCoverBehind } from './cover.js';
 
 /** An attack worth less than this, in expected degrees, is not worth taking from cover. */
 const WORTH_ATTACKING = 0.15;
 
 const isShooter = (c) => c.attacks.some((a) => a.kind !== 'close');
+/** A style that would rather shoot than close in (blaster, gunner, mage, mentalist and the like). */
+const prefersRange = (c) => (STYLES[c.style]?.ranged ?? 1) > (STYLES[c.style]?.close ?? 1);
 const intact = (b) => piecesOf(b).filter((p) => p.state === 'intact');
 
 /** The best intact piece within one move of c (its own zone included): total before partial, tougher first, then nearer. */
@@ -25,8 +28,10 @@ export function bestCover(b, c, mode = 'full') {
 
 /** Move behind the best cover in reach, if the team plays Take Cover. Returns true when the fighter ends up behind a piece. */
 export function seekCover(b, c, mode) {
-  if (tacticOf(b, c) !== 'cover' || !isShooter(c)) return false;
-  const piece = bestCover(b, c, mode);
+  const tactic = tacticOf(b, c) === 'cover';
+  if (!isShooter(c) || !(tactic || prefersRange(c))) return false;
+  // Take Cover goes out of its way to reach cover; anyone else uses what is in their own zone.
+  const piece = bestCover(b, c, tactic ? mode : 'stay');
   if (!piece) return !!shelterOf(b, c);
   if (shelterOf(b, c)?.id === piece.id) return true;
   if (piece.zone !== c.pos) moveTo(b, c, piece.zone, `to the ${piece.name}`);
