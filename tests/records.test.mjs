@@ -210,6 +210,26 @@ test('the leaderboard is deterministic: the order records arrive in does not mat
   assert.deepEqual(tie.map((r) => r.name), ['Amy', 'Zed']);
 });
 
+test('Elo: in a three-sided fight the losers are not scored against each other, even when their ratings differ', () => {
+  const recs = [
+    made({ A: [fighter('Bob', 'b')], B: [fighter('Cy', 'c', 'out')] }, 'A'), // Bob 1012, Cy 988
+    made({ A: [fighter('Ann', 'a')], B: [fighter('Bob', 'b', 'out')], C: [fighter('Cy', 'c', 'out')] }, 'A'),
+  ];
+  const rows = leaderboard(recs);
+  const vsBob = 24 * (1 - expectedScore(1000, 1012));
+  const vsCy = 24 * (1 - expectedScore(1000, 988));
+  assert.ok(Math.abs(row(rows, 'a').rating - (1000 + vsBob + vsCy)) < 0.06);
+  assert.ok(Math.abs(row(rows, 'b').rating - (1012 - vsBob)) < 0.06);
+  assert.ok(Math.abs(row(rows, 'c').rating - (988 - vsCy)) < 0.06);
+});
+
+test('the text export keeps the fighter order of the battle when sides are mixed', () => {
+  const b = createBattle({ seed: 'rec-mixed', name: 'Mixed' });
+  [['A', hero('paragon', 7)], ['B', hero('blaster', 8)], ['A', hero('mystic', 9)]].forEach(([team, ch], k) => addCombatant(b, makeCombatant(R, ch, { id: `m${k}`, team })));
+  runToEnd(b, R);
+  assert.equal(recordText(fightRecord(b, { date: 'x' })), battleText(b));
+});
+
 test('a leaderboard from real fights counts every fight once per fighter', () => {
   const recs = [1, 2, 3].map((i) => fightRecord(fight(`rec-lb-${i}`, { A: [hero('paragon', 1)], B: [hero('blaster', 2)] }), { date: `2026-04-0${i}T00:00:00.000Z`, counter: 1 }));
   const rows = leaderboard(recs);
