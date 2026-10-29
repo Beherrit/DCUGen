@@ -50,6 +50,8 @@ function buildData() {
     skillGuide: opt('skill_guide.json', []),
     equipment: opt('equipment.json', { weapons: [], armor: [], gear: [], devices: [] }),
     styles: opt('styles.json', []),
+    stances: opt('stances.json', []),
+    maneuvers: opt('maneuvers.json', []),
     archetypes: opt('archetypes.json', []),
     themes: opt('themes.json', []),
     flavor: jsonFolder('flavor'),
