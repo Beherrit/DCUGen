@@ -3,6 +3,7 @@
 import { activeConditions, checkPenalty, defenseVs, resistOf, aidBonus } from './conditions.js';
 import { effectWeights } from './combatant.js';
 import { coverPenalty, coverDodgeBonus, preciseIgnores } from './cover.js';
+import { proneMod } from './prone.js';
 
 export function hitOdds(bonus, defense) {
   let hit = 0;
@@ -76,13 +77,12 @@ export function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, a
   if (atk.roll && !autoHit) {
     const def = defenseVs(target, atk.kind === 'close' ? 'Parry' : 'Dodge', c);
     let bonus = atk.bonus + bonusShift - checkPenalty(c) - rangePenalty(atk, dist);
-    if (activeConditions(target).has('Prone')) bonus += atk.kind === 'close' ? 5 : -5;
-    if (activeConditions(c).has('Prone') && atk.kind === 'close') bonus -= 5;
+    bonus += proneMod(c, target, atk);
     bonus -= concealmentPenalty(c, target, atk) + coverPenalty(b, c, target, atk);
     if (c.aiming?.target === target.id) bonus += c.aiming.bonus;
     bonus += aidBonus(c, target);
     ({ hit, crit } = hitOdds(bonus, def));
-    if (target.defending) hit *= 0.55;
+    if (target.defending) hit *= target.adv['Improved Defense'] ? 0.5 : 0.55;
     if (activeConditions(target).has('Defenseless')) crit = hit;
   }
   if (atk.effect === 'Damage' && !atk.penetrating && rank <= Math.floor(target.impervious / 2)) return 0.05 * hit;

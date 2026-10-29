@@ -11,6 +11,7 @@ import { isFrontliner, positionGoal, stepToZone, wantsKite, kiteThreat, kiteZone
 import { coverStep, coverDefends } from './tactics-cover.js';
 import { withdrawStance, withdrawGuards, withdrawTurn, withdrawHolds, withdrawOver } from './tactics-withdraw.js';
 import { fleeChance } from './tactics-support.js';
+import { isProne } from './prone.js';
 
 export { TEAM_TACTICS, tacticOf, positionGoal, stepToZone, wantsKite, kiteThreat, kiteZones, aimsAlways, isMeleeThreat, coverStep, coverDefends, withdrawTurn, withdrawHolds, withdrawOver, fleeChance };
 
@@ -43,8 +44,8 @@ export function targetBias(b, c, t, { enemies }) {
     case 'focus': return focusTarget(b, c.team)?.id === t.id ? 3 : 1;
     case 'bodyguard': return (t.vipHit?.[c.team] ?? -1) > (c.prevTurnTick ?? 0) ? 3 : 1;
     case 'lockdown': return lockdownBias(b, c, t);
-    case 'pickoff': return pickoffBias(t, enemies);
-    case 'flank': return t.feinted?.by === c.id || activeConditions(t).has('Vulnerable') ? 2.5 : 1;
+    case 'pickoff': return pickoffBias(t, enemies) * (t.minion && activeConditions(t).has('Defenseless') ? 1.5 : 1); // a finishing attack
+    case 'flank': return t.feinted?.by === c.id || activeConditions(t).has('Vulnerable') || (t.pos === c.pos && isProne(t)) ? 2.5 : 1;
     case 'intimidate': return isDemoralized(t) ? 3 : 1;
     case 'aid': return aidBonus(c, t) ? 2.5 : 1;
     default: return 1;
@@ -69,6 +70,9 @@ export function attackBias(b, c, atk, t) {
     default: return 1;
   }
 }
+
+/** Lockdown: against the marked enemy a fighter asks less of its trip, disarm and smash odds (they pin the enemy down). */
+export const maneuverEase = (b, c, t) => (tacticOf(b, c) === 'lockdown' && lockTarget(b, c.team)?.id === t.id ? 0.6 : 1);
 
 /** The chance of choosing a grab: Lockdown fighters grab the enemy they are pinning down. */
 export function grabChance(b, c, t, chance) {

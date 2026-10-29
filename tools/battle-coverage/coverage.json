@@ -899,7 +899,7 @@
     "kind": "advantage",
     "name": "Fast Grab",
     "status": "full",
-    "note": "A successful unarmed hit can turn into a grab as a free action.",
+    "note": "A successful unarmed hit (the hit itself, not the damage) can turn into a grab as a free action.",
     "source": "DCA 74"
   },
   {
@@ -912,15 +912,15 @@
   {
     "kind": "advantage",
     "name": "Grabbing Finesse",
-    "status": "none",
-    "note": "Grabs always use Strength and Fighting.",
+    "status": "partial",
+    "note": "Holds are made with Dexterity instead of Strength. The engine does not make a grabber vulnerable while holding, so there is nothing to waive.",
     "source": "DCA 75"
   },
   {
     "kind": "advantage",
     "name": "Improved Aim",
-    "status": "none",
-    "note": "Aim bonuses are the base +5 or +2.",
+    "status": "full",
+    "note": "The aim bonus is +10 close or adjacent and +5 at range.",
     "source": "DCA 75"
   },
   {
@@ -933,15 +933,15 @@
   {
     "kind": "advantage",
     "name": "Improved Defense",
-    "status": "none",
-    "note": "The extra bonus when defending is not applied.",
+    "status": "full",
+    "note": "+2 to the defense roll while taking the Defend action.",
     "source": "DCA 75"
   },
   {
     "kind": "advantage",
     "name": "Improved Disarm",
-    "status": "none",
-    "note": "Disarm is not simulated.",
+    "status": "full",
+    "note": "No attack penalty and no counter-disarm. The AI tries it with a lower bar for the odds.",
     "source": "DCA 75"
   },
   {
@@ -968,15 +968,15 @@
   {
     "kind": "advantage",
     "name": "Improved Smash",
-    "status": "none",
-    "note": "Smash is not simulated.",
+    "status": "full",
+    "note": "No -5 on attacks against a held item.",
     "source": "DCA 75"
   },
   {
     "kind": "advantage",
     "name": "Improved Trip",
-    "status": "none",
-    "note": "Trip is not simulated.",
+    "status": "full",
+    "note": "No -2 on the trip, no counter-trip, and the attacker picks the target's weaker of Athletics and Acrobatics. The AI tries it with a lower bar for the odds.",
     "source": "DCA 76"
   },
   {
@@ -989,8 +989,8 @@
   {
     "kind": "advantage",
     "name": "Move-by Action",
-    "status": "partial",
-    "note": "Speedster-style fighters hit and then step away; other fighters never split movement around an attack.",
+    "status": "full",
+    "note": "The move is split around the attack and stays within the fighter's speed: a shooter shoots from where it stands and then steps back out of reach of a melee threat; a melee fighter steps in, strikes and steps out when the foe is dangerous (speedsters always).",
     "source": "DCA 77"
   },
   {
@@ -1010,8 +1010,8 @@
   {
     "kind": "advantage",
     "name": "Prone Fighting",
-    "status": "none",
-    "note": "The prone attack penalty is always applied.",
+    "status": "full",
+    "note": "No -5 on its own close attacks while prone, and close attackers get no +5 against it.",
     "source": "DCA 77"
   },
   {
@@ -1185,8 +1185,8 @@
   {
     "kind": "advantage",
     "name": "Instant Up",
-    "status": "none",
-    "note": "Standing up is not simulated.",
+    "status": "full",
+    "note": "Stands from prone as a free action with no check.",
     "source": "DCA 76"
   },
   {
@@ -1416,14 +1416,14 @@
   {
     "kind": "action",
     "name": "Disarm",
-    "status": "none",
-    "note": "Disarming is not simulated."
+    "status": "partial",
+    "note": "Attack at -2 (-5 ranged), then damage rank against Strength; a win removes the item's attacks for the rest of the fight, a loss with a melee weapon allows a counter-disarm. Equipment weapons and Easily Removable devices can be disarmed. The dropped item is never picked up, and an unarmed disarmer's grab is only logged."
   },
   {
     "kind": "action",
     "name": "Drop Prone",
-    "status": "none",
-    "note": "Fighters are knocked prone by effects but never drop prone on purpose."
+    "status": "partial",
+    "note": "A ranged-heavy fighter in the open, with no cover, facing only ranged foes and needing no move, drops prone for the -5 against ranged attacks. No other reason to go down is modelled."
   },
   {
     "kind": "action",
@@ -1458,14 +1458,14 @@
   {
     "kind": "action",
     "name": "Smash",
-    "status": "none",
-    "note": "Attacking held objects is not simulated."
+    "status": "partial",
+    "note": "Attack on a held or worn item at -5, then the item's Toughness check (device points / 5, equipment by material): two degrees break it, three destroy it, and its attacks are removed. The AI smashes when breaking the target's best item beats a plain attack. Worn armor and other non-attack items are not smashed."
   },
   {
     "kind": "action",
     "name": "Stand",
-    "status": "none",
-    "note": "Standing from prone is not simulated."
+    "status": "full",
+    "note": "Standing is a move action, free with a DC 20 Acrobatics check (a failure costs the move action) or with Instant Up. A prone fighter stands at the start of its turn when it wants to move or fight up close; a shooter that need not move stays down."
   },
   {
     "kind": "action",
@@ -1476,8 +1476,8 @@
   {
     "kind": "action",
     "name": "Trip",
-    "status": "none",
-    "note": "Tripping is not simulated."
+    "status": "full",
+    "note": "Close attack against Parry at -2, then Acrobatics or Athletics against the target; a win leaves it prone, a loss gives it a counter-trip. The AI trips when a friend who fights up close shares the target's zone or the target shoots, and the odds beat 0.35. Not used on minions."
   },
   {
     "kind": "action",
@@ -1513,7 +1513,7 @@
     "kind": "maneuver",
     "name": "Finishing Attack",
     "status": "partial",
-    "note": "Any hit on a defenseless target is a critical; the routine check and the kill rule are not used."
+    "note": "A close attack on a defenseless target is rolled normally for a critical, or taken as a routine check (a sure hit, no critical) when the bonus is so low a roll would often miss. Killing intent is not used."
   },
   {
     "kind": "maneuver",
@@ -1692,8 +1692,8 @@
   {
     "kind": "condition",
     "name": "Prone",
-    "status": "partial",
-    "note": "Attack modifiers and hindered movement apply; fighters cannot drop prone or stand up."
+    "status": "full",
+    "note": "Close attackers get +5 and ranged attackers -5 against it; the prone fighter has -5 on close attacks and moves at half speed. It stands up on its own turn (see Stand). Prone from an Affliction ends only when the Affliction does."
   },
   {
     "kind": "condition",

@@ -4,16 +4,11 @@ import { sign, d20, log } from './util.js';
 import { resistOf } from './conditions.js';
 import { releaseHolds } from './maneuvers.js';
 import { expireSupport } from './support-actions.js';
-
-/** A fighter knocked prone gets back up at the end of its next turn. */
-function standUp(b, c) {
-  if (!c.conditions.some((x) => x.source === 'knockback')) return;
-  c.conditions = c.conditions.filter((x) => x.source !== 'knockback');
-  log(b, { kind: 'recover', actor: c.id, text: `${c.name} gets back to their feet.` });
-}
+import { STAND_SOURCES } from './prone.js';
 
 export function endOfTurn(b, c, rng) {
   c.interposed = false;
+  c.noMove = false; c.zonesMoved = 0; // this turn's movement is over
   // A feint lasts until the end of the feinter's next round (DCA 64).
   for (const t of b.combatants) if (t.feinted?.by === c.id && t.feinted.round < b.round) t.feinted = null;
   expireSupport(b, c);
@@ -23,8 +18,7 @@ export function endOfTurn(b, c, rng) {
   // Sustained defenses come back as a free action
   if (c.nullified) { c.nullified = 0; log(b, { kind: 'recover', actor: c.id, text: `${c.name} restores its defenses.` }); }
   // Recovery checks against afflictions (DCA 95)
-  standUp(b, c);
-  const sources = [...new Set(c.conditions.filter((x) => x.source !== 'grab' && x.source !== 'surprise' && x.source !== 'demoralize').map((x) => x.source))];
+  const sources = [...new Set(c.conditions.filter((x) => x.source !== 'grab' && x.source !== 'surprise' && x.source !== 'demoralize' && !STAND_SOURCES.includes(x.source)).map((x) => x.source))];
   for (const src of sources) {
     const group = c.conditions.filter((x) => x.source === src);
     const lead = group[0];

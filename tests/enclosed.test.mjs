@@ -35,7 +35,8 @@ function arena({ enclosed = false, seed = SEED, enclosedAfterAdd = false } = {})
 }
 const pos = (b, id) => b.combatants.find((c) => c.id === id).pos;
 // A normal attack is logged as 'hit' or 'miss'; 'attack' is used for special attacks (holds, area).
-const bruiserAttacks = (b) => b.log.filter((e) => ['attack', 'hit', 'miss'].includes(e.kind) && e.actor === BRUISER_ID);
+// A trip is also a close attack (it starts with an attack check against Parry), logged with the trip result.
+const bruiserAttacks = (b) => b.log.filter((e) => e.actor === BRUISER_ID && (['attack', 'hit', 'miss'].includes(e.kind) || /tries to trip/.test(e.text)));
 
 // The first fighter of team B is nudged one zone toward the middle by the spread rule, so with 8 zones it stands at 5 (ARENA - 3), as before this feature.
 test('open ground: team A starts at zone 1, team B at zone 5, arena is ARENA (default placement unchanged)', () => {

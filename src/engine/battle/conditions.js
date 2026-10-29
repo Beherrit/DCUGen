@@ -123,6 +123,6 @@ export function canAct(c) {
 
 export function moveZones(c) {
   const s = activeConditions(c);
-  if (s.has('Immobile') || c.grabbedBy) return 0;
+  if (s.has('Immobile') || c.grabbedBy || c.noMove) return 0; // noMove: the move action went on standing up
   return s.has('Hindered') ? Math.max(1, Math.ceil(c.speed / 2)) : c.speed;
 }

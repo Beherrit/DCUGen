@@ -22,9 +22,12 @@ is not simulated). The code is split by job:
 - `materials.js`: building materials, `toughnessOf` (the doubling rule) and the `COVER_KINDS` presets.
 - `cover.js`: cover pieces (`b.cover`), their levels, who stands behind one, the attack penalty and Dodge bonus. `cover-damage.js`: hurting a piece (hole or destroy), shooting through cover, area attacks on scenery. `cover-plan.js`: when the AI shoots the cover itself.
 - `support-actions.js`: Demoralize and Aid, and how they wear off. `support-plan.js`: when a fighter demoralizes or aids instead of attacking (its own judgement, and the Intimidate and Break and Aid the Champion tactics). `tactics-support.js`: who demoralizes, who the champion is, the flee chance. `tactics-withdraw.js`: the Fighting Withdrawal tactic (escape, rearguard, the hold-out win).
+- `prone.js`: the prone state, the attack-check change from it (and Prone Fighting), falling prone. `stand.js`: standing up (the Stand action, DC 20 Acrobatics, Instant Up) and dropping prone on purpose.
+- `items.js`: the items behind a fighter's attacks (held or worn, Toughness) and losing one. `maneuver-checks.js`: the attack and opposed checks the maneuvers share. `trip.js`, `disarm.js`, `smash.js`: the three maneuvers and their odds. `plan-maneuvers.js`: when the AI picks one. `maneuver-run.js`: carrying the chosen one out.
+- `move-by.js`: stepping away from melee threats before a shot (kiting) and the Move-by Action split (after the attack).
 - `knockback.js`: the optional knockback rule, mass rank, flight and collisions. `tactics-cover.js`: the Take Cover tactic.
 - `summaries.js`: status lines, battle text, many-run tallies, save and load.
 
 The app is bundled by tools/build.mjs, which does not allow import cycles, so keep imports flowing one way: util and
-constants at the bottom, then styles, conditions, combatant, materials, cover, odds, support-actions, the tactics files, plan, movement, maneuvers, support, support-plan, attack-effects,
+constants at the bottom, then styles, conditions, combatant, materials, cover, odds, support-actions, prone, items, the tactics files, plan-maneuvers, plan, movement, maneuvers, support, support-plan, attack-effects,
 attack-roll, cover-damage, knockback, attacks, turn-attack, turn, end-of-turn, battle-flow and summaries on top.

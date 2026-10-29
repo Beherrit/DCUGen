@@ -2,7 +2,8 @@
 
 import { sign, d20 } from './util.js';
 import { activeConditions, checkPenalty, defenseVs, feintedBy, aidBonus } from './conditions.js';
-import { rangePenalty, concealmentPenalty } from './odds.js';
+import { rangePenalty, concealmentPenalty, hitOdds } from './odds.js';
+import { proneMod } from './prone.js';
 import { spendOnMiss } from './tactics.js';
 import { coverPenalty, coverLevel, shieldFor } from './cover.js';
 
@@ -29,6 +30,13 @@ export function attackVerb(c, atk, t, rng) {
 /** Minions don't crit non-minions (DCA 175), and a routine attack never crits. */
 const critOk = (c, t, routine) => !(c.minion && !t.minion) && !routine;
 
+/** Finishing attack (p178): against a defenseless target the check is routine (it hits) or rolled for a critical. Routine only when the bonus is so low that a roll would often miss. */
+const ROUTINE_BELOW = 0.7;
+function finishingRoutine(c, t, mod, dcUsed) {
+  if (10 + mod < dcUsed) return false;
+  return !critOk(c, t, false) || hitOdds(mod, dcUsed - 10).hit < ROUTINE_BELOW;
+}
+
 /** The to-hit modifier: the attack bonus, trade-offs, conditions, range, concealment and cover. Adds notes for the last two. */
 function toHitMod(b, c, atk, t, m, aimed, notes) {
   const dist = Math.abs(c.pos - t.pos);
@@ -36,9 +44,7 @@ function toHitMod(b, c, atk, t, m, aimed, notes) {
   const cover = coverPenalty(b, c, t, atk);
   const aid = aidBonus(c, t);
   let mod = atk.bonus - m.trade + m.allOut - m.defensive - checkPenalty(c) - rangePenalty(atk, dist) - conceal - cover - (m.charge ? 2 : 0) + aimed + aid;
-  const tc = activeConditions(t); const cc = activeConditions(c);
-  if (tc.has('Prone')) mod += atk.kind === 'close' ? 5 : -5;
-  if (cc.has('Prone') && atk.kind === 'close') mod -= 5;
+  mod += proneMod(c, t, atk);
   if (aid) notes.push(`aid: +${aid}`);
   if (conceal) notes.push(`${conceal === 5 ? 'total' : 'partial'} concealment: −${conceal}`);
   if (cover) notes.push(`${coverLevel(shieldFor(b, c, atk, t))} cover: −${cover}`);
@@ -57,11 +63,13 @@ export function rollToHit(b, c, atk, t, rng, m, aimed, notes) {
   let dcUsed = 10 + def;
   if (t.defending) {
     const r = d20(rng); const defRoll = r <= 10 ? r + 10 : r;
-    dcUsed = defRoll + def;
-    notes.push(`${t.name} is defending: d20 ${r}${r <= 10 ? ' (+10)' : ''} + ${def} = ${dcUsed}`);
+    const imp = t.adv['Improved Defense'] ? 2 : 0;
+    dcUsed = defRoll + def + imp;
+    notes.push(`${t.name} is defending: d20 ${r}${r <= 10 ? ' (+10)' : ''} + ${def}${imp ? ' + 2 (Improved Defense)' : ''} = ${dcUsed}`);
   }
   // Against a minion, a non-minion can take the attack as a routine check (DCA 175): no roll when 10 does it.
-  const routine = t.minion && !c.minion && !t.defending && 10 + mod >= dcUsed;
+  const finishing = atk.kind === 'close' && activeConditions(t).has('Defenseless');
+  const routine = finishing ? finishingRoutine(c, t, mod, dcUsed) : t.minion && !c.minion && !t.defending && 10 + mod >= dcUsed;
   const roll = routine ? 10 : d20(rng);
   const total = roll + mod;
   const hit = routine || roll === 20 || (roll !== 1 && total >= dcUsed);
@@ -69,8 +77,8 @@ export function rollToHit(b, c, atk, t, rng, m, aimed, notes) {
   const crit = critOk(c, t, routine) && hit && (roll === 20 ? total >= dcUsed : roll >= atk.crit);
   const dice = routine ? [] : [{ label: 'Attack', roll, mod, total, dc: dcUsed }];
   let text = routine
-    ? `${c.name} ${attackVerb(c, atk, t, rng)}: routine attack against a minion, ${10 + mod} vs ${which} DC ${dcUsed}`
-    : `${c.name} ${attackVerb(c, atk, t, rng)}: d20 ${roll} ${sign(mod)} = ${total} vs ${which} ${t.defending ? '' : 'DC '}${dcUsed}`;
+    ? `${c.name} ${attackVerb(c, atk, t, rng)}: ${finishing ? 'finishing attack as a routine check' : 'routine attack against a minion'}, ${10 + mod} vs ${which} DC ${dcUsed}`
+    : `${c.name} ${attackVerb(c, atk, t, rng)}: d20 ${roll} ${sign(mod)} = ${total} vs ${which} ${t.defending ? '' : 'DC '}${dcUsed}${finishing ? ' (finishing attack)' : ''}`;
   if (feintedBy(t, c)) { text += ' (feinted: vulnerable to this attack)'; t.feinted = null; }
   const out = { roll, total, mod, hit, crit, dice, text, dcUsed, which };
   if (!hit && b.options.heroPoints && c.heroPoints > 0 && roll !== 1 && (c.style !== 'minion') && (spendOnMiss(b, c) || t.staggered || c.staggered || rng.chance(0.5))) rerollMiss(c, atk, t, rng, out, routine);

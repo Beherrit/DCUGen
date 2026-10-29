@@ -15,8 +15,11 @@ export function feint(b, c, t, rng) {
   log(b, { kind: ok ? 'condition' : 'miss', actor: c.id, target: t.id, text: `${c.name} feints ${useAcro ? 'with acrobatics' : ''}: ${useAcro ? 'Acrobatics' : 'Deception'} d20 ${r1} ${sign(mine)} = ${r1 + mine} vs ${t.name}'s Insight d20 ${r2} ${sign(theirs)} = ${r2 + theirs} — ${ok ? `${t.name} falls for it and is vulnerable to the next attack` : 'not fooled'}.`, dice: [{ label: 'Feint', roll: r1, mod: mine, total: r1 + mine, dc: r2 + theirs }] });
 }
 
+/** The ability a hold is made with: Strength, or Dexterity with Grabbing Finesse (p75). */
+export const gripOf = (c) => c.d.abilities[c.adv['Grabbing Finesse'] ? 'Dexterity' : 'Strength'] ?? 0;
+
 export function grab(b, R, c, t, rng, { free = false } = {}) {
-  const str = c.d.abilities.Strength ?? 0;
+  const str = gripOf(c);
   if (!free) {
     const dc = 10 + defenseOf(t, 'Parry');
     const bonus = (c.attacks.find((a) => a.unarmed)?.bonus ?? c.d.abilities.Fighting ?? 0) - checkPenalty(c);
@@ -42,7 +45,7 @@ export function tryEscape(b, c, holder, rng) {
   if (!bound && holder.pos === c.pos && c.attacks.some((a) => expectedValue(c, a, holder) > 0.15)) return false;
   // Escape (DCA 176): Athletics or Sleight of Hand against the hold
   const mine = Math.max(c.skills.Athletics, c.skills['Sleight of Hand'] ?? -99) - checkPenalty(c);
-  const dc = 10 + (holder.d.abilities.Strength ?? 0) + (holder.adv['Improved Hold'] ? 5 : 0);
+  const dc = 10 + gripOf(holder) + (holder.adv['Improved Hold'] ? 5 : 0);
   const roll = d20(rng); const total = roll + mine;
   const ok = roll === 20 || total >= dc;
   if (ok) { c.grabbedBy = null; holder.holding = null; c.conditions = c.conditions.filter((x) => x.source !== 'grab'); }

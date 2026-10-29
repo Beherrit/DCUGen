@@ -5,6 +5,7 @@ import { repairPowerRoles } from '../repair.js';
 import { hasExtra, extraOpt, clamp } from './util.js';
 import { STYLES, detectStyle } from './styles.js';
 import { SEVERITY, parseAffliction } from './conditions.js';
+import { itemFor, deviceOf } from './items.js';
 
 export function effectWeights(attack) {
   if (attack.effect === 'Damage') return [0, 1, 2.3, 3.8, 6.5];
@@ -35,7 +36,7 @@ function buildAttack(c, a0, R) {
     id: `${a.name}|${a.effect}|${a.rank}|${a.kind}`,
     name: a.name, effect: a.effect, kind: a.kind, rank: a.rank, bonus: a.roll ? a.bonus : null, roll: !!a.roll,
     resistance: a.resistance || eff.resistance || 'Toughness',
-    equipment: !!a.equipment, device: !!(p && (c.ch.devices || []).some((d) => d.powers.includes(p) || d.powers.some((q) => (q.alternates || []).includes(p)))),
+    equipment: !!a.equipment, device: !!(p && deviceOf(c.ch, p)), item: itemFor(c.ch, a, p, R),
     unarmed: a.name === 'Unarmed', alternate: !!a.alternate,
     crit: a.crit || (p ? Math.max(16, 20 - advantageRank(c.ch, 'Improved Critical', p.name) - advantageRank(c.ch, 'Improved Critical')) : 20),
     descriptors: attackDescriptors(c, a, p),
@@ -133,6 +134,9 @@ export function resetCombatant(c) {
     weakened: {},          // trait -> ranks lost
     fatigue: 0, defMod: 0, feinted: false, grabbedBy: null, holding: null, nullified: 0, regen: 0, interposed: false,
     lastAttackId: null, usedEffort: 0, teamedRound: null, surpriseActor: false,
+    dropped: [],           // keys of items lost to a disarm or a smash: their attacks stay removed (items.js)
+    noMove: false,         // the move action went on standing up this turn
+    zonesMoved: 0,         // zones moved so far this turn (Move-by Action splits the speed)
     aid: [],               // Aid received: [{ by, vs, mode, amount, until }]
     escaped: false,        // got away under Fighting Withdrawal (also marked fled, so it leaves the fight)
     recovered: false,      // the Recover action: once per conflict (DCA 177)
@@ -153,13 +157,13 @@ export function rebuildCombatant(c, R, d = null) {
   d = d || deriveAll(c.ch, R);
   c.d = d;
   c.initBonus = d.initiative;
-  c.attacks = d.attacks.map((a) => buildAttack(c, a, R)).filter((a) => a.rank > 0 || a.effect !== 'Damage');
+  c.attacks = d.attacks.map((a) => buildAttack(c, a, R)).filter((a) => (a.rank > 0 || a.effect !== 'Damage') && !(a.item && (c.dropped || []).includes(a.item.key)));
   powerStats(c);
   c.immune = immunities(c.ch, d);
   const mv = bestMoveRank(c.ch);
   c.speed = 1 + Math.min(4, Math.floor(mv.rank / 3));
   c.flying = mv.flying;
-  c.adv = Object.fromEntries(['Power Attack', 'Accurate Attack', 'All-out Attack', 'Defensive Attack', 'Takedown', 'Interpose', 'Evasion', 'Fearless', 'Seize Initiative', 'Move-by Action', 'Fast Grab', 'Improved Grab', 'Improved Hold', 'Chokehold', 'Agile Feint', 'Uncanny Dodge', 'Improved Initiative', 'Diehard', 'Instant Up', 'Luck', 'Taunt', 'Teamwork'].map((n) => [n, advantageRank(c.ch, n)]));
+  c.adv = Object.fromEntries(['Power Attack', 'Accurate Attack', 'All-out Attack', 'Defensive Attack', 'Takedown', 'Interpose', 'Evasion', 'Fearless', 'Seize Initiative', 'Move-by Action', 'Fast Grab', 'Improved Grab', 'Improved Hold', 'Chokehold', 'Agile Feint', 'Uncanny Dodge', 'Improved Initiative', 'Diehard', 'Instant Up', 'Luck', 'Taunt', 'Teamwork', 'Improved Trip', 'Improved Disarm', 'Improved Smash', 'Prone Fighting', 'Improved Aim', 'Improved Defense', 'Grabbing Finesse'].map((n) => [n, advantageRank(c.ch, n)]));
   const sk = (name) => d.skills.find((s) => s.name === name)?.bonus ?? (d.abilities[R.skillAbility(name)] ?? 0);
   c.skills = { Deception: sk('Deception'), Insight: sk('Insight'), Acrobatics: sk('Acrobatics'), Athletics: sk('Athletics'), Intimidation: sk('Intimidation'), 'Sleight of Hand': sk('Sleight of Hand') };
   c.moveRank = mv.rank;

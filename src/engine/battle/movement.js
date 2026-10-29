@@ -7,6 +7,7 @@ export function moveTo(b, c, dest, why) {
   if (dest === c.pos) return;
   const from = c.pos;
   c.pos = dest;
+  c.zonesMoved = (c.zonesMoved || 0) + Math.abs(dest - from);
   if (c.behind) c.behind = null; // nobody keeps cover from another zone
   log(b, { kind: 'move', actor: c.id, text: `${c.name} ${c.flying ? 'flies' : c.speed >= 3 ? 'blurs' : 'moves'} ${why ? `${why} ` : ''}(zone ${from + 1} → ${dest + 1}).` });
 }

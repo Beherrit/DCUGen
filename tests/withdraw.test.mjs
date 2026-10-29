@@ -54,7 +54,10 @@ test('intimidate: on the same six seeds, team A demoralizes only with the tactic
   assert.ok(count('intimidate', /demoraliz/) >= 20, `${count('intimidate', /demoraliz/)} demoralize lines`); // 44 when written
   const b = fight('intimidate', 2);
   assert.equal(b.log.find((e) => /demoraliz/.test(e.text)).actor, 'A0');
-  assert.equal(demoralizerOf(b, 'A').id, 'A0', 'Intimidation 12 against 9, 3 and 1');
+  // Who the team's demoralizer is depends on who is still standing, so read it right after the start, not at the end.
+  const fresh = arena('intimidate', 'obs-2', squadA(2), squadB(2));
+  startBattle(fresh, R);
+  assert.equal(demoralizerOf(fresh, 'A').id, 'A0', 'Intimidation 12 against 9, 3 and 1');
 });
 
 // Requirement: the intimidator demoralizes an enemy that is not already impaired each round; Fearless enemies are skipped.

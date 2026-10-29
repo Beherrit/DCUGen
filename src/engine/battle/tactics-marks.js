@@ -7,15 +7,15 @@ import { threatOn } from './odds.js';
 
 export const isControlAttack = (a) => !!a.tiers || a.effect === 'Nullify';
 
-/** Pinned, exposed or helpless: a Lockdown team is done with this enemy for now. */
+/** Pinned, exposed, on the ground or helpless: a Lockdown team is done with this enemy for now. */
 export function isControlled(t) {
   const s = activeConditions(t);
-  return ['Vulnerable', 'Defenseless', 'Stunned', 'Bound'].some((x) => s.has(x));
+  return ['Vulnerable', 'Defenseless', 'Stunned', 'Bound', 'Prone'].some((x) => s.has(x));
 }
 
-/** Can this fighter pin an enemy down: an Affliction, Snare-type, Nullify or a grab? */
+/** Can this fighter pin an enemy down: an Affliction, Snare-type, Nullify, a grab, or a trip, disarm or smash it is trained for? */
 export function hasControl(c) {
-  return c.attacks.some(isControlAttack) || !!(STYLES[c.style].grabs || c.adv['Fast Grab'] || c.adv['Improved Grab'] || c.adv.Chokehold);
+  return c.attacks.some(isControlAttack) || !!(STYLES[c.style].grabs || c.adv['Fast Grab'] || c.adv['Improved Grab'] || c.adv.Chokehold || c.adv['Improved Trip'] || c.adv['Improved Disarm'] || c.adv['Improved Smash']);
 }
 
 /** How much harm enemy e could do to the whole team, added up over its members. */

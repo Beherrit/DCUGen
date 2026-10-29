@@ -15,6 +15,7 @@ import { releaseHolds } from './maneuvers.js';
 import { piecesOf, pieceLabel } from './cover.js';
 import { damagePiece } from './cover-damage.js';
 import { toughnessOf, ENCLOSURE_WALL } from './materials.js';
+import { makeProne } from './prone.js';
 
 const powerRanks = (c, effect) => allPowers(c.ch, { includeAlternates: false }).map((x) => x.power).filter((p) => !p.pool && p.effect === effect).reduce((s, p) => s + p.rank, 0);
 
@@ -78,10 +79,9 @@ function summary(t, moved, events) {
   return `${lead}${parts.length ? ` and ${parts.join(' and ')}` : ''}.`;
 }
 
-/** The target falls prone, if it is not down already. It gets up at the end of its next turn. */
+/** The target falls prone, if it is not down already. It gets up on its own turn if it wants to move or fight up close (stand.js). */
 export function knockProne(t, c) {
-  if (t.conditions.some((x) => x.name === 'Prone')) return;
-  t.conditions.push({ name: 'Prone', degree: 1, from: c.id, source: 'knockback', label: 'knocked prone' });
+  makeProne(t, c, 'knockback', 'knocked prone');
 }
 
 /** After a damaging hit: throw the target back if the rule is on and the blow was hard enough (or was a slam). */

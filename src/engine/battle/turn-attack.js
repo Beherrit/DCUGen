@@ -1,15 +1,15 @@
-// The attacking half of a turn: step away or close in, line up a shot, pick the trade-offs, attack, then hit and run.
+// The attacking half of a turn: step away or close in, line up a shot, pick the trade-offs, attack, then move on (Move-by Action).
 
-import { clamp, d20, log, alliesOf } from './util.js';
-import { arenaOf } from './constants.js';
-import { STYLES } from './styles.js';
+import { d20, log, alliesOf } from './util.js';
 import { conditionLabels, checkPenalty, defenseOf, canAct, moveZones } from './conditions.js';
 import { hitOdds, rangePenalty, concealmentPenalty } from './odds.js';
 import { bestTradeoff } from './plan.js';
 import { moveTo, moveToward } from './movement.js';
 import { resolveAttack } from './attacks.js';
-import { positionGoal, stepToZone, wantsKite, kiteThreat, kiteZones, aimsAlways, isMeleeThreat, tradeoffBias, forceEffort, teamAttackMin, coverStep } from './tactics.js';
-import { shelterOf, coverPenalty } from './cover.js';
+import { positionGoal, stepToZone, wantsKite, aimsAlways, tradeoffBias, forceEffort, teamAttackMin, coverStep } from './tactics.js';
+import { coverPenalty } from './cover.js';
+import { kite, moveBy } from './move-by.js';
+import { runManeuver } from './maneuver-run.js';
 
 /** The attack plan chosen for this turn: move into position, maybe aim, then attack. */
 export function attackTurn(b, R, c, choice, enemies, mode, rng) {
@@ -20,6 +20,7 @@ export function attackTurn(b, R, c, choice, enemies, mode, rng) {
   const closed = closeIn(b, c, attack, target, mode, rng);
   if (closed.over) return;
   const charge = closed.charge;
+  if (choice.plan !== 'attack') { runManeuver(b, c, choice, rng); moveBy(b, c, attack, target, enemies, mode); return; }
   if (!charge && lineUpShot(b, c, attack, target, enemies, rng)) return;
   const { trade, allOut, defensive } = pickTradeoffs(b, c, attack, target, enemies);
   const effort = pickEffort(b, c, attack, target, rng);
@@ -27,20 +28,7 @@ export function attackTurn(b, R, c, choice, enemies, mode, rng) {
   const slam = slamRank(c, attack, charge);
   // Takedown chains and the attack itself
   resolveAttack(b, R, c, attack, target, rng, { trade: charge ? 0 : trade, allOut: charge ? 0 : allOut, defensive: charge ? 0 : defensive, effort, charge, slam, team });
-  hitAndRun(b, c, attack, enemies, mode);
-}
-
-/** Kiting: ranged fighters step away from melee threats before shooting. */
-function kite(b, c, attack, target, enemies, mode) {
-  const S = STYLES[c.style];
-  if (!(mode === 'full' && attack.kind !== 'close' && (S.ranged >= 1.2 || wantsKite(b, c)) && !c.grabbedBy && !shelterOf(b, c))) return;
-  const threat = enemies.find((e) => e.pos === c.pos && isMeleeThreat(e)) || kiteThreat(b, c, enemies);
-  if (threat && rangePenalty(attack, 1) === 0) {
-    const dir = c.pos <= threat.pos ? -1 : 1;
-    const step = kiteZones(b, c, attack, target, dir) ?? Math.min(moveZones(c), 1);
-    const dest = clamp(c.pos + dir * step, 0, arenaOf(b) - 1);
-    if (dest !== c.pos) moveTo(b, c, dest, `away from ${threat.name}`);
-  }
+  moveBy(b, c, attack, target, enemies, mode);
 }
 
 /** A team tactic may call for a different spot first. True when the move used up the turn (a close attack could not reach). */
@@ -80,7 +68,7 @@ function lineUpShot(b, c, attack, target, enemies, rng) {
   const dist = Math.abs(c.pos - target.pos);
   const def = defenseOf(target, 'Dodge');
   const now = hitOdds(attack.bonus - rangePenalty(attack, dist) - concealmentPenalty(c, target, attack) - coverPenalty(b, c, target, attack), def).hit;
-  const bonus = dist <= 1 ? 5 : 2;
+  const bonus = c.adv['Improved Aim'] ? (dist <= 1 ? 10 : 5) : (dist <= 1 ? 5 : 2); // Improved Aim doubles it (p75)
   if (always || (now < 0.4 && hitOdds(attack.bonus + bonus - rangePenalty(attack, dist) - concealmentPenalty(c, target, attack) - coverPenalty(b, c, target, attack), def).hit >= now + 0.2 && rng.chance(0.7))) {
     c.aiming = { target: target.id, attack: attack.id, bonus };
     log(b, { kind: 'note', actor: c.id, target: target.id, text: `${c.name} takes aim at ${target.name} (+${bonus} next turn, vulnerable until then).` });
@@ -155,11 +143,3 @@ function slamRank(c, attack, charge) {
   return null;
 }
 
-/** Hit and run: strike and end the turn out of reach. */
-function hitAndRun(b, c, attack, enemies, mode) {
-  const S = STYLES[c.style];
-  if (!(S.hitAndRun && c.adv['Move-by Action'] && mode === 'full' && attack.kind === 'close' && !c.holding)) return;
-  const dir = c.pos >= arenaOf(b) / 2 ? 1 : -1;
-  const dest = clamp(c.pos + dir * Math.max(1, Math.floor(moveZones(c) / 2)), 0, arenaOf(b) - 1);
-  if (dest !== c.pos && !enemies.some((e) => e.pos === dest)) moveTo(b, c, dest, 'and is gone before anyone can answer');
-}

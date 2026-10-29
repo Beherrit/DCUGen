@@ -100,9 +100,9 @@ function landHit(b, R, c, atk, t, rng, r, { rankShift, notes, slam }) {
   return result;
 }
 
-/** After a hit lands: Fast Grab can turn it into a hold, and Takedown lets the attacker swing at the next minion. */
+/** After a hit: Fast Grab can turn it into a hold (the unarmed hit counts as the grab's attack check, p74), and Takedown lets the attacker swing at the next minion. */
 function followUps(b, R, c, atk, t, rng, result, mod) {
-  if (result?.landed && atk.unarmed && c.adv['Fast Grab'] && !c.holding && !t.out && !t.grabbedBy && rng.chance(0.6)) {
+  if (result && atk.unarmed && c.adv['Fast Grab'] && !c.holding && !t.out && !t.grabbedBy && rng.chance(0.6)) {
     log(b, { kind: 'note', actor: c.id, target: t.id, text: `${c.name} uses Fast Grab to turn the hit into a hold.` });
     grab(b, R, c, t, rng, { free: true });
   }

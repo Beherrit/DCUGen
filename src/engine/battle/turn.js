@@ -13,6 +13,7 @@ import { attackTurn } from './turn-attack.js';
 import { markTurn, mayFlee, mayDefend, recoverEarly, healsFreely, healThreshold, coverDefends, fleeChance, withdrawTurn, withdrawHolds } from './tactics.js';
 import { supportTurn } from './support-plan.js';
 import { shootCover } from './cover-damage.js';
+import { planStanding, standOrDrop } from './stand.js';
 
 const isHurt = (c) => c.staggered || c.bruises >= 2;
 
@@ -35,11 +36,12 @@ export function takeTurn(b, R, c, rng) {
   if (takeAimedShot(b, R, c, rng)) return;
   if (healFirst(b, c, rng)) return;
   if (crushHeld(b, R, c, rng)) return;
-  const choice = choosePlan(b, R, c, enemies, rng, mode);
+  const choice = planStanding(c, () => choosePlan(b, R, c, enemies, rng, mode)); // a prone fighter plans as if it were on its feet
   if (!choice) { log(b, { kind: 'skip', actor: c.id, text: `${c.name} finds nothing worth doing and holds position.` }); return; }
   if (withdrawHolds(b, c, choice)) return;
   if (supportTurn(b, c, choice, enemies, mode, rng)) return;
   if (digIn(b, c, choice, enemies, mode)) return;
+  standOrDrop(b, c, choice, enemies, mode, rng);
   if (nonAttackPlan(b, R, c, choice, mode, rng)) return;
   attackTurn(b, R, c, choice, enemies, mode, rng);
 }
@@ -161,7 +163,7 @@ function digIn(b, c, choice, enemies, mode) {
   return true;
 }
 
-/** The plans that are not an attack: close in, feint, grab. */
+/** The plans that are not an attack: close in, feint, grab. (Trip, disarm and smash go on to attackTurn, which gets the fighter in position first.) */
 function nonAttackPlan(b, R, c, choice, mode, rng) {
   const { target, plan } = choice;
   if (plan === 'cover') { shootCover(b, c, choice, rng); return true; }

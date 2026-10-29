@@ -13,12 +13,12 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | effect | 61 | 6 | 26 | 21 | 8 | 60% |
 | extra | 38 | 5 | 6 | 22 | 5 | 33% |
 | flaw | 22 | 0 | 1 | 18 | 3 | 5% |
-| advantage | 75 | 18 | 7 | 29 | 21 | 46% |
-| action | 20 | 7 | 4 | 9 | 0 | 55% |
+| advantage | 75 | 26 | 7 | 21 | 21 | 61% |
+| action | 20 | 9 | 7 | 4 | 0 | 80% |
 | maneuver | 12 | 7 | 4 | 1 | 0 | 92% |
-| condition | 30 | 15 | 9 | 5 | 1 | 83% |
+| condition | 30 | 16 | 8 | 5 | 1 | 83% |
 | rule | 36 | 13 | 11 | 12 | 0 | 67% |
-| all | 294 | 71 | 68 | 117 | 38 | 54% |
+| all | 294 | 82 | 70 | 104 | 38 | 59% |
 
 ## Effects
 
@@ -167,23 +167,23 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Defensive Attack | full | Trade attack bonus for defense, up to 4 with the advantage. | DCA 73 |
 | Defensive Roll | full | Adds to Toughness in derive. | DCA 73 |
 | Evasion | full | Bonus to Dodge against area attacks, and a clean dodge on two degrees. | DCA 74 |
-| Fast Grab | full | A successful unarmed hit can turn into a grab as a free action. | DCA 74 |
+| Fast Grab | full | A successful unarmed hit (the hit itself, not the damage) can turn into a grab as a free action. | DCA 74 |
 | Favored Environment | none | Environments are not simulated. | DCA 74 |
-| Grabbing Finesse | none | Grabs always use Strength and Fighting. | DCA 75 |
-| Improved Aim | none | Aim bonuses are the base +5 or +2. | DCA 75 |
+| Grabbing Finesse | partial | Holds are made with Dexterity instead of Strength. The engine does not make a grabber vulnerable while holding, so there is nothing to waive. | DCA 75 |
+| Improved Aim | full | The aim bonus is +10 close or adjacent and +5 at range. | DCA 75 |
 | Improved Critical | full | Widens the critical threat range per rank (16-20 at four). | DCA 75 |
-| Improved Defense | none | The extra bonus when defending is not applied. | DCA 75 |
-| Improved Disarm | none | Disarm is not simulated. | DCA 75 |
+| Improved Defense | full | +2 to the defense roll while taking the Defend action. | DCA 75 |
+| Improved Disarm | full | No attack penalty and no counter-disarm. The AI tries it with a lower bar for the odds. | DCA 75 |
 | Improved Grab | partial | Only makes the fighter likely to grab; keeping a free hand is not modelled. | DCA 75 |
 | Improved Hold | full | Held foes face a harder escape (+5 to the hold DC). | DCA 75 |
 | Improved Initiative | full | +4 to initiative per rank. | DCA 75 |
-| Improved Smash | none | Smash is not simulated. | DCA 75 |
-| Improved Trip | none | Trip is not simulated. | DCA 76 |
+| Improved Smash | full | No -5 on attacks against a held item. | DCA 75 |
+| Improved Trip | full | No -2 on the trip, no counter-trip, and the attacker picks the target's weaker of Athletics and Acrobatics. The AI tries it with a lower bar for the odds. | DCA 76 |
 | Improvised Weapon | none | Improvised weapons are not simulated. | DCA 76 |
-| Move-by Action | partial | Speedster-style fighters hit and then step away; other fighters never split movement around an attack. | DCA 77 |
+| Move-by Action | full | The move is split around the attack and stays within the fighter's speed: a shooter shoots from where it stands and then steps back out of reach of a melee threat; a melee fighter steps in, strikes and steps out when the foe is dangerous (speedsters always). | DCA 77 |
 | Power Attack | full | Trade attack bonus for rank, up to 5 with the advantage and 2 without. | DCA 77 |
 | Precise Attack | full | Each rank ignores the cover or concealment penalty for one pairing of close or ranged attacks, such as Ranged, Cover. | DCA 77 |
-| Prone Fighting | none | The prone attack penalty is always applied. | DCA 77 |
+| Prone Fighting | full | No -5 on its own close attacks while prone, and close attackers get no +5 against it. | DCA 77 |
 | Quick Draw | none | Drawing weapons is not simulated. | DCA 77 |
 | Ranged Attack | full | Adds to the ranged attack bonus in derive. | DCA 77 |
 | Redirect | none | Redirecting a missed attack is not simulated. | DCA 78 |
@@ -208,7 +208,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Fearless | partial | Immune to attacks the engine recognizes as fear effects (by wording) and to Demoralize, and never flees. | DCA 75 |
 | Feature | n/a | Descriptive only. | DCA 75 |
 | Great Endurance | none | The bonus to resist fatigue is not applied. | DCA 75 |
-| Instant Up | none | Standing up is not simulated. | DCA 76 |
+| Instant Up | full | Stands from prone as a free action with no check. | DCA 76 |
 | Interpose | full | A guard in the same zone takes a hit meant for a weaker ally once per round; not against area or perception attacks. | DCA 76 |
 | Minion | n/a | Minions are built as separate combatants. | DCA 77 |
 | Second Chance | none | Rerolls against hazards are not simulated. | DCA 78 |
@@ -247,17 +247,17 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Defend | full | Attackers face an opposed defense roll with 1-10 counting as 11-20; the AI only picks it when hurt and outnumbered. |  |
 | Delay | partial | Only minion squads delay, to make a team attack. |  |
 | Demoralize | full | A standard action: Intimidation (or Deception with Taunt) against the target's Insight or Will check; impaired until the end of the demoralizer's next round, disabled on four or more degrees. Enemy minions in earshot are demoralized by one check. The AI uses it with a skill 5 or more above the target's resistance and a weak attack, against a crowd of three or more minions, or on a team's orders (Intimidate and Break). Fearless fighters are immune; the range is two zones. |  |
-| Disarm | none | Disarming is not simulated. |  |
-| Drop Prone | none | Fighters are knocked prone by effects but never drop prone on purpose. |  |
+| Disarm | partial | Attack at -2 (-5 ranged), then damage rank against Strength; a win removes the item's attacks for the rest of the fight, a loss with a melee weapon allows a counter-disarm. Equipment weapons and Easily Removable devices can be disarmed. The dropped item is never picked up, and an unarmed disarmer's grab is only logged. |  |
+| Drop Prone | partial | A ranged-heavy fighter in the open, with no cover, facing only ranged foes and needing no move, drops prone for the -5 against ranged attacks. No other reason to go down is modelled. |  |
 | Escape | partial | Athletics or Sleight of Hand against the hold ends a grab; the free move afterwards is not taken. |  |
 | Grab | partial | Attack check then Strength against Strength or Dodge, restrained or bound; the holder's own penalties and later cumulative grabs are not applied. |  |
 | Move | partial | Speed rank is turned into 1 to 5 arena zones per turn; real distances are not tracked. |  |
 | Ready | none | Readied actions are not simulated. |  |
 | Recover | full | Once per fight, whole turn, removes the worst damage or fatigue and gives +2 to defenses. |  |
-| Smash | none | Attacking held objects is not simulated. |  |
-| Stand | none | Standing from prone is not simulated. |  |
+| Smash | partial | Attack on a held or worn item at -5, then the item's Toughness check (device points / 5, equipment by material): two degrees break it, three destroy it, and its attacks are removed. The AI smashes when breaking the target's best item beats a plain attack. Worn armor and other non-attack items are not smashed. |  |
+| Stand | full | Standing is a move action, free with a DC 20 Acrobatics check (a failure costs the move action) or with Instant Up. A prone fighter stands at the start of its turn when it wants to move or fight up close; a shooter that need not move stays down. |  |
 | Trick | none | Tricks with Deception are not simulated. |  |
-| Trip | none | Tripping is not simulated. |  |
+| Trip | full | Close attack against Parry at -2, then Acrobatics or Athletics against the target; a win leaves it prone, a loss gives it a counter-trip. The AI trips when a friend who fights up close shares the target's zone or the target shoots, and the odds beat 0.35. Not used on minions. |  |
 | Crawl | none | Prone fighters do not crawl at half speed. |  |
 | Command | none | Orders to minions and thralls are not simulated. |  |
 
@@ -268,7 +268,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Accurate Attack | full | Trade rank for attack bonus, 2 by default and 5 with the advantage. |  |
 | All-out Attack | full | Trade defense for attack bonus, chosen by brawlers, tanks, beasts and minions. |  |
 | Defensive Attack | full | Trade attack bonus for defense, chosen by duelists and supports under pressure. |  |
-| Finishing Attack | partial | Any hit on a defenseless target is a critical; the routine check and the kill rule are not used. |  |
+| Finishing Attack | partial | A close attack on a defenseless target is rolled normally for a critical, or taken as a routine check (a sure hit, no critical) when the bonus is so low a roll would often miss. Killing intent is not used. |  |
 | Power Attack | full | Trade attack bonus for rank, chosen when it raises the expected harm. |  |
 | Slam Attack | partial | A charging fighter uses its movement rank as Damage and, with the optional knockback rule on, throws the target back; the extra +1 for a full move and the damage the slammer takes are not applied. |  |
 | Surprise Attack | partial | Only through the Ambush option; stealth and unusual tactics do not make a target vulnerable. |  |
@@ -303,7 +303,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Impaired | full | -2 on checks, applied to attacks and resistance. |  |
 | Incapacitated | full | Out of the fight. |  |
 | Paralyzed | full | Defenseless, immobile and stunned. |  |
-| Prone | partial | Attack modifiers and hindered movement apply; fighters cannot drop prone or stand up. |  |
+| Prone | full | Close attackers get +5 and ranged attackers -5 against it; the prone fighter has -5 on close attacks and moves at half speed. It stands up on its own turn (see Stand). Prone from an Affliction ends only when the Affliction does. |  |
 | Restrained | full | Hindered and vulnerable, from a hold or an Affliction. |  |
 | Staggered | full | Dazed and hindered until recovered; a second staggering result incapacitates. |  |
 | Stunned | full | Cannot act; a hero point can end it. |  |
