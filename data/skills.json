@@ -31,7 +31,41 @@
     "specialized": true,
     "trained_only": true,
     "summary": "Knowledge of one field.",
-    "source": "DCA 59"
+    "source": "DCA 59",
+    "specialties": [
+      {
+        "name": "Geomancy",
+        "ability": "Awareness",
+        "trained_only": true,
+        "action": "None",
+        "summary": "Ley Lines, topographical readings, divination and the philosophies that unify them; a fitting Check Required skill for geomancy powers.",
+        "source": "MA 48"
+      },
+      {
+        "name": "Martial Arts",
+        "ability": "Intellect",
+        "trained_only": false,
+        "action": "None",
+        "summary": "General knowledge of martial arts, styles, practitioners and the martial arts community; no ability to use any technique.",
+        "source": "MA 48"
+      },
+      {
+        "name": "Martial Showman",
+        "ability": "Agility",
+        "trained_only": false,
+        "action": "Standard or more",
+        "summary": "Flourishing, choreographed fighting-style moves used to entertain or impress; the GM may allow it for the Daze advantage.",
+        "source": "MA 48"
+      },
+      {
+        "name": "Specific Fighting Style",
+        "ability": "Intellect",
+        "trained_only": true,
+        "action": "None",
+        "summary": "Deep familiarity with one named fighting style (one skill per style); its check can identify a stance of that style at the stance DC +5, Neutral automatically.",
+        "source": "MA 49"
+      }
+    ]
   },
   {
     "name": "Insight",
