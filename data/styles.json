@@ -1394,9 +1394,10 @@
     ],
     "style_flaws": [
       {
-        "name": "Clumsy Attack",
+        "name": "Clumsy Attacks",
         "detail": "Close Hand Strikes",
-        "cost": -1
+        "cost": -1,
+        "as_printed": "Clumsy Attack"
       },
       {
         "name": "Demanding",
@@ -1675,9 +1676,10 @@
     ],
     "style_flaws": [
       {
-        "name": "Clumsy Attack",
+        "name": "Clumsy Attacks",
         "detail": "Kicks",
-        "cost": -1
+        "cost": -1,
+        "as_printed": "Clumsy Attack"
       },
       {
         "name": "Demanding",
@@ -1934,9 +1936,10 @@
     ],
     "style_flaws": [
       {
-        "name": "Clumsy Attack",
+        "name": "Clumsy Attacks",
         "detail": "Grab",
-        "cost": -1
+        "cost": -1,
+        "as_printed": "Clumsy Attack"
       },
       {
         "name": "Demanding",
@@ -2171,9 +2174,10 @@
     ],
     "style_flaws": [
       {
-        "name": "Clumsy Attack",
+        "name": "Clumsy Attacks",
         "detail": "Kicks",
-        "cost": -1
+        "cost": -1,
+        "as_printed": "Clumsy Attack"
       },
       {
         "name": "Demanding",
@@ -2199,8 +2203,8 @@
         "ranks": 5
       },
       {
-        "name": "Ex-",
-        "ranks": 0
+        "name": "Expertise: Theology & Philosophy (AWE/INT)",
+        "ranks": 1
       }
     ],
     "advantage_list": [
@@ -3424,9 +3428,10 @@
     ],
     "style_extras": [
       {
-        "name": "Attack",
+        "name": "Attack Focus",
         "detail": "Unarmed Finger Strike",
-        "cost": 1
+        "cost": 1,
+        "as_printed": "Attack"
       },
       {
         "name": "Esoteric",
@@ -8818,10 +8823,11 @@
     ],
     "style_flaws": [
       {
-        "name": "Clumsy Attack",
+        "name": "Clumsy Attacks",
         "rank": 2,
         "detail": "Grab",
-        "cost": -2
+        "cost": -2,
+        "as_printed": "Clumsy Attack"
       },
       {
         "name": "Demanding",
@@ -9379,7 +9385,7 @@
     "weapon_elements": [
       "Dagger/Knife",
       "Machete",
-      "Un-"
+      "Unarmed"
     ],
     "skill_list": [
       {
@@ -9872,9 +9878,10 @@
     ],
     "style_flaws": [
       {
-        "name": "Clumsy Attack",
+        "name": "Clumsy Attacks",
         "detail": "All Unarmed",
-        "cost": -1
+        "cost": -1,
+        "as_printed": "Clumsy Attack"
       },
       {
         "name": "Demanding",
@@ -11077,10 +11084,11 @@
     ],
     "style_flaws": [
       {
-        "name": "Clumsy Attack",
+        "name": "Clumsy Attacks",
         "rank": 2,
         "detail": "Grab",
-        "cost": -2
+        "cost": -2,
+        "as_printed": "Clumsy Attack"
       },
       {
         "name": "Demanding",
@@ -11360,9 +11368,10 @@
     ],
     "style_flaws": [
       {
-        "name": "Clumsy Attack",
+        "name": "Clumsy Attacks",
         "detail": "Grab",
-        "cost": -1
+        "cost": -1,
+        "as_printed": "Clumsy Attack"
       },
       {
         "name": "Demanding",
@@ -17491,7 +17500,7 @@
         "cost": -2
       },
       {
-        "name": "No Non-",
+        "name": "No Nonsense",
         "cost": -1
       }
     ],
@@ -18032,20 +18041,11 @@
       "Moment of Weakness (Select One Action)"
     ],
     "free_advantage_points": 4,
-    "style_extras": [
-      {
-        "name": "Add up to 4 points in style extras",
-        "cost": 1
-      }
-    ],
+    "style_extras": [],
     "style_flaws": [
       {
         "name": "Demanding",
         "detail": "7 hours, -1",
-        "cost": -1
-      },
-      {
-        "name": "add up to 3 more points in style flaws",
         "cost": -1
       }
     ],
@@ -19263,7 +19263,7 @@
         "cost": 1
       },
       {
-        "name": "Spir-",
+        "name": "Spiritual",
         "cost": 1
       }
     ],
@@ -20598,22 +20598,13 @@
     "source": "MA 207",
     "stances_pick_extra": 6,
     "free_advantage_points": 4,
-    "style_extras": [
-      {
-        "name": "Add up to 3 points in style extras",
-        "cost": 1
-      }
-    ],
+    "style_extras": [],
     "style_flaws": [
       {
         "name": "Demanding",
         "rank": 2,
         "detail": "split between time and penalty",
         "cost": -2
-      },
-      {
-        "name": "add up to 3 more points in style flaws",
-        "cost": -1
       }
     ],
     "weapon_elements": [
@@ -23039,9 +23030,10 @@
     ],
     "style_flaws": [
       {
-        "name": "Clumsy Attack",
+        "name": "Clumsy Attacks",
         "detail": "Grab",
-        "cost": -1
+        "cost": -1,
+        "as_printed": "Clumsy Attack"
       },
       {
         "name": "Demanding",
@@ -23309,9 +23301,10 @@
         "cost": 3
       },
       {
-        "name": "Mobility",
+        "name": "Mobile",
         "rank": 2,
-        "cost": 2
+        "cost": 2,
+        "as_printed": "Mobility"
       }
     ],
     "style_flaws": [
@@ -31398,7 +31391,7 @@
       }
     ],
     "weapon_elements": [],
-    "weapon_elements_note": "New vehicle types are pos-",
+    "weapon_elements_note": "New vehicle types are possible but not necessary",
     "skill_list": [
       {
         "name": "Close Combat: Drive-Fu",
@@ -32663,7 +32656,7 @@
         "cost": 1
       },
       {
-        "name": "Spiri-",
+        "name": "Spiritual",
         "cost": 1
       }
     ],
@@ -36364,8 +36357,8 @@
         "ranks": 2
       },
       {
-        "name": "Exper-",
-        "ranks": 0
+        "name": "Expertise: Tactics",
+        "ranks": 1
       }
     ],
     "advantage_list": [
@@ -39933,8 +39926,8 @@
         "ranks": 4
       },
       {
-        "name": "Close Combat: Web-",
-        "ranks": 0
+        "name": "Close Combat: Web-Fu",
+        "ranks": 1
       }
     ],
     "advantage_list": [
