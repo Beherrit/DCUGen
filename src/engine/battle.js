@@ -20,6 +20,7 @@
 
 import { makeRng } from './rng.js';
 import { deriveAll, advantageRank, allPowers } from './derive.js';
+import { repairPowerRoles } from './repair.js';
 
 export const ARENA = 8;           // zones, left to right
 export const ENCLOSED_ARENA = 2;  // a room or corridor: everyone within one move
@@ -221,6 +222,7 @@ function attackDescriptors(c, a, p) {
 
 /** Build a combatant from a character. opts: { team, style, tactics, heroPoints, name } */
 export function makeCombatant(R, ch, opts = {}) {
+  repairPowerRoles(ch, R);
   const d = deriveAll(ch, R);
   const style = opts.style && STYLES[opts.style] ? opts.style : detectStyle(ch, R);
   const c = {
@@ -256,7 +258,13 @@ function resetCombatant(c) {
 }
 
 /** Derived numbers (recomputed on load, since only the character is saved). */
-export function rebuildCombatant(c, R, d = deriveAll(c.ch, R)) {
+export function rebuildCombatant(c, R, d = null) {
+  // A fighter saved before hand-built attack powers were repaired: repair it, and redo the style that was
+  // guessed from the broken build (it saw no attacks, so a ranged fighter read as a brawler or powerhouse).
+  const was = JSON.stringify(c.ch?.powers || []);
+  repairPowerRoles(c.ch, R);
+  if (!d && JSON.stringify(c.ch?.powers || []) !== was && c.style !== 'minion') c.style = detectStyle(c.ch, R);
+  d = d || deriveAll(c.ch, R);
   c.d = d;
   c.initBonus = d.initiative;
   c.attacks = d.attacks.map((a) => buildAttack(c, a, R)).filter((a) => a.rank > 0 || a.effect !== 'Damage');

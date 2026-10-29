@@ -123,3 +123,32 @@ test('a power with an id or an existing attackSkill is never relinked', () => {
   assert.equal(ch.powers[0].attackSkill, undefined);
   assert.equal(ch.powers[1].attackSkill, 'Zapping');
 });
+
+// A Battle Room saved before the repair keeps its own copy of each fighter; loading it must repair that copy too.
+test('a battle saved before the repair loads with Kinetic control and Ballista fights as a blaster', async () => {
+  const B = await import('../src/engine/battle.js');
+  const brute = { name: 'Brute', pl: 10, abilities: { Strength: 10, Stamina: 10, Agility: 2, Dexterity: 0, Fighting: 9, Intellect: 0, Awareness: 1, Presence: 0 }, defenses: { Dodge: 6, Parry: 4, Fortitude: 4, Will: 6 }, skills: [], advantages: [], powers: [] };
+  const b = B.createBattle({ seed: 'stale-save', name: 'old save' });
+  B.addCombatant(b, B.makeCombatant(R, ballista(), { id: 'ba', team: 'A', name: 'Ballista' }));
+  B.addCombatant(b, B.makeCombatant(R, brute, { id: 'br', team: 'B', name: 'Brute' }));
+  const saved = JSON.parse(JSON.stringify(B.serializeBattle(b)));
+  const old = saved.combatants.find((c) => c.id === 'ba');
+  old.ch = ballista(); // the unrepaired character, exactly as the old save held it
+  old.style = 'tank';  // the style the old code guessed from a build with no attacks
+  const back = B.reviveBattle(R, saved);
+  const ba = back.combatants.find((c) => c.id === 'ba');
+  assert.ok(ba.attacks.some((a) => a.name === 'Kinetic control'), 'Kinetic control missing after load');
+  assert.equal(ba.style, 'blaster');
+  B.runToEnd(back, R);
+  assert.ok(back.log.some((e) => e.actor === 'ba' && /Kinetic control/.test(e.text)), 'Ballista never used Kinetic control');
+});
+
+test('a fighter whose build needed no repair keeps the style it was given', async () => {
+  const B = await import('../src/engine/battle.js');
+  const ch = repairPowerRoles(ballista(), R);
+  const b = B.createBattle({ seed: 'kept-style', name: 'x' });
+  B.addCombatant(b, B.makeCombatant(R, ch, { id: 'ba', team: 'A', style: 'duelist' }));
+  B.addCombatant(b, B.makeCombatant(R, ballista(), { id: 'bb', team: 'B' }));
+  const back = B.reviveBattle(R, JSON.parse(JSON.stringify(B.serializeBattle(b))));
+  assert.equal(back.combatants.find((c) => c.id === 'ba').style, 'duelist');
+});
