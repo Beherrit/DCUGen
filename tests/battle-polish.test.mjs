@@ -92,3 +92,9 @@ test('a brawler out of reach still closes all the way in', () => {
   step(b, R);
   assert.equal(br.pos, s.pos);
 });
+
+test('wooden weapons are wood (Toughness 3) whatever the prefix, everything else is steel (9)', async () => {
+  const { equipmentToughness } = await import('../src/engine/battle/items.js');
+  for (const name of ['Bow', 'Longbow', 'Shortbow', 'Crossbow', 'Compound Bow', 'Quarterstaff', 'Bo Staff', 'Club', 'War Clubs']) assert.equal(equipmentToughness(name), 3, name);
+  for (const name of ['Revolver', 'Elbow Blade', 'Katana', 'Rainbow Gun']) assert.equal(equipmentToughness(name), 9, name);
+});

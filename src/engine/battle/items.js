@@ -6,7 +6,8 @@ import { toughnessOf } from './materials.js';
 
 // Hero's Handbook p94: a device has Toughness equal to its points divided by 5 (at least 1); equipment is made of a
 // material. Bows and staves are wood, everything else (guns, blades, armor) is steel.
-const WOODEN = /\b(bow|crossbow|staff|staves|quarterstaff|club)\b/i;
+// Longbow, shortbow and crossbow are bows too, so no word boundary is required before "bow".
+const WOODEN = /(?:\b|long|short|cross)bows?\b|\b(?:quarter)?staff\b|\bstaves\b|\bclubs?\b/i;
 export const equipmentToughness = (name) => toughnessOf(WOODEN.test(name) ? 'wood' : 'steel');
 
 /** The device of the character that holds this power (or has it as an alternate), or null. */
