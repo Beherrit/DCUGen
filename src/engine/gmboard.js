@@ -113,11 +113,12 @@ export function resolveHit(ch, hit, R, roll = () => 1 + Math.floor(Math.random()
   const dc = base + rank;
   const r = roll(); const total = r + resistMod;
   dice.push({ label: `${hit.resist} check`, roll: r, mod: resistMod, total, dc });
-  const deg = degreesBelow(total, dc);
+  // A natural 20 is a critical success: one degree better (Hero's Handbook p10).
+  const deg = Math.max(0, degreesBelow(total, dc) - (r === 20 ? 1 : 0));
   let play = { ...s, conditions: [...s.conditions] };
   let result;
   if (hit.effect === 'Damage' || hit.effect === 'Mental Blast') {
-    const a = applyDamage(s, { total, dc });
+    const a = applyDamage(s, { total, dc, roll: r });
     play = a.state; result = a.text;
   } else if (hit.effect === 'Affliction') {
     if (!deg) result = 'resists it';

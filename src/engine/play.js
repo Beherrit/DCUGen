@@ -39,10 +39,11 @@ export function effectiveDefenses(d, s) {
 }
 
 /** Apply a failed (or passed) Toughness check: returns the new play state and what happened. */
-export function applyDamage(s, { total, dc }) {
+export function applyDamage(s, { total, dc, roll }) {
   const out = { ...s, conditions: [...s.conditions] };
-  if (total >= dc) return { state: out, text: 'no damage' };
-  const degrees = 1 + Math.floor((dc - total - 1) / 5);
+  // A natural 20 is a critical success: one degree better (Hero's Handbook p10), so one degree of failure is none.
+  const degrees = (total >= dc ? 0 : 1 + Math.floor((dc - total - 1) / 5)) - (roll === 20 ? 1 : 0);
+  if (degrees <= 0) return { state: out, text: roll === 20 && total < dc ? 'no damage (natural 20: +1 degree)' : 'no damage' };
   out.bruises += 1;
   let text = 'a bruise (−1 Toughness)';
   const worse = (st) => { if (DAMAGE_STATES.indexOf(st) > DAMAGE_STATES.indexOf(out.damage)) out.damage = st; };

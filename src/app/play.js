@@ -41,8 +41,8 @@ export function renderPlay(ch, R, opts) {
     const rank = Number(hitRank.value);
     if (!(rank > 0)) { toast('Type the damage rank of the hit first'); return; }
     const e = roll('Toughness vs damage', def.Toughness + 0 - pen, { dc: 15 + rank });
-    const { total, dc } = e.dice || {};
-    const r = applyDamage(s, { total, dc });
+    const { total, dc, roll: d20 } = e.dice || {};
+    const r = applyDamage(s, { total, dc, roll: d20 });
     setPlay((st) => Object.assign(st, r.state));
     toast(`${e.text} → ${r.text}`);
   };
