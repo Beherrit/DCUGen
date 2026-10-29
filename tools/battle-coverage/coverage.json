@@ -2066,5 +2066,236 @@
     "name": "Vehicles",
     "status": "n/a",
     "note": "Vehicle combat is not simulated."
+  },
+  {
+    "kind": "effect",
+    "name": "Communal",
+    "status": "none",
+    "note": "Martial Arts (3e) effect; not simulated in fights yet.",
+    "source": "MA 81"
+  },
+  {
+    "kind": "effect",
+    "name": "Extra Attacks",
+    "status": "none",
+    "note": "Martial Arts (3e) effect; not simulated in fights yet.",
+    "source": "MA 83"
+  },
+  {
+    "kind": "extra",
+    "name": "Ammunition",
+    "status": "none",
+    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "source": "MA 91"
+  },
+  {
+    "kind": "extra",
+    "name": "Combo Element",
+    "status": "none",
+    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "source": "MA 91"
+  },
+  {
+    "kind": "extra",
+    "name": "Conductor",
+    "status": "none",
+    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "source": "MA 91"
+  },
+  {
+    "kind": "extra",
+    "name": "Diminishing Counter",
+    "status": "none",
+    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "source": "MA 92"
+  },
+  {
+    "kind": "extra",
+    "name": "Improved Counter",
+    "status": "none",
+    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "source": "MA 93"
+  },
+  {
+    "kind": "extra",
+    "name": "Overwhelming Counter",
+    "status": "none",
+    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "source": "MA 93"
+  },
+  {
+    "kind": "extra",
+    "name": "Partial Resistance",
+    "status": "none",
+    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "source": "MA 93"
+  },
+  {
+    "kind": "extra",
+    "name": "Pinball",
+    "status": "none",
+    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "source": "MA 93"
+  },
+  {
+    "kind": "extra",
+    "name": "Potent",
+    "status": "none",
+    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "source": "MA 93"
+  },
+  {
+    "kind": "extra",
+    "name": "Proficient",
+    "status": "none",
+    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "source": "MA 93"
+  },
+  {
+    "kind": "extra",
+    "name": "Recoverable",
+    "status": "none",
+    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "source": "MA 94"
+  },
+  {
+    "kind": "extra",
+    "name": "Stacking",
+    "status": "none",
+    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "source": "MA 94"
+  },
+  {
+    "kind": "flaw",
+    "name": "Announcement",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 94"
+  },
+  {
+    "kind": "flaw",
+    "name": "Bad Bounce",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 94"
+  },
+  {
+    "kind": "flaw",
+    "name": "Calling",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 95"
+  },
+  {
+    "kind": "flaw",
+    "name": "Chained",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 95"
+  },
+  {
+    "kind": "flaw",
+    "name": "Diluted",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 96"
+  },
+  {
+    "kind": "flaw",
+    "name": "Dulled",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 96"
+  },
+  {
+    "kind": "flaw",
+    "name": "Fast Return",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 96"
+  },
+  {
+    "kind": "flaw",
+    "name": "Gallant",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 97"
+  },
+  {
+    "kind": "flaw",
+    "name": "Immobile",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 97"
+  },
+  {
+    "kind": "flaw",
+    "name": "Inexact",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 97"
+  },
+  {
+    "kind": "flaw",
+    "name": "Momentum-Based",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 97"
+  },
+  {
+    "kind": "flaw",
+    "name": "Nonlethal",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 97"
+  },
+  {
+    "kind": "flaw",
+    "name": "Obvious",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 97"
+  },
+  {
+    "kind": "flaw",
+    "name": "Prone",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 98"
+  },
+  {
+    "kind": "flaw",
+    "name": "Push Over",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 98"
+  },
+  {
+    "kind": "flaw",
+    "name": "Source",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 98"
+  },
+  {
+    "kind": "flaw",
+    "name": "Strained",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 98"
+  },
+  {
+    "kind": "flaw",
+    "name": "Uncertain",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 98"
+  },
+  {
+    "kind": "flaw",
+    "name": "Weak Limbed",
+    "status": "none",
+    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "source": "MA 98"
   }
 ]

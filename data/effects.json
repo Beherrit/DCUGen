@@ -1005,5 +1005,37 @@
     "source": "DCA 122",
     "summary": "Drains power points from a chosen trait by the margin of the failed resistance check.",
     "built_from": null
+  },
+  {
+    "name": "Communal",
+    "type": "General",
+    "action": "Move",
+    "range": "Touch",
+    "duration": "Sustained",
+    "resistance": null,
+    "cost": 4,
+    "cost_options": null,
+    "fixed_cost": null,
+    "max_rank": null,
+    "attack": false,
+    "built_from": null,
+    "source": "MA 81",
+    "summary": "Two or more contributors pool (rank x 5) points to buy component powers none could use alone; all must touch to activate, one controls it."
+  },
+  {
+    "name": "Extra Attacks",
+    "type": "General",
+    "action": "Standard",
+    "range": "Personal",
+    "duration": "Instant",
+    "resistance": null,
+    "cost": 5,
+    "cost_options": null,
+    "fixed_cost": null,
+    "max_rank": null,
+    "attack": false,
+    "built_from": null,
+    "source": "MA 83",
+    "summary": "Make a number of attacks in one round equal to rank + 1, all with the same weapon, method or power, at the normal attack modifier."
   }
 ]
