@@ -438,6 +438,60 @@
       "cost": 1,
       "source": "DCUGen",
       "text": "A consecrated chapel or altar; rituals and Expertise: Magic or religion checks made there gain a +2 circumstance bonus."
+    },
+    {
+      "name": "Ancient Armory Display",
+      "cost": 1,
+      "text": "A modifier for an existing area or in its own space, this feature lines the walls with melee weapon displays of a sort most likely related to the headquarters' nature, but this need not be so if otherwise specified. Although not entirely for show, the weapons are not kept in perfect, operational condition--they will be somewhat more dull and fragile than they should be. In a pinch, these weapons can be pulled down and used in combat, but reduce the weapons' Toughness and Penetrating (if any) ranks by half, and reduce their Damage rank by 1 (to a minimum of +0).",
+      "prerequisites": "None",
+      "space": "1 or more",
+      "cost_text": "1 point",
+      "source": "MA 276"
+    },
+    {
+      "name": "Ancient Secrets",
+      "cost": 1,
+      "text": "Only available in headquarters that have been around for a while, this adds a breadth of randomness by representing secret passages, concealed traps, secret listening tubes, hidden rooms full of lost knowledge, and the like. This is a rather open-ended feature that allows the Gamemaster to drop in plot elements when needed. For example, someone may uncover something hidden in the headquarters or this feature can offer a much-needed resource or the like when least expected. If someone actively seeks out these secrets rather than waiting for them to reveal themselves, they do so with great difficulty. This requires a Perception check of at least DC 30 and possibly even necessitating spending a hero point.",
+      "prerequisites": "Expertise: Engineering 8 ranks, Stealth 8 ranks",
+      "space": "1/10th (rounded down) the headquarter's total space; minimum 1",
+      "cost_text": "1 point",
+      "source": "MA 276"
+    },
+    {
+      "name": "Dojo (Fighting Style)",
+      "cost": 1,
+      "text": "Whether known as a dojo or something else, this feature encompasses any space set aside for the physical, mental, and spiritual elements of training in the specified fighting style. While training or fighting within the dojo, anyone who has the (Style) Initiate (or Student or Master) advantage appropriate to the dojo's fighting style gains a +2 bonus to all skill checks related to that fighting style. They also gain a +1 rank bonus to all the style's ranked advanced combat maneuvers.",
+      "prerequisites": "Appropriate Close Combat: Fighting Style 8 ranks",
+      "space": "1 per accommodations for 4 people",
+      "cost_text": "1 point",
+      "source": "MA 276"
+    },
+    {
+      "name": "Great Garden",
+      "cost": 1,
+      "text": "This area is filled with a garden of the desired type, be it a hedge maze, rock garden, rose-filled pavilion, or the like. While primarily an aesthetic choice intended to offer a place to get away for a moment's peace, in a fight a great garden offers all sorts of obstacles and impromptu surfaces upon which to do battle and get in the way.",
+      "prerequisites": "Expertise: Gardening 8 ranks, Grounds feature to require 0 Space",
+      "space": "6+ if contained in the headquarters itself, 0 if located on the Grounds feature",
+      "cost_text": "1 point",
+      "source": "MA 277"
+    },
+    {
+      "name": "Shrine (Type)",
+      "cost": 1,
+      "text": "A site for religious or philosophic contemplation, meditation, or observance of service, as the situation dictates. A shrine devoted to religious practice grants a +4 bonus to any appropriate checks involving divine traits (e.g., holy magic) related to whichever divine power or deity the shrine is devoted to. Shrines dedicated to meditation and philosophic contemplation instead of divinity similarly grant a +4 bonus to any relevant skill checks (e.g., for trances). The type of shrine must be determined when purchased, and it is up to the Gamemaster to indicate what faiths or philosophical systems are close enough to still offer some or all of its benefits if they aren't exactly the same as that type. For instance, the Gamemaster may decide a shrine devoted to Zen Buddhism contemplation is sufficiently similar to grant Tibetan Buddhists its full benefits while only bestowing half its bonus to a Yoga Hindu and none to a Sufi.",
+      "prerequisites": "Appropriate Expertise: Religion 8 ranks",
+      "space": "1 per accommodations for 4 people",
+      "cost_text": "1 point",
+      "source": "MA 277"
+    },
+    {
+      "name": "Trophy Room",
+      "cost": 1,
+      "text": "An area has been set aside within the headquarters to store trophies of a particular type (e.g., hunting, ancient weapons, armor, metahuman). For example, hunting trophies would contain animal heads and mounted hunting weapons; an ancient weapons trophy room would contain mounted swords, spears, and the like; and a metahuman trophy room would contain costumes, weapons, and devices taken from vanquished metahumans (perhaps friend and foe). When in a trophy room, a character may reach for a convenient item to use in combat appropriately--a crossbow in an ancient weapons room, for example, or a shield from an armor trophy room. Doing so requires making a Dexterity check (DC 10 + item's point value); success means an item of the appropriate type is at hand while failure means one is not. The Gamemaster determines what the item is, exactly. The character can say they want to grab a nearby weapon, for instance, but the Gamemaster will indicate the sort of weapon grabbed. The item must also be appropriate for the HQ's PL--a weapon cannot have more than 5 ranks of Damage for a PL 5 headquarters, for example. It is possible to have a mixed trophy room, but the maximum PL value of anything at hand is equal to the HQ's PL divided by the types of objects available in the trophy room. Assign any remainder to the desired types of trophies. A PL 10 headquarters has a trophy room that displays martial arts weapons, armor, and alien artifacts. The armor is deemed to be the primary focus of the trophy room, so the maximum armor PL is 4, but it is PL 3 for the martial arts weapons and alien artifacts.",
+      "prerequisites": "None",
+      "space": "1 or more",
+      "cost_text": "1 point",
+      "source": "MA 277"
     }
   ],
   "premade": [
@@ -2881,6 +2935,570 @@
       "summary": "A thatched cottage in the deep wood, roomier inside than it looks, smelling of herbs.",
       "cost": 7,
       "source": "DCUGen"
+    }
+  ],
+  "expanded_sizes": [
+    {
+      "name": "Galactic V",
+      "cost": 35,
+      "spaces": "250B",
+      "examples": "Planetary solar system",
+      "source": "MA 275"
+    },
+    {
+      "name": "Galactic IV",
+      "cost": 34,
+      "spaces": "124B",
+      "examples": "",
+      "source": "MA 275"
+    },
+    {
+      "name": "Galactic III",
+      "cost": 33,
+      "spaces": "64B",
+      "examples": "",
+      "source": "MA 275"
+    },
+    {
+      "name": "Galactic II",
+      "cost": 32,
+      "spaces": "32B",
+      "examples": "",
+      "source": "MA 275"
+    },
+    {
+      "name": "Galactic",
+      "cost": 31,
+      "spaces": "16B",
+      "examples": "",
+      "source": "MA 275"
+    },
+    {
+      "name": "Stellar V",
+      "cost": 30,
+      "spaces": "8B",
+      "examples": "Solar asteroid belt",
+      "source": "MA 275"
+    },
+    {
+      "name": "Stellar IV",
+      "cost": 29,
+      "spaces": "4B",
+      "examples": "",
+      "source": "MA 275"
+    },
+    {
+      "name": "Stellar III",
+      "cost": 28,
+      "spaces": "2B",
+      "examples": "",
+      "source": "MA 275"
+    },
+    {
+      "name": "Stellar II",
+      "cost": 27,
+      "spaces": "1B",
+      "examples": "",
+      "source": "MA 275"
+    },
+    {
+      "name": "Stellar",
+      "cost": 26,
+      "spaces": "500M",
+      "examples": "",
+      "source": "MA 275"
+    },
+    {
+      "name": "Planetary V",
+      "cost": 25,
+      "spaces": "250M",
+      "examples": "",
+      "source": "MA 275"
+    },
+    {
+      "name": "Planetary IV",
+      "cost": 24,
+      "spaces": "125M",
+      "examples": "",
+      "source": "MA 275"
+    },
+    {
+      "name": "Planetary III",
+      "cost": 23,
+      "spaces": "64M",
+      "examples": "Sun",
+      "source": "MA 275"
+    },
+    {
+      "name": "Planetary II",
+      "cost": 22,
+      "spaces": "32M",
+      "examples": "",
+      "source": "MA 275"
+    },
+    {
+      "name": "Planetary",
+      "cost": 21,
+      "spaces": "16M",
+      "examples": "",
+      "source": "MA 275"
+    },
+    {
+      "name": "Epic V",
+      "cost": 20,
+      "spaces": "8M",
+      "examples": "Jupiter, Saturn",
+      "source": "MA 275"
+    },
+    {
+      "name": "Epic IV",
+      "cost": 19,
+      "spaces": "4M",
+      "examples": "Neptune, Uranus",
+      "source": "MA 275"
+    },
+    {
+      "name": "Epic III",
+      "cost": 18,
+      "spaces": "2M",
+      "examples": "",
+      "source": "MA 275"
+    },
+    {
+      "name": "Epic II",
+      "cost": 17,
+      "spaces": "1M",
+      "examples": "Earth, Venus",
+      "source": "MA 275"
+    },
+    {
+      "name": "Epic",
+      "cost": 16,
+      "spaces": "500K",
+      "examples": "The moon, Mars, Mercury",
+      "source": "MA 275"
+    },
+    {
+      "name": "Titanic V",
+      "cost": 15,
+      "spaces": "250K",
+      "examples": "Large country, Pluto",
+      "source": "MA 275"
+    },
+    {
+      "name": "Titanic IV",
+      "cost": 14,
+      "spaces": "125K",
+      "examples": "Small country",
+      "source": "MA 275"
+    },
+    {
+      "name": "Titanic III",
+      "cost": 13,
+      "spaces": "64,000",
+      "examples": "Large state",
+      "source": "MA 275"
+    },
+    {
+      "name": "Titanic II",
+      "cost": 12,
+      "spaces": "32,000",
+      "examples": "State",
+      "source": "MA 275"
+    },
+    {
+      "name": "Titanic",
+      "cost": 11,
+      "spaces": "16,000",
+      "examples": "Several counties",
+      "source": "MA 275"
+    },
+    {
+      "name": "Awesome V",
+      "cost": 10,
+      "spaces": "8,000",
+      "examples": "County",
+      "source": "MA 275"
+    },
+    {
+      "name": "Awesome IV",
+      "cost": 9,
+      "spaces": "4,000",
+      "examples": "City",
+      "source": "MA 275"
+    },
+    {
+      "name": "Awesome III",
+      "cost": 8,
+      "spaces": "2,000",
+      "examples": "Small city",
+      "source": "MA 275"
+    },
+    {
+      "name": "Awesome II",
+      "cost": 7,
+      "spaces": "1,000",
+      "examples": "Town",
+      "source": "MA 275"
+    },
+    {
+      "name": "Awesome",
+      "cost": 6,
+      "spaces": "500",
+      "examples": "Small town/village, sprawling installation",
+      "source": "MA 275"
+    },
+    {
+      "name": "Colossal",
+      "cost": 5,
+      "spaces": "250",
+      "examples": "City block, private estate",
+      "source": "MA 275"
+    },
+    {
+      "name": "Gargantuan",
+      "cost": 4,
+      "spaces": "125",
+      "examples": "Skyscraper",
+      "source": "MA 275"
+    },
+    {
+      "name": "Huge",
+      "cost": 3,
+      "spaces": "64",
+      "examples": "Castle",
+      "source": "MA 275"
+    },
+    {
+      "name": "Large",
+      "cost": 2,
+      "spaces": "32",
+      "examples": "Mansion, cave complex",
+      "source": "MA 275"
+    },
+    {
+      "name": "Medium",
+      "cost": 1,
+      "spaces": "16",
+      "examples": "Warehouse",
+      "source": "MA 275"
+    },
+    {
+      "name": "Small",
+      "cost": 0,
+      "spaces": "8",
+      "examples": "House",
+      "source": "MA 275"
+    },
+    {
+      "name": "Tiny",
+      "cost": -1,
+      "spaces": "4",
+      "examples": "Townhouse",
+      "source": "MA 275"
+    },
+    {
+      "name": "Diminutive",
+      "cost": -2,
+      "spaces": "2",
+      "examples": "Apartment",
+      "source": "MA 275"
+    },
+    {
+      "name": "Fine",
+      "cost": -3,
+      "spaces": "1",
+      "examples": "Loft",
+      "source": "MA 275"
+    },
+    {
+      "name": "Miniscule",
+      "cost": -4,
+      "spaces": "0",
+      "examples": "Room",
+      "source": "MA 275"
+    }
+  ],
+  "revised_power_needs": [
+    {
+      "name": "Galactic V",
+      "cost": 14,
+      "cost_alt": 21,
+      "spaces": "125B",
+      "source": "MA 276"
+    },
+    {
+      "name": "Galactic IV",
+      "cost": 14,
+      "cost_alt": 21,
+      "spaces": "64B",
+      "source": "MA 276"
+    },
+    {
+      "name": "Galactic III",
+      "cost": 14,
+      "cost_alt": 21,
+      "spaces": "32B",
+      "source": "MA 276"
+    },
+    {
+      "name": "Galactic II",
+      "cost": 13,
+      "cost_alt": 20,
+      "spaces": "16B",
+      "source": "MA 276"
+    },
+    {
+      "name": "Galactic",
+      "cost": 13,
+      "cost_alt": 20,
+      "spaces": "8B",
+      "source": "MA 276"
+    },
+    {
+      "name": "Stellar V",
+      "cost": 13,
+      "cost_alt": 20,
+      "spaces": "4B",
+      "source": "MA 276"
+    },
+    {
+      "name": "Stellar IV",
+      "cost": 12,
+      "cost_alt": 18,
+      "spaces": "2B",
+      "source": "MA 276"
+    },
+    {
+      "name": "Stellar III",
+      "cost": 12,
+      "cost_alt": 18,
+      "spaces": "1B",
+      "source": "MA 276"
+    },
+    {
+      "name": "Stellar II",
+      "cost": 11,
+      "cost_alt": 17,
+      "spaces": "500M",
+      "source": "MA 276"
+    },
+    {
+      "name": "Stellar",
+      "cost": 11,
+      "cost_alt": 17,
+      "spaces": "125M",
+      "source": "MA 276"
+    },
+    {
+      "name": "Planetary V",
+      "cost": 11,
+      "cost_alt": 17,
+      "spaces": "64M",
+      "source": "MA 276"
+    },
+    {
+      "name": "Planetary IV",
+      "cost": 10,
+      "cost_alt": 15,
+      "spaces": "32M",
+      "source": "MA 276"
+    },
+    {
+      "name": "Planetary III",
+      "cost": 10,
+      "cost_alt": 15,
+      "spaces": "16M",
+      "source": "MA 276"
+    },
+    {
+      "name": "Planetary II",
+      "cost": 10,
+      "cost_alt": 15,
+      "spaces": "8M",
+      "source": "MA 276"
+    },
+    {
+      "name": "Planetary",
+      "cost": 9,
+      "cost_alt": 14,
+      "spaces": "4M",
+      "source": "MA 276"
+    },
+    {
+      "name": "Epic V",
+      "cost": 9,
+      "cost_alt": 14,
+      "spaces": "2M",
+      "source": "MA 276"
+    },
+    {
+      "name": "Epic IV",
+      "cost": 8,
+      "cost_alt": 12,
+      "spaces": "1M",
+      "source": "MA 276"
+    },
+    {
+      "name": "Epic III",
+      "cost": 8,
+      "cost_alt": 12,
+      "spaces": "500K",
+      "source": "MA 276"
+    },
+    {
+      "name": "Epic II",
+      "cost": 8,
+      "cost_alt": 12,
+      "spaces": "125K",
+      "source": "MA 276"
+    },
+    {
+      "name": "Epic",
+      "cost": 7,
+      "cost_alt": 11,
+      "spaces": "64,000",
+      "source": "MA 276"
+    },
+    {
+      "name": "Titanic V",
+      "cost": 7,
+      "cost_alt": 11,
+      "spaces": "32,000",
+      "source": "MA 276"
+    },
+    {
+      "name": "Titanic IV",
+      "cost": 7,
+      "cost_alt": 11,
+      "spaces": "16,000",
+      "source": "MA 276"
+    },
+    {
+      "name": "Titanic III",
+      "cost": 6,
+      "cost_alt": 9,
+      "spaces": "8,000",
+      "source": "MA 276"
+    },
+    {
+      "name": "Titanic II",
+      "cost": 6,
+      "cost_alt": 9,
+      "spaces": "4,000",
+      "source": "MA 276"
+    },
+    {
+      "name": "Titanic",
+      "cost": 5,
+      "cost_alt": 8,
+      "spaces": "2,000",
+      "source": "MA 276"
+    },
+    {
+      "name": "Awesome V",
+      "cost": 5,
+      "cost_alt": 8,
+      "spaces": "1,000",
+      "source": "MA 276"
+    },
+    {
+      "name": "Awesome IV",
+      "cost": 5,
+      "cost_alt": 8,
+      "spaces": "500",
+      "source": "MA 276"
+    },
+    {
+      "name": "Awesome III",
+      "cost": 4,
+      "cost_alt": 6,
+      "spaces": "125",
+      "source": "MA 276"
+    },
+    {
+      "name": "Awesome II",
+      "cost": 4,
+      "cost_alt": 6,
+      "spaces": "64",
+      "source": "MA 276"
+    },
+    {
+      "name": "Awesome",
+      "cost": 4,
+      "cost_alt": 6,
+      "spaces": "32",
+      "source": "MA 276"
+    },
+    {
+      "name": "Colossal",
+      "cost": 3,
+      "cost_alt": 4,
+      "spaces": "16",
+      "source": "MA 276"
+    },
+    {
+      "name": "Gargantuan",
+      "cost": 3,
+      "cost_alt": 4,
+      "spaces": "8",
+      "source": "MA 276"
+    },
+    {
+      "name": "Huge",
+      "cost": 2,
+      "cost_alt": 3,
+      "spaces": "4",
+      "source": "MA 276"
+    },
+    {
+      "name": "Large",
+      "cost": 2,
+      "cost_alt": 3,
+      "spaces": "2",
+      "source": "MA 276"
+    },
+    {
+      "name": "Medium",
+      "cost": 2,
+      "cost_alt": 3,
+      "spaces": "1",
+      "source": "MA 276"
+    },
+    {
+      "name": "Small",
+      "cost": 1,
+      "cost_alt": 2,
+      "spaces": "0",
+      "source": "MA 276"
+    },
+    {
+      "name": "Tiny",
+      "cost": 1,
+      "cost_alt": 2,
+      "spaces": "0",
+      "source": "MA 276"
+    },
+    {
+      "name": "Diminutive",
+      "cost": 1,
+      "cost_alt": 2,
+      "spaces": "0",
+      "source": "MA 276"
+    },
+    {
+      "name": "Fine",
+      "cost": 1,
+      "cost_alt": 2,
+      "spaces": "0",
+      "source": "MA 276"
+    },
+    {
+      "name": "Miniscule",
+      "cost": 1,
+      "cost_alt": 2,
+      "spaces": "0",
+      "source": "MA 276"
     }
   ]
 }
