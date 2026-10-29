@@ -6,6 +6,8 @@ import { upsert, emit } from './store.js';
 import { readCharactersFile } from './exporters.js';
 import { decodeCharacter, decodePaper, isPaperKey, decodeHandout, isHandoutKey } from './share.js';
 import { fromKey } from '../engine/keys.js';
+import { RULES } from '../engine/index.js';
+import { repairPowerRoles } from '../engine/repair.js';
 
 let hooks = { open: null, afterSave: null, openPaper: null, openHandout: null };
 
@@ -19,7 +21,7 @@ export async function importCharacters(list, { open = true, save = true } = {}) 
   let n = 0;
   for (const raw of list) {
     if (!raw) continue;
-    const ch = { ...raw };
+    const ch = repairPowerRoles({ ...raw }, R || RULES);
     delete ch.rosterId;
     delete ch.savedAt;
     const kept = save ? upsert(ch) : ch;
@@ -49,9 +51,9 @@ export async function openAnything(text) {
   if (keyMatch && !/DCU1\./.test(t)) {
     const { character, versionMatch, edited } = await fromKey(R, keyMatch[0]);
     if (!versionMatch) toast(edited ? 'That key was made with a different version of DCUGen: its edits are exact, other details may differ from what its owner sees.' : 'That key was made with a different version of DCUGen, so details may differ from what its owner sees.');
-    return character;
+    return repairPowerRoles(character, R || RULES);
   }
-  return decodeCharacter(t);
+  return repairPowerRoles(await decodeCharacter(t), R || RULES);
 }
 
 export async function importFiles(files, opts) {
