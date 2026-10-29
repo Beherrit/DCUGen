@@ -134,6 +134,7 @@ export function resetCombatant(c) {
     fatigue: 0, defMod: 0, feinted: false, grabbedBy: null, holding: null, nullified: 0, regen: 0, interposed: false,
     lastAttackId: null, usedEffort: 0, teamedRound: null, surpriseActor: false,
     recovered: false,      // the Recover action: once per conflict (DCA 177)
+    behind: null,          // the cover piece this fighter stands behind (its id)
     aiming: null,          // { target, bonus } after an Aim action (DCA 175)
     defending: false,      // the Defend action, until the start of their next turn (DCA 175)
     stats: { attacks: 0, hits: 0, crits: 0, degrees: 0, kos: 0, healed: 0, taken: 0 },
@@ -160,6 +161,8 @@ export function rebuildCombatant(c, R, d = null) {
   const sk = (name) => d.skills.find((s) => s.name === name)?.bonus ?? (d.abilities[R.skillAbility(name)] ?? 0);
   c.skills = { Deception: sk('Deception'), Insight: sk('Insight'), Acrobatics: sk('Acrobatics'), Athletics: sk('Athletics'), Intimidation: sk('Intimidation'), 'Sleight of Hand': sk('Sleight of Hand') };
   c.moveRank = mv.rank;
+  // Precise Attack is bought per pairing, like "Ranged, Cover" (DCA 77)
+  c.precise = (c.ch.advantages || []).filter((a) => a.name === 'Precise Attack').map((a) => String(a.param || '').toLowerCase());
   addOmniStunts(c, d);
   return c;
 }

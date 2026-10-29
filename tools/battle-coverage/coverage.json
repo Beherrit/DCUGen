@@ -1003,8 +1003,8 @@
   {
     "kind": "advantage",
     "name": "Precise Attack",
-    "status": "partial",
-    "note": "Ignores concealment penalties; cover is not simulated.",
+    "status": "full",
+    "note": "Each rank ignores the cover or concealment penalty for one pairing of close or ranged attacks, such as Ranged, Cover.",
     "source": "DCA 77"
   },
   {
@@ -1525,7 +1525,7 @@
     "kind": "maneuver",
     "name": "Slam Attack",
     "status": "partial",
-    "note": "A charging fighter uses its movement rank as Damage; the extra +1 for a full move and the damage the slammer takes are not applied."
+    "note": "A charging fighter uses its movement rank as Damage and, with the optional knockback rule on, throws the target back; the extra +1 for a full move and the damage the slammer takes are not applied."
   },
   {
     "kind": "maneuver",
@@ -1860,8 +1860,8 @@
   {
     "kind": "rule",
     "name": "Cover",
-    "status": "none",
-    "note": "Cover and its penalties are not simulated."
+    "status": "partial",
+    "note": "Pieces made of real materials give -2 (partial) or -5 (total) to attacks against whoever stands behind them, total cover blocks direct targeting, and cover adds to Dodge against area effects. Fighters use cover only when their team plays Take Cover."
   },
   {
     "kind": "rule",
@@ -1872,8 +1872,8 @@
   {
     "kind": "rule",
     "name": "Knockback",
-    "status": "none",
-    "note": "Knockback is not simulated."
+    "status": "partial",
+    "note": "An optional community rule, off unless switched on: damage rank minus mass rank sets the distance in zones, the target falls prone, and cover or an enclosed wall can stop it or be smashed through."
   },
   {
     "kind": "rule",
@@ -1944,7 +1944,7 @@
   {
     "kind": "rule",
     "name": "Damaging objects",
-    "status": "none",
-    "note": "Objects and smashing are not simulated."
+    "status": "full",
+    "note": "Cover pieces are defenseless objects: a hit at DC 10 is an automatic critical, two degrees of failure on the Toughness check punch a hole and three destroy the piece. Area attacks, shooting through cover and knockback collisions roll against it too."
   }
 ]

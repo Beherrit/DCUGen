@@ -10,7 +10,8 @@ import { applyEffect } from './attack-effects.js';
 import { feint, grab, tryEscape } from './maneuvers.js';
 import { heal, spendHeroPoint, recoverAction } from './support.js';
 import { attackTurn } from './turn-attack.js';
-import { markTurn, mayFlee, mayDefend, recoverEarly, healsFreely, healThreshold } from './tactics.js';
+import { markTurn, mayFlee, mayDefend, recoverEarly, healsFreely, healThreshold, coverDefends } from './tactics.js';
+import { shootCover } from './cover-damage.js';
 
 const isHurt = (c) => c.staggered || c.bruises >= 2;
 
@@ -34,7 +35,7 @@ export function takeTurn(b, R, c, rng) {
   if (crushHeld(b, R, c, rng)) return;
   const choice = choosePlan(b, R, c, enemies, rng, mode);
   if (!choice) { log(b, { kind: 'skip', actor: c.id, text: `${c.name} finds nothing worth doing and holds position.` }); return; }
-  if (digIn(b, c, choice, enemies)) return;
+  if (digIn(b, c, choice, enemies, mode)) return;
   if (nonAttackPlan(b, R, c, choice, mode, rng)) return;
   attackTurn(b, R, c, choice, enemies, mode, rng);
 }
@@ -143,8 +144,13 @@ function crushHeld(b, R, c, rng) {
 }
 
 /** Defend (DCA 175): hurt, already recovered, outnumbered and with nothing that would land: dig in. */
-function digIn(b, c, choice, enemies) {
+function digIn(b, c, choice, enemies, mode) {
   if (!mayDefend(b, c)) return false;
+  if (coverDefends(b, c, choice, enemies, mode)) {
+    c.defending = true;
+    log(b, { kind: 'note', actor: c.id, text: `${c.name} keeps their head down and defends: attackers must beat a rolled defense until their next turn.` });
+    return true;
+  }
   if (!(choice.plan === 'attack' && c.staggered && c.recovered && (choice.ev ?? 1) < 0.12 && enemies.length > alliesOf(b, c).length && ['support', 'duelist', 'tank'].includes(c.style))) return false;
   c.defending = true;
   log(b, { kind: 'note', actor: c.id, text: `${c.name} goes on the defensive: attackers must beat a rolled defense until their next turn.` });
@@ -152,7 +158,9 @@ function digIn(b, c, choice, enemies) {
 }
 
 /** The plans that are not an attack: close in, feint, grab. */
-function nonAttackPlan(b, R, c, { target, plan }, mode, rng) {
+function nonAttackPlan(b, R, c, choice, mode, rng) {
+  const { target, plan } = choice;
+  if (plan === 'cover') { shootCover(b, c, choice, rng); return true; }
   if (plan === 'move') { moveToward(b, c, target, rng, mode === 'full' ? 2 : 1); return true; }
   if (plan === 'feint') {
     if (mode === 'full') moveToward(b, c, target, rng);

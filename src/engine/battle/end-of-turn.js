@@ -4,6 +4,13 @@ import { sign, d20, log } from './util.js';
 import { resistOf } from './conditions.js';
 import { releaseHolds } from './maneuvers.js';
 
+/** A fighter knocked prone gets back up at the end of its next turn. */
+function standUp(b, c) {
+  if (!c.conditions.some((x) => x.source === 'knockback')) return;
+  c.conditions = c.conditions.filter((x) => x.source !== 'knockback');
+  log(b, { kind: 'recover', actor: c.id, text: `${c.name} gets back to their feet.` });
+}
+
 export function endOfTurn(b, c, rng) {
   c.interposed = false;
   // A feint lasts until the end of the feinter's next round (DCA 64).
@@ -14,6 +21,7 @@ export function endOfTurn(b, c, rng) {
   // Sustained defenses come back as a free action
   if (c.nullified) { c.nullified = 0; log(b, { kind: 'recover', actor: c.id, text: `${c.name} restores its defenses.` }); }
   // Recovery checks against afflictions (DCA 95)
+  standUp(b, c);
   const sources = [...new Set(c.conditions.filter((x) => x.source !== 'grab' && x.source !== 'surprise').map((x) => x.source))];
   for (const src of sources) {
     const group = c.conditions.filter((x) => x.source === src);

@@ -8,6 +8,7 @@ import { catalogEntries } from '../engine/workshop.js';
 import { catalogToCharacter } from '../engine/catalog.js';
 import { placeAll } from '../engine/battle.js';
 import { tacticPanel } from './battle-tactics.js';
+import { sceneryPanel, fitCover } from './battle-cover.js';
 
 const TEAMS = ['A', 'B', 'C', 'D'];
 
@@ -124,8 +125,9 @@ export function addPanel(cx) {
     h('div', { class: 'add-row', style: { alignItems: 'center' } },
       h('label', { class: 'bt-copies', title: 'Add several of the same (a squad of minions)' }, 'Copies ×', copies),
       h('label', { class: 'bt-copies' }, h('input', { type: 'checkbox', checked: !!ui.moreTeams, onChange: (e) => { ui.moreTeams = e.target.checked; render(); } }), ' Teams C and D'),
-      h('label', { class: 'bt-copies', title: 'A room or corridor: two zones, everyone within one move, ranged fighters have nowhere to run' }, h('input', { type: 'checkbox', id: 'bt-enclosed', checked: !!battle.options.enclosed, onChange: (e) => { battle.options.enclosed = e.target.checked; placeAll(battle); save(); render(); } }), ' Enclosed space'),
+      h('label', { class: 'bt-copies', title: 'A room or corridor: two zones, everyone within one move, ranged fighters have nowhere to run' }, h('input', { type: 'checkbox', id: 'bt-enclosed', checked: !!battle.options.enclosed, onChange: (e) => { battle.options.enclosed = e.target.checked; placeAll(battle); fitCover(battle); save(); render(); } }), ' Enclosed space'),
       ambushPicker(cx)),
     tacticPanel(cx, rowTeams(cx)),
+    sceneryPanel(cx),
     h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', type: 'button', onClick: () => hooks.goBestiary?.() }, 'Open the Bestiary')));
 }

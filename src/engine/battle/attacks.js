@@ -6,25 +6,34 @@ import { applyEffect } from './attack-effects.js';
 import { grab } from './maneuvers.js';
 import { attackVerb, rollToHit } from './attack-roll.js';
 import { noteAttack, interposeFor } from './tactics.js';
+import { shieldFor, coverLevel, coverDodgeBonus } from './cover.js';
+import { shootThrough, areaOnPieces, pieceMod } from './cover-damage.js';
+import { maybeKnockback } from './knockback.js';
 
 export function resolveAttack(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive = 0, effort = null, charge = false, slam = null, aimed = 0, team = 0 } = {}) {
   c.lastAttackId = atk.id;
   noteAttack(b, c, t);
   c.stats.attacks++;
   const m = shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charge, slam, team });
-  const { rankShift, notes } = m;
+  const { notes } = m;
+  let { rankShift } = m;
   if (atk.area) { areaAttack(b, R, c, atk, t, rng, rankShift, notes); return; }
   if (!atk.roll) {
     log(b, { kind: 'attack', actor: c.id, target: t.id, text: `${c.name} ${attackVerb(c, atk, t, rng)} (perception range, no attack roll)${notes.length ? ` — ${notes.join('; ')}` : ''}.` });
     applyEffect(b, R, c, atk, t, rng, { auto: true, crit: false, rankShift });
     return;
   }
+  if (b.options.shootThrough) {
+    const through = throughCover(b, c, atk, t, rng, m, aimed);
+    if (through === null) return;
+    rankShift = through;
+  }
   const r = rollToHit(b, c, atk, t, rng, m, aimed, notes);
   if (!r.hit) {
     log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${r.text} — ${r.roll === 1 ? 'natural 1, a clean miss' : 'miss'}${notes.length ? ` (${notes.join('; ')})` : ''}.`, dice: r.dice });
     return;
   }
-  const result = landHit(b, R, c, atk, t, rng, r, rankShift, notes);
+  const result = landHit(b, R, c, atk, t, rng, r, { rankShift, notes, slam: m.slam });
   if (!result) return;
   followUps(b, R, c, atk, t, rng, result, r.mod);
 }
@@ -51,11 +60,20 @@ function shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charg
     notes.push(`extra effort: +1 rank, now ${c.fatigue >= 2 ? 'exhausted' : 'fatigued'}`);
     if (b.options.heroPoints && c.heroPoints > 0 && rng.chance(0.5)) { c.heroPoints--; c.fatigue--; notes.push('spends a hero point to shrug off the fatigue'); }
   }
-  return { trade, allOut, defensive, charge, rankShift, notes };
+  return { trade, allOut, defensive, charge, rankShift, notes, slam: !!slam };
+}
+
+/** Optional rule: a shot at a target behind total cover goes through the cover first. Returns the rank shift, or null when the cover stops the shot. */
+function throughCover(b, c, atk, t, rng, m, aimed) {
+  const piece = shieldFor(b, c, atk, t);
+  if (!piece || coverLevel(piece) !== 'total') return m.rankShift;
+  const mod = pieceMod(c, atk, m, Math.abs(c.pos - t.pos), aimed);
+  const s = shootThrough(b, c, atk, piece, rng, { mod, rankShift: m.rankShift });
+  return s.go ? s.rankShift : null;
 }
 
 /** A hit: count it, log it, and apply the effect (to an Interposing ally if there is one). Returns the effect result, or null if it was interposed. */
-function landHit(b, R, c, atk, t, rng, r, rankShift, notes) {
+function landHit(b, R, c, atk, t, rng, r, { rankShift, notes, slam }) {
   const { crit, total, dcUsed, dice } = r;
   let text = r.text;
   c.stats.hits++;
@@ -77,7 +95,9 @@ function landHit(b, R, c, atk, t, rng, r, rankShift, notes) {
     if (multi) text += ` Multiattack: ${deg} degrees, +${multi} to the DC.`;
   }
   log(b, { kind: crit ? 'crit' : 'hit', actor: c.id, target: t.id, text, dice });
-  return applyEffect(b, R, c, atk, t, rng, { crit, rankShift, multi });
+  const result = applyEffect(b, R, c, atk, t, rng, { crit, rankShift, multi });
+  maybeKnockback(b, R, c, atk, t, result, rng, { slam });
+  return result;
 }
 
 /** After a hit lands: Fast Grab can turn it into a hold, and Takedown lets the attacker swing at the next minion. */
@@ -120,16 +140,19 @@ function areaAttack(b, R, c, atk, t, rng, rankShift, notes) {
   const friendly = inArea.filter((x) => x.team === c.team);
   log(b, { kind: 'attack', actor: c.id, target: t.id, text: `${c.name} drops ${atk.name} (${atk.area} area) on zone ${zone + 1}: ${inArea.map((x) => x.name).join(', ') || 'nobody'} ${inArea.length === 1 ? 'is' : 'are'} caught in it${friendly.length && !atk.selective ? ` (${friendly.map((x) => x.name).join(', ')} too!)` : ''}${notes.length ? ` — ${notes.join('; ')}` : ''}.`, important: true });
   for (const v of [...victims, ...friendly]) {
-    const dodge = defenseOf(v, 'Dodge') - checkPenalty(v) + (v.adv.Evasion >= 2 ? 5 : v.adv.Evasion ? 2 : 0);
+    const shelter = coverDodgeBonus(b, c, v);
+    const dodge = defenseOf(v, 'Dodge') - checkPenalty(v) + (v.adv.Evasion >= 2 ? 5 : v.adv.Evasion ? 2 : 0) + shelter;
     const dc = 10 + atk.rank + rankShift;
     const roll = d20(rng);
     const total = roll + dodge;
     const half = roll === 20 || total >= dc;
     const deg = half ? 1 + Math.floor((total - dc) / 5) : 0;
     const dodged = half && v.adv.Evasion && deg >= 2;
-    log(b, { kind: half ? 'resist' : 'hit', actor: c.id, target: v.id, text: `${v.name} dives for cover: Dodge d20 ${roll} ${sign(dodge)} = ${total} vs DC ${dc} — ${dodged ? 'Evasion: slips clear entirely' : half ? 'half effect' : 'full effect'}.`, dice: [{ label: 'Dodge', roll, mod: dodge, total, dc }] });
+    log(b, { kind: half ? 'resist' : 'hit', actor: c.id, target: v.id, text: `${v.name} dives for cover: Dodge d20 ${roll} ${sign(dodge)} = ${total} vs DC ${dc}${shelter ? ` (includes +${shelter} for cover)` : ''} — ${dodged ? 'Evasion: slips clear entirely' : half ? 'half effect' : 'full effect'}.`, dice: [{ label: 'Dodge', roll, mod: dodge, total, dc }] });
     if (dodged) continue;
     const r = applyEffect(b, R, c, atk, v, rng, { auto: true, crit: false, rankShift: rankShift - (half ? Math.ceil((atk.rank + rankShift) / 2) : 0) });
     if (r?.landed && v.team !== c.team) c.stats.hits++;
+    maybeKnockback(b, R, c, atk, v, r, rng);
   }
+  areaOnPieces(b, c, atk, zone, atk.rank + rankShift, rng);
 }

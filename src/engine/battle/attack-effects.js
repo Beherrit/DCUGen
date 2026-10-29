@@ -5,7 +5,7 @@ import { resistOf } from './conditions.js';
 import { dcOf, isImmune, halfImmune } from './odds.js';
 import { releaseHolds } from './maneuvers.js';
 
-/** Resolve the effect of a hit (or an automatic effect). Returns { landed, ko, degrees }. */
+/** Resolve the effect of a hit (or an automatic effect). Returns { landed, ko, degrees, rank } (the rank for Damage). */
 export function applyEffect(b, R, c, atk, t, rng, { crit = false, rankShift = 0, multi = 0 } = {}) {
   let rank = Math.max(0, atk.rank + rankShift);
   const why = isImmune(t, atk);
@@ -27,10 +27,10 @@ export function applyEffect(b, R, c, atk, t, rng, { crit = false, rankShift = 0,
   if (roll === 20) fails = Math.max(0, fails - 1);
   const dice = [{ label: `${resistName} check`, roll, mod: resist, total, dc }];
   const base = `${t.name} resists with ${resistName}: d20 ${roll} ${sign(resist)} = ${total} vs DC ${dc}${crit ? ' (+5, critical)' : ''}`;
-  if (!fails) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${base} — ${roll === 20 ? 'natural 20, ' : ''}resisted.`, dice }); return { landed: false, degrees: 0 }; }
+  if (!fails) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${base} — ${roll === 20 ? 'natural 20, ' : ''}resisted.`, dice }); return { landed: false, degrees: 0, rank }; }
   c.stats.degrees += fails;
   t.stats.taken += fails;
-  if (atk.effect === 'Damage' || atk.effect === 'Mental Blast') return damageResult(b, c, t, fails, base, dice);
+  if (atk.effect === 'Damage' || atk.effect === 'Mental Blast') return { ...damageResult(b, c, t, fails, base, dice), rank };
   if (atk.effect === 'Weaken') {
     const trait = atk.weakens || 'Toughness';
     const lost = Math.min(fails, rank);

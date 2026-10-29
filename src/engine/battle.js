@@ -16,7 +16,8 @@
 // Power / Accurate / All-out / Defensive Attack trade-offs, feints, grabs (restrained and bound),
 // Takedown, Interpose, Evasion, Luck, Seize Initiative, Fearless, hero points (improve a roll,
 // recover) and extra effort with fatigue, range bands and movement, prone, vulnerable, defenseless.
-// Not simulated: Summon, Create, Illusion, Deflect, Insubstantial, Environment, cover. Team attacks are simulated for minion squads.
+// Cover pieces made of real materials (partial and total cover, breaking it, shooting through it) and the optional knockback rule are simulated when a battle asks for them.
+// Not simulated: Summon, Create, Illusion, Deflect, Insubstantial, Environment. Team attacks are simulated for minion squads.
 //
 // The code lives in src/engine/battle/ (see README.md there); this file keeps the names the rest of the app imports.
 
@@ -28,6 +29,9 @@ import { hitOdds, resistOdds } from './battle/odds.js';
 import { createBattle, addCombatant, removeCombatant, placeAll, startBattle, joinBattle, step, runRound, runToEnd } from './battle/battle-flow.js';
 import { byId } from './battle/util.js';
 import { TEAM_TACTICS } from './battle/tactics.js';
+import { MATERIALS, COVER_KINDS, toughnessOf } from './battle/materials.js';
+import { addCover, removeCover, coverLevel, pieceLabel } from './battle/cover.js';
+import { massRank } from './battle/knockback.js';
 import { statusLine, battleText, simulateMany, serializeBattle, reviveBattle } from './battle/summaries.js';
 
-export { TEAM_TACTICS, ARENA, ENCLOSED_ARENA, arenaOf, MAX_ROUNDS, STYLES, TACTICS, detectStyle, parseAffliction, makeCombatant, rebuildCombatant, activeConditions, conditionLabels, hitOdds, resistOdds, createBattle, addCombatant, removeCombatant, placeAll, startBattle, byId, joinBattle, step, runRound, runToEnd, statusLine, battleText, simulateMany, serializeBattle, reviveBattle };
+export { MATERIALS, COVER_KINDS, toughnessOf, addCover, removeCover, coverLevel, pieceLabel, massRank, TEAM_TACTICS, ARENA, ENCLOSED_ARENA, arenaOf, MAX_ROUNDS, STYLES, TACTICS, detectStyle, parseAffliction, makeCombatant, rebuildCombatant, activeConditions, conditionLabels, hitOdds, resistOdds, createBattle, addCombatant, removeCombatant, placeAll, startBattle, byId, joinBattle, step, runRound, runToEnd, statusLine, battleText, simulateMany, serializeBattle, reviveBattle };

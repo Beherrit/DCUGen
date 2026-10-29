@@ -4,6 +4,7 @@ import { sign, d20 } from './util.js';
 import { activeConditions, checkPenalty, defenseVs, feintedBy } from './conditions.js';
 import { rangePenalty, concealmentPenalty } from './odds.js';
 import { spendOnMiss } from './tactics.js';
+import { coverPenalty, coverLevel, shieldFor } from './cover.js';
 
 const VERBS = {
   brawler: ['swings at', 'hammers', 'slams', 'pounds on'], duelist: ['cuts at', 'strikes at', 'lunges at', 'snaps a strike at'],
@@ -24,15 +25,17 @@ export function attackVerb(c, atk, t, rng) {
 /** Minions don't crit non-minions (DCA 175), and a routine attack never crits. */
 const critOk = (c, t, routine) => !(c.minion && !t.minion) && !routine;
 
-/** The to-hit modifier: the attack bonus, trade-offs, conditions, range and concealment. Adds a concealment note. */
-function toHitMod(c, atk, t, m, aimed, notes) {
+/** The to-hit modifier: the attack bonus, trade-offs, conditions, range, concealment and cover. Adds notes for the last two. */
+function toHitMod(b, c, atk, t, m, aimed, notes) {
   const dist = Math.abs(c.pos - t.pos);
   const conceal = concealmentPenalty(c, t, atk);
-  let mod = atk.bonus - m.trade + m.allOut - m.defensive - checkPenalty(c) - rangePenalty(atk, dist) - conceal - (m.charge ? 2 : 0) + aimed;
+  const cover = coverPenalty(b, c, t, atk);
+  let mod = atk.bonus - m.trade + m.allOut - m.defensive - checkPenalty(c) - rangePenalty(atk, dist) - conceal - cover - (m.charge ? 2 : 0) + aimed;
   const tc = activeConditions(t); const cc = activeConditions(c);
   if (tc.has('Prone')) mod += atk.kind === 'close' ? 5 : -5;
   if (cc.has('Prone') && atk.kind === 'close') mod -= 5;
   if (conceal) notes.push(`${conceal === 5 ? 'total' : 'partial'} concealment: −${conceal}`);
+  if (cover) notes.push(`${coverLevel(shieldFor(b, c, atk, t))} cover: −${cover}`);
   return mod;
 }
 
@@ -43,7 +46,7 @@ function toHitMod(c, atk, t, m, aimed, notes) {
 export function rollToHit(b, c, atk, t, rng, m, aimed, notes) {
   const which = atk.kind === 'close' ? 'Parry' : 'Dodge';
   const def = defenseVs(t, which, c);
-  const mod = toHitMod(c, atk, t, m, aimed, notes);
+  const mod = toHitMod(b, c, atk, t, m, aimed, notes);
   // Defend (DCA 175): the target rolls its defense instead of the flat 10; a 10 or less counts as +10.
   let dcUsed = 10 + def;
   if (t.defending) {

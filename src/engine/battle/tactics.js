@@ -8,8 +8,9 @@ import { hitOdds, rangePenalty } from './odds.js';
 import { TEAM_TACTICS, tacticOf } from './tactics-list.js';
 import { focusTarget, lockTarget, isControlled, hasControl, isControlAttack, vipOf } from './tactics-marks.js';
 import { isFrontliner, positionGoal, stepToZone, wantsKite, kiteThreat, kiteZones, aimsAlways, isMeleeThreat } from './tactics-position.js';
+import { coverStep, coverDefends } from './tactics-cover.js';
 
-export { TEAM_TACTICS, tacticOf, positionGoal, stepToZone, wantsKite, kiteThreat, kiteZones, aimsAlways, isMeleeThreat };
+export { TEAM_TACTICS, tacticOf, positionGoal, stepToZone, wantsKite, kiteThreat, kiteZones, aimsAlways, isMeleeThreat, coverStep, coverDefends };
 
 const alpha = (b, c) => tacticOf(b, c) === 'alpha' && b.round <= 2;
 

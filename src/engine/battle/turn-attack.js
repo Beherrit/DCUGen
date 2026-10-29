@@ -8,11 +8,13 @@ import { hitOdds, rangePenalty, concealmentPenalty } from './odds.js';
 import { bestTradeoff } from './plan.js';
 import { moveTo, moveToward } from './movement.js';
 import { resolveAttack } from './attacks.js';
-import { positionGoal, stepToZone, wantsKite, kiteThreat, kiteZones, aimsAlways, isMeleeThreat, tradeoffBias, forceEffort, teamAttackMin } from './tactics.js';
+import { positionGoal, stepToZone, wantsKite, kiteThreat, kiteZones, aimsAlways, isMeleeThreat, tradeoffBias, forceEffort, teamAttackMin, coverStep } from './tactics.js';
+import { shelterOf, coverPenalty } from './cover.js';
 
 /** The attack plan chosen for this turn: move into position, maybe aim, then attack. */
 export function attackTurn(b, R, c, choice, enemies, mode, rng) {
   const { attack, target } = choice;
+  coverStep(b, c, attack, mode);
   kite(b, c, attack, target, enemies, mode);
   if (holdPosition(b, c, attack, target, mode)) return;
   const closed = closeIn(b, c, attack, target, mode, rng);
@@ -31,7 +33,7 @@ export function attackTurn(b, R, c, choice, enemies, mode, rng) {
 /** Kiting: ranged fighters step away from melee threats before shooting. */
 function kite(b, c, attack, target, enemies, mode) {
   const S = STYLES[c.style];
-  if (!(mode === 'full' && attack.kind !== 'close' && (S.ranged >= 1.2 || wantsKite(b, c)) && !c.grabbedBy)) return;
+  if (!(mode === 'full' && attack.kind !== 'close' && (S.ranged >= 1.2 || wantsKite(b, c)) && !c.grabbedBy && !shelterOf(b, c))) return;
   const threat = enemies.find((e) => e.pos === c.pos && isMeleeThreat(e)) || kiteThreat(b, c, enemies);
   if (threat && rangePenalty(attack, 1) === 0) {
     const dir = c.pos <= threat.pos ? -1 : 1;
@@ -72,9 +74,9 @@ function lineUpShot(b, c, attack, target, enemies, rng) {
   if (!(attack.roll && attack.kind === 'ranged' && (always || ((c.style === 'gunner' || c.style === 'blaster') && !enemies.some((e) => e.pos === c.pos))))) return false;
   const dist = Math.abs(c.pos - target.pos);
   const def = defenseOf(target, 'Dodge');
-  const now = hitOdds(attack.bonus - rangePenalty(attack, dist) - concealmentPenalty(c, target, attack), def).hit;
+  const now = hitOdds(attack.bonus - rangePenalty(attack, dist) - concealmentPenalty(c, target, attack) - coverPenalty(b, c, target, attack), def).hit;
   const bonus = dist <= 1 ? 5 : 2;
-  if (always || (now < 0.4 && hitOdds(attack.bonus + bonus - rangePenalty(attack, dist) - concealmentPenalty(c, target, attack), def).hit >= now + 0.2 && rng.chance(0.7))) {
+  if (always || (now < 0.4 && hitOdds(attack.bonus + bonus - rangePenalty(attack, dist) - concealmentPenalty(c, target, attack) - coverPenalty(b, c, target, attack), def).hit >= now + 0.2 && rng.chance(0.7))) {
     c.aiming = { target: target.id, attack: attack.id, bonus };
     log(b, { kind: 'note', actor: c.id, target: target.id, text: `${c.name} takes aim at ${target.name} (+${bonus} next turn, vulnerable until then).` });
     return true;
@@ -95,7 +97,7 @@ function pickStance(b, c, target, enemies) {
 
 /** The trade-offs for this attack: the fighter's own choice, then any team tactic's override. */
 function pickTradeoffs(b, c, attack, target, enemies) {
-  let trade = bestTradeoff(c, attack, target, Math.abs(c.pos - target.pos));
+  let trade = bestTradeoff(c, attack, target, Math.abs(c.pos - target.pos), b);
   let { allOut, defensive } = pickStance(b, c, target, enemies);
   const adj = tradeoffBias(b, c, target, attack);
   if (adj) {

@@ -12,6 +12,7 @@ export const TEAM_TACTICS = {
   flank: { label: 'Feint and Flank', blurb: 'Skilled fighters feint to open up the enemy, and the team piles onto whoever is left exposed.' },
   sustain: { label: 'Sustain', blurb: 'Healers keep everyone up, the others fight defensively while a friend is hurt, and the hurt recover early.' },
   noretreat: { label: 'No Retreat', blurb: 'Nobody flees or digs in, and every close attack is an all-out attack.' },
+  cover: { label: 'Take Cover', blurb: 'Shooters move behind the best cover in reach and defend when no attack is worth much; melee fighters still close in. With no cover about, the team defends more when outnumbered.' },
 };
 
 /** The tactic id for c's team, or 'none'. */

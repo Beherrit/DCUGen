@@ -710,6 +710,12 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 .bt-speed { display: inline-flex; align-items: center; gap: 6px; font: 700 11px/1 var(--font-label); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
 .bt-arena { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 4px; padding: 8px; border-radius: 10px; background: radial-gradient(ellipse at 50% 120%, color-mix(in srgb, var(--accent) 18%, var(--surface-2)), var(--surface-2) 70%); border: 1px solid var(--line); min-height: 86px; }
 .bt-zone { position: relative; min-height: 70px; border-radius: 6px; background: color-mix(in srgb, var(--surface) 55%, transparent); border: 1px dashed color-mix(in srgb, var(--line) 80%, transparent); display: flex; flex-wrap: wrap; gap: 4px; align-content: flex-start; padding: 16px 4px 4px; }
+.bt-piece { display: block; flex: 1 0 100%; font: 600 10px/1.25 var(--font-label); padding: 2px 4px; border-radius: 4px; background: color-mix(in srgb, var(--ink-3) 22%, transparent); color: var(--ink-2); }
+.bt-piece.holed { background: color-mix(in srgb, #a8670b 28%, transparent); }
+.bt-piece.destroyed { background: color-mix(in srgb, #c8202f 22%, transparent); text-decoration: line-through; }
+.bt-scenery { display: grid; gap: 6px; }
+.bt-scenery-row { justify-content: space-between; gap: 6px; }
+.bt-scenery-text { font-size: 12px; flex: 1 1 auto; min-width: 0; }
 .bt-zone-n { position: absolute; top: 2px; left: 6px; font: 700 10px/1 var(--font-label); color: var(--ink-3); letter-spacing: .08em; }
 .bt-token { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--c); color: var(--c-ink, #fff); font: 800 11px/1 var(--font-label); letter-spacing: .02em; box-shadow: 0 0 0 3px var(--t), 0 2px 6px rgba(0, 0, 0, .3); flex: none; transition: transform .25s ease, opacity .25s ease; }
 .bt-token.down { opacity: .35; filter: grayscale(.8); transform: rotate(90deg) scale(.85); }

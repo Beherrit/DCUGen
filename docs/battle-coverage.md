@@ -13,12 +13,12 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | effect | 61 | 6 | 26 | 21 | 8 | 60% |
 | extra | 38 | 5 | 6 | 22 | 5 | 33% |
 | flaw | 22 | 0 | 1 | 18 | 3 | 5% |
-| advantage | 75 | 16 | 7 | 31 | 21 | 43% |
+| advantage | 75 | 17 | 6 | 31 | 21 | 43% |
 | action | 20 | 5 | 4 | 11 | 0 | 45% |
 | maneuver | 12 | 5 | 4 | 3 | 0 | 75% |
 | condition | 30 | 15 | 9 | 5 | 1 | 83% |
-| rule | 34 | 11 | 8 | 15 | 0 | 56% |
-| all | 292 | 63 | 65 | 126 | 38 | 50% |
+| rule | 34 | 12 | 10 | 12 | 0 | 65% |
+| all | 292 | 65 | 66 | 123 | 38 | 52% |
 
 ## Effects
 
@@ -182,7 +182,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Improvised Weapon | none | Improvised weapons are not simulated. | DCA 76 |
 | Move-by Action | partial | Speedster-style fighters hit and then step away; other fighters never split movement around an attack. | DCA 77 |
 | Power Attack | full | Trade attack bonus for rank, up to 5 with the advantage and 2 without. | DCA 77 |
-| Precise Attack | partial | Ignores concealment penalties; cover is not simulated. | DCA 77 |
+| Precise Attack | full | Each rank ignores the cover or concealment penalty for one pairing of close or ranged attacks, such as Ranged, Cover. | DCA 77 |
 | Prone Fighting | none | The prone attack penalty is always applied. | DCA 77 |
 | Quick Draw | none | Drawing weapons is not simulated. | DCA 77 |
 | Ranged Attack | full | Adds to the ranged attack bonus in derive. | DCA 77 |
@@ -270,7 +270,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Defensive Attack | full | Trade attack bonus for defense, chosen by duelists and supports under pressure. |  |
 | Finishing Attack | partial | Any hit on a defenseless target is a critical; the routine check and the kill rule are not used. |  |
 | Power Attack | full | Trade attack bonus for rank, chosen when it raises the expected harm. |  |
-| Slam Attack | partial | A charging fighter uses its movement rank as Damage; the extra +1 for a full move and the damage the slammer takes are not applied. |  |
+| Slam Attack | partial | A charging fighter uses its movement rank as Damage and, with the optional knockback rule on, throws the target back; the extra +1 for a full move and the damage the slammer takes are not applied. |  |
 | Surprise Attack | partial | Only through the Ambush option; stealth and unusual tactics do not make a target vulnerable. |  |
 | Team Attack | partial | Only minion squads combine attacks (+2 or +5 rank); heroes never team up. |  |
 | Feint | full | Deception (or Acrobatics with Agile Feint) against Insight or Deception; on success the target is vulnerable to the feinter's next attack until the end of the feinter's next round (DCA 64). |  |
@@ -336,9 +336,9 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Minions: fail any Damage check and drop | full | A failed Toughness check incapacitates a minion. |  |
 | Minions: worst degree of other effects | none | Only Damage uses the minion rule; Afflictions and other effects use normal degrees. |  |
 | Range bands | partial | Distance in arena zones gives no penalty, -2, -5 or no attack; the rank-based feet of the book and Extended Range are not used. |  |
-| Cover | none | Cover and its penalties are not simulated. |  |
+| Cover | partial | Pieces made of real materials give -2 (partial) or -5 (total) to attacks against whoever stands behind them, total cover blocks direct targeting, and cover adds to Dodge against area effects. Fighters use cover only when their team plays Take Cover. |  |
 | Concealment | partial | -2 or -5 to attack a target with Concealment or Invisibility; the environment itself never conceals. |  |
-| Knockback | none | Knockback is not simulated. |  |
+| Knockback | partial | An optional community rule, off unless switched on: damage rank minus mass rank sets the distance in zones, the target falls prone, and cover or an enclosed wall can stop it or be smashed through. |  |
 | Surprise round | full | The Ambush option gives a surprise round: surprised side stunned and vulnerable, ambushers act with one standard action. |  |
 | Initiative | full | d20 plus Agility plus Improved Initiative; late joiners roll and slot into the order. |  |
 | Recovery checks | full | Ongoing Affliction conditions are resisted at the end of each turn. |  |
@@ -350,4 +350,4 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Perception range | full | Perception-range effects need no attack check and cannot critically hit. |  |
 | Defense class | full | Close attacks hit 10 + Parry, ranged attacks 10 + Dodge, vulnerable halves defenses. |  |
 | Fatigue | partial | Extra effort and Afflictions cause fatigue; exhaustion at three levels incapacitates; rest and hazards are not simulated. |  |
-| Damaging objects | none | Objects and smashing are not simulated. |  |
+| Damaging objects | full | Cover pieces are defenseless objects: a hit at DC 10 is an automatic critical, two degrees of failure on the Toughness check punch a hole and three destroy the piece. Area attacks, shooting through cover and knockback collisions roll against it too. |  |

@@ -2,6 +2,7 @@
 
 import { activeConditions, checkPenalty, defenseVs, resistOf } from './conditions.js';
 import { effectWeights } from './combatant.js';
+import { coverPenalty, coverDodgeBonus, preciseIgnores } from './cover.js';
 
 export function hitOdds(bonus, defense) {
   let hit = 0;
@@ -67,7 +68,7 @@ function immunityMatch(target, atk, wantHalf) {
 }
 
 /** Expected "harm" of an attack on a target: how much it would change the fight, in rough degrees. */
-export function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, autoHit = false, dist = 0 } = {}) {
+export function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, autoHit = false, dist = 0, b = null } = {}) {
   if (isImmune(target, atk)) return 0;
   let rank = atk.rank + rankShift;
   if (halfImmune(target, atk)) rank = Math.floor(rank / 2);
@@ -77,7 +78,7 @@ export function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, a
     let bonus = atk.bonus + bonusShift - checkPenalty(c) - rangePenalty(atk, dist);
     if (activeConditions(target).has('Prone')) bonus += atk.kind === 'close' ? 5 : -5;
     if (activeConditions(c).has('Prone') && atk.kind === 'close') bonus -= 5;
-    bonus -= concealmentPenalty(c, target, atk);
+    bonus -= concealmentPenalty(c, target, atk) + coverPenalty(b, c, target, atk);
     if (c.aiming?.target === target.id) bonus += c.aiming.bonus;
     ({ hit, crit } = hitOdds(bonus, def));
     if (target.defending) hit *= 0.55;
@@ -101,7 +102,7 @@ export function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, a
     if (atk.tiers && i > (atk.maxDegree || 3)) wi = w[atk.maxDegree || 3];
     ev += ((hit - crit) * dist1[i] + crit * dist2[i]) * wi;
   }
-  if (atk.area) ev *= 0.85; // Dodge for half
+  if (atk.area) ev *= 0.85 - 0.04 * coverDodgeBonus(b, c, target); // Dodge for half, with cover helping
   // An affliction that is already on the target (and doesn't stack) is worth much less than something new
   if (atk.tiers && !atk.cumulative && target.conditions.some((x) => x.source === atk.id && x.from === c.id)) ev *= 0.4;
   if (!atk.roll && !atk.area) { const r = c.stats; void r; }
@@ -120,7 +121,7 @@ export function rangePenalty(atk, dist) {
 export function concealmentPenalty(c, target, atk) {
   if (activeConditions(c).has('Blind') || activeConditions(c).has('Blinded')) return 5;
   if (!target.concealment || seesThrough(c, target)) return 0;
-  if (c.adv['Precise Attack'] && atk && c.adv['Precise Attack'] >= (atk.kind === 'close' ? 1 : 2)) return 0;
+  if (preciseIgnores(c, atk, 'concealment')) return 0;
   return target.concealment === 'total' ? 5 : 2;
 }
 

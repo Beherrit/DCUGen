@@ -40,6 +40,7 @@ export function simulateMany(b, R, n = 100, { seed = b.seed } = {}) {
   for (let i = 0; i < n; i++) {
     const copy = createBattle({ seed: `${seed}-run-${i}`, name: b.name });
     copy.options = { ...b.options };
+    copy.cover = (b.cover || []).map((p) => ({ ...p, state: 'intact' }));
     for (const c of b.combatants) addCombatant(copy, makeCombatant(R, c.ch, { id: c.id, team: c.team, style: c.style, tactics: c.tactics, heroPoints: c.heroPoints, name: c.name }));
     runToEnd(copy, R);
     wins[copy.winner || 'draw'] = (wins[copy.winner || 'draw'] || 0) + 1;
@@ -63,6 +64,7 @@ export function serializeBattle(b) {
 export function reviveBattle(R, data) {
   const b = { ...createBattle({ seed: data.seed, name: data.name }), ...data };
   b.options = { ...createBattle().options, ...(data.options || {}) };
+  b.cover = (data.cover || []).map((p) => ({ ...p }));
   b.combatants = (data.combatants || []).map((c) => rebuildCombatant({ ...c, stats: c.stats || { attacks: 0, hits: 0, crits: 0, degrees: 0, kos: 0, healed: 0, taken: 0 }, conditions: c.conditions || [], weakened: c.weakened || {} }, R));
   return b;
 }

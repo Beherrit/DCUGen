@@ -4,6 +4,8 @@ import { STYLES } from './styles.js';
 import { activeConditions, defenseOf, resistOf, moveZones } from './conditions.js';
 import { hitOdds, expectedValue, rangePenalty, threatOn } from './odds.js';
 import { targetBias, attackBias, feintBias, grabChance } from './tactics.js';
+import { blocksDirect } from './cover.js';
+import { coverPlan, throughFactor } from './cover-plan.js';
 
 /** Best attack for c against t, with the trade-off already folded in. */
 export function bestAttackVs(c, t, rng, { dist = Math.abs(c.pos - t.pos), reachable = true, charge = false, b = null } = {}) {
@@ -12,8 +14,9 @@ export function bestAttackVs(c, t, rng, { dist = Math.abs(c.pos - t.pos), reacha
   for (const atk of c.attacks) {
     if (atk.kind === 'close' && !reachable) continue;
     if (atk.kind === 'ranged' && rangePenalty(atk, reachable ? Math.min(dist, 1) : dist) > 50) continue;
-    const trade = bestTradeoff(c, atk, t, atk.kind === 'close' ? 0 : dist);
-    const ev = expectedValue(c, atk, t, { bonusShift: -trade - (charge && atk.kind === 'close' ? 2 : 0), rankShift: trade, dist: atk.kind === 'close' ? 0 : dist });
+    if (b && blocksDirect(b, c, atk, t)) continue; // total cover: the target cannot be picked
+    const trade = bestTradeoff(c, atk, t, atk.kind === 'close' ? 0 : dist, b);
+    const ev = expectedValue(c, atk, t, { bonusShift: -trade - (charge && atk.kind === 'close' ? 2 : 0), rankShift: trade, dist: atk.kind === 'close' ? 0 : dist, b });
     let score = ev * (atk.kind === 'close' ? S.close : S.ranged);
     if (c.style === 'gunner' && (atk.equipment || atk.device)) score *= 1.3;
     if (c.style === 'mentalist' && atk.resistance === 'Will') score *= 1.3;
@@ -21,18 +24,18 @@ export function bestAttackVs(c, t, rng, { dist = Math.abs(c.pos - t.pos), reacha
     if (S.variety && atk.id === c.lastAttackId) score *= 0.7;
     if (atk.stunt) score *= 0.95;
     if (atk.unarmed && c.attacks.length > 1) score *= 0.9;
-    if (b) score *= attackBias(b, c, atk, t);
+    if (b) score *= attackBias(b, c, atk, t) * throughFactor(b, c, atk, t, dist);
     score *= 0.9 + rng.next() * 0.2;
     if (score > best.score) best = { attack: atk, ev, score };
   }
   return best;
 }
 
-export function bestTradeoff(c, atk, t, dist) {
+export function bestTradeoff(c, atk, t, dist, b = null) {
   if (!atk.roll || atk.unarmed && !c.adv['Power Attack'] && c.style !== 'brawler') return 0;
   const limitUp = c.adv['Power Attack'] ? 5 : 2;      // bonus -> rank
   const limitDown = c.adv['Accurate Attack'] ? 5 : 2;  // rank -> bonus
-  const base = expectedValue(c, atk, t, { dist });
+  const base = expectedValue(c, atk, t, { dist, b });
   let best = 0; let bestEv = base;
   const def = defenseOf(t, atk.kind === 'close' ? 'Parry' : 'Dodge');
   for (let s = -limitDown; s <= limitUp; s++) {
@@ -40,7 +43,7 @@ export function bestTradeoff(c, atk, t, dist) {
     if (atk.rank + s < 1) continue;
     // Power Attack only makes sense while the attack still has a fair chance to land
     if (s > 0 && hitOdds(atk.bonus - s - rangePenalty(atk, dist), def).hit < 0.35) continue;
-    const ev = expectedValue(c, atk, t, { bonusShift: -s, rankShift: s, dist });
+    const ev = expectedValue(c, atk, t, { bonusShift: -s, rankShift: s, dist, b });
     if (ev > bestEv * 1.03 && ev - base > 0.03) { best = s; bestEv = ev; }
   }
   return best;
@@ -94,6 +97,8 @@ export function choosePlan(b, R, c, enemies, rng, mode) {
   scored.sort((x, y) => y.score - x.score);
   const top = scored[0];
   if (!top) return null;
+  const shot = coverPlan(b, c, scored);
+  if (shot) return shot;
   const t = top.t;
   // Nothing usable right now: close the distance
   if (!top.pick.attack || top.pick.ev <= 0.02) {

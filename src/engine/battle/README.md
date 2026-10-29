@@ -19,8 +19,11 @@ is not simulated). The code is split by job:
 - `end-of-turn.js`: recovery checks and the weakened traits coming back.
 - `battle-flow.js`: create, start, ambush, join, step, round, run to the end.
 - `tactics.js`: team tactics, the small hooks the turn code calls (all neutral when a team has none). `tactics-list.js`: the list and `tacticOf`. `tactics-marks.js`: focus and lockdown targets, the VIP. `tactics-position.js`: the line, the guard, kiting.
+- `materials.js`: building materials, `toughnessOf` (the doubling rule) and the `COVER_KINDS` presets.
+- `cover.js`: cover pieces (`b.cover`), their levels, who stands behind one, the attack penalty and Dodge bonus. `cover-damage.js`: hurting a piece (hole or destroy), shooting through cover, area attacks on scenery. `cover-plan.js`: when the AI shoots the cover itself.
+- `knockback.js`: the optional knockback rule, mass rank, flight and collisions. `tactics-cover.js`: the Take Cover tactic.
 - `summaries.js`: status lines, battle text, many-run tallies, save and load.
 
 The app is bundled by tools/build.mjs, which does not allow import cycles, so keep imports flowing one way: util and
-constants at the bottom, then styles, conditions, combatant, odds, the tactics files, plan, movement, maneuvers, support, attack-effects,
-attack-roll, attacks, turn-attack, turn, end-of-turn, battle-flow and summaries on top.
+constants at the bottom, then styles, conditions, combatant, materials, cover, odds, the tactics files, plan, movement, maneuvers, support, attack-effects,
+attack-roll, cover-damage, knockback, attacks, turn-attack, turn, end-of-turn, battle-flow and summaries on top.

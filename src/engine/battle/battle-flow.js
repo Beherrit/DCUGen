@@ -8,9 +8,10 @@ import { takeTurn } from './turn.js';
 import { regenerate } from './support.js';
 import { endOfTurn } from './end-of-turn.js';
 import { announceTactics } from './tactics.js';
+import { resetScenery } from './cover.js';
 
 export function createBattle({ seed = 'battle', name = 'Battle' } = {}) {
-  return { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, enclosed: false, ambush: null, teamTactics: {}, vip: {}, maxRounds: MAX_ROUNDS }, lastEvent: 0 };
+  return { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, enclosed: false, ambush: null, teamTactics: {}, vip: {}, maxRounds: MAX_ROUNDS, shootThrough: false, knockback: false }, cover: [], lastEvent: 0 };
 }
 
 export function addCombatant(b, c) {
@@ -43,6 +44,7 @@ export function placeAll(b) {
 export function startBattle(b, R) {
   if (b.combatants.length < 2 || new Set(b.combatants.map((c) => c.team)).size < 2) throw new Error('Put fighters on at least two teams first.');
   b.log = []; b.tick = 0; b.round = 1; b.turn = 0; b.winner = null;
+  resetScenery(b);
   for (const c of b.combatants) { resetCombatant(c); rebuildCombatant(c, R); }
   placeAll(b);
   const rng = rngFor(b);
