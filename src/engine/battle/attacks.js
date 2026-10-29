@@ -3,7 +3,8 @@
 import { sign, d20, log, alive, enemiesOf, alliesOf } from './util.js';
 import { checkPenalty, defenseOf } from './conditions.js';
 import { applyEffect } from './attack-effects.js';
-import { grab } from './maneuvers.js';
+import { grab, grabAppetite } from './maneuvers.js';
+import { rollCheck, critNote } from './checks.js';
 import { attackVerb, rollToHit } from './attack-roll.js';
 import { noteAttack, interposeFor } from './tactics.js';
 import { shieldFor, coverLevel, coverDodgeBonus } from './cover.js';
@@ -102,7 +103,7 @@ function landHit(b, R, c, atk, t, rng, r, { rankShift, notes, slam }) {
 
 /** After a hit: Fast Grab can turn it into a hold (the unarmed hit counts as the grab's attack check, p74), and Takedown lets the attacker swing at the next minion. */
 function followUps(b, R, c, atk, t, rng, result, mod) {
-  if (result && atk.unarmed && c.adv['Fast Grab'] && !c.holding && !t.out && !t.grabbedBy && rng.chance(0.6)) {
+  if (result && atk.unarmed && c.adv['Fast Grab'] && !c.holding && !t.out && !t.grabbedBy && rng.chance(0.6 * grabAppetite(b, c, t))) {
     log(b, { kind: 'note', actor: c.id, target: t.id, text: `${c.name} uses Fast Grab to turn the hit into a hold.` });
     grab(b, R, c, t, rng, { free: true });
   }
@@ -143,12 +144,12 @@ function areaAttack(b, R, c, atk, t, rng, rankShift, notes) {
     const shelter = coverDodgeBonus(b, c, v);
     const dodge = defenseOf(v, 'Dodge') - checkPenalty(v) + (v.adv.Evasion >= 2 ? 5 : v.adv.Evasion ? 2 : 0) + shelter;
     const dc = 10 + atk.rank + rankShift;
-    const roll = d20(rng);
-    const total = roll + dodge;
-    const half = roll === 20 || total >= dc;
-    const deg = half ? 1 + Math.floor((total - dc) / 5) : 0;
+    const dodgeCheck = rollCheck(rng, dodge, dc);
+    const { roll, total } = dodgeCheck;
+    const half = dodgeCheck.success;
+    const deg = half ? dodgeCheck.degrees : 0;
     const dodged = half && v.adv.Evasion && deg >= 2;
-    log(b, { kind: half ? 'resist' : 'hit', actor: c.id, target: v.id, text: `${v.name} dives for cover: Dodge d20 ${roll} ${sign(dodge)} = ${total} vs DC ${dc}${shelter ? ` (includes +${shelter} for cover)` : ''} — ${dodged ? 'Evasion: slips clear entirely' : half ? 'half effect' : 'full effect'}.`, dice: [{ label: 'Dodge', roll, mod: dodge, total, dc }] });
+    log(b, { kind: half ? 'resist' : 'hit', actor: c.id, target: v.id, text: `${v.name} dives for cover: Dodge d20 ${roll} ${sign(dodge)} = ${total} vs DC ${dc}${shelter ? ` (includes +${shelter} for cover)` : ''}${critNote(dodgeCheck)} — ${dodged ? 'Evasion: slips clear entirely' : half ? 'half effect' : 'full effect'}.`, dice: [{ label: 'Dodge', roll, mod: dodge, total, dc }] });
     if (dodged) continue;
     const r = applyEffect(b, R, c, atk, v, rng, { auto: true, crit: false, rankShift: rankShift - (half ? Math.ceil((atk.rank + rankShift) / 2) : 0) });
     if (r?.landed && v.team !== c.team) c.stats.hits++;

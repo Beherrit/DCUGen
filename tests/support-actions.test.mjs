@@ -61,7 +61,9 @@ test('demoralize: a failed check leaves no condition, and only a natural 20 resc
   assert.match(b.log.at(-1).text, /tries to demoralize .*shrug it off/);
   a.skills.Intimidation = -10;
   assert.equal(demoralize(b, a, t, dice(19, 20)), 0);
-  assert.equal(demoralize(b, a, t, dice(20, 20)), 1);
+  assert.equal(demoralize(b, a, t, dice(20, 20)), 0, 'both sides rolled a natural 20: they cancel and the totals decide');
+  assert.equal(demoralize(b, a, t, dice(20, 11)), 0, 'a natural 20 behind by 6 is still one degree short');
+  assert.equal(demoralize(b, a, t, dice(20, 10)), 1);
   assert.deepEqual(conditionLabels(t), ['Impaired']);
 });
 

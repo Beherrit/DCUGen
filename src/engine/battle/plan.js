@@ -6,7 +6,7 @@ import { hitOdds, expectedValue, rangePenalty, threatOn } from './odds.js';
 import { targetBias, attackBias, feintBias, grabChance } from './tactics.js';
 import { blocksDirect } from './cover.js';
 import { coverPlan, throughFactor } from './cover-plan.js';
-import { gripOf } from './maneuvers.js';
+import { gripOf, grabAppetite } from './maneuvers.js';
 import { maneuverPlan } from './plan-maneuvers.js';
 
 /** Best attack for c against t, with the trade-off already folded in. */
@@ -115,7 +115,7 @@ export function choosePlan(b, R, c, enemies, rng, mode) {
     return null;
   }
   // Grab: beasts, brawlers and tanks with the knack, against someone they can reach
-  if ((S.grabs || c.adv['Fast Grab'] || c.adv['Improved Grab'] || c.adv.Chokehold) && !c.holding && top.reachable && top.dist <= zones && gripOf(c) >= (t.d.abilities.Strength ?? 0) + 2 && !t.grabbedBy && !t.minion && rng.chance(grabChance(b, c, t, c.style === 'beast' ? 0.45 : 0.3))) {
+  if ((S.grabs || c.adv['Fast Grab'] || c.adv['Improved Grab'] || c.adv.Chokehold) && !c.holding && top.reachable && top.dist <= zones && gripOf(c) >= (t.d.abilities.Strength ?? 0) + 2 && !t.grabbedBy && !t.minion && rng.chance(grabChance(b, c, t, c.style === 'beast' ? 0.45 : 0.3) * grabAppetite(b, c, t))) {
     return { target: t, attack: top.pick.attack, plan: 'grab' };
   }
   const maneuver = maneuverPlan(b, c, top, mode);

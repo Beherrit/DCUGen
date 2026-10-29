@@ -38,6 +38,12 @@ export function parseAffliction(p, R) {
   const cap = (v) => v.charAt(0).toUpperCase() + v.slice(1);
   return { resist: cap(resist.toLowerCase()), tiers: tiers.slice(0, maxDegree), maxDegree, cumulative: hasExtra(p, 'Cumulative'), progressive: hasExtra(p, 'Progressive'), extraCondition: hasExtra(p, 'Extra Condition') };
 }
+/** A fighter holding someone is hindered and vulnerable (p176); Improved Grab and Grabbing Finesse spare it the vulnerable part (p75, p77). */
+function holdingConditions(c, add) {
+  add('Hindered');
+  if (!c.adv?.['Improved Grab'] && !c.adv?.['Grabbing Finesse']) add('Vulnerable');
+}
+
 /** The basic conditions in force on a combatant right now. */
 export function activeConditions(c) {
   const set = new Set();
@@ -47,6 +53,7 @@ export function activeConditions(c) {
   if (c.out && !c.fled) add('Incapacitated');
   if (c.fatigue >= 2) add('Exhausted'); else if (c.fatigue === 1) add('Fatigued');
   if (c.grabbedBy) add(c.conditions.some((x) => x.name === 'Bound') ? 'Bound' : 'Restrained');
+  if (c.holding) holdingConditions(c, add);
   for (const x of c.conditions) add(x.name);
   return set;
 }

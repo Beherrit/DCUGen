@@ -913,7 +913,7 @@
     "kind": "advantage",
     "name": "Grabbing Finesse",
     "status": "partial",
-    "note": "Holds are made with Dexterity instead of Strength. The engine does not make a grabber vulnerable while holding, so there is nothing to waive.",
+    "note": "Holds are made with Dexterity instead of Strength. A fighter with it (or Improved Grab) is not made vulnerable while it holds.",
     "source": "DCA 75"
   },
   {
@@ -948,7 +948,7 @@
     "kind": "advantage",
     "name": "Improved Grab",
     "status": "partial",
-    "note": "Only makes the fighter likely to grab; keeping a free hand is not modelled.",
+    "note": "Makes the fighter likely to grab, and not vulnerable while it holds; keeping a free hand is not modelled.",
     "source": "DCA 75"
   },
   {
@@ -1435,7 +1435,7 @@
     "kind": "action",
     "name": "Grab",
     "status": "partial",
-    "note": "Attack check then Strength against Strength or Dodge, restrained or bound; the holder's own penalties and later cumulative grabs are not applied."
+    "note": "Attack check then Strength against Strength or Dodge, restrained or bound. The holder is hindered and vulnerable while it holds (not vulnerable with Improved Grab or Grabbing Finesse), and the AI is less keen to grab with other foes about; later cumulative grabs are not applied."
   },
   {
     "kind": "action",
@@ -1892,6 +1892,18 @@
     "name": "Recovery checks",
     "status": "full",
     "note": "Ongoing Affliction conditions are resisted at the end of each turn."
+  },
+  {
+    "kind": "rule",
+    "name": "Critical success",
+    "status": "full",
+    "note": "A natural 20 on a check raises the degree by one (it can turn a one-degree failure into a success) in resistance, recovery, Toughness, Dodge, Aid, healing, Stand and Escape checks and in opposed checks (src/engine/battle/checks.js). Attack checks keep their own natural 20 rule: always a hit, and a threat."
+  },
+  {
+    "kind": "rule",
+    "name": "Opposed checks",
+    "status": "full",
+    "note": "The higher result wins; a tie goes to the higher bonus, and with equal bonuses a d20 decides (1 to 10 for the acting fighter). Degrees are counted from the loser's result. Used by Feint, Trip, Disarm, Demoralize and Nullify."
   },
   {
     "kind": "rule",

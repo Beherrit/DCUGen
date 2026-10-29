@@ -14,6 +14,8 @@ const body = (extra = {}) => ({
   defenses: { Parry: 6, Dodge: 6 }, skills: [{ name: 'Deception', ranks: 10 }], advantages: [], powers: [], ...extra,
 });
 const fixed = (n) => ({ int: () => n, chance: () => false, next: () => 0.5, pick: (a) => a[0], weighted: (a) => a[0] });
+// The feinter's die, then the target's (an opposed check: two equal dice are a full tie, so the two sides get different ones).
+const duel = (mine, theirs) => { const rolls = [mine, theirs]; return { ...fixed(1), int: () => rolls.shift() ?? 1 }; };
 
 function setup() {
   const b = createBattle({ seed: 'feint' });
@@ -28,7 +30,7 @@ function setup() {
 test('a successful feint halves the target defense against the feinter only', () => {
   const { b, d, a, f } = setup();
   const full = defenseOf(f, 'Parry');
-  feint(b, d, f, fixed(20)); // a natural 20 always succeeds
+  feint(b, d, f, duel(20, 1)); // a natural 20 against a 1 succeeds
   assert.equal(defenseVs(f, 'Parry', d), Math.ceil(full / 2));
   assert.equal(defenseVs(f, 'Parry', a), full, 'an ally gets no benefit from someone else\'s feint');
 });
@@ -36,7 +38,7 @@ test('a successful feint halves the target defense against the feinter only', ()
 test('the feinter\'s next attack uses the halved defense and spends the feint', () => {
   const { b, d, f } = setup();
   const full = defenseOf(f, 'Parry');
-  feint(b, d, f, fixed(20));
+  feint(b, d, f, duel(20, 1));
   const atk = d.attacks.find((x) => x.kind === 'close');
   const out = rollToHit(b, d, atk, f, fixed(5), {}, 0, []);
   assert.equal(out.dcUsed, 10 + Math.ceil(full / 2));
@@ -47,7 +49,7 @@ test('the feinter\'s next attack uses the halved defense and spends the feint', 
 test('an unused feint lasts through the feinter\'s next round, then wears off', () => {
   const { b, d, f } = setup();
   const full = defenseOf(f, 'Parry');
-  feint(b, d, f, fixed(20));
+  feint(b, d, f, duel(20, 1));
   endOfTurn(b, d, fixed(20)); // the end of the turn the feint was made
   assert.equal(defenseVs(f, 'Parry', d), Math.ceil(full / 2), 'still good on the next round');
   b.round += 1;
@@ -58,6 +60,6 @@ test('an unused feint lasts through the feinter\'s next round, then wears off', 
 test('a failed feint changes nothing', () => {
   const { b, d, f } = setup();
   const full = defenseOf(f, 'Parry');
-  feint(b, d, f, fixed(1));
+  feint(b, d, f, duel(1, 20));
   assert.equal(defenseVs(f, 'Parry', d), full);
 });

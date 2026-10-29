@@ -1,6 +1,7 @@
 // The attacking half of a turn: step away or close in, line up a shot, pick the trade-offs, attack, then move on (Move-by Action).
 
-import { d20, log, alliesOf } from './util.js';
+import { log, alliesOf } from './util.js';
+import { rollCheck } from './checks.js';
 import { conditionLabels, checkPenalty, defenseOf, canAct, moveZones } from './conditions.js';
 import { hitOdds, rangePenalty, concealmentPenalty } from './odds.js';
 import { bestTradeoff } from './plan.js';
@@ -127,9 +128,9 @@ function teamAttack(b, c, attack, target, rng) {
     a.teamedRound = b.round;
     if (atk.kind === 'close' && a.pos !== target.pos) a.pos = target.pos;
     const def = defenseOf(target, atk.kind === 'close' ? 'Parry' : 'Dodge');
-    const r = d20(rng); const tot = r + atk.bonus - checkPenalty(a);
-    const d = r === 20 || tot >= 10 + def ? 1 + Math.floor((tot - 10 - def) / 5) : 0;
-    deg += Math.max(0, d);
+    const r = rollCheck(rng, atk.bonus - checkPenalty(a), 10 + def);
+    const d = r.success ? r.degrees : r.crit ? 1 : 0; // a natural 20 is always a hit, if only of one degree
+    deg += d;
     parts.push(`${a.name} ${d > 0 ? `${d} degree${d > 1 ? 's' : ''}` : 'misses'}`);
   }
   const team = deg >= 3 ? 5 : deg >= 1 ? 2 : 0;

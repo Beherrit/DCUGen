@@ -17,8 +17,8 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | action | 20 | 9 | 7 | 4 | 0 | 80% |
 | maneuver | 12 | 7 | 4 | 1 | 0 | 92% |
 | condition | 30 | 16 | 8 | 5 | 1 | 83% |
-| rule | 36 | 13 | 11 | 12 | 0 | 67% |
-| all | 294 | 82 | 70 | 104 | 38 | 59% |
+| rule | 38 | 15 | 11 | 12 | 0 | 68% |
+| all | 296 | 84 | 70 | 104 | 38 | 60% |
 
 ## Effects
 
@@ -169,12 +169,12 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Evasion | full | Bonus to Dodge against area attacks, and a clean dodge on two degrees. | DCA 74 |
 | Fast Grab | full | A successful unarmed hit (the hit itself, not the damage) can turn into a grab as a free action. | DCA 74 |
 | Favored Environment | none | Environments are not simulated. | DCA 74 |
-| Grabbing Finesse | partial | Holds are made with Dexterity instead of Strength. The engine does not make a grabber vulnerable while holding, so there is nothing to waive. | DCA 75 |
+| Grabbing Finesse | partial | Holds are made with Dexterity instead of Strength. A fighter with it (or Improved Grab) is not made vulnerable while it holds. | DCA 75 |
 | Improved Aim | full | The aim bonus is +10 close or adjacent and +5 at range. | DCA 75 |
 | Improved Critical | full | Widens the critical threat range per rank (16-20 at four). | DCA 75 |
 | Improved Defense | full | +2 to the defense roll while taking the Defend action. | DCA 75 |
 | Improved Disarm | full | No attack penalty and no counter-disarm. The AI tries it with a lower bar for the odds. | DCA 75 |
-| Improved Grab | partial | Only makes the fighter likely to grab; keeping a free hand is not modelled. | DCA 75 |
+| Improved Grab | partial | Makes the fighter likely to grab, and not vulnerable while it holds; keeping a free hand is not modelled. | DCA 75 |
 | Improved Hold | full | Held foes face a harder escape (+5 to the hold DC). | DCA 75 |
 | Improved Initiative | full | +4 to initiative per rank. | DCA 75 |
 | Improved Smash | full | No -5 on attacks against a held item. | DCA 75 |
@@ -250,7 +250,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Disarm | partial | Attack at -2 (-5 ranged), then damage rank against Strength; a win removes the item's attacks for the rest of the fight, a loss with a melee weapon allows a counter-disarm. Equipment weapons and Easily Removable devices can be disarmed. The dropped item is never picked up, and an unarmed disarmer's grab is only logged. |  |
 | Drop Prone | partial | A ranged-heavy fighter in the open, with no cover, facing only ranged foes and needing no move, drops prone for the -5 against ranged attacks. No other reason to go down is modelled. |  |
 | Escape | partial | Athletics or Sleight of Hand against the hold ends a grab; the free move afterwards is not taken. |  |
-| Grab | partial | Attack check then Strength against Strength or Dodge, restrained or bound; the holder's own penalties and later cumulative grabs are not applied. |  |
+| Grab | partial | Attack check then Strength against Strength or Dodge, restrained or bound. The holder is hindered and vulnerable while it holds (not vulnerable with Improved Grab or Grabbing Finesse), and the AI is less keen to grab with other foes about; later cumulative grabs are not applied. |  |
 | Move | partial | Speed rank is turned into 1 to 5 arena zones per turn; real distances are not tracked. |  |
 | Ready | none | Readied actions are not simulated. |  |
 | Recover | full | Once per fight, whole turn, removes the worst damage or fatigue and gives +2 to defenses. |  |
@@ -342,6 +342,8 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Surprise round | full | The Ambush option gives a surprise round: surprised side stunned and vulnerable, ambushers act with one standard action. |  |
 | Initiative | full | d20 plus Agility plus Improved Initiative; late joiners roll and slot into the order. |  |
 | Recovery checks | full | Ongoing Affliction conditions are resisted at the end of each turn. |  |
+| Critical success | full | A natural 20 on a check raises the degree by one (it can turn a one-degree failure into a success) in resistance, recovery, Toughness, Dodge, Aid, healing, Stand and Escape checks and in opposed checks (src/engine/battle/checks.js). Attack checks keep their own natural 20 rule: always a hit, and a threat. |  |
+| Opposed checks | full | The higher result wins; a tie goes to the higher bonus, and with equal bonuses a d20 decides (1 to 10 for the acting fighter). Degrees are counted from the loser's result. Used by Feint, Trip, Disarm, Demoralize and Nullify. |  |
 | Staggered | full | Three degrees of failure on Damage stagger the target; a second one incapacitates. |  |
 | Critical hits | partial | A critical adds +5 to the resistance DC (Increased Effect); Added Effect and Alternate Effect are not used. |  |
 | Death and dying | none | Nobody dies; the worst result is out of the fight. |  |

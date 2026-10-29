@@ -1,6 +1,7 @@
 // The end of a turn: recovery checks against Afflictions and the weakened traits coming back.
 
-import { sign, d20, log } from './util.js';
+import { sign, log } from './util.js';
+import { rollCheck, critNote } from './checks.js';
 import { resistOf } from './conditions.js';
 import { releaseHolds } from './maneuvers.js';
 import { expireSupport } from './support-actions.js';
@@ -24,23 +25,23 @@ export function endOfTurn(b, c, rng) {
     const lead = group[0];
     const resist = resistOf(c, lead.resist || 'Fortitude');
     if (resist === null) { c.conditions = c.conditions.filter((x) => x.source !== src); continue; }
-    const roll = d20(rng);
-    const total = roll + resist;
-    const ok = roll === 20 || total >= lead.dc;
+    const r = rollCheck(rng, resist, lead.dc);
+    const { roll, total } = r;
+    const ok = r.success;
     const dice = [{ label: `Recover (${lead.resist})`, roll, mod: resist, total, dc: lead.dc }];
     if (ok) {
       c.conditions = c.conditions.filter((x) => x.source !== src);
       if (c.out && ['affliction', 'asleep', 'paralyzed'].includes(c.outReason)) { c.out = false; c.outReason = null; }
-      log(b, { kind: 'recover', actor: c.id, text: `${c.name} shakes off ${lead.label || 'the effect'}: ${lead.resist} d20 ${roll} ${sign(resist)} = ${total} vs DC ${lead.dc} — recovered.`, dice });
+      log(b, { kind: 'recover', actor: c.id, text: `${c.name} shakes off ${lead.label || 'the effect'}: ${lead.resist} d20 ${roll} ${sign(resist)} = ${total} vs DC ${lead.dc}${critNote(r)} — recovered.`, dice });
     } else if (lead.progressive && lead.degree < (lead.maxDegree || 3)) {
       const deg = lead.degree + 1;
       const names = lead.tiers[deg - 1];
       c.conditions = c.conditions.filter((x) => x.source !== src);
       for (const n of names) c.conditions.push({ ...lead, name: n, degree: deg, names });
       if (names.includes('Incapacitated') || names.includes('Asleep')) { c.out = true; c.outReason = 'affliction'; releaseHolds(b, c); }
-      log(b, { kind: 'condition', actor: c.id, text: `${lead.label} worsens (progressive): d20 ${roll} ${sign(resist)} = ${total} vs DC ${lead.dc} failed — ${c.name} is now ${names.join(' and ').toUpperCase()}.`, dice, important: true });
+      log(b, { kind: 'condition', actor: c.id, text: `${lead.label} worsens (progressive): d20 ${roll} ${sign(resist)} = ${total} vs DC ${lead.dc}${critNote(r)} failed — ${c.name} is now ${names.join(' and ').toUpperCase()}.`, dice, important: true });
     } else {
-      log(b, { kind: 'miss', actor: c.id, text: `${c.name} fails to shake off ${lead.label || 'the effect'}: d20 ${roll} ${sign(resist)} = ${total} vs DC ${lead.dc}.`, dice });
+      log(b, { kind: 'miss', actor: c.id, text: `${c.name} fails to shake off ${lead.label || 'the effect'}: d20 ${roll} ${sign(resist)} = ${total} vs DC ${lead.dc}${critNote(r)}.`, dice });
     }
   }
   // Weakened traits recover a rank per round

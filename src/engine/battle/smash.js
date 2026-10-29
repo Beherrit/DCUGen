@@ -3,7 +3,8 @@
 // then the object's Toughness check against the damage (p94). Two degrees of failure break it and three or more destroy
 // it; either way its attacks are gone. The holder defends the object, so a hit on it is not an automatic critical.
 
-import { sign, d20, log } from './util.js';
+import { sign, log } from './util.js';
+import { rollCheck, critNote } from './checks.js';
 import { checkPenalty, defenseVs } from './conditions.js';
 import { hitOdds, rangePenalty, resistOdds } from './odds.js';
 import { attackCheck } from './maneuver-checks.js';
@@ -31,11 +32,11 @@ export function smash(b, c, atk, t, item, rng, dist) {
   const lead = `${c.name} smashes at the ${item.name} in ${t.name}'s grip${improved ? ' (Improved Smash)' : ` at -${SMASH_PENALTY}`}: ${check.text}`;
   if (!check.hit) { log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${lead} — miss.`, dice: check.dice }); return; }
   c.stats.hits++;
-  const roll = d20(rng); const total = roll + item.toughness; const dc = dcOf(atk);
-  let fails = total >= dc ? 0 : 1 + Math.floor((dc - total - 1) / 5);
-  if (roll === 20) fails = Math.max(0, fails - 1);
+  const dc = dcOf(atk);
+  const r = rollCheck(rng, item.toughness, dc);
+  const { roll, total, fails } = r;
   const dice = [...check.dice, { label: 'Toughness check', roll, mod: item.toughness, total, dc }];
-  const detail = `${lead} — hit. The ${item.name} resists Damage ${atk.rank}: Toughness d20 ${roll} ${sign(item.toughness)} = ${total} vs DC ${dc}`;
+  const detail = `${lead} — hit. The ${item.name} resists Damage ${atk.rank}: Toughness d20 ${roll} ${sign(item.toughness)} = ${total} vs DC ${dc}${critNote(r)}`;
   if (fails >= 2) {
     loseItem(t, item);
     log(b, { kind: 'condition', actor: c.id, target: t.id, text: `${detail} — ${fails >= 3 ? 'destroyed' : 'broken'} (${fails} degrees), and its attacks are gone.`, dice, important: true });

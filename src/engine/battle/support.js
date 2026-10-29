@@ -1,12 +1,13 @@
 // Healing, hero points, the Recover action and Regeneration.
 
-import { d20, log } from './util.js';
+import { log } from './util.js';
+import { rollCheck, critNote } from './checks.js';
 
 export function heal(b, c, patient, rng) {
-  const roll = d20(rng);
-  const total = roll + c.healing.rank;
   const dc = 10;
-  const deg = total >= dc ? 1 + Math.floor((total - dc) / 5) : 0;
+  const r = rollCheck(rng, c.healing.rank, dc);
+  const { roll, total } = r;
+  const deg = r.success ? r.degrees : 0;
   const fixed = [];
   for (let i = 0; i < deg; i++) {
     if (patient.staggered) { patient.staggered = false; fixed.push('staggered'); }
@@ -15,7 +16,7 @@ export function heal(b, c, patient, rng) {
     else break;
   }
   c.stats.healed += fixed.length;
-  log(b, { kind: fixed.length ? 'heal' : 'miss', actor: c.id, target: patient.id, text: `${c.name} uses ${c.healing.name} on ${patient === c ? `${c.name === 'it' ? 'itself' : 'themself'}` : patient.name}: d20 ${roll} + ${c.healing.rank} = ${total} vs DC 10 — ${fixed.length ? `removes ${fixed.join(', ')}` : 'no effect'}.`, dice: [{ label: 'Healing', roll, mod: c.healing.rank, total, dc }], important: fixed.length > 1 });
+  log(b, { kind: fixed.length ? 'heal' : 'miss', actor: c.id, target: patient.id, text: `${c.name} uses ${c.healing.name} on ${patient === c ? `${c.name === 'it' ? 'itself' : 'themself'}` : patient.name}: d20 ${roll} + ${c.healing.rank} = ${total} vs DC 10${critNote(r, { degrees: true })} — ${fixed.length ? `removes ${fixed.join(', ')}` : 'no effect'}.`, dice: [{ label: 'Healing', roll, mod: c.healing.rank, total, dc }], important: fixed.length > 1 });
 }
 
 export function spendHeroPoint(b, c, use) {

@@ -2,6 +2,7 @@
 // The decisions about when to use them are in support-plan.js.
 
 import { sign, d20, log, enemiesOf } from './util.js';
+import { opposedCheck, opposedNote, checkResult, critNote } from './checks.js';
 import { checkPenalty, resistOf, isImpaired } from './conditions.js';
 
 /** How far a voice carries: a demoralizer reaches foes this many zones away. */
@@ -48,11 +49,11 @@ export function demoralize(b, c, t, rng, { skill = demoralSkill(c) } = {}) {
   const group = t.minion ? [t, ...minionsInSight(b, c).filter((x) => x !== t)] : [t];
   const theirs = Math.max(...group.map((x) => resistanceTo(x, skill)));
   const mine = skill.value - checkPenalty(c);
-  const r1 = d20(rng); const r2 = d20(rng);
-  const diff = r1 + mine - (r2 + theirs);
-  const degrees = diff > 0 || r1 === 20 ? 1 + Math.floor(Math.max(0, diff) / 5) : 0;
-  const dice = [{ label: 'Demoralize', roll: r1, mod: mine, total: r1 + mine, dc: r2 + theirs }];
-  const roll = `${skill.name} d20 ${r1} ${sign(mine)} = ${r1 + mine} vs resistance d20 ${r2} ${sign(theirs)} = ${r2 + theirs}`;
+  const duel = opposedCheck(rng, { bonus: mine }, { bonus: theirs });
+  const [r1, r2] = duel.rolls;
+  const degrees = duel.winner === 'a' ? duel.degrees : 0;
+  const dice = [{ label: 'Demoralize', roll: r1, mod: mine, total: duel.totals.a, dc: duel.totals.b }];
+  const roll = `${skill.name} d20 ${r1} ${sign(mine)} = ${duel.totals.a} vs resistance d20 ${r2} ${sign(theirs)} = ${duel.totals.b}${opposedNote(duel)}`;
   if (!degrees) {
     log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${c.name} tries to demoralize ${nameList(group)}: ${roll} — they shrug it off.`, dice });
     return 0;
@@ -75,12 +76,14 @@ export function aidAttackOf(c) {
  */
 export function aid(b, c, ally, foe, rng, { mode = 'attack', attack = aidAttackOf(c) } = {}) {
   const bonus = (attack?.bonus ?? c.d.abilities.Fighting ?? 0) - checkPenalty(c) + (c.adv.Teamwork ? 5 : 0);
-  const roll = d20(rng); const total = roll + bonus;
-  const ok = roll === 20 || (roll !== 1 && total >= 10);
-  const amount = ok ? (1 + Math.floor((total - 10) / 5) >= 4 ? 5 : 2) : 0;
+  const roll = d20(rng);
+  const r = checkResult(roll, bonus, 10);
+  const total = r.total;
+  const ok = roll === 20 || (roll !== 1 && r.success);
+  const amount = ok ? (r.success && r.degrees >= 4 ? 5 : 2) : 0;
   const dice = [{ label: 'Aid', roll, mod: bonus, total, dc: 10 }];
   const what = mode === 'defense' ? `defense against ${foe.name}` : `an attack on ${foe.name}`;
-  const check = `d20 ${roll} ${sign(bonus)} = ${total} vs DC 10${c.adv.Teamwork ? ' (Teamwork +5)' : ''}`;
+  const check = `d20 ${roll} ${sign(bonus)} = ${total} vs DC 10${c.adv.Teamwork ? ' (Teamwork +5)' : ''}${critNote(r, { degrees: true })}`;
   if (!amount) {
     log(b, { kind: 'miss', actor: c.id, target: ally.id, text: `${c.name} tries to aid ${ally.name} against ${foe.name}: ${check} — no help.`, dice });
     return 0;

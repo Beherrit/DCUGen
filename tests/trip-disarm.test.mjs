@@ -61,7 +61,8 @@ test('trip: opposed check uses the better of Acrobatics and Athletics on each si
   assert.equal(win.t.conditions.find((k) => k.name === 'Prone').source, 'trip');
   assert.match(win.b.log[0].text, /Acrobatics or Athletics d20 10 \+10 = 20 against d20 10 \+9 = 19/);
   assert.ok(!prone(duel([10, 0], [0, 9], 5, 10).t), 'the target uses its better skill (9), so 15 loses to 19');
-  assert.ok(!prone(duel([10, 0], [0, 9], 9, 10).t), 'a tie goes to the defender');
+  assert.ok(prone(duel([10, 0], [0, 9], 9, 10).t), 'a tie in the totals goes to the higher bonus: the tripper has 10 against 9');
+  assert.ok(!prone(duel([9, 0], [0, 10], 10, 9).t), 'and to the defender when the defender has the higher bonus');
 });
 
 test('trip: a lost opposed check lets the target try to trip the attacker back; a failed counter ends it', () => {
@@ -112,9 +113,11 @@ test('disarm: the attack\'s damage rank is rolled against the target\'s Strength
     disarm(f.b, f.c, atk, f.t, itemsOf(f.t)[0], dice(20, r1, r2), 0);
     return f;
   };
-  const lost = run(6, 12); // 6 + 8 = 14 against 12 + 2 = 14: a tie goes to the target
+  const lost = run(5, 12); // 13 against 14
   assert.deepEqual(names(lost.t), ['Unarmed', 'Revolver']);
   assert.match(lost.b.log[0].text, /keeps hold of it/);
+  const tie = run(6, 12); // 6 + 8 = 14 against 12 + 2 = 14: a tie goes to the higher bonus, the disarmer's 8 against 2
+  assert.deepEqual(names(tie.t), ['Unarmed']);
   const won = run(7, 12); // 15 against 14
   assert.deepEqual(names(won.t), ['Unarmed']);
   assert.deepEqual(won.t.dropped, ['equipment:Revolver']);

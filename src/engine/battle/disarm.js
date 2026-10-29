@@ -5,7 +5,8 @@
 import { log } from './util.js';
 import { checkPenalty, defenseVs } from './conditions.js';
 import { hitOdds, rangePenalty } from './odds.js';
-import { attackCheck, opposedCheck, opposedOdds } from './maneuver-checks.js';
+import { attackCheck, contest } from './maneuver-checks.js';
+import { opposedOdds } from './checks.js';
 import { proneMod } from './prone.js';
 import { loseItem } from './items.js';
 
@@ -26,7 +27,7 @@ export function disarmOdds(c, t, atk, dist) {
 /** The loser of a disarm with a melee weapon is open to a counter: the target's best close damage rank against the attacker's Strength. */
 function counterDisarm(b, c, atk, t, rng) {
   const rank = Math.max(0, ...t.attacks.filter((a) => a.kind === 'close' && a.roll).map((a) => a.rank));
-  const back = opposedCheck(rng, rank, strengthOf(c));
+  const back = contest(rng, rank, strengthOf(c));
   if (back.won) loseItem(c, atk.item);
   log(b, { kind: back.won ? 'condition' : 'resist', actor: t.id, target: c.id, text: `${t.name} tries to disarm ${c.name} in return (damage ${rank} against Strength): ${back.text} — ${back.won ? `${c.name} drops the ${atk.item.name}` : 'it holds on'}.`, dice: back.dice, important: back.won });
 }
@@ -39,7 +40,7 @@ export function disarm(b, c, atk, t, item, rng, dist) {
   const lead = `${c.name} tries to disarm ${t.name} of the ${item.name}${improved ? ' (Improved Disarm)' : ` at -${penaltyOf(c, atk)}`}: ${check.text}`;
   if (!check.hit) { log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${lead} — miss.`, dice: check.dice }); return; }
   c.stats.hits++;
-  const duel = opposedCheck(rng, atk.rank, strengthOf(t));
+  const duel = contest(rng, atk.rank, strengthOf(t));
   const detail = `${lead} — hit. Damage ${atk.rank} against Strength, ${duel.text}`;
   const dice = [...check.dice, ...duel.dice];
   if (duel.won) {

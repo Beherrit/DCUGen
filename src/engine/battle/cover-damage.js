@@ -4,6 +4,7 @@
 // area attacks hitting the scenery, and the AI shooting a piece that shields its best target.
 
 import { sign, d20, log } from './util.js';
+import { rollCheck, critNote } from './checks.js';
 import { checkPenalty } from './conditions.js';
 import { rangePenalty } from './odds.js';
 import { attackVerb } from './attack-roll.js';
@@ -22,16 +23,14 @@ function outcome(piece, fails) {
 /** The piece's Toughness check against damage of this rank. Updates its state and the log. Returns the degrees of failure. */
 export function damagePiece(b, c, piece, rank, rng, { crit = false } = {}) {
   const dc = 15 + rank + (crit ? 5 : 0);
-  const roll = d20(rng);
-  const total = roll + piece.toughness;
-  let fails = total >= dc ? 0 : 1 + Math.floor((dc - total - 1) / 5);
-  if (roll === 20) fails = Math.max(0, fails - 1);
+  const r = rollCheck(rng, piece.toughness, dc);
+  const { roll, total, fails } = r;
   const out = outcome(piece, fails);
   const changed = out.state !== piece.state;
   piece.state = out.state;
   const left = piece.level ? coverLevel(piece) : 'none';
   const after = changed && piece.level ? `, now ${left === 'none' ? 'no cover at all' : `${left} cover`}` : '';
-  log(b, { kind: changed ? 'condition' : 'resist', actor: c?.id, text: `The ${pieceLabel(piece)} resists Damage ${rank}: Toughness d20 ${roll} ${sign(piece.toughness)} = ${total} vs DC ${dc}${crit ? ' (+5, defenseless object)' : ''} — ${out.text}${after}.`, dice: [{ label: 'Toughness check', roll, mod: piece.toughness, total, dc }], important: changed });
+  log(b, { kind: changed ? 'condition' : 'resist', actor: c?.id, text: `The ${pieceLabel(piece)} resists Damage ${rank}: Toughness d20 ${roll} ${sign(piece.toughness)} = ${total} vs DC ${dc}${crit ? ' (+5, defenseless object)' : ''}${critNote(r)} — ${out.text}${after}.`, dice: [{ label: 'Toughness check', roll, mod: piece.toughness, total, dc }], important: changed });
   if (piece.state === 'destroyed' && changed) uncoverBehind(b, piece);
   return fails;
 }

@@ -2,7 +2,8 @@
 // A prone fighter stands at the start of its turn when it wants to move or fight up close; a shooter that has no need
 // to move stays down, since ranged attackers have -5 against it. The decisions are small functions at the top.
 
-import { sign, d20, log } from './util.js';
+import { sign, log } from './util.js';
+import { rollCheck, critNote } from './checks.js';
 import { STYLES } from './styles.js';
 import { checkPenalty, moveZones } from './conditions.js';
 import { rangePenalty, expectedValue } from './odds.js';
@@ -37,11 +38,11 @@ function tryStand(b, c, rng, canMove) {
   if (c.adv['Instant Up']) return { how: 'a free action (Instant Up)', dice: [] };
   const mod = c.skills.Acrobatics - checkPenalty(c);
   if (mod < 0) return canMove ? { how: 'a move action', dice: [], usesMove: true } : null; // 20 is out of reach
-  const roll = d20(rng);
-  const total = roll + mod;
+  const r = rollCheck(rng, mod, STAND_DC);
+  const { roll, total } = r;
   const dice = [{ label: 'Stand', roll, mod, total, dc: STAND_DC }];
-  const check = `Acrobatics d20 ${roll} ${sign(mod)} = ${total} vs DC ${STAND_DC}`;
-  if (total >= STAND_DC) return { how: `a free action (${check})`, dice };
+  const check = `Acrobatics d20 ${roll} ${sign(mod)} = ${total} vs DC ${STAND_DC}${critNote(r)}`;
+  if (r.success) return { how: `a free action (${check})`, dice };
   if (canMove) return { how: `a move action (${check}, too low to do it free)`, dice, usesMove: true };
   log(b, { kind: 'miss', actor: c.id, text: `${c.name} tries to get up without using a move: ${check} — still prone.`, dice });
   return null;

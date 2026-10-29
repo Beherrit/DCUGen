@@ -5,7 +5,8 @@
 import { log } from './util.js';
 import { checkPenalty, defenseVs } from './conditions.js';
 import { hitOdds } from './odds.js';
-import { closeBonus, attackCheck, opposedCheck, opposedOdds } from './maneuver-checks.js';
+import { closeBonus, attackCheck, contest } from './maneuver-checks.js';
+import { opposedOdds } from './checks.js';
 import { makeProne, proneMod } from './prone.js';
 
 export const TRIP_PENALTY = 2;
@@ -34,7 +35,7 @@ export function trip(b, c, t, rng) {
   const lead = `${c.name} tries to trip ${t.name}${improved ? ' (Improved Trip)' : ` at -${TRIP_PENALTY}`}: ${check.text}`;
   if (!check.hit) { log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${lead} — miss.`, dice: check.dice }); return; }
   c.stats.hits++;
-  const duel = opposedCheck(rng, skillOf(c), defendWith(c, t));
+  const duel = contest(rng, skillOf(c), defendWith(c, t));
   const dice = [...check.dice, ...duel.dice];
   if (duel.won) {
     makeProne(t, c, 'trip', 'tripped');
@@ -44,7 +45,7 @@ export function trip(b, c, t, rng) {
   const tail = improved ? '' : ` and tries to throw ${c.name} in return`;
   log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${lead} — hit. Acrobatics or Athletics ${duel.text}: ${t.name} keeps its feet${tail}.`, dice });
   if (improved) return;
-  const back = opposedCheck(rng, skillOf(t), skillOf(c));
+  const back = contest(rng, skillOf(t), skillOf(c));
   if (back.won) makeProne(c, t, 'trip', 'tripped');
   log(b, { kind: back.won ? 'condition' : 'resist', actor: t.id, target: c.id, text: `${t.name}'s counter-trip: ${back.text} — ${back.won ? `${c.name} is thrown to the ground, PRONE` : `${c.name} stays up`}.`, dice: back.dice, important: back.won });
 }

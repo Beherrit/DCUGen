@@ -1,6 +1,7 @@
 // What a hit does: the resistance check and its result (damage, Weaken, Affliction, Nullify).
 
-import { sign, d20, log } from './util.js';
+import { sign, log } from './util.js';
+import { rollCheck, critNote, opposedCheck, opposedNote } from './checks.js';
 import { resistOf } from './conditions.js';
 import { dcOf, isImmune, halfImmune } from './odds.js';
 import { releaseHolds } from './maneuvers.js';
@@ -21,13 +22,11 @@ export function applyEffect(b, R, c, atk, t, rng, { crit = false, rankShift = 0,
   const resist = resistOf(t, resistName);
   if (resist === null) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name} has no ${resistName} to affect: no effect.` }); return { landed: false }; }
   const dc = dcOf(atk, rank) + (crit ? 5 : 0) + multi;
-  const roll = d20(rng);
-  const total = roll + resist;
-  let fails = total >= dc ? 0 : 1 + Math.floor((dc - total - 1) / 5);
-  if (roll === 20) fails = Math.max(0, fails - 1);
+  const r = rollCheck(rng, resist, dc);
+  const { roll, total, fails } = r;
   const dice = [{ label: `${resistName} check`, roll, mod: resist, total, dc }];
-  const base = `${t.name} resists with ${resistName}: d20 ${roll} ${sign(resist)} = ${total} vs DC ${dc}${crit ? ' (+5, critical)' : ''}`;
-  if (!fails) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${base} — ${roll === 20 ? 'natural 20, ' : ''}resisted.`, dice }); return { landed: false, degrees: 0, rank }; }
+  const base = `${t.name} resists with ${resistName}: d20 ${roll} ${sign(resist)} = ${total} vs DC ${dc}${crit ? ' (+5, critical)' : ''}${critNote(r)}`;
+  if (!fails) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${base} — ${r.crit && r.base.success ? 'natural 20, ' : ''}resisted.`, dice }); return { landed: false, degrees: 0, rank }; }
   c.stats.degrees += fails;
   t.stats.taken += fails;
   if (atk.effect === 'Damage' || atk.effect === 'Mental Blast') return { ...damageResult(b, c, t, fails, base, dice), rank };
@@ -91,13 +90,15 @@ function afflictionResult(b, c, atk, t, fails, dc, base, dice, rng) {
 function nullify(b, c, atk, t, rng, rank) {
   const prot = t.sustainedProtection;
   if (!prot) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name} has no sustained defense for ${atk.name} to counter: no effect.` }); return { landed: false }; }
-  const r1 = d20(rng); const r2 = d20(rng);
-  const mine = r1 + rank; const theirs = r2 + Math.max(prot, resistOf(t, 'Will') ?? 0);
-  if (mine > theirs) {
+  const bonus = Math.max(prot, resistOf(t, 'Will') ?? 0);
+  const duel = opposedCheck(rng, { bonus: rank }, { bonus });
+  const [r1, r2] = duel.rolls;
+  const mine = duel.totals.a; const theirs = duel.totals.b;
+  if (duel.winner === 'a') {
     t.nullified = prot;
-    log(b, { kind: 'condition', actor: c.id, target: t.id, text: `${c.name}'s ${atk.name} (d20 ${r1} + ${rank} = ${mine}) overpowers ${t.name}'s defenses (d20 ${r2} + ${theirs - r2} = ${theirs}): ${prot} ranks of protection wink out until ${t.name} restores them.`, important: true });
+    log(b, { kind: 'condition', actor: c.id, target: t.id, text: `${c.name}'s ${atk.name} (d20 ${r1} + ${rank} = ${mine}) overpowers ${t.name}'s defenses (d20 ${r2} + ${bonus} = ${theirs})${opposedNote(duel)}: ${prot} ranks of protection wink out until ${t.name} restores them.`, important: true });
     return { landed: true, degrees: 1 };
   }
-  log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${c.name}'s ${atk.name} (d20 ${r1} + ${rank} = ${mine}) fails to crack ${t.name}'s defenses (${theirs}).` });
+  log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${c.name}'s ${atk.name} (d20 ${r1} + ${rank} = ${mine}) fails to crack ${t.name}'s defenses (${theirs})${opposedNote(duel)}.` });
   return { landed: false };
 }

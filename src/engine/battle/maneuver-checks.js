@@ -1,6 +1,7 @@
-// The checks the maneuvers share: the attack check, the opposed check and their odds.
+// The checks the maneuvers share: the attack check and the opposed check (the rules for it are in checks.js).
 
 import { sign, d20 } from './util.js';
+import { opposedCheck, opposedNote } from './checks.js';
 import { feintedBy, defenseVs } from './conditions.js';
 
 /** The bonus for a close maneuver such as a grab or a trip: the unarmed attack, else Fighting. */
@@ -19,19 +20,14 @@ export function attackCheck(c, t, rng, which, mod) {
   return { hit, roll, total, dc, dice: [{ label: 'Attack', roll, mod, total, dc }], text: `d20 ${roll} ${sign(mod)} = ${total} vs ${which} DC ${dc}${feinted ? ' (feinted: vulnerable)' : ''}` };
 }
 
-/** An opposed check: `won` is true when the first side beats the second (a tie goes to the second). */
-export function opposedCheck(rng, mine, theirs) {
-  const r1 = d20(rng); const r2 = d20(rng);
+/** An opposed check of the first side's bonus against the second's: `won` is true when the first side wins. */
+export function contest(rng, mine, theirs) {
+  const res = opposedCheck(rng, { bonus: mine }, { bonus: theirs });
+  const [r1, r2] = res.rolls;
   return {
-    won: r1 + mine > r2 + theirs,
-    text: `d20 ${r1} ${sign(mine)} = ${r1 + mine} against d20 ${r2} ${sign(theirs)} = ${r2 + theirs}`,
-    dice: [{ label: 'Opposed check', roll: r1, mod: mine, total: r1 + mine, dc: r2 + theirs }],
+    won: res.winner === 'a',
+    degrees: res.degrees,
+    text: `d20 ${r1} ${sign(mine)} = ${res.totals.a} against d20 ${r2} ${sign(theirs)} = ${res.totals.b}${opposedNote(res)}`,
+    dice: [{ label: 'Opposed check', roll: r1, mod: mine, total: res.totals.a, dc: res.totals.b }],
   };
-}
-
-/** The chance that the first side beats the second in an opposed check. */
-export function opposedOdds(mine, theirs) {
-  let wins = 0;
-  for (let a = 1; a <= 20; a++) for (let b = 1; b <= 20; b++) if (a + mine > b + theirs) wins++;
-  return wins / 400;
 }
