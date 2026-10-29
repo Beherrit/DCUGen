@@ -291,6 +291,7 @@ function statusBar() {
     next && battle.status === 'running' ? chip(`Next: ${next.name}`) : null,
     chip(`Seed ${battle.seed}`),
     battle.options.enclosed ? chip('Enclosed space') : null,
+    battle.options.ambush ? chip(`Team ${battle.options.ambush} ambushes`) : null,
   ];
 }
 
@@ -327,6 +328,14 @@ function quickStarts() {
     btn('👥 Squad of 5 minions → B', 'Five of the same minion from the Bestiary', () => { const f = foe('B', { minion: true }); throwIn(f.ch, { team: 'B', copies: 5, name: f.name }); toast(`5 × ${f.name} on team B`); }),
     btn('⚖ Even it up', 'Adds Bestiary fighters to the weaker team until the power levels are close', evenUp, battle.combatants.length < 1),
   ];
+}
+
+/** The ambush choice: one side catches the other off guard. */
+function ambushPicker() {
+  const teams = rowTeams();
+  const opts = [h('option', { value: '' }, 'No ambush'), ...teams.map((t) => h('option', { value: t, selected: battle.options.ambush === t }, `Team ${t} ambushes`))];
+  return h('label', { class: 'bt-copies', title: 'One side catches the other off guard: a surprise round where only the ambushers act and the surprised are vulnerable until they act' }, 'Ambush ',
+    h('select', { id: 'bt-ambush', 'aria-label': 'Ambush', onChange: (e) => { battle.options.ambush = e.target.value || null; save(); renderBattle(); } }, ...opts));
 }
 
 /** The team letters to offer on each row: A and B, and C and D once a fight uses more sides (or asks for them). */
@@ -396,7 +405,8 @@ function addPanel() {
     h('div', { class: 'add-row', style: { alignItems: 'center' } },
       h('label', { class: 'bt-copies', title: 'Add several of the same (a squad of minions)' }, 'Copies ×', copies),
       h('label', { class: 'bt-copies' }, h('input', { type: 'checkbox', checked: !!ui.moreTeams, onChange: (e) => { ui.moreTeams = e.target.checked; renderBattle(); } }), ' Teams C and D'),
-      h('label', { class: 'bt-copies', title: 'A room or corridor: two zones, everyone within one move, ranged fighters have nowhere to run' }, h('input', { type: 'checkbox', id: 'bt-enclosed', checked: !!battle.options.enclosed, onChange: (e) => { battle.options.enclosed = e.target.checked; placeAll(battle); save(); renderBattle(); } }), ' Enclosed space')),
+      h('label', { class: 'bt-copies', title: 'A room or corridor: two zones, everyone within one move, ranged fighters have nowhere to run' }, h('input', { type: 'checkbox', id: 'bt-enclosed', checked: !!battle.options.enclosed, onChange: (e) => { battle.options.enclosed = e.target.checked; placeAll(battle); save(); renderBattle(); } }), ' Enclosed space'),
+      ambushPicker()),
     h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', type: 'button', onClick: () => hooks.goBestiary?.() }, 'Open the Bestiary')));
 }
 

@@ -247,7 +247,7 @@ function resetCombatant(c) {
     conditions: [],        // [{ name, degree, from, source, dc, resist, cumulative, progressive, tiers, extraCondition, until }]
     weakened: {},          // trait -> ranks lost
     fatigue: 0, defMod: 0, feinted: false, grabbedBy: null, holding: null, nullified: 0, regen: 0, interposed: false,
-    lastAttackId: null, usedEffort: 0, teamedRound: null,
+    lastAttackId: null, usedEffort: 0, teamedRound: null, surpriseActor: false,
     recovered: false,      // the Recover action: once per conflict (DCA 177)
     aiming: null,          // { target, bonus } after an Aim action (DCA 175)
     defending: false,      // the Defend action, until the start of their next turn (DCA 175)
@@ -351,6 +351,7 @@ function canAct(c) {
   const s = activeConditions(c);
   if (c.out) return 'none';
   if (s.has('Stunned') || s.has('Unaware')) return 'none';
+  if (c.surpriseActor) return 'standard'; // the surprise round: a standard action, or a move instead (DCA 167)
   if (s.has('Controlled')) return 'controlled';
   if (s.has('Dazed') || s.has('Compelled')) return 'standard';
   return 'full';
@@ -493,7 +494,7 @@ function seesThrough(c, target) {
 // ---- the battle -----------------------------------------------------------------------------------------------
 
 export function createBattle({ seed = 'battle', name = 'Battle' } = {}) {
-  return { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, enclosed: false, maxRounds: MAX_ROUNDS }, lastEvent: 0 };
+  return { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, enclosed: false, ambush: null, maxRounds: MAX_ROUNDS }, lastEvent: 0 };
 }
 
 export function addCombatant(b, c) {
@@ -542,10 +543,48 @@ export function startBattle(b, R) {
   }
   b.order = [...b.combatants].sort((x, y) => y.init - x.init || y.initBonus - x.initBonus || x.name.localeCompare(y.name)).map((c) => c.id);
   b.status = 'running';
+  const amb = applyAmbush(b);
   if (b.options.enclosed) log(b, { kind: 'note', text: 'Enclosed space: a room or corridor. Everyone starts within one move and nobody can keep their distance.' });
+  if (amb) log(b, { kind: 'note', text: `Ambush: team ${amb} catches the others off guard. Surprise round: only team ${amb} acts, and the surprised are vulnerable until they act.` });
   log(b, { kind: 'round', text: `Round 1 begins. ${b.combatants.length} fighters, ${new Set(b.combatants.map((c) => c.team)).size} sides.`, important: true });
   log(b, { kind: 'init', text: `Initiative: ${b.order.map((id) => { const c = byId(b, id); return `${c.name} ${c.init - (c.adv['Seize Initiative'] ? 100 : 0)}${c.adv['Seize Initiative'] ? ' (Seize Initiative, goes first)' : ''}`; }).join(', ')}.`, dice: b.order.map((id) => { const c = byId(b, id); return { label: `${c.name} initiative`, roll: c.initRoll, mod: c.initBonus, total: c.initRoll + c.initBonus }; }) });
   return b;
+}
+
+/** The surprise round is over: the surprised recover and the ambushers get full turns again. */
+function endSurprise(b) {
+  for (const c of b.combatants) {
+    c.surpriseActor = false;
+    if (!c.conditions.some((x) => x.source === 'surprise')) continue;
+    c.conditions = c.conditions.filter((x) => x.source !== 'surprise');
+    if (!c.out && !c.fled) log(b, { kind: 'recover', actor: c.id, text: `${c.name} recovers from the surprise.` });
+  }
+}
+
+/** One team catches the rest off guard: ambushers close in, everyone else is surprised. Returns the team letter, or null if nothing applies. */
+function applyAmbush(b) {
+  const amb = b.options.ambush;
+  const ambushers = amb ? alive(b).filter((c) => c.team === amb) : [];
+  if (!ambushers.length) return null;
+  const arena = arenaOf(b);
+  for (const c of ambushers) {
+    const foes = enemiesOf(b, c);
+    if (!foes.length) continue;
+    const e = foes.reduce((best, x) => (Math.abs(c.pos - x.pos) < Math.abs(c.pos - best.pos) ? x : best), foes[0]);
+    // Ambushers are already in position: melee in the target's zone, ranged one zone off (no range penalty).
+    const S = STYLES[c.style] || {};
+    const ranged = c.attacks.some((a) => a.kind !== 'close') && (S.ranged ?? 1) >= (S.close ?? 1);
+    c.pos = ranged ? clamp(e.pos + (e.pos <= arena / 2 ? 1 : -1), 0, arena - 1) : e.pos;
+    c.surpriseActor = true;
+  }
+  for (const c of alive(b).filter((x) => x.team !== amb)) {
+    // Surprised: stunned and vulnerable until the next round (DCA 167). Uncanny Dodge removes only the vulnerable part.
+    if (c.adv['Uncanny Dodge']) {
+      log(b, { kind: 'note', text: `${c.name} keeps their guard up (Uncanny Dodge): surprised, but not vulnerable.` });
+      c.conditions.push({ name: 'Stunned', degree: 1, source: 'surprise', label: 'surprised', from: null });
+    } else c.conditions.push({ name: 'Surprised', degree: 1, source: 'surprise', label: 'surprised', from: null });
+  }
+  return amb;
 }
 
 export function byId(b, id) { return b.combatants.find((c) => c.id === id); }
@@ -595,6 +634,7 @@ export function step(b, R) {
     b.round += 1;
     if (checkOver(b)) return b.log.length - before;
     log(b, { kind: 'round', text: `Round ${b.round}.`, important: true });
+    if (b.round === 2) endSurprise(b);
     for (const c of alive(b)) regenerate(b, c);
   }
   const c = byId(b, b.order[b.turn]);
@@ -603,7 +643,10 @@ export function step(b, R) {
   // Joined an earlier team attack this round: that was this fighter's turn (they delayed into it).
   if (c.teamedRound === b.round) return b.log.length - before;
   const rng = rngFor(b);
-  try { takeTurn(b, R, c, rng); } catch (e) { log(b, { kind: 'note', actor: c.id, text: `${c.name} hesitates (${e.message}).` }); }
+  if (c.conditions.some((x) => x.source === 'surprise')) log(b, { kind: 'skip', actor: c.id, text: `${c.name} is surprised and loses the round.` });
+  else {
+    try { takeTurn(b, R, c, rng); } catch (e) { log(b, { kind: 'note', actor: c.id, text: `${c.name} hesitates (${e.message}).` }); }
+  }
   endOfTurn(b, c, rng);
   checkOver(b);
   return b.log.length - before;
@@ -1337,7 +1380,7 @@ function endOfTurn(b, c, rng) {
   // Sustained defenses come back as a free action
   if (c.nullified) { c.nullified = 0; log(b, { kind: 'recover', actor: c.id, text: `${c.name} restores its defenses.` }); }
   // Recovery checks against afflictions (DCA 95)
-  const sources = [...new Set(c.conditions.filter((x) => x.source !== 'grab').map((x) => x.source))];
+  const sources = [...new Set(c.conditions.filter((x) => x.source !== 'grab' && x.source !== 'surprise').map((x) => x.source))];
   for (const src of sources) {
     const group = c.conditions.filter((x) => x.source === src);
     const lead = group[0];
