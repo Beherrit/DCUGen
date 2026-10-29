@@ -2317,3 +2317,19 @@ html.read-color .power-about { font-style: normal; }
 .ses-att th[scope="row"] { text-align: left; }
 .ses-att tr.villain th[scope="row"] { color: var(--accent); }
 .ses-att .linkish { background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: inherit; cursor: pointer; text-decoration: underline; }
+
+/* Battle Room: sub-tabs, saved fights, the fight viewer and the leaderboard (src/app/records) */
+.bt-subtabs { max-width: 280px; margin-bottom: 12px; }
+.fl-panel { gap: 12px; }
+.fl-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.fl-tools .spacer { flex: 1; }
+.fl-tools input[type="search"] { min-width: 0; flex: 0 1 200px; }
+.fl-body { display: grid; gap: 12px; min-width: 0; }
+.fl-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.fl-row { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface-2); }
+.fl-main { display: grid; gap: 2px; min-width: 0; flex: 1 1 260px; }
+.fl-sum { font-weight: 600; overflow-wrap: anywhere; }
+.fv-title { margin: 0; }
+.fb-table td, .fb-table th { white-space: nowrap; }
+.bt-kept { margin-top: 2px; }
+@media (max-width: 640px) { .bt-subtabs { max-width: none; } .fl-pages { width: 100% !important; } .fl-tools input[type="search"] { flex: 1 1 100%; } }

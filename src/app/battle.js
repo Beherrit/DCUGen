@@ -2,7 +2,6 @@
 // the fight play out turn by turn with a full log. Pause, step, run to the end, or run the same
 // match a hundred times for the odds.
 
-import { sortChars } from './sorting.js';
 import { hasForms, activeForm, switchForm } from '../engine/forms.js';
 import { h, clear, toast, copyText, download, inkFor, openDialog } from './dom.js';
 import { randomSeed } from '../engine/rng.js';
@@ -12,6 +11,9 @@ import { portraitOf } from '../engine/portrait.js';
 import { imageDialog } from './imageshare.js';
 import { addPanel, quickStarts } from './battle-setup.js';
 import { tacticChips } from './battle-tactics.js';
+import { keepFinishedFight, keptNote, roomTabs } from './records/room.js';
+import { renderFights, openFight } from './records/fights-view.js';
+import { KIND_CLASS, teamColor, renderLogInto, logControls } from './battle-log.js';
 import { coverTags, uiBattle, wholeCover } from './battle-cover.js';
 import { createBattle, addCombatant, removeCombatant, makeCombatant, joinBattle, startBattle, step, runRound, runToEnd, battleText, simulateMany, serializeBattle, reviveBattle, placeAll, STYLES, TACTICS, arenaOf, statusLine, conditionLabels, detectStyle, rebuildCombatant } from '../engine/battle.js';
 
@@ -21,8 +23,7 @@ let root;
 let hooks = {};
 let battle;
 let timer = null;
-let ui = { showDice: true, logWho: null, moreTeams: false, mineQ: '', speed: 700, filter: 'all', bestiaryQ: '', team: 'A', copies: 1, mc: null, mcBusy: false, showHelp: false };
-const TEAM_COLORS = { A: '#1f4fbf', B: '#c8202f', C: '#1a7f4b', D: '#a8670b' };
+let ui = { sub: 'fight', showDice: true, logWho: null, moreTeams: false, mineQ: '', speed: 700, filter: 'all', bestiaryQ: '', team: 'A', copies: 1, mc: null, mcBusy: false, showHelp: false };
 const TEAMS = ['A', 'B', 'C', 'D'];
 
 function load() {
@@ -43,7 +44,7 @@ export function initBattle(rules, el, h2 = {}) {
   hooks = h2;
   battle = load();
   document.addEventListener('keydown', (e) => {
-    if (!root || root.hidden || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (!root || root.hidden || ui.sub === 'fights' || e.ctrlKey || e.metaKey || e.altKey) return;
     if (/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName)) return;
     if (document.querySelector('dialog[open]')) return;
     const k = e.key.toLowerCase();
@@ -148,7 +149,6 @@ const setupCx = () => ({ battle, R, ui, hooks, throwIn, save, render: renderBatt
 
 // ---- pieces ---------------------------------------------------------------------------------------------
 
-const teamColor = (t) => TEAM_COLORS[t] || '#666';
 const initials = (name) => name.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
 
 function fighterCard(c) {
@@ -205,36 +205,6 @@ function arena() {
   return h('div', { class: 'bt-arena', role: 'img', 'aria-label': 'The arena, with every fighter in their zone' }, zones);
 }
 
-const KIND_CLASS = { round: 'round', init: 'init', hit: 'hit', crit: 'crit', miss: 'miss', resist: 'resist', condition: 'cond', ko: 'ko', heal: 'heal', hero: 'hero', move: 'move', flee: 'ko', end: 'end', skip: 'skip', attack: 'attack', recover: 'heal', note: 'note' };
-
-const diceText = (d) => `${d.label}: d20 ${d.roll}${d.mod != null ? ` ${d.mod >= 0 ? '+' : '−'} ${Math.abs(d.mod)}` : ''}${d.total != null ? ` = ${d.total}` : ''}${d.dc != null ? ` vs ${d.dc}` : ''}`;
-
-function logEntry(e) {
-  const el = h('div', { class: `bt-log-row ${KIND_CLASS[e.kind] || ''} ${e.important ? 'key' : ''}` },
-    h('span', { class: 'bt-log-text' }, e.text,
-      ui.showDice && e.dice?.length && e.kind !== 'init' && !/d20 \d/.test(e.text || '') ? h('small', { class: 'bt-log-roll' }, e.dice.map(diceText).join(' · ')) : null),
-    e.dice?.length ? h('span', { class: 'bt-log-dice', title: e.dice.map(diceText).join('\n') }, e.dice.slice(0, 4).map((d) => h('b', { class: `num ${d.roll === 20 ? 'nat20' : d.roll === 1 ? 'nat1' : ''}` }, d.roll))) : null);
-  return el;
-}
-
-/**
- * The log as turns: each fighter's turn is a block with who acted and everything that happened in it (moves,
- * attacks, rolls, what the target rolled, conditions), so you can read the fight action by action.
- */
-function logTurns(list) {
-  const blocks = [];
-  let cur = null;
-  for (const e of list) {
-    if (e.kind === 'round' || e.kind === 'end' || e.kind === 'init' && !e.actor) { blocks.push({ kind: e.kind, entries: [e] }); cur = null; continue; }
-    if (!cur || (e.actor && e.actor !== cur.actor) || e.round !== cur.round) {
-      cur = { kind: 'turn', actor: e.actor || null, round: e.round, entries: [] };
-      blocks.push(cur);
-    }
-    cur.entries.push(e);
-  }
-  return blocks;
-}
-
 let logHost; let liveHost; let arenaHost; let cardsHost; let nowHost;
 
 /** What just happened and who is up, in big type, so you need not read the log. */
@@ -251,21 +221,7 @@ function nowBanner() {
 
 function renderLog() {
   if (!logHost) return;
-  clear(logHost);
-  const who = ui.logWho && battle.combatants.some((c) => c.id === ui.logWho) ? ui.logWho : null;
-  const list = battle.log.filter((e) => (ui.filter === 'all' || e.important || ['round', 'ko', 'end', 'crit', 'hero'].includes(e.kind))
-    && (!who || e.kind === 'round' || e.actor === who || e.target === who || (e.text || '').includes(battle.combatants.find((c) => c.id === who)?.name || '\u0000')));
-  if (!list.length) { logHost.append(h('p', { class: 'hint', style: { margin: 0 } }, battle.status === 'setup' ? 'Start the fight and every action shows here, turn by turn: who moved, who they attacked, every roll and what it did.' : 'Nothing for this filter yet.')); return; }
-  const blocks = logTurns(list);
-  blocks.forEach((b, i) => {
-    if (b.kind !== 'turn') { for (const e of b.entries) logHost.append(logEntry(e)); return; }
-    const actor = b.actor ? battle.combatants.find((c) => c.id === b.actor) : null;
-    const last = i === blocks.length - 1;
-    logHost.append(h('div', { class: `bt-turn ${last && battle.status === 'running' ? 'latest' : ''}`, style: actor ? { '--t': teamColor(actor.team) } : null },
-      actor ? h('div', { class: 'bt-turn-head' }, h('span', { class: 'bt-log-team', style: { background: teamColor(actor.team) } }, actor.team), h('b', null, actor.name), h('span', { class: 'hint' }, `round ${b.round}`)) : null,
-      b.entries.map(logEntry)));
-  });
-  logHost.scrollTop = logHost.scrollHeight;
+  renderLogInto(logHost, { log: battle.log, fighters: battle.combatants, status: battle.status, filter: ui.filter, logWho: ui.logWho, showDice: ui.showDice }, teamColor);
 }
 
 /** Cheap re-render while the fight plays: cards, arena and log only. */
@@ -418,8 +374,13 @@ function helpPanel() {
 
 // ---- the page --------------------------------------------------------------------------------------------
 
+/** Switch between the Battle Room's pages: 'fight' (the arena) and 'fights' (saved fights and the leaderboard). */
+function goSub(sub) { ui.sub = sub; renderBattle(); }
+
 export function renderBattle() {
   if (!root) return;
+  keepFinishedFight(battle, save);
+  if (ui.sub === 'fights') { renderFights(root, goSub); return; }
   clear(root);
   const setup = battle.status === 'setup';
   const over = battle.status === 'over';
@@ -457,11 +418,7 @@ export function renderBattle() {
   arenaHost = h('div'); arenaHost.append(arena());
   cardsHost = h('div', { class: 'bt-teams' }); cardsHost.append(...teamColumns());
   logHost = h('div', { class: 'bt-log', 'aria-live': 'polite' });
-  const filter = h('div', { class: 'seg', role: 'group', 'aria-label': 'Log filter', style: { width: '200px' } },
-    [['all', 'Every action'], ['key', 'Key moments']].map(([v, t]) => h('button', { type: 'button', 'aria-pressed': String(ui.filter === v), onClick: () => { ui.filter = v; renderLog(); renderBattle(); } }, t)));
-  const whoSel = h('select', { id: 'bt-log-who', 'aria-label': 'Show one fighter', onChange: (e) => { ui.logWho = e.target.value || null; renderLog(); } },
-    h('option', { value: '' }, 'Everyone'), sortChars(battle.combatants, 'name').map((c) => h('option', { value: c.id, selected: c.id === ui.logWho }, `${c.name} (${c.team})`)));
-  const diceToggle = h('label', { class: 'bt-copies', title: 'Show every roll written out: d20, bonus, total and the DC' }, h('input', { type: 'checkbox', id: 'bt-log-dice', checked: ui.showDice !== false, onChange: (e) => { ui.showDice = e.target.checked; renderLog(); } }), ' Rolls');
+  const { filter, whoSel, diceToggle } = logControls(ui, battle.combatants, { onLog: renderLog, onFilter: () => { renderLog(); renderBattle(); } });
 
   const result = over ? resultPanel() : null;
 
@@ -469,6 +426,7 @@ export function renderBattle() {
     h('div', null, h('h1', null, 'Battle Room'), h('p', null, 'Put anyone against anyone: press A or B next to a fighter, then Fight! Each fighter plays to its strengths, and "What happened" shows every action and roll. Space plays and pauses, N steps, R runs a round, E runs to the end.')),
     h('span', { class: 'spacer' }),
     h('button', { class: 'btn sm ghost', type: 'button', 'aria-pressed': String(ui.showHelp), onClick: () => { ui.showHelp = !ui.showHelp; renderBattle(); } }, ui.showHelp ? 'Hide the rules used' : 'What\'s simulated?')));
+  root.append(roomTabs('fight', goSub));
   if (ui.showHelp) root.append(helpPanel());
   nowHost = h('div', { class: 'bt-now' }); nowHost.append(...nowBanner());
   const logPanel = h('section', { class: 'panel bt-panel bt-log-panel', id: 'bt-log-panel' },
@@ -500,6 +458,7 @@ function resultPanel() {
   return h('div', { class: 'bt-result', style: { '--t': battle.winner ? teamColor(battle.winner) : 'var(--ink-3)' } },
     h('b', null, battle.winner ? `Team ${battle.winner} ${battle.gotAway ? 'gets away' : 'wins'} in ${battle.round} round${battle.round === 1 ? '' : 's'}` : `Stalemate after ${battle.round - 1} rounds`),
     h('span', null, standing.length ? `Still standing: ${standing.map((c) => `${c.name} (${statusLine(c).toLowerCase()})`).join(', ')}.` : 'Nobody is left standing.'),
+    keptNote(battle, (id) => { openFight(id); goSub('fights'); }),
     mvp && (mvp.stats.kos || mvp.stats.degrees) ? h('span', null, `Fight of the night: ${mvp.name}, ${mvp.stats.hits} hits, ${mvp.stats.kos} KO${mvp.stats.kos === 1 ? '' : 's'}.`) : null,
     h('div', { class: 'btn-row', style: { marginTop: '6px' } },
       h('button', { class: 'btn primary', type: 'button', id: 'bt-comic', title: 'Turn this fight into a six-panel comic page to share', onClick: () => {
