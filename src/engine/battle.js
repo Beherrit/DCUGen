@@ -22,6 +22,8 @@ import { makeRng } from './rng.js';
 import { deriveAll, advantageRank, allPowers } from './derive.js';
 
 export const ARENA = 8;           // zones, left to right
+export const ENCLOSED_ARENA = 2;  // a room or corridor: everyone within one move
+export function arenaOf(b) { return b?.options?.enclosed ? ENCLOSED_ARENA : ARENA; }
 export const MAX_ROUNDS = 40;
 
 // ---- fighting styles ------------------------------------------------------------------------------
@@ -491,7 +493,7 @@ function seesThrough(c, target) {
 // ---- the battle -----------------------------------------------------------------------------------------------
 
 export function createBattle({ seed = 'battle', name = 'Battle' } = {}) {
-  return { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, maxRounds: MAX_ROUNDS }, lastEvent: 0 };
+  return { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, enclosed: false, maxRounds: MAX_ROUNDS }, lastEvent: 0 };
 }
 
 export function addCombatant(b, c) {
@@ -509,13 +511,14 @@ export function removeCombatant(b, id) {
 /** Teams start on opposite sides of the arena (a third or fourth team in between). */
 export function placeAll(b) {
   const teams = [...new Set(b.combatants.map((c) => c.team))].sort();
-  const spots = { [teams[0]]: 1, [teams[1]]: ARENA - 2, [teams[2]]: Math.floor(ARENA / 2) - 1, [teams[3]]: Math.floor(ARENA / 2) };
+  const arena = arenaOf(b);
+  const spots = { [teams[0]]: arena >= 4 ? 1 : 0, [teams[1]]: arena >= 4 ? arena - 2 : arena - 1, [teams[2]]: Math.max(0, Math.floor(arena / 2) - 1), [teams[3]]: Math.floor(arena / 2) };
   const seen = {};
   for (const c of b.combatants) {
-    const base = spots[c.team] ?? Math.floor(ARENA / 2);
+    const base = spots[c.team] ?? Math.floor(arena / 2);
     const n = (seen[c.team] = (seen[c.team] || 0) + 1);
-    const spread = [0, -1, 1][n % 3] * (n > 3 ? 0 : 1);
-    c.pos = clamp(base + (c.team === teams[0] ? Math.max(0, spread) : c.team === teams[1] ? Math.min(0, spread) : spread), 0, ARENA - 1);
+    const spread = arena < 4 ? 0 : [0, -1, 1][n % 3] * (n > 3 ? 0 : 1);
+    c.pos = clamp(base + (c.team === teams[0] ? Math.max(0, spread) : c.team === teams[1] ? Math.min(0, spread) : spread), 0, arena - 1);
   }
 }
 
@@ -539,6 +542,7 @@ export function startBattle(b, R) {
   }
   b.order = [...b.combatants].sort((x, y) => y.init - x.init || y.initBonus - x.initBonus || x.name.localeCompare(y.name)).map((c) => c.id);
   b.status = 'running';
+  if (b.options.enclosed) log(b, { kind: 'note', text: 'Enclosed space: a room or corridor. Everyone starts within one move and nobody can keep their distance.' });
   log(b, { kind: 'round', text: `Round 1 begins. ${b.combatants.length} fighters, ${new Set(b.combatants.map((c) => c.team)).size} sides.`, important: true });
   log(b, { kind: 'init', text: `Initiative: ${b.order.map((id) => { const c = byId(b, id); return `${c.name} ${c.init - (c.adv['Seize Initiative'] ? 100 : 0)}${c.adv['Seize Initiative'] ? ' (Seize Initiative, goes first)' : ''}`; }).join(', ')}.`, dice: b.order.map((id) => { const c = byId(b, id); return { label: `${c.name} initiative`, roll: c.initRoll, mod: c.initBonus, total: c.initRoll + c.initBonus }; }) });
   return b;
@@ -552,7 +556,8 @@ export function joinBattle(b, R, c) {
   b.combatants.push(c);
   resetCombatant(c); rebuildCombatant(c, R);
   const teams = [...new Set(b.combatants.map((x) => x.team))].sort();
-  c.pos = c.team === teams[0] ? 0 : c.team === teams[1] ? ARENA - 1 : Math.floor(ARENA / 2);
+  const arena = arenaOf(b);
+  c.pos = c.team === teams[0] ? 0 : c.team === teams[1] ? arena - 1 : Math.floor(arena / 2);
   const rng = rngFor(b);
   c.initRoll = d20(rng); c.init = c.initRoll + c.initBonus;
   b.order.push(c.id);
@@ -747,7 +752,7 @@ function takeTurn(b, R, c, rng) {
     const threat = enemies.find((e) => e.pos === c.pos && e.attacks.some((a) => a.kind === 'close' && !a.unarmed || (a.unarmed && e.style === 'brawler')));
     if (threat && rangePenalty(attack, 1) === 0) {
       const dir = c.pos <= threat.pos ? -1 : 1;
-      const dest = clamp(c.pos + dir * Math.min(moveZones(c), 1), 0, ARENA - 1);
+      const dest = clamp(c.pos + dir * Math.min(moveZones(c), 1), 0, arenaOf(b) - 1);
       if (dest !== c.pos) moveTo(b, c, dest, `away from ${threat.name}`);
     }
   }
@@ -824,8 +829,8 @@ function takeTurn(b, R, c, rng) {
 
   // Hit and run
   if (S.hitAndRun && c.adv['Move-by Action'] && mode === 'full' && attack.kind === 'close' && !c.holding) {
-    const dir = c.pos >= ARENA / 2 ? 1 : -1;
-    const dest = clamp(c.pos + dir * Math.max(1, Math.floor(moveZones(c) / 2)), 0, ARENA - 1);
+    const dir = c.pos >= arenaOf(b) / 2 ? 1 : -1;
+    const dest = clamp(c.pos + dir * Math.max(1, Math.floor(moveZones(c) / 2)), 0, arenaOf(b) - 1);
     if (dest !== c.pos && !enemies.some((e) => e.pos === dest)) moveTo(b, c, dest, 'and is gone before anyone can answer');
   }
 }

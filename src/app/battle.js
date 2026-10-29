@@ -13,7 +13,7 @@ import { DIFFICULTIES, verdict, heroOdds, tuneBattle, scaleCharacter } from '../
 import { battleComic, comicSvg } from '../engine/comic.js';
 import { portraitOf } from '../engine/portrait.js';
 import { imageDialog } from './imageshare.js';
-import { createBattle, addCombatant, removeCombatant, makeCombatant, joinBattle, startBattle, step, runRound, runToEnd, battleText, simulateMany, serializeBattle, reviveBattle, placeAll, STYLES, TACTICS, ARENA, statusLine, conditionLabels, detectStyle, rebuildCombatant } from '../engine/battle.js';
+import { createBattle, addCombatant, removeCombatant, makeCombatant, joinBattle, startBattle, step, runRound, runToEnd, battleText, simulateMany, serializeBattle, reviveBattle, placeAll, STYLES, TACTICS, arenaOf, statusLine, conditionLabels, detectStyle, rebuildCombatant } from '../engine/battle.js';
 
 const KEY = 'dcugen.battle.v1';
 let R;
@@ -124,7 +124,9 @@ function doEnd() { stopTimer(); runToEnd(battle, R); save(); renderBattle(); }
 function reset({ newSeed = false } = {}) {
   stopTimer();
   const chars = battle.combatants.map((c) => ({ ch: c.ch, team: c.team, style: c.style, tactics: c.tactics, heroPoints: c.heroPoints, name: c.name, id: c.id }));
+  const oldOptions = battle.options;
   battle = createBattle({ seed: newSeed ? randomSeed() : battle.seed, name: battle.name });
+  battle.options = { ...battle.options, ...oldOptions };
   for (const x of chars) addCombatant(battle, makeCombatant(R, x.ch, x));
   ui.mc = null;
   save();
@@ -188,11 +190,11 @@ function fighterCard(c) {
 }
 
 function arena() {
-  const zones = Array.from({ length: ARENA }, (_, i) => h('div', { class: 'bt-zone' }, h('span', { class: 'bt-zone-n' }, i + 1)));
+  const zones = Array.from({ length: arenaOf(battle) }, (_, i) => h('div', { class: 'bt-zone' }, h('span', { class: 'bt-zone-n' }, i + 1)));
   const active = battle.status === 'running' ? battle.order[Math.min(battle.turn, battle.order.length - 1)] : null;
   for (const c of battle.combatants) {
     const tok = h('span', { class: `bt-token ${c.out || c.fled ? 'down' : ''} ${c.id === battle.order[battle.turn - 1] ? 'acting' : ''}`, title: `${c.name} (team ${c.team}) · ${statusLine(c)}`, style: { '--c': c.color, '--t': teamColor(c.team), '--c-ink': inkFor(c.color) } }, initials(c.name));
-    zones[Math.max(0, Math.min(ARENA - 1, c.pos))].append(tok);
+    zones[Math.max(0, Math.min(arenaOf(battle) - 1, c.pos))].append(tok);
   }
   void active;
   return h('div', { class: 'bt-arena', role: 'img', 'aria-label': 'The arena, with every fighter in their zone' }, zones);
@@ -288,6 +290,7 @@ function statusBar() {
     acting ? chip(`Last: ${acting.name}`) : null,
     next && battle.status === 'running' ? chip(`Next: ${next.name}`) : null,
     chip(`Seed ${battle.seed}`),
+    battle.options.enclosed ? chip('Enclosed space') : null,
   ];
 }
 
@@ -392,7 +395,8 @@ function addPanel() {
     q, beastList,
     h('div', { class: 'add-row', style: { alignItems: 'center' } },
       h('label', { class: 'bt-copies', title: 'Add several of the same (a squad of minions)' }, 'Copies ×', copies),
-      h('label', { class: 'bt-copies' }, h('input', { type: 'checkbox', checked: !!ui.moreTeams, onChange: (e) => { ui.moreTeams = e.target.checked; renderBattle(); } }), ' Teams C and D')),
+      h('label', { class: 'bt-copies' }, h('input', { type: 'checkbox', checked: !!ui.moreTeams, onChange: (e) => { ui.moreTeams = e.target.checked; renderBattle(); } }), ' Teams C and D'),
+      h('label', { class: 'bt-copies', title: 'A room or corridor: two zones, everyone within one move, ranged fighters have nowhere to run' }, h('input', { type: 'checkbox', id: 'bt-enclosed', checked: !!battle.options.enclosed, onChange: (e) => { battle.options.enclosed = e.target.checked; placeAll(battle); save(); renderBattle(); } }), ' Enclosed space')),
     h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', type: 'button', onClick: () => hooks.goBestiary?.() }, 'Open the Bestiary')));
 }
 
