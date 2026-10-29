@@ -42,8 +42,9 @@ const squadB = (i) => [hero('powerhouse', `e${i}`), hero('crimefighter', `f${i}`
 // ---------------------------------------------------------------------------------------------------------
 
 // Requirement: the ten tactics plus 'none' are offered, in order, with a label and a one-sentence blurb.
-test('the tactic list has none and the ten tactics in order, each with a label and a blurb', () => {
-  assert.deepEqual(Object.keys(TEAM_TACTICS), ['none', 'focus', 'alpha', 'line', 'bodyguard', 'kite', 'lockdown', 'pickoff', 'flank', 'sustain', 'noretreat']);
+test('the tactic list starts with none and the first ten tactics in order, each with a label and a blurb', () => {
+  // Later phases add tactics after these (Take Cover, Intimidate and Break, ...), so only the start is fixed.
+  assert.deepEqual(Object.keys(TEAM_TACTICS).slice(0, 11), ['none', 'focus', 'alpha', 'line', 'bodyguard', 'kite', 'lockdown', 'pickoff', 'flank', 'sustain', 'noretreat']);
   assert.equal(TEAM_TACTICS.focus.label, 'Focus Fire');
   assert.equal(TEAM_TACTICS.noretreat.label, 'No Retreat');
   for (const [id, t] of Object.entries(TEAM_TACTICS)) {
