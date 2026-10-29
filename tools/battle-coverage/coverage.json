@@ -1165,7 +1165,7 @@
     "kind": "advantage",
     "name": "Fearless",
     "status": "partial",
-    "note": "Immune to attacks the engine recognizes as fear effects (by wording) and never flees; Demoralize is not simulated.",
+    "note": "Immune to attacks the engine recognizes as fear effects (by wording) and to Demoralize, and never flees.",
     "source": "DCA 75"
   },
   {
@@ -1220,8 +1220,8 @@
   {
     "kind": "advantage",
     "name": "Teamwork",
-    "status": "none",
-    "note": "Team checks are not simulated.",
+    "status": "partial",
+    "note": "Adds +5 to the Aid attack check (Aid is treated as the team check); other team checks are not simulated.",
     "source": "DCA 78"
   },
   {
@@ -1353,8 +1353,8 @@
   {
     "kind": "advantage",
     "name": "Taunt",
-    "status": "none",
-    "note": "Taunting is not simulated.",
+    "status": "full",
+    "note": "Lets the fighter demoralize with Deception instead of Intimidation; targets resist with Deception, Insight or Will.",
     "source": "DCA 78"
   },
   {
@@ -1374,8 +1374,8 @@
   {
     "kind": "action",
     "name": "Aid",
-    "status": "none",
-    "note": "Helping an ally with an attack check is not simulated."
+    "status": "full",
+    "note": "A standard action: an attack check against DC 10; the ally gets +2 (or +5 on four or more degrees) on attacks against a foe, or to defense against it, until the end of the ally's next turn. The AI aids when its own attack is poor and an ally engaged with the foe has a better one, or the ally is staggered; Aid the Champion does it by tactic. Bonuses do not stack."
   },
   {
     "kind": "action",
@@ -1410,8 +1410,8 @@
   {
     "kind": "action",
     "name": "Demoralize",
-    "status": "none",
-    "note": "Intimidation to impair a foe is not simulated."
+    "status": "full",
+    "note": "A standard action: Intimidation (or Deception with Taunt) against the target's Insight or Will check; impaired until the end of the demoralizer's next round, disabled on four or more degrees. Enemy minions in earshot are demoralized by one check. The AI uses it with a skill 5 or more above the target's resistance and a weak attack, against a crowd of three or more minions, or on a team's orders (Intimidate and Break). Fearless fighters are immune; the range is two zones."
   },
   {
     "kind": "action",
@@ -1554,14 +1554,14 @@
   {
     "kind": "maneuver",
     "name": "Demoralize",
-    "status": "none",
-    "note": "Intimidation to impair a foe is not simulated."
+    "status": "full",
+    "note": "A standard action: Intimidation (or Deception with Taunt) against the target's Insight or Will check; impaired until the end of the demoralizer's next round, disabled on four or more degrees. Enemy minions in earshot are demoralized by one check. The AI uses it with a skill 5 or more above the target's resistance and a weak attack, against a crowd of three or more minions, or on a team's orders (Intimidate and Break). Fearless fighters are immune; the range is two zones."
   },
   {
     "kind": "maneuver",
     "name": "Aid",
-    "status": "none",
-    "note": "Helping an ally with an attack check is not simulated."
+    "status": "full",
+    "note": "A standard action: an attack check against DC 10; the ally gets +2 (or +5 on four or more degrees) on attacks against a foe, or to defense against it, until the end of the ally's next turn. The AI aids when its own attack is poor and an ally engaged with the foe has a better one, or the ally is staggered; Aid the Champion does it by tactic. Bonuses do not stack."
   },
   {
     "kind": "condition",
@@ -1946,5 +1946,17 @@
     "name": "Damaging objects",
     "status": "full",
     "note": "Cover pieces are defenseless objects: a hit at DC 10 is an automatic critical, two degrees of failure on the Toughness check punch a hole and three destroy the piece. Area attacks, shooting through cover and knockback collisions roll against it too."
+  },
+  {
+    "kind": "rule",
+    "name": "Minions: demoralized as a group",
+    "status": "full",
+    "note": "Enemy minions that can see and hear the demoralizer are demoralized together by one check against the highest resistance among them; a demoralized minion of a side facing Intimidate and Break flees half again as readily."
+  },
+  {
+    "kind": "rule",
+    "name": "Fighting Withdrawal: escape",
+    "status": "partial",
+    "note": "Under the Fighting Withdrawal tactic a fighter who starts a turn on its own edge and is not held gets away; the team wins by getting half its fighters out, or by holding out for a set number of rounds. Escape is only a tactic: other fights never let anyone leave."
   }
 ]

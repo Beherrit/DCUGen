@@ -6,7 +6,7 @@ import { makeCombatant, rebuildCombatant } from './combatant.js';
 import { createBattle, addCombatant, runToEnd } from './battle-flow.js';
 
 export function statusLine(c) {
-  if (c.fled) return 'Fled';
+  if (c.fled) return c.escaped ? 'Got away' : 'Fled';
   if (c.out) return c.outReason === 'minion' ? 'Down' : c.outReason === 'asleep' ? 'Asleep' : c.outReason === 'exhausted' ? 'Collapsed' : 'Incapacitated';
   const bits = [];
   if (c.bruises) bits.push(`${c.bruises} bruise${c.bruises > 1 ? 's' : ''}`);
@@ -36,7 +36,9 @@ export function simulateMany(b, R, n = 100, { seed = b.seed } = {}) {
   const kos = {};
   const survived = {};
   const out = {};
-  for (const c of b.combatants) { kos[c.id] = 0; survived[c.id] = 0; out[c.id] = 0; }
+  const escaped = {};
+  let gotAway = 0;
+  for (const c of b.combatants) { kos[c.id] = 0; survived[c.id] = 0; out[c.id] = 0; escaped[c.id] = 0; }
   for (let i = 0; i < n; i++) {
     const copy = createBattle({ seed: `${seed}-run-${i}`, name: b.name });
     copy.options = { ...b.options };
@@ -45,9 +47,10 @@ export function simulateMany(b, R, n = 100, { seed = b.seed } = {}) {
     runToEnd(copy, R);
     wins[copy.winner || 'draw'] = (wins[copy.winner || 'draw'] || 0) + 1;
     rounds.push(copy.round);
-    for (const c of copy.combatants) { kos[c.id] += c.stats.kos; if (!c.out && !c.fled) survived[c.id]++; if (c.out) out[c.id]++; }
+    if (copy.gotAway) gotAway++;
+    for (const c of copy.combatants) { if (c.escaped) escaped[c.id]++; kos[c.id] += c.stats.kos; if (!c.out && !c.fled) survived[c.id]++; if (c.out) out[c.id]++; }
   }
-  return { n, wins, avgRounds: rounds.reduce((s, r) => s + r, 0) / Math.max(1, rounds.length), kos, survived, out };
+  return { n, wins, avgRounds: rounds.reduce((s, r) => s + r, 0) / Math.max(1, rounds.length), kos, survived, out, escaped, gotAway };
 }
 
 /** Strip a battle to what needs saving (characters and settings; derived numbers are rebuilt). */

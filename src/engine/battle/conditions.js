@@ -52,7 +52,7 @@ export function activeConditions(c) {
 }
 
 export function conditionLabels(c) {
-  if (c.fled) return ['Fled'];
+  if (c.fled) return [c.escaped ? 'Got away' : 'Fled'];
   if (c.out) return [c.outReason === 'minion' ? 'Down' : c.outReason === 'asleep' ? 'Asleep' : c.outReason === 'paralyzed' ? 'Paralyzed' : 'Incapacitated'];
   const basic = activeConditions(c);
   const named = new Set();
@@ -73,11 +73,25 @@ export function checkPenalty(c) {
 /** Did this attacker's feint leave the target vulnerable to them (DCA 64)? */
 export function feintedBy(t, c) { return !!(t.feinted && c && t.feinted.by === c.id); }
 
-/** The defense an attack from `attacker` faces: a successful feint makes the target vulnerable to the feinter's next attack. */
+/** Impaired or worse from any source (a demoralize, an Affliction, exhaustion). */
+export function isImpaired(c) { const s = activeConditions(c); return s.has('Impaired') || s.has('Disabled'); }
+
+/** Is this fighter under a Demoralize (Intimidation or Taunt)? */
+export function isDemoralized(c) { return c.conditions.some((x) => x.source === 'demoralize'); }
+
+/** The bonus an Aid gives c against this foe, for attack checks or for defense. Aids do not stack: the best one counts. */
+export function aidBonus(c, foe, mode = 'attack') {
+  let best = 0;
+  for (const a of c.aid || []) if (foe && a.vs === foe.id && a.mode === mode && a.amount > best) best = a.amount;
+  return best;
+}
+
+/** The defense an attack from `attacker` faces: a successful feint makes the target vulnerable to the feinter's next attack, and an Aid can add to it. */
 export function defenseVs(t, which, attacker) {
   const v = defenseOf(t, which);
   const s = activeConditions(t);
-  return feintedBy(t, attacker) && !s.has('Vulnerable') && !s.has('Defenseless') ? Math.ceil(v / 2) : v;
+  const base = feintedBy(t, attacker) && !s.has('Vulnerable') && !s.has('Defenseless') ? Math.ceil(v / 2) : v;
+  return s.has('Defenseless') ? base : base + aidBonus(t, attacker, 'defense');
 }
 
 export function defenseOf(c, which) {

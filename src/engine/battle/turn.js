@@ -10,7 +10,8 @@ import { applyEffect } from './attack-effects.js';
 import { feint, grab, tryEscape } from './maneuvers.js';
 import { heal, spendHeroPoint, recoverAction } from './support.js';
 import { attackTurn } from './turn-attack.js';
-import { markTurn, mayFlee, mayDefend, recoverEarly, healsFreely, healThreshold, coverDefends } from './tactics.js';
+import { markTurn, mayFlee, mayDefend, recoverEarly, healsFreely, healThreshold, coverDefends, fleeChance, withdrawTurn, withdrawHolds } from './tactics.js';
+import { supportTurn } from './support-plan.js';
 import { shootCover } from './cover-damage.js';
 
 const isHurt = (c) => c.staggered || c.bruises >= 2;
@@ -29,12 +30,15 @@ export function takeTurn(b, R, c, rng) {
   if (losesNerve(b, c, enemies, rng)) return;
   if (escapeGrab(b, c, rng)) return;
   recoverFromDaze(b, c, mode, rng);
+  if (withdrawTurn(b, c)) return;
   if (catchBreath(b, c, rng)) return;
   if (takeAimedShot(b, R, c, rng)) return;
   if (healFirst(b, c, rng)) return;
   if (crushHeld(b, R, c, rng)) return;
   const choice = choosePlan(b, R, c, enemies, rng, mode);
   if (!choice) { log(b, { kind: 'skip', actor: c.id, text: `${c.name} finds nothing worth doing and holds position.` }); return; }
+  if (withdrawHolds(b, c, choice)) return;
+  if (supportTurn(b, c, choice, enemies, mode, rng)) return;
   if (digIn(b, c, choice, enemies, mode)) return;
   if (nonAttackPlan(b, R, c, choice, mode, rng)) return;
   attackTurn(b, R, c, choice, enemies, mode, rng);
@@ -71,7 +75,7 @@ function controlledTurn(b, R, c, rng) {
 function losesNerve(b, c, enemies, rng) {
   const S = STYLES[c.style];
   if (!mayFlee(b, c)) return false;
-  if (!(S.flees && !c.adv.Fearless && (c.staggered || (c.minion && c.bruises >= 1 && alliesOf(b, c).length < enemies.length)) && rng.chance(c.minion ? 0.35 : 0.3))) return false;
+  if (!(S.flees && !c.adv.Fearless && (c.staggered || (c.minion && c.bruises >= 1 && alliesOf(b, c).length < enemies.length)) && rng.chance(fleeChance(b, c, c.minion ? 0.35 : 0.3)))) return false;
   c.fled = true;
   log(b, { kind: 'flee', actor: c.id, text: `${c.name} has had enough and ${c.style === 'beast' ? 'bolts for cover' : 'runs for it'}.`, important: true });
   return true;

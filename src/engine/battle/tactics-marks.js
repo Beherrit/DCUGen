@@ -24,7 +24,7 @@ function teamThreat(b, team, e) {
 }
 
 /** The enemy a team has marked this round (kept while it stands and still qualifies), else the most threatening one. */
-function pickMark(b, team, key, qualifies) {
+export function pickMark(b, team, key, qualifies) {
   const marks = ((b.tac ||= {})[key] ||= {});
   const foes = alive(b).filter((x) => x.team !== team);
   const held = marks[team]?.round === b.round ? foes.find((x) => x.id === marks[team].id) : null;

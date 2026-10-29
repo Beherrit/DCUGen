@@ -21,9 +21,10 @@ is not simulated). The code is split by job:
 - `tactics.js`: team tactics, the small hooks the turn code calls (all neutral when a team has none). `tactics-list.js`: the list and `tacticOf`. `tactics-marks.js`: focus and lockdown targets, the VIP. `tactics-position.js`: the line, the guard, kiting.
 - `materials.js`: building materials, `toughnessOf` (the doubling rule) and the `COVER_KINDS` presets.
 - `cover.js`: cover pieces (`b.cover`), their levels, who stands behind one, the attack penalty and Dodge bonus. `cover-damage.js`: hurting a piece (hole or destroy), shooting through cover, area attacks on scenery. `cover-plan.js`: when the AI shoots the cover itself.
+- `support-actions.js`: Demoralize and Aid, and how they wear off. `support-plan.js`: when a fighter demoralizes or aids instead of attacking (its own judgement, and the Intimidate and Break and Aid the Champion tactics). `tactics-support.js`: who demoralizes, who the champion is, the flee chance. `tactics-withdraw.js`: the Fighting Withdrawal tactic (escape, rearguard, the hold-out win).
 - `knockback.js`: the optional knockback rule, mass rank, flight and collisions. `tactics-cover.js`: the Take Cover tactic.
 - `summaries.js`: status lines, battle text, many-run tallies, save and load.
 
 The app is bundled by tools/build.mjs, which does not allow import cycles, so keep imports flowing one way: util and
-constants at the bottom, then styles, conditions, combatant, materials, cover, odds, the tactics files, plan, movement, maneuvers, support, attack-effects,
+constants at the bottom, then styles, conditions, combatant, materials, cover, odds, support-actions, the tactics files, plan, movement, maneuvers, support, support-plan, attack-effects,
 attack-roll, cover-damage, knockback, attacks, turn-attack, turn, end-of-turn, battle-flow and summaries on top.

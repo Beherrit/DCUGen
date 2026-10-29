@@ -1,4 +1,5 @@
-// The Battle Room's team tactic controls: one choice per team, who a Bodyguard team protects, and the status chips.
+// The Battle Room's team tactic controls: one choice per team, who a Bodyguard team protects, how long a withdrawing
+// team holds out, and the status chips.
 
 import { h } from './dom.js';
 import { TEAM_TACTICS } from '../engine/battle.js';
@@ -20,7 +21,20 @@ function vipPicker(cx, team) {
       battle.combatants.filter((c) => c.team === team).map((c) => h('option', { value: c.id, selected: c.id === current }, c.name))));
 }
 
-/** One select per team listing the team tactics, plus the VIP choice for a Bodyguard team. */
+/** Fighting Withdrawal: surviving this many rounds with anyone standing also counts as getting away (blank: only escaping counts). */
+function holdOutInput(cx, team) {
+  const { battle, save, render } = cx;
+  const onChange = (e) => {
+    const rounds = Math.max(0, Math.floor(Number(e.target.value) || 0));
+    battle.options.withdrawRounds = { ...battle.options.withdrawRounds };
+    if (rounds) battle.options.withdrawRounds[team] = rounds; else delete battle.options.withdrawRounds[team];
+    save(); render();
+  };
+  return h('label', { class: 'bt-copies', title: 'Optional: if this many rounds pass and anyone on the team is still standing, the team gets away. Leave blank to count only fighters who reach the edge.' }, 'Hold out for ',
+    h('input', { type: 'number', id: `bt-holdout-${team}`, min: 0, max: 40, value: battle.options.withdrawRounds?.[team] || '', 'aria-label': `Team ${team} hold out for this many rounds`, style: { maxWidth: '64px' }, onChange }), ' rounds');
+}
+
+/** One select per team listing the team tactics, plus the VIP choice for a Bodyguard team and the hold-out rounds for a withdrawing one. */
 export function tacticPanel(cx, teams) {
   const { battle, save, render } = cx;
   const rows = teams.map((team) => {
@@ -33,7 +47,8 @@ export function tacticPanel(cx, teams) {
       Object.entries(TEAM_TACTICS).map(([id, t]) => h('option', { value: id, selected: id === chosen, title: t.blurb }, t.label)));
     return h('div', { class: 'add-row', style: { alignItems: 'center' } },
       h('label', { class: 'bt-copies', title: TEAM_TACTICS[chosen].blurb }, `Team ${team} tactic `, select),
-      chosen === 'bodyguard' ? vipPicker(cx, team) : null);
+      chosen === 'bodyguard' ? vipPicker(cx, team) : null,
+      chosen === 'withdraw' ? holdOutInput(cx, team) : null);
   });
   return h('div', { class: 'bt-tactics' },
     h('div', { class: 'label' }, 'Team tactics'),

@@ -133,6 +133,8 @@ export function resetCombatant(c) {
     weakened: {},          // trait -> ranks lost
     fatigue: 0, defMod: 0, feinted: false, grabbedBy: null, holding: null, nullified: 0, regen: 0, interposed: false,
     lastAttackId: null, usedEffort: 0, teamedRound: null, surpriseActor: false,
+    aid: [],               // Aid received: [{ by, vs, mode, amount, until }]
+    escaped: false,        // got away under Fighting Withdrawal (also marked fled, so it leaves the fight)
     recovered: false,      // the Recover action: once per conflict (DCA 177)
     behind: null,          // the cover piece this fighter stands behind (its id)
     aiming: null,          // { target, bonus } after an Aim action (DCA 175)
@@ -157,7 +159,7 @@ export function rebuildCombatant(c, R, d = null) {
   const mv = bestMoveRank(c.ch);
   c.speed = 1 + Math.min(4, Math.floor(mv.rank / 3));
   c.flying = mv.flying;
-  c.adv = Object.fromEntries(['Power Attack', 'Accurate Attack', 'All-out Attack', 'Defensive Attack', 'Takedown', 'Interpose', 'Evasion', 'Fearless', 'Seize Initiative', 'Move-by Action', 'Fast Grab', 'Improved Grab', 'Improved Hold', 'Chokehold', 'Agile Feint', 'Uncanny Dodge', 'Improved Initiative', 'Diehard', 'Instant Up', 'Luck'].map((n) => [n, advantageRank(c.ch, n)]));
+  c.adv = Object.fromEntries(['Power Attack', 'Accurate Attack', 'All-out Attack', 'Defensive Attack', 'Takedown', 'Interpose', 'Evasion', 'Fearless', 'Seize Initiative', 'Move-by Action', 'Fast Grab', 'Improved Grab', 'Improved Hold', 'Chokehold', 'Agile Feint', 'Uncanny Dodge', 'Improved Initiative', 'Diehard', 'Instant Up', 'Luck', 'Taunt', 'Teamwork'].map((n) => [n, advantageRank(c.ch, n)]));
   const sk = (name) => d.skills.find((s) => s.name === name)?.bonus ?? (d.abilities[R.skillAbility(name)] ?? 0);
   c.skills = { Deception: sk('Deception'), Insight: sk('Insight'), Acrobatics: sk('Acrobatics'), Athletics: sk('Athletics'), Intimidation: sk('Intimidation'), 'Sleight of Hand': sk('Sleight of Hand') };
   c.moveRank = mv.rank;

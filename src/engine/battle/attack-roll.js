@@ -1,7 +1,7 @@
 // The attack roll: how the attack is worded, the to-hit modifier, the roll against defense, and the hero point re-roll.
 
 import { sign, d20 } from './util.js';
-import { activeConditions, checkPenalty, defenseVs, feintedBy } from './conditions.js';
+import { activeConditions, checkPenalty, defenseVs, feintedBy, aidBonus } from './conditions.js';
 import { rangePenalty, concealmentPenalty } from './odds.js';
 import { spendOnMiss } from './tactics.js';
 import { coverPenalty, coverLevel, shieldFor } from './cover.js';
@@ -34,10 +34,12 @@ function toHitMod(b, c, atk, t, m, aimed, notes) {
   const dist = Math.abs(c.pos - t.pos);
   const conceal = concealmentPenalty(c, t, atk);
   const cover = coverPenalty(b, c, t, atk);
-  let mod = atk.bonus - m.trade + m.allOut - m.defensive - checkPenalty(c) - rangePenalty(atk, dist) - conceal - cover - (m.charge ? 2 : 0) + aimed;
+  const aid = aidBonus(c, t);
+  let mod = atk.bonus - m.trade + m.allOut - m.defensive - checkPenalty(c) - rangePenalty(atk, dist) - conceal - cover - (m.charge ? 2 : 0) + aimed + aid;
   const tc = activeConditions(t); const cc = activeConditions(c);
   if (tc.has('Prone')) mod += atk.kind === 'close' ? 5 : -5;
   if (cc.has('Prone') && atk.kind === 'close') mod -= 5;
+  if (aid) notes.push(`aid: +${aid}`);
   if (conceal) notes.push(`${conceal === 5 ? 'total' : 'partial'} concealment: −${conceal}`);
   if (cover) notes.push(`${coverLevel(shieldFor(b, c, atk, t))} cover: −${cover}`);
   return mod;

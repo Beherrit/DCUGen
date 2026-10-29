@@ -3,14 +3,16 @@
 // (focus target, lockdown target, VIP) in tactics-marks.js, and positions and kiting in tactics-position.js.
 
 import { alive, log } from './util.js';
-import { activeConditions, defenseOf } from './conditions.js';
+import { activeConditions, defenseOf, isDemoralized, aidBonus } from './conditions.js';
 import { hitOdds, rangePenalty } from './odds.js';
 import { TEAM_TACTICS, tacticOf } from './tactics-list.js';
 import { focusTarget, lockTarget, isControlled, hasControl, isControlAttack, vipOf } from './tactics-marks.js';
 import { isFrontliner, positionGoal, stepToZone, wantsKite, kiteThreat, kiteZones, aimsAlways, isMeleeThreat } from './tactics-position.js';
 import { coverStep, coverDefends } from './tactics-cover.js';
+import { withdrawStance, withdrawGuards, withdrawTurn, withdrawHolds, withdrawOver } from './tactics-withdraw.js';
+import { fleeChance } from './tactics-support.js';
 
-export { TEAM_TACTICS, tacticOf, positionGoal, stepToZone, wantsKite, kiteThreat, kiteZones, aimsAlways, isMeleeThreat, coverStep, coverDefends };
+export { TEAM_TACTICS, tacticOf, positionGoal, stepToZone, wantsKite, kiteThreat, kiteZones, aimsAlways, isMeleeThreat, coverStep, coverDefends, withdrawTurn, withdrawHolds, withdrawOver, fleeChance };
 
 const alpha = (b, c) => tacticOf(b, c) === 'alpha' && b.round <= 2;
 
@@ -43,6 +45,8 @@ export function targetBias(b, c, t, { enemies }) {
     case 'lockdown': return lockdownBias(b, c, t);
     case 'pickoff': return pickoffBias(t, enemies);
     case 'flank': return t.feinted?.by === c.id || activeConditions(t).has('Vulnerable') ? 2.5 : 1;
+    case 'intimidate': return isDemoralized(t) ? 3 : 1;
+    case 'aid': return aidBonus(c, t) ? 2.5 : 1;
     default: return 1;
   }
 }
@@ -89,6 +93,7 @@ export function tradeoffBias(b, c, target, attack) {
   if (id === 'alpha' && alpha(b, c)) return { allOut: allOutMax, defensive: 0, power: alphaPower(c, attack, target, allOutMax) };
   if (id === 'noretreat' && attack.kind === 'close') return { allOut: allOutMax, defensive: 0 };
   if (id === 'line' && isFrontliner(c)) return { allOut: 0, defensive: 2 };
+  if (id === 'withdraw') return withdrawStance(b, c);
   if (id === 'sustain' && !c.healing && alive(b).some((x) => x.team === c.team && x.staggered)) return { allOut: 0, defensive: 2 };
   return null;
 }
@@ -118,5 +123,6 @@ export function interposeFor(b, guard, victim) {
   const id = tacticOf(b, guard);
   if (id === 'line') return true;
   if (id === 'bodyguard') return vipOf(b, guard.team)?.id === victim.id;
+  if (id === 'withdraw') return withdrawGuards(b, guard);
   return null;
 }

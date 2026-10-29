@@ -7,11 +7,11 @@ import { resetCombatant, rebuildCombatant } from './combatant.js';
 import { takeTurn } from './turn.js';
 import { regenerate } from './support.js';
 import { endOfTurn } from './end-of-turn.js';
-import { announceTactics } from './tactics.js';
+import { announceTactics, withdrawOver } from './tactics.js';
 import { resetScenery } from './cover.js';
 
 export function createBattle({ seed = 'battle', name = 'Battle' } = {}) {
-  return { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, enclosed: false, ambush: null, teamTactics: {}, vip: {}, maxRounds: MAX_ROUNDS, shootThrough: false, knockback: false }, cover: [], lastEvent: 0 };
+  return { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, enclosed: false, ambush: null, teamTactics: {}, vip: {}, withdrawRounds: {}, maxRounds: MAX_ROUNDS, shootThrough: false, knockback: false }, cover: [], lastEvent: 0 };
 }
 
 export function addCombatant(b, c) {
@@ -113,6 +113,7 @@ export function joinBattle(b, R, c) {
   return c;
 }
 function checkOver(b) {
+  if (withdrawOver(b)) return true;
   const teams = new Set(alive(b).map((c) => c.team));
   if (teams.size <= 1) {
     b.status = 'over';

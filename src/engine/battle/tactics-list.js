@@ -13,6 +13,9 @@ export const TEAM_TACTICS = {
   sustain: { label: 'Sustain', blurb: 'Healers keep everyone up, the others fight defensively while a friend is hurt, and the hurt recover early.' },
   noretreat: { label: 'No Retreat', blurb: 'Nobody flees or digs in, and every close attack is an all-out attack.' },
   cover: { label: 'Take Cover', blurb: 'Shooters move behind the best cover in reach and defend when no attack is worth much; melee fighters still close in. With no cover about, the team defends more when outnumbered.' },
+  intimidate: { label: 'Intimidate and Break', blurb: 'The best intimidator demoralizes the most dangerous enemy each round, demoralized minions flee more readily, and everyone else goes after the demoralized first.' },
+  aid: { label: 'Aid the Champion', blurb: 'The strongest attacker is the champion; fighters whose own attacks are worth less than half of theirs aid the champion\'s attack instead.' },
+  withdraw: { label: 'Fighting Withdrawal', blurb: 'The goal is escape: fighters walk to their own edge and leave, while tanks and Interposers cover the retreat. The team wins by getting half its fighters away, or by holding out for a set number of rounds.' },
 };
 
 /** The tactic id for c's team, or 'none'. */

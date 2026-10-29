@@ -1,6 +1,6 @@
 // Probability helpers: hit and resistance odds, immunity, and the expected value of an attack on a target.
 
-import { activeConditions, checkPenalty, defenseVs, resistOf } from './conditions.js';
+import { activeConditions, checkPenalty, defenseVs, resistOf, aidBonus } from './conditions.js';
 import { effectWeights } from './combatant.js';
 import { coverPenalty, coverDodgeBonus, preciseIgnores } from './cover.js';
 
@@ -80,6 +80,7 @@ export function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, a
     if (activeConditions(c).has('Prone') && atk.kind === 'close') bonus -= 5;
     bonus -= concealmentPenalty(c, target, atk) + coverPenalty(b, c, target, atk);
     if (c.aiming?.target === target.id) bonus += c.aiming.bonus;
+    bonus += aidBonus(c, target);
     ({ hit, crit } = hitOdds(bonus, def));
     if (target.defending) hit *= 0.55;
     if (activeConditions(target).has('Defenseless')) crit = hit;
@@ -128,6 +129,16 @@ export function concealmentPenalty(c, target, atk) {
 function seesThrough(c, target) {
   if (!target.concealment) return true;
   return /radar|accurate|tremor|awareness|danger sense|mental|infravision|ultravision|detect/i.test(c.senses);
+}
+
+/** The best expected value of any attack c could make on t at this distance (close attacks need distance 0). */
+export function bestEvNow(c, t, dist = Math.abs(c.pos - t.pos), bonusShift = 0) {
+  let best = 0;
+  for (const a of c.attacks) {
+    if (a.kind === 'close' ? dist > 0 : rangePenalty(a, dist) > 5) continue;
+    best = Math.max(best, expectedValue(c, a, t, { dist: a.kind === 'close' ? 0 : dist, bonusShift }));
+  }
+  return best;
 }
 
 /** How much harm t could do to c right now: its best attack's expected value at that distance. */

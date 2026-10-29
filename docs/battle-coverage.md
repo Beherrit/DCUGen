@@ -13,12 +13,12 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | effect | 61 | 6 | 26 | 21 | 8 | 60% |
 | extra | 38 | 5 | 6 | 22 | 5 | 33% |
 | flaw | 22 | 0 | 1 | 18 | 3 | 5% |
-| advantage | 75 | 17 | 6 | 31 | 21 | 43% |
-| action | 20 | 5 | 4 | 11 | 0 | 45% |
-| maneuver | 12 | 5 | 4 | 3 | 0 | 75% |
+| advantage | 75 | 18 | 7 | 29 | 21 | 46% |
+| action | 20 | 7 | 4 | 9 | 0 | 55% |
+| maneuver | 12 | 7 | 4 | 1 | 0 | 92% |
 | condition | 30 | 15 | 9 | 5 | 1 | 83% |
-| rule | 34 | 12 | 10 | 12 | 0 | 65% |
-| all | 292 | 65 | 66 | 123 | 38 | 52% |
+| rule | 36 | 13 | 11 | 12 | 0 | 67% |
+| all | 294 | 71 | 68 | 117 | 38 | 54% |
 
 ## Effects
 
@@ -205,7 +205,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Eidetic Memory | n/a | Memory has no combat rule. | DCA 73 |
 | Equipment | n/a | Gear is read from the character, not from the advantage. | DCA 73 |
 | Extraordinary Effort | none | Double extra effort is not simulated. | DCA 74 |
-| Fearless | partial | Immune to attacks the engine recognizes as fear effects (by wording) and never flees; Demoralize is not simulated. | DCA 75 |
+| Fearless | partial | Immune to attacks the engine recognizes as fear effects (by wording) and to Demoralize, and never flees. | DCA 75 |
 | Feature | n/a | Descriptive only. | DCA 75 |
 | Great Endurance | none | The bonus to resist fatigue is not applied. | DCA 75 |
 | Instant Up | none | Standing up is not simulated. | DCA 76 |
@@ -213,7 +213,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Minion | n/a | Minions are built as separate combatants. | DCA 77 |
 | Second Chance | none | Rerolls against hazards are not simulated. | DCA 78 |
 | Sidekick | n/a | Sidekicks are built as separate combatants. | DCA 78 |
-| Teamwork | none | Team checks are not simulated. | DCA 78 |
+| Teamwork | partial | Adds +5 to the Aid attack check (Aid is treated as the team check); other team checks are not simulated. | DCA 78 |
 | Trance | n/a | Has no combat rule. | DCA 79 |
 | Agile Feint | full | Feint with Acrobatics instead of Deception; the feint makes the target vulnerable to the feinter's next attack. | DCA 69 |
 | Animal Empathy | n/a | Out of combat skill use. | DCA 69 |
@@ -232,7 +232,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Ritualist | n/a | Rituals are not simulated. | DCA 78 |
 | Skill Mastery | n/a | Skill checks are not simulated. | DCA 78 |
 | Startle | none | Startle as a feint is not simulated. | DCA 78 |
-| Taunt | none | Taunting is not simulated. | DCA 78 |
+| Taunt | full | Lets the fighter demoralize with Deception instead of Intimidation; targets resist with Deception, Insight or Will. | DCA 78 |
 | Tracking | n/a | Out of combat skill use. | DCA 79 |
 | Well-informed | n/a | Social only. | DCA 79 |
 
@@ -240,13 +240,13 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 
 | Name | Status | Note | Source |
 | --- | --- | --- | --- |
-| Aid | none | Helping an ally with an attack check is not simulated. |  |
+| Aid | full | A standard action: an attack check against DC 10; the ally gets +2 (or +5 on four or more degrees) on attacks against a foe, or to defense against it, until the end of the ally's next turn. The AI aids when its own attack is poor and an ally engaged with the foe has a better one, or the ally is staggered; Aid the Champion does it by tactic. Bonuses do not stack. |  |
 | Aim | full | Aiming gives +5 (close) or +2 (farther), leaves the fighter vulnerable, and must be followed by the attack. |  |
 | Attack | full | d20 against 10 + Parry or Dodge, natural 20 hits and natural 1 misses. |  |
 | Charge | full | Move and then attack at -2, covering up to twice the speed. |  |
 | Defend | full | Attackers face an opposed defense roll with 1-10 counting as 11-20; the AI only picks it when hurt and outnumbered. |  |
 | Delay | partial | Only minion squads delay, to make a team attack. |  |
-| Demoralize | none | Intimidation to impair a foe is not simulated. |  |
+| Demoralize | full | A standard action: Intimidation (or Deception with Taunt) against the target's Insight or Will check; impaired until the end of the demoralizer's next round, disabled on four or more degrees. Enemy minions in earshot are demoralized by one check. The AI uses it with a skill 5 or more above the target's resistance and a weak attack, against a crowd of three or more minions, or on a team's orders (Intimidate and Break). Fearless fighters are immune; the range is two zones. |  |
 | Disarm | none | Disarming is not simulated. |  |
 | Drop Prone | none | Fighters are knocked prone by effects but never drop prone on purpose. |  |
 | Escape | partial | Athletics or Sleight of Hand against the hold ends a grab; the free move afterwards is not taken. |  |
@@ -275,8 +275,8 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Team Attack | partial | Only minion squads combine attacks (+2 or +5 rank); heroes never team up. |  |
 | Feint | full | Deception (or Acrobatics with Agile Feint) against Insight or Deception; on success the target is vulnerable to the feinter's next attack until the end of the feinter's next round (DCA 64). |  |
 | Trick | none | Tricks with Deception are not simulated. |  |
-| Demoralize | none | Intimidation to impair a foe is not simulated. |  |
-| Aid | none | Helping an ally with an attack check is not simulated. |  |
+| Demoralize | full | A standard action: Intimidation (or Deception with Taunt) against the target's Insight or Will check; impaired until the end of the demoralizer's next round, disabled on four or more degrees. Enemy minions in earshot are demoralized by one check. The AI uses it with a skill 5 or more above the target's resistance and a weak attack, against a crowd of three or more minions, or on a team's orders (Intimidate and Break). Fearless fighters are immune; the range is two zones. |  |
+| Aid | full | A standard action: an attack check against DC 10; the ally gets +2 (or +5 on four or more degrees) on attacks against a foe, or to defense against it, until the end of the ally's next turn. The AI aids when its own attack is poor and an ally engaged with the foe has a better one, or the ally is staggered; Aid the Champion does it by tactic. Bonuses do not stack. |  |
 
 ## Conditions
 
@@ -351,3 +351,5 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Defense class | full | Close attacks hit 10 + Parry, ranged attacks 10 + Dodge, vulnerable halves defenses. |  |
 | Fatigue | partial | Extra effort and Afflictions cause fatigue; exhaustion at three levels incapacitates; rest and hazards are not simulated. |  |
 | Damaging objects | full | Cover pieces are defenseless objects: a hit at DC 10 is an automatic critical, two degrees of failure on the Toughness check punch a hole and three destroy the piece. Area attacks, shooting through cover and knockback collisions roll against it too. |  |
+| Minions: demoralized as a group | full | Enemy minions that can see and hear the demoralizer are demoralized together by one check against the highest resistance among them; a demoralized minion of a side facing Intimidate and Break flees half again as readily. |  |
+| Fighting Withdrawal: escape | partial | Under the Fighting Withdrawal tactic a fighter who starts a turn on its own edge and is not held gets away; the team wins by getting half its fighters out, or by holding out for a set number of rounds. Escape is only a tactic: other fights never let anyone leave. |  |

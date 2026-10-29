@@ -186,7 +186,7 @@ function fighterCard(c) {
     setup ? h('div', { class: 'bt-opts' }, teamSel, formSel, styleSel, h('details', { class: 'bt-more' }, h('summary', null, 'More'), h('div', { class: 'bt-more-body' }, tacSel, h('label', { class: 'bt-hp-wrap', title: 'Hero points: re-roll a miss or shake off a daze' }, '★ Hero points', hp)))) : null,
     !setup ? h('div', { class: 'bt-state' }, dmg,
       h('div', { class: 'bt-conds' },
-        c.fled ? h('span', { class: 'bt-cond fled' }, 'Fled') : c.out ? h('span', { class: 'bt-cond ko' }, statusLine(c)) : null,
+        c.fled ? h('span', { class: 'bt-cond fled' }, c.escaped ? 'Got away' : 'Fled') : c.out ? h('span', { class: 'bt-cond ko' }, statusLine(c)) : null,
         conds.map((x) => h('span', { class: 'bt-cond' }, x)),
         c.heroPoints ? h('span', { class: 'bt-cond hp', title: 'Hero points' }, `★ ${c.heroPoints}`) : null,
         c.fatigue ? h('span', { class: 'bt-cond' }, c.fatigue >= 2 ? 'Exhausted' : 'Fatigued') : null),
@@ -290,7 +290,7 @@ function statusBar() {
   const next = battle.status === 'running' ? battle.combatants.find((c) => c.id === battle.order[battle.turn]) : null;
   const chip = (text, cls = '') => h('span', { class: `chip ${cls}` }, text);
   return [
-    chip(battle.status === 'setup' ? 'Setting up' : battle.status === 'over' ? (battle.winner ? `Team ${battle.winner} wins` : 'Stalemate') : timer ? 'Playing' : 'Paused', battle.status === 'over' ? 'bt-chip-win' : ''),
+    chip(battle.status === 'setup' ? 'Setting up' : battle.status === 'over' ? (battle.winner ? `Team ${battle.winner} ${battle.gotAway ? 'got away' : 'wins'}` : 'Stalemate') : timer ? 'Playing' : 'Paused', battle.status === 'over' ? 'bt-chip-win' : ''),
     battle.status !== 'setup' ? chip(`Round ${battle.round}`) : null,
     acting ? chip(`Last: ${acting.name}`) : null,
     next && battle.status === 'running' ? chip(`Next: ${next.name}`) : null,
@@ -498,7 +498,7 @@ function resultPanel() {
   const standing = battle.combatants.filter((c) => !c.out && !c.fled);
   const mvp = [...battle.combatants].sort((a, b) => (b.stats.kos * 10 + b.stats.degrees) - (a.stats.kos * 10 + a.stats.degrees))[0];
   return h('div', { class: 'bt-result', style: { '--t': battle.winner ? teamColor(battle.winner) : 'var(--ink-3)' } },
-    h('b', null, battle.winner ? `Team ${battle.winner} wins in ${battle.round} round${battle.round === 1 ? '' : 's'}` : `Stalemate after ${battle.round - 1} rounds`),
+    h('b', null, battle.winner ? `Team ${battle.winner} ${battle.gotAway ? 'gets away' : 'wins'} in ${battle.round} round${battle.round === 1 ? '' : 's'}` : `Stalemate after ${battle.round - 1} rounds`),
     h('span', null, standing.length ? `Still standing: ${standing.map((c) => `${c.name} (${statusLine(c).toLowerCase()})`).join(', ')}.` : 'Nobody is left standing.'),
     mvp && (mvp.stats.kos || mvp.stats.degrees) ? h('span', null, `Fight of the night: ${mvp.name}, ${mvp.stats.hits} hits, ${mvp.stats.kos} KO${mvp.stats.kos === 1 ? '' : 's'}.`) : null,
     h('div', { class: 'btn-row', style: { marginTop: '6px' } },
