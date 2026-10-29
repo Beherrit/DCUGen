@@ -132,7 +132,7 @@ function attackDescriptors(c, a, p) {
   return [...out];
 }
 
-/** Build a combatant from a character. opts: { team, style, tactics, heroPoints, name } */
+/** Build a combatant from a character. opts: { team, style, tactics, heroPoints, name, carry: { bruises, fatigue } }. A carry is damage taken in an earlier fight, put back when the battle starts (startBattle). */
 export function makeCombatant(R, ch, opts = {}) {
   repairPowerRoles(ch, R);
   const d = deriveAll(ch, R);
@@ -149,6 +149,7 @@ export function makeCombatant(R, ch, opts = {}) {
     heroPoints: opts.heroPoints ?? (ch.minion || style === 'minion' || style === 'beast' ? 0 : 1),
     luck: opts.luck ?? (ch.minion || style === 'minion' || style === 'beast' ? 0 : advantageRank(ch, 'Luck')), // re-rolls left this fight (Luck, p78)
     x: 0, y: 0,
+    carry: opts.carry ? { bruises: opts.carry.bruises || 0, fatigue: opts.carry.fatigue || 0 } : null,
   };
   resetCombatant(c);
   rebuildCombatant(c, R, d);

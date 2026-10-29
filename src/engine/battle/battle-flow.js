@@ -36,7 +36,7 @@ export function startBattle(b, R) {
   if (b.combatants.length < 2 || new Set(b.combatants.map((c) => c.team)).size < 2) throw new Error('Put fighters on at least two teams first.');
   b.log = []; b.tick = 0; b.round = 1; b.turn = 0; b.winner = null;
   resetScenery(b);
-  for (const c of b.combatants) { resetCombatant(c); rebuildCombatant(c, R); }
+  for (const c of b.combatants) { resetCombatant(c); rebuildCombatant(c, R); if (c.carry) { c.bruises = c.carry.bruises; c.fatigue = c.carry.fatigue; } }
   placeAll(b);
   const rng = rngFor(b);
   for (const c of b.combatants) {
