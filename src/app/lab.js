@@ -5,7 +5,8 @@ import { state } from './store.js';
 import { getPower, setPower, whatItDoes } from './sheetview.js';
 import { costMath, availableModifiers, randomPower } from '../engine/powersmith.js';
 import { powerCost, alternateOwnCost, primaryOwnCost } from '../engine/costs.js';
-import { describeEffect } from '../engine/render.js';
+import { statLine } from './lab-text.js';
+import { attackSkillField, stampRole } from './lab-attack.js';
 import { poolCapacity } from '../engine/pools.js';
 import { RANGE_STEPS, ABILITIES, BUYABLE_DEFENSES } from '../engine/rules.js';
 let R;
@@ -187,6 +188,7 @@ function render() {
             p.effect === 'Enhanced Trait' ? traitOptions() : Object.entries(eff.cost_options).map(([k, v]) => h('option', { value: k }, `${k} (${v}/rank)`))))
         : null),
     h('div', { class: 'grid2' },
+      attackSkillField(p, ch, R, update),
       h('label', { class: 'field' }, h('span', null, 'Descriptors'), h('input', { type: 'text', id: 'lab-desc', value: (p.descriptors || []).join(', '), placeholder: 'fire, magic, tech, cosmic...',
         onChange: (e) => update((q) => { q.descriptors = e.target.value.split(',').map((x) => x.trim()).filter(Boolean); }) })),
       h('label', { class: 'field' }, h('span', null, 'Details (resistance, conditions, what it covers)'),
@@ -241,14 +243,14 @@ function render() {
     aeWarnings.length ? h('ul', { class: 'issues' }, aeWarnings.map((w) => h('li', { class: 'error' }, w))) : null,
     h('div', { class: 'field' }, h('span', null, `What ${p.name || 'it'} does`), whatItDoes(p, R)),
     h('div', { class: 'field' }, h('span', null, 'Stat block line'),
-      h('div', { class: 'statblock-text', id: 'lab-text' }, statLine(arr))),
+      h('div', { class: 'statblock-text', id: 'lab-text' }, statLine(arr, R))),
     h('div', { class: 'btn-row' },
-      h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(statLine(arr))) ? 'Power copied' : 'Select the text to copy it') }, 'Copy'),
+      h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(statLine(arr, R))) ? 'Power copied' : 'Select the text to copy it') }, 'Copy'),
       ch && target ? h('button', { class: 'btn primary', type: 'button', onClick: () => {
-        const c = clone(ch); setPower(c, target.path, clone(arr)); hooks.applyToCurrent?.(c); toast('Power saved to the character');
+        const c = clone(ch); setPower(c, target.path, stampRole(clone(arr), R)); hooks.applyToCurrent?.(c); toast('Power saved to the character');
       } }, `Save to ${ch.identity?.codename || 'character'}`) : null,
       ch ? h('button', { class: target ? 'btn' : 'btn primary', type: 'button', onClick: () => {
-        const c = clone(ch); const np = clone(arr); np.role = np.role || 'utility'; c.powers = [...(c.powers || []), np];
+        const c = clone(ch); const np = clone(arr); stampRole(np, R); c.powers = [...(c.powers || []), np];
         hooks.applyToCurrent?.(c); target = { path: { device: null, index: c.powers.length - 1 } }; toast(`Added to ${c.identity?.codename || 'character'}`);
       } }, `Add as new power to ${ch.identity?.codename || 'character'}`) : h('span', { style: { color: 'var(--ink-3)', fontSize: '13px' } }, 'Roll or open a character to add this power to them.')));
 
@@ -270,17 +272,6 @@ function weakenNames(ch) {
   for (const d of ch?.devices || []) visit(d.powers);
   if (state.lab?.effect === 'Weaken') out.push(state.lab.name);
   return [...new Set(out)];
-}
-
-function statLine(arr) {
-  try {
-    const lines = [`${arr.name}: ${describeEffect(arr, R)} • ${powerCost({ ...arr, alternates: [] }, R)} points`];
-    for (const a of arr.alternates) lines.push(`${arr.dynamic ? 'DAE' : 'AE'}: ${a.name}: ${describeEffect(a, R)} • ${arr.dynamic ? 2 : 1} point${arr.dynamic ? 's' : ''}`);
-    if (arr.dynamic) lines.push(`(Dynamic: a ${primaryOwnCost(arr, R)}-point pool shared by the whole array)`);
-    return lines.join('\n');
-  } catch (e) {
-    return e.message;
-  }
 }
 
 export function renderLab() {

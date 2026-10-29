@@ -16,6 +16,8 @@ import { paintRoster } from './portrait.js';
 import { setPortrait, portraitOf } from '../engine/portrait.js';
 import { encodeRoster, decodeRoster, rosterLink, keySize } from './share.js';
 import { qrSvg } from './lobby.js';
+import { RULES } from '../engine/index.js';
+import { repairPowerRoles } from '../engine/repair.js';
 
 const FOLDERS_KEY = 'dcugen.roster.folders.v1';
 const VIEW_KEY = 'dcugen.roster.view';
@@ -358,7 +360,7 @@ export async function shareRosterDialog(start) {
 export async function openRosterKey(text) {
   let data;
   try { data = await decodeRoster(text); } catch (e) { toast(e.message); return false; }
-  const chars = data.characters.filter((c) => c?.abilities && c.pl != null);
+  const chars = data.characters.filter((c) => c?.abilities && c.pl != null).map((c) => repairPowerRoles(c, RULES));
   if (!chars.length) { toast('That link has no characters in it.'); return false; }
   const known = chars.filter((c) => c.rosterId && state.roster.some((x) => x.rosterId === c.rosterId)).length;
   const where = h('select', { id: 'roster-into', 'aria-label': 'Where they go' },

@@ -1,0 +1,169 @@
+{
+  "pl": 10,
+  "abilities": {
+    "Strength": 7,
+    "Stamina": 8,
+    "Agility": 5,
+    "Dexterity": 0,
+    "Fighting": 7,
+    "Intellect": 1,
+    "Awareness": 4,
+    "Presence": 5
+  },
+  "defenses": {
+    "Dodge": 2,
+    "Parry": 1,
+    "Fortitude": 6,
+    "Will": 2
+  },
+  "skills": [
+    {
+      "name": "Close Combat",
+      "spec": "General",
+      "ranks": 4
+    },
+    {
+      "name": "Athletics",
+      "ranks": 5
+    },
+    {
+      "name": "Persuasion",
+      "ranks": 5
+    },
+    {
+      "name": "Perception",
+      "ranks": 2
+    },
+    {
+      "name": "Deception",
+      "ranks": 3
+    },
+    {
+      "name": "Ranged Combat",
+      "spec": "Throwing",
+      "ranks": 5
+    }
+  ],
+  "advantages": [
+    {
+      "name": "Improved Initiative",
+      "rank": 1
+    },
+    {
+      "name": "Luck",
+      "rank": 4
+    },
+    {
+      "name": "Leadership",
+      "rank": 1
+    },
+    {
+      "name": "Instant Up",
+      "rank": 1
+    },
+    {
+      "name": "Teamwork",
+      "rank": 1
+    },
+    {
+      "name": "Throwing Mastery",
+      "rank": 3
+    },
+    {
+      "name": "All-out Attack",
+      "rank": 1
+    },
+    {
+      "name": "Move-by Action",
+      "rank": 1
+    }
+  ],
+  "powers": [
+    {
+      "name": "Tough skin",
+      "effect": "Protection",
+      "rank": 4,
+      "extras": [
+        {
+          "name": "Impervious"
+        },
+        {
+          "name": "Innate"
+        }
+      ],
+      "flaws": [],
+      "descriptors": [],
+      "alternates": [],
+      "role": "utility"
+    },
+    {
+      "name": "Leaping",
+      "effect": "Leaping",
+      "rank": 7,
+      "extras": [],
+      "flaws": [],
+      "descriptors": [],
+      "alternates": [],
+      "description": "900 foot controlled leap",
+      "role": "utility"
+    },
+    {
+      "name": "Bad luck",
+      "effect": "Luck Control",
+      "rank": 4,
+      "extras": [
+        {
+          "name": "Insidious"
+        }
+      ],
+      "flaws": [],
+      "descriptors": [],
+      "alternates": [],
+      "description": "Attacks/affects against me that only achieve one level, can be unluckily instead and miss. Misses can by altered to critical misses. Can be uses up to Rank number of times per session. Requires Hero point.",
+      "role": "utility"
+    },
+    {
+      "name": "Psionic Defense",
+      "effect": "Deflect",
+      "rank": 5,
+      "extras": [
+        {
+          "name": "Innate"
+        },
+        {
+          "name": "Reaction",
+          "option": "From free action"
+        }
+      ],
+      "flaws": [],
+      "descriptors": [
+        "resistance to psionic"
+      ],
+      "alternates": [],
+      "description": "Psionic influence automatically 1 level less.",
+      "role": "utility"
+    },
+    {
+      "name": "Kinetic control",
+      "effect": "Damage",
+      "rank": 12,
+      "range": "Ranged",
+      "extras": [],
+      "flaws": [],
+      "descriptors": [
+        "Enhances kinetic energy up to 100 tons",
+        "or removes up to 100 tons of force either from self or to self."
+      ],
+      "alternates": [],
+      "description": "Common weapon is ball bearings but any ammo will do. Uses Throwing skill to hit. damage is higher of ammo damage or Rank. In atmosphere, limited to throwing distance. Can also cancel up to 12 levels of physical damage with successful Parry. Must save action to use defensively or spend a Hero point.",
+      "role": "utility"
+    }
+  ],
+  "identity": {
+    "codename": "Ballista",
+    "realName": "Billy Pride (Istowitz)",
+    "languages": [
+      "English"
+    ]
+  }
+}

@@ -1,5 +1,8 @@
 // App state, saved roster and preferences (kept in this browser's storage).
 
+import { RULES } from '../engine/index.js';
+import { repairPowerRoles } from '../engine/repair.js';
+
 const ROSTER_KEY = 'dcugen.roster.v1';
 const PREFS_KEY = 'dcugen.prefs.v1';
 // Deleted characters, so a sync or a merged backup doesn't bring them back: [{ rosterId, at }].
@@ -29,7 +32,7 @@ export const state = {
   current: null,      // the character on the Forge
   editing: false,
   history: [],        // recent rolls (not saved)
-  roster: readJson(ROSTER_KEY, []),
+  roster: readJson(ROSTER_KEY, []).map((c) => repairPowerRoles(c, RULES)),
   prefs: readJson(PREFS_KEY, { pl: 10, plRandom: false, archetype: '', theme: '', alignment: 'hero', chaos: 0.35, gender: 'random', teamSize: 4 }),
   lab: null,          // the power being edited in the Power Lab
 };
@@ -59,7 +62,7 @@ export function newId() {
 
 /** Add or update a character in the roster. Returns the stored copy. */
 export function upsert(ch) {
-  const copy = JSON.parse(JSON.stringify(ch));
+  const copy = repairPowerRoles(JSON.parse(JSON.stringify(ch)), RULES);
   if (!copy.rosterId) copy.rosterId = newId();
   copy.savedAt = new Date().toISOString();
   const i = state.roster.findIndex((x) => x.rosterId === copy.rosterId);
