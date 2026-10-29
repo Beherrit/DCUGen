@@ -128,3 +128,8 @@ function seesThrough(c, target) {
   if (!target.concealment) return true;
   return /radar|accurate|tremor|awareness|danger sense|mental|infravision|ultravision|detect/i.test(c.senses);
 }
+
+/** How much harm t could do to c right now: its best attack's expected value at that distance. */
+export function threatOn(t, c, dist) {
+  return Math.max(0, ...t.attacks.map((a) => expectedValue(t, a, c, { dist: a.kind === 'close' ? 0 : dist })));
+}

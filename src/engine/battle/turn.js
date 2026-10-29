@@ -10,12 +10,14 @@ import { applyEffect } from './attack-effects.js';
 import { feint, grab, tryEscape } from './maneuvers.js';
 import { heal, spendHeroPoint, recoverAction } from './support.js';
 import { attackTurn } from './turn-attack.js';
+import { markTurn, mayFlee, mayDefend, recoverEarly, healsFreely, healThreshold } from './tactics.js';
 
 const isHurt = (c) => c.staggered || c.bruises >= 2;
 
 /** Every step below returns true when it used up the turn. */
 export function takeTurn(b, R, c, rng) {
   c.defMod = 0;
+  markTurn(b, c);
   const mode = canAct(c);
   const conds = conditionLabels(c).filter((x) => x !== 'Fled');
   c.defending = false;
@@ -67,6 +69,7 @@ function controlledTurn(b, R, c, rng) {
 /** Morale: beasts and minions may break and run. */
 function losesNerve(b, c, enemies, rng) {
   const S = STYLES[c.style];
+  if (!mayFlee(b, c)) return false;
   if (!(S.flees && !c.adv.Fearless && (c.staggered || (c.minion && c.bruises >= 1 && alliesOf(b, c).length < enemies.length)) && rng.chance(c.minion ? 0.35 : 0.3))) return false;
   c.fled = true;
   log(b, { kind: 'flee', actor: c.id, text: `${c.name} has had enough and ${c.style === 'beast' ? 'bolts for cover' : 'runs for it'}.`, important: true });
@@ -91,6 +94,7 @@ function recoverFromDaze(b, c, mode, rng) {
 
 /** Recover (once per conflict, DCA 177): badly hurt with no healer coming, catch your breath. */
 function catchBreath(b, c, rng) {
+  if (recoverEarly(b, c) && c.staggered && !c.recovered && !c.minion) { recoverAction(b, c); return true; }
   if (!c.recovered && !c.minion && (c.staggered || c.fatigue >= 2 || (c.bruises >= 3 && c.dazed)) && !alliesOf(b, c).some((a) => a.healing && !a.out)
     && (c.style === 'tank' || c.style === 'support' || c.style === 'duelist' || alliesOf(b, c).length > 0 || rng.chance(0.5))) {
     recoverAction(b, c);
@@ -116,8 +120,9 @@ function takeAimedShot(b, R, c, rng) {
 
 /** Support: heal first if someone needs it. */
 function healFirst(b, c, rng) {
-  if (!(c.healing && (c.style === 'support' || rng.chance(0.4)))) return false;
-  const patient = alliesOf(b, c).concat([c]).filter((a) => a.bruises >= 2 || a.staggered).sort((x, y) => (y.staggered ? 10 : 0) + y.bruises - ((x.staggered ? 10 : 0) + x.bruises))[0];
+  if (!(c.healing && (c.style === 'support' || healsFreely(b, c) || rng.chance(0.4)))) return false;
+  const need = healThreshold(b, c);
+  const patient = alliesOf(b, c).concat([c]).filter((a) => a.bruises >= need || a.staggered || (need < 2 && a.dazed)).sort((x, y) => (y.staggered ? 10 : 0) + y.bruises - ((x.staggered ? 10 : 0) + x.bruises))[0];
   if (patient && (c.healing.ranged || Math.abs(patient.pos - c.pos) <= moveZones(c))) {
     if (!c.healing.ranged && patient.pos !== c.pos && canAct(c) === 'full') moveTo(b, c, patient.pos, `to reach ${patient.name}`);
     if (c.healing.ranged || patient.pos === c.pos) { heal(b, c, patient, rng); return true; }
@@ -139,6 +144,7 @@ function crushHeld(b, R, c, rng) {
 
 /** Defend (DCA 175): hurt, already recovered, outnumbered and with nothing that would land: dig in. */
 function digIn(b, c, choice, enemies) {
+  if (!mayDefend(b, c)) return false;
   if (!(choice.plan === 'attack' && c.staggered && c.recovered && (choice.ev ?? 1) < 0.12 && enemies.length > alliesOf(b, c).length && ['support', 'duelist', 'tank'].includes(c.style))) return false;
   c.defending = true;
   log(b, { kind: 'note', actor: c.id, text: `${c.name} goes on the defensive: attackers must beat a rolled defense until their next turn.` });

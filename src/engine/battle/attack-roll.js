@@ -3,6 +3,7 @@
 import { sign, d20 } from './util.js';
 import { activeConditions, checkPenalty, defenseOf } from './conditions.js';
 import { rangePenalty, concealmentPenalty } from './odds.js';
+import { spendOnMiss } from './tactics.js';
 
 const VERBS = {
   brawler: ['swings at', 'hammers', 'slams', 'pounds on'], duelist: ['cuts at', 'strikes at', 'lunges at', 'snaps a strike at'],
@@ -63,7 +64,7 @@ export function rollToHit(b, c, atk, t, rng, m, aimed, notes) {
     : `${c.name} ${attackVerb(c, atk, t, rng)}: d20 ${roll} ${sign(mod)} = ${total} vs ${which} ${t.defending ? '' : 'DC '}${dcUsed}`;
   if (t.feinted) { text += ' (feinted: defenses halved)'; t.feinted = false; }
   const out = { roll, total, mod, hit, crit, dice, text, dcUsed, which };
-  if (!hit && b.options.heroPoints && c.heroPoints > 0 && roll !== 1 && (c.style !== 'minion') && (t.staggered || c.staggered || rng.chance(0.5))) rerollMiss(c, atk, t, rng, out, routine);
+  if (!hit && b.options.heroPoints && c.heroPoints > 0 && roll !== 1 && (c.style !== 'minion') && (spendOnMiss(b, c) || t.staggered || c.staggered || rng.chance(0.5))) rerollMiss(c, atk, t, rng, out, routine);
   if (activeConditions(t).has('Defenseless') && out.hit && critOk(c, t, routine)) out.crit = true;
   return out;
 }

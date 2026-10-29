@@ -5,9 +5,11 @@ import { checkPenalty, defenseOf } from './conditions.js';
 import { applyEffect } from './attack-effects.js';
 import { grab } from './maneuvers.js';
 import { attackVerb, rollToHit } from './attack-roll.js';
+import { noteAttack, interposeFor } from './tactics.js';
 
 export function resolveAttack(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive = 0, effort = null, charge = false, slam = null, aimed = 0, team = 0 } = {}) {
   c.lastAttackId = atk.id;
+  noteAttack(b, c, t);
   c.stats.attacks++;
   const m = shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charge, slam, team });
   const { rankShift, notes } = m;
@@ -61,7 +63,7 @@ function landHit(b, R, c, atk, t, rng, r, rankShift, notes) {
   text += ` — ${crit ? 'CRITICAL HIT' : 'hit'}${notes.length ? ` (${notes.join('; ')})` : ''}.`;
   // Interpose: an ally with the advantage takes the hit
   const guard = alliesOf(b, t).find((a) => a.adv.Interpose && !a.interposed && a.pos === t.pos && !a.staggered && a.style !== 'minion');
-  if (guard && (t.staggered || t.bruises >= 2 || t.pl < guard.pl)) {
+  if (guard && (interposeFor(b, guard, t) ?? (t.staggered || t.bruises >= 2 || t.pl < guard.pl))) {
     guard.interposed = true;
     log(b, { kind: 'hit', actor: c.id, target: t.id, text, dice });
     log(b, { kind: 'condition', actor: guard.id, target: t.id, text: `${guard.name} interposes and takes the hit meant for ${t.name}!`, important: true });

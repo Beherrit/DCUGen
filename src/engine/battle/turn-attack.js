@@ -8,17 +8,18 @@ import { hitOdds, rangePenalty, concealmentPenalty } from './odds.js';
 import { bestTradeoff } from './plan.js';
 import { moveTo, moveToward } from './movement.js';
 import { resolveAttack } from './attacks.js';
+import { positionGoal, stepToZone, wantsKite, kiteThreat, kiteZones, aimsAlways, isMeleeThreat, tradeoffBias, forceEffort, teamAttackMin } from './tactics.js';
 
 /** The attack plan chosen for this turn: move into position, maybe aim, then attack. */
 export function attackTurn(b, R, c, choice, enemies, mode, rng) {
   const { attack, target } = choice;
-  kite(b, c, attack, enemies, mode);
+  kite(b, c, attack, target, enemies, mode);
+  if (holdPosition(b, c, attack, target, mode)) return;
   const closed = closeIn(b, c, attack, target, mode, rng);
   if (closed.over) return;
   const charge = closed.charge;
   if (!charge && lineUpShot(b, c, attack, target, enemies, rng)) return;
-  const trade = bestTradeoff(c, attack, target, Math.abs(c.pos - target.pos));
-  const { allOut, defensive } = pickStance(b, c, target, enemies);
+  const { trade, allOut, defensive } = pickTradeoffs(b, c, attack, target, enemies);
   const effort = pickEffort(b, c, attack, target, rng);
   const team = teamAttack(b, c, attack, target, rng);
   const slam = slamRank(c, attack, charge);
@@ -28,15 +29,23 @@ export function attackTurn(b, R, c, choice, enemies, mode, rng) {
 }
 
 /** Kiting: ranged fighters step away from melee threats before shooting. */
-function kite(b, c, attack, enemies, mode) {
+function kite(b, c, attack, target, enemies, mode) {
   const S = STYLES[c.style];
-  if (!(mode === 'full' && attack.kind !== 'close' && S.ranged >= 1.2 && !c.grabbedBy)) return;
-  const threat = enemies.find((e) => e.pos === c.pos && e.attacks.some((a) => a.kind === 'close' && !a.unarmed || (a.unarmed && e.style === 'brawler')));
+  if (!(mode === 'full' && attack.kind !== 'close' && (S.ranged >= 1.2 || wantsKite(b, c)) && !c.grabbedBy)) return;
+  const threat = enemies.find((e) => e.pos === c.pos && isMeleeThreat(e)) || kiteThreat(b, c, enemies);
   if (threat && rangePenalty(attack, 1) === 0) {
     const dir = c.pos <= threat.pos ? -1 : 1;
-    const dest = clamp(c.pos + dir * Math.min(moveZones(c), 1), 0, arenaOf(b) - 1);
+    const step = kiteZones(b, c, attack, target, dir) ?? Math.min(moveZones(c), 1);
+    const dest = clamp(c.pos + dir * step, 0, arenaOf(b) - 1);
     if (dest !== c.pos) moveTo(b, c, dest, `away from ${threat.name}`);
   }
+}
+
+/** A team tactic may call for a different spot first. True when the move used up the turn (a close attack could not reach). */
+function holdPosition(b, c, attack, target, mode) {
+  const goal = mode === 'full' ? positionGoal(b, c) : null;
+  if (goal === null || !stepToZone(b, c, goal, 'to hold position')) return false;
+  return attack.kind === 'close' && target.pos !== c.pos;
 }
 
 /** Get a close attack into reach. Returns { over } when the turn went on moving, { charge } when a charge was made. */
@@ -59,12 +68,13 @@ function closeIn(b, c, attack, target, mode, rng) {
 
 /** Aim: a ranged fighter with poor odds and nobody on top of them lines up the shot for next turn (DCA 175). True when the turn went on aiming. */
 function lineUpShot(b, c, attack, target, enemies, rng) {
-  if (!(attack.roll && attack.kind === 'ranged' && (c.style === 'gunner' || c.style === 'blaster') && !enemies.some((e) => e.pos === c.pos))) return false;
+  const always = aimsAlways(b, c, enemies);
+  if (!(attack.roll && attack.kind === 'ranged' && (always || ((c.style === 'gunner' || c.style === 'blaster') && !enemies.some((e) => e.pos === c.pos))))) return false;
   const dist = Math.abs(c.pos - target.pos);
   const def = defenseOf(target, 'Dodge');
   const now = hitOdds(attack.bonus - rangePenalty(attack, dist) - concealmentPenalty(c, target, attack), def).hit;
   const bonus = dist <= 1 ? 5 : 2;
-  if (now < 0.4 && hitOdds(attack.bonus + bonus - rangePenalty(attack, dist) - concealmentPenalty(c, target, attack), def).hit >= now + 0.2 && rng.chance(0.7)) {
+  if (always || (now < 0.4 && hitOdds(attack.bonus + bonus - rangePenalty(attack, dist) - concealmentPenalty(c, target, attack), def).hit >= now + 0.2 && rng.chance(0.7))) {
     c.aiming = { target: target.id, attack: attack.id, bonus };
     log(b, { kind: 'note', actor: c.id, target: target.id, text: `${c.name} takes aim at ${target.name} (+${bonus} next turn, vulnerable until then).` });
     return true;
@@ -83,10 +93,23 @@ function pickStance(b, c, target, enemies) {
   return { allOut, defensive };
 }
 
+/** The trade-offs for this attack: the fighter's own choice, then any team tactic's override. */
+function pickTradeoffs(b, c, attack, target, enemies) {
+  let trade = bestTradeoff(c, attack, target, Math.abs(c.pos - target.pos));
+  let { allOut, defensive } = pickStance(b, c, target, enemies);
+  const adj = tradeoffBias(b, c, target, attack);
+  if (adj) {
+    ({ allOut, defensive } = adj);
+    if (adj.power !== undefined) trade = adj.power;
+    c.defMod = allOut ? -allOut : defensive;
+  }
+  return { trade, allOut, defensive };
+}
+
 /** Extra effort: push a power when losing (DCA 19). */
 function pickEffort(b, c, attack, target, rng) {
   const hurt = c.staggered || c.bruises >= 2;
-  if (b.options.extraEffort && c.fatigue < 2 && attack.power && !attack.equipment && (hurt || (b.round >= 3 && target.bruises === 0)) && ['mage', 'omni', 'blaster', 'tank', 'brawler', 'mentalist'].includes(c.style) && rng.chance(0.45)) {
+  if (b.options.extraEffort && c.fatigue < 2 && attack.power && !attack.equipment && (forceEffort(b, c) || ((hurt || (b.round >= 3 && target.bruises === 0)) && ['mage', 'omni', 'blaster', 'tank', 'brawler', 'mentalist'].includes(c.style) && rng.chance(0.45)))) {
     return 'power';
   }
   return null;
@@ -101,7 +124,7 @@ function teamAttack(b, c, attack, target, rng) {
   const order = b.order.slice(b.turn);
   const helpers = alliesOf(b, c).filter((a) => a.minion && a.teamedRound !== b.round && order.includes(a.id) && canAct(a) === 'full'
     && Math.abs(a.pos - target.pos) <= moveZones(a)).slice(0, 5);
-  if (helpers.length < 2) return 0;
+  if (helpers.length < teamAttackMin(b, c, target)) return 0;
   let deg = 0; const parts = [];
   for (const a of helpers) {
     const atk = a.attacks.find((x) => x.effect === attack.effect && x.resistance === attack.resistance && Math.abs(x.rank - attack.rank) <= 5 && x.roll && (x.kind !== 'close' || Math.abs(a.pos - target.pos) <= moveZones(a)));

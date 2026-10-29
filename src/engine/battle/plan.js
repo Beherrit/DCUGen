@@ -2,10 +2,11 @@
 
 import { STYLES } from './styles.js';
 import { activeConditions, defenseOf, resistOf, moveZones } from './conditions.js';
-import { hitOdds, expectedValue, rangePenalty } from './odds.js';
+import { hitOdds, expectedValue, rangePenalty, threatOn } from './odds.js';
+import { targetBias, attackBias, feintBias, grabChance } from './tactics.js';
 
 /** Best attack for c against t, with the trade-off already folded in. */
-export function bestAttackVs(c, t, rng, { dist = Math.abs(c.pos - t.pos), reachable = true, charge = false } = {}) {
+export function bestAttackVs(c, t, rng, { dist = Math.abs(c.pos - t.pos), reachable = true, charge = false, b = null } = {}) {
   const S = STYLES[c.style];
   let best = { attack: null, ev: 0, score: 0 };
   for (const atk of c.attacks) {
@@ -20,6 +21,7 @@ export function bestAttackVs(c, t, rng, { dist = Math.abs(c.pos - t.pos), reacha
     if (S.variety && atk.id === c.lastAttackId) score *= 0.7;
     if (atk.stunt) score *= 0.95;
     if (atk.unarmed && c.attacks.length > 1) score *= 0.9;
+    if (b) score *= attackBias(b, c, atk, t);
     score *= 0.9 + rng.next() * 0.2;
     if (score > best.score) best = { attack: atk, ev, score };
   }
@@ -45,14 +47,17 @@ export function bestTradeoff(c, atk, t, dist) {
 }
 
 /** Feint: skilled fighters against a defense they can't crack. */
-function wantsFeint(c, t, top, mode) {
-  if (!((c.style === 'duelist' || c.adv['Agile Feint']) && top.pick.attack?.roll && top.reachable && top.dist <= moveZones(c) && !t.feinted && mode === 'full')) return false;
+function wantsFeint(b, c, t, top, mode) {
+  const flank = feintBias(b, c);
+  if (!((flank || c.style === 'duelist' || c.adv['Agile Feint']) && top.pick.attack?.roll && top.reachable && top.dist <= moveZones(c) && !t.feinted && mode === 'full')) return false;
   const atk = top.pick.attack;
   const def = defenseOf(t, atk.kind === 'close' ? 'Parry' : 'Dodge');
   const now = hitOdds(atk.bonus, def).hit;
   const after = hitOdds(atk.bonus, Math.ceil(def / 2)).hit;
   const feintSkill = Math.max(c.skills.Deception, c.adv['Agile Feint'] ? c.skills.Acrobatics : -99);
-  const pFeint = hitOdds(feintSkill, Math.max(t.skills.Insight, t.skills.Deception)).hit;
+  const opposed = Math.max(t.skills.Insight, t.skills.Deception);
+  if (flank) return feintSkill >= opposed - flank.slack && after >= now * flank.ratio;
+  const pFeint = hitOdds(feintSkill, opposed).hit;
   return after * pFeint > now * 2.1;
 }
 
@@ -67,8 +72,7 @@ function targetPref(c, t, dist, tactic, rng) {
     if (tactic === 'random') pref = 0.6 + rng.next() * 0.8;
     if (t.minion) pref *= 0.75;
     // Smarter targeting: knock out whoever hurts us most, and finish fighters who are nearly down.
-    const threat = Math.max(0, ...t.attacks.map((a) => expectedValue(t, a, c, { dist: a.kind === 'close' ? 0 : dist })));
-    pref *= 1 + Math.min(1, threat) * 0.5;
+    pref *= 1 + Math.min(1, threatOn(t, c, dist)) * 0.5;
     if (t.staggered || activeConditions(t).has('Defenseless')) pref *= 1.35;
     if (t.aiming || t.holding) pref *= 1.15; // break the aim, or free the friend in their grip
   return pref;
@@ -83,8 +87,8 @@ export function choosePlan(b, R, c, enemies, rng, mode) {
     const dist = Math.abs(c.pos - t.pos);
     // In reach with a move, or with a move and a charge (twice the speed, −2 to hit: DCA 175)
     const reachable = dist === 0 || (mode === 'full' && dist <= zones * 2);
-    const pick = bestAttackVs(c, t, rng, { dist, reachable, charge: dist > zones });
-    const pref = targetPref(c, t, dist, tactic, rng);
+    const pick = bestAttackVs(c, t, rng, { dist, reachable, charge: dist > zones, b });
+    const pref = targetPref(c, t, dist, tactic, rng) * targetBias(b, c, t, { dist, enemies });
     scored.push({ t, dist, reachable, pick, score: (pick.score || 0.01) * pref });
   }
   scored.sort((x, y) => y.score - x.score);
@@ -101,9 +105,9 @@ export function choosePlan(b, R, c, enemies, rng, mode) {
     return null;
   }
   // Grab: beasts, brawlers and tanks with the knack, against someone they can reach
-  if ((S.grabs || c.adv['Fast Grab'] || c.adv['Improved Grab'] || c.adv.Chokehold) && !c.holding && top.reachable && top.dist <= zones && (c.d.abilities.Strength ?? 0) >= (t.d.abilities.Strength ?? 0) + 2 && !t.grabbedBy && !t.minion && rng.chance(c.style === 'beast' ? 0.45 : 0.3)) {
+  if ((S.grabs || c.adv['Fast Grab'] || c.adv['Improved Grab'] || c.adv.Chokehold) && !c.holding && top.reachable && top.dist <= zones && (c.d.abilities.Strength ?? 0) >= (t.d.abilities.Strength ?? 0) + 2 && !t.grabbedBy && !t.minion && rng.chance(grabChance(b, c, t, c.style === 'beast' ? 0.45 : 0.3))) {
     return { target: t, attack: top.pick.attack, plan: 'grab' };
   }
-  if (wantsFeint(c, t, top, mode)) return { target: t, attack: top.pick.attack, plan: 'feint' };
+  if (wantsFeint(b, c, t, top, mode)) return { target: t, attack: top.pick.attack, plan: 'feint' };
   return { target: t, attack: top.pick.attack, plan: 'attack', ev: top.pick.ev };
 }

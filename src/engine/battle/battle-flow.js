@@ -7,9 +7,10 @@ import { resetCombatant, rebuildCombatant } from './combatant.js';
 import { takeTurn } from './turn.js';
 import { regenerate } from './support.js';
 import { endOfTurn } from './end-of-turn.js';
+import { announceTactics } from './tactics.js';
 
 export function createBattle({ seed = 'battle', name = 'Battle' } = {}) {
-  return { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, enclosed: false, ambush: null, maxRounds: MAX_ROUNDS }, lastEvent: 0 };
+  return { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, enclosed: false, ambush: null, teamTactics: {}, vip: {}, maxRounds: MAX_ROUNDS }, lastEvent: 0 };
 }
 
 export function addCombatant(b, c) {
@@ -54,6 +55,7 @@ export function startBattle(b, R) {
   const amb = applyAmbush(b);
   if (b.options.enclosed) log(b, { kind: 'note', text: 'Enclosed space: a room or corridor. Everyone starts within one move and nobody can keep their distance.' });
   if (amb) log(b, { kind: 'note', text: `Ambush: team ${amb} catches the others off guard. Surprise round: only team ${amb} acts, and the surprised are vulnerable until they act.` });
+  announceTactics(b);
   log(b, { kind: 'round', text: `Round 1 begins. ${b.combatants.length} fighters, ${new Set(b.combatants.map((c) => c.team)).size} sides.`, important: true });
   log(b, { kind: 'init', text: `Initiative: ${b.order.map((id) => { const c = byId(b, id); return `${c.name} ${c.init - (c.adv['Seize Initiative'] ? 100 : 0)}${c.adv['Seize Initiative'] ? ' (Seize Initiative, goes first)' : ''}`; }).join(', ')}.`, dice: b.order.map((id) => { const c = byId(b, id); return { label: `${c.name} initiative`, roll: c.initRoll, mod: c.initBonus, total: c.initRoll + c.initBonus }; }) });
   return b;

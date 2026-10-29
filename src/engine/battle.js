@@ -27,6 +27,7 @@ import { makeCombatant, rebuildCombatant } from './battle/combatant.js';
 import { hitOdds, resistOdds } from './battle/odds.js';
 import { createBattle, addCombatant, removeCombatant, placeAll, startBattle, joinBattle, step, runRound, runToEnd } from './battle/battle-flow.js';
 import { byId } from './battle/util.js';
+import { TEAM_TACTICS } from './battle/tactics.js';
 import { statusLine, battleText, simulateMany, serializeBattle, reviveBattle } from './battle/summaries.js';
 
-export { ARENA, ENCLOSED_ARENA, arenaOf, MAX_ROUNDS, STYLES, TACTICS, detectStyle, parseAffliction, makeCombatant, rebuildCombatant, activeConditions, conditionLabels, hitOdds, resistOdds, createBattle, addCombatant, removeCombatant, placeAll, startBattle, byId, joinBattle, step, runRound, runToEnd, statusLine, battleText, simulateMany, serializeBattle, reviveBattle };
+export { TEAM_TACTICS, ARENA, ENCLOSED_ARENA, arenaOf, MAX_ROUNDS, STYLES, TACTICS, detectStyle, parseAffliction, makeCombatant, rebuildCombatant, activeConditions, conditionLabels, hitOdds, resistOdds, createBattle, addCombatant, removeCombatant, placeAll, startBattle, byId, joinBattle, step, runRound, runToEnd, statusLine, battleText, simulateMany, serializeBattle, reviveBattle };
