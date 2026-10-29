@@ -6,7 +6,7 @@ import { RULES as R } from '../src/engine/index.js';
 import { generateCharacter } from '../src/engine/generator.js';
 import { catalogEntries } from '../src/engine/workshop.js';
 import { catalogToCharacter } from '../src/engine/catalog.js';
-import { createBattle, addCombatant, makeCombatant, startBattle, statusLine, conditionLabels } from '../src/engine/battle.js';
+import { createBattle, addCombatant, makeCombatant, startBattle, statusLine, conditionLabels, feet, inReach } from '../src/engine/battle.js';
 import { demoralize, aid, aidAttackOf } from '../src/engine/battle/support-actions.js';
 import { supportTurn } from '../src/engine/battle/support-plan.js';
 import { endOfTurn } from '../src/engine/battle/end-of-turn.js';
@@ -113,7 +113,7 @@ test('demoralize: Deception is ignored without Taunt, or when Intimidation is th
 function minionScene() {
   const b = arena([hero('mastermind', 'o1')], [minion(), minion(), minion(), hero('powerhouse', 'o3')]);
   const a = fighter(b, 'A0'); a.skills.Intimidation = 10; a.adv.Taunt = 0;
-  for (const x of b.combatants) { if (x.team === 'B') { x.pos = a.pos; x.adv.Fearless = 0; x.skills.Insight = 0; } if (x.minion) x.d.defenses.Will = 3; }
+  for (const x of b.combatants) { if (x.team === 'B') { x.x = a.x; x.y = a.y; x.adv.Fearless = 0; x.skills.Insight = 0; } if (x.minion) x.d.defenses.Will = 3; }
   return { b, a, m: ['B0', 'B1', 'B2'].map((id) => fighter(b, id)), boss: fighter(b, 'B3') };
 }
 const labels = (list) => list.map((x) => conditionLabels(x).join('/'));
@@ -134,11 +134,11 @@ test('demoralize: the group is resisted at its highest resistance, and Fearless,
   assert.equal(demoralize(b, a, m[0], dice(10, 5)), 0, 'beats 3 but not 20');
   assert.deepEqual(labels(m), ['', '', '']);
   m[1].adv.Fearless = 1; // out of the group, so its Will no longer sets the bar
-  m[2].pos = a.pos + 3; // beyond earshot (2 zones)
+  m[2].x = a.x + 3; m[2].y = a.y; // 90 ft away, beyond earshot (60 ft)
   assert.equal(demoralize(b, a, m[0], dice(10, 5)), 3);
   assert.deepEqual(labels(m), ['Impaired', '', '']);
   const before = JSON.stringify(m[0].conditions);
-  m[2].pos = a.pos; m[1].adv.Fearless = 0; m[1].d.defenses.Will = 3;
+  m[2].x = a.x; m[2].y = a.y; m[1].adv.Fearless = 0; m[1].d.defenses.Will = 3;
   demoralize(b, a, m[1], dice(19, 5)); // 4 degrees: the group is B1 and B2, and B0 keeps its earlier, lighter condition
   assert.deepEqual(labels(m), ['Impaired', 'Disabled', 'Disabled']);
   assert.equal(JSON.stringify(m[0].conditions), before);
@@ -163,7 +163,7 @@ test('demoralize: it lapses at the end of the demoralizer\'s next round, not bef
 
 function trio() {
   const b = arena([hero('blaster', 'p1'), hero('paragon', 'p2'), hero('speedster', 'p3')], [hero('powerhouse', 'p4')]);
-  for (const x of b.combatants) { x.pos = 3; x.adv.Teamwork = 0; Object.assign(x.skills, { Intimidation: -20 }); }
+  for (const x of b.combatants) { x.x = 3; x.y = 5; x.adv.Teamwork = 0; Object.assign(x.skills, { Intimidation: -20 }); }
   return { b, helper: fighter(b, 'A0'), ally: fighter(b, 'A1'), third: fighter(b, 'A2'), foe: fighter(b, 'B0') };
 }
 const aidWith = (b, helper, ally, foe, roll, bonus = 0, mode = 'attack') => aid(b, helper, ally, foe, dice(roll), { mode, attack: { bonus } });
@@ -245,12 +245,13 @@ test('aid: it ends with the ally\'s next turn: this round if the ally has yet to
 
 const plan = (foe, ev) => ({ plan: ev === 0 ? 'move' : 'attack', ev, target: foe });
 const turn = (b, c, foe, ev) => supportTurn(b, c, plan(foe, ev), [foe], 'full', dice(15, 15));
-const gainOf = (helper, ally, foe, teamwork = 0) => hitOdds(aidAttackOf(helper).bonus + teamwork, 0).hit * (bestEvNow(ally, foe, undefined, 2) - bestEvNow(ally, foe));
+const evAt = (b, a, foe, shift = 0) => bestEvNow(a, foe, feet(b, a, foe), shift, inReach(b, a, foe));
+const gainOf = (b, helper, ally, foe, teamwork = 0) => hitOdds(aidAttackOf(helper).bonus + teamwork, 0).hit * (evAt(b, ally, foe, 2) - evAt(b, ally, foe));
 
 // Requirement: aid only when pAid x (ally's EV with +2 minus without) beats the aider's own attack, and the own attack is worth under 0.5.
 test('aid decision: aids when pAid x ally gain beats its own attack value, and not when its own attack is worth more', () => {
   const { b, helper, ally, third, foe } = trio();
-  const gain = gainOf(helper, ally, foe);
+  const gain = gainOf(b, helper, ally, foe);
   assert.ok(gain > 0.1 && gain < 0.3, `setup: the gain is ${gain}`);
   assert.equal(turn(b, helper, foe, gain + 0.03), false, 'own attack worth more');
   assert.deepEqual(ally.aid, []); assert.equal(b.log.length, 0);
@@ -261,15 +262,15 @@ test('aid decision: aids when pAid x ally gain beats its own attack value, and n
 
 test('aid decision: helps the ally who gains most, then the next, and nobody who has an aid already or is far from the foe', () => {
   const { b, helper, ally, third, foe } = trio();
-  assert.ok(gainOf(helper, ally, foe) > gainOf(helper, third, foe) + 0.05);
+  assert.ok(gainOf(b, helper, ally, foe) > gainOf(b, helper, third, foe) + 0.05);
   turn(b, helper, foe, 0);
   assert.equal(ally.aid.length, 1); assert.equal(third.aid.length, 0);
   assert.equal(turn(b, helper, foe, 0), true, 'the next best ally is helped once the first has an aid');
   assert.equal(third.aid.length, 1);
   assert.equal(turn(b, helper, foe, 0), false, 'everyone already has an aid');
   assert.equal(b.log.filter((e) => /aids /.test(e.text)).length, 2);
-  const far = trio(); far.ally.pos = 6; far.third.pos = 6;
-  assert.equal(turn(far.b, far.helper, far.foe, 0), false, 'allies 3 zones from the foe are not engaged with it');
+  const far = trio(); far.ally.x = 6; far.third.x = 6;
+  assert.equal(turn(far.b, far.helper, far.foe, 0), false, 'allies 90 ft from the foe are not engaged with it');
 });
 
 test('aid decision: a helper who would rarely succeed does not aid, and Teamwork makes it worth trying', () => {
@@ -283,7 +284,7 @@ test('aid decision: a helper who would rarely succeed does not aid, and Teamwork
 
 test('aid decision: a staggered ally in the fight gets a defense aid when no attack aid is worth more than the own attack', () => {
   const { b, helper, ally, foe } = trio();
-  const ev = gainOf(helper, ally, foe) + 0.1;
+  const ev = gainOf(b, helper, ally, foe) + 0.1;
   assert.equal(turn(b, helper, foe, ev), false);
   ally.staggered = true;
   assert.equal(turn(b, helper, foe, ev), true);
@@ -293,12 +294,12 @@ test('aid decision: a staggered ally in the fight gets a defense aid when no att
 
 // Requirement: demoralize when Intimidation beats the target by 5+ and the own attack is worth under 0.4, or against 3+ minions.
 test('demoralize decision: a good Intimidation and a poor attack demoralize; a good attack, a small gap or a Fearless foe do not', () => {
-  const { b, a, t } = duel(); t.pos = a.pos;
+  const { b, a, t } = duel(); t.x = a.x; t.y = a.y;
   const go = (ev) => supportTurn(b, a, plan(t, ev), [t], 'full', dice(10, 5));
   assert.equal(go(0.4), false); assert.deepEqual(conditionLabels(t), []);
   assert.equal(go(0.39), true); assert.deepEqual(conditionLabels(t), ['Impaired']);
   assert.equal(go(0.1), false, 'already impaired');
-  const d = duel(); d.t.pos = d.a.pos; d.a.skills.Intimidation = 9; // 9 - 5 = 4: under 5
+  const d = duel(); d.t.x = d.a.x; d.t.y = d.a.y; d.a.skills.Intimidation = 9; // 9 - 5 = 4: under 5
   assert.equal(supportTurn(d.b, d.a, plan(d.t, 0), [d.t], 'full', dice(10, 5)), false);
   d.a.skills.Intimidation = 10; d.t.adv.Fearless = 1;
   assert.equal(supportTurn(d.b, d.a, plan(d.t, 0), [d.t], 'full', dice(10, 5)), false);
@@ -308,6 +309,6 @@ test('demoralize decision: three or more minions in earshot are demoralized even
   const { b, a, m } = minionScene();
   assert.equal(supportTurn(b, a, plan(m[0], 2), m, 'full', dice(10, 5)), true);
   assert.deepEqual(labels(m), ['Impaired', 'Impaired', 'Impaired']);
-  const s2 = minionScene(); s2.m[2].pos = s2.a.pos + 3;
+  const s2 = minionScene(); s2.m[2].x = s2.a.x + 3; s2.m[2].y = s2.a.y;
   assert.equal(supportTurn(s2.b, s2.a, plan(s2.m[0], 2), s2.m, 'full', dice(10, 5)), false, 'only two in earshot');
 });

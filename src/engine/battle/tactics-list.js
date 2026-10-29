@@ -4,7 +4,7 @@ export const TEAM_TACTICS = {
   none: { label: "Each fighter's own style", blurb: 'No team plan: everyone fights the way its build suggests.' },
   focus: { label: 'Focus Fire', blurb: 'The whole team picks the most dangerous enemy and brings it down together.' },
   alpha: { label: 'Alpha Strike', blurb: 'Hit as hard as possible in the first two rounds, spending extra effort and hero points freely.' },
-  line: { label: 'Hold the Line', blurb: 'Tough fighters stand in front with defensive attacks and guard allies; the rest stay one zone back.' },
+  line: { label: 'Hold the Line', blurb: 'Tough fighters stand in front with defensive attacks and guard allies; the rest stay one square back.' },
   bodyguard: { label: 'Bodyguard', blurb: 'The team protects one fighter, stays beside them, interposes for them and goes after whoever attacks them.' },
   kite: { label: 'Kite', blurb: 'Ranged fighters keep their distance from melee enemies, take no close fights and aim when nobody is near.' },
   lockdown: { label: 'Lockdown', blurb: 'Controllers pin down the most dangerous enemy first while the damage dealers finish controlled enemies.' },

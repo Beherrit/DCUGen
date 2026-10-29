@@ -10,15 +10,15 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 
 | Kind | Total | Full | Partial | None | n/a | Covered |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| effect | 61 | 6 | 26 | 21 | 8 | 60% |
-| extra | 38 | 5 | 6 | 22 | 5 | 33% |
+| effect | 61 | 6 | 27 | 20 | 8 | 62% |
+| extra | 38 | 8 | 5 | 20 | 5 | 39% |
 | flaw | 22 | 0 | 1 | 18 | 3 | 5% |
 | advantage | 75 | 26 | 7 | 21 | 21 | 61% |
 | action | 20 | 9 | 7 | 4 | 0 | 80% |
 | maneuver | 12 | 7 | 4 | 1 | 0 | 92% |
 | condition | 30 | 16 | 8 | 5 | 1 | 83% |
-| rule | 38 | 15 | 11 | 12 | 0 | 68% |
-| all | 296 | 84 | 70 | 104 | 38 | 60% |
+| rule | 38 | 16 | 10 | 12 | 0 | 68% |
+| all | 296 | 88 | 69 | 101 | 38 | 61% |
 
 ## Effects
 
@@ -37,7 +37,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Deflect | none | There is no reaction to turn a ranged attack aside. | DCA 95 |
 | Duplication | none | Duplicates are not created. | DCA 94 |
 | Element Control | none | Control effects (Move Object style) are not simulated. | DCA 95 |
-| Elongation | none | Stretching and extra reach are not modelled. | DCA 96 |
+| Elongation | partial | Stretches the fighter's close reach by the distance of its rank (rank 1 is 60 ft), counted in whole squares at the scale of the fight; the help it gives to grabbing is not applied. | DCA 96 |
 | Energy Absorption | none | Absorbing energy attacks into Enhanced Traits is not simulated. | DCA 95 |
 | Energy Aura | partial | Fights as Damage that is used like a normal attack; its automatic Reaction against attackers is not simulated. | DCA 97 |
 | Energy Control | partial | Fights as Damage at range; the other uses of an energy power are not simulated. | DCA 97 |
@@ -97,17 +97,17 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Affects Others | none | Defenses and powers cannot be given to allies in a fight. | DCA 125 |
 | Alternate Effect | partial | Alternate attacks are separate attack choices, switched for free; alternate defenses and utilities are ignored. | DCA 125 |
 | Alternate Resistance | partial | The attack uses the resistance recorded on the power; the cost changes are not checked. | DCA 126 |
-| Area | partial | Burst, Cone and the rest all hit everyone in one zone with Dodge for half; shapes are not modelled. | DCA 126 |
+| Area | partial | Burst, Cloud, Cylinder, Cone and Line catch whoever is inside the shape on the grid, sized by the Area rank (a 30 ft burst, a 60 ft cone, a 30 ft long line, doubled per extra rank); a Ranged area is centered on the target within long range, a Close one on the attacker. Each victim gets a Dodge for half. Shapeable is treated as a burst and Perception ignores concealment. | DCA 126 |
 | Attack | none | An Attack extra on a non-attack effect does not make it an attack. | DCA 128 |
 | Contagious | none | Spreading effects are not simulated. | DCA 129 |
 | Dimensional | none | Dimensions are not simulated. | DCA 129 |
-| Extended Range | none | Range bands in the fight do not scale with Extended Range. | DCA 129 |
+| Extended Range | full | Doubles the short, medium and long bands of a ranged attack for each rank, measured in feet between squares. | DCA 129 |
 | Feature | n/a | Descriptive only. | DCA 129 |
 | Homing | none | Homing attacks are not simulated. | DCA 129 |
 | Impervious | full | Impervious Protection ignores attacks of half its rank or less unless Penetrating. | DCA 129 |
 | Increased Duration | none | Durations beyond instant are not tracked. | DCA 129 |
 | Increased Mass | none | Needs Move Object, which is not simulated. | DCA 130 |
-| Increased Range | partial | Changes the attack from close to ranged through the power's range; distance is counted in zones, not by rank. | DCA 130 |
+| Increased Range | full | Changes the attack from close to ranged (or to perception) through the power's range; the bands then come from the attack's rank in feet. | DCA 130 |
 | Incurable | none | Effects that resist Healing and Regeneration are not simulated. | DCA 130 |
 | Indirect | none | Needs cover and line of sight, which are not simulated. | DCA 130 |
 | Innate | none | Innate powers are not protected from Nullify. | DCA 130 |
@@ -116,7 +116,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Multiattack | full | Two degrees of success add +2 to the resistance DC, three or more add +5. | DCA 131 |
 | Penetrating | full | Overcomes Impervious. | DCA 131 |
 | Precise | n/a | Fine control has no combat meaning. | DCA 131 |
-| Reach | none | Reach is not modelled. | DCA 131 |
+| Reach | full | Adds 5 ft per rank of the extra to a close attack's reach, counted in whole squares at the scale of the fight (nothing at 30 ft squares until it adds up to a square). | DCA 131 |
 | Reaction | none | Reactions are not simulated, apart from Energy Aura as a normal attack. | DCA 131 |
 | Reversible | n/a | Reversing an effect has no combat meaning. | DCA 132 |
 | Ricochet | none | Attacks cannot bounce. | DCA 132 |
@@ -209,7 +209,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Feature | n/a | Descriptive only. | DCA 75 |
 | Great Endurance | none | The bonus to resist fatigue is not applied. | DCA 75 |
 | Instant Up | full | Stands from prone as a free action with no check. | DCA 76 |
-| Interpose | full | A guard in the same zone takes a hit meant for a weaker ally once per round; not against area or perception attacks. | DCA 76 |
+| Interpose | full | A guard within a move of the ally takes a hit meant for a weaker ally once per round; not against area or perception attacks. | DCA 76 |
 | Minion | n/a | Minions are built as separate combatants. | DCA 77 |
 | Second Chance | none | Rerolls against hazards are not simulated. | DCA 78 |
 | Sidekick | n/a | Sidekicks are built as separate combatants. | DCA 78 |
@@ -246,18 +246,18 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Charge | full | Move and then attack at -2, covering up to twice the speed. |  |
 | Defend | full | Attackers face an opposed defense roll with 1-10 counting as 11-20; the AI only picks it when hurt and outnumbered. |  |
 | Delay | partial | Only minion squads delay, to make a team attack. |  |
-| Demoralize | full | A standard action: Intimidation (or Deception with Taunt) against the target's Insight or Will check; impaired until the end of the demoralizer's next round, disabled on four or more degrees. Enemy minions in earshot are demoralized by one check. The AI uses it with a skill 5 or more above the target's resistance and a weak attack, against a crowd of three or more minions, or on a team's orders (Intimidate and Break). Fearless fighters are immune; the range is two zones. |  |
+| Demoralize | full | A standard action: Intimidation (or Deception with Taunt) against the target's Insight or Will check; impaired until the end of the demoralizer's next round, disabled on four or more degrees. Enemy minions in earshot are demoralized by one check. The AI uses it with a skill 5 or more above the target's resistance and a weak attack, against a crowd of three or more minions, or on a team's orders (Intimidate and Break). Fearless fighters are immune; the range is 60 ft. |  |
 | Disarm | partial | Attack at -2 (-5 ranged), then damage rank against Strength; a win removes the item's attacks for the rest of the fight, a loss with a melee weapon allows a counter-disarm. Equipment weapons and Easily Removable devices can be disarmed. The dropped item is never picked up, and an unarmed disarmer's grab is only logged. |  |
 | Drop Prone | partial | A ranged-heavy fighter in the open, with no cover, facing only ranged foes and needing no move, drops prone for the -5 against ranged attacks. No other reason to go down is modelled. |  |
 | Escape | partial | Athletics or Sleight of Hand against the hold ends a grab; the free move afterwards is not taken. |  |
 | Grab | partial | Attack check then Strength against Strength or Dodge, restrained or bound. The holder is hindered and vulnerable while it holds (not vulnerable with Improved Grab or Grabbing Finesse), and the AI is less keen to grab with other foes about; later cumulative grabs are not applied. |  |
-| Move | partial | Speed rank is turned into 1 to 5 arena zones per turn; real distances are not tracked. |  |
+| Move | partial | A move action covers the distance rank of the fighter's speed in feet (30 ft at rank 0; Flight, Speed, Swimming, Teleport and half of Leaping count) as whole squares of 5, 30 or 250 ft, at least one; Hindered halves it, a full turn moves twice that, and walls and cover pieces are walked around. Terrain such as difficult ground is not modelled. |  |
 | Ready | none | Readied actions are not simulated. |  |
 | Recover | full | Once per fight, whole turn, removes the worst damage or fatigue and gives +2 to defenses. |  |
 | Smash | partial | Attack on a held or worn item at -5, then the item's Toughness check (device points / 5, equipment by material): two degrees break it, three destroy it, and its attacks are removed. The AI smashes when breaking the target's best item beats a plain attack. Worn armor and other non-attack items are not smashed. |  |
 | Stand | full | Standing is a move action, free with a DC 20 Acrobatics check (a failure costs the move action) or with Instant Up. A prone fighter stands at the start of its turn when it wants to move or fight up close; a shooter that need not move stays down. |  |
 | Trick | none | Tricks with Deception are not simulated. |  |
-| Trip | full | Close attack against Parry at -2, then Acrobatics or Athletics against the target; a win leaves it prone, a loss gives it a counter-trip. The AI trips when a friend who fights up close shares the target's zone or the target shoots, and the odds beat 0.35. Not used on minions. |  |
+| Trip | full | Close attack against Parry at -2, then Acrobatics or Athletics against the target; a win leaves it prone, a loss gives it a counter-trip. The AI trips when a friend who fights up close is within reach of the target or the target shoots, and the odds beat 0.35. Not used on minions. |  |
 | Crawl | none | Prone fighters do not crawl at half speed. |  |
 | Command | none | Orders to minions and thralls are not simulated. |  |
 
@@ -275,7 +275,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Team Attack | partial | Only minion squads combine attacks (+2 or +5 rank); heroes never team up. |  |
 | Feint | full | Deception (or Acrobatics with Agile Feint) against Insight or Deception; on success the target is vulnerable to the feinter's next attack until the end of the feinter's next round (DCA 64). |  |
 | Trick | none | Tricks with Deception are not simulated. |  |
-| Demoralize | full | A standard action: Intimidation (or Deception with Taunt) against the target's Insight or Will check; impaired until the end of the demoralizer's next round, disabled on four or more degrees. Enemy minions in earshot are demoralized by one check. The AI uses it with a skill 5 or more above the target's resistance and a weak attack, against a crowd of three or more minions, or on a team's orders (Intimidate and Break). Fearless fighters are immune; the range is two zones. |  |
+| Demoralize | full | A standard action: Intimidation (or Deception with Taunt) against the target's Insight or Will check; impaired until the end of the demoralizer's next round, disabled on four or more degrees. Enemy minions in earshot are demoralized by one check. The AI uses it with a skill 5 or more above the target's resistance and a weak attack, against a crowd of three or more minions, or on a team's orders (Intimidate and Break). Fearless fighters are immune; the range is 60 ft. |  |
 | Aid | full | A standard action: an attack check against DC 10; the ally gets +2 (or +5 on four or more degrees) on attacks against a foe, or to defense against it, until the end of the ally's next turn. The AI aids when its own attack is poor and an ally engaged with the foe has a better one, or the ally is staggered; Aid the Champion does it by tactic. Bonuses do not stack. |  |
 
 ## Conditions
@@ -335,10 +335,10 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Minions: routine attack checks | full | A non-minion hits a minion on a routine check when 10 does it. |  |
 | Minions: fail any Damage check and drop | full | A failed Toughness check incapacitates a minion. |  |
 | Minions: worst degree of other effects | none | Only Damage uses the minion rule; Afflictions and other effects use normal degrees. |  |
-| Range bands | partial | Distance in arena zones gives no penalty, -2, -5 or no attack; the rank-based feet of the book and Extended Range are not used. |  |
-| Cover | partial | Pieces made of real materials give -2 (partial) or -5 (total) to attacks against whoever stands behind them, total cover blocks direct targeting, and cover adds to Dodge against area effects. Fighters use cover only when their team plays Take Cover. |  |
+| Range bands | full | Short range is rank x 25 ft with no penalty, medium rank x 50 ft at -2, long rank x 100 ft at -5, and nothing beyond; Extended Range doubles each. Distance is the squares between fighters (diagonals count one) times the scale, and a close attack needs the same or an adjacent square. |  |
+| Cover | partial | Pieces made of real materials give -2 (partial) or -5 (total) to an attack when a piece stands in a square beside the target on the straight line from the attacker; total cover blocks direct targeting, and cover adds to Dodge against area effects. Pieces fill their square and are walked around. Fighters seek cover only when their team plays Take Cover, or use a piece beside them. |  |
 | Concealment | partial | -2 or -5 to attack a target with Concealment or Invisibility; the environment itself never conceals. |  |
-| Knockback | partial | An optional community rule, off unless switched on: damage rank minus mass rank sets the distance in zones, the target falls prone, and cover or an enclosed wall can stop it or be smashed through. |  |
+| Knockback | partial | An optional community rule, off unless switched on: damage rank minus mass rank sets the distance in feet (rank 0 is 30 ft), the target falls prone and flies square by square along the line from the attacker; cover pieces and the walls of an enclosed room can stop it or be smashed through. |  |
 | Surprise round | full | The Ambush option gives a surprise round: surprised side stunned and vulnerable, ambushers act with one standard action. |  |
 | Initiative | full | d20 plus Agility plus Improved Initiative; late joiners roll and slot into the order. |  |
 | Recovery checks | full | Ongoing Affliction conditions are resisted at the end of each turn. |  |
@@ -348,7 +348,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Critical hits | partial | A critical adds +5 to the resistance DC (Increased Effect); Added Effect and Alternate Effect are not used. |  |
 | Death and dying | none | Nobody dies; the worst result is out of the fight. |  |
 | Ongoing effects | full | Afflictions are re-checked at the end of the target's turn. |  |
-| Area effects | partial | Everyone in the zone makes a Dodge check for half; shapes and cover are not modelled. |  |
+| Area effects | partial | Everyone inside the template (friends too, unless Selective) makes a Dodge check for half; cover pieces inside it take a Toughness check. Cover only helps the Dodge; shapes follow the map tools' template geometry. |  |
 | Perception range | full | Perception-range effects need no attack check and cannot critically hit. |  |
 | Defense class | full | Close attacks hit 10 + Parry, ranged attacks 10 + Dodge, vulnerable halves defenses. |  |
 | Fatigue | partial | Extra effort and Afflictions cause fatigue; exhaustion at three levels incapacitates; rest and hazards are not simulated. |  |

@@ -5,7 +5,8 @@
 import { sign, log } from './util.js';
 import { rollCheck, critNote } from './checks.js';
 import { STYLES } from './styles.js';
-import { checkPenalty, moveZones } from './conditions.js';
+import { checkPenalty } from './conditions.js';
+import { feet, squares, squaresInMove } from './geometry.js';
 import { rangePenalty, expectedValue } from './odds.js';
 import { wantsKite } from './tactics-position.js';
 import { shelterOf, piecesOf } from './cover.js';
@@ -19,10 +20,10 @@ const SHOT_HARM = 0.15;  // a ranged foe must threaten at least this much to be 
 const ATTACK_PLANS = ['attack', 'cover', 'disarm', 'smash'];
 
 /** Does this plan need the fighter standing: it moves, fights up close, or must get into range first? */
-export function needsFeet(c, choice) {
+export function needsFeet(b, c, choice) {
   if (!ATTACK_PLANS.includes(choice.plan)) return true;
   const atk = choice.attack;
-  return !atk || atk.kind === 'close' || rangePenalty(atk, Math.abs(c.pos - choice.target.pos)) > 5;
+  return !atk || atk.range === 'close' || rangePenalty(atk, feet(b, c, choice.target)) > 5;
 }
 
 /** Run `make` (the planner) as if a fighter that can stand were already on its feet. */
@@ -50,7 +51,7 @@ function tryStand(b, c, rng, canMove) {
 
 /** Get up. Standing as a move action leaves no movement for the rest of the turn. */
 function standUp(b, c, rng, mode) {
-  const got = tryStand(b, c, rng, mode === 'full' && moveZones(c) > 0);
+  const got = tryStand(b, c, rng, mode === 'full' && squaresInMove(b, c) > 0);
   if (!got) return;
   c.conditions = c.conditions.filter((x) => !standableProne(c).includes(x));
   if (got.usesMove) c.noMove = true;
@@ -58,7 +59,7 @@ function standUp(b, c, rng, mode) {
 }
 
 /** A foe that could do real harm up close (any close attack, a fist included): it would get +5 against a prone fighter. */
-const closeThreat = (e, c) => e.attacks.some((a) => a.kind === 'close' && expectedValue(e, a, c, { dist: 0 }) >= CLOSE_HARM);
+const closeThreat = (e, c) => e.attacks.some((a) => a.range === 'close' && expectedValue(e, a, c, { dist: 0 }) >= CLOSE_HARM);
 
 /**
  * Drop prone (a free action) is for a ranged-heavy fighter in the open, with no cover, that faces only ranged foes,
@@ -67,16 +68,16 @@ const closeThreat = (e, c) => e.attacks.some((a) => a.kind === 'close' && expect
 function wantsToDrop(b, c, choice, enemies) {
   const S = STYLES[c.style];
   const atk = choice.attack;
-  if (choice.plan !== 'attack' || atk?.kind !== 'ranged' || isProne(c) || c.grabbedBy || c.holding || wantsKite(b, c)) return false;
-  if (!(S.ranged > S.close) || shelterOf(b, c) || piecesOf(b).some((p) => p.zone === c.pos && p.state !== 'destroyed')) return false;
-  if (rangePenalty(atk, Math.abs(c.pos - choice.target.pos)) > 5 || enemies.some((e) => closeThreat(e, c))) return false;
-  return enemies.some((e) => e.attacks.some((a) => a.kind === 'ranged' && expectedValue(e, a, c, { dist: Math.abs(e.pos - c.pos) }) > SHOT_HARM));
+  if (choice.plan !== 'attack' || atk?.range !== 'ranged' || isProne(c) || c.grabbedBy || c.holding || wantsKite(b, c)) return false;
+  if (!(S.ranged > S.close) || shelterOf(b, c) || piecesOf(b).some((p) => squares(p, c) <= 1 && p.state !== 'destroyed')) return false;
+  if (rangePenalty(atk, feet(b, c, choice.target)) > 5 || enemies.some((e) => closeThreat(e, c))) return false;
+  return enemies.some((e) => e.attacks.some((a) => a.range === 'ranged' && expectedValue(e, a, c, { dist: feet(b, e, c) }) > SHOT_HARM));
 }
 
 /** The prone step of a turn: stand when the plan needs it, drop prone when that is the smart thing for a shooter. */
 export function standOrDrop(b, c, choice, enemies, mode, rng) {
   if (standableProne(c).length) {
-    if (needsFeet(c, choice)) standUp(b, c, rng, mode);
+    if (needsFeet(b, c, choice)) standUp(b, c, rng, mode);
     return;
   }
   if (wantsToDrop(b, c, choice, enemies)) {

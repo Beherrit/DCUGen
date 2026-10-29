@@ -4,6 +4,7 @@ import { alive } from './util.js';
 import { STYLES } from './styles.js';
 import { activeConditions } from './conditions.js';
 import { threatOn } from './odds.js';
+import { feet } from './geometry.js';
 
 export const isControlAttack = (a) => !!a.tiers || a.effect === 'Nullify';
 
@@ -20,7 +21,7 @@ export function hasControl(c) {
 
 /** How much harm enemy e could do to the whole team, added up over its members. */
 function teamThreat(b, team, e) {
-  return alive(b).filter((m) => m.team === team).reduce((sum, m) => sum + threatOn(e, m, Math.abs(e.pos - m.pos)), 0);
+  return alive(b).filter((m) => m.team === team).reduce((sum, m) => sum + threatOn(e, m, feet(b, e, m)), 0);
 }
 
 /** The enemy a team has marked this round (kept while it stands and still qualifies), else the most threatening one. */

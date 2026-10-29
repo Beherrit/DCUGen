@@ -1,6 +1,6 @@
 // Making an attack: the extra effort and trade-off notes, the hit or miss, Interpose, Fast Grab, Takedown, and area attacks.
 
-import { sign, d20, log, alive, enemiesOf, alliesOf } from './util.js';
+import { sign, d20, log, enemiesOf, alliesOf } from './util.js';
 import { checkPenalty, defenseOf } from './conditions.js';
 import { applyEffect } from './attack-effects.js';
 import { grab, grabAppetite } from './maneuvers.js';
@@ -10,9 +10,13 @@ import { noteAttack, interposeFor } from './tactics.js';
 import { shieldFor, coverLevel, coverDodgeBonus } from './cover.js';
 import { shootThrough, areaOnPieces, pieceMod } from './cover-damage.js';
 import { maybeKnockback } from './knockback.js';
+import { squares, squaresInMove, feet, inReach, areaVictims } from './geometry.js';
+import { spotName } from './grid.js';
+import { traceAttack } from './trace.js';
 
 export function resolveAttack(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive = 0, effort = null, charge = false, slam = null, aimed = 0, team = 0 } = {}) {
   c.lastAttackId = atk.id;
+  traceAttack(b, c, atk, t);
   noteAttack(b, c, t);
   c.stats.attacks++;
   const m = shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charge, slam, team });
@@ -68,7 +72,7 @@ function shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charg
 function throughCover(b, c, atk, t, rng, m, aimed) {
   const piece = shieldFor(b, c, atk, t);
   if (!piece || coverLevel(piece) !== 'total') return m.rankShift;
-  const mod = pieceMod(c, atk, m, Math.abs(c.pos - t.pos), aimed);
+  const mod = pieceMod(c, atk, m, feet(b, c, t), aimed);
   const s = shootThrough(b, c, atk, piece, rng, { mod, rankShift: m.rankShift });
   return s.go ? s.rankShift : null;
 }
@@ -80,8 +84,8 @@ function landHit(b, R, c, atk, t, rng, r, { rankShift, notes, slam }) {
   c.stats.hits++;
   if (crit) c.stats.crits++;
   text += ` — ${crit ? 'CRITICAL HIT' : 'hit'}${notes.length ? ` (${notes.join('; ')})` : ''}.`;
-  // Interpose: an ally with the advantage takes the hit
-  const guard = alliesOf(b, t).find((a) => a.adv.Interpose && !a.interposed && a.pos === t.pos && !a.staggered && a.style !== 'minion');
+  // Interpose: an ally within range of its normal movement (p76) takes the hit
+  const guard = alliesOf(b, t).find((a) => a.adv.Interpose && !a.interposed && squares(a, t) <= Math.max(1, squaresInMove(b, a)) && !a.staggered && a.style !== 'minion');
   if (guard && (interposeFor(b, guard, t) ?? (t.staggered || t.bruises >= 2 || t.pl < guard.pl))) {
     guard.interposed = true;
     log(b, { kind: 'hit', actor: c.id, target: t.id, text, dice });
@@ -109,13 +113,13 @@ function followUps(b, R, c, atk, t, rng, result, mod) {
   }
   if (result?.ko && t.minion && c.adv.Takedown && atk.kind === 'close' && !atk.area) {
     let chain = 0;
-    let next = enemiesOf(b, c).find((e) => e.minion && e.pos === c.pos);
+    let next = enemiesOf(b, c).find((e) => e.minion && inReach(b, c, e, atk));
     while (next && chain < 5) {
       chain++;
       log(b, { kind: 'note', actor: c.id, target: next.id, text: `Takedown: ${c.name} keeps moving and swings at ${next.name}.` });
       const r = resolveSimpleAttack(b, R, c, atk, next, rng, mod);
       if (!r?.ko) break;
-      next = enemiesOf(b, c).find((e) => e.minion && e.pos === c.pos);
+      next = enemiesOf(b, c).find((e) => e.minion && inReach(b, c, e, atk));
     }
   }
 }
@@ -135,11 +139,10 @@ function resolveSimpleAttack(b, R, c, atk, t, rng, mod) {
 }
 
 function areaAttack(b, R, c, atk, t, rng, rankShift, notes) {
-  const zone = t.pos;
-  const inArea = alive(b).filter((x) => x.pos === zone && x !== c && (!atk.selective || x.team !== c.team));
+  const inArea = areaVictims(b, c, atk, t).filter((x) => !atk.selective || x.team !== c.team);
   const victims = inArea.filter((x) => x.team !== c.team);
   const friendly = inArea.filter((x) => x.team === c.team);
-  log(b, { kind: 'attack', actor: c.id, target: t.id, text: `${c.name} drops ${atk.name} (${atk.area} area) on zone ${zone + 1}: ${inArea.map((x) => x.name).join(', ') || 'nobody'} ${inArea.length === 1 ? 'is' : 'are'} caught in it${friendly.length && !atk.selective ? ` (${friendly.map((x) => x.name).join(', ')} too!)` : ''}${notes.length ? ` — ${notes.join('; ')}` : ''}.`, important: true });
+  log(b, { kind: 'attack', actor: c.id, target: t.id, text: `${c.name} drops ${atk.name} (${atk.area} area) ${atk.range === 'close' ? 'around itself' : `on ${spotName(t)}`}: ${inArea.map((x) => x.name).join(', ') || 'nobody'} ${inArea.length === 1 ? 'is' : 'are'} caught in it${friendly.length && !atk.selective ? ` (${friendly.map((x) => x.name).join(', ')} too!)` : ''}${notes.length ? ` — ${notes.join('; ')}` : ''}.`, important: true });
   for (const v of [...victims, ...friendly]) {
     const shelter = coverDodgeBonus(b, c, v);
     const dodge = defenseOf(v, 'Dodge') - checkPenalty(v) + (v.adv.Evasion >= 2 ? 5 : v.adv.Evasion ? 2 : 0) + shelter;
@@ -147,13 +150,13 @@ function areaAttack(b, R, c, atk, t, rng, rankShift, notes) {
     const dodgeCheck = rollCheck(rng, dodge, dc);
     const { roll, total } = dodgeCheck;
     const half = dodgeCheck.success;
-    const deg = half ? dodgeCheck.degrees : 0;
-    const dodged = half && v.adv.Evasion && deg >= 2;
-    log(b, { kind: half ? 'resist' : 'hit', actor: c.id, target: v.id, text: `${v.name} dives for cover: Dodge d20 ${roll} ${sign(dodge)} = ${total} vs DC ${dc}${shelter ? ` (includes +${shelter} for cover)` : ''}${critNote(dodgeCheck)} — ${dodged ? 'Evasion: slips clear entirely' : half ? 'half effect' : 'full effect'}.`, dice: [{ label: 'Dodge', roll, mod: dodge, total, dc }] });
-    if (dodged) continue;
-    const r = applyEffect(b, R, c, atk, v, rng, { auto: true, crit: false, rankShift: rankShift - (half ? Math.ceil((atk.rank + rankShift) / 2) : 0) });
+    log(b, { kind: half ? 'resist' : 'hit', actor: c.id, target: v.id, text: `${v.name} dives for cover: Dodge d20 ${roll} ${sign(dodge)} = ${total} vs DC ${dc}${shelter ? ` (includes +${shelter} for cover)` : ''}${critNote(dodgeCheck)} — ${half ? 'half effect' : 'full effect'}.`, dice: [{ label: 'Dodge', roll, mod: dodge, total, dc }] });
+    // A successful Dodge halves the rank, rounding down, minimum 1 (Area, Hero's Handbook p126). Evasion only adds
+    // its +2 or +5 to the Dodge check (p76); it never lets a target slip clear entirely.
+    const full = atk.rank + rankShift;
+    const r = applyEffect(b, R, c, atk, v, rng, { auto: true, crit: false, rankShift: rankShift - (half ? full - Math.max(1, Math.floor(full / 2)) : 0) });
     if (r?.landed && v.team !== c.team) c.stats.hits++;
     maybeKnockback(b, R, c, atk, v, r, rng);
   }
-  areaOnPieces(b, c, atk, zone, atk.rank + rankShift, rng);
+  areaOnPieces(b, c, atk, t, atk.rank + rankShift, rng);
 }

@@ -1,10 +1,11 @@
-// The Battle Room's scenery: cover pieces placed in zones, random streets and buildings, the two optional rules
-// (knockback and shooting through cover), and the tags the arena strip shows for each piece. battle.js passes in
-// what these need: cx is { battle, ui, save, render }.
+// The Battle Room's scenery: cover pieces placed on squares of the grid, random streets and buildings, the scale of
+// the grid, and the two optional rules (knockback and shooting through cover). battle.js passes in what these need:
+// cx is { battle, ui, save, render }.
 
 import { h, toast } from './dom.js';
 import { makeRng } from '../engine/rng.js';
-import { createBattle, COVER_KINDS, addCover, removeCover, arenaOf, pieceLabel, toughnessOf } from '../engine/battle.js';
+import { createBattle, COVER_KINDS, addCover, removeCover, squareName, pieceLabel, toughnessOf } from '../engine/battle.js';
+import { scalePicker } from './battle-grid.js';
 
 const STREET = ['parked-car', 'parked-car', 'wooden-fence', 'concrete-pillar', 'glass-storefront', 'brick-wall'];
 const BUILDING = ['concrete-wall', 'concrete-pillar', 'steel-door', 'brick-wall', 'concrete-wall'];
@@ -17,9 +18,10 @@ export function uiBattle(seed, name = 'Battle') {
   return b;
 }
 
-/** After the arena changes size, keep every piece inside it. */
+/** After the room changes (an enclosed space has walls), keep every piece on the playable squares. */
 export function fitCover(battle) {
-  for (const p of battle.cover || []) p.zone = Math.min(p.zone, arenaOf(battle) - 1);
+  const { x0, y0, x1, y1 } = battle.grid.play;
+  for (const p of battle.cover || []) { p.x = Math.max(x0, Math.min(x1, p.x)); p.y = Math.max(y0, Math.min(y1, p.y)); }
 }
 
 /** Cover for a restarted battle: the same pieces, whole again. */
@@ -33,7 +35,8 @@ function rollScenery(cx, theme, label) {
   const rng = makeRng(`${battle.seed}::${label}::${ui.sceneryRolls = (ui.sceneryRolls || 0) + 1}`);
   for (const p of [...(battle.cover || [])]) removeCover(battle, p.id);
   const count = rng.int(3, 6);
-  for (let i = 0; i < count; i++) addCover(battle, rng.pick(theme), rng.int(0, arenaOf(battle) - 1));
+  const { x0, y0, x1, y1 } = battle.grid.play; // keep clear of the two columns where the teams start
+  for (let i = 0; i < count; i++) addCover(battle, rng.pick(theme), rng.int(x0 + 2, x1 - 2), rng.int(y0, y1));
   toast(`${count} pieces of scenery placed`);
 }
 
@@ -43,18 +46,12 @@ function pieceStatus(battle, p) {
   return `${p.state}${behind.length ? `, ${behind.join(' and ')} behind it` : ''}`;
 }
 
-/** What the arena strip shows in a zone: each piece with its name, Toughness and state, and who is behind it. */
-export function coverTags(battle, zone) {
-  return (battle.cover || []).filter((p) => p.zone === zone).map((p) => h('span', { class: `bt-piece ${p.state}`, title: `${pieceLabel(p)}: ${p.level} cover, ${pieceStatus(battle, p)}` },
-    `${p.name}, Toughness ${p.toughness}: ${pieceStatus(battle, p)}`));
-}
-
 /** One piece in the list, with its Remove button. */
 function pieceRow(cx, p) {
   const { battle, save, render } = cx;
   return h('div', { class: 'add-row bt-scenery-row', style: { alignItems: 'center' } },
-    h('span', { class: 'bt-scenery-text', title: pieceLabel(p) }, `Zone ${p.zone + 1}: ${pieceLabel(p)}, ${p.level} cover, ${p.state}`),
-    h('button', { type: 'button', class: 'btn sm', 'aria-label': `Remove the ${p.name} in zone ${p.zone + 1}`, onClick: () => { removeCover(battle, p.id); save(); render(); } }, 'Remove'));
+    h('span', { class: 'bt-scenery-text', title: pieceLabel(p) }, `${squareName(p.x, p.y)}: ${pieceLabel(p)}, ${p.level} cover, ${pieceStatus(battle, p)}`),
+    h('button', { type: 'button', class: 'btn sm', 'aria-label': `Remove the ${p.name} at ${squareName(p.x, p.y)}`, onClick: () => { removeCover(battle, p.id); save(); render(); } }, 'Remove'));
 }
 
 function optionBox(cx, key, label, hint) {
@@ -66,15 +63,15 @@ function optionBox(cx, key, label, hint) {
 export function sceneryPanel(cx) {
   const { battle, ui, save, render } = cx;
   const kind = h('select', { id: 'bt-cover-kind', 'aria-label': 'Kind of cover' }, COVER_KINDS.map((k) => h('option', { value: k.id, selected: k.id === ui.coverKind }, kindText(k))));
-  const zone = h('select', { id: 'bt-cover-zone', 'aria-label': 'Zone for the cover' }, Array.from({ length: arenaOf(battle) }, (_, i) => h('option', { value: i, selected: i === (ui.coverZone ?? 1) }, `Zone ${i + 1}`)));
+  ui.coverKind = ui.coverKind || kind.value;
   kind.addEventListener('change', () => { ui.coverKind = kind.value; });
-  zone.addEventListener('change', () => { ui.coverZone = Number(zone.value); });
-  const add = () => { addCover(battle, kind.value, Number(zone.value)); save(); render(); };
+  const place = () => { ui.placing = !ui.placing; render(); };
   const roll = (theme, label) => () => { rollScenery(cx, theme, label); save(); render(); };
   return h('div', { class: 'bt-scenery' },
+    scalePicker(cx),
     h('div', { class: 'label' }, 'Scenery'),
-    h('p', { class: 'hint', style: { margin: 0 } }, 'Cover gives −2 (partial) or −5 (total) to attacks against whoever stands behind it, and total cover cannot be shot past. Fighters who would rather shoot step behind cover in their own zone; a team playing Take Cover goes out of its way to reach it. It can be shot, blasted and smashed to pieces.'),
-    h('div', { class: 'add-row', style: { alignItems: 'center' } }, kind, zone, h('button', { type: 'button', class: 'btn sm', id: 'bt-cover-add', onClick: add }, 'Add')),
+    h('p', { class: 'hint', style: { margin: 0 } }, 'Cover gives −2 (partial) or −5 (total) to attacks on someone standing next to it, on the far side from the attacker, and total cover cannot be shot past. Pieces fill their square and are walked around. Fighters who would rather shoot step behind a piece beside them; a team playing Take Cover goes out of its way to reach one. It can be shot, blasted and smashed to pieces.'),
+    h('div', { class: 'add-row', style: { alignItems: 'center' } }, kind, h('button', { type: 'button', class: `btn sm ${ui.placing ? 'on' : ''}`, id: 'bt-cover-add', 'aria-pressed': !!ui.placing, onClick: place }, ui.placing ? 'Click a square on the grid' : 'Place on the grid')),
     h('div', { class: 'add-row' },
       h('button', { type: 'button', class: 'btn sm', id: 'bt-cover-street', onClick: roll(STREET, 'street') }, 'Random street'),
       h('button', { type: 'button', class: 'btn sm', id: 'bt-cover-building', onClick: roll(BUILDING, 'building') }, 'Random building')),

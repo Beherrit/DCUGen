@@ -3,11 +3,12 @@
 // skills (or a good attack) plays exactly as before. The actions themselves are in support-actions.js.
 
 import { alliesOf } from './util.js';
-import { moveZones, aidBonus, isImpaired } from './conditions.js';
+import { aidBonus, isImpaired } from './conditions.js';
+import { squares, feet, squaresInMove, reachSquares, inReach, inEarshot, interacts, earshotSquares } from './geometry.js';
 import { bestEvNow, rangePenalty, threatOn, hitOdds } from './odds.js';
 import { tacticOf } from './tactics-list.js';
-import { stepToZone } from './tactics-position.js';
-import { SIGHT, demoralSkill, resistanceTo, canDemoralize, minionsInSight, demoralize, aid, aidAttackOf } from './support-actions.js';
+import { stepToSquare } from './tactics-position.js';
+import { demoralSkill, resistanceTo, canDemoralize, minionsInSight, demoralize, aid, aidAttackOf } from './support-actions.js';
 import { demoralizerOf, demoralizeTarget, potentialEv, championOf, championFoe } from './tactics-support.js';
 
 /** What the fighter's best attack is worth this turn: 0 when it only closes in, Infinity when the plan is something else. */
@@ -18,10 +19,10 @@ function intimidateTurn(b, c, mode, rng) {
   if (demoralizerOf(b, c.team) !== c) return false;
   const t = demoralizeTarget(b, c.team);
   if (!t) return false;
-  if (Math.abs(c.pos - t.pos) > SIGHT) {
-    if (mode !== 'full' || !moveZones(c)) return false;
-    stepToZone(b, c, t.pos + (c.pos < t.pos ? -SIGHT : SIGHT), `to get within earshot of ${t.name}`);
-    if (Math.abs(c.pos - t.pos) > SIGHT) return true;
+  if (!inEarshot(b, c, t)) {
+    if (mode !== 'full' || !squaresInMove(b, c)) return false;
+    stepToSquare(b, c, { x: t.x, y: t.y, stopAt: earshotSquares(b) }, `to get within earshot of ${t.name}`);
+    if (!inEarshot(b, c, t)) return true;
   }
   demoralize(b, c, t, rng);
   return true;
@@ -34,8 +35,8 @@ function demoralizeByChoice(b, c, choice, enemies, rng) {
   const crowd = minionsInSight(b, c);
   if (crowd.length >= 3 && crowd.every(beat)) { demoralize(b, c, crowd[0], rng); return true; }
   if (ownValue(choice) >= 0.4) return false;
-  const near = enemies.filter((e) => Math.abs(e.pos - c.pos) <= SIGHT && canDemoralize(e) && !isImpaired(e) && beat(e));
-  near.sort((x, y) => threatOn(y, c, Math.abs(y.pos - c.pos)) - threatOn(x, c, Math.abs(x.pos - c.pos)) || x.id.localeCompare(y.id));
+  const near = enemies.filter((e) => inEarshot(b, e, c) && canDemoralize(e) && !isImpaired(e) && beat(e));
+  near.sort((x, y) => threatOn(y, c, feet(b, y, c)) - threatOn(x, c, feet(b, x, c)) || x.id.localeCompare(y.id));
   if (!near.length) return false;
   demoralize(b, c, near[0], rng);
   return true;
@@ -43,14 +44,19 @@ function demoralizeByChoice(b, c, choice, enemies, rng) {
 
 /** Walk into reach of the foe if that is what it takes, and say which attack the Aid check uses. Null when it cannot get there. */
 function getInPosition(b, c, foe, mode) {
-  const reach = mode === 'full' ? moveZones(c) : 0;
-  const dist = Math.abs(c.pos - foe.pos);
-  const dir = foe.pos > c.pos ? 1 : -1;
+  const budget = mode === 'full' ? squaresInMove(b, c) : 0;
+  const n = squares(c, foe);
   const options = c.attacks.filter((a) => a.roll && !a.area).sort((x, y) => y.bonus - x.bonus);
   for (const a of options) {
-    const need = a.kind === 'close' ? dist : Math.max(0, dist - 5);
-    if (need > reach || (a.kind !== 'close' && rangePenalty(a, dist - need) > 5)) continue;
-    if (need) stepToZone(b, c, c.pos + dir * need, `to get in position to aid against ${foe.name}`);
+    let stop = reachSquares(b, c, a); // squares from the foe to stand at
+    if (a.range !== 'close') {
+      stop = n;
+      while (stop > 1 && rangePenalty(a, stop * b.grid.squareFt) > 5) stop--;
+      if (rangePenalty(a, stop * b.grid.squareFt) > 5) continue;
+    }
+    const need = Math.max(0, n - stop);
+    if (need > budget) continue;
+    if (need) stepToSquare(b, c, { x: foe.x, y: foe.y, stopAt: stop }, `to get in position to aid against ${foe.name}`);
     return a;
   }
   return null;
@@ -70,14 +76,15 @@ function aidByChoice(b, c, choice, mode, rng) {
   const foe = choice.target;
   const tool = aidAttackOf(c);
   if (!foe || !tool || ownValue(choice) >= 0.5) return false;
-  const near = alliesOf(b, c).filter((a) => Math.abs(a.pos - foe.pos) <= 1);
+  const near = alliesOf(b, c).filter((a) => interacts(b, a, foe));
   // Aid only pays when the ally's gain from +2 (times the chance the Aid check succeeds) beats this fighter's own attack.
   const pAid = hitOdds(tool.bonus + (c.adv.Teamwork ? 5 : 0), 0).hit;
-  const gainOf = (a) => pAid * (bestEvNow(a, foe, undefined, 2) - bestEvNow(a, foe));
+  const evNow = (a, shift) => bestEvNow(a, foe, feet(b, a, foe), shift, inReach(b, a, foe));
+  const gainOf = (a) => pAid * (evNow(a, 2) - evNow(a, 0));
   const better = near.filter((a) => !aidBonus(a, foe)).map((a) => ({ a, ev: gainOf(a) })).filter((x) => x.ev > Math.max(0.05, ownValue(choice)))
     .sort((x, y) => y.ev - x.ev || x.a.id.localeCompare(y.a.id))[0];
   if (better) return aidAllyAttack(b, c, better.a, foe, mode, rng);
-  const hurt = near.find((a) => a.staggered && !aidBonus(a, foe, 'defense') && threatOn(foe, a, Math.abs(foe.pos - a.pos)) > 0.05);
+  const hurt = near.find((a) => a.staggered && !aidBonus(a, foe, 'defense') && threatOn(foe, a, feet(b, foe, a)) > 0.05);
   if (!hurt) return false;
   const attack = getInPosition(b, c, foe, mode);
   if (!attack) return false;

@@ -16,3 +16,5 @@ export function byId(b, id) { return b.combatants.find((c) => c.id === id); }
 export const alive = (b) => b.combatants.filter((c) => !c.out && !c.fled);
 export const enemiesOf = (b, c) => alive(b).filter((x) => x.team !== c.team);
 export const alliesOf = (b, c) => alive(b).filter((x) => x.team === c.team && x !== c);
+/** Is the list of numbers a above the list b, comparing entry by entry from the first? */
+export const lexAbove = (a, b) => { for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return a[i] > b[i]; return false; };

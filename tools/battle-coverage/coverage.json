@@ -93,8 +93,8 @@
   {
     "kind": "effect",
     "name": "Elongation",
-    "status": "none",
-    "note": "Stretching and extra reach are not modelled.",
+    "status": "partial",
+    "note": "Stretches the fighter's close reach by the distance of its rank (rank 1 is 60 ft), counted in whole squares at the scale of the fight; the help it gives to grabbing is not applied.",
     "source": "DCA 96"
   },
   {
@@ -479,7 +479,7 @@
     "kind": "extra",
     "name": "Area",
     "status": "partial",
-    "note": "Burst, Cone and the rest all hit everyone in one zone with Dodge for half; shapes are not modelled.",
+    "note": "Burst, Cloud, Cylinder, Cone and Line catch whoever is inside the shape on the grid, sized by the Area rank (a 30 ft burst, a 60 ft cone, a 30 ft long line, doubled per extra rank); a Ranged area is centered on the target within long range, a Close one on the attacker. Each victim gets a Dodge for half. Shapeable is treated as a burst and Perception ignores concealment.",
     "source": "DCA 126"
   },
   {
@@ -506,8 +506,8 @@
   {
     "kind": "extra",
     "name": "Extended Range",
-    "status": "none",
-    "note": "Range bands in the fight do not scale with Extended Range.",
+    "status": "full",
+    "note": "Doubles the short, medium and long bands of a ranged attack for each rank, measured in feet between squares.",
     "source": "DCA 129"
   },
   {
@@ -548,8 +548,8 @@
   {
     "kind": "extra",
     "name": "Increased Range",
-    "status": "partial",
-    "note": "Changes the attack from close to ranged through the power's range; distance is counted in zones, not by rank.",
+    "status": "full",
+    "note": "Changes the attack from close to ranged (or to perception) through the power's range; the bands then come from the attack's rank in feet.",
     "source": "DCA 130"
   },
   {
@@ -611,8 +611,8 @@
   {
     "kind": "extra",
     "name": "Reach",
-    "status": "none",
-    "note": "Reach is not modelled.",
+    "status": "full",
+    "note": "Adds 5 ft per rank of the extra to a close attack's reach, counted in whole squares at the scale of the fight (nothing at 30 ft squares until it adds up to a square).",
     "source": "DCA 131"
   },
   {
@@ -1193,7 +1193,7 @@
     "kind": "advantage",
     "name": "Interpose",
     "status": "full",
-    "note": "A guard in the same zone takes a hit meant for a weaker ally once per round; not against area or perception attacks.",
+    "note": "A guard within a move of the ally takes a hit meant for a weaker ally once per round; not against area or perception attacks.",
     "source": "DCA 76"
   },
   {
@@ -1411,7 +1411,7 @@
     "kind": "action",
     "name": "Demoralize",
     "status": "full",
-    "note": "A standard action: Intimidation (or Deception with Taunt) against the target's Insight or Will check; impaired until the end of the demoralizer's next round, disabled on four or more degrees. Enemy minions in earshot are demoralized by one check. The AI uses it with a skill 5 or more above the target's resistance and a weak attack, against a crowd of three or more minions, or on a team's orders (Intimidate and Break). Fearless fighters are immune; the range is two zones."
+    "note": "A standard action: Intimidation (or Deception with Taunt) against the target's Insight or Will check; impaired until the end of the demoralizer's next round, disabled on four or more degrees. Enemy minions in earshot are demoralized by one check. The AI uses it with a skill 5 or more above the target's resistance and a weak attack, against a crowd of three or more minions, or on a team's orders (Intimidate and Break). Fearless fighters are immune; the range is 60 ft."
   },
   {
     "kind": "action",
@@ -1441,7 +1441,7 @@
     "kind": "action",
     "name": "Move",
     "status": "partial",
-    "note": "Speed rank is turned into 1 to 5 arena zones per turn; real distances are not tracked."
+    "note": "A move action covers the distance rank of the fighter's speed in feet (30 ft at rank 0; Flight, Speed, Swimming, Teleport and half of Leaping count) as whole squares of 5, 30 or 250 ft, at least one; Hindered halves it, a full turn moves twice that, and walls and cover pieces are walked around. Terrain such as difficult ground is not modelled."
   },
   {
     "kind": "action",
@@ -1477,7 +1477,7 @@
     "kind": "action",
     "name": "Trip",
     "status": "full",
-    "note": "Close attack against Parry at -2, then Acrobatics or Athletics against the target; a win leaves it prone, a loss gives it a counter-trip. The AI trips when a friend who fights up close shares the target's zone or the target shoots, and the odds beat 0.35. Not used on minions."
+    "note": "Close attack against Parry at -2, then Acrobatics or Athletics against the target; a win leaves it prone, a loss gives it a counter-trip. The AI trips when a friend who fights up close is within reach of the target or the target shoots, and the odds beat 0.35. Not used on minions."
   },
   {
     "kind": "action",
@@ -1555,7 +1555,7 @@
     "kind": "maneuver",
     "name": "Demoralize",
     "status": "full",
-    "note": "A standard action: Intimidation (or Deception with Taunt) against the target's Insight or Will check; impaired until the end of the demoralizer's next round, disabled on four or more degrees. Enemy minions in earshot are demoralized by one check. The AI uses it with a skill 5 or more above the target's resistance and a weak attack, against a crowd of three or more minions, or on a team's orders (Intimidate and Break). Fearless fighters are immune; the range is two zones."
+    "note": "A standard action: Intimidation (or Deception with Taunt) against the target's Insight or Will check; impaired until the end of the demoralizer's next round, disabled on four or more degrees. Enemy minions in earshot are demoralized by one check. The AI uses it with a skill 5 or more above the target's resistance and a weak attack, against a crowd of three or more minions, or on a team's orders (Intimidate and Break). Fearless fighters are immune; the range is 60 ft."
   },
   {
     "kind": "maneuver",
@@ -1854,14 +1854,14 @@
   {
     "kind": "rule",
     "name": "Range bands",
-    "status": "partial",
-    "note": "Distance in arena zones gives no penalty, -2, -5 or no attack; the rank-based feet of the book and Extended Range are not used."
+    "status": "full",
+    "note": "Short range is rank x 25 ft with no penalty, medium rank x 50 ft at -2, long rank x 100 ft at -5, and nothing beyond; Extended Range doubles each. Distance is the squares between fighters (diagonals count one) times the scale, and a close attack needs the same or an adjacent square."
   },
   {
     "kind": "rule",
     "name": "Cover",
     "status": "partial",
-    "note": "Pieces made of real materials give -2 (partial) or -5 (total) to attacks against whoever stands behind them, total cover blocks direct targeting, and cover adds to Dodge against area effects. Fighters use cover only when their team plays Take Cover."
+    "note": "Pieces made of real materials give -2 (partial) or -5 (total) to an attack when a piece stands in a square beside the target on the straight line from the attacker; total cover blocks direct targeting, and cover adds to Dodge against area effects. Pieces fill their square and are walked around. Fighters seek cover only when their team plays Take Cover, or use a piece beside them."
   },
   {
     "kind": "rule",
@@ -1873,7 +1873,7 @@
     "kind": "rule",
     "name": "Knockback",
     "status": "partial",
-    "note": "An optional community rule, off unless switched on: damage rank minus mass rank sets the distance in zones, the target falls prone, and cover or an enclosed wall can stop it or be smashed through."
+    "note": "An optional community rule, off unless switched on: damage rank minus mass rank sets the distance in feet (rank 0 is 30 ft), the target falls prone and flies square by square along the line from the attacker; cover pieces and the walls of an enclosed room can stop it or be smashed through."
   },
   {
     "kind": "rule",
@@ -1933,7 +1933,7 @@
     "kind": "rule",
     "name": "Area effects",
     "status": "partial",
-    "note": "Everyone in the zone makes a Dodge check for half; shapes and cover are not modelled."
+    "note": "Everyone inside the template (friends too, unless Selective) makes a Dodge check for half; cover pieces inside it take a Toughness check. Cover only helps the Dodge; shapes follow the map tools' template geometry."
   },
   {
     "kind": "rule",

@@ -1,13 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { RULES as R } from '../src/engine/index.js';
-import { createBattle, addCombatant, makeCombatant, startBattle } from '../src/engine/battle.js';
+import { createBattle, addCombatant, makeCombatant, startBattle, squares, squaresInMove } from '../src/engine/battle.js';
 import { resolveAttack } from '../src/engine/battle/attacks.js';
 import { grab } from '../src/engine/battle/maneuvers.js';
 import { takeTurn } from '../src/engine/battle/turn.js';
 import { standOrDrop } from '../src/engine/battle/stand.js';
 import { makeProne, isProne } from '../src/engine/battle/prone.js';
-import { moveZones } from '../src/engine/battle/conditions.js';
 import { expectedValue } from '../src/engine/battle/odds.js';
 import { makeRng } from '../src/engine/rng.js';
 
@@ -27,12 +26,12 @@ const get = (b, id) => b.combatants.find((c) => c.id === id);
 const unarmed = (c) => c.attacks.find((a) => a.unarmed);
 const ranged = (c) => c.attacks.find((a) => a.kind === 'ranged');
 
-/** Teams of [id, character, style, zone]; fighters at the same index share a zone number. */
+/** Teams of [id, character, style, column]; fighters stand on the given column of row 6 (30 ft squares); the same column is the same square. */
 function scene(team, opts = {}) {
   const b = createBattle({ seed: 'pm', name: 'pm' }); Object.assign(b.options, opts);
   for (const [id, ch, style] of team) addCombatant(b, makeCombatant(R, ch, { id, team: id[0], style }));
   startBattle(b, R); b.log.length = 0;
-  for (const [id, , , pos] of team) { const c = get(b, id); c.pos = pos; c.heroPoints = 0; }
+  for (const [id, , , pos] of team) { const c = get(b, id); c.x = pos; c.y = 5; c.heroPoints = 0; }
   return b;
 }
 const duel = (a, t, style = 'brawler') => scene([['A0', a, style, 3], ['B0', t, 'brawler', 3]]);
@@ -87,7 +86,7 @@ test('stand: with no better way it takes a move action, leaving no movement for 
   const { b, c } = stand((x) => { x.skills.Acrobatics = -2; }, []); // DC 20 is out of reach, so no roll is made
   assert.ok(!isProne(c));
   assert.equal(c.noMove, true);
-  assert.equal(moveZones(c), 0);
+  assert.equal(squaresInMove(b, c), 0);
   assert.match(b.log[0].text, /stands up as a move action\./);
 });
 
@@ -95,12 +94,12 @@ test('stand: a DC 20 Acrobatics check stands up for free (20 passes, 19 fails an
   const ok = stand((x) => { x.skills.Acrobatics = 8; }, [12]);
   assert.ok(!isProne(ok.c));
   assert.equal(ok.c.noMove, false);
-  assert.equal(moveZones(ok.c), 1);
+  assert.equal(squaresInMove(ok.b, ok.c), 1);
   assert.match(ok.b.log[0].text, /free action \(Acrobatics d20 12 \+8 = 20 vs DC 20\)/);
   const bad = stand((x) => { x.skills.Acrobatics = 8; }, [11]);
   assert.ok(!isProne(bad.c));
   assert.equal(bad.c.noMove, true);
-  assert.equal(moveZones(bad.c), 0);
+  assert.equal(squaresInMove(bad.b, bad.c), 0);
   assert.match(bad.b.log[0].text, /move action \(Acrobatics d20 11 \+8 = 19 vs DC 20, too low to do it free\)/);
 });
 
@@ -123,7 +122,7 @@ test('a prone fighter that wants to fight up close stands first, then has no mov
   const log = turn(b, 'A0');
   assert.match(log[0].text, /Fallen stands up as a move action/);
   assert.match(log[1].text, /can't move/);
-  assert.equal(get(b, 'A0').pos, 1);
+  assert.equal(get(b, 'A0').x, 1);
 });
 
 const blaster = (name, o = {}) => mk(name, { powers: [blast(8)], ...o });
@@ -154,62 +153,62 @@ const moves = (log) => log.filter((e) => e.kind === 'move');
 
 test('Move-by Action, ranged: shoots first, then steps out of the melee foe\'s reach, within the speed', () => {
   const b = scene([['A0', blaster('Skirmisher', { advantages: ['Move-by Action'] }), 'blaster', 3], ['B0', slasher(), 'brawler', 3]]);
-  get(b, 'A0').speed = 2;
+  get(b, 'A0').moveFt = 60; // two squares per move
   const log = turn(b, 'A0');
   const shot = log.findIndex((e) => /Blast at Slasher/.test(e.text));
   const step = log.findIndex((e) => e.kind === 'move');
   assert.ok(shot >= 0 && step > shot, 'the move comes after the shot');
   assert.match(log[step].text, /back out of reach of Slasher after the shot \(Move-by Action\)/);
-  assert.equal(get(b, 'A0').pos, 1, 'two zones, the whole speed');
-  assert.equal(get(b, 'A0').zonesMoved, 2);
+  assert.equal(squares(get(b, 'A0'), get(b, 'B0')), 2, 'two squares away, the whole move');
+  assert.equal(get(b, 'A0').squaresMoved, 2);
 });
 
 test('Move-by Action, ranged: the step back is limited by the speed that is left', () => {
   const b = scene([['A0', blaster('Skirmisher', { advantages: ['Move-by Action'] }), 'blaster', 3], ['B0', slasher(), 'brawler', 3]]);
-  get(b, 'A0').speed = 1;
+  get(b, 'A0').moveFt = 30;
   turn(b, 'A0');
-  assert.equal(get(b, 'A0').pos, 2);
+  assert.equal(squares(get(b, 'A0'), get(b, 'B0')), 1, 'one square is all it has');
 });
 
-test('without Move-by Action a shooter steps away before the shot instead, and only one zone', () => {
+test('without Move-by Action a shooter steps away before the shot instead, out of the foe\'s reach', () => {
   const b = scene([['A0', blaster('Skirmisher'), 'blaster', 3], ['B0', slasher(), 'brawler', 3]]);
-  get(b, 'A0').speed = 2;
+  get(b, 'A0').moveFt = 60;
   const log = turn(b, 'A0');
   assert.equal(log[0].kind, 'move');
   assert.match(log[0].text, /away from Slasher/);
   assert.equal(moves(log).length, 1);
-  assert.equal(get(b, 'A0').pos, 2);
+  assert.equal(squares(get(b, 'A0'), get(b, 'B0')), 2, 'two squares away is out of a melee foe\'s reach of one');
 });
 
 test('Move-by Action, melee: steps in, strikes a dangerous foe and steps back out, within the speed budget', () => {
   const mkB = (speed, adv = ['Move-by Action']) => {
-    const b = scene([['A0', mk('Hitter', { abilities: { Strength: 7, Fighting: 8 }, advantages: adv }), 'brawler', 2], ['B0', mk('Slasher', { abilities: { Strength: 9, Fighting: 9 }, equipment: [spear] }), 'brawler', 3]]);
-    get(b, 'A0').speed = speed; return b;
+    const b = scene([['A0', mk('Hitter', { abilities: { Strength: 7, Fighting: 8 }, advantages: adv }), 'brawler', 1], ['B0', mk('Slasher', { abilities: { Strength: 9, Fighting: 9 }, equipment: [spear] }), 'brawler', 3]]);
+    get(b, 'A0').moveFt = speed * 30; return b;
   };
   const b = mkB(3); const log = turn(b, 'A0');
   const kinds = log.map((e) => e.kind === 'move' ? 'move' : 'other').join();
   assert.equal(kinds.startsWith('move,other,'), true, kinds);
   assert.equal(log.at(-1).kind, 'move');
   assert.match(log.at(-1).text, /is gone before anyone can answer/);
-  assert.equal(get(b, 'A0').pos, 2, 'back where it started');
-  assert.ok(get(b, 'A0').zonesMoved <= 3, 'in and out within the speed');
+  assert.deepEqual([get(b, 'A0').x, get(b, 'A0').y], [1, 5], 'back where it started');
+  assert.ok(get(b, 'A0').squaresMoved <= 3, 'in and out within the speed');
   const slow = mkB(1); turn(slow, 'A0');
-  assert.equal(get(slow, 'A0').pos, 3, 'with speed 1 the step in uses it all, so it cannot step back');
+  assert.equal(get(slow, 'A0').x, 2, 'with one square per move the step in uses it all, so it cannot step back');
   const plain = mkB(3, []); const plainLog = turn(plain, 'A0');
   assert.equal(moves(plainLog).length, 1, 'without the advantage it only closes in');
-  assert.equal(get(plain, 'A0').pos, 3);
+  assert.equal(get(plain, 'A0').x, 2);
 });
 
 // ---- Aim, Defend, Grab --------------------------------------------------------------------------------------------
 
 test('Improved Aim: +10 for a close shot and +5 at range, against +5 and +2 without it; the aimed shot gets it', () => {
   const aim = (adv, foeZone, options = {}) => { // far off, only the kite tactic aims; next door a poor shot does
-    const b = scene([['A0', blaster('Gunner', { advantages: adv }), 'blaster', 3], ['B0', mk('Brute', { defenses: { Dodge: 8 } }), 'brawler', foeZone]], options);
+    const b = scene([['A0', blaster('Gunner', { advantages: adv }), 'blaster', 3], ['B0', mk('Brute', { defenses: { Dodge: 8 } }), 'blaster', foeZone]], options); // not a melee threat, so the gunner does not step away first
     const rng = makeRng('aim'); rng.chance = () => true;
     takeTurn(b, R, get(b, 'A0'), rng);
     return { b, bonus: get(b, 'A0').aiming?.bonus };
   };
-  assert.equal(aim([], 4).bonus, 5, 'adjacent zone');
+  assert.equal(aim([], 4).bonus, 5, 'next square');
   assert.equal(aim(['Improved Aim'], 4).bonus, 10);
   assert.equal(aim([], 7, { teamTactics: { A: 'kite' } }).bonus, 2, 'at range');
   assert.equal(aim(['Improved Aim'], 7, { teamTactics: { A: 'kite' } }).bonus, 5);

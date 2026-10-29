@@ -3,6 +3,7 @@
 import { sign, d20 } from './util.js';
 import { activeConditions, checkPenalty, defenseVs, feintedBy, aidBonus } from './conditions.js';
 import { rangePenalty, concealmentPenalty, hitOdds } from './odds.js';
+import { feet } from './geometry.js';
 import { proneMod } from './prone.js';
 import { spendOnMiss } from './tactics.js';
 import { coverPenalty, coverLevel, shieldFor } from './cover.js';
@@ -20,7 +21,7 @@ const MELEE_STYLES = ['brawler', 'duelist', 'tank', 'speedster', 'beast'];
 const RANGED_VERBS = ['hurls', 'throws', 'flings', 'lets fly with'];
 
 export function attackVerb(c, atk, t, rng) {
-  const ranged = atk.kind !== 'close' && MELEE_STYLES.includes(c.style);
+  const ranged = atk.range !== 'close' && MELEE_STYLES.includes(c.style);
   const v = rng.pick(ranged ? RANGED_VERBS : VERBS[c.style] || VERBS.brawler);
   if (ranged || c.style === 'blaster' || c.style === 'mage' || c.style === 'omni') return `${v} ${atk.name} at ${t.name}`;
   if (atk.unarmed) return `${v} ${t.name}`;
@@ -39,7 +40,7 @@ function finishingRoutine(c, t, mod, dcUsed) {
 
 /** The to-hit modifier: the attack bonus, trade-offs, conditions, range, concealment and cover. Adds notes for the last two. */
 function toHitMod(b, c, atk, t, m, aimed, notes) {
-  const dist = Math.abs(c.pos - t.pos);
+  const dist = feet(b, c, t);
   const conceal = concealmentPenalty(c, t, atk);
   const cover = coverPenalty(b, c, t, atk);
   const aid = aidBonus(c, t);

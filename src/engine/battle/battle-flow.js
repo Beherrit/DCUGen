@@ -1,8 +1,10 @@
 // The battle itself: setting it up, starting it, ambush, joining late, and stepping through the rounds.
 
-import { clamp, rngFor, d20, log, byId, alive, enemiesOf } from './util.js';
-import { arenaOf, MAX_ROUNDS } from './constants.js';
-import { STYLES } from './styles.js';
+import { rngFor, d20, log, byId, alive, enemiesOf } from './util.js';
+import { MAX_ROUNDS } from './constants.js';
+import { syncGrid, DEFAULT_SCALE } from './grid.js';
+import { squares } from './geometry.js';
+import { placeAll, joinSpot, ambushSpot } from './placement.js';
 import { resetCombatant, rebuildCombatant } from './combatant.js';
 import { takeTurn } from './turn.js';
 import { regenerate } from './support.js';
@@ -11,7 +13,9 @@ import { announceTactics, withdrawOver } from './tactics.js';
 import { resetScenery } from './cover.js';
 
 export function createBattle({ seed = 'battle', name = 'Battle' } = {}) {
-  return { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, enclosed: false, ambush: null, teamTactics: {}, vip: {}, withdrawRounds: {}, maxRounds: MAX_ROUNDS, shootThrough: false, knockback: false }, cover: [], lastEvent: 0 };
+  const b = { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, enclosed: false, ambush: null, teamTactics: {}, vip: {}, withdrawRounds: {}, maxRounds: MAX_ROUNDS, shootThrough: false, knockback: false, scale: DEFAULT_SCALE }, cover: [], lastEvent: 0 };
+  syncGrid(b);
+  return b;
 }
 
 export function addCombatant(b, c) {
@@ -24,20 +28,6 @@ export function removeCombatant(b, id) {
   b.combatants = b.combatants.filter((c) => c.id !== id);
   b.order = b.order.filter((x) => x !== id);
   if (b.status === 'setup') placeAll(b);
-}
-
-/** Teams start on opposite sides of the arena (a third or fourth team in between). */
-export function placeAll(b) {
-  const teams = [...new Set(b.combatants.map((c) => c.team))].sort();
-  const arena = arenaOf(b);
-  const spots = { [teams[0]]: arena >= 4 ? 1 : 0, [teams[1]]: arena >= 4 ? arena - 2 : arena - 1, [teams[2]]: Math.max(0, Math.floor(arena / 2) - 1), [teams[3]]: Math.floor(arena / 2) };
-  const seen = {};
-  for (const c of b.combatants) {
-    const base = spots[c.team] ?? Math.floor(arena / 2);
-    const n = (seen[c.team] = (seen[c.team] || 0) + 1);
-    const spread = arena < 4 ? 0 : [0, -1, 1][n % 3] * (n > 3 ? 0 : 1);
-    c.pos = clamp(base + (c.team === teams[0] ? Math.max(0, spread) : c.team === teams[1] ? Math.min(0, spread) : spread), 0, arena - 1);
-  }
 }
 
 /** Roll initiative and start the fight. */
@@ -55,7 +45,7 @@ export function startBattle(b, R) {
   b.order = [...b.combatants].sort((x, y) => y.init - x.init || y.initBonus - x.initBonus || x.name.localeCompare(y.name)).map((c) => c.id);
   b.status = 'running';
   const amb = applyAmbush(b);
-  if (b.options.enclosed) log(b, { kind: 'note', text: 'Enclosed space: a room or corridor. Everyone starts within one move and nobody can keep their distance.' });
+  if (b.options.enclosed) log(b, { kind: 'note', text: 'Enclosed space: a walled room 60 ft across, in 5 ft squares. Teams start on opposite walls and nobody can get far away.' });
   if (amb) log(b, { kind: 'note', text: `Ambush: team ${amb} catches the others off guard. Surprise round: only team ${amb} acts, and the surprised lose the round and are vulnerable until round 2.` });
   announceTactics(b);
   log(b, { kind: 'round', text: `Round 1 begins. ${b.combatants.length} fighters, ${new Set(b.combatants.map((c) => c.team)).size} sides.`, important: true });
@@ -78,15 +68,13 @@ function applyAmbush(b) {
   const amb = b.options.ambush;
   const ambushers = amb ? alive(b).filter((c) => c.team === amb) : [];
   if (!ambushers.length) return null;
-  const arena = arenaOf(b);
   for (const c of ambushers) {
     const foes = enemiesOf(b, c);
     if (!foes.length) continue;
-    const e = foes.reduce((best, x) => (Math.abs(c.pos - x.pos) < Math.abs(c.pos - best.pos) ? x : best), foes[0]);
-    // Ambushers are already in position: melee in the target's zone, ranged one zone off (no range penalty).
-    const S = STYLES[c.style] || {};
-    const ranged = c.attacks.some((a) => a.kind !== 'close') && (S.ranged ?? 1) >= (S.close ?? 1);
-    c.pos = ranged ? clamp(e.pos + (e.pos <= arena / 2 ? 1 : -1), 0, arena - 1) : e.pos;
+    const e = foes.reduce((best, x) => (squares(c, x) < squares(c, best) ? x : best), foes[0]);
+    // Ambushers are already in position: melee next to the target, shooters at short range (no range penalty), ideally by cover.
+    const spot = ambushSpot(b, c, e);
+    c.x = spot.x; c.y = spot.y;
     c.surpriseActor = true;
   }
   for (const c of alive(b).filter((x) => x.team !== amb)) {
@@ -103,9 +91,9 @@ export function joinBattle(b, R, c) {
   if (b.status !== 'running') return addCombatant(b, c);
   b.combatants.push(c);
   resetCombatant(c); rebuildCombatant(c, R);
-  const teams = [...new Set(b.combatants.map((x) => x.team))].sort();
-  const arena = arenaOf(b);
-  c.pos = c.team === teams[0] ? 0 : c.team === teams[1] ? arena - 1 : Math.floor(arena / 2);
+  syncGrid(b);
+  const spot = joinSpot(b, c.team);
+  c.x = spot.x; c.y = spot.y;
   const rng = rngFor(b);
   c.initRoll = d20(rng); c.init = c.initRoll + c.initBonus;
   b.order.push(c.id);

@@ -1,25 +1,31 @@
-// Moving across the arena.
+// Moving across the grid.
+import { log, byId } from './util.js';
+import { fmtFt } from '../range.js';
+import { spotName } from './grid.js';
+import { squares, squaresInMove } from './geometry.js';
+import { stepToward } from './path.js';
+import { traceMove } from './trace.js';
 
-import { log } from './util.js';
-import { moveZones } from './conditions.js';
-
+/** Put c on a square, log the move with its distance, and count it against this turn's squares. */
 export function moveTo(b, c, dest, why) {
-  if (dest === c.pos) return;
-  const from = c.pos;
-  c.pos = dest;
-  c.zonesMoved = (c.zonesMoved || 0) + Math.abs(dest - from);
-  if (c.behind) c.behind = null; // nobody keeps cover from another zone
-  log(b, { kind: 'move', actor: c.id, text: `${c.name} ${c.flying ? 'flies' : c.speed >= 3 ? 'blurs' : 'moves'} ${why ? `${why} ` : ''}(zone ${from + 1} → ${dest + 1}).` });
+  if (dest.x === c.x && dest.y === c.y) return;
+  const from = { x: c.x, y: c.y };
+  const n = squares(from, dest);
+  c.x = dest.x; c.y = dest.y;
+  c.squaresMoved = (c.squaresMoved || 0) + n;
+  const held = c.holding ? byId(b, c.holding) : null;
+  if (held && held.grabbedBy === c.id) { held.x = dest.x; held.y = dest.y; } // a held fighter is carried along
+  const verb = c.flying ? 'flies' : c.speed >= 3 ? 'blurs' : 'moves';
+  log(b, { kind: 'move', actor: c.id, from: [from.x, from.y], to: [dest.x, dest.y], text: `${c.name} ${verb} ${why ? `${why} ` : ''}from ${spotName(from)} to ${spotName(dest)}, ${fmtFt(n * b.grid.squareFt)}.` });
+  traceMove(b, c, from, dest);
 }
 
-/** Move toward t, stopping `stopAt` zones short of it (a shooter only needs to get within range). */
-export function moveToward(b, c, t, rng, moves = 1, stopAt = 0) {
+/** Move toward t, stopping once within `stopAt` squares of it (1: next to it; a shooter only needs to get within range). */
+export function moveToward(b, c, t, rng, moves = 1, stopAt = 1) {
   void rng;
-  const zones = moveZones(c) * moves;
-  if (!zones) { log(b, { kind: 'skip', actor: c.id, text: `${c.name} can't move.` }); return; }
-  if (Math.abs(t.pos - c.pos) <= stopAt) return;
-  const dir = t.pos > c.pos ? 1 : -1;
-  const dist = Math.abs(t.pos - c.pos) - stopAt;
-  const dest = c.pos + dir * Math.min(zones, dist);
-  moveTo(b, c, dest, dest === t.pos ? `${moves > 1 ? 'all the way ' : ''}to ${t.name}` : `toward ${t.name}`);
+  const budget = squaresInMove(b, c) * moves;
+  if (!budget) { log(b, { kind: 'skip', actor: c.id, text: `${c.name} can't move.` }); return; }
+  if (squares(c, t) <= stopAt) return;
+  const dest = stepToward(b, c, t, budget, stopAt);
+  moveTo(b, c, dest, squares(dest, t) <= Math.max(1, stopAt) ? `${moves > 1 ? 'all the way ' : ''}to ${t.name}` : `toward ${t.name}`);
 }

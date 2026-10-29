@@ -14,8 +14,9 @@ import { tacticChips } from './battle-tactics.js';
 import { keepFinishedFight, keptNote, roomTabs } from './records/room.js';
 import { renderFights, openFight } from './records/fights-view.js';
 import { KIND_CLASS, teamColor, renderLogInto, logControls } from './battle-log.js';
-import { coverTags, uiBattle, wholeCover } from './battle-cover.js';
-import { createBattle, addCombatant, removeCombatant, makeCombatant, joinBattle, startBattle, step, runRound, runToEnd, battleText, simulateMany, serializeBattle, reviveBattle, placeAll, STYLES, TACTICS, arenaOf, statusLine, conditionLabels, detectStyle, rebuildCombatant } from '../engine/battle.js';
+import { uiBattle, wholeCover } from './battle-cover.js';
+import { gridBoard, initials } from './battle-grid.js';
+import { createBattle, addCombatant, removeCombatant, makeCombatant, joinBattle, startBattle, step, runRound, runToEnd, battleText, simulateMany, serializeBattle, reviveBattle, placeAll, squareName, STYLES, TACTICS, statusLine, conditionLabels, detectStyle, rebuildCombatant } from '../engine/battle.js';
 
 const KEY = 'dcugen.battle.v1';
 let R;
@@ -149,7 +150,6 @@ const setupCx = () => ({ battle, R, ui, hooks, throwIn, save, render: renderBatt
 
 // ---- pieces ---------------------------------------------------------------------------------------------
 
-const initials = (name) => name.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
 
 function fighterCard(c) {
   const setup = battle.status === 'setup';
@@ -174,7 +174,7 @@ function fighterCard(c) {
   const hp = h('input', { type: 'number', class: 'bt-hp', min: 0, max: 9, value: c.heroPoints, 'aria-label': `${c.name} hero points`, title: 'Hero points', onChange: (e) => { c.heroPoints = Math.max(0, Number(e.target.value) || 0); save(); } });
   return h('article', { class: `bt-card ${c.out ? 'out' : ''} ${c.fled ? 'fled' : ''}`, style: { '--c': c.color, '--t': teamColor(c.team), '--c-ink': inkFor(c.color) } },
     h('div', { class: 'bt-card-head' },
-      h('span', { class: 'bt-token', title: `Zone ${c.pos + 1}` }, initials(c.name)),
+      h('span', { class: 'bt-token', title: `Square ${squareName(c.x, c.y)}` }, initials(c.name)),
       h('div', { class: 'bt-names' },
         h('b', null, c.name),
         h('span', null, `PL ${c.pl} · ${S.glyph} ${S.label}${c.minion ? ' · minion' : ''}${hasForms(c.ch) ? ` · 🎭 ${c.ch.forms[activeForm(c.ch)]?.name || 'form'}` : ''}`)),
@@ -194,16 +194,8 @@ function fighterCard(c) {
     S.blurb && setup ? h('p', { class: 'bt-blurb' }, S.blurb) : null);
 }
 
-function arena() {
-  const zones = Array.from({ length: arenaOf(battle) }, (_, i) => h('div', { class: 'bt-zone' }, h('span', { class: 'bt-zone-n' }, i + 1), coverTags(battle, i)));
-  const active = battle.status === 'running' ? battle.order[Math.min(battle.turn, battle.order.length - 1)] : null;
-  for (const c of battle.combatants) {
-    const tok = h('span', { class: `bt-token ${c.out || c.fled ? 'down' : ''} ${c.id === battle.order[battle.turn - 1] ? 'acting' : ''}`, title: `${c.name} (team ${c.team}) · ${statusLine(c)}`, style: { '--c': c.color, '--t': teamColor(c.team), '--c-ink': inkFor(c.color) } }, initials(c.name));
-    zones[Math.max(0, Math.min(arenaOf(battle) - 1, c.pos))].append(tok);
-  }
-  void active;
-  return h('div', { class: 'bt-arena', role: 'img', 'aria-label': 'The arena, with every fighter in their zone' }, zones);
-}
+/** The grid board. Selecting a fighter shades its ranges; in setup tokens can be dragged and cover dropped on a square. */
+const arena = () => gridBoard({ battle, ui, save, render: renderBattle, teamColor });
 
 let logHost; let liveHost; let arenaHost; let cardsHost; let nowHost;
 
@@ -369,7 +361,7 @@ function helpPanel() {
     h('p', { style: { margin: 0 } }, 'By the Hero\'s Handbook: attack checks against defense + 10, resistance checks against DC 15 + rank (Damage) or 10 + rank, degrees of failure, bruises that stack, dazed until the end of the next turn, staggered and incapacitated. A natural 20 always hits and is a critical (+5 to the DC) when the total also beats the defense. Minions drop on any failed Toughness check, never crit heroes, and heroes hit them with routine attacks (DCA 175). Afflictions get an end-of-turn recovery check; area effects a Dodge check for half. Concealment and cover are −2 (partial) or −5 (total) to hit; total cover cannot be shot past, and cover can be shot, blasted or smashed to pieces. Knockback and shooting through cover are optional rules in the Scenery panel. Impervious, Penetrating, Multiattack, Immunity, Healing and Regeneration all count.'),
     h('p', { style: { margin: 0 } }, 'Actions and maneuvers: Charge (twice the speed, −2 to hit) and Slam for fast heavy hitters, Aim (+5 close, +2 far, doubled with Improved Aim, vulnerable meanwhile), Recover once per fight (the worst damage level goes, +2 defenses), Defend (attackers must beat a rolled defense), Feint, Trip, Disarm and Smash (Improved Trip, Disarm and Smash remove the penalties), Grab and Escape (Athletics or Sleight of Hand), Stand and Drop Prone, Power, Accurate, All-out and Defensive Attack (only on attacks with an attack check), Interpose, Takedown, Move-by Action, and team attacks by minion squads (+2 or +5 to the lead attack). Hero points re-roll a miss and keep the better roll (1–10 counts +10), or shake off dazed, stunned or fatigue; extra effort pushes a power a rank.'),
     h('p', { style: { margin: 0 } }, 'How they think: each fighter plays to its style (brawlers charge and go all-out, blasters keep distance and aim, mentalists break the weakest will, support heals and interposes) and picks targets by what its attacks can do to them, how dangerous they are, and who is nearly down.'),
-    h('p', { style: { margin: 0, color: 'var(--ink-3)' } }, 'Not simulated yet: Summon, Create, Illusion, Deflect, Insubstantial, Environment. The arena is eight zones in a line; a zone apart is short range, three is medium (−2), five is long (−5).'));
+    h('p', { style: { margin: 0, color: 'var(--ink-3)' } }, 'Not simulated yet: Summon, Create, Illusion, Deflect, Insubstantial, Environment. The battlefield is a 12 by 12 grid (Street 5 ft, Block 30 ft or District 250 ft squares); a move covers the fighter\'s speed in feet, and a ranged attack is short to rank × 25 ft, medium to rank × 50 ft (−2) and long to rank × 100 ft (−5).'));
 }
 
 // ---- the page --------------------------------------------------------------------------------------------

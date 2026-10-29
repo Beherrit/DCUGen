@@ -7,13 +7,14 @@ import { activeConditions, defenseOf, isDemoralized, aidBonus } from './conditio
 import { hitOdds, rangePenalty } from './odds.js';
 import { TEAM_TACTICS, tacticOf } from './tactics-list.js';
 import { focusTarget, lockTarget, isControlled, hasControl, isControlAttack, vipOf } from './tactics-marks.js';
-import { isFrontliner, positionGoal, stepToZone, wantsKite, kiteThreat, kiteZones, aimsAlways, isMeleeThreat } from './tactics-position.js';
+import { isFrontliner, positionGoal, stepToSquare, wantsKite, kiteThreat, kiteSquare, aimsAlways, isMeleeThreat } from './tactics-position.js';
 import { coverStep, coverDefends } from './tactics-cover.js';
 import { withdrawStance, withdrawGuards, withdrawTurn, withdrawHolds, withdrawOver } from './tactics-withdraw.js';
 import { fleeChance } from './tactics-support.js';
 import { isProne } from './prone.js';
+import { feet, inReach } from './geometry.js';
 
-export { TEAM_TACTICS, tacticOf, positionGoal, stepToZone, wantsKite, kiteThreat, kiteZones, aimsAlways, isMeleeThreat, coverStep, coverDefends, withdrawTurn, withdrawHolds, withdrawOver, fleeChance };
+export { TEAM_TACTICS, tacticOf, positionGoal, stepToSquare, wantsKite, kiteThreat, kiteSquare, aimsAlways, isMeleeThreat, coverStep, coverDefends, withdrawTurn, withdrawHolds, withdrawOver, fleeChance };
 
 const alpha = (b, c) => tacticOf(b, c) === 'alpha' && b.round <= 2;
 
@@ -45,7 +46,7 @@ export function targetBias(b, c, t, { enemies }) {
     case 'bodyguard': return (t.vipHit?.[c.team] ?? -1) > (c.prevTurnTick ?? 0) ? 3 : 1;
     case 'lockdown': return lockdownBias(b, c, t);
     case 'pickoff': return pickoffBias(t, enemies) * (t.minion && activeConditions(t).has('Defenseless') ? 1.5 : 1); // a finishing attack
-    case 'flank': return t.feinted?.by === c.id || activeConditions(t).has('Vulnerable') || (t.pos === c.pos && isProne(t)) ? 2.5 : 1;
+    case 'flank': return t.feinted?.by === c.id || activeConditions(t).has('Vulnerable') || (inReach(b, c, t) && isProne(t)) ? 2.5 : 1;
     case 'intimidate': return isDemoralized(t) ? 3 : 1;
     case 'aid': return aidBonus(c, t) ? 2.5 : 1;
     default: return 1;
@@ -65,7 +66,7 @@ function pickoffBias(t, enemies) {
 /** A multiplier on how much c likes this attack against t. */
 export function attackBias(b, c, atk, t) {
   switch (tacticOf(b, c)) {
-    case 'kite': return atk.kind === 'close' && c.attacks.some((a) => a.kind !== 'close') ? 0.25 : 1;
+    case 'kite': return atk.range === 'close' && c.attacks.some((a) => a.range !== 'close') ? 0.25 : 1;
     case 'lockdown': return isControlAttack(atk) && lockTarget(b, c.team)?.id === t.id ? 2 : 1;
     default: return 1;
   }
@@ -80,10 +81,10 @@ export function grabChance(b, c, t, chance) {
 }
 
 /** Alpha Strike: the largest Power Attack that still leaves the attack a fair chance to land. */
-function alphaPower(c, attack, target, allOut) {
+function alphaPower(b, c, attack, target, allOut) {
   if (attack.unarmed && !c.adv['Power Attack'] && c.style !== 'brawler') return 0;
   const def = defenseOf(target, attack.kind === 'close' ? 'Parry' : 'Dodge');
-  const dist = attack.kind === 'close' ? 0 : Math.abs(c.pos - target.pos);
+  const dist = attack.range === 'close' ? 0 : feet(b, c, target);
   let power = c.adv['Power Attack'] ? 5 : 2;
   while (power > 0 && hitOdds(attack.bonus + allOut - power - rangePenalty(attack, dist), def).hit < 0.3) power--;
   return power;
@@ -94,8 +95,8 @@ export function tradeoffBias(b, c, target, attack) {
   const id = tacticOf(b, c);
   if (id === 'none' || !attack.roll || attack.area) return null;
   const allOutMax = c.adv['All-out Attack'] ? 5 : 2;
-  if (id === 'alpha' && alpha(b, c)) return { allOut: allOutMax, defensive: 0, power: alphaPower(c, attack, target, allOutMax) };
-  if (id === 'noretreat' && attack.kind === 'close') return { allOut: allOutMax, defensive: 0 };
+  if (id === 'alpha' && alpha(b, c)) return { allOut: allOutMax, defensive: 0, power: alphaPower(b, c, attack, target, allOutMax) };
+  if (id === 'noretreat' && attack.range === 'close') return { allOut: allOutMax, defensive: 0 };
   if (id === 'line' && isFrontliner(c)) return { allOut: 0, defensive: 2 };
   if (id === 'withdraw') return withdrawStance(b, c);
   if (id === 'sustain' && !c.healing && alive(b).some((x) => x.team === c.team && x.staggered)) return { allOut: 0, defensive: 2 };

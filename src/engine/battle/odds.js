@@ -4,6 +4,7 @@ import { activeConditions, checkPenalty, defenseVs, resistOf, aidBonus } from '.
 import { effectWeights } from './combatant.js';
 import { coverPenalty, coverDodgeBonus, preciseIgnores } from './cover.js';
 import { proneMod } from './prone.js';
+import { bandFor } from '../range.js';
 
 export function hitOdds(bonus, defense) {
   let hit = 0;
@@ -110,14 +111,17 @@ export function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, a
   return ev;
 }
 
-export function rangePenalty(atk, dist) {
-  if (atk.kind !== 'ranged') return 0;
-  if (dist <= 1) return 0;
-  if (dist <= 3) return 2;
-  if (dist <= 5) return 5;
-  return 99;
+/**
+ * The attack-check penalty for the distance in feet (a positive number), or 99 when the target is beyond long range.
+ * The bands are the book's: short rank x 25 ft, medium x 50 ft (-2), long x 100 ft (-5), doubled per Extended Range.
+ * An area placed at range has no attack roll, so it has no penalty but is still limited to long range.
+ */
+export function rangePenalty(atk, ft) {
+  if ((atk.range ?? atk.kind) !== 'ranged') return 0;
+  const band = bandFor(ft, Math.max(1, atk.rank), atk.ext || 0);
+  if (band.band === 'out') return 99;
+  return atk.area ? 0 : -band.penalty || 0;
 }
-
 /** Concealment: −2 to the attack check for partial, −5 for total (DCA 174); blind attackers face total. */
 export function concealmentPenalty(c, target, atk) {
   if (activeConditions(c).has('Blind') || activeConditions(c).has('Blinded')) return 5;
@@ -131,17 +135,17 @@ function seesThrough(c, target) {
   return /radar|accurate|tremor|awareness|danger sense|mental|infravision|ultravision|detect/i.test(c.senses);
 }
 
-/** The best expected value of any attack c could make on t at this distance (close attacks need distance 0). */
-export function bestEvNow(c, t, dist = Math.abs(c.pos - t.pos), bonusShift = 0) {
+/** The best expected value of any attack c could make on t at this distance in feet (close attacks count only when closeOk, meaning the foe is in reach). */
+export function bestEvNow(c, t, dist, bonusShift = 0, closeOk = true) {
   let best = 0;
   for (const a of c.attacks) {
-    if (a.kind === 'close' ? dist > 0 : rangePenalty(a, dist) > 5) continue;
-    best = Math.max(best, expectedValue(c, a, t, { dist: a.kind === 'close' ? 0 : dist, bonusShift }));
+    if (a.range === 'close' ? !closeOk : rangePenalty(a, dist) > 5) continue;
+    best = Math.max(best, expectedValue(c, a, t, { dist: a.range === 'close' ? 0 : dist, bonusShift }));
   }
   return best;
 }
 
 /** How much harm t could do to c right now: its best attack's expected value at that distance. */
 export function threatOn(t, c, dist) {
-  return Math.max(0, ...t.attacks.map((a) => expectedValue(t, a, c, { dist: a.kind === 'close' ? 0 : dist })));
+  return Math.max(0, ...t.attacks.map((a) => expectedValue(t, a, c, { dist: a.range === 'close' ? 0 : dist })));
 }

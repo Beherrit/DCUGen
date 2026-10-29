@@ -127,9 +127,3 @@ export function canAct(c) {
   if (s.has('Dazed') || s.has('Compelled')) return 'standard';
   return 'full';
 }
-
-export function moveZones(c) {
-  const s = activeConditions(c);
-  if (s.has('Immobile') || c.grabbedBy || c.noMove) return 0; // noMove: the move action went on standing up
-  return s.has('Hindered') ? Math.max(1, Math.ceil(c.speed / 2)) : c.speed;
-}

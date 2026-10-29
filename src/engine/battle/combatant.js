@@ -6,6 +6,7 @@ import { hasExtra, extraOpt, clamp } from './util.js';
 import { STYLES, detectStyle } from './styles.js';
 import { SEVERITY, parseAffliction } from './conditions.js';
 import { itemFor, deviceOf } from './items.js';
+import { AREA_BASE, rankFt } from '../range.js';
 
 export function effectWeights(attack) {
   if (attack.effect === 'Damage') return [0, 1, 2.3, 3.8, 6.5];
@@ -28,6 +29,26 @@ function combatEffect(name, R) {
   try { return name === 'Damage' || /^Damage\b/.test(R.effect(name).built_from || '') ? 'Damage' : name; } catch { return name; }
 }
 
+/**
+ * How far an attack reaches, for the grid: its delivery (close, ranged or perception; an area follows its power's range),
+ * Extended Range steps, the feet Reach adds to a close attack, and the size in feet of an area.
+ */
+function reachOf(a, p, R) {
+  const steps = (name) => (p?.extras || []).filter((m) => m.name === name).reduce((s, m) => s + (m.steps ?? 1), 0);
+  let range = a.kind;
+  if (a.kind === 'area') {
+    let eff = null;
+    try { eff = R.effect(p.effect).range; } catch { eff = null; }
+    range = { Ranged: 'ranged', Perception: 'perception' }[p?.range || eff] || 'close';
+  }
+  const out = { range, ext: range === 'ranged' ? steps('Extended Range') : 0, reachFt: range === 'close' ? 5 * steps('Reach') : 0 };
+  if (a.kind === 'area') {
+    const base = AREA_BASE[extraOpt(p, 'Area') || 'Burst'] || AREA_BASE.Burst;
+    out.areaFt = (base.ft ?? AREA_BASE.Burst.ft) * 2 ** Math.max(0, steps('Area') - 1);
+  }
+  return out;
+}
+
 function buildAttack(c, a0, R) {
   const a = { ...a0, effect: combatEffect(a0.effect, R) };
   const p = a.power || null;
@@ -43,6 +64,7 @@ function buildAttack(c, a0, R) {
     multiattack: hasExtra(p, 'Multiattack'), penetrating: hasExtra(p, 'Penetrating'), selective: hasExtra(p, 'Selective'),
     area: a.kind === 'area' ? (extraOpt(p, 'Area') || 'Burst') : null,
     perception: a.kind === 'perception',
+    ...reachOf(a, p, R),
     fear: /terror|fear|despair|cowering/i.test(p?.detail || ''),
     power: p,
   };
@@ -72,6 +94,11 @@ function bestMoveRank(ch) {
   return { rank: best, flying };
 }
 
+/** The feet an Elongation power stretches the fighter's reach: the distance of its rank (Hero's Handbook p96). */
+function elongationFt(ch) {
+  const ranks = allPowers(ch, { includeAlternates: false }).filter(({ power: p }) => p.effect === 'Elongation').map(({ power: p }) => p.rank);
+  return ranks.length ? rankFt(Math.max(...ranks)) : 0;
+}
 /**
  * What a fighter is immune to, from Immunity powers and absent defenses: lower-case phrases like "fire damage",
  * "fortitude effects", "life support". Immunity with Limited to Half Effect is marked " #half" (DCA 104).
@@ -119,7 +146,7 @@ export function makeCombatant(R, ch, opts = {}) {
     minion: !!ch.minion || style === 'minion',
     style, tactics: opts.tactics || 'auto',
     heroPoints: opts.heroPoints ?? (ch.minion || style === 'minion' || style === 'beast' ? 0 : 1 + advantageRank(ch, 'Luck')),
-    pos: 0,
+    x: 0, y: 0,
   };
   resetCombatant(c);
   rebuildCombatant(c, R, d);
@@ -136,7 +163,7 @@ export function resetCombatant(c) {
     lastAttackId: null, usedEffort: 0, teamedRound: null, surpriseActor: false,
     dropped: [],           // keys of items lost to a disarm or a smash: their attacks stay removed (items.js)
     noMove: false,         // the move action went on standing up this turn
-    zonesMoved: 0,         // zones moved so far this turn (Move-by Action splits the speed)
+    squaresMoved: 0,       // squares moved so far this turn (Move-by Action splits the speed)
     aid: [],               // Aid received: [{ by, vs, mode, amount, until }]
     escaped: false,        // got away under Fighting Withdrawal (also marked fled, so it leaves the fight)
     recovered: false,      // the Recover action: once per conflict (DCA 177)
@@ -167,6 +194,8 @@ export function rebuildCombatant(c, R, d = null) {
   const sk = (name) => d.skills.find((s) => s.name === name)?.bonus ?? (d.abilities[R.skillAbility(name)] ?? 0);
   c.skills = { Deception: sk('Deception'), Insight: sk('Insight'), Acrobatics: sk('Acrobatics'), Athletics: sk('Athletics'), Intimidation: sk('Intimidation'), 'Sleight of Hand': sk('Sleight of Hand') };
   c.moveRank = mv.rank;
+  c.moveFt = rankFt(mv.rank);
+  c.elongFt = elongationFt(c.ch);
   // Precise Attack is bought per pairing, like "Ranged, Cover" (DCA 77)
   c.precise = (c.ch.advantages || []).filter((a) => a.name === 'Precise Attack').map((a) => String(a.param || '').toLowerCase());
   addOmniStunts(c, d);
@@ -193,7 +222,7 @@ function addOmniStunts(c, d) {
   if (c.variable && c.style === 'omni') {
     const base = d.abilities.Dexterity ?? 0;
     const rank = clamp(Math.floor(c.variable.points / 2), 1, 2 * c.pl - base);
-    const stunt = (name, effect, extra) => ({ id: `variable|${effect}|${name}`, name: `${c.variable.name}: ${name}`, effect, kind: 'ranged', rank, bonus: base, roll: true, resistance: 'Toughness', descriptors: ['variable'], crit: 20, weights: null, stunt: true, power: null, ...extra });
+    const stunt = (name, effect, extra) => ({ id: `variable|${effect}|${name}`, name: `${c.variable.name}: ${name}`, effect, kind: 'ranged', range: 'ranged', ext: 0, reachFt: 0, rank, bonus: base, roll: true, resistance: 'Toughness', descriptors: ['variable'], crit: 20, weights: null, stunt: true, power: null, ...extra });
     const stunts = [
       stunt('Energy Blast', 'Damage', { resistance: 'Toughness' }),
       stunt('Stunning Pulse', 'Affliction', { resistance: 'Fortitude', resist: 'Fortitude', tiers: [['Dazed'], ['Stunned'], ['Incapacitated']], maxDegree: 3 }),

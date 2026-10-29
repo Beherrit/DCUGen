@@ -2,7 +2,9 @@
 
 import { log, byId, enemiesOf, alliesOf } from './util.js';
 import { STYLES } from './styles.js';
-import { activeConditions, conditionLabels, canAct, moveZones } from './conditions.js';
+import { activeConditions, conditionLabels, canAct } from './conditions.js';
+import { squares, squaresInMove, reachSquares, inReach, inRangeNow, shootSquares } from './geometry.js';
+import { stepToward } from './path.js';
 import { choosePlan, bestAttackVs } from './plan.js';
 import { moveTo, moveToward } from './movement.js';
 import { resolveAttack } from './attacks.js';
@@ -66,8 +68,11 @@ function controlledTurn(b, R, c, rng) {
   if (master && victims.length) {
     const t = victims[Math.floor(rng.next() * victims.length)];
     log(b, { kind: 'condition', actor: c.id, text: `${c.name} is controlled by ${master.name} and turns on ${t.name}!`, important: true });
-    const atk = bestAttackVs(c, t, rng).attack;
-    if (atk) { moveToward(b, c, t, rng); resolveAttack(b, R, c, atk, t, rng, {}); }
+    const atk = bestAttackVs(b, c, t, rng, { full: true }).attack;
+    if (atk) {
+      moveToward(b, c, t, rng, 1, atk.range === 'close' ? reachSquares(b, c, atk) : shootSquares(b, c));
+      if (inRangeNow(b, c, atk, t)) resolveAttack(b, R, c, atk, t, rng, {}); // a controlled fighter that cannot get there swings at nothing
+    }
     return;
   }
   log(b, { kind: 'skip', actor: c.id, text: `${c.name} stands controlled, with no one to turn on.` });
@@ -115,7 +120,7 @@ function takeAimedShot(b, R, c, rng) {
   if (!c.aiming) return false;
   const t = byId(b, c.aiming.target);
   const atk = c.attacks.find((a) => a.id === c.aiming.attack);
-  if (t && !t.out && !t.fled && atk && (atk.kind !== 'close' || t.pos === c.pos)) {
+  if (t && !t.out && !t.fled && atk && inRangeNow(b, c, atk, t)) {
     log(b, { kind: 'note', actor: c.id, target: t.id, text: `${c.name} takes the aimed shot (+${c.aiming.bonus}).` });
     resolveAttack(b, R, c, atk, t, rng, { aimed: c.aiming.bonus });
     c.aiming = null;
@@ -130,9 +135,9 @@ function healFirst(b, c, rng) {
   if (!(c.healing && (c.style === 'support' || healsFreely(b, c) || rng.chance(0.4)))) return false;
   const need = healThreshold(b, c);
   const patient = alliesOf(b, c).concat([c]).filter((a) => a.bruises >= need || a.staggered || (need < 2 && a.dazed)).sort((x, y) => (y.staggered ? 10 : 0) + y.bruises - ((x.staggered ? 10 : 0) + x.bruises))[0];
-  if (patient && (c.healing.ranged || Math.abs(patient.pos - c.pos) <= moveZones(c))) {
-    if (!c.healing.ranged && patient.pos !== c.pos && canAct(c) === 'full') moveTo(b, c, patient.pos, `to reach ${patient.name}`);
-    if (c.healing.ranged || patient.pos === c.pos) { heal(b, c, patient, rng); return true; }
+  if (patient && (c.healing.ranged || squares(c, patient) - reachSquares(b, c) <= squaresInMove(b, c))) {
+    if (!c.healing.ranged && !inReach(b, c, patient) && canAct(c) === 'full') moveTo(b, c, stepToward(b, c, patient, squaresInMove(b, c), reachSquares(b, c)), `to reach ${patient.name}`);
+    if (c.healing.ranged || inReach(b, c, patient)) { heal(b, c, patient, rng); return true; }
   }
   return false;
 }
@@ -167,15 +172,15 @@ function digIn(b, c, choice, enemies, mode) {
 function nonAttackPlan(b, R, c, choice, mode, rng) {
   const { target, plan } = choice;
   if (plan === 'cover') { shootCover(b, c, choice, rng); return true; }
-  if (plan === 'move') { moveToward(b, c, target, rng, mode === 'full' ? 2 : 1, choice.stopAt || 0); return true; }
+  if (plan === 'move') { moveToward(b, c, target, rng, mode === 'full' ? 2 : 1, choice.stopAt || reachSquares(b, c)); return true; }
   if (plan === 'feint') {
-    if (mode === 'full') moveToward(b, c, target, rng);
+    if (mode === 'full') moveToward(b, c, target, rng, 1, reachSquares(b, c));
     feint(b, c, target, rng);
     return true;
   }
   if (plan === 'grab') {
-    if (mode === 'full') moveToward(b, c, target, rng);
-    if (target.pos === c.pos) grab(b, R, c, target, rng);
+    if (mode === 'full') moveToward(b, c, target, rng, 1, reachSquares(b, c));
+    if (inReach(b, c, target)) grab(b, R, c, target, rng);
     return true;
   }
   return false;

@@ -8,7 +8,7 @@ import { RULES as R } from '../src/engine/index.js';
 import { generateCharacter } from '../src/engine/generator.js';
 import { catalogEntries } from '../src/engine/workshop.js';
 import { catalogToCharacter } from '../src/engine/catalog.js';
-import { TEAM_TACTICS, createBattle, addCombatant, makeCombatant, startBattle, step, runToEnd, serializeBattle, reviveBattle } from '../src/engine/battle.js';
+import { TEAM_TACTICS, createBattle, addCombatant, makeCombatant, startBattle, step, runToEnd, serializeBattle, reviveBattle, squares } from '../src/engine/battle.js';
 import { tacticOf, targetBias, attackBias, grabChance, tradeoffBias, forceEffort, spendOnMiss, mayFlee, mayDefend, recoverEarly, healsFreely, healThreshold, teamAttackMin, feintBias, interposeFor, positionGoal, wantsKite, aimsAlways, noteAttack, markTurn } from '../src/engine/battle/tactics.js';
 import { vipOf } from '../src/engine/battle/tactics-marks.js';
 import { choosePlan } from '../src/engine/battle/plan.js';
@@ -225,15 +225,15 @@ test('alpha: rounds 1 and 2 are all-out with extra effort and hero point re-roll
 const lineSquad = (i) => [hero('blaster', 'x1'), hero('paragon', `la${i}`), hero('mystic', 'x1'), hero('powerhouse', `lp${i}`)];
 
 // Requirement: front-liners stand in front with Defensive Attack 2, the rest one zone behind, and guards interpose for any ally.
-test('line: the tough fighters take the front zone, the others stand one behind it', () => {
+test('line: the tough fighters hold the front, the others stand one square behind it', () => {
   const b = arena('line', 'line-0', lineSquad(0), squadB(0));
   startBattle(b, R);
   const [shooter, tank, caster, brute] = ['A0', 'A1', 'A2', 'A3'].map((id) => fighter(b, id));
-  const front = Math.max(...teamOf(b, 'A').map((c) => c.pos));
-  assert.equal(positionGoal(b, tank), front);
-  assert.equal(positionGoal(b, brute), front);
-  assert.equal(positionGoal(b, shooter), front - 1, 'ranged fighter one zone behind');
-  assert.equal(positionGoal(b, caster), front - 1, 'caster one zone behind');
+  const front = Math.max(...teamOf(b, 'A').map((c) => c.x)); // team A starts on the west edge and faces east
+  assert.deepEqual(positionGoal(b, tank), { x: tank.x, y: tank.y }, 'a front-liner already on the front stays');
+  assert.deepEqual(positionGoal(b, brute), { x: brute.x, y: brute.y });
+  assert.equal(positionGoal(b, shooter).x, front - 1, 'ranged fighter one square behind');
+  assert.equal(positionGoal(b, caster).x, front - 1, 'caster one square behind');
   const plain = arena(null, 'line-0', lineSquad(0), squadB(0));
   startBattle(plain, R);
   assert.equal(positionGoal(plain, fighter(plain, 'A0')), null);
@@ -286,7 +286,8 @@ test('bodyguard: the VIP is the named fighter, else the lowest Toughness; guards
   const guard = fighter(b, 'A0');
   assert.equal(interposeFor(b, guard, fighter(b, 'A2')), true);
   assert.equal(interposeFor(b, guard, fighter(b, 'A1')), false);
-  assert.equal(positionGoal(b, guard), fighter(b, 'A2').pos);
+  const vip = fighter(b, 'A2');
+  assert.deepEqual(positionGoal(b, guard), { x: vip.x, y: vip.y, stopAt: 1 }, 'next to the VIP');
   assert.equal(positionGoal(b, fighter(b, 'A2')), null, 'the VIP does not follow itself');
 
   const unnamed = arena('bodyguard', 'bg-0', A(), squadB(0));
@@ -328,7 +329,7 @@ test('bodyguard: in whole fights the guards stay beside the VIP and interpose fo
       const f = arena(tactic, `bg-${i}`, A, [hero('powerhouse', `be-${i}`), hero('speedster', `bf-${i}`)], { vip: { A: 'A2' } });
       startBattle(f, R);
       while (f.status === 'running' && f.round < 3) step(f, R);
-      for (const c of teamOf(f, 'A').filter((x) => x.id !== 'A2' && !x.out)) { dist += Math.abs(c.pos - fighter(f, 'A2').pos); n++; }
+      for (const c of teamOf(f, 'A').filter((x) => x.id !== 'A2' && !x.out)) { dist += squares(c, fighter(f, 'A2')); n++; }
     }
     return { interVip, interOther, dist: dist / n };
   };
@@ -336,7 +337,7 @@ test('bodyguard: in whole fights the guards stay beside the VIP and interpose fo
   assert.equal(guard.interOther, 0, 'a guard never takes a hit meant for a non-VIP');
   assert.ok(guard.interVip > 0, 'the guard does interpose for the VIP');
   assert.ok(none.interOther > 0, 'without the tactic the same fighter does interpose for others (26 for the VIP, 14 for others)');
-  assert.ok(guard.dist < none.dist - 0.25, `average distance of the guards from the VIP in round 3: bodyguard ${guard.dist.toFixed(2)}, none ${none.dist.toFixed(2)}`);
+  assert.ok(guard.dist < none.dist - 0.25, `average distance in squares of the guards from the VIP in round 3: bodyguard ${guard.dist.toFixed(2)}, none ${none.dist.toFixed(2)}`);
 });
 
 // ---------------------------------------------------------------------------------------------------------
@@ -359,12 +360,14 @@ test('kite: shooters aim and back away from melee enemies much more than with no
   };
   const kite = tally('kite'); const none = tally(null);
   // Every fighter on team B here can attack at range, so Kite never aims for free: aiming would cost a turn
-  // and leave the shooter vulnerable to return fire. It still backs away from melee.
-  assert.ok(kite.aims <= none.aims + 4, `aims against foes who shoot back: kite ${kite.aims}, none ${none.aims}`);
-  assert.ok(kite.away >= none.away + 6, `steps away: kite ${kite.away}, none ${none.away} (20 against 7)`);
+  // and leave the shooter vulnerable to return fire. It still backs away from melee. (On the grid the shooters sit at
+  // 150 to 300 ft with range penalties, so a few poor shots are lined up for ordinary reasons: 14 aims over these 12
+  // fights against 0 before. A free aim every turn would be hundreds, so the bound still catches that.)
+  assert.ok(kite.aims <= none.aims + 24, `aims against foes who shoot back: kite ${kite.aims}, none ${none.aims}`);
+  assert.ok(kite.away >= none.away + 6, `steps away: kite ${kite.away}, none ${none.away} (58 against 14)`);
 });
 
-test('kite: close attacks are a quarter as attractive for a fighter who also has ranged ones, and aiming needs nobody within two zones', () => {
+test('kite: close attacks are a quarter as attractive for a fighter who also has ranged ones, and aiming needs nobody within 60 ft', () => {
   const b = arena('kite', 'kite-0', [hero('weaponmaster', 'kw'), hero('paragon', 'kp')], [hero('powerhouse', 'ks')]);
   startBattle(b, R);
   const shooter = fighter(b, 'A0'); const enemy = fighter(b, 'B0');
@@ -373,12 +376,12 @@ test('kite: close attacks are a quarter as attractive for a fighter who also has
   assert.ok(wantsKite(b, shooter));
   assert.equal(attackBias(b, shooter, close, enemy), 0.25);
   assert.equal(attackBias(b, shooter, ranged, enemy), 1);
-  enemy.pos = shooter.pos + 5;
+  enemy.x = shooter.x + 5; enemy.y = shooter.y; // 150 ft away
   assert.equal(aimsAlways(b, shooter, [enemy]), true);
-  enemy.pos = shooter.pos + 2;
+  enemy.x = shooter.x + 2; // 60 ft away: near
   assert.equal(aimsAlways(b, shooter, [enemy]), false);
   // An enemy that can shoot back takes away the free aim, however far away it is.
-  enemy.pos = shooter.pos + 5;
+  enemy.x = shooter.x + 5;
   const shotBack = { ...enemy, attacks: [...enemy.attacks, { name: 'Rock', kind: 'ranged', effect: 'Damage', rank: 6, roll: true, bonus: 4 }] };
   assert.equal(aimsAlways(b, shooter, [shotBack]), false);
   const plain = arena(null, 'kite-0', [hero('weaponmaster', 'kw')], [hero('powerhouse', 'ks')]);

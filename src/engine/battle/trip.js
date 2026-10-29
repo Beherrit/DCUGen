@@ -27,7 +27,7 @@ export function tripOdds(c, t) {
   return hitOdds(tripMod(c, t), defenseVs(t, 'Parry', c)).hit * opposedOdds(skillOf(c), defendWith(c, t));
 }
 
-/** The target is to be tripped by c, who is in its zone. */
+/** The target is to be tripped by c, who is within reach of it. */
 export function trip(b, c, t, rng) {
   c.stats.attacks++;
   const improved = !!c.adv['Improved Trip'];

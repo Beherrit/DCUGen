@@ -22,17 +22,21 @@
 //
 // The code lives in src/engine/battle/ (see README.md there); this file keeps the names the rest of the app imports.
 
-import { ARENA, ENCLOSED_ARENA, arenaOf, MAX_ROUNDS } from './battle/constants.js';
+import { MAX_ROUNDS } from './battle/constants.js';
+import { GRID_SIZE, SCALES, DEFAULT_SCALE, scaleOf, syncGrid, squareName, isWall } from './battle/grid.js';
+import { squares, feet, inReach, reachSquares, squaresInMove, bandFrom, inRangeNow, lineClear, areaVictims } from './battle/geometry.js';
+import { reachableFrom } from './battle/path.js';
 import { STYLES, TACTICS, detectStyle } from './battle/styles.js';
 import { parseAffliction, activeConditions, conditionLabels } from './battle/conditions.js';
 import { makeCombatant, rebuildCombatant } from './battle/combatant.js';
 import { hitOdds, resistOdds } from './battle/odds.js';
-import { createBattle, addCombatant, removeCombatant, placeAll, startBattle, joinBattle, step, runRound, runToEnd } from './battle/battle-flow.js';
+import { placeAll } from './battle/placement.js';
+import { createBattle, addCombatant, removeCombatant, startBattle, joinBattle, step, runRound, runToEnd } from './battle/battle-flow.js';
 import { byId } from './battle/util.js';
 import { TEAM_TACTICS } from './battle/tactics.js';
 import { MATERIALS, COVER_KINDS, toughnessOf } from './battle/materials.js';
-import { addCover, removeCover, coverLevel, pieceLabel } from './battle/cover.js';
+import { addCover, removeCover, coverLevel, pieceLabel, pieceBetween } from './battle/cover.js';
 import { massRank } from './battle/knockback.js';
 import { statusLine, battleText, simulateMany, serializeBattle, reviveBattle } from './battle/summaries.js';
 
-export { MATERIALS, COVER_KINDS, toughnessOf, addCover, removeCover, coverLevel, pieceLabel, massRank, TEAM_TACTICS, ARENA, ENCLOSED_ARENA, arenaOf, MAX_ROUNDS, STYLES, TACTICS, detectStyle, parseAffliction, makeCombatant, rebuildCombatant, activeConditions, conditionLabels, hitOdds, resistOdds, createBattle, addCombatant, removeCombatant, placeAll, startBattle, byId, joinBattle, step, runRound, runToEnd, statusLine, battleText, simulateMany, serializeBattle, reviveBattle };
+export { MATERIALS, COVER_KINDS, toughnessOf, addCover, removeCover, coverLevel, pieceLabel, massRank, TEAM_TACTICS, GRID_SIZE, SCALES, DEFAULT_SCALE, scaleOf, syncGrid, squareName, isWall, squares, feet, inReach, reachSquares, squaresInMove, bandFrom, inRangeNow, lineClear, areaVictims, reachableFrom, pieceBetween, MAX_ROUNDS, STYLES, TACTICS, detectStyle, parseAffliction, makeCombatant, rebuildCombatant, activeConditions, conditionLabels, hitOdds, resistOdds, createBattle, addCombatant, removeCombatant, placeAll, startBattle, byId, joinBattle, step, runRound, runToEnd, statusLine, battleText, simulateMany, serializeBattle, reviveBattle };

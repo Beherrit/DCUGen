@@ -9,6 +9,7 @@ import { checkPenalty } from './conditions.js';
 import { rangePenalty } from './odds.js';
 import { attackVerb } from './attack-roll.js';
 import { piecesOf, coverLevel, pieceLabel, uncoverBehind } from './cover.js';
+import { feet, areaPieces } from './geometry.js';
 
 const ORDER = ['intact', 'holed', 'destroyed'];
 
@@ -71,10 +72,10 @@ export function shootThrough(b, c, atk, piece, rng, { mod, rankShift }) {
   return { go: true, rankShift: next };
 }
 
-/** An area Damage attack also hits every intact piece of scenery in the zone: a Toughness check, no attack roll. */
-export function areaOnPieces(b, c, atk, zone, rank, rng) {
+/** An area Damage attack also hits every intact piece of scenery inside its template: a Toughness check, no attack roll. */
+export function areaOnPieces(b, c, atk, target, rank, rng) {
   if (atk.effect !== 'Damage') return;
-  for (const p of piecesOf(b).filter((x) => x.zone === zone && x.state === 'intact')) damagePiece(b, c, p, Math.max(0, rank), rng);
+  for (const p of areaPieces(b, c, atk, target, piecesOf(b).filter((x) => x.state === 'intact'))) damagePiece(b, c, p, Math.max(0, rank), rng);
 }
 
 /** The AI shoots the piece that shields its best target (the plan chosen in cover-plan.js). */
@@ -83,5 +84,5 @@ export function shootCover(b, c, { target, attack, piece }, rng) {
   c.stats.attacks++;
   const m = { trade: 0, allOut: 0, defensive: 0, charge: false };
   log(b, { kind: 'note', actor: c.id, target: target.id, text: `${c.name} can't see a clean shot at ${target.name}, who is behind total cover, and goes for the ${piece.name} instead.` });
-  hitPiece(b, c, attack, piece, rng, { mod: pieceMod(c, attack, m, Math.abs(c.pos - target.pos)) });
+  hitPiece(b, c, attack, piece, rng, { mod: pieceMod(c, attack, m, feet(b, c, target)) });
 }

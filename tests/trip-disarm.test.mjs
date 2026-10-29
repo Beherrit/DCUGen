@@ -33,7 +33,7 @@ function fight(a, t, o = {}) {
   addCombatant(b, makeCombatant(R, t, { id: 'B0', team: 'B', style: o.styleB || 'brawler' }));
   startBattle(b, R); b.log.length = 0;
   const [c, d] = b.combatants;
-  c.heroPoints = 0; d.heroPoints = 0; c.pos = 3; d.pos = 3;
+  c.heroPoints = 0; d.heroPoints = 0; c.x = 3; c.y = 5; d.x = 3; d.y = 5;
   return { b, c, t: d };
 }
 const prone = (x) => x.conditions.some((k) => k.name === 'Prone');
@@ -239,7 +239,7 @@ function scene(team, opts = {}) {
   const b = createBattle({ seed: 'ai' }); Object.assign(b.options, opts);
   for (const [id, ch, style] of team) addCombatant(b, makeCombatant(R, ch, { id, team: id[0], style }));
   startBattle(b, R); b.log.length = 0;
-  for (const [id, , , pos] of team) { const c = b.combatants.find((x) => x.id === id); c.pos = pos; c.heroPoints = 0; }
+  for (const [id, , , pos] of team) { const c = b.combatants.find((x) => x.id === id); c.x = pos; c.y = 5; c.heroPoints = 0; }
   return b;
 }
 const get = (b, id) => b.combatants.find((c) => c.id === id);

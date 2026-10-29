@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { RULES as R } from '../src/engine/index.js';
-import { createBattle, addCombatant, makeCombatant, startBattle, step, serializeBattle, reviveBattle, activeConditions, conditionLabels } from '../src/engine/battle.js';
+import { createBattle, addCombatant, makeCombatant, startBattle, step, serializeBattle, reviveBattle, activeConditions, conditionLabels, squares, inReach } from '../src/engine/battle.js';
 
 // Two hand-made fighters: a melee brute with no powers and a glass-cannon archer-type.
 const bruiser = () => ({
@@ -45,7 +45,7 @@ function finishRound(b, n) {
 }
 
 // Requirement: with ambush A, team B fighters carry a surprise condition, team A does not, ambushers start next to an enemy.
-test('ambush A on open ground: team B is Surprised, team A is not, and the ambusher starts within one zone of the enemy', () => {
+test('ambush A on open ground: team B is Surprised, team A is not, and the ambusher starts within one square of the enemy', () => {
   const b = arena();
   startBattle(b, R);
   const a = fighter(b, BRUISER_ID);
@@ -53,7 +53,7 @@ test('ambush A on open ground: team B is Surprised, team A is not, and the ambus
   assert.equal(surprise(s).length, 1);
   assert.equal(surprise(s)[0].name, 'Surprised');
   assert.equal(surprise(a).length, 0);
-  assert.ok(Math.abs(a.pos - s.pos) <= 1, `ambusher at ${a.pos}, enemy at ${s.pos}`);
+  assert.ok(squares(a, s) <= 1, `ambusher at ${a.x},${a.y}, enemy at ${s.x},${s.y}`);
   const notes = b.log.filter((e) => e.kind === 'note' && e.text.startsWith('Ambush: team'));
   assert.equal(notes.length, 1);
   assert.match(notes[0].text, /^Ambush: team A catches the others off guard/);
@@ -116,10 +116,10 @@ test('ambush A: the surprise wears off when round 2 begins, before the first tur
 });
 
 // Requirement: in the surprise round the ambushers get a standard action only (DCA 167); melee ambushers start in reach.
-test('ambush A: a melee ambusher starts in its target zone and attacks without moving in round 1', () => {
+test('ambush A: a melee ambusher starts next to its target and attacks without moving in round 1', () => {
   const b = arena();
   startBattle(b, R);
-  assert.equal(fighter(b, BRUISER_ID).pos, fighter(b, SHOOTER_ID).pos, 'melee ambusher must start in reach');
+  assert.ok(inReach(b, fighter(b, BRUISER_ID), fighter(b, SHOOTER_ID)), 'melee ambusher must start in reach');
   finishRound(b, 1);
   assert.equal(acts(b, 'A', ['move']).length, 0, 'no move and attack in the surprise round');
   assert.ok(acts(b, 'A', ATTACK_KINDS).length >= 1);
@@ -147,16 +147,16 @@ test('no ambush and ambush on an empty team: no surprise conditions and no ambus
 });
 
 // Requirement: works together with enclosed space.
-test('ambush A and enclosed together: positions stay in zones 0..1 and the surprise rules hold', () => {
+test('ambush A and enclosed together: positions stay inside the walled room and the surprise rules hold', () => {
   const b = arena({ enclosed: true });
   startBattle(b, R);
-  const inside = (label) => { for (const c of b.combatants) assert.ok(c.pos >= 0 && c.pos <= 1, `${c.name} at ${c.pos} ${label}`); };
+  const inside = (label) => { for (const c of b.combatants) assert.ok(c.x >= 1 && c.x <= 10 && c.y >= 1 && c.y <= 10, `${c.name} at ${c.x},${c.y} ${label}`); };
   inside('at start');
   const a = fighter(b, BRUISER_ID);
   const s = fighter(b, SHOOTER_ID);
   assert.equal(surprise(s).length, 1);
   assert.equal(surprise(a).length, 0);
-  assert.ok(Math.abs(a.pos - s.pos) <= 1);
+  assert.ok(squares(a, s) <= 1);
   finishRound(b, 1);
   inside('after round 1');
   assert.deepEqual(acts(b, 'B', ATTACK_KINDS), []);

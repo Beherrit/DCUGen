@@ -24,7 +24,7 @@ const canShootCover = (atk) => atk.kind === 'ranged' && atk.roll && !atk.area &&
 
 /**
  * A plan to shoot the cover when it hides a target the fighter cannot hit directly and opening it is worth more than
- * anything else on offer. scored is choosePlan's list of { t, dist, pick }. Returns a plan or null.
+ * anything else on offer. scored is choosePlan's list of { t, ft, pick }, ft being the feet to the target. Returns a plan or null.
  */
 export function coverPlan(b, c, scored) {
   if (!(b.cover || []).length) return null;
@@ -34,8 +34,8 @@ export function coverPlan(b, c, scored) {
     if (s.pick.attack && s.pick.ev > 0.02) continue;
     for (const atk of c.attacks.filter(canShootCover)) {
       const piece = shieldFor(b, c, atk, s.t);
-      if (!piece || coverLevel(piece) !== 'total' || rangePenalty(atk, s.dist) > 50) continue;
-      const value = openChance(c, atk, piece, s.dist) * expectedValue(c, atk, s.t, { dist: s.dist });
+      if (!piece || coverLevel(piece) !== 'total' || rangePenalty(atk, s.ft) > 50) continue;
+      const value = openChance(c, atk, piece, s.ft) * expectedValue(c, atk, s.t, { dist: s.ft });
       if (value > others && value > 0.05 && (!best || value > best.ev)) best = { target: s.t, attack: atk, plan: 'cover', piece, ev: value };
     }
   }

@@ -3,6 +3,7 @@
 import { sign, d20, log, byId, enemiesOf } from './util.js';
 import { activeConditions, checkPenalty, defenseOf } from './conditions.js';
 import { expectedValue } from './odds.js';
+import { inReach } from './geometry.js';
 import { rollCheck, opposedCheck, opposedNote, critNote } from './checks.js';
 
 export function feint(b, c, t, rng) {
@@ -54,7 +55,7 @@ export function grab(b, R, c, t, rng, { free = false } = {}) {
 export function tryEscape(b, c, holder, rng) {
   const bound = activeConditions(c).has('Bound');
   // Restrained but able to hit the one holding them: fight on instead (still immobile and vulnerable)
-  if (!bound && holder.pos === c.pos && c.attacks.some((a) => expectedValue(c, a, holder) > 0.15)) return false;
+  if (!bound && inReach(b, c, holder) && c.attacks.some((a) => expectedValue(c, a, holder) > 0.15)) return false;
   // Escape (DCA 176): Athletics or Sleight of Hand against the hold
   const mine = Math.max(c.skills.Athletics, c.skills['Sleight of Hand'] ?? -99) - checkPenalty(c);
   const dc = 10 + gripOf(holder) + (holder.adv['Improved Hold'] ? 5 : 0);

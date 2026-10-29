@@ -4,6 +4,7 @@ import { STYLES } from './styles.js';
 import { conditionLabels } from './conditions.js';
 import { makeCombatant, rebuildCombatant } from './combatant.js';
 import { createBattle, addCombatant, runToEnd } from './battle-flow.js';
+import { syncGrid, zoneToSquare } from './grid.js';
 
 export function statusLine(c) {
   if (c.fled) return c.escaped ? 'Got away' : 'Fled';
@@ -55,8 +56,10 @@ export function simulateMany(b, R, n = 100, { seed = b.seed } = {}) {
 
 /** Strip a battle to what needs saving (characters and settings; derived numbers are rebuilt). */
 export function serializeBattle(b) {
+  const { trace, ...rest } = b;
+  void trace;
   return {
-    ...b,
+    ...rest,
     combatants: b.combatants.map((c) => {
       const { d, attacks, adv, skills, immune, ...rest } = c;
       return rest;
@@ -64,10 +67,17 @@ export function serializeBattle(b) {
   };
 }
 
+/** A copy of a saved fighter or piece; one saved with a zone on the old line gets a square on the grid. */
+function fromZone(b, thing, field) {
+  const { [field]: zone, ...rest } = thing;
+  if (rest.x !== undefined && rest.y !== undefined) return { ...rest };
+  return { ...rest, ...zoneToSquare(b, zone) };
+}
 export function reviveBattle(R, data) {
   const b = { ...createBattle({ seed: data.seed, name: data.name }), ...data };
   b.options = { ...createBattle().options, ...(data.options || {}) };
-  b.cover = (data.cover || []).map((p) => ({ ...p }));
-  b.combatants = (data.combatants || []).map((c) => rebuildCombatant({ ...c, stats: c.stats || { attacks: 0, hits: 0, crits: 0, degrees: 0, kos: 0, healed: 0, taken: 0 }, conditions: c.conditions || [], weakened: c.weakened || {} }, R));
+  syncGrid(b);
+  b.cover = (data.cover || []).map((p) => fromZone(b, p, 'zone'));
+  b.combatants = (data.combatants || []).map((c) => rebuildCombatant({ ...fromZone(b, c, 'pos'), stats: c.stats || { attacks: 0, hits: 0, crits: 0, degrees: 0, kos: 0, healed: 0, taken: 0 }, conditions: c.conditions || [], weakened: c.weakened || {} }, R));
   return b;
 }

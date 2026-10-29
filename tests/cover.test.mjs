@@ -37,7 +37,10 @@ const fire = (b, from, to, rolls, opts = {}) => {
 };
 const dice = (b, label) => b.log.flatMap((e) => e.dice || []).find((d) => d.label === label);
 const lines = (b) => b.log.map((e) => e.text);
-const behind = (b, kind, zone, who = 'B') => { const p = addCover(b, kind, zone); get(b, who).behind = p.id; return p; };
+/** Put S and B on row 6 at these columns (30 ft squares). */
+const line = (b, sx, bx) => { for (const [id, x] of [['S', sx], ['B', bx]]) { get(b, id).x = x; get(b, id).y = 5; } };
+/** A piece on the square just west of `who`, between that fighter and a shooter to the west; the fighter takes cover behind it. */
+const behind = (b, kind, who = 'B') => { const t = get(b, who); const p = addCover(b, kind, t.x - 1, t.y); t.behind = p.id; return p; };
 
 test('materials: every material in the book table has its one-inch Toughness (p94)', () => {
   const book = { paper: 0, soil: 0, glass: 1, ice: 1, rope: 1, wood: 3, stone: 5, iron: 7, concrete: 8, steel: 9, titanium: 15, prometheum: 20 };
@@ -65,46 +68,46 @@ test('materials: each preset works its Toughness out from material and thickness
 
 test('addCover builds a piece with computed Toughness and a plain label; removeCover frees the fighter behind it', () => {
   const b = scene('store');
-  const wall = behind(b, 'brick-wall', 4);
-  assert.deepEqual([wall.toughness, wall.level, wall.state, wall.zone], [8, 'total', 'intact', 4]);
+  const wall = behind(b, 'brick-wall'); // B starts at K6 (column 10), so the wall is at J6
+  assert.deepEqual([wall.toughness, wall.level, wall.state, wall.x, wall.y], [8, 'total', 'intact', 9, 5]);
   assert.equal(pieceLabel(wall), 'brick wall (stone, 8 in, Toughness 8)');
-  assert.equal(pieceLabel(addCover(b, 'concrete-wall', 99)), 'concrete wall (reinforced concrete, 8 in, Toughness 11)');
-  assert.equal(b.cover[1].zone, 7, 'a zone past the arena is clamped to its last zone');
+  assert.equal(pieceLabel(addCover(b, 'concrete-wall', 99, 99)), 'concrete wall (reinforced concrete, 8 in, Toughness 11)');
+  assert.deepEqual([b.cover[1].x, b.cover[1].y], [11, 11], 'a square past the grid is clamped to the last square');
   removeCover(b, wall.id);
   assert.deepEqual(b.cover.map((p) => p.kind), ['concrete-wall']);
   assert.equal(get(b, 'B').behind, null);
-  assert.throws(() => addCover(b, 'moat', 1), /Unknown kind of cover/);
+  assert.throws(() => addCover(b, 'moat', 1, 1), /Unknown kind of cover/);
 });
 
 test('cover level: a holed piece gives one level less, a destroyed piece none (p173)', () => {
   const b = scene('levels');
-  const wall = addCover(b, 'brick-wall', 3); const fence = addCover(b, 'wooden-fence', 3);
+  const wall = addCover(b, 'brick-wall', 3, 5); const fence = addCover(b, 'wooden-fence', 3, 6);
   const seen = [];
   for (const state of ['intact', 'holed', 'destroyed']) { wall.state = fence.state = state; seen.push([coverLevel(wall), coverLevel(fence)]); }
   assert.deepEqual(seen, [['total', 'partial'], ['partial', 'none'], ['none', 'none']]);
 });
 
 const PRECISE = (param) => [{ name: 'Precise Attack', param, rank: 1 }];
-/** The Attack-die modifier of one shot (or swing, if close) at a target behind `kind` in zone 4, and the log line. */
-function attackMod(kind, { state, close, sameZone, adv } = {}) {
+/** The Attack-die modifier of one shot (or swing, if close) at a target behind `kind` at column 4 (the piece just west of it), and the log line. */
+function attackMod(kind, { state, close, sameSquare, adv } = {}) {
   const b = scene('mod', {}, shooter(adv)); const [from, to] = close ? ['B', 'S'] : ['S', 'B'];
-  get(b, to).pos = 4; get(b, from).pos = sameZone ? 4 : 0;
-  if (kind) { const p = behind(b, kind, 4, to); if (state) p.state = state; }
+  get(b, to).x = 4; get(b, to).y = 5; get(b, from).x = sameSquare ? 4 : 0; get(b, from).y = 5;
+  if (kind) { const p = behind(b, kind, to); if (state) p.state = state; }
   const c = get(b, from);
   resolveAttack(b, R, c, c.attacks.find((a) => (a.kind === 'close') === !!close), get(b, to), scripted([12, 5]), {});
   return { mod: dice(b, 'Attack').mod, text: lines(b)[0] };
 }
 
-test('partial cover is -2 and total -5 to a ranged attack from another zone (p173)', () => {
+test('partial cover is -2 and total -5 to a ranged attack when the piece is on the line to the target (p173)', () => {
   const open = attackMod(null).mod; const fence = attackMod('wooden-fence'); const wall = attackMod('brick-wall');
   assert.deepEqual([open - fence.mod, open - wall.mod], [2, 5]);
   assert.match(fence.text, /\(partial cover: −2\)\.$/);
   assert.match(wall.text, /\(total cover: −5\)\.$/);
 });
 
-test('cover does not count against a close attack, or a shot from the same zone', () => {
+test('cover does not count against a close attack, or a shot from the target\'s own square', () => {
   assert.equal(attackMod('brick-wall', { close: true }).mod, attackMod(null, { close: true }).mod);
-  assert.equal(attackMod('brick-wall', { sameZone: true }).mod, attackMod(null, { sameZone: true }).mod);
+  assert.equal(attackMod('brick-wall', { sameSquare: true }).mod, attackMod(null, { sameSquare: true }).mod);
 });
 
 test('a holed wall gives only partial cover (-2), a destroyed one none', () => {
@@ -121,32 +124,32 @@ test('Precise Attack bought for cover removes the penalty; the wrong pairing doe
 
 test('the AI sees cover in its expected value, and Precise Attack lifts it', () => {
   const ev = (kind, adv = []) => {
-    const b = scene('ev', {}, shooter(adv)); get(b, 'S').pos = 0; get(b, 'B').pos = 4;
-    if (kind) behind(b, kind, 4);
-    return expectedValue(get(b, 'S'), get(b, 'S').attacks[0], get(b, 'B'), { b, dist: 4 });
+    const b = scene('ev', {}, shooter(adv)); line(b, 0, 4);
+    if (kind) behind(b, kind);
+    return expectedValue(get(b, 'S'), get(b, 'S').attacks[0], get(b, 'B'), { b, dist: 120 });
   };
   const [open, partial, total] = [ev(null), ev('wooden-fence'), ev('brick-wall')];
   assert.ok(open > partial && partial > total, `${open} > ${partial} > ${total}`);
   assert.equal(ev('wooden-fence', PRECISE('Ranged, Cover')), open);
 });
 
-test('area attacks give the target a Dodge bonus equal to the cover penalty, only from another zone', () => {
+test('area attacks give the target a Dodge bonus equal to the cover penalty, only from the far side of the piece', () => {
   const bomb = shooter([], [blast([{ name: 'Area', option: 'Burst' }], 8)]);
-  const dodge = (kind, atZone) => {
-    const b = scene('area', {}, bomb); get(b, 'S').pos = atZone; get(b, 'B').pos = 3;
-    if (kind) behind(b, kind, 3);
+  const dodge = (kind, atColumn) => {
+    const b = scene('area', {}, bomb); line(b, atColumn, 3);
+    if (kind) behind(b, kind);
     resolveAttack(b, R, get(b, 'S'), get(b, 'S').attacks.find((a) => a.area), get(b, 'B'), scripted([10, 10]), {});
     return dice(b, 'Dodge');
   };
   const open = dodge(null, 0).mod;
   assert.equal(dodge('wooden-fence', 0).mod - open, 2);
   assert.equal(dodge('brick-wall', 0).mod - open, 5);
-  assert.equal(dodge('brick-wall', 3).mod - open, 0, 'blast from the same zone ignores the wall');
+  assert.equal(dodge('brick-wall', 3).mod - open, 0, 'a blast from the target\'s own square ignores the wall');
 });
 
 test('total cover: the target cannot be picked directly, and the AI shoots the cover instead', () => {
   const b = scene('cov2'); b.order = ['S', 'B']; b.turn = 0;
-  get(b, 'S').pos = 0; get(b, 'B').pos = 4; behind(b, 'brick-wall', 4);
+  line(b, 0, 4); behind(b, 'brick-wall');
   const s = get(b, 'S'); const atk = s.attacks[0];
   assert.equal(blocksDirect(b, s, atk, get(b, 'B')), true);
   assert.equal(blocksDirect(b, s, { ...atk, area: 'Burst' }, get(b, 'B')), false, 'area attacks need no direct target');
@@ -163,7 +166,7 @@ test('total cover: the target cannot be picked directly, and the AI shoots the c
 
 test('attacking cover: DC 10, a hit is an automatic critical against a defenseless object', () => {
   const run = (rolls, mod) => {
-    const b = scene('hit'); const piece = addCover(b, 'wooden-fence', 4);
+    const b = scene('hit'); const piece = addCover(b, 'wooden-fence', 4, 5);
     const r = hitPiece(b, get(b, 'S'), { ...get(b, 'S').attacks[0], rank: 5 }, piece, scripted(rolls), { mod });
     return { r, piece, b };
   };
@@ -180,7 +183,7 @@ test('attacking cover: DC 10, a hit is an automatic critical against a defensele
 test('cover Toughness check: 2 degrees of failure hole it, 3 or more destroy it', () => {
   // fence Toughness 3, Damage 5 as a critical is DC 25: totals 20 (1 degree), 19 (2), 15 (2), 14 (3)
   const after = (roll, kind = 'wooden-fence') => {
-    const b = scene('deg'); const piece = addCover(b, kind, 4); get(b, 'B').behind = piece.id; get(b, 'B').pos = 4;
+    const b = scene('deg'); const piece = addCover(b, kind, 4, 5); get(b, 'B').behind = piece.id; get(b, 'B').x = 5; get(b, 'B').y = 5;
     const fails = damagePiece(b, get(b, 'S'), piece, 5, scripted([roll]), { crit: true });
     return { state: piece.state, level: coverLevel(piece), fails, behind: get(b, 'B').behind, text: lines(b).join('\n') };
   };
@@ -195,8 +198,8 @@ test('cover Toughness check: 2 degrees of failure hole it, 3 or more destroy it'
 
 test('the AI shooting cover: a destroyed fence leaves the target open, a holed total fence drops to partial', () => {
   const run = (seed) => {
-    const b = scene(seed); b.order = ['S', 'B']; b.turn = 0; get(b, 'S').pos = 0; get(b, 'B').pos = 4;
-    const p = behind(b, 'wooden-fence', 4); p.level = 'total';
+    const b = scene(seed); b.order = ['S', 'B']; b.turn = 0; line(b, 0, 4);
+    const p = behind(b, 'wooden-fence'); p.level = 'total';
     step(b, R);
     return { p, b };
   };
@@ -210,11 +213,11 @@ test('the AI shooting cover: a destroyed fence leaves the target open, a holed t
   assert.equal(get(holed.b, 'B').behind, holed.p.id);
 });
 
-test('area attacks roll Toughness against every intact piece in the zone, and only that zone', () => {
+test('area attacks roll Toughness against every intact piece inside the burst, and only those', () => {
   const bomb = shooter([], [blast([{ name: 'Area', option: 'Burst' }], 8)]);
-  const b = scene('ar2', {}, bomb); get(b, 'S').pos = 0; get(b, 'B').pos = 3;
-  const fence = behind(b, 'wooden-fence', 3); const car = addCover(b, 'parked-car', 3);
-  const wall = addCover(b, 'brick-wall', 5); const old = addCover(b, 'wooden-fence', 3); old.state = 'destroyed';
+  const b = scene('ar2', {}, bomb); line(b, 0, 3); // a 30 ft burst on B at D6 reaches the squares next to it
+  const fence = behind(b, 'wooden-fence'); const car = addCover(b, 'parked-car', 4, 5);
+  const wall = addCover(b, 'brick-wall', 7, 5); const old = addCover(b, 'wooden-fence', 3, 5); old.state = 'destroyed';
   resolveAttack(b, R, get(b, 'S'), get(b, 'S').attacks.find((a) => a.area), get(b, 'B'), scripted([10, 10, 8, 8]), {});
   const rolled = lines(b).filter((t) => /^The .* resists Damage 8/.test(t));
   assert.equal(rolled.length, 2);
@@ -224,8 +227,8 @@ test('area attacks roll Toughness against every intact piece in the zone, and on
 });
 
 test('shoot-through is off by default: no cover roll, no optional-rule note', () => {
-  const b = scene('st1'); get(b, 'S').pos = 0; get(b, 'B').pos = 4;
-  const wall = behind(b, 'brick-wall', 4);
+  const b = scene('st1'); line(b, 0, 4);
+  const wall = behind(b, 'brick-wall');
   fire(b, 'S', 'B', [15, 5]);
   assert.equal(wall.state, 'intact');
   assert.ok(!lines(b).some((t) => /Optional rule|brick wall/.test(t.replace(/\(partial cover/, ''))), lines(b).join('\n'));
@@ -233,8 +236,8 @@ test('shoot-through is off by default: no cover roll, no optional-rule note', ()
 });
 
 test('shoot-through on: the shot breaks the cover, then carries on at the rank minus half its Toughness', () => {
-  const b = scene('st1', { shootThrough: true }); get(b, 'S').pos = 0; get(b, 'B').pos = 4;
-  const wall = behind(b, 'brick-wall', 4);
+  const b = scene('st1', { shootThrough: true }); line(b, 0, 4);
+  const wall = behind(b, 'brick-wall');
   fire(b, 'S', 'B', [15, 5, 18, 1]);
   const t = lines(b);
   assert.match(t[0], /^Optional rule \(shoot through cover\)/);
@@ -248,8 +251,8 @@ test('shoot-through on: the shot breaks the cover, then carries on at the rank m
 });
 
 test('shoot-through on: a wall that holds stops the shot', () => {
-  const b = scene('st2', { shootThrough: true }); get(b, 'S').pos = 0; get(b, 'B').pos = 4;
-  const wall = behind(b, 'brick-wall', 4);
+  const b = scene('st2', { shootThrough: true }); line(b, 0, 4);
+  const wall = behind(b, 'brick-wall');
   fire(b, 'S', 'B', [15, 20]);
   assert.equal(wall.state, 'intact');
   assert.ok(lines(b).includes('The brick wall stops the shot.'));
@@ -257,44 +260,44 @@ test('shoot-through on: a wall that holds stops the shot', () => {
 });
 
 test('shoot-through on: a holed wall passes the shot with the cover level it has left', () => {
-  const b = scene('st3', { shootThrough: true }); get(b, 'S').pos = 0; get(b, 'B').pos = 4;
-  const wall = behind(b, 'brick-wall', 4);
+  const b = scene('st3', { shootThrough: true }); line(b, 0, 4);
+  const wall = behind(b, 'brick-wall');
   fire(b, 'S', 'B', [15, 16, 18, 1]);
   assert.equal(wall.state, 'holed');
   assert.ok(lines(b).includes('The shot goes through the brick wall and carries on at Damage 6.'));
   assert.match(lines(b).find((x) => /Shooter .* at Bruiser/.test(x)), /partial cover: −2/);
 });
 
-/** One turn for Shooter (zone 3, speed 1) with these pieces (kind, zone) on the field, and the team tactic if given. */
+/** One turn for Shooter (D6, one square per move) with these pieces (kind, column, row) on the field and Bruiser far to the south, and the team tactic if given. */
 function turnWith(pieces, tactic) {
   const b = scene('tc1', tactic ? { teamTactics: { A: tactic } } : {}); b.order = ['S', 'B']; b.turn = 0;
-  get(b, 'S').pos = 3; get(b, 'B').pos = 6;
-  const made = pieces.map(([kind, zone]) => addCover(b, kind, zone));
+  get(b, 'S').x = 3; get(b, 'S').y = 5; get(b, 'B').x = 3; get(b, 'B').y = 11;
+  const made = pieces.map(([kind, x, y]) => addCover(b, kind, x, y));
   step(b, R);
   return { b, s: get(b, 'S'), made };
 }
 
 test('Take Cover: shooters move behind the best piece in reach, total before partial, then tougher', () => {
-  // brick wall (total, T8) beats the pillar in the shooter's zone (partial, T11); the steel door (total, T10) beats the brick wall
-  const { b, s, made } = turnWith([['concrete-pillar', 3], ['brick-wall', 2], ['steel-door', 4]], 'cover');
-  assert.deepEqual([s.pos, s.behind], [4, made[2].id]);
+  // brick wall (total, T8) beats the pillar beside the shooter (partial, T11); the steel door (total, T10) beats the brick wall
+  const { b, s, made } = turnWith([['concrete-pillar', 3, 6], ['brick-wall', 2, 6], ['steel-door', 4, 6]], 'cover');
+  assert.deepEqual([s.x, s.y, s.behind], [4, 5, made[2].id]);
   assert.ok(lines(b).includes('Shooter takes cover behind the steel door (steel, 2 in, Toughness 10).'));
-  const total = turnWith([['concrete-pillar', 3], ['brick-wall', 2]], 'cover');
-  assert.deepEqual([total.s.pos, total.s.behind], [2, total.made[1].id], 'total cover beats a tougher partial piece');
-  const far = turnWith([['concrete-wall', 0], ['parked-car', 3]], 'cover');
+  const total = turnWith([['concrete-pillar', 3, 6], ['brick-wall', 2, 6]], 'cover');
+  assert.deepEqual([total.s.x, total.s.y, total.s.behind], [2, 5, total.made[1].id], 'total cover beats a tougher partial piece');
+  const far = turnWith([['concrete-wall', 0, 6], ['parked-car', 3, 6]], 'cover');
   assert.equal(far.s.behind, far.made[1].id, 'a wall out of reach loses to the car beside the shooter');
 });
 
-test('a blaster with no tactic uses cover in its own zone but does not go looking for it', () => {
-  const own = turnWith([['brick-wall', 3]]);
+test('a blaster with no tactic uses cover beside it but does not go looking for it', () => {
+  const own = turnWith([['brick-wall', 3, 6]]);
   assert.equal(own.s.behind, own.made[0].id);
-  const away = turnWith([['brick-wall', 4]]);
-  assert.deepEqual([away.s.pos, away.s.behind ?? null], [3, null]);
+  const away = turnWith([['brick-wall', 2, 6]]);
+  assert.deepEqual([away.s.x, away.s.y, away.s.behind ?? null], [3, 5, null]);
 });
 
 test('Take Cover: with nothing worth shooting the fighter digs in with the Defend action', () => {
   const b = scene('tc3', { teamTactics: { A: 'cover' } }); b.order = ['S', 'B']; b.turn = 0;
-  get(b, 'S').pos = 3; get(b, 'B').pos = 7; addCover(b, 'concrete-wall', 3);
+  get(b, 'S').x = 3; get(b, 'S').y = 0; get(b, 'B').x = 3; get(b, 'B').y = 11; addCover(b, 'concrete-wall', 3, 1); // 330 ft apart: the Blast has to close in before it can do anything
   Object.assign(get(b, 'B').d.defenses, { Dodge: 30, Parry: 30, Toughness: 40 });
   step(b, R);
   assert.equal(get(b, 'S').defending, true);

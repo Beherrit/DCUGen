@@ -52,6 +52,7 @@ function optionsOf(b) {
   return {
     enclosed: !!o.enclosed, ambush: o.ambush || null, tactics: { ...(o.teamTactics || {}) },
     knockback: !!o.knockback, shootThrough: !!o.shootThrough,
+    scale: o.enclosed ? 'street' : o.scale || 'block', // grid square size: street 5 ft, block 30 ft, district 250 ft
     cover: (b.cover || []).map((p) => p.name),
   };
 }

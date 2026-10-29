@@ -4,9 +4,7 @@
 import { sign, d20, log, enemiesOf } from './util.js';
 import { opposedCheck, opposedNote, checkResult, critNote } from './checks.js';
 import { checkPenalty, resistOf, isImpaired } from './conditions.js';
-
-/** How far a voice carries: a demoralizer reaches foes this many zones away. */
-export const SIGHT = 2;
+import { inEarshot } from './geometry.js';
 
 /** The demoralizer's skill: Intimidation, or Deception when the fighter has Taunt and it is better. */
 export function demoralSkill(c) {
@@ -24,9 +22,9 @@ export function resistanceTo(t, skill) {
   return Math.max(will, t.skills.Insight - checkPenalty(t), skill.taunt ? t.skills.Deception - checkPenalty(t) : -99);
 }
 
-/** Enemy minions that can see and hear c and could be demoralized: one check covers them all. */
+/** Enemy minions within earshot (60 ft) of c that could be demoralized: one check covers them all. */
 export function minionsInSight(b, c) {
-  return enemiesOf(b, c).filter((e) => e.minion && Math.abs(e.pos - c.pos) <= SIGHT && canDemoralize(e) && !isImpaired(e));
+  return enemiesOf(b, c).filter((e) => e.minion && inEarshot(b, e, c) && canDemoralize(e) && !isImpaired(e));
 }
 
 const nameList = (list) => list.map((x) => x.name).join(', ');

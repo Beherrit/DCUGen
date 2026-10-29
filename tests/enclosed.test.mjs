@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { RULES as R } from '../src/engine/index.js';
-import { ARENA, ENCLOSED_ARENA, arenaOf, createBattle, addCombatant, makeCombatant, startBattle, runRound, runToEnd, placeAll, serializeBattle, reviveBattle } from '../src/engine/battle.js';
+import { GRID_SIZE, createBattle, addCombatant, makeCombatant, startBattle, runRound, runToEnd, placeAll, serializeBattle, reviveBattle } from '../src/engine/battle.js';
 
 // Two hand-made fighters: a melee brute with no powers and a glass-cannon archer-type.
 const bruiser = () => ({
@@ -33,29 +33,28 @@ function arena({ enclosed = false, seed = SEED, enclosedAfterAdd = false } = {})
   if (enclosed && enclosedAfterAdd) { b.options.enclosed = true; placeAll(b); }
   return b;
 }
-const pos = (b, id) => b.combatants.find((c) => c.id === id).pos;
+const at = (b, id) => { const c = b.combatants.find((x) => x.id === id); return [c.x, c.y]; };
 // A normal attack is logged as 'hit' or 'miss'; 'attack' is used for special attacks (holds, area).
 // A trip is also a close attack (it starts with an attack check against Parry), logged with the trip result.
 const bruiserAttacks = (b) => b.log.filter((e) => e.actor === BRUISER_ID && (['attack', 'hit', 'miss'].includes(e.kind) || /tries to trip/.test(e.text)));
 
-// The first fighter of team B is nudged one zone toward the middle by the spread rule, so with 8 zones it stands at 5 (ARENA - 3), as before this feature.
-test('open ground: team A starts at zone 1, team B at zone 5, arena is ARENA (default placement unchanged)', () => {
+test('open ground: team A starts near the west edge, team B near the east edge, on a 12 by 12 grid of 30 ft squares', () => {
   const b = arena();
   assert.equal(b.options.enclosed, false);
-  assert.equal(pos(b, BRUISER_ID), 1);
-  assert.equal(pos(b, SHOOTER_ID), ARENA - 3);
-  assert.equal(arenaOf(b), ARENA);
-  assert.equal(ARENA, 8);
+  assert.deepEqual(at(b, BRUISER_ID), [1, 5]);
+  assert.deepEqual(at(b, SHOOTER_ID), [GRID_SIZE - 2, 5]);
+  assert.deepEqual([b.grid.w, b.grid.h, b.grid.squareFt, b.grid.walls.length], [12, 12, 30, 0]);
 });
 
-test('enclosed: placeAll puts the teams at zones 0 and 1 on a two-zone line', () => {
+test('enclosed: placeAll puts the teams on opposite walls of a walled room in 5 ft squares', () => {
   for (const afterAdd of [false, true]) {
     const b = arena({ enclosed: true, enclosedAfterAdd: afterAdd });
-    assert.equal(pos(b, BRUISER_ID), 0, `bruiser, afterAdd=${afterAdd}`);
-    assert.equal(pos(b, SHOOTER_ID), 1, `shooter, afterAdd=${afterAdd}`);
-    assert.equal(arenaOf(b), ENCLOSED_ARENA);
+    assert.deepEqual(at(b, BRUISER_ID), [1, 5], `bruiser, afterAdd=${afterAdd}`);
+    assert.deepEqual(at(b, SHOOTER_ID), [10, 5], `shooter, afterAdd=${afterAdd}`);
+    assert.equal(b.grid.squareFt, 5, 'the room is 60 ft across in 5 ft squares');
+    assert.equal(b.grid.walls.length, 44, 'an outer ring of wall squares');
+    assert.ok(b.grid.walls.every((w) => w.x === 0 || w.y === 0 || w.x === 11 || w.y === 11));
   }
-  assert.equal(ENCLOSED_ARENA, 2);
 });
 
 test('enclosed: a speed 1 brawler attacks in round 1; on open ground it is still closing', () => {
@@ -78,18 +77,18 @@ test('enclosed: startBattle logs the Enclosed space note, open ground does not',
   startBattle(enc, R);
   const notes = enc.log.filter((e) => e.kind === 'note' && e.text.startsWith('Enclosed space:'));
   assert.equal(notes.length, 1);
-  assert.match(notes[0].text, /nobody can keep their distance/);
+  assert.match(notes[0].text, /walled room 60 ft across/);
 
   const open = arena();
   startBattle(open, R);
   assert.equal(open.log.filter((e) => e.text.startsWith('Enclosed space:')).length, 0);
 });
 
-test('enclosed: nobody leaves zones 0..1 during or at the end of a fight', () => {
+test('enclosed: nobody leaves the room during or at the end of a fight', () => {
   const b = arena({ enclosed: true });
   startBattle(b, R);
   const inside = (label) => {
-    for (const c of b.combatants) assert.ok(c.pos >= 0 && c.pos <= 1, `${c.name} at ${c.pos} ${label}`);
+    for (const c of b.combatants) assert.ok(c.x >= 1 && c.x <= 10 && c.y >= 1 && c.y <= 10, `${c.name} at ${c.x},${c.y} ${label}`);
   };
   inside('at start');
   let rounds = 0;
@@ -99,14 +98,14 @@ test('enclosed: nobody leaves zones 0..1 during or at the end of a fight', () =>
   assert.equal(b.status, 'over');
 });
 
-test('enclosed survives save and load: option kept and arena is two zones', () => {
+test('enclosed survives save and load: option kept and the room is rebuilt', () => {
   const b = arena({ enclosed: true });
   const data = JSON.parse(JSON.stringify(serializeBattle(b)));
   const back = reviveBattle(R, data);
   assert.equal(back.options.enclosed, true);
-  assert.equal(arenaOf(back), ENCLOSED_ARENA);
+  assert.deepEqual([back.grid.squareFt, back.grid.walls.length], [5, 44]);
 
   const open = reviveBattle(R, JSON.parse(JSON.stringify(serializeBattle(arena()))));
   assert.equal(open.options.enclosed, false);
-  assert.equal(arenaOf(open), ARENA);
+  assert.deepEqual([open.grid.squareFt, open.grid.walls.length], [30, 0]);
 });

@@ -4,6 +4,7 @@
 import { alive, byId, enemiesOf } from './util.js';
 import { isImpaired } from './conditions.js';
 import { bestEvNow } from './odds.js';
+import { feet, squares, inReach } from './geometry.js';
 import { tacticOf } from './tactics-list.js';
 import { pickMark } from './tactics-marks.js';
 import { demoralSkill, canDemoralize } from './support-actions.js';
@@ -39,7 +40,7 @@ export function championOf(b, team) {
 
 /** The foe the champion is most likely to attack: what it can hit now, then what it could hit, then the nearest. */
 export function championFoe(b, champ) {
-  const key = (e) => [bestEvNow(champ, e), bestEvNow(champ, e, 0), -Math.abs(champ.pos - e.pos)];
+  const key = (e) => [bestEvNow(champ, e, feet(b, champ, e), 0, inReach(b, champ, e)), bestEvNow(champ, e, 0), -squares(champ, e)];
   const scored = enemiesOf(b, champ).map((e) => ({ e, k: key(e) }));
   scored.sort((x, y) => y.k[0] - x.k[0] || y.k[1] - x.k[1] || y.k[2] - x.k[2] || x.e.id.localeCompare(y.e.id));
   return scored[0]?.e || null;

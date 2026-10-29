@@ -9,7 +9,7 @@ import { STAND_SOURCES } from './prone.js';
 
 export function endOfTurn(b, c, rng) {
   c.interposed = false;
-  c.noMove = false; c.zonesMoved = 0; // this turn's movement is over
+  c.noMove = false; c.squaresMoved = 0; // this turn's movement is over
   // A feint lasts until the end of the feinter's next round (DCA 64).
   for (const t of b.combatants) if (t.feinted?.by === c.id && t.feinted.round < b.round) t.feinted = null;
   expireSupport(b, c);

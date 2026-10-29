@@ -3,12 +3,15 @@
 //
 // A damaging attack that hits and beats the target's Toughness check by 2 or more degrees, or a slam attack that
 // hits, throws the target back. Knockback rank = the attack's damage rank minus the target's mass rank. Below 0
-// the target is only knocked prone. Rank 0 is 30 feet, one zone, and every rank doubles it. A cover piece in the
-// way, or the wall of an enclosed arena, hurts the target (the lower of the knockback rank and the obstacle's
-// Toughness) and takes a Toughness check of its own; if it is holed or destroyed the target flies on through.
+// the target is only knocked prone. Rank 0 is 30 feet and every rank doubles it; the flight runs square by square along
+// the line from the attacker through the target. A cover piece in the way, or the wall of an enclosed room, hurts the
+// target (the lower of the knockback rank and the obstacle's Toughness) and takes a Toughness check of its own; if
+// it is holed or destroyed the target flies on through (a wall still stops it, the room ends there).
 
 import { log } from './util.js';
-import { arenaOf } from './constants.js';
+import { fmtFt, rankFt } from '../range.js';
+import { GRID_SIZE, isWall, isPlayable, spotName } from './grid.js';
+import { teamsOf } from './placement.js';
 import { allPowers } from '../derive.js';
 import { applyEffect } from './attack-effects.js';
 import { releaseHolds } from './maneuvers.js';
@@ -26,18 +29,15 @@ export function massRank(c) {
   return base + (c.defending ? 2 : 0);
 }
 
-/** Which way a blow throws the target: away from the attacker, or toward its own side when they share a zone. */
+/** Which way a blow throws the target: along the line from the attacker, or toward its own team's edge when they share a square. */
 function directionOf(b, c, t) {
-  if (t.pos !== c.pos) return Math.sign(t.pos - c.pos);
-  const teams = [...new Set(b.combatants.map((x) => x.team))].sort();
-  const i = teams.indexOf(t.team);
-  if (i === 0 || i === 1) return i === 0 ? -1 : 1;
-  return t.pos < (arenaOf(b) - 1) / 2 ? -1 : 1;
+  const dx = t.x - c.x; const dy = t.y - c.y;
+  if (dx || dy) return { dx, dy };
+  const home = [{ dx: -1, dy: 0 }, { dx: 1, dy: 0 }, { dx: 0, dy: -1 }, { dx: 0, dy: 1 }][teamsOf(b).indexOf(t.team)];
+  return home || { dx: t.x * 2 < GRID_SIZE - 1 ? -1 : 1, dy: 0 };
 }
-
-// The wall of an enclosed arena is not cover, so it has no level.
-const wallPiece = (zone) => ({ id: 'wall', ...ENCLOSURE_WALL, level: null, toughness: toughnessOf(ENCLOSURE_WALL.material, ENCLOSURE_WALL.inches), zone, state: 'intact' });
-
+// The wall of an enclosed room is not cover, so it has no level.
+const wallPiece = (x, y) => ({ id: 'wall', ...ENCLOSURE_WALL, level: null, toughness: toughnessOf(ENCLOSURE_WALL.material, ENCLOSURE_WALL.inches), x, y, state: 'intact' });
 /** The target hits an obstacle: collision damage to it, a Toughness check for the obstacle. True when the target gets through. */
 function collide(b, R, c, t, piece, rank, rng) {
   const hurt = Math.min(rank, piece.toughness);
@@ -48,34 +48,31 @@ function collide(b, R, c, t, piece, rank, rng) {
   return piece.state !== 'intact';
 }
 
-/** Fly the target along its path, colliding with whatever stands in the way. Returns { at, moved, events }. */
-function fly(b, R, c, t, dir, zones, rank, rng) {
-  const arena = arenaOf(b);
+/** Fly the target along its path, square by square, colliding with whatever stands in the way. Returns { at, moved, events }. */
+function fly(b, R, c, t, dir, squares, rank, rng) {
   const events = [];
-  let at = t.pos; let moved = 0;
+  const path = [{ x: t.x, y: t.y }];
+  const m = Math.max(Math.abs(dir.dx), Math.abs(dir.dy));
   const meet = (piece) => {
     const through = collide(b, R, c, t, piece, rank, rng);
     events.push({ label: pieceLabel(piece), through });
     return through;
   };
-  const own = piecesOf(b).find((p) => p.id === t.behind && p.zone === t.pos && p.state === 'intact');
-  if (own && !meet(own)) return { at, moved, events };
-  while (moved < zones) {
-    const next = at + dir;
-    if (next < 0 || next >= arena) {
-      if (b.options.enclosed && !(meet(wallPiece(at)))) return { at, moved, events };
-      break;
-    }
-    at = next; moved++;
-    for (const p of piecesOf(b).filter((x) => x.zone === at && x.state === 'intact')) if (!meet(p)) return { at, moved, events };
+  for (let i = 1; i <= squares; i++) {
+    const x = t.x + Math.round((dir.dx * i) / m); const y = t.y + Math.round((dir.dy * i) / m);
+    if (isWall(b, x, y)) { meet(wallPiece(x, y)); break; } // the room ends there, through the wall or not
+    if (!isPlayable(b, x, y)) break;
+    if (piecesOf(b).filter((p) => p.x === x && p.y === y && p.state === 'intact').some((p) => !meet(p))) break;
+    path.push({ x, y });
   }
-  return { at, moved, events };
+  // A flight cannot end inside a piece that is still standing (holed): it comes to rest in the square before.
+  while (path.length > 1 && piecesOf(b).some((p) => p.x === path.at(-1).x && p.y === path.at(-1).y && p.state !== 'destroyed')) path.pop();
+  return { at: path.at(-1), moved: path.length - 1, events };
 }
-
 /** One plain sentence for what happened to the target. */
-function summary(t, moved, events) {
+function summary(b, t, moved, events) {
   const parts = events.map((e) => `${e.through ? 'smashes through' : 'slams into'} the ${e.label}`);
-  const lead = moved > 0 ? `${t.name} is knocked back ${moved} zone${moved > 1 ? 's' : ''}` : `${t.name} is thrown to the ground`;
+  const lead = moved > 0 ? `${t.name} is knocked back ${moved} square${moved > 1 ? 's' : ''} (${fmtFt(moved * b.grid.squareFt)}) to ${spotName(t)}` : `${t.name} is thrown to the ground`;
   return `${lead}${parts.length ? ` and ${parts.join(' and ')}` : ''}.`;
 }
 
@@ -89,12 +86,13 @@ export function maybeKnockback(b, R, c, atk, t, res, rng, { slam = false } = {})
   if (!b.options.knockback || atk.effect !== 'Damage' || res?.rank === undefined) return;
   if (!(slam || (res.degrees || 0) >= 2)) return;
   const rank = res.rank - massRank(t);
-  const zones = rank < 0 ? 0 : Math.min(2 ** rank, arenaOf(b));
-  const how = rank < 0 ? `enough to knock ${t.name} down` : `${zones} zone${zones > 1 ? 's' : ''} of flight${zones < 2 ** rank ? ' (the arena ends sooner)' : ''}`;
+  const flightFt = rank < 0 ? 0 : rankFt(rank);
+  const flightSq = Math.min(Math.floor(flightFt / b.grid.squareFt), GRID_SIZE - 1);
+  const how = rank < 0 ? `enough to knock ${t.name} down` : `${fmtFt(flightFt)} of flight (${flightSq} square${flightSq === 1 ? '' : 's'} here)`;
   log(b, { kind: 'note', actor: c.id, target: t.id, text: `Knockback: Damage ${res.rank} against mass rank ${massRank(t)}${t.defending ? ' (braced by the Defend action)' : ''} is knockback rank ${rank}, ${how}.` });
   knockProne(t, c);
   if (rank < 0) { log(b, { kind: 'condition', actor: c.id, target: t.id, text: `${t.name} is knocked prone.` }); return; }
-  const flight = fly(b, R, c, t, directionOf(b, c, t), zones, rank, rng);
-  if (flight.moved > 0) { t.pos = flight.at; t.behind = null; releaseHolds(b, t); }
-  log(b, { kind: 'condition', actor: c.id, target: t.id, text: summary(t, flight.moved, flight.events), important: true });
+  const flight = fly(b, R, c, t, directionOf(b, c, t), flightSq, rank, rng);
+  if (flight.moved > 0) { t.x = flight.at.x; t.y = flight.at.y; releaseHolds(b, t); }
+  log(b, { kind: 'condition', actor: c.id, target: t.id, text: summary(b, t, flight.moved, flight.events), important: true });
 }

@@ -2,7 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { RULES as R } from '../src/engine/index.js';
 import { createBattle, addCombatant, makeCombatant, startBattle } from '../src/engine/battle.js';
-import { activeConditions, defenseOf, defenseVs, moveZones, conditionLabels } from '../src/engine/battle/conditions.js';
+import { activeConditions, defenseOf, defenseVs, conditionLabels } from '../src/engine/battle/conditions.js';
+import { squaresInMove } from '../src/engine/battle/geometry.js';
 import { grab, grabAppetite, releaseHolds } from '../src/engine/battle/maneuvers.js';
 
 // Hero's Handbook p176: "You are hindered and vulnerable while grabbing and holding an opponent." Improved Grab (p77) and
@@ -25,18 +26,18 @@ const always = (n) => ({ int: () => n });
 
 test('a fighter that holds someone is hindered and vulnerable; letting go removes both', () => {
   const { b, g, f } = arena();
-  g.speed = 4;
-  const free = { parry: defenseOf(g, 'Parry'), zones: moveZones(g) };
+  g.moveFt = 120; // four squares per move at 30 ft
+  const free = { parry: defenseOf(g, 'Parry'), squares: squaresInMove(b, g) };
   g.holding = f.id; f.grabbedBy = g.id;
   const held = activeConditions(g);
   assert.ok(held.has('Hindered') && held.has('Vulnerable'));
   assert.equal(defenseOf(g, 'Parry'), Math.ceil(free.parry / 2));
-  assert.ok(moveZones(g) < free.zones, 'hindered: half speed');
+  assert.equal(squaresInMove(b, g), free.squares / 2, 'hindered: half the squares');
   assert.deepEqual(conditionLabels(g).sort(), ['Hindered', 'Vulnerable']);
   releaseHolds(b, g);
   assert.ok(!activeConditions(g).has('Hindered') && !activeConditions(g).has('Vulnerable'));
   assert.equal(defenseOf(g, 'Parry'), free.parry);
-  assert.equal(moveZones(g), free.zones);
+  assert.equal(squaresInMove(b, g), free.squares);
 });
 
 test('a successful grab leaves the grabber vulnerable to the next attack', () => {

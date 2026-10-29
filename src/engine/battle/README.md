@@ -5,21 +5,22 @@ is not simulated). The code is split by job:
 
 - `util.js`: the per-turn random stream, the log, dice, small helpers, who is alive.
 - `checks.js`: the one way to resolve a check: degrees, the natural 20 critical success, opposed checks with the tie rule, `rollCheck` for resistance and other checks against a DC. Every check except attack rolls and initiative goes through it.
-- `constants.js`: arena size and the round limit.
+- `constants.js`: the round limit.
+- `grid.js`: the 12 by 12 grid (`b.grid`), its scales (street 5 ft, block 30 ft, district 250 ft), the wall ring of an enclosed room, square names, and turning old saved zones into squares. `geometry.js`: distances in squares and feet, reach, range bands, a clear line, moves per turn, area templates. `path.js`: walking (around walls and cover), reachable squares, the best square to back off to. `placement.js`: teams on their edges and where an ambush puts fighters. `trace.js`: the optional `b.trace` record the grid tests read.
 - `styles.js`: fighting styles, targeting tactics, `detectStyle`.
-- `conditions.js`: Afflictions parsed into conditions, `activeConditions`, defenses, `canAct`, `moveZones`.
+- `conditions.js`: Afflictions parsed into conditions, `activeConditions`, defenses, `canAct`.
 - `combatant.js`: building and rebuilding a combatant from a character.
 - `odds.js`: hit and resistance odds, immunity, `expectedValue`, range and concealment.
 - `plan.js`: the best attack against a target, the trade-off, and `choosePlan`.
 - `turn.js`: `takeTurn` and the checks that can end a turn early. `turn-attack.js`: the attacking half of a turn.
-- `movement.js`: `moveTo`, `moveToward`.
+- `movement.js`: `moveTo` (logs the squares and feet), `moveToward`.
 - `attack-roll.js`: attack wording, the to-hit modifier and roll, the hero point re-roll.
 - `attacks.js`: `resolveAttack`, Interpose, Fast Grab, Takedown, area attacks.
 - `attack-effects.js`: what a hit does (damage, Weaken, Affliction, Nullify).
 - `maneuvers.js`: feint, grab, escape, release. `support.js`: healing, hero points, Recover, Regeneration.
 - `end-of-turn.js`: recovery checks and the weakened traits coming back.
 - `battle-flow.js`: create, start, ambush, join, step, round, run to the end.
-- `tactics.js`: team tactics, the small hooks the turn code calls (all neutral when a team has none). `tactics-list.js`: the list and `tacticOf`. `tactics-marks.js`: focus and lockdown targets, the VIP. `tactics-position.js`: the line, the guard, kiting.
+- `tactics.js`: team tactics, the small hooks the turn code calls (all neutral when a team has none). `tactics-list.js`: the list and `tacticOf`. `tactics-marks.js`: focus and lockdown targets, the VIP. `tactics-position.js`: the line, the guard, kiting (squares, not zones).
 - `materials.js`: building materials, `toughnessOf` (the doubling rule) and the `COVER_KINDS` presets.
 - `cover.js`: cover pieces (`b.cover`), their levels, who stands behind one, the attack penalty and Dodge bonus. `cover-damage.js`: hurting a piece (hole or destroy), shooting through cover, area attacks on scenery. `cover-plan.js`: when the AI shoots the cover itself.
 - `support-actions.js`: Demoralize and Aid, and how they wear off. `support-plan.js`: when a fighter demoralizes or aids instead of attacking (its own judgement, and the Intimidate and Break and Aid the Champion tactics). `tactics-support.js`: who demoralizes, who the champion is, the flee chance. `tactics-withdraw.js`: the Fighting Withdrawal tactic (escape, rearguard, the hold-out win).
@@ -31,4 +32,4 @@ is not simulated). The code is split by job:
 
 The app is bundled by tools/build.mjs, which does not allow import cycles, so keep imports flowing one way: util,
 constants and checks at the bottom, then styles, conditions, combatant, materials, cover, odds, support-actions, prone, items, the tactics files, plan-maneuvers, plan, movement, maneuvers, support, support-plan, attack-effects,
-attack-roll, cover-damage, knockback, attacks, turn-attack, turn, end-of-turn, battle-flow and summaries on top.
+attack-roll, cover-damage, knockback, attacks, turn-attack, turn, end-of-turn, battle-flow and summaries on top. The grid files sit low: grid, then geometry (which needs conditions), path, trace and placement, all before cover and movement.
