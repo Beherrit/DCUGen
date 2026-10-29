@@ -22,7 +22,13 @@ export function effectWeights(attack) {
 }
 
 /** Everything the simulator needs about one attack, from derive.attacks() plus the power itself. */
-function buildAttack(c, a, R) {
+/** Blast, Strike, Energy Control, Magic and Energy Aura are Damage with a range or Reaction added (DCA 89-110). */
+function combatEffect(name, R) {
+  try { return name === 'Damage' || /^Damage\b/.test(R.effect(name).built_from || '') ? 'Damage' : name; } catch { return name; }
+}
+
+function buildAttack(c, a0, R) {
+  const a = { ...a0, effect: combatEffect(a0.effect, R) };
   const p = a.power || null;
   const eff = R.effect(a.effect);
   const atk = {
