@@ -114,7 +114,7 @@ async function readFile(fh) {
 }
 
 async function writeFile(fh) {
-  const snap = snapshotAll();
+  const snap = snapshotAll({ fights: false }); // fight logs stay on this device; they can be many megabytes
   for (const k of LOCAL_ONLY) delete snap.data[k];
   const all = stamps();
   snap.stamps = Object.fromEntries(Object.entries(all).filter(([k]) => synced(k)));
