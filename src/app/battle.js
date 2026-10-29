@@ -13,6 +13,7 @@ import { addPanel, quickStarts } from './battle-setup.js';
 import { tacticChips } from './battle-tactics.js';
 import { keepFinishedFight, keptNote, roomTabs } from './records/room.js';
 import { renderFights, openFight } from './records/fights-view.js';
+import { renderCityWar } from './citywar/view.js';
 import { KIND_CLASS, teamColor, renderLogInto, logControls } from './battle-log.js';
 import { uiBattle, wholeCover } from './battle-cover.js';
 import { gridBoard, initials } from './battle-grid.js';
@@ -45,7 +46,7 @@ export function initBattle(rules, el, h2 = {}) {
   hooks = h2;
   battle = load();
   document.addEventListener('keydown', (e) => {
-    if (!root || root.hidden || ui.sub === 'fights' || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (!root || root.hidden || ui.sub !== 'fight' || e.ctrlKey || e.metaKey || e.altKey) return;
     if (/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName)) return;
     if (document.querySelector('dialog[open]')) return;
     const k = e.key.toLowerCase();
@@ -125,7 +126,7 @@ function doEnd() { stopTimer(); runToEnd(battle, R); save(); renderBattle(); }
 
 function reset({ newSeed = false } = {}) {
   stopTimer();
-  const chars = battle.combatants.map((c) => ({ ch: c.ch, team: c.team, style: c.style, tactics: c.tactics, heroPoints: c.heroPoints, name: c.name, id: c.id }));
+  const chars = battle.combatants.map((c) => ({ ch: c.ch, team: c.team, style: c.style, tactics: c.tactics, heroPoints: c.heroPoints, name: c.name, id: c.id, carry: c.carry }));
   const oldOptions = battle.options;
   const oldCover = wholeCover(battle.cover);
   battle = createBattle({ seed: newSeed ? randomSeed() : battle.seed, name: battle.name });
@@ -366,13 +367,23 @@ function helpPanel() {
 
 // ---- the page --------------------------------------------------------------------------------------------
 
-/** Switch between the Battle Room's pages: 'fight' (the arena) and 'fights' (saved fights and the leaderboard). */
+/** Switch between the Battle Room's pages: 'fight' (the arena), 'citywar' and 'fights' (saved fights and the leaderboard). */
 function goSub(sub) { ui.sub = sub; renderBattle(); }
+
+/** Load a City war fight (built by the City war, not yet started) into One fight; Fight! plays it exactly as the war did. */
+function watchFight(b) {
+  stopTimer();
+  b.keptId = 'city-war'; // the war already kept it in Fights, so it is not saved again as a Battle Room fight
+  battle = b; ui.mc = null; ui.sub = 'fight';
+  save();
+  renderBattle();
+}
 
 export function renderBattle() {
   if (!root) return;
   keepFinishedFight(battle, save);
   if (ui.sub === 'fights') { renderFights(root, goSub); return; }
+  if (ui.sub === 'citywar') { renderCityWar(root, { R, go: goSub, watch: watchFight }); return; }
   clear(root);
   const setup = battle.status === 'setup';
   const over = battle.status === 'over';
