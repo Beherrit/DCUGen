@@ -8,15 +8,16 @@ import { blocksDirect } from './cover.js';
 import { coverPlan, throughFactor } from './cover-plan.js';
 
 /** Best attack for c against t, with the trade-off already folded in. */
-export function bestAttackVs(c, t, rng, { dist = Math.abs(c.pos - t.pos), reachable = true, charge = false, b = null } = {}) {
+export function bestAttackVs(c, t, rng, { dist = Math.abs(c.pos - t.pos), reachable = true, charge = false, b = null, room = 0 } = {}) {
   const S = STYLES[c.style];
   let best = { attack: null, ev: 0, score: 0 };
   for (const atk of c.attacks) {
     if (atk.kind === 'close' && !reachable) continue;
-    if (atk.kind === 'ranged' && rangePenalty(atk, reachable ? Math.min(dist, 1) : dist) > 50) continue;
+    const from = atk.kind === 'ranged' && rangePenalty(atk, dist) > 5 ? Math.max(1, dist - room) : dist;
+    if (atk.kind === 'ranged' && rangePenalty(atk, from) > 5) continue; // out of range even after a move
     if (b && blocksDirect(b, c, atk, t)) continue; // total cover: the target cannot be picked
-    const trade = bestTradeoff(c, atk, t, atk.kind === 'close' ? 0 : dist, b);
-    const ev = expectedValue(c, atk, t, { bonusShift: -trade - (charge && atk.kind === 'close' ? 2 : 0), rankShift: trade, dist: atk.kind === 'close' ? 0 : dist, b });
+    const trade = bestTradeoff(c, atk, t, atk.kind === 'close' ? 0 : from, b);
+    const ev = expectedValue(c, atk, t, { bonusShift: -trade - (charge && atk.kind === 'close' ? 2 : 0), rankShift: trade, dist: atk.kind === 'close' ? 0 : from, b });
     let score = ev * (atk.kind === 'close' ? S.close : S.ranged);
     if (c.style === 'gunner' && (atk.equipment || atk.device)) score *= 1.3;
     if (c.style === 'mentalist' && atk.resistance === 'Will') score *= 1.3;
@@ -90,7 +91,7 @@ export function choosePlan(b, R, c, enemies, rng, mode) {
     const dist = Math.abs(c.pos - t.pos);
     // In reach with a move, or with a move and a charge (twice the speed, −2 to hit: DCA 175)
     const reachable = dist === 0 || (mode === 'full' && dist <= zones * 2);
-    const pick = bestAttackVs(c, t, rng, { dist, reachable, charge: dist > zones, b });
+    const pick = bestAttackVs(c, t, rng, { dist, reachable, charge: dist > zones, b, room: mode === 'full' ? zones : 0 });
     const pref = targetPref(c, t, dist, tactic, rng) * targetBias(b, c, t, { dist, enemies });
     scored.push({ t, dist, reachable, pick, score: (pick.score || 0.01) * pref });
   }
@@ -103,10 +104,12 @@ export function choosePlan(b, R, c, enemies, rng, mode) {
   // Nothing usable right now: close the distance
   if (!top.pick.attack || top.pick.ev <= 0.02) {
     const closeAtk = c.attacks.some((a) => a.kind === 'close');
-    if (closeAtk && top.dist > 0) return { target: t, attack: null, plan: 'move' };
+    const S = STYLES[c.style] || {};
+    const shooter = c.attacks.some((a) => a.kind === 'ranged' && a.roll) && (S.ranged ?? 1) > (S.close ?? 1);
+    if (closeAtk && top.dist > 0 && !shooter) return { target: t, attack: null, plan: 'move' };
     const alt = scored.find((s) => s.pick.attack && s.pick.ev > 0.02);
     if (alt) return { target: alt.t, attack: alt.pick.attack, plan: 'attack' };
-    if (top.dist > 1) return { target: t, attack: null, plan: 'move' };
+    if (top.dist > 1) return { target: t, attack: null, plan: 'move', stopAt: shooter ? 1 : 0 };
     return null;
   }
   // Grab: beasts, brawlers and tanks with the knack, against someone they can reach

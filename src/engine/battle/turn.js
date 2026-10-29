@@ -165,7 +165,7 @@ function digIn(b, c, choice, enemies, mode) {
 function nonAttackPlan(b, R, c, choice, mode, rng) {
   const { target, plan } = choice;
   if (plan === 'cover') { shootCover(b, c, choice, rng); return true; }
-  if (plan === 'move') { moveToward(b, c, target, rng, mode === 'full' ? 2 : 1); return true; }
+  if (plan === 'move') { moveToward(b, c, target, rng, mode === 'full' ? 2 : 1, choice.stopAt || 0); return true; }
   if (plan === 'feint') {
     if (mode === 'full') moveToward(b, c, target, rng);
     feint(b, c, target, rng);

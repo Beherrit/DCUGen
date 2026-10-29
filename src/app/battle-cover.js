@@ -73,7 +73,7 @@ export function sceneryPanel(cx) {
   const roll = (theme, label) => () => { rollScenery(cx, theme, label); save(); render(); };
   return h('div', { class: 'bt-scenery' },
     h('div', { class: 'label' }, 'Scenery'),
-    h('p', { class: 'hint', style: { margin: 0 } }, 'Cover gives −2 (partial) or −5 (total) to attacks against whoever stands behind it, and total cover cannot be shot past. Fighters use it when their team plays Take Cover. It can be shot, blasted and smashed to pieces.'),
+    h('p', { class: 'hint', style: { margin: 0 } }, 'Cover gives −2 (partial) or −5 (total) to attacks against whoever stands behind it, and total cover cannot be shot past. Fighters who would rather shoot step behind cover in their own zone; a team playing Take Cover goes out of its way to reach it. It can be shot, blasted and smashed to pieces.'),
     h('div', { class: 'add-row', style: { alignItems: 'center' } }, kind, zone, h('button', { type: 'button', class: 'btn sm', id: 'bt-cover-add', onClick: add }, 'Add')),
     h('div', { class: 'add-row' },
       h('button', { type: 'button', class: 'btn sm', id: 'bt-cover-street', onClick: roll(STREET, 'street') }, 'Random street'),

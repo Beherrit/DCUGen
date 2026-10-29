@@ -53,6 +53,11 @@ function holdPosition(b, c, attack, target, mode) {
 /** Get a close attack into reach. Returns { over } when the turn went on moving, { charge } when a charge was made. */
 function closeIn(b, c, attack, target, mode, rng) {
   let charge = false;
+  if (attack.kind === 'ranged' && rangePenalty(attack, Math.abs(c.pos - target.pos)) > 5) {
+    if (mode !== 'full') { log(b, { kind: 'skip', actor: c.id, text: `${c.name} is out of range and can't close the distance.` }); return { over: true }; }
+    moveToward(b, c, target, rng, 1, 1);
+    if (rangePenalty(attack, Math.abs(c.pos - target.pos)) > 5) return { over: true }; // still out of range: the turn went on moving
+  }
   if (attack.kind === 'close' && target.pos !== c.pos) {
     if (mode !== 'full') { log(b, { kind: 'skip', actor: c.id, text: `${c.name} is ${conditionLabels(c).join(', ').toLowerCase()} and can't close the distance.` }); return { over: true }; }
     const dist = Math.abs(c.pos - target.pos);

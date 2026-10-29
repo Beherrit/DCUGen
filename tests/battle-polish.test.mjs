@@ -57,3 +57,38 @@ test('the ambush note says the surprised lose the round', () => {
   const note = b.log.find((e) => /^Ambush:/.test(e.text));
   assert.match(note.text, /lose the round and are vulnerable until round 2/);
 });
+
+test('a thrower who is out of range closes to short range, not into melee', () => {
+  const b = createBattle({ seed: 'polish-close' });
+  // A flier: fast enough that closing "all the way" would carry it into the brawler's zone this turn.
+  const flight = { name: 'Flight', effect: 'Flight', rank: 9, role: 'movement', extras: [], flaws: [] };
+  addCombatant(b, makeCombatant(R, body([blast, flight]), { id: 'S', team: 'A', style: 'blaster' }));
+  addCombatant(b, makeCombatant(R, body([]), { id: 'B', team: 'B', style: 'brawler' }));
+  startBattle(b, R);
+  const [s, t] = ['S', 'B'].map((id) => b.combatants.find((c) => c.id === id));
+  assert.ok(s.speed * 2 >= 6, 'the test needs a flier who could reach melee in one turn');
+  s.pos = 0; t.pos = 6; // six zones apart: beyond long range
+  b.order = ['S', 'B']; b.turn = 0;
+  step(b, R);
+  assert.ok(s.pos < t.pos, 'the thrower must not walk into the brawler\'s zone');
+  assert.equal(t.pos - s.pos >= 1, true);
+  const moved = b.log.find((e) => e.actor === 'S' && e.kind === 'move');
+  if (moved) assert.doesNotMatch(moved.text, /all the way/);
+  // Beyond long range there is no attack at all: the shot is made only after moving into range.
+  for (const e of b.log.filter((x) => x.actor === 'S' && ['hit', 'miss'].includes(x.kind))) {
+    for (const d of e.dice || []) assert.ok(d.mod > -20, `fired from out of range: ${e.text}`);
+  }
+  assert.ok(t.pos - s.pos <= 5, 'the shooter should have moved into range');
+});
+
+test('a brawler out of reach still closes all the way in', () => {
+  const b = createBattle({ seed: 'polish-close-2' });
+  addCombatant(b, makeCombatant(R, body([]), { id: 'B', team: 'A', style: 'brawler' }));
+  addCombatant(b, makeCombatant(R, body([blast]), { id: 'S', team: 'B', style: 'blaster' }));
+  startBattle(b, R);
+  const [br, s] = ['B', 'S'].map((id) => b.combatants.find((c) => c.id === id));
+  br.pos = 2; s.pos = 3;
+  b.order = ['B', 'S']; b.turn = 0;
+  step(b, R);
+  assert.equal(br.pos, s.pos);
+});
