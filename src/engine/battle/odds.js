@@ -1,0 +1,130 @@
+// Probability helpers: hit and resistance odds, immunity, and the expected value of an attack on a target.
+
+import { activeConditions, checkPenalty, defenseOf, resistOf } from './conditions.js';
+import { effectWeights } from './combatant.js';
+
+export function hitOdds(bonus, defense) {
+  let hit = 0;
+  for (let r = 2; r <= 19; r++) if (r + bonus >= 10 + defense) hit++;
+  return { hit: (hit + 1) / 20, crit: 1 / 20 };
+}
+
+export function resistOdds(resist, dc) {
+  const out = [0, 0, 0, 0, 0];
+  for (let r = 1; r <= 20; r++) {
+    const total = r + resist;
+    let fails = total < dc ? 1 + Math.floor((dc - total - 1) / 5) : 0;
+    if (r === 20) fails = Math.max(0, fails - 1);
+    out[Math.min(4, fails)] += 1 / 20;
+  }
+  return out;
+}
+
+export function dcOf(atk, rank = atk.rank) {
+  return (atk.effect === 'Damage' || atk.effect === 'Mental Blast' ? 15 : 10) + rank;
+}
+
+/**
+ * Is the target immune to this attack (DCA 103-104)? Returns the reason, or null. An Immunity to "<descriptor>
+ * damage" stops only Damage with that descriptor; "<descriptor> effects" (or just the descriptor) stops any
+ * effect with it. Limited to Half Effect immunities don't stop it: see halfImmune().
+ */
+export function isImmune(target, atk) {
+  const why = immunityMatch(target, atk, false);
+  return why;
+}
+
+/** An Immunity limited to half effect that applies: the effect lands at half rank. Returns the reason or null. */
+export function halfImmune(target, atk) { return immunityMatch(target, atk, true); }
+
+const NEVER_MATCH = ['variable', 'super-science', 'technology', 'power armor'];
+function immunityMatch(target, atk, wantHalf) {
+  const res = String(atk.resistance || '').toLowerCase();
+  const damaging = atk.effect === 'Damage' || atk.effect === 'Mental Blast';
+  for (const raw of target.immune) {
+    const half = raw.endsWith(' #half');
+    if (half !== wantHalf) continue;
+    const w = raw.replace(/ #half$/, '');
+    if (w.includes('fortitude effects') && res === 'fortitude') return 'immune to Fortitude effects';
+    if (w.includes('will effects') && res === 'will') return 'immune to Will effects';
+    if (/life support/.test(w) && (atk.effect === 'Suffocation' || (atk.descriptors || []).some((d) => /disease|poison|toxin|vacuum|suffocat|drown|radiation/.test(d)))) return 'immune (Life Support)';
+    if (/\ball (damage|attacks)\b|\bdamage \(all\)/.test(w) && damaging) return 'immune to damage';
+    for (const dsc of atk.descriptors || []) {
+      const d = String(dsc).toLowerCase().replace(/\s*\(.*$/, '');
+      if (d.length <= 2 || NEVER_MATCH.includes(d)) continue;
+      // each comma or "and" separated part of the immunity is checked on its own
+      for (const part of w.split(/,|\band\b|;/).map((x) => x.trim()).filter(Boolean)) {
+        if (!new RegExp(`\\b${d.replace(/[^a-z\-]/g, '')}s?\\b`).test(part)) continue;
+        if (/damage|attacks/.test(part) && !damaging) continue; // "fire damage" doesn't stop a fire Affliction
+        return `immune to ${dsc}${/damage/.test(part) ? ' damage' : ''}`;
+      }
+    }
+    if (atk.effect === 'Mind Control' && /mind control|mental/.test(w)) return 'immune to mental effects';
+    if (atk.effect === 'Sleep' && /sleep/.test(w)) return 'immune to sleep';
+  }
+  if (!wantHalf && atk.fear && target.adv.Fearless) return 'Fearless';
+  return null;
+}
+
+/** Expected "harm" of an attack on a target: how much it would change the fight, in rough degrees. */
+export function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, autoHit = false, dist = 0 } = {}) {
+  if (isImmune(target, atk)) return 0;
+  let rank = atk.rank + rankShift;
+  if (halfImmune(target, atk)) rank = Math.floor(rank / 2);
+  let hit = 1; let crit = 0;
+  if (atk.roll && !autoHit) {
+    const def = defenseOf(target, atk.kind === 'close' ? 'Parry' : 'Dodge');
+    let bonus = atk.bonus + bonusShift - checkPenalty(c) - rangePenalty(atk, dist);
+    if (activeConditions(target).has('Prone')) bonus += atk.kind === 'close' ? 5 : -5;
+    if (activeConditions(c).has('Prone') && atk.kind === 'close') bonus -= 5;
+    bonus -= concealmentPenalty(c, target, atk);
+    if (c.aiming?.target === target.id) bonus += c.aiming.bonus;
+    ({ hit, crit } = hitOdds(bonus, def));
+    if (target.defending) hit *= 0.55;
+    if (activeConditions(target).has('Defenseless')) crit = hit;
+  }
+  if (atk.effect === 'Damage' && !atk.penetrating && rank <= Math.floor(target.impervious / 2)) return 0.05 * hit;
+  const resist = resistOf(target, atk.resistance);
+  if (resist === null) return 0;
+  const dc = dcOf(atk, rank);
+  const dist1 = resistOdds(resist, dc);
+  const dist2 = resistOdds(resist, dc + 5);
+  const w = atk.weights || effectWeights(atk);
+  let ev = 0;
+  for (let i = 1; i < 5; i++) {
+    let wi = w[i];
+    if (atk.effect === 'Damage') {
+      // bruises stack: what matters is the condition that lands
+      if (i >= 3 && target.staggered) wi = w[4];
+      if (target.minion) wi = w[4];
+    }
+    if (atk.tiers && i > (atk.maxDegree || 3)) wi = w[atk.maxDegree || 3];
+    ev += ((hit - crit) * dist1[i] + crit * dist2[i]) * wi;
+  }
+  if (atk.area) ev *= 0.85; // Dodge for half
+  // An affliction that is already on the target (and doesn't stack) is worth much less than something new
+  if (atk.tiers && !atk.cumulative && target.conditions.some((x) => x.source === atk.id && x.from === c.id)) ev *= 0.4;
+  if (!atk.roll && !atk.area) { const r = c.stats; void r; }
+  return ev;
+}
+
+export function rangePenalty(atk, dist) {
+  if (atk.kind !== 'ranged') return 0;
+  if (dist <= 1) return 0;
+  if (dist <= 3) return 2;
+  if (dist <= 5) return 5;
+  return 99;
+}
+
+/** Concealment: −2 to the attack check for partial, −5 for total (DCA 174); blind attackers face total. */
+export function concealmentPenalty(c, target, atk) {
+  if (activeConditions(c).has('Blind') || activeConditions(c).has('Blinded')) return 5;
+  if (!target.concealment || seesThrough(c, target)) return 0;
+  if (c.adv['Precise Attack'] && atk && c.adv['Precise Attack'] >= (atk.kind === 'close' ? 1 : 2)) return 0;
+  return target.concealment === 'total' ? 5 : 2;
+}
+
+function seesThrough(c, target) {
+  if (!target.concealment) return true;
+  return /radar|accurate|tremor|awareness|danger sense|mental|infravision|ultravision|detect/i.test(c.senses);
+}
