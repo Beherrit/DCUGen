@@ -10,6 +10,7 @@ import { plainFx, hurt } from './fortune.js';
 import { feintPick, setUpAllies } from './tricks.js';
 import { interactionImmune, slipsHold } from './immunity.js';
 import { formWords } from './insubstantial.js';
+import { stanceBonus } from './stance-fight.js';
 
 export function feint(b, c, t, rng) {
   if (interactionImmune(t)) { log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${c.name} tries to feint ${t.name}, but ${t.name} is immune to interaction skills: it fails.` }); return; }
@@ -46,7 +47,7 @@ export function grab(b, R, c, t, rng, { free = false } = {}) {
   const str = gripOf(c);
   if (!free) {
     const dc = 10 + defenseOf(t, 'Parry');
-    const bonus = (c.attacks.find((a) => a.unarmed)?.bonus ?? c.d.abilities.Fighting ?? 0) - checkPenalty(c) + (c.limbBonus || 0); // all the limbs on the grab: +1 a rank of Extra Limbs, to +5 (p98)
+    const bonus = (c.attacks.find((a) => a.unarmed)?.bonus ?? c.d.abilities.Fighting ?? 0) - checkPenalty(c) + (c.limbBonus || 0) + stanceBonus(c, 'Grab'); // Grappler stance +2 (MA 129); all the limbs on the grab: +1 a rank of Extra Limbs, to +5 (p98)
     const roll = d20(rng); const total = roll + bonus;
     if (!(roll === 20 || (roll !== 1 && total >= dc))) { log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${c.name} tries to grab ${t.name}: d20 ${roll} ${sign(bonus)} = ${total} vs Parry DC ${dc} — ${t.name} slips away.`, dice: [{ label: 'Grab', roll, mod: bonus, total, dc }] }); return; }
     log(b, { kind: 'hit', actor: c.id, target: t.id, text: `${c.name} grabs at ${t.name}: d20 ${roll} ${sign(bonus)} = ${total} vs Parry DC ${dc} — got a hold.`, dice: [{ label: 'Grab', roll, mod: bonus, total, dc }] });

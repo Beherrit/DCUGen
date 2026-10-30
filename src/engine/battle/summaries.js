@@ -64,7 +64,8 @@ export function serializeBattle(b) {
   return {
     ...rest,
     combatants: b.combatants.map((c) => {
-      const { d, attacks, adv, skills, immune, ...rest } = c;
+      const { d, attacks, adv, skills, immune, ma, ...rest } = c; // `ma` (the styles and stances) is read again from the character on load
+      void ma;
       return rest;
     }),
   };

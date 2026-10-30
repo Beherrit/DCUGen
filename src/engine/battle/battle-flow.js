@@ -21,6 +21,8 @@ import { shapeUpkeep } from './shapeshift.js';
 import { returnFromDeath } from './immortality.js';
 import { transformUpkeep } from './transform.js';
 import { restoreStartForm } from './form-swap.js';
+import { stanceUpkeep } from './stance-fight.js';
+import { styleEndTurn } from './style-turn.js';
 
 export function createBattle({ seed = 'battle', name = 'Battle' } = {}) {
   const b = { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, enclosed: false, ambush: null, teamTactics: {}, vip: {}, withdrawRounds: {}, maxRounds: MAX_ROUNDS, shootThrough: false, knockback: false, scale: DEFAULT_SCALE }, cover: [], traps: [], lastEvent: 0 };
@@ -115,6 +117,7 @@ export function joinBattle(b, R, c) {
   return c;
 }
 function checkOver(b) {
+  stanceUpkeep(b); // a stance broken by a condition goes back to Neutral (stance-fight.js)
   summonUpkeep(b); // minions end with a summoner who is out (summon-run.js)
   createUpkeep(b); // so do created objects (create.js)
   environmentUpkeep(b); // an Environment (environment.js)
@@ -168,6 +171,7 @@ export function step(b, R) {
   else {
     try { takeTurn(b, R, c, rng); } catch (e) { log(b, { kind: 'note', actor: c.id, text: `${c.name} hesitates (${e.message}).` }); }
   }
+  styleEndTurn(b, c); // Mobile and Fixed styles: the defense bonus for how far the fighter moved (style-turn.js)
   endOfTurn(b, c, rng, R);
   checkOver(b);
   return b.log.length - before;

@@ -9,6 +9,7 @@ import { closeBonus, attackCheck, contest } from './maneuver-checks.js';
 import { opposedOdds } from './checks.js';
 import { makeProne, proneMod } from './prone.js';
 import { plainFx, hurt } from './fortune.js';
+import { stanceDefense } from './mods-martial.js';
 
 export const TRIP_PENALTY = 2;
 const CLOSE = { kind: 'close' };
@@ -18,7 +19,7 @@ const skillOf = (c) => Math.max(c.skills.Acrobatics, c.skills.Athletics) - check
 /** What the target rolls to stay up: its better skill, or its weaker one against Improved Trip. */
 function defendWith(c, t) {
   const pair = [t.skills.Acrobatics, t.skills.Athletics];
-  return (c.adv['Improved Trip'] ? Math.min(...pair) : Math.max(...pair)) - checkPenalty(t);
+  return (c.adv['Improved Trip'] ? Math.min(...pair) : Math.max(...pair)) - checkPenalty(t) + stanceDefense(t, 'trip'); // Low, Grounded (+) and High (-) stances
 }
 
 const tripMod = (c, t) => closeBonus(c) - (c.adv['Improved Trip'] ? 0 : TRIP_PENALTY) - checkPenalty(c) + proneMod(c, t, CLOSE);

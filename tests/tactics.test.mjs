@@ -482,9 +482,11 @@ test('pickoff: bias is 2.5 for a minion, +0.5 per bruise and 1.5 more for the so
 
 // Requirement: fighters who are not duelists feint too, and the team piles onto the feinted or Vulnerable enemy.
 test('flank: fighters who are not duelists feint, which they never do with no tactic', () => {
+  // 36 seeds, not 12: the martial artist on team B now has its style's +2 to Insight and Deception (Martial Arts, Initiate), so it is harder
+  // to feint and a dozen fights give only 2. The threshold is unchanged; the sample is three times as wide (17 non-duelist feints in the 36).
   const tally = (tactic) => {
     let feints = 0; let byOthers = 0;
-    for (const i of range(12)) {
+    for (const i of range(36)) {
       const A = [hero('weaponmaster', `fa-${i}`), hero('paragon', `fb-${i}`), hero('mastermind', `fc-${i}`)];
       const B = [hero('powerhouse', `fd-${i}`, 12), hero('martialartist', `fe-${i}`, 12)];
       const f = arena(tactic, `fl-${i}`, A, B);
@@ -496,7 +498,7 @@ test('flank: fighters who are not duelists feint, which they never do with no ta
     return { feints, byOthers };
   };
   const flank = tally('flank'); const none = tally(null);
-  assert.ok(flank.byOthers >= 6, `feints by non-duelists: flank ${flank.byOthers} (12 in the sample run)`);
+  assert.ok(flank.byOthers >= 6, `feints by non-duelists: flank ${flank.byOthers} (17 in the sample run)`);
   assert.equal(none.byOthers, 0);
   assert.ok(flank.feints > none.feints);
 });

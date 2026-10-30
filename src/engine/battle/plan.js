@@ -53,6 +53,7 @@ export function bestAttackVs(b, c, t, rng, { full = false } = {}) {
     if (S.variety && atk.id === c.lastAttackId) score *= 0.7;
     if (atk.stunt) score *= 0.95;
     if (atk.unarmed && c.attacks.length > 1) score *= 0.9;
+    if (atk.manDef) score *= 1 + Math.max(-0.15, Math.min(0.05, 0.015 * (atk.manDef.Parry + atk.manDef.Dodge))); // a maneuver that costs Parry and Dodge until the next turn is worth a little less (MA 137)
     score *= attackBias(b, c, atk, t) * throughFactor(b, c, atk, t, from);
     const base = score; // the attack's utility before the die-roll wobble
     score *= 0.9 + rng.next() * 0.2;
@@ -64,7 +65,7 @@ export function bestAttackVs(b, c, t, rng, { full = false } = {}) {
 const staysPut = (atk) => !!(atk.flaws && (atk.flaws.increased || atk.flaws.immobile));
 
 export function bestTradeoff(c, atk, t, dist, b = null) {
-  if (!atk.roll || atk.unarmed && !c.adv['Power Attack'] && c.style !== 'brawler') return 0;
+  if (!atk.roll || (atk.unarmed || (atk.maneuver && !atk.item)) && !c.adv['Power Attack'] && c.style !== 'brawler') return 0; // an unarmed maneuver trades like the unarmed attack it is built on
   const limitUp = c.adv['Power Attack'] ? 5 : 2;      // bonus -> rank
   const limitDown = c.adv['Accurate Attack'] ? 5 : 2;  // rank -> bonus
   const base = expectedValue(c, atk, t, { dist, b });

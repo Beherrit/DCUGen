@@ -8,6 +8,7 @@ import { hitOdds, rangePenalty } from './odds.js';
 import { attackCheck, contest } from './maneuver-checks.js';
 import { opposedOdds } from './checks.js';
 import { proneMod } from './prone.js';
+import { stanceBonus } from './stance-fight.js';
 import { loseItem } from './items.js';
 import { plainFx } from './fortune.js';
 
@@ -18,7 +19,7 @@ const penaltyOf = (c, atk) => (c.adv['Improved Disarm'] ? 0 : atk.kind === 'clos
 const strengthOf = (c) => (c.d.abilities.Strength ?? 0) - checkPenalty(c);
 const whichOf = (atk) => (atk.kind === 'close' ? 'Parry' : 'Dodge');
 
-export const disarmMod = (c, t, atk, dist) => atk.bonus - penaltyOf(c, atk) - checkPenalty(c) - rangePenalty(atk, dist) + proneMod(c, t, atk);
+export const disarmMod = (c, t, atk, dist) => atk.bonus - penaltyOf(c, atk) - checkPenalty(c) - rangePenalty(atk, dist) + proneMod(c, t, atk) + stanceBonus(c, 'Disarm'); // Disarming stance: +4 (MA 129)
 
 /** The chance that this attack knocks an item out of the target's hands. */
 export function disarmOdds(c, t, atk, dist) {

@@ -12,6 +12,7 @@
 // A set of changes is an entry { source, key, mods, fades }; `fades` takes that many off every amount at the end of each turn.
 
 import { rankFt } from '../range.js';
+import { shiftMartial } from './mods-martial.js';
 
 const DEFENSES = ['Toughness', 'Dodge', 'Parry', 'Fortitude', 'Will'];
 const isDamage = (a) => a.effect === 'Damage' && !a.area;
@@ -33,7 +34,7 @@ function shift(c, m, sign) {
   } else if (m.kind === 'speed') {
     c.moveRank = (c.moveRank ?? 0) + n;
     c.moveFt = rankFt(c.moveRank);
-  }
+  } else shiftMartial(c, m, sign); // a stance or a fighting style extra (mods-martial.js)
 }
 
 const apply = (c, entry, sign) => { for (const m of entry.mods) shift(c, m, sign); };

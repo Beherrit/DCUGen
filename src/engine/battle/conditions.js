@@ -49,8 +49,10 @@ function holdingConditions(c, add) {
   if (!c.adv?.['Improved Grab'] && !c.adv?.['Grabbing Finesse']) add('Vulnerable');
 }
 
-/** The basic conditions in force on a combatant right now. */
-export function activeConditions(c) {
+const STANCE_FLAGS = { immobile: 'Immobile', hindered: 'Hindered', vulnerable: 'Vulnerable' };
+
+/** The basic conditions in force on a combatant right now. `bare` leaves out the ones its own fighting stance brings (stance-fight.js asks that to see if a stance is broken). */
+export function activeConditions(c, bare = false) {
   const set = new Set();
   const add = (name) => { set.add(name); for (const sub of COMPOSITE[name] || []) if (sub !== name) add(sub); };
   if (c.dazed) add('Dazed');
@@ -61,6 +63,7 @@ export function activeConditions(c) {
   if (c.holding) holdingConditions(c, add);
   for (const x of c.conditions) add(x.name);
   for (const n of debilitatedConditions(c)) add(n); // an ability below -5 (debilitated.js)
+  if (!bare) for (const f of c.stanceFlags || []) if (STANCE_FLAGS[f]) add(STANCE_FLAGS[f]); // Crane is immobile, Low hindered, Grounded vulnerable (MA 129)
   return set;
 }
 
@@ -140,9 +143,15 @@ export function weakenedAttack(c, atk) {
   return out;
 }
 
+/** One active defense before conditions: the sheet's number, the round's modifier, Weaken, and the active-only bonus of a stance. */
+function rawDefense(c, which) {
+  return (c.d.defenses[which] ?? 0) + c.defMod + (c.actDef?.[which] || 0) - (c.weakened[which] || 0) - (which === 'Parry' ? c.weakened.Fighting || 0 : 0);
+}
+
 export function defenseOf(c, which) {
   const s = activeConditions(c);
-  let v = (c.d.defenses[which] ?? 0) + c.defMod - (c.weakened[which] || 0) - (which === 'Parry' ? c.weakened.Fighting || 0 : 0);
+  let v = rawDefense(c, which);
+  if (which === 'Parry' && c.dodgeForParry) v = Math.max(v, rawDefense(c, 'Dodge')); // Avoiding stance: Dodge in place of Parry (MA 129)
   if (s.has('Defenseless')) return 0;
   if (s.has('Vulnerable') || c.aiming || c.distracted) v = Math.ceil(v / 2); // aiming leaves you vulnerable (DCA 175), and so does a Distracting effect (DCA 135)
   return v;
@@ -151,7 +160,7 @@ export function defenseOf(c, which) {
 export function resistOf(c, which) {
   const dd = c.d.defenses;
   if (which === 'Toughness') return Math.max(-5, dd.Toughness - c.bruises - c.nullified - (c.weakened.Toughness || 0) - (c.weakened.Strength ? Math.floor(c.weakened.Strength / 2) : 0)) - checkPenalty(c);
-  if (which === 'Dodge' || which === 'Parry') return defenseOf(c, which) - checkPenalty(c);
+  if (which === 'Dodge' || which === 'Parry') return defenseOf(c, which) - (c.actDef?.[which] || 0) + (c.resDef?.[which] || 0) - checkPenalty(c); // High stance helps the active defense only, Reactive the resistance check only
   const v = dd[which];
   if (typeof v !== 'number') return null; // immune
   return v - (c.weakened[which] || 0) - checkPenalty(c);
