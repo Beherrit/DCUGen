@@ -14,6 +14,7 @@ import { powerCost, primaryOwnCost } from '../engine/costs.js';
 import { gearCatalog, gearToEquipment, gearToDevice } from '../engine/gear.js';
 import { portraitBlock } from './portrait.js';
 import { houseRules } from '../engine/house.js';
+import { stylesSection } from './styles/section.js';
 import { poolTargets, targetLabel, poolPowers, poolCapacity, poolSpent, poolAvailable, poolFeeder, costPerRank, drain, loseDrained, settlePools, fmtPoints } from '../engine/pools.js';
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const clone = (x) => JSON.parse(JSON.stringify(x));
@@ -277,7 +278,7 @@ export function renderFile(ch, R, opts = {}) {
   const powers = h('section', { class: 'sec' },
     h('h3', null, 'Powers', h('span', { class: 'pts' }, `${s.cost.powers} pp`)),
     h('div', { class: 'read-legend no-print', 'aria-hidden': 'true' }, h('span', { class: 'lg-name' }, 'Name'), h('span', { class: 'lg-mech' }, 'How it works'), h('span', { class: 'lg-desc' }, 'What it does')),
-    (ch.powers || []).map((p, i) => powerCard(p, { device: null, index: i })),
+    (ch.powers || []).map((p, i) => (p.maneuver ? null : powerCard(p, { device: null, index: i }))),
     (ch.devices || []).map((dev, di) => {
       const dc = s.devices[di];
       return h('div', { class: 'device' },
@@ -288,7 +289,7 @@ export function renderFile(ch, R, opts = {}) {
           editing ? h('button', { class: 'x no-print', type: 'button', 'aria-label': `Remove ${dev.name}`, onClick: () => change((c) => { c.devices.splice(di, 1); }) }, '✕') : null),
         dev.powers.map((p, i) => powerCard(p, { device: di, index: i }, true)));
     }),
-    !ch.powers?.length && !ch.devices?.length ? h('p', { style: { color: 'var(--ink-3)', margin: 0 } }, 'No powers. All skill, training and gear.') : null,
+    !(ch.powers || []).some((p) => !p.maneuver) && !ch.devices?.length ? h('p', { style: { color: 'var(--ink-3)', margin: 0 } }, 'No powers. All skill, training and gear.') : null,
     editing ? h('div', { class: 'add-row no-print' }, h('button', { class: 'btn', type: 'button', onClick: () => opts.onAddPower?.() }, '+ Add a power from the Power Lab')) : null);
 
   // ---- advantages ----
@@ -357,6 +358,9 @@ export function renderFile(ch, R, opts = {}) {
           } }, 'Add')),
         preview);
     })() : null);
+
+  // ---- fighting styles (Martial Arts 3e) ----
+  const fighting = stylesSection(ch, R, { editing, change, stepper, cost: s.cost });
 
   // ---- skills ----
   const skills = h('section', { class: 'sec' },
@@ -449,7 +453,7 @@ export function renderFile(ch, R, opts = {}) {
   const c = s.cost;
   const parts = [
     ['Abilities', c.abilities, '#d1495b'], ['Powers', c.powers, '#2f6fde'], ['Advantages', c.advantages, '#e0a030'],
-    ['Skills', c.skills, '#3aa17e'], ['Defenses', c.defenses, '#8a5cd6'],
+    ['Skills', c.skills, '#3aa17e'], ['Defenses', c.defenses, '#8a5cd6'], ...(c.styles ? [['Fighting styles', c.styles, '#b5651d']] : []),
   ];
   const denom = Math.max(c.budget, c.total, 1);
   const points = h('section', { class: 'sec points' },
@@ -465,7 +469,7 @@ export function renderFile(ch, R, opts = {}) {
     opts.onChange && !opts.noAdvancement ? pointsBar(ch, R, { change, onSpend: opts.onSpend, editing }) : null,
     h('div', { class: 'file-body' },
       h('div', { class: 'col' }, abilities, defenses, offense, powers),
-      h('div', { class: 'col' }, advantages, skills, equipment, story, points,
+      h('div', { class: 'col' }, advantages, fighting, skills, equipment, story, points,
         opts.onChange && !opts.noAdvancement ? advancementSection(ch, R, { change, onSpend: opts.onSpend, editing }) : null)));
   file.style.setProperty('--hero', hero);
   file.style.setProperty('--hero-ink', inkFor(hero));

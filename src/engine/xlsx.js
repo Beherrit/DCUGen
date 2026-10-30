@@ -5,6 +5,7 @@
 
 import { sheet as makeSheet, statBlockText } from './render.js';
 import { ABILITIES } from './rules.js';
+import { styleTextLines } from './martial/summary.js';
 const enc = new TextEncoder();
 const dec = new TextDecoder();
 
@@ -277,6 +278,19 @@ function safeSheetName(name, i) {
 
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 
+/** The fighting styles (Martial Arts 3e) as stat block rows: the style, its stances, then each maneuver. */
+function styleRows(s) {
+  if (!s.styles.length) return [];
+  const rows = [['FIGHTING STYLES', 'Points', 'Detail']];
+  for (const st of s.styles) {
+    rows.push([`${st.name} (${st.tierLabel})`, st.cost, [st.skill, st.weaponElements.length ? `weapons: ${st.weaponElements.join(', ')}` : ''].filter(Boolean).join('; ')]);
+    for (const x of st.stances.filter((y) => y.name !== 'Neutral')) rows.push([`   Stance: ${x.name}`, '', x.line]);
+    for (const m of st.maneuvers) rows.push([`   ${m.label}${m.rank != null ? ` ${m.rank}` : ''}`, m.cost ?? '', m.line]);
+  }
+  rows.push([]);
+  return rows;
+}
+
 /** Rows for the "Full Stat Block" sheet. */
 export function statBlockRows(ch, R) {
   const s = makeSheet(ch, R);
@@ -309,6 +323,7 @@ export function statBlockRows(ch, R) {
   rows.push(['ADVANTAGES', 'Rank', 'Summary']);
   for (const a of s.advantages) rows.push([a.name + (a.param ? ` (${a.param})` : ''), a.rank || 1, R.advantage(a.name)?.summary || '']);
   rows.push([]);
+  rows.push(...styleRows(s));
   rows.push(['SKILLS', 'Ranks', 'Bonus']);
   for (const k of s.skills) rows.push([k.label, k.ranks, sign(k.bonus)]);
   rows.push([]);
@@ -324,6 +339,7 @@ export function statBlockRows(ch, R) {
   rows.push(['Advantages', c.advantages, '']);
   rows.push(['Skills', c.skills, `${c.skillRanks} ranks`]);
   rows.push(['Defenses', c.defenses, '']);
+  if (c.styles) rows.push(['Fighting styles', c.styles, 'Tiers, stances, weapon elements, style extras and flaws, maneuvers']);
   rows.push(['Total', c.total, ch.advancement ? `of ${c.budget} (starting ${ch.advancement.startPoints} + earned)` : `of ${c.budget} (PL ${ch.pl} x 15)`]);
   rows.push([]);
   if (ch.advancement) {
@@ -462,6 +478,8 @@ export function templateCells(ch, R) {
   });
   const notes = [`Made with DCUGen. Seed: ${ch.seed || 'custom'}. See the "Full Stat Block" sheet for every detail.`];
   if (s.advantages.length > 20) notes.push(`More advantages: ${s.advantages.slice(20).map((a) => a.label).join(', ')}.`);
+  const fighting = styleTextLines(ch, R);
+  if (fighting.length) notes.push(`Fighting styles: ${fighting.join(' ')}`);
   if (ch.notes) notes.push(ch.notes);
   notes.forEach((n, i) => put(`X${147 + i * 2}`, n));
   return cells;

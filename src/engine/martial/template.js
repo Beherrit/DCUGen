@@ -33,13 +33,20 @@ function buyAdvantages(ch, R, entry, def) {
   }
 }
 
+/** A maneuver item from a style's list as the arguments for addManeuver (null for the plain attacks every style has). */
+export function listedManeuver(R, it) {
+  if (GENERIC_BASIC.test(it.name)) return null;
+  const m = maneuverDef(R, it.name, it.detail);
+  if (!m) return null;
+  const price = it.cost != null && it.cost !== maneuverPrice(m, it.rank) ? it.cost : undefined;
+  return { name: it.name, rank: it.rank, detail: it.detail, price, repeat: true };
+}
+
 function buyManeuvers(ch, R, entry, def, withVarying) {
   for (const it of [...(def.basic_maneuvers || []), ...(def.advanced_maneuvers || [])]) {
-    if (GENERIC_BASIC.test(it.name) || (it.cost == null && !withVarying)) continue; // no printed price: the player sets it
-    const m = maneuverDef(R, it.name, it.detail);
-    if (!m) continue;
-    const price = it.cost != null && it.cost !== maneuverPrice(m, it.rank) ? it.cost : undefined;
-    addManeuver(ch, R, entry.name, { name: it.name, rank: it.rank, detail: it.detail, price, repeat: true });
+    if (it.cost == null && !withVarying) continue; // no printed price: the player sets it
+    const args = listedManeuver(R, it);
+    if (args) addManeuver(ch, R, entry.name, args);
   }
 }
 

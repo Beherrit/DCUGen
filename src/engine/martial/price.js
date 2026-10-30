@@ -33,30 +33,30 @@ export function tierRanks(ch) {
   return { initiate: at(0), student: at(1), master: at(2) };
 }
 
-function styleExtrasFlaws(ch, R) {
-  let extras = 0; let flaws = 0;
-  for (const s of stylesOf(ch)) {
-    const def = styleDef(R, s.name);
-    if (!def) continue;
-    flaws += (def.style_flaws || []).reduce((t, f) => t + (f.cost || 0), 0);
-    if (TIERS.indexOf(s.tier) >= 1) extras += (def.style_extras || []).reduce((t, e) => t + (e.cost || 0), 0);
-  }
-  return { extras, flaws };
-}
-
-/** The style costs that are not ordinary skills, advantages or powers, part by part. */
-export function styleCostParts(ch, R) {
-  const styles = stylesOf(ch);
-  const ranks = tierRanks(ch);
-  const tiers = ranks.initiate + ranks.student + ranks.master;
-  const stances = styles.filter((s) => s.stances).length;
-  const elements = styles.reduce((t, s) => t + (s.weaponElements || []).length, 0);
-  const externals = styles.reduce((t, s) => t + (s.externals || []).reduce((u, a) => u + (a.rank || 1), 0), 0);
-  const { extras, flaws } = styleExtrasFlaws(ch, R);
+/** What one style costs apart from its skills, advantages and maneuvers, part by part. */
+export function styleParts(s, R) {
+  const def = styleDef(R, s.name);
+  const t = TIERS.indexOf(s.tier);
+  const tiers = t + 1; // Initiate 1, Student 2, Master 3
+  const stances = s.stances ? 1 : 0;
+  const elements = (s.weaponElements || []).length;
+  const externals = (s.externals || []).reduce((u, a) => u + (a.rank || 1), 0);
+  const flaws = (def?.style_flaws || []).reduce((n, f) => n + (f.cost || 0), 0);
+  const extras = t >= 1 ? (def?.style_extras || []).reduce((n, e) => n + (e.cost || 0), 0) : 0;
   return { tiers, stances, elements, externals, extras, flaws, total: tiers + stances + elements + externals + extras + flaws };
 }
 
-/** Power points spent on maneuver powers. */
-export function maneuverPoints(ch, R) {
-  return (ch.powers || []).filter((p) => p.maneuver).reduce((t, p) => t + maneuverPowerCost(p, R), 0);
+/** The style costs that are not ordinary skills, advantages or powers, added up over every style. */
+export function styleCostParts(ch, R) {
+  const sum = { tiers: 0, stances: 0, elements: 0, externals: 0, extras: 0, flaws: 0, total: 0 };
+  for (const s of stylesOf(ch)) {
+    const p = styleParts(s, R);
+    for (const k of Object.keys(sum)) sum[k] += p[k];
+  }
+  return sum;
+}
+
+/** Power points spent on maneuver powers (of one style when a name is given). */
+export function maneuverPoints(ch, R, styleName) {
+  return (ch.powers || []).filter((p) => p.maneuver && (!styleName || p.style === styleName)).reduce((t, p) => t + maneuverPowerCost(p, R), 0);
 }

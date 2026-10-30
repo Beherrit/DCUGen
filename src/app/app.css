@@ -2469,3 +2469,40 @@ html.read-color .power-about { font-style: normal; }
 .bt-rail-tab.on { background: var(--accent); color: var(--accent-ink); }
 .bt-rail-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
 .bt-rail-pane { display: grid; gap: 8px; align-content: start; }
+
+/* Fighting styles (Martial Arts 3e) on the sheet, the play view and the Rules tab */
+.fs-card { padding: 8px 10px; margin: 8px 0; border: 1px solid var(--line); border-left: 3px solid var(--hero, var(--ink-3)); border-radius: 0 6px 6px 0; background: var(--surface-2); display: grid; gap: 6px; min-width: 0; }
+.fs-head { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.fs-name { font-size: 16px; }
+.fs-pts { margin-left: auto; font: 600 12px/1 var(--font-label); color: var(--ink-3); }
+.fs-head .fs-pts + .x { margin-left: 0; }
+.fs-sum, .fs-costs, .fs-ef { margin: 0; font-size: 13.5px; overflow-wrap: anywhere; }
+.fs-none { margin: 0; font-size: 13px; color: var(--ink-3); }
+.fs-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.fs-check { display: inline-flex; align-items: center; gap: 4px; font-size: 13.5px; }
+.fs-checks { display: flex; gap: 4px 14px; flex-wrap: wrap; }
+.fs-tier-text { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--ink-3); }
+.fs-stances { margin: 0; padding-left: 18px; font-size: 13.5px; display: grid; gap: 3px; }
+.fs-stances li { overflow-wrap: anywhere; }
+.fs-mans { display: grid; gap: 6px; }
+.fs-man { padding: 4px 8px; border-left: 2px solid var(--line); min-width: 0; }
+.fs-man-head { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 14px; }
+.fs-man-line { font-size: 13px; color: var(--ink-2); overflow-wrap: anywhere; }
+.fs-man-sum { font-size: 12.5px; color: var(--ink-3); overflow-wrap: anywhere; }
+.fs-add-man select { min-width: 0; max-width: 100%; }
+.fs-add-man .fs-rank { flex: 0 0 64px; }
+.fs-price { flex: 0 0 auto; align-self: center; font-size: 13px; color: var(--ink-3); }
+.fs-add { margin-top: 8px; }
+.fs-add > summary { cursor: pointer; font-weight: 600; }
+.fs-list { max-height: 360px; overflow: auto; margin-top: 6px; display: grid; gap: 8px; }
+.fs-group h4 { margin: 4px 0; font: 700 12px/1.2 var(--font-label); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.fs-pick { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 8px; width: 100%; text-align: left; padding: 6px 8px; margin-bottom: 4px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); cursor: pointer; }
+.fs-pick:hover { border-color: var(--ink-3); }
+.fs-pick small { grid-column: 1 / -1; color: var(--ink-3); font-size: 12.5px; }
+.fs-stance-pick { display: grid; gap: 6px; }
+.fs-stance-btn { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 8px; text-align: left; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); cursor: pointer; }
+.fs-stance-btn[aria-pressed="true"] { border-color: var(--hero, var(--ink)); box-shadow: inset 3px 0 0 var(--hero, var(--ink)); }
+.fs-stance-btn small { grid-column: 1 / -1; color: var(--ink-3); font-size: 12.5px; }
+.fs-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.fs-table th, .fs-table td { padding: 4px 6px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+@media (max-width: 640px) { .fs-list { max-height: 300px; } .fs-pts { margin-left: 0; } }

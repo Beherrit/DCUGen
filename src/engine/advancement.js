@@ -13,6 +13,7 @@
 
 import { ABILITIES, BUYABLE_DEFENSES, PP_PER_PL } from './rules.js';
 import { costBreakdown, powerCost, deviceCost } from './costs.js';
+import { styleParts } from './martial/price.js';
 
 const TRAIT_KEYS = ['pl', 'abilities', 'defenses', 'skills', 'advantages', 'powers', 'devices', 'equipment'];
 
@@ -116,6 +117,18 @@ export function diffTraits(before, after, R) {
     else if (now !== old) push(`${label(a)} ${old} → ${now}`, now - old);
   }
   for (const [k, a] of ba) if (!aa.has(k)) push(`Removed advantage: ${label(a)}`, -(a.rank || 1));
+
+  // Fighting styles: what learning one, or moving up a tier, costs apart from its skills and maneuvers (those show as skills and powers).
+  const styleMap = (c) => new Map((Array.isArray(c.styles) ? c.styles : []).map((st) => [st.name, st]));
+  const bst = styleMap(before);
+  const ast = styleMap(after);
+  const stylePts = (st) => safe(() => styleParts(st, R).total);
+  for (const [name, st] of ast) {
+    const old = bst.get(name);
+    if (!old) push(`New fighting style: ${name} (${st.tier})`, stylePts(st));
+    else if (stylePts(old) !== stylePts(st)) push(`${name} style: ${old.tier} → ${st.tier}${old.stances !== st.stances ? (st.stances ? ', stances added' : ', stances dropped') : ''}`, stylePts(st) - stylePts(old));
+  }
+  for (const [name, st] of bst) if (!ast.has(name)) push(`Removed fighting style: ${name}`, -stylePts(st));
 
   const pcost = (p) => safe(() => powerCost(p, R));
   const powMap = (c) => new Map((c.powers || []).map((p, i) => [p.name || `power ${i + 1}`, p]));

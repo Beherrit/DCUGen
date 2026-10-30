@@ -61,8 +61,8 @@ const inflate = async (bytes) => new TextDecoder().decode(await pipe(bytes, new 
 
 /** The parts of a character that a key must reproduce exactly. */
 function fingerprint(ch) {
-  const pick = (({ pl, abilities, defenses, skills, advantages, powers, devices, equipment, identity, alignment, complications, notes, forms, activeForm, companions }) =>
-    ({ pl, abilities, defenses, skills, advantages, powers, devices, equipment, identity, alignment, complications, notes, forms, activeForm, companions }))(ch);
+  const pick = (({ pl, abilities, defenses, skills, advantages, powers, devices, equipment, styles, identity, alignment, complications, notes, forms, activeForm, companions }) =>
+    ({ pl, abilities, defenses, skills, advantages, powers, devices, equipment, styles, identity, alignment, complications, notes, forms, activeForm, companions }))(ch);
   return JSON.stringify([pick, ch.bio?.summary || null, ch.bio?.timeline?.length || 0, ch.journal?.entries?.length || 0]);
 }
 
