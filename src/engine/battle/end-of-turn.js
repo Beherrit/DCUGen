@@ -58,7 +58,7 @@ export function endOfTurn(b, c, rng, R = null) {
     if (breakout != null) snareFeedback(b, c, lead, rng); // Feedback (DCA 135): hitting the snare hurts whoever made it
     if (ok) {
       c.conditions = c.conditions.filter((x) => x.source !== src);
-      if (c.out && ['affliction', 'asleep', 'paralyzed'].includes(c.outReason)) { c.out = false; c.outReason = null; }
+      if (c.out && ['affliction', 'asleep', 'paralyzed', 'transformed'].includes(c.outReason)) { c.out = false; c.outReason = null; }
       log(b, { kind: 'recover', actor: c.id, text: `${c.name} shakes off ${lead.label || 'the effect'}: ${how} d20 ${roll} ${sign(resist)} = ${total} vs DC ${lead.dc}${critNote(r)} — recovered.`, dice });
     } else if (lead.progressive && lead.degree < (lead.maxDegree || 3)) {
       const deg = lead.degree + 1;

@@ -9,8 +9,8 @@
   {
     "kind": "effect",
     "name": "Alternate Form",
-    "status": "none",
-    "note": "Alternate forms are not switched in a fight.",
+    "status": "partial",
+    "note": "A character with other builds (a form is a whole build: Forms in the sheet) and an Alternate Form power takes the form that fights best against the foes now, scored as the harm its best attack does less the harm it takes, when the new build beats the current one by enough. The action is the Activation flaw's: a move action (the standard action stays for the attack) or a standard action (a turn option beside the attack). The fight state stays; a fight starts in the form it was set up in. Not modelled: the Heroic form's Activation on every power, and the effects of a form that is not a build of the same character.",
     "source": "DCA 88"
   },
   {
@@ -240,8 +240,8 @@
   {
     "kind": "effect",
     "name": "Mimic",
-    "status": "none",
-    "note": "Copying traits from a target is not simulated.",
+    "status": "partial",
+    "note": "A standard action scans a foe and copies its best attack at the lower of the foe's rank and what rank x 5 points buy at the effect's price per rank, made with the mimic's own attack check; a new scan replaces the copy, and it lasts while the mimic can keep it up. A Mimic limited to touch needs the foe in reach. The AI scans when the copy beats its own best attack by enough. Not modelled: copying defenses, abilities, skills and advantages, mixing traits from several foes, and the touch attack roll.",
     "source": "DCA 107"
   },
   {
@@ -261,8 +261,8 @@
   {
     "kind": "effect",
     "name": "Morph",
-    "status": "n/a",
-    "note": "Changing appearance has no combat effect here.",
+    "status": "partial",
+    "note": "Only the Metamorph extra matters: a character with other builds and a Morph with Metamorph changes build as a free action (once a round), as Alternate Form does. The disguise itself has no combat effect here.",
     "source": "DCA 108"
   },
   {
@@ -331,8 +331,8 @@
   {
     "kind": "effect",
     "name": "Shapeshift",
-    "status": "none",
-    "note": "Changing form in a fight is not simulated.",
+    "status": "partial",
+    "note": "A move action takes a shape worth rank x 5 points at the book's prices (a hulking brute with Strength, an armored hide with Toughness, a lithe body with Dodge and Parry, or claws with Damage), whichever scores best against the foes and beats the current one by enough. house rule: the shapes are that fixed menu, since the book leaves the forms to the player. The shape ends when the shapeshifter cannot keep it up. Not modelled: redistributing points spent on its own physical traits, skills and advantages of a form.",
     "source": "DCA 116"
   },
   {
@@ -408,8 +408,8 @@
   {
     "kind": "effect",
     "name": "Transform",
-    "status": "none",
-    "note": "Transformations are not simulated.",
+    "status": "partial",
+    "note": "Two uses. On an enemy's weapon or device: a touch (close attack check against Parry), then the item's Dodge check (+5 if held) against 10 + rank; a failure takes every attack from the item for the fight. On a being with no Stamina (a construct or robot): house rule, the GM option in the book that lets Transform act like an Affliction on non-living creatures with Will: a Will check against 10 + rank for impaired, dazed and hindered, then Transformed (out of the fight until it recovers or the transformer lets go). Living beings cannot be transformed. Not modelled: transforming scenery (a wall into water), an item coming back when the effect ends, and the cost bands of what changes into what.",
     "source": "DCA 120"
   },
   {
@@ -1730,8 +1730,9 @@
   {
     "kind": "condition",
     "name": "Transformed",
-    "status": "none",
-    "note": "Recognized in Affliction text but has no effect."
+    "status": "partial",
+    "note": "The third degree of a Transform on a being with no Stamina: out of the fight until it recovers (a Will check each turn) or the transformer can no longer keep it up. An Affliction that names Transformed does little beyond what its other conditions do.",
+    "source": "DCA 120"
   },
   {
     "kind": "condition",

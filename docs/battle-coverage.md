@@ -10,23 +10,23 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 
 | Kind | Total | Full | Partial | None | n/a | Covered |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| effect | 63 | 6 | 37 | 12 | 8 | 78% |
+| effect | 63 | 6 | 42 | 8 | 7 | 86% |
 | extra | 50 | 19 | 20 | 3 | 8 | 93% |
 | flaw | 41 | 11 | 22 | 2 | 6 | 94% |
 | advantage | 75 | 30 | 22 | 0 | 23 | 100% |
 | skill | 16 | 8 | 0 | 2 | 6 | 80% |
 | action | 20 | 10 | 10 | 0 | 0 | 100% |
 | maneuver | 12 | 7 | 4 | 1 | 0 | 92% |
-| condition | 30 | 18 | 10 | 1 | 1 | 97% |
+| condition | 30 | 18 | 11 | 0 | 1 | 100% |
 | rule | 39 | 19 | 17 | 1 | 2 | 97% |
-| all | 346 | 128 | 142 | 22 | 54 | 92% |
+| all | 346 | 128 | 148 | 17 | 53 | 94% |
 
 ## Effects
 
 | Name | Status | Note | Source |
 | --- | --- | --- | --- |
 | Affliction | partial | Three degrees, Cumulative, Progressive, Extra Condition, Limited Degree and end-of-turn recovery work; Deaf, Transformed and other minor conditions do little and durations are ignored. | DCA 87 |
-| Alternate Form | none | Alternate forms are not switched in a fight. | DCA 88 |
+| Alternate Form | partial | A character with other builds (a form is a whole build: Forms in the sheet) and an Alternate Form power takes the form that fights best against the foes now, scored as the harm its best attack does less the harm it takes, when the new build beats the current one by enough. The action is the Activation flaw's: a move action (the standard action stays for the attack) or a standard action (a turn option beside the attack). The fight state stays; a fight starts in the form it was set up in. Not modelled: the Heroic form's Activation on every power, and the effects of a form that is not a build of the same character. | DCA 88 |
 | Blast | full | Fights as Damage at range (DCA 89). | DCA 89 |
 | Burrowing | none | Burrowing is not counted as movement and no one goes underground. | DCA 89 |
 | Communication | n/a | Communication has no effect on a fight. | DCA 89 |
@@ -59,10 +59,10 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Luck Control | partial | Each rank buys one capability (named in the text, else the first ranks of grant, bestow, negate, force): grant an ally a re-roll, bestow a luck point (once per ally per round), negate an enemy's re-roll of an attack, or force an enemy hit or passed resistance check to be re-rolled at the worse (the target may spend a point to avoid it). Each is a reaction, once a round per controller, paid with Luck then hero points; a power whose text says 'against me' acts only on rolls aimed at its owner. Side Effect, Resistible and Ranged are not simulated. | DCA 106 |
 | Magic | partial | Fights as Damage at range; the flexible casting that Magic allows is not simulated. Every Magic effect, and every power of a magic-source character, carries the magic descriptor (DCA 105), so an Immunity to magic stops it. | DCA 105 |
 | Mental Blast | full | Perception range Damage resisted by Will, with no attack roll. | DCA 107 |
-| Mimic | none | Copying traits from a target is not simulated. | DCA 107 |
+| Mimic | partial | A standard action scans a foe and copies its best attack at the lower of the foe's rank and what rank x 5 points buy at the effect's price per rank, made with the mimic's own attack check; a new scan replaces the copy, and it lasts while the mimic can keep it up. A Mimic limited to touch needs the foe in reach. The AI scans when the copy beats its own best attack by enough. Not modelled: copying defenses, abilities, skills and advantages, mixing traits from several foes, and the touch attack roll. | DCA 107 |
 | Mind Control | partial | Dazed, compelled and controlled work (a controlled fighter attacks its own side); the controller's other orders are not. | DCA 107 |
 | Mind Reading | n/a | Reading minds has no combat effect here. | DCA 106 |
-| Morph | n/a | Changing appearance has no combat effect here. | DCA 108 |
+| Morph | partial | Only the Metamorph extra matters: a character with other builds and a Morph with Metamorph changes build as a free action (once a round), as Alternate Form does. The disguise itself has no combat effect here. | DCA 108 |
 | Move Object | partial | Two attacks from the rank (held to the power level limit: attack bonus + rank at most twice the PL, which the build does not check for a Control effect): thrown objects (Damage at the rank, plus a rank for each Throwing Mastery and Improvised Weapon rank, a ranged attack check against Dodge, or none when the effect is Perception Ranged) and seizing a target (a Snare of the rank, broken out of with Damage). house rule: something is always at hand to throw. Not modelled: disarm and trip with the effect, throwing a seized fighter, holding objects still, Precise and Subtle. | DCA 108 |
 | Movement | none | Special movement types are not counted. | DCA 109 |
 | Nullify | partial | Opposed check against sustained protection only; other powers cannot be nullified. The AI values it by the gain for the allies who strike while the protection is down. | DCA 111 |
@@ -72,7 +72,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Regeneration | partial | Recovers one damage condition per round using a simplified rank count; the book's recovery timings are not followed. With Affects Others it is lent to an ally by touch and counts as a heal. | DCA 112 |
 | Remote Sensing | n/a | Sensing from afar has no combat effect here. | DCA 112 |
 | Senses | partial | Only senses that see through concealment (radar, tremor, danger sense and the like) are used. | DCA 113 |
-| Shapeshift | none | Changing form in a fight is not simulated. | DCA 116 |
+| Shapeshift | partial | A move action takes a shape worth rank x 5 points at the book's prices (a hulking brute with Strength, an armored hide with Toughness, a lithe body with Dodge and Parry, or claws with Damage), whichever scores best against the foes and beats the current one by enough. house rule: the shapes are that fixed menu, since the book leaves the forms to the player. The shape ends when the shapeshifter cannot keep it up. Not modelled: redistributing points spent on its own physical traits, skills and advantages of a form. | DCA 116 |
 | Shrinking | partial | Strength, Dodge and Parry change; Stealth and small-size effects do not. | DCA 117 |
 | Sleep | partial | Fought as Fortitude Affliction (fatigued, exhausted, asleep); waking from noise or damage is not simulated. | DCA 116 |
 | Snare | partial | Hindered and vulnerable, then defenseless and immobile, resisted by Dodge; escaping by Strength is not simulated. | DCA 117 |
@@ -83,7 +83,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Super-Speed | none | Not counted as movement, and the Improved Initiative it grants is not applied. | DCA 119 |
 | Swimming | partial | Counts as movement speed; water is not in the arena. | DCA 119 |
 | Teleport | partial | Counts as movement speed; Teleport Attack and ranged placement are not simulated. | DCA 120 |
-| Transform | none | Transformations are not simulated. | DCA 120 |
+| Transform | partial | Two uses. On an enemy's weapon or device: a touch (close attack check against Parry), then the item's Dodge check (+5 if held) against 10 + rank; a failure takes every attack from the item for the fight. On a being with no Stamina (a construct or robot): house rule, the GM option in the book that lets Transform act like an Affliction on non-living creatures with Will: a Will check against 10 + rank for impaired, dazed and hindered, then Transformed (out of the fight until it recovers or the transformer lets go). Living beings cannot be transformed. Not modelled: transforming scenery (a wall into water), an item coming back when the effect ends, and the cost bands of what changes into what. | DCA 120 |
 | Variable | partial | Only Omni-power fighters reconfigure, into four fixed attacks sized to half the points. | DCA 121 |
 | Weaken | partial | Weakens one trait read from the power's detail (Toughness, Strength, Dodge, Parry, Will, Fortitude, Fighting, Dexterity, an attack power by a word of its name, or all defenses) and returns a rank each round; the book's recovery rate differs. The AI values it by what the loss does to the team's next attacks or to the enemy's threat. | DCA 122 |
 | Communal | none | Martial Arts (3e) effect; not simulated in fights yet. | MA 81 |
@@ -363,7 +363,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Staggered | full | Dazed and hindered until recovered; a second staggering result incapacitates. |  |
 | Stunned | full | Cannot act; a hero point can end it. |  |
 | Surprised | full | Stunned and vulnerable until the surprise round ends. |  |
-| Transformed | none | Recognized in Affliction text but has no effect. |  |
+| Transformed | partial | The third degree of a Transform on a being with no Stamina: out of the fight until it recovers (a Will check each turn) or the transformer can no longer keep it up. An Affliction that names Transformed does little beyond what its other conditions do. | DCA 120 |
 | Unaware | partial | Cannot act; the unaware fighter is not treated as defenseless. |  |
 | Vulnerable | full | Active defenses are halved, rounded up. |  |
 | Weakened | partial | Weaken costs ranks that return one per round; the Weakened condition from other sources is not tracked. |  |

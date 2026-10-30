@@ -68,7 +68,7 @@ export function conditionLabels(c) {
   if (c.fled) return [c.escaped ? 'Got away' : 'Fled'];
   if (c.dead) return ['Dead'];
   if (c.dying) return ['Dying'];
-  if (c.out) return [c.outReason === 'minion' ? 'Down' : c.outReason === 'asleep' ? 'Asleep' : c.outReason === 'paralyzed' ? 'Paralyzed' : 'Incapacitated'];
+  if (c.out) return [c.outReason === 'minion' ? 'Down' : c.outReason === 'asleep' ? 'Asleep' : c.outReason === 'paralyzed' ? 'Paralyzed' : c.outReason === 'transformed' ? 'Transformed' : 'Incapacitated'];
   const basic = activeConditions(c);
   const named = new Set();
   if (c.staggered && !c.out) named.add('Staggered');

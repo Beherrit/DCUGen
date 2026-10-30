@@ -17,6 +17,9 @@ import { summonSkip, summonUpkeep } from './summon-run.js';
 import { createUpkeep, withoutCreated } from './create.js';
 import { environmentUpkeep, environmentRound } from './environment.js';
 import { illusionUpkeep } from './illusion.js';
+import { shapeUpkeep } from './shapeshift.js';
+import { transformUpkeep } from './transform.js';
+import { restoreStartForm } from './form-swap.js';
 
 export function createBattle({ seed = 'battle', name = 'Battle' } = {}) {
   const b = { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, enclosed: false, ambush: null, teamTactics: {}, vip: {}, withdrawRounds: {}, maxRounds: MAX_ROUNDS, shootThrough: false, knockback: false, scale: DEFAULT_SCALE }, cover: [], traps: [], lastEvent: 0 };
@@ -45,7 +48,7 @@ export function startBattle(b, R) {
   b.env = []; // and so are Environment effects (environment.js)
   resetScenery(b);
   b.traps = []; // Triggered effects set in an earlier run are gone (trap.js)
-  for (const c of b.combatants) { resetCombatant(c); rebuildCombatant(c, R); if (c.carry) { c.bruises = c.carry.bruises; c.fatigue = c.carry.fatigue; } }
+  for (const c of b.combatants) { restoreStartForm(R, c); resetCombatant(c); rebuildCombatant(c, R); if (c.carry) { c.bruises = c.carry.bruises; c.fatigue = c.carry.fatigue; } }
   placeAll(b);
   const rng = rngFor(b);
   for (const c of b.combatants) {
@@ -115,6 +118,8 @@ function checkOver(b) {
   createUpkeep(b); // so do created objects (create.js)
   environmentUpkeep(b); // an Environment (environment.js)
   illusionUpkeep(b); // and an Illusion (illusion.js)
+  shapeUpkeep(b); // and a Shapeshift form or a Mimic copy (shapeshift.js)
+  transformUpkeep(b); // and a Transform on a being (transform.js)
   if (withdrawOver(b)) return true;
   const teams = new Set(alive(b).map((c) => c.team));
   if (teams.size <= 1 && !deathsPending(b)) { // a lethal fight goes on until the dying have died or steadied

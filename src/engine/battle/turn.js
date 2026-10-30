@@ -33,6 +33,7 @@ import { runHoming, freeHeld, concentrateHeld } from './extra-run.js';
 import { issueCommand } from './summon-run.js';
 import { deceivedTurn } from './illusion-turn.js';
 import { refreshEnvironment } from './environment.js';
+import { formTurn } from './form-turn.js';
 
 const isHurt = (c) => c.staggered || c.bruises >= 2;
 
@@ -60,6 +61,7 @@ export function takeTurn(b, R, c, rng) {
   if (!enemies.length) { steadyIdle(b, R, c, mode, rng); return; } // nobody left to fight: a medic tends a dying teammate (stabilize.js)
   if (losesNerve(b, c, enemies, rng)) return;
   if (mode === 'full' && issueCommand(b, c)) mode = 'standard'; // Command, a move action: orders to minions still waiting for them (summon-run.js)
+  mode = formTurn(b, R, c, enemies, mode); // a free or move-action change of build: Alternate Form, Metamorph, Shapeshift (form-turn.js)
   insubTurn(b, c, enemies); // a free action: change form, and flow out of a hold
   uncontrolledFire(b, R, c, enemies, rng); // an Uncontrolled power may go off by itself
   runHoming(b, R, c, rng); // a Homing attack that missed tries again, as a free action (extra-run.js)

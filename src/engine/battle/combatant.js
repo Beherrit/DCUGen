@@ -21,6 +21,8 @@ import { flawsOf, shapeAttack, freshFlawState } from './flaws.js';
 import { extrasOf } from './extras.js';
 import { formAttack } from './attack-form.js';
 import { powerAttacks } from './power-attacks.js';
+import { applyMods } from './mods.js';
+import { activeForm } from '../forms.js';
 
 export function effectWeights(attack) {
   if (attack.effect === 'Damage') return [0, 1, 2.3, 3.8, 6.5];
@@ -137,6 +139,7 @@ export function makeCombatant(R, ch, opts = {}) {
     color: ch.theme?.color || '#6b7480',
     ch,
     pl: ch.pl || 10,
+    startForm: activeForm(ch), // the build the fight starts in; Alternate Form can change it (form-swap.js)
     minion: !!ch.minion || style === 'minion',
     style, tactics: opts.tactics || 'auto',
     heroPoints: opts.heroPoints ?? (ch.minion || style === 'minion' || style === 'beast' ? 0 : 1),
@@ -184,6 +187,7 @@ export function resetCombatant(c) {
     deflectRound: null,    // the round a Reaction deflect was last used
     luckCtlRound: null,    // the round a Luck Control reaction was last used (luck.js)
     bestowedRound: null,   // the round an ally last bestowed a luck point on this fighter
+    mods: [],              // temporary changes to the traits: a Shapeshift form, a Mimic copy, absorbed energy (mods.js)
     deceived: null,        // { by, victim, rank, name } while an Illusion has this fighter taking a teammate for a foe (illusion.js)
     slowed: 0, lit: 0, envChecks: 0, // ranks of speed lost and the light on it from an Environment, and the heat or cold checks made (environment.js)
     summon: null,          // set on a summoned minion or duplicate: { by, power, since, needsOrders, commanded, ... } (summon.js)
@@ -229,6 +233,7 @@ export function rebuildCombatant(c, R, d = null) {
   c.gifts = giftsOf(c.ch);               // traits this fighter can lend to an ally
   addOmniStunts(c, d);
   applyGrants(c);
+  applyMods(c);                          // a Shapeshift form, a Mimic copy or absorbed energy still in force (mods.js)
   c.roles = detectRoles(c);
   return c;
 }
