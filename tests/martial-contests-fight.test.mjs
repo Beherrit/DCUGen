@@ -143,14 +143,19 @@ test('Crane stance, which cannot move, is no good to a fighter who has to walk t
   if (crane) assert.ok(crane.gain <= g.margin, 'Crane does not pay when the foe is far');
 });
 
-test('the turn uses a free action to change stance from Neutral, and takes the move action to change from another', () => {
+test('the turn takes the stance the weighing found best, as a free action from Neutral and a move action from another', () => {
   const { b, me, foe } = pair({ style: 'Savate', maneuvers: ['Jab'] });
-  const mode = stanceTurn(b, R, me, [foe], 'full', steady);
-  assert.equal(mode, 'full', 'from Neutral it is free');
-  assert.notEqual(stanceName(me), 'Neutral', 'a hand fighter next to its foe takes a stance');
-  const from = stanceName(me);
-  put(me, from === 'Pugilist' ? 'Kicker' : 'Pugilist', 'Savate'); // now it would have to pay a move action to change back
-  assert.ok(['full', 'standard'].includes(stanceTurn(b, R, me, [foe], 'full', steady)));
+  const { margin, scores } = scoreStances(b, me, [foe], false);
+  const best = scores.filter((s) => s.gain > margin).sort((x, y) => y.gain - x.gain)[0];
+  assert.ok(best, 'a hand fighter next to its foe has a stance worth taking');
+  const mode = stanceTurn(b, R, me, [foe], 'full', dice(15));
+  assert.equal(mode, 'full', 'from Neutral it is a free action');
+  assert.equal(stanceName(me), best.choice.name);
+  assert.match(texts(b).at(-1), new RegExp(`shifts into ${best.choice.name} stance`));
+  put(me, best.choice.name === 'Kicker' ? 'Pugilist' : 'Kicker', 'Savate'); // a stance that is worse here: changing costs the move action
+  const left = stanceTurn(b, R, me, [foe], 'full', dice(15));
+  assert.equal(left, 'standard', 'a change from another stance spends the move action');
+  assert.equal(stanceName(me), best.choice.name, 'back to the best one');
 });
 
 test('a stunned fighter does not take a stance that would be broken at once', () => {
