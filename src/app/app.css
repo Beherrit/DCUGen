@@ -2462,3 +2462,10 @@ html.read-color .power-about { font-style: normal; }
 .tn-checks { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px 18px; }
 .bt-tactic-row { display: grid; gap: 2px; }
 .bt-tactic-blurb { margin: 0 0 6px; }
+/* Battle Room setup rail in three tabs: Fighters, Teams, Arena */
+.bt-rail-tabs { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; margin: 2px 0 8px; }
+.bt-rail-tab { border: 0; background: var(--surface); padding: 9px 6px; cursor: pointer; font: 700 13px/1 var(--font-label); color: var(--ink-2); }
+.bt-rail-tab + .bt-rail-tab { border-left: 1px solid var(--line); }
+.bt-rail-tab.on { background: var(--accent); color: var(--accent-ink); }
+.bt-rail-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
+.bt-rail-pane { display: grid; gap: 8px; align-content: start; }

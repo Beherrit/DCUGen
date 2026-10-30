@@ -32,6 +32,7 @@ test('the board is a 12 by 12 grid with a token for each fighter; picking one sh
 
 test('the scale picker changes the square size, and click-to-place drops cover on a square', async ({ page }) => {
   await setUp(page);
+  await page.locator('#bt-rail-arena').click(); // the scale picker lives in the Arena tab of the setup rail
   await page.locator('#bt-scale-street').click();
   await expect(page.locator('svg.bt-grid')).toHaveAttribute('aria-label', /squares of 5 ft/);
   await page.locator('#bt-scale-district').click();

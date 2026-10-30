@@ -8,6 +8,7 @@ import { catalogEntries } from '../engine/workshop.js';
 import { catalogToCharacter } from '../engine/catalog.js';
 import { placeAll } from '../engine/battle.js';
 import { tacticPanel } from './battle-tactics.js';
+import { railTabs } from './battle-rail.js';
 import { sceneryPanel, fitCover } from './battle-cover.js';
 import { ALL_TEAMS, teamCount, visibleTeams } from './battle-teams.js';
 
@@ -112,8 +113,7 @@ export function addPanel(cx) {
   };
   q.addEventListener('input', drawBeasts);
   drawBeasts();
-  return h('aside', { class: 'rail bt-rail', 'aria-label': 'Add fighters' },
-    h('h2', null, 'Pick the fighters'),
+  const fighters = [
     h('p', { class: 'hint', style: { margin: 0 } }, 'Press a team letter on a row to put them on that side.'),
     h('div', { class: 'label' }, 'Quick starts'),
     h('div', { class: 'bt-quicks' }, quickStarts(cx)),
@@ -121,14 +121,16 @@ export function addPanel(cx) {
     mineQ, mineList,
     h('div', { class: 'bt-list-head' }, h('span', { class: 'label' }, 'Bestiary'), sortSelect('battle-beasts', drawBeasts, { fallback: 'plAsc', modes: ['name', 'plAsc', 'plDesc'], id: 'bt-beast-sort' })),
     q, beastList,
-    h('div', { class: 'add-row', style: { alignItems: 'center' } },
-      h('label', { class: 'bt-copies', title: 'Add several of the same (a squad of minions)' }, 'Copies ×', copies),
-      h('label', { class: 'bt-copies', title: 'Teams A to D start on the four edges of the grid, E to H in its corners' }, 'Teams ',
+    h('div', { class: 'add-row', style: { alignItems: 'center' } }, h('label', { class: 'bt-copies', title: 'Add several of the same (a squad of minions)' }, 'Copies ×', copies), h('button', { class: 'btn sm', type: 'button', onClick: () => hooks.goBestiary?.() }, 'Open the Bestiary')),
+  ];
+  const teamsPane = [
+    h('div', { class: 'add-row', style: { alignItems: 'center' } }, h('label', { class: 'bt-copies', title: 'Teams A to D start on the four edges of the grid, E to H in its corners' }, 'Teams ',
         h('select', { id: 'bt-team-count', 'aria-label': 'Number of teams', onChange: (e) => { ui.teamCount = Number(e.target.value); render(); } },
-          ALL_TEAMS.slice(1).map((_, i) => i + 2).map((n) => h('option', { value: n, selected: n === teamCount(battle, ui) }, String(n))))),
-      h('label', { class: 'bt-copies', title: 'A walled room 60 ft across in 5 ft squares: the teams start on opposite walls and nobody gets far away' }, h('input', { type: 'checkbox', id: 'bt-enclosed', checked: !!battle.options.enclosed, onChange: (e) => { battle.options.enclosed = e.target.checked; placeAll(battle); fitCover(battle); save(); render(); } }), ' Enclosed space'),
-      ambushPicker(cx)),
+          ALL_TEAMS.slice(1).map((_, i) => i + 2).map((n) => h('option', { value: n, selected: n === teamCount(battle, ui) }, String(n))))), ambushPicker(cx)),
     tacticPanel(cx, rowTeams(cx)),
-    sceneryPanel(cx),
-    h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', type: 'button', onClick: () => hooks.goBestiary?.() }, 'Open the Bestiary')));
+  ];
+  const arena = [h('div', { class: 'add-row', style: { alignItems: 'center' } }, h('label', { class: 'bt-copies', title: 'A walled room 60 ft across in 5 ft squares: the teams start on opposite walls and nobody gets far away' }, h('input', { type: 'checkbox', id: 'bt-enclosed', checked: !!battle.options.enclosed, onChange: (e) => { battle.options.enclosed = e.target.checked; placeAll(battle); fitCover(battle); save(); render(); } }), ' Enclosed space')), sceneryPanel(cx)];
+  return h('aside', { class: 'rail bt-rail', 'aria-label': 'Set up the fight' },
+    h('h2', null, 'Set up the fight'),
+    railTabs(cx, { fighters, teams: teamsPane, arena }));
 }
