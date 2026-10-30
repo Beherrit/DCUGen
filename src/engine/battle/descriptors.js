@@ -84,10 +84,17 @@ export function variants(descriptors, size) {
   return out;
 }
 
+// Descriptors that are one and the same for Immunity: a heat ray is fire, so Immunity to fire damage stops it.
+// house rule: the book lists fire among the common descriptors and never separates heat from it.
+const SAME = { heat: ['fire'], fire: ['heat'] };
+
 /** A descriptor list with its family words added: "fire" is also "energy"; "bludgeoning" is also "physical". */
 export function withFamilies(list) {
   const out = new Set(list);
-  for (const d of list) { const f = familyOf(d); if (f) out.add(f); }
+  for (const d of list) {
+    const f = familyOf(d); if (f) out.add(f);
+    for (const s of SAME[d] || []) out.add(s);
+  }
   return [...out];
 }
 
@@ -171,7 +178,8 @@ function guessPhysical(set, a, p) {
 /** The descriptors to show a player: no family words that repeat a more exact one. */
 export function showDescriptors(list) {
   const l = (list || []).filter((x) => x !== 'variable');
-  const exact = l.filter((x) => x !== 'physical' && x !== 'energy');
+  // the twin a word brings along (a heat ray is also fire) stays out of sight: only the first of a pair is named
+  const exact = l.filter((x, i) => x !== 'physical' && x !== 'energy' && !(SAME[x] || []).some((s) => l.indexOf(s) > -1 && l.indexOf(s) < i));
   return exact.length ? exact : l;
 }
 

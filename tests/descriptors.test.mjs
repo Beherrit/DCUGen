@@ -235,3 +235,11 @@ test('mind reading and need for sleep are not attacks and stop nothing; they sti
   assert.ok(describeImmunities(t).length >= 1);
 });
 
+
+test('heat is fire: Immunity to fire damage stops a heat ray, and a heat immunity stops a fire blast', () => {
+  const ray = attack(user([blast('Searing Ray')]), 'Searing Ray');
+  assert.ok(ray.descriptors.includes('heat') && ray.descriptors.includes('fire'));
+  assert.ok(isImmune(target([immunity('fire damage', 5)]), ray), 'fire damage immunity stops a heat ray');
+  assert.ok(isImmune(target([immunity('heat damage', 5)]), fireDamage()), 'heat damage immunity stops a fire blast');
+  assert.ok(!isImmune(target([immunity('cold damage', 5)]), ray), 'cold immunity does not');
+});

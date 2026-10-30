@@ -171,11 +171,14 @@ export const fearImmune = (t) => !!whole(t, 'fear');
 
 /** The fighter's immunities in plain words, for the Battle Room and the log. */
 export function describeImmunities(c) {
-  const seen = new Set();
-  const out = [];
+  // One line per immunity: "Fortitude effects (no Stamina)" and an Immunity power to Fortitude effects are the same,
+  // and a full immunity outranks a half-effect one to the same thing.
+  const byKey = new Map();
   for (const e of [...(c.immune || []), ...insubEntries(c)]) {
-    const text = `${e.label}${e.half ? ' (half effect)' : ''}`;
-    if (!seen.has(text)) { seen.add(text); out.push(text); }
+    const key = e.label.replace(/ \([^)]*\)$/, '');
+    const had = byKey.get(key);
+    if (!had || (had.half && !e.half)) byKey.set(key, e);
   }
-  return out;
+  return [...byKey.values()].map((e) => `${e.label}${e.half ? ' (half effect)' : ''}`);
 }
+
