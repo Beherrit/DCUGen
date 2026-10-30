@@ -157,3 +157,13 @@ test('characters without styles are unchanged', () => {
   assert.equal(deriveAll(ch, R).attacks.length, 1);
   assert.ok(checkLimits(ch, R).every((i) => i.rule !== 'style'));
 });
+
+test('a style must cost more than its style flaws pay back (MA 134): a bare Initiate of a flawed style is illegal', () => {
+  const flawed = (ch) => checkLimits(ch, R).filter((x) => x.severity === 'error' && /style flaws/.test(x.message));
+  const ch = plain({ abilities: {} });
+  addStyle(ch, R, 'Aikido');
+  assert.ok(styleOf('Aikido').style_flaws.length, 'Aikido has style flaws');
+  assert.equal(flawed(ch).length, 1, 'Initiate alone does not cover the flaws');
+  buyWholeStyle(ch, R, 'Aikido');
+  assert.equal(flawed(ch).length, 0, 'the whole style as listed covers them');
+});

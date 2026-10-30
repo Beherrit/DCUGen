@@ -3,6 +3,7 @@
 
 import { abilityTotals, advantageRank, skillRanks } from '../derive.js';
 import { TIERS, TIER_LABEL, stylesOf, styleDef, maneuverDef } from './lookup.js';
+import { styleParts, maneuverPoints } from './price.js';
 
 /** The damage and attack numbers of a basic maneuver that is plain Strength damage: { plus, mod } or null. */
 export function strengthManeuver(def) {
@@ -28,6 +29,22 @@ export function maneuverOverLimit(ch, R, power) {
   return !!n && n.bonus + n.rank > 2 * ch.pl;
 }
 
+/**
+ * MA 134: the points spent on a style's advantages, maneuvers and the rest must surpass its style flaws, so a style
+ * never costs nothing or pays points back. Counts the tier, stances, weapon elements, extras, outside advantages,
+ * maneuvers, and the skills and advantages the style added. Returns { spent, flaws } when it falls short, else null.
+ */
+export function flawsUncovered(ch, R, s) {
+  const parts = styleParts(s, R);
+  const flaws = -parts.flaws;
+  if (flaws <= 0) return null;
+  const added = s.added || {};
+  const skills = (added.skills || []).reduce((t, k) => t + (k.ranks || 0), 0) / 2;
+  const advantages = (added.advantages || []).reduce((t, a) => t + (a.rank || 1), 0);
+  const spent = parts.total - parts.flaws + maneuverPoints(ch, R, s.name) + skills + advantages;
+  return spent > flaws ? null : { spent, flaws };
+}
+
 export function checkStyleLimits(ch, R, issue) {
   const out = [];
   const abil = abilityTotals(ch, R);
@@ -38,6 +55,8 @@ export function checkStyleLimits(ch, R, issue) {
     seen.add(s.name);
     if (!TIERS.includes(s.tier)) out.push(issue('style', `${s.name}: "${s.tier}" is not a tier (Initiate, Student or Master).`));
     else if (TIERS.indexOf(s.tier) >= 1 && !s.stances) out.push(issue('style', `${s.name}: ${TIER_LABEL[s.tier]} needs the ${s.name} Stances advantage (MA 79).`, 'warning', { source: 'MA 79' }));
+    const flawed = flawsUncovered(ch, R, s);
+    if (flawed) out.push(issue('style', `${s.name}: ${flawed.spent} pp spent on the style does not surpass its ${flawed.flaws} pp of style flaws; buy more of the style (MA 134).`, 'error', { source: 'MA 134' }));
   }
   for (const p of ch.powers || []) {
     if (!p.maneuver) continue;

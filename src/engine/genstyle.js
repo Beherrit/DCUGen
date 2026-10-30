@@ -187,14 +187,17 @@ export function grantStyle(ch, R, ctx) {
   // everyday hero (traditional or cinematic, unarmed or armed as the archetype is), else another drawn from its own stream.
   const fit = styleChoices(R, ctx.arch);
   const rolled = ctx.style && fit.find((s) => s.name === ctx.style.name);
-  const def = rolled || (fit.length ? rng.fork('pick').pick(fit) : null);
-  if (!def) return null;
+  const first = rolled || (fit.length ? rng.fork('pick').pick(fit) : null);
+  if (!first) return null;
   const orig = clone(ch);
   const restore = () => { for (const k of Object.keys(ch)) delete ch[k]; Object.assign(ch, orig); return null; };
   // Tiers, stances and weapon elements belong to the style itself now; a hand-picked copy would be paid twice.
   ch.advantages = (ch.advantages || []).filter((a) => !/^\(Style\)/.test(a.name) && a.name !== 'Weapon Element');
   const target = ctx.budget;
-  if (!applyBest(ch, R, def, rng, Math.round(target * SHARE))) return restore();
+  // A style whose flaws a small budget cannot outspend (MA 134) gives way to one without style flaws
+  const plain = rng.fork('plain').shuffle(fit.filter((s) => s !== first && !(s.style_flaws || []).length)).slice(0, 3);
+  const def = [first, ...plain].find((d) => applyBest(ch, R, d, rng, Math.round(target * SHARE)));
+  if (!def) return restore();
   fund(ch, R, target, rng.fork('fund'));
   topUp(ch, R, target, rng.fork('top'), knownStyle(ch, def.name).skill);
   if (costBreakdown(ch, R).total !== target || problems(ch, R).length) return restore();
