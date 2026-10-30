@@ -101,15 +101,32 @@ function settle(c, R, before) {
 
 const KEEP = new Set(['Equipment', 'Defensive Roll', 'Close Attack', 'Ranged Attack']);
 
+// What the battle engine uses (tools/battle-coverage): given up only once nothing else is left, so a styled fighter
+// keeps its fighting edge.
+const FIGHT_ADVANTAGES = new Set(['Accurate Attack', 'All-out Attack', 'Chokehold', 'Defensive Attack', 'Evasion',
+  'Fast Grab', 'Grabbing Finesse', 'Improved Aim', 'Improved Critical', 'Improved Defense', 'Improved Disarm',
+  'Improved Grab', 'Improved Hold', 'Improved Initiative', 'Improved Smash', 'Improved Trip', 'Move-by Action',
+  'Power Attack', 'Precise Attack', 'Prone Fighting', 'Set-up', 'Takedown', 'Throwing Mastery', 'Uncanny Dodge',
+  'Inspire', 'Leadership', 'Luck', 'Seize Initiative', 'Ultimate Effort', 'Fearless', 'Instant Up', 'Interpose',
+  'Teamwork', 'Agile Feint', 'Daze', 'Startle', 'Taunt']);
+const FIGHT_SKILLS = new Set(['Close Combat', 'Ranged Combat', 'Acrobatics', 'Athletics', 'Deception', 'Insight',
+  'Intimidation', 'Sleight of Hand']);
+
 /**
  * Pay for the style by giving up filler first: single skill ranks and advantages the style did not bring, so the
- * attacks, powers, defenses and abilities the archetype was built around stay as they were.
+ * attacks, powers, defenses and abilities the archetype was built around stay as they were. Skills and advantages
+ * that matter in a fight go last.
  */
 function fund(ch, R, target, rng) {
   const own = new Set((ch.styles || []).flatMap((s) => (s.added?.advantages || []).map((a) => a.name)));
   for (let i = 0; i < 200 && costBreakdown(ch, R).total > target; i++) {
-    const skills = (ch.skills || []).filter((k) => k.ranks > 0 && k.name !== 'Close Combat' && k.name !== 'Ranged Combat');
-    const advs = (ch.advantages || []).filter((a) => !KEEP.has(a.name) && !own.has(a.name));
+    const allSkills = (ch.skills || []).filter((k) => k.ranks > 0 && k.name !== 'Close Combat' && k.name !== 'Ranged Combat');
+    const allAdvs = (ch.advantages || []).filter((a) => !KEEP.has(a.name) && !own.has(a.name));
+    const softSkills = allSkills.filter((k) => !FIGHT_SKILLS.has(k.name));
+    const softAdvs = allAdvs.filter((a) => !FIGHT_ADVANTAGES.has(a.name));
+    const soft = softSkills.length || softAdvs.length;
+    const skills = soft ? softSkills : allSkills;
+    const advs = soft ? softAdvs : allAdvs;
     if (!skills.length && !advs.length) return;
     if (skills.length && (!advs.length || rng.chance(4 / 7))) {
       const k = rng.pick(skills);

@@ -71,3 +71,18 @@ test('a style that cannot be paid for leaves the character exactly as it was', (
   assert.equal(grantStyle(ch, R, ctx), null);
   assert.equal(JSON.stringify(ch), before);
 });
+
+test('paying for a style gives up skills and advantages that do nothing in a fight before ones that do', () => {
+  const ch = generateCharacter(R, { seed: 'gs-keep', archetype: 'martialartist', pl: 10 });
+  delete ch.styles;
+  ch.powers = ch.powers.filter((p) => !p.maneuver);
+  ch.skills = ['History', 'Art', 'Science', 'Law', 'Business', 'Medicine', 'Magic', 'Streetwise'].map((spec) => ({ name: 'Expertise', spec, ranks: 10 }));
+  ch.skills.push({ name: 'Sleight of Hand', ranks: 6 });
+  ch.advantages = [{ name: 'Improved Critical', rank: 2, param: 'Unarmed' }, { name: 'Improved Initiative', rank: 1 }, { name: 'Evasion', rank: 1 }];
+  const budget = costBreakdown(ch, R).total;
+  const ctx = { arch: R.raw.archetypes.find((a) => a.id === 'martialartist'), style: null, budget, rng: makeRng('keep') };
+  assert.ok(grantStyle(ch, R, ctx), 'the style fits by trading the history ranks');
+  const adv = (name) => ch.advantages.find((a) => a.name === name)?.rank || 0;
+  assert.ok(adv('Improved Critical') >= 2 && adv('Improved Initiative') >= 1 && adv('Evasion') >= 1, 'fight advantages kept');
+  assert.ok(ch.skills.find((k) => k.name === 'Sleight of Hand').ranks >= 6, 'fight skills kept');
+});
