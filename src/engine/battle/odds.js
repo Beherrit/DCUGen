@@ -49,7 +49,7 @@ export function attackHit(c, atk, target, { bonusShift = 0, autoHit = false, dis
   if (atk.roll && !autoHit) {
     const def = defenseVs(target, atk.kind === 'close' ? 'Parry' : 'Dodge', c);
     let bonus = atk.bonus + bonusShift - checkPenalty(c) - rangePenalty(atk, dist);
-    bonus += proneMod(c, target, atk);
+    bonus += proneMod(c, target, atk) + (c.envAttack || 0);
     bonus -= concealmentPenalty(c, target, atk) + coverPenalty(b, c, target, atk);
     if (c.aiming?.target === target.id) bonus += c.aiming.bonus;
     bonus += aidBonus(c, target);

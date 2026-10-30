@@ -54,8 +54,9 @@ export function toHitMod(b, c, atk, t, m, aimed, notes) {
   const hurt = checkPenalty(c);
   const prone = proneMod(c, t, atk);
   const weak = weakenedAttack(c, atk).bonus;
-  let mod = atk.bonus - m.trade + m.allOut - m.defensive - hurt - range - conceal - cover - (m.charge ? 2 : 0) + aimed + aid - weak;
-  mod += prone;
+  let mod = atk.bonus - m.trade + m.allOut - m.defensive - hurt - range - conceal - cover - (m.charge ? 2 : 0) + aimed + aid - weak + (m.bonus || 0);
+  mod += prone + (c.envAttack || 0);
+  if (c.envAttack) notes.push(`favored environment: +${c.envAttack}`);
   // Every penalty the attacker carries is named, so a low bonus in the log can be traced
   if (range) notes.push(`${range >= 5 ? 'long' : 'medium'} range: −${range}`);
   if (hurt) notes.push(hurt > 0 ? `${c.name} is impaired: −${hurt}` : `inspired: +${-hurt}`); // checkPenalty nets Impaired or Disabled against Inspire

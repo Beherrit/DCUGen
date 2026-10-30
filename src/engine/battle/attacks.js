@@ -19,6 +19,7 @@ import { traceAttack } from './trace.js';
 import { critImmune, slipsHold } from './immunity.js';
 import { flawKey } from './flaws.js';
 import { noteHoming } from './extra-after.js';
+import { effortEffect } from './effort.js';
 import { bounce, surprisePrep, recoverCatch } from './extra-bounce.js';
 import { splitPlan, splitSecond } from './extra-split.js';
 import { concealmentPenalty } from './odds.js';
@@ -115,14 +116,13 @@ function shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charg
   if (trade < 0) notes.push(`Accurate Attack: +${-trade} to hit, ${trade} effect`);
   if (allOut) notes.push(`All-out Attack: +${allOut} to hit, −${allOut} defenses until next turn`);
   if (defensive) notes.push(`Defensive Attack: −${defensive} to hit, +${defensive} defenses`);
-  if (effort === 'power') {
-    rankShift += 1;
-    c.fatigue += 1;
-    c.usedEffort++;
-    notes.push(`extra effort: +1 rank, now ${c.fatigue >= 2 ? 'exhausted' : 'fatigued'}`);
-    if (b.options.heroPoints && c.heroPoints > 0 && rng.chance(0.5)) { c.heroPoints--; c.fatigue--; notes.push('spends a hero point to shrug off the fatigue'); }
+  let bonus = 0;
+  if (effort) { // extra effort: +1 rank, +1 Strength, two benefits, or +2 on the attack check (effort.js)
+    const e = effortEffect(b, c, rng, effort);
+    rankShift += e.rank; bonus = e.hit;
+    notes.push(e.text);
   }
-  return { trade, allOut, defensive, charge, rankShift, notes, slam: !!slam };
+  return { trade, allOut, defensive, charge, rankShift, notes, slam: !!slam, bonus };
 }
 
 /** Optional rule: a shot at a target behind total cover goes through the cover first. Returns the rank shift, or null when the cover stops the shot. */

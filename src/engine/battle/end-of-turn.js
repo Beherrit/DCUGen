@@ -2,7 +2,8 @@
 
 import { sign, log } from './util.js';
 import { rollCheck, critNote } from './checks.js';
-import { resistOf } from './conditions.js';
+import { resistOf, SEVERITY } from './conditions.js';
+import { extraResistance, payOwed } from './effort.js';
 import { releaseHolds } from './maneuvers.js';
 import { expireSupport } from './support-actions.js';
 import { STAND_SOURCES } from './prone.js';
@@ -25,6 +26,7 @@ function overcomeBonus(b, c, lead) {
 
 export function endOfTurn(b, c, rng, R = null) {
   c.interposed = false;
+  payOwed(b, c, rng); // extra effort for speed: the fatigue it cost arrives at the end of the turn (effort.js)
   if (!c.out) { runSecondary(b, R, c, rng); spreadContagion(b, R, c, rng); } // Secondary Effect and Contagious (extra-run.js)
   c.noMove = false; c.squaresMoved = 0; // this turn's movement is over
   // A feint lasts until the end of the feinter's next round (DCA 64).
@@ -46,7 +48,9 @@ export function endOfTurn(b, c, rng, R = null) {
     const resist = breakout ?? resistOf(c, lead.resist || 'Fortitude');
     const how = breakout == null ? lead.resist : 'Strength, Damage or Sleight of Hand';
     if (resist === null) { c.conditions = c.conditions.filter((x) => x.source !== src); continue; }
-    const r = rollCheck(rng, resist, lead.dc, recoveryFx(b, c, lead));
+    let r = rollCheck(rng, resist, lead.dc, recoveryFx(b, c, lead));
+    const severe = Math.max(...(lead.names || [lead.name]).map((n) => SEVERITY[n] || 0)) >= 6;
+    if (!r.success && extraResistance(b, c, rng, severe)) r = rollCheck(rng, resist, lead.dc); // extra effort: an immediate extra resistance check (effort.js)
     const { roll, total } = r;
     const ok = r.success;
     const dice = [{ label: `Recover (${how})`, roll, mod: resist, total, dc: lead.dc }];

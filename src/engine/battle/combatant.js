@@ -153,6 +153,8 @@ export function resetCombatant(c) {
   Object.assign(c, {
     insub: null,           // the Insubstantial form in force (insubstantial.js), set again by rebuildCombatant for an innate one
     init: 0, initRoll: 0, bruises: 0, dazed: false, staggered: false, out: false, outReason: null, fled: false,
+    envAttack: 0,          // +2 on attack checks from Favored Environment, until the start of the next turn (favored.js)
+    speedBoost: false, owesFatigue: false, effortRound: null, // extra effort: +1 speed rank this turn; the round extra effort was last used (effort.js)
     dying: false, dead: false, stable: false, diehard: false, dyingFails: 0, dyingRound: null, // dying and death in a lethal fight (dying.js)
     conditions: [],        // [{ name, degree, from, source, dc, resist, cumulative, progressive, tiers, extraCondition, until }]
     weakened: {},          // trait -> ranks lost

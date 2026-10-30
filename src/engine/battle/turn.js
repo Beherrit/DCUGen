@@ -23,6 +23,7 @@ import { insubTurn } from './insub-turn.js';
 import { flawsStartTurn, concentrationLost, uncontrolledFire, concentrate } from './flaw-turn.js';
 import { heldAttack } from './flaw-grab.js';
 import { steadyIdle } from './stabilize.js';
+import { favoredTurn } from './favored.js';
 import { runHoming, freeHeld, concentrateHeld } from './extra-run.js';
 
 const isHurt = (c) => c.staggered || c.bruises >= 2;
@@ -30,6 +31,7 @@ const isHurt = (c) => c.staggered || c.bruises >= 2;
 /** Every step below returns true when it used up the turn. */
 export function takeTurn(b, R, c, rng) {
   c.defMod = 0;
+  c.speedBoost = false; // extra effort for speed lasts until the start of the next turn
   markTurn(b, c);
   refreshGrants(b);
   const mode = canAct(c);
@@ -39,6 +41,7 @@ export function takeTurn(b, R, c, rng) {
   flawsStartTurn(c);
   concentrationLost(b, c, mode);
   if (mode === 'none' && cannotAct(b, c, conds)) return;
+  favoredTurn(b, c, enemiesOf(b, c).length, alliesOf(b, c).length); // Favored Environment: +2 on attacks or defenses (favored.js)
   if (mode === 'controlled') { controlledTurn(b, R, c, rng); return; }
   const enemies = enemiesOf(b, c);
   if (!enemies.length) { steadyIdle(b, R, c, mode, rng); return; } // nobody left to fight: a medic tends a dying teammate (stabilize.js)

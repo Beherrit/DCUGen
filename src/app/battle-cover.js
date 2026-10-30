@@ -4,7 +4,7 @@
 
 import { h, toast } from './dom.js';
 import { makeRng } from '../engine/rng.js';
-import { createBattle, COVER_KINDS, addCover, removeCover, squareName, pieceLabel, toughnessOf } from '../engine/battle.js';
+import { createBattle, COVER_KINDS, addCover, removeCover, squareName, pieceLabel, toughnessOf, ENVIRONMENTS } from '../engine/battle.js';
 import { scalePicker } from './battle-grid.js';
 
 const STREET = ['parked-car', 'parked-car', 'wooden-fence', 'concrete-pillar', 'glass-storefront', 'brick-wall'];
@@ -59,6 +59,14 @@ function optionBox(cx, key, label, hint) {
   return h('label', { class: 'bt-copies', title: hint }, h('input', { type: 'checkbox', id: `bt-opt-${key}`, checked: !!battle.options[key], onChange: (e) => { battle.options[key] = e.target.checked; save(); render(); } }), ` ${label}`);
 }
 
+/** Where the fight takes place, for Favored Environment (the walled room is the Enclosed space box). */
+function environmentPicker(cx) {
+  const { battle, save, render } = cx;
+  const opts = [h('option', { value: '' }, 'Open ground (no particular environment)'), ...ENVIRONMENTS.map((e) => h('option', { value: e.id, selected: battle.options.environment === e.id }, e.label))];
+  return h('label', { class: 'bt-copies', title: 'Fighters with Favored Environment get +2 on attacks or on defenses when it matches' }, 'Environment ',
+    h('select', { id: 'bt-environment', 'aria-label': 'Environment', onChange: (e) => { battle.options.environment = e.target.value || null; save(); render(); } }, ...opts));
+}
+
 /** The Scenery panel for the setup rail. */
 export function sceneryPanel(cx) {
   const { battle, ui, save, render } = cx;
@@ -78,5 +86,6 @@ export function sceneryPanel(cx) {
     (battle.cover || []).map((p) => pieceRow(cx, p)),
     optionBox(cx, 'knockback', 'Knockback (community rule)', 'A hard hit throws the target back: the damage rank minus its mass rank sets how far, and walls and cover hurt'),
     optionBox(cx, 'shootThrough', 'Shoot through cover (optional rule)', 'A shot at someone behind total cover must breach the cover first, and loses half its Toughness in rank'),
-    optionBox(cx, 'lethal', 'Lethal damage (optional rule)', 'Attackers go for the kill: a fighter taken out by Damage is dying and rolls a Fortitude check each round (DC 15, two degrees of success steady it, three degrees of failure in all kill it), further damage kills, minions taken out are killed, and Diehard, Treatment and Healing save lives. Off, a fighter who would be dying is only incapacitated'));
+    optionBox(cx, 'lethal', 'Lethal damage (optional rule)', 'Attackers go for the kill: a fighter taken out by Damage is dying and rolls a Fortitude check each round (DC 15, two degrees of success steady it, three degrees of failure in all kill it), further damage kills, minions taken out are killed, and Diehard, Treatment and Healing save lives. Off, a fighter who would be dying is only incapacitated'),
+    environmentPicker(cx));
 }

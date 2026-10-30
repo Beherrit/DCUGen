@@ -571,7 +571,7 @@ test('noretreat: beasts that run away with no tactic stand and fight', () => {
   const wolf = es.find((e) => /wolf/i.test(e.name));
   const tally = (tactic) => {
     let fled = 0;
-    for (const i of range(20)) {
+    for (const i of range(100)) {
       const A = range(3).map(() => catalogToCharacter(wolf));
       const f = arena(tactic, `nr-${i}`, A, [hero('paragon', `nb${i}`, 12), hero('blaster', `nc${i}`, 12)]);
       runToEnd(f, R);
@@ -580,7 +580,7 @@ test('noretreat: beasts that run away with no tactic stand and fight', () => {
     return fled;
   };
   const none = tally(null);
-  assert.ok(none >= 4, `the baseline must flee for the comparison to mean anything (${none}; 8 in the sample run)`);
+  assert.ok(none >= 4, `the baseline must flee for the comparison to mean anything (${none}; about 8 in the sample run)`); // 100 fights: heroes finishing a staggered beast with an extra action make a flight rarer, so a short run hung on a few seeds
   assert.equal(tally('noretreat'), 0);
 });
 

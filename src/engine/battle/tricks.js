@@ -5,15 +5,16 @@ import { alliesOf } from './util.js';
 import { resistOf } from './conditions.js';
 import { squares, squaresInMove, reachSquares, interacts } from './geometry.js';
 import { expectedValue } from './odds.js';
+import { foeBonus } from './favored.js';
 
 /**
  * How c feints t: the skill it uses (Deception; Acrobatics with Agile Feint; Intimidation with Startle, whichever is
  * best), its bonus, and the bonus the target resists with. A Startle resists with Insight, Intimidation or Will.
  */
 export function feintPick(c, t) {
-  let name = 'Deception'; let mine = c.skills.Deception;
+  let name = 'Deception'; let mine = c.skills.Deception + foeBonus(c, t, 'Deception'); // Favored Foe: +2 on the social skills (favored.js)
   if (c.adv['Agile Feint'] && c.skills.Acrobatics > mine) { name = 'Acrobatics'; mine = c.skills.Acrobatics; }
-  if (c.adv.Startle && c.skills.Intimidation > mine) { name = 'Intimidation'; mine = c.skills.Intimidation; }
+  if (c.adv.Startle && c.skills.Intimidation + foeBonus(c, t, 'Intimidation') > mine) { name = 'Intimidation'; mine = c.skills.Intimidation + foeBonus(c, t, 'Intimidation'); }
   const theirs = name === 'Intimidation'
     ? Math.max(t.skills.Insight, t.skills.Intimidation, resistOf(t, 'Will') ?? -99)
     : Math.max(t.skills.Insight, t.skills.Deception);

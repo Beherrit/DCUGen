@@ -9,12 +9,15 @@ import { hitOdds, rangePenalty, concealmentPenalty } from './odds.js';
 import { bestTradeoff } from './plan.js';
 import { moveTo, moveToward } from './movement.js';
 import { resolveAttack } from './attacks.js';
-import { positionGoal, stepToSquare, wantsKite, aimsAlways, tradeoffBias, forceEffort, teamAttackMin, coverStep } from './tactics.js';
+import { positionGoal, stepToSquare, wantsKite, aimsAlways, tradeoffBias, teamAttackMin, coverStep } from './tactics.js';
+import { pickEffort, extraAction, speedEffort } from './effort.js';
 import { coverPenalty } from './cover.js';
 import { kite, moveBy } from './move-by.js';
 import { runManeuver } from './maneuver-run.js';
 import { finishingFeat } from './feat.js';
 import { flawedAction } from './flaw-turn.js';
+
+export { pickEffort }; // extra effort is chosen in effort.js; the tests read it from here
 
 /** The attack plan chosen for this turn: move into position, maybe aim, then attack. */
 export function attackTurn(b, R, c, choice, enemies, mode, rng) {
@@ -37,6 +40,7 @@ export function attackTurn(b, R, c, choice, enemies, mode, rng) {
   const slam = slamRank(b, c, attack, charge);
   // Takedown chains and the attack itself
   resolveAttack(b, R, c, attack, target, rng, { trade: charge ? 0 : trade, allOut: charge ? 0 : allOut, defensive: charge ? 0 : defensive, effort, charge, slam, team });
+  extraAction(b, R, c, rng, effort); // extra effort for another standard action (effort.js)
   moveBy(b, c, attack, target, enemies, mode);
 }
 
@@ -65,6 +69,7 @@ function closeIn(b, c, attack, target, mode, rng) {
     if (mode !== 'full') { log(b, { kind: 'skip', actor: c.id, text: `${c.name} is ${conditionLabels(c).join(', ').toLowerCase()} and can't close the distance.` }); return { over: true }; }
     const reach = reachSquares(b, c, attack);
     const need = squares(c, target) - reach;
+    if (need > squaresInMove(b, c) * 2 && need <= squaresInMove(b, c) * 4) speedEffort(b, c, rng); // +1 speed rank: twice as far (effort.js)
     const move = squaresInMove(b, c);
     if (need > move && need <= move * 2) {
       // Charge: a move and then a charge, twice the speed, the attack at -2 (DCA 175)
@@ -117,15 +122,6 @@ function pickTradeoffs(b, c, attack, target, enemies) {
     c.defMod = allOut ? -allOut : defensive;
   }
   return { trade, allOut, defensive };
-}
-
-/** Extra effort: push a power when losing (DCA 19). */
-export function pickEffort(b, c, attack, target, rng) {
-  const hurt = c.staggered || c.bruises >= 2;
-  if (b.options.extraEffort && c.fatigue < 2 && attack.power && !attack.equipment && !attack.flaws?.strained && (forceEffort(b, c) || ((hurt || (b.round >= 3 && target.bruises === 0)) && ['mage', 'omni', 'blaster', 'tank', 'brawler', 'mentalist'].includes(c.style) && rng.chance(0.45)))) {
-    return 'power';
-  }
-  return null;
 }
 
 /**

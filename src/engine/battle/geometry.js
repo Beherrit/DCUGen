@@ -29,7 +29,7 @@ export const spot = (c) => ({ x: c.x, y: c.y });
 export function squaresInMove(b, c) {
   const s = activeConditions(c);
   if (s.has('Immobile') || c.grabbedBy || c.noMove) return 0; // noMove: the move action went on standing up
-  const ft = (c.moveFt ?? 30) / (s.has('Hindered') ? 2 : 1);
+  const ft = (c.moveFt ?? 30) * (c.speedBoost ? 2 : 1) / (s.has('Hindered') ? 2 : 1); // speedBoost: +1 speed rank from extra effort doubles the distance (effort.js)
   return Math.max(1, Math.floor(ft / b.grid.squareFt));
 }
 

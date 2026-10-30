@@ -8,6 +8,7 @@ import { inEarshot } from './geometry.js';
 import { tacticOf } from './tactics-list.js';
 import { plainFx, hurt } from './fortune.js';
 import { interactionImmune } from './immunity.js';
+import { foeBonus } from './favored.js';
 
 /** The demoralizer's skill: Intimidation, or Deception when the fighter has Taunt and it is better. */
 export function demoralSkill(c) {
@@ -50,7 +51,7 @@ export function demoralize(b, c, t, rng, { skill = demoralSkill(c) } = {}) {
   if (!canDemoralize(t)) return 0;
   const group = t.minion ? [t, ...minionsInSight(b, c).filter((x) => x !== t)] : [t];
   const theirs = Math.max(...group.map((x) => resistanceTo(x, skill)));
-  const mine = skill.value - checkPenalty(c);
+  const mine = skill.value + foeBonus(c, t, skill.name.startsWith('Intimidation') ? 'Intimidation' : 'Deception') - checkPenalty(c); // Favored Foe (favored.js)
   const boss = tacticOf(b, c) === 'intimidate';
   const duel = opposedCheck(rng, { bonus: mine, fx: plainFx(b, c, 'demoralize check', () => boss) }, { bonus: theirs, fx: plainFx(b, t, 'demoralize resistance', () => hurt(t)) });
   const [r1, r2] = duel.rolls;
