@@ -25,6 +25,8 @@
 // Extras are simulated (extras.js and the extra-*.js files): Attack on a Teleport, Contagious, Homing, Increased Duration, Incurable, Indirect, Innate, Ricochet, Secondary Effect, Sleep, Split, Triggered, and the Martial Arts counter and resistance extras.
 // Extra effort has its benefits (power rank, Strength, +2 on the attack check, an extra action, speed, an extra resistance check, Extraordinary Effort), and a target can counter an effect (Instant Counter, Ready).
 // With the Lethal damage option on, a fighter taken out by Damage is dying and may die (dying.js); off, nobody does.
+// Martial arts are simulated (stance-*.js, maneuver-*.js, style-*.js, ma-reactions.js): fighting style stances (assumed by a Fighting Style check, held until broken, weighed by the AI),
+// Identify and Disrupt Stance, combat maneuvers as attacks, the Student bonus, style extras and flaws, Kata and a handful of combat advantages; the coverage list says which parts.
 // The AI scores a heal, a buff, a control, a Weaken and a guard in the same expected degrees as an attack and picks the best (utility.js); a fighter's roles (healer, controller, ...) only tip those weights a little.
 // The power effects with their own turn option are simulated (power-options.js): Summon and Duplication (minions on the grid), Create and Move Object (cover, thrown and dropped objects), Illusion (the switch of looks), Environment, Shapeshift, Alternate Form, Mimic and Transform; Super-Speed, Burrowing, Movement, Extra Limbs, Immortality, Energy Absorption and Extra Attacks change the numbers. Communal is not simulated. Team attacks are simulated for minion squads.
 //

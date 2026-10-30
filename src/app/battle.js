@@ -13,6 +13,7 @@ import { addPanel, quickStarts } from './battle-setup.js';
 import { tacticChips } from './battle-tactics.js';
 import { notSimulatedLine } from './battle-report.js';
 import { rolesNote } from './battle-roles.js';
+import { styleLine } from './battle-style.js';
 import { descriptorTags, attackTitle, insubChip } from './battle-descriptors.js';
 import { keepFinishedFight, keptNote, roomTabs } from './records/room.js';
 import { renderFights, openFight } from './records/fights-view.js';
@@ -188,6 +189,7 @@ function fighterCard(c) {
     h('div', { class: 'bt-stats' },
       [['DOD', d.defenses.Dodge], ['PAR', d.defenses.Parry], ['TOU', d.defenses.Toughness - c.bruises], ['FOR', d.defenses.immune?.Fortitude ? '—' : d.defenses.Fortitude], ['WIL', d.defenses.immune?.Will ? '—' : d.defenses.Will], ['INI', (d.initiative >= 0 ? '+' : '') + d.initiative]].map(([k, v]) => h('div', null, h('b', { class: 'num' }, v), h('span', null, k)))),
     main ? h('div', { class: 'bt-main', title: attackTitle(c) }, `${main.name}: ${main.roll ? `+${main.bonus}, ` : `${main.area ? `${main.area} area` : 'perception'}, `}${main.effect} ${main.rank} (${main.resistance})`, c.attacks.length > 2 ? h('small', null, ` +${c.attacks.length - 1} more`) : null) : null,
+    styleLine(c),
     descriptorTags(c),
     setup ? h('div', { class: 'bt-opts' }, teamSel, formSel, styleSel, h('details', { class: 'bt-more' }, h('summary', null, 'More'), h('div', { class: 'bt-more-body' }, tacSel, h('label', { class: 'bt-hp-wrap', title: 'Hero points: re-roll a miss or shake off a daze' }, 'Hero points', hp), notSimulatedLine(c)))) : null,
     !setup ? h('div', { class: 'bt-state' }, dmg,

@@ -16,7 +16,7 @@ export function attackTags(a) {
 
 function modApplies(mod, tags, prefix) {
   const [stat, part] = mod.stat.split('.');
-  if (stat !== prefix || mod.when) return false;
+  if (stat !== prefix || mod.when || mod.except === 'chosenWeapon') return false; // the Weapon stance's penalty to "all other" weapons waits for the weapon to be named (the Battle Room does that)
   if (part && !tags[part]) return false;
   return !(mod.except && tags[mod.except]);
 }
@@ -84,4 +84,27 @@ export function inStance(d, def, pl) {
     }),
     skills: d.skills.map((k) => (sk[k.name] ? { ...k, bonus: k.bonus + sk[k.name], stance: true } : k)),
   };
+}
+
+/**
+ * A stance's Dodge and Parry changes split by where they count, for the Battle Room, which keeps the active defense and the
+ * resistance check apart: { Dodge: { all, active, resist, set }, Parry: { ... } }. `all` counts for both, `active` only for the
+ * defense against an attack (High), `resist` only for resistance checks (Reactive), `set` replaces the value (Crane's Dodge +0).
+ */
+export function defenseSplit(def) {
+  const out = { Dodge: { all: 0, active: 0, resist: 0 }, Parry: { all: 0, active: 0, resist: 0 } };
+  for (const m of def?.mods || []) {
+    const row = out[m.stat];
+    if (!row || m.when) continue;
+    if (m.set) row.set = m.value;
+    else if (m.only === 'active') row.active += m.value;
+    else if (m.only === 'resistance') row.resist += m.value;
+    else if (!m.only) row.all += m.value;
+  }
+  return out;
+}
+
+/** The unconditional mods of a stance with a given stat name (or prefix, ending in a colon), for the Battle Room's own effects. */
+export function modsOf(def, stat) {
+  return (def?.mods || []).filter((m) => !m.when && (stat.endsWith(':') ? m.stat.startsWith(stat) : m.stat === stat));
 }

@@ -13,6 +13,7 @@ import { assistReroll } from './luck.js';
 import { wantsReroll, negatesReroll, forcesHit } from './luck-attack.js';
 import { deflectAgainst } from './deflect.js';
 import { critImmune } from './immunity.js';
+import { opposingBonus } from './style-bonus.js';
 
 const VERBS = {
   brawler: ['swings at', 'hammers', 'slams', 'pounds on'], duelist: ['cuts at', 'strikes at', 'lunges at', 'snaps a strike at'],
@@ -56,12 +57,15 @@ export function toHitMod(b, c, atk, t, m, aimed, notes) {
   const weak = weakenedAttack(c, atk).bonus;
   let mod = atk.bonus - m.trade + m.allOut - m.defensive - hurt - range - conceal - cover - (m.charge ? 2 : 0) + aimed + aid - weak + (m.bonus || 0);
   mod += prone + (c.envAttack || 0);
+  const opposing = opposingBonus(c, t); // a foe in the style the fighter has studied against (style-bonus.js)
+  if (opposing.n) { mod += opposing.n; notes.push(`Opposing Style (${opposing.style}): +${opposing.n}`); }
   if (c.envAttack) notes.push(`favored environment: +${c.envAttack}`);
   // Every penalty the attacker carries is named, so a low bonus in the log can be traced
   if (range) notes.push(`${range >= 5 ? 'long' : 'medium'} range: −${range}`);
   if (hurt) notes.push(hurt > 0 ? `${c.name} is impaired: −${hurt}` : `inspired: +${-hurt}`); // checkPenalty nets Impaired or Disabled against Inspire
   if (prone) notes.push(`prone: ${prone > 0 ? '+' : '−'}${Math.abs(prone)}`);
   if (weak) notes.push(`weakened: −${weak}`);
+  for (const [src, n] of Object.entries(atk.bn || {})) notes.push(`${src}: ${n > 0 ? '+' : '−'}${Math.abs(n)}`); // stance, Student and style bonuses already in the attack bonus
   if (atk.flaws?.inaccurate) notes.push(`Inaccurate: −${2 * atk.flaws.inaccurate} (already in the bonus)`);
   if (aid) notes.push(`aid: +${aid}`);
   if (conceal) notes.push(`${conceal === 5 ? 'total' : 'partial'} concealment: −${conceal}`);

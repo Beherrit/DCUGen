@@ -17,6 +17,8 @@ import { runManeuver } from './maneuver-run.js';
 import { finishingFeat } from './feat.js';
 import { flawedAction } from './flaw-turn.js';
 import { runExtraAttacks } from './extra-attacks.js';
+import { stanceName, tradeCap } from './stance-fight.js';
+import { wantsDisrupt } from './stance-plan.js';
 
 // Extra effort is chosen in effort.js; the tests read it from here.
 export { pickEffort };
@@ -40,8 +42,9 @@ export function attackTurn(b, R, c, choice, enemies, mode, rng) {
   const effort = pickEffort(b, c, attack, target, rng);
   const team = teamAttack(b, c, attack, target, rng);
   const slam = slamRank(b, c, attack, charge);
+  const disrupt = !charge && wantsDisrupt(b, c, attack, target); // a disruptive attack on a foe's stance (stance-plan.js)
   // Takedown chains and the attack itself
-  const landed = resolveAttack(b, R, c, attack, target, rng, { trade: charge ? 0 : trade, allOut: charge ? 0 : allOut, defensive: charge ? 0 : defensive, effort, charge, slam, team });
+  const landed = resolveAttack(b, R, c, attack, target, rng, { trade: charge ? 0 : trade, allOut: charge ? 0 : allOut, defensive: charge ? 0 : defensive, effort, charge, slam, team, disrupt });
   runExtraAttacks(b, R, c, attack, target, rng, landed); // Extra Attacks: more attacks with the same power (extra-attacks.js)
   extraAction(b, R, c, rng, effort); // extra effort for another standard action (effort.js)
   moveBy(b, c, attack, target, enemies, mode);
@@ -74,7 +77,7 @@ function closeIn(b, c, attack, target, mode, rng) {
     const need = squares(c, target) - reach;
     if (need > squaresInMove(b, c) * 2 && need <= squaresInMove(b, c) * 4) speedEffort(b, c, rng); // +1 speed rank: twice as far (effort.js)
     const move = squaresInMove(b, c);
-    if (need > move && need <= move * 2) {
+    if (need > move && need <= move * 2 && !c.noCharge) {
       // Charge: a move and then a charge, twice the speed, the attack at -2 (DCA 175)
       moveTo(b, c, stepToward(b, c, target, move * 2, reach), `and charges ${target.name}`);
       if (!inReach(b, c, target, attack)) return { over: true }; // walls or scenery in the way: the charge fell short
@@ -107,9 +110,14 @@ function lineUpShot(b, c, attack, target, enemies, rng) {
 function pickStance(b, c, target, enemies) {
   const hurt = c.staggered || c.bruises >= 2;
   let allOut = 0; let defensive = 0;
-  const maxTrade = (name) => (c.adv[name] ? 5 : 2);
+  const maxTrade = (name) => tradeCap(c, name); // the Offensive and Guarded stances raise the limits (stance-fight.js)
+  const outnumbered = enemies.length > alliesOf(b, c).length + 1;
   if (!hurt && (c.style === 'brawler' || c.style === 'tank' || c.style === 'beast' || c.style === 'minion') && (target.staggered || target.bruises >= 2 || c.adv['All-out Attack'])) allOut = Math.min(maxTrade('All-out Attack'), 2 + (c.adv['All-out Attack'] ? 2 : 0));
-  if ((c.style === 'duelist' || c.style === 'support') && (hurt || enemies.length > alliesOf(b, c).length + 1)) defensive = Math.min(maxTrade('Defensive Attack'), 2 + (c.adv['Defensive Attack'] ? 2 : 0));
+  if ((c.style === 'duelist' || c.style === 'support') && (hurt || outnumbered)) defensive = Math.min(maxTrade('Defensive Attack'), 2 + (c.adv['Defensive Attack'] ? 2 : 0));
+  if (stanceName(c) === 'Offensive' && !hurt && (target.staggered || target.bruises >= 2)) allOut = maxTrade('All-out Attack') >= 5 ? Math.min(maxTrade('All-out Attack'), c.adv['All-out Attack'] ? 8 : 5) : allOut; // up to +5 (+10 with the advantage), MA 130
+  if (stanceName(c) === 'Guarded' && (hurt || outnumbered)) defensive = Math.min(maxTrade('Defensive Attack'), c.adv['Defensive Attack'] ? 8 : 5); // MA 130
+  if (c.noAllOut) allOut = 0; // a Defensive style forbids All-Out Attack (MA 131)
+  if (c.noDefensive) defensive = 0; // and an Aggressive one, Defensive Attack
   c.defMod = allOut ? -allOut : defensive;
   return { allOut, defensive };
 }

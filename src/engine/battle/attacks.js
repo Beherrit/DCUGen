@@ -31,10 +31,15 @@ import { afterUse } from './flaw-effects.js';
 import { grabBasedUse } from './flaw-grab.js';
 import { inexactHit } from './flaw-resist.js';
 import { sacrificeFor } from './summon-sacrifice.js';
+import { beforeStyleAttack, impractical } from './style-turn.js';
+import { disruptContest } from './stance-contest.js';
+import { markAttacker, afterMeleeHit, afterMeleeMiss } from './ma-reactions.js';
 
 export function resolveAttack(b, R, c, atk, t, rng, opts = {}) {
   if (c.out || c.fled) return false; // a fighter struck down on its own turn (by a readied attack as it moved in) attacks no more
   c.lastAttackId = atk.id;
+  beforeStyleAttack(b, c, atk); // a maneuver's change to Parry and Dodge, Kata (style-turn.js)
+  markAttacker(b, c); // for Counterstrike: a fighter that attacked this round has used up its chance (ma-reactions.js)
   traceAttack(b, c, atk, t);
   noteAttack(b, c, t);
   c.stats.attacks++;
@@ -51,8 +56,8 @@ export function resolveAttack(b, R, c, atk, t, rng, opts = {}) {
 }
 
 /** The attack itself, after the flaws have let it go. Returns whether it landed (a hit that was not resisted), for Side Effect and Chained. */
-function attackBody(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive = 0, effort = null, charge = false, slam = null, aimed = 0, team = 0, homing = null, declining = 0 }, checkShift) {
-  const m = shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charge, slam, team, declining });
+function attackBody(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive = 0, effort = null, charge = false, slam = null, aimed = 0, team = 0, homing = null, declining = 0, disrupt = false, penalty = null }, checkShift) {
+  const m = shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charge, slam, team, declining, disrupt, penalty });
   const { notes } = m;
   m.rankShift += checkShift;
   let { rankShift } = m;
@@ -98,6 +103,8 @@ function rollAndLand(b, R, c, atk, t, rng, m, { rankShift, notes, aimed, homing 
   out.r = r;
   if (!r.hit) {
     log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${r.text} — ${r.roll === 1 ? 'natural 1, a clean miss' : 'miss'}${notes.length ? ` (${notes.join('; ')})` : ''}.`, dice: r.dice });
+    if (r.roll === 1) impractical(b, c, atk); // the Impractical style flaw (style-turn.js)
+    afterMeleeMiss(b, c, atk, t, rng, r); // Defensive Throw (ma-reactions.js)
     afterDeflect(b, R, c, atk, t, rng, r, rankShift);
     const conceal = concealmentPenalty(c, t, atk);
     noteHoming(b, c, atk, t, homing, conceal > 0 && r.total + conceal >= r.dcUsed); // Homing: try again next turn (extra-after.js)
@@ -106,6 +113,8 @@ function rollAndLand(b, R, c, atk, t, rng, m, { rankShift, notes, aimed, homing 
     return false;
   }
   const result = landHit(b, R, c, atk, t, rng, r, { rankShift, notes, slam: m.slam });
+  if (result && m.disrupt) disruptContest(b, c, t, rng); // a disruptive attack that lands, even with no damage (stance-contest.js)
+  if (result) afterMeleeHit(b, R, c, atk, t, rng, r, resolveAttack); // Counterstrike, Follow-Up Strike, Sweeping Strike (ma-reactions.js)
   if (!result) return true; // an ally took the hit
   followUps(b, R, c, atk, t, rng, result, r.mod);
   return !!result.landed;
@@ -115,7 +124,7 @@ function rollAndLand(b, R, c, atk, t, rng, m, { rankShift, notes, aimed, homing 
  * Apply the trade-offs, charge, slam, team bonus and extra effort to the attack. Maneuvers only apply to attacks
  * with an attack check (DCA 178). Returns the trade-offs that stand, the rank shift, and the notes for the log.
  */
-function shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charge, slam, team, declining }) {
+function shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charge, slam, team, declining, disrupt, penalty }) {
   if (!atk.roll || atk.area) { trade = 0; allOut = 0; defensive = 0; }
   let rankShift = trade;
   const notes = [];
@@ -127,13 +136,16 @@ function shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charg
   if (allOut) notes.push(`All-out Attack: +${allOut} to hit, −${allOut} defenses until next turn`);
   if (defensive) notes.push(`Defensive Attack: −${defensive} to hit, +${defensive} defenses`);
   let bonus = 0;
+  if (disrupt && atk.roll && !atk.area) { bonus -= 5; rankShift -= 2; notes.push('disrupting the stance: −5 to hit, −2 Damage'); } // Disrupt Stance (MA 50)
+  else disrupt = false;
+  if (penalty) { bonus -= penalty.n; notes.push(`${penalty.why}: −${penalty.n} to hit`); } // a free attack from an advantage (ma-reactions.js)
   if (declining) { bonus -= declining; notes.push(`Declining: −${declining} to hit`); } // Extra Attacks with Declining (MA 84)
   if (effort) { // extra effort: +1 rank, +1 Strength, two benefits, or +2 on the attack check (effort.js)
     const e = effortEffect(b, c, rng, effort);
     rankShift += e.rank; bonus += e.hit;
     notes.push(e.text);
   }
-  return { trade, allOut, defensive, charge, rankShift, notes, slam: !!slam, bonus };
+  return { trade, allOut, defensive, charge, rankShift, notes, slam: !!slam, bonus, disrupt };
 }
 
 /** Optional rule: a shot at a target behind total cover goes through the cover first. Returns the rank shift, or null when the cover stops the shot. */

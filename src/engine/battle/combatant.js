@@ -26,6 +26,9 @@ import { extraAttacksOf } from './extra-attacks-read.js';
 import { absorbsOf } from './absorb.js';
 import { movementTraits, burrowSpeed, limbBonus } from './movement-powers.js';
 import { activeForm } from '../forms.js';
+import { readMartial } from './martial-read.js';
+import { styleBonuses } from './style-bonus.js';
+import { maneuverAttacks } from './maneuver-attacks.js';
 
 export function effectWeights(attack) {
   if (attack.effect === 'Damage') return [0, 1, 2.3, 3.8, 6.5];
@@ -83,7 +86,8 @@ function buildAttack(c, a0, R, where = new Map()) {
     id: `${a.name}|${a.effect}|${a.rank}|${a.kind}`,
     name: a.name, effect: a.effect, kind: a.kind, rank: a.rank, bonus: a.roll ? a.bonus : null, roll: !!a.roll,
     resistance: a.resistance || eff.resistance || 'Toughness',
-    equipment: !!a.equipment, device: !!(p && deviceOf(c.ch, p)), item: itemFor(c.ch, a, p, R),
+    equipment: !!a.equipment, device: !!(p && deviceOf(c.ch, p)), item: a.item || itemFor(c.ch, a, p, R),
+    maneuver: !!a.maneuver, styleName: a.style || null, manDef: a.manDef || null, // a combat maneuver of a fighting style (maneuver-attacks.js)
     unarmed: a.name === 'Unarmed', alternate: !!a.alternate,
     crit: a.crit || (p ? Math.max(16, 20 - advantageRank(c.ch, 'Improved Critical', p.name) - advantageRank(c.ch, 'Improved Critical')) : 20),
     descriptors: attackDescriptors(R, c.ch, a, p, where.get(p) || {}),
@@ -174,6 +178,9 @@ export function resetCombatant(c) {
     weakened: {},          // trait -> ranks lost
     fatigue: 0, defMod: 0, feinted: false, grabbedBy: null, holding: null, nullified: 0, regen: 0, interposed: false,
     lastAttackId: null, usedEffort: 0, luckRound: null, inspired: null, inspireUsed: false, feats: [], teamedRound: null, surpriseActor: false,
+    stance: null,          // { name, style } while a fighting style stance other than Neutral is held (stance-fight.js)
+    rerollsUsed: 0,        // a Master's free re-rolls used this fight (stance-fight.js)
+    maRound: {},           // what the martial artist did this round: { round, struck, moved } (style-turn.js)
     dropped: [],           // keys of items lost to a disarm or a smash: their attacks stay removed (items.js)
     flaw: freshFlawState(), // what is switched on, used, faded or done for the flaws (flaws.js)
     distracted: false,     // used a Distracting effect: vulnerable until the start of the next turn
@@ -216,7 +223,7 @@ export function rebuildCombatant(c, R, d = null) {
   const mt = movementTraits(c.ch);
   c.initBonus = d.initiative + 4 * mt.superSpeed; // Super-Speed: Improved Initiative as an Enhanced Trait, +4 a rank (movement-powers.js)
   const where = new Map(allPowers(c.ch).map((x) => [x.power, x]));
-  c.attacks = [...d.attacks, ...powerAttacks(c.ch, R, d.abilities)].map((a) => buildAttack(c, a, R, where)).filter((a) => (a.rank > 0 || a.effect !== 'Damage') && !(a.item && (c.dropped || []).includes(a.item.key)) && !(a.ex?.attackForm && !a.formOk));
+  c.attacks = [...d.attacks, ...powerAttacks(c.ch, R, d.abilities), ...maneuverAttacks(c.ch, R, d)].map((a) => buildAttack(c, a, R, where)).filter((a) => (a.rank > 0 || a.effect !== 'Damage') && !(a.item && (c.dropped || []).includes(a.item.key)) && !(a.ex?.attackForm && !a.formOk));
   powerStats(c);
   c.immune = immunitiesOf(c.ch, d);      // [{ label, half, hits(atk), crit, interaction, fear, grab, environment }] (immunity.js)
   c.insub = restoreForm(c);              // the Insubstantial form the fighter is in, or null (insubstantial.js)
@@ -226,7 +233,7 @@ export function rebuildCombatant(c, R, d = null) {
   c.absorbs = absorbsOf(c.ch);            // Energy Absorption: the kinds of attack it feeds on (absorb.js)
   c.extraAttacks = extraAttacksOf(c.ch); // Extra Attacks (Martial Arts p83), or null (extra-attacks-read.js)
   Object.assign(c, { burrows: mv.burrowing, permeates: mt.permeate, slithers: mt.slithers, sureFooted: mt.sureFooted, adaptsWeather: mt.adaptation, limbBonus: limbBonus(mt), limbDistract: mt.limbsDistract });
-  c.adv = Object.fromEntries(['Power Attack', 'Accurate Attack', 'All-out Attack', 'Defensive Attack', 'Takedown', 'Interpose', 'Evasion', 'Fearless', 'Seize Initiative', 'Move-by Action', 'Fast Grab', 'Improved Grab', 'Improved Hold', 'Chokehold', 'Agile Feint', 'Uncanny Dodge', 'Improved Initiative', 'Diehard', 'Instant Up', 'Luck', 'Taunt', 'Teamwork', 'Improved Trip', 'Improved Disarm', 'Improved Smash', 'Prone Fighting', 'Improved Aim', 'Improved Defense', 'Grabbing Finesse', 'Leadership', 'Inspire', 'Set-up', 'Startle', 'Great Endurance', 'Extraordinary Effort', 'Assessment', 'Quick Draw', 'Improvised Weapon', 'Redirect', 'Weapon Bind', 'Weapon Break', 'Fascinate'].map((n) => [n, advantageRank(c.ch, n)]));
+  c.adv = Object.fromEntries(['Power Attack', 'Accurate Attack', 'All-out Attack', 'Defensive Attack', 'Takedown', 'Interpose', 'Evasion', 'Fearless', 'Seize Initiative', 'Move-by Action', 'Fast Grab', 'Improved Grab', 'Improved Hold', 'Chokehold', 'Agile Feint', 'Uncanny Dodge', 'Improved Initiative', 'Diehard', 'Instant Up', 'Luck', 'Taunt', 'Teamwork', 'Improved Trip', 'Improved Disarm', 'Improved Smash', 'Prone Fighting', 'Improved Aim', 'Improved Defense', 'Grabbing Finesse', 'Leadership', 'Inspire', 'Set-up', 'Startle', 'Great Endurance', 'Extraordinary Effort', 'Assessment', 'Quick Draw', 'Improvised Weapon', 'Redirect', 'Weapon Bind', 'Weapon Break', 'Fascinate', 'Counterstrike', 'Defensive Throw', 'Follow-Up Strike', 'Sweeping Strike', 'Reversal', 'Crushing Hold', 'Bob and Weave', 'Quick Throw', 'Damaging Escape'].map((n) => [n, advantageRank(c.ch, n)]));
   if (mt.limbs > 0) c.adv['Improved Grab'] = Math.max(1, c.adv['Improved Grab'] || 0); // Extra Limbs give the benefits of Improved Grab (p98)
   if (fearImmune(c)) c.adv.Fearless = Math.max(1, c.adv.Fearless || 0); // Immunity to fear is Fearless (DCA 77, 102)
   const sk = (name) => d.skills.find((s) => s.name === name)?.bonus ?? (d.abilities[R.skillAbility(name)] ?? 0);
@@ -242,6 +249,9 @@ export function rebuildCombatant(c, R, d = null) {
   c.precise = (c.ch.advantages || []).filter((a) => a.name === 'Precise Attack').map((a) => String(a.param || '').toLowerCase());
   c.gifts = giftsOf(c.ch);               // traits this fighter can lend to an ally
   addOmniStunts(c, d);
+  c.ma = readMartial(c, R, d);           // the styles, tier and stances of a martial artist, or null (martial-read.js)
+  styleBonuses(c);                       // Student's +2, Aggressive's +1 and the like, on the style's own attacks (style-bonus.js)
+  Object.assign(c, { stanceFlags: [], actDef: {}, resDef: {}, stanceDef: {}, dodgeForParry: 0 }); // stance effects are put back by applyMods below
   applyGrants(c);
   applyMods(c);                          // a Shapeshift form, a Mimic copy or absorbed energy still in force (mods.js)
   c.roles = detectRoles(c);

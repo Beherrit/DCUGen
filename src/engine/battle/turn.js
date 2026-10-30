@@ -34,12 +34,16 @@ import { issueCommand } from './summon-run.js';
 import { deceivedTurn } from './illusion-turn.js';
 import { refreshEnvironment } from './environment.js';
 import { formTurn } from './form-turn.js';
+import { stanceTurn } from './stance-plan.js';
+import { styleStartTurn, bobAndWeave } from './style-turn.js';
+import { reversal, damagingEscape, quickThrow } from './ma-reactions.js';
 
 const isHurt = (c) => c.staggered || c.bruises >= 2;
 
 /** Every step below returns true when it used up the turn. */
 export function takeTurn(b, R, c, rng) {
   c.defMod = 0;
+  styleStartTurn(c); // the round's defense changes of a martial artist end (style-turn.js)
   c.speedBoost = false; // extra effort for speed lasts until the start of the next turn
   dropReady(b, c); // a readied action that did not happen is lost (ready.js)
   markTurn(b, c);
@@ -62,11 +66,13 @@ export function takeTurn(b, R, c, rng) {
   if (losesNerve(b, c, enemies, rng)) return;
   if (mode === 'full' && issueCommand(b, c)) mode = 'standard'; // Command, a move action: orders to minions still waiting for them (summon-run.js)
   mode = formTurn(b, R, c, enemies, mode); // a free or move-action change of build: Alternate Form, Metamorph, Shapeshift (form-turn.js)
+  mode = stanceTurn(b, R, c, enemies, mode, rng); // a martial artist reads the foes' stances and may change its own (stance-plan.js)
+  mode = bobAndWeave(b, c, enemies, mode, rng); // Bob and Weave: a move action for a bonus to active defense (style-turn.js)
   insubTurn(b, c, enemies); // a free action: change form, and flow out of a hold
   uncontrolledFire(b, R, c, enemies, rng); // an Uncontrolled power may go off by itself
   runHoming(b, R, c, rng); // a Homing attack that missed tries again, as a free action (extra-run.js)
   freeHeld(b, R, c, rng); // effects held with a free action or none (Increased Duration)
-  if (escapeGrab(b, c, rng)) return;
+  if (escapeGrab(b, R, c, rng)) return;
   recoverFromDaze(b, c, mode, rng);
   recoverFatigue(b, c);
   if (concentrate(b, c)) return; // keeping a Concentration effect up takes the standard action
@@ -132,11 +138,11 @@ function losesNerve(b, c, enemies, rng) {
 }
 
 /** Escape a grab? True when the struggle used up the turn. */
-function escapeGrab(b, c, rng) {
+function escapeGrab(b, R, c, rng) {
   if (!c.grabbedBy) return false;
   const holder = byId(b, c.grabbedBy);
   if (!holder || holder.out || holder.fled) { c.grabbedBy = null; return false; }
-  if (tryEscape(b, c, holder, rng)) return true;
+  if (tryEscape(b, c, holder, rng)) { if (!c.grabbedBy) { damagingEscape(b, R, c, holder, rng, resolveAttack); reversal(b, R, c, holder, rng); } return true; } // Damaging Escape, Reversal: a blow and a grab on the one who held us (ma-reactions.js)
   return activeConditions(c).has('Bound');
 }
 
@@ -184,12 +190,12 @@ function crushHeld(b, R, c, rng) {
   if (!unarmed) return false;
   log(b, { kind: 'attack', actor: c.id, target: victim.id, text: `${c.name} ${c.style === 'beast' ? 'worries' : 'crushes'} ${victim.name} in ${c.style === 'beast' ? 'its jaws' : 'the hold'}: Damage ${unarmed.rank}, no attack roll needed.` });
   applyEffect(b, R, c, unarmed, victim, rng, { auto: true, crit: false });
-  return true;
+  return !c.adv['Crushing Hold']; // Crushing Hold: crushing the held foe is a free action (MA, Combat advantages)
 }
 
 /** Defend (DCA 175): hurt, already recovered, outnumbered and with nothing that would land: dig in. */
 function digIn(b, c, choice, enemies, mode) {
-  if (!mayDefend(b, c)) return false;
+  if (!mayDefend(b, c) || c.noDefend) return false; // an Aggressive style does not take the Defend action (MA 131)
   if (coverDefends(b, c, choice, enemies, mode)) {
     c.defending = true;
     log(b, { kind: 'note', actor: c.id, text: `${c.name} keeps their head down and defends: attackers must beat a rolled defense until their next turn.` });
@@ -213,7 +219,7 @@ function nonAttackPlan(b, R, c, choice, mode, rng) {
   }
   if (plan === 'grab') {
     if (mode === 'full') moveToward(b, c, target, rng, 1, reachSquares(b, c));
-    if (inReach(b, c, target)) grab(b, R, c, target, rng);
+    if (inReach(b, c, target)) { grab(b, R, c, target, rng); if (c.holding === target.id) quickThrow(b, c, target, rng); } // Quick Throw: a free throw after a good grab (ma-reactions.js)
     return true;
   }
   return false;

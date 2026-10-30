@@ -10,6 +10,7 @@
 
 import { log } from './util.js';
 import { fmtFt, rankFt } from '../range.js';
+import { stanceDefense } from './mods-martial.js';
 import { GRID_SIZE, isWall, isPlayable, spotName } from './grid.js';
 import { teamsOf } from './placement.js';
 import { allPowers } from '../derive.js';
@@ -85,7 +86,7 @@ export function knockProne(t, c) {
 export function maybeKnockback(b, R, c, atk, t, res, rng, { slam = false } = {}) {
   if (!b.options.knockback || atk.effect !== 'Damage' || res?.rank === undefined) return;
   if (!(slam || (res.degrees || 0) >= 2)) return;
-  const rank = res.rank - massRank(t);
+  const rank = res.rank - massRank(t) - stanceDefense(t, 'knockback'); // Grounded stance: 1 rank less knockback; High stance: more (MA 129)
   const flightFt = rank < 0 ? 0 : rankFt(rank);
   const flightSq = Math.min(Math.floor(flightFt / b.grid.squareFt), GRID_SIZE - 1);
   const how = rank < 0 ? `enough to knock ${t.name} down` : `${fmtFt(flightFt)} of flight (${flightSq} square${flightSq === 1 ? '' : 's'} here)`;
