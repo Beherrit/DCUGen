@@ -24,7 +24,7 @@ export function rollCheck({ who, label, mod = 0, dc = null, note = '' }) {
   return postRoll({ who, text, dice: { label, roll, mod, total, dc, deg } });
 }
 
-/** The "🎲 Roll" dropdown for a character. */
+/** The "Roll" dropdown for a character. */
 export function rollMenu(ch, R) {
   const who = ch.identity?.codename || ch.identity?.realName || 'Someone';
   let d;
@@ -36,7 +36,7 @@ export function rollMenu(ch, R) {
     document.querySelectorAll('.menu-list').forEach((m) => { m.hidden = true; });
     list.hidden = !open;
     btn.setAttribute('aria-expanded', String(open));
-  } }, '🎲 Roll ▾');
+  } }, 'Roll ▾');
   const item = (label, hint, run) => h('button', { type: 'button', role: 'menuitem', onClick: () => { list.hidden = true; const e = run(); if (e) toast(e.text); } }, label, hint ? h('small', null, hint) : null);
   const group = (title) => h('div', { class: 'roll-group' }, title);
   list.append(group('Combat'));

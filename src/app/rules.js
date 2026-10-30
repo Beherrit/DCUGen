@@ -17,7 +17,7 @@ function housePanel() {
     h('select', { id: `house-${k}`, onChange: (e) => set(k, e.target.value === 'true' ? true : e.target.value === 'false' ? false : e.target.value) }, opts.map(([v, t]) => h('option', { value: String(v), selected: hr[k] === v }, t))),
     hint ? h('small', { class: 'hint' }, hint) : null);
   return h('details', { class: 'panel house-panel', open: !isByTheBook() },
-    h('summary', null, h('b', null, '⚖ House rules'), h('span', { class: 'chip' }, isByTheBook() ? 'By the book' : 'House rules on')),
+    h('summary', null, h('b', null, 'House rules'), h('span', { class: 'chip' }, isByTheBook() ? 'By the book' : 'House rules on')),
     h('p', { class: 'hint', style: { margin: '8px 0' } }, 'Play your table\'s way. These change what the Forge flags as a problem and how drains work, for every character in this browser (and on your other devices if you sync).'),
     h('div', { class: 'grid2' },
       sel('plLimits', 'Power level limits (attack + effect, defenses, skills)', [['error', 'By the book: over the limit is a rule issue'], ['warning', 'Allowed: shown as a warning'], ['off', 'Off: not checked']]),
@@ -53,7 +53,7 @@ function buildCards() {
   if (ref.recovery) add('Combat', { title: 'Recovery', meta: 'Combat', details: ref.recovery });
   if (ref.range) add('Combat', { title: 'Range', meta: 'Combat', details: ref.range });
   if (ref.measurements?.length) {
-    add('Tables', { title: 'Measurements', meta: 'Rank → mass, time, distance, volume', summary: ref.measurement_notes?.summary, details: ref.measurement_notes?.details,
+    add('Tables', { title: 'Measurements', meta: 'Rank to mass, time, distance, volume', summary: ref.measurement_notes?.summary, details: ref.measurement_notes?.details,
       table: [['Rank', 'Mass', 'Time', 'Distance', 'Volume'], ...ref.measurements.map((m) => [m.rank, m.mass, m.time, m.distance, m.volume])] });
   }
   for (const x of ref.hazards || []) add('Hazards', { title: x.name, meta: 'Hazard', summary: x.summary, details: x.details, source: x.source, table: x.table });

@@ -23,7 +23,7 @@ export const TOURS = {
       { tab: 'forge', sel: '#build-scratch', title: 'Or build your own', text: 'Build from scratch starts a blank sheet. Use Edit on any sheet to change traits with + and −, and the Power Lab for custom powers.' },
       { tab: 'forge', sel: '#open-key', title: 'Open what your GM sent', text: 'Paste a key or link here, or use Import for an Excel sheet or a .json file.' },
       { tab: 'roster', sel: '#tab-roster', title: 'Your roster', text: 'Save to roster keeps a character in this browser. Folders, worlds and a backup are here too.' },
-      { tab: 'table', sel: '#tab-table', title: 'Join the table', text: 'When your GM hosts a game, join here or scan their QR code with your phone. Claim your character with ✋ Mine, and your sheet, rolls and conditions show up on the GM\'s screen.' },
+      { tab: 'table', sel: '#tab-table', title: 'Join the table', text: 'When your GM hosts a game, join here or scan their QR code with your phone. Claim your character with Mine, and your sheet, rolls and conditions show up on the GM\'s screen.' },
       { tab: 'rules', sel: '#tab-rules', title: 'Rules', text: 'Every effect, advantage, condition and skill, searchable. You can take this tour again from the ? menu.' },
     ],
   },
@@ -192,9 +192,9 @@ export function initHelp({ showTab, setMode }) {
   showTabHook = showTab;
   hooks = { setMode };
   const m = menu('?', [
-    { label: '🧭 Player tour', hint: 'Make a character and join a table', run: () => startTour('player') },
-    { label: '🧭 GM tour', hint: 'Bestiary, GM Screen, Battle Room, World', run: () => startTour('gm') },
-    { label: '✨ What\'s new', id: 'whats-new', hint: 'What changed in recent updates', run: () => showWhatsNew() },
+    { label: 'Player tour', hint: 'Make a character and join a table', run: () => startTour('player') },
+    { label: 'GM tour', hint: 'Bestiary, GM Screen, Battle Room, World', run: () => startTour('gm') },
+    { label: 'What\'s new', id: 'whats-new', hint: 'What changed in recent updates', run: () => showWhatsNew() },
     { label: 'Rules', hint: 'Effects, advantages, conditions, skills', run: () => showTab('rules') },
   ], { cls: 'icon-btn help-btn' });
   m.classList.add('help-menu');
