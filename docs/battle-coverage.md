@@ -12,14 +12,14 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | effect | 63 | 6 | 30 | 19 | 8 | 65% |
 | extra | 50 | 10 | 8 | 26 | 6 | 41% |
-| flaw | 41 | 0 | 1 | 37 | 3 | 3% |
+| flaw | 41 | 11 | 21 | 3 | 6 | 91% |
 | advantage | 75 | 28 | 12 | 14 | 21 | 74% |
 | skill | 16 | 8 | 0 | 2 | 6 | 80% |
 | action | 20 | 9 | 7 | 4 | 0 | 80% |
 | maneuver | 12 | 7 | 4 | 1 | 0 | 92% |
 | condition | 30 | 16 | 8 | 5 | 1 | 83% |
 | rule | 38 | 16 | 11 | 11 | 0 | 71% |
-| all | 345 | 100 | 81 | 119 | 45 | 60% |
+| all | 345 | 111 | 101 | 85 | 48 | 71% |
 
 ## Effects
 
@@ -148,47 +148,47 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 
 | Name | Status | Note | Source |
 | --- | --- | --- | --- |
-| Activation | none | Activation time is not charged. | DCA 133 |
-| Check Required | none | Required checks are not rolled. | DCA 134 |
-| Concentration | none | Concentration is not tracked. | DCA 135 |
-| Diminished Range | none | Range is not reduced by the flaw. | DCA 135 |
-| Distracting | none | The vulnerability from using the power is not applied. | DCA 135 |
-| Fades | none | Fading uses are not tracked. | DCA 135 |
-| Feedback | none | Damage to the user is not applied. | DCA 135 |
-| Grab-Based | none | Grab-based powers are not tied to a hold. | DCA 135 |
-| Inaccurate | none | The -2 to hit is not applied. | DCA 135 |
-| Increased Action | none | Slower actions are not charged. | DCA 135 |
-| Limited | partial | Read only for Immunity (half effect), Concealment and Limited Degree; other limits are not enforced. | DCA 135 |
+| Activation | partial | An attack with it needs a move (-1) or standard (-2) action to switch on first, once a fight: a move leaves the standard action for the attack when the target is already in range, a standard action is the whole turn; the AI activates it and the log says so, and values an unlit attack lower. Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight. | DCA 133 |
+| Check Required | partial | Before each use the fighter rolls the named skill or ability (else its attack bonus; house rule) against DC 10 + the flaw ranks: a natural 1 or no point over the DC fails and the action is spent, each point over is a rank of the effect (DCA 134). The AI weighs the chance and the ranks. Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight. | DCA 134 |
+| Concentration | partial | Conditions an attack causes with it last only while the user keeps concentrating: it spends its standard action each turn to hold a control that stops the target (otherwise it lets go), and the effect ends when the user is stunned, out or fled (DCA 135). Instant effects (damage) leave nothing to hold. | DCA 135 |
+| Diminished Range | full | Ranks 1 to 3 cut the short, medium and long range per rank of the effect to 10/25/50, 5/10/25 and 2/5/10 feet (DCA 135); range penalties, out-of-range, shooting distance and the AI all use the shrunk bands. | DCA 135 |
+| Distracting | partial | After using it the user is vulnerable (defense halved) until the start of its next turn (DCA 135); the AI values it lower. Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight. | DCA 135 |
+| Fades | partial | Each use loses a rank (more for Fades taken again, MA 96), the effect stops at 0 and the log says so (DCA 135). Recovering a faded effect (rest, recharge, a hero point) happens outside the fight and is not simulated. Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight. | DCA 135 |
+| Feedback | partial | The engine has one manifestation, a Snare: when the snared fighter breaks out with Damage, the maker resists that Damage rank with the Snare rank as the bonus and is hurt on a failure (DCA 135). Create, Summon and Illusion are not simulated, so their objects cannot be damaged. | DCA 135 |
+| Grab-Based | full | The effect needs a successful grab (attack check, then the hold) first and follows at once when it succeeds; on a later turn, while the hold lasts, it is the standard action with no attack roll (DCA 135, 176). A target that slips every hold cannot be used on, and the AI values the attack with its grab. | DCA 135 |
+| Inaccurate | full | -2 to the attack check per rank (DCA 135), built into the attack bonus and named in the log. | DCA 135 |
+| Increased Action | partial | An attack effect (a standard action) with it becomes a full action: the fighter must already be in range and does not move that turn, and a dazed or one-action fighter cannot use it (DCA 135). The AI will not pick one it cannot reach. Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight. | DCA 135 |
+| Limited | partial | Read for Immunity (half effect), Concealment and Limited Degree, and on attacks for a table of limits the engine knows the facts for: against machines, living things, the undead, flying or grounded or wounded or prone or helpless targets, minions, in melee or at range, while flying, while hurt, and against a descriptor (fire users). A limit that is not met blocks the use and the log says so; every other limit (darkness, daylight, sources, places) keeps the power working. house rule: met means full effect, not met means none. | DCA 135 |
 | Noticeable | n/a | Concerns being noticed. | DCA 135 |
 | Permanent | n/a | Only changes cost. | DCA 136 |
 | Quirk | n/a | Roleplaying only. | DCA 136 |
-| Reduced Range | none | Range is not reduced by the flaw. | DCA 136 |
-| Removable | none | Items are never taken away. | DCA 136 |
-| Resistible | none | The extra resistance check is not applied. | DCA 137 |
-| Sense-Dependent | none | Senses are not tracked for powers. | DCA 137 |
-| Side Effect | none | Side effects are not applied. | DCA 137 |
-| Tiring | none | Fatigue from using the power is not applied. | DCA 138 |
-| Uncontrolled | none | Random results are not applied. | DCA 138 |
-| Unreliable | none | Uses that may fail are not rolled. | DCA 138 |
-| Announcement | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 94 |
-| Bad Bounce | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 94 |
-| Calling | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 95 |
-| Chained | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 95 |
-| Diluted | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 96 |
-| Dulled | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 96 |
-| Fast Return | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 96 |
-| Gallant | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 97 |
-| Immobile | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 97 |
-| Inexact | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 97 |
-| Momentum-Based | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 97 |
-| Nonlethal | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 97 |
-| Obvious | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 97 |
-| Prone | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 98 |
-| Push Over | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 98 |
-| Source | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 98 |
-| Strained | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 98 |
-| Uncertain | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 98 |
-| Weak Limbed | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 98 |
+| Reduced Range | full | The range drops one step per rank (perception to ranged, ranged to close) for attacks, areas and Healing (DCA 136): the attack check, the defense it faces and the distance it can be used from all follow. | DCA 136 |
+| Removable | full | A device with it cannot be disarmed in a fight (it only comes away when the owner is stunned and defenseless, which ends the fight for that fighter); Easily Removable devices and Equipment can be disarmed (disarm.js). The Grab action has no rule text for taking an item, so a grab does not take it (DCA 136, 176). | DCA 136 |
+| Resistible | full | The target makes a second resistance check with the defense the flaw names (its detail) and the better of the two counts; the odds and the AI use it too (DCA 137). A Resistible with no defense named changes nothing. | DCA 137 |
+| Sense-Dependent | partial | A target that cannot use the sense (blind for sight, deaf for hearing) is immune, and any other target gets a Dodge check to look away or cover its ears (DCA 137); a sense the detail does not name is read from the power text. Opponents who deliberately block the sense for +10 (and give partial concealment) are not simulated. | DCA 137 |
+| Side Effect | partial | On a failed use (a miss or a resisted effect) or every use, the effect rebounds on the user, who makes the normal resistance check and is not protected by its own immunities (DCA 137). house rule: the book leaves the side effect to the GM; the rebound of the base effect is one of its examples, so it is the only one built. Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight. | DCA 137 |
+| Tiring | partial | A level of fatigue each use (stacking with extra effort); the AI stops using it when one more would exhaust it (DCA 138). Tiring on only some ranks is not modelled. Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight. | DCA 138 |
+| Uncontrolled | partial | The AI never picks it; each turn it may go off by itself at a foe in range on a d20 of 11 or more. house rule: the book only says the GM decides when and how it works (DCA 138). Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight. | DCA 138 |
+| Unreliable | partial | A d20 each use: 10 or less and it fails with the action spent, a hero point makes it work; a detail such as "one shot" or "five uses" counts uses instead (DCA 138). The AI halves its value. Recovering spent uses by hero point is not simulated. Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight. | DCA 138 |
+| Announcement | n/a | Shouting the name is free and nothing in a fight stops it (no silence or gag effect is simulated), so it changes nothing. | MA 94 |
+| Bad Bounce | partial | The flaw is read onto the attack and the per-bounce attack check DC is ready (10 against a still surface, else 10 + defense, +2 per earlier bounce), but needs the Ricochet extra, which is not simulated yet. | MA 94 |
+| Calling | none | Needs the Summon effect, which is not simulated (summoned allies are not created), so there is no minion to call. | MA 95 |
+| Chained | partial | A chained attack works only if the power named in its detail worked (hit and was not resisted) in the user's previous turn, so the AI uses the prerequisite first (MA 95). A prerequisite that is not one of the fighter's attacks, or none named, counts as done. | MA 95 |
+| Diluted | full | Each rank takes 1 off the effect's resistance DC, never below 10, without lowering its ranks (MA 96); the DC, the odds and Afflictions that persist all use it. | MA 96 |
+| Dulled | partial | While the condition in its detail holds (the same phrase table as Limited, read as "against ..."), the effect loses the flaw's ranks; at rank 0 the base DC stays, and Completely Dulled (-2) at rank 0 does nothing (MA 96). A condition the engine cannot read never applies. | MA 96 |
+| Fast Return | partial | A Weaken with it gets back one more rank per flaw rank at the end of each of the target's turns (MA 96). house rule: it is kept per target, not per Weaken effect, so two Weakens on one target share the better rate. | MA 96 |
+| Gallant | partial | Each use costs a hero point and cannot be made without one (MA 97). With hero points off in the battle it costs nothing (house rule). Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight. | MA 97 |
+| Immobile | partial | The attack is used where the fighter stands, after no movement; a fighter out of range closes in first and uses it next turn, and the 2-point version also keeps the fighter still while it is used (MA 97). Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight. | MA 97 |
+| Inexact | full | Each target in the area needs its own attack check first (a hit still gets its Dodge check) (MA 97). house rule: an area has no attack bonus, so the fighter's attack bonus is used. | MA 97 |
+| Momentum-Based | partial | The effect works only if the fighter has moved this turn, and then with all its ranks (MA 97): in range already, the fighter first steps to an open square (the run), and a fighter with no move left cannot use it. house rule: any move counts as running at the fighter's full movement rank, since the grid does not track speed ranks (the book caps the rank at the current speed rank). | MA 97 |
+| Nonlethal | n/a | The fight engine ends at incapacitated; dying and dead are not modelled, so every attack is already unable to kill. | MA 97 |
+| Obvious | n/a | Only makes the effect easier to notice (Perception); noticing is not simulated. | MA 97 |
+| Prone | full | After the effect the user makes an Agility or Acrobatics check against DC 10 + rank to stay on its feet, or falls prone; the 2-point version always does (MA 98). The prone fighter gets up through the Stand rules. | MA 98 |
+| Push Over | partial | The user is braced less against knockback (Toughness -1 per rank in the book) until its next turn (MA 98). house rule: the knockback rule here works from mass rank, so each flaw rank counts as one rank less mass. | MA 98 |
+| Source | none | The environment (a fire, a person, a place) is not modelled, so a Source is never missing and the power keeps working. | MA 98 |
+| Strained | full | The effect never uses extra effort (MA 98). | MA 98 |
+| Uncertain | full | The critical miss range grows by one natural number per rank: a natural 1 and 2 with one rank (MA 98). | MA 98 |
+| Weak Limbed | none | Needs the Extra Limbs effect, which is not simulated (extra limbs do not hold or attack). | MA 98 |
 
 ## Advantages
 

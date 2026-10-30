@@ -695,78 +695,78 @@
   {
     "kind": "flaw",
     "name": "Activation",
-    "status": "none",
-    "note": "Activation time is not charged.",
+    "status": "partial",
+    "note": "An attack with it needs a move (-1) or standard (-2) action to switch on first, once a fight: a move leaves the standard action for the attack when the target is already in range, a standard action is the whole turn; the AI activates it and the log says so, and values an unlit attack lower. Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight.",
     "source": "DCA 133"
   },
   {
     "kind": "flaw",
     "name": "Check Required",
-    "status": "none",
-    "note": "Required checks are not rolled.",
+    "status": "partial",
+    "note": "Before each use the fighter rolls the named skill or ability (else its attack bonus; house rule) against DC 10 + the flaw ranks: a natural 1 or no point over the DC fails and the action is spent, each point over is a rank of the effect (DCA 134). The AI weighs the chance and the ranks. Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight.",
     "source": "DCA 134"
   },
   {
     "kind": "flaw",
     "name": "Concentration",
-    "status": "none",
-    "note": "Concentration is not tracked.",
+    "status": "partial",
+    "note": "Conditions an attack causes with it last only while the user keeps concentrating: it spends its standard action each turn to hold a control that stops the target (otherwise it lets go), and the effect ends when the user is stunned, out or fled (DCA 135). Instant effects (damage) leave nothing to hold.",
     "source": "DCA 135"
   },
   {
     "kind": "flaw",
     "name": "Diminished Range",
-    "status": "none",
-    "note": "Range is not reduced by the flaw.",
+    "status": "full",
+    "note": "Ranks 1 to 3 cut the short, medium and long range per rank of the effect to 10/25/50, 5/10/25 and 2/5/10 feet (DCA 135); range penalties, out-of-range, shooting distance and the AI all use the shrunk bands.",
     "source": "DCA 135"
   },
   {
     "kind": "flaw",
     "name": "Distracting",
-    "status": "none",
-    "note": "The vulnerability from using the power is not applied.",
+    "status": "partial",
+    "note": "After using it the user is vulnerable (defense halved) until the start of its next turn (DCA 135); the AI values it lower. Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight.",
     "source": "DCA 135"
   },
   {
     "kind": "flaw",
     "name": "Fades",
-    "status": "none",
-    "note": "Fading uses are not tracked.",
+    "status": "partial",
+    "note": "Each use loses a rank (more for Fades taken again, MA 96), the effect stops at 0 and the log says so (DCA 135). Recovering a faded effect (rest, recharge, a hero point) happens outside the fight and is not simulated. Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight.",
     "source": "DCA 135"
   },
   {
     "kind": "flaw",
     "name": "Feedback",
-    "status": "none",
-    "note": "Damage to the user is not applied.",
+    "status": "partial",
+    "note": "The engine has one manifestation, a Snare: when the snared fighter breaks out with Damage, the maker resists that Damage rank with the Snare rank as the bonus and is hurt on a failure (DCA 135). Create, Summon and Illusion are not simulated, so their objects cannot be damaged.",
     "source": "DCA 135"
   },
   {
     "kind": "flaw",
     "name": "Grab-Based",
-    "status": "none",
-    "note": "Grab-based powers are not tied to a hold.",
+    "status": "full",
+    "note": "The effect needs a successful grab (attack check, then the hold) first and follows at once when it succeeds; on a later turn, while the hold lasts, it is the standard action with no attack roll (DCA 135, 176). A target that slips every hold cannot be used on, and the AI values the attack with its grab.",
     "source": "DCA 135"
   },
   {
     "kind": "flaw",
     "name": "Inaccurate",
-    "status": "none",
-    "note": "The -2 to hit is not applied.",
+    "status": "full",
+    "note": "-2 to the attack check per rank (DCA 135), built into the attack bonus and named in the log.",
     "source": "DCA 135"
   },
   {
     "kind": "flaw",
     "name": "Increased Action",
-    "status": "none",
-    "note": "Slower actions are not charged.",
+    "status": "partial",
+    "note": "An attack effect (a standard action) with it becomes a full action: the fighter must already be in range and does not move that turn, and a dazed or one-action fighter cannot use it (DCA 135). The AI will not pick one it cannot reach. Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight.",
     "source": "DCA 135"
   },
   {
     "kind": "flaw",
     "name": "Limited",
     "status": "partial",
-    "note": "Read only for Immunity (half effect), Concealment and Limited Degree; other limits are not enforced.",
+    "note": "Read for Immunity (half effect), Concealment and Limited Degree, and on attacks for a table of limits the engine knows the facts for: against machines, living things, the undead, flying or grounded or wounded or prone or helpless targets, minions, in melee or at range, while flying, while hurt, and against a descriptor (fire users). A limit that is not met blocks the use and the log says so; every other limit (darkness, daylight, sources, places) keeps the power working. house rule: met means full effect, not met means none.",
     "source": "DCA 135"
   },
   {
@@ -793,57 +793,57 @@
   {
     "kind": "flaw",
     "name": "Reduced Range",
-    "status": "none",
-    "note": "Range is not reduced by the flaw.",
+    "status": "full",
+    "note": "The range drops one step per rank (perception to ranged, ranged to close) for attacks, areas and Healing (DCA 136): the attack check, the defense it faces and the distance it can be used from all follow.",
     "source": "DCA 136"
   },
   {
     "kind": "flaw",
     "name": "Removable",
-    "status": "none",
-    "note": "Items are never taken away.",
+    "status": "full",
+    "note": "A device with it cannot be disarmed in a fight (it only comes away when the owner is stunned and defenseless, which ends the fight for that fighter); Easily Removable devices and Equipment can be disarmed (disarm.js). The Grab action has no rule text for taking an item, so a grab does not take it (DCA 136, 176).",
     "source": "DCA 136"
   },
   {
     "kind": "flaw",
     "name": "Resistible",
-    "status": "none",
-    "note": "The extra resistance check is not applied.",
+    "status": "full",
+    "note": "The target makes a second resistance check with the defense the flaw names (its detail) and the better of the two counts; the odds and the AI use it too (DCA 137). A Resistible with no defense named changes nothing.",
     "source": "DCA 137"
   },
   {
     "kind": "flaw",
     "name": "Sense-Dependent",
-    "status": "none",
-    "note": "Senses are not tracked for powers.",
+    "status": "partial",
+    "note": "A target that cannot use the sense (blind for sight, deaf for hearing) is immune, and any other target gets a Dodge check to look away or cover its ears (DCA 137); a sense the detail does not name is read from the power text. Opponents who deliberately block the sense for +10 (and give partial concealment) are not simulated.",
     "source": "DCA 137"
   },
   {
     "kind": "flaw",
     "name": "Side Effect",
-    "status": "none",
-    "note": "Side effects are not applied.",
+    "status": "partial",
+    "note": "On a failed use (a miss or a resisted effect) or every use, the effect rebounds on the user, who makes the normal resistance check and is not protected by its own immunities (DCA 137). house rule: the book leaves the side effect to the GM; the rebound of the base effect is one of its examples, so it is the only one built. Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight.",
     "source": "DCA 137"
   },
   {
     "kind": "flaw",
     "name": "Tiring",
-    "status": "none",
-    "note": "Fatigue from using the power is not applied.",
+    "status": "partial",
+    "note": "A level of fatigue each use (stacking with extra effort); the AI stops using it when one more would exhaust it (DCA 138). Tiring on only some ranks is not modelled. Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight.",
     "source": "DCA 138"
   },
   {
     "kind": "flaw",
     "name": "Uncontrolled",
-    "status": "none",
-    "note": "Random results are not applied.",
+    "status": "partial",
+    "note": "The AI never picks it; each turn it may go off by itself at a foe in range on a d20 of 11 or more. house rule: the book only says the GM decides when and how it works (DCA 138). Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight.",
     "source": "DCA 138"
   },
   {
     "kind": "flaw",
     "name": "Unreliable",
-    "status": "none",
-    "note": "Uses that may fail are not rolled.",
+    "status": "partial",
+    "note": "A d20 each use: 10 or less and it fails with the action spent, a hero point makes it work; a detail such as \"one shot\" or \"five uses\" counts uses instead (DCA 138). The AI halves its value. Recovering spent uses by hero point is not simulated. Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight.",
     "source": "DCA 138"
   },
   {
@@ -2168,134 +2168,134 @@
   {
     "kind": "flaw",
     "name": "Announcement",
-    "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "status": "n/a",
+    "note": "Shouting the name is free and nothing in a fight stops it (no silence or gag effect is simulated), so it changes nothing.",
     "source": "MA 94"
   },
   {
     "kind": "flaw",
     "name": "Bad Bounce",
-    "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "status": "partial",
+    "note": "The flaw is read onto the attack and the per-bounce attack check DC is ready (10 against a still surface, else 10 + defense, +2 per earlier bounce), but needs the Ricochet extra, which is not simulated yet.",
     "source": "MA 94"
   },
   {
     "kind": "flaw",
     "name": "Calling",
     "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "note": "Needs the Summon effect, which is not simulated (summoned allies are not created), so there is no minion to call.",
     "source": "MA 95"
   },
   {
     "kind": "flaw",
     "name": "Chained",
-    "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "status": "partial",
+    "note": "A chained attack works only if the power named in its detail worked (hit and was not resisted) in the user's previous turn, so the AI uses the prerequisite first (MA 95). A prerequisite that is not one of the fighter's attacks, or none named, counts as done.",
     "source": "MA 95"
   },
   {
     "kind": "flaw",
     "name": "Diluted",
-    "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "status": "full",
+    "note": "Each rank takes 1 off the effect's resistance DC, never below 10, without lowering its ranks (MA 96); the DC, the odds and Afflictions that persist all use it.",
     "source": "MA 96"
   },
   {
     "kind": "flaw",
     "name": "Dulled",
-    "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "status": "partial",
+    "note": "While the condition in its detail holds (the same phrase table as Limited, read as \"against ...\"), the effect loses the flaw's ranks; at rank 0 the base DC stays, and Completely Dulled (-2) at rank 0 does nothing (MA 96). A condition the engine cannot read never applies.",
     "source": "MA 96"
   },
   {
     "kind": "flaw",
     "name": "Fast Return",
-    "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "status": "partial",
+    "note": "A Weaken with it gets back one more rank per flaw rank at the end of each of the target's turns (MA 96). house rule: it is kept per target, not per Weaken effect, so two Weakens on one target share the better rate.",
     "source": "MA 96"
   },
   {
     "kind": "flaw",
     "name": "Gallant",
-    "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "status": "partial",
+    "note": "Each use costs a hero point and cannot be made without one (MA 97). With hero points off in the battle it costs nothing (house rule). Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight.",
     "source": "MA 97"
   },
   {
     "kind": "flaw",
     "name": "Immobile",
-    "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "status": "partial",
+    "note": "The attack is used where the fighter stands, after no movement; a fighter out of range closes in first and uses it next turn, and the 2-point version also keeps the fighter still while it is used (MA 97). Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight.",
     "source": "MA 97"
   },
   {
     "kind": "flaw",
     "name": "Inexact",
-    "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "status": "full",
+    "note": "Each target in the area needs its own attack check first (a hit still gets its Dodge check) (MA 97). house rule: an area has no attack bonus, so the fighter's attack bonus is used.",
     "source": "MA 97"
   },
   {
     "kind": "flaw",
     "name": "Momentum-Based",
-    "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "status": "partial",
+    "note": "The effect works only if the fighter has moved this turn, and then with all its ranks (MA 97): in range already, the fighter first steps to an open square (the run), and a fighter with no move left cannot use it. house rule: any move counts as running at the fighter's full movement rank, since the grid does not track speed ranks (the book caps the rank at the current speed rank).",
     "source": "MA 97"
   },
   {
     "kind": "flaw",
     "name": "Nonlethal",
-    "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "status": "n/a",
+    "note": "The fight engine ends at incapacitated; dying and dead are not modelled, so every attack is already unable to kill.",
     "source": "MA 97"
   },
   {
     "kind": "flaw",
     "name": "Obvious",
-    "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "status": "n/a",
+    "note": "Only makes the effect easier to notice (Perception); noticing is not simulated.",
     "source": "MA 97"
   },
   {
     "kind": "flaw",
     "name": "Prone",
-    "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "status": "full",
+    "note": "After the effect the user makes an Agility or Acrobatics check against DC 10 + rank to stay on its feet, or falls prone; the 2-point version always does (MA 98). The prone fighter gets up through the Stand rules.",
     "source": "MA 98"
   },
   {
     "kind": "flaw",
     "name": "Push Over",
-    "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "status": "partial",
+    "note": "The user is braced less against knockback (Toughness -1 per rank in the book) until its next turn (MA 98). house rule: the knockback rule here works from mass rank, so each flaw rank counts as one rank less mass.",
     "source": "MA 98"
   },
   {
     "kind": "flaw",
     "name": "Source",
     "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "note": "The environment (a fire, a person, a place) is not modelled, so a Source is never missing and the power keeps working.",
     "source": "MA 98"
   },
   {
     "kind": "flaw",
     "name": "Strained",
-    "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "status": "full",
+    "note": "The effect never uses extra effort (MA 98).",
     "source": "MA 98"
   },
   {
     "kind": "flaw",
     "name": "Uncertain",
-    "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "status": "full",
+    "note": "The critical miss range grows by one natural number per rank: a natural 1 and 2 with one rank (MA 98).",
     "source": "MA 98"
   },
   {
     "kind": "flaw",
     "name": "Weak Limbed",
     "status": "none",
-    "note": "Martial Arts (3e) flaw; not simulated in fights yet.",
+    "note": "Needs the Extra Limbs effect, which is not simulated (extra limbs do not hold or attack).",
     "source": "MA 98"
   }
 ]
