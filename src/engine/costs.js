@@ -8,6 +8,7 @@
 //   Removable devices: -1 point per 5 points of total cost (Easily Removable: -2 per 5).
 
 import { ABILITIES, RANGE_STEPS, PP_PER_PL, EP_PER_EQUIPMENT_RANK, traitKind } from './rules.js';
+import { maneuverPowerCost, styleCostParts, maneuverPoints } from './martial/price.js';
 const TRAIT_BASE = { ability: 2, defense: 1, skill: 0, advantage: 1 };
 
 export function modifierValue(mod, def) {
@@ -75,6 +76,7 @@ export function effectCost(power, R) {
 
 /** Full cost of a power: the effect, its linked effects, and its Alternate Effects. */
 export function powerCost(power, R) {
+  if (power.maneuver) return maneuverPowerCost(power, R); // a fighting style maneuver, priced by its own formula
   let total = effectCost(power, R).total;
   for (const link of power.linked || []) total += effectCost(link, R).total;
   const aeCost = power.dynamic ? 2 : 1;
@@ -118,17 +120,20 @@ export function costBreakdown(ch, R) {
     if (v === null) return s - 10; // an absent ability is worth -10 points
     return s + 2 * (v || 0);
   }, 0);
-  const powers = (ch.powers || []).reduce((s, p) => s + powerCost(p, R), 0)
+  const powers = (ch.powers || []).filter((p) => !p.maneuver).reduce((s, p) => s + powerCost(p, R), 0)
     + (ch.devices || []).reduce((s, d) => s + deviceCost(d, R).total, 0);
   const advantages = (ch.advantages || []).reduce((s, a) => s + (a.rank || 1), 0);
   const ranks = skillRanksTotal(ch);
   const skills = Math.ceil(ranks / 2);
   const defenses = Object.values(ch.defenses || {}).reduce((s, v) => s + (v || 0), 0);
-  const total = abilities + powers + advantages + skills + defenses;
+  // Fighting styles (Martial Arts 3e): tier and stance advantages, weapon elements, style extras and flaws, and the maneuvers.
+  const styleParts = styleCostParts(ch, R);
+  const styles = styleParts.total + maneuverPoints(ch, R);
+  const total = abilities + powers + advantages + skills + defenses + styles;
   // With advancement on (GM-awarded points, DCA 190), the budget is the starting points plus every award.
   const adv = ch.advancement;
   const budget = adv
     ? (adv.startPoints ?? (adv.startPl ?? ch.pl) * PP_PER_PL) + (adv.log || []).filter((e) => e.type === 'award').reduce((s, e) => s + (e.points || 0), 0)
     : (ch.pl || 0) * PP_PER_PL;
-  return { abilities, powers, advantages, skills, skillRanks: ranks, defenses, total, budget, unspent: budget - total };
+  return { abilities, powers, advantages, skills, skillRanks: ranks, defenses, styles, styleParts, total, budget, unspent: budget - total };
 }

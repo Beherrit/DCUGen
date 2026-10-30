@@ -13,6 +13,7 @@ import { EP_PER_EQUIPMENT_RANK } from './rules.js';
 import { powerTags } from './powersmith.js';
 import { withoutPlaced, hasPlaced, poolPowers, poolSpent, poolAvailable, fmtPoints } from './pools.js';
 import { houseRules } from './house.js';
+import { checkStyleLimits } from './martial/limits.js';
 function issue(rule, message, severity = 'error', extra = {}) {
   return { rule, message, severity, ...extra };
 }
@@ -98,6 +99,9 @@ export function checkLimits(ch, R) {
   if (ep > eqRanks * EP_PER_EQUIPMENT_RANK) {
     out.push(issue('equipment', `Equipment costs ${ep} points but Equipment ${eqRanks} only provides ${eqRanks * EP_PER_EQUIPMENT_RANK}.`));
   }
+
+  // Fighting styles and their maneuvers (Martial Arts 3e)
+  out.push(...checkStyleLimits(ch, R, issue));
 
   // Powers
   for (const { power: p, alternateOf } of allPowers(ch)) {
