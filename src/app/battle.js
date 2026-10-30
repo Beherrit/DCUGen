@@ -13,6 +13,7 @@ import { addPanel, quickStarts } from './battle-setup.js';
 import { tacticChips } from './battle-tactics.js';
 import { notSimulatedLine } from './battle-report.js';
 import { rolesNote } from './battle-roles.js';
+import { descriptorTags, attackTitle, insubChip } from './battle-descriptors.js';
 import { keepFinishedFight, keptNote, roomTabs } from './records/room.js';
 import { renderFights, openFight } from './records/fights-view.js';
 import { renderCityWar } from './citywar/view.js';
@@ -186,12 +187,14 @@ function fighterCard(c) {
       h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${c.name}`, title: 'Remove from the battle', onClick: () => { removeCombatant(battle, c.id); save(); renderBattle(); } }, 'Remove')),
     h('div', { class: 'bt-stats' },
       [['DOD', d.defenses.Dodge], ['PAR', d.defenses.Parry], ['TOU', d.defenses.Toughness - c.bruises], ['FOR', d.defenses.immune?.Fortitude ? '—' : d.defenses.Fortitude], ['WIL', d.defenses.immune?.Will ? '—' : d.defenses.Will], ['INI', (d.initiative >= 0 ? '+' : '') + d.initiative]].map(([k, v]) => h('div', null, h('b', { class: 'num' }, v), h('span', null, k)))),
-    main ? h('div', { class: 'bt-main' }, `${main.name}: ${main.roll ? `+${main.bonus}, ` : `${main.area ? `${main.area} area` : 'perception'}, `}${main.effect} ${main.rank} (${main.resistance})`, c.attacks.length > 2 ? h('small', null, ` +${c.attacks.length - 1} more`) : null) : null,
+    main ? h('div', { class: 'bt-main', title: attackTitle(c) }, `${main.name}: ${main.roll ? `+${main.bonus}, ` : `${main.area ? `${main.area} area` : 'perception'}, `}${main.effect} ${main.rank} (${main.resistance})`, c.attacks.length > 2 ? h('small', null, ` +${c.attacks.length - 1} more`) : null) : null,
+    descriptorTags(c),
     setup ? h('div', { class: 'bt-opts' }, teamSel, formSel, styleSel, h('details', { class: 'bt-more' }, h('summary', null, 'More'), h('div', { class: 'bt-more-body' }, tacSel, h('label', { class: 'bt-hp-wrap', title: 'Hero points: re-roll a miss or shake off a daze' }, 'Hero points', hp), notSimulatedLine(c)))) : null,
     !setup ? h('div', { class: 'bt-state' }, dmg,
       h('div', { class: 'bt-conds' },
         c.fled ? h('span', { class: 'bt-cond fled' }, c.escaped ? 'Got away' : 'Fled') : c.out ? h('span', { class: 'bt-cond ko' }, statusLine(c)) : null,
         conds.map((x) => h('span', { class: 'bt-cond' }, x)),
+        insubChip(c) ? h('span', { class: 'bt-cond', title: 'Insubstantial form (Hero\'s Handbook p103)' }, insubChip(c)) : null,
         c.heroPoints ? h('span', { class: 'bt-cond hp', title: 'Hero points' }, `Hero points ${c.heroPoints}`) : null,
         c.fatigue ? h('span', { class: 'bt-cond' }, c.fatigue >= 2 ? 'Exhausted' : 'Fatigued') : null),
       h('div', { class: 'bt-record' }, `${c.stats.hits}/${c.stats.attacks} hits · ${c.stats.kos} KO${c.stats.kos === 1 ? '' : 's'} · dealt ${c.stats.degrees}, took ${c.stats.taken}`)) : null,

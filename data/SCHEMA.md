@@ -187,3 +187,10 @@ effect, crit, cost, description?, toughness/weight for improvised), `ma_armor`, 
 `stance_rules` (the stance rules as a structured block), `optional_rules` (Hit Location with its tables, Hit Location Damage Results,
 Vehicle Hit Location, Disabling Critical Hits, Off-Hand Attacks with its penalty table, Unarmed Defense against Close Combat Weapons,
 Vehicle Jumping, Creative Vehicle Combat), `new_actions` and `pursuit_maneuvers` ({ pursuer, target, either }).
+
+## Character fields the Battle Room reads
+
+`descriptors` (optional list of words on the character itself, such as `["magic", "divine"]`): the character's power source. Every
+power attack of the character carries these descriptors in the Battle Room, so an Immunity to magic stops all of a magician's spells.
+Characters without it work as before; the engine also reads `theme.id` (magic, psychic, tech, cosmic, death and radiation themes
+tag every power) and the powers' own `descriptors`. There is no Forge field for it yet.

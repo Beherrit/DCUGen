@@ -66,7 +66,7 @@
     "kind": "effect",
     "name": "Dazzle",
     "status": "partial",
-    "note": "Fought as an Affliction (impaired, disabled, unaware) but the sense it blocks is not tracked.",
+    "note": "Fought as an Affliction (impaired, disabled, unaware) but the sense it blocks is not tracked, except that an Immunity to a sense (sight or hearing) or to dazzle effects stops it.",
     "source": "DCA 94"
   },
   {
@@ -192,14 +192,14 @@
     "kind": "effect",
     "name": "Immunity",
     "status": "partial",
-    "note": "Immunity is matched by text against attack descriptors and defenses, including half effect; unusual immunities may be missed.",
+    "note": "The detail text is read by the book's ranks (DCA 102-103): a descriptor's damage or its effects (a bare common descriptor by its ranks: 1 is the environment only, 5 damage, 10 every effect), physical or energy, all Fortitude, Will or Toughness effects, critical hits (a critical is a normal hit), interaction skills (Demoralize, Daze and feints fail), entrapment (no grab, snare or bond), fear (Fearless), emotion, sleep, fatigue, dazzle and sensory effects by sight or hearing, alteration, suffocation, life support (poison, disease, suffocation), your own powers, and Reflect and Redirect (the stopped attack goes back with the fighter's own attack check). Limited to Half Effect halves the rank. Every immunity that fires says which one and which descriptor in the log; the Battle Room card lists them. Not played: Affects Others and Ranged (lending an immunity), and the environment items (aging, hunger, thirst, need for sleep, one environment), which show on the card and stop nothing because a fight has no weather. Mind reading is not a fight action. house rule: the book names no descriptor list, so words in an attack's name and detail are read from one table (descriptors.js).",
     "source": "DCA 102"
   },
   {
     "kind": "effect",
     "name": "Insubstantial",
-    "status": "none",
-    "note": "Insubstantial forms and the damage they avoid are not simulated.",
+    "status": "partial",
+    "note": "Each Insubstantial power or alternate is a form, switched as a free action once a round (the AI turns insubstantial when that beats the harm coming in, solid again to attack). Fluid (1) flows out of holds and snares and cannot be grabbed; gaseous (2) is immune to physical damage but not to area attacks; energy (3) to physical damage and the energy of its own form; incorporeal (4) to physical and energy damage, except the effect named in the power's detail and effects with Affects Insubstantial, and it cannot affect the physical world without Affects Corporeal (or a sensory effect). Ranks 2 to 4 have no Strength. The form shows on the card and in the log. Not played: walls and objects (no moving through them, no ejection damage), Progressive, Precise, Reaction, Subtle, Affects Others and the Attack extra (turning a target insubstantial). house rule: the one other effect an incorporeal form is open to is read from the power's detail text.",
     "source": "DCA 103"
   },
   {
@@ -227,7 +227,7 @@
     "kind": "effect",
     "name": "Magic",
     "status": "partial",
-    "note": "Fights as Damage at range; the flexible casting that Magic allows is not simulated.",
+    "note": "Fights as Damage at range; the flexible casting that Magic allows is not simulated. Every Magic effect, and every power of a magic-source character, carries the magic descriptor (DCA 105), so an Immunity to magic stops it.",
     "source": "DCA 105"
   },
   {
@@ -436,22 +436,22 @@
   {
     "kind": "extra",
     "name": "Affects Corporeal",
-    "status": "none",
-    "note": "Only matters with Insubstantial, which is not simulated.",
+    "status": "partial",
+    "note": "An incorporeal (rank 4) attacker's effect works on corporeal targets at the extra's steps, up to its full rank; without it the effect does nothing. Applying it to Strength so a rank 1-3 form keeps some Strength is not read.",
     "source": "DCA 125"
   },
   {
     "kind": "extra",
     "name": "Affects Insubstantial",
-    "status": "none",
-    "note": "Insubstantial is not simulated.",
+    "status": "full",
+    "note": "Against a fighter in a form that would stop the effect (physical or energy damage), rank 1 lands at half rank and rank 2 at full rank, logged. The AI counts it when it picks an attack.",
     "source": "DCA 125"
   },
   {
     "kind": "extra",
     "name": "Affects Objects",
-    "status": "none",
-    "note": "Objects are not in the fight.",
+    "status": "n/a",
+    "note": "It lets Fortitude effects (Weaken, Healing, Affliction) work on objects with no Stamina. The only objects in a fight are cover pieces and held items, and the simulator only breaks them with Damage, which works on objects anyway; no fight would change.",
     "source": "DCA 125"
   },
   {
@@ -688,8 +688,8 @@
   {
     "kind": "extra",
     "name": "Variable Descriptor",
-    "status": "none",
-    "note": "Descriptors are fixed.",
+    "status": "full",
+    "note": "Rank 1 switches the attack to a descriptor in a closely related group, rank 2 to one in a broad group. The AI does it when the target is immune to the attack as it stands, and the log says from what to what. house rule: the groups are the engine's own (temperature, weather, electromagnetic, sound, matter, physical blows, mental, magical, technological...); the book leaves them to the GM.",
     "source": "DCA 133"
   },
   {
@@ -1165,7 +1165,7 @@
     "kind": "advantage",
     "name": "Fearless",
     "status": "partial",
-    "note": "Immune to attacks the engine recognizes as fear effects (by wording) and to Demoralize, and never flees.",
+    "note": "Immune to attacks the engine recognizes as fear effects (by wording) and to Demoralize, and never flees. An Immunity to fear gives the same.",
     "source": "DCA 75"
   },
   {

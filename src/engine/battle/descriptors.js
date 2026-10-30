@@ -174,3 +174,21 @@ export function showDescriptors(list) {
   const exact = l.filter((x) => x !== 'physical' && x !== 'energy');
   return exact.length ? exact : l;
 }
+
+/** An attack's descriptors in plain words for the Battle Room: "fire, energy". */
+export function attackDescriptorWords(atk) {
+  const l = atk.descriptors || [];
+  const shown = showDescriptors(l);
+  const fams = ['physical', 'energy'].filter((f) => l.includes(f));
+  return [...new Set([...shown, ...fams])].join(', ');
+}
+
+/** The descriptors across all of a fighter's attacks (not fists), most common first, for its card. */
+export function fighterDescriptors(c) {
+  const count = new Map();
+  for (const a of c.attacks || []) {
+    if (a.unarmed) continue;
+    for (const d of showDescriptors(a.descriptors)) count.set(d, (count.get(d) || 0) + 1);
+  }
+  return [...count.entries()].sort((x, y) => y[1] - x[1]).map(([d]) => d);
+}

@@ -12,6 +12,7 @@
 // Limited to Half Effect marks the entry half (the effect lands at half rank).
 
 import { allPowers } from '../derive.js';
+import { hasExtra } from './util.js';
 import { canonical, isCommon, sourceDescriptors } from './descriptors.js';
 import { insubEntries, entraps } from './insubstantial.js';
 
@@ -125,7 +126,8 @@ export function immunitiesOf(ch, d) {
     const half = (p.flaws || []).some((f) => /half effect/i.test(f.name || f));
     const items = itemsOf(String(p.detail).toLowerCase());
     const per = (p.rank || 1) / Math.max(1, items.length);
-    for (const item of items) { const e = entryFor(item, per, half, ownSet); if (e) out.push(e); }
+    const reflect = hasExtra(p, 'Reflect'); // sends back the attacks it stops (DCA 102); Redirect needs Reflect
+    for (const item of items) { const e = entryFor(item, per, half, ownSet); if (e) out.push(reflect ? { ...e, reflect, redirect: hasExtra(p, 'Redirect') } : e); }
   }
   return out;
 }
@@ -142,13 +144,16 @@ function reasonOf(e, atk, target) {
  * Is the target immune to this attack? Returns the reason, or null. wantHalf looks only at Limited to Half Effect
  * immunities, which halve the rank instead of stopping the attack.
  */
-export function immunityMatch(target, atk, wantHalf) {
+export function immunityMatch(target, atk, wantHalf) { return immunityHit(target, atk, wantHalf)?.why || null; }
+
+/** The same, with the immunity that did it: { why, entry } (entry is null for Fearless). */
+export function immunityHit(target, atk, wantHalf = false) {
   for (const e of [...(target.immune || []), ...insubEntries(target)]) {
     if (!!e.half !== wantHalf) continue;
     const why = reasonOf(e, atk, target);
-    if (why) return why;
+    if (why) return { why, entry: e };
   }
-  if (!wantHalf && atk.fear && target.adv?.Fearless) return 'Fearless';
+  if (!wantHalf && atk.fear && target.adv?.Fearless) return { why: 'Fearless', entry: null };
   return null;
 }
 

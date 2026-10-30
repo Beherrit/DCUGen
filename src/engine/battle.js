@@ -12,7 +12,8 @@
 // dazed / staggered / incapacitated, minions going down on any failed check, Afflictions with their
 // three degrees and end-of-turn recovery (Cumulative, Progressive, Limited Degree, Extra Condition),
 // Weaken, Nullify on sustained defenses, Area effects with Dodge for half, Multiattack, Penetrating
-// vs Impervious, Immunity by descriptor and defense, Concealment misses, Healing and Regeneration,
+// vs Impervious, descriptors and every combat Immunity option (damage or effects of a descriptor, critical hits, interaction skills,
+// entrapment, fear, sleep, life support...), Insubstantial forms with Affects Insubstantial and Affects Corporeal, Variable Descriptor, Concealment misses, Healing and Regeneration,
 // Power / Accurate / All-out / Defensive Attack trade-offs, feints, Demoralize and Aid, grabs (restrained and bound),
 // Trip, Disarm and Smash (with the Improved advantages), finishing attacks, standing up from prone and dropping prone, Move-by Action,
 // Takedown, Interpose, Evasion, Seize Initiative, Fearless, hero points (improve a roll on attacks, resistance,
@@ -20,7 +21,7 @@
 // Cover pieces made of real materials (partial and total cover, breaking it, shooting through it) and the optional knockback rule are simulated when a battle asks for them.
 // Deflect (the Defend action for the team, or as a Reaction, with Reflect and Redirect), Luck Control (grant, bestow, negate, force) and Throwing Mastery are simulated.
 // The AI scores a heal, a buff, a control, a Weaken and a guard in the same expected degrees as an attack and picks the best (utility.js); a fighter's roles (healer, controller, ...) only tip those weights a little.
-// Not simulated: Summon, Create, Illusion, Insubstantial, Environment. Team attacks are simulated for minion squads.
+// Not simulated: Summon, Create, Illusion, Environment. Team attacks are simulated for minion squads.
 //
 // The code lives in src/engine/battle/ (see README.md there); this file keeps the names the rest of the app imports.
 
@@ -41,5 +42,7 @@ import { addCover, removeCover, coverLevel, pieceLabel, pieceBetween } from './b
 import { massRank } from './battle/knockback.js';
 import { statusLine, battleText, simulateMany, serializeBattle, reviveBattle } from './battle/summaries.js';
 import { buildReport } from './battle/build-report.js';
+import { describeImmunities } from './battle/immunity.js';
+import { fighterDescriptors, attackDescriptorWords } from './battle/descriptors.js';
 
-export { MATERIALS, COVER_KINDS, toughnessOf, addCover, removeCover, coverLevel, pieceLabel, massRank, TEAM_TACTICS, GRID_SIZE, SCALES, DEFAULT_SCALE, CUSTOM_FT, customFt, scaleOf, squareFtOf, syncGrid, squareName, isWall, squares, feet, inReach, reachSquares, squaresInMove, bandFrom, inRangeNow, lineClear, areaVictims, reachableFrom, pieceBetween, MAX_ROUNDS, STYLES, TACTICS, detectStyle, parseAffliction, makeCombatant, rebuildCombatant, activeConditions, conditionLabels, hitOdds, resistOdds, createBattle, addCombatant, removeCombatant, placeAll, startBattle, byId, joinBattle, step, runRound, runToEnd, statusLine, battleText, simulateMany, serializeBattle, reviveBattle, buildReport };
+export { MATERIALS, COVER_KINDS, toughnessOf, addCover, removeCover, coverLevel, pieceLabel, massRank, TEAM_TACTICS, GRID_SIZE, SCALES, DEFAULT_SCALE, CUSTOM_FT, customFt, scaleOf, squareFtOf, syncGrid, squareName, isWall, squares, feet, inReach, reachSquares, squaresInMove, bandFrom, inRangeNow, lineClear, areaVictims, reachableFrom, pieceBetween, MAX_ROUNDS, STYLES, TACTICS, detectStyle, parseAffliction, makeCombatant, rebuildCombatant, activeConditions, conditionLabels, hitOdds, resistOdds, createBattle, addCombatant, removeCombatant, placeAll, startBattle, byId, joinBattle, step, runRound, runToEnd, statusLine, battleText, simulateMany, serializeBattle, reviveBattle, buildReport, describeImmunities, fighterDescriptors, attackDescriptorWords };

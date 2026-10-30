@@ -10,8 +10,8 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 
 | Kind | Total | Full | Partial | None | n/a | Covered |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| effect | 63 | 6 | 29 | 20 | 8 | 64% |
-| extra | 50 | 8 | 7 | 30 | 5 | 33% |
+| effect | 63 | 6 | 30 | 19 | 8 | 65% |
+| extra | 50 | 10 | 8 | 26 | 6 | 41% |
 | flaw | 41 | 0 | 1 | 37 | 3 | 3% |
 | advantage | 75 | 28 | 12 | 14 | 21 | 74% |
 | skill | 16 | 8 | 0 | 2 | 6 | 80% |
@@ -19,7 +19,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | maneuver | 12 | 7 | 4 | 1 | 0 | 92% |
 | condition | 30 | 16 | 8 | 5 | 1 | 83% |
 | rule | 38 | 16 | 11 | 11 | 0 | 71% |
-| all | 345 | 98 | 79 | 124 | 44 | 59% |
+| all | 345 | 100 | 81 | 119 | 45 | 60% |
 
 ## Effects
 
@@ -34,7 +34,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Concealment | partial | Visual concealment gives -2 or -5 to attacks against the holder; other senses and non-visual concealment are ignored. | DCA 91 |
 | Create | none | Created objects and barriers are not simulated. | DCA 91 |
 | Damage | full | Toughness check at 15 + rank with cumulative bruises, dazed, staggered and incapacitated; Strength gives built-in close Damage. | DCA 93 |
-| Dazzle | partial | Fought as an Affliction (impaired, disabled, unaware) but the sense it blocks is not tracked. | DCA 94 |
+| Dazzle | partial | Fought as an Affliction (impaired, disabled, unaware) but the sense it blocks is not tracked, except that an Immunity to a sense (sight or hearing) or to dazzle effects stops it. | DCA 94 |
 | Deflect | partial | Taking the Defend action to deflect protects the user and every ally in long range until its next turn; the user rolls d20 (10 or less counts 11) plus its rank against the attacker, -2 at medium range and -5 at long range, and the attacker beats the better of that and the flat defense. A rank-for-defense Defend rolls the rank in place of its own Dodge or Parry. Area, perception and non-Dodge, non-Parry attacks are never deflected. Reflect and Redirect (the Deflect extras) send a beaten attack back; the AI deflects when its own attack is worth less than the harm to its allies, or when Bodyguard or Hold the Line asks. Extended Range and descriptor effects (such as 'resistance to psionic') are not read. | DCA 95 |
 | Duplication | none | Duplicates are not created. | DCA 94 |
 | Element Control | none | Control effects (Move Object style) are not simulated. | DCA 95 |
@@ -52,12 +52,12 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Healing | partial | A DC 10 check by touch as a standard action: each degree heals one damage condition (staggered, dazed, bruises), worst first, and a failed check cannot be tried again on that subject. The AI weighs a heal against its best attack in expected degrees. Stabilizing, the extras and the other uses are not simulated. | DCA 100 |
 | Illusion | none | Illusions are not simulated. | DCA 101 |
 | Immortality | none | Returning after incapacitation is not simulated. | DCA 102 |
-| Immunity | partial | Immunity is matched by text against attack descriptors and defenses, including half effect; unusual immunities may be missed. | DCA 102 |
-| Insubstantial | none | Insubstantial forms and the damage they avoid are not simulated. | DCA 103 |
+| Immunity | partial | The detail text is read by the book's ranks (DCA 102-103): a descriptor's damage or its effects (a bare common descriptor by its ranks: 1 is the environment only, 5 damage, 10 every effect), physical or energy, all Fortitude, Will or Toughness effects, critical hits (a critical is a normal hit), interaction skills (Demoralize, Daze and feints fail), entrapment (no grab, snare or bond), fear (Fearless), emotion, sleep, fatigue, dazzle and sensory effects by sight or hearing, alteration, suffocation, life support (poison, disease, suffocation), your own powers, and Reflect and Redirect (the stopped attack goes back with the fighter's own attack check). Limited to Half Effect halves the rank. Every immunity that fires says which one and which descriptor in the log; the Battle Room card lists them. Not played: Affects Others and Ranged (lending an immunity), and the environment items (aging, hunger, thirst, need for sleep, one environment), which show on the card and stop nothing because a fight has no weather. Mind reading is not a fight action. house rule: the book names no descriptor list, so words in an attack's name and detail are read from one table (descriptors.js). | DCA 102 |
+| Insubstantial | partial | Each Insubstantial power or alternate is a form, switched as a free action once a round (the AI turns insubstantial when that beats the harm coming in, solid again to attack). Fluid (1) flows out of holds and snares and cannot be grabbed; gaseous (2) is immune to physical damage but not to area attacks; energy (3) to physical damage and the energy of its own form; incorporeal (4) to physical and energy damage, except the effect named in the power's detail and effects with Affects Insubstantial, and it cannot affect the physical world without Affects Corporeal (or a sensory effect). Ranks 2 to 4 have no Strength. The form shows on the card and in the log. Not played: walls and objects (no moving through them, no ejection damage), Progressive, Precise, Reaction, Subtle, Affects Others and the Attack extra (turning a target insubstantial). house rule: the one other effect an incorporeal form is open to is read from the power's detail text. | DCA 103 |
 | Invisibility | partial | Treated as visual Concealment; other senses are ignored. | DCA 104 |
 | Leaping | partial | Counts as half its rank toward movement; jumping over things is not modelled. | DCA 105 |
 | Luck Control | partial | Each rank buys one capability (named in the text, else the first ranks of grant, bestow, negate, force): grant an ally a re-roll, bestow a luck point (once per ally per round), negate an enemy's re-roll of an attack, or force an enemy hit or passed resistance check to be re-rolled at the worse (the target may spend a point to avoid it). Each is a reaction, once a round per controller, paid with Luck then hero points; a power whose text says 'against me' acts only on rolls aimed at its owner. Side Effect, Resistible and Ranged are not simulated. | DCA 106 |
-| Magic | partial | Fights as Damage at range; the flexible casting that Magic allows is not simulated. | DCA 105 |
+| Magic | partial | Fights as Damage at range; the flexible casting that Magic allows is not simulated. Every Magic effect, and every power of a magic-source character, carries the magic descriptor (DCA 105), so an Immunity to magic stops it. | DCA 105 |
 | Mental Blast | full | Perception range Damage resisted by Will, with no attack roll. | DCA 107 |
 | Mimic | none | Copying traits from a target is not simulated. | DCA 107 |
 | Mind Control | partial | Dazed, compelled and controlled work (a controlled fighter attacks its own side); the controller's other orders are not. | DCA 107 |
@@ -94,9 +94,9 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Name | Status | Note | Source |
 | --- | --- | --- | --- |
 | Accurate | full | Adds +2 to the attack bonus per step. | DCA 125 |
-| Affects Corporeal | none | Only matters with Insubstantial, which is not simulated. | DCA 125 |
-| Affects Insubstantial | none | Insubstantial is not simulated. | DCA 125 |
-| Affects Objects | none | Objects are not in the fight. | DCA 125 |
+| Affects Corporeal | partial | An incorporeal (rank 4) attacker's effect works on corporeal targets at the extra's steps, up to its full rank; without it the effect does nothing. Applying it to Strength so a rank 1-3 form keeps some Strength is not read. | DCA 125 |
+| Affects Insubstantial | full | Against a fighter in a form that would stop the effect (physical or energy damage), rank 1 lands at half rank and rank 2 at full rank, logged. The AI counts it when it picks an attack. | DCA 125 |
+| Affects Objects | n/a | It lets Fortitude effects (Weaken, Healing, Affliction) work on objects with no Stamina. The only objects in a fight are cover pieces and held items, and the simulator only breaks them with Damage, which works on objects anyway; no fight would change. | DCA 125 |
 | Affects Others | partial | Enhanced Trait (Dodge, Parry, Toughness, Fortitude, Will, Fighting, Dexterity, Agility, Stamina), Protection and Regeneration can be lent to one ally at a time by touch and last while the giver can keep them up; other powers cannot be given to allies in a fight. | DCA 125 |
 | Alternate Effect | partial | Alternate attacks are separate attack choices, switched for free; alternate defenses and utilities are ignored. | DCA 125 |
 | Alternate Resistance | partial | The attack uses the resistance recorded on the power; the cost changes are not checked. | DCA 126 |
@@ -130,7 +130,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Subtle | n/a | Concerns being noticed. | DCA 132 |
 | Sustained | partial | Only Sustained Protection is used (and can be nullified). | DCA 132 |
 | Triggered | none | Triggered effects are not simulated. | DCA 132 |
-| Variable Descriptor | none | Descriptors are fixed. | DCA 133 |
+| Variable Descriptor | full | Rank 1 switches the attack to a descriptor in a closely related group, rank 2 to one in a broad group. The AI does it when the target is immune to the attack as it stands, and the log says from what to what. house rule: the groups are the engine's own (temperature, weather, electromagnetic, sound, matter, physical blows, mental, magical, technological...); the book leaves them to the GM. | DCA 133 |
 | Ammunition | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 91 |
 | Combo Element | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 91 |
 | Conductor | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 91 |
@@ -239,7 +239,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Eidetic Memory | n/a | Memory has no combat rule. | DCA 73 |
 | Equipment | n/a | Gear is read from the character, not from the advantage. | DCA 73 |
 | Extraordinary Effort | none | Double extra effort is not simulated. | DCA 74 |
-| Fearless | partial | Immune to attacks the engine recognizes as fear effects (by wording) and to Demoralize, and never flees. | DCA 75 |
+| Fearless | partial | Immune to attacks the engine recognizes as fear effects (by wording) and to Demoralize, and never flees. An Immunity to fear gives the same. | DCA 75 |
 | Feature | n/a | Descriptive only. | DCA 75 |
 | Great Endurance | none | The bonus to resist fatigue is not applied. | DCA 75 |
 | Instant Up | full | Stands from prone as a free action with no check. | DCA 76 |

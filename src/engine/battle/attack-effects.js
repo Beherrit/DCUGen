@@ -3,12 +3,17 @@
 import { sign, log } from './util.js';
 import { rollCheck, critNote, opposedCheck, opposedNote } from './checks.js';
 import { resistOf, weakenedAttack } from './conditions.js';
-import { dcOf, isImmune, halfImmune } from './odds.js';
+import { dcOf, halfImmune } from './odds.js';
+import { immunityHit } from './immunity.js';
 import { retune } from './variable-descriptor.js';
 import { insubLoss, formWords, entraps } from './insubstantial.js';
 import { releaseHolds } from './maneuvers.js';
 import { resistFx } from './fortune.js';
 import { weakenTraits, traitLabel } from './weaken-traits.js';
+
+// Reflect on an Immunity (DCA 102) sends the attack it stops back; reflect.js sets the hook (it needs this file, so it cannot be imported here).
+let reflectHook = null;
+export function onImmuneReflect(fn) { reflectHook = fn; }
 
 /** Variable Descriptor (DCA 133): against a target immune to the attack's descriptor, switch to one it is not immune to, and say so. */
 function retuned(b, c, atk, t) {
@@ -23,9 +28,13 @@ export function applyEffect(b, R, c, atk, t, rng, { crit = false, rankShift = 0,
   atk = retuned(b, c, atk, t);
   const lost = insubLoss(c, atk);
   let rank = Math.max(0, atk.rank + rankShift - weakenedAttack(c, atk).rank - lost);
-  if (lost && rank <= 0) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${atk.name}: ${c.name} is ${formWords(c.insub)} and cannot affect the physical world with it: no effect.` }); return { landed: false }; }
-  const why = isImmune(t, atk);
-  if (why) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${atk.name}: ${t.name} is ${why}: no effect.` }); return { landed: false }; }
+  if (lost && rank <= 0) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${atk.name}: ${c.name} is ${formWords(c.insub)} and ${c.insub.rank === 4 ? 'cannot affect the physical world with it' : 'has no Strength to put behind it'}: no effect.` }); return { landed: false }; }
+  const stopped = immunityHit(t, atk);
+  if (stopped) {
+    log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${atk.name}: ${t.name} is ${stopped.why}: no effect.` });
+    if (stopped.entry?.reflect && reflectHook) reflectHook(b, R, c, atk, t, stopped.entry, rng, rankShift);
+    return { landed: false };
+  }
   const half = halfImmune(t, atk);
   if (half) { rank = Math.floor(rank / 2); log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${atk.name}: ${t.name} is partly ${half} (half effect): rank ${rank}.` }); rankShift = rank - atk.rank; }
   if (atk.effect === 'Damage' && !atk.penetrating && t.impervious && rank <= Math.floor(t.impervious / 2)) {

@@ -758,6 +758,9 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 .bt-stats span { font: 700 9px/1.1 var(--font-label); letter-spacing: .06em; color: var(--ink-3); }
 .bt-main { font-size: 12.5px; color: var(--ink-2); }
 .bt-main small { color: var(--ink-3); }
+.bt-tags { display: grid; gap: 2px; font-size: 11.5px; line-height: 1.35; color: var(--ink-2); }
+.bt-tag b { font-weight: 800; color: var(--ink-3); }
+.bt-tag.imm { color: var(--ink); }
 .bt-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
 .bt-mini { padding: 4px 6px; font-size: 12px; }
 .bt-hp-wrap { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: var(--warn); font-weight: 800; }
