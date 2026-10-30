@@ -526,7 +526,7 @@ test('flank: the feint threshold is loosened and teammates are x2.5 on a feinted
 test('sustain: a team with a healer heals far more often than with no tactic', () => {
   const tally = (tactic) => {
     let heals = 0; let recovers = 0;
-    for (const i of range(12)) {
+    for (const i of range(40)) { // most fights need no healing at all, so a short run hangs on one or two seeds
       const A = [hero('healer', `sa-${i}`), hero('paragon', `sb-${i}`), hero('martialartist', `sc-${i}`)];
       const B = [hero('powerhouse', `sd-${i}`), hero('blaster', `se-${i}`)];
       const f = arena(tactic, `su-${i}`, A, B);
@@ -537,7 +537,7 @@ test('sustain: a team with a healer heals far more often than with no tactic', (
     return { heals, recovers };
   };
   const sustain = tally('sustain'); const none = tally(null);
-  assert.ok(sustain.heals >= none.heals + 8, `heal actions: sustain ${sustain.heals}, none ${none.heals} (16 against 2)`);
+  assert.ok(sustain.heals >= none.heals * 1.5, `heal actions: sustain ${sustain.heals}, none ${none.heals} (73 against 34 over 40 fights)`);
   assert.ok(sustain.recovers >= none.recovers, `Recover actions: sustain ${sustain.recovers}, none ${none.recovers}`);
 });
 
