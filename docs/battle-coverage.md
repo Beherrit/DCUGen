@@ -11,15 +11,15 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Kind | Total | Full | Partial | None | n/a | Covered |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | effect | 63 | 6 | 30 | 19 | 8 | 65% |
-| extra | 50 | 10 | 8 | 26 | 6 | 41% |
+| extra | 50 | 19 | 20 | 3 | 8 | 93% |
 | flaw | 41 | 11 | 21 | 3 | 6 | 91% |
-| advantage | 75 | 28 | 12 | 14 | 21 | 74% |
+| advantage | 75 | 30 | 21 | 1 | 23 | 98% |
 | skill | 16 | 8 | 0 | 2 | 6 | 80% |
-| action | 20 | 9 | 7 | 4 | 0 | 80% |
+| action | 20 | 10 | 9 | 0 | 1 | 100% |
 | maneuver | 12 | 7 | 4 | 1 | 0 | 92% |
-| condition | 30 | 16 | 8 | 5 | 1 | 83% |
-| rule | 38 | 16 | 11 | 11 | 0 | 71% |
-| all | 345 | 111 | 101 | 85 | 48 | 71% |
+| condition | 30 | 18 | 10 | 1 | 1 | 97% |
+| rule | 38 | 18 | 17 | 1 | 2 | 97% |
+| all | 345 | 127 | 132 | 31 | 55 | 89% |
 
 ## Effects
 
@@ -101,19 +101,19 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Alternate Effect | partial | Alternate attacks are separate attack choices, switched for free; alternate defenses and utilities are ignored. | DCA 125 |
 | Alternate Resistance | partial | The attack uses the resistance recorded on the power; the cost changes are not checked. | DCA 126 |
 | Area | partial | Burst, Cloud, Cylinder, Cone and Line catch whoever is inside the shape on the grid, sized by the Area rank (a 30 ft burst, a 60 ft cone, a 30 ft long line, doubled per extra rank); a Ranged area is centered on the target within long range, a Close one on the attacker. Each victim gets a Dodge for half. Shapeable is treated as a burst and Perception ignores concealment. | DCA 126 |
-| Attack | none | An Attack extra on a non-attack effect does not make it an attack. | DCA 128 |
-| Contagious | none | Spreading effects are not simulated. | DCA 129 |
-| Dimensional | none | Dimensions are not simulated. | DCA 129 |
+| Attack | partial | On a Teleport it makes a close attack (resisted by Will, or the defense the power names) that sends the target to the farthest open square within the Teleport distance; on an effect that is an attack already it changes nothing. Shrinking, Insubstantial, Morph and other personal effects given the Attack extra have no rule yet and are left out of the fight. | DCA 128 |
+| Contagious | partial | A hit with a Contagious effect makes the target a carrier; at the end of its turn each fighter next to it (not the user) resists the effect normally and becomes a carrier too. An Affliction stops spreading when it wears off, a Weaken when the ranks return, Damage lasts the fight. Contact other than standing next to each other is not tracked. | DCA 129 |
+| Dimensional | n/a | The engine has no other dimensions to reach into. | DCA 129 |
 | Extended Range | full | Doubles the short, medium and long bands of a ranged attack for each rank, measured in feet between squares. | DCA 129 |
 | Feature | n/a | Descriptive only. | DCA 129 |
-| Homing | none | Homing attacks are not simulated. | DCA 129 |
+| Homing | full | A missed ranged attack tries again at the start of the attacker's next turn as a free action, one try per rank and one a round; a miss that concealment caused loses the lock, and a target that is down or out of range ends it. The AI values the second chance. | DCA 129 |
 | Impervious | full | Impervious Protection ignores attacks of half its rank or less unless Penetrating. | DCA 129 |
-| Increased Duration | none | Durations beyond instant are not tracked. | DCA 129 |
-| Increased Mass | none | Needs Move Object, which is not simulated. | DCA 130 |
+| Increased Duration | partial | One, two or three ranks make the effect last as concentration, sustained or continuous: it is applied again on each of the user's turns with the target's normal resistance check and no attack check or critical. Concentration takes the standard action (the AI keeps it up when that beats its planned turn), sustained a free action, continuous nothing. It ends when the target is down. An Affliction can still be shaken off by the target's own recovery checks. | DCA 129 |
+| Increased Mass | n/a | Needs a mover that carries others (Teleport, Move Object with passengers); the engine moves no one along with a mover. | DCA 130 |
 | Increased Range | full | Changes the attack from close to ranged (or to perception) through the power's range; the bands then come from the attack's rank in feet. | DCA 130 |
-| Incurable | none | Effects that resist Healing and Regeneration are not simulated. | DCA 130 |
-| Indirect | none | Needs cover and line of sight, which are not simulated. | DCA 130 |
-| Innate | none | Innate powers are not protected from Nullify. | DCA 130 |
+| Incurable | partial | Healing and Regeneration cannot take off the bruises or the staggered condition that Incurable Damage caused (the Recover action can: it is normal recovery). Incurable Afflictions and Weaken are not tracked. | DCA 130 |
+| Indirect | partial | Cover between the user and the target does not count (total cover included), and the first Indirect attack on each target is a surprise attack, so the target is vulnerable to it (a house rule: the book leaves it to the GM). The four ranks, which differ in where the effect can come from, are treated alike. | DCA 130 |
+| Innate | full | Nullify only ever takes sustained protection, and Innate protection is left alone; the log says so. | DCA 130 |
 | Insidious | n/a | Concerns detecting an effect after the fight. | DCA 130 |
 | Linked | partial | Linked powers show as separate attacks instead of one combined action. | DCA 130 |
 | Multiattack | full | Two degrees of success add +2 to the resistance DC, three or more add +5. | DCA 131 |
@@ -122,27 +122,27 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Reach | full | Adds 5 ft per rank of the extra to a close attack's reach, counted in whole squares at the scale of the fight (nothing at 30 ft squares until it adds up to a square). | DCA 131 |
 | Reaction | partial | A Deflect with Reaction deflects once a round without the Defend action, for the fighter and allies within short range; Energy Aura counts as a normal attack. No other reaction is simulated. | DCA 131 |
 | Reversible | n/a | Reversing an effect has no combat meaning. | DCA 132 |
-| Ricochet | none | Attacks cannot bounce. | DCA 132 |
-| Secondary Effect | none | Second effects are not simulated. | DCA 132 |
+| Ricochet | partial | A ranged attack on a target behind cover banks off the cover (or the walls of an enclosed room, which need no cover piece to bounce off): the cover does not count, even total cover, and the first such attack on a target is a surprise attack (a house rule). Bad Bounce checks each bounce, Pinball hits the cover, Recoverable brings spare bounces back. Only one bounce is used and no path is traced. | DCA 132 |
+| Secondary Effect | full | A hit with a Secondary Effect hits the target again at the end of the attacker's next turn, with the target's normal resistance check; they do not stack (a new hit only moves the second effect back a round). | DCA 132 |
 | Selective | full | Area attacks skip allies. | DCA 132 |
-| Sleep | none | Sleep instead of incapacitation is not applied to Damage; the Sleep effect is separate. | DCA 132 |
-| Split | none | Splitting an attack among targets is not simulated. | DCA 132 |
+| Sleep | full | Damage that would incapacitate leaves the target asleep (out of the fight, and not dying), and an Affliction's incapacitated degree becomes asleep. | DCA 132 |
+| Split | partial | One attack check is compared against the target and one other foe in range, and the effect is divided between them (each at least a third of the rank) when that is worth clearly more than one big effect. A third target, for the higher ranks of Split, is not used. | DCA 132 |
 | Subtle | n/a | Concerns being noticed. | DCA 132 |
 | Sustained | partial | Only Sustained Protection is used (and can be nullified). | DCA 132 |
-| Triggered | none | Triggered effects are not simulated. | DCA 132 |
+| Triggered | partial | A fighter with a Triggered attack sets it as a trap on a square in front of it (a standard action); the effect goes off, with the foe's normal resistance check, when a foe of the setter crosses the square, once per rank. House rule: nobody notices or disarms a trap, and a variable trigger is not offered. | DCA 132 |
 | Variable Descriptor | full | Rank 1 switches the attack to a descriptor in a closely related group, rank 2 to one in a broad group. The AI does it when the target is immune to the attack as it stands, and the log says from what to what. house rule: the groups are the engine's own (temperature, weather, electromagnetic, sound, matter, physical blows, mental, magical, technological...); the book leaves them to the GM. | DCA 133 |
-| Ammunition | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 91 |
-| Combo Element | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 91 |
-| Conductor | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 91 |
-| Diminishing Counter | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 92 |
-| Improved Counter | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 93 |
-| Overwhelming Counter | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 93 |
-| Partial Resistance | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 93 |
-| Pinball | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 93 |
-| Potent | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 93 |
-| Proficient | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 93 |
-| Recoverable | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 94 |
-| Stacking | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 94 |
+| Ammunition | none | The firing weapon's range is not tracked: ranges come from the power's own rank. | MA 91 |
+| Combo Element | none | Combo points and the Combo Finish are not simulated. | MA 91 |
+| Conductor | none | Mediums that carry a touch effect are not simulated. | MA 91 |
+| Diminishing Counter | full | A counter that fails still saps the attack: its rank is cut to the margin by which the counter lost, plus one. | MA 92 |
+| Improved Counter | full | Each rank lets the power counter one more descriptor than the opposed pairs; the AI takes whichever one is coming (a house reading of "choose a descriptor"). | MA 93 |
+| Overwhelming Counter | full | A counter that wins sends one rank of itself per degree of the win back at the attacker, who defends and resists as normal. | MA 93 |
+| Partial Resistance | full | A one-degree success halves the effect's ranks: the +1 version allows a second check at the halved rank to resist outright, the +2 version counts it as a degree of failure. | MA 93 |
+| Pinball | partial | With Ricochet, a Damage bounce also hurts the cover piece it bounces off. Other effects, and bouncing off walls, do nothing extra. | MA 93 |
+| Potent | full | Adds +1 to the resistance DC per rank on Parry, Dodge, Fortitude and Will effects, without more rank (not on Toughness). | MA 93 |
+| Proficient | partial | +2 per rank on the effect's power checks: Nullify, Healing and countering. Its Alternate Effects and other power checks are not simulated. | MA 93 |
+| Recoverable | partial | With Ricochet, spare bounces bring the attack back to the user, who catches it with a Dexterity check against the attack roll; two degrees of failure and it is made against the user. A spare bounce is read as one left over after the bounce used on cover. | MA 94 |
+| Stacking | partial | Each repeat use on the same target in a round raises the resistance DC by 1 per rank, and the bonus fades a point a round. The flat-rate time options and the Stacking Alternative are not used. | MA 94 |
 
 ## Flaws
 
@@ -202,7 +202,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Defensive Roll | full | Adds to Toughness in derive. | DCA 73 |
 | Evasion | full | Bonus to Dodge against area attacks, and a clean dodge on two degrees. | DCA 74 |
 | Fast Grab | full | A successful unarmed hit (the hit itself, not the damage) can turn into a grab as a free action. | DCA 74 |
-| Favored Environment | none | Environments are not simulated. | DCA 74 |
+| Favored Environment | full | In the environment the Arena tab sets (or an enclosed room), a fighter whose advantage names it gets +2 on attack checks, or +2 on active defenses when it is hurt or outnumbered, chosen each round. | DCA 74 |
 | Grabbing Finesse | partial | Holds are made with Dexterity instead of Strength. A fighter with it (or Improved Grab) is not made vulnerable while it holds. | DCA 75 |
 | Improved Aim | full | The aim bonus is +10 close or adjacent and +5 at range. | DCA 75 |
 | Improved Critical | full | Widens the critical threat range per rank (16-20 at four). | DCA 75 |
@@ -213,39 +213,39 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Improved Initiative | full | +4 to initiative per rank. | DCA 75 |
 | Improved Smash | full | No -5 on attacks against a held item. | DCA 75 |
 | Improved Trip | full | No -2 on the trip, no counter-trip, and the attacker picks the target's weaker of Athletics and Acrobatics. The AI tries it with a lower bar for the odds. | DCA 76 |
-| Improvised Weapon | none | Improvised weapons are not simulated. | DCA 76 |
+| Improvised Weapon | none | Thrown scenery and picked-up objects are not simulated. | DCA 76 |
 | Move-by Action | full | The move is split around the attack and stays within the fighter's speed: a shooter shoots from where it stands and then steps back out of reach of a melee threat; a melee fighter steps in, strikes and steps out when the foe is dangerous (speedsters always). | DCA 77 |
 | Power Attack | full | Trade attack bonus for rank, up to 5 with the advantage and 2 without. | DCA 77 |
 | Precise Attack | full | Each rank ignores the cover or concealment penalty for one pairing of close or ranged attacks, such as Ranged, Cover. | DCA 77 |
 | Prone Fighting | full | No -5 on its own close attacks while prone, and close attackers get no +5 against it. | DCA 77 |
-| Quick Draw | none | Drawing weapons is not simulated. | DCA 77 |
+| Quick Draw | partial | A fighter disarmed of its weapon gets it back at the start of its next turn: a move action, or free with Quick Draw (a house reading: the book's Quick Draw is about drawing from a holster, and a dropped weapon is picked up). | DCA 77 |
 | Ranged Attack | full | Adds to the ranged attack bonus in derive. | DCA 77 |
-| Redirect | none | Redirecting a missed attack is not simulated. | DCA 78 |
+| Redirect | partial | A fighter that tricked a foe turns that foe's missed attack on another foe next to it and in range, with a new check at the same modifier. The AI tricks only to set this up. | DCA 78 |
 | Set-up | partial | A feint can be handed to one ally per rank: the target is vulnerable to their next attack instead of the feinter's. Demoralize and Daze are not handed over. | DCA 78 |
 | Takedown | full | A free attack against the next minion after taking one out; chains up to five. | DCA 78 |
 | Throwing Mastery | partial | +1 damage per rank on thrown equipment, on Strength-based ranged attacks and on a Damage power whose Ranged Combat specialty is Throwing, shown in the attack's rank on the sheet and counted by the power level limit (the bonus stops where bonus plus rank would pass twice PL). Throwing harmless objects as weapons is not simulated. | DCA 79 |
 | Uncanny Dodge | full | The fighter is stunned but not vulnerable in a surprise round. | DCA 79 |
-| Weapon Bind | none | Reactions to disarm are not simulated. | DCA 79 |
-| Weapon Break | none | Reactions to attack weapons are not simulated. | DCA 79 |
-| Beginner's Luck | none | Skill ranks are not boosted in a fight. | DCA 72 |
+| Weapon Bind | partial | A fighter that took the Defend action and held off a close weapon attack makes a disarm attempt as a reaction. The AI takes the Defend action for it against a foe's weapon when its own attack is weak. | DCA 79 |
+| Weapon Break | partial | A fighter that took the Defend action and held off a close weapon attack attacks the weapon as a reaction (Smash). The AI takes the Defend action for it against a foe's weapon when its own attack is weak. | DCA 79 |
+| Beginner's Luck | n/a | A hero point buys temporary skill ranks for a scene; in a fight a hero point is worth more as a re-roll, which the AI already spends. | DCA 72 |
 | Inspire | partial | Once per fight, a standard action and a hero point: allies in interaction range get +1 per rank on all checks until the start of the inspirer's next turn. Used on the first round or when the side is losing. | DCA 76 |
 | Leadership | full | A standard action and a hero point remove dazed, stunned or fatigued from an ally in interaction range; used when the ally would do more than the leader (always for a Sustain team). | DCA 76 |
 | Luck | partial | A separate pool of re-rolls, one a round up to its rank a fight, spent before hero points on attacks, resistance, opposed and recovery checks; not on healing, aid, stand or smash checks. | DCA 77 |
 | Seize Initiative | partial | The fighter goes first, but no hero point is spent. | DCA 78 |
 | Ultimate Effort | partial | A hero point makes an attack check, a Toughness, Will, Fortitude or Dodge check a roll of 20 (not a natural 20), as the advantage's parameter names; other kinds of check are not covered. | DCA 79 |
-| Assessment | none | Insight reads of a foe's numbers are not simulated. | DCA 70 |
+| Assessment | partial | A free action once per foe: Insight against its Deception tells whether its attack and defense bonuses are higher or lower than the fighter's, and more degrees give them exactly. The AI already works from the real numbers, so it only leans a little toward a foe it learned has the lower defense. | DCA 70 |
 | Benefit | n/a | A perk with no combat rule. | DCA 72 |
-| Diehard | none | There is no dying state to stabilize from. | DCA 73 |
+| Diehard | full | In a lethal fight a dying fighter with Diehard rolls no check and stabilizes on the following round; further damage can still kill it. Without the Lethal damage option nobody is dying. | DCA 73 |
 | Eidetic Memory | n/a | Memory has no combat rule. | DCA 73 |
 | Equipment | n/a | Gear is read from the character, not from the advantage. | DCA 73 |
-| Extraordinary Effort | none | Double extra effort is not simulated. | DCA 74 |
+| Extraordinary Effort | partial | A fresh fighter pushing a power takes two ranks (two benefits of the same kind) for two levels of fatigue. Pairing two different benefits is not used. | DCA 74 |
 | Fearless | partial | Immune to attacks the engine recognizes as fear effects (by wording) and to Demoralize, and never flees. An Immunity to fear gives the same. | DCA 75 |
 | Feature | n/a | Descriptive only. | DCA 75 |
-| Great Endurance | none | The bonus to resist fatigue is not applied. | DCA 75 |
+| Great Endurance | partial | +5 on Fortitude checks against suffocation and against effects that start by fatiguing. Hazards (heat, cold, starvation) are not in a fight. | DCA 75 |
 | Instant Up | full | Stands from prone as a free action with no check. | DCA 76 |
 | Interpose | full | A guard within a move of the ally takes a hit meant for a weaker ally once per round; not against area or perception attacks. | DCA 76 |
 | Minion | n/a | Minions are built as separate combatants. | DCA 77 |
-| Second Chance | none | Rerolls against hazards are not simulated. | DCA 78 |
+| Second Chance | partial | One more resistance check, taking the better, against an attack the advantage's named hazard matches (by words in its name, effect, resistance or descriptors). Falls, traps and skill checks are not in a fight. | DCA 78 |
 | Sidekick | n/a | Sidekicks are built as separate combatants. | DCA 78 |
 | Teamwork | partial | Adds +5 to the Aid attack check (Aid is treated as the team check); other team checks are not simulated. | DCA 78 |
 | Trance | n/a | Has no combat rule. | DCA 79 |
@@ -256,8 +256,8 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Connected | n/a | Social only. | DCA 72 |
 | Contacts | n/a | Social only. | DCA 72 |
 | Daze | partial | A standard action: Deception or Intimidation against the target's best of that skill, Insight or Will; a win leaves the target dazed. Not handed to allies with Set-up. | DCA 73 |
-| Fascinate | none | Fascinating a foe is not simulated. | DCA 74 |
-| Favored Foe | none | The bonus against a chosen foe is not applied. | DCA 75 |
+| Fascinate | n/a | The advantage itself says combat and other immediate danger make it ineffective. | DCA 74 |
+| Favored Foe | partial | A fighter gets +2 on the feint, Daze, Demoralize, Trick and Assessment against a foe the advantage names (matched by the words of its name, type or style). Perception and the fighter's own Insight when resisting are not modeled. | DCA 75 |
 | Hide in Plain Sight | n/a | Stealth is not simulated. | DCA 75 |
 | Improvised Tools | n/a | Out of combat skill use. | DCA 76 |
 | Inventor | n/a | Out of combat crafting. | DCA 76 |
@@ -307,14 +307,14 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Escape | partial | Athletics or Sleight of Hand against the hold ends a grab; the free move afterwards is not taken. |  |
 | Grab | partial | Attack check then Strength against Strength or Dodge, restrained or bound. The holder is hindered and vulnerable while it holds (not vulnerable with Improved Grab or Grabbing Finesse), and the AI is less keen to grab with other foes about; later cumulative grabs are not applied. |  |
 | Move | partial | A move action covers the distance rank of the fighter's speed in feet (30 ft at rank 0; Flight, Speed, Swimming, Teleport and half of Leaping count) as whole squares of 5, 30 or 250 ft, at least one; Hindered halves it, a full turn moves twice that, and walls and cover pieces are walked around. Terrain such as difficult ground is not modelled. |  |
-| Ready | none | Readied actions are not simulated. |  |
+| Ready | partial | A close fighter with nothing to hit, facing brawlers that are about to walk into reach, holds an attack that fires as a foe moves in; a fighter with a power that can counter the best attack coming holds a counter. A readied action is lost if it does not happen before the fighter's next turn. Other triggers are not offered. | DCA 177 |
 | Recover | full | Once per fight, whole turn, removes the worst damage or fatigue and gives +2 to defenses. |  |
 | Smash | partial | Attack on a held or worn item at -5, then the item's Toughness check (device points / 5, equipment by material): two degrees break it, three destroy it, and its attacks are removed. The AI smashes when breaking the target's best item beats a plain attack. Worn armor and other non-attack items are not smashed. |  |
 | Stand | full | Standing is a move action, free with a DC 20 Acrobatics check (a failure costs the move action) or with Instant Up. A prone fighter stands at the start of its turn when it wants to move or fight up close; a shooter that need not move stays down. |  |
-| Trick | none | Tricks with Deception are not simulated. |  |
+| Trick | partial | Deception against the foe's Deception or Insight: a win leaves the foe heedless (it feeds Redirect), a loss by more than a degree leaves the trickster vulnerable. The hazards the book names (a precipice, a junction box) are not in the fight. | DCA 58 |
 | Trip | full | Close attack against Parry at -2, then Acrobatics or Athletics against the target; a win leaves it prone, a loss gives it a counter-trip. The AI trips when a friend who fights up close is within reach of the target or the target shoots, and the odds beat 0.35. Not used on minions. |  |
-| Crawl | none | Prone fighters do not crawl at half speed. |  |
-| Command | none | Orders to minions and thralls are not simulated. |  |
+| Crawl | full | A prone fighter is hindered, so it moves at half speed (the Prone condition); the Slither effect, which crawls at full speed, is not special-cased. | DCA 175 |
+| Command | n/a | Minions fight on their own turn under the same AI, and Summon is not simulated, so there are no orders to give. | DCA 175 |
 
 ## Maneuvers
 
@@ -344,12 +344,12 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Compelled | partial | Limited to one standard action; the controller's choice of action is not simulated. |  |
 | Controlled | partial | The controlled fighter attacks one of its own side each turn; other orders are not simulated. |  |
 | Dazed | full | One standard action; wears off at the end of the target's next turn. |  |
-| Dead | none | Death is not simulated; the worst result is incapacitated. |  |
-| Debilitated | none | Abilities below -5 are not tracked. |  |
-| Deaf | none | Recognized in Affliction text but has no effect. |  |
+| Dead | full | With the Lethal damage option: a dying fighter who fails a Damage check, or fails three degrees of its dying checks, dies; a minion taken out is killed. The log says who died. Without the option nobody dies. | DCA 19 |
+| Debilitated | partial | Weaken that takes Strength, Dexterity, Fighting or Stamina below -5 collapses the fighter (defenseless, immobile, stunned), leaves it dazed and defenseless without close attacks, or makes it dying (-5 on its Fortitude checks). Agility, Intellect, Awareness and Presence are folded into Dodge and Will by the Weaken reader and cannot be debilitated. | DCA 49 |
+| Deaf | partial | A deaf fighter is immune to Sense-Dependent (hearing) effects. The auditory concealment and the surprise attacks it allows are not simulated. | DCA 19 |
 | Defenseless | partial | Defense counts as 0 and hits are critical; routine checks against defenseless targets are not used. |  |
 | Disabled | full | -5 on checks, applied to attacks and resistance. |  |
-| Dying | none | Incapacitated fighters never roll to stabilize or die. |  |
+| Dying | full | With the Lethal damage option: a fighter taken out by Damage is dying, checks Fortitude each round (DC 15; two degrees of success stabilize it, three degrees of failure in all kill it), and Treatment, Healing or Diehard can steady it. Without the option a fighter who would be dying is incapacitated. | DCA 19 |
 | Entranced | partial | Treated as stunned; a hostile act does not break the trance. |  |
 | Exhausted | full | Impaired and hindered; from extra effort fatigue or an Affliction. |  |
 | Fatigued | full | Hindered; from extra effort or an Affliction. |  |
@@ -374,22 +374,22 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | --- | --- | --- | --- |
 | Hero point: Improve Roll | partial | A missed attack, a failed Toughness, Fortitude, Will or Dodge check, a lost opposed check (feint, trip, disarm, grab, escape, demoralize, Daze) and a recovery check are re-rolled (1-10 counts as 11-20) when the failure matters; healing, aid, stand and smash checks are not. |  |
 | Hero point: Recover | full | Removes dazed, stunned or fatigue, or turns exhausted into fatigued, at the start of a turn or when stunned. |  |
-| Hero point: Edit Scene | none | Scene edits are not simulated. |  |
+| Hero point: Edit Scene | n/a | Changing the details of a scene is a story power; the AI has no use for it in a fight. | DCA 20 |
 | Hero point: Heroic Feat | partial | Interpose is borrowed to take a hit that would knock out an ally, and Power Attack or All-out Attack for a finishing blow; other advantages are not. |  |
-| Hero point: Inspiration | none | Hints from the GM have no combat effect. |  |
-| Hero point: Instant Counter | none | Countering an effect as a reaction is not simulated. |  |
+| Hero point: Inspiration | n/a | A hint from the GM has no combat use. | DCA 20 |
+| Hero point: Instant Counter | partial | A target hit by an effect it has a power to counter (opposed descriptors, or the same for magic and mind: a table of the engine's own) can spend a hero point to counter it; both sides roll d20 + rank and a win cancels both. The AI does it when the hit would often do real harm and the counter would often win. | DCA 20 |
 | Extra effort: +1 power rank | partial | A fighter pushing an attack power gains +1 rank and a level of fatigue (applied at once, not at the start of the next turn). |  |
-| Extra effort: extra action | none | Extra standard actions are not simulated. |  |
-| Extra effort: +2 on a check | none | Circumstance bonuses on checks are not simulated. |  |
-| Extra effort: power stunt | none | Temporary alternate effects are not simulated; Omni-power fighters reconfigure on their own. |  |
-| Extra effort: extra resistance check | none | Extra recovery checks are not simulated. |  |
-| Extra effort: +1 speed rank | none | Extra speed is not simulated. |  |
-| Extra effort: +1 Strength rank | none | Extra Strength is not simulated. |  |
+| Extra effort: extra action | partial | A fresh fighter with a hero point and a strong attack takes an extra standard action to finish a foe that is staggered or has two bruises. | DCA 19 |
+| Extra effort: +2 on a check | partial | A +2 on the attack check, when the shot is a toss-up (a fighter that is losing, with a hero point to take the fatigue away). Other checks do not use it. | DCA 19 |
+| Extra effort: power stunt | none | A temporary Alternate Effect is not simulated; a fighter's own Alternate Effects are already free to switch. | DCA 19 |
+| Extra effort: extra resistance check | partial | A fighter that fails its end-of-turn recovery check against a severe condition (stunned, incapacitated, entranced, controlled...) and is not already fatigued makes one more check for a level of fatigue. | DCA 19 |
+| Extra effort: +1 speed rank | partial | A fighter whose foe is between two and four moves away doubles its move for the turn to reach it; the fatigue comes at the end of the turn. | DCA 19 |
+| Extra effort: +1 Strength rank | partial | A losing unarmed fighter with a hero point adds a rank to its unarmed damage. Strength-based powers and grabs do not use it. | DCA 19 |
 | Extra effort: cancel fatigue | partial | A hero point can cancel the fatigue, chosen by chance right after the effort. |  |
 | Minions: no critical hits on non-minions | full | Minions never crit heroes. |  |
 | Minions: routine attack checks | full | A non-minion hits a minion on a routine check when 10 does it. |  |
 | Minions: fail any Damage check and drop | full | A failed Toughness check incapacitates a minion. |  |
-| Minions: worst degree of other effects | none | Only Damage uses the minion rule; Afflictions and other effects use normal degrees. |  |
+| Minions: worst degree of other effects | full | A minion that fails any resistance check suffers the worst degree: the top condition of an Affliction, all the ranks of a Weaken. | DCA 174 |
 | Range bands | full | Short range is rank x 25 ft with no penalty, medium rank x 50 ft at -2, long rank x 100 ft at -5, and nothing beyond; Extended Range doubles each. Distance is the squares between fighters (diagonals count one) times the scale, and a close attack needs the same or an adjacent square. |  |
 | Cover | partial | Pieces made of real materials give -2 (partial) or -5 (total) to an attack when a piece stands in a square beside the target on the straight line from the attacker; total cover blocks direct targeting, and cover adds to Dodge against area effects. Pieces fill their square and are walked around. Fighters seek cover only when their team plays Take Cover, or use a piece beside them. |  |
 | Concealment | partial | -2 or -5 to attack a target with Concealment or Invisibility; the environment itself never conceals. |  |
@@ -401,7 +401,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Opposed checks | full | The higher result wins; a tie goes to the higher bonus, and with equal bonuses a d20 decides (1 to 10 for the acting fighter). Degrees are counted from the loser's result. Used by Feint, Trip, Disarm, Demoralize and Nullify. |  |
 | Staggered | full | Three degrees of failure on Damage stagger the target; a second one incapacitates. |  |
 | Critical hits | partial | A critical adds +5 to the resistance DC (Increased Effect); Added Effect and Alternate Effect are not used. |  |
-| Death and dying | none | Nobody dies; the worst result is out of the fight. |  |
+| Death and dying | full | With the Lethal damage option (Arena tab, tournaments, city war): attackers go for the kill (Damage that incapacitates also makes the target dying); further failed Damage checks make an incapacitated fighter dying and a dying one dead; the dying roll Fortitude each round, and the fight goes on until they die or steady. Off by default. | DCA 185 |
 | Ongoing effects | full | Afflictions are re-checked at the end of the target's turn. |  |
 | Area effects | partial | Everyone inside the template (friends too, unless Selective) makes a Dodge check for half; cover pieces inside it take a Toughness check. Cover only helps the Dodge; shapes follow the map tools' template geometry. |  |
 | Perception range | full | Perception-range effects need no attack check and cannot critically hit. |  |

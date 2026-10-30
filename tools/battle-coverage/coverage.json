@@ -485,22 +485,22 @@
   {
     "kind": "extra",
     "name": "Attack",
-    "status": "none",
-    "note": "An Attack extra on a non-attack effect does not make it an attack.",
+    "status": "partial",
+    "note": "On a Teleport it makes a close attack (resisted by Will, or the defense the power names) that sends the target to the farthest open square within the Teleport distance; on an effect that is an attack already it changes nothing. Shrinking, Insubstantial, Morph and other personal effects given the Attack extra have no rule yet and are left out of the fight.",
     "source": "DCA 128"
   },
   {
     "kind": "extra",
     "name": "Contagious",
-    "status": "none",
-    "note": "Spreading effects are not simulated.",
+    "status": "partial",
+    "note": "A hit with a Contagious effect makes the target a carrier; at the end of its turn each fighter next to it (not the user) resists the effect normally and becomes a carrier too. An Affliction stops spreading when it wears off, a Weaken when the ranks return, Damage lasts the fight. Contact other than standing next to each other is not tracked.",
     "source": "DCA 129"
   },
   {
     "kind": "extra",
     "name": "Dimensional",
-    "status": "none",
-    "note": "Dimensions are not simulated.",
+    "status": "n/a",
+    "note": "The engine has no other dimensions to reach into.",
     "source": "DCA 129"
   },
   {
@@ -520,8 +520,8 @@
   {
     "kind": "extra",
     "name": "Homing",
-    "status": "none",
-    "note": "Homing attacks are not simulated.",
+    "status": "full",
+    "note": "A missed ranged attack tries again at the start of the attacker's next turn as a free action, one try per rank and one a round; a miss that concealment caused loses the lock, and a target that is down or out of range ends it. The AI values the second chance.",
     "source": "DCA 129"
   },
   {
@@ -534,15 +534,15 @@
   {
     "kind": "extra",
     "name": "Increased Duration",
-    "status": "none",
-    "note": "Durations beyond instant are not tracked.",
+    "status": "partial",
+    "note": "One, two or three ranks make the effect last as concentration, sustained or continuous: it is applied again on each of the user's turns with the target's normal resistance check and no attack check or critical. Concentration takes the standard action (the AI keeps it up when that beats its planned turn), sustained a free action, continuous nothing. It ends when the target is down. An Affliction can still be shaken off by the target's own recovery checks.",
     "source": "DCA 129"
   },
   {
     "kind": "extra",
     "name": "Increased Mass",
-    "status": "none",
-    "note": "Needs Move Object, which is not simulated.",
+    "status": "n/a",
+    "note": "Needs a mover that carries others (Teleport, Move Object with passengers); the engine moves no one along with a mover.",
     "source": "DCA 130"
   },
   {
@@ -555,22 +555,22 @@
   {
     "kind": "extra",
     "name": "Incurable",
-    "status": "none",
-    "note": "Effects that resist Healing and Regeneration are not simulated.",
+    "status": "partial",
+    "note": "Healing and Regeneration cannot take off the bruises or the staggered condition that Incurable Damage caused (the Recover action can: it is normal recovery). Incurable Afflictions and Weaken are not tracked.",
     "source": "DCA 130"
   },
   {
     "kind": "extra",
     "name": "Indirect",
-    "status": "none",
-    "note": "Needs cover and line of sight, which are not simulated.",
+    "status": "partial",
+    "note": "Cover between the user and the target does not count (total cover included), and the first Indirect attack on each target is a surprise attack, so the target is vulnerable to it (a house rule: the book leaves it to the GM). The four ranks, which differ in where the effect can come from, are treated alike.",
     "source": "DCA 130"
   },
   {
     "kind": "extra",
     "name": "Innate",
-    "status": "none",
-    "note": "Innate powers are not protected from Nullify.",
+    "status": "full",
+    "note": "Nullify only ever takes sustained protection, and Innate protection is left alone; the log says so.",
     "source": "DCA 130"
   },
   {
@@ -632,15 +632,15 @@
   {
     "kind": "extra",
     "name": "Ricochet",
-    "status": "none",
-    "note": "Attacks cannot bounce.",
+    "status": "partial",
+    "note": "A ranged attack on a target behind cover banks off the cover (or the walls of an enclosed room, which need no cover piece to bounce off): the cover does not count, even total cover, and the first such attack on a target is a surprise attack (a house rule). Bad Bounce checks each bounce, Pinball hits the cover, Recoverable brings spare bounces back. Only one bounce is used and no path is traced.",
     "source": "DCA 132"
   },
   {
     "kind": "extra",
     "name": "Secondary Effect",
-    "status": "none",
-    "note": "Second effects are not simulated.",
+    "status": "full",
+    "note": "A hit with a Secondary Effect hits the target again at the end of the attacker's next turn, with the target's normal resistance check; they do not stack (a new hit only moves the second effect back a round).",
     "source": "DCA 132"
   },
   {
@@ -653,15 +653,15 @@
   {
     "kind": "extra",
     "name": "Sleep",
-    "status": "none",
-    "note": "Sleep instead of incapacitation is not applied to Damage; the Sleep effect is separate.",
+    "status": "full",
+    "note": "Damage that would incapacitate leaves the target asleep (out of the fight, and not dying), and an Affliction's incapacitated degree becomes asleep.",
     "source": "DCA 132"
   },
   {
     "kind": "extra",
     "name": "Split",
-    "status": "none",
-    "note": "Splitting an attack among targets is not simulated.",
+    "status": "partial",
+    "note": "One attack check is compared against the target and one other foe in range, and the effect is divided between them (each at least a third of the rank) when that is worth clearly more than one big effect. A third target, for the higher ranks of Split, is not used.",
     "source": "DCA 132"
   },
   {
@@ -681,8 +681,8 @@
   {
     "kind": "extra",
     "name": "Triggered",
-    "status": "none",
-    "note": "Triggered effects are not simulated.",
+    "status": "partial",
+    "note": "A fighter with a Triggered attack sets it as a trap on a square in front of it (a standard action); the effect goes off, with the foe's normal resistance check, when a foe of the setter crosses the square, once per rank. House rule: nobody notices or disarms a trap, and a variable trigger is not offered.",
     "source": "DCA 132"
   },
   {
@@ -905,8 +905,8 @@
   {
     "kind": "advantage",
     "name": "Favored Environment",
-    "status": "none",
-    "note": "Environments are not simulated.",
+    "status": "full",
+    "note": "In the environment the Arena tab sets (or an enclosed room), a fighter whose advantage names it gets +2 on attack checks, or +2 on active defenses when it is hurt or outnumbered, chosen each round.",
     "source": "DCA 74"
   },
   {
@@ -983,7 +983,7 @@
     "kind": "advantage",
     "name": "Improvised Weapon",
     "status": "none",
-    "note": "Improvised weapons are not simulated.",
+    "note": "Thrown scenery and picked-up objects are not simulated.",
     "source": "DCA 76"
   },
   {
@@ -1017,8 +1017,8 @@
   {
     "kind": "advantage",
     "name": "Quick Draw",
-    "status": "none",
-    "note": "Drawing weapons is not simulated.",
+    "status": "partial",
+    "note": "A fighter disarmed of its weapon gets it back at the start of its next turn: a move action, or free with Quick Draw (a house reading: the book's Quick Draw is about drawing from a holster, and a dropped weapon is picked up).",
     "source": "DCA 77"
   },
   {
@@ -1031,8 +1031,8 @@
   {
     "kind": "advantage",
     "name": "Redirect",
-    "status": "none",
-    "note": "Redirecting a missed attack is not simulated.",
+    "status": "partial",
+    "note": "A fighter that tricked a foe turns that foe's missed attack on another foe next to it and in range, with a new check at the same modifier. The AI tricks only to set this up.",
     "source": "DCA 78"
   },
   {
@@ -1066,22 +1066,22 @@
   {
     "kind": "advantage",
     "name": "Weapon Bind",
-    "status": "none",
-    "note": "Reactions to disarm are not simulated.",
+    "status": "partial",
+    "note": "A fighter that took the Defend action and held off a close weapon attack makes a disarm attempt as a reaction. The AI takes the Defend action for it against a foe's weapon when its own attack is weak.",
     "source": "DCA 79"
   },
   {
     "kind": "advantage",
     "name": "Weapon Break",
-    "status": "none",
-    "note": "Reactions to attack weapons are not simulated.",
+    "status": "partial",
+    "note": "A fighter that took the Defend action and held off a close weapon attack attacks the weapon as a reaction (Smash). The AI takes the Defend action for it against a foe's weapon when its own attack is weak.",
     "source": "DCA 79"
   },
   {
     "kind": "advantage",
     "name": "Beginner's Luck",
-    "status": "none",
-    "note": "Skill ranks are not boosted in a fight.",
+    "status": "n/a",
+    "note": "A hero point buys temporary skill ranks for a scene; in a fight a hero point is worth more as a re-roll, which the AI already spends.",
     "source": "DCA 72"
   },
   {
@@ -1122,8 +1122,8 @@
   {
     "kind": "advantage",
     "name": "Assessment",
-    "status": "none",
-    "note": "Insight reads of a foe's numbers are not simulated.",
+    "status": "partial",
+    "note": "A free action once per foe: Insight against its Deception tells whether its attack and defense bonuses are higher or lower than the fighter's, and more degrees give them exactly. The AI already works from the real numbers, so it only leans a little toward a foe it learned has the lower defense.",
     "source": "DCA 70"
   },
   {
@@ -1136,8 +1136,8 @@
   {
     "kind": "advantage",
     "name": "Diehard",
-    "status": "none",
-    "note": "There is no dying state to stabilize from.",
+    "status": "full",
+    "note": "In a lethal fight a dying fighter with Diehard rolls no check and stabilizes on the following round; further damage can still kill it. Without the Lethal damage option nobody is dying.",
     "source": "DCA 73"
   },
   {
@@ -1157,8 +1157,8 @@
   {
     "kind": "advantage",
     "name": "Extraordinary Effort",
-    "status": "none",
-    "note": "Double extra effort is not simulated.",
+    "status": "partial",
+    "note": "A fresh fighter pushing a power takes two ranks (two benefits of the same kind) for two levels of fatigue. Pairing two different benefits is not used.",
     "source": "DCA 74"
   },
   {
@@ -1178,8 +1178,8 @@
   {
     "kind": "advantage",
     "name": "Great Endurance",
-    "status": "none",
-    "note": "The bonus to resist fatigue is not applied.",
+    "status": "partial",
+    "note": "+5 on Fortitude checks against suffocation and against effects that start by fatiguing. Hazards (heat, cold, starvation) are not in a fight.",
     "source": "DCA 75"
   },
   {
@@ -1206,8 +1206,8 @@
   {
     "kind": "advantage",
     "name": "Second Chance",
-    "status": "none",
-    "note": "Rerolls against hazards are not simulated.",
+    "status": "partial",
+    "note": "One more resistance check, taking the better, against an attack the advantage's named hazard matches (by words in its name, effect, resistance or descriptors). Falls, traps and skill checks are not in a fight.",
     "source": "DCA 78"
   },
   {
@@ -1283,15 +1283,15 @@
   {
     "kind": "advantage",
     "name": "Fascinate",
-    "status": "none",
-    "note": "Fascinating a foe is not simulated.",
+    "status": "n/a",
+    "note": "The advantage itself says combat and other immediate danger make it ineffective.",
     "source": "DCA 74"
   },
   {
     "kind": "advantage",
     "name": "Favored Foe",
-    "status": "none",
-    "note": "The bonus against a chosen foe is not applied.",
+    "status": "partial",
+    "note": "A fighter gets +2 on the feint, Daze, Demoralize, Trick and Assessment against a foe the advantage names (matched by the words of its name, type or style). Perception and the fighter's own Insight when resisting are not modeled.",
     "source": "DCA 75"
   },
   {
@@ -1446,8 +1446,9 @@
   {
     "kind": "action",
     "name": "Ready",
-    "status": "none",
-    "note": "Readied actions are not simulated."
+    "status": "partial",
+    "note": "A close fighter with nothing to hit, facing brawlers that are about to walk into reach, holds an attack that fires as a foe moves in; a fighter with a power that can counter the best attack coming holds a counter. A readied action is lost if it does not happen before the fighter's next turn. Other triggers are not offered.",
+    "source": "DCA 177"
   },
   {
     "kind": "action",
@@ -1470,8 +1471,9 @@
   {
     "kind": "action",
     "name": "Trick",
-    "status": "none",
-    "note": "Tricks with Deception are not simulated."
+    "status": "partial",
+    "note": "Deception against the foe's Deception or Insight: a win leaves the foe heedless (it feeds Redirect), a loss by more than a degree leaves the trickster vulnerable. The hazards the book names (a precipice, a junction box) are not in the fight.",
+    "source": "DCA 58"
   },
   {
     "kind": "action",
@@ -1482,14 +1484,16 @@
   {
     "kind": "action",
     "name": "Crawl",
-    "status": "none",
-    "note": "Prone fighters do not crawl at half speed."
+    "status": "full",
+    "note": "A prone fighter is hindered, so it moves at half speed (the Prone condition); the Slither effect, which crawls at full speed, is not special-cased.",
+    "source": "DCA 175"
   },
   {
     "kind": "action",
     "name": "Command",
-    "status": "none",
-    "note": "Orders to minions and thralls are not simulated."
+    "status": "n/a",
+    "note": "Minions fight on their own turn under the same AI, and Summon is not simulated, so there are no orders to give.",
+    "source": "DCA 175"
   },
   {
     "kind": "maneuver",
@@ -1608,20 +1612,23 @@
   {
     "kind": "condition",
     "name": "Dead",
-    "status": "none",
-    "note": "Death is not simulated; the worst result is incapacitated."
+    "status": "full",
+    "note": "With the Lethal damage option: a dying fighter who fails a Damage check, or fails three degrees of its dying checks, dies; a minion taken out is killed. The log says who died. Without the option nobody dies.",
+    "source": "DCA 19"
   },
   {
     "kind": "condition",
     "name": "Debilitated",
-    "status": "none",
-    "note": "Abilities below -5 are not tracked."
+    "status": "partial",
+    "note": "Weaken that takes Strength, Dexterity, Fighting or Stamina below -5 collapses the fighter (defenseless, immobile, stunned), leaves it dazed and defenseless without close attacks, or makes it dying (-5 on its Fortitude checks). Agility, Intellect, Awareness and Presence are folded into Dodge and Will by the Weaken reader and cannot be debilitated.",
+    "source": "DCA 49"
   },
   {
     "kind": "condition",
     "name": "Deaf",
-    "status": "none",
-    "note": "Recognized in Affliction text but has no effect."
+    "status": "partial",
+    "note": "A deaf fighter is immune to Sense-Dependent (hearing) effects. The auditory concealment and the surprise attacks it allows are not simulated.",
+    "source": "DCA 19"
   },
   {
     "kind": "condition",
@@ -1638,8 +1645,9 @@
   {
     "kind": "condition",
     "name": "Dying",
-    "status": "none",
-    "note": "Incapacitated fighters never roll to stabilize or die."
+    "status": "full",
+    "note": "With the Lethal damage option: a fighter taken out by Damage is dying, checks Fortitude each round (DC 15; two degrees of success stabilize it, three degrees of failure in all kill it), and Treatment, Healing or Diehard can steady it. Without the option a fighter who would be dying is incapacitated.",
+    "source": "DCA 19"
   },
   {
     "kind": "condition",
@@ -1758,8 +1766,9 @@
   {
     "kind": "rule",
     "name": "Hero point: Edit Scene",
-    "status": "none",
-    "note": "Scene edits are not simulated."
+    "status": "n/a",
+    "note": "Changing the details of a scene is a story power; the AI has no use for it in a fight.",
+    "source": "DCA 20"
   },
   {
     "kind": "rule",
@@ -1770,14 +1779,16 @@
   {
     "kind": "rule",
     "name": "Hero point: Inspiration",
-    "status": "none",
-    "note": "Hints from the GM have no combat effect."
+    "status": "n/a",
+    "note": "A hint from the GM has no combat use.",
+    "source": "DCA 20"
   },
   {
     "kind": "rule",
     "name": "Hero point: Instant Counter",
-    "status": "none",
-    "note": "Countering an effect as a reaction is not simulated."
+    "status": "partial",
+    "note": "A target hit by an effect it has a power to counter (opposed descriptors, or the same for magic and mind: a table of the engine's own) can spend a hero point to counter it; both sides roll d20 + rank and a win cancels both. The AI does it when the hit would often do real harm and the counter would often win.",
+    "source": "DCA 20"
   },
   {
     "kind": "rule",
@@ -1788,38 +1799,44 @@
   {
     "kind": "rule",
     "name": "Extra effort: extra action",
-    "status": "none",
-    "note": "Extra standard actions are not simulated."
+    "status": "partial",
+    "note": "A fresh fighter with a hero point and a strong attack takes an extra standard action to finish a foe that is staggered or has two bruises.",
+    "source": "DCA 19"
   },
   {
     "kind": "rule",
     "name": "Extra effort: +2 on a check",
-    "status": "none",
-    "note": "Circumstance bonuses on checks are not simulated."
+    "status": "partial",
+    "note": "A +2 on the attack check, when the shot is a toss-up (a fighter that is losing, with a hero point to take the fatigue away). Other checks do not use it.",
+    "source": "DCA 19"
   },
   {
     "kind": "rule",
     "name": "Extra effort: power stunt",
     "status": "none",
-    "note": "Temporary alternate effects are not simulated; Omni-power fighters reconfigure on their own."
+    "note": "A temporary Alternate Effect is not simulated; a fighter's own Alternate Effects are already free to switch.",
+    "source": "DCA 19"
   },
   {
     "kind": "rule",
     "name": "Extra effort: extra resistance check",
-    "status": "none",
-    "note": "Extra recovery checks are not simulated."
+    "status": "partial",
+    "note": "A fighter that fails its end-of-turn recovery check against a severe condition (stunned, incapacitated, entranced, controlled...) and is not already fatigued makes one more check for a level of fatigue.",
+    "source": "DCA 19"
   },
   {
     "kind": "rule",
     "name": "Extra effort: +1 speed rank",
-    "status": "none",
-    "note": "Extra speed is not simulated."
+    "status": "partial",
+    "note": "A fighter whose foe is between two and four moves away doubles its move for the turn to reach it; the fatigue comes at the end of the turn.",
+    "source": "DCA 19"
   },
   {
     "kind": "rule",
     "name": "Extra effort: +1 Strength rank",
-    "status": "none",
-    "note": "Extra Strength is not simulated."
+    "status": "partial",
+    "note": "A losing unarmed fighter with a hero point adds a rank to its unarmed damage. Strength-based powers and grabs do not use it.",
+    "source": "DCA 19"
   },
   {
     "kind": "rule",
@@ -1848,8 +1865,9 @@
   {
     "kind": "rule",
     "name": "Minions: worst degree of other effects",
-    "status": "none",
-    "note": "Only Damage uses the minion rule; Afflictions and other effects use normal degrees."
+    "status": "full",
+    "note": "A minion that fails any resistance check suffers the worst degree: the top condition of an Affliction, all the ranks of a Weaken.",
+    "source": "DCA 174"
   },
   {
     "kind": "rule",
@@ -1920,8 +1938,9 @@
   {
     "kind": "rule",
     "name": "Death and dying",
-    "status": "none",
-    "note": "Nobody dies; the worst result is out of the fight."
+    "status": "full",
+    "note": "With the Lethal damage option (Arena tab, tournaments, city war): attackers go for the kill (Damage that incapacitates also makes the target dying); further failed Damage checks make an incapacitated fighter dying and a dying one dead; the dying roll Fortitude each round, and the fight goes on until they die or steady. Off by default.",
+    "source": "DCA 185"
   },
   {
     "kind": "rule",
@@ -2085,84 +2104,84 @@
     "kind": "extra",
     "name": "Ammunition",
     "status": "none",
-    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "note": "The firing weapon's range is not tracked: ranges come from the power's own rank.",
     "source": "MA 91"
   },
   {
     "kind": "extra",
     "name": "Combo Element",
     "status": "none",
-    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "note": "Combo points and the Combo Finish are not simulated.",
     "source": "MA 91"
   },
   {
     "kind": "extra",
     "name": "Conductor",
     "status": "none",
-    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "note": "Mediums that carry a touch effect are not simulated.",
     "source": "MA 91"
   },
   {
     "kind": "extra",
     "name": "Diminishing Counter",
-    "status": "none",
-    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "status": "full",
+    "note": "A counter that fails still saps the attack: its rank is cut to the margin by which the counter lost, plus one.",
     "source": "MA 92"
   },
   {
     "kind": "extra",
     "name": "Improved Counter",
-    "status": "none",
-    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "status": "full",
+    "note": "Each rank lets the power counter one more descriptor than the opposed pairs; the AI takes whichever one is coming (a house reading of \"choose a descriptor\").",
     "source": "MA 93"
   },
   {
     "kind": "extra",
     "name": "Overwhelming Counter",
-    "status": "none",
-    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "status": "full",
+    "note": "A counter that wins sends one rank of itself per degree of the win back at the attacker, who defends and resists as normal.",
     "source": "MA 93"
   },
   {
     "kind": "extra",
     "name": "Partial Resistance",
-    "status": "none",
-    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "status": "full",
+    "note": "A one-degree success halves the effect's ranks: the +1 version allows a second check at the halved rank to resist outright, the +2 version counts it as a degree of failure.",
     "source": "MA 93"
   },
   {
     "kind": "extra",
     "name": "Pinball",
-    "status": "none",
-    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "status": "partial",
+    "note": "With Ricochet, a Damage bounce also hurts the cover piece it bounces off. Other effects, and bouncing off walls, do nothing extra.",
     "source": "MA 93"
   },
   {
     "kind": "extra",
     "name": "Potent",
-    "status": "none",
-    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "status": "full",
+    "note": "Adds +1 to the resistance DC per rank on Parry, Dodge, Fortitude and Will effects, without more rank (not on Toughness).",
     "source": "MA 93"
   },
   {
     "kind": "extra",
     "name": "Proficient",
-    "status": "none",
-    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "status": "partial",
+    "note": "+2 per rank on the effect's power checks: Nullify, Healing and countering. Its Alternate Effects and other power checks are not simulated.",
     "source": "MA 93"
   },
   {
     "kind": "extra",
     "name": "Recoverable",
-    "status": "none",
-    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "status": "partial",
+    "note": "With Ricochet, spare bounces bring the attack back to the user, who catches it with a Dexterity check against the attack roll; two degrees of failure and it is made against the user. A spare bounce is read as one left over after the bounce used on cover.",
     "source": "MA 94"
   },
   {
     "kind": "extra",
     "name": "Stacking",
-    "status": "none",
-    "note": "Martial Arts (3e) extra; not simulated in fights yet.",
+    "status": "partial",
+    "note": "Each repeat use on the same target in a round raises the resistance DC by 1 per rank, and the bonus fades a point a round. The flat-rate time options and the Stacking Alternative are not used.",
     "source": "MA 94"
   },
   {
