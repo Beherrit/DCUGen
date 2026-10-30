@@ -19,6 +19,7 @@ import { planStanding, standOrDrop } from './stand.js';
 import { deflectTurn } from './deflect-plan.js';
 import { utilityTurn } from './utility.js';
 import { refreshGrants } from './grants.js';
+import { insubTurn } from './insub-turn.js';
 
 const isHurt = (c) => c.staggered || c.bruises >= 2;
 
@@ -36,6 +37,7 @@ export function takeTurn(b, R, c, rng) {
   const enemies = enemiesOf(b, c);
   if (!enemies.length) return;
   if (losesNerve(b, c, enemies, rng)) return;
+  insubTurn(b, c, enemies); // a free action: change form, and flow out of a hold
   if (escapeGrab(b, c, rng)) return;
   recoverFromDaze(b, c, mode, rng);
   recoverFatigue(b, c);

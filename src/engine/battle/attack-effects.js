@@ -4,17 +4,30 @@ import { sign, log } from './util.js';
 import { rollCheck, critNote, opposedCheck, opposedNote } from './checks.js';
 import { resistOf, weakenedAttack } from './conditions.js';
 import { dcOf, isImmune, halfImmune } from './odds.js';
+import { retune } from './variable-descriptor.js';
+import { insubLoss, formWords, entraps } from './insubstantial.js';
 import { releaseHolds } from './maneuvers.js';
 import { resistFx } from './fortune.js';
 import { weakenTraits, traitLabel } from './weaken-traits.js';
 
+/** Variable Descriptor (DCA 133): against a target immune to the attack's descriptor, switch to one it is not immune to, and say so. */
+function retuned(b, c, atk, t) {
+  const v = retune(t, atk);
+  if (!v) return atk;
+  log(b, { kind: 'note', actor: c.id, target: t.id, text: `${atk.name}: ${c.name} changes its descriptor from ${v.from} to ${v.to} (Variable Descriptor), because ${t.name} is ${v.because}.` });
+  return v.atk;
+}
+
 /** Resolve the effect of a hit (or an automatic effect). Returns { landed, ko, degrees, rank } (the rank for Damage). */
 export function applyEffect(b, R, c, atk, t, rng, { crit = false, rankShift = 0, multi = 0 } = {}) {
-  let rank = Math.max(0, atk.rank + rankShift - weakenedAttack(c, atk).rank);
+  atk = retuned(b, c, atk, t);
+  const lost = insubLoss(c, atk);
+  let rank = Math.max(0, atk.rank + rankShift - weakenedAttack(c, atk).rank - lost);
+  if (lost && rank <= 0) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${atk.name}: ${c.name} is ${formWords(c.insub)} and cannot affect the physical world with it: no effect.` }); return { landed: false }; }
   const why = isImmune(t, atk);
-  if (why) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name} is ${why}: no effect.` }); return { landed: false }; }
+  if (why) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${atk.name}: ${t.name} is ${why}: no effect.` }); return { landed: false }; }
   const half = halfImmune(t, atk);
-  if (half) { rank = Math.floor(rank / 2); log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name} is partly ${half.replace(/^immune/, 'immune')} (half effect): rank ${rank}.` }); rankShift = rank - atk.rank; }
+  if (half) { rank = Math.floor(rank / 2); log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${atk.name}: ${t.name} is partly ${half} (half effect): rank ${rank}.` }); rankShift = rank - atk.rank; }
   if (atk.effect === 'Damage' && !atk.penetrating && t.impervious && rank <= Math.floor(t.impervious / 2)) {
     log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name}'s Impervious ${t.impervious} shrugs off Damage ${rank} without a check.` });
     return { landed: false };
@@ -71,7 +84,7 @@ function afflictionResult(b, c, atk, t, fails, dc, base, dice, rng) {
   else if (existing) degree = Math.max(existing.degree, degree);
   const names = tiers[degree - 1];
   if (atk.extraCondition && degree === 1 && tiers[1]) names.push(...tiers[1].filter((n) => !names.includes(n)));
-  const cond = { name: names[0], names, degree, from: c.id, source: atk.id, label: atk.name, dc: dcOf(atk, atk.rank), resist: atk.resistance, cumulative: !!atk.cumulative, progressive: !!atk.progressive, tiers, maxDegree: maxDeg };
+  const cond = { name: names[0], names, degree, from: c.id, source: atk.id, label: atk.name, dc: dcOf(atk, atk.rank), resist: atk.resistance, cumulative: !!atk.cumulative, progressive: !!atk.progressive, tiers, maxDegree: maxDeg, ...(entraps(atk) ? { entrap: true } : {}) };
   t.conditions = t.conditions.filter((x) => x !== existing);
   for (const n of names.slice(1)) t.conditions.push({ ...cond, name: n });
   t.conditions.push(cond);

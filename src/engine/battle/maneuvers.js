@@ -8,8 +8,11 @@ import { rollCheck, opposedCheck, opposedNote, critNote } from './checks.js';
 import { tacticOf } from './tactics-list.js';
 import { plainFx, hurt } from './fortune.js';
 import { feintPick, setUpAllies } from './tricks.js';
+import { interactionImmune, slipsHold } from './immunity.js';
+import { formWords } from './insubstantial.js';
 
 export function feint(b, c, t, rng) {
+  if (interactionImmune(t)) { log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${c.name} tries to feint ${t.name}, but ${t.name} is immune to interaction skills: it fails.` }); return; }
   const { name, mine, theirs } = feintPick(c, t);
   const flank = tacticOf(b, c) === 'flank';
   const duel = opposedCheck(rng, { bonus: mine, fx: plainFx(b, c, 'feint check', () => flank) }, { bonus: theirs, fx: plainFx(b, t, 'feint resistance', () => hurt(t)) });
@@ -39,6 +42,7 @@ export function grabAppetite(b, c, t) {
 }
 
 export function grab(b, R, c, t, rng, { free = false } = {}) {
+  if (slipsHold(t)) { log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${c.name} tries to grab ${t.name}, but ${t.name} ${t.insub ? `is in ${formWords(t.insub)} and flows out of any hold` : 'is immune to entrapment'}: no hold.` }); return; }
   const str = gripOf(c);
   if (!free) {
     const dc = 10 + defenseOf(t, 'Parry');

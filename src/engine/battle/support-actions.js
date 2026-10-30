@@ -7,6 +7,7 @@ import { checkPenalty, resistOf, isImpaired } from './conditions.js';
 import { inEarshot } from './geometry.js';
 import { tacticOf } from './tactics-list.js';
 import { plainFx, hurt } from './fortune.js';
+import { interactionImmune } from './immunity.js';
 
 /** The demoralizer's skill: Intimidation, or Deception when the fighter has Taunt and it is better. */
 export function demoralSkill(c) {
@@ -15,7 +16,7 @@ export function demoralSkill(c) {
 }
 
 /** Fearless fighters, and those immune to Will effects, cannot be demoralized. */
-export const canDemoralize = (t) => !t.adv.Fearless && resistOf(t, 'Will') !== null;
+export const canDemoralize = (t) => !t.adv.Fearless && resistOf(t, 'Will') !== null && !interactionImmune(t);
 
 /** What the target rolls against a demoralize: the higher of Insight and Will (and Deception against Taunt). Null if immune. */
 export function resistanceTo(t, skill) {
@@ -45,6 +46,7 @@ function impair(b, c, t, name, degrees) {
  * are demoralized together by the one check, against the highest resistance among them. Returns the degrees of success.
  */
 export function demoralize(b, c, t, rng, { skill = demoralSkill(c) } = {}) {
+  if (interactionImmune(t)) { log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${c.name} tries to demoralize ${t.name}, but ${t.name} is immune to interaction skills: it fails.` }); return 0; }
   if (!canDemoralize(t)) return 0;
   const group = t.minion ? [t, ...minionsInSight(b, c).filter((x) => x !== t)] : [t];
   const theirs = Math.max(...group.map((x) => resistanceTo(x, skill)));

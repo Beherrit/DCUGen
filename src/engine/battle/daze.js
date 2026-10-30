@@ -8,11 +8,12 @@ import { opposedCheck, opposedNote, opposedOdds } from './checks.js';
 import { inEarshot } from './geometry.js';
 import { plainFx, hurt } from './fortune.js';
 import { ownValue, potentialEv } from './tactics-support.js';
+import { interactionImmune } from './immunity.js';
 
 /** Worth a Daze: the target is still up and not already limited, and has a Will defense to resist with. */
 export function canDaze(t) {
   const s = activeConditions(t);
-  return !t.out && !t.fled && !t.dazed && !t.staggered && !s.has('Stunned') && !s.has('Unaware') && resistOf(t, 'Will') !== null;
+  return !t.out && !t.fled && !t.dazed && !t.staggered && !s.has('Stunned') && !s.has('Unaware') && resistOf(t, 'Will') !== null && !interactionImmune(t);
 }
 
 /** What the target resists a Daze with: the same skill, Insight, or Will, whichever is best. */
@@ -32,6 +33,7 @@ export function dazeSkillFor(c, t) {
 
 /** c Dazes t with the skill. Returns true when the target is dazed. */
 export function daze(b, c, t, rng, skill) {
+  if (interactionImmune(t)) { log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${c.name} tries to daze ${t.name}, but ${t.name} is immune to interaction skills: it fails.` }); return false; }
   const mine = c.skills[skill] - checkPenalty(c);
   const theirs = dazeResistance(t, skill);
   const duel = opposedCheck(rng, { bonus: mine, fx: plainFx(b, c, 'Daze check', () => false) }, { bonus: theirs, fx: plainFx(b, t, 'Daze resistance', () => hurt(t)) });

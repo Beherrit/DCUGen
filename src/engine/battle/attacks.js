@@ -16,6 +16,7 @@ import { maybeKnockback } from './knockback.js';
 import { squares, squaresInMove, feet, inReach, areaVictims } from './geometry.js';
 import { spotName } from './grid.js';
 import { traceAttack } from './trace.js';
+import { critImmune, slipsHold } from './immunity.js';
 
 export function resolveAttack(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive = 0, effort = null, charge = false, slam = null, aimed = 0, team = 0 } = {}) {
   c.lastAttackId = atk.id;
@@ -121,7 +122,7 @@ function landHit(b, R, c, atk, t, rng, r, { rankShift, notes, slam }) {
 
 /** After a hit: Fast Grab can turn it into a hold (the unarmed hit counts as the grab's attack check, p74), and Takedown lets the attacker swing at the next minion. */
 function followUps(b, R, c, atk, t, rng, result, mod) {
-  if (result && atk.unarmed && c.adv['Fast Grab'] && !c.holding && !t.out && !t.grabbedBy && rng.chance(0.6 * grabAppetite(b, c, t))) {
+  if (result && atk.unarmed && c.adv['Fast Grab'] && !c.holding && !t.out && !t.grabbedBy && !slipsHold(t) && rng.chance(0.6 * grabAppetite(b, c, t))) {
     log(b, { kind: 'note', actor: c.id, target: t.id, text: `${c.name} uses Fast Grab to turn the hit into a hold.` });
     grab(b, R, c, t, rng, { free: true });
   }
@@ -144,7 +145,7 @@ function resolveSimpleAttack(b, R, c, atk, t, rng, mod) {
   const roll = d20(rng);
   const total = roll + mod;
   const hit = roll === 20 || (roll !== 1 && total >= dc);
-  const crit = !(c.minion && !t.minion) && hit && (roll === 20 ? total >= dc : roll >= atk.crit);
+  const crit = !(c.minion && !t.minion) && hit && (roll === 20 ? total >= dc : roll >= atk.crit) && !critImmune(t);
   c.stats.attacks++;
   if (!hit) { log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${c.name} swings at ${t.name}: d20 ${roll} ${sign(mod)} = ${total} vs ${which} DC ${dc} — miss.`, dice: [{ label: 'Attack', roll, mod, total, dc }] }); return null; }
   c.stats.hits++;

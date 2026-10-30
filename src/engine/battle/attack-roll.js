@@ -12,6 +12,7 @@ import { payReroll } from './points.js';
 import { assistReroll } from './luck.js';
 import { wantsReroll, negatesReroll, forcesHit } from './luck-attack.js';
 import { deflectAgainst } from './deflect.js';
+import { critImmune } from './immunity.js';
 
 const VERBS = {
   brawler: ['swings at', 'hammers', 'slams', 'pounds on'], duelist: ['cuts at', 'strikes at', 'lunges at', 'snaps a strike at'],
@@ -106,6 +107,7 @@ export function rollToHit(b, c, atk, t, rng, m, aimed, notes) {
   const out = { roll, total, mod, hit, crit, dice, text, dcUsed, which, deflect };
   if (!hit && !ultimate && wantsReroll(b, c, t, roll, rng)) rerollMiss(b, c, atk, t, rng, out, routine);
   if (activeConditions(t).has('Defenseless') && out.hit && critOk(c, t, routine)) out.crit = true;
+  if (out.crit && critImmune(t)) { out.crit = false; out.text += ` (a critical threat, but ${t.name} is immune to critical hits: a normal hit)`; }
   return out;
 }
 

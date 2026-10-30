@@ -5,6 +5,9 @@ import { effectWeights } from './combatant.js';
 import { coverPenalty, coverDodgeBonus, preciseIgnores } from './cover.js';
 import { proneMod } from './prone.js';
 import { bandFor } from '../range.js';
+import { immunityMatch } from './immunity.js';
+import { retune } from './variable-descriptor.js';
+import { insubLoss } from './insubstantial.js';
 
 export function hitOdds(bonus, defense) {
   let hit = 0;
@@ -28,46 +31,13 @@ export function dcOf(atk, rank = atk.rank) {
 }
 
 /**
- * Is the target immune to this attack (DCA 103-104)? Returns the reason, or null. An Immunity to "<descriptor>
- * damage" stops only Damage with that descriptor; "<descriptor> effects" (or just the descriptor) stops any
- * effect with it. Limited to Half Effect immunities don't stop it: see halfImmune().
+ * Is the target immune to this attack (DCA 102-104)? Returns the reason, or null. What each Immunity (and an
+ * insubstantial form) stops is in immunity.js. Limited to Half Effect immunities don't stop it: see halfImmune().
  */
-export function isImmune(target, atk) {
-  const why = immunityMatch(target, atk, false);
-  return why;
-}
+export function isImmune(target, atk) { return immunityMatch(target, atk, false); }
 
 /** An Immunity limited to half effect that applies: the effect lands at half rank. Returns the reason or null. */
 export function halfImmune(target, atk) { return immunityMatch(target, atk, true); }
-
-const NEVER_MATCH = ['variable', 'super-science', 'technology', 'power armor'];
-function immunityMatch(target, atk, wantHalf) {
-  const res = String(atk.resistance || '').toLowerCase();
-  const damaging = atk.effect === 'Damage' || atk.effect === 'Mental Blast';
-  for (const raw of target.immune) {
-    const half = raw.endsWith(' #half');
-    if (half !== wantHalf) continue;
-    const w = raw.replace(/ #half$/, '');
-    if (w.includes('fortitude effects') && res === 'fortitude') return 'immune to Fortitude effects';
-    if (w.includes('will effects') && res === 'will') return 'immune to Will effects';
-    if (/life support/.test(w) && (atk.effect === 'Suffocation' || (atk.descriptors || []).some((d) => /disease|poison|toxin|vacuum|suffocat|drown|radiation/.test(d)))) return 'immune (Life Support)';
-    if (/\ball (damage|attacks)\b|\bdamage \(all\)/.test(w) && damaging) return 'immune to damage';
-    for (const dsc of atk.descriptors || []) {
-      const d = String(dsc).toLowerCase().replace(/\s*\(.*$/, '');
-      if (d.length <= 2 || NEVER_MATCH.includes(d)) continue;
-      // each comma or "and" separated part of the immunity is checked on its own
-      for (const part of w.split(/,|\band\b|;/).map((x) => x.trim()).filter(Boolean)) {
-        if (!new RegExp(`\\b${d.replace(/[^a-z\-]/g, '')}s?\\b`).test(part)) continue;
-        if (/damage|attacks/.test(part) && !damaging) continue; // "fire damage" doesn't stop a fire Affliction
-        return `immune to ${dsc}${/damage/.test(part) ? ' damage' : ''}`;
-      }
-    }
-    if (atk.effect === 'Mind Control' && /mind control|mental/.test(w)) return 'immune to mental effects';
-    if (atk.effect === 'Sleep' && /sleep/.test(w)) return 'immune to sleep';
-  }
-  if (!wantHalf && atk.fear && target.adv.Fearless) return 'Fearless';
-  return null;
-}
 
 /** The chance an attack roll lands, and the chance it is a critical (both 1 when there is no roll to make). */
 export function attackHit(c, atk, target, { bonusShift = 0, autoHit = false, dist = 0, b = null } = {}) {
@@ -89,8 +59,11 @@ export function attackHit(c, atk, target, { bonusShift = 0, autoHit = false, dis
 
 /** Expected "harm" of an attack on a target: how much it would change the fight, in rough degrees. */
 export function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, autoHit = false, dist = 0, b = null } = {}) {
+  atk = retune(target, atk)?.atk || atk; // Variable Descriptor: used with a descriptor the target is not immune to
   if (isImmune(target, atk)) return 0;
-  let rank = atk.rank + rankShift - weakenedAttack(c, atk).rank;
+  const lost = insubLoss(c, atk);
+  let rank = atk.rank + rankShift - weakenedAttack(c, atk).rank - lost;
+  if (lost && rank <= 0) return 0; // an insubstantial fighter that cannot affect the physical world
   if (halfImmune(target, atk)) rank = Math.floor(rank / 2);
   const { hit, crit } = attackHit(c, atk, target, { bonusShift, autoHit, dist, b });
   if (atk.effect === 'Damage' && !atk.penetrating && rank <= Math.floor(target.impervious / 2)) return 0.05 * hit;

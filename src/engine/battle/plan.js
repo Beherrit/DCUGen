@@ -10,6 +10,7 @@ import { coverPlan, throughFactor } from './cover-plan.js';
 import { gripOf, grabAppetite } from './maneuvers.js';
 import { maneuverPlan } from './plan-maneuvers.js';
 import { feintPick, setUpAllies, closeBest } from './tricks.js';
+import { interactionImmune, slipsHold } from './immunity.js';
 import { attackValue } from './utility-attack.js';
 
 /**
@@ -82,7 +83,7 @@ export function bestTradeoff(c, atk, t, dist, b = null) {
 function wantsFeint(b, c, t, top, mode) {
   const flank = feintBias(b, c);
   const gift = setUpAllies(b, c, t);
-  if (!((flank || c.style === 'duelist' || c.adv['Agile Feint'] || c.adv.Startle || gift.length) && top.pick.attack?.roll && top.reachable && top.need <= squaresInMove(b, c) && !t.feinted && mode === 'full')) return false;
+  if (!((flank || c.style === 'duelist' || c.adv['Agile Feint'] || c.adv.Startle || gift.length) && top.pick.attack?.roll && top.reachable && top.need <= squaresInMove(b, c) && !t.feinted && mode === 'full') || interactionImmune(t)) return false;
   const atk = gift.length ? closeBest(b, gift[0], t).atk : top.pick.attack;
   const def = defenseOf(t, atk.kind === 'close' ? 'Parry' : 'Dodge');
   const now = hitOdds(atk.bonus, def).hit;
@@ -145,7 +146,7 @@ export function choosePlan(b, R, c, enemies, rng, mode) {
     return null;
   }
   // Grab: beasts, brawlers and tanks with the knack, against someone they can reach
-  if ((S.grabs || c.adv['Fast Grab'] || c.adv['Improved Grab'] || c.adv.Chokehold) && !c.holding && top.reachable && top.need <= moveSq && gripOf(c) >= (t.d.abilities.Strength ?? 0) + 2 && !t.grabbedBy && !t.minion && rng.chance(grabChance(b, c, t, c.style === 'beast' ? 0.45 : 0.3) * grabAppetite(b, c, t))) {
+  if ((S.grabs || c.adv['Fast Grab'] || c.adv['Improved Grab'] || c.adv.Chokehold) && !c.holding && top.reachable && top.need <= moveSq && gripOf(c) >= (t.d.abilities.Strength ?? 0) + 2 && !t.grabbedBy && !slipsHold(t) && !t.minion && rng.chance(grabChance(b, c, t, c.style === 'beast' ? 0.45 : 0.3) * grabAppetite(b, c, t))) {
     return { target: t, attack: top.pick.attack, plan: 'grab' };
   }
   const maneuver = maneuverPlan(b, c, top, mode);

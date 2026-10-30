@@ -13,6 +13,10 @@ import { luckControlOf } from './luck.js';
 import { parseWeakenTrait } from './weaken-traits.js';
 import { giftsOf, applyGrants } from './grants.js';
 import { detectRoles } from './roles.js';
+import { attackDescriptors } from './descriptors.js';
+import { immunitiesOf, fearImmune } from './immunity.js';
+import { variableSize } from './variable-descriptor.js';
+import { restoreForm } from './insubstantial.js';
 
 export function effectWeights(attack) {
   if (attack.effect === 'Damage') return [0, 1, 2.3, 3.8, 6.5];
@@ -55,7 +59,14 @@ function reachOf(a, p, R) {
   return out;
 }
 
-function buildAttack(c, a0, R) {
+/** The Affects Insubstantial extra as 0 (none), 1 (half rank) or 2 (full rank), and Affects Corporeal as its steps (DCA 125). */
+function insubExtras(p) {
+  const ai = (p?.extras || []).find((m) => m.name === 'Affects Insubstantial');
+  const ac = (p?.extras || []).filter((m) => m.name === 'Affects Corporeal').reduce((s, m) => s + (m.steps ?? 1), 0);
+  return { affectsInsub: ai ? (/full/i.test(String(ai.option || '')) || (ai.steps ?? 1) >= 2 ? 2 : 1) : 0, affectsCorporeal: ac };
+}
+
+function buildAttack(c, a0, R, where = new Map()) {
   const a = { ...a0, effect: combatEffect(a0.effect, R) };
   const p = a.power || null;
   const eff = R.effect(a.effect);
@@ -66,7 +77,8 @@ function buildAttack(c, a0, R) {
     equipment: !!a.equipment, device: !!(p && deviceOf(c.ch, p)), item: itemFor(c.ch, a, p, R),
     unarmed: a.name === 'Unarmed', alternate: !!a.alternate,
     crit: a.crit || (p ? Math.max(16, 20 - advantageRank(c.ch, 'Improved Critical', p.name) - advantageRank(c.ch, 'Improved Critical')) : 20),
-    descriptors: attackDescriptors(c, a, p),
+    descriptors: attackDescriptors(R, c.ch, a, p, where.get(p) || {}),
+    variable: variableSize(p), ...insubExtras(p),
     multiattack: hasExtra(p, 'Multiattack'), penetrating: hasExtra(p, 'Penetrating'), selective: hasExtra(p, 'Selective'),
     area: a.kind === 'area' ? (extraOpt(p, 'Area') || 'Burst') : null,
     perception: a.kind === 'perception',
@@ -105,38 +117,6 @@ function elongationFt(ch) {
   const ranks = allPowers(ch, { includeAlternates: false }).filter(({ power: p }) => p.effect === 'Elongation').map(({ power: p }) => p.rank);
   return ranks.length ? rankFt(Math.max(...ranks)) : 0;
 }
-/**
- * What a fighter is immune to, from Immunity powers and absent defenses: lower-case phrases like "fire damage",
- * "fortitude effects", "life support". Immunity with Limited to Half Effect is marked " #half" (DCA 104).
- */
-function immunities(ch, d) {
-  const words = [];
-  if (d.defenses.immune?.Fortitude) words.push('fortitude effects');
-  if (d.defenses.immune?.Will) words.push('will effects');
-  for (const { power: p } of allPowers(ch, { includeAlternates: false })) {
-    if (p.effect !== 'Immunity' || !p.detail) continue;
-    const half = (p.flaws || []).some((f) => /half effect/i.test(f.name || f));
-    words.push(`${String(p.detail).toLowerCase()}${half ? ' #half' : ''}`);
-  }
-  return words;
-}
-
-/**
- * An attack's descriptors: its power's own, plus what it obviously is. Fists, claws, thrown cars and weapons
- * are physical (and a weapon is a weapon); a power with an energy descriptor isn't physical.
- */
-function attackDescriptors(c, a, p) {
-  const own = (p?.descriptors || []).map((x) => String(x).toLowerCase());
-  const out = new Set(own);
-  const energy = own.some((x) => /fire|heat|cold|ice|electric|lightning|light|laser|sonic|sound|radiation|cosmic|magic|mystic|psychic|mental|darkness|shadow|plasma|force|energy|acid|poison|chemical|toxic|disease|gravity|vibration/.test(x));
-  const strengthBased = a.name === 'Unarmed' || (a.kind === 'close' && !p) || (p && a.effect === 'Damage' && /strength/i.test(`${p.name} ${p.detail || ''}`));
-  if (a.name === 'Unarmed') { out.add('bludgeoning'); out.add('unarmed'); }
-  if (a.equipment) out.add('weapon');
-  if (!energy && a.effect === 'Damage' && (strengthBased || a.equipment || (p && /punch|fist|claw|bite|kick|strike|club|blade|sword|bullet|gun|arrow|projectile|thrown|slam|tail|horn|talon|fang/i.test(`${p.name} ${a.name}`)))) out.add('physical');
-  if (out.has('bullet') || out.has('bullets') || /gun|pistol|rifle|bullet/i.test(a.name)) out.add('ballistic');
-  return [...out];
-}
-
 /** Build a combatant from a character. opts: { team, style, tactics, heroPoints, name, carry: { bruises, fatigue } }. A carry is damage taken in an earlier fight, put back when the battle starts (startBattle). */
 export function makeCombatant(R, ch, opts = {}) {
   repairPowerRoles(ch, R);
@@ -164,6 +144,7 @@ export function makeCombatant(R, ch, opts = {}) {
 /** The fight-state part of a combatant (kept when a battle is reset). */
 export function resetCombatant(c) {
   Object.assign(c, {
+    insub: null,           // the Insubstantial form in force (insubstantial.js), set again by rebuildCombatant for an innate one
     init: 0, initRoll: 0, bruises: 0, dazed: false, staggered: false, out: false, outReason: null, fled: false,
     conditions: [],        // [{ name, degree, from, source, dc, resist, cumulative, progressive, tiers, extraCondition, until }]
     weakened: {},          // trait -> ranks lost
@@ -198,13 +179,16 @@ export function rebuildCombatant(c, R, d = null) {
   d = d || deriveAll(c.ch, R);
   c.d = d;
   c.initBonus = d.initiative;
-  c.attacks = d.attacks.map((a) => buildAttack(c, a, R)).filter((a) => (a.rank > 0 || a.effect !== 'Damage') && !(a.item && (c.dropped || []).includes(a.item.key)));
+  const where = new Map(allPowers(c.ch).map((x) => [x.power, x]));
+  c.attacks = d.attacks.map((a) => buildAttack(c, a, R, where)).filter((a) => (a.rank > 0 || a.effect !== 'Damage') && !(a.item && (c.dropped || []).includes(a.item.key)));
   powerStats(c);
-  c.immune = immunities(c.ch, d);
+  c.immune = immunitiesOf(c.ch, d);      // [{ label, half, hits(atk), crit, interaction, fear, grab, environment }] (immunity.js)
+  c.insub = restoreForm(c);              // the Insubstantial form the fighter is in, or null (insubstantial.js)
   const mv = bestMoveRank(c.ch);
   c.speed = 1 + Math.min(4, Math.floor(mv.rank / 3));
   c.flying = mv.flying;
   c.adv = Object.fromEntries(['Power Attack', 'Accurate Attack', 'All-out Attack', 'Defensive Attack', 'Takedown', 'Interpose', 'Evasion', 'Fearless', 'Seize Initiative', 'Move-by Action', 'Fast Grab', 'Improved Grab', 'Improved Hold', 'Chokehold', 'Agile Feint', 'Uncanny Dodge', 'Improved Initiative', 'Diehard', 'Instant Up', 'Luck', 'Taunt', 'Teamwork', 'Improved Trip', 'Improved Disarm', 'Improved Smash', 'Prone Fighting', 'Improved Aim', 'Improved Defense', 'Grabbing Finesse', 'Leadership', 'Inspire', 'Set-up', 'Startle'].map((n) => [n, advantageRank(c.ch, n)]));
+  if (fearImmune(c)) c.adv.Fearless = Math.max(1, c.adv.Fearless || 0); // Immunity to fear is Fearless (DCA 77, 102)
   const sk = (name) => d.skills.find((s) => s.name === name)?.bonus ?? (d.abilities[R.skillAbility(name)] ?? 0);
   c.skills = { Deception: sk('Deception'), Insight: sk('Insight'), Acrobatics: sk('Acrobatics'), Athletics: sk('Athletics'), Intimidation: sk('Intimidation'), 'Sleight of Hand': sk('Sleight of Hand') };
   c.ultimate = ultimateKinds(c.ch);      // the checks an Ultimate Effort covers
