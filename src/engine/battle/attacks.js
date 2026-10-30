@@ -20,6 +20,7 @@ import { critImmune, slipsHold } from './immunity.js';
 import { flawKey } from './flaws.js';
 import { noteHoming } from './extra-after.js';
 import { effortEffect } from './effort.js';
+import { counterTry } from './counter.js';
 import { bounce, surprisePrep, recoverCatch } from './extra-bounce.js';
 import { splitPlan, splitSecond } from './extra-split.js';
 import { concealmentPenalty } from './odds.js';
@@ -29,6 +30,7 @@ import { grabBasedUse } from './flaw-grab.js';
 import { inexactHit } from './flaw-resist.js';
 
 export function resolveAttack(b, R, c, atk, t, rng, opts = {}) {
+  if (c.out || c.fled) return; // a fighter struck down on its own turn (by a readied attack as it moved in) attacks no more
   c.lastAttackId = atk.id;
   traceAttack(b, c, atk, t);
   noteAttack(b, c, t);
@@ -167,6 +169,9 @@ function landHit(b, R, c, atk, t, rng, r, { rankShift, notes, slam }) {
     if (multi) text += ` Multiattack: ${deg} degrees, +${multi} to the DC.`;
   }
   log(b, { kind: crit ? 'crit' : 'hit', actor: c.id, target: t.id, text, dice });
+  const cnt = counterTry(b, R, c, atk, t, rng, atk.rank + rankShift); // a readied counter, or a hero point for an Instant Counter (counter.js)
+  if (cnt.countered) return { landed: false };
+  rankShift -= cnt.rankCut;
   const result = applyEffect(b, R, c, atk, t, rng, { crit, rankShift, multi });
   maybeKnockback(b, R, c, atk, t, result, rng, { slam });
   return result;

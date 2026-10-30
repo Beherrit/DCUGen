@@ -24,6 +24,7 @@ import { flawsStartTurn, concentrationLost, uncontrolledFire, concentrate } from
 import { heldAttack } from './flaw-grab.js';
 import { steadyIdle } from './stabilize.js';
 import { favoredTurn } from './favored.js';
+import { readyTurn, dropReady } from './ready.js';
 import { runHoming, freeHeld, concentrateHeld } from './extra-run.js';
 
 const isHurt = (c) => c.staggered || c.bruises >= 2;
@@ -32,6 +33,7 @@ const isHurt = (c) => c.staggered || c.bruises >= 2;
 export function takeTurn(b, R, c, rng) {
   c.defMod = 0;
   c.speedBoost = false; // extra effort for speed lasts until the start of the next turn
+  dropReady(b, c); // a readied action that did not happen is lost (ready.js)
   markTurn(b, c);
   refreshGrants(b);
   const mode = canAct(c);
@@ -67,6 +69,7 @@ export function takeTurn(b, R, c, rng) {
   if (supportTurn(b, c, choice, enemies, mode, rng)) return;
   if (digIn(b, c, choice, enemies, mode)) return;
   if (deflectTurn(b, c, choice, enemies, mode)) return;
+  if (readyTurn(b, c, choice, enemies, mode)) return; // hold the standard action for a foe walking into reach, or for a counter (ready.js)
   standOrDrop(b, c, choice, enemies, mode, rng);
   if (nonAttackPlan(b, R, c, choice, mode, rng)) return;
   attackTurn(b, R, c, choice, enemies, mode, rng);
