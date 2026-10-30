@@ -20,6 +20,7 @@ import { KIND_CLASS, teamColor, renderLogInto, logControls } from './battle-log.
 import { uiBattle, wholeCover } from './battle-cover.js';
 import { gridBoard, initials } from './battle-grid.js';
 import { createBattle, addCombatant, removeCombatant, makeCombatant, joinBattle, startBattle, step, runRound, runToEnd, battleText, simulateMany, serializeBattle, reviveBattle, placeAll, squareName, STYLES, TACTICS, statusLine, conditionLabels, detectStyle, rebuildCombatant } from '../engine/battle.js';
+import { visibleTeams } from './battle-teams.js';
 
 const KEY = 'dcugen.battle.v1';
 let R;
@@ -27,8 +28,7 @@ let root;
 let hooks = {};
 let battle;
 let timer = null;
-let ui = { sub: 'fight', showDice: true, logWho: null, moreTeams: false, mineQ: '', speed: 700, filter: 'all', bestiaryQ: '', team: 'A', copies: 1, mc: null, mcBusy: false, showHelp: false };
-const TEAMS = ['A', 'B', 'C', 'D'];
+let ui = { sub: 'fight', showDice: true, logWho: null, teamCount: 2, mineQ: '', speed: 700, filter: 'all', bestiaryQ: '', team: 'A', copies: 1, mc: null, mcBusy: false, showHelp: false };
 
 function load() {
   try {
@@ -167,7 +167,7 @@ function fighterCard(c) {
     Object.entries(STYLES).map(([k, v]) => h('option', { value: k, selected: k === c.style }, `${v.glyph} ${v.label}`)));
   const tacSel = h('select', { class: 'bt-mini', 'aria-label': `${c.name} target choice`, onChange: (e) => { c.tactics = e.target.value; save(); } },
     Object.entries(TACTICS).map(([k, v]) => h('option', { value: k, selected: k === c.tactics }, k === 'auto' ? `Target: ${S.target === 'lowWill' ? 'weakest will' : TACTICS[S.target]?.toLowerCase() || 'by style'}` : v)));
-  const teamSel = h('div', { class: 'bt-sides', role: 'group', 'aria-label': `${c.name} team` }, TEAMS.map((t) => h('button', { type: 'button', class: `bt-side ${t === c.team ? 'on' : ''}`, style: { '--t': teamColor(t) }, title: `Move to team ${t}`, 'aria-pressed': String(t === c.team), onClick: () => { c.team = t; placeAll(battle); save(); renderBattle(); } }, t)));
+  const teamSel = h('div', { class: 'bt-sides', role: 'group', 'aria-label': `${c.name} team` }, visibleTeams(battle, ui).map((t) => h('button', { type: 'button', class: `bt-side ${t === c.team ? 'on' : ''}`, style: { '--t': teamColor(t) }, title: `Move to team ${t}`, 'aria-pressed': String(t === c.team), onClick: () => { c.team = t; placeAll(battle); save(); renderBattle(); } }, t)));
   // Alternate forms: fight in any of them (DCA 88: each form is its own build)
   const formSel = hasForms(c.ch) ? h('select', { class: 'bt-mini', 'aria-label': `${c.name} form`, title: 'Which form they fight in', onChange: (e) => {
     const ch = switchForm(c.ch, Number(e.target.value));

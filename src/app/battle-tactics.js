@@ -45,10 +45,13 @@ export function tacticPanel(cx, teams) {
     };
     const select = h('select', { id: `bt-tactic-${team}`, 'aria-label': `Team ${team} tactic`, title: TEAM_TACTICS[chosen].blurb, onChange },
       Object.entries(TEAM_TACTICS).map(([id, t]) => h('option', { value: id, selected: id === chosen, title: t.blurb }, t.label)));
-    return h('div', { class: 'add-row', style: { alignItems: 'center' } },
-      h('label', { class: 'bt-copies', title: TEAM_TACTICS[chosen].blurb }, `Team ${team} tactic `, select),
-      chosen === 'bodyguard' ? vipPicker(cx, team) : null,
-      chosen === 'withdraw' ? holdOutInput(cx, team) : null);
+    return h('div', { class: 'bt-tactic-row' },
+      h('div', { class: 'add-row', style: { alignItems: 'center' } },
+        h('label', { class: 'bt-copies', title: TEAM_TACTICS[chosen].blurb }, `Team ${team} tactic `, select),
+        chosen === 'bodyguard' ? vipPicker(cx, team) : null,
+        chosen === 'withdraw' ? holdOutInput(cx, team) : null),
+      // What the tactic does, in plain words, under the picker (a tooltip alone is invisible on a phone).
+      h('p', { class: 'hint bt-tactic-blurb', id: `bt-tactic-blurb-${team}` }, TEAM_TACTICS[chosen].blurb));
   });
   return h('div', { class: 'bt-tactics' },
     h('div', { class: 'label' }, 'Team tactics'),

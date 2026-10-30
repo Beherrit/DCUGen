@@ -24,7 +24,7 @@
 // The code lives in src/engine/battle/ (see README.md there); this file keeps the names the rest of the app imports.
 
 import { MAX_ROUNDS } from './battle/constants.js';
-import { GRID_SIZE, SCALES, DEFAULT_SCALE, scaleOf, syncGrid, squareName, isWall } from './battle/grid.js';
+import { GRID_SIZE, SCALES, DEFAULT_SCALE, CUSTOM_FT, customFt, scaleOf, squareFtOf, syncGrid, squareName, isWall } from './battle/grid.js';
 import { squares, feet, inReach, reachSquares, squaresInMove, bandFrom, inRangeNow, lineClear, areaVictims } from './battle/geometry.js';
 import { reachableFrom } from './battle/path.js';
 import { STYLES, TACTICS, detectStyle } from './battle/styles.js';
@@ -41,4 +41,4 @@ import { massRank } from './battle/knockback.js';
 import { statusLine, battleText, simulateMany, serializeBattle, reviveBattle } from './battle/summaries.js';
 import { buildReport } from './battle/build-report.js';
 
-export { MATERIALS, COVER_KINDS, toughnessOf, addCover, removeCover, coverLevel, pieceLabel, massRank, TEAM_TACTICS, GRID_SIZE, SCALES, DEFAULT_SCALE, scaleOf, syncGrid, squareName, isWall, squares, feet, inReach, reachSquares, squaresInMove, bandFrom, inRangeNow, lineClear, areaVictims, reachableFrom, pieceBetween, MAX_ROUNDS, STYLES, TACTICS, detectStyle, parseAffliction, makeCombatant, rebuildCombatant, activeConditions, conditionLabels, hitOdds, resistOdds, createBattle, addCombatant, removeCombatant, placeAll, startBattle, byId, joinBattle, step, runRound, runToEnd, statusLine, battleText, simulateMany, serializeBattle, reviveBattle, buildReport };
+export { MATERIALS, COVER_KINDS, toughnessOf, addCover, removeCover, coverLevel, pieceLabel, massRank, TEAM_TACTICS, GRID_SIZE, SCALES, DEFAULT_SCALE, CUSTOM_FT, customFt, scaleOf, squareFtOf, syncGrid, squareName, isWall, squares, feet, inReach, reachSquares, squaresInMove, bandFrom, inRangeNow, lineClear, areaVictims, reachableFrom, pieceBetween, MAX_ROUNDS, STYLES, TACTICS, detectStyle, parseAffliction, makeCombatant, rebuildCombatant, activeConditions, conditionLabels, hitOdds, resistOdds, createBattle, addCombatant, removeCombatant, placeAll, startBattle, byId, joinBattle, step, runRound, runToEnd, statusLine, battleText, simulateMany, serializeBattle, reviveBattle, buildReport };

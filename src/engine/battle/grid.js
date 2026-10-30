@@ -13,8 +13,12 @@ export const DEFAULT_SCALE = 'block';
 /** An enclosed space is a room 60 ft across made of 5 ft squares, whatever the scale option says. */
 export const ENCLOSED_SCALE = 'street';
 
-export const scaleOf = (options) => (options?.enclosed ? ENCLOSED_SCALE : SCALES[options?.scale] ? options.scale : DEFAULT_SCALE);
-export const squareFtOf = (options) => SCALES[scaleOf(options)].ft;
+/** A custom scale: any whole number of feet per square from 1 to 10,000 (options.scale 'custom', options.squareFt). */
+export const CUSTOM_FT = { min: 1, max: 10000, suggest: [30, 60, 120, 200, 400, 500, 1000] };
+export const customFt = (ft) => Math.max(CUSTOM_FT.min, Math.min(CUSTOM_FT.max, Math.round(Number(ft)) || SCALES[DEFAULT_SCALE].ft));
+
+export const scaleOf = (options) => (options?.enclosed ? ENCLOSED_SCALE : options?.scale === 'custom' || SCALES[options?.scale] ? options.scale : DEFAULT_SCALE);
+export const squareFtOf = (options) => (scaleOf(options) === 'custom' ? customFt(options.squareFt) : SCALES[scaleOf(options)].ft);
 
 const onRing = (x, y) => x === 0 || y === 0 || x === GRID_SIZE - 1 || y === GRID_SIZE - 1;
 

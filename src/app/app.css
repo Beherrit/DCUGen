@@ -2460,3 +2460,5 @@ html.read-color .power-about { font-style: normal; }
 @media (max-width: 760px) { .tn-entrant { grid-template-columns: auto auto minmax(0, 1fr); } .tn-members, .tn-entrant .cw-tactic, .tn-row-btns { grid-column: 1 / -1; } }
 @media (max-width: 640px) { .tn-odds li { grid-template-columns: minmax(80px, 120px) minmax(0, 1fr) 40px; } .tn-round { width: 170px; } }
 .tn-checks { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.bt-tactic-row { display: grid; gap: 2px; }
+.bt-tactic-blurb { margin: 0 0 6px; }

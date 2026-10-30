@@ -52,7 +52,8 @@ function optionsOf(b) {
   return {
     enclosed: !!o.enclosed, ambush: o.ambush || null, tactics: { ...(o.teamTactics || {}) },
     knockback: !!o.knockback, shootThrough: !!o.shootThrough,
-    scale: o.enclosed ? 'street' : o.scale || 'block', // grid square size: street 5 ft, block 30 ft, district 250 ft
+    scale: o.enclosed ? 'street' : o.scale || 'block', // grid square size: street 5 ft, block 30 ft, district 250 ft, or custom
+    squareFt: o.enclosed ? 5 : o.scale === 'custom' ? Math.round(Number(o.squareFt)) || 30 : { street: 5, block: 30, district: 250 }[o.scale || 'block'] || 30,
     cover: (b.cover || []).map((p) => p.name),
   };
 }

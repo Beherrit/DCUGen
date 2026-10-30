@@ -8,7 +8,7 @@ import { nearestOpen, isOpenSquare } from './path.js';
 export const teamsOf = (b) => [...new Set(b.combatants.map((c) => c.team))].sort();
 
 /**
- * The line a team starts on: 0 west, 1 east, 2 north, 3 south (teams past the fourth start in the middle). On open ground
+ * The line a team starts on: 0 west, 1 east, 2 north, 3 south (teams 5 to 8 start in the corners: see cornerSpots). On open ground
  * it is the second square in from the edge, so a team that wants to leave by its edge has a square to walk; in an enclosed
  * room the line is the edge itself.
  */
@@ -23,8 +23,18 @@ function edgeLine(b, index) {
   return { fixed: { x: mid(x0, x1) }, along: 'y', lo: y0, hi: y1 };
 }
 
+/** Teams 5 to 8 (E to H): a short diagonal running in from the north-west, north-east, south-west or south-east corner. */
+function cornerSpots(b, index, n) {
+  const { x0, y0, x1, y1 } = b.grid.play;
+  const inset = b.options?.enclosed ? 0 : 1;
+  const corner = [[x0 + inset, y0 + inset, 1, 1], [x1 - inset, y0 + inset, -1, 1], [x0 + inset, y1 - inset, 1, -1], [x1 - inset, y1 - inset, -1, -1]][(index - 4) % 4];
+  const [cx, cy, dx, dy] = corner;
+  return Array.from({ length: n }, (_, k) => nearestOpen(b, { x: cx + dx * k, y: cy + dy * k }));
+}
+
 /** n spots along a team's edge: two squares apart when there is room, else one apart, centered on the edge. */
 export function edgeSpots(b, index, n) {
+  if (index >= 4) return cornerSpots(b, index, n);
   const line = edgeLine(b, index);
   const len = line.hi - line.lo + 1;
   const gap = (n - 1) * 2 + 1 <= len ? 2 : n <= len ? 1 : 0;

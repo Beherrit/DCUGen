@@ -9,8 +9,8 @@ import { catalogToCharacter } from '../engine/catalog.js';
 import { placeAll } from '../engine/battle.js';
 import { tacticPanel } from './battle-tactics.js';
 import { sceneryPanel, fitCover } from './battle-cover.js';
+import { ALL_TEAMS, teamCount, visibleTeams } from './battle-teams.js';
 
-const TEAMS = ['A', 'B', 'C', 'D'];
 
 // cx is what battle.js hands over: { battle, R, ui, hooks, throwIn, save, render, sidePower, teamColor }.
 
@@ -57,10 +57,9 @@ function ambushPicker(cx) {
     h('select', { id: 'bt-ambush', 'aria-label': 'Ambush', onChange: (e) => { battle.options.ambush = e.target.value || null; save(); render(); } }, ...opts));
 }
 
-/** The team letters to offer on each row: A and B, and C and D once a fight uses more sides (or asks for them). */
+/** The team letters to offer on each row: as many as the "Teams" picker asks for, and any already in use. */
 function rowTeams({ battle, ui }) {
-  const used = new Set(battle.combatants.map((c) => c.team));
-  return TEAMS.filter((t, i) => i < 2 || used.has(t) || ui.moreTeams);
+  return visibleTeams(battle, ui);
 }
 
 /** A pickable fighter: its name and PL, and a button per team to throw it straight onto that side. */
@@ -124,7 +123,9 @@ export function addPanel(cx) {
     q, beastList,
     h('div', { class: 'add-row', style: { alignItems: 'center' } },
       h('label', { class: 'bt-copies', title: 'Add several of the same (a squad of minions)' }, 'Copies ×', copies),
-      h('label', { class: 'bt-copies' }, h('input', { type: 'checkbox', checked: !!ui.moreTeams, onChange: (e) => { ui.moreTeams = e.target.checked; render(); } }), ' Teams C and D'),
+      h('label', { class: 'bt-copies', title: 'Teams A to D start on the four edges of the grid, E to H in its corners' }, 'Teams ',
+        h('select', { id: 'bt-team-count', 'aria-label': 'Number of teams', onChange: (e) => { ui.teamCount = Number(e.target.value); render(); } },
+          ALL_TEAMS.slice(1).map((_, i) => i + 2).map((n) => h('option', { value: n, selected: n === teamCount(battle, ui) }, String(n))))),
       h('label', { class: 'bt-copies', title: 'A walled room 60 ft across in 5 ft squares: the teams start on opposite walls and nobody gets far away' }, h('input', { type: 'checkbox', id: 'bt-enclosed', checked: !!battle.options.enclosed, onChange: (e) => { battle.options.enclosed = e.target.checked; placeAll(battle); fitCover(battle); save(); render(); } }), ' Enclosed space'),
       ambushPicker(cx)),
     tacticPanel(cx, rowTeams(cx)),

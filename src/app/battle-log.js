@@ -5,7 +5,7 @@
 import { h, clear } from './dom.js';
 import { sortChars } from './sorting.js';
 
-const TEAM_COLORS = { A: '#1f4fbf', B: '#c8202f', C: '#1a7f4b', D: '#a8670b' };
+const TEAM_COLORS = { A: '#1f4fbf', B: '#c8202f', C: '#1a7f4b', D: '#a8670b', E: '#7a3fb8', F: '#0e7a86', G: '#b23a6e', H: '#556270' };
 export const teamColor = (t) => TEAM_COLORS[t] || '#666';
 
 export const KIND_CLASS = { round: 'round', init: 'init', hit: 'hit', crit: 'crit', miss: 'miss', resist: 'resist', condition: 'cond', ko: 'ko', heal: 'heal', hero: 'hero', move: 'move', flee: 'ko', end: 'end', skip: 'skip', attack: 'attack', recover: 'heal', note: 'note' };

@@ -5,7 +5,7 @@
 
 import { h, inkFor } from './dom.js';
 import { fmtFt, rangeBands } from '../engine/range.js';
-import { GRID_SIZE, SCALES, scaleOf, syncGrid, squareName, isWall, addCover, reachableFrom, squaresInMove, bandFrom, squares, feet, statusLine } from '../engine/battle.js';
+import { GRID_SIZE, SCALES, CUSTOM_FT, customFt, scaleOf, squareFtOf, syncGrid, squareName, isWall, addCover, reachableFrom, squaresInMove, bandFrom, squares, feet, statusLine } from '../engine/battle.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 const CELL = 10;      // one square, in drawing units
@@ -165,16 +165,29 @@ export function gridBoard(cx) {
   return host;
 }
 
-/** The scale picker: Street, Block or District, with a line saying what the choice means. */
+/** A box for any number of feet per square, shown when the Custom scale is chosen. */
+function customFtInput(cx) {
+  const { battle, save, render } = cx;
+  const set = (v) => { battle.options.scale = 'custom'; battle.options.squareFt = customFt(v); syncGrid(battle); save(); render(); };
+  return h('label', { class: 'bt-copies' }, 'Feet per square ',
+    h('input', { type: 'number', id: 'bt-scale-ft', min: CUSTOM_FT.min, max: CUSTOM_FT.max, step: 1, list: 'bt-scale-ft-list', value: squareFtOf(battle.options),
+      'aria-label': 'Feet per square', style: { width: '7em' }, onChange: (e) => set(e.target.value) }),
+    h('datalist', { id: 'bt-scale-ft-list' }, CUSTOM_FT.suggest.map((ft) => h('option', { value: ft }))));
+}
+
+/** The scale picker: Street, Block, District or a custom number of feet, with a line saying what the choice means. */
 export function scalePicker(cx) {
   const { battle, save, render } = cx;
   const now = scaleOf(battle.options);
   const enclosed = !!battle.options.enclosed;
+  const ft = squareFtOf(battle.options);
+  const pick = (key) => { battle.options.scale = key; if (key === 'custom' && !battle.options.squareFt) battle.options.squareFt = ft; syncGrid(battle); save(); render(); };
+  const btn = (key, text) => h('button', { type: 'button', class: `btn sm ${key === now ? 'on' : ''}`, id: `bt-scale-${key}`, 'aria-pressed': key === now, disabled: enclosed, onClick: () => pick(key) }, text);
+  const blurb = now === 'custom' ? `Squares of ${ft} ft, a board ${ft * GRID_SIZE} ft across.` : SCALES[now].blurb;
   return h('div', { class: 'bt-scale' },
     h('div', { class: 'label' }, 'Scale'),
-    h('div', { class: 'bt-scale-row', role: 'group', 'aria-label': 'Scale of the grid' }, Object.entries(SCALES).map(([key, s]) => h('button', {
-      type: 'button', class: `btn sm ${key === now ? 'on' : ''}`, id: `bt-scale-${key}`, 'aria-pressed': key === now, disabled: enclosed,
-      onClick: () => { battle.options.scale = key; syncGrid(battle); save(); render(); },
-    }, `${s.label} ${s.ft} ft`))),
-    h('p', { class: 'hint', style: { margin: 0 } }, enclosed ? 'An enclosed space is always a room 60 ft across in 5 ft squares.' : `${SCALES[now].blurb} Ranges and moves are in feet, so the same fight plays out differently at each scale.`));
+    h('div', { class: 'bt-scale-row', role: 'group', 'aria-label': 'Scale of the grid' },
+      Object.entries(SCALES).map(([key, s]) => btn(key, `${s.label} ${s.ft} ft`)), btn('custom', 'Custom')),
+    now === 'custom' && !enclosed ? customFtInput(cx) : null,
+    h('p', { class: 'hint', style: { margin: 0 } }, enclosed ? 'An enclosed space is always a room 60 ft across in 5 ft squares.' : `${blurb} Ranges and moves are in feet, so the same fight plays out differently at each scale.`));
 }
