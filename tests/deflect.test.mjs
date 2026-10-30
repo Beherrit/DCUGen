@@ -6,7 +6,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { R, dice, deflect, powerArena, who, unarmed, text } from './helpers/power-arena.mjs';
 import { resolveAttack } from '../src/engine/battle/attacks.js';
-import { deflectTurn } from '../src/engine/battle/deflect-plan.js';
+import { deflectTurn, deflectHarm } from '../src/engine/battle/deflect-plan.js';
 import { deflectOf } from '../src/engine/battle/deflect.js';
 import { takeTurn } from '../src/engine/battle/turn.js';
 import { makeRng } from '../src/engine/rng.js';
@@ -27,7 +27,7 @@ function setup({ rank = 5, extras = [], at = { x: 3, y: 0 }, held = true, scale 
 const swing = (b, rolls, target = 'ally') => { const d = dice(...rolls); resolveAttack(b, R, who(b, 'atk'), unarmed(who(b, 'atk')), who(b, target), d); return d; };
 
 test('Deflect is read from the power: rank and the Reaction, Reflect and Redirect extras (Redirect needs Reflect)', () => {
-  assert.deepEqual(deflectOf({ powers: [deflect(5, ['Reaction'])] }), { name: 'Guard', rank: 5, reaction: true, reflect: false, redirect: false });
+  assert.deepEqual(deflectOf({ powers: [deflect(5, ['Reaction'])] }), { name: 'Guard', rank: 5, reaction: true, reflect: false, redirect: false, only: null });
   assert.equal(deflectOf({ powers: [deflect(3, ['Reflect', 'Redirect'])] }).redirect, true);
   assert.equal(deflectOf({ powers: [deflect(3, ['Redirect'])] }).redirect, false);
   assert.equal(deflectOf({ powers: [] }), null);
@@ -219,4 +219,56 @@ test('in a real turn the guard takes the Defend, and it ends when the guard\'s n
   who(b, 'hit').out = true;                           // nobody left to fight: the next turn still clears the Defend first
   takeTurn(b, R, who(b, 'guard'), makeRng('turn2'));
   assert.deepEqual([who(b, 'guard').defending, who(b, 'guard').deflecting], [false, false]);
+});
+
+/** A guard whose Deflect is limited the way Ballista's Psionic Defense is. */
+const psionicOnly = (extras = [], rank = 5) => ({ ...deflect(rank, extras), descriptors: ['resistance to psionic'] });
+function limitedSetup(extras, held, rank = 5) {
+  const b = powerArena([
+    ['atk', 'A', STRIKER, { x: 0, y: 0 }],
+    ['guard', 'B', { ...SOFT, powers: [psionicOnly(extras, rank)] }, { x: 1, y: 0 }],
+  ], NO_HEROES);
+  who(b, 'guard').deflecting = held;
+  return b;
+}
+const psionic = (c) => ({ ...unarmed(c), descriptors: ['psychic'] });
+
+test('a Deflect limited by its descriptor reads the limit: "resistance to psionic", a Limited flaw, or none at all', () => {
+  assert.deepEqual(deflectOf({ powers: [psionicOnly()] }).only, ['psychic']);
+  assert.deepEqual(deflectOf({ powers: [{ ...deflect(5), flaws: [{ name: 'Limited', option: 'to fire attacks' }] }] }).only, ['fire']);
+  assert.equal(deflectOf({ powers: [{ ...deflect(5), descriptors: ['force field'] }] }).only, null, 'a descriptor that only says what it looks like is no limit');
+});
+
+test('Psionic Defense as a Reaction stops a psionic attack but never rolls against fists', () => {
+  const b = limitedSetup(['Reaction'], false);
+  const fists = dice(8, 15);                         // no deflection roll: 8 + 8 = 16 hits the flat Parry 16, then the Toughness check
+  resolveAttack(b, R, who(b, 'atk'), unarmed(who(b, 'atk')), who(b, 'guard'), fists);
+  assert.match(text(b), /d20 8 \+8 = 16 vs Parry DC 16 — hit/);
+  assert.doesNotMatch(text(b), /deflect/i);
+
+  const c = limitedSetup(['Reaction'], false);
+  const mind = dice(12, 8);                          // deflect 12 + 5 = 17 beats the flat 16; the attack's 8 + 8 = 16 misses
+  resolveAttack(c, R, who(c, 'atk'), psionic(who(c, 'atk')), who(c, 'guard'), mind);
+  assert.equal(mind.left(), 0);
+  assert.match(text(c), /vs Parry DC 17 — miss/);
+  assert.match(text(c), /deflect/i);
+});
+
+test('a held Defend with a limited Deflect uses its rank only against what it covers', () => {
+  const defend = (attack) => {
+    const b = limitedSetup([], true, 9);             // rank 9 beats Parry 6, so the rank shows in the Defend roll when it applies
+    const guard = who(b, 'guard'); guard.defending = true;
+    resolveAttack(b, R, who(b, 'atk'), attack(who(b, 'atk')), guard, dice(14, 1, 15));
+    return text(b);
+  };
+  assert.match(defend(unarmed), /Guard is defending: d20 14 \+ 6 = 20|defending: d20 14 \+ 6 = 20/, 'fists meet the plain Defend, Parry 6');
+  assert.match(defend(psionic), /defending: d20 14 \+ 9 \(Deflect\) = 23/, 'a psionic attack meets the Deflect rank');
+});
+
+test('the AI weighs a limited Deflect only against attacks it covers', () => {
+  const b = limitedSetup([], false);
+  const guard = who(b, 'guard'); const foe = who(b, 'atk');
+  assert.equal(deflectHarm(b, guard, [foe]), 0, 'fists are not psionic, so there is nothing to deflect');
+  foe.attacks = foe.attacks.map((a) => ({ ...a, descriptors: ['psychic'] }));
+  assert.ok(deflectHarm(b, guard, [foe]) > 0, 'a psionic attack is');
 });

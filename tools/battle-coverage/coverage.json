@@ -73,7 +73,7 @@
     "kind": "effect",
     "name": "Deflect",
     "status": "partial",
-    "note": "Taking the Defend action to deflect protects the user and every ally in long range until its next turn; the user rolls d20 (10 or less counts 11) plus its rank against the attacker, -2 at medium range and -5 at long range, and the attacker beats the better of that and the flat defense. A rank-for-defense Defend rolls the rank in place of its own Dodge or Parry. Area, perception and non-Dodge, non-Parry attacks are never deflected. Reflect and Redirect (the Deflect extras) send a beaten attack back; the AI deflects when its own attack is worth less than the harm to its allies, or when Bodyguard or Hold the Line asks. Extended Range and descriptor effects (such as 'resistance to psionic') are not read.",
+    "note": "Taking the Defend action to deflect protects the user and every ally in long range until its next turn; the user rolls d20 (10 or less counts 11) plus its rank against the attacker, -2 at medium range and -5 at long range, and the attacker beats the better of that and the flat defense. A rank-for-defense Defend rolls the rank in place of its own Dodge or Parry. Area, perception and non-Dodge, non-Parry attacks are never deflected. Reflect and Redirect (the Deflect extras) send a beaten attack back; the AI deflects when its own attack is worth less than the harm to its allies, or when Bodyguard or Hold the Line asks. A descriptor limit (such as 'resistance to psionic' or a Limited flaw naming a descriptor) is read: the Deflect then stops only attacks with that descriptor, and the AI weighs only those. Extended Range is not read.",
     "source": "DCA 95"
   },
   {
