@@ -45,6 +45,25 @@ test('three degrees of failure in all kill, over two checks', () => {
   assert.equal(statusLine(f.t), 'Dead');
 });
 
+test('exactly three degrees in all kill: two, then one more', () => {
+  const f = duel([], {}, {}, {}, lethal);
+  fire(f, ...KO, 1); // two degrees
+  assert.equal(f.t.dying, true);
+  f.b.round++;
+  dyingTurn(f.b, f.t, dice(8)); // 8 + 4 = 12 against 15: one degree
+  assert.equal(f.t.dyingFails, 3);
+  assert.equal(f.t.dead, true);
+});
+
+test('two degrees in all do not kill', () => {
+  const f = duel([], {}, {}, {}, lethal);
+  fire(f, ...KO, 1);
+  f.b.round++;
+  dyingTurn(f.b, f.t, dice(12)); // a success: nothing changes
+  assert.equal(f.t.dyingFails, 2);
+  assert.equal(f.t.dead, false);
+});
+
 test('a single failure of three degrees kills at once', () => {
   const f = duel([], {}, { abilities: { Stamina: -4 } }, {}, lethal); // Fortitude -4: a roll of 1 is -3 against 15, three degrees
   fire(f, ...KO, 1);

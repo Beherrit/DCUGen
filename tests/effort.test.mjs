@@ -3,7 +3,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { powerArena, dice, text, R, who } from './helpers/power-arena.mjs';
-import { pickEffort, effortEffect, extraAction, extraResistance, speedEffort, payOwed } from '../src/engine/battle/effort.js';
+import { pickEffort, extraAction, extraResistance, speedEffort } from '../src/engine/battle/effort.js';
+import { effortEffect, payOwed } from '../src/engine/battle/effort-pay.js';
 import { squaresInMove } from '../src/engine/battle/geometry.js';
 import { endOfTurn } from '../src/engine/battle/end-of-turn.js';
 import { resolveAttack } from '../src/engine/battle/attacks.js';
@@ -34,14 +35,18 @@ test('a power is pushed (+1 rank), or two ranks with Extraordinary Effort at dou
   f.u.staggered = true;
   const power = f.u.attacks.find((a) => a.name === 'Zap');
   assert.equal(pickEffort(f.b, f.u, power, f.t, dice()), 'power');
-  const big = fight({ hp: 0, powers: [zap([], { rank: 8 })], advantages: [{ name: 'Extraordinary Effort', rank: 1 }] });
+  const big = fight({ powers: [zap([], { rank: 8 })], advantages: [{ name: 'Extraordinary Effort', rank: 1 }] });
   big.u.staggered = true;
   const bigPower = big.u.attacks.find((a) => a.name === 'Zap');
   assert.equal(pickEffort(big.b, big.u, bigPower, big.t, dice()), 'double');
-  const e = effortEffect(big.b, big.u, dice(), 'double');
+  const never = { ...dice(), chance: () => false }; // no hero point spent this time
+  const e = effortEffect(big.b, big.u, never, 'double');
   assert.equal(e.rank, 2);
-  assert.equal(big.u.fatigue, 2, 'two levels: exhausted (no hero point to take any away)');
+  assert.equal(big.u.fatigue, 2, 'two levels: exhausted');
   assert.match(e.text, /Extraordinary Effort: \+2 ranks \(two benefits\), now exhausted/);
+  const poor = fight({ hp: 0, powers: [zap([], { rank: 8 })], advantages: [{ name: 'Extraordinary Effort', rank: 1 }] });
+  poor.u.staggered = true;
+  assert.equal(pickEffort(poor.b, poor.u, poor.u.attacks.find((a) => a.name === 'Zap'), poor.t, dice()), 'power', 'with no hero point to take a level away it settles for one benefit');
   big.u.fatigue = 1; // already fatigued: the double effort is not offered
   big.u.effortRound = null;
   assert.equal(pickEffort(big.b, big.u, bigPower, big.t, dice()), 'power');
@@ -56,7 +61,7 @@ test('a hero point spent on the effort takes one level of fatigue away', () => {
 });
 
 test('extra effort is once a turn, and the AI stops at fatigued', () => {
-  const f = fight();
+  const f = fight({ hp: 3 }); // hero points left over, so only the turn limit says no
   f.u.staggered = true;
   effortEffect(f.b, f.u, dice(), 'strength');
   assert.equal(pickEffort(f.b, f.u, f.atk, f.t, dice()), null, 'already used this turn');

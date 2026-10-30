@@ -97,7 +97,7 @@ test('Contagious: a carrier that ends its turn touching someone passes the effec
   spreadContagion(b, R, t, dice(12)); // X is next to T and fails its check too
   assert.ok(xx.conditions.some((c) => c.name === 'Dazed'));
   assert.equal(xx.contagion.length, 1, 'X carries it now');
-  assert.equal(far.contagion, undefined, 'not touching: not exposed');
+  assert.equal(far.contagion.length, 0, 'not touching: not exposed');
   assert.match(text(b), /X touches T and is exposed to it/);
   spreadContagion(b, R, t, dice()); // X already carries it: nothing more to roll
 });
@@ -132,7 +132,7 @@ test('Homing: a miss that concealment caused loses the lock', () => {
   const f = duel([], { extras: [x('Homing')] }, {}, { hp: 0 });
   f.t.concealment = 'total'; // -5: an 18 (20 in all) would have hit Dodge DC 20 without it
   fire(f, 18);
-  assert.equal(f.u.homing, undefined);
+  assert.equal(f.u.homing.length, 0);
   assert.match(logOf(f), /Homing loses its lock on T/);
 });
 

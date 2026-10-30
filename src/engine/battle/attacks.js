@@ -19,8 +19,10 @@ import { traceAttack } from './trace.js';
 import { critImmune, slipsHold } from './immunity.js';
 import { flawKey } from './flaws.js';
 import { noteHoming } from './extra-after.js';
-import { effortEffect } from './effort.js';
+import { effortEffect } from './effort-pay.js';
 import { counterTry } from './counter.js';
+import { weaponReaction } from './weapon-reactions.js';
+import { redirect } from './trick.js';
 import { bounce, surprisePrep, recoverCatch } from './extra-bounce.js';
 import { splitPlan, splitSecond } from './extra-split.js';
 import { concealmentPenalty } from './odds.js';
@@ -95,6 +97,8 @@ function rollAndLand(b, R, c, atk, t, rng, m, { rankShift, notes, aimed, homing 
     afterDeflect(b, R, c, atk, t, rng, r, rankShift);
     const conceal = concealmentPenalty(c, t, atk);
     noteHoming(b, c, atk, t, homing, conceal > 0 && r.total + conceal >= r.dcUsed); // Homing: try again next turn (extra-after.js)
+    if (t.defending && atk.item) weaponReaction(b, c, atk, t, rng); // Weapon Bind, Weapon Break (weapon-reactions.js)
+    if (t.adv.Redirect && c.tricked) redirect(b, c, atk, t, r, rng, (t2, r2) => landHit(b, R, c, atk, t2, rng, r2, { rankShift, notes: [], slam: false })); // Redirect (trick.js)
     return false;
   }
   const result = landHit(b, R, c, atk, t, rng, r, { rankShift, notes, slam: m.slam });

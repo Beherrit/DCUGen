@@ -80,3 +80,23 @@ test('a fighter card shows its attack descriptors and what it is immune to', asy
   await expect(card.locator('.bt-tag.imm')).toContainText('electricity damage');
   expect(errors).toEqual([]);
 });
+
+test('the Arena tab has Lethal damage and an environment, and the choice stays after a fight', async ({ page }) => {
+  const errors = await openApp(page);
+  await showTab(page, 'battle');
+  await addBeast(page, 'ogre', 'A');
+  await addBeast(page, 'wolf', 'B');
+  await page.locator('#bt-rail-arena').click();
+  const lethal = page.locator('#bt-opt-lethal');
+  await expect(lethal).not.toBeChecked();
+  await lethal.check();
+  await page.locator('#bt-environment').selectOption({ label: 'Space' });
+  await expect(lethal).toBeChecked();
+  await page.locator('#bt-fight').click();
+  await page.keyboard.press('e');
+  await expect(page.locator('#bt-comic')).toBeVisible();
+  await page.locator('#bt-rail-arena').click();
+  await expect(page.locator('#bt-opt-lethal')).toBeChecked();
+  await expect(page.locator('#bt-environment')).toHaveValue('space');
+  expect(errors).toEqual([]);
+});

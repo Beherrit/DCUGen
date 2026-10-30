@@ -15,7 +15,7 @@ import { resetScenery } from './cover.js';
 import { dyingTurn, deathsPending, deadNames } from './dying.js';
 
 export function createBattle({ seed = 'battle', name = 'Battle' } = {}) {
-  const b = { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, enclosed: false, ambush: null, teamTactics: {}, vip: {}, withdrawRounds: {}, maxRounds: MAX_ROUNDS, shootThrough: false, knockback: false, scale: DEFAULT_SCALE }, cover: [], lastEvent: 0 };
+  const b = { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, enclosed: false, ambush: null, teamTactics: {}, vip: {}, withdrawRounds: {}, maxRounds: MAX_ROUNDS, shootThrough: false, knockback: false, scale: DEFAULT_SCALE }, cover: [], traps: [], lastEvent: 0 };
   syncGrid(b);
   return b;
 }
@@ -37,6 +37,7 @@ export function startBattle(b, R) {
   if (b.combatants.length < 2 || new Set(b.combatants.map((c) => c.team)).size < 2) throw new Error('Put fighters on at least two teams first.');
   b.log = []; b.tick = 0; b.round = 1; b.turn = 0; b.winner = null;
   resetScenery(b);
+  b.traps = []; // Triggered effects set in an earlier run are gone (trap.js)
   for (const c of b.combatants) { resetCombatant(c); rebuildCombatant(c, R); if (c.carry) { c.bruises = c.carry.bruises; c.fatigue = c.carry.fatigue; } }
   placeAll(b);
   const rng = rngFor(b);

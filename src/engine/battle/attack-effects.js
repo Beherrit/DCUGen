@@ -15,7 +15,7 @@ import { staminaGone } from './dying.js';
 import { damageResult } from './damage-result.js';
 import { resistStep } from './resist-step.js';
 import { scheduleAfter } from './extra-after.js';
-import { attackFormResult } from './attack-form.js';
+import { attackFormResult } from './attack-form-effect.js';
 
 export { damageResult };
 

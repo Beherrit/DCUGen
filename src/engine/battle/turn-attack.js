@@ -17,7 +17,8 @@ import { runManeuver } from './maneuver-run.js';
 import { finishingFeat } from './feat.js';
 import { flawedAction } from './flaw-turn.js';
 
-export { pickEffort }; // extra effort is chosen in effort.js; the tests read it from here
+// Extra effort is chosen in effort.js; the tests read it from here.
+export { pickEffort };
 
 /** The attack plan chosen for this turn: move into position, maybe aim, then attack. */
 export function attackTurn(b, R, c, choice, enemies, mode, rng) {

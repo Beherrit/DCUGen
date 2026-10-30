@@ -29,7 +29,7 @@ export function disarmOdds(c, t, atk, dist) {
 function counterDisarm(b, c, atk, t, rng) {
   const rank = Math.max(0, ...t.attacks.filter((a) => a.kind === 'close' && a.roll).map((a) => a.rank));
   const back = contest(rng, rank, strengthOf(c));
-  if (back.won) loseItem(c, atk.item);
+  if (back.won) loseItem(c, atk.item, true);
   log(b, { kind: back.won ? 'condition' : 'resist', actor: t.id, target: c.id, text: `${t.name} tries to disarm ${c.name} in return (damage ${rank} against Strength): ${back.text} — ${back.won ? `${c.name} drops the ${atk.item.name}` : 'it holds on'}.`, dice: back.dice, important: back.won });
 }
 
@@ -45,7 +45,7 @@ export function disarm(b, c, atk, t, item, rng, dist) {
   const detail = `${lead} — hit. Damage ${atk.rank} against Strength, ${duel.text}`;
   const dice = [...check.dice, ...duel.dice];
   if (duel.won) {
-    loseItem(t, item);
+    loseItem(t, item, true);
     const snatch = atk.unarmed ? ` ${c.name} may snatch it up as a free action.` : '';
     log(b, { kind: 'condition', actor: c.id, target: t.id, text: `${detail}: the ${item.name} is knocked from ${t.name}'s hands, and its attacks are gone.${snatch}`, dice, important: true });
     return;

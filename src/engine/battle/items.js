@@ -34,7 +34,8 @@ export function itemsOf(c) {
 }
 
 /** The fighter loses an item (dropped, broken or destroyed): its attacks are gone for the rest of the fight. */
-export function loseItem(c, item) {
+export function loseItem(c, item, disarmed = false) {
   c.dropped = [...(c.dropped || []), item.key];
+  if (disarmed) c.disarmed = [...(c.disarmed || []), item.key]; // a disarmed item can be picked up again (weapon-reactions.js); a broken one cannot
   c.attacks = c.attacks.filter((a) => a.item?.key !== item.key);
 }

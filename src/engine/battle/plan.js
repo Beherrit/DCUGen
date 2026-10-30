@@ -12,6 +12,7 @@ import { maneuverPlan } from './plan-maneuvers.js';
 import { feintPick, setUpAllies, closeBest } from './tricks.js';
 import { interactionImmune, slipsHold } from './immunity.js';
 import { attackValue } from './utility-attack.js';
+import { assessBias } from './assessment.js';
 
 /**
  * Best attack for c against t, with the trade-off already folded in. A close attack counts when the target is in reach, or
@@ -111,6 +112,7 @@ function targetPref(c, t, n, ft, tactic, rng) {
     pref *= 1 + Math.min(1, threatOn(t, c, ft)) * 0.5;
     if (t.staggered || activeConditions(t).has('Defenseless')) pref *= 1.35;
     if (t.aiming || t.holding) pref *= 1.15; // break the aim, or free the friend in their grip
+    pref *= assessBias(c, t); // what an Assessment taught the fighter about this foe
   return pref;
 }
 

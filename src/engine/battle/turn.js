@@ -25,6 +25,10 @@ import { heldAttack } from './flaw-grab.js';
 import { steadyIdle } from './stabilize.js';
 import { favoredTurn } from './favored.js';
 import { readyTurn, dropReady } from './ready.js';
+import { trickTurn } from './trick.js';
+import { trapTurn } from './trap.js';
+import { assessTurn } from './assessment.js';
+import { weaponDefends, fetchWeapon } from './weapon-reactions.js';
 import { runHoming, freeHeld, concentrateHeld } from './extra-run.js';
 
 const isHurt = (c) => c.staggered || c.bruises >= 2;
@@ -43,9 +47,11 @@ export function takeTurn(b, R, c, rng) {
   flawsStartTurn(c);
   concentrationLost(b, c, mode);
   if (mode === 'none' && cannotAct(b, c, conds)) return;
+  fetchWeapon(b, R, c, mode); // a disarmed fighter gets its weapon back: free with Quick Draw (weapon-reactions.js)
   favoredTurn(b, c, enemiesOf(b, c).length, alliesOf(b, c).length); // Favored Environment: +2 on attacks or defenses (favored.js)
   if (mode === 'controlled') { controlledTurn(b, R, c, rng); return; }
   const enemies = enemiesOf(b, c);
+  assessTurn(b, c, enemies, rng); // Assessment: size up each foe once, a free action (assessment.js)
   if (!enemies.length) { steadyIdle(b, R, c, mode, rng); return; } // nobody left to fight: a medic tends a dying teammate (stabilize.js)
   if (losesNerve(b, c, enemies, rng)) return;
   insubTurn(b, c, enemies); // a free action: change form, and flow out of a hold
@@ -67,8 +73,10 @@ export function takeTurn(b, R, c, rng) {
   if (withdrawHolds(b, c, choice)) return;
   if (fortuneTurn(b, c, choice, enemies)) return;
   if (supportTurn(b, c, choice, enemies, mode, rng)) return;
-  if (digIn(b, c, choice, enemies, mode)) return;
+  if (digIn(b, c, choice, enemies, mode) || weaponDefends(b, c, choice, enemies)) return;
   if (deflectTurn(b, c, choice, enemies, mode)) return;
+  if (trickTurn(b, c, choice, enemies, mode, rng)) return; // Trick, to set up a Redirect (trick.js)
+  if (trapTurn(b, c, choice, enemies, mode)) return; // set a Triggered effect on the way a foe is coming (trap.js)
   if (readyTurn(b, c, choice, enemies, mode)) return; // hold the standard action for a foe walking into reach, or for a counter (ready.js)
   standOrDrop(b, c, choice, enemies, mode, rng);
   if (nonAttackPlan(b, R, c, choice, mode, rng)) return;

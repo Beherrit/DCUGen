@@ -6,9 +6,9 @@ import { squares, squaresInMove } from './geometry.js';
 import { stepToward } from './path.js';
 import { traceMove } from './trace.js';
 
-// A fighter who readied an action reacts to a move (ready.js sets the hook; it needs this file, so it cannot be imported here).
-let movedHook = null;
-export function onMoved(fn) { movedHook = fn; }
+// Things that react to a move (a readied attack: ready.js; a trap: trap.js) register here; they need this file, so it cannot import them.
+const movedHooks = [];
+export function onMoved(fn) { movedHooks.push(fn); }
 
 /** Put c on a square, log the move with its distance, and count it against this turn's squares. */
 export function moveTo(b, c, dest, why) {
@@ -22,7 +22,7 @@ export function moveTo(b, c, dest, why) {
   const verb = c.flying ? 'flies' : c.speed >= 3 ? 'blurs' : 'moves';
   log(b, { kind: 'move', actor: c.id, from: [from.x, from.y], to: [dest.x, dest.y], text: `${c.name} ${verb} ${why ? `${why} ` : ''}from ${spotName(from)} to ${spotName(dest)}, ${fmtFt(n * b.grid.squareFt)}.` });
   traceMove(b, c, from, dest);
-  if (movedHook) movedHook(b, c);
+  for (const hook of movedHooks) hook(b, c, from);
 }
 
 /** Move toward t, stopping once within `stopAt` squares of it (1: next to it; a shooter only needs to get within range). */

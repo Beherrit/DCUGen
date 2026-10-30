@@ -1,5 +1,6 @@
 // Debilitated abilities (Hero's Handbook p49): an ability pushed below -5, by Weaken. The engine keeps what Weaken took
-// off Strength, Dexterity, Fighting and Stamina under those names (weaken-traits.js), so those four can be debilitated;
+// off Strength, Dexterity and Fighting under those names (weaken-traits.js), and Weaken Stamina takes the same ranks off Toughness
+// and Fortitude, so what both have lost is Stamina; those four can be debilitated;
 // Agility, Intellect, Awareness and Presence are folded into Dodge and Will by the Weaken reader and cannot be told apart.
 //
 // - Strength or Dexterity: the fighter collapses, defenseless, immobile and stunned (still conscious).

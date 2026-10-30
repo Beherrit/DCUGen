@@ -10,21 +10,22 @@
 // level; a hero point spent at the start of the next turn takes the fatigue away (the engine spends it at once, by chance).
 // Power stunts (a temporary Alternate Effect) are not simulated: a fighter's own alternate effects are already free to switch.
 
-import { log } from './util.js';
+import { log, enemiesOf } from './util.js';
 import { hitOdds } from './odds.js';
 import { defenseVs, checkPenalty } from './conditions.js';
 import { forceEffort } from './tactics.js';
 import { bestAttackVs } from './plan.js';
 import { resolveAttack } from './attacks.js';
 import { inRangeNow, inReach } from './geometry.js';
-import { enemiesOf } from './util.js';
+import { payEffort } from './effort-pay.js';
 
 const QUIET = { next: () => 0.5 };
 const STYLES = ['mage', 'omni', 'blaster', 'tank', 'brawler', 'mentalist'];
 
 /** Which kind of extra effort this attack would take, or null. A power effect pushes its rank; unarmed uses Strength; anything else with an attack check takes the bonus. */
 function kindFor(c, attack) {
-  if (attack.power && !attack.equipment) return c.adv['Extraordinary Effort'] && c.fatigue === 0 ? 'double' : 'power';
+  // Extraordinary Effort costs two levels of fatigue, so the AI takes it only fresh and with a hero point to take one away
+  if (attack.power && !attack.equipment) return c.adv['Extraordinary Effort'] && c.fatigue === 0 && c.heroPoints > 0 ? 'double' : 'power';
   if (attack.unarmed && !attack.equipment) return 'strength';
   return attack.roll && !attack.area ? 'bonus' : null;
 }
@@ -46,26 +47,6 @@ export function pickEffort(b, c, attack, target, rng) {
   if (!pushing && !(b.options.heroPoints && c.heroPoints > 0)) return null;
   if (forceEffort(b, c) || ((hurt || (pushing && b.round >= 3 && target.bruises === 0)) && STYLES.includes(c.style) && rng.chance(0.45))) return kind;
   return null;
-}
-
-/** Pay for the effort: fatigue (two levels for Extraordinary Effort), and a hero point may take one away. Returns the note for the log. */
-export function payEffort(b, c, rng, kind) {
-  const levels = kind === 'double' ? 2 : 1;
-  c.fatigue += levels;
-  c.usedEffort++;
-  c.effortRound = b.round; // extra effort is limited to once a turn
-  let note = `now ${c.fatigue >= 2 ? 'exhausted' : 'fatigued'}`;
-  if (b.options.heroPoints && c.heroPoints > 0 && rng.chance(0.5)) { c.heroPoints--; c.fatigue--; note += '; spends a hero point to shrug off the fatigue'; }
-  return note;
-}
-
-/** The effect of an effort on the attack: { rank, hit, text }. */
-export function effortEffect(b, c, rng, kind) {
-  const cost = payEffort(b, c, rng, kind);
-  if (kind === 'bonus') return { rank: 0, hit: 2, text: `extra effort: +2 on the attack check, ${cost}` };
-  if (kind === 'strength') return { rank: 1, hit: 0, text: `extra effort: +1 Strength rank, ${cost}` };
-  if (kind === 'double') return { rank: 2, hit: 0, text: `Extraordinary Effort: +2 ranks (two benefits), ${cost}` };
-  return { rank: 1, hit: 0, text: `extra effort: +1 rank, ${cost}` };
 }
 
 /**
@@ -106,11 +87,4 @@ export function speedEffort(b, c) {
   c.owesFatigue = true; // the fatigue comes at the end of the turn, so the fighter is not hindered while it moves (endOfTurn)
   log(b, { kind: 'hero', actor: c.id, text: `${c.name} uses extra effort for +1 speed rank: moves twice as far this turn.`, important: true });
   return true;
-}
-
-/** The end of a turn that used extra effort for speed: the fatigue it cost arrives now. */
-export function payOwed(b, c, rng) {
-  if (!c.owesFatigue) return;
-  c.owesFatigue = false;
-  log(b, { kind: 'hero', actor: c.id, text: `${c.name} pays for the speed: ${payEffort(b, c, rng, 'speed')}.` });
 }

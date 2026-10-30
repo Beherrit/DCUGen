@@ -32,7 +32,7 @@ function startRest(war, team, why) {
 }
 
 /** A resting team gets up: knocked-out members come back and bruises and fatigue clear. */
-function recover(war, team) {
+export function recover(war, team) {
   const back = outCount(team) - deadCount(team);
   team.state = team.members.map((_, i) => (team.state[i]?.dead ? { out: true, dead: true, bruises: 0, fatigue: 0 } : { out: false, bruises: 0, fatigue: 0 })); // the dead stay dead
   team.resting = false;

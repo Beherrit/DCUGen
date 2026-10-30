@@ -153,6 +153,11 @@ export function resetCombatant(c) {
   Object.assign(c, {
     insub: null,           // the Insubstantial form in force (insubstantial.js), set again by rebuildCombatant for an innate one
     init: 0, initRoll: 0, bruises: 0, dazed: false, staggered: false, out: false, outReason: null, fled: false,
+    ready: null,           // { kind: 'attack' | 'counter', atk, round }: an action held for a trigger (ready.js)
+    lasting: [], homing: [], contagion: [], secondary: [], stacks: {}, // extras that come back later (extra-after.js, extra-run.js, resist-step.js)
+    incurable: null, surprisedBy: [], assessed: null, // Incurable damage (damage-result.js), who has surprised this fighter (extra-bounce.js), Assessment (assessment.js)
+    disarmed: [],          // keys of items lost to a disarm, which can be picked up again (weapon-reactions.js)
+    tricked: null,         // { by, round } after another fighter's Trick: its missed attack can be redirected (trick.js)
     envAttack: 0,          // +2 on attack checks from Favored Environment, until the start of the next turn (favored.js)
     speedBoost: false, owesFatigue: false, effortRound: null, // extra effort: +1 speed rank this turn; the round extra effort was last used (effort.js)
     dying: false, dead: false, stable: false, diehard: false, dyingFails: 0, dyingRound: null, // dying and death in a lethal fight (dying.js)

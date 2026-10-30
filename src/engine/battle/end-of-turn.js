@@ -3,7 +3,8 @@
 import { sign, log } from './util.js';
 import { rollCheck, critNote } from './checks.js';
 import { resistOf, SEVERITY } from './conditions.js';
-import { extraResistance, payOwed } from './effort.js';
+import { extraResistance } from './effort.js';
+import { payOwed } from './effort-pay.js';
 import { releaseHolds } from './maneuvers.js';
 import { expireSupport } from './support-actions.js';
 import { STAND_SOURCES } from './prone.js';

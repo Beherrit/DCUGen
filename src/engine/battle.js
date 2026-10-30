@@ -22,6 +22,9 @@
 // Deflect (the Defend action for the team, or as a Reaction, with Reflect and Redirect), Luck Control (grant, bestow, negate, force) and Throwing Mastery are simulated.
 // Flaws on attacks are simulated (flaw-*.js): Activation, Check Required, Concentration, Diminished and Reduced Range, Distracting, Fades, Grab-Based, Inaccurate, Increased Action,
 // Limited (to the limits the engine knows), Resistible, Sense-Dependent, Side Effect, Tiring, Uncontrolled, Unreliable, and the Martial Arts flaws that change a fight; the coverage list says which parts.
+// Extras are simulated (extras.js and the extra-*.js files): Attack on a Teleport, Contagious, Homing, Increased Duration, Incurable, Indirect, Innate, Ricochet, Secondary Effect, Sleep, Split, Triggered, and the Martial Arts counter and resistance extras.
+// Extra effort has its benefits (power rank, Strength, +2 on the attack check, an extra action, speed, an extra resistance check, Extraordinary Effort), and a target can counter an effect (Instant Counter, Ready).
+// With the Lethal damage option on, a fighter taken out by Damage is dying and may die (dying.js); off, nobody does.
 // The AI scores a heal, a buff, a control, a Weaken and a guard in the same expected degrees as an attack and picks the best (utility.js); a fighter's roles (healer, controller, ...) only tip those weights a little.
 // Not simulated: Summon, Create, Illusion, Environment. Team attacks are simulated for minion squads.
 //

@@ -20,10 +20,10 @@ test('the shipped module is exactly what the coverage list says, so the app neve
   assert.equal(BATTLE_COVERAGE.length, entries.filter((e) => e.status !== 'n/a').length);
 });
 
-test('Ballista: only Innate is ignored; Kinetic control, Deflect, Luck Control, Leadership and Teamwork are used', () => {
+test('Ballista: nothing is ignored; Kinetic control, Deflect, Luck Control, Leadership, Teamwork and Innate are used', () => {
   const report = buildReport(makeCombatant(R, ballista(), { id: 'b', team: 'A' }));
-  assert.deepEqual(report.ignored.map((x) => x.name), ['Innate']);
-  assert.match(report.ignored[0].why, /not protected from Nullify/);
+  assert.deepEqual(report.ignored.map((x) => x.name), []);
+  assert.ok(report.used.includes('Innate'), 'Innate keeps a power out of Nullify');
   for (const name of ['Damage', 'Deflect', 'Reaction', 'Luck Control', 'Throwing Mastery', 'Leadership', 'Teamwork', 'Luck', 'Protection', 'Close Combat', 'Ranged Combat']) assert.ok(report.used.includes(name), name);
   assert.deepEqual(report.partial.map((x) => x.name).filter((n) => ['Teamwork', 'Deflect', 'Luck Control'].includes(n)).sort(), ['Deflect', 'Luck Control', 'Teamwork']);
   assert.ok(!report.used.includes('Persuasion') && !report.ignored.some((x) => x.name === 'Persuasion'), 'a skill that is n/a in a fight is not listed');
@@ -36,10 +36,10 @@ test('a combatant and its character give the same report', () => {
 });
 
 test('traits the simulator does not use are ignored with the reason from the coverage list', () => {
-  const ch = person({ powers: [power('Summon'), power('Damage', ['Innate'], ['Tiring'])], skills: [{ name: 'Stealth', ranks: 4 }, { name: 'Persuasion', ranks: 4 }] });
+  const ch = person({ powers: [power('Summon'), power('Damage', ['Conductor'], ['Tiring'])], skills: [{ name: 'Stealth', ranks: 4 }, { name: 'Persuasion', ranks: 4 }] });
   const report = buildReport(ch);
   const names = report.ignored.map((x) => x.name);
-  assert.ok(names.includes('Summon') && names.includes('Innate') && names.includes('Stealth'), names.join(', '));
+  assert.ok(names.includes('Summon') && names.includes('Conductor') && names.includes('Stealth'), names.join(', '));
   assert.equal(report.ignored.find((x) => x.name === 'Stealth').why, entries.find((e) => e.kind === 'skill' && e.name === 'Stealth').note);
   assert.ok(!names.includes('Persuasion') && !names.includes('Damage'));
 });
