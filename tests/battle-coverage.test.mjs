@@ -41,7 +41,7 @@ test('no entry is listed twice', () => {
 test('entries name rules that exist in the data (except actions, maneuvers, conditions and rules)', () => {
   for (const e of entries) {
     if (FREE_KINDS.includes(e.kind)) continue;
-    const known = required[e.kind];
+    const known = e.kind === 'advantage' ? RAW.advantages.map((a) => a.name) : required[e.kind]; // the Martial Arts advantages are listed too
     assert.ok(known.includes(e.name), `${e.kind} "${e.name}" is not in the rules data`);
   }
 });
@@ -52,4 +52,16 @@ test('the summary counts every entry once and the markdown lists every kind', ()
   assert.equal(all.full + all.partial + all.none + all.na, entries.length);
   const md = markdown(entries);
   for (const e of entries) assert.ok(md.includes(`| ${e.name.replace(/\|/g, '/')} |`), `${e.name} missing from the markdown`);
+});
+
+test('the Martial Arts rules are in the coverage list: every stance, every Martial Arts advantage, the style extras and flaws', () => {
+  const stanceNames = RAW.stances.map((x) => x.name);
+  const have = (kind) => names(kind);
+  assert.deepEqual(stanceNames.filter((n) => !have('stance').has(n)), [], 'stances');
+  const ma = RAW.advantages.filter((a) => String(a.source).startsWith('MA')).map((a) => a.name);
+  assert.deepEqual(ma.filter((n) => !have('advantage').has(n)), [], 'Martial Arts advantages');
+  const extras = new Set(RAW.styles.flatMap((s) => (s.style_extras || []).map((x) => x.name)));
+  const flaws = new Set(RAW.styles.flatMap((s) => (s.style_flaws || []).map((x) => x.name)));
+  assert.deepEqual([...extras].filter((n) => !have('style extra').has(n)), [], 'style extras');
+  assert.deepEqual([...flaws].filter((n) => !have('style flaw').has(n)), [], 'style flaws');
 });

@@ -2324,5 +2324,1356 @@
     "status": "full",
     "note": "Sacrifice: a summoner hit by an effect needing a resistance check spends a hero point to shift it to a minion in range, when the hit is worth the minion (summon-sacrifice.js). Resistible: the minion rolls its Will against 10 + rank and, if it resists, no second try. Feedback: damaging a minion makes the summoner resist that Damage rank with the effect's rank as the bonus (feedback.js).",
     "source": "DCA 118, 135"
+  },
+  {
+    "kind": "stance",
+    "name": "Avoiding",
+    "status": "full",
+    "note": "Dodge counts in place of Parry against close attacks, -4 to attack. Attack penalties are on every rolled attack; the log names \"Avoiding stance: -4\". Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 129"
+  },
+  {
+    "kind": "stance",
+    "name": "Blocking",
+    "status": "full",
+    "note": "+2 Parry and -2 to every attack check, both within the power level limit. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 129"
+  },
+  {
+    "kind": "stance",
+    "name": "Bobbing",
+    "status": "full",
+    "note": "+2 Dodge, -2 to every attack check. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 129"
+  },
+  {
+    "kind": "stance",
+    "name": "Crane",
+    "status": "full",
+    "note": "+2 attack and Parry; Dodge is set to 0 (so is a Dodge resistance check); the fighter is Immobile and cannot walk, which the AI weighs (it does not take Crane when it must walk to its foe). The stance's own Immobile does not break it. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 129"
+  },
+  {
+    "kind": "stance",
+    "name": "Disarming",
+    "status": "full",
+    "note": "+4 to disarm checks (disarm odds and rolls both count it), -2 to every other attack check. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 129"
+  },
+  {
+    "kind": "stance",
+    "name": "Disruptive",
+    "status": "full",
+    "note": "+8 to a Disrupt Stance contest, -4 to the fighter's other Fighting Style checks (assume, identify, Bob and Weave). Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 129"
+  },
+  {
+    "kind": "stance",
+    "name": "Drunken",
+    "status": "full",
+    "note": "+2 Dodge, -1 attack, Deception +8 for a feint, Acrobatics -8, Intimidation -4. Defensive Roll 2 is counted as +2 Toughness, the way the sheet counts the advantage. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 129"
+  },
+  {
+    "kind": "stance",
+    "name": "Extended",
+    "status": "full",
+    "note": "+5 ft reach on close attacks (Reach 1), -1 Parry and Dodge. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 129"
+  },
+  {
+    "kind": "stance",
+    "name": "Finishing",
+    "status": "partial",
+    "note": "-4 to attack, defenses and effect ranks is played. The doubled close damage (only when the target went helpless while the fighter was already in the stance) is not, and the AI never takes the stance. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 129"
+  },
+  {
+    "kind": "stance",
+    "name": "Firing",
+    "status": "full",
+    "note": "+1 attack and damage with ranged attacks, -1 with every other attack. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 129"
+  },
+  {
+    "kind": "stance",
+    "name": "Fluid",
+    "status": "partial",
+    "note": "With no Extra Attacks, +2 to the attack check (the player's \"any combat check\", declared each round); -2 Deception for feints is in the skill, -1 Parry. The Combo Element rank for Extra Attacks is not played (combo points are not simulated). Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 129"
+  },
+  {
+    "kind": "stance",
+    "name": "Grappler",
+    "status": "full",
+    "note": "+2 to the grab check, -1 Parry and Dodge. A hold has only the initiating check in the engine. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 129"
+  },
+  {
+    "kind": "stance",
+    "name": "Grounded",
+    "status": "partial",
+    "note": "Vulnerable (defenses halved), -1 attack, one rank less knockback, +2 against a trip. Resisting a push, rush or body throw is not a check the engine makes. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 129"
+  },
+  {
+    "kind": "stance",
+    "name": "Guarded",
+    "status": "full",
+    "note": "The Defensive Attack trade goes up to 5 (10 with the advantage); the AI takes the most when hurt or outnumbered. The matching attack penalty is the Defensive Attack's own. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 130"
+  },
+  {
+    "kind": "stance",
+    "name": "High",
+    "status": "partial",
+    "note": "+2 Dodge as an active defense only (a Dodge resistance check gets nothing); -2 against knockback (more ranks thrown) and a trip. Body throws are not a check the engine makes. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 130"
+  },
+  {
+    "kind": "stance",
+    "name": "Kicker",
+    "status": "full",
+    "note": "+2 attack and damage with foot attacks, -2 with the rest. Which attacks are feet and hands is read from their names, as the sheet does. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 130"
+  },
+  {
+    "kind": "stance",
+    "name": "Low",
+    "status": "partial",
+    "note": "Hindered (half speed) and +4 against a trip. Body throws are not a check the engine makes. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 130"
+  },
+  {
+    "kind": "stance",
+    "name": "Misleading",
+    "status": "full",
+    "note": "Deception +4 for a feint, -1 initiative and attack. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 130"
+  },
+  {
+    "kind": "stance",
+    "name": "(Named)",
+    "status": "none",
+    "note": "The DC is 10 + a rank of the named power and the bonus is declared for that power; a character does not record which power a named stance is for, so the Battle Room never offers it. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 130"
+  },
+  {
+    "kind": "stance",
+    "name": "Neutral",
+    "status": "full",
+    "note": "Everyone starts in Neutral. Assuming it needs no check; every broken or failed stance ends in it. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 130"
+  },
+  {
+    "kind": "stance",
+    "name": "Offensive",
+    "status": "full",
+    "note": "The All-Out Attack trade goes up to 5 (10 with the advantage), the same amount off Dodge and Parry (the All-Out Attack's own penalty). The AI takes the most against a hurt foe when healthy. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 130"
+  },
+  {
+    "kind": "stance",
+    "name": "Power",
+    "status": "full",
+    "note": "+2 damage with close attacks, -1 Parry, -1 initiative. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 130"
+  },
+  {
+    "kind": "stance",
+    "name": "Prone",
+    "status": "partial",
+    "note": "-1 initiative is played. Crawling at two thirds speed is not, and the book's list of broken stances includes prone, so a fighter knocked down loses it; the AI never takes it. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 130"
+  },
+  {
+    "kind": "stance",
+    "name": "Pugilist",
+    "status": "full",
+    "note": "+2 attack and damage with hand attacks, -2 with the rest. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 130"
+  },
+  {
+    "kind": "stance",
+    "name": "Reactive",
+    "status": "full",
+    "note": "+2 to Dodge resistance checks only (an area attack's Dodge), -1 attack. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 130"
+  },
+  {
+    "kind": "stance",
+    "name": "Showman",
+    "status": "full",
+    "note": "Deception +4 (the feint), -1 attack, -1 Dodge and Parry. The Expertise ranks are not rolled in a fight. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 130"
+  },
+  {
+    "kind": "stance",
+    "name": "Throwing",
+    "status": "partial",
+    "note": "house rule: the +2 Strength for throwing is +2 damage rank on throw attacks (the maneuver named Throw and the like), since the engine has no distance to throw. -2 initiative. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 131"
+  },
+  {
+    "kind": "stance",
+    "name": "Wary",
+    "status": "full",
+    "note": "+4 initiative, -1 attack. Fighters begin in Neutral and initiative is rolled once, so the bonus only counts for a fighter who joins late. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 131"
+  },
+  {
+    "kind": "stance",
+    "name": "Weapon",
+    "status": "partial",
+    "note": "The weapon is the fighter's best close weapon; the bonus is taken as attack (+1) and damage (+2), the penalty -1 and -2 on every other attack. The per-round choice of Parry or initiative instead is not offered. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 131"
+  },
+  {
+    "kind": "stance",
+    "name": "Firing (Vehicle)",
+    "status": "n/a",
+    "note": "For vehicle mounted weapons; the battle engine does not fight from vehicles. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 227"
+  },
+  {
+    "kind": "stance",
+    "name": "Rubber Band",
+    "status": "none",
+    "note": "Enhanced Elongation 1 and the Distracting flaw are not applied. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 245"
+  },
+  {
+    "kind": "stance",
+    "name": "TK",
+    "status": "full",
+    "note": "Move Object +1 rank on the attack it makes (thrown objects), -2 Parry and Dodge. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 248"
+  },
+  {
+    "kind": "stance",
+    "name": "Pack",
+    "status": "none",
+    "note": "The +1 attack with an ally opposite the target and the -1 defense from other directions are conditional on facing, which the grid does not track. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js).",
+    "source": "MA 249"
+  },
+  {
+    "kind": "maneuver",
+    "name": "MA basic maneuvers (Strength-based Damage)",
+    "status": "full",
+    "note": "Each basic maneuver the fighter bought is an attack: Damage of Strength (or the weapon, for a weapon style) plus the table modifier, the table attack modifier, critical range and the change to Parry and Dodge until the next turn (Haymaker, Jab, Snap Kick and the rest). Penetrating and Multiattack in a maneuver's build are played; Push Over, Exposed and Added/Empowered Critical beyond the table are not.",
+    "source": "MA 137-143"
+  },
+  {
+    "kind": "maneuver",
+    "name": "MA Sweep",
+    "status": "full",
+    "note": "Affliction 6 resisted by Dodge: vulnerable, then prone (Limited Degree).",
+    "source": "MA 142"
+  },
+  {
+    "kind": "maneuver",
+    "name": "MA Body Slam, Throw, Scissor Grapple, Escape, Flying Attack",
+    "status": "none",
+    "note": "Grab-based builds, the Flying Attack modifier and the Escape bonus are not played; Body Slam and Throw are left out of the attack list rather than made into a plain hit.",
+    "source": "MA 137-143"
+  },
+  {
+    "kind": "maneuver",
+    "name": "MA advanced attack maneuvers (Damage, Affliction, Weaken)",
+    "status": "partial",
+    "note": "Chi Strike, Cobra Strike, Flaming Fists, Stunning Attack, Stone Touch, Sleeper's Touch and Withering Blow are attacks at the rank bought. Awesome Strike, Breaking Blow, Dim Mak, Blinding Strike, Riposte, the Kiai cones and the other builds (about 100 advanced maneuvers) are not.",
+    "source": "MA 144-153"
+  },
+  {
+    "kind": "maneuver",
+    "name": "MA advanced maneuvers that improve the style's attacks",
+    "status": "partial",
+    "note": "Focused Strike (Improved Critical), Nerve Strike (Penetrating) and Flurry (Multiattack) improve the style's close attacks by the rank bought. The other \"Enhanced\" builds (Iron Shirt, Nimble Dodge, Whirlwind Block and so on) are not played.",
+    "source": "MA 144-153"
+  },
+  {
+    "kind": "maneuver",
+    "name": "MA the Student bonus on maneuvers",
+    "status": "full",
+    "note": "+2 to attack with the style's basic attack and every maneuver, named in the roll as \"Student: +2\".",
+    "source": "MA 79"
+  },
+  {
+    "kind": "style extra",
+    "name": "Aggressive",
+    "status": "full",
+    "note": "+1 to attacks with the style's maneuvers and basic attack; the fighter takes no Defensive Attack and no Defend action.",
+    "source": "MA 131"
+  },
+  {
+    "kind": "style extra",
+    "name": "Attack Focus",
+    "status": "partial",
+    "note": "+2 to attack and initiative with the named attack types while in a stance of the style other than Neutral. The negated extra critical-miss range is not played (no Uncertain on style attacks), and \"Select One Combat Maneuver\" choices are not known so they are skipped.",
+    "source": "MA 131"
+  },
+  {
+    "kind": "style extra",
+    "name": "Defensive",
+    "status": "full",
+    "note": "+1 Parry and Dodge while in a stance of the style other than Neutral; no All-Out Attack and no charge.",
+    "source": "MA 131"
+  },
+  {
+    "kind": "style extra",
+    "name": "Divine",
+    "status": "none",
+    "note": "A Feature per rank whose effect the Gamemaster decides; nothing to simulate.",
+    "source": "MA 132"
+  },
+  {
+    "kind": "style extra",
+    "name": "Esoteric",
+    "status": "full",
+    "note": "-2 (one rank) or -5 (more) to an opponent's Identify and Disrupt Stance checks against the style. Read Opponent and Analyze Style are not played.",
+    "source": "MA 132"
+  },
+  {
+    "kind": "style extra",
+    "name": "Fixed",
+    "status": "full",
+    "note": "+2 to the weaker of Parry and Dodge in a round the fighter attacked and moved no more than 5 ft, until its next turn (a second rank covers both).",
+    "source": "MA 132"
+  },
+  {
+    "kind": "style extra",
+    "name": "Geomantic",
+    "status": "none",
+    "note": "A check to cut an impact attack's rank while grounded is not played.",
+    "source": "MA 132"
+  },
+  {
+    "kind": "style extra",
+    "name": "Metahuman",
+    "status": "none",
+    "note": "+2 to power checks; fights roll no power checks.",
+    "source": "MA 132"
+  },
+  {
+    "kind": "style extra",
+    "name": "Mobile",
+    "status": "full",
+    "note": "+2 to the weaker of Parry and Dodge after a round of moving more than 15 ft, until its next turn (a second rank covers both).",
+    "source": "MA 133"
+  },
+  {
+    "kind": "style extra",
+    "name": "Mystic",
+    "status": "none",
+    "note": "Replacing the Strength-based Damage with a magic spell's rank (two checks and a Will resistance) is not played.",
+    "source": "MA 133"
+  },
+  {
+    "kind": "style extra",
+    "name": "Spiritual",
+    "status": "none",
+    "note": "Will in place of Fortitude (with harsher results) is not played.",
+    "source": "MA 133"
+  },
+  {
+    "kind": "style flaw",
+    "name": "Clumsy Attacks",
+    "status": "full",
+    "note": "-2 to attack and initiative with the named attack types while in a stance of the style other than Neutral.",
+    "source": "MA 134"
+  },
+  {
+    "kind": "style flaw",
+    "name": "Demanding",
+    "status": "n/a",
+    "note": "A lack of practice between fights; a single battle has no weeks of practice.",
+    "source": "MA 134"
+  },
+  {
+    "kind": "style flaw",
+    "name": "Ill-Favored Conditions",
+    "status": "none",
+    "note": "Free text (\"while sober, -3 attack\") that the engine cannot test.",
+    "source": "MA 135"
+  },
+  {
+    "kind": "style flaw",
+    "name": "Impractical",
+    "status": "partial",
+    "note": "A natural 1 on a style attack costs the rank on the fighter's attacks and defenses until its next turn. The widened natural-miss range some styles list is not played.",
+    "source": "MA 135"
+  },
+  {
+    "kind": "style flaw",
+    "name": "Listless",
+    "status": "full",
+    "note": "-4 initiative a rank while the fighter practices the style (initiative is rolled once, at the start).",
+    "source": "MA 135"
+  },
+  {
+    "kind": "style flaw",
+    "name": "No Nonsense",
+    "status": "n/a",
+    "note": "A penalty to Martial Showman checks; not rolled in a fight.",
+    "source": "MA 136"
+  },
+  {
+    "kind": "style flaw",
+    "name": "Predictable",
+    "status": "full",
+    "note": "+2 a rank to a foe's Identify and Disrupt Stance checks against the style.",
+    "source": "MA 136"
+  },
+  {
+    "kind": "style flaw",
+    "name": "Slow",
+    "status": "full",
+    "note": "One speed rank off a rank while the fighter practices the style.",
+    "source": "MA 136"
+  },
+  {
+    "kind": "style flaw",
+    "name": "Style Weakness",
+    "status": "none",
+    "note": "No style in the data has it.",
+    "source": "MA 136"
+  },
+  {
+    "kind": "style flaw",
+    "name": "Weak Defense",
+    "status": "partial",
+    "note": "-1 a rank to Parry or Dodge (as the style names) while in a stance of the style other than Neutral; the book says \"while using the style\", which the engine reads as holding one of its stances.",
+    "source": "MA 136"
+  },
+  {
+    "kind": "style flaw",
+    "name": "Weapon Dependent",
+    "status": "full",
+    "note": "The style's maneuvers are made only with a weapon (and the unarmed attack gets no Student bonus).",
+    "source": "MA 136"
+  },
+  {
+    "kind": "advantage",
+    "name": "Acrobatic Defense",
+    "status": "n/a",
+    "note": "moving acrobatically at half speed is not played",
+    "source": "MA 52"
+  },
+  {
+    "kind": "advantage",
+    "name": "Action Surge",
+    "status": "none",
+    "note": "Not simulated: a Stamina check after extra effort is not played.",
+    "source": "MA 52"
+  },
+  {
+    "kind": "advantage",
+    "name": "Active Disarm",
+    "status": "none",
+    "note": "Not simulated: disarming with Parry is not played.",
+    "source": "MA 52"
+  },
+  {
+    "kind": "advantage",
+    "name": "Added Critical",
+    "status": "none",
+    "note": "Not simulated: the extra effect on a critical hit is not played.",
+    "source": "MA 52"
+  },
+  {
+    "kind": "advantage",
+    "name": "Aggressive Driving",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 52"
+  },
+  {
+    "kind": "advantage",
+    "name": "Aggressive Escape",
+    "status": "none",
+    "note": "Not simulated: forcing a grabber to let go with an attack is not played.",
+    "source": "MA 55"
+  },
+  {
+    "kind": "advantage",
+    "name": "Ambush",
+    "status": "none",
+    "note": "Not simulated: the critical range against unaware targets is not played.",
+    "source": "MA 55"
+  },
+  {
+    "kind": "advantage",
+    "name": "Armed Grab",
+    "status": "none",
+    "note": "Not simulated: grabbing with occupied hands is not played.",
+    "source": "MA 56"
+  },
+  {
+    "kind": "advantage",
+    "name": "Attack Specialist",
+    "status": "none",
+    "note": "Not simulated: a bonus for fighting with only a chosen attack is not played.",
+    "source": "MA 57"
+  },
+  {
+    "kind": "advantage",
+    "name": "Bail Out",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 57"
+  },
+  {
+    "kind": "advantage",
+    "name": "Burn Rubber",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 58"
+  },
+  {
+    "kind": "advantage",
+    "name": "Cheap Shot",
+    "status": "none",
+    "note": "Not simulated: a feint turned into a damage bonus is not played; feints only make the foe vulnerable.",
+    "source": "MA 58"
+  },
+  {
+    "kind": "advantage",
+    "name": "Close-Quarters Battle",
+    "status": "none",
+    "note": "Not simulated: a ranged bonus against adjacent foes is not played.",
+    "source": "MA 58"
+  },
+  {
+    "kind": "advantage",
+    "name": "Combo Element",
+    "status": "none",
+    "note": "Not simulated: combo points are not simulated.",
+    "source": "MA 59"
+  },
+  {
+    "kind": "advantage",
+    "name": "Countering Expert",
+    "status": "none",
+    "note": "Not simulated: a counter bonus for a descriptor is not read from the sheet.",
+    "source": "MA 59"
+  },
+  {
+    "kind": "advantage",
+    "name": "Crushing Hold",
+    "status": "full",
+    "note": "Crushing a held foe is a free action, and the fighter goes on to its other action.",
+    "source": "MA 58"
+  },
+  {
+    "kind": "advantage",
+    "name": "Cunning Fighter",
+    "status": "none",
+    "note": "Not simulated: a feint with the attack bonus is not played.",
+    "source": "MA 59"
+  },
+  {
+    "kind": "advantage",
+    "name": "Damaging Escape",
+    "status": "full",
+    "note": "After slipping a grab, a free unarmed attack on the grabber.",
+    "source": "MA 58"
+  },
+  {
+    "kind": "advantage",
+    "name": "Dancing Combat",
+    "status": "none",
+    "note": "Not simulated: feinting with Expertise: Dancing is not played.",
+    "source": "MA 59"
+  },
+  {
+    "kind": "advantage",
+    "name": "Daredevil",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 60"
+  },
+  {
+    "kind": "advantage",
+    "name": "Dauntless",
+    "status": "none",
+    "note": "Not simulated: a penalty to the Defend action against a chosen attack is not played.",
+    "source": "MA 60"
+  },
+  {
+    "kind": "advantage",
+    "name": "Dedicated Defense",
+    "status": "none",
+    "note": "Not simulated: shifting active defense toward one attacker is not played.",
+    "source": "MA 60"
+  },
+  {
+    "kind": "advantage",
+    "name": "Defensive Driving",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 60"
+  },
+  {
+    "kind": "advantage",
+    "name": "Defensive Strike",
+    "status": "none",
+    "note": "Not simulated: a bonus after a foe misses is not played.",
+    "source": "MA 60"
+  },
+  {
+    "kind": "advantage",
+    "name": "Defensive Throw",
+    "status": "partial",
+    "note": "A close attack that misses by 2 or more degrees is answered with a free trip. The rule that a failed throw can only be countered on 3 or more degrees is not played.",
+    "source": "MA 58"
+  },
+  {
+    "kind": "advantage",
+    "name": "Demolition Derby",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 60"
+  },
+  {
+    "kind": "advantage",
+    "name": "Devastating Hold",
+    "status": "none",
+    "note": "Not simulated: a doubled critical range when crushing is not played.",
+    "source": "MA 61"
+  },
+  {
+    "kind": "advantage",
+    "name": "Dirty Attack",
+    "status": "none",
+    "note": "Not simulated: Dexterity added to damage against prone foes is not played.",
+    "source": "MA 61"
+  },
+  {
+    "kind": "advantage",
+    "name": "Dirty Fighting",
+    "status": "none",
+    "note": "Not simulated: damage bonuses against foes in cover are not played.",
+    "source": "MA 61"
+  },
+  {
+    "kind": "advantage",
+    "name": "Distracting Attack",
+    "status": "none",
+    "note": "Not simulated: trading damage to aid an ally is not played.",
+    "source": "MA 61"
+  },
+  {
+    "kind": "advantage",
+    "name": "Diverting Feint",
+    "status": "none",
+    "note": "Not simulated: special attacks after two feints are not played.",
+    "source": "MA 61"
+  },
+  {
+    "kind": "advantage",
+    "name": "Driving Instinct",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 61"
+  },
+  {
+    "kind": "advantage",
+    "name": "Duck and Cover",
+    "status": "none",
+    "note": "Not simulated: a stronger effect of cover is not read from the sheet.",
+    "source": "MA 61"
+  },
+  {
+    "kind": "advantage",
+    "name": "Empowered Critical",
+    "status": "none",
+    "note": "Not simulated: the extra effect on a critical hit is not played.",
+    "source": "MA 61"
+  },
+  {
+    "kind": "advantage",
+    "name": "Entangling Feint",
+    "status": "none",
+    "note": "Not simulated: a feinted foe tangling itself is not played.",
+    "source": "MA 62"
+  },
+  {
+    "kind": "advantage",
+    "name": "Escapist",
+    "status": "none",
+    "note": "Not simulated: releasing a grab on escape is not played.",
+    "source": "MA 62"
+  },
+  {
+    "kind": "advantage",
+    "name": "Favored Conditions",
+    "status": "none",
+    "note": "Not simulated: a bonus under a chosen circumstance is not tested.",
+    "source": "MA 62"
+  },
+  {
+    "kind": "advantage",
+    "name": "Finesse Attack",
+    "status": "full",
+    "note": "The named Strength-based attack takes its damage from Dexterity when that is higher, within the power level limit.",
+    "source": "MA 61"
+  },
+  {
+    "kind": "advantage",
+    "name": "Finish Them",
+    "status": "none",
+    "note": "Not simulated: a finishing attack one step faster is not played.",
+    "source": "MA 62"
+  },
+  {
+    "kind": "advantage",
+    "name": "First Strike",
+    "status": "none",
+    "note": "Not simulated: a damage bonus against surprised foes is not played.",
+    "source": "MA 62"
+  },
+  {
+    "kind": "advantage",
+    "name": "Flippant Disarm",
+    "status": "none",
+    "note": "Not simulated: where a disarmed weapon lands is not played.",
+    "source": "MA 62"
+  },
+  {
+    "kind": "advantage",
+    "name": "Follow-Up Strike",
+    "status": "full",
+    "note": "A melee critical hit earns a free extra attack on the same foe.",
+    "source": "MA 62"
+  },
+  {
+    "kind": "advantage",
+    "name": "Grab Breaker",
+    "status": "none",
+    "note": "Not simulated: opposing a grab with an attack is not played; escapes use Athletics or Sleight of Hand.",
+    "source": "MA 63"
+  },
+  {
+    "kind": "advantage",
+    "name": "Grabbing Parry",
+    "status": "none",
+    "note": "Not simulated: starting a grab after a defended attack is not played.",
+    "source": "MA 63"
+  },
+  {
+    "kind": "advantage",
+    "name": "Guard Weapon",
+    "status": "none",
+    "note": "Not simulated: an off-hand weapon's Parry is not played.",
+    "source": "MA 63"
+  },
+  {
+    "kind": "advantage",
+    "name": "Gymkhana",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 64"
+  },
+  {
+    "kind": "advantage",
+    "name": "Healing Touch",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 64"
+  },
+  {
+    "kind": "advantage",
+    "name": "Healing Trance",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 64"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Assessment",
+    "status": "none",
+    "note": "Not simulated: assessing more than one foe at a time is not played.",
+    "source": "MA 64"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Charge",
+    "status": "none",
+    "note": "Not simulated: a damage bonus for the distance charged is not played.",
+    "source": "MA 65"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Concealment",
+    "status": "none",
+    "note": "Not simulated: a stronger effect of concealment is not read from the sheet.",
+    "source": "MA 65"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Covering Attack",
+    "status": "none",
+    "note": "Not simulated: covering attacks are not played.",
+    "source": "MA 65"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Disabling",
+    "status": "none",
+    "note": "Not simulated: disabling critical hits are an optional rule that is not played.",
+    "source": "MA 65"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Entangle Weapon",
+    "status": "none",
+    "note": "Not simulated: entangling weapons is not played.",
+    "source": "MA 65"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Escape",
+    "status": "none",
+    "note": "Not simulated: escaping a grab as a free action is not played.",
+    "source": "MA 65"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Exchange",
+    "status": "none",
+    "note": "Not simulated: a higher trade-off limit is not read from the sheet.",
+    "source": "MA 65"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Joint Lock",
+    "status": "none",
+    "note": "Not simulated: the joint-lock grab option is not simulated.",
+    "source": "MA 66"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Ranged Disarm",
+    "status": "none",
+    "note": "Not simulated: ranged disarms are not played.",
+    "source": "MA 66"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Readiness",
+    "status": "none",
+    "note": "Not simulated: readying without a stated trigger is not played.",
+    "source": "MA 66"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Reversal",
+    "status": "none",
+    "note": "Not simulated: a bonus on the Reversal grab is not played.",
+    "source": "MA 66"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Tricking",
+    "status": "none",
+    "note": "Not simulated: tricking as a move action is not played.",
+    "source": "MA 66"
+  },
+  {
+    "kind": "advantage",
+    "name": "Inviting Defense",
+    "status": "none",
+    "note": "Not simulated: trading initiative for defense; initiative is rolled once.",
+    "source": "MA 66"
+  },
+  {
+    "kind": "advantage",
+    "name": "Iron Liver",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 66"
+  },
+  {
+    "kind": "advantage",
+    "name": "Joint Lock",
+    "status": "none",
+    "note": "Not simulated: the joint-lock grab option is not simulated.",
+    "source": "MA 66"
+  },
+  {
+    "kind": "advantage",
+    "name": "Just a Scratch",
+    "status": "none",
+    "note": "Not simulated: shedding a damage condition with a hero point is not played.",
+    "source": "MA 66"
+  },
+  {
+    "kind": "advantage",
+    "name": "Knockout",
+    "status": "none",
+    "note": "Not simulated: the Fortitude check to leave a harmed foe unconscious is not played.",
+    "source": "MA 67"
+  },
+  {
+    "kind": "advantage",
+    "name": "Lie in Wait",
+    "status": "none",
+    "note": "Not simulated: a planned ambush's full actions are not played.",
+    "source": "MA 67"
+  },
+  {
+    "kind": "advantage",
+    "name": "Light Sleeper",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 67"
+  },
+  {
+    "kind": "advantage",
+    "name": "Mobile Defense",
+    "status": "none",
+    "note": "Not simulated: running Athletics checks are not rolled.",
+    "source": "MA 67"
+  },
+  {
+    "kind": "advantage",
+    "name": "Mobile Offense",
+    "status": "none",
+    "note": "Not simulated: running Athletics checks are not rolled.",
+    "source": "MA 67"
+  },
+  {
+    "kind": "advantage",
+    "name": "Monkey Climber",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 68"
+  },
+  {
+    "kind": "advantage",
+    "name": "Multi-Entangle",
+    "status": "none",
+    "note": "Not simulated: entangling weapons is not played.",
+    "source": "MA 68"
+  },
+  {
+    "kind": "advantage",
+    "name": "Multiattack Mastery",
+    "status": "none",
+    "note": "Not simulated: extra benefits of a Multiattack are not played.",
+    "source": "MA 68"
+  },
+  {
+    "kind": "advantage",
+    "name": "Neck Breaker",
+    "status": "none",
+    "note": "Not simulated: lethal finishing attacks on a bound foe are not played.",
+    "source": "MA 68"
+  },
+  {
+    "kind": "advantage",
+    "name": "Not So Helpless",
+    "status": "none",
+    "note": "Not simulated: a Fortitude check against a finishing attack is not played.",
+    "source": "MA 68"
+  },
+  {
+    "kind": "advantage",
+    "name": "Off-Putting Feint",
+    "status": "none",
+    "note": "Not simulated: a feint's extra penalty is not played.",
+    "source": "MA 68"
+  },
+  {
+    "kind": "advantage",
+    "name": "Parkour",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 68"
+  },
+  {
+    "kind": "advantage",
+    "name": "Pummel",
+    "status": "none",
+    "note": "Not simulated: a knockback-only damage bonus; the optional knockback rule does not use it.",
+    "source": "MA 68"
+  },
+  {
+    "kind": "advantage",
+    "name": "Quick Strike",
+    "status": "none",
+    "note": "Not simulated: trading damage for initiative; initiative is rolled once at the start.",
+    "source": "MA 68"
+  },
+  {
+    "kind": "advantage",
+    "name": "Quick Throw",
+    "status": "full",
+    "note": "After a successful grab, a free throw (a trip) of the foe.",
+    "source": "MA 65"
+  },
+  {
+    "kind": "advantage",
+    "name": "Red Lining",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 69"
+  },
+  {
+    "kind": "advantage",
+    "name": "Reversal",
+    "status": "full",
+    "note": "After slipping a grab, a free grab on the grabber.",
+    "source": "MA 65"
+  },
+  {
+    "kind": "advantage",
+    "name": "Steadfast",
+    "status": "none",
+    "note": "Not simulated: less knockback distance is not read from the sheet.",
+    "source": "MA 70"
+  },
+  {
+    "kind": "advantage",
+    "name": "Stuntman",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 70"
+  },
+  {
+    "kind": "advantage",
+    "name": "Superior Disabling",
+    "status": "none",
+    "note": "Not simulated: disabling critical hits are an optional rule that is not played.",
+    "source": "MA 70"
+  },
+  {
+    "kind": "advantage",
+    "name": "Superior Entangle Weapon",
+    "status": "none",
+    "note": "Not simulated: entangling weapons is not played.",
+    "source": "MA 70"
+  },
+  {
+    "kind": "advantage",
+    "name": "Sweeping Strike",
+    "status": "partial",
+    "note": "A successful unarmed attack is followed by a free trip attempt. Splitting the Damage modifier into a trip bonus is not played.",
+    "source": "MA 66"
+  },
+  {
+    "kind": "advantage",
+    "name": "Take the Hit",
+    "status": "none",
+    "note": "Not simulated: forgoing a defense for a free attack needs a reaction in the middle of an attack.",
+    "source": "MA 71"
+  },
+  {
+    "kind": "advantage",
+    "name": "Unbalancing Strike",
+    "status": "none",
+    "note": "Not simulated: dividing the foe's Dodge is not played.",
+    "source": "MA 71"
+  },
+  {
+    "kind": "advantage",
+    "name": "Vehicrobatics",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 71"
+  },
+  {
+    "kind": "advantage",
+    "name": "Vehicular Shield",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 71"
+  },
+  {
+    "kind": "advantage",
+    "name": "Acrobatic Fighter",
+    "status": "none",
+    "note": "Not simulated: an Acrobatics check against the attack roll for a damage or defense bonus is not played.",
+    "source": "MA 72"
+  },
+  {
+    "kind": "advantage",
+    "name": "Aggressive Counter",
+    "status": "none",
+    "note": "Not simulated: the vulnerable foe after a successful counter is not played.",
+    "source": "MA 74"
+  },
+  {
+    "kind": "advantage",
+    "name": "Anticipation",
+    "status": "none",
+    "note": "Not simulated: an opposed Insight check each time a foe is engaged is not played.",
+    "source": "MA 74"
+  },
+  {
+    "kind": "advantage",
+    "name": "Attack Mastery",
+    "status": "none",
+    "note": "Not simulated: raising a bonus of Attack Specialist, which is not simulated either.",
+    "source": "MA 74"
+  },
+  {
+    "kind": "advantage",
+    "name": "Bob and Weave",
+    "status": "partial",
+    "note": "A DC 10 Fighting Style check as a move action for +1 active defense a degree, lost when the stance changes. It is not lost by another Fighting Style check or by being denied the bonus.",
+    "source": "MA 74"
+  },
+  {
+    "kind": "advantage",
+    "name": "Bullet Time",
+    "status": "none",
+    "note": "Not simulated: extra move actions from extra effort are not played.",
+    "source": "MA 74"
+  },
+  {
+    "kind": "advantage",
+    "name": "Counterstrike",
+    "status": "partial",
+    "note": "In a round the fighter has not attacked and after its turn, a free melee attack at a cumulative -2 on each foe who landed a melee blow, up to its ranks. The AI never holds an attack back to use it, so it fires for a fighter that spent its turn moving, recovering or defending.",
+    "source": "MA 74"
+  },
+  {
+    "kind": "advantage",
+    "name": "Deceptive Attack",
+    "status": "none",
+    "note": "Not simulated: a feint at -4 that adds Presence to the follow-up is not played.",
+    "source": "MA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Deceptive Stance",
+    "status": "full",
+    "note": "+2 a rank to the stance DC when assumed; -4 a rank to foes' Identify and Disrupt checks against the fighter. Read Opponent is not played.",
+    "source": "MA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Defensive Feint",
+    "status": "none",
+    "note": "Not simulated: feinting with Parry or Dodge is not played.",
+    "source": "MA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Evasive Retreat",
+    "status": "none",
+    "note": "Not simulated: moving after an attack misses is not played.",
+    "source": "MA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Flowing Form",
+    "status": "full",
+    "note": "Stance DCs 5 lower, and every change is a free action.",
+    "source": "MA 76"
+  },
+  {
+    "kind": "advantage",
+    "name": "Follow-Up Hard",
+    "status": "none",
+    "note": "Not simulated: a free attack on a foe knocked back is not played.",
+    "source": "MA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Grappling Knee",
+    "status": "none",
+    "note": "Not simulated: keeping a hold with a knee is not played.",
+    "source": "MA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Hard Defense",
+    "status": "none",
+    "note": "Not simulated: a Defend action with Toughness changes damage after the attack roll; the engine fixes a defense before the roll.",
+    "source": "MA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Hard Grab",
+    "status": "none",
+    "note": "Not simulated: a free grab on an attacker is not played.",
+    "source": "MA 75"
+  },
+  {
+    "kind": "advantage",
+    "name": "Hard Throw",
+    "status": "none",
+    "note": "Not simulated: a free throw after a close trip is not played.",
+    "source": "MA 76"
+  },
+  {
+    "kind": "advantage",
+    "name": "Iaijutsu",
+    "status": "none",
+    "note": "Not simulated: a style check in place of initiative on the first draw; initiative is rolled once.",
+    "source": "MA 76"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improved Prone Fighting",
+    "status": "n/a",
+    "note": "a damage bonus while prone; fighters are not played fighting from the ground on purpose",
+    "source": "MA 76"
+  },
+  {
+    "kind": "advantage",
+    "name": "Improvised Weapon Element",
+    "status": "none",
+    "note": "Not simulated: anything as a style weapon is not played.",
+    "source": "MA 76"
+  },
+  {
+    "kind": "advantage",
+    "name": "Kata",
+    "status": "full",
+    "note": "+2 Parry and Dodge in a round the fighter used the style's attack from a stance of the style other than Neutral, within the power level limit, until its next turn.",
+    "source": "MA 76"
+  },
+  {
+    "kind": "advantage",
+    "name": "Kata Lore",
+    "status": "none",
+    "note": "A +4 style skill bonus while the Kata is on; the skill checks are not rolled.",
+    "source": "MA 76"
+  },
+  {
+    "kind": "advantage",
+    "name": "Know Your Enemy",
+    "status": "none",
+    "note": "+2 initiative against an opposing style; initiative is rolled once at the start.",
+    "source": "MA 77"
+  },
+  {
+    "kind": "advantage",
+    "name": "Living Weapon",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 77"
+  },
+  {
+    "kind": "advantage",
+    "name": "Martial Balance",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 77"
+  },
+  {
+    "kind": "advantage",
+    "name": "Martial Defense",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 77"
+  },
+  {
+    "kind": "advantage",
+    "name": "Mobile Trance",
+    "status": "n/a",
+    "note": "Not a fight rule: a skill, vehicle, chase or rest benefit.",
+    "source": "MA 77"
+  },
+  {
+    "kind": "advantage",
+    "name": "Offensive Defense",
+    "status": "none",
+    "note": "Not simulated: a readied attack standing in for the defense needs a reaction in the middle of an attack.",
+    "source": "MA 77"
+  },
+  {
+    "kind": "advantage",
+    "name": "Opposing Style",
+    "status": "partial",
+    "note": "+2 to attack against a foe who practices the named style. The automatic recognition and the bonus to stance checks are not played.",
+    "source": "MA 77"
+  },
+  {
+    "kind": "advantage",
+    "name": "Passing Attack",
+    "status": "none",
+    "note": "Not simulated: moving on after a charge is not played.",
+    "source": "MA 78"
+  },
+  {
+    "kind": "advantage",
+    "name": "Preferred Stance",
+    "status": "partial",
+    "note": "The favoured stance has its worst attack penalty halved, or else its best bonus raised by half (at least 1). The player's choice each round is fixed by that rule.",
+    "source": "MA 77"
+  },
+  {
+    "kind": "advantage",
+    "name": "Shattering Blow",
+    "status": "none",
+    "note": "Not simulated: damage against objects with a chosen attack is not played for the style's attacks.",
+    "source": "MA 78"
+  },
+  {
+    "kind": "advantage",
+    "name": "Soft Defense",
+    "status": "none",
+    "note": "Not simulated: a defended hit reduced to half damage in return for a readied action needs a reaction in the middle of an attack.",
+    "source": "MA 78"
+  },
+  {
+    "kind": "advantage",
+    "name": "(Style) Initiate",
+    "status": "partial",
+    "note": "+2 to the skills the style lists (apart from its Close Combat), where the fight rolls them: Deception for a feint, Acrobatics, Intimidation, Insight, Athletics.",
+    "source": "MA 78"
+  },
+  {
+    "kind": "advantage",
+    "name": "(Style) Student",
+    "status": "full",
+    "note": "+2 attack with the style's basic attack and maneuvers.",
+    "source": "MA 79"
+  },
+  {
+    "kind": "advantage",
+    "name": "(Style) Master",
+    "status": "partial",
+    "note": "One free re-roll of a failed Assume Stance check per style mastered, each fight (the book says each session). Other style checks have the hero point machinery only.",
+    "source": "MA 78"
+  },
+  {
+    "kind": "advantage",
+    "name": "(Style) Stances",
+    "status": "full",
+    "note": "A fighter without it has Neutral only; with it the style's stances are offered to the AI and Assume Stance is rolled.",
+    "source": "MA 79"
+  },
+  {
+    "kind": "advantage",
+    "name": "Stylistic Teamwork",
+    "status": "none",
+    "note": "Not simulated: a bonus to an ally's aid; aid is not a style action.",
+    "source": "MA 79"
+  },
+  {
+    "kind": "advantage",
+    "name": "Up In Your Face",
+    "status": "none",
+    "note": "Not simulated: sharing a foe's square is not something the grid movement does.",
+    "source": "MA 80"
+  },
+  {
+    "kind": "advantage",
+    "name": "Warrior's Trance",
+    "status": "none",
+    "note": "Not simulated: the extra-effort benefits from an Awareness check are not played.",
+    "source": "MA 80"
+  },
+  {
+    "kind": "advantage",
+    "name": "Weapon Element",
+    "status": "partial",
+    "note": "Which weapons a style uses is read from the style's own list in the data; an element bought on the sheet is not added.",
+    "source": "MA 80"
   }
 ]

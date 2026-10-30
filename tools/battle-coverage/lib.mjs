@@ -3,12 +3,12 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-export const KINDS = ['effect', 'extra', 'flaw', 'advantage', 'skill', 'action', 'maneuver', 'condition', 'rule'];
+export const KINDS = ['effect', 'extra', 'flaw', 'advantage', 'skill', 'action', 'maneuver', 'stance', 'style extra', 'style flaw', 'condition', 'rule'];
 export const STATUSES = ['full', 'partial', 'none', 'n/a'];
 // Kinds whose names are curated here rather than checked against the rules data.
-export const FREE_KINDS = ['skill', 'action', 'maneuver', 'condition', 'rule'];
+export const FREE_KINDS = ['skill', 'action', 'maneuver', 'stance', 'style extra', 'style flaw', 'condition', 'rule'];
 
-const TITLES = { effect: 'Effects', extra: 'Extras', flaw: 'Flaws', advantage: 'Advantages', skill: 'Skills', action: 'Actions', maneuver: 'Maneuvers', condition: 'Conditions', rule: 'Rules' };
+const TITLES = { effect: 'Effects', extra: 'Extras', flaw: 'Flaws', advantage: 'Advantages', skill: 'Skills', action: 'Actions', maneuver: 'Maneuvers', stance: 'Fighting style stances', 'style extra': 'Fighting style extras', 'style flaw': 'Fighting style flaws', condition: 'Conditions', rule: 'Rules' };
 const COVERAGE_FILE = new URL('./coverage.json', import.meta.url);
 const GENERATED_FILE = new URL('../../src/generated/battle-coverage.js', import.meta.url);
 

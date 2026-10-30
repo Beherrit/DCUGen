@@ -13,13 +13,16 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | effect | 63 | 7 | 48 | 1 | 7 | 98% |
 | extra | 50 | 19 | 20 | 3 | 8 | 93% |
 | flaw | 41 | 11 | 23 | 1 | 6 | 97% |
-| advantage | 75 | 30 | 22 | 0 | 23 | 100% |
+| advantage | 207 | 41 | 31 | 88 | 47 | 45% |
 | skill | 16 | 8 | 0 | 2 | 6 | 80% |
 | action | 20 | 10 | 10 | 0 | 0 | 100% |
-| maneuver | 12 | 7 | 4 | 1 | 0 | 92% |
+| maneuver | 18 | 10 | 6 | 2 | 0 | 89% |
+| stance | 33 | 21 | 8 | 3 | 1 | 91% |
+| style extra | 11 | 5 | 1 | 5 | 0 | 55% |
+| style flaw | 11 | 5 | 2 | 2 | 2 | 78% |
 | condition | 30 | 18 | 11 | 0 | 1 | 100% |
 | rule | 39 | 19 | 17 | 1 | 2 | 97% |
-| all | 346 | 129 | 155 | 9 | 53 | 97% |
+| all | 539 | 174 | 177 | 108 | 80 | 76% |
 
 ## Effects
 
@@ -269,6 +272,138 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Taunt | full | Lets the fighter demoralize with Deception instead of Intimidation; targets resist with Deception, Insight or Will. | DCA 78 |
 | Tracking | n/a | Out of combat skill use. | DCA 79 |
 | Well-informed | n/a | Social only. | DCA 79 |
+| Acrobatic Defense | n/a | moving acrobatically at half speed is not played | MA 52 |
+| Action Surge | none | Not simulated: a Stamina check after extra effort is not played. | MA 52 |
+| Active Disarm | none | Not simulated: disarming with Parry is not played. | MA 52 |
+| Added Critical | none | Not simulated: the extra effect on a critical hit is not played. | MA 52 |
+| Aggressive Driving | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 52 |
+| Aggressive Escape | none | Not simulated: forcing a grabber to let go with an attack is not played. | MA 55 |
+| Ambush | none | Not simulated: the critical range against unaware targets is not played. | MA 55 |
+| Armed Grab | none | Not simulated: grabbing with occupied hands is not played. | MA 56 |
+| Attack Specialist | none | Not simulated: a bonus for fighting with only a chosen attack is not played. | MA 57 |
+| Bail Out | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 57 |
+| Burn Rubber | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 58 |
+| Cheap Shot | none | Not simulated: a feint turned into a damage bonus is not played; feints only make the foe vulnerable. | MA 58 |
+| Close-Quarters Battle | none | Not simulated: a ranged bonus against adjacent foes is not played. | MA 58 |
+| Combo Element | none | Not simulated: combo points are not simulated. | MA 59 |
+| Countering Expert | none | Not simulated: a counter bonus for a descriptor is not read from the sheet. | MA 59 |
+| Crushing Hold | full | Crushing a held foe is a free action, and the fighter goes on to its other action. | MA 58 |
+| Cunning Fighter | none | Not simulated: a feint with the attack bonus is not played. | MA 59 |
+| Damaging Escape | full | After slipping a grab, a free unarmed attack on the grabber. | MA 58 |
+| Dancing Combat | none | Not simulated: feinting with Expertise: Dancing is not played. | MA 59 |
+| Daredevil | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 60 |
+| Dauntless | none | Not simulated: a penalty to the Defend action against a chosen attack is not played. | MA 60 |
+| Dedicated Defense | none | Not simulated: shifting active defense toward one attacker is not played. | MA 60 |
+| Defensive Driving | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 60 |
+| Defensive Strike | none | Not simulated: a bonus after a foe misses is not played. | MA 60 |
+| Defensive Throw | partial | A close attack that misses by 2 or more degrees is answered with a free trip. The rule that a failed throw can only be countered on 3 or more degrees is not played. | MA 58 |
+| Demolition Derby | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 60 |
+| Devastating Hold | none | Not simulated: a doubled critical range when crushing is not played. | MA 61 |
+| Dirty Attack | none | Not simulated: Dexterity added to damage against prone foes is not played. | MA 61 |
+| Dirty Fighting | none | Not simulated: damage bonuses against foes in cover are not played. | MA 61 |
+| Distracting Attack | none | Not simulated: trading damage to aid an ally is not played. | MA 61 |
+| Diverting Feint | none | Not simulated: special attacks after two feints are not played. | MA 61 |
+| Driving Instinct | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 61 |
+| Duck and Cover | none | Not simulated: a stronger effect of cover is not read from the sheet. | MA 61 |
+| Empowered Critical | none | Not simulated: the extra effect on a critical hit is not played. | MA 61 |
+| Entangling Feint | none | Not simulated: a feinted foe tangling itself is not played. | MA 62 |
+| Escapist | none | Not simulated: releasing a grab on escape is not played. | MA 62 |
+| Favored Conditions | none | Not simulated: a bonus under a chosen circumstance is not tested. | MA 62 |
+| Finesse Attack | full | The named Strength-based attack takes its damage from Dexterity when that is higher, within the power level limit. | MA 61 |
+| Finish Them | none | Not simulated: a finishing attack one step faster is not played. | MA 62 |
+| First Strike | none | Not simulated: a damage bonus against surprised foes is not played. | MA 62 |
+| Flippant Disarm | none | Not simulated: where a disarmed weapon lands is not played. | MA 62 |
+| Follow-Up Strike | full | A melee critical hit earns a free extra attack on the same foe. | MA 62 |
+| Grab Breaker | none | Not simulated: opposing a grab with an attack is not played; escapes use Athletics or Sleight of Hand. | MA 63 |
+| Grabbing Parry | none | Not simulated: starting a grab after a defended attack is not played. | MA 63 |
+| Guard Weapon | none | Not simulated: an off-hand weapon's Parry is not played. | MA 63 |
+| Gymkhana | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 64 |
+| Healing Touch | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 64 |
+| Healing Trance | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 64 |
+| Improved Assessment | none | Not simulated: assessing more than one foe at a time is not played. | MA 64 |
+| Improved Charge | none | Not simulated: a damage bonus for the distance charged is not played. | MA 65 |
+| Improved Concealment | none | Not simulated: a stronger effect of concealment is not read from the sheet. | MA 65 |
+| Improved Covering Attack | none | Not simulated: covering attacks are not played. | MA 65 |
+| Improved Disabling | none | Not simulated: disabling critical hits are an optional rule that is not played. | MA 65 |
+| Improved Entangle Weapon | none | Not simulated: entangling weapons is not played. | MA 65 |
+| Improved Escape | none | Not simulated: escaping a grab as a free action is not played. | MA 65 |
+| Improved Exchange | none | Not simulated: a higher trade-off limit is not read from the sheet. | MA 65 |
+| Improved Joint Lock | none | Not simulated: the joint-lock grab option is not simulated. | MA 66 |
+| Improved Ranged Disarm | none | Not simulated: ranged disarms are not played. | MA 66 |
+| Improved Readiness | none | Not simulated: readying without a stated trigger is not played. | MA 66 |
+| Improved Reversal | none | Not simulated: a bonus on the Reversal grab is not played. | MA 66 |
+| Improved Tricking | none | Not simulated: tricking as a move action is not played. | MA 66 |
+| Inviting Defense | none | Not simulated: trading initiative for defense; initiative is rolled once. | MA 66 |
+| Iron Liver | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 66 |
+| Joint Lock | none | Not simulated: the joint-lock grab option is not simulated. | MA 66 |
+| Just a Scratch | none | Not simulated: shedding a damage condition with a hero point is not played. | MA 66 |
+| Knockout | none | Not simulated: the Fortitude check to leave a harmed foe unconscious is not played. | MA 67 |
+| Lie in Wait | none | Not simulated: a planned ambush's full actions are not played. | MA 67 |
+| Light Sleeper | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 67 |
+| Mobile Defense | none | Not simulated: running Athletics checks are not rolled. | MA 67 |
+| Mobile Offense | none | Not simulated: running Athletics checks are not rolled. | MA 67 |
+| Monkey Climber | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 68 |
+| Multi-Entangle | none | Not simulated: entangling weapons is not played. | MA 68 |
+| Multiattack Mastery | none | Not simulated: extra benefits of a Multiattack are not played. | MA 68 |
+| Neck Breaker | none | Not simulated: lethal finishing attacks on a bound foe are not played. | MA 68 |
+| Not So Helpless | none | Not simulated: a Fortitude check against a finishing attack is not played. | MA 68 |
+| Off-Putting Feint | none | Not simulated: a feint's extra penalty is not played. | MA 68 |
+| Parkour | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 68 |
+| Pummel | none | Not simulated: a knockback-only damage bonus; the optional knockback rule does not use it. | MA 68 |
+| Quick Strike | none | Not simulated: trading damage for initiative; initiative is rolled once at the start. | MA 68 |
+| Quick Throw | full | After a successful grab, a free throw (a trip) of the foe. | MA 65 |
+| Red Lining | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 69 |
+| Reversal | full | After slipping a grab, a free grab on the grabber. | MA 65 |
+| Steadfast | none | Not simulated: less knockback distance is not read from the sheet. | MA 70 |
+| Stuntman | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 70 |
+| Superior Disabling | none | Not simulated: disabling critical hits are an optional rule that is not played. | MA 70 |
+| Superior Entangle Weapon | none | Not simulated: entangling weapons is not played. | MA 70 |
+| Sweeping Strike | partial | A successful unarmed attack is followed by a free trip attempt. Splitting the Damage modifier into a trip bonus is not played. | MA 66 |
+| Take the Hit | none | Not simulated: forgoing a defense for a free attack needs a reaction in the middle of an attack. | MA 71 |
+| Unbalancing Strike | none | Not simulated: dividing the foe's Dodge is not played. | MA 71 |
+| Vehicrobatics | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 71 |
+| Vehicular Shield | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 71 |
+| Acrobatic Fighter | none | Not simulated: an Acrobatics check against the attack roll for a damage or defense bonus is not played. | MA 72 |
+| Aggressive Counter | none | Not simulated: the vulnerable foe after a successful counter is not played. | MA 74 |
+| Anticipation | none | Not simulated: an opposed Insight check each time a foe is engaged is not played. | MA 74 |
+| Attack Mastery | none | Not simulated: raising a bonus of Attack Specialist, which is not simulated either. | MA 74 |
+| Bob and Weave | partial | A DC 10 Fighting Style check as a move action for +1 active defense a degree, lost when the stance changes. It is not lost by another Fighting Style check or by being denied the bonus. | MA 74 |
+| Bullet Time | none | Not simulated: extra move actions from extra effort are not played. | MA 74 |
+| Counterstrike | partial | In a round the fighter has not attacked and after its turn, a free melee attack at a cumulative -2 on each foe who landed a melee blow, up to its ranks. The AI never holds an attack back to use it, so it fires for a fighter that spent its turn moving, recovering or defending. | MA 74 |
+| Deceptive Attack | none | Not simulated: a feint at -4 that adds Presence to the follow-up is not played. | MA 75 |
+| Deceptive Stance | full | +2 a rank to the stance DC when assumed; -4 a rank to foes' Identify and Disrupt checks against the fighter. Read Opponent is not played. | MA 75 |
+| Defensive Feint | none | Not simulated: feinting with Parry or Dodge is not played. | MA 75 |
+| Evasive Retreat | none | Not simulated: moving after an attack misses is not played. | MA 75 |
+| Flowing Form | full | Stance DCs 5 lower, and every change is a free action. | MA 76 |
+| Follow-Up Hard | none | Not simulated: a free attack on a foe knocked back is not played. | MA 75 |
+| Grappling Knee | none | Not simulated: keeping a hold with a knee is not played. | MA 75 |
+| Hard Defense | none | Not simulated: a Defend action with Toughness changes damage after the attack roll; the engine fixes a defense before the roll. | MA 75 |
+| Hard Grab | none | Not simulated: a free grab on an attacker is not played. | MA 75 |
+| Hard Throw | none | Not simulated: a free throw after a close trip is not played. | MA 76 |
+| Iaijutsu | none | Not simulated: a style check in place of initiative on the first draw; initiative is rolled once. | MA 76 |
+| Improved Prone Fighting | n/a | a damage bonus while prone; fighters are not played fighting from the ground on purpose | MA 76 |
+| Improvised Weapon Element | none | Not simulated: anything as a style weapon is not played. | MA 76 |
+| Kata | full | +2 Parry and Dodge in a round the fighter used the style's attack from a stance of the style other than Neutral, within the power level limit, until its next turn. | MA 76 |
+| Kata Lore | none | A +4 style skill bonus while the Kata is on; the skill checks are not rolled. | MA 76 |
+| Know Your Enemy | none | +2 initiative against an opposing style; initiative is rolled once at the start. | MA 77 |
+| Living Weapon | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 77 |
+| Martial Balance | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 77 |
+| Martial Defense | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 77 |
+| Mobile Trance | n/a | Not a fight rule: a skill, vehicle, chase or rest benefit. | MA 77 |
+| Offensive Defense | none | Not simulated: a readied attack standing in for the defense needs a reaction in the middle of an attack. | MA 77 |
+| Opposing Style | partial | +2 to attack against a foe who practices the named style. The automatic recognition and the bonus to stance checks are not played. | MA 77 |
+| Passing Attack | none | Not simulated: moving on after a charge is not played. | MA 78 |
+| Preferred Stance | partial | The favoured stance has its worst attack penalty halved, or else its best bonus raised by half (at least 1). The player's choice each round is fixed by that rule. | MA 77 |
+| Shattering Blow | none | Not simulated: damage against objects with a chosen attack is not played for the style's attacks. | MA 78 |
+| Soft Defense | none | Not simulated: a defended hit reduced to half damage in return for a readied action needs a reaction in the middle of an attack. | MA 78 |
+| (Style) Initiate | partial | +2 to the skills the style lists (apart from its Close Combat), where the fight rolls them: Deception for a feint, Acrobatics, Intimidation, Insight, Athletics. | MA 78 |
+| (Style) Student | full | +2 attack with the style's basic attack and maneuvers. | MA 79 |
+| (Style) Master | partial | One free re-roll of a failed Assume Stance check per style mastered, each fight (the book says each session). Other style checks have the hero point machinery only. | MA 78 |
+| (Style) Stances | full | A fighter without it has Neutral only; with it the style's stances are offered to the AI and Assume Stance is rolled. | MA 79 |
+| Stylistic Teamwork | none | Not simulated: a bonus to an ally's aid; aid is not a style action. | MA 79 |
+| Up In Your Face | none | Not simulated: sharing a foe's square is not something the grid movement does. | MA 80 |
+| Warrior's Trance | none | Not simulated: the extra-effort benefits from an Awareness check are not played. | MA 80 |
+| Weapon Element | partial | Which weapons a style uses is read from the style's own list in the data; an element bought on the sheet is not added. | MA 80 |
 
 ## Skills
 
@@ -332,6 +467,82 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Trick | none | Tricks with Deception are not simulated. |  |
 | Demoralize | full | A standard action: Intimidation (or Deception with Taunt) against the target's Insight or Will check; impaired until the end of the demoralizer's next round, disabled on four or more degrees. Enemy minions in earshot are demoralized by one check. The AI uses it with a skill 5 or more above the target's resistance and a weak attack, against a crowd of three or more minions, or on a team's orders (Intimidate and Break). Fearless fighters are immune; the range is 60 ft. |  |
 | Aid | full | A standard action: an attack check against DC 10; the ally gets +2 (or +5 on four or more degrees) on attacks against a foe, or to defense against it, until the end of the ally's next turn. The AI aids when its own attack is poor and an ally engaged with the foe has a better one, or the ally is staggered; Aid the Champion does it by tactic. Bonuses do not stack. |  |
+| MA basic maneuvers (Strength-based Damage) | full | Each basic maneuver the fighter bought is an attack: Damage of Strength (or the weapon, for a weapon style) plus the table modifier, the table attack modifier, critical range and the change to Parry and Dodge until the next turn (Haymaker, Jab, Snap Kick and the rest). Penetrating and Multiattack in a maneuver's build are played; Push Over, Exposed and Added/Empowered Critical beyond the table are not. | MA 137-143 |
+| MA Sweep | full | Affliction 6 resisted by Dodge: vulnerable, then prone (Limited Degree). | MA 142 |
+| MA Body Slam, Throw, Scissor Grapple, Escape, Flying Attack | none | Grab-based builds, the Flying Attack modifier and the Escape bonus are not played; Body Slam and Throw are left out of the attack list rather than made into a plain hit. | MA 137-143 |
+| MA advanced attack maneuvers (Damage, Affliction, Weaken) | partial | Chi Strike, Cobra Strike, Flaming Fists, Stunning Attack, Stone Touch, Sleeper's Touch and Withering Blow are attacks at the rank bought. Awesome Strike, Breaking Blow, Dim Mak, Blinding Strike, Riposte, the Kiai cones and the other builds (about 100 advanced maneuvers) are not. | MA 144-153 |
+| MA advanced maneuvers that improve the style's attacks | partial | Focused Strike (Improved Critical), Nerve Strike (Penetrating) and Flurry (Multiattack) improve the style's close attacks by the rank bought. The other "Enhanced" builds (Iron Shirt, Nimble Dodge, Whirlwind Block and so on) are not played. | MA 144-153 |
+| MA the Student bonus on maneuvers | full | +2 to attack with the style's basic attack and every maneuver, named in the roll as "Student: +2". | MA 79 |
+
+## Fighting style stances
+
+| Name | Status | Note | Source |
+| --- | --- | --- | --- |
+| Avoiding | full | Dodge counts in place of Parry against close attacks, -4 to attack. Attack penalties are on every rolled attack; the log names "Avoiding stance: -4". Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 129 |
+| Blocking | full | +2 Parry and -2 to every attack check, both within the power level limit. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 129 |
+| Bobbing | full | +2 Dodge, -2 to every attack check. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 129 |
+| Crane | full | +2 attack and Parry; Dodge is set to 0 (so is a Dodge resistance check); the fighter is Immobile and cannot walk, which the AI weighs (it does not take Crane when it must walk to its foe). The stance's own Immobile does not break it. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 129 |
+| Disarming | full | +4 to disarm checks (disarm odds and rolls both count it), -2 to every other attack check. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 129 |
+| Disruptive | full | +8 to a Disrupt Stance contest, -4 to the fighter's other Fighting Style checks (assume, identify, Bob and Weave). Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 129 |
+| Drunken | full | +2 Dodge, -1 attack, Deception +8 for a feint, Acrobatics -8, Intimidation -4. Defensive Roll 2 is counted as +2 Toughness, the way the sheet counts the advantage. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 129 |
+| Extended | full | +5 ft reach on close attacks (Reach 1), -1 Parry and Dodge. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 129 |
+| Finishing | partial | -4 to attack, defenses and effect ranks is played. The doubled close damage (only when the target went helpless while the fighter was already in the stance) is not, and the AI never takes the stance. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 129 |
+| Firing | full | +1 attack and damage with ranged attacks, -1 with every other attack. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 129 |
+| Fluid | partial | With no Extra Attacks, +2 to the attack check (the player's "any combat check", declared each round); -2 Deception for feints is in the skill, -1 Parry. The Combo Element rank for Extra Attacks is not played (combo points are not simulated). Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 129 |
+| Grappler | full | +2 to the grab check, -1 Parry and Dodge. A hold has only the initiating check in the engine. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 129 |
+| Grounded | partial | Vulnerable (defenses halved), -1 attack, one rank less knockback, +2 against a trip. Resisting a push, rush or body throw is not a check the engine makes. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 129 |
+| Guarded | full | The Defensive Attack trade goes up to 5 (10 with the advantage); the AI takes the most when hurt or outnumbered. The matching attack penalty is the Defensive Attack's own. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 130 |
+| High | partial | +2 Dodge as an active defense only (a Dodge resistance check gets nothing); -2 against knockback (more ranks thrown) and a trip. Body throws are not a check the engine makes. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 130 |
+| Kicker | full | +2 attack and damage with foot attacks, -2 with the rest. Which attacks are feet and hands is read from their names, as the sheet does. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 130 |
+| Low | partial | Hindered (half speed) and +4 against a trip. Body throws are not a check the engine makes. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 130 |
+| Misleading | full | Deception +4 for a feint, -1 initiative and attack. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 130 |
+| (Named) | none | The DC is 10 + a rank of the named power and the bonus is declared for that power; a character does not record which power a named stance is for, so the Battle Room never offers it. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 130 |
+| Neutral | full | Everyone starts in Neutral. Assuming it needs no check; every broken or failed stance ends in it. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 130 |
+| Offensive | full | The All-Out Attack trade goes up to 5 (10 with the advantage), the same amount off Dodge and Parry (the All-Out Attack's own penalty). The AI takes the most against a hurt foe when healthy. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 130 |
+| Power | full | +2 damage with close attacks, -1 Parry, -1 initiative. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 130 |
+| Prone | partial | -1 initiative is played. Crawling at two thirds speed is not, and the book's list of broken stances includes prone, so a fighter knocked down loses it; the AI never takes it. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 130 |
+| Pugilist | full | +2 attack and damage with hand attacks, -2 with the rest. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 130 |
+| Reactive | full | +2 to Dodge resistance checks only (an area attack's Dodge), -1 attack. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 130 |
+| Showman | full | Deception +4 (the feint), -1 attack, -1 Dodge and Parry. The Expertise ranks are not rolled in a fight. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 130 |
+| Throwing | partial | house rule: the +2 Strength for throwing is +2 damage rank on throw attacks (the maneuver named Throw and the like), since the engine has no distance to throw. -2 initiative. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 131 |
+| Wary | full | +4 initiative, -1 attack. Fighters begin in Neutral and initiative is rolled once, so the bonus only counts for a fighter who joins late. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 131 |
+| Weapon | partial | The weapon is the fighter's best close weapon; the bonus is taken as attack (+1) and damage (+2), the penalty -1 and -2 on every other attack. The per-round choice of Parry or initiative instead is not offered. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 131 |
+| Firing (Vehicle) | n/a | For vehicle mounted weapons; the battle engine does not fight from vehicles. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 227 |
+| Rubber Band | none | Enhanced Elongation 1 and the Distracting flaw are not applied. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 245 |
+| TK | full | Move Object +1 rank on the attack it makes (thrown objects), -2 Parry and Dodge. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 248 |
+| Pack | none | The +1 attack with an ally opposite the target and the -1 defense from other directions are conditional on facing, which the grid does not track. Assumed by the AI when it beats the stance held after the chance of the check and the action it costs (stance-plan.js). | MA 249 |
+
+## Fighting style extras
+
+| Name | Status | Note | Source |
+| --- | --- | --- | --- |
+| Aggressive | full | +1 to attacks with the style's maneuvers and basic attack; the fighter takes no Defensive Attack and no Defend action. | MA 131 |
+| Attack Focus | partial | +2 to attack and initiative with the named attack types while in a stance of the style other than Neutral. The negated extra critical-miss range is not played (no Uncertain on style attacks), and "Select One Combat Maneuver" choices are not known so they are skipped. | MA 131 |
+| Defensive | full | +1 Parry and Dodge while in a stance of the style other than Neutral; no All-Out Attack and no charge. | MA 131 |
+| Divine | none | A Feature per rank whose effect the Gamemaster decides; nothing to simulate. | MA 132 |
+| Esoteric | full | -2 (one rank) or -5 (more) to an opponent's Identify and Disrupt Stance checks against the style. Read Opponent and Analyze Style are not played. | MA 132 |
+| Fixed | full | +2 to the weaker of Parry and Dodge in a round the fighter attacked and moved no more than 5 ft, until its next turn (a second rank covers both). | MA 132 |
+| Geomantic | none | A check to cut an impact attack's rank while grounded is not played. | MA 132 |
+| Metahuman | none | +2 to power checks; fights roll no power checks. | MA 132 |
+| Mobile | full | +2 to the weaker of Parry and Dodge after a round of moving more than 15 ft, until its next turn (a second rank covers both). | MA 133 |
+| Mystic | none | Replacing the Strength-based Damage with a magic spell's rank (two checks and a Will resistance) is not played. | MA 133 |
+| Spiritual | none | Will in place of Fortitude (with harsher results) is not played. | MA 133 |
+
+## Fighting style flaws
+
+| Name | Status | Note | Source |
+| --- | --- | --- | --- |
+| Clumsy Attacks | full | -2 to attack and initiative with the named attack types while in a stance of the style other than Neutral. | MA 134 |
+| Demanding | n/a | A lack of practice between fights; a single battle has no weeks of practice. | MA 134 |
+| Ill-Favored Conditions | none | Free text ("while sober, -3 attack") that the engine cannot test. | MA 135 |
+| Impractical | partial | A natural 1 on a style attack costs the rank on the fighter's attacks and defenses until its next turn. The widened natural-miss range some styles list is not played. | MA 135 |
+| Listless | full | -4 initiative a rank while the fighter practices the style (initiative is rolled once, at the start). | MA 135 |
+| No Nonsense | n/a | A penalty to Martial Showman checks; not rolled in a fight. | MA 136 |
+| Predictable | full | +2 a rank to a foe's Identify and Disrupt Stance checks against the style. | MA 136 |
+| Slow | full | One speed rank off a rank while the fighter practices the style. | MA 136 |
+| Style Weakness | none | No style in the data has it. | MA 136 |
+| Weak Defense | partial | -1 a rank to Parry or Dodge (as the style names) while in a stance of the style other than Neutral; the book says "while using the style", which the engine reads as holding one of its stances. | MA 136 |
+| Weapon Dependent | full | The style's maneuvers are made only with a weapon (and the unarmed attack gets no Student bonus). | MA 136 |
 
 ## Conditions
 
