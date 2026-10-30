@@ -12,13 +12,13 @@ export const FORMATS = ['single', 'double', 'round-robin'];
 export const FORMAT_LABELS = { single: 'Single elimination', double: 'Double elimination', 'round-robin': 'Round robin' };
 export const MAX_ENTRANTS = 64;
 export const SCENERY = ['none', 'street', 'park'];
-export const DEFAULT_SETTINGS = { enclosed: false, knockback: true, shootThrough: true, scenery: 'none', ambush: 'none' };
+export const DEFAULT_SETTINGS = { enclosed: false, knockback: true, shootThrough: true, lethal: false, scenery: 'none', ambush: 'none' };
 
 /** The match settings with every field present: scenery is none, street or park; ambush is none or alternate. */
 export function normalizeSettings(s = {}) {
   const m = { ...DEFAULT_SETTINGS, ...s };
   return {
-    enclosed: !!m.enclosed, knockback: !!m.knockback, shootThrough: !!m.shootThrough,
+    enclosed: !!m.enclosed, knockback: !!m.knockback, shootThrough: !!m.shootThrough, lethal: !!m.lethal,
     scenery: SCENERY.includes(m.scenery) ? m.scenery : 'none', ambush: m.ambush === 'alternate' ? 'alternate' : 'none',
   };
 }

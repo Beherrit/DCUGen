@@ -45,6 +45,8 @@ export function setupPanel(cx) {
       h('button', { type: 'button', class: 'btn', id: 'cw-terrain', onClick: () => { war.cells = generateTerrain(`${war.seed}::${(ui.terrainRolls = (ui.terrainRolls || 0) + 1)}`, war.size); save(); render(); } }, 'New terrain')),
     locked ? null : h('p', { class: 'hint', style: { margin: 0 } }, ui.placing ? 'Click a free cell to move the selected team there.' : 'Click a free cell to change its terrain: street, building, park.'),
     locked ? null : addTeamPanel(cx),
+    h('label', { class: 'bt-copies', title: 'Fighters taken out by Damage are dying and may die; the dead do not come back when their team rests. Off, nobody dies' },
+      h('input', { type: 'checkbox', id: 'cw-lethal', checked: !!war.lethal, disabled: locked, onChange: (e) => { war.lethal = e.target.checked; save(); render(); } }), ' Lethal damage (dying and death)'),
     h('div', { class: 'label' }, 'Seed'),
     h('div', { class: 'add-row' }, seedIn,
       h('button', { type: 'button', class: 'btn', id: 'cw-newseed', disabled: locked, onClick: () => { withSeed(war, randomSeed()); save(); render(); } }, 'New seed')),

@@ -2,22 +2,26 @@
 
 import { log } from './util.js';
 import { rollCheck, critNote } from './checks.js';
+import { healableDamage } from './damage-result.js';
 
 /** Healing (Hero's Handbook p103): a DC 10 check, one damage condition healed per degree, worst first. A failed check cannot be tried again on the same subject in the fight. */
 export function heal(b, c, patient, rng) {
   const dc = 10;
-  const r = rollCheck(rng, c.healing.rank, dc);
+  const r = rollCheck(rng, c.healing.rank + 2 * (c.healing.proficient || 0), dc); // Proficient (MA 93): +2 on the power check per rank
   const { roll, total } = r;
   const deg = r.success ? r.degrees : 0;
   if (!r.success) patient.healFailed = true;
   const fixed = [];
+  let blocked = false;
   for (let i = 0; i < deg; i++) {
-    if (patient.staggered) { patient.staggered = false; fixed.push('staggered'); }
-    else if (patient.dazed) { patient.dazed = false; fixed.push('dazed'); }
-    else if (patient.bruises > 0) { patient.bruises--; fixed.push('a bruise'); }
-    else break;
+    const left = healableDamage(patient); // Incurable damage stays (damage-result.js)
+    if (left.staggered) { patient.staggered = false; fixed.push('staggered'); }
+    else if (left.dazed) { patient.dazed = false; fixed.push('dazed'); }
+    else if (left.bruises > 0) { patient.bruises--; fixed.push('a bruise'); }
+    else { blocked = patient.bruises > 0 || patient.staggered; break; }
   }
   c.stats.healed += fixed.length;
+  if (blocked) log(b, { kind: 'note', actor: c.id, target: patient.id, text: `${patient.name}'s remaining damage is Incurable: ${c.healing.name} cannot take it off.` });
   log(b, { kind: fixed.length ? 'heal' : 'miss', actor: c.id, target: patient.id, text: `${c.name} uses ${c.healing.name} on ${patient === c ? `${c.name === 'it' ? 'itself' : 'themself'}` : patient.name}: d20 ${roll} + ${c.healing.rank} = ${total} vs DC 10${critNote(r, { degrees: true })} — ${fixed.length ? `removes ${fixed.join(', ')}` : 'no effect'}.`, dice: [{ label: 'Healing', roll, mod: c.healing.rank, total, dc }], important: fixed.length > 1 });
 }
 
@@ -54,14 +58,16 @@ export function recoverAction(b, c) {
 }
 
 export function regenerate(b, c) {
-  if (!c.regenRank || (!c.bruises && !c.dazed && !c.staggered)) return;
+  const left = healableDamage(c); // Incurable damage stays (damage-result.js)
+  if (!c.regenRank || (!left.bruises && !left.dazed && !left.staggered)) return;
   c.regen += c.regenRank;
   const fixed = [];
   while (c.regen >= 10) {
     c.regen -= 10;
-    if (c.staggered) { c.staggered = false; fixed.push('staggered'); }
-    else if (c.dazed) { c.dazed = false; fixed.push('dazed'); }
-    else if (c.bruises) { c.bruises--; fixed.push('a bruise'); }
+    const now = healableDamage(c);
+    if (now.staggered) { c.staggered = false; fixed.push('staggered'); }
+    else if (now.dazed) { c.dazed = false; fixed.push('dazed'); }
+    else if (now.bruises) { c.bruises--; fixed.push('a bruise'); }
     else break;
   }
   if (fixed.length) log(b, { kind: 'heal', actor: c.id, text: `${c.name} regenerates: no longer ${fixed.join(', ')}.` });

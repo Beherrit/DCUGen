@@ -77,5 +77,6 @@ export function sceneryPanel(cx) {
       h('button', { type: 'button', class: 'btn sm', id: 'bt-cover-building', onClick: roll(BUILDING, 'building') }, 'Random building')),
     (battle.cover || []).map((p) => pieceRow(cx, p)),
     optionBox(cx, 'knockback', 'Knockback (community rule)', 'A hard hit throws the target back: the damage rank minus its mass rank sets how far, and walls and cover hurt'),
-    optionBox(cx, 'shootThrough', 'Shoot through cover (optional rule)', 'A shot at someone behind total cover must breach the cover first, and loses half its Toughness in rank'));
+    optionBox(cx, 'shootThrough', 'Shoot through cover (optional rule)', 'A shot at someone behind total cover must breach the cover first, and loses half its Toughness in rank'),
+    optionBox(cx, 'lethal', 'Lethal damage (optional rule)', 'Attackers go for the kill: a fighter taken out by Damage is dying and rolls a Fortitude check each round (DC 15, two degrees of success steady it, three degrees of failure in all kill it), further damage kills, minions taken out are killed, and Diehard, Treatment and Healing save lives. Off, a fighter who would be dying is only incapacitated'));
 }

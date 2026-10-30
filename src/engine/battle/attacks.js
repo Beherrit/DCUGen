@@ -18,6 +18,10 @@ import { spotName } from './grid.js';
 import { traceAttack } from './trace.js';
 import { critImmune, slipsHold } from './immunity.js';
 import { flawKey } from './flaws.js';
+import { noteHoming } from './extra-after.js';
+import { bounce, surprisePrep, recoverCatch } from './extra-bounce.js';
+import { splitPlan, splitSecond } from './extra-split.js';
+import { concealmentPenalty } from './odds.js';
 import { flawGate } from './flaw-gate.js';
 import { afterUse } from './flaw-effects.js';
 import { grabBasedUse } from './flaw-grab.js';
@@ -28,7 +32,7 @@ export function resolveAttack(b, R, c, atk, t, rng, opts = {}) {
   traceAttack(b, c, atk, t);
   noteAttack(b, c, t);
   c.stats.attacks++;
-  if (!atk.flaws) {
+  if (!atk.flaws || opts.homing != null) { // a Homing retry is a free action: no flaw gate
     if (attackBody(b, R, c, atk, t, rng, opts, 0)) c.flaw.done[flawKey(atk)] = b.round; // a Chained effect hangs on this one having worked
     return;
   }
@@ -38,7 +42,7 @@ export function resolveAttack(b, R, c, atk, t, rng, opts = {}) {
 }
 
 /** The attack itself, after the flaws have let it go. Returns whether it landed (a hit that was not resisted), for Side Effect and Chained. */
-function attackBody(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive = 0, effort = null, charge = false, slam = null, aimed = 0, team = 0 }, checkShift) {
+function attackBody(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive = 0, effort = null, charge = false, slam = null, aimed = 0, team = 0, homing = null }, checkShift) {
   const m = shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charge, slam, team });
   const { notes } = m;
   m.rankShift += checkShift;
@@ -54,10 +58,40 @@ function attackBody(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive = 0
     if (through === null) return false;
     rankShift = through;
   }
+  if (!atk.ex) return rollAndLand(b, R, c, atk, t, rng, m, { rankShift, notes, aimed, homing });
+  return extraAttack(b, R, c, atk, t, rng, m, { rankShift, notes, aimed, homing });
+}
+
+/** An attack with extras that change how it is made: a Ricochet bounce, a surprise attack, a Split between two foes, a Recoverable one coming back. */
+function extraAttack(b, R, c, atk, t, rng, m, { rankShift, notes, aimed, homing }) {
+  const bounced = bounce(b, c, atk, t, rng); // Ricochet banks off cover (extra-bounce.js)
+  if (!bounced.ok) return false;
+  surprisePrep(b, c, atk, t); // Indirect, or Ricochet round cover: a surprise attack
+  const plan = splitPlan(b, c, atk, t);
+  if (plan) notes.push(`Split: rank ${plan.first} on ${t.name}, rank ${plan.others[0].rank} on ${plan.others[0].t.name}`);
+  const base = rankShift;
+  const roll = {};
+  let landed = rollAndLand(b, R, c, atk, t, rng, m, { rankShift: plan ? base + plan.first - atk.rank : base, notes, aimed, homing }, roll);
+  for (const o of plan?.others || []) {
+    const land = (t2, r2, shift) => { const res = landHit(b, R, c, atk, t2, rng, r2, { rankShift: base + shift, notes: [], slam: false }); return !res || !!res.landed; };
+    landed = splitSecond(b, c, atk, o, roll.r, m, aimed, land) || landed;
+  }
+  if (recoverCatch(b, c, atk, rng, roll.r?.total ?? 0, bounced.used) >= 2) { // two degrees of failure to catch it: it is made against the user
+    log(b, { kind: 'attack', actor: c.id, target: c.id, text: `${atk.name} comes back and strikes ${c.name}!`, important: true });
+    applyEffect(b, R, c, atk, c, rng, { auto: true, crit: false, rankShift: base, later: true });
+  }
+  return landed;
+}
+
+/** The attack check and what follows: a miss (and Homing), or the hit landing. `out` collects the roll for a Split or a catch. */
+function rollAndLand(b, R, c, atk, t, rng, m, { rankShift, notes, aimed, homing }, out = {}) {
   const r = rollToHit(b, c, atk, t, rng, m, aimed, notes);
+  out.r = r;
   if (!r.hit) {
     log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${r.text} — ${r.roll === 1 ? 'natural 1, a clean miss' : 'miss'}${notes.length ? ` (${notes.join('; ')})` : ''}.`, dice: r.dice });
     afterDeflect(b, R, c, atk, t, rng, r, rankShift);
+    const conceal = concealmentPenalty(c, t, atk);
+    noteHoming(b, c, atk, t, homing, conceal > 0 && r.total + conceal >= r.dcUsed); // Homing: try again next turn (extra-after.js)
     return false;
   }
   const result = landHit(b, R, c, atk, t, rng, r, { rankShift, notes, slam: m.slam });

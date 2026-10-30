@@ -10,6 +10,7 @@ import { recoveryFx } from './fortune.js';
 import { expireFeats } from './feat.js';
 import { concentrationBroken } from './flaw-turn.js';
 import { snareFeedback } from './flaw-effects.js';
+import { runSecondary, spreadContagion } from './extra-run.js';
 
 /**
  * A snare-type affliction ("overcome by Damage") is broken with Damage, including Strength, or slipped with Sleight
@@ -22,8 +23,9 @@ function overcomeBonus(b, c, lead) {
   return Math.max(damage, c.skills?.['Sleight of Hand'] ?? 0);
 }
 
-export function endOfTurn(b, c, rng) {
+export function endOfTurn(b, c, rng, R = null) {
   c.interposed = false;
+  if (!c.out) { runSecondary(b, R, c, rng); spreadContagion(b, R, c, rng); } // Secondary Effect and Contagious (extra-run.js)
   c.noMove = false; c.squaresMoved = 0; // this turn's movement is over
   // A feint lasts until the end of the feinter's next round (DCA 64).
   for (const t of b.combatants) if (t.feinted?.by === c.id && t.feinted.round < b.round) t.feinted = null;

@@ -22,7 +22,7 @@ function uniqueName(seen, name) {
 export function buildGame(t, R, A, B, seed, ambush = null) {
   const b = createBattle({ seed, name: `${A.name} vs ${B.name}` });
   const s = t.settings;
-  Object.assign(b.options, { knockback: !!s.knockback, shootThrough: !!s.shootThrough, enclosed: !!s.enclosed, ambush });
+  Object.assign(b.options, { knockback: !!s.knockback, shootThrough: !!s.shootThrough, enclosed: !!s.enclosed, lethal: !!s.lethal, ambush });
   b.options.teamTactics = Object.fromEntries([['A', A], ['B', B]].filter(([, e]) => e.tactic && e.tactic !== 'none' && TEAM_TACTICS[e.tactic]).map(([letter, e]) => [letter, e.tactic]));
   const seen = new Map();
   for (const [letter, e] of [['A', A], ['B', B]]) {

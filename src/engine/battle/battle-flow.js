@@ -12,6 +12,7 @@ import { endOfTurn } from './end-of-turn.js';
 import { expireInspire } from './fortune-turn.js';
 import { announceTactics, withdrawOver } from './tactics.js';
 import { resetScenery } from './cover.js';
+import { dyingTurn, deathsPending, deadNames } from './dying.js';
 
 export function createBattle({ seed = 'battle', name = 'Battle' } = {}) {
   const b = { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, enclosed: false, ambush: null, teamTactics: {}, vip: {}, withdrawRounds: {}, maxRounds: MAX_ROUNDS, shootThrough: false, knockback: false, scale: DEFAULT_SCALE }, cover: [], lastEvent: 0 };
@@ -104,11 +105,12 @@ export function joinBattle(b, R, c) {
 function checkOver(b) {
   if (withdrawOver(b)) return true;
   const teams = new Set(alive(b).map((c) => c.team));
-  if (teams.size <= 1) {
+  if (teams.size <= 1 && !deathsPending(b)) { // a lethal fight goes on until the dying have died or steadied
     b.status = 'over';
     b.winner = teams.size ? [...teams][0] : null;
     const names = alive(b).map((c) => c.name).join(', ');
     log(b, { kind: 'end', text: b.winner ? `The fight is over. Team ${b.winner} wins${names ? `: ${names} ${alive(b).length === 1 ? 'is' : 'are'} still standing` : ''}.` : 'Everyone is down. Nobody wins.', important: true });
+    if (deadNames(b).length) log(b, { kind: 'end', text: `Dead: ${deadNames(b).join(', ')}.`, important: true });
     return true;
   }
   if (b.round > b.options.maxRounds) {
@@ -134,6 +136,7 @@ export function step(b, R) {
   }
   const c = byId(b, b.order[b.turn]);
   b.turn += 1;
+  if (c?.out && c.dying) { dyingTurn(b, c, rngFor(b)); checkOver(b); return b.log.length - before; } // a dying fighter only rolls its check (dying.js)
   if (!c || c.out || c.fled) return b.log.length - before;
   // Joined an earlier team attack this round: that was this fighter's turn (they delayed into it).
   if (c.teamedRound === b.round) return b.log.length - before;
@@ -143,7 +146,7 @@ export function step(b, R) {
   else {
     try { takeTurn(b, R, c, rng); } catch (e) { log(b, { kind: 'note', actor: c.id, text: `${c.name} hesitates (${e.message}).` }); }
   }
-  endOfTurn(b, c, rng);
+  endOfTurn(b, c, rng, R);
   checkOver(b);
   return b.log.length - before;
 }

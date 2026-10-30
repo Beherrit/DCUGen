@@ -28,7 +28,7 @@ export function planFight(war, attacker, defender) {
   return {
     n, turn: war.turn, attacker: attacker.id, defender: defender.id, cell: cellName(defender.x, defender.y), terrain,
     ambush: ambushFor(war, defender), seed: `${war.seed}::fight::${n}`,
-    tactics: { A: attacker.tactic, B: defender.tactic }, a: list(attacker), b: list(defender),
+    tactics: { A: attacker.tactic, B: defender.tactic }, lethal: !!war.lethal, a: list(attacker), b: list(defender),
   };
 }
 
@@ -38,6 +38,7 @@ export function buildFightBattle(war, R, rec) {
   const b = createBattle({ seed: rec.seed, name: `${A.name} vs ${B.name}` });
   b.options.knockback = true; // the Battle Room's defaults
   b.options.shootThrough = true;
+  b.options.lethal = !!rec.lethal; // the war's Lethal damage setting when the fight was planned
   b.options.enclosed = rec.terrain === 'building';
   b.options.ambush = rec.ambush || null;
   b.options.teamTactics = Object.fromEntries(Object.entries(rec.tactics || {}).filter(([, id]) => id && id !== 'none' && TEAM_TACTICS[id]));
@@ -69,6 +70,7 @@ export function applyOutcome(war, b, rec) {
       if (!c) continue;
       const s = team.state[i];
       s.out = c.out || (c.fled && !c.escaped);
+      if (c.dead) s.dead = true; // a death in a lethal war lasts (resting does not bring them back)
       s.bruises = c.bruises; s.fatigue = c.fatigue;
       team.kos += c.stats.kos;
     }

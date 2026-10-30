@@ -1,17 +1,23 @@
-// What a hit does: the resistance check and its result (damage, Weaken, Affliction, Nullify).
+// What a hit does: the resistance check and its result (damage, Weaken, Affliction, Nullify, an Attack-extra effect).
 
-import { sign, log } from './util.js';
-import { critNote, opposedCheck, opposedNote } from './checks.js';
+import { log } from './util.js';
+import { opposedCheck, opposedNote } from './checks.js';
 import { resistOf, weakenedAttack } from './conditions.js';
-import { dcOf, halfImmune } from './odds.js';
+import { halfImmune, dcOf } from './odds.js';
 import { immunityHit } from './immunity.js';
 import { retune } from './variable-descriptor.js';
 import { insubLoss, formWords, entraps } from './insubstantial.js';
 import { releaseHolds } from './maneuvers.js';
-import { resistFx } from './fortune.js';
 import { weakenTraits, traitLabel } from './weaken-traits.js';
 import { flawRankLoss } from './flaw-odds.js';
-import { senseStops, resistRoll } from './flaw-resist.js';
+import { senseStops } from './flaw-resist.js';
+import { staminaGone } from './dying.js';
+import { damageResult } from './damage-result.js';
+import { resistStep } from './resist-step.js';
+import { scheduleAfter } from './extra-after.js';
+import { attackFormResult } from './attack-form.js';
+
+export { damageResult };
 
 // Reflect on an Immunity (DCA 102) sends the attack it stops back; reflect.js sets the hook (it needs this file, so it cannot be imported here).
 let reflectHook = null;
@@ -25,8 +31,17 @@ function retuned(b, c, atk, t) {
   return v.atk;
 }
 
-/** Resolve the effect of a hit (or an automatic effect). Returns { landed, ko, degrees, rank } (the rank for Damage). */
-export function applyEffect(b, R, c, atk, t, rng, { crit = false, rankShift = 0, multi = 0 } = {}) {
+/**
+ * Resolve the effect of a hit (or an automatic effect). Returns { landed, ko, degrees, rank } (the rank for Damage).
+ * `later` marks an effect that comes back by itself (Secondary Effect, a held effect, Homing): it is not scheduled again.
+ */
+export function applyEffect(b, R, c, atk, t, rng, opts = {}) {
+  const res = applyBase(b, R, c, atk, t, rng, opts);
+  if (atk.ex && !opts.later) scheduleAfter(b, c, atk, t, res, opts); // Secondary Effect, Increased Duration, Contagious (extra-after.js)
+  return res;
+}
+
+function applyBase(b, R, c, atk, t, rng, { crit = false, rankShift = 0, multi = 0 } = {}) {
   atk = retuned(b, c, atk, t);
   const lost = insubLoss(c, atk);
   let rank = Math.max(0, atk.rank + rankShift - weakenedAttack(c, atk).rank - lost - flawRankLoss(b, c, atk, t));
@@ -48,25 +63,25 @@ export function applyEffect(b, R, c, atk, t, rng, { crit = false, rankShift = 0,
   const resistName = atk.resistance;
   const resist = resistOf(t, resistName);
   if (resist === null) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name} has no ${resistName} to affect: no effect.` }); return { landed: false }; }
-  const dc = dcOf(atk, rank) + (crit ? 5 : 0) + multi;
-  if (senseStops(b, c, atk, t, rng, dc, rank)) return { landed: false }; // Sense-Dependent: the target could not perceive it, or looked away
-  const { r, name, bonus } = resistRoll(rng, t, atk, resistName, resist, dc, resistFx(b, t, atk, c)); // Resistible adds a second check
-  const { roll, total, fails } = r;
-  const dice = [{ label: `${name} check`, roll, mod: bonus, total, dc }];
-  const base = `${t.name} resists with ${name}: d20 ${roll} ${sign(bonus)} = ${total} vs DC ${dc}${crit ? ' (+5, critical)' : ''}${critNote(r)}`;
-  if (!fails) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${base} — ${r.crit && r.base.success ? 'natural 20, ' : ''}resisted.`, dice }); return { landed: false, degrees: 0, rank }; }
+  if (senseStops(b, c, atk, t, rng, dcOf(atk, rank) + (crit ? 5 : 0) + multi, rank)) return { landed: false }; // Sense-Dependent: the target could not perceive it, or looked away
+  const step = resistStep(b, c, atk, t, rng, { rank, crit, multi, resistName, resist });
+  if (step.result) return step.result;
+  const { fails, base, dice } = step;
+  rank = step.rank;
   c.stats.degrees += fails;
   t.stats.taken += fails;
-  if (atk.effect === 'Damage' || atk.effect === 'Mental Blast') return { ...damageResult(b, c, t, fails, base, dice), rank };
+  if (atk.effect === 'Damage' || atk.effect === 'Mental Blast') return { ...damageResult(b, c, t, fails, base, dice, atk, rng), rank };
+  if (atk.ex?.attackForm) return attackFormResult(b, c, atk, t, fails, base, dice, rank);
   if (atk.effect === 'Weaken') {
     const trait = atk.weakens || 'Toughness';
-    const lost = Math.min(fails, rank);
-    const now = weakenTraits(t, trait, lost);
+    const lostRanks = Math.min(fails, rank);
+    const now = weakenTraits(t, trait, lostRanks);
     if (atk.flaws?.fastReturn) t.fastReturn = Math.max(t.fastReturn || 0, atk.flaws.fastReturn); // Fast Return (MA 96): more comes back each round
-    log(b, { kind: 'condition', actor: c.id, target: t.id, text: `${base} — ${fails} degree${fails > 1 ? 's' : ''}: ${t.name} loses ${lost} rank${lost > 1 ? 's' : ''} of ${traitLabel(trait)} (now −${now}).`, dice });
+    log(b, { kind: 'condition', actor: c.id, target: t.id, text: `${base} — ${fails} degree${fails > 1 ? 's' : ''}: ${t.name} loses ${lostRanks} rank${lostRanks > 1 ? 's' : ''} of ${traitLabel(trait)} (now −${now}).`, dice });
+    staminaGone(b, t, rng); // Debilitated Stamina means dying (dying.js)
     return { landed: true, degrees: fails };
   }
-  return afflictionResult(b, c, atk, t, fails, dc, base, dice, rng);
+  return afflictionResult(b, c, atk, t, fails, base, dice);
 }
 
 /** Fades and Dulled take ranks off this use: say so in the log. False when a Completely Dulled effect is down to nothing (MA 96) and does nothing. */
@@ -80,34 +95,14 @@ function flawedRank(b, c, atk, t, rank) {
   return false;
 }
 
-export function damageResult(b, c, t, fails, base, dice) {
-  const minionDown = t.minion && b.options.minionRule;
-  let text; let ko = false;
-  if (minionDown) { t.out = true; t.outReason = 'minion'; ko = true; text = `${base} — failed: ${t.name} goes down (minions drop on any failed check).`; }
-  else {
-    const deg = Math.min(4, fails);
-    t.bruises++;
-    if (deg === 1) text = `${base} — 1 degree: bruised (−${t.bruises} to Toughness).`;
-    else if (deg === 2) { t.dazed = true; text = `${base} — 2 degrees: dazed and bruised (−${t.bruises}).`; }
-    else if (deg === 3) {
-      if (t.staggered) { t.out = true; ko = true; text = `${base} — 3 degrees, and already staggered: ${t.name} is INCAPACITATED.`; }
-      else { t.staggered = true; text = `${base} — 3 degrees: staggered and bruised (−${t.bruises}).`; }
-    } else { t.out = true; ko = true; text = `${base} — ${fails} degrees: ${t.name} is INCAPACITATED.`; }
-    // Hero point recover from a knockout? (not in the rules: incapacitated needs recovery time)
-  }
-  if (ko) { t.outReason = t.outReason || 'ko'; c.stats.kos++; releaseHolds(b, t); }
-  log(b, { kind: ko ? 'ko' : 'condition', actor: c.id, target: t.id, text, dice, important: ko || fails >= 3 });
-  return { landed: true, ko, degrees: fails };
-}
-
-function afflictionResult(b, c, atk, t, fails, dc, base, dice, rng) {
+function afflictionResult(b, c, atk, t, fails, base, dice) {
   const tiers = atk.tiers || [['Dazed'], ['Stunned'], ['Incapacitated']];
   const maxDeg = atk.maxDegree || tiers.length;
   let degree = Math.min(maxDeg, fails);
   const existing = t.conditions.find((x) => x.source === atk.id && x.from === c.id);
   if (atk.cumulative && existing) degree = Math.min(maxDeg, existing.degree + fails);
   else if (existing) degree = Math.max(existing.degree, degree);
-  const names = tiers[degree - 1];
+  const names = atk.ex?.sleep ? tiers[degree - 1].map((n) => (n === 'Incapacitated' ? 'Asleep' : n)) : tiers[degree - 1]; // Sleep (DCA 132): asleep rather than incapacitated
   if (atk.extraCondition && degree === 1 && tiers[1]) names.push(...tiers[1].filter((n) => !names.includes(n)));
   const cond = { name: names[0], names, degree, from: c.id, source: atk.id, label: atk.name, dc: dcOf(atk, atk.rank), resist: atk.resistance, cumulative: !!atk.cumulative, progressive: !!atk.progressive, tiers, maxDegree: maxDeg, ...(entraps(atk) ? { entrap: true } : {}), ...(atk.flaws?.concentration ? { concentrate: true } : {}) };
   t.conditions = t.conditions.filter((x) => x !== existing);
@@ -123,22 +118,27 @@ function afflictionResult(b, c, atk, t, fails, dc, base, dice, rng) {
   }
   const extra = names.includes('Prone') ? ' and knocked prone' : '';
   log(b, { kind: ko ? 'ko' : 'condition', actor: c.id, target: t.id, text: `${base} — ${fails} degree${fails > 1 ? 's' : ''}${atk.cumulative && existing ? ' (cumulative)' : ''}: ${t.name} is ${names.map((n) => n.toUpperCase()).join(' and ')}${extra}${ko ? ' and out of the fight' : ''}.`, dice, important: ko || degree >= 2 });
-  void rng;
   return { landed: true, ko, degrees: fails };
 }
 
 function nullify(b, c, atk, t, rng, rank) {
   const prot = t.sustainedProtection;
-  if (!prot) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name} has no sustained defense for ${atk.name} to counter: no effect.` }); return { landed: false }; }
+  if (!prot) {
+    const why = t.innateProtection ? `${t.name}'s protection is Innate and cannot be nullified` : `${t.name} has no sustained defense for ${atk.name} to counter`;
+    log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${why}: no effect.` });
+    return { landed: false };
+  }
   const bonus = Math.max(prot, resistOf(t, 'Will') ?? 0);
-  const duel = opposedCheck(rng, { bonus: rank }, { bonus });
+  const mine = rank + 2 * (atk.ex?.proficient || 0); // Proficient (MA 93): +2 on the effect's power checks per rank
+  const duel = opposedCheck(rng, { bonus: mine }, { bonus });
   const [r1, r2] = duel.rolls;
-  const mine = duel.totals.a; const theirs = duel.totals.b;
+  const total1 = duel.totals.a; const total2 = duel.totals.b;
+  const prof = atk.ex?.proficient ? ` (includes +${2 * atk.ex.proficient}, Proficient)` : '';
   if (duel.winner === 'a') {
     t.nullified = prot;
-    log(b, { kind: 'condition', actor: c.id, target: t.id, text: `${c.name}'s ${atk.name} (d20 ${r1} + ${rank} = ${mine}) overpowers ${t.name}'s defenses (d20 ${r2} + ${bonus} = ${theirs})${opposedNote(duel)}: ${prot} ranks of protection wink out until ${t.name} restores them.`, important: true });
+    log(b, { kind: 'condition', actor: c.id, target: t.id, text: `${c.name}'s ${atk.name} (d20 ${r1} + ${mine} = ${total1}${prof}) overpowers ${t.name}'s defenses (d20 ${r2} + ${bonus} = ${total2})${opposedNote(duel)}: ${prot} ranks of protection wink out until ${t.name} restores them.`, important: true });
     return { landed: true, degrees: 1 };
   }
-  log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${c.name}'s ${atk.name} (d20 ${r1} + ${rank} = ${mine}) fails to crack ${t.name}'s defenses (${theirs})${opposedNote(duel)}.` });
+  log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${c.name}'s ${atk.name} (d20 ${r1} + ${mine} = ${total1}${prof}) fails to crack ${t.name}'s defenses (${total2})${opposedNote(duel)}.` });
   return { landed: false };
 }

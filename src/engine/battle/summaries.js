@@ -8,6 +8,9 @@ import { syncGrid, zoneToSquare } from './grid.js';
 
 export function statusLine(c) {
   if (c.fled) return c.escaped ? 'Got away' : 'Fled';
+  if (c.dead) return 'Dead';
+  if (c.dying) return 'Dying';
+  if (c.out && c.stable) return 'Stable';
   if (c.out) return c.outReason === 'minion' ? 'Down' : c.outReason === 'asleep' ? 'Asleep' : c.outReason === 'exhausted' ? 'Collapsed' : 'Incapacitated';
   const bits = [];
   if (c.bruises) bits.push(`${c.bruises} bruise${c.bruises > 1 ? 's' : ''}`);

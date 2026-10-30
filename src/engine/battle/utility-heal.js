@@ -15,6 +15,7 @@ import { healBias } from './tactics.js';
 import { roleWeight } from './roles.js';
 import { holderOf, lend } from './grants.js';
 import { heal } from './support.js';
+import { healableDamage } from './damage-result.js';
 
 /** What taking away one damage condition is worth: a bruise and staggered alike (measured), a daze much less because it wears off by itself. */
 const WORTH = { staggered: CONDITION_WORTH, dazed: DAZED_WORTH, bruise: CONDITION_WORTH };
@@ -24,9 +25,10 @@ const HORIZON = 3; // rounds a lent Regeneration is counted over
 /** The damage conditions of a fighter, worst first, each as what removing it is worth. */
 export function damageOf(a) {
   const out = [];
-  if (a.staggered) out.push(WORTH.staggered);
-  if (a.dazed) out.push(WORTH.dazed);
-  for (let i = 0; i < a.bruises; i++) out.push(WORTH.bruise);
+  const left = healableDamage(a); // Incurable damage cannot be healed (damage-result.js)
+  if (left.staggered) out.push(WORTH.staggered);
+  if (left.dazed) out.push(WORTH.dazed);
+  for (let i = 0; i < left.bruises; i++) out.push(WORTH.bruise);
   return out;
 }
 
@@ -51,13 +53,13 @@ const healable = (a, retry) => !a.out && (!a.healFailed || retry) && !a.d.defens
 const sumWorth = (conds, chance) => conds.reduce((s, w, k) => s + w * chance(k), 0);
 
 /** Can c reach the patient to touch it this turn (a ranged Healing needs no reach)? */
-function canTouch(b, c, patient, mode, ranged) {
+export function canTouch(b, c, patient, mode, ranged) {
   if (ranged || patient === c || inReach(b, c, patient)) return true;
   return mode === 'full' && squares(c, patient) - reachSquares(b, c) <= squaresInMove(b, c);
 }
 
 /** Walk up to the patient when the touch needs it. */
-function approach(b, c, patient) {
+export function approach(b, c, patient) {
   if (patient === c || inReach(b, c, patient) || canAct(c) !== 'full') return;
   moveTo(b, c, stepToward(b, c, patient, squaresInMove(b, c), reachSquares(b, c)), `to reach ${patient.name}`);
 }

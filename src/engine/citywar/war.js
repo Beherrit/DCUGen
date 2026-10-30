@@ -6,7 +6,7 @@ import { generateTerrain, terrainAt } from './terrain.js';
 const clone = (x) => JSON.parse(JSON.stringify(x));
 
 export function createCityWar({ seed = 'city', size = 12 } = {}) {
-  return { seed: String(seed), size, cells: generateTerrain(seed, size), teams: [], log: [], turn: 0, status: 'setup', winner: null, battles: [], nextTeam: 1 };
+  return { seed: String(seed), size, cells: generateTerrain(seed, size), teams: [], log: [], turn: 0, status: 'setup', winner: null, battles: [], nextTeam: 1, lethal: false };
 }
 
 /** Teams still in the war. */
@@ -20,6 +20,7 @@ export const fighters = (team) => team.members.map((m, i) => ({ m, i, s: team.st
 export const hurtCount = (team) => team.state.filter((s) => s.out || s.bruises > 0 || s.fatigue > 0).length;
 export const outCount = (team) => team.state.filter((s) => s.out).length;
 const freshState = () => ({ out: false, bruises: 0, fatigue: 0 });
+export const deadCount = (team) => team.state.filter((s) => s.dead).length;
 
 /** A character kept by value, without the bulky extras (life story, portrait) a fight never needs. */
 export function slimCharacter(ch) {

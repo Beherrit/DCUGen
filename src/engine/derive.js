@@ -129,6 +129,9 @@ export function isAttackPower(p, R) {
   return eff.attack === true || eff.type === 'Attack';
 }
 
+/** A power with the Attack extra (DCA 128) is an attack on others whatever its effect, unless it is a defense. */
+export const isAttackForm = (p) => hasExtra(p, 'Attack') && p.role !== 'defense';
+
 const THROWN_WORDS = /\bthrown\b|\bthrowing\b/i;
 
 /**
@@ -164,7 +167,7 @@ export function attacks(ch, R, abil = abilityTotals(ch, R)) {
   });
 
   for (const { power: p, alternateOf } of allPowers(ch)) {
-    if (!isAttackPower(p, R)) continue;
+    if (!isAttackPower(p, R) && !isAttackForm(p)) continue;
     const eff = R.effect(p.effect);
     const kind = attackKind(p, R);
     const spec = p.attackSkill || p.name;

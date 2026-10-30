@@ -9,6 +9,7 @@ import { immunityMatch } from './immunity.js';
 import { retune } from './variable-descriptor.js';
 import { insubLoss } from './insubstantial.js';
 import { flawFactor, flawRankLoss, betterOf } from './flaw-odds.js';
+import { extraFactor } from './extra-odds.js';
 
 export function hitOdds(bonus, defense) {
   let hit = 0;
@@ -28,7 +29,7 @@ export function resistOdds(resist, dc) {
 }
 
 export function dcOf(atk, rank = atk.rank) {
-  const base = (atk.effect === 'Damage' || atk.effect === 'Mental Blast' ? 15 : 10) + rank;
+  const base = (atk.effect === 'Damage' || atk.effect === 'Mental Blast' ? 15 : 10) + rank + (atk.resistance === 'Toughness' ? 0 : atk.ex?.potent || 0); // Potent (MA 93): +1 DC per rank, without more rank; not on a Toughness check
   // Diluted (MA 96): each rank takes 1 off the resistance DC, which never goes below 10
   return atk.flaws?.diluted ? Math.max(10, base - atk.flaws.diluted) : base;
 }
@@ -94,7 +95,7 @@ export function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, a
   // An affliction that is already on the target (and doesn't stack) is worth much less than something new
   if (atk.tiers && !atk.cumulative && target.conditions.some((x) => x.source === atk.id && x.from === c.id)) ev *= 0.4;
   if (!atk.roll && !atk.area) { const r = c.stats; void r; }
-  return ev * factor;
+  return ev * factor * extraFactor(atk, hit);
 }
 
 /** The odds of each degree of failure against the attack's DC, counting a Resistible flaw's second check (the better of the two stands). */

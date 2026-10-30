@@ -1,6 +1,7 @@
 // Conditions: Afflictions parsed into condition names, what is in force on a fighter, and the checks they change.
 
 import { hasExtra } from './util.js';
+import { debilitatedConditions } from './debilitated.js';
 
 // Composite conditions break down into the basic ones (DCA 19-21).
 const COMPOSITE = {
@@ -59,11 +60,14 @@ export function activeConditions(c) {
   if (c.grabbedBy) add(c.conditions.some((x) => x.name === 'Bound') ? 'Bound' : 'Restrained');
   if (c.holding) holdingConditions(c, add);
   for (const x of c.conditions) add(x.name);
+  for (const n of debilitatedConditions(c)) add(n); // an ability below -5 (debilitated.js)
   return set;
 }
 
 export function conditionLabels(c) {
   if (c.fled) return [c.escaped ? 'Got away' : 'Fled'];
+  if (c.dead) return ['Dead'];
+  if (c.dying) return ['Dying'];
   if (c.out) return [c.outReason === 'minion' ? 'Down' : c.outReason === 'asleep' ? 'Asleep' : c.outReason === 'paralyzed' ? 'Paralyzed' : 'Incapacitated'];
   const basic = activeConditions(c);
   const named = new Set();
@@ -72,6 +76,7 @@ export function conditionLabels(c) {
   if (c.fatigue === 1) named.add('Fatigued'); if (c.fatigue >= 2) named.add('Exhausted');
   if (c.grabbedBy) named.add(basic.has('Bound') ? 'Bound' : 'Restrained');
   for (const x of c.conditions) named.add(x.name);
+  if (debilitatedConditions(c).length) named.add('Debilitated');
   for (const n of ['Prone', 'Vulnerable', 'Defenseless', 'Hindered', 'Immobile', 'Impaired', 'Disabled', 'Stunned', 'Unaware']) if (basic.has(n) && ![...named].some((m) => (COMPOSITE[m] || []).includes(n))) named.add(n);
   return [...named];
 }

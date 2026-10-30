@@ -67,8 +67,16 @@ export function pieceBetween(b, from, t) {
 }
 /** Cover does nothing against a close attack; a ranged one is covered by a piece next to the target on the line from the attacker. */
 export function shieldFor(b, c, atk, t) {
-  if (!piecesOf(b).length || atk.range === 'close') return null;
+  if (!piecesOf(b).length || atk.range === 'close' || ignoresCover(b, atk)) return null;
   return pieceBetween(b, c, t);
+}
+/** Is there a solid surface to bounce an effect off: the walls of an enclosed room, or a piece of scenery still standing? */
+export const bouncesOffSomething = (b) => !!b.options?.enclosed || piecesOf(b).some((p) => p.state !== 'destroyed');
+/** Indirect (DCA 130) comes from another point, so cover between the user and the target does not count; Ricochet (DCA 132) goes around it off a surface. */
+export const ignoresCover = (b, atk) => !!(atk.ex?.indirect || (atk.ex?.ricochet && bouncesOffSomething(b)));
+/** The piece that covers the target from the attacker on a straight line (the one a Ricochet or Indirect attack goes around), or null. */
+export function coverBetween(b, c, atk, t) {
+  return piecesOf(b).length && atk.range !== 'close' ? pieceBetween(b, c, t) : null;
 }
 /** Precise Attack ignores cover or concealment penalties for close or ranged attacks, one pairing per rank (DCA 77). */
 export function preciseIgnores(c, atk, what) {

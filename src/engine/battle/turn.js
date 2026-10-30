@@ -22,6 +22,8 @@ import { refreshGrants } from './grants.js';
 import { insubTurn } from './insub-turn.js';
 import { flawsStartTurn, concentrationLost, uncontrolledFire, concentrate } from './flaw-turn.js';
 import { heldAttack } from './flaw-grab.js';
+import { steadyIdle } from './stabilize.js';
+import { runHoming, freeHeld, concentrateHeld } from './extra-run.js';
 
 const isHurt = (c) => c.staggered || c.bruises >= 2;
 
@@ -39,10 +41,12 @@ export function takeTurn(b, R, c, rng) {
   if (mode === 'none' && cannotAct(b, c, conds)) return;
   if (mode === 'controlled') { controlledTurn(b, R, c, rng); return; }
   const enemies = enemiesOf(b, c);
-  if (!enemies.length) return;
+  if (!enemies.length) { steadyIdle(b, R, c, mode, rng); return; } // nobody left to fight: a medic tends a dying teammate (stabilize.js)
   if (losesNerve(b, c, enemies, rng)) return;
   insubTurn(b, c, enemies); // a free action: change form, and flow out of a hold
   uncontrolledFire(b, R, c, enemies, rng); // an Uncontrolled power may go off by itself
+  runHoming(b, R, c, rng); // a Homing attack that missed tries again, as a free action (extra-run.js)
+  freeHeld(b, R, c, rng); // effects held with a free action or none (Increased Duration)
   if (escapeGrab(b, c, rng)) return;
   recoverFromDaze(b, c, mode, rng);
   recoverFatigue(b, c);
@@ -53,6 +57,7 @@ export function takeTurn(b, R, c, rng) {
   if (crushHeld(b, R, c, rng)) return;
   const choice = planStanding(c, () => choosePlan(b, R, c, enemies, rng, mode)); // a prone fighter plans as if it were on its feet
   if (utilityTurn(b, R, c, choice, enemies, mode, rng)) return; // a heal or a buff that beats the best attack
+  if (concentrateHeld(b, R, c, choice, rng)) return; // an Increased Duration (concentration) effect kept up with the standard action
   if (!choice) { log(b, { kind: 'skip', actor: c.id, text: `${c.name} finds nothing worth doing and holds position.` }); return; }
   if (withdrawHolds(b, c, choice)) return;
   if (fortuneTurn(b, c, choice, enemies)) return;

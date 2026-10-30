@@ -2,7 +2,7 @@
 // finds the nearest other team and fights it (next door), rests (hurt) or marches one cell toward it.
 
 import { makeRng } from '../rng.js';
-import { standingTeams, teamById, fighters, hurtCount, outCount, terrainOf } from './war.js';
+import { standingTeams, teamById, fighters, hurtCount, outCount, deadCount, terrainOf } from './war.js';
 import { cellName } from './terrain.js';
 import { planFight, playFight, applyOutcome, fightHeadline, fightResultLine, fightLabel } from './fight.js';
 
@@ -33,8 +33,8 @@ function startRest(war, team, why) {
 
 /** A resting team gets up: knocked-out members come back and bruises and fatigue clear. */
 function recover(war, team) {
-  const back = outCount(team);
-  team.state = team.members.map(() => ({ out: false, bruises: 0, fatigue: 0 }));
+  const back = outCount(team) - deadCount(team);
+  team.state = team.members.map((_, i) => (team.state[i]?.dead ? { out: true, dead: true, bruises: 0, fatigue: 0 } : { out: false, bruises: 0, fatigue: 0 })); // the dead stay dead
   team.resting = false;
   note(war, 'recover', `Turn ${war.turn}: ${team.name} recover${back ? ` and bring back ${back} ${back === 1 ? 'fighter' : 'fighters'}` : ''} at ${cellName(team.x, team.y)}.`);
 }

@@ -18,6 +18,8 @@ import { immunitiesOf, fearImmune } from './immunity.js';
 import { variableSize } from './variable-descriptor.js';
 import { restoreForm } from './insubstantial.js';
 import { flawsOf, shapeAttack, freshFlawState } from './flaws.js';
+import { extrasOf } from './extras.js';
+import { formAttack } from './attack-form.js';
 
 export function effectWeights(attack) {
   if (attack.effect === 'Damage') return [0, 1, 2.3, 3.8, 6.5];
@@ -86,9 +88,11 @@ function buildAttack(c, a0, R, where = new Map()) {
     ...reachOf(a, p, R),
     fear: /terror|fear|despair|cowering/i.test(p?.detail || ''),
     flaws: flawsOf(p),     // the flaws that change a fight, read once (flaws.js)
+    ex: extrasOf(p),       // the extras that change a fight, read once (extras.js)
     power: p,
   };
   shapeAttack(atk);
+  formAttack(atk, p, eff); // the Attack extra on a personal effect (attack-form.js)
   if (['Affliction', 'Dazzle', 'Sleep', 'Snare', 'Mind Control', 'Suffocation'].includes(a.effect)) Object.assign(atk, parseAffliction(p || { effect: a.effect }, R));
   if (a.effect === 'Weaken') {
     const detail = String(p?.detail || '');
@@ -149,6 +153,7 @@ export function resetCombatant(c) {
   Object.assign(c, {
     insub: null,           // the Insubstantial form in force (insubstantial.js), set again by rebuildCombatant for an innate one
     init: 0, initRoll: 0, bruises: 0, dazed: false, staggered: false, out: false, outReason: null, fled: false,
+    dying: false, dead: false, stable: false, diehard: false, dyingFails: 0, dyingRound: null, // dying and death in a lethal fight (dying.js)
     conditions: [],        // [{ name, degree, from, source, dc, resist, cumulative, progressive, tiers, extraCondition, until }]
     weakened: {},          // trait -> ranks lost
     fatigue: 0, defMod: 0, feinted: false, grabbedBy: null, holding: null, nullified: 0, regen: 0, interposed: false,
@@ -187,17 +192,17 @@ export function rebuildCombatant(c, R, d = null) {
   c.flaw ||= freshFlawState();           // a battle saved before the flaws were simulated has none
   c.initBonus = d.initiative;
   const where = new Map(allPowers(c.ch).map((x) => [x.power, x]));
-  c.attacks = d.attacks.map((a) => buildAttack(c, a, R, where)).filter((a) => (a.rank > 0 || a.effect !== 'Damage') && !(a.item && (c.dropped || []).includes(a.item.key)));
+  c.attacks = d.attacks.map((a) => buildAttack(c, a, R, where)).filter((a) => (a.rank > 0 || a.effect !== 'Damage') && !(a.item && (c.dropped || []).includes(a.item.key)) && !(a.ex?.attackForm && !a.formOk));
   powerStats(c);
   c.immune = immunitiesOf(c.ch, d);      // [{ label, half, hits(atk), crit, interaction, fear, grab, environment }] (immunity.js)
   c.insub = restoreForm(c);              // the Insubstantial form the fighter is in, or null (insubstantial.js)
   const mv = bestMoveRank(c.ch);
   c.speed = 1 + Math.min(4, Math.floor(mv.rank / 3));
   c.flying = mv.flying;
-  c.adv = Object.fromEntries(['Power Attack', 'Accurate Attack', 'All-out Attack', 'Defensive Attack', 'Takedown', 'Interpose', 'Evasion', 'Fearless', 'Seize Initiative', 'Move-by Action', 'Fast Grab', 'Improved Grab', 'Improved Hold', 'Chokehold', 'Agile Feint', 'Uncanny Dodge', 'Improved Initiative', 'Diehard', 'Instant Up', 'Luck', 'Taunt', 'Teamwork', 'Improved Trip', 'Improved Disarm', 'Improved Smash', 'Prone Fighting', 'Improved Aim', 'Improved Defense', 'Grabbing Finesse', 'Leadership', 'Inspire', 'Set-up', 'Startle'].map((n) => [n, advantageRank(c.ch, n)]));
+  c.adv = Object.fromEntries(['Power Attack', 'Accurate Attack', 'All-out Attack', 'Defensive Attack', 'Takedown', 'Interpose', 'Evasion', 'Fearless', 'Seize Initiative', 'Move-by Action', 'Fast Grab', 'Improved Grab', 'Improved Hold', 'Chokehold', 'Agile Feint', 'Uncanny Dodge', 'Improved Initiative', 'Diehard', 'Instant Up', 'Luck', 'Taunt', 'Teamwork', 'Improved Trip', 'Improved Disarm', 'Improved Smash', 'Prone Fighting', 'Improved Aim', 'Improved Defense', 'Grabbing Finesse', 'Leadership', 'Inspire', 'Set-up', 'Startle', 'Great Endurance', 'Extraordinary Effort', 'Assessment', 'Quick Draw', 'Improvised Weapon', 'Redirect', 'Weapon Bind', 'Weapon Break', 'Fascinate'].map((n) => [n, advantageRank(c.ch, n)]));
   if (fearImmune(c)) c.adv.Fearless = Math.max(1, c.adv.Fearless || 0); // Immunity to fear is Fearless (DCA 77, 102)
   const sk = (name) => d.skills.find((s) => s.name === name)?.bonus ?? (d.abilities[R.skillAbility(name)] ?? 0);
-  c.skills = { Deception: sk('Deception'), Insight: sk('Insight'), Acrobatics: sk('Acrobatics'), Athletics: sk('Athletics'), Intimidation: sk('Intimidation'), 'Sleight of Hand': sk('Sleight of Hand') };
+  c.skills = { Deception: sk('Deception'), Insight: sk('Insight'), Acrobatics: sk('Acrobatics'), Athletics: sk('Athletics'), Intimidation: sk('Intimidation'), 'Sleight of Hand': sk('Sleight of Hand'), Treatment: d.skills.find((s) => s.name === 'Treatment')?.bonus ?? null };
   c.ultimate = ultimateKinds(c.ch);      // the checks an Ultimate Effort covers
   c.dazeSkills = dazeSkills(c.ch);       // the skills a Daze can use
   c.moveRank = mv.rank;
@@ -218,10 +223,12 @@ export function rebuildCombatant(c, R, d = null) {
 function powerStats(c) {
   const pw = allPowers(c.ch, { includeAlternates: false }).map((x) => x.power);
   c.impervious = pw.filter((p) => ['Protection', 'Force Field'].includes(p.effect) && hasExtra(p, 'Impervious')).reduce((s, p) => s + p.rank, 0);
-  c.sustainedProtection = pw.filter((p) => p.effect === 'Force Field' || (p.effect === 'Protection' && hasExtra(p, 'Sustained'))).reduce((s, p) => s + p.rank, 0);
+  const sustained = pw.filter((p) => p.effect === 'Force Field' || (p.effect === 'Protection' && hasExtra(p, 'Sustained')));
+  c.sustainedProtection = sustained.filter((p) => !hasExtra(p, 'Innate')).reduce((s, p) => s + p.rank, 0); // Innate powers cannot be nullified (DCA 130)
+  c.innateProtection = sustained.filter((p) => hasExtra(p, 'Innate')).reduce((s, p) => s + p.rank, 0);
   c.regenRank = pw.filter((p) => p.effect === 'Regeneration').reduce((s, p) => s + p.rank, 0);
   const heal = allPowers(c.ch).map((x) => x.power).find((p) => p.effect === 'Healing');
-  c.healing = heal ? { name: heal.name, rank: heal.rank, ranged: reducedRange(heal, heal.range || 'Close') !== 'Close' } : null;
+  c.healing = heal ? { name: heal.name, rank: heal.rank, ranged: reducedRange(heal, heal.range || 'Close') !== 'Close', proficient: extrasOf(heal)?.proficient || 0 } : null;
   const conceal = pw.find((p) => ['Concealment', 'Invisibility'].includes(p.effect) && (!p.detail || /visual|sight|vision/i.test(p.detail)));
   c.concealment = conceal ? ((conceal.flaws || []).some((f) => /Blending|Limited|Partial/i.test(f.name)) || conceal.rank < 2 ? 'partial' : 'total') : null;
   c.senses = pw.filter((p) => p.effect === 'Senses').map((p) => p.detail || '').join(' ');

@@ -45,7 +45,7 @@ function finishingRoutine(c, t, mod, dcUsed) {
 }
 
 /** The to-hit modifier: the attack bonus, trade-offs, conditions, range, concealment and cover. Adds notes for the last two. */
-function toHitMod(b, c, atk, t, m, aimed, notes) {
+export function toHitMod(b, c, atk, t, m, aimed, notes) {
   const dist = feet(b, c, t);
   const conceal = concealmentPenalty(c, t, atk);
   const cover = coverPenalty(b, c, t, atk);
@@ -106,7 +106,7 @@ export function rollToHit(b, c, atk, t, rng, m, aimed, notes) {
   let text = routine
     ? `${c.name} ${attackVerb(c, atk, t, rng)}: ${finishing ? 'finishing attack as a routine check' : 'routine attack against a minion'}, ${10 + mod} vs ${which} DC ${dcUsed}`
     : `${c.name} ${attackVerb(c, atk, t, rng)}: d20 ${roll} ${sign(mod)} = ${total} vs ${which} ${t.defending ? '' : 'DC '}${dcUsed}${finishing ? ' (finishing attack)' : ''}`;
-  if (feintedBy(t, c)) { text += ' (feinted: vulnerable to this attack)'; useFeint(t, c); }
+  if (feintedBy(t, c)) { text += ` (${t.feinted.why || 'feinted'}: vulnerable to this attack)`; useFeint(t, c); }
   const out = { roll, total, mod, hit, crit, dice, text, dcUsed, which, deflect };
   if (!hit && !ultimate && wantsReroll(b, c, t, roll, rng)) rerollMiss(b, c, atk, t, rng, out, routine);
   if (activeConditions(t).has('Defenseless') && out.hit && critOk(c, t, routine)) out.crit = true;

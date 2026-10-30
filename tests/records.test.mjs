@@ -41,7 +41,7 @@ test('a record of a seeded fight has the documented shape', () => {
   assert.equal(rec.label, 'Practice');
   assert.equal(rec.seed, 'rec-duel');
   assert.deepEqual(Object.keys(rec.teams).sort(), ['A', 'B']);
-  assert.deepEqual(Object.keys(rec.options).sort(), ['ambush', 'cover', 'enclosed', 'knockback', 'scale', 'shootThrough', 'squareFt', 'tactics']);
+  assert.deepEqual(Object.keys(rec.options).sort(), ['ambush', 'cover', 'enclosed', 'environment', 'knockback', 'lethal', 'scale', 'shootThrough', 'squareFt', 'tactics']);
   assert.equal(rec.options.scale, rec.options.enclosed ? 'street' : 'block');
   assert.equal(rec.result.winner, b.winner);
   assert.equal(rec.result.gotAway, false);

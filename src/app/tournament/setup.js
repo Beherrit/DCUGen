@@ -28,7 +28,7 @@ function optionFields(draft, redo) {
     labelled('Seeding', h('select', { id: 'tn-seeding', 'aria-label': 'Seeding', onChange: (e) => { draft.seeding = e.target.value; redo(); } },
       option('given', 'As listed (top is seed 1)', draft.seeding), option('random', 'Random (from the seed)', draft.seeding))),
     h('div', { class: 'label' }, 'Every match'),
-    h('div', { class: 'tn-checks' }, check('enclosed', 'Enclosed space (a walled room)', 'tn-enclosed'), check('knockback', 'Knockback', 'tn-knockback'), check('shootThrough', 'Shoot through cover', 'tn-shootthrough')),
+    h('div', { class: 'tn-checks' }, check('enclosed', 'Enclosed space (a walled room)', 'tn-enclosed'), check('knockback', 'Knockback', 'tn-knockback'), check('shootThrough', 'Shoot through cover', 'tn-shootthrough'), check('lethal', 'Lethal damage (dying and death)', 'tn-lethal')),
     labelled('Scenery', h('select', { id: 'tn-scenery', disabled: !!s.enclosed, 'aria-label': 'Scenery', onChange: (e) => { s.scenery = e.target.value; redo(); } },
       option('none', 'None', s.scenery), option('street', 'Street (cars, walls, storefronts)', s.scenery), option('park', 'Park (fences and trees)', s.scenery))),
     labelled('Ambush', h('select', { id: 'tn-ambush', 'aria-label': 'Ambush', onChange: (e) => { s.ambush = e.target.value; redo(); } },
