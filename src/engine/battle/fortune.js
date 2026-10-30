@@ -7,24 +7,16 @@
 // - Luck: the same, once per round, up to its rank in times a fight, and it is spent before a hero point.
 // - Ultimate Effort: a hero point turns one named kind of check into a roll of 20 that is not a natural 20.
 
-import { log, d20 } from './util.js';
+import { log, d20, alive } from './util.js';
+import { fortuneOn, hasPoint, luckReady, canReroll, payReroll } from './points.js';
+import { assistReady, assistReroll, forceWorse } from './luck.js';
 import { checkResult } from './checks.js';
 import { SEVERITY, resistOf } from './conditions.js';
 import { dcOf, resistOdds, hitOdds } from './odds.js';
 import { alphaNow } from './tactics-list.js';
 
-export const fortuneOn = (b) => !!b.options?.heroPoints;
-export const hasPoint = (b, c) => fortuneOn(b) && (c.heroPoints || 0) > 0;
-export const luckReady = (b, c) => fortuneOn(b) && (c.luck || 0) > 0 && c.luckRound !== b.round;
-export const canReroll = (b, c) => luckReady(b, c) || hasPoint(b, c);
+export { fortuneOn, hasPoint, luckReady, canReroll, payReroll };
 const ultimateReady = (b, c, kind) => hasPoint(b, c) && !!c.ultimate?.includes(kind);
-
-/** Pay for one Improve Roll: Luck first (once a round), else a hero point. Returns 'Luck', 'hero point', or null when neither is there. */
-export function payReroll(b, c) {
-  if (luckReady(b, c)) { c.luck--; c.luckRound = b.round; return 'Luck'; }
-  if (hasPoint(b, c)) { c.heroPoints--; return 'hero point'; }
-  return null;
-}
 
 /** The better of the first roll and a re-roll, where 1 to 10 on the re-roll count +10. Returns { roll, natural, second } (`second` is the die as thrown). */
 export function improvedRoll(rng, first, firstNatural = first === 20) {
@@ -41,12 +33,12 @@ const leftOf = (how, c) => (how === 'Luck' ? `${c.luck} Luck left` : `${c.heroPo
 function improveRoll(b, c, rng, info, label, matters) {
   // The re-roll lands between 11 and 20, so a check that needs more than 15 on the die is not worth the spend.
   if (info.dc - info.bonus > 15 || info.roll >= 20 || !matters(info)) return null;
-  const how = payReroll(b, c);
+  const how = payReroll(b, c) ?? assistReroll(b, c, label);
   if (!how) return null;
   const r = improvedRoll(rng, info.roll, info.roll === 20);
   const kept = r.roll === info.roll ? 'keeps the first' : `takes ${r.roll}`;
-  const verb = how === 'Luck' ? 'uses Luck' : 'spends a hero point';
-  log(b, { kind: 'hero', actor: c.id, text: `${c.name} ${verb} to re-roll the ${label}: d20 ${info.roll}, then ${r.second}${r.second <= 10 ? ' (+10, below 11)' : ''} — ${kept} (${leftOf(how, c)}).`, important: true });
+  const verb = how === 'Luck' ? 'uses Luck' : how === 'granted' ? 'takes the granted re-roll' : 'spends a hero point';
+  log(b, { kind: 'hero', actor: c.id, text: `${c.name} ${verb} to re-roll the ${label}: d20 ${info.roll}, then ${r.second}${r.second <= 10 ? ' (+10, below 11)' : ''} — ${kept} (${how === 'granted' ? 'granted by Luck Control' : leftOf(how, c)}).`, important: true });
   return r;
 }
 
@@ -75,12 +67,13 @@ function ultimateRoll(b, c, label, bonus, dc, matters) {
  * `kind` is the Ultimate Effort kind that covers it (if any), and `matters(info)` says whether a result (info.fails,
  * the degrees of failure) is bad enough to spend on.
  */
-export function checkFx(b, c, { label, kind = null, matters = () => true }) {
+export function checkFx(b, c, { label, kind = null, matters = () => true, curse = null }) {
   const ult = !!kind && ultimateReady(b, c, kind);
-  if (!canReroll(b, c) && !ult) return null;
+  if (!canReroll(b, c) && !ult && !curse && !assistReady(b, c)) return null;
   return {
     fixed: ult ? (bonus, dc) => ultimateRoll(b, c, label, bonus, dc, matters) : null,
     improve: (rng, info) => improveRoll(b, c, rng, info, label, matters),
+    curse,
   };
 }
 
@@ -120,11 +113,26 @@ export function ultimateAim(b, c, t, mod, dcUsed) {
 
 const ULT_RESISTS = ['Toughness', 'Will', 'Fortitude'];
 
-/** The hook for t's resistance check against a hit. */
-export function resistFx(b, t, atk) {
+/**
+ * Luck Control on a resistance check t just passed against the attacker's best attack: an enemy of t forces a re-roll at
+ * the worse of the two when a second die alone would often fail the check by enough to matter. Null when it is not worth it.
+ */
+function resistCurse(b, t, atk, attacker, from) {
+  if (!attacker || from === Infinity || !alive(b).some((x) => x.team === attacker.team && x.luckCtl)) return null;
+  const best = Math.max(...alive(b).filter((x) => x.team === attacker.team).flatMap((x) => x.attacks.map((a) => a.rank)));
+  if (atk.rank < best) return null;
+  return (rng, info) => {
+    const chance = Math.max(0, Math.min(1, (info.dc - 1 - 5 * (from - 1) - info.bonus) / 20));
+    if (!info.success || chance < 0.3) return null;
+    return forceWorse(b, t, rng, { on: attacker, label: `${atk.resistance} check`, roll: info.roll });
+  };
+}
+
+/** The hook for t's resistance check against a hit (by `attacker`, when known). */
+export function resistFx(b, t, atk, attacker = null) {
   const from = mattersFrom(atk);
   const kind = ULT_RESISTS.includes(atk.resistance) ? atk.resistance : null;
-  return checkFx(b, t, { label: `${atk.resistance} check`, kind, matters: (i) => i.fails >= from });
+  return checkFx(b, t, { label: `${atk.resistance} check`, kind, matters: (i) => i.fails >= from, curse: resistCurse(b, t, atk, attacker, from) });
 }
 
 /** The hook for v's Dodge check against an area attack: it matters when a full effect would often do real harm. */

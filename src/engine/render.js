@@ -256,7 +256,7 @@ export function offenseLines(ch, R, d = deriveAll(ch, R)) {
   for (const a of d.attacks) {
     const effectName = a.effect === 'Damage' ? 'Damage' : a.effect;
     let text;
-    if (a.roll) text = `${sign(a.bonus)} ${a.kind === 'ranged' ? 'Ranged' : 'Close'}, ${effectName} ${a.rank}`;
+    if (a.roll) text = `${sign(a.bonus)} ${a.kind === 'ranged' ? 'Ranged' : 'Close'}, ${effectName} ${a.rank}${a.thrown ? ` (incl. +${a.thrown} Throwing Mastery)` : ''}`;
     else if (a.kind === 'area') text = `Area, ${effectName} ${a.rank} (DC ${dcFor(a, R)}; Dodge DC ${10 + a.rank} for half)`;
     else text = `Perception, ${effectName} ${a.rank} (DC ${dcFor(a, R)})`;
     if (a.crit && a.crit < 20) text += `, Crit. ${a.crit}-20`;

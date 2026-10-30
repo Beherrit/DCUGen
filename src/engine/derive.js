@@ -121,6 +121,24 @@ export function isAttackPower(p, R) {
   return eff.attack === true || eff.type === 'Attack';
 }
 
+const THROWN_WORDS = /\bthrown\b|\bthrowing\b/i;
+
+/**
+ * Throwing Mastery (p79): +1 damage per rank with thrown weapons. That is equipment with "thrown" or "throwing" in its
+ * name, category or descriptors; a Strength-based ranged attack (a thrown object); and a Damage power whose attack
+ * skill is a Ranged Combat specialty named Throwing. The bonus joins the attack's rank, so the PL limit counts it as rank;
+ * "your maximum damage bonus is still limited by power level", so it stops where bonus plus rank would pass 2 x PL.
+ * `used` is the attack bonus plus rank before the mastery (rank alone for an attack with no check).
+ */
+export function throwingBonus(ch, R, { kind, effect, strengthBased, spec, label, used = 0, roll = true }) {
+  const rank = Math.min(advantageRank(ch, 'Throwing Mastery'), Math.max(0, (roll ? 2 : 1) * (ch.pl || 0) - used));
+  if (!rank || kind !== 'ranged') return 0;
+  let damage = effect === 'Damage';
+  if (!damage) { try { damage = /^Damage\b/.test(R.effect(effect).built_from || ''); } catch { damage = false; } }
+  if (!damage) return 0;
+  return strengthBased || THROWN_WORDS.test(label || '') || /^throwing\b/i.test(spec || '') ? rank : 0;
+}
+
 /** Offense lines for the stat block, with the numbers the PL limits are checked against. */
 export function attacks(ch, R, abil = abilityTotals(ch, R)) {
   const ab = (a) => abil[a] ?? 0;
@@ -146,10 +164,12 @@ export function attacks(ch, R, abil = abilityTotals(ch, R)) {
     let bonus = null;
     if (kind === 'close') bonus = closeBase + skillRanks(ch, 'Close Combat', spec) + accurate;
     if (kind === 'ranged') bonus = rangedBase + skillRanks(ch, 'Ranged Combat', spec) + accurate;
-    const rank = p.rank + placedOn(ch, `power:${p.name}`) + (p.strengthBased ? ab('Strength') : 0);
+    const base = p.rank + placedOn(ch, `power:${p.name}`) + (p.strengthBased ? ab('Strength') : 0);
+    const thrown = throwingBonus(ch, R, { kind, effect: p.effect, strengthBased: p.strengthBased, spec, used: base + (bonus ?? 0), roll: bonus !== null });
+    const rank = base + thrown;
     out.push({
       name: p.name, kind, effect: p.effect, resistance: p.resistance || eff.resistance,
-      bonus, rank, roll: bonus !== null, alternate: !!alternateOf, power: p,
+      bonus, rank, roll: bonus !== null, alternate: !!alternateOf, power: p, ...(thrown ? { thrown } : {}),
     });
   }
 
@@ -160,8 +180,11 @@ export function attacks(ch, R, abil = abilityTotals(ch, R)) {
     const bonus = a.kind === 'ranged'
       ? rangedBase + skillRanks(ch, 'Ranged Combat', spec)
       : closeBase + skillRanks(ch, 'Close Combat', spec);
-    const rank = a.rank + (a.strengthBased ? ab('Strength') : 0);
-    out.push({ name: item.name, kind: a.kind, effect: 'Damage', resistance: 'Toughness', bonus, rank, roll: true, crit: a.crit, equipment: true });
+    const label = [item.name, item.category, ...(item.descriptors || [])].join(' ');
+    const base = a.rank + (a.strengthBased ? ab('Strength') : 0);
+    const thrown = throwingBonus(ch, R, { kind: a.kind, effect: 'Damage', strengthBased: a.strengthBased, spec, label, used: base + bonus });
+    const rank = base + thrown;
+    out.push({ name: item.name, kind: a.kind, effect: 'Damage', resistance: 'Toughness', bonus, rank, roll: true, crit: a.crit, equipment: true, ...(thrown ? { thrown } : {}) });
   }
   return out;
 }

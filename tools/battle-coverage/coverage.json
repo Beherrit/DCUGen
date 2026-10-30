@@ -72,8 +72,8 @@
   {
     "kind": "effect",
     "name": "Deflect",
-    "status": "none",
-    "note": "There is no reaction to turn a ranged attack aside.",
+    "status": "partial",
+    "note": "Taking the Defend action to deflect protects the user and every ally in long range until its next turn; the user rolls d20 (10 or less counts 11) plus its rank against the attacker, -2 at medium range and -5 at long range, and the attacker beats the better of that and the flat defense. A rank-for-defense Defend rolls the rank in place of its own Dodge or Parry. Area, perception and non-Dodge, non-Parry attacks are never deflected. Reflect and Redirect (the Deflect extras) send a beaten attack back; the AI deflects when its own attack is worth less than the harm to its allies, or when Bodyguard or Hold the Line asks. Extended Range and descriptor effects (such as 'resistance to psionic') are not read.",
     "source": "DCA 95"
   },
   {
@@ -219,8 +219,8 @@
   {
     "kind": "effect",
     "name": "Luck Control",
-    "status": "none",
-    "note": "Rerolls forced on other characters are not simulated.",
+    "status": "partial",
+    "note": "Each rank buys one capability (named in the text, else the first ranks of grant, bestow, negate, force): grant an ally a re-roll, bestow a luck point (once per ally per round), negate an enemy's re-roll of an attack, or force an enemy hit or passed resistance check to be re-rolled at the worse (the target may spend a point to avoid it). Each is a reaction, once a round per controller, paid with Luck then hero points; a power whose text says 'against me' acts only on rolls aimed at its owner. Side Effect, Resistible and Ranged are not simulated.",
     "source": "DCA 106"
   },
   {
@@ -618,8 +618,8 @@
   {
     "kind": "extra",
     "name": "Reaction",
-    "status": "none",
-    "note": "Reactions are not simulated, apart from Energy Aura as a normal attack.",
+    "status": "partial",
+    "note": "A Deflect with Reaction deflects once a round without the Defend action, for the fighter and allies within short range; Energy Aura counts as a normal attack. No other reaction is simulated.",
     "source": "DCA 131"
   },
   {
@@ -1052,8 +1052,8 @@
   {
     "kind": "advantage",
     "name": "Throwing Mastery",
-    "status": "none",
-    "note": "Thrown weapons are not simulated.",
+    "status": "partial",
+    "note": "+1 damage per rank on thrown equipment, on Strength-based ranged attacks and on a Damage power whose Ranged Combat specialty is Throwing, shown in the attack's rank on the sheet and counted by the power level limit (the bonus stops where bonus plus rank would pass twice PL). Throwing harmless objects as weapons is not simulated.",
     "source": "DCA 79"
   },
   {
@@ -1970,5 +1970,101 @@
     "name": "Fighting Withdrawal: escape",
     "status": "partial",
     "note": "Under the Fighting Withdrawal tactic a fighter who starts a turn on its own edge and is not held gets away; the team wins by getting half its fighters out, or by holding out for a set number of rounds. Escape is only a tactic: other fights never let anyone leave."
+  },
+  {
+    "kind": "skill",
+    "name": "Close Combat",
+    "status": "full",
+    "note": "The attack bonus of every close attack, per specialty."
+  },
+  {
+    "kind": "skill",
+    "name": "Ranged Combat",
+    "status": "full",
+    "note": "The attack bonus of every ranged attack, per specialty."
+  },
+  {
+    "kind": "skill",
+    "name": "Acrobatics",
+    "status": "full",
+    "note": "Standing up from prone (DC 20) and the feint check with Agile Feint."
+  },
+  {
+    "kind": "skill",
+    "name": "Athletics",
+    "status": "full",
+    "note": "Grab and escape checks."
+  },
+  {
+    "kind": "skill",
+    "name": "Deception",
+    "status": "full",
+    "note": "Feint, Daze and (with Taunt) Demoralize checks."
+  },
+  {
+    "kind": "skill",
+    "name": "Insight",
+    "status": "full",
+    "note": "Resisting a feint."
+  },
+  {
+    "kind": "skill",
+    "name": "Intimidation",
+    "status": "full",
+    "note": "Demoralize and Daze checks."
+  },
+  {
+    "kind": "skill",
+    "name": "Sleight of Hand",
+    "status": "full",
+    "note": "Escaping a grab (the better of this and Athletics)."
+  },
+  {
+    "kind": "skill",
+    "name": "Stealth",
+    "status": "none",
+    "note": "Stealth is not simulated; an ambush is a battle option, not a check."
+  },
+  {
+    "kind": "skill",
+    "name": "Treatment",
+    "status": "none",
+    "note": "First aid and treating poison are not used; only Healing powers restore fighters."
+  },
+  {
+    "kind": "skill",
+    "name": "Expertise",
+    "status": "n/a",
+    "note": "Knowledge skills have no use in a fight."
+  },
+  {
+    "kind": "skill",
+    "name": "Investigation",
+    "status": "n/a",
+    "note": "Searching and deducing have no use in a fight."
+  },
+  {
+    "kind": "skill",
+    "name": "Perception",
+    "status": "n/a",
+    "note": "Noticing things is not part of the fight."
+  },
+  {
+    "kind": "skill",
+    "name": "Persuasion",
+    "status": "n/a",
+    "note": "Talking has no use in a fight."
+  },
+  {
+    "kind": "skill",
+    "name": "Technology",
+    "status": "n/a",
+    "note": "Building and using devices is outside the fight."
+  },
+  {
+    "kind": "skill",
+    "name": "Vehicles",
+    "status": "n/a",
+    "note": "Vehicle combat is not simulated."
   }
 ]

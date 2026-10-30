@@ -10,15 +10,16 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 
 | Kind | Total | Full | Partial | None | n/a | Covered |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| effect | 61 | 6 | 27 | 20 | 8 | 62% |
-| extra | 38 | 8 | 5 | 20 | 5 | 39% |
+| effect | 61 | 6 | 29 | 18 | 8 | 66% |
+| extra | 38 | 8 | 6 | 19 | 5 | 42% |
 | flaw | 22 | 0 | 1 | 18 | 3 | 5% |
-| advantage | 75 | 28 | 11 | 15 | 21 | 72% |
+| advantage | 75 | 28 | 12 | 14 | 21 | 74% |
+| skill | 16 | 8 | 0 | 2 | 6 | 80% |
 | action | 20 | 9 | 7 | 4 | 0 | 80% |
 | maneuver | 12 | 7 | 4 | 1 | 0 | 92% |
 | condition | 30 | 16 | 8 | 5 | 1 | 83% |
 | rule | 38 | 16 | 11 | 11 | 0 | 71% |
-| all | 296 | 90 | 74 | 94 | 38 | 64% |
+| all | 312 | 98 | 78 | 92 | 44 | 66% |
 
 ## Effects
 
@@ -34,7 +35,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Create | none | Created objects and barriers are not simulated. | DCA 91 |
 | Damage | full | Toughness check at 15 + rank with cumulative bruises, dazed, staggered and incapacitated; Strength gives built-in close Damage. | DCA 93 |
 | Dazzle | partial | Fought as an Affliction (impaired, disabled, unaware) but the sense it blocks is not tracked. | DCA 94 |
-| Deflect | none | There is no reaction to turn a ranged attack aside. | DCA 95 |
+| Deflect | partial | Taking the Defend action to deflect protects the user and every ally in long range until its next turn; the user rolls d20 (10 or less counts 11) plus its rank against the attacker, -2 at medium range and -5 at long range, and the attacker beats the better of that and the flat defense. A rank-for-defense Defend rolls the rank in place of its own Dodge or Parry. Area, perception and non-Dodge, non-Parry attacks are never deflected. Reflect and Redirect (the Deflect extras) send a beaten attack back; the AI deflects when its own attack is worth less than the harm to its allies, or when Bodyguard or Hold the Line asks. Extended Range and descriptor effects (such as 'resistance to psionic') are not read. | DCA 95 |
 | Duplication | none | Duplicates are not created. | DCA 94 |
 | Element Control | none | Control effects (Move Object style) are not simulated. | DCA 95 |
 | Elongation | partial | Stretches the fighter's close reach by the distance of its rank (rank 1 is 60 ft), counted in whole squares at the scale of the fight; the help it gives to grabbing is not applied. | DCA 96 |
@@ -55,7 +56,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Insubstantial | none | Insubstantial forms and the damage they avoid are not simulated. | DCA 103 |
 | Invisibility | partial | Treated as visual Concealment; other senses are ignored. | DCA 104 |
 | Leaping | partial | Counts as half its rank toward movement; jumping over things is not modelled. | DCA 105 |
-| Luck Control | none | Rerolls forced on other characters are not simulated. | DCA 106 |
+| Luck Control | partial | Each rank buys one capability (named in the text, else the first ranks of grant, bestow, negate, force): grant an ally a re-roll, bestow a luck point (once per ally per round), negate an enemy's re-roll of an attack, or force an enemy hit or passed resistance check to be re-rolled at the worse (the target may spend a point to avoid it). Each is a reaction, once a round per controller, paid with Luck then hero points; a power whose text says 'against me' acts only on rolls aimed at its owner. Side Effect, Resistible and Ranged are not simulated. | DCA 106 |
 | Magic | partial | Fights as Damage at range; the flexible casting that Magic allows is not simulated. | DCA 105 |
 | Mental Blast | full | Perception range Damage resisted by Will, with no attack roll. | DCA 107 |
 | Mimic | none | Copying traits from a target is not simulated. | DCA 107 |
@@ -117,7 +118,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Penetrating | full | Overcomes Impervious. | DCA 131 |
 | Precise | n/a | Fine control has no combat meaning. | DCA 131 |
 | Reach | full | Adds 5 ft per rank of the extra to a close attack's reach, counted in whole squares at the scale of the fight (nothing at 30 ft squares until it adds up to a square). | DCA 131 |
-| Reaction | none | Reactions are not simulated, apart from Energy Aura as a normal attack. | DCA 131 |
+| Reaction | partial | A Deflect with Reaction deflects once a round without the Defend action, for the fighter and allies within short range; Energy Aura counts as a normal attack. No other reaction is simulated. | DCA 131 |
 | Reversible | n/a | Reversing an effect has no combat meaning. | DCA 132 |
 | Ricochet | none | Attacks cannot bounce. | DCA 132 |
 | Secondary Effect | none | Second effects are not simulated. | DCA 132 |
@@ -189,7 +190,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Redirect | none | Redirecting a missed attack is not simulated. | DCA 78 |
 | Set-up | partial | A feint can be handed to one ally per rank: the target is vulnerable to their next attack instead of the feinter's. Demoralize and Daze are not handed over. | DCA 78 |
 | Takedown | full | A free attack against the next minion after taking one out; chains up to five. | DCA 78 |
-| Throwing Mastery | none | Thrown weapons are not simulated. | DCA 79 |
+| Throwing Mastery | partial | +1 damage per rank on thrown equipment, on Strength-based ranged attacks and on a Damage power whose Ranged Combat specialty is Throwing, shown in the attack's rank on the sheet and counted by the power level limit (the bonus stops where bonus plus rank would pass twice PL). Throwing harmless objects as weapons is not simulated. | DCA 79 |
 | Uncanny Dodge | full | The fighter is stunned but not vulnerable in a surprise round. | DCA 79 |
 | Weapon Bind | none | Reactions to disarm are not simulated. | DCA 79 |
 | Weapon Break | none | Reactions to attack weapons are not simulated. | DCA 79 |
@@ -235,6 +236,27 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Taunt | full | Lets the fighter demoralize with Deception instead of Intimidation; targets resist with Deception, Insight or Will. | DCA 78 |
 | Tracking | n/a | Out of combat skill use. | DCA 79 |
 | Well-informed | n/a | Social only. | DCA 79 |
+
+## Skills
+
+| Name | Status | Note | Source |
+| --- | --- | --- | --- |
+| Close Combat | full | The attack bonus of every close attack, per specialty. |  |
+| Ranged Combat | full | The attack bonus of every ranged attack, per specialty. |  |
+| Acrobatics | full | Standing up from prone (DC 20) and the feint check with Agile Feint. |  |
+| Athletics | full | Grab and escape checks. |  |
+| Deception | full | Feint, Daze and (with Taunt) Demoralize checks. |  |
+| Insight | full | Resisting a feint. |  |
+| Intimidation | full | Demoralize and Daze checks. |  |
+| Sleight of Hand | full | Escaping a grab (the better of this and Athletics). |  |
+| Stealth | none | Stealth is not simulated; an ambush is a battle option, not a check. |  |
+| Treatment | none | First aid and treating poison are not used; only Healing powers restore fighters. |  |
+| Expertise | n/a | Knowledge skills have no use in a fight. |  |
+| Investigation | n/a | Searching and deducing have no use in a fight. |  |
+| Perception | n/a | Noticing things is not part of the fight. |  |
+| Persuasion | n/a | Talking has no use in a fight. |  |
+| Technology | n/a | Building and using devices is outside the fight. |  |
+| Vehicles | n/a | Vehicle combat is not simulated. |  |
 
 ## Actions
 

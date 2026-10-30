@@ -11,6 +11,7 @@ import { portraitOf } from '../engine/portrait.js';
 import { imageDialog } from './imageshare.js';
 import { addPanel, quickStarts } from './battle-setup.js';
 import { tacticChips } from './battle-tactics.js';
+import { notSimulatedLine } from './battle-report.js';
 import { keepFinishedFight, keptNote, roomTabs } from './records/room.js';
 import { renderFights, openFight } from './records/fights-view.js';
 import { renderCityWar } from './citywar/view.js';
@@ -184,7 +185,7 @@ function fighterCard(c) {
     h('div', { class: 'bt-stats' },
       [['DOD', d.defenses.Dodge], ['PAR', d.defenses.Parry], ['TOU', d.defenses.Toughness - c.bruises], ['FOR', d.defenses.immune?.Fortitude ? '—' : d.defenses.Fortitude], ['WIL', d.defenses.immune?.Will ? '—' : d.defenses.Will], ['INI', (d.initiative >= 0 ? '+' : '') + d.initiative]].map(([k, v]) => h('div', null, h('b', { class: 'num' }, v), h('span', null, k)))),
     main ? h('div', { class: 'bt-main' }, `${main.name}: ${main.roll ? `+${main.bonus}, ` : `${main.area ? `${main.area} area` : 'perception'}, `}${main.effect} ${main.rank} (${main.resistance})`, c.attacks.length > 2 ? h('small', null, ` +${c.attacks.length - 1} more`) : null) : null,
-    setup ? h('div', { class: 'bt-opts' }, teamSel, formSel, styleSel, h('details', { class: 'bt-more' }, h('summary', null, 'More'), h('div', { class: 'bt-more-body' }, tacSel, h('label', { class: 'bt-hp-wrap', title: 'Hero points: re-roll a miss or shake off a daze' }, '★ Hero points', hp)))) : null,
+    setup ? h('div', { class: 'bt-opts' }, teamSel, formSel, styleSel, h('details', { class: 'bt-more' }, h('summary', null, 'More'), h('div', { class: 'bt-more-body' }, tacSel, h('label', { class: 'bt-hp-wrap', title: 'Hero points: re-roll a miss or shake off a daze' }, '★ Hero points', hp), notSimulatedLine(c)))) : null,
     !setup ? h('div', { class: 'bt-state' }, dmg,
       h('div', { class: 'bt-conds' },
         c.fled ? h('span', { class: 'bt-cond fled' }, c.escaped ? 'Got away' : 'Fled') : c.out ? h('span', { class: 'bt-cond ko' }, statusLine(c)) : null,
@@ -362,7 +363,7 @@ function helpPanel() {
     h('p', { style: { margin: 0 } }, 'By the Hero\'s Handbook: attack checks against defense + 10, resistance checks against DC 15 + rank (Damage) or 10 + rank, degrees of failure, bruises that stack, dazed until the end of the next turn, staggered and incapacitated. A natural 20 always hits and is a critical (+5 to the DC) when the total also beats the defense. Minions drop on any failed Toughness check, never crit heroes, and heroes hit them with routine attacks (DCA 175). Afflictions get an end-of-turn recovery check; area effects a Dodge check for half. Concealment and cover are −2 (partial) or −5 (total) to hit; total cover cannot be shot past, and cover can be shot, blasted or smashed to pieces. Knockback and shooting through cover are optional rules in the Scenery panel. Impervious, Penetrating, Multiattack, Immunity, Healing and Regeneration all count.'),
     h('p', { style: { margin: 0 } }, 'Actions and maneuvers: Charge (twice the speed, −2 to hit) and Slam for fast heavy hitters, Aim (+5 close, +2 far, doubled with Improved Aim, vulnerable meanwhile), Recover once per fight (the worst damage level goes, +2 defenses), Defend (attackers must beat a rolled defense), Feint, Trip, Disarm and Smash (Improved Trip, Disarm and Smash remove the penalties), Grab and Escape (Athletics or Sleight of Hand), Stand and Drop Prone, Power, Accurate, All-out and Defensive Attack (only on attacks with an attack check), Interpose, Takedown, Move-by Action, and team attacks by minion squads (+2 or +5 to the lead attack). Hero points re-roll a miss and keep the better roll (1–10 counts +10), or shake off dazed, stunned or fatigue; extra effort pushes a power a rank.'),
     h('p', { style: { margin: 0 } }, 'How they think: each fighter plays to its style (brawlers charge and go all-out, blasters keep distance and aim, mentalists break the weakest will, support heals and interposes) and picks targets by what its attacks can do to them, how dangerous they are, and who is nearly down.'),
-    h('p', { style: { margin: 0, color: 'var(--ink-3)' } }, 'Not simulated yet: Summon, Create, Illusion, Deflect, Insubstantial, Environment. The battlefield is a 12 by 12 grid (Street 5 ft, Block 30 ft or District 250 ft squares); a move covers the fighter\'s speed in feet, and a ranged attack is short to rank × 25 ft, medium to rank × 50 ft (−2) and long to rank × 100 ft (−5).'));
+    h('p', { style: { margin: 0, color: 'var(--ink-3)' } }, 'Not simulated yet: Summon, Create, Illusion, Insubstantial, Environment. The battlefield is a 12 by 12 grid (Street 5 ft, Block 30 ft or District 250 ft squares); a move covers the fighter\'s speed in feet, and a ranged attack is short to rank × 25 ft, medium to rank × 50 ft (−2) and long to rank × 100 ft (−5).'));
 }
 
 // ---- the page --------------------------------------------------------------------------------------------

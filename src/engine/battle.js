@@ -18,7 +18,8 @@
 // Takedown, Interpose, Evasion, Seize Initiative, Fearless, hero points (improve a roll on attacks, resistance,
 // opposed and recovery checks, recover, heroic feat), Luck, Leadership, Inspire, Ultimate Effort, Daze, Startle, Set-up and extra effort with fatigue, range bands and movement, prone, vulnerable, defenseless.
 // Cover pieces made of real materials (partial and total cover, breaking it, shooting through it) and the optional knockback rule are simulated when a battle asks for them.
-// Not simulated: Summon, Create, Illusion, Deflect, Insubstantial, Environment. Team attacks are simulated for minion squads.
+// Deflect (the Defend action for the team, or as a Reaction, with Reflect and Redirect), Luck Control (grant, bestow, negate, force) and Throwing Mastery are simulated.
+// Not simulated: Summon, Create, Illusion, Insubstantial, Environment. Team attacks are simulated for minion squads.
 //
 // The code lives in src/engine/battle/ (see README.md there); this file keeps the names the rest of the app imports.
 
@@ -38,5 +39,6 @@ import { MATERIALS, COVER_KINDS, toughnessOf } from './battle/materials.js';
 import { addCover, removeCover, coverLevel, pieceLabel, pieceBetween } from './battle/cover.js';
 import { massRank } from './battle/knockback.js';
 import { statusLine, battleText, simulateMany, serializeBattle, reviveBattle } from './battle/summaries.js';
+import { buildReport } from './battle/build-report.js';
 
-export { MATERIALS, COVER_KINDS, toughnessOf, addCover, removeCover, coverLevel, pieceLabel, massRank, TEAM_TACTICS, GRID_SIZE, SCALES, DEFAULT_SCALE, scaleOf, syncGrid, squareName, isWall, squares, feet, inReach, reachSquares, squaresInMove, bandFrom, inRangeNow, lineClear, areaVictims, reachableFrom, pieceBetween, MAX_ROUNDS, STYLES, TACTICS, detectStyle, parseAffliction, makeCombatant, rebuildCombatant, activeConditions, conditionLabels, hitOdds, resistOdds, createBattle, addCombatant, removeCombatant, placeAll, startBattle, byId, joinBattle, step, runRound, runToEnd, statusLine, battleText, simulateMany, serializeBattle, reviveBattle };
+export { MATERIALS, COVER_KINDS, toughnessOf, addCover, removeCover, coverLevel, pieceLabel, massRank, TEAM_TACTICS, GRID_SIZE, SCALES, DEFAULT_SCALE, scaleOf, syncGrid, squareName, isWall, squares, feet, inReach, reachSquares, squaresInMove, bandFrom, inRangeNow, lineClear, areaVictims, reachableFrom, pieceBetween, MAX_ROUNDS, STYLES, TACTICS, detectStyle, parseAffliction, makeCombatant, rebuildCombatant, activeConditions, conditionLabels, hitOdds, resistOdds, createBattle, addCombatant, removeCombatant, placeAll, startBattle, byId, joinBattle, step, runRound, runToEnd, statusLine, battleText, simulateMany, serializeBattle, reviveBattle, buildReport };

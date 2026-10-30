@@ -1074,6 +1074,8 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 .bt-more { font-size: 12px; }
 .bt-more summary { cursor: pointer; color: var(--ink-3); font: 700 11px/1.6 var(--font-label); text-transform: uppercase; letter-spacing: .06em; }
 .bt-more-body { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 4px; }
+.bt-unsim { flex-basis: 100%; margin: 2px 0 0; font-size: 11px; line-height: 1.4; color: var(--ink-3); }
+.bt-unsim-name { font-weight: 700; }
 @media (max-width: 760px) { .bt-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* bio editor */

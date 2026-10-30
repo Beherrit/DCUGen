@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { loadCoverage, writeGenerated } from './battle-coverage/lib.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(ROOT, 'data');
@@ -75,6 +76,7 @@ function buildData() {
       // Homebrew packs that ship with the app (data/packs): switched on by choice, so seeds never change.
       + `export const PACKS = ${JSON.stringify(Object.values(jsonFolder('packs')))};\n`,
   );
+  writeGenerated(loadCoverage()); // src/generated/battle-coverage.js: what the Battle Room simulates, for each fighter's build report
   const catalogCount = Object.values(raw.catalog).reduce((s, l) => s + l.length, 0);
   console.log(`data: ${raw.effects.length} effects, ${raw.advantages.length} advantages, ${raw.archetypes.length} archetypes, ${raw.themes.length} themes, ${catalogCount} catalog entries`);
 }

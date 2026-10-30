@@ -9,7 +9,8 @@
 //   (1 to 10 for the first side, 11 to 20 for the second). The loser's result is the DC for counting degrees.
 // - A fighter's own check can carry a fortune hook `fx` (fortune.js): `fx.fixed(bonus, dc)` may give a roll to use
 //   instead of throwing the die (Ultimate Effort), and `fx.improve(rng, info)` may give a better roll once the first
-//   one failed (Improve Roll, Luck). Both return { roll, natural } or null. A roll that was not thrown, or was
+//   one failed (Improve Roll, Luck). A hook may also carry `curse(rng, info)`: Luck Control forcing a passed check to be
+//   re-rolled at the worse of the two. All three return { roll, natural } or null. A roll that was not thrown, or was
 //   re-rolled, is only a natural 20 when the die itself came up 20, so `natural` travels with the roll.
 
 import { d20 } from './util.js';
@@ -39,6 +40,10 @@ export function rollCheck(rng, bonus, dc, fx = null) {
   let roll = fixed ? fixed.roll : d20(rng);
   let natural = fixed ? fixed.natural : roll === 20;
   let r = checkResult(roll, bonus, dc, natural);
+  if (!fixed && r.success && fx?.curse) {
+    const worse = fx.curse(rng, { ...r, roll, bonus });
+    if (worse) { ({ roll, natural } = worse); r = checkResult(roll, bonus, dc, natural); }
+  }
   if (!fixed && !r.success && fx?.improve) {
     const better = fx.improve(rng, { ...r, roll, bonus, fails: r.degrees });
     if (better) { ({ roll, natural } = better); r = checkResult(roll, bonus, dc, natural); }

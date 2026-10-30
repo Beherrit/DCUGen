@@ -23,7 +23,7 @@ export function applyEffect(b, R, c, atk, t, rng, { crit = false, rankShift = 0,
   const resist = resistOf(t, resistName);
   if (resist === null) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name} has no ${resistName} to affect: no effect.` }); return { landed: false }; }
   const dc = dcOf(atk, rank) + (crit ? 5 : 0) + multi;
-  const r = rollCheck(rng, resist, dc, resistFx(b, t, atk));
+  const r = rollCheck(rng, resist, dc, resistFx(b, t, atk, c));
   const { roll, total, fails } = r;
   const dice = [{ label: `${resistName} check`, roll, mod: resist, total, dc }];
   const base = `${t.name} resists with ${resistName}: d20 ${roll} ${sign(resist)} = ${total} vs DC ${dc}${crit ? ' (+5, critical)' : ''}${critNote(r)}`;

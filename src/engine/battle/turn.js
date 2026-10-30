@@ -17,6 +17,7 @@ import { supportTurn } from './support-plan.js';
 import { recoverFatigue, fortuneTurn } from './fortune-turn.js';
 import { shootCover } from './cover-damage.js';
 import { planStanding, standOrDrop } from './stand.js';
+import { deflectTurn } from './deflect-plan.js';
 
 const isHurt = (c) => c.staggered || c.bruises >= 2;
 
@@ -27,6 +28,7 @@ export function takeTurn(b, R, c, rng) {
   const mode = canAct(c);
   const conds = conditionLabels(c).filter((x) => x !== 'Fled');
   c.defending = false;
+  c.deflecting = false;
   if (mode === 'none' && cannotAct(b, c, conds)) return;
   if (mode === 'controlled') { controlledTurn(b, R, c, rng); return; }
   const enemies = enemiesOf(b, c);
@@ -46,6 +48,7 @@ export function takeTurn(b, R, c, rng) {
   if (fortuneTurn(b, c, choice, enemies)) return;
   if (supportTurn(b, c, choice, enemies, mode, rng)) return;
   if (digIn(b, c, choice, enemies, mode)) return;
+  if (deflectTurn(b, c, choice, enemies, mode)) return;
   standOrDrop(b, c, choice, enemies, mode, rng);
   if (nonAttackPlan(b, R, c, choice, mode, rng)) return;
   attackTurn(b, R, c, choice, enemies, mode, rng);

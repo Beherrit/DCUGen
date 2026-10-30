@@ -13,14 +13,15 @@ test('as shared, the Ballista sheet lists only Unarmed (the bug being repaired)'
   assert.deepEqual(names(ballista()), ['Unarmed']);
 });
 
-test('repair turns Kinetic control into a ranged Damage attack at rank 12 that rolls with Ranged Combat: Throwing', () => {
+test('repair turns Kinetic control into a ranged Damage attack at rank 12 (+3 Throwing Mastery) that rolls with Ranged Combat: Throwing', () => {
   const ch = repairPowerRoles(ballista(), R);
   const list = attacks(ch, R);
   assert.deepEqual(list.map((a) => a.name), ['Unarmed', 'Kinetic control']);
   const k = list.find((a) => a.name === 'Kinetic control');
   assert.equal(k.kind, 'ranged');
   assert.equal(k.effect, 'Damage');
-  assert.equal(k.rank, 12);
+  assert.equal(k.rank, 15);
+  assert.equal(k.thrown, 3);
   assert.equal(k.bonus, 5);
   assert.equal(ch.powers.find((p) => p.name === 'Kinetic control').attackSkill, 'Throwing');
 });

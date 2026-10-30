@@ -8,6 +8,8 @@ import { SEVERITY, parseAffliction } from './conditions.js';
 import { itemFor, deviceOf } from './items.js';
 import { AREA_BASE, rankFt } from '../range.js';
 import { ultimateKinds, dazeSkills } from './fortune-kinds.js';
+import { deflectOf } from './deflect.js';
+import { luckControlOf } from './luck.js';
 
 export function effectWeights(attack) {
   if (attack.effect === 'Damage') return [0, 1, 2.3, 3.8, 6.5];
@@ -173,6 +175,10 @@ export function resetCombatant(c) {
     behind: null,          // the cover piece this fighter stands behind (its id)
     aiming: null,          // { target, bonus } after an Aim action (DCA 175)
     defending: false,      // the Defend action, until the start of their next turn (DCA 175)
+    deflecting: false,     // the Defend action taken to deflect for the team (deflect.js), until their next turn
+    deflectRound: null,    // the round a Reaction deflect was last used
+    luckCtlRound: null,    // the round a Luck Control reaction was last used (luck.js)
+    bestowedRound: null,   // the round an ally last bestowed a luck point on this fighter
     stats: { attacks: 0, hits: 0, crits: 0, degrees: 0, kos: 0, healed: 0, taken: 0 },
   });
 }
@@ -201,6 +207,8 @@ export function rebuildCombatant(c, R, d = null) {
   c.moveRank = mv.rank;
   c.moveFt = rankFt(mv.rank);
   c.elongFt = elongationFt(c.ch);
+  c.deflect = deflectOf(c.ch);           // Deflect: { rank, reaction, reflect, redirect } or null
+  c.luckCtl = luckControlOf(c.ch);       // Luck Control: { caps, mineOnly } or null
   // Precise Attack is bought per pairing, like "Ranged, Cover" (DCA 77)
   c.precise = (c.ch.advantages || []).filter((a) => a.name === 'Precise Attack').map((a) => String(a.param || '').toLowerCase());
   addOmniStunts(c, d);

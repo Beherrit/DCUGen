@@ -238,7 +238,7 @@ export function renderFile(ch, R, opts = {}) {
         return h('tr', null,
           h('td', null, a.name, a.alternate ? h('span', { style: { color: 'var(--ink-3)' } }, ' (AE)') : null),
           h('td', { class: 'n' }, a.roll ? sign(a.bonus) : a.kind === 'area' ? 'Area' : 'Perc.'),
-          h('td', null, `${a.effect} ${a.rank}${a.resistance ? ` · ${a.resistance}` : ''}${a.crit && a.crit < 20 ? ` · crit ${a.crit}-20` : ''}`),
+          h('td', null, `${a.effect} ${a.rank}${a.thrown ? ` (incl. +${a.thrown} Throwing Mastery)` : ''}${a.resistance ? ` · ${a.resistance}` : ''}${a.crit && a.crit < 20 ? ` · crit ${a.crit}-20` : ''}`),
           h('td', { class: 'range-cell' }, attackRange(a, R)),
           h('td', null, h('span', { class: 'ok', style: used > limit ? { color: 'var(--bad)' } : null }, `${used}/${limit}`)));
       })))));

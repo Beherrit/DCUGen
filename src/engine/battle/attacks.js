@@ -8,6 +8,7 @@ import { rollCheck, critNote } from './checks.js';
 import { dodgeFx } from './fortune.js';
 import { featInterposer } from './feat.js';
 import { attackVerb, rollToHit } from './attack-roll.js';
+import { afterDeflect } from './reflect.js';
 import { noteAttack, interposeFor } from './tactics.js';
 import { shieldFor, coverLevel, coverDodgeBonus } from './cover.js';
 import { shootThrough, areaOnPieces, pieceMod } from './cover-damage.js';
@@ -38,6 +39,7 @@ export function resolveAttack(b, R, c, atk, t, rng, { trade = 0, allOut = 0, def
   const r = rollToHit(b, c, atk, t, rng, m, aimed, notes);
   if (!r.hit) {
     log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${r.text} — ${r.roll === 1 ? 'natural 1, a clean miss' : 'miss'}${notes.length ? ` (${notes.join('; ')})` : ''}.`, dice: r.dice });
+    afterDeflect(b, R, c, atk, t, rng, r, rankShift);
     return;
   }
   const result = landHit(b, R, c, atk, t, rng, r, { rankShift, notes, slam: m.slam });
