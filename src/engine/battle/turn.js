@@ -31,6 +31,8 @@ import { assessTurn } from './assessment.js';
 import { weaponDefends, fetchWeapon } from './weapon-reactions.js';
 import { runHoming, freeHeld, concentrateHeld } from './extra-run.js';
 import { issueCommand } from './summon-run.js';
+import { deceivedTurn } from './illusion-turn.js';
+import { refreshEnvironment } from './environment.js';
 
 const isHurt = (c) => c.staggered || c.bruises >= 2;
 
@@ -41,6 +43,7 @@ export function takeTurn(b, R, c, rng) {
   dropReady(b, c); // a readied action that did not happen is lost (ready.js)
   markTurn(b, c);
   refreshGrants(b);
+  refreshEnvironment(b); // speed lost to impeding weather and the light on each fighter (environment.js)
   let mode = canAct(c);
   const conds = conditionLabels(c).filter((x) => x !== 'Fled');
   c.defending = false;
@@ -51,6 +54,7 @@ export function takeTurn(b, R, c, rng) {
   fetchWeapon(b, R, c, mode); // a disarmed fighter gets its weapon back: free with Quick Draw (weapon-reactions.js)
   favoredTurn(b, c, enemiesOf(b, c).length, alliesOf(b, c).length); // Favored Environment: +2 on attacks or defenses (favored.js)
   if (mode === 'controlled') { controlledTurn(b, R, c, rng); return; }
+  if (deceivedTurn(b, R, c, rng)) return; // fooled by an Illusion: turns on the teammate whose look was switched (illusion-turn.js)
   const enemies = enemiesOf(b, c);
   assessTurn(b, c, enemies, rng); // Assessment: size up each foe once, a free action (assessment.js)
   if (!enemies.length) { steadyIdle(b, R, c, mode, rng); return; } // nobody left to fight: a medic tends a dying teammate (stabilize.js)

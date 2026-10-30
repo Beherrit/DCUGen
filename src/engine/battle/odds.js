@@ -121,7 +121,10 @@ export function concealmentPenalty(c, target, atk) {
   if (activeConditions(c).has('Blind') || activeConditions(c).has('Blinded')) return 5;
   if (!target.concealment || seesThrough(c, target)) return 0;
   if (preciseIgnores(c, atk, 'concealment')) return 0;
-  return target.concealment === 'total' ? 5 : 2;
+  const lit = target.concealDark ? target.lit || 0 : 0; // an Environment of light takes the cover off darkness only (environment.js)
+  if (lit >= 2) return 0;
+  if (target.concealment === 'total') return lit ? 2 : 5;
+  return lit ? 0 : 2;
 }
 
 function seesThrough(c, target) {

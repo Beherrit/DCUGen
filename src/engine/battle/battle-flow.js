@@ -15,6 +15,8 @@ import { resetScenery } from './cover.js';
 import { dyingTurn, deathsPending, deadNames } from './dying.js';
 import { summonSkip, summonUpkeep } from './summon-run.js';
 import { createUpkeep, withoutCreated } from './create.js';
+import { environmentUpkeep, environmentRound } from './environment.js';
+import { illusionUpkeep } from './illusion.js';
 
 export function createBattle({ seed = 'battle', name = 'Battle' } = {}) {
   const b = { seed, name, tick: 0, round: 0, turn: 0, order: [], combatants: [], log: [], status: 'setup', winner: null, options: { minionRule: true, heroPoints: true, extraEffort: true, enclosed: false, ambush: null, teamTactics: {}, vip: {}, withdrawRounds: {}, maxRounds: MAX_ROUNDS, shootThrough: false, knockback: false, scale: DEFAULT_SCALE }, cover: [], traps: [], lastEvent: 0 };
@@ -40,6 +42,7 @@ export function startBattle(b, R) {
   b.log = []; b.tick = 0; b.round = 1; b.turn = 0; b.winner = null;
   b.combatants = b.combatants.filter((c) => !c.summon); // minions called in an earlier run are gone (summon-run.js)
   withoutCreated(b); // objects created in an earlier run are gone (create.js)
+  b.env = []; // and so are Environment effects (environment.js)
   resetScenery(b);
   b.traps = []; // Triggered effects set in an earlier run are gone (trap.js)
   for (const c of b.combatants) { resetCombatant(c); rebuildCombatant(c, R); if (c.carry) { c.bruises = c.carry.bruises; c.fatigue = c.carry.fatigue; } }
@@ -110,6 +113,8 @@ export function joinBattle(b, R, c) {
 function checkOver(b) {
   summonUpkeep(b); // minions end with a summoner who is out (summon-run.js)
   createUpkeep(b); // so do created objects (create.js)
+  environmentUpkeep(b); // an Environment (environment.js)
+  illusionUpkeep(b); // and an Illusion (illusion.js)
   if (withdrawOver(b)) return true;
   const teams = new Set(alive(b).map((c) => c.team));
   if (teams.size <= 1 && !deathsPending(b)) { // a lethal fight goes on until the dying have died or steadied
@@ -138,6 +143,7 @@ export function step(b, R) {
     b.round += 1;
     if (checkOver(b)) return b.log.length - before;
     log(b, { kind: 'round', text: `Round ${b.round}.`, important: true });
+    environmentRound(b, b.round, () => rngFor(b)); // every tenth round the extreme heat and cold ask their Fortitude checks
     if (b.round === 2) endSurprise(b);
     for (const c of alive(b)) regenerate(b, c);
   }

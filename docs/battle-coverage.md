@@ -10,7 +10,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 
 | Kind | Total | Full | Partial | None | n/a | Covered |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| effect | 63 | 6 | 35 | 14 | 8 | 75% |
+| effect | 63 | 6 | 37 | 12 | 8 | 78% |
 | extra | 50 | 19 | 20 | 3 | 8 | 93% |
 | flaw | 41 | 11 | 22 | 2 | 6 | 94% |
 | advantage | 75 | 30 | 22 | 0 | 23 | 100% |
@@ -19,7 +19,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | maneuver | 12 | 7 | 4 | 1 | 0 | 92% |
 | condition | 30 | 18 | 10 | 1 | 1 | 97% |
 | rule | 39 | 19 | 17 | 1 | 2 | 97% |
-| all | 346 | 128 | 140 | 24 | 54 | 92% |
+| all | 346 | 128 | 142 | 22 | 54 | 92% |
 
 ## Effects
 
@@ -43,14 +43,14 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Energy Aura | partial | Fights as Damage that is used like a normal attack; its automatic Reaction against attackers is not simulated. | DCA 97 |
 | Energy Control | partial | Fights as Damage at range; the other uses of an energy power are not simulated. | DCA 97 |
 | Enhanced Trait | partial | Abilities, defenses and skills are added to the derived numbers; Enhanced Advantage is not. | DCA 96 |
-| Environment | none | Environmental changes such as darkness or heat are not simulated. | DCA 97 |
+| Environment | partial | An area around the user (30 ft at rank 1, a distance rank more per rank) that follows it and affects everyone in it. Impede movement takes 1 or 2 ranks off the speed of all in the area; light takes the concealment off darkness only (partial for 1, none for 2); extreme heat and cold ask a Fortitude check (DC 10, +1 each time) every tenth round, which is the book's once a minute, for fatigue, exhaustion and collapse, and intense heat and cold ask none within a fight (once per 10 minutes); Immunity to the environment needs no check. The AI starts impeding weather when it holds up melee foes more than our own, and light against concealment by darkness. Visibility (-2 or -5 to Perception) does nothing because Perception is not part of the fight. Not modelled: Selective used to spare allies, mixing several kinds at different strengths, and Teleport ignoring the slowing. | DCA 97 |
 | Extra Limbs | none | Extra limbs (holding while attacking) are not modelled. | DCA 98 |
 | Feature | n/a | A feature is descriptive only. | DCA 98 |
 | Flight | partial | Sets how far the fighter moves each turn and the log wording; nothing else about flying (height, ground effects) is modelled. | DCA 99 |
 | Force Field | full | Counts as sustained Protection with Impervious; Nullify can switch it off. | DCA 100 |
 | Growth | partial | Strength, Stamina, Dodge, Parry, Intimidation and Stealth change; extra reach and size effects do not. | DCA 100 |
 | Healing | partial | A DC 10 check by touch as a standard action: each degree heals one damage condition (staggered, dazed, bruises), worst first, and a failed check cannot be tried again on that subject. The AI weighs a heal against its best attack in expected degrees. Stabilizing, the extras and the other uses are not simulated. | DCA 100 |
-| Illusion | none | Illusions are not simulated. | DCA 101 |
+| Illusion | partial | The one use the book names for a fight: switching the looks of an enemy and an ally (p102, 'My ally, my enemy'). An opposed check of the Illusion rank against the target's Insight; on a win the target is fooled and its next attack goes at a teammate, after which it gets an Insight check against 10 + rank to see through it (it interacted with the illusion). The AI uses it when there are two or more foes and the gain beats an attack. A sense that Counters Illusion sees through it; the illusion ends when its maker can no longer keep it up. Not modelled: decoys, illusory scenery and walls, damaging illusions, size, Independent, Selective, and a viewer told by an ally gaining a +5 re-check. | DCA 101 |
 | Immortality | none | Returning after incapacitation is not simulated. | DCA 102 |
 | Immunity | partial | The detail text is read by the book's ranks (DCA 102-103): a descriptor's damage or its effects (a bare common descriptor by its ranks: 1 is the environment only, 5 damage, 10 every effect), physical or energy, all Fortitude, Will or Toughness effects, critical hits (a critical is a normal hit), interaction skills (Demoralize, Daze and feints fail), entrapment (no grab, snare or bond), fear (Fearless), emotion, sleep, fatigue, dazzle and sensory effects by sight or hearing, alteration, suffocation, life support (poison, disease, suffocation), your own powers, and Reflect and Redirect (the stopped attack goes back with the fighter's own attack check). Limited to Half Effect halves the rank. Every immunity that fires says which one and which descriptor in the log; the Battle Room card lists them. Not played: Affects Others and Ranged (lending an immunity), and the environment items (aging, hunger, thirst, need for sleep, one environment), which show on the card and stop nothing because a fight has no weather. Mind reading is not a fight action. house rule: the book names no descriptor list, so words in an attack's name and detail are read from one table (descriptors.js). | DCA 102 |
 | Insubstantial | partial | Each Insubstantial power or alternate is a form, switched as a free action once a round (the AI turns insubstantial when that beats the harm coming in, solid again to attack). Fluid (1) flows out of holds and snares and cannot be grabbed; gaseous (2) is immune to physical damage but not to area attacks; energy (3) to physical damage and the energy of its own form; incorporeal (4) to physical and energy damage, except the effect named in the power's detail and effects with Affects Insubstantial, and it cannot affect the physical world without Affects Corporeal (or a sensory effect). Ranks 2 to 4 have no Strength. The form shows on the card and in the log. Not played: walls and objects (no moving through them, no ejection damage), Progressive, Precise, Reaction, Subtle, Affects Others and the Attack extra (turning a target insubstantial). house rule: the one other effect an incorporeal form is open to is read from the power's detail text. | DCA 103 |

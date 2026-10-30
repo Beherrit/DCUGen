@@ -184,6 +184,8 @@ export function resetCombatant(c) {
     deflectRound: null,    // the round a Reaction deflect was last used
     luckCtlRound: null,    // the round a Luck Control reaction was last used (luck.js)
     bestowedRound: null,   // the round an ally last bestowed a luck point on this fighter
+    deceived: null,        // { by, victim, rank, name } while an Illusion has this fighter taking a teammate for a foe (illusion.js)
+    slowed: 0, lit: 0, envChecks: 0, // ranks of speed lost and the light on it from an Environment, and the heat or cold checks made (environment.js)
     summon: null,          // set on a summoned minion or duplicate: { by, power, since, needsOrders, commanded, ... } (summon.js)
     summonDazed: false,    // a summoned minion is dazed unless its power is Active (summon.js)
     summoned: [],          // the ids of the minions this fighter has called in this fight
@@ -243,6 +245,7 @@ function powerStats(c) {
   c.healing = heal ? { name: heal.name, rank: heal.rank, ranged: reducedRange(heal, heal.range || 'Close') !== 'Close', proficient: extrasOf(heal)?.proficient || 0 } : null;
   const conceal = pw.find((p) => ['Concealment', 'Invisibility'].includes(p.effect) && (!p.detail || /visual|sight|vision/i.test(p.detail)));
   c.concealment = conceal ? ((conceal.flaws || []).some((f) => /Blending|Limited|Partial/i.test(f.name)) || conceal.rank < 2 ? 'partial' : 'total') : null;
+  c.concealDark = !!conceal && /dark|shadow|night|gloom|murk/i.test(`${conceal.name} ${conceal.detail || ''} ${(conceal.descriptors || []).join(' ')}`);
   c.senses = pw.filter((p) => p.effect === 'Senses').map((p) => p.detail || '').join(' ');
   const variable = pw.find((p) => p.effect === 'Variable');
   c.variable = variable ? { name: variable.name, points: variable.rank * 5 } : null;

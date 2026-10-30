@@ -128,8 +128,8 @@
   {
     "kind": "effect",
     "name": "Environment",
-    "status": "none",
-    "note": "Environmental changes such as darkness or heat are not simulated.",
+    "status": "partial",
+    "note": "An area around the user (30 ft at rank 1, a distance rank more per rank) that follows it and affects everyone in it. Impede movement takes 1 or 2 ranks off the speed of all in the area; light takes the concealment off darkness only (partial for 1, none for 2); extreme heat and cold ask a Fortitude check (DC 10, +1 each time) every tenth round, which is the book's once a minute, for fatigue, exhaustion and collapse, and intense heat and cold ask none within a fight (once per 10 minutes); Immunity to the environment needs no check. The AI starts impeding weather when it holds up melee foes more than our own, and light against concealment by darkness. Visibility (-2 or -5 to Perception) does nothing because Perception is not part of the fight. Not modelled: Selective used to spare allies, mixing several kinds at different strengths, and Teleport ignoring the slowing.",
     "source": "DCA 97"
   },
   {
@@ -177,8 +177,8 @@
   {
     "kind": "effect",
     "name": "Illusion",
-    "status": "none",
-    "note": "Illusions are not simulated.",
+    "status": "partial",
+    "note": "The one use the book names for a fight: switching the looks of an enemy and an ally (p102, 'My ally, my enemy'). An opposed check of the Illusion rank against the target's Insight; on a win the target is fooled and its next attack goes at a teammate, after which it gets an Insight check against 10 + rank to see through it (it interacted with the illusion). The AI uses it when there are two or more foes and the gain beats an attack. A sense that Counters Illusion sees through it; the illusion ends when its maker can no longer keep it up. Not modelled: decoys, illusory scenery and walls, damaging illusions, size, Independent, Selective, and a viewer told by an ally gaining a +5 re-check.",
     "source": "DCA 101"
   },
   {
