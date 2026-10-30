@@ -15,6 +15,7 @@ import { checkLimits } from './limits.js';
 import { rollSpec, rangeOf, evalExpr } from './expr.js';
 import { makeIdentity } from './flavor.js';
 import { generateBio } from './lifepath.js';
+import { ensureAttack, hasFairAttack } from './genattack.js';
 export const ENGINE_VERSION = 1;
 
 const clone = (x) => JSON.parse(JSON.stringify(x));
@@ -703,7 +704,7 @@ function buildMechanics(R, ctx) {
   if (!main && !arch.powerless && mode === 'strength') {
     // Paragons and powerhouses still get a ranged or area trick from their theme.
     const pick = rng.weighted(themeTemplates([theme], (t) => t.role === 'attack' && !t.strengthBased));
-    if (pick && rng.chance(0.75)) {
+    if (pick && (rng.chance(0.75) || arch.construct)) { // robots and androids always carry a built-in weapon
       main = instantiate(pick.tpl, rankFor(pick.tpl, ctx, R, 'main'), pick.theme, rng);
       main.tpl = tplKey(pick.tpl);
       ch.powers.push(main);
@@ -816,6 +817,22 @@ function buildMechanics(R, ctx) {
       fillAccuracy(w.attack.kind, w.name, abil, Math.min(attackT, 2 * pl - rank));
     }
   }
+  // A fighter with nothing but a weak Unarmed gets a weapon, a strike or its theme attack (genattack.js).
+  ensureAttack(ch, R, ctx, {
+    parseItem,
+    themeAttack: () => {
+      const pick = rng.weighted(themeTemplates(themes, (t) => t.role === 'attack' && !t.strengthBased));
+      if (!pick) return false;
+      const p = instantiate(pick.tpl, rankFor(pick.tpl, ctx, R, 'main'), pick.theme, rng);
+      p.tpl = tplKey(pick.tpl);
+      (ctx.device ? ctx.device.powers : ch.powers).push(p);
+      if (templateRolls(p, R)) {
+        const kind = attackKind(p, R);
+        fillAccuracy(kind, p.attackSkill, kind === 'ranged' ? ab.Dexterity : ab.Fighting, attackT);
+      }
+      return true;
+    },
+  });
   if (ctx.wantArmor) {
     const d0 = deriveAll(ch, R);
     const left = tough - d0.defenses.Toughness;
@@ -869,6 +886,7 @@ function buildMechanics(R, ctx) {
   if (!repair(ch, R, rng)) return fail(`repair2: ${errors(ch, R).map((e) => e.message).join('; ')}`);
   if (total(ch, R) !== budget) balance(ch, R, { ...ctx, budget });
   if (total(ch, R) !== budget || !legal(ch, R)) return fail(`budget ${total(ch, R)}/${budget}: ${errors(ch, R).map((e) => e.message).join('; ')}`);
+  if (!hasFairAttack(ch, R)) return fail('no attack worth rolling');
   return ch;
 }
 
