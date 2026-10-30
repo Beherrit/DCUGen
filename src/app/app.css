@@ -455,8 +455,9 @@ details > summary { cursor: pointer; color: var(--ink-2); font: 600 12.5px/1.4 v
 .rule-card.wide { grid-column: 1 / -1; }
 
 /* ---------- rules ---------- */
-.rule-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; align-items: start; }
-.rule-card { gap: 8px; padding: 14px; }
+.rule-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 12px; align-items: start; }
+.rule-card { gap: 8px; padding: 14px; min-width: 0; }
+.rule-card > * { min-width: 0; }
 .rule-title { font: 800 20px/1.1 var(--font-display); letter-spacing: .03em; text-transform: uppercase; margin-top: 2px; }
 .rule-sum { margin: 0; font-weight: 600; }
 .rule-det { margin: 0; color: var(--ink-2); font-size: 14px; }
@@ -737,7 +738,7 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 .bt-token { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--c); color: var(--c-ink, #fff); font: 800 11px/1 var(--font-label); letter-spacing: .02em; box-shadow: 0 0 0 3px var(--t), 0 2px 6px rgba(0, 0, 0, .3); flex: none; transition: transform .25s ease, opacity .25s ease; }
 .bt-token.down { opacity: .35; filter: grayscale(.8); transform: rotate(90deg) scale(.85); }
 .bt-token.acting { transform: scale(1.18); box-shadow: 0 0 0 3px var(--t), 0 0 0 6px color-mix(in srgb, var(--accent) 60%, transparent), 0 2px 10px rgba(0, 0, 0, .35); }
-.bt-teams { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; align-items: start; }
+.bt-teams { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 14px; align-items: start; }
 .bt-team-col { display: grid; gap: 8px; padding: 10px; border-radius: 10px; border: 1px solid var(--line); border-top: 4px solid var(--t); background: var(--surface-2); }
 .bt-team-head { display: flex; align-items: center; gap: 8px; font: 800 15px/1 var(--font-display); text-transform: uppercase; letter-spacing: .04em; }
 .bt-team-head .hint { margin-left: auto; font: 600 12px/1 var(--font-label); color: var(--ink-3); text-transform: none; letter-spacing: 0; }
@@ -1755,7 +1756,7 @@ body.eb-printing .eb-wrap { max-height: none; overflow: visible; border-width: 4
 .version-what small { color: var(--ink-3); }
 
 /* ---- Play view ---- */
-.play { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start; }
+.play { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); align-items: start; }
 .play-card { padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); min-width: 0; }
 .play-card h3 { margin: 0 0 8px; display: flex; gap: 8px; align-items: center; }
 .play-status { grid-column: 1 / -1; display: grid; gap: 10px; }
@@ -2506,3 +2507,5 @@ html.read-color .power-about { font-style: normal; }
 .fs-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
 .fs-table th, .fs-table td { padding: 4px 6px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 @media (max-width: 640px) { .fs-list { max-height: 300px; } .fs-pts { margin-left: 0; } }
+/* Small phones (with the 1.15 reading zoom a 375 px screen has about 326 px): a tighter top bar so it fits */
+@media (max-width: 400px) { .topbar { column-gap: 8px; padding-left: 10px; padding-right: 10px; } }

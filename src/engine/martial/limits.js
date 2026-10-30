@@ -56,7 +56,7 @@ export function checkStyleLimits(ch, R, issue) {
     if (!TIERS.includes(s.tier)) out.push(issue('style', `${s.name}: "${s.tier}" is not a tier (Initiate, Student or Master).`));
     else if (TIERS.indexOf(s.tier) >= 1 && !s.stances) out.push(issue('style', `${s.name}: ${TIER_LABEL[s.tier]} needs the ${s.name} Stances advantage (MA 79).`, 'warning', { source: 'MA 79' }));
     const flawed = flawsUncovered(ch, R, s);
-    if (flawed) out.push(issue('style', `${s.name}: ${flawed.spent} pp spent on the style does not surpass its ${flawed.flaws} pp of style flaws; buy more of the style (MA 134).`, 'error', { source: 'MA 134' }));
+    if (flawed) out.push(issue('style', `${s.name}: ${flawed.spent} pp spent on the style does not surpass its ${flawed.flaws} pp of style flaws; buy more of the style.`, 'error', { source: 'MA 134' }));
   }
   for (const p of ch.powers || []) {
     if (!p.maneuver) continue;
