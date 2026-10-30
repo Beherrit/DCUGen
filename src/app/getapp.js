@@ -43,7 +43,7 @@ export function getAppButton() {
   const d = DOWNLOADS[mine];
   return h('span', { class: 'getapp-wrap' },
     h('a', { class: 'btn sm getapp', href: `${DL}/${d.file}`, download: d.file, title: `Download the desktop app for ${d.label.replace(' installer', '')} (${d.file}). ${d.hint}. Your data on your own disk, host a table for your players, updates itself.` }, mine === 'windows' ? 'Download app (.exe)' : `Download app (${d.file.replace(/^DCUGen\.?/, '')})`),
-    h('button', { class: 'btn sm getapp-more', type: 'button', title: 'Other downloads and what the app does', 'aria-label': 'Other downloads', onClick: getAppDialog }, '▾'));
+    h('button', { class: 'btn sm getapp-more', type: 'button', title: 'Other downloads and what the app does', 'aria-label': 'Other downloads', onClick: getAppDialog }, 'More'));
 }
 
 const qr = (text, label) => { const svg = qrSvg(text, 4); return svg ? h('figure', { class: 'getapp-qr' }, h('div', { class: 'qr', html: svg }), h('figcaption', null, label)) : null; };

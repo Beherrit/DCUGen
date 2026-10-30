@@ -117,8 +117,8 @@ function build() {
     const open = !f.classList.contains('rail-open');
     f.classList.toggle('rail-open', open);
     optsBtn.setAttribute('aria-expanded', String(open));
-    optsBtn.lastChild.textContent = open ? ' ▴' : ' ▾';
-  } }, 'Options', h('span', null, ' ▾'));
+    optsBtn.lastChild.textContent = open ? ': hide' : '';
+  } }, 'Options', h('span', null, ''));
   const quick = h('div', { class: 'rail-quick' },
     h('button', { class: 'btn primary', type: 'button', onClick: () => roll(seedIn.value.trim() || undefined) }, 'Roll a character'),
     optsBtn);

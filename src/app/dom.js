@@ -120,7 +120,7 @@ export function menu(label, items, { cls = 'btn' } = {}) {
       const box = (btn.closest('.toolbar') || document.body).getBoundingClientRect();
       if (b.right - list.offsetWidth < box.left) list.classList.add('left');
     }
-  } }, label, ' ▾');
+  } }, label);
   for (const it of items) {
     if (!it) continue;
     list.append(h('button', { type: 'button', role: 'menuitem', id: it.id || null, class: it.danger ? 'danger' : null, onClick: () => { list.hidden = true; it.run(); } }, it.label, it.hint ? h('small', null, it.hint) : null));

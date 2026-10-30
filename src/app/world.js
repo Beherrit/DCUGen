@@ -215,7 +215,7 @@ function indexPanel() {
     return h('div', { class: 'wd-section' },
       h('div', { class: 'wd-section-head-row' },
         h('button', { type: 'button', class: 'wd-section-head', 'aria-expanded': String(sOpen), onClick: () => { ui.open[t] = !sOpen; renderWorld(); } },
-          h('span', { class: 'wd-caret' }, sOpen ? '▾' : '▸'), meta.label, h('span', { class: 'count' }, list.length)),
+          h('span', { class: `wd-caret ${sOpen ? 'open' : ''}`, 'aria-hidden': 'true' }), meta.label, h('span', { class: 'count' }, list.length)),
         h('button', { type: 'button', class: 'wd-section-add', title: `New ${meta.one.toLowerCase()}`, 'aria-label': `New ${meta.one.toLowerCase()}`, onClick: () => { if (t === 'paper') startPaper(ctx(), { draft: true }); else if (t === 'handout') newHandoutDialog(ctx()); else newPageDialog(t); } }, '+')),
       sOpen ? h('div', { class: 'wd-section-list' },
         shown.map((e) => h('button', { type: 'button', class: `wd-tree ${ui.page === e.id ? 'active' : ''}`, style: { '--c': e.color || meta.color }, title: e.status || '', onClick: () => go(e.id) }, h('span', { class: 'swatch' }), h('span', { class: 'wd-tree-name' }, e.name), e.character ? h('span', { class: 'wd-tree-pl num' }, `PL ${e.character.pl}`) : shortStatus(e) ? h('span', { class: 'wd-tree-pl' }, e.status) : null)),

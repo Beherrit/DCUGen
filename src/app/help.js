@@ -191,7 +191,7 @@ export async function showWhatsNew() {
 export function initHelp({ showTab, setMode }) {
   showTabHook = showTab;
   hooks = { setMode };
-  const m = menu('?', [
+  const m = menu('Help', [
     { label: 'Player tour', hint: 'Make a character and join a table', run: () => startTour('player') },
     { label: 'GM tour', hint: 'Bestiary, GM Screen, Battle Room, World', run: () => startTour('gm') },
     { label: 'What\'s new', id: 'whats-new', hint: 'What changed in recent updates', run: () => showWhatsNew() },

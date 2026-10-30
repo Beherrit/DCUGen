@@ -248,7 +248,7 @@ function folderTree() {
     const collapsed = !!folders.collapsed[path];
     const active = ui.folder === path;
     const btn = h('div', { class: `rf-node ${active ? 'active' : ''}`, style: { '--d': depth, '--c': color || 'var(--ink-3)' } },
-      children.length ? h('button', { type: 'button', class: 'rf-caret', 'aria-label': collapsed ? 'Expand' : 'Collapse', onClick: () => { folders.collapsed[path] = !collapsed; saveFolders(); renderRoster(); } }, collapsed ? '▸' : '▾') : h('span', { class: 'rf-caret' }),
+      children.length ? h('button', { type: 'button', class: 'rf-caret', 'aria-label': collapsed ? 'Expand' : 'Collapse', onClick: () => { folders.collapsed[path] = !collapsed; saveFolders(); renderRoster(); } }, h('span', { class: `wd-caret ${collapsed ? '' : 'open'}`, 'aria-hidden': 'true' })) : h('span', { class: 'rf-caret' }),
       h('button', { type: 'button', class: 'rf-name', onClick: () => { ui.folder = path; saveView(); renderRoster(); } }, h('span', { class: 'rf-label' }, label), h('span', { class: 'count' }, counts(path))),
       path ? h('button', { type: 'button', class: 'rf-more', title: 'Rename, colour, delete, export', 'aria-label': `Folder options for ${label}`, onClick: (e) => { e.stopPropagation(); folderMenu(path, e.currentTarget); } }, '⋯') : null);
     if (path !== null) dropTarget(btn, path);
@@ -501,7 +501,7 @@ function paintButton() {
 
 function backupMenu() {
   const list = h('div', { class: 'menu-list', hidden: true, role: 'menu' });
-  const btn = h('button', { class: 'btn', type: 'button', 'aria-haspopup': 'menu', 'aria-expanded': 'false', onClick: (e) => { e.stopPropagation(); const open = list.hidden; document.querySelectorAll('.menu-list').forEach((m) => { m.hidden = true; }); list.hidden = !open; btn.setAttribute('aria-expanded', String(open)); } }, 'Backup ▾');
+  const btn = h('button', { class: 'btn', type: 'button', 'aria-haspopup': 'menu', 'aria-expanded': 'false', onClick: (e) => { e.stopPropagation(); const open = list.hidden; document.querySelectorAll('.menu-list').forEach((m) => { m.hidden = true; }); list.hidden = !open; btn.setAttribute('aria-expanded', String(open)); } }, 'Backup');
   for (const it of backupMenuItems()) list.append(h('button', { type: 'button', role: 'menuitem', onClick: () => { list.hidden = true; it.run(); } }, it.label, it.hint ? h('small', null, it.hint) : null));
   if (window.dcugenDesktop) list.append(h('button', { type: 'button', role: 'menuitem', onClick: () => { list.hidden = true; window.dcugenDesktop.openDataFolder(); } }, 'Open the data folder', h('small', null, 'Where the desktop app keeps everything')));
   return h('div', { class: 'menu' }, btn, list);

@@ -241,7 +241,7 @@ function card(p, spot) {
       h('b', { class: 'gm-name' }, s.name),
       h('span', { class: 'chip' }, `PL ${s.pl}`),
       s.form ? h('span', { class: 'chip' }, `Form: ${s.form}`) : null,
-      h('span', { class: `gm-src ${p.kind}`, title: local ? 'Run on this device' : 'Live from the player\'s app' }, local ? 'GM' : `● ${p.player}`),
+      h('span', { class: `gm-src ${p.kind}`, title: local ? 'Run on this device' : 'Live from the player\'s app' }, local ? 'GM' : `Live: ${p.player}`),
       h('span', { class: 'spacer' }),
       local ? h('button', { class: 'x', type: 'button', 'aria-label': `Take ${s.name} off the board`, onClick: () => { gs.board = gs.board.filter((x) => x.rosterId !== p.key); save(); renderGmScreen(); } }, 'Remove') : null),
     h('div', { class: 'gm-defs' }, ['Dodge', 'Parry', 'Toughness', 'Fortitude', 'Will'].map((d) => h('span', { class: 'gm-def' }, h('small', null, d.slice(0, 4)), h('b', { class: 'num' }, s.defenses[d] == null ? '—' : s.defenses[d]))),

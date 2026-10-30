@@ -64,7 +64,7 @@ function draw() {
         init.next ? h('span', { class: 'tbar-next' }, h('small', null, 'Next '), init.next.name) : null,
       ] : h('span', { class: 'tbar-now' }, h('small', null, 'At the table')),
       h('span', { class: 'spacer' }),
-      lobby.role !== 'host' && party.length ? h('button', { class: 'btn sm ghost', type: 'button', id: 'tbar-party', 'aria-expanded': String(openParty), onClick: () => { openParty = !openParty; draw(); } }, `Party ${openParty ? '▾' : '▴'}`) : null,
+      lobby.role !== 'host' && party.length ? h('button', { class: 'btn sm ghost', type: 'button', id: 'tbar-party', 'aria-expanded': String(openParty), onClick: () => { openParty = !openParty; draw(); } }, openParty ? 'Hide party' : 'Party') : null,
       init ? h('button', { class: 'btn sm ghost', type: 'button', title: 'The whole turn order', 'aria-label': 'Turn order', onClick: () => toast(init.order.map((o, i) => `${i === init.turn ? 'Now: ' : ''}${o.name}`).join(' · ')) }, 'Turn order') : null),
     remind && (remind.lines.length || remind.tip || !remind.canAct) ? h('div', { class: 'tbar-remind' },
       !remind.canAct ? h('div', null, h('b', null, 'You can\'t act this turn.')) : null,

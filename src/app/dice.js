@@ -36,7 +36,7 @@ export function rollMenu(ch, R) {
     document.querySelectorAll('.menu-list').forEach((m) => { m.hidden = true; });
     list.hidden = !open;
     btn.setAttribute('aria-expanded', String(open));
-  } }, 'Roll ▾');
+  } }, 'Roll');
   const item = (label, hint, run) => h('button', { type: 'button', role: 'menuitem', onClick: () => { list.hidden = true; const e = run(); if (e) toast(e.text); } }, label, hint ? h('small', null, hint) : null);
   const group = (title) => h('div', { class: 'roll-group' }, title);
   list.append(group('Combat'));

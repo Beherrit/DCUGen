@@ -866,7 +866,9 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 .wd-sections { display: grid; gap: 4px; }
 .wd-section-head { display: flex; align-items: center; gap: 6px; width: 100%; border: 0; background: none; padding: 6px 4px; cursor: pointer; font: 700 12px/1 var(--font-label); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); text-align: left; }
 .wd-section-head .count { margin-left: auto; font-weight: 600; color: var(--ink-3); background: var(--surface-2); padding: 1px 6px; border-radius: 8px; letter-spacing: 0; }
-.wd-caret { width: 10px; color: var(--ink-3); }
+/* A small triangle drawn with borders (no glyph): points right when closed, down when open */
+.wd-caret { display: inline-block; width: 0; height: 0; margin: 0 4px; border-style: solid; border-width: 4px 0 4px 6px; border-color: transparent transparent transparent var(--ink-3); transition: transform .12s; flex: 0 0 auto; }
+.wd-caret.open { transform: rotate(90deg); }
 .wd-section-list { display: grid; gap: 1px; padding-left: 4px; }
 .wd-tree { display: flex; align-items: center; gap: 6px; border: 0; background: none; padding: 4px 6px; border-radius: 4px; cursor: pointer; font: 500 13.5px/1.2 var(--font-body); color: var(--ink); text-align: left; min-width: 0; }
 .wd-tree:hover { background: var(--surface-2); }
@@ -2057,8 +2059,8 @@ div.play-line small { grid-column: 1; grid-row: 2; }
 .wd-side { display: block; padding: 10px 10px 12px; top: 70px; }
 .wd-side-summary { display: flex; align-items: center; gap: 8px; cursor: pointer; list-style: none; font: 800 12px/1 var(--font-label); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); padding: 4px 4px 8px; }
 .wd-side-summary::-webkit-details-marker { display: none; }
-.wd-side-summary::before { content: '▸'; color: var(--ink-3); }
-.wd-side[open] > .wd-side-summary::before { content: '▾'; }
+.wd-side-summary::before { content: ''; border-style: solid; border-width: 4px 0 4px 6px; border-color: transparent transparent transparent var(--ink-3); transition: transform .12s; }
+.wd-side[open] > .wd-side-summary::before { transform: rotate(90deg); }
 .wd-side-summary .count { margin-left: auto; font-weight: 600; color: var(--ink-3); background: var(--surface-2); padding: 2px 7px; border-radius: 8px; letter-spacing: 0; }
 .wd-section-head-row { display: flex; align-items: center; }
 .wd-section-head-row .wd-section-head { flex: 1; min-width: 0; }
@@ -2110,7 +2112,7 @@ main.wd-content { margin: 0; padding: 0; max-width: none; width: 100%; }
 /* ---------- help menu, tours, what's new ---------- */
 .help-menu { position: relative; }
 .help-btn { font: 800 16px/1 var(--font-label); min-width: 34px; }
-.help-menu.has-news .help-btn::after { content: ""; position: absolute; top: 4px; right: 4px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.help-menu.has-news .help-btn::after { content: ""; position: absolute; top: -3px; right: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
 .top-tools .menu-list { color: var(--ink); }
 .help-version { padding: 8px 10px 4px; margin-top: 4px; border-top: 1px solid var(--line); font: 400 12px/1.3 var(--font-body); color: var(--ink-3); }
 .tour { position: fixed; inset: 0; z-index: 60; }
@@ -2504,5 +2506,10 @@ html.read-color .power-about { font-style: normal; }
 .fs-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
 .fs-table th, .fs-table td { padding: 4px 6px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 @media (max-width: 640px) { .fs-list { max-height: 300px; } .fs-pts { margin-left: 0; } }
-/* Small phones (with the 1.15 reading zoom a 375 px screen has about 326 px): a tighter top bar so it fits */
-@media (max-width: 400px) { .topbar { column-gap: 8px; padding-left: 10px; padding-right: 10px; } }
+/* Phones (with the 1.15 reading zoom a 375 px screen has about 326 px, a 412 px one 358): a tighter top bar so it fits */
+@media (max-width: 480px) {
+  .topbar { column-gap: 8px; padding-left: 10px; padding-right: 10px; }
+  .topbar { grid-template-columns: auto minmax(0, 1fr) minmax(0, auto); }
+  .top-tools { gap: 3px; flex-wrap: wrap; justify-content: flex-end; }
+  .top-tools button { padding-left: 6px; padding-right: 6px; font-size: 13px; } /* words, not icons, so keep them compact */
+}

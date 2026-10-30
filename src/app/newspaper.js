@@ -303,7 +303,7 @@ export function editorPage(ctx) {
     const open = ctx.ui.draftOpen[s.id] ?? (i === 0 || !s.headline);
     const slot = h('select', { 'aria-label': 'Slot', onChange: (e2) => { s.slot = e2.target.value; redraw(); } }, Object.entries(STORY_SLOTS).map(([k, v]) => h('option', { value: k, selected: s.slot === k }, v)));
     const head = h('div', { class: 'np-story-head' },
-      h('button', { type: 'button', class: 'np-story-toggle', 'aria-expanded': String(open), onClick: () => { ctx.ui.draftOpen[s.id] = !open; rebuildForm(); } }, h('span', { class: 'wd-caret' }, open ? '▾' : '▸'), h('b', null, s.headline || 'Untitled story'), h('small', null, STORY_SLOTS[s.slot] || 'Brief')),
+      h('button', { type: 'button', class: 'np-story-toggle', 'aria-expanded': String(open), onClick: () => { ctx.ui.draftOpen[s.id] = !open; rebuildForm(); } }, h('span', { class: `wd-caret ${open ? 'open' : ''}`, 'aria-hidden': 'true' }), h('b', null, s.headline || 'Untitled story'), h('small', null, STORY_SLOTS[s.slot] || 'Brief')),
       h('span', { class: 'spacer' }),
       h('button', { class: 'x', type: 'button', 'aria-label': 'Move up', title: 'Move up', disabled: i === 0, onClick: () => { [d.stories[i - 1], d.stories[i]] = [d.stories[i], d.stories[i - 1]]; rebuildForm(); } }, 'Up'),
       h('button', { class: 'x', type: 'button', 'aria-label': 'Move down', title: 'Move down', disabled: i === d.stories.length - 1, onClick: () => { [d.stories[i + 1], d.stories[i]] = [d.stories[i], d.stories[i + 1]]; rebuildForm(); } }, 'Down'),

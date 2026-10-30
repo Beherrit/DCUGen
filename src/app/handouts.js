@@ -101,7 +101,7 @@ function letterEl(hd, pic, reveal) {
 function textsEl(hd) {
   const f = hd.fields || {};
   return h('div', { class: 'ho-phone' },
-    h('div', { class: 'ho-phone-status' }, h('span', null, f.when || ''), h('span', null, '●●●')),
+    h('div', { class: 'ho-phone-status' }, h('span', null, f.when || ''), h('span', null, 'LTE')),
     h('div', { class: 'ho-phone-contact' }, h('span', { class: 'ho-avatar' }, (f.them || '?').slice(0, 1)), h('b', null, f.them || 'Unknown number')),
     h('div', { class: 'ho-thread' }, (hd.lines || []).map((l) => h('div', { class: `ho-bubble ${l.side === 'me' ? 'me' : 'them'}` }, h('span', null, l.text), l.time ? h('small', null, l.time) : null))),
     h('div', { class: 'ho-phone-input' }, h('span', null, 'Message'), h('b', null, 'Send')));
