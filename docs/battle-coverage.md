@@ -12,14 +12,14 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | effect | 63 | 7 | 48 | 1 | 7 | 98% |
 | extra | 50 | 19 | 20 | 3 | 8 | 93% |
-| flaw | 41 | 11 | 22 | 2 | 6 | 94% |
+| flaw | 41 | 11 | 23 | 1 | 6 | 97% |
 | advantage | 75 | 30 | 22 | 0 | 23 | 100% |
 | skill | 16 | 8 | 0 | 2 | 6 | 80% |
 | action | 20 | 10 | 10 | 0 | 0 | 100% |
 | maneuver | 12 | 7 | 4 | 1 | 0 | 92% |
 | condition | 30 | 18 | 11 | 0 | 1 | 100% |
 | rule | 39 | 19 | 17 | 1 | 2 | 97% |
-| all | 346 | 129 | 154 | 10 | 53 | 97% |
+| all | 346 | 129 | 155 | 9 | 53 | 97% |
 
 ## Effects
 
@@ -188,7 +188,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Source | none | The environment (a fire, a person, a place) is not modelled, so a Source is never missing and the power keeps working. | MA 98 |
 | Strained | full | The effect never uses extra effort (MA 98). | MA 98 |
 | Uncertain | full | The critical miss range grows by one natural number per rank: a natural 1 and 2 with one rank (MA 98). | MA 98 |
-| Weak Limbed | none | Needs the Extra Limbs effect, which is not simulated (extra limbs do not hold or attack). | MA 98 |
+| Weak Limbed | partial | house rule: the extra limbs add no Strength of their own to a grab, so each rank of the flaw takes a rank off the +1 a rank bonus that all the limbs give a grab attempt (Extra Limbs). The limbs' own Strength matters nowhere else in the fight. | MA 98 |
 
 ## Advantages
 
