@@ -66,6 +66,22 @@ test('in the play view, assuming a stance changes the defense and Neutral clears
   expect(errors).toEqual([]);
 });
 
+test('the Rules tab has the Martial Arts book: styles, stances and maneuvers with their pages', async ({ page }) => {
+  const errors = await openApp(page);
+  await showTab(page, 'rules');
+  for (const cat of ['Fighting styles', 'Stances', 'Combat maneuvers', 'Optional rules']) {
+    await expect(page.locator('.ae-tabs button', { hasText: new RegExp(`^${cat}$`) })).toBeVisible();
+  }
+  await page.locator('.ae-tabs button', { hasText: /^Stances$/ }).click();
+  const table = page.locator('.rule-card', { hasText: 'Stances (table)' });
+  await expect(table.locator('tbody tr')).toHaveCount(33);
+  await expect(table.locator('tr', { hasText: 'Blocking' })).toContainText('13');
+  await page.locator('.ae-tabs button', { hasText: /^Everything$/ }).click();
+  await page.locator('#rules-q').fill('Soft Landing');
+  await expect(page.locator('.rule-card', { has: page.locator('.rule-title', { hasText: /^Soft Landing$/ }) })).toContainText('MA 154');
+  expect(errors).toEqual([]);
+});
+
 test('the styles section and the stance picker stay inside the screen on a phone @phone', async ({ page }) => {
   await openApp(page);
   await startBlank(page);

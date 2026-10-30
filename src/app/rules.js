@@ -7,6 +7,7 @@ import { guideFor, skillGuideBody } from './skillguide.js';
 import { rangeCalculator } from './rangecalc.js';
 import { state, savePrefs, emit } from './store.js';
 import { houseRules, setHouseRules, HOUSE_DEFAULTS, isByTheBook } from '../engine/house.js';
+import { martialCards } from './rules-martial.js';
 
 /** House rules: how strict the app is for this table. */
 function housePanel() {
@@ -73,6 +74,7 @@ function buildCards() {
     add('Skills', { title: s.name, meta: `${s.ability}${s.trained_only ? ' · trained only' : ''}${s.specialized ? ' · pick a specialty' : ''}`, summary: g ? null : s.summary,
       details: g ? `${g.covers || ''} ${(g.uses || []).map((u) => `${u.name} ${u.text || ''}`).join(' ')}` : null, el: g ? () => skillGuideBody(g) : null, hideDetails: !!g, source: g ? null : s.source });
   }
+  cards.push(...martialCards(R)); // Martial Arts 3e: styles, stances, maneuvers, weapons, headquarters, optional rules
   return cards;
 }
 
@@ -164,7 +166,7 @@ export function renderRules() {
   };
   root.append(
     h('div', { class: 'page-head' }, h('div', null, h('h1', null, 'Rules'),
-      h('p', null, 'Quick reference for DC Adventures: actions, maneuvers, checks, combat, hazards, tables, conditions, every effect, extra, flaw, advantage and skill. Page numbers point to the Hero\'s Handbook.'))),
+      h('p', null, 'Quick reference for DC Adventures: actions, maneuvers, checks, combat, hazards, tables, conditions, every effect, extra, flaw, advantage and skill, plus the Martial Arts book: fighting styles, stances, combat maneuvers and its optional rules. Page numbers point to the Hero\'s Handbook (DCA) or Martial Arts 3e (MA).'))),
     housePanel(),
     h('div', { class: 'roster-tools' },
       h('input', { type: 'search', id: 'rules-q', placeholder: 'Search the rules (grab, falling, Area, Luck...)', value: query, 'aria-label': 'Search the rules', onInput: (e) => { query = e.target.value; draw(); } }),
