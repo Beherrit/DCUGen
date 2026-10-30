@@ -1942,7 +1942,7 @@ div.play-line small { grid-column: 1; grid-row: 2; }
 .bm-prop-body { stroke: rgba(0, 0, 0, .55); stroke-width: 1.5; }
 .bm-prop.sel .bm-prop-body { stroke: var(--blue); stroke-width: 4; }
 .bm-prop-ridge { stroke: rgba(0, 0, 0, .45); stroke-width: 2; }
-.bm-prop-icon { pointer-events: none; }
+.bm-prop-short { font: 800 13px/1 var(--font-label, sans-serif); fill: #fff; paint-order: stroke; stroke: rgba(0,0,0,.6); stroke-width: 2px; pointer-events: none; }
 .bm-prop-floors { font: 800 9px/1 sans-serif; fill: #fff; paint-order: stroke; stroke: rgba(0,0,0,.6); stroke-width: 2px; pointer-events: none; }
 .bm-handle { fill: #fff; stroke: #111; stroke-width: 2; cursor: grab; }
 .bm-handle.aim { fill: var(--tc, #e3242b); }
@@ -1956,7 +1956,7 @@ div.play-line small { grid-column: 1; grid-row: 2; }
 .bm-token.down { opacity: .45; }
 .bm-token.hidden { opacity: .5; }
 .bm-token.villain .bm-ring-token { stroke-dasharray: 4 2; }
-.bm-badge { font-size: 12px; pointer-events: none; }
+.bm-badge { font: 800 9px/1 sans-serif; fill: #fff; paint-order: stroke; stroke: rgba(0,0,0,.7); stroke-width: 2px; pointer-events: none; }
 .bm-initial { font: 900 15px/1 var(--font-label, sans-serif); fill: #fff; pointer-events: none; }
 .bm-name { font: 700 10px/1 sans-serif; fill: #111; paint-order: stroke; stroke: #fff; stroke-width: 3px; pointer-events: none; }
 .bm-ring { fill: none; stroke-width: 2; pointer-events: none; }
@@ -1980,7 +1980,6 @@ div.play-line small { grid-column: 1; grid-row: 2; }
 .bm-settings .rc-row { margin: 8px 0; align-items: end; }
 .bm-pieces { display: flex; flex-wrap: wrap; gap: 4px; }
 .bm-piece { display: grid; justify-items: center; gap: 2px; min-width: 64px; padding: 5px 6px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); cursor: pointer; color: var(--ink); }
-.bm-piece span { font-size: 20px; line-height: 1; }
 .bm-piece small { font: 700 10.5px/1.1 var(--font-label); }
 .bm-piece[aria-pressed="true"] { border-color: var(--blue); box-shadow: inset 0 0 0 2px var(--blue); }
 .bm-build { display: grid; gap: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
