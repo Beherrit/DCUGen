@@ -258,7 +258,7 @@ test('line: front-liners use Defensive Attack 2, and guards interpose for any al
       runToEnd(f, R);
       defensive += f.log.filter((e) => byTeamA(e) && /Defensive Attack/.test(e.text)).length;
     }
-    for (const i of range(14)) {
+    for (const i of range(60)) { // 60 fights: with the objects-and-summons attacks the fights are shorter and 14 were too few to tell the two apart
       const A = [hero('paragon', `ia-${i}`), hero('blaster', `ib-${i}`), hero('mystic', `ic-${i}`)];
       A[0].advantages = [...(A[0].advantages || []), { name: 'Interpose', rank: 1 }];
       const f = arena(tactic, `gd-${i}`, A, [hero('powerhouse', `id-${i}`), hero('speedster', `ie-${i}`)], { enclosed: true });
@@ -271,7 +271,7 @@ test('line: front-liners use Defensive Attack 2, and guards interpose for any al
   // The exact count depends on how long fights last (trips and other maneuvers shorten some); the front-liners'
   // Defensive Attack 2 itself is pinned by the hook test above.
   assert.ok(line.defensive >= none.defensive + 30, `Defensive Attack: line ${line.defensive}, none ${none.defensive}`);
-  assert.ok(line.interposeForCaster >= none.interposeForCaster + 8, `interposes for the mystic ally: line ${line.interposeForCaster}, none ${none.interposeForCaster} (30 against 14)`);
+  assert.ok(line.interposeForCaster >= none.interposeForCaster + 8, `interposes for the mystic ally: line ${line.interposeForCaster}, none ${none.interposeForCaster} (58 against 42 over 60 fights)`);
 });
 
 // ---------------------------------------------------------------------------------------------------------

@@ -14,6 +14,7 @@ export const piecesOf = (b) => b?.cover || [];
 
 /** "brick wall (stone, 8 in, Toughness 8)" */
 export function pieceLabel(p) {
+  if (p.created) return `${p.name} (created, Toughness ${p.toughness})`;
   return `${p.name} (${materialOf(p.material)?.name || p.material}, ${p.inches} in, Toughness ${p.toughness})`;
 }
 

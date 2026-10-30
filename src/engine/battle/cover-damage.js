@@ -10,6 +10,7 @@ import { rangePenalty } from './odds.js';
 import { attackVerb } from './attack-roll.js';
 import { piecesOf, coverLevel, pieceLabel, uncoverBehind } from './cover.js';
 import { feet, areaPieces } from './geometry.js';
+import { manifestationFeedback } from './feedback.js';
 
 const ORDER = ['intact', 'holed', 'destroyed'];
 
@@ -23,6 +24,10 @@ function outcome(piece, fails) {
 
 /** The piece's Toughness check against damage of this rank. Updates its state and the log. Returns the degrees of failure. */
 export function damagePiece(b, c, piece, rank, rng, { crit = false } = {}) {
+  if (piece.impervious && rank <= Math.floor(piece.toughness / 2)) { // an Impervious created object shrugs off weak damage (p92)
+    log(b, { kind: 'resist', actor: c?.id, text: `The ${pieceLabel(piece)} is Impervious and shrugs off Damage ${rank} without a check.` });
+    return 0;
+  }
   const dc = 15 + rank + (crit ? 5 : 0);
   const r = rollCheck(rng, piece.toughness, dc);
   const { roll, total, fails } = r;
@@ -33,6 +38,7 @@ export function damagePiece(b, c, piece, rank, rng, { crit = false } = {}) {
   const after = changed && piece.level ? `, now ${left === 'none' ? 'no cover at all' : `${left} cover`}` : '';
   log(b, { kind: changed ? 'condition' : 'resist', actor: c?.id, text: `The ${pieceLabel(piece)} resists Damage ${rank}: Toughness d20 ${roll} ${sign(piece.toughness)} = ${total} vs DC ${dc}${crit ? ' (+5, defenseless object)' : ''}${critNote(r)} — ${out.text}${after}.`, dice: [{ label: 'Toughness check', roll, mod: piece.toughness, total, dc }], important: changed });
   if (piece.state === 'destroyed' && changed) uncoverBehind(b, piece);
+  if (piece.feedback && fails > 0) manifestationFeedback(b, c, b.combatants.find((x) => x.id === piece.owner), { rank: piece.rank, damage: rank, what: `the ${piece.name}` }, rng); // Feedback (feedback.js)
   return fails;
 }
 

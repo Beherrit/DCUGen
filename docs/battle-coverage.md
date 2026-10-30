@@ -10,16 +10,16 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 
 | Kind | Total | Full | Partial | None | n/a | Covered |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| effect | 63 | 6 | 32 | 17 | 8 | 69% |
+| effect | 63 | 6 | 35 | 14 | 8 | 75% |
 | extra | 50 | 19 | 20 | 3 | 8 | 93% |
 | flaw | 41 | 11 | 22 | 2 | 6 | 94% |
-| advantage | 75 | 30 | 21 | 1 | 23 | 98% |
+| advantage | 75 | 30 | 22 | 0 | 23 | 100% |
 | skill | 16 | 8 | 0 | 2 | 6 | 80% |
 | action | 20 | 10 | 10 | 0 | 0 | 100% |
 | maneuver | 12 | 7 | 4 | 1 | 0 | 92% |
 | condition | 30 | 18 | 10 | 1 | 1 | 97% |
 | rule | 39 | 19 | 17 | 1 | 2 | 97% |
-| all | 346 | 128 | 136 | 28 | 54 | 90% |
+| all | 346 | 128 | 140 | 24 | 54 | 92% |
 
 ## Effects
 
@@ -32,12 +32,12 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Communication | n/a | Communication has no effect on a fight. | DCA 89 |
 | Comprehend | n/a | Languages and comprehension do not matter in a fight. | DCA 90 |
 | Concealment | partial | Visual concealment gives -2 or -5 to attacks against the holder; other senses and non-visual concealment are ignored. | DCA 91 |
-| Create | none | Created objects and barriers are not simulated. | DCA 91 |
+| Create | partial | The AI forms a piece of cover with Toughness equal to the rank where it keeps the most enemy ranged fire off the fighters beside it (cover does nothing against a close attack): a piece the grid treats like any scenery, blocking movement, giving partial or total cover, damaged and destroyed with the Toughness check, gone when the maker is down unless Continuous or Permanent, repaired or moved by using the effect again. Dropping an object is a ranged attack against Dodge for Damage equal to the rank (held to the power level limit: attack bonus + rank at most twice the PL), and trapping with objects is a Snare of the rank (broken out of with Damage). Impervious and Feedback work; Proportional splits the rank. house rule: a piece fills one square, rank 4 makes partial cover and rank 7 total cover (the book gives no size on the grid). Not modelled: Movable, Tether, Stationary, Selective, Precise, Subtle, supporting weight, bridges, and cover that blocks the maker's own shots through it. | DCA 91 |
 | Damage | full | Toughness check at 15 + rank with cumulative bruises, dazed, staggered and incapacitated; Strength gives built-in close Damage. | DCA 93 |
 | Dazzle | partial | Fought as an Affliction (impaired, disabled, unaware) but the sense it blocks is not tracked, except that an Immunity to a sense (sight or hearing) or to dazzle effects stops it. | DCA 94 |
 | Deflect | partial | Taking the Defend action to deflect protects the user and every ally in long range until its next turn; the user rolls d20 (10 or less counts 11) plus its rank against the attacker, -2 at medium range and -5 at long range, and the attacker beats the better of that and the flat defense. A rank-for-defense Defend rolls the rank in place of its own Dodge or Parry. Area, perception and non-Dodge, non-Parry attacks are never deflected. Reflect and Redirect (the Deflect extras) send a beaten attack back; the AI deflects when its own attack is worth less than the harm to its allies, or when Bodyguard or Hold the Line asks. Extended Range and descriptor effects (such as 'resistance to psionic') are not read. | DCA 95 |
 | Duplication | partial | Summon Duplicate, Active: a copy of the summoner with the same traits except this power, a minion that acts in full and needs no orders. At the full-copy rank (points not counting Duplication over 15, rounded up) it is exact; lower, it is scaled down. house rule: the book says 'proportionately lower-ranked traits' and no formula, so abilities, defenses, power ranks and skill ranks are multiplied by (rank x 15 / points) and rounded down. The summoner's hero points are not spendable for the duplicate; Multiple Minions and the other Summon extras work as for Summon. | DCA 94 |
-| Element Control | none | Control effects (Move Object style) are not simulated. | DCA 95 |
+| Element Control | partial | Move Object with the element as its descriptor and Perception Ranged: its thrown element needs no attack check, and the element's Immunity applies. Its Alternate Effects (walls of rock as Create, tunnelling as Burrowing and the rest) work if the character has them as powers. | DCA 95 |
 | Elongation | partial | Stretches the fighter's close reach by the distance of its rank (rank 1 is 60 ft), counted in whole squares at the scale of the fight; the help it gives to grabbing is not applied. | DCA 96 |
 | Energy Absorption | none | Absorbing energy attacks into Enhanced Traits is not simulated. | DCA 95 |
 | Energy Aura | partial | Fights as Damage that is used like a normal attack; its automatic Reaction against attackers is not simulated. | DCA 97 |
@@ -63,7 +63,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Mind Control | partial | Dazed, compelled and controlled work (a controlled fighter attacks its own side); the controller's other orders are not. | DCA 107 |
 | Mind Reading | n/a | Reading minds has no combat effect here. | DCA 106 |
 | Morph | n/a | Changing appearance has no combat effect here. | DCA 108 |
-| Move Object | none | Moving or throwing objects with a power is not simulated. | DCA 108 |
+| Move Object | partial | Two attacks from the rank (held to the power level limit: attack bonus + rank at most twice the PL, which the build does not check for a Control effect): thrown objects (Damage at the rank, plus a rank for each Throwing Mastery and Improvised Weapon rank, a ranged attack check against Dodge, or none when the effect is Perception Ranged) and seizing a target (a Snare of the rank, broken out of with Damage). house rule: something is always at hand to throw. Not modelled: disarm and trip with the effect, throwing a seized fighter, holding objects still, Precise and Subtle. | DCA 108 |
 | Movement | none | Special movement types are not counted. | DCA 109 |
 | Nullify | partial | Opposed check against sustained protection only; other powers cannot be nullified. The AI values it by the gain for the allies who strike while the protection is down. | DCA 111 |
 | Power-Lifting | n/a | Only changes how much can be lifted. | DCA 111 |
@@ -213,7 +213,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Improved Initiative | full | +4 to initiative per rank. | DCA 75 |
 | Improved Smash | full | No -5 on attacks against a held item. | DCA 75 |
 | Improved Trip | full | No -2 on the trip, no counter-trip, and the attacker picks the target's weaker of Athletics and Acrobatics. The AI tries it with a lower bar for the odds. | DCA 76 |
-| Improvised Weapon | none | Thrown scenery and picked-up objects are not simulated. | DCA 76 |
+| Improvised Weapon | partial | Only as Move Object uses it: each rank adds 1 to the damage of objects thrown with the effect. Picked-up scenery and objects thrown by hand are not simulated. | DCA 76 |
 | Move-by Action | full | The move is split around the attack and stays within the fighter's speed: a shooter shoots from where it stands and then steps back out of reach of a melee threat; a melee fighter steps in, strikes and steps out when the foe is dangerous (speedsters always). | DCA 77 |
 | Power Attack | full | Trade attack bonus for rank, up to 5 with the advantage and 2 without. | DCA 77 |
 | Precise Attack | full | Each rank ignores the cover or concealment penalty for one pairing of close or ranged attacks, such as Ranged, Cover. | DCA 77 |

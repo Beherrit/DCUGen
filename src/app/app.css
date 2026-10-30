@@ -722,6 +722,7 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 .bt-grid .bg-label { font: 700 3.4px var(--font-label); fill: var(--ink-3); }
 .bt-grid .bg-piece rect { fill: color-mix(in srgb, var(--ink-3) 45%, var(--surface)); stroke: var(--ink-2); stroke-width: .4; }
 .bt-grid .bg-piece text { font: 700 3px var(--font-label); fill: var(--ink); }
+.bt-grid .bg-piece.created rect { fill: color-mix(in srgb, var(--accent) 22%, var(--surface)); stroke-dasharray: 2 .8; }
 .bt-grid .bg-piece.holed rect { fill: color-mix(in srgb, #a8670b 40%, var(--surface)); stroke-dasharray: 1 .6; }
 .bt-grid .bg-piece.destroyed rect { fill: color-mix(in srgb, #c8202f 20%, var(--surface)); opacity: .55; }
 .bt-grid .bg-token { cursor: pointer; transition: opacity .25s ease; outline: none; }

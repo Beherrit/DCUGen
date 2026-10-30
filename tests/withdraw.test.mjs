@@ -39,7 +39,7 @@ const count = (tactic, re) => SEEDS.reduce((n, i) => n + fight(tactic, i).log.fi
 
 /** A started fight with hand-placed fighters: A0 a tank with Interpose (the rearguard), A1-A3 not; B0, B1 the foes. */
 function scene(tactic = 'withdraw', options = {}, seed = 'w1') {
-  const b = arena(tactic, seed, [hero('powerhouse', 'w1'), hero('blaster', 'w2'), hero('mystic', 'w3'), hero('speedster', 'w4')], [hero('paragon', 'w5'), hero('crimefighter', 'w6')], options);
+  const b = arena(tactic, seed, [hero('powerhouse', 'w1a'), hero('blaster', 'w2'), hero('mystic', 'w3'), hero('speedster', 'w4')], [hero('paragon', 'w5'), hero('crimefighter', 'w6')], options);
   startBattle(b, R); b.log.length = 0;
   for (const c of b.combatants) { c.x = c.team === 'A' ? 3 : 4; c.y = 5; c.moveFt = 120; c.adv.Fearless = 0; } // four squares per move at 30 ft
   return { b, ...Object.fromEntries(b.combatants.map((c) => [c.id.toLowerCase(), c])) };
@@ -224,7 +224,7 @@ test('withdraw: holding out for the set rounds wins only once they are over, and
 });
 
 test('withdraw: a whole fight with withdrawRounds 1 ends in round 2 as a hold-out win, with nobody escaped', () => {
-  const b = arena('withdraw', 'w1', [hero('powerhouse', 'w1'), hero('blaster', 'w2'), hero('mystic', 'w3'), hero('speedster', 'w4')], [hero('paragon', 'w5'), hero('crimefighter', 'w6')], { withdrawRounds: { A: 1 } });
+  const b = arena('withdraw', 'w1', [hero('powerhouse', 'w1a'), hero('blaster', 'w2'), hero('mystic', 'w3'), hero('speedster', 'w4')], [hero('paragon', 'w5'), hero('crimefighter', 'w6')], { withdrawRounds: { A: 1 } });
   runToEnd(b, R);
   assert.deepEqual([b.winner, b.gotAway, b.round, b.combatants.filter((c) => c.escaped).length], ['A', true, 2, 0]);
   assert.equal(lastText(b), 'Team A gets away after holding out for 1 round. Team B holds the field.');

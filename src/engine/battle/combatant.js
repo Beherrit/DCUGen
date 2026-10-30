@@ -20,6 +20,7 @@ import { restoreForm } from './insubstantial.js';
 import { flawsOf, shapeAttack, freshFlawState } from './flaws.js';
 import { extrasOf } from './extras.js';
 import { formAttack } from './attack-form.js';
+import { powerAttacks } from './power-attacks.js';
 
 export function effectWeights(attack) {
   if (attack.effect === 'Damage') return [0, 1, 2.3, 3.8, 6.5];
@@ -203,7 +204,7 @@ export function rebuildCombatant(c, R, d = null) {
   c.flaw ||= freshFlawState();           // a battle saved before the flaws were simulated has none
   c.initBonus = d.initiative;
   const where = new Map(allPowers(c.ch).map((x) => [x.power, x]));
-  c.attacks = d.attacks.map((a) => buildAttack(c, a, R, where)).filter((a) => (a.rank > 0 || a.effect !== 'Damage') && !(a.item && (c.dropped || []).includes(a.item.key)) && !(a.ex?.attackForm && !a.formOk));
+  c.attacks = [...d.attacks, ...powerAttacks(c.ch, R, d.abilities)].map((a) => buildAttack(c, a, R, where)).filter((a) => (a.rank > 0 || a.effect !== 'Damage') && !(a.item && (c.dropped || []).includes(a.item.key)) && !(a.ex?.attackForm && !a.formOk));
   powerStats(c);
   c.immune = immunitiesOf(c.ch, d);      // [{ label, half, hits(atk), crit, interaction, fear, grab, environment }] (immunity.js)
   c.insub = restoreForm(c);              // the Insubstantial form the fighter is in, or null (insubstantial.js)

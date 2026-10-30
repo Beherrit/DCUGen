@@ -51,8 +51,8 @@
   {
     "kind": "effect",
     "name": "Create",
-    "status": "none",
-    "note": "Created objects and barriers are not simulated.",
+    "status": "partial",
+    "note": "The AI forms a piece of cover with Toughness equal to the rank where it keeps the most enemy ranged fire off the fighters beside it (cover does nothing against a close attack): a piece the grid treats like any scenery, blocking movement, giving partial or total cover, damaged and destroyed with the Toughness check, gone when the maker is down unless Continuous or Permanent, repaired or moved by using the effect again. Dropping an object is a ranged attack against Dodge for Damage equal to the rank (held to the power level limit: attack bonus + rank at most twice the PL), and trapping with objects is a Snare of the rank (broken out of with Damage). Impervious and Feedback work; Proportional splits the rank. house rule: a piece fills one square, rank 4 makes partial cover and rank 7 total cover (the book gives no size on the grid). Not modelled: Movable, Tether, Stationary, Selective, Precise, Subtle, supporting weight, bridges, and cover that blocks the maker's own shots through it.",
     "source": "DCA 91"
   },
   {
@@ -86,8 +86,8 @@
   {
     "kind": "effect",
     "name": "Element Control",
-    "status": "none",
-    "note": "Control effects (Move Object style) are not simulated.",
+    "status": "partial",
+    "note": "Move Object with the element as its descriptor and Perception Ranged: its thrown element needs no attack check, and the element's Immunity applies. Its Alternate Effects (walls of rock as Create, tunnelling as Burrowing and the rest) work if the character has them as powers.",
     "source": "DCA 95"
   },
   {
@@ -268,8 +268,8 @@
   {
     "kind": "effect",
     "name": "Move Object",
-    "status": "none",
-    "note": "Moving or throwing objects with a power is not simulated.",
+    "status": "partial",
+    "note": "Two attacks from the rank (held to the power level limit: attack bonus + rank at most twice the PL, which the build does not check for a Control effect): thrown objects (Damage at the rank, plus a rank for each Throwing Mastery and Improvised Weapon rank, a ranged attack check against Dodge, or none when the effect is Perception Ranged) and seizing a target (a Snare of the rank, broken out of with Damage). house rule: something is always at hand to throw. Not modelled: disarm and trip with the effect, throwing a seized fighter, holding objects still, Precise and Subtle.",
     "source": "DCA 108"
   },
   {
@@ -982,8 +982,8 @@
   {
     "kind": "advantage",
     "name": "Improvised Weapon",
-    "status": "none",
-    "note": "Thrown scenery and picked-up objects are not simulated.",
+    "status": "partial",
+    "note": "Only as Move Object uses it: each rank adds 1 to the damage of objects thrown with the effect. Picked-up scenery and objects thrown by hand are not simulated.",
     "source": "DCA 76"
   },
   {

@@ -79,10 +79,10 @@ function drawLabels(svg) {
 
 function drawPieces(svg, battle) {
   for (const p of battle.cover || []) {
-    svg.append(el('g', { class: `bg-piece ${p.state}` },
+    svg.append(el('g', { class: `bg-piece ${p.state} ${p.created ? 'created' : ''}` },
       el('rect', { x: p.x * CELL + 1, y: p.y * CELL + 1, width: CELL - 2, height: CELL - 2, rx: 1.2 }),
       el('text', { x: p.x * CELL + CELL / 2, y: p.y * CELL + CELL / 2 + 1.1, 'text-anchor': 'middle' }, initials(p.name)),
-      el('title', {}, `${p.name} at ${squareName(p.x, p.y)}: ${p.level} cover, Toughness ${p.toughness}, ${p.state}`)));
+      el('title', {}, `${p.name}${p.created ? ' (created)' : ''} at ${squareName(p.x, p.y)}: ${p.level} cover, Toughness ${p.toughness}, ${p.state}`)));
   }
 }
 
