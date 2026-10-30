@@ -1,4 +1,4 @@
-// Jump-anywhere search: Ctrl+K (⌘K on a Mac), or 🔍 in the top bar. One box for every section, the things
+// Jump-anywhere search: Ctrl+K (Cmd+K on a Mac), or the Search button in the top bar. One box for every section, the things
 // you do most, every character, every World page, every rule and every creature. Arrow keys and Enter.
 
 import { h, clear } from './dom.js';
@@ -7,15 +7,13 @@ import { rankItems, starterItems, groupByKind } from '../engine/palette.js';
 let provider = () => [];
 let layer = null;
 
-const KIND_GLYPH = { 'Go to': '→', Do: '⚡', Character: '🦸', Page: '🌐', Rule: '📖', Creature: '🐉' };
-
 /** items() returns everything searchable: [{ id, label, kind, hint, words, weight, run }]. */
 export function initPalette(items) {
   provider = items;
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && e.key.toLowerCase() === 'k') { e.preventDefault(); if (layer) closePalette(); else openPalette(); }
   });
-  const btn = h('button', { class: 'icon-btn palette-btn', type: 'button', id: 'palette-btn', title: 'Search everything (Ctrl+K)', 'aria-label': 'Search everything', onClick: () => openPalette() }, '🔍');
+  const btn = h('button', { class: 'icon-btn palette-btn', type: 'button', id: 'palette-btn', title: 'Search everything (Ctrl+K)', 'aria-label': 'Search everything', onClick: () => openPalette() }, 'Search');
   document.getElementById('theme-toggle').before(btn);
 }
 
@@ -45,7 +43,6 @@ export function openPalette(initial = '') {
       if (it.kind !== lastKind) { list.append(h('li', { class: 'palette-kind', role: 'presentation' }, it.kind)); lastKind = it.kind; }
       list.append(h('li', { class: `palette-item ${i === at ? 'on' : ''}`, role: 'option', id: `palette-${i}`, 'aria-selected': String(i === at),
         onMousemove: () => { if (at !== i) { at = i; mark(); } }, onClick: () => run(it) },
-        h('span', { class: 'palette-glyph', 'aria-hidden': 'true' }, it.glyph || KIND_GLYPH[it.kind] || '•'),
         h('span', { class: 'palette-label' }, it.label),
         it.hint ? h('small', null, it.hint) : null));
     });
@@ -65,7 +62,7 @@ export function openPalette(initial = '') {
     else if (e.key === 'Escape') { e.preventDefault(); closePalette(); }
   });
   layer = h('div', { class: 'palette', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Search everything', onMousedown: (e) => { if (e.target === layer) closePalette(); } },
-    h('div', { class: 'palette-box' }, input, list, h('div', { class: 'palette-foot' }, h('span', null, '↑↓ to move · Enter to open · Esc to close'), h('span', null, 'Ctrl+K anywhere'))));
+    h('div', { class: 'palette-box' }, input, list, h('div', { class: 'palette-foot' }, h('span', null, 'Up and Down to move · Enter to open · Esc to close'), h('span', null, 'Ctrl+K anywhere'))));
   document.body.append(layer);
   draw();
   input.focus();

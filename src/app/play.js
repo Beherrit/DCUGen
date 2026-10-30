@@ -51,7 +51,7 @@ export function renderPlay(ch, R, opts) {
     const { total, dc, roll: d20 } = e.dice || {};
     const r = applyDamage(s, { total, dc, roll: d20 });
     setPlay((st) => Object.assign(st, r.state));
-    toast(`${e.text} → ${r.text}`);
+    toast(`${e.text} to ${r.text}`);
   };
   let saved = 0;
   try { const c = costBreakdown(ch, R); saved = c.budget - c.total; } catch { /* unknown */ }
@@ -75,8 +75,8 @@ export function renderPlay(ch, R, opts) {
       h('button', { class: 'btn', type: 'button', title: 'Extra effort: +1 rank, a power stunt, an extra action... then fatigued next turn unless you spend a hero point', onClick: () => {
         setPlay((st) => { const i = FATIGUE.indexOf(st.fatigue); st.fatigue = FATIGUE[Math.min(FATIGUE.length - 1, i + 1)]; });
         toast('Extra effort: you become more fatigued (spend a hero point to cancel it: press − on Hero points and set Fatigue back)');
-      } }, '💪 Extra effort'),
-      h('button', { class: 'btn', type: 'button', disabled: !s.heroPoints, title: 'Spend a hero point: re-roll, improve a check, recover...', onClick: () => setPlay((st) => { st.heroPoints = Math.max(0, st.heroPoints - 1); }) }, '⭐ Spend hero point'),
+      } }, 'Extra effort'),
+      h('button', { class: 'btn', type: 'button', disabled: !s.heroPoints, title: 'Spend a hero point: re-roll, improve a check, recover...', onClick: () => setPlay((st) => { st.heroPoints = Math.max(0, st.heroPoints - 1); }) }, 'Spend hero point'),
       h('button', { class: 'btn ghost', type: 'button', title: 'Damage, conditions and fatigue clear; hero points stay', onClick: () => setPlay((st) => Object.assign(st, endScene(st))) }, 'End of scene')));
 
   // ---- defenses ----
@@ -92,9 +92,9 @@ export function renderPlay(ch, R, opts) {
     h('div', { class: 'play-list' }, d.attacks.map((a) => {
       const dc = (a.effect === 'Damage' || a.resistance === 'Toughness' ? 15 : 10) + a.rank;
       return h('button', { type: 'button', class: 'play-line', onClick: () => (a.roll ? roll(`${a.name} attack`, a.bonus, { note: `${a.effect} ${a.rank}: ${a.resistance || 'resist'} DC ${dc}` }) : toast(`${a.name}: no attack roll. ${a.effect} ${a.rank}: targets resist with ${a.resistance} against DC ${dc}.`)) },
-        h('b', null, a.name), h('span', { class: 'num' }, a.roll ? sign(a.bonus + pen) : a.kind), h('small', null, `${a.effect} ${a.rank} · ${a.resistance || ''} DC ${dc}${a.power ? ` · 📏 ${rangeInfo(a.power, R)?.text || ''}` : a.kind === 'close' ? ' · 📏 close' : ''}`));
+        h('b', null, a.name), h('span', { class: 'num' }, a.roll ? sign(a.bonus + pen) : a.kind), h('small', null, `${a.effect} ${a.rank} · ${a.resistance || ''} DC ${dc}${a.power ? ` · Range ${rangeInfo(a.power, R)?.text || ''}` : a.kind === 'close' ? ' · Range close' : ''}`));
     })),
-    h('button', { class: 'btn sm', type: 'button', style: { marginTop: '8px' }, onClick: () => openRangeCalculator(ch, R) }, '📏 Range calculator'));
+    h('button', { class: 'btn sm', type: 'button', style: { marginTop: '8px' }, onClick: () => openRangeCalculator(ch, R) }, 'Range calculator'));
 
   // ---- skills ----
   const skills = h('section', { class: 'play-card' }, h('h3', null, 'Skills'),
@@ -126,7 +126,7 @@ export function renderPlay(ch, R, opts) {
       return h('div', { class: 'play-line' },
         h('b', null, c.identity?.codename || 'Companion'),
         h('small', null, cd ? `Dodge ${cd.defenses.Dodge} · Parry ${cd.defenses.Parry} · Tough ${cd.defenses.Toughness}` : ''),
-        cd?.attacks?.[1] || cd?.attacks?.[0] ? h('button', { class: 'btn sm', type: 'button', onClick: () => { const a = cd.attacks.find((x) => x.name !== 'Unarmed') || cd.attacks[0]; const e = rollCheck({ who: c.identity?.codename || 'Companion', label: `${a.name} attack`, mod: a.bonus ?? 0, note: `${a.effect} ${a.rank}` }); toast(e.text); } }, '🎲 Attack') : null,
+        cd?.attacks?.[1] || cd?.attacks?.[0] ? h('button', { class: 'btn sm', type: 'button', onClick: () => { const a = cd.attacks.find((x) => x.name !== 'Unarmed') || cd.attacks[0]; const e = rollCheck({ who: c.identity?.codename || 'Companion', label: `${a.name} attack`, mod: a.bonus ?? 0, note: `${a.effect} ${a.rank}` }); toast(e.text); } }, 'Attack') : null,
         h('button', { class: 'btn sm', type: 'button', onClick: () => opts.openCompanion?.(i) }, 'Sheet'));
     }))) : null;
 

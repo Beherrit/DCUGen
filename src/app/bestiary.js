@@ -16,17 +16,17 @@ let root;
 let hooks = {};
 
 export const REALMS = [
-  { id: 'Fantasy', glyph: '🐉', color: '#7a3fb8', blurb: 'Dragons, giants, fey, elementals and dungeon horrors' },
-  { id: 'Horror & Undead', glyph: '💀', color: '#5b6470', blurb: 'The dead that walk, demons, and things from beyond' },
-  { id: 'Myth & Legend', glyph: '🏛', color: '#b8862b', blurb: 'Beasts and spirits from the world\'s myths and cryptids' },
-  { id: 'Aliens & Cosmic', glyph: '👽', color: '#1f8f8a', blurb: 'Alien species, star-beasts and cosmic entities' },
-  { id: 'Robots & Constructs', glyph: '🤖', color: '#3a6fb0', blurb: 'Robots, mechs, clockwork and golems' },
-  { id: 'Kaiju', glyph: '🦖', color: '#c2410c', blurb: 'City-wrecking giant monsters' },
-  { id: 'Animals', glyph: '🐾', color: '#3f7d3a', blurb: 'Everyday and wild animals, dinosaurs and swarms' },
-  { id: 'People', glyph: '🧑', color: '#8a5a44', blurb: 'Civilians, cops, soldiers, thugs, agents and cultists' },
-  { id: 'Homebrew', glyph: '🧪', color: '#a21caf', blurb: 'Your own creatures, from homebrew packs (Workshop)' },
+  { id: 'Fantasy', color: '#7a3fb8', blurb: 'Dragons, giants, fey, elementals and dungeon horrors' },
+  { id: 'Horror & Undead', color: '#5b6470', blurb: 'The dead that walk, demons, and things from beyond' },
+  { id: 'Myth & Legend', color: '#b8862b', blurb: 'Beasts and spirits from the world\'s myths and cryptids' },
+  { id: 'Aliens & Cosmic', color: '#1f8f8a', blurb: 'Alien species, star-beasts and cosmic entities' },
+  { id: 'Robots & Constructs', color: '#3a6fb0', blurb: 'Robots, mechs, clockwork and golems' },
+  { id: 'Kaiju', color: '#c2410c', blurb: 'City-wrecking giant monsters' },
+  { id: 'Animals', color: '#3f7d3a', blurb: 'Everyday and wild animals, dinosaurs and swarms' },
+  { id: 'People', color: '#8a5a44', blurb: 'Civilians, cops, soldiers, thugs, agents and cultists' },
+  { id: 'Homebrew', color: '#a21caf', blurb: 'Your own creatures, from homebrew packs (Workshop)' },
 ];
-const realmInfo = (id) => REALMS.find((r) => r.id === id) || { id: id || 'Other', glyph: '✦', color: '#666666', blurb: '' };
+const realmInfo = (id) => REALMS.find((r) => r.id === id) || { id: id || 'Other', color: '#666666', blurb: '' };
 
 export function realmOf(e) {
   if (e.realm) return e.realm;
@@ -97,7 +97,6 @@ function card(e) {
   const isSel = selected?.entry.id === e.id;
   return h('button', { type: 'button', class: `bst-card ${isSel ? 'sel' : ''}`, style: { '--rc': r.color, '--rc-ink': inkFor(r.color) }, 'aria-pressed': String(isSel), onClick: () => select(e) },
     h('div', { class: 'bst-card-top' },
-      h('span', { class: 'bst-glyph', 'aria-hidden': 'true' }, r.glyph),
       h('span', { class: 'bst-cat' }, e.category),
       h('span', { class: 'bst-pl num' }, `PL ${e.pl}`)),
     h('div', { class: 'bst-name' }, e.name),
@@ -137,7 +136,7 @@ function detail() {
   const { entry, ch, template } = selected;
   const r = realmInfo(entry.realm);
   const notes = h('section', { class: 'bst-notes', style: { '--rc': r.color } },
-    h('div', { class: 'bst-notes-head' }, h('span', { 'aria-hidden': 'true' }, r.glyph), h('b', null, `${entry.realm} · ${entry.category}`)),
+    h('div', { class: 'bst-notes-head' }, h('b', null, `${entry.realm} · ${entry.category}`)),
     entry.summary ? h('p', null, entry.summary) : null,
     h('dl', null,
       entry.tactics ? [h('dt', null, 'Tactics'), h('dd', null, entry.tactics)] : null,
@@ -148,7 +147,7 @@ function detail() {
   const tpl = h('select', { id: 'bst-template', 'aria-label': 'Template', onChange: (e) => select(entry, e.target.value) },
     Object.entries(CREATURE_TEMPLATES).map(([k, v]) => h('option', { value: k, selected: k === template }, v.label)));
   const toolbar = h('div', { class: 'toolbar' },
-    h('button', { class: 'btn primary', type: 'button', onClick: () => hooks.throwIn?.(JSON.parse(JSON.stringify(ch)), { name: entry.name }) }, '⚔ Throw in Battle Room'),
+    h('button', { class: 'btn primary', type: 'button', onClick: () => hooks.throwIn?.(JSON.parse(JSON.stringify(ch)), { name: entry.name }) }, 'Throw in Battle Room'),
     h('button', { class: 'btn', type: 'button', title: 'Three of them', onClick: () => hooks.throwIn?.(JSON.parse(JSON.stringify(ch)), { name: entry.name, copies: 3 }) }, '×3'),
     h('button', { class: 'btn', type: 'button', onClick: () => hooks.addToInitiative?.(ch) }, 'Add to initiative'),
     h('button', { class: 'btn', type: 'button', onClick: () => hooks.openInForge?.(JSON.parse(JSON.stringify(ch))) }, 'Open in Forge'),
@@ -186,10 +185,10 @@ export function renderBestiary() {
 
   const realmBar = h('div', { class: 'bst-realms', role: 'group', 'aria-label': 'Realm' },
     h('button', { type: 'button', class: 'bst-realm', 'aria-pressed': String(!f.realm), style: { '--rc': '#444' }, onClick: () => { f.realm = ''; savePrefs(); renderBestiary(); } },
-      h('span', { class: 'bst-glyph' }, '✦'), h('span', null, 'All'), h('span', { class: 'count' }, list.length)),
+      h('span', null, 'All'), h('span', { class: 'count' }, list.length)),
     REALMS.filter((r) => counts[r.id]).map((r) => h('button', { type: 'button', class: 'bst-realm', title: r.blurb, 'aria-pressed': String(f.realm === r.id), style: { '--rc': r.color, '--rc-ink': inkFor(r.color) },
       onClick: () => { f.realm = f.realm === r.id ? '' : r.id; f.category = ''; savePrefs(); renderBestiary(); } },
-    h('span', { class: 'bst-glyph', 'aria-hidden': 'true' }, r.glyph), h('span', null, r.id), h('span', { class: 'count' }, counts[r.id]))));
+    h('span', null, r.id), h('span', { class: 'count' }, counts[r.id]))));
 
   const grid = h('div', { class: 'bst-grid' });
   const drawGrid = () => {
@@ -214,7 +213,7 @@ export function renderBestiary() {
       h('select', { id: 'bst-sort', onChange: (e) => { f.sort = e.target.value; savePrefs(); drawGrid(); } },
         [['pl', 'Power level'], ['name', 'Name']].map(([v, t]) => h('option', { value: v, selected: v === f.sort }, t)))),
     h('div', { class: 'btn-row' },
-      h('button', { class: 'btn primary', type: 'button', onClick: () => rollRandom(filtered(list)) }, '🎲 Random creature'),
+      h('button', { class: 'btn primary', type: 'button', onClick: () => rollRandom(filtered(list)) }, 'Random creature'),
       h('button', { class: 'btn', type: 'button', title: 'Add 3 random creatures from these filters to the initiative order', onClick: () => rollRandom(filtered(list), 3) }, 'Random encounter (3)')));
 
   drawGrid();

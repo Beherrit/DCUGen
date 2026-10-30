@@ -39,7 +39,7 @@ export function journalSection(ch, R, { change, onOpenPerson } = {}) {
           h('input', { type: 'text', value: p.who || '', placeholder: existing ? 'What happened with them' : 'Who they are', 'aria-label': 'Who they are', onInput: (ev) => { p.who = ev.target.value; } }),
           h('input', { type: 'text', value: p.status || '', placeholder: 'Status now (e.g. "now an enemy", "died in issue #12")', 'aria-label': 'Status', onInput: (ev) => { p.status = ev.target.value; } }),
           h('span', { class: `jr-tag ${existing ? '' : 'new'}` }, existing ? 'known' : 'new'),
-          h('button', { class: 'x', type: 'button', 'aria-label': 'Remove person', onClick: () => { people.splice(i, 1); drawPeople(); } }, '✕')));
+          h('button', { class: 'x', type: 'button', 'aria-label': 'Remove person', onClick: () => { people.splice(i, 1); drawPeople(); } }, 'Remove')));
       });
       peopleRows.append(h('button', { class: 'btn sm', type: 'button', onClick: () => { people.push({ name: '', relation: '', who: '', status: '' }); drawPeople(); } }, '+ Someone they met or dealt with'));
     };
@@ -52,7 +52,7 @@ export function journalSection(ch, R, { change, onOpenPerson } = {}) {
         drawPeople();
         toast(r.people?.length ? `Downtime rolled: ${r.people.map((p) => p.name).join(', ')} added to the people list` : 'Downtime rolled');
       } catch (err) { toast(err.message); }
-    } }, '🎲 Roll a downtime event');
+    } }, 'Roll a downtime event');
     const save = () => {
       const data = { session: session.value, date: date.value, title: title.value, text: text.value, people, downtime: downtime.value, pointsEarned: points ? Number(points.value) || 0 : 0 };
       if (!data.title.trim() && !data.text.trim()) { title.setCustomValidity('Give the session a title or some text'); title.reportValidity(); return; }
@@ -86,7 +86,7 @@ export function journalSection(ch, R, { change, onOpenPerson } = {}) {
         earned ? h('span', { class: 'chip jr-earned' }, `+${earned} pp`) : null,
         change ? h('span', { class: 'btn-row no-print' },
           h('button', { class: 'btn sm ghost', type: 'button', onClick: () => { editing = e.id; change(() => {}); } }, 'Edit'),
-          h('button', { class: 'btn sm ghost danger', type: 'button', onClick: () => { if (confirm(`Remove session ${e.session} from the journal? Its timeline entry and the people it added go with it.`)) change((c) => removeJournalEntry(c, e.id)); } }, '✕')) : null),
+          h('button', { class: 'btn sm ghost danger', type: 'button', onClick: () => { if (confirm(`Remove session ${e.session} from the journal? Its timeline entry and the people it added go with it.`)) change((c) => removeJournalEntry(c, e.id)); } }, 'Remove')) : null),
       e.text ? h('p', { class: 'jr-text' }, e.text) : null,
       e.people?.length ? h('div', { class: 'jr-chips' }, e.people.map((p) => {
         const k = known.find((x) => String(x.name).toLowerCase() === p.name.toLowerCase());
@@ -108,7 +108,7 @@ export function journalSection(ch, R, { change, onOpenPerson } = {}) {
     h('p', { class: 'hint', style: { margin: '0 0 8px' } }, 'Each session joins the life timeline as "In play". People you name are added to their life, or have their status updated. Points the GM awards for a session are tied to it, and so is whatever they bought.'),
     change && editing !== 'new' ? h('div', { class: 'btn-row no-print', style: { marginBottom: '8px' } },
       h('button', { class: 'btn primary', type: 'button', id: 'jr-new', onClick: () => { editing = 'new'; change(() => {}); } }, '+ New session'),
-      h('button', { class: 'btn', type: 'button', id: 'jr-enemy', title: 'Roll a villain who has it in for them', onClick: () => enemyDialog(ch, R, change) }, '😈 Add an enemy'),
+      h('button', { class: 'btn', type: 'button', id: 'jr-enemy', title: 'Roll a villain who has it in for them', onClick: () => enemyDialog(ch, R, change) }, 'Add an enemy'),
       entries.length ? h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(journalText(ch))) ? 'Journal copied' : 'Copy failed') }, 'Copy journal') : null) : null,
     editing === 'new' ? form(null) : null,
     linkRow,

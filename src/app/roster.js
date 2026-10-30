@@ -128,8 +128,8 @@ function folderPicker(current, onPick, { allowNew = true, label = 'Move to…' }
     if (v !== '__cur') onPick(v === '__root' ? '' : v);
   } },
   h('option', { value: '__cur', selected: true }, label),
-  h('option', { value: '__root' }, current ? '🌌 Hub only (no world)' : '✓ Hub only (no world)'),
-  allFolders().map((p) => h('option', { value: p, disabled: p === current }, `${'　'.repeat(p.split('/').length - 1)}${p === current ? '✓ ' : ''}${p.includes('/') ? '' : '🌍 '}${leafOf(p)}`)),
+  h('option', { value: '__root' }, current ? 'Hub only (no world)' : 'Hub only (no world), current'),
+  allFolders().map((p) => h('option', { value: p, disabled: p === current }, `${'　'.repeat(p.split('/').length - 1)}${p === current ? '(current) ' : ''}${leafOf(p)}`)),
   allowNew ? h('option', { value: '__new' }, current ? '+ New folder…' : '+ New world…') : null);
   return sel;
 }
@@ -151,8 +151,8 @@ export function worldSelect(current, onPick, { id } = {}) {
     }
     onPick(v);
   } },
-  h('option', { value: '', selected: !cur }, '🌌 The Multiverse Hub only'),
-  all.map((p) => h('option', { value: p, selected: p === cur }, `${'　'.repeat(p.split('/').length - 1)}${p.includes('/') ? '📁' : '🌍'} ${leafOf(p)}`)),
+  h('option', { value: '', selected: !cur }, 'The Multiverse Hub only'),
+  all.map((p) => h('option', { value: p, selected: p === cur }, `${'　'.repeat(p.split('/').length - 1)}${leafOf(p)}`)),
   h('option', { value: '__new' }, '+ New world…'));
   return sel;
 }
@@ -182,14 +182,14 @@ function card(ch) {
       h('label', { class: 'card-pick no-print', title: 'Select' }, h('input', { type: 'checkbox', checked: sel, 'aria-label': `Select ${ch.identity?.codename || 'character'}`, onChange: toggle })),
       h('div', { class: 'cn' }, ch.identity?.codename || 'Unnamed'),
       h('div', { class: 'rn' }, [ch.identity?.realName, `PL ${ch.pl}`, ch.alignment === 'villain' ? 'Villain' : 'Hero'].filter(Boolean).join(' · ')),
-      ch.folder && ui.folder !== ch.folder ? h('button', { type: 'button', class: 'card-folder', title: 'Open this folder', onClick: () => { ui.folder = ch.folder; saveView(); renderRoster(); } }, `${ch.folder.includes('/') ? '📁' : '🌍'} ${ch.folder}`) : null,
-      Array.isArray(ch.forms) && ch.forms.length > 1 ? h('span', { class: 'card-folder', title: ch.forms.map((f) => f.name).join(', ') }, `🎭 ${ch.forms.length} forms`) : null,
-      ch.companions?.length ? h('span', { class: 'card-folder', title: ch.companions.map((c) => c.identity?.codename).join(', ') }, `🐾 ${ch.companions.length}`) : null),
+      ch.folder && ui.folder !== ch.folder ? h('button', { type: 'button', class: 'card-folder', title: 'Open this folder', onClick: () => { ui.folder = ch.folder; saveView(); renderRoster(); } }, ch.folder) : null,
+      Array.isArray(ch.forms) && ch.forms.length > 1 ? h('span', { class: 'card-folder', title: ch.forms.map((f) => f.name).join(', ') }, `${ch.forms.length} forms`) : null,
+      ch.companions?.length ? h('span', { class: 'card-folder', title: ch.companions.map((c) => c.identity?.codename).join(', ') }, `${ch.companions.length} companion${ch.companions.length === 1 ? '' : 's'}`) : null),
     h('div', { class: 'card-body' },
       h('div', { class: 'tagwrap' },
         ch.archetype?.name && h('span', { class: 'chip' }, ch.archetype.name),
         ch.theme?.name && h('span', { class: 'chip' }, ch.theme.name),
-        h('span', { class: `status ${legal ? 'ok' : 'bad'}` }, legal ? `✓ ${s.cost.total}/${s.cost.budget}` : 'Check rules')),
+        h('span', { class: `status ${legal ? 'ok' : 'bad'}` }, legal ? `Legal ${s.cost.total}/${s.cost.budget}` : 'Check rules')),
       s ? h('div', { class: 'card-stats' },
         [['Dodge', s.d.defenses.Dodge], ['Parry', s.d.defenses.Parry], ['Tough', s.d.defenses.Toughness], ['Will', s.d.defenses.Will]].map(([k, v]) =>
           h('div', null, h('b', { class: 'num' }, v), h('span', null, k.toUpperCase())))) : null,
@@ -199,16 +199,16 @@ function card(ch) {
       folderPicker(ch.folder || '', (p) => { moveTo([ch], p); renderRoster(); toast(p ? `Moved to ${p}` : 'Moved out of its folder'); }),
       h('button', { class: 'btn sm', type: 'button', onClick: () => exportExcel(ch, R) }, 'Excel'),
       h('button', { class: 'btn sm', type: 'button', onClick: () => exportJson(ch) }, 'JSON'),
-      h('button', { class: 'btn sm', type: 'button', title: 'Add to the Battle Room', onClick: () => hooks.throwIn?.(ch) }, '⚔'),
+      h('button', { class: 'btn sm', type: 'button', title: 'Add to the Battle Room', onClick: () => hooks.throwIn?.(ch) }, 'Battle Room'),
       h('button', { class: 'btn sm', type: 'button', title: 'Duplicate', onClick: () => {
         const copy = JSON.parse(JSON.stringify(ch)); copy.rosterId = newId(); copy.identity = { ...copy.identity, codename: `${copy.identity?.codename || 'Unnamed'} (copy)` };
         upsert(copy); renderRoster(); toast('Copy added');
-      } }, '⧉'),
+      } }, 'Duplicate'),
       confirmDelete === ch.rosterId
         ? h('span', { class: 'btn-row' },
           h('button', { class: 'btn sm danger', type: 'button', onClick: () => { removeFromRoster(ch.rosterId); confirmDelete = null; renderRoster(); toast('Deleted'); } }, 'Delete for good'),
           h('button', { class: 'btn sm', type: 'button', onClick: () => { confirmDelete = null; renderRoster(); } }, 'Keep'))
-        : h('button', { class: 'btn sm ghost danger', type: 'button', title: 'Delete', onClick: () => { confirmDelete = ch.rosterId; renderRoster(); } }, '🗑')));
+        : h('button', { class: 'btn sm ghost danger', type: 'button', title: 'Delete', onClick: () => { confirmDelete = ch.rosterId; renderRoster(); } }, 'Delete')));
   return el;
 }
 
@@ -221,7 +221,7 @@ function row(ch) {
     h('td', { class: 'num' }, ch.pl), h('td', null, ch.alignment === 'villain' ? 'Villain' : 'Hero'), h('td', null, ch.archetype?.name || ''), h('td', null, ch.theme?.name || ''), h('td', null, ch.team || ''),
     h('td', { class: 'num' }, s ? `${s.d.defenses.Dodge}/${s.d.defenses.Parry}/${s.d.defenses.Toughness}/${s.d.defenses.Will}` : ''),
     h('td', null, folderPicker(ch.folder || '', (p) => { moveTo([ch], p); renderRoster(); }, { label: ch.folder ? leafOf(ch.folder) : 'Hub only' })),
-    h('td', null, h('div', { class: 'btn-row', style: { gap: '4px' } }, h('button', { class: 'btn sm', type: 'button', onClick: () => exportExcel(ch, R) }, 'Excel'), h('button', { class: 'btn sm', type: 'button', title: 'Add to the Battle Room', onClick: () => hooks.throwIn?.(ch) }, '⚔'))));
+    h('td', null, h('div', { class: 'btn-row', style: { gap: '4px' } }, h('button', { class: 'btn sm', type: 'button', onClick: () => exportExcel(ch, R) }, 'Excel'), h('button', { class: 'btn sm', type: 'button', title: 'Add to the Battle Room', onClick: () => hooks.throwIn?.(ch) }, 'Battle Room'))));
   return el;
 }
 
@@ -249,7 +249,7 @@ function folderTree() {
     const active = ui.folder === path;
     const btn = h('div', { class: `rf-node ${active ? 'active' : ''}`, style: { '--d': depth, '--c': color || 'var(--ink-3)' } },
       children.length ? h('button', { type: 'button', class: 'rf-caret', 'aria-label': collapsed ? 'Expand' : 'Collapse', onClick: () => { folders.collapsed[path] = !collapsed; saveFolders(); renderRoster(); } }, collapsed ? '▸' : '▾') : h('span', { class: 'rf-caret' }),
-      h('button', { type: 'button', class: 'rf-name', onClick: () => { ui.folder = path; saveView(); renderRoster(); } }, h('span', { class: 'rf-glyph' }, path === null ? '🌌' : path === '' ? '📄' : path.includes('/') ? '📁' : '🌍'), h('span', { class: 'rf-label' }, label), h('span', { class: 'count' }, counts(path))),
+      h('button', { type: 'button', class: 'rf-name', onClick: () => { ui.folder = path; saveView(); renderRoster(); } }, h('span', { class: 'rf-label' }, label), h('span', { class: 'count' }, counts(path))),
       path ? h('button', { type: 'button', class: 'rf-more', title: 'Rename, colour, delete, export', 'aria-label': `Folder options for ${label}`, onClick: (e) => { e.stopPropagation(); folderMenu(path, e.currentTarget); } }, '⋯') : null);
     if (path !== null) dropTarget(btn, path);
     return [btn, ...(collapsed ? [] : children.map((p) => node(p, leafOf(p), { depth: depth + 1, color: folderMeta(p)?.color || null, meta: folderMeta(p) })))];
@@ -294,10 +294,10 @@ function bulkBar() {
     h('button', { class: 'btn sm', type: 'button', onClick: () => { ui.selected.clear(); ui.selecting = false; renderRoster(); } }, 'Clear'),
     h('span', { class: 'spacer' }),
     folderPicker(null, (p) => { const k = moveTo(chars, p); ui.selected.clear(); ui.selecting = false; renderRoster(); toast(`${k} moved to ${p || 'no folder'}`); }, { label: n ? 'Move selected to…' : 'Move to…' }),
-    h('button', { class: 'btn sm', type: 'button', disabled: !n, onClick: () => shareRosterDialog('selected') }, '🔗 Link'),
+    h('button', { class: 'btn sm', type: 'button', disabled: !n, onClick: () => shareRosterDialog('selected') }, 'Link'),
     h('button', { class: 'btn sm', type: 'button', disabled: !n, onClick: () => exportRosterExcel(chars, R) }, 'Excel'),
     h('button', { class: 'btn sm', type: 'button', disabled: !n, onClick: () => exportRosterJson(chars) }, 'JSON'),
-    h('button', { class: 'btn sm', type: 'button', disabled: !n, onClick: () => { for (const c of chars) hooks.throwIn?.(c); toast(`${n} thrown in the Battle Room`); } }, '⚔ Battle Room'),
+    h('button', { class: 'btn sm', type: 'button', disabled: !n, onClick: () => { for (const c of chars) hooks.throwIn?.(c); toast(`${n} thrown in the Battle Room`); } }, 'Battle Room'),
     h('button', { class: 'btn sm ghost danger', type: 'button', disabled: !n, onClick: async () => { const ok = await openDialog({ title: `Delete ${n} character${n === 1 ? '' : 's'}?`, body: h('p', { style: { margin: 0 } }, 'This cannot be undone (a backup can bring them back).'), buttons: [{ label: 'Keep', value: false }, { label: 'Delete', value: true, danger: true }] }); if (ok) { for (const c of chars) removeFromRoster(c.rosterId); ui.selected.clear(); ui.selecting = false; renderRoster(); toast('Deleted'); } } }, 'Delete'));
 }
 
@@ -310,12 +310,12 @@ async function importDialog() {
 
 /** Who a share covers: everyone, the open world or folder, the selected cards, or any world. */
 function shareScopes() {
-  const out = [['all', `🌌 Everyone (The Multiverse Hub, ${state.roster.length})`, () => state.roster]];
+  const out = [['all', `Everyone (The Multiverse Hub, ${state.roster.length})`, () => state.roster]];
   const sel = state.roster.filter((c) => ui.selected.has(c.rosterId));
-  if (sel.length) out.push(['selected', `☑ The ${sel.length} selected`, () => sel]);
+  if (sel.length) out.push(['selected', `The ${sel.length} selected`, () => sel]);
   for (const p of allFolders()) {
     const n = state.roster.filter((c) => inFolder(c, p)).length;
-    if (n) out.push([`f:${p}`, `${p.includes('/') ? '📁' : '🌍'} ${p} (${n})`, () => state.roster.filter((c) => inFolder(c, p))]);
+    if (n) out.push([`f:${p}`, `${p} (${n})`, () => state.roster.filter((c) => inFolder(c, p))]);
   }
   return out;
 }
@@ -348,7 +348,7 @@ export async function shareRosterDialog(start) {
   pick.addEventListener('change', make); pics.addEventListener('change', make);
   await make();
   await openDialog({
-    title: '🔗 Share characters as a link',
+    title: 'Share characters as a link',
     body: [h('label', { class: 'field' }, h('span', null, 'Who'), pick),
       h('label', { class: 'bm-check' }, pics, 'Include uploaded pictures (the link gets much longer)'),
       out],
@@ -410,7 +410,7 @@ export function renderRoster() {
     h('div', { class: 'btn-row' },
       paintButton(),
       backupMenu(),
-      h('button', { class: 'btn primary', type: 'button', id: 'roster-share', disabled: !state.roster.length, title: 'A link that adds these characters to anyone\'s roster', onClick: () => shareRosterDialog() }, '🔗 Share as a link'),
+      h('button', { class: 'btn primary', type: 'button', id: 'roster-share', disabled: !state.roster.length, title: 'A link that adds these characters to anyone\'s roster', onClick: () => shareRosterDialog() }, 'Share as a link'),
       h('button', { class: 'btn', type: 'button', onClick: importDialog }, 'Import'),
       h('button', { class: 'btn', type: 'button', disabled: !list.length, title: `Everyone shown (${here})`, onClick: () => exportRosterExcel(list, R, ui.folder ? leafOf(ui.folder) : undefined) }, 'Export to Excel'),
       h('button', { class: 'btn', type: 'button', disabled: !list.length, onClick: () => exportRosterJson(list) }, 'Export JSON'))));
@@ -434,9 +434,9 @@ export function renderRoster() {
     h('label', { class: 'wd-inline' }, 'Sort', h('select', { 'aria-label': 'Sort', onChange: (e) => { ui.sort = e.target.value; saveView(); renderRosterList(); } }, Object.entries(SORTS).map(([k, v]) => h('option', { value: k, selected: k === ui.sort }, v)))),
     h('div', { class: 'seg', role: 'group', 'aria-label': 'View', style: { width: '150px' } },
       [['cards', 'Cards'], ['list', 'List']].map(([v, t]) => h('button', { type: 'button', 'aria-pressed': String(ui.view === v), onClick: () => { ui.view = v; saveView(); renderRosterList(); } }, t))),
-    h('button', { class: 'btn sm', type: 'button', 'aria-pressed': String(ui.selecting), onClick: () => { ui.selecting = !ui.selecting; if (!ui.selecting) ui.selected.clear(); renderRoster(); } }, ui.selecting ? 'Done selecting' : '☑ Select'));
+    h('button', { class: 'btn sm', type: 'button', 'aria-pressed': String(ui.selecting), onClick: () => { ui.selecting = !ui.selecting; if (!ui.selecting) ui.selected.clear(); renderRoster(); } }, ui.selecting ? 'Done selecting' : 'Select'));
   const crumbs = h('div', { class: 'rf-crumbs' },
-    h('button', { type: 'button', class: 'linkish', onClick: () => { ui.folder = null; saveView(); renderRoster(); } }, '🌌 The Multiverse Hub'),
+    h('button', { type: 'button', class: 'linkish', onClick: () => { ui.folder = null; saveView(); renderRoster(); } }, 'The Multiverse Hub'),
     ...(ui.folder ? ui.folder.split('/').map((part, i, arr) => [h('span', { class: 'rf-sep' }, '›'), h('button', { type: 'button', class: 'linkish', onClick: () => { ui.folder = arr.slice(0, i + 1).join('/'); saveView(); renderRoster(); } }, part)]) : ui.folder === '' ? [h('span', { class: 'rf-sep' }, '›'), h('span', null, 'Not in a world')] : []),
     h('span', { class: 'hint', style: { marginLeft: '8px' } }, `${list.length} of ${state.roster.length}`));
   const listHost = h('div', { id: 'roster-list' });
@@ -460,7 +460,7 @@ function renderRosterList() {
   // sub-folders of the current folder, as drop targets up top
   if (ui.folder !== '') {
     const subs = allFolders().filter((p) => (ui.folder === null ? !p.includes('/') : parentOf(p) === ui.folder));
-    if (subs.length) host.append(h('div', { class: 'rf-subs' }, subs.map((p) => dropTarget(h('button', { type: 'button', class: 'rf-sub', style: { '--c': folderMeta(p)?.color || 'var(--ink-3)' }, onClick: () => { ui.folder = p; saveView(); renderRoster(); } }, p.includes('/') ? '📁 ' : '🌍 ', leafOf(p), h('span', { class: 'count' }, state.roster.filter((c) => inFolder(c, p)).length)), p))));
+    if (subs.length) host.append(h('div', { class: 'rf-subs' }, subs.map((p) => dropTarget(h('button', { type: 'button', class: 'rf-sub', style: { '--c': folderMeta(p)?.color || 'var(--ink-3)' }, onClick: () => { ui.folder = p; saveView(); renderRoster(); } }, leafOf(p), h('span', { class: 'count' }, state.roster.filter((c) => inFolder(c, p)).length)), p))));
   }
   const teams = new Map();
   const solo = [];
@@ -483,7 +483,7 @@ let painting = null; // cancel function while a roster paint runs
 let paintStatus = '';
 function paintButton() {
   const waiting = state.roster.filter((c) => { const p = portraitOf(c); return !p.hidden && p.source === 'ai' && !p.live; }).length;
-  if (painting) return h('button', { class: 'btn', type: 'button', title: paintStatus, onClick: () => { painting(); painting = null; renderRoster(); } }, `⏹ Stop painting (${paintStatus || 'working'})`);
+  if (painting) return h('button', { class: 'btn', type: 'button', title: paintStatus, onClick: () => { painting(); painting = null; renderRoster(); } }, `Stop painting (${paintStatus || 'working'})`);
   return h('button', { class: 'btn', type: 'button', disabled: !waiting, title: 'Fetch an AI painting for everyone who still has the built-in art, one at a time, and keep it on the character', onClick: () => {
     painting = paintRoster(() => state.roster, (rosterId, { image, live }) => {
       const cur = state.roster.find((x) => x.rosterId === rosterId);
@@ -496,7 +496,7 @@ function paintButton() {
       const b = root?.querySelector('#paint-status'); if (b) b.textContent = paintStatus; else renderRoster();
     });
     renderRoster();
-  } }, `🖼 Paint all portraits (${waiting})`);
+  } }, `Paint all portraits (${waiting})`);
 }
 
 function backupMenu() {
