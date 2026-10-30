@@ -13,6 +13,10 @@ import { costBreakdown } from '../engine/costs.js';
 import { openRangeCalculator } from './rangecalc.js';
 import { rangeInfo } from '../engine/range.js';
 import { sharedMapView } from './battlemap.js';
+import { stanceCard } from './styles/stance-card.js';
+import { currentStance, dropBrokenStance } from '../engine/martial/stance.js';
+import { inStance } from '../engine/martial/stance-mods.js';
+import { stanceDef } from '../engine/martial/lookup.js';
 
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const recent = []; // this visit's rolls, newest first
@@ -22,9 +26,12 @@ const recent = []; // this visit's rolls, newest first
  */
 export function renderPlay(ch, R, opts) {
   const s = playState(ch);
-  const setPlay = (fn) => opts.change((c) => { const st = playState(c); fn(st); c.play = st; });
-  let d;
-  try { d = deriveAll(ch, R); } catch (e) { return h('p', null, e.message); }
+  const setPlay = (fn) => opts.change((c) => { const st = playState(c); fn(st); dropBrokenStance(st); c.play = st; });
+  let d0;
+  try { d0 = deriveAll(ch, R); } catch (e) { return h('p', null, e.message); }
+  // A held stance (Martial Arts 3e) changes the defenses, attacks and initiative shown below.
+  const stanceNow = currentStance(s);
+  const d = stanceNow === 'Neutral' ? d0 : inStance(d0, stanceDef(R, stanceNow), ch.pl);
   const who = ch.identity?.codename || 'Someone';
   const pen = checkPenalty(s);
   const roll = (label, mod, extra = {}) => {
@@ -75,7 +82,7 @@ export function renderPlay(ch, R, opts) {
   // ---- defenses ----
   const defTile = (name, v, label) => h('button', { type: 'button', class: 'play-tile', disabled: v == null, onClick: () => roll(`${name} check`, v) },
     h('span', { class: 'label' }, label || name), h('b', { class: 'num' }, v == null ? '—' : v), h('small', null, v == null ? 'immune' : 'tap to roll'));
-  const defenses = h('section', { class: 'play-card' }, h('h3', null, 'Defenses', pen ? h('span', { class: 'chip warn' }, `${sign(pen)} on checks`) : null),
+  const defenses = h('section', { class: 'play-card' }, h('h3', null, 'Defenses', pen ? h('span', { class: 'chip warn' }, `${sign(pen)} on checks`) : null, stanceNow !== 'Neutral' ? h('span', { class: 'chip', id: 'defense-stance' }, `${stanceNow} stance`) : null),
     h('div', { class: 'play-tiles' },
       defTile('Dodge', def.Dodge), defTile('Parry', def.Parry), defTile('Toughness', def.Toughness, s.bruises ? `Toughness (−${s.bruises})` : 'Toughness'), defTile('Fortitude', def.Fortitude), defTile('Will', def.Will),
       h('button', { type: 'button', class: 'play-tile', onClick: () => roll('initiative', d.initiative) }, h('span', { class: 'label' }, 'Initiative'), h('b', { class: 'num' }, sign(d.initiative)), h('small', null, 'tap to roll'))));
@@ -125,5 +132,7 @@ export function renderPlay(ch, R, opts) {
 
   const log = recent.length ? h('section', { class: 'play-card' }, h('h3', null, 'Recent rolls'), h('ol', { class: 'play-log' }, recent.map((t) => h('li', null, t)))) : null;
 
-  return h('div', { class: 'play' }, status, sharedMapView(ch.rosterId ? [ch.rosterId] : []), defenses, attacks, skills, conditions, powers, companions, log);
+  const stance = stanceCard(ch, R, d0, s, { roll, setPlay });
+
+  return h('div', { class: 'play' }, status, sharedMapView(ch.rosterId ? [ch.rosterId] : []), stance, defenses, attacks, skills, conditions, powers, companions, log);
 }

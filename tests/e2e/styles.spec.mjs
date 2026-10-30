@@ -39,12 +39,44 @@ test('add Aikido at Student on a new character, see the cost, and buy a maneuver
   expect(errors).toEqual([]);
 });
 
-test('the styles section stays inside the screen on a phone @phone', async ({ page }) => {
+test('in the play view, assuming a stance changes the defense and Neutral clears it', async ({ page }) => {
+  await page.addInitScript(() => { Math.random = () => 0.97; }); // every d20 is a 20, so the stance check passes
+  const errors = await openApp(page);
+  await startBlank(page);
+  await addAikidoAtStudent(page);
+  await page.getByRole('button', { name: 'Done editing' }).click();
+  await page.locator('#view-play').click();
+  const stance = page.locator('#play-stance');
+  await expect(stance).toBeVisible();
+  await expect(stance.locator('.fs-stance-btn', { hasText: 'Blocking' })).toContainText('DC 13');
+  const parry = page.locator('.play-tile', { hasText: 'Parry' }).locator('b');
+  const before = Number(await parry.textContent());
+  await stance.locator('.fs-stance-btn[data-stance="Blocking"]').click();
+  await expect(page.locator('#play-stance-now')).toHaveText('Blocking');
+  await expect(parry).toHaveText(String(before + 2));
+  await expect(page.locator('#defense-stance')).toContainText('Blocking');
+  // Being prone ends the stance.
+  await page.locator('.play-chip', { hasText: /^Prone$/ }).click();
+  await expect(page.locator('#play-stance-now')).toHaveText('Neutral');
+  await page.locator('.play-chip', { hasText: /^Prone$/ }).click();
+  await stance.locator('.fs-stance-btn[data-stance="Blocking"]').click();
+  await expect(parry).toHaveText(String(before + 2));
+  await stance.locator('.fs-stance-btn[data-stance="Neutral"]').click();
+  await expect(parry).toHaveText(String(before));
+  expect(errors).toEqual([]);
+});
+
+test('the styles section and the stance picker stay inside the screen on a phone @phone', async ({ page }) => {
   await openApp(page);
   await startBlank(page);
   await addAikidoAtStudent(page);
-  await expect(page.locator('.fs-card[data-style="Aikido"]')).toBeVisible();
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-  expect(overflow).toBeLessThanOrEqual(1);
+  await page.locator('#fs-man-Aikido').selectOption({ label: 'Soft Landing' });
+  await page.locator('.fs-card[data-style="Aikido"]').getByRole('button', { name: 'Add maneuver' }).click();
+  const overflow = () => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  expect(await overflow()).toBeLessThanOrEqual(1);
+  await page.getByRole('button', { name: 'Done editing' }).click();
+  await page.locator('#view-play').click();
+  await expect(page.locator('#play-stance')).toBeVisible();
+  expect(await overflow()).toBeLessThanOrEqual(1);
   await showTab(page, 'forge');
 });

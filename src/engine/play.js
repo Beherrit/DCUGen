@@ -4,6 +4,8 @@
 // Damage (DCA, Toughness vs DC 15 + rank): fail by 1-5 = a bruise (-1 Toughness); by 6-10 = a bruise and
 // dazed; by 11-15 = a bruise and staggered; more = incapacitated. Staggered twice = incapacitated.
 
+import { dropBrokenStance } from './martial/stance.js';
+
 export const DAMAGE_STATES = ['none', 'dazed', 'staggered', 'incapacitated'];
 export const FATIGUE = ['none', 'fatigued', 'exhausted', 'incapacitated'];
 export const QUICK_CONDITIONS = ['Prone', 'Vulnerable', 'Defenseless', 'Hindered', 'Impaired', 'Disabled', 'Immobile', 'Stunned', 'Surprised', 'Entranced', 'Compelled', 'Controlled', 'Blind', 'Deaf', 'Unaware', 'Asleep', 'Bound', 'Restrained', 'Paralyzed', 'Transformed', 'Weakened'];
@@ -51,12 +53,13 @@ export function applyDamage(s, { total, dc, roll }) {
   if (degrees === 2) { worse('dazed'); if (out.damage === 'dazed') out.dazedTurns = 1; text += ', dazed'; }
   if (degrees === 3) { if (out.damage === 'staggered') { worse('incapacitated'); text += ', staggered again: incapacitated'; } else { worse('staggered'); text += ', staggered'; } }
   if (degrees >= 4) { worse('incapacitated'); text = 'incapacitated'; }
+  dropBrokenStance(out); // incapacitated ends a stance (Martial Arts 3e, p128)
   return { state: out, text: `${degrees} degree${degrees > 1 ? 's' : ''} of failure: ${text}` };
 }
 
 /** End of the scene: damage and conditions clear, hero points stay. */
 export function endScene(s) {
   const out = { ...s, bruises: 0, damage: 'none', conditions: [], fatigue: 'none' };
-  delete out.afflictions; delete out.dazedTurns; delete out.weakened;
+  delete out.afflictions; delete out.dazedTurns; delete out.weakened; delete out.stance; // a stance ends with the scene
   return out;
 }
