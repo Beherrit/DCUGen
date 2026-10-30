@@ -19,7 +19,7 @@ function infobox(e) {
   let s = null;
   try { s = ch ? makeSheet(ch, W.R) : null; } catch { s = null; }
   return h('aside', { class: 'wd-infobox', style: { '--c': e.color || typeMeta(e.type).color } },
-    h('div', { class: 'wd-infobox-head' }, h('span', { class: 'wd-glyph' }, typeMeta(e.type).glyph), typeMeta(e.type).one, statusBadge(e)),
+    h('div', { class: 'wd-infobox-head' }, typeMeta(e.type).one, statusBadge(e)),
     s ? h('div', { class: 'card-stats', style: { gridTemplateColumns: 'repeat(5, 1fr)', margin: '8px 0' } }, [['DOD', s.d.defenses.Dodge], ['PAR', s.d.defenses.Parry], ['TOU', s.d.defenses.Toughness], ['FOR', s.d.defenses.Fortitude], ['WIL', s.d.defenses.Will]].map(([k, v]) => h('div', null, h('b', { class: 'num' }, v), h('span', null, k)))) : null,
     rows.length ? h('dl', { class: 'wd-fields' }, rows.map(([k, v]) => [h('dt', null, k), h('dd', null, String(v))])) : null,
     e.source === 'bio' && e.knownBy?.length ? h('div', { class: 'wd-known' }, h('div', { class: 'label' }, 'Known through'), e.knownBy.map((k) => h('div', { class: 'wd-known-row' }, h('button', { type: 'button', class: 'wd-link', onClick: () => W.go(k.id) }, k.name), h('small', null, ` · their ${(k.relation || k.role || 'contact').toLowerCase()}`)))) : null,
@@ -99,7 +99,7 @@ function addLinkForm(e) {
     h('div', { class: 'wd-quicklinks' }, quick),
     h('div', { class: 'add-row' }, target, rel, newType, since, h('button', { class: 'btn primary', type: 'button', onClick: submit }, 'Link')),
     h('div', { class: 'add-row' }, note),
-    h('p', { class: 'hint', style: { margin: '4px 0 0' } }, `Reads as "<name> is ${e.name}'s <relationship>". The other page gets the inverse. Prefer "⚡ What happened" when the tie starts in play: it also ends what it replaces and lands on the timeline.`));
+    h('p', { class: 'hint', style: { margin: '4px 0 0' } }, `Reads as "<name> is ${e.name}'s <relationship>". The other page gets the inverse. Prefer "What happened" when the tie starts in play: it also ends what it replaces and lands on the timeline.`));
   el.addEventListener('toggle', () => { W.ui.addTie = el.open; });
   return el;
 }
@@ -165,18 +165,18 @@ export function entityPage(e) {
   const copyMd = async () => toast((await copyText(vaultMarkdown(W.world)[Object.keys(vaultMarkdown(W.world)).find((k) => k.endsWith(`/${e.name.replace(/[\\/:*?"<>|#^[\]]/g, '')}.md`)) || ''] || '')) ? 'Page copied as Markdown' : 'Copy failed');
   // The few things you do on a page are buttons; the rest is one menu.
   const actions = h('div', { class: 'toolbar wd-actions' },
-    W.ui.history.length ? h('button', { class: 'btn ghost', type: 'button', title: 'Back to the previous page', onClick: W.back }, '← Back') : null,
-    h('button', { class: 'btn primary', type: 'button', title: 'Record something that happened to them', onClick: () => momentDialog({ a: e.id }) }, '⚡ What happened'),
+    W.ui.history.length ? h('button', { class: 'btn ghost', type: 'button', title: 'Back to the previous page', onClick: W.back }, 'Back') : null,
+    h('button', { class: 'btn primary', type: 'button', title: 'Record something that happened to them', onClick: () => momentDialog({ a: e.id }) }, 'What happened'),
     h('button', { class: 'btn', type: 'button', title: 'Add a friend, enemy, faction, home…', onClick: () => { W.ui.addTie = true; W.renderWorld(); setTimeout(() => { const f = W.root.querySelector('#wd-link-target'); f?.scrollIntoView({ block: 'center' }); f?.focus(); }, 0); } }, '＋ Tie'),
-    h('button', { class: 'btn', type: 'button', 'aria-pressed': String(W.ui.edit), onClick: () => { W.ui.edit = !W.ui.edit; W.renderWorld(); } }, W.ui.edit ? '✓ Done editing' : '✎ Edit'),
+    h('button', { class: 'btn', type: 'button', 'aria-pressed': String(W.ui.edit), onClick: () => { W.ui.edit = !W.ui.edit; W.renderWorld(); } }, W.ui.edit ? 'Done editing' : 'Edit'),
     ch ? h('button', { class: 'btn', type: 'button', onClick: () => W.hooks.open?.(ch) }, 'Open on the Forge') : null,
     canOpenAsCharacter ? h('button', { class: 'btn', type: 'button', title: 'Rebuild this person as a full character from their key', onClick: openAsCharacter }, 'Open as a character') : null,
     h('span', { class: 'spacer' }),
     menu('More', [
-      ch ? { label: '⚔ Battle Room', hint: 'Throw them into a fight', run: () => W.hooks.throwIn?.(ch) } : null,
-      e.type === 'person' ? { label: '📜 Wanted poster', hint: 'Drafted from their ties and what happened', run: () => startHandout(W.ctx(), draftHandout(W.world, 'wanted', { a: e })) } : null,
-      e.type === 'person' ? { label: '🗂 Case file', hint: 'An agency case file, drafted from this page', run: () => startHandout(W.ctx(), draftHandout(W.world, 'casefile', { a: e })) } : null,
-      { label: '📌 Pin to the evidence board', run: () => { pinToBoard(W.saved, e.id); W.save(); W.go('board'); } },
+      ch ? { label: 'Battle Room', hint: 'Throw them into a fight', run: () => W.hooks.throwIn?.(ch) } : null,
+      e.type === 'person' ? { label: 'Wanted poster', hint: 'Drafted from their ties and what happened', run: () => startHandout(W.ctx(), draftHandout(W.world, 'wanted', { a: e })) } : null,
+      e.type === 'person' ? { label: 'Case file', hint: 'An agency case file, drafted from this page', run: () => startHandout(W.ctx(), draftHandout(W.world, 'casefile', { a: e })) } : null,
+      { label: 'Pin to the evidence board', run: () => { pinToBoard(W.saved, e.id); W.save(); W.go('board'); } },
       { label: 'Copy as Markdown', hint: 'For notes, Obsidian or a chat', run: copyMd },
       { label: e.source === 'manual' ? 'Delete this page' : 'Hide this page', hint: e.source === 'manual' ? 'Removes it and its ties' : 'The character or bio it came from is not touched', danger: true, run: removePage },
     ], { cls: 'btn' }));
@@ -195,7 +195,7 @@ export function entityPage(e) {
     pageLink(c.other),
     c.since || c.until ? h('span', { class: 'wd-when num', title: c.until ? 'Ended' : 'Since' }, c.until ? `until ${whenText(c.until)}` : `since ${whenText(c.since)}`) : null,
     c.note ? h('span', { class: 'wd-note' }, c.note) : null,
-    (c.source === 'manual' || W.ui.edit) && !c.ended ? h('button', { class: 'x', type: 'button', 'aria-label': 'Remove link', title: c.source === 'manual' ? 'Delete this link' : 'Hide this automatic link', onClick: () => { removeLink(W.saved, W.world, c.id); W.save(); W.renderWorld(); } }, '✕') : null);
+    (c.source === 'manual' || W.ui.edit) && !c.ended ? h('button', { class: 'x', type: 'button', 'aria-label': 'Remove link', title: c.source === 'manual' ? 'Delete this link' : 'Hide this automatic link', onClick: () => { removeLink(W.saved, W.world, c.id); W.save(); W.renderWorld(); } }, 'Remove') : null);
   const connections = h('section', { class: 'sec' },
     h('h3', null, 'Ties', h('span', { class: 'pts' }, `${e.connections.length}${e.past.length ? ` · ${e.past.length} past` : ''}`)),
     groups.length ? groups.map((g) => h('div', { class: 'wd-group' },
@@ -236,7 +236,7 @@ function editForm(e) {
     fields.forEach((f, i) => fieldRows.append(h('div', { class: 'wd-field-row' },
       h('input', { type: 'text', value: f.k, placeholder: 'Field', list: 'wd-field-presets', onInput: (ev) => { f.k = ev.target.value; } }),
       h('input', { type: 'text', value: f.v, placeholder: 'Value', onInput: (ev) => { f.v = ev.target.value; } }),
-      h('button', { class: 'x', type: 'button', 'aria-label': 'Remove field', onClick: () => { fields.splice(i, 1); drawFields(); } }, '✕'))));
+      h('button', { class: 'x', type: 'button', 'aria-label': 'Remove field', onClick: () => { fields.splice(i, 1); drawFields(); } }, 'Remove'))));
     fieldRows.append(h('datalist', { id: 'wd-field-presets' }, (presets[type.value] || []).map((p) => h('option', { value: p }))));
     fieldRows.append(h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', type: 'button', onClick: () => { fields.push({ k: '', v: '' }); drawFields(); } }, '+ Field'), (presets[type.value] || []).filter((p) => !fields.some((f) => f.k === p)).slice(0, 6).map((p) => h('button', { class: 'btn sm ghost', type: 'button', onClick: () => { fields.push({ k: p, v: '' }); drawFields(); } }, `+ ${p}`))));
   };
@@ -259,7 +259,7 @@ function editForm(e) {
 }
 
 export async function newPageDialog(presetType = 'faction', presetName = '') {
-  const type = h('select', { 'aria-label': 'Type' }, Object.entries(ENTITY_TYPES).filter(([t]) => !['paper', 'handout'].includes(t)).map(([t, m]) => h('option', { value: t, selected: t === presetType }, `${m.glyph} ${m.one}`)));
+  const type = h('select', { 'aria-label': 'Type' }, Object.entries(ENTITY_TYPES).filter(([t]) => !['paper', 'handout'].includes(t)).map(([t, m]) => h('option', { value: t, selected: t === presetType }, m.one)));
   const name = h('input', { type: 'text', placeholder: 'Name', 'aria-label': 'Name', value: presetName });
   const kind = h('input', { type: 'text', list: 'wd-kind-presets', placeholder: 'Kind (optional): team, gang, city, bar, artefact…', 'aria-label': 'Kind' });
   const summary = h('textarea', { placeholder: 'A line or two', style: { minHeight: '70px' } });

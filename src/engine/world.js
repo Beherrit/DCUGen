@@ -13,13 +13,13 @@ import { personKey } from './keys.js';
 import { mergeSessions } from './sessions.js';
 
 export const ENTITY_TYPES = {
-  person: { label: 'People', one: 'Person', glyph: '🧑', color: '#2f6fde' },
-  faction: { label: 'Factions', one: 'Faction', glyph: '🏛', color: '#8a5cd6' },
-  location: { label: 'Locations', one: 'Location', glyph: '📍', color: '#1a7f4b' },
-  event: { label: 'Events', one: 'Event', glyph: '📅', color: '#c2410c' },
-  item: { label: 'Items', one: 'Item', glyph: '🗝', color: '#a8670b' },
-  paper: { label: 'Newspapers', one: 'Newspaper', glyph: '📰', color: '#3b4252' },
-  handout: { label: 'Handouts', one: 'Handout', glyph: '🗂', color: '#8a5a44' },
+  person: { label: 'People', one: 'Person', glyph: 'P', color: '#2f6fde' },
+  faction: { label: 'Factions', one: 'Faction', glyph: 'F', color: '#8a5cd6' },
+  location: { label: 'Locations', one: 'Location', glyph: 'L', color: '#1a7f4b' },
+  event: { label: 'Events', one: 'Event', glyph: 'E', color: '#c2410c' },
+  item: { label: 'Items', one: 'Item', glyph: 'I', color: '#a8670b' },
+  paper: { label: 'Newspapers', one: 'Newspaper', glyph: 'N', color: '#3b4252' },
+  handout: { label: 'Handouts', one: 'Handout', glyph: 'H', color: '#8a5a44' },
 };
 
 // rel = what `to` is to `from`. inverse = what `from` is to `to`.

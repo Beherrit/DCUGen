@@ -12,7 +12,7 @@ test('a saved character gets a page, and what happened lands on the timeline', a
   await expect(page.locator('#view-world h1')).toContainText(name);
 
   // Record a moment: this character founded a new faction.
-  await page.getByRole('button', { name: '⚡ What happened' }).first().click();
+  await page.getByRole('button', { name: 'What happened' }).first().click();
   const dlg = page.locator('#dialog');
   await dlg.getByLabel('Who').fill(name);
   await dlg.getByLabel('What happened').selectOption({ label: 'founded' });

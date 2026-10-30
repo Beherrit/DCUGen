@@ -164,14 +164,14 @@ function go(page, { replace = false } = {}) {
 function back() { const prev = ui.history.pop(); if (prev != null) { ui.page = prev; ui.edit = false; ui.linkPreset = null; renderWorld(); } }
 // The World's own bar: where you are, the pages that aren't people or places, search, and the two things you
 // do most (record what happened, make a page). Everything else lives one click down.
-const TABS = [['home', 'Home', '⌂'], ['sessions', 'Sessions', '🗓'], ['timeline', 'Timeline', '🕰'], ['graph', 'Graph', '◉'], ['board', 'Board', '📌'], ['newsstand', 'Newsstand', '📰'], ['handouts', 'Handouts', '🗂'], ['vault', 'Share & export', '🗄']];
+const TABS = [['home', 'Home'], ['sessions', 'Sessions'], ['timeline', 'Timeline'], ['graph', 'Graph'], ['board', 'Board'], ['newsstand', 'Newsstand'], ['handouts', 'Handouts'], ['vault', 'Share & export']];
 const TAB_OF = { 'paper-edit': 'newsstand', 'handout-edit': 'handouts' };
 
 function newMenu() {
   return menu('＋ New', [
-    ...Object.entries(ENTITY_TYPES).filter(([t]) => t !== 'paper' && t !== 'handout').map(([t, m]) => ({ label: `${m.glyph} ${m.one}`, hint: NEW_HINTS[t] || '', run: () => newPageDialog(t) })),
-    { label: '📰 Front page', hint: 'Draft a newspaper from the campaign, or write one', run: () => startPaper(ctx(), { draft: true }) },
-    { label: '📜 Handout', hint: 'A wanted poster, case file, letter, texts or report', run: () => newHandoutDialog(ctx()) },
+    ...Object.entries(ENTITY_TYPES).filter(([t]) => t !== 'paper' && t !== 'handout').map(([t, m]) => ({ label: m.one, hint: NEW_HINTS[t] || '', run: () => newPageDialog(t) })),
+    { label: 'Front page', hint: 'Draft a newspaper from the campaign, or write one', run: () => startPaper(ctx(), { draft: true }) },
+    { label: 'Handout', hint: 'A wanted poster, case file, letter, texts or report', run: () => newHandoutDialog(ctx()) },
   ], { cls: 'btn sm' });
 }
 const NEW_HINTS = { person: 'Anyone the roster does not know yet', faction: 'A team, agency, gang, court or cult', location: 'A city, a base, a bar, a planet', event: 'A battle, a wedding, a heist, a funeral', item: 'An artefact, a weapon, a vehicle, a MacGuffin' };
@@ -193,12 +193,12 @@ function topbar() {
   const active = TAB_OF[ui.page] || ui.page;
   return h('div', { class: 'wd-topbar' },
     h('div', { class: 'wd-topbar-row' },
-      h('button', { type: 'button', class: 'wd-world-name', onClick: () => go('home'), title: 'The world\'s home page' }, h('span', { class: 'wd-glyph' }, '🌐'), h('b', null, world.name || 'My World')),
+      h('button', { type: 'button', class: 'wd-world-name', onClick: () => go('home'), title: 'The world\'s home page' }, h('b', null, world.name || 'My World')),
       h('div', { class: 'wd-search' }, q, results),
       h('div', { class: 'wd-topbar-actions' },
-        h('button', { class: 'btn sm primary', type: 'button', title: 'Record something that happened: a new tie, a betrayal, a death, a move, a faction joined or left', onClick: () => momentDialog({}) }, '⚡ What happened'),
+        h('button', { class: 'btn sm primary', type: 'button', title: 'Record something that happened: a new tie, a betrayal, a death, a move, a faction joined or left', onClick: () => momentDialog({}) }, 'What happened'),
         newMenu())),
-    h('nav', { class: 'wd-tabs', 'aria-label': 'World pages' }, TABS.map(([id, label, glyph]) => h('button', { type: 'button', class: `wd-tab ${active === id ? 'active' : ''}`, 'aria-current': active === id ? 'page' : null, onClick: () => go(id) }, h('span', { class: 'wd-glyph', 'aria-hidden': 'true' }, glyph), label))));
+    h('nav', { class: 'wd-tabs', 'aria-label': 'World pages' }, TABS.map(([id, label]) => h('button', { type: 'button', class: `wd-tab ${active === id ? 'active' : ''}`, 'aria-current': active === id ? 'page' : null, onClick: () => go(id) }, label))));
 }
 
 /** Every page, by kind. On a phone it starts folded, so the page you opened comes first. */
@@ -215,7 +215,7 @@ function indexPanel() {
     return h('div', { class: 'wd-section' },
       h('div', { class: 'wd-section-head-row' },
         h('button', { type: 'button', class: 'wd-section-head', 'aria-expanded': String(sOpen), onClick: () => { ui.open[t] = !sOpen; renderWorld(); } },
-          h('span', { class: 'wd-caret' }, sOpen ? '▾' : '▸'), h('span', { class: 'wd-glyph' }, meta.glyph), meta.label, h('span', { class: 'count' }, list.length)),
+          h('span', { class: 'wd-caret' }, sOpen ? '▾' : '▸'), meta.label, h('span', { class: 'count' }, list.length)),
         h('button', { type: 'button', class: 'wd-section-add', title: `New ${meta.one.toLowerCase()}`, 'aria-label': `New ${meta.one.toLowerCase()}`, onClick: () => { if (t === 'paper') startPaper(ctx(), { draft: true }); else if (t === 'handout') newHandoutDialog(ctx()); else newPageDialog(t); } }, '+')),
       sOpen ? h('div', { class: 'wd-section-list' },
         shown.map((e) => h('button', { type: 'button', class: `wd-tree ${ui.page === e.id ? 'active' : ''}`, style: { '--c': e.color || meta.color }, title: e.status || '', onClick: () => go(e.id) }, h('span', { class: 'swatch' }), h('span', { class: 'wd-tree-name' }, e.name), e.character ? h('span', { class: 'wd-tree-pl num' }, `PL ${e.character.pl}`) : shortStatus(e) ? h('span', { class: 'wd-tree-pl' }, e.status) : null)),
@@ -247,7 +247,7 @@ function home() {
     const ok = await openDialog({ title: 'This world', body: [h('label', { class: 'field' }, h('span', null, 'Name'), name), h('label', { class: 'field' }, h('span', null, 'Tagline'), tag), h('label', { class: 'field' }, h('span', null, 'About'), desc)], buttons: [{ label: 'Cancel', value: false }, { label: 'Save', value: true, primary: true }] });
     if (ok) { saved.name = name.value.trim() || 'My World'; saved.tagline = tag.value.trim(); saved.description = desc.value.trim(); save(); renderWorld(); }
   } }, 'Edit');
-  const quick = (glyph, label, hint, fn, primary = false) => h('button', { type: 'button', class: `wd-quick ${primary ? 'primary' : ''}`, title: hint, onClick: fn }, h('span', { class: 'wd-quick-glyph' }, glyph), h('b', null, label), h('small', null, hint));
+  const quick = (label, hint, fn, primary = false) => h('button', { type: 'button', class: `wd-quick ${primary ? 'primary' : ''}`, title: hint, onClick: fn }, h('b', null, label), h('small', null, hint));
   // Until something has been written by hand, show where to start; after that the bar above has it all.
   const fresh = !Object.keys(saved.entities).length && !(saved.moments || []).length && !saved.links.length;
   const shownCounts = counts.filter(({ n }) => n > 0);
@@ -258,10 +258,10 @@ function home() {
       editBtn),
     fresh && ents.length ? h('section', { class: 'wd-block' }, h('h2', null, 'Start here'),
       h('div', { class: 'wd-quicks' },
-        quick('⚡', 'What happened', 'Two people became enemies, someone joined a faction, moved, died…', () => momentDialog({}), true),
-        quick('🏛', 'New faction', 'A team, agency, gang, court or cult', () => newPageDialog('faction')),
-        quick('📍', 'New location', 'A city, a base, a bar, a planet', () => newPageDialog('location')),
-        quick('📌', 'Evidence board', 'Pin people, string the ties, stick the theories', () => go('board')))) : null,
+        quick('What happened', 'Two people became enemies, someone joined a faction, moved, died…', () => momentDialog({}), true),
+        quick('New faction', 'A team, agency, gang, court or cult', () => newPageDialog('faction')),
+        quick('New location', 'A city, a base, a bar, a planet', () => newPageDialog('location')),
+        quick('Evidence board', 'Pin people, string the ties, stick the theories', () => go('board')))) : null,
     !ents.length ? h('div', { class: 'empty' }, h('h2', null, 'An empty world'), h('p', null, 'Save characters to your roster and they appear here with everyone in their lives: parents, mentors, rivals, enemies, their city and their team. Then record what happens to them with "What happened".')) : null,
     latestBlock,
     papers.length ? h('section', { class: 'wd-block' }, h('h2', null, 'On the newsstand', h('button', { class: 'linkish', type: 'button', style: { marginLeft: '10px', fontSize: '13px' }, onClick: () => go('newsstand') }, 'all front pages')), h('div', { class: 'np-stand small' }, papers.map((e) => h('div', { class: 'np-card' }, paperThumb(e.paper, () => go(e.id)), h('div', { class: 'np-card-text' }, h('b', null, e.paper.masthead), h('span', null, [e.paper.edition, e.paper.date].filter(Boolean).join(' · '))))))) : null,

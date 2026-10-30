@@ -100,7 +100,7 @@ export function teamTool(redraw) {
           h('span', { class: 'chip' }, `PL ${ch.pl}`),
           h('span', { style: { flex: 1 } }),
           h('button', { class: 'btn sm', type: 'button', onClick: () => hooks.open?.(ch) }, 'Open sheet'),
-          h('button', { class: 'x', type: 'button', 'aria-label': `Take ${nameOf(ch)} out of play`, title: 'Take out of play', onClick: () => toggle(id) }, '✕')),
+          h('button', { class: 'x', type: 'button', 'aria-label': `Take ${nameOf(ch)} out of play`, title: 'Take out of play', onClick: () => toggle(id) }, 'Remove')),
         h('div', { class: 'team-fields' },
           h('label', { class: 'team-field' }, h('span', null, 'Conditions'),
             h('select', { 'aria-label': `Add a condition to ${nameOf(ch)}`, onChange: (e) => { if (e.target.value && !n.conds.includes(e.target.value)) { n.conds.push(e.target.value); save(); } rerender(); } },
@@ -120,8 +120,8 @@ export function teamTool(redraw) {
                 n.given = (n.given || 0) + n.xp; n.xp = 0; save(); rerender();
               } }, 'Give to sheet') : null))),
         n.conds.length ? h('ul', { class: 'team-conds' }, n.conds.map((c) => h('li', { class: 'team-cond' },
-          h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${c} from ${nameOf(ch)}`, title: 'Remove', onClick: () => { n.conds = n.conds.filter((x) => x !== c); save(); rerender(); } }, '✕'),
-          h('b', null, `${c}: `), R.raw.gm?.conditions?.conditions?.[c] || ''))) : null,
+          h('b', null, `${c}: `), R.raw.gm?.conditions?.conditions?.[c] || '',
+          h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${c} from ${nameOf(ch)}`, title: 'Remove', onClick: () => { n.conds = n.conds.filter((x) => x !== c); save(); rerender(); } }, 'Remove')))) : null,
         h('textarea', { rows: 2, placeholder: 'Notes', 'aria-label': `Notes for ${nameOf(ch)}`, onInput: (e) => { n.note = e.target.value; save(); } }, n.note));
     };
 
@@ -162,7 +162,7 @@ export function teamTool(redraw) {
   return h('div', { style: { display: 'grid', gap: '16px' } },
     h('p', { class: 'hint', style: { margin: 0 } }, 'Who is in play this session. Conditions, points and notes are kept in this browser and go into backups.'),
     h('div', { class: 'btn-row', id: 'team-actions' },
-      h('button', { class: 'btn sm primary', type: 'button', disabled: !everyone.length, onClick: toBattle }, '⚔ Everyone to the Battle Room'),
+      h('button', { class: 'btn sm primary', type: 'button', disabled: !everyone.length, onClick: toBattle }, 'Everyone to the Battle Room'),
       h('button', { class: 'btn sm', type: 'button', disabled: !everyone.length, onClick: toInitiative }, 'Roll initiative for everyone'),
       h('button', { class: 'btn sm', type: 'button', disabled: !heroes.length, onClick: awardAll }, '+1 bonus point to every hero'),
       h('button', { class: 'btn sm ghost', type: 'button', disabled: !everyone.length, title: 'Hero points back to 1, Toughness penalties and conditions cleared', onClick: newSession }, 'Reset for a new session')),

@@ -75,7 +75,7 @@ export async function momentDialog({ a = null, b = null, kind = null } = {}) {
   subject.addEventListener('input', fillKinds); other.addEventListener('input', fillKinds); kindSel.addEventListener('change', refresh); session.addEventListener('input', refresh); note.addEventListener('input', refresh); subjectType.addEventListener('change', fillKinds);
   fillKinds();
   const ok = await openDialog({
-    title: '⚡ What happened',
+    title: 'What happened',
     body: [
       h('datalist', { id: 'wd-mo-all' }, all.map((x) => h('option', { value: x.name }, typeMeta(x.type).one))),
       h('div', { class: 'add-row' }, subject, subjectType),

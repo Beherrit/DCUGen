@@ -6,7 +6,7 @@
 //   Hits         "Burst Damage 10 hits Shadowshot and Spark": each player's app rolls its own resistance
 //                and applies the result; the GM's own characters are rolled here. Everything goes to the feed.
 //   Initiative   roll for everyone, step through turns and rounds.
-//   Spotlight    who hasn't had a moment yet this session; ★ marks one.
+//   Spotlight    who hasn't had a moment yet this session; the Moment button marks one.
 //   Complications the scene in a sentence; complications it could bring into play; +1 hero point in one tap.
 //   Nemeses      recurring villains: grudge, what they learned from defeats, and the scheme clock.
 //   Recap        end the session: a comic-book cover and a few lines for the group chat.
@@ -122,7 +122,7 @@ function changeLocal(rosterId, fn) {
 function awardHeroPoint(person, why) {
   if (person.kind === 'live') lobbySend({ t: 'hp', rosterId: person.key, n: 1, why });
   else changeLocal(person.key, (st) => { st.heroPoints += 1; });
-  postRoll({ who: 'GM', kind: 'chat', text: `⭐ ${person.status.name} gets a hero point${why ? `: ${why}` : ''}.` });
+  postRoll({ who: 'GM', kind: 'chat', text: `${person.status.name} gets a hero point${why ? `: ${why}` : ''}.` });
 }
 
 // ---- hits -----------------------------------------------------------------------------------------------------
@@ -134,11 +134,11 @@ function applyHit(hit, people) {
     const ch = localChar(p.entry);
     const r = resolveHit(ch, hit, R);
     changeLocal(p.key, (st) => Object.assign(st, r.play));
-    postRoll({ who: p.status.name, text: `GM: ${describeHit(hit)} → ${r.text}`, dice: r.dice[r.dice.length - 1] ? { ...r.dice[r.dice.length - 1] } : undefined });
+    postRoll({ who: p.status.name, text: `GM: ${describeHit(hit)}: ${r.text}`, dice: r.dice[r.dice.length - 1] ? { ...r.dice[r.dice.length - 1] } : undefined });
   }
   gs.session && (gs.session.hits = (gs.session.hits || 0) + 1);
   save();
-  toast(`${describeHit(hit)} → ${targets.map((t) => t.status.name).join(', ')}${targets.some((t) => t.kind === 'live') ? ' (players roll their own)' : ''}`);
+  toast(`${describeHit(hit)} on ${targets.map((t) => t.status.name).join(', ')}${targets.some((t) => t.kind === 'live') ? ' (players roll their own)' : ''}`);
 }
 
 function hitConsole(people) {
@@ -150,7 +150,7 @@ function hitConsole(people) {
   const read = () => {
     parsed = input.value.trim() ? parseHit(input.value, names) : null;
     if (parsed && !parsed.error && parsed.effect === 'Affliction' && tiers.value.trim()) parsed.tiers = tiers.value.split('/').map((x) => x.split(/,| and /).map((y) => y.trim()).filter(Boolean).map((y) => y[0].toUpperCase() + y.slice(1).toLowerCase()));
-    preview.textContent = !parsed ? preview.textContent : parsed.error ? `⚠ ${parsed.error}` : `→ ${describeHit(parsed)} on ${parsed.targets.join(', ')}`;
+    preview.textContent = !parsed ? preview.textContent : parsed.error ? parsed.error : `${describeHit(parsed)} on ${parsed.targets.join(', ')}`;
     preview.classList.toggle('bad', !!parsed?.error);
   };
   input.addEventListener('input', read);
@@ -158,7 +158,7 @@ function hitConsole(people) {
   const go = () => { read(); if (!parsed || parsed.error) { toast(parsed?.error || 'Type a hit first'); return; } applyHit(parsed, people); input.value = ''; renderGmScreen(); };
   input.addEventListener('keydown', (e) => { if (e.key === 'Enter') go(); });
   return h('section', { class: 'panel gm-hit' },
-    h('h2', null, '💥 Hit them'),
+    h('h2', null, 'Hit them'),
     h('div', { class: 'seed-row' }, input, h('button', { class: 'btn primary', type: 'button', id: 'gm-hit-go', onClick: go }, 'Apply')),
     preview,
     h('details', null, h('summary', null, 'Affliction conditions'), tiers, h('p', { class: 'hint' }, 'What each degree of failure does, separated by "/". Leave empty for Dazed / Stunned / Incapacitated.')));
@@ -197,7 +197,7 @@ function initiativePanel(people) {
     const n = advanceTurn(gs.init);
     endTurnFor(n.ended, people);
     delete n.ended;
-    if (n.round !== gs.init.round) postRoll({ who: 'GM', kind: 'chat', text: `⏱ Round ${n.round}.` });
+    if (n.round !== gs.init.round) postRoll({ who: 'GM', kind: 'chat', text: `Round ${n.round}.` });
     gs.init = n;
     save(); broadcastInit(); renderGmScreen();
   };
@@ -212,10 +212,10 @@ function initiativePanel(people) {
   const acting = init ? people.find((p) => p.key === init.order[init.turn]?.key) : null;
   const remind = acting ? turnReminder(acting.status.play) : null;
   return h('section', { class: 'panel gm-init' },
-    h('div', { class: 'gm-head' }, h('h2', null, '⏱ Initiative'), init ? h('span', { class: 'chip' }, `Round ${init.round}`) : null, h('span', { class: 'spacer' }),
+    h('div', { class: 'gm-head' }, h('h2', null, 'Initiative'), init ? h('span', { class: 'chip' }, `Round ${init.round}`) : null, h('span', { class: 'spacer' }),
       h('button', { class: 'btn sm', type: 'button', id: 'gm-init-roll', disabled: !people.length, onClick: roll }, init ? 'Re-roll' : 'Roll for everyone'),
       init ? h('button', { class: 'btn sm', type: 'button', id: 'gm-delay', title: 'The acting character waits: they go after the next one', onClick: delay }, 'Delay') : null,
-      init ? h('button', { class: 'btn sm primary', type: 'button', id: 'gm-next', title: 'Ends this turn (recovery checks, dazes wear off) and starts the next', onClick: next }, 'Next turn ▶') : null,
+      init ? h('button', { class: 'btn sm primary', type: 'button', id: 'gm-next', title: 'Ends this turn (recovery checks, dazes wear off) and starts the next', onClick: next }, 'Next turn') : null,
       init ? h('button', { class: 'btn sm ghost', type: 'button', onClick: end }, 'End') : null),
     init ? h('ol', { class: 'gm-order' }, init.order.map((o, i) => h('li', { class: i === init.turn ? 'now' : '' }, h('b', { class: 'num' }, o.total), ' ', o.name, i === init.turn ? h('span', { class: 'chip' }, 'acting') : null)))
       : h('p', { class: 'hint', style: { margin: 0 } }, 'Rolls d20 + initiative for everyone on the board and keeps the turn order. Players see it on their phones, with a nudge when it\'s their turn.'),
@@ -240,28 +240,28 @@ function card(p, spot) {
       h('span', { class: 'swatch' }),
       h('b', { class: 'gm-name' }, s.name),
       h('span', { class: 'chip' }, `PL ${s.pl}`),
-      s.form ? h('span', { class: 'chip' }, `🎭 ${s.form}`) : null,
+      s.form ? h('span', { class: 'chip' }, `Form: ${s.form}`) : null,
       h('span', { class: `gm-src ${p.kind}`, title: local ? 'Run on this device' : 'Live from the player\'s app' }, local ? 'GM' : `● ${p.player}`),
       h('span', { class: 'spacer' }),
-      local ? h('button', { class: 'x', type: 'button', 'aria-label': `Take ${s.name} off the board`, onClick: () => { gs.board = gs.board.filter((x) => x.rosterId !== p.key); save(); renderGmScreen(); } }, '✕') : null),
+      local ? h('button', { class: 'x', type: 'button', 'aria-label': `Take ${s.name} off the board`, onClick: () => { gs.board = gs.board.filter((x) => x.rosterId !== p.key); save(); renderGmScreen(); } }, 'Remove') : null),
     h('div', { class: 'gm-defs' }, ['Dodge', 'Parry', 'Toughness', 'Fortitude', 'Will'].map((d) => h('span', { class: 'gm-def' }, h('small', null, d.slice(0, 4)), h('b', { class: 'num' }, s.defenses[d] == null ? '—' : s.defenses[d]))),
       h('span', { class: 'gm-def' }, h('small', null, 'Init'), h('b', { class: 'num' }, sign(s.initiative)))),
     h('div', { class: 'gm-state' },
-      h('span', { class: 'gm-hp', title: 'Hero points' }, '⭐ ', h('b', { class: 'num' }, pl.heroPoints)),
-      h('span', { class: 'gm-bruise', title: 'Bruises (−1 Toughness each)' }, '🩹 ', h('b', { class: 'num' }, pl.bruises)),
+      h('span', { class: 'gm-hp', title: 'Hero points' }, 'Hero points ', h('b', { class: 'num' }, pl.heroPoints)),
+      h('span', { class: 'gm-bruise', title: 'Bruises (−1 Toughness each)' }, 'Bruises ', h('b', { class: 'num' }, pl.bruises)),
       conds.length ? conds.map((c) => h('span', { class: `chip cond ${/Incapacitated|Stunned|Staggered/.test(c) ? 'bad' : ''}`, 'data-rule': c, 'data-rule-cat': 'Conditions', role: 'button', tabindex: 0, title: `${c}: what the rules say` }, c)) : h('span', { class: 'hint' }, 'fine'),
       s.penalty ? h('span', { class: 'chip warn' }, `${sign(s.penalty)} checks`) : null),
     s.pools.length || s.drains.length ? h('div', { class: 'gm-pools' },
-      s.drains.map((d) => h('span', { class: 'chip' }, `🩸 ${d.name} ${d.held}/${d.rank}`)),
-      s.pools.map((q) => h('span', { class: 'chip' }, `⚡ ${q.name} ${Math.round(q.spent * 10) / 10}/${q.avail} pp`))) : null,
+      s.drains.map((d) => h('span', { class: 'chip' }, `${d.name} ${d.held}/${d.rank}`)),
+      s.pools.map((q) => h('span', { class: 'chip' }, `${q.name} ${Math.round(q.spent * 10) / 10}/${q.avail} pp`))) : null,
     h('div', { class: 'gm-spot' }, h('div', { class: 'meter', title: 'Spotlight this session' }, h('i', { style: { width: `${((sp?.score || 0) / maxSpot) * 100}%` } })),
       h('small', null, sp?.score ? `${sp.score} spotlight` : 'no moment yet')),
     h('div', { class: 'gm-actions no-print' },
-      h('button', { class: 'btn sm', type: 'button', title: 'Mark a great moment for the spotlight', onClick: () => { if (!gs.session) startSession(); gs.session.taps[p.key] = (gs.session.taps[p.key] || 0) + 1; save(); renderGmScreen(); } }, '★ Moment'),
+      h('button', { class: 'btn sm', type: 'button', title: 'Mark a great moment for the spotlight', onClick: () => { if (!gs.session) startSession(); gs.session.taps[p.key] = (gs.session.taps[p.key] || 0) + 1; save(); renderGmScreen(); } }, 'Moment'),
       h('button', { class: 'btn sm', type: 'button', onClick: () => awardHeroPoint(p, 'from the GM') }, '+1 hero point'),
       local ? h('button', { class: 'btn sm ghost', type: 'button', title: 'Recover a bruise', disabled: !pl.bruises, onClick: () => { changeLocal(p.key, (st) => { st.bruises = Math.max(0, st.bruises - 1); }); renderGmScreen(); } }, '−1 bruise') : null,
       local ? h('select', { class: 'btn sm', 'aria-label': `Toggle a condition on ${s.name}`, onChange: (e) => { const c = e.target.value; if (!c) return; changeLocal(p.key, (st) => { st.conditions = st.conditions.includes(c) ? st.conditions.filter((x) => x !== c) : [...st.conditions, c]; }); renderGmScreen(); } },
-        h('option', { value: '' }, 'Condition…'), QUICK_CONDITIONS.map((c) => h('option', { value: c }, `${pl.conditions.includes(c) ? '✓ ' : ''}${c}`))) : null,
+        h('option', { value: '' }, 'Condition…'), QUICK_CONDITIONS.map((c) => h('option', { value: c }, `${pl.conditions.includes(c) ? 'Has: ' : ''}${c}`))) : null,
       local ? h('button', { class: 'btn sm ghost', type: 'button', onClick: () => { changeLocal(p.key, (st) => { st.bruises = 0; st.damage = 'none'; st.conditions = []; st.fatigue = 'none'; }); renderGmScreen(); } }, 'Clear') : null));
 }
 
@@ -292,7 +292,7 @@ export function startSession({ number = null, previously = null } = {}) {
   gs.session = { number: n, startedAt: new Date().toISOString(), taps: {}, complications: [], events: [], hits: 0 };
   gs.lastSession = Math.max(gs.lastSession || 0, n);
   save();
-  postRoll({ who: 'GM', kind: 'chat', text: `🎬 Session ${n} begins.` });
+  postRoll({ who: 'GM', kind: 'chat', text: `Session ${n} begins.` });
   const prev = previously ?? hooks.previously?.(n) ?? '';
   if (prev) postRoll({ who: 'GM', kind: 'chat', text: prev });
   if (root && !root.hidden) renderGmScreen();
@@ -321,23 +321,23 @@ function complicationsPanel(people) {
           gs.session.complications.push({ key: pr.key, name: pr.name, text: pr.complication.type });
           save();
           awardHeroPoint(p, `${pr.complication.type} comes into play`);
-          postRoll({ who: 'GM', kind: 'chat', text: `🎭 ${pr.name}'s complication comes into play: ${pr.complication.type}.` });
+          postRoll({ who: 'GM', kind: 'chat', text: `${pr.name}'s complication comes into play: ${pr.complication.type}.` });
           renderGmScreen();
-        } }, used ? 'Used ✓' : 'Invoke: +1 hero point')));
+        } }, used ? 'Used' : 'Invoke: +1 hero point')));
     }
   };
   scene.addEventListener('input', () => { gs.scene = scene.value; save(); draw(); });
   draw();
-  return h('section', { class: 'panel gm-comp' }, h('h2', null, '🎭 Complications in this scene'), scene, list);
+  return h('section', { class: 'panel gm-comp' }, h('h2', null, 'Complications in this scene'), scene, list);
 }
 
 function spotlightPanel(spot) {
   if (!spot.length) return null;
   const quiet = spot.filter((s) => !s.score);
   return h('section', { class: 'panel gm-spotlight' },
-    h('h2', null, '🔦 Spotlight'),
+    h('h2', null, 'Spotlight'),
     quiet.length ? h('p', { class: 'gm-quiet' }, `No moment yet: ${quiet.map((q) => q.name).join(', ')}. Give them the next scene.`) : h('p', { class: 'hint', style: { margin: 0 } }, 'Everyone has had a moment this session.'),
-    h('div', { class: 'gm-spot-list' }, spot.map((s) => h('div', { class: 'gm-spot-row' }, h('span', null, s.name), h('div', { class: 'meter' }, h('i', { style: { width: `${(s.score / Math.max(1, ...spot.map((x) => x.score))) * 100}%` } })), h('small', { class: 'num' }, `${s.rolls} rolls · ${s.nat20s} nat 20s · ${s.marked} ★`)))));
+    h('div', { class: 'gm-spot-list' }, spot.map((s) => h('div', { class: 'gm-spot-row' }, h('span', null, s.name), h('div', { class: 'meter' }, h('i', { style: { width: `${(s.score / Math.max(1, ...spot.map((x) => x.score))) * 100}%` } })), h('small', { class: 'num' }, `${s.rolls} rolls · ${s.nat20s} nat 20s · ${s.marked} moments`)))));
 }
 
 // ---- nemeses ------------------------------------------------------------------------------------------------
@@ -356,14 +356,14 @@ function nemesisPanel() {
     renderGmScreen();
   };
   return h('section', { class: 'panel gm-nemesis' },
-    h('h2', null, '😈 Recurring villains'),
+    h('h2', null, 'Recurring villains'),
     villains.length ? villains.map((v) => {
       const n = v.nemesis; const s = n.scheme;
       const last = n.defeats[n.defeats.length - 1];
       return h('div', { class: 'gm-nem', style: { '--c': v.theme?.color || '#a33' } },
         h('div', { class: 'gm-card-head' }, h('span', { class: 'swatch' }), h('b', null, v.identity?.codename), h('span', { class: 'chip' }, `Grudge ${n.grudge}`), h('span', { class: 'chip' }, `PL ${v.pl}`)),
         last ? h('p', { class: 'hint', style: { margin: '4px 0' } }, `Last beaten in ${last.battle}${last.by?.length ? ` by ${last.by.join(', ')}` : ''}; learned ${Object.entries(last.bought || {}).map(([d, k]) => `${d} +${k}`).join(', ') || 'nothing yet'}.`) : h('p', { class: 'hint', style: { margin: '4px 0' } }, 'Not beaten yet. Record their fights in the World (Battle Room > Record) and every defeat makes them stronger where they failed.'),
-        h('div', { class: 'gm-clock' }, h('span', null, `⏳ ${s.name}`), h('span', { class: 'gm-dots' }, Array.from({ length: s.steps }, (_, i) => h('i', { class: i < s.progress ? 'on' : '' }))), h('small', null, schemeLabel(v))),
+        h('div', { class: 'gm-clock' }, h('span', null, s.name), h('span', { class: 'gm-dots' }, Array.from({ length: s.steps }, (_, i) => h('i', { class: i < s.progress ? 'on' : '' }))), h('small', null, schemeLabel(v))),
         s.hints.length ? h('ul', { class: 'gm-hints' }, s.hints.slice(-3).map((x) => h('li', null, h('small', null, `Step ${x.step}: `), x.text))) : null,
         h('div', { class: 'gm-actions' },
           h('button', { class: 'btn sm primary', type: 'button', disabled: s.progress >= s.steps, title: 'Between sessions: the plan moves on, and a hint goes into the World for the Newsstand', onClick: () => {
@@ -408,7 +408,7 @@ async function endSession(people, spot) {
     entries: feedEntries(), events: s.events, spotlight: spot, complications: s.complications, since: s.startedAt,
   });
   const svg = recapSvg(r);
-  postRoll({ who: 'GM', kind: 'chat', text: `🎬 Session ${s.number} ends. ${r.headline}` });
+  postRoll({ who: 'GM', kind: 'chat', text: `Session ${s.number} ends. ${r.headline}` });
   hooks.addWorldEvent?.({ name: `${r.campaign} #${r.issue}: ${r.headline}`, summary: r.blurbs.join(' '), tags: ['recap', 'session'], fields: { Kind: 'Session recap', Session: s.number }, people: r.cast.map((c) => c.name) });
   hooks.sessionPlayed?.(s.number, r);
   gs.lastRecap = r; gs.session = null; gs.init = null;
@@ -457,9 +457,9 @@ function prepPanel() {
   };
   const folder = `Session ${(gs.lastSession || 0) + 1}`;
   return h('section', { class: 'panel gm-prep' },
-    h('div', { class: 'gm-head' }, h('h2', null, '🧰 Session in a Box'), h('span', { class: 'spacer' }),
+    h('div', { class: 'gm-head' }, h('h2', null, 'Session in a Box'), h('span', { class: 'spacer' }),
       h('label', { class: 'wd-inline' }, 'Showdown', diff),
-      h('button', { class: 'btn primary', type: 'button', id: 'prep-go', disabled: ui.busy, onClick: run }, ui.busy ? 'Building…' : plan ? '↻ Prep again' : 'Prep next session')),
+      h('button', { class: 'btn primary', type: 'button', id: 'prep-go', disabled: ui.busy, onClick: run }, ui.busy ? 'Building…' : plan ? 'Prep again' : 'Prep next session')),
     h('p', { class: 'hint', style: { margin: '4px 0 10px' } }, party.length ? `For ${party.map((c) => c.identity?.codename).join(', ')}. Scenes come from their bios and complications; the quiet players get the first scenes; the showdown is checked against the party in the Battle Room.` : 'Save your heroes to the roster (or put them on the board) and five minutes of prep become one click.'),
     plan ? [
       h('div', { class: 'prep-villain', style: { '--c': plan.villain.ch.theme?.color || '#a33' } },
@@ -468,16 +468,16 @@ function prepPanel() {
         h('div', { class: 'gm-actions' },
           h('button', { class: 'btn sm primary', type: 'button', onClick: () => { const v = toBoard(plan.villain.ch, folder); plan.villain.ch = v; save(); toast(`${v.identity?.codename} is on the board (saved in ${folder})`); renderGmScreen(); } }, 'Put on the board'),
           h('button', { class: 'btn sm', type: 'button', onClick: () => hooks.open?.(plan.villain.ch) }, 'Open sheet'),
-          h('button', { class: 'btn sm', type: 'button', onClick: () => { hooks.throwIn?.(plan.villain.ch, { team: 'B' }); for (const c of party) hooks.throwIn?.(c, { team: 'A' }); toast('Party on A, villain on B: the Battle Room is set'); } }, '⚔ Set up the fight'))),
+          h('button', { class: 'btn sm', type: 'button', onClick: () => { hooks.throwIn?.(plan.villain.ch, { team: 'B' }); for (const c of party) hooks.throwIn?.(c, { team: 'A' }); toast('Party on A, villain on B: the Battle Room is set'); } }, 'Set up the fight'))),
       h('div', { class: 'prep-minions' }, h('b', null, `Minions: ${plan.minions.count} × ${plan.minions.name}`), h('span', { class: 'hint' }, ` PL ${plan.minions.rank} · ${plan.minions.villainCost.minionAdvantage.text}`),
         h('button', { class: 'btn sm', type: 'button', onClick: () => { const m = { ...plan.minions.member, minion: true, identity: { ...plan.minions.member.identity, codename: `${plan.minions.name} (×${plan.minions.count})` } }; toBoard(m, folder); toast('Squad on the board'); renderGmScreen(); } }, 'Put on the board')),
       h('ol', { class: 'prep-scenes' }, plan.scenes.map((sc) => h('li', { class: `prep-scene ${sc.kind}` },
-        h('div', { class: 'gm-card-head' }, h('b', null, sc.title), h('span', { class: 'chip' }, `🔦 ${sc.spotlight}`), sc.complication ? h('span', { class: 'chip warn' }, `🎭 ${sc.complication.hero}`) : null),
+        h('div', { class: 'gm-card-head' }, h('b', null, sc.title), h('span', { class: 'chip' }, `Spotlight: ${sc.spotlight}`), sc.complication ? h('span', { class: 'chip warn' }, `Complication: ${sc.complication.hero}`) : null),
         h('p', null, sc.text), h('p', { class: 'hint' }, sc.stakes),
         h('div', { class: 'gm-actions' },
           h('button', { class: 'btn sm', type: 'button', onClick: () => { gs.scene = sc.scene; gs.view = 'run'; save(); renderGmScreen(); toast('Scene set: its complications are up on the Run page'); } }, 'Play this scene'),
-          sc.minions || sc.villain ? h('button', { class: 'btn sm', type: 'button', onClick: () => { if (sc.villain) hooks.throwIn?.(plan.villain.ch, { team: 'B' }); else hooks.throwIn?.({ ...plan.minions.member, minion: true }, { team: 'B', copies: plan.minions.count }); for (const c of party) hooks.throwIn?.(c, { team: 'A' }); toast('The Battle Room is set'); } }, '⚔ To the Battle Room') : null)))),
-      h('div', { class: 'prep-rumor' }, h('span', null, `📰 Rumor: ${plan.rumor}`), h('button', { class: 'btn sm', type: 'button', onClick: () => { hooks.addWorldEvent?.({ name: plan.rumor, summary: `Rumor ahead of session ${(gs.lastSession || 0) + 1}.`, tags: ['rumor'], fields: { Kind: 'Rumor' } }); toast('In the World: the Newsstand will run it'); } }, 'Put it in the newspaper')),
+          sc.minions || sc.villain ? h('button', { class: 'btn sm', type: 'button', onClick: () => { if (sc.villain) hooks.throwIn?.(plan.villain.ch, { team: 'B' }); else hooks.throwIn?.({ ...plan.minions.member, minion: true }, { team: 'B', copies: plan.minions.count }); for (const c of party) hooks.throwIn?.(c, { team: 'A' }); toast('The Battle Room is set'); } }, 'To the Battle Room') : null)))),
+      h('div', { class: 'prep-rumor' }, h('span', null, `Rumor: ${plan.rumor}`), h('button', { class: 'btn sm', type: 'button', onClick: () => { hooks.addWorldEvent?.({ name: plan.rumor, summary: `Rumor ahead of session ${(gs.lastSession || 0) + 1}.`, tags: ['rumor'], fields: { Kind: 'Rumor' } }); toast('In the World: the Newsstand will run it'); } }, 'Put it in the newspaper')),
     ] : null);
 }
 
@@ -486,7 +486,7 @@ function roguesPanel() {
   const list = rogueCandidates(party, state.roster).slice(0, 8);
   const made = state.roster.filter((c) => c.foilOf);
   return h('section', { class: 'panel gm-rogues' },
-    h('h2', null, '🦹 Rogues\' gallery'),
+    h('h2', null, 'Rogues\' gallery'),
     h('p', { class: 'hint', style: { margin: '0 0 8px' } }, 'People from the heroes\' own pasts, back as villains built to beat them: their attack goes after that hero\'s weakest defense, and they\'re hardened against the hero\'s best attack.'),
     list.length ? h('div', { class: 'rogue-list' }, list.map((c) => h('div', { class: 'rogue' },
       h('div', null, h('b', null, c.person.name), h('span', { class: 'chip' }, `${c.hero.identity?.codename}'s ${String(c.person.relation).toLowerCase()}`), h('div', { class: 'hint' }, c.person.who)),
@@ -516,14 +516,14 @@ export function renderGmScreen() {
       h('div', null, h('h1', null, 'GM Screen'), h('p', null, 'Everyone at the table on one screen, live. Type a hit and their apps roll it. Track initiative, give the quiet player the spotlight, cash in complications for hero points, and send the recap when you\'re done.')),
       h('span', { class: 'spacer' }),
       h('div', { class: 'btn-row' },
-        gs.session ? h('span', { class: 'chip gm-session' }, `🎬 Session ${gs.session.number} · since ${new Date(gs.session.startedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`) : null,
-        gs.session ? h('button', { class: 'btn primary', type: 'button', id: 'gm-end', onClick: () => endSession(people, spot) }, 'End session & make the recap') : h('button', { class: 'btn primary', type: 'button', id: 'gm-start', onClick: () => { startSession(); renderGmScreen(); } }, '🎬 Start a session'),
+        gs.session ? h('span', { class: 'chip gm-session' }, `Session ${gs.session.number} · since ${new Date(gs.session.startedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`) : null,
+        gs.session ? h('button', { class: 'btn primary', type: 'button', id: 'gm-end', onClick: () => endSession(people, spot) }, 'End session & make the recap') : h('button', { class: 'btn primary', type: 'button', id: 'gm-start', onClick: () => { startSession(); renderGmScreen(); } }, 'Start a session'),
         h('button', { class: 'btn', type: 'button', id: 'gm-add', onClick: addToBoard }, '+ Characters'),
-        h('button', { class: 'btn', type: 'button', id: 'gm-invite', title: 'Players scan a QR code and join from their phones', onClick: async () => { await hooks.invite?.(); renderGmScreen(); } }, lobby.status === 'on' && lobby.role === 'host' ? '📱 Invite players' : '📱 Open a table for phones'),
+        h('button', { class: 'btn', type: 'button', id: 'gm-invite', title: 'Players scan a QR code and join from their phones', onClick: async () => { await hooks.invite?.(); renderGmScreen(); } }, lobby.status === 'on' && lobby.role === 'host' ? 'Invite players' : 'Open a table for phones'),
         lobby.status === 'on' && lobby.role === 'host' ? h('button', { class: 'btn', type: 'button', onClick: requestStatuses }, '⟳ Refresh players') : null)),
     h('p', { class: 'hint gm-lobby' }, lobbyLine),
     h('div', { class: 'seg gm-views', role: 'tablist', 'aria-label': 'GM screen' },
-      [['run', '▶ Run the session'], ['prep', '🧰 Prep'], ['map', '🗺 Map']].map(([v, t]) => h('button', { type: 'button', role: 'tab', id: `gm-view-${v}`, 'aria-pressed': String((gs.view || 'run') === v), onClick: () => { gs.view = v; save(); renderGmScreen(); } }, t))),
+      [['run', 'Run the session'], ['prep', 'Prep'], ['map', 'Map']].map(([v, t]) => h('button', { type: 'button', role: 'tab', id: `gm-view-${v}`, 'aria-pressed': String((gs.view || 'run') === v), onClick: () => { gs.view = v; save(); renderGmScreen(); } }, t))),
     (gs.view || 'run') === 'prep'
       ? h('div', { class: 'gm-layout' }, h('div', { class: 'gm-main' }, prepPanel()), h('div', { class: 'gm-side' }, roguesPanel(), nemesisPanel()))
       : gs.view === 'map'
