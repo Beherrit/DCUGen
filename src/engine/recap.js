@@ -33,10 +33,10 @@ export function buildRecap({ campaign = 'Our Campaign', issue = 1, cast = [], en
   const blurbs = highlights.slice(0, 4).map((h) => h.text);
   const tagline = star && star.score > 0 ? `Starring ${star.name}, who stole the show!` : names.length ? `Starring ${names.join(', ')}` : '';
   const text = [
-    `📰 ${campaign.toUpperCase()} #${issue}: ${headline}`,
+    `${campaign.toUpperCase()} #${issue}: ${headline}`,
     ...blurbs.map((b) => `• ${b}`),
-    star && star.score > 0 ? `⭐ Spotlight: ${star.name}` : null,
-    complications.length ? `🎭 Complications: ${complications.map((c) => c.name).join(', ')}` : null,
+    star && star.score > 0 ? `Spotlight: ${star.name}` : null,
+    complications.length ? `Complications: ${complications.map((c) => c.name).join(', ')}` : null,
     names.length ? `With ${names.join(', ')}.` : null,
   ].filter(Boolean).join('\n');
   return { campaign, issue, headline, blurbs, tagline, cast, star: star?.score > 0 ? star.name : null, text, date: new Date().toISOString().slice(0, 10) };

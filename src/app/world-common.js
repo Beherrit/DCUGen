@@ -24,7 +24,7 @@ export function svg(tag, attrs = {}, ...children) {
   return el;
 }
 
-export const typeMeta = (t) => ENTITY_TYPES[t] || { label: t, one: t, glyph: '✦', color: '#666' };
+export const typeMeta = (t) => ENTITY_TYPES[t] || { label: t, one: t, glyph: '?', color: '#666' };
 export const whenText = (w) => (w?.session != null ? `S${w.session}` : w?.date || '');
 export const STATUS_TONE = { Dead: 'bad', Missing: 'warn', Captured: 'warn', Injured: 'warn', Retired: 'muted', 'In hiding': 'muted', Destroyed: 'bad', Disbanded: 'muted', 'Turned villain': 'bad', Reformed: 'good', Active: 'good', Alive: 'good' };
 // A short status is a badge (Dead, Missing, Estranged); a long bio sentence is not.

@@ -2,7 +2,7 @@
 // asphalt, desert sand, snow, a torch-lit dungeon, a cavern ringed with rock, the moon under the stars, deep
 // space, a starship deck), the weather falls (rain, a thunderstorm with lightning, snow, a blizzard, fog, a
 // sandstorm, ash and embers), and day, dusk or night lights it. Walls and cover rise from the painted squares,
-// the pieces from 🏠 Build become little models (houses, skyscrapers with lit windows, cars, buses, cranes,
+// the pieces from Build become little models (houses, skyscrapers with lit windows, cars, buses, cranes,
 // trees, ponds, people...), tokens stand as cardboard standees with their portraits, and area templates glow
 // on the ground. Orbit around it or stand in a token's shoes. One square is one unit; heights come from feet.
 
@@ -104,7 +104,7 @@ function standeeTexture(T, tok, done) {
 function roundRect(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
 
 /**
- * One piece from 🏠 Build as a Group on the ground, its footprint centred on 0,0. Long things (roads,
+ * One piece from Build as a Group on the ground, its footprint centred on 0,0. Long things (roads,
  * vehicles, fences) are built along z and turned when the footprint is wider than deep.
  * ctx: { night, dark, snowy, cold, lights: [] (where real lights go) }
  */
@@ -661,7 +661,7 @@ export function open3D({ map, tokens, bg, focus = null, gm = false }) {
   };
 
   // the bar on top
-  const pick = h('select', { 'aria-label': 'Whose eyes', id: 'm3d-view' }, h('option', { value: '' }, '🛰 Overview: drag to turn, scroll or pinch to zoom'), tokens.filter((t) => gm || !t.hidden).map((t) => h('option', { value: t.key }, `👁 Through ${t.name}'s eyes`)));
+  const pick = h('select', { 'aria-label': 'Whose eyes', id: 'm3d-view' }, h('option', { value: '' }, 'Overview: drag to turn, scroll or pinch to zoom'), tokens.filter((t) => gm || !t.hidden).map((t) => h('option', { value: t.key }, `Through ${t.name}'s eyes`)));
   pick.addEventListener('change', () => lookFrom(pick.value || null));
   const syncPick = () => { pick.value = eye.key || ''; };
   const btn = (label, title, fn, id) => h('button', { class: 'btn sm', type: 'button', title, id, onClick: () => { fn(); place(); } }, label);
@@ -669,7 +669,7 @@ export function open3D({ map, tokens, bg, focus = null, gm = false }) {
   const close = () => { cancelAnimationFrame(raf); window.removeEventListener('resize', resize); document.removeEventListener('keydown', key); renderer.dispose(); renderer.forceContextLoss?.(); scene.traverse((o) => { o.geometry?.dispose?.(); const m = o.material; (Array.isArray(m) ? m : m ? [m] : []).forEach((x) => { x.map?.dispose?.(); x.dispose?.(); }); }); host.remove(); };
   const mood = [GROUNDS[ground].label, weather !== 'clear' ? WEATHER[weather].label : null, light !== 'day' ? LIGHTS[light].label : null].filter(Boolean).join(' · ');
   const bar = h('div', { class: 'm3d-bar' },
-    h('b', null, `🧊 ${map.name || 'Battle map'}`), h('span', { class: 'm3d-mood' }, mood), pick,
+    h('b', null, `${map.name || 'Battle map'}`), h('span', { class: 'm3d-mood' }, mood), pick,
     btn('⟲', 'Turn left', () => { if (eye.key) eye.yaw -= Math.PI / 8; else orbit.theta += Math.PI / 8; }),
     btn('⟳', 'Turn right', () => { if (eye.key) eye.yaw += Math.PI / 8; else orbit.theta -= Math.PI / 8; }),
     btn('Top', 'Look straight down', () => { eye.key = null; syncPick(); orbit.phi = 0.12; orbit.target.set(0, 0, 0); orbit.r = span * 1.1; }, 'm3d-top'),

@@ -93,7 +93,7 @@ function modEditor(kind) {
         ['Limited', 'Quirk', 'Side Effect', 'Sense-Dependent', 'Check Required', 'Activation'].includes(m.name) || m.detail
           ? h('input', { type: 'text', value: m.detail || '', placeholder: 'detail', 'aria-label': `${m.name} detail`,
             onChange: (e) => update((q) => { (kind === 'extra' ? q.extras : q.flaws)[i].detail = e.target.value; }) }) : null),
-      h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${m.name}`, onClick: () => update((q) => { (kind === 'extra' ? q.extras : q.flaws).splice(i, 1); }) }, '✕'));
+      h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${m.name}`, onClick: () => update((q) => { (kind === 'extra' ? q.extras : q.flaws).splice(i, 1); }) }, 'Remove'));
   });
   return h('div', { class: 'field' },
     h('span', null, kind === 'extra' ? 'Extras (raise cost)' : 'Flaws (lower cost)'),
@@ -126,7 +126,7 @@ function render() {
   const pl = ch?.pl || state.prefs.pl || 10;
 
   // AE tabs
-  const linkTabs = (eff, alt) => (eff.linked || []).map((l, j) => h('button', { type: 'button', class: 'ae-linked', title: 'Linked: works at the same time, costs its full price', 'aria-pressed': String(selected === alt && linkSel === j), onClick: () => select(alt, j) }, `🔗 ${l.name || l.effect}`));
+  const linkTabs = (eff, alt) => (eff.linked || []).map((l, j) => h('button', { type: 'button', class: 'ae-linked', title: 'Linked: works at the same time, costs its full price', 'aria-pressed': String(selected === alt && linkSel === j), onClick: () => select(alt, j) }, `Linked: ${l.name || l.effect}`));
   const tabs = h('div', { class: 'ae-tabs', role: 'group', 'aria-label': 'Effects in this power' },
     h('button', { type: 'button', 'aria-pressed': String(selected < 0 && linkSel == null), onClick: () => select(-1) }, `Primary: ${arr.name}`),
     linkTabs(arr, -1),
@@ -156,7 +156,7 @@ function render() {
       h('input', { type: 'checkbox', id: 'lab-dynamic', checked: !!arr.dynamic, disabled: !arr.alternates.length && !arr.dynamic, onChange: (e) => { if (e.target.checked) arr.dynamic = true; else delete arr.dynamic; render(); } }),
       'Dynamic array'));
   const linkNote = linkSel != null
-    ? h('p', { class: 'hint lab-note' }, `🔗 Linked to ${base().name}: both work at the same time with one action, and the linked effect costs its full price on top. Linked effects usually share the same range and duration.`)
+    ? h('p', { class: 'hint lab-note' }, `Linked to ${base().name}: both work at the same time with one action, and the linked effect costs its full price on top. Linked effects usually share the same range and duration.`)
     : arr.dynamic ? h('p', { class: 'hint lab-note' }, 'Dynamic array: the primary\'s points are a shared pool. Use one effect at full power, or split the pool and run several effects at lower ranks at once. Each Dynamic AE costs 2 points.') : null;
 
   const rangeable = eff.range in RANGE_STEPS;

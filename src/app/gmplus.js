@@ -133,7 +133,7 @@ export function combatCalculator() {
       const total = r + s.bonus;
       const hit = r === 20 || (r !== 1 && total >= 10 + s.defense);
       crit = r === 20;
-      lines.push(`Attack: d20 ${r} ${sign(s.bonus)} = ${total} vs. ${10 + s.defense} → ${r === 1 ? 'natural 1, miss' : hit ? (crit ? 'CRITICAL HIT' : 'hit') : 'miss'}`);
+      lines.push(`Attack: d20 ${r} ${sign(s.bonus)} = ${total} vs. ${10 + s.defense}: ${r === 1 ? 'natural 1, miss' : hit ? (crit ? 'CRITICAL HIT' : 'hit') : 'miss'}`);
       if (!hit) { show(lines); return; }
     }
     const r2 = d20();
@@ -142,7 +142,7 @@ export function combatCalculator() {
     let fails = t2 >= eff ? 0 : 1 + Math.floor((eff - t2 - 1) / 5);
     if (r2 === 20) fails = Math.max(0, fails - 1);
     const results = s.effect === 'Damage' ? DAMAGE_RESULTS : AFFLICTION_RESULTS;
-    lines.push(`Resistance: d20 ${r2} ${sign(s.resist - s.penalty)} = ${t2} vs. DC ${eff} → ${fails ? `${fails} degree${fails > 1 ? 's' : ''} of failure` : 'resisted'}`);
+    lines.push(`Resistance: d20 ${r2} ${sign(s.resist - s.penalty)} = ${t2} vs. DC ${eff}: ${fails ? `${fails} degree${fails > 1 ? 's' : ''} of failure` : 'resisted'}`);
     lines.push(`Result: ${results[Math.min(4, fails)]}`);
     show(lines);
   }
@@ -202,7 +202,7 @@ export function gmScreen(rerender) {
       h('div', { style: { display: 'flex', alignItems: 'baseline', gap: '8px', flexWrap: 'wrap' } },
         h('h3', { class: 'rule-title' }, ch.identity?.codename || 'Character'), h('span', { class: 'chip' }, `PL ${ch.pl}`), h('span', { class: 'chip' }, `Init ${sign(d.initiative)}`),
         h('span', { style: { flex: 1 } }),
-        h('button', { class: 'x', type: 'button', 'aria-label': 'Unpin', onClick: () => { screen.pinned = screen.pinned.filter((x) => x !== k); save(); rerender(); } }, '✕')),
+        h('button', { class: 'x', type: 'button', 'aria-label': 'Unpin', onClick: () => { screen.pinned = screen.pinned.filter((x) => x !== k); save(); rerender(); } }, 'Unpin')),
       h('div', { class: 'card-stats', style: { gridTemplateColumns: 'repeat(5, 1fr)' } },
         [['Dodge', def.Dodge], ['Parry', def.Parry], ['Fort', def.immune?.Fortitude ? '—' : def.Fortitude], ['Tough', def.Toughness - t.penalty], ['Will', def.immune?.Will ? '—' : def.Will]].map(([n, v]) =>
           h('div', null, h('b', { class: 'num' }, v), h('span', null, n.toUpperCase())))),
@@ -280,7 +280,7 @@ export function notesTool(rerender) {
       h('div', { style: { display: 'grid', gap: '6px', alignContent: 'start', minWidth: 0 } },
         h('input', { type: 'search', id: 'notes-q', placeholder: 'Search notes', value: ui.q, 'aria-label': 'Search notes', onInput: (e) => { ui.q = e.target.value; saveUi(); rerender(); setTimeout(() => { const el = document.getElementById('notes-q'); if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); } }, 0); } }),
         list.map((n) => h('button', { type: 'button', class: `note-item ${current && n.id === current.id ? 'active' : ''}`, onClick: () => { ui.selected = n.id; saveUi(); rerender(); } },
-          h('b', null, `${n.pinned ? '★ ' : ''}${n.title || 'Untitled'}`), h('small', null, n.tags || (n.body || '').slice(0, 60))))),
+          h('b', null, `${n.pinned ? 'Pinned: ' : ''}${n.title || 'Untitled'}`), h('small', null, n.tags || (n.body || '').slice(0, 60))))),
       editor));
 }
 

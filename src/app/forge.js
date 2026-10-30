@@ -87,7 +87,7 @@ function build() {
   // Homebrew archetypes are hidden from random rolls but listed here (engine/homebrew.js).
   const archetypes = R.raw.archetypes.filter((a) => !a.hidden || a.homebrew);
   const themes = R.raw.themes.slice().sort((a, b) => a.name.localeCompare(b.name));
-  const mark = (x) => (x.homebrew ? `${x.name} ✦` : x.name);
+  const mark = (x) => (x.homebrew ? `${x.name} (homebrew)` : x.name);
 
   const plOut = h('span', { class: 'pl-readout num' }, p.plRandom ? 'Any' : p.pl);
   const plRange = h('input', { type: 'range', min: 1, max: 20, value: p.pl, id: 'pl', 'aria-label': 'Power level', disabled: p.plRandom,
@@ -120,7 +120,7 @@ function build() {
     optsBtn.lastChild.textContent = open ? ' ▴' : ' ▾';
   } }, 'Options', h('span', null, ' ▾'));
   const quick = h('div', { class: 'rail-quick' },
-    h('button', { class: 'btn primary', type: 'button', onClick: () => roll(seedIn.value.trim() || undefined) }, '🎲 Roll a character'),
+    h('button', { class: 'btn primary', type: 'button', onClick: () => roll(seedIn.value.trim() || undefined) }, 'Roll a character'),
     optsBtn);
   const rail = h('aside', { class: 'rail', 'aria-label': 'Roll options' },
     quick,
@@ -146,7 +146,7 @@ function build() {
           h('div', { class: 'range-row' }, h('span', null, 'By the book'), h('span', null, 'Wild'))),
         h('div', { class: 'field' }, h('span', null, 'Seed (the same seed rolls the same character)'),
           h('div', { class: 'seed-row' }, seedIn,
-            h('button', { class: 'btn', type: 'button', title: 'Fill in a random seed', 'aria-label': 'Random seed', onClick: () => { seedIn.value = randomSeed(); } }, '🎲'))));
+            h('button', { class: 'btn', type: 'button', title: 'Fill in a random seed', 'aria-label': 'Random seed', onClick: () => { seedIn.value = randomSeed(); } }, 'Random'))));
       more.addEventListener('toggle', () => { p.railMore = more.open; savePrefs(); });
       return more;
     })(),
@@ -175,7 +175,7 @@ function build() {
       };
       keyIn.addEventListener('keydown', (e) => { if (e.key === 'Enter') go(); });
       return h('div', { class: 'field' }, h('span', null, 'Open what someone sent you'), h('div', { class: 'seed-row' }, keyIn, h('button', { class: 'btn', type: 'button', onClick: go }, 'Open')),
-        h('button', { class: 'linkish import-link', type: 'button', id: 'forge-import', title: 'Open a character your GM or another player sent you', onClick: () => importDialog() }, '⇪ or import a file (.xlsx, .json)'));
+        h('button', { class: 'linkish import-link', type: 'button', id: 'forge-import', title: 'Open a character your GM or another player sent you', onClick: () => importDialog() }, 'or import a file (.xlsx, .json)'));
     })(),
     h('p', { class: 'hint' }, 'Press R to roll. Every roll is legal for its power level and spends exactly 15 points per PL.'),
     h('div', { class: 'field' }, h('span', null, 'Recent rolls'), historyEl));
@@ -304,18 +304,18 @@ export function renderCurrent() {
 
 /** Nothing open: characters are only rolled when you ask for one. */
 function drawEmpty() {
-  const card = (glyph, title, text, run, { primary = false, id = null } = {}) => h('button', { type: 'button', class: `start-card ${primary ? 'primary' : ''}`, id, onClick: run },
-    h('span', { class: 'start-glyph', 'aria-hidden': 'true' }, glyph), h('b', null, title), h('small', null, text));
+  const card = (title, text, run, { primary = false, id = null } = {}) => h('button', { type: 'button', class: `start-card ${primary ? 'primary' : ''}`, id, onClick: run },
+    h('b', null, title), h('small', null, text));
   fileHost.append(h('div', { class: 'forge-empty start-here' },
     h('h2', null, 'No character open'),
     h('p', { class: 'hint' }, 'What would you like to do?'),
     h('div', { class: 'start-cards' },
-      card('🎲', 'Roll a character', 'A complete, legal hero in one click. Pick a power level or theme on the left first if you like.', () => roll(), { primary: true }),
-      card('✎', 'Build from scratch', 'A blank sheet you fill in yourself, with the costs and limits checked as you go.', buildFromScratch, { id: 'start-scratch' }),
-      card('📂', 'Open one of yours', state.roster.length ? `Your roster has ${state.roster.length} character${state.roster.length === 1 ? '' : 's'}.` : 'Characters you save show up on the Roster.', () => api.goTab?.('roster')),
-      card('⚔', 'Run a fight', 'Put anyone against anyone in the Battle Room and watch it play out.', () => api.goTab?.('battle')),
-      card('📱', 'Join a table', 'Your GM sent a link or a QR code? Join from here.', () => api.goTab?.('table')),
-      card('🗓', 'Run a campaign (GM)', 'Plan sessions, run the GM Screen, keep the World.', () => api.goTab?.('screen')))));
+      card('Roll a character', 'A complete, legal hero in one click. Pick a power level or theme on the left first if you like.', () => roll(), { primary: true }),
+      card('Build from scratch', 'A blank sheet you fill in yourself, with the costs and limits checked as you go.', buildFromScratch, { id: 'start-scratch' }),
+      card('Open one of yours', state.roster.length ? `Your roster has ${state.roster.length} character${state.roster.length === 1 ? '' : 's'}.` : 'Characters you save show up on the Roster.', () => api.goTab?.('roster')),
+      card('Run a fight', 'Put anyone against anyone in the Battle Room and watch it play out.', () => api.goTab?.('battle')),
+      card('Join a table', 'Your GM sent a link or a QR code? Join from here.', () => api.goTab?.('table')),
+      card('Run a campaign (GM)', 'Plan sessions, run the GM Screen, keep the World.', () => api.goTab?.('screen')))));
 }
 
 // ---- saving to a world -------------------------------------------------------------------------------
@@ -358,7 +358,7 @@ function saveBar(ch) {
   const inRoster = inRosterNow(ch);
   const world = worldOf(ch);
   return h('div', { class: 'save-bar no-print' },
-    h('label', { class: 'field' }, h('span', null, '🌍 Save to world'), worldSelect(world, (w) => pickWorld(ch, w), { id: 'save-world' })),
+    h('label', { class: 'field' }, h('span', null, 'Save to world'), worldSelect(world, (w) => pickWorld(ch, w), { id: 'save-world' })),
     h('button', { class: 'btn primary', type: 'button', id: 'save-bottom', onClick: () => saveCurrent(ch) }, inRoster ? 'Update in roster' : 'Save to roster'),
     h('p', { class: 'hint' }, world
       ? `Saves to ${world}. Everyone also shows up in The Multiverse Hub on the Roster.`
@@ -396,14 +396,14 @@ function formStrip(ch) {
     } catch (e) { toast(e.message); }
   };
   return h('div', { class: 'form-strip no-print', role: 'tablist', 'aria-label': 'Alternate forms' },
-    h('span', { class: 'form-strip-label' }, '🎭 Forms'),
+    h('span', { class: 'form-strip-label' }, 'Forms'),
     ch.forms.map((f, i) => h('span', { class: `form-tab ${i === cur ? 'active' : ''}` },
       h('button', { type: 'button', role: 'tab', 'aria-selected': String(i === cur), class: 'form-tab-btn', title: i === cur ? 'This form is showing. Click again to rename it.' : `Switch to ${f.name}`, onClick: () => (i === cur ? rename(i) : commit(switchForm(state.current, i))) },
         h('b', { class: 'num' }, i + 1), ' ', f.name),
       i !== cur ? h('button', { type: 'button', class: 'x', 'aria-label': `Remove ${f.name}`, title: `Remove ${f.name}`, onClick: async () => {
         const ok = await openDialog({ title: `Remove ${f.name}?`, body: h('p', { style: { margin: 0 } }, 'Its whole build goes. The other forms and the character stay.'), buttons: [{ label: 'Keep', value: false }, { label: 'Remove', value: true, danger: true }] });
         if (ok) commit(removeForm(state.current, i));
-      } }, '✕') : null)),
+      } }, 'Remove') : null)),
     ch.forms.length < MAX_FORMS ? h('button', { type: 'button', class: 'form-add', onClick: add, title: `Add a form (up to ${MAX_FORMS})` }, '+ Form') : null);
 }
 
@@ -436,7 +436,7 @@ async function historyDialog() {
       list.append(h('div', { class: 'version-row' },
         h('div', { class: 'version-what' }, h('b', null, v.label), h('small', null, `${new Date(v.at).toLocaleString()} · ${v.ch.identity?.codename || 'Unnamed'} · PL ${v.ch.pl}${v.pp != null ? ` · ${v.pp} pp` : ''}`)),
         h('button', { class: 'btn sm', type: 'button', onClick: () => { putActive(restoreVersion(state.current, v)); saveTabs(); fresh = false; renderCurrent(); emit('current'); document.getElementById('dialog')?.close(); toast(`Restored "${v.label}". Ctrl+Z puts it back.`); } }, 'Restore'),
-        h('button', { class: 'x', type: 'button', 'aria-label': `Delete version ${v.label}`, onClick: () => { removeVersion(ch, v.id); draw(); } }, '✕')));
+        h('button', { class: 'x', type: 'button', 'aria-label': `Delete version ${v.label}`, onClick: () => { removeVersion(ch, v.id); draw(); } }, 'Delete')));
     }
   };
   draw();
@@ -473,26 +473,26 @@ function drawCurrent(ch) {
     h('button', { class: 'btn primary', type: 'button', title: `Saves to ${worldOf(ch) || 'The Multiverse Hub'} (change it at the bottom of the sheet)`, onClick: () => saveCurrent(ch) }, inRoster ? 'Update in roster' : 'Save to roster'),
     h('button', { class: 'btn', type: 'button', 'aria-pressed': String(state.editing), onClick: () => toggleEditing() }, state.editing ? 'Done editing' : 'Edit'),
     menu('More', [
-      { label: '📏 Range', id: 'range-btn', hint: 'How far your powers reach, distances, travel, throwing', run: () => openRangeCalculator(ch, R) },
+      { label: 'Range', id: 'range-btn', hint: 'How far your powers reach, distances, travel, throwing', run: () => openRangeCalculator(ch, R) },
       { label: 'Copy stat block', hint: 'Book-style text, ready to paste', run: async () => { const ok = await copyText(statBlockText(ch, R)); toast(ok ? 'Stat block copied' : 'Copy failed. Use Export > Text instead.'); } },
-      { label: '🔑 Share / Key', hint: 'A short key or link anyone can open', run: () => share(ch) },
-      { label: '🌐 World page', hint: 'This character in the World wiki', run: () => api.openWorld?.(ch) },
+      { label: 'Share / Key', hint: 'A short key or link anyone can open', run: () => share(ch) },
+      { label: 'World page', hint: 'This character in the World wiki', run: () => api.openWorld?.(ch) },
       { label: 'New name', hint: 'Keep the build, roll a new name and story', run: () => { const c = rerollIdentity(R, ch, randomSeed()); c.rosterId = ch.rosterId; setCurrent(c, { fresh: true }); } },
       { label: 'New build', hint: 'Keep the name and story, roll new powers and stats', run: () => rebuild(ch) },
-      ch.companionOf ? null : { label: '🐾 Add a companion', id: 'toolbar-companion', hint: 'A sidekick, minion or animal with a full sheet', run: () => addCompanionDialog(ch) },
-      hasForms(ch) ? null : { label: '🎭 Alternate forms', id: 'add-forms', hint: 'Up to 8 builds of the same person', run: addFormsFlow },
+      ch.companionOf ? null : { label: 'Add a companion', id: 'toolbar-companion', hint: 'A sidekick, minion or animal with a full sheet', run: () => addCompanionDialog(ch) },
+      hasForms(ch) ? null : { label: 'Alternate forms', id: 'add-forms', hint: 'Up to 8 builds of the same person', run: addFormsFlow },
     ]),
     h('span', { class: 'undo-group' },
-      h('button', { class: 'btn ghost icon', type: 'button', id: 'undo', title: 'Undo (Ctrl+Z)', 'aria-label': 'Undo', disabled: !canUndo(), onClick: undo }, '↶'),
-      h('button', { class: 'btn ghost icon', type: 'button', id: 'redo', title: 'Redo (Ctrl+Y)', 'aria-label': 'Redo', disabled: !canRedo(), onClick: redo }, '↷'),
-      h('button', { class: 'btn ghost', type: 'button', id: 'history', title: 'Saved versions of this character', onClick: () => historyDialog() }, '🕘 History')),
+      h('button', { class: 'btn ghost icon', type: 'button', id: 'undo', title: 'Undo (Ctrl+Z)', 'aria-label': 'Undo', disabled: !canUndo(), onClick: undo }, 'Undo'),
+      h('button', { class: 'btn ghost icon', type: 'button', id: 'redo', title: 'Redo (Ctrl+Y)', 'aria-label': 'Redo', disabled: !canRedo(), onClick: redo }, 'Redo'),
+      h('button', { class: 'btn ghost', type: 'button', id: 'history', title: 'Saved versions of this character', onClick: () => historyDialog() }, 'History')),
     rollMenu(ch, R),
-    lobby.status === 'on' && lobby.role !== 'host' && ch.rosterId && ch.lobbyShared && !ch.lobbyOwner ? h('button', { class: 'btn ghost', type: 'button', title: 'Tell the table this character is yours', onClick: () => claimCharacter(ch) }, '✋ Mine') : null,
-    lobby.status === 'on' && lobby.role === 'host' && ch.rosterId && !ch.lobbyOwner ? h('button', { class: `btn ghost${ch.tableShared ? ' on' : ''}`, type: 'button', 'aria-pressed': String(!!ch.tableShared), title: ch.tableShared ? 'Players can see this character. Click to stop sharing it.' : 'Let the players see this character (to claim, or as an ally or a known villain)', onClick: () => { ch.tableShared = !ch.tableShared; setTableShared(ch, ch.tableShared); renderCurrent(); } }, ch.tableShared ? '✓ Shared with table' : '📤 Share with table') : null,
+    lobby.status === 'on' && lobby.role !== 'host' && ch.rosterId && ch.lobbyShared && !ch.lobbyOwner ? h('button', { class: 'btn ghost', type: 'button', title: 'Tell the table this character is yours', onClick: () => claimCharacter(ch) }, 'Mine') : null,
+    lobby.status === 'on' && lobby.role === 'host' && ch.rosterId && !ch.lobbyOwner ? h('button', { class: `btn ghost${ch.tableShared ? ' on' : ''}`, type: 'button', 'aria-pressed': String(!!ch.tableShared), title: ch.tableShared ? 'Players can see this character. Click to stop sharing it.' : 'Let the players see this character (to claim, or as an ally or a known villain)', onClick: () => { ch.tableShared = !ch.tableShared; setTableShared(ch, ch.tableShared); renderCurrent(); } }, ch.tableShared ? 'Shared with table' : 'Share with table') : null,
     ch.lobbyOwner ? h('span', { class: 'chip', title: 'Claimed at the table' }, `${ch.lobbyOwner === lobby.id ? 'Yours' : `Played by ${ch.lobbyOwnerName || 'a player'}`}`) : null,
     h('span', { class: 'spacer' }),
     status(ch),
-    h('button', { class: 'btn', type: 'button', title: 'Throw this character into the Battle Room', onClick: () => api.throwIn?.(ch) }, '⚔ Battle Room'),
+    h('button', { class: 'btn', type: 'button', title: 'Throw this character into the Battle Room', onClick: () => api.throwIn?.(ch) }, 'Battle Room'),
     menu('Export', [
       { label: 'Excel character sheet (.xlsx)', hint: 'Your classic sheet, filled in. DCUGen can import it back, too', run: () => exportExcel(ch, R) },
       { label: 'Character file (.json)', hint: 'Small file to send to your GM or players; they Import it', run: () => exportJson(ch) },
@@ -565,7 +565,7 @@ function viewSwitch(ch) {
   return h('div', { class: 'view-switch no-print', role: 'group', 'aria-label': 'Show' },
     h('button', { type: 'button', 'aria-pressed': String(sheetView !== 'bio' && sheetView !== 'play'), onClick: () => set('sheet') }, 'Character sheet'),
     h('button', { type: 'button', 'aria-pressed': String(sheetView === 'bio'), onClick: () => set('bio') }, ch.bio ? 'Bio' : 'Bio (roll one)'),
-    h('button', { type: 'button', id: 'view-play', 'aria-pressed': String(sheetView === 'play'), title: 'At the table: damage, conditions, hero points, quick rolls', onClick: () => set('play') }, '▶ Play'));
+    h('button', { type: 'button', id: 'view-play', 'aria-pressed': String(sheetView === 'play'), title: 'At the table: damage, conditions, hero points, quick rolls', onClick: () => set('play') }, 'Play'));
 }
 
 /** Leaving edit mode records any spending in the advancement log (when it's switched on). */
@@ -587,13 +587,13 @@ function toggleEditing() {
 function status(ch) {
   const s = makeSheet(ch, R);
   const errs = s.issues.filter((i) => i.severity === 'error');
-  if (errs.length) return h('span', { class: 'status bad', title: errs.map((e) => e.message).join('\n') }, `✕ ${errs.length} rule issue${errs.length > 1 ? 's' : ''}`);
-  if (ch.pl === 0 && !ch.advancement) return h('span', { class: 'status ok', title: 'PL 0 is for ordinary people: up to 14 points, no limits to check' }, `✓ Ordinary person · ${s.cost.total} pp`);
-  if (s.cost.total > s.cost.budget) return h('span', { class: 'status ok', title: 'A supporting character: built as a stat block, so points over PL x 15 are allowed (DCA 194)' }, `✓ Legal · ${s.cost.total} pp (supporting character)`);
+  if (errs.length) return h('span', { class: 'status bad', title: errs.map((e) => e.message).join('\n') }, `${errs.length} rule issue${errs.length > 1 ? 's' : ''}`);
+  if (ch.pl === 0 && !ch.advancement) return h('span', { class: 'status ok', title: 'PL 0 is for ordinary people: up to 14 points, no limits to check' }, `Ordinary person · ${s.cost.total} pp`);
+  if (s.cost.total > s.cost.budget) return h('span', { class: 'status ok', title: 'A supporting character: built as a stat block, so points over PL x 15 are allowed (DCA 194)' }, `Legal · ${s.cost.total} pp (supporting character)`);
   if (s.cost.total < s.cost.budget) return ch.advancement
-    ? h('span', { class: 'status ok', title: 'Points from the GM you haven\'t spent yet. They stay saved until you spend them.' }, `✓ Legal · ${s.cost.budget - s.cost.total} pp saved`)
+    ? h('span', { class: 'status ok', title: 'Points from the GM you haven\'t spent yet. They stay saved until you spend them.' }, `Legal · ${s.cost.budget - s.cost.total} pp saved`)
     : h('span', { class: 'status warn' }, `Legal · ${s.cost.budget - s.cost.total} pp unspent`);
-  return h('span', { class: 'status ok' }, `✓ Legal · ${s.cost.total}/${s.cost.budget} pp`);
+  return h('span', { class: 'status ok' }, `Legal · ${s.cost.total}/${s.cost.budget} pp`);
 }
 
 function rebuild(ch) {
@@ -629,7 +629,7 @@ async function share(ch) {
     title: `Share ${ch.identity?.codename || 'character'}`,
     body: [
       h('div', { class: 'key-box' },
-        h('div', { class: 'label' }, found?.kind === 'edits' ? '🔑 Character key · seed + edits' : '🔑 Character key'),
+        h('div', { class: 'label' }, found?.kind === 'edits' ? 'Character key · seed + edits' : 'Character key'),
         key ? h('code', { id: 'share-key', class: found.kind === 'edits' ? 'key-long' : '' }, key) : null,
         h('p', { class: 'hint', style: { margin: '4px 0 0' } }, why()),
         key ? h('div', { class: 'btn-row', style: { marginTop: '6px' } },

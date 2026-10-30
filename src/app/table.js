@@ -30,7 +30,7 @@ export async function showInvite() {
   const link = joinLink(lobby.key);
   const qr = qrSvg(link, 6);
   const v = await openDialog({
-    title: '📱 Players: scan to join',
+    title: 'Players: scan to join',
     body: [
       qr ? h('div', { class: 'qr', html: qr }) : null,
       h('p', { style: { margin: '6px 0' } }, 'Players scan this with their phone camera (or open the link) and they\'re at your table, no install. Keep this page open while you play: it is the table.'),
@@ -146,7 +146,7 @@ function lobbyPanel() {
     h('h2', null, 'Lobby'),
     status === 'on' ? [
       h('div', { class: 'tb-status on' }, h('b', null, lobby.role === 'host' ? 'Hosting' : 'Joined'), ` ${lobby.info?.name || ''}${lobby.hostGone ? ' · the host left' : ''}`),
-      lobby.role === 'host' && lobby.mode === 'phone' ? h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', type: 'button', onClick: showInvite }, '📱 Show the QR code')) : null,
+      lobby.role === 'host' && lobby.mode === 'phone' ? h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', type: 'button', onClick: showInvite }, 'Show the QR code')) : null,
       lobby.role === 'host' && lobby.mode !== 'phone' ? h('div', { class: 'key-box' }, h('div', { class: 'label' }, 'Lobby key: send it to your players'), h('code', null, lobby.key), h('div', { class: 'btn-row', style: { marginTop: '6px' } }, h('button', { class: 'btn sm primary', type: 'button', onClick: async () => toast((await copyText(lobby.key)) ? 'Key copied' : 'Copy failed') }, 'Copy key'))) : null,
       lobby.role === 'host' ? sharePicker() : null,
       h('div', { class: 'label' }, `At the table (${members.length})`),
@@ -161,8 +161,8 @@ function lobbyPanel() {
           lobby.mode === 'phone' && lobby.key ? h('button', { class: 'btn sm', type: 'button', onClick: () => { retryTable(); } }, 'Try again') : null,
           h('button', { class: 'btn sm', type: 'button', onClick: testConnection }, 'Test my connection'))) : null,
       h('label', { class: 'field' }, h('span', null, 'Your name'), nameIn),
-      h('div', { class: 'tb-host' }, h('button', { class: 'btn primary', type: 'button', id: 'tb-phone', onClick: async () => { setTableName(nameIn.value); await openPhoneTable(); renderTable(); } }, '📱 Open a table for phones'), h('p', { class: 'hint', style: { margin: '4px 0 0' } }, 'Players scan a QR code and join from any phone or browser, no install. This page is the table: keep it open while you play.')),
-      desktop ? h('div', { class: 'tb-host' }, h('button', { class: 'btn', type: 'button', onClick: host }, '⌂ Host on this computer (local network)'), h('p', { class: 'hint', style: { margin: '4px 0 0' } }, 'The desktop app\'s own server: for players on your network using the desktop app. Your world and the characters you share are sent to them; players claim their own characters and roll for them.')) : null,
+      h('div', { class: 'tb-host' }, h('button', { class: 'btn primary', type: 'button', id: 'tb-phone', onClick: async () => { setTableName(nameIn.value); await openPhoneTable(); renderTable(); } }, 'Open a table for phones'), h('p', { class: 'hint', style: { margin: '4px 0 0' } }, 'Players scan a QR code and join from any phone or browser, no install. This page is the table: keep it open while you play.')),
+      desktop ? h('div', { class: 'tb-host' }, h('button', { class: 'btn', type: 'button', onClick: host }, 'Host on this computer (local network)'), h('p', { class: 'hint', style: { margin: '4px 0 0' } }, 'The desktop app\'s own server: for players on your network using the desktop app. Your world and the characters you share are sent to them; players claim their own characters and roll for them.')) : null,
       connectionSettings(),
       h('div', { class: 'label', style: { marginTop: '6px' } }, 'Join a table'),
       h('div', { class: 'add-row', style: { marginTop: 0 } }, keyIn, h('button', { class: 'btn', type: 'button', onClick: join }, 'Join')),
@@ -187,7 +187,7 @@ function quickRoller() {
   const say = () => { const t = chat.value.trim(); if (!t) return; postRoll({ who: tableName(), kind: 'chat', text: t }); chat.value = ''; };
   const chars = [...(state.tabs || []), ...state.roster.filter((c) => !(state.tabs || []).some((t) => t.rosterId && t.rosterId === c.rosterId))];
   return h('div', { class: 'tb-tools' },
-    h('div', { class: 'add-row', style: { marginTop: 0 } }, label, mod, dc, h('button', { class: 'btn primary', type: 'button', onClick: roll }, '🎲 Roll d20')),
+    h('div', { class: 'add-row', style: { marginTop: 0 } }, label, mod, dc, h('button', { class: 'btn primary', type: 'button', onClick: roll }, 'Roll d20')),
     h('div', { class: 'add-row', style: { marginTop: '6px' } }, chat, h('button', { class: 'btn', type: 'button', onClick: say }, 'Say')),
     chars.length ? h('div', { class: 'tb-chars' }, h('span', { class: 'label' }, 'Roll for'), chars.slice(0, 12).map((c) => h('button', { class: 'chip', type: 'button', style: { '--c': c.theme?.color }, onClick: () => hooks.open?.(c) }, h('span', { class: 'swatch' }), c.identity?.codename || 'Unnamed'))) : null);
 }

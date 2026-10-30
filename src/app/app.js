@@ -183,7 +183,7 @@ function wireLobby() {
       if (!ch?.rosterId) return null;
       if (lobby.role === 'host') {
         const mine = st.roster.find((x) => x.rosterId === ch.rosterId);
-        if (!hostAcceptsEdit(mine, from)) { toast(`${ch.identity?.codename || 'A character'}: a player's edit was refused (${mine?.lobbyOwner ? 'it belongs to someone else' : 'claim it with ✋ Mine first'})`); return null; }
+        if (!hostAcceptsEdit(mine, from)) { toast(`${ch.identity?.codename || 'A character'}: a player's edit was refused (${mine?.lobbyOwner ? 'it belongs to someone else' : 'claim it with Mine first'})`); return null; }
         // A character a player brings is theirs.
         const who = lobby.members.find((m) => m.id === from)?.name || ch.lobbyOwnerName || 'a player';
         const kept = { ...ch, lobbyOwner: from, lobbyOwnerName: mine?.lobbyOwnerName || who, lobbyShared: true };
@@ -221,7 +221,7 @@ function wireLobby() {
         let res = null;
         const ch = updateOpen(msg.rosterId, (c) => { res = resolveHit(c, msg.hit, R); c.play = res.play; });
         if (ch && res) {
-          const e = postRoll({ who: ch.identity?.codename || 'Someone', text: `GM: ${describeHit(msg.hit)} → ${res.text}`, dice: res.dice[res.dice.length - 1] });
+          const e = postRoll({ who: ch.identity?.codename || 'Someone', text: `GM: ${describeHit(msg.hit)}: ${res.text}`, dice: res.dice[res.dice.length - 1] });
           toast(e.text);
         }
       }
@@ -236,7 +236,7 @@ function wireLobby() {
       }
       if (msg.t === 'hp' && lobby.role !== 'host' && msg.rosterId) {
         const ch = updateOpen(msg.rosterId, (c) => { c.play = { ...(c.play || {}), heroPoints: ((c.play?.heroPoints ?? 1) + (msg.n || 1)) }; });
-        if (ch) toast(`⭐ The GM gives ${ch.identity?.codename || 'you'} a hero point${msg.why ? `: ${msg.why}` : ''}`);
+        if (ch) toast(`The GM gives ${ch.identity?.codename || 'you'} a hero point${msg.why ? `: ${msg.why}` : ''}`);
       }
     },
   });

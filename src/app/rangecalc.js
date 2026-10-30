@@ -103,15 +103,15 @@ export function rangeCalculator(ch, R) {
   drawThrow();
 
   return h('div', { class: 'rangecalc' },
-    h('section', null, h('h4', null, '🎯 Attack range'), h('div', { class: 'rc-row' }, pick, h('label', null, 'Rank', rank), h('label', null, 'Extended Range', ext), h('label', null, 'Target is', dist, unit)), attackOut,
+    h('section', null, h('h4', null, 'Attack range'), h('div', { class: 'rc-row' }, pick, h('label', null, 'Rank', rank), h('label', null, 'Extended Range', ext), h('label', null, 'Target is', dist, unit)), attackOut,
       h('p', { class: 'hint' }, 'Ranged: short rank × 25 ft, medium × 50 ft (−2), long × 100 ft (−5); Extended Range doubles them per rank (DCA 129, 172-173). Close: touch. Perception: anything you can perceive, no roll.')),
-    h('section', null, h('h4', null, '📐 Areas'), h('table', { class: 'rc-table' }, h('tbody', null, Object.entries(AREA_BASE).map(([k, v]) => h('tr', null, h('td', null, k), h('td', null, v.text(v.ft)))))),
+    h('section', null, h('h4', null, 'Areas'), h('table', { class: 'rc-table' }, h('tbody', null, Object.entries(AREA_BASE).map(([k, v]) => h('tr', null, h('td', null, k), h('td', null, v.text(v.ft)))))),
       h('p', { class: 'hint' }, 'One rank of Area; each +1 Area doubles it. Targets inside make a Dodge check (DC 10 + rank) for half (DCA 126).')),
-    h('section', null, h('h4', null, '📏 Distance by rank'), h('div', { class: 'rc-row' }, h('label', null, 'Rank', mRank), h('label', null, 'or', mDist, mUnit)), measureOut,
+    h('section', null, h('h4', null, 'Distance by rank'), h('div', { class: 'rc-row' }, h('label', null, 'Rank', mRank), h('label', null, 'or', mDist, mUnit)), measureOut,
       h('p', { class: 'hint' }, 'Every rank doubles: rank 0 is 30 ft, rank 7 about half a mile, rank 15 about 60 miles.')),
-    h('section', null, h('h4', null, '🏃 Travel time'), h('div', { class: 'rc-row' }, h('label', null, 'Speed rank', sRank), h('label', null, 'Distance', tDist, tUnit)), travelOut,
+    h('section', null, h('h4', null, 'Travel time'), h('div', { class: 'rc-row' }, h('label', null, 'Speed rank', sRank), h('label', null, 'Distance', tDist, tUnit)), travelOut,
       h('p', { class: 'hint' }, 'Time rank = distance rank − speed rank. Flight, Speed and Swimming ranks are speed ranks.')),
-    h('section', null, h('h4', null, '💪 Lifting & throwing'), h('div', { class: 'rc-row' }, h('label', null, 'Strength', sIn), h('label', null, 'Object', mass)), throwOut,
+    h('section', null, h('h4', null, 'Lifting & throwing'), h('div', { class: 'rc-row' }, h('label', null, 'Strength', sIn), h('label', null, 'Object', mass)), throwOut,
       h('p', { class: 'hint' }, 'You lift the mass of your Strength rank. Throwing distance rank = Strength rank − the object’s mass rank.')));
 }
 

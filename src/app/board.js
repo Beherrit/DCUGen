@@ -72,14 +72,14 @@ export function boardPage(ctx) {
     const ch = e.character;
     const por = ch ? portraitOf(ch) : null;
     const img = por && !por.hidden ? h('img', { src: (por.source === 'upload' && por.image) || por.avatar, alt: '' }) : null;
-    const meta = ENTITY_TYPES[e.type] || { glyph: '✦', color: '#888' };
+    const meta = ENTITY_TYPES[e.type] || { color: '#888' };
     let el;
     if (e.type === 'person') el = h('div', { class: 'eb-item eb-polaroid' }, h('div', { class: 'eb-photo', style: { '--c': e.color || meta.color } }, img || h('span', { class: 'eb-initials' }, e.name.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase())), h('div', { class: 'eb-caption' }, e.name), e.status && e.status !== 'Active' ? h('div', { class: 'eb-status' }, e.status) : null);
     else if (e.type === 'paper' && e.paper) el = h('div', { class: 'eb-item eb-clipping' }, h('div', { class: 'eb-clip-mast' }, e.paper.masthead), h('div', { class: 'eb-clip-head' }, (e.paper.stories?.[0]?.headline) || e.name), h('div', { class: 'eb-clip-text' }, e.paper.stories?.[0]?.deck || e.summary || ''));
     else if (e.type === 'handout' && e.handout) el = h('div', { class: 'eb-item eb-doc' }, h('div', { class: 'eb-doc-kind' }, (e.fields?.Kind || 'Handout').toUpperCase()), h('div', { class: 'eb-doc-title' }, e.handout.title || e.name), h('div', { class: 'eb-clip-text' }, e.summary || ''));
-    else el = h('div', { class: 'eb-item eb-card', style: { '--c': e.color || meta.color } }, h('div', { class: 'eb-card-type' }, `${meta.glyph} ${(ENTITY_TYPES[e.type]?.one || e.type).toUpperCase()}`), h('div', { class: 'eb-card-name' }, e.name), e.summary ? h('div', { class: 'eb-clip-text' }, String(e.summary).split(/(?<=[.!?])\s/)[0]) : null);
+    else el = h('div', { class: 'eb-item eb-card', style: { '--c': e.color || meta.color } }, h('div', { class: 'eb-card-type' }, (ENTITY_TYPES[e.type]?.one || e.type).toUpperCase()), h('div', { class: 'eb-card-name' }, e.name), e.summary ? h('div', { class: 'eb-clip-text' }, String(e.summary).split(/(?<=[.!?])\s/)[0]) : null);
     el.style.left = `${pos.x}px`; el.style.top = `${pos.y}px`; el.style.setProperty('--rot', `${pos.rot || 0}deg`);
-    el.append(h('div', { class: 'eb-tools no-print' }, h('button', { type: 'button', class: 'eb-tool', title: 'Open the page', onClick: () => go(e.id) }, '↗'), h('button', { type: 'button', class: 'eb-tool', title: 'Take it down', onClick: () => unpin(e.id) }, '✕')));
+    el.append(h('div', { class: 'eb-tools no-print' }, h('button', { type: 'button', class: 'eb-tool', title: 'Open the page', onClick: () => go(e.id) }, 'Open'), h('button', { type: 'button', class: 'eb-tool', title: 'Take it down', onClick: () => unpin(e.id) }, 'Take down')));
     el.append(h('span', { class: 'eb-pushpin' }));
     drag(el, pos, save);
     items.set(e.id, el);
@@ -88,7 +88,7 @@ export function boardPage(ctx) {
   const noteEl = (n) => {
     const el = h('div', { class: 'eb-item eb-note', style: { left: `${n.x}px`, top: `${n.y}px`, '--rot': `${n.rot || 0}deg`, background: n.color || NOTE_COLORS[0] } },
       h('textarea', { 'aria-label': 'Sticky note', rows: 4, onInput: (ev) => { n.text = ev.target.value; }, onChange: () => save() }, n.text || ''),
-      h('div', { class: 'eb-tools no-print' }, h('button', { type: 'button', class: 'eb-tool', title: 'Colour', onClick: () => { n.color = NOTE_COLORS[(NOTE_COLORS.indexOf(n.color || NOTE_COLORS[0]) + 1) % NOTE_COLORS.length]; el.style.background = n.color; save(); } }, '◐'), h('button', { type: 'button', class: 'eb-tool', title: 'Tear it off', onClick: () => { board.notes = board.notes.filter((x) => x !== n); board.strings = board.strings.filter((s) => s.a !== n.id && s.b !== n.id); save(); ctx.renderWorld(); } }, '✕')),
+      h('div', { class: 'eb-tools no-print' }, h('button', { type: 'button', class: 'eb-tool', title: 'Colour', onClick: () => { n.color = NOTE_COLORS[(NOTE_COLORS.indexOf(n.color || NOTE_COLORS[0]) + 1) % NOTE_COLORS.length]; el.style.background = n.color; save(); } }, 'Colour'), h('button', { type: 'button', class: 'eb-tool', title: 'Tear it off', onClick: () => { board.notes = board.notes.filter((x) => x !== n); board.strings = board.strings.filter((s) => s.a !== n.id && s.b !== n.id); save(); ctx.renderWorld(); } }, 'Tear off')),
       h('span', { class: 'eb-tape' }));
     drag(el, n, save);
     items.set(n.id, el);
@@ -100,7 +100,7 @@ export function boardPage(ctx) {
   const pinDialog = async () => {
     const q = h('input', { type: 'search', placeholder: 'Search pages…', 'aria-label': 'Search' });
     const results = h('div', { class: 'wd-results', style: { maxHeight: '260px', overflow: 'auto' } });
-    const draw = () => { clear(results); const found = q.value.trim() ? searchWorld(world, q.value, { limit: 20 }) : [...world.entities.values()].filter((e) => e.character).slice(0, 20); for (const e of found) if (!board.items[e.id]) results.append(h('button', { type: 'button', class: 'wd-link', onClick: () => { pin(board, e.id); save(); ctx.renderWorld(); } }, h('span', { class: 'wd-glyph', style: { background: e.color || ENTITY_TYPES[e.type]?.color } }, ENTITY_TYPES[e.type]?.glyph || '✦'), e.name, h('small', null, ` ${ENTITY_TYPES[e.type]?.one || e.type}`))); };
+    const draw = () => { clear(results); const found = q.value.trim() ? searchWorld(world, q.value, { limit: 20 }) : [...world.entities.values()].filter((e) => e.character).slice(0, 20); for (const e of found) if (!board.items[e.id]) results.append(h('button', { type: 'button', class: 'wd-link', onClick: () => { pin(board, e.id); save(); ctx.renderWorld(); } }, e.name, h('small', null, ` ${ENTITY_TYPES[e.type]?.one || e.type}`))); };
     q.addEventListener('input', draw); draw();
     await openDialog({ title: 'Pin a page to the board', body: [q, results, h('p', { class: 'hint', style: { margin: 0 } }, 'Click a page to pin it. Ties between pinned pages appear as red string.')], buttons: [{ label: 'Done', value: null }] });
   };
@@ -122,13 +122,13 @@ export function boardPage(ctx) {
   return h('div', { class: 'wd-page eb-page' },
     h('header', { class: 'wd-hero small eb-hero' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'Evidence board'), h('h1', null, 'What do we know?'), h('p', { class: 'wd-tagline' }, `${pinned.length} pinned, ${ties.length} ties as red string, ${board.notes.length} notes. Drag anything. Pin people, factions, places, front pages and handouts; the ties between them show up by themselves.`))),
     h('div', { class: 'toolbar wd-actions no-print' },
-      h('button', { class: 'btn primary', type: 'button', onClick: pinDialog }, '📌 Pin a page'),
-      h('button', { class: 'btn', type: 'button', onClick: pinCast }, '🧑 Pin the roster'),
-      h('button', { class: 'btn', type: 'button', onClick: () => { board.notes.push({ id: newId(), x: 60 + Math.random() * 300, y: 60 + Math.random() * 200, rot: Math.round(Math.random() * 8 - 4), text: '', color: NOTE_COLORS[board.notes.length % NOTE_COLORS.length] }); save(); ctx.renderWorld(); } }, '🗒 Sticky note'),
-      h('button', { class: 'btn', type: 'button', onClick: stringDialog }, '🧵 Run a string'),
+      h('button', { class: 'btn primary', type: 'button', onClick: pinDialog }, 'Pin a page'),
+      h('button', { class: 'btn', type: 'button', onClick: pinCast }, 'Pin the roster'),
+      h('button', { class: 'btn', type: 'button', onClick: () => { board.notes.push({ id: newId(), x: 60 + Math.random() * 300, y: 60 + Math.random() * 200, rot: Math.round(Math.random() * 8 - 4), text: '', color: NOTE_COLORS[board.notes.length % NOTE_COLORS.length] }); save(); ctx.renderWorld(); } }, 'Sticky note'),
+      h('button', { class: 'btn', type: 'button', onClick: stringDialog }, 'Run a string'),
       h('span', { class: 'spacer' }),
       h('button', { class: 'btn ghost', type: 'button', onClick: shuffle }, 'Tidy'),
-      h('button', { class: 'btn ghost', type: 'button', onClick: print }, '🖨 Print'),
+      h('button', { class: 'btn ghost', type: 'button', onClick: print }, 'Print'),
       h('button', { class: 'btn ghost danger', type: 'button', onClick: clearBoard }, 'Clear')),
     pinned.length || board.notes.length ? h('div', { class: 'eb-wrap' }, stage) : h('div', { class: 'empty' }, h('h2', null, 'An empty corkboard'), h('p', null, 'Pin the roster to start, then add notes and run strings between what the players suspect.')));
 }

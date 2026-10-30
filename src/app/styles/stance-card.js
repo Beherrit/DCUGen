@@ -25,7 +25,7 @@ export function stanceCard(ch, R, d, s, ctx) {
     const e = ctx.roll(`Assume ${c.name} stance (Close Combat: ${c.style})`, c.bonus, { dc: c.dc, note: action === 'free' ? 'free action from Neutral' : 'move action' });
     const r = assumeStance(s, c, e.dice?.total ?? -99);
     ctx.setPlay((st) => { if (r.stance === 'Neutral') delete st.stance; else st.stance = r.stance; });
-    toast(`${e.text} → ${r.text}`);
+    toast(`${e.text} to ${r.text}`);
   };
 
   const btn = (c) => h('button', { type: 'button', class: 'fs-stance-btn', 'aria-pressed': String(c.name === now), 'data-stance': c.name, onClick: () => pick(c) },

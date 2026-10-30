@@ -126,7 +126,7 @@ async function archetypeDialog(p) {
     clear(themeIn);
     for (const t of R.raw.themes.slice().sort((x, y) => (y.homebrew ? 1 : 0) - (x.homebrew ? 1 : 0) || x.name.localeCompare(y.name))) {
       const w = a?.themes?.[t.id] || 0;
-      themeIn.append(h('label', { class: `hb-theme-w ${w ? 'on' : ''}` }, h('span', null, `${t.name}${t.homebrew ? ' ✦' : ''}`), h('input', { type: 'number', min: 0, max: 10, value: w, 'data-theme': t.id, 'aria-label': `${t.name} weight` })));
+      themeIn.append(h('label', { class: `hb-theme-w ${w ? 'on' : ''}` }, h('span', null, `${t.name}${t.homebrew ? ' (homebrew)' : ''}`), h('input', { type: 'number', min: 0, max: 10, value: w, 'data-theme': t.id, 'aria-label': `${t.name} weight` })));
     }
   };
   base.addEventListener('change', fill);
@@ -138,7 +138,7 @@ async function archetypeDialog(p) {
       h('div', { class: 'add-row' }, field('Start from', base), field('Name', name)),
       field('Blurb', blurb),
       h('div', { class: 'label' }, 'Ability ranges'), h('div', { class: 'hb-abil' }, ABILITIES.map((a) => field(a.slice(0, 3).toUpperCase(), abil[a]))),
-      h('div', { class: 'label' }, 'Themes it rolls with (higher = more often; ✦ yours)'), themeIn,
+      h('div', { class: 'label' }, 'Themes it rolls with (higher = more often; (homebrew) is yours)'), themeIn,
     ],
     buttons: [{ label: 'Cancel', value: false }, { label: 'Add archetype', value: true, primary: true }],
   });
@@ -193,8 +193,8 @@ function itemRow(p, kind, x) {
     h('b', null, x.name), h('small', { class: 'hint' }, meta),
     h('span', { class: 'spacer' }),
     kind === 'creatures' ? h('button', { class: 'btn sm ghost', type: 'button', onClick: () => hooks.showCreature?.(x.name) }, 'Bestiary') : null,
-    kind !== 'creatures' ? h('button', { class: 'btn sm ghost', type: 'button', onClick: () => hooks.roll?.(kind === 'themes' ? { theme: x.id } : { archetype: x.id }) }, '🎲 Roll one') : null,
-    h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${x.name}`, onClick: remove }, '✕'));
+    kind !== 'creatures' ? h('button', { class: 'btn sm ghost', type: 'button', onClick: () => hooks.roll?.(kind === 'themes' ? { theme: x.id } : { archetype: x.id }) }, 'Roll one') : null,
+    h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${x.name}`, onClick: remove }, 'Remove'));
 }
 
 function packPanel(p) {
@@ -209,7 +209,7 @@ function packPanel(p) {
     section('Archetypes', 'archetypes', archetypeDialog, 'Your own kind of hero or villain, from a built-in archetype.'),
     section('Creatures', 'creatures', creatureDialog, 'A sheet you built on the Forge, with notes for the GM, in the Bestiary.'),
     h('div', { class: 'btn-row' },
-      h('button', { class: 'btn', type: 'button', id: 'hb-save-file', onClick: () => { const { enabled, ...clean } = p; download(`${slug(p.name)}.dcugen-pack.json`, JSON.stringify(clean, null, 2), 'application/json'); toast('Pack saved: send the file to your players; they load it in Workshop > Homebrew'); } }, '⬇ Save pack file'),
+      h('button', { class: 'btn', type: 'button', id: 'hb-save-file', onClick: () => { const { enabled, ...clean } = p; download(`${slug(p.name)}.dcugen-pack.json`, JSON.stringify(clean, null, 2), 'application/json'); toast('Pack saved: send the file to your players; they load it in Workshop > Homebrew'); } }, 'Save pack file'),
       h('button', { class: 'btn', type: 'button', id: 'hb-copy-code', onClick: async () => { const c = await packCode(p); toast((await copyText(c)) ? `Pack code copied (${Math.round(c.length / 1024) || 1} KB): paste it in a chat` : 'Copy failed: save the file instead'); } }, 'Copy pack code'),
       h('span', { class: 'spacer' }),
       h('button', { class: 'btn ghost danger', type: 'button', onClick: async () => { const ok = await openDialog({ title: `Delete ${p.name}?`, body: h('p', { style: { margin: 0 } }, 'Its themes, archetypes and creatures go from this device. Save the pack file first to keep a copy.'), buttons: [{ label: 'Keep', value: false }, { label: 'Delete', value: true, danger: true }] }); if (ok) { packs = packs.filter((x) => x.id !== p.id); openId = null; changed(`${p.name} deleted`); } } }, 'Delete pack')));
@@ -223,7 +223,7 @@ export function homebrewPage() {
   const p = pack();
   return h('div', { class: 'hb' },
     h('section', { class: 'panel hb-packs' },
-      h('h2', null, '🧪 Homebrew packs'),
+      h('h2', null, 'Homebrew packs'),
       h('p', { class: 'hint', style: { margin: 0 } }, 'Your own power themes, archetypes and Bestiary creatures, kept in packs. Switch a pack off to set it aside. Share a pack as a file or a code, and your players load it here.'),
       packs.length ? h('ul', { class: 'hb-pack-list' }, packs.map((x) => h('li', { class: `hb-pack-row ${x.id === openId ? 'active' : ''}` },
         h('input', { type: 'checkbox', checked: x.enabled !== false, 'aria-label': `Use ${x.name}`, onChange: (e) => { x.enabled = e.target.checked; changed(`${x.name} ${x.enabled ? 'on' : 'off'}`); } }),
@@ -241,7 +241,7 @@ export function homebrewPage() {
             h('b', null, bp.name), h('small', { class: 'hint' }, `${count(bp.themes.length, 'theme')} · ${count(bp.archetypes.length, 'archetype')} · ${count(bp.creatures.length, 'creature')}${bp.author ? ` · ${bp.author}` : ''}`),
             bp.notes ? h('small', { class: 'hint', style: { flexBasis: '100%' } }, bp.notes) : null,
             h('span', { class: 'spacer' }),
-            h('button', { class: 'btn sm', type: 'button', 'data-pack': bp.id, disabled: have, onClick: () => importPack(JSON.parse(JSON.stringify(bp))) }, have ? '✓ Added' : '+ Add'));
+            h('button', { class: 'btn sm', type: 'button', 'data-pack': bp.id, disabled: have, onClick: () => importPack(JSON.parse(JSON.stringify(bp))) }, have ? 'Added' : '+ Add'));
         }))] : null),
     p ? packPanel(p) : null);
 }

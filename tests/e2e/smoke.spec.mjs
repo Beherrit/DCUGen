@@ -84,7 +84,7 @@ test('the Bestiary throws a creature into the Battle Room', async ({ page }) => 
   const errors = await openApp(page);
   await showTab(page, 'bestiary');
   await page.locator('#view-bestiary .bst-card').first().click();
-  await page.getByRole('button', { name: '⚔ Throw in Battle Room' }).click();
+  await page.getByRole('button', { name: 'Throw in Battle Room' }).click();
   await showTab(page, 'battle');
   await expect(page.locator('#view-battle')).not.toContainText('The arena is empty');
   expect(errors).toEqual([]);

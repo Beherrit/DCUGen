@@ -400,7 +400,7 @@ export function templateCells(ch, R) {
   put('K2', id.codename); put('AP2', id.gender); put('BD2', id.age);
   put('K5', id.realName); put('AP5', ch.appearance?.eyes); put('BE5', ch.appearance?.height);
   put('AP8', ch.appearance?.hair); put('BE8', ch.appearance?.weight ? `${ch.appearance.weight} lb` : '');
-  if (ch.complications?.some((x) => /Secret Identity/.test(x.type))) put('L8', 'SECRET ✓'); else put('U8', 'PUBLIC ✓');
+  if (ch.complications?.some((x) => /Secret Identity/.test(x.type))) put('L8', 'SECRET'); else put('U8', 'PUBLIC');
   put('AN11', `${ch.archetype?.name || ''}${ch.alignment === 'villain' ? ' (villain)' : ''}`);
   const abilityCell = { Strength: 'N18', Stamina: 'N22', Agility: 'N26', Dexterity: 'N30', Fighting: 'N34', Intellect: 'N38', Awareness: 'N42', Presence: 'N46' };
   for (const a of ABILITIES) put(abilityCell[a], s.d.abilities[a] ?? '—');

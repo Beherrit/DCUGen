@@ -128,7 +128,7 @@ function initiativeTool() {
       h('span', null, h('b', null, e.name), e.cond && e.cond !== 'Normal' ? h('span', { class: 'chip', style: { marginLeft: '6px' } }, e.cond) : null),
       h('select', { 'aria-label': `Condition for ${e.name}`, style: { maxWidth: '130px', padding: '3px' }, onChange: (ev) => { e.cond = ev.target.value; draw(); } },
         conds.map((c) => h('option', { value: c, selected: c === (e.cond || 'Normal') }, c))),
-      h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${e.name}`, onClick: () => { init.list.splice(i, 1); if (init.turn >= init.list.length) init.turn = 0; draw(); } }, '✕'))));
+      h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${e.name}`, onClick: () => { init.list.splice(i, 1); if (init.turn >= init.list.length) init.turn = 0; draw(); } }, 'Remove'))));
     roundEl.textContent = `Round ${init.round}`;
   };
   const add = (n, b) => {

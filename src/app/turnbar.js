@@ -39,7 +39,7 @@ export function setParty(list) { party = Array.isArray(list) ? list : []; draw()
 function chip(p) {
   return h('span', { class: `tbar-mate ${p.out ? 'out' : ''}`, style: { '--c': p.color || '#888' }, title: p.player ? `Played by ${p.player}` : 'Run by the GM' },
     h('span', { class: 'swatch' }), h('b', null, p.name),
-    h('small', { class: 'num' }, `⭐${p.heroPoints}${p.bruises ? ` 🩹${p.bruises}` : ''}`),
+    h('small', { class: 'num' }, `${p.heroPoints} hero pts${p.bruises ? `, ${p.bruises} bruise${p.bruises === 1 ? '' : 's'}` : ''}`),
     p.conditions.length ? h('small', { class: 'tbar-conds' }, p.conditions.join(', ')) : h('small', { class: 'hint' }, 'fine'));
 }
 
@@ -65,7 +65,7 @@ function draw() {
       ] : h('span', { class: 'tbar-now' }, h('small', null, 'At the table')),
       h('span', { class: 'spacer' }),
       lobby.role !== 'host' && party.length ? h('button', { class: 'btn sm ghost', type: 'button', id: 'tbar-party', 'aria-expanded': String(openParty), onClick: () => { openParty = !openParty; draw(); } }, `Party ${openParty ? '▾' : '▴'}`) : null,
-      init ? h('button', { class: 'btn sm ghost', type: 'button', title: 'The whole turn order', 'aria-label': 'Turn order', onClick: () => toast(init.order.map((o, i) => `${i === init.turn ? '▶ ' : ''}${o.name}`).join(' · ')) }, '☰') : null),
+      init ? h('button', { class: 'btn sm ghost', type: 'button', title: 'The whole turn order', 'aria-label': 'Turn order', onClick: () => toast(init.order.map((o, i) => `${i === init.turn ? 'Now: ' : ''}${o.name}`).join(' · ')) }, 'Turn order') : null),
     remind && (remind.lines.length || remind.tip || !remind.canAct) ? h('div', { class: 'tbar-remind' },
       !remind.canAct ? h('div', null, h('b', null, 'You can\'t act this turn.')) : null,
       remind.lines.map((l) => { const [c, ...rest] = l.split(': '); return h('div', null, h('button', { type: 'button', class: 'rule-link', 'data-rule': c, 'data-rule-cat': 'Conditions' }, c), `: ${rest.join(': ')}`); }),
