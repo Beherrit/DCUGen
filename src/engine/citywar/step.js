@@ -57,6 +57,12 @@ function march(war, team, foe) {
   note(war, 'move', `Turn ${war.turn}: ${team.name} move to ${cellName(to.x, to.y)}, toward ${foe.name}.`);
 }
 
+/** A team that got away leaves the city: it is out of the war without having been beaten. */
+function leaveCity(war, team) {
+  team.status = 'out'; team.left = true; team.resting = false; team.outTurn = war.turn;
+  note(war, 'out', `Turn ${war.turn}: ${team.name} get away and leave the city.`);
+}
+
 function eliminate(war, team) {
   team.status = 'out'; team.resting = false; team.outTurn = war.turn;
   note(war, 'out', `Turn ${war.turn}: ${team.name} are out of the war.`);
@@ -89,6 +95,9 @@ function fight(war, R, attacker, defender, onFight) {
   if (onFight) onFight(b, rec, war, fightLabel(war, rec));
   if (!rec.winner) { afterFight(war, [attacker, defender]); return; }
   const [won, lost] = rec.winner === 'A' ? [attacker, defender] : [defender, attacker];
+  // Getting away (Fighting Withdrawal) defeats nobody. The runners leave the city: out of the war, but not beaten,
+  // and their pursuers get no win. (Slipping one block away only led to the same chase every turn.)
+  if (rec.gotAway) { leaveCity(war, won); afterFight(war, [lost]); return; }
   won.won++;
   eliminate(war, lost);
   afterFight(war, [won]);

@@ -55,7 +55,7 @@ export function playFight(war, R, rec) {
   const gone = (c) => c.out || (c.fled && !c.escaped);
   const side = (letter) => b.combatants.filter((c) => c.team === letter);
   Object.assign(rec, {
-    winner: b.winner || null, rounds: Math.max(1, Math.min(b.round, b.options.maxRounds)),
+    winner: b.winner || null, gotAway: !!b.gotAway, rounds: Math.max(1, Math.min(b.round, b.options.maxRounds)),
     koA: side('A').filter(gone).length, koB: side('B').filter(gone).length,
   });
   return b;
@@ -94,6 +94,7 @@ export function fightResultLine(war, rec) {
   if (!rec.winner) return `Nobody wins: the fight ends after ${plural(rec.rounds, 'round')} and both teams stay.`;
   const won = rec.winner === 'A' ? A : B;
   const lose = rec.winner === 'A' ? rec.koA : rec.koB;
+  if (rec.gotAway) return `${won.name} get away after ${plural(rec.rounds, 'round')} and ${lose ? `lose ${plural(lose, 'fighter')}` : 'lose no one'}; nobody is out of the war.`;
   return `${won.name} win in ${plural(rec.rounds, 'round')} and ${lose ? `lose ${plural(lose, 'fighter')}` : 'lose no one'}.`;
 }
 

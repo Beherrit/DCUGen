@@ -365,3 +365,22 @@ test('the turn cap ends a war nobody wins', () => {
   assert.equal(war.turn, 5);
   assert.match(war.log.at(-1).text, /stalemate/);
 });
+
+test('a team that gets away (Fighting Withdrawal) defeats nobody: it leaves the city, and its pursuers get no win', () => {
+  let seen = 0;
+  for (let i = 0; i < 12 && !seen; i++) {
+    const war = duel({ seed: `away-${i}`, tacticA: 'withdraw', size: 4 });
+    stepCity(war, R);
+    const rec = war.battles.find((r) => r.gotAway);
+    if (!rec) continue;
+    seen++;
+    const runners = teamById(war, rec.winner === 'A' ? rec.attacker : rec.defender);
+    const pursuers = teamById(war, rec.winner === 'A' ? rec.defender : rec.attacker);
+    assert.equal(runners.status, 'out'); assert.equal(runners.left, true);
+    assert.equal(pursuers.status, 'alive', 'the pursuers are not knocked out by a getaway');
+    assert.equal(pursuers.won, 0, 'nobody is beaten, so nobody wins');
+    assert.ok(war.log.some((l) => /leave the city/.test(l.text) && l.text.includes(runners.name)));
+    assert.equal(standings(war).find((r) => r.id === runners.id).fled, true);
+  }
+  assert.ok(seen, 'no seed produced a getaway; the test needs one');
+});

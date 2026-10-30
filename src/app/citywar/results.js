@@ -15,7 +15,7 @@ export function standingsTable(war) {
     h('td', null, h('i', { class: 'cw-dot', style: { background: r.color } }), ' ', h('b', null, r.name)),
     h('td', null, tacticLabel(r.tactic)),
     h('td', { class: 'num' }, r.won), h('td', { class: 'num' }, r.left), h('td', { class: 'num' }, r.kos),
-    h('td', { class: 'num' }, r.alive ? (war.status === 'over' ? 'Winner' : 'In') : r.outTurn)));
+    h('td', { class: 'num' }, r.alive ? (war.status === 'over' ? 'Winner' : 'In') : r.fled ? `Left, turn ${r.outTurn}` : r.outTurn)));
   return h('section', { class: 'panel bt-panel', id: 'cw-standings-panel' }, h('h2', null, war.status === 'over' ? 'Final standings' : 'Standings'),
     h('div', { class: 'table-scroll' }, h('table', { class: 'skills bt-mc-table', id: 'cw-standings' },
       h('thead', null, h('tr', null, ['Team', 'Tactic', 'Fights won', 'Fighters left', 'KOs dealt', 'Eliminated'].map((c) => h('th', null, c)))), h('tbody', null, rows))));
