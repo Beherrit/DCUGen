@@ -1864,7 +1864,7 @@
    "2|hit|A1|Viper tears at Halo Sentry Saucer with Talons: d20 13 +9 = 22 vs Parry DC 12 — hit (Power Attack: −2 to hit, +2 effect).",
    "2|condition|A1|Halo Sentry Saucer resists with Toughness: d20 3 +3 = 6 vs DC 21 — 3 degrees: staggered and bruised (−2).",
    "2|move|B0|Mindrender moves and charges Viper from K4 to K6, 60 ft.",
-   "2|attack|B0|Mindrender drops Mind Blast (Cone area) around itself: Viper is caught in it — charge: −2 to hit.",
+   "2|attack|B0|Mindrender drops Mind Blast (Cone area) around itself: Viper is caught in it.",
    "2|resist|B0|Viper dives for cover: Dodge d20 18 +8 = 26 vs DC 21 — half effect.",
    "2|resist|B0|Viper resists with Will: d20 17 +5 = 22 vs DC 15 — resisted.",
    "2|hero|B0|Mindrender uses extra effort for an extra standard action (now fatigued; spends a hero point to shrug off the fatigue).",

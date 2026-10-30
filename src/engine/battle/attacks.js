@@ -119,7 +119,7 @@ function shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charg
   if (!atk.roll || atk.area) { trade = 0; allOut = 0; defensive = 0; }
   let rankShift = trade;
   const notes = [];
-  if (charge) notes.push('charge: −2 to hit');
+  if (charge && atk.roll && !atk.area) notes.push('charge: −2 to hit'); // an area needs no attack check, so the charge costs it nothing
   if (slam) { rankShift += slam - atk.rank; notes.push(`slam: Damage ${slam} from momentum`); }
   if (team) { rankShift += team; notes.push(`team attack: +${team} rank`); }
   if (trade > 0) notes.push(`Power Attack${trade > 2 ? ' (advantage)' : ''}: −${trade} to hit, +${trade} effect`);
