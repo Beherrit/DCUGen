@@ -115,13 +115,13 @@ test('Ballista\'s Bad luck forces a barely-landing hit on him to be re-rolled, a
   const weakHitter = { abilities: { Fighting: 0, Strength: 16 }, skills: [{ name: 'Close Combat', spec: 'Unarmed', ranks: 2 }], hp: 0 };
   const mk = () => powerArena([['atk', 'A', weakHitter, { x: 0, y: 0 }], ['ballista', 'B', { ch: ballista() }, { x: 1, y: 0 }], ['pal', 'B', { ...SOFT, hp: 0 }, { x: 2, y: 0 }]]);
   const b = mk();
-  const d = swing(b, 'atk', 'ballista', [1, 17, 2]);     // his Reaction deflect rolls first (1 counts 11 + 5 = 16, no help); 17 + 2 = 19 hits Parry 18; the forced second roll of 2 is worse
+  const d = swing(b, 'atk', 'ballista', [17, 2]);        // fists are not psionic, so his Psionic Defense does not roll; 17 + 2 = 19 hits Parry 18; the forced second roll of 2 is worse
   assert.equal(d.left(), 0);
   assert.match(text(b), /ballista spends Luck to force atk to re-roll the attack roll with Bad luck \(Luck Control\): d20 17, then 2 — takes the worse, 2\./);
   assert.match(text(b), /Luck Control forced the roll from 17 to 2/);
   assert.equal(who(b, 'ballista').luck, 3);
   const pal = mk();
-  const e = swing(pal, 'atk', 'pal', [1, 14, 2]);        // Ballista's Reaction deflect covers his ally and rolls first; 14 + 2 = 16 hits the ally's 16; Bad luck is only for rolls against Ballista
+  const e = swing(pal, 'atk', 'pal', [14, 2]);           // no deflect roll against fists here either; 14 + 2 = 16 hits the ally's 16; Bad luck is only for rolls against Ballista
   assert.equal(e.left(), 0);
   assert.doesNotMatch(text(pal), /Bad luck/);
 });

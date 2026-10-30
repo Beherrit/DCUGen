@@ -11,7 +11,7 @@ import { ultimateAim } from './fortune.js';
 import { payReroll } from './points.js';
 import { assistReroll } from './luck.js';
 import { wantsReroll, negatesReroll, forcesHit } from './luck-attack.js';
-import { deflectAgainst } from './deflect.js';
+import { deflectAgainst, deflectCovers } from './deflect.js';
 import { critImmune } from './immunity.js';
 import { opposingBonus } from './style-bonus.js';
 
@@ -86,7 +86,7 @@ export function rollToHit(b, c, atk, t, rng, m, aimed, notes) {
   if (t.defending) {
     const r = d20(rng); const defRoll = r <= 10 ? r + 10 : r;
     const imp = t.adv['Improved Defense'] ? 2 : 0;
-    const base = t.deflecting ? Math.max(def, t.deflect.rank) : def;
+    const base = t.deflecting && deflectCovers(t, atk) ? Math.max(def, t.deflect.rank) : def;
     dcUsed = defRoll + base + imp;
     notes.push(`${t.name} is defending: d20 ${r}${r <= 10 ? ' (+10)' : ''} + ${base}${base !== def ? ' (Deflect)' : ''}${imp ? ' + 2 (Improved Defense)' : ''} = ${dcUsed}`);
   }

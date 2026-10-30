@@ -6,7 +6,7 @@ import { log, alliesOf } from './util.js';
 import { defenseOf } from './conditions.js';
 import { squares, squaresInMove, reachSquares, feet } from './geometry.js';
 import { expectedValue, rangePenalty } from './odds.js';
-import { deflectPenalty } from './deflect.js';
+import { deflectPenalty, deflectCovers } from './deflect.js';
 import { tacticOf } from './tactics-list.js';
 import { vipOf } from './tactics-marks.js';
 import { isFrontliner } from './tactics-position.js';
@@ -38,7 +38,7 @@ export function deflectHarm(b, c, enemies, only = null) {
     for (const a of allies) {
       const pen = deflectPenalty(b, c, a);
       for (const atk of e.attacks) {
-        if (!atk.roll || atk.area || atk.perception || !reaches(b, e, atk, a)) continue;
+        if (!atk.roll || atk.area || atk.perception || !deflectCovers(c, atk) || !reaches(b, e, atk, a)) continue;
         const share = beatsFlat(c.deflect.rank + pen, defenseOf(a, atk.kind === 'close' ? 'Parry' : 'Dodge'));
         worst = Math.max(worst, share * expectedValue(e, atk, a, { dist: atk.range === 'close' ? 0 : feet(b, e, a), b }));
       }
