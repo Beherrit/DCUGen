@@ -13,13 +13,13 @@ import { personKey } from './keys.js';
 import { mergeSessions } from './sessions.js';
 
 export const ENTITY_TYPES = {
-  person: { label: 'People', one: 'Person', glyph: '🧑', color: '#2f6fde' },
-  faction: { label: 'Factions', one: 'Faction', glyph: '🏛', color: '#8a5cd6' },
-  location: { label: 'Locations', one: 'Location', glyph: '📍', color: '#1a7f4b' },
-  event: { label: 'Events', one: 'Event', glyph: '📅', color: '#c2410c' },
-  item: { label: 'Items', one: 'Item', glyph: '🗝', color: '#a8670b' },
-  paper: { label: 'Newspapers', one: 'Newspaper', glyph: '📰', color: '#3b4252' },
-  handout: { label: 'Handouts', one: 'Handout', glyph: '🗂', color: '#8a5a44' },
+  person: { label: 'People', one: 'Person', glyph: 'P', color: '#2f6fde' },
+  faction: { label: 'Factions', one: 'Faction', glyph: 'F', color: '#8a5cd6' },
+  location: { label: 'Locations', one: 'Location', glyph: 'L', color: '#1a7f4b' },
+  event: { label: 'Events', one: 'Event', glyph: 'E', color: '#c2410c' },
+  item: { label: 'Items', one: 'Item', glyph: 'I', color: '#a8670b' },
+  paper: { label: 'Newspapers', one: 'Newspaper', glyph: 'N', color: '#3b4252' },
+  handout: { label: 'Handouts', one: 'Handout', glyph: 'H', color: '#8a5a44' },
 };
 
 // rel = what `to` is to `from`. inverse = what `from` is to `to`.
@@ -676,8 +676,9 @@ export function mergeWorldSaved(current, incoming) {
 }
 
 /** Record a Battle Room fight as an event with everyone who fought in it. */
-export function recordBattle(saved, battle, world) {
-  const name = `${battle.name || 'Battle'}: ${battle.winner ? `team ${battle.winner} wins` : 'stalemate'}`;
+export function recordBattle(saved, battle0, world) {
+  const battle = { ...battle0, combatants: battle0.combatants.filter((c) => !c.summon) }; // minions called in the fight are not people in the world
+  const name = `${battle.name || 'Battle'}: ${battle.winner ? `team ${battle.winner} ${battle.gotAway ? 'gets away' : 'wins'}` : 'stalemate'}`;
   const teams = [...new Set(battle.combatants.map((c) => c.team))].sort();
   const sides = teams.map((t) => `Team ${t}: ${battle.combatants.filter((c) => c.team === t).map((c) => c.name).join(', ')}`).join(' vs ');
   const standing = battle.combatants.filter((c) => !c.out && !c.fled).map((c) => c.name);

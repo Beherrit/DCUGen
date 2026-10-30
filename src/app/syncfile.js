@@ -114,7 +114,7 @@ async function readFile(fh) {
 }
 
 async function writeFile(fh) {
-  const snap = snapshotAll();
+  const snap = snapshotAll({ fights: false }); // fight logs stay on this device; they can be many megabytes
   for (const k of LOCAL_ONLY) delete snap.data[k];
   const all = stamps();
   snap.stamps = Object.fromEntries(Object.entries(all).filter(([k]) => synced(k)));
@@ -205,7 +205,7 @@ export function syncButton() {
   } });
   const paint = (s) => {
     btn.hidden = s === 'off';
-    btn.textContent = s === 'ok' ? '⟳' : '⚠';
+    btn.textContent = s === 'ok' ? 'Synced' : 'Sync problem';
     btn.title = s === 'ok' ? 'Synced with your cloud folder. Click for details.' : s === 'needs-permission' ? 'Click to reconnect your sync file (the browser asks once per visit)' : 'Sync had a problem. Click to try again.';
     btn.classList.toggle('warn', s !== 'ok');
   };

@@ -33,3 +33,17 @@ test('impaired and disabled penalize checks; the end of a scene clears damage bu
   const s = endScene({ ...playState({}), bruises: 3, damage: 'staggered', conditions: ['Prone'], heroPoints: 3, fatigue: 'exhausted' });
   assert.deepEqual(s, { bruises: 0, damage: 'none', heroPoints: 3, conditions: [], fatigue: 'none' });
 });
+
+test('a natural 20 on the Toughness check is one degree better (Hero Handbook p10)', () => {
+  const s = playState({});
+  // One degree of failure (total 24 vs DC 25) becomes no damage at all.
+  const saved = applyDamage(s, { total: 24, dc: 25, roll: 20 });
+  assert.equal(saved.state.bruises, 0);
+  assert.match(saved.text, /natural 20/);
+  // Two degrees (total 19 vs DC 25) become one: a bruise, not dazed.
+  const eased = applyDamage(s, { total: 19, dc: 25, roll: 20 });
+  assert.equal(eased.state.bruises, 1);
+  assert.ok(!/dazed/.test(eased.text));
+  // Without the natural 20 the same total is two degrees: dazed.
+  assert.match(applyDamage(s, { total: 19, dc: 25, roll: 9 }).text, /dazed/);
+});

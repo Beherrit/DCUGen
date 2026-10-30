@@ -76,7 +76,7 @@ export function openDialog({ title, body, buttons = [{ label: 'Close', value: nu
   return new Promise((resolve) => {
     const done = (v) => { dlg.close(); resolve(v); };
     dlg.append(
-      h('div', { class: 'dlg-head' }, h('h2', null, title), h('span', { style: { flex: 1 } }), h('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Close', onClick: () => done(null) }, '✕')),
+      h('div', { class: 'dlg-head' }, h('h2', null, title), h('span', { style: { flex: 1 } }), h('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Close', onClick: () => done(null) }, 'Close')),
       h('div', { class: 'dlg-body' }, body),
       h('div', { class: 'dlg-foot' }, buttons.map((b) => h('button', { class: `btn ${b.primary ? 'primary' : ''} ${b.danger ? 'danger' : ''}`, type: 'button', onClick: () => done(typeof b.value === 'function' ? b.value() : b.value) }, b.label))),
     );
@@ -120,7 +120,7 @@ export function menu(label, items, { cls = 'btn' } = {}) {
       const box = (btn.closest('.toolbar') || document.body).getBoundingClientRect();
       if (b.right - list.offsetWidth < box.left) list.classList.add('left');
     }
-  } }, label, ' ▾');
+  } }, label);
   for (const it of items) {
     if (!it) continue;
     list.append(h('button', { type: 'button', role: 'menuitem', id: it.id || null, class: it.danger ? 'danger' : null, onClick: () => { list.hidden = true; it.run(); } }, it.label, it.hint ? h('small', null, it.hint) : null));

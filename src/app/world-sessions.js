@@ -43,7 +43,7 @@ function nextPanel() {
   const plan = () => { const n = addSession(W.saved, { after: lastSession(W.world) }); W.ui.sessionId = n.id; commit(); };
   if (!s) {
     return h('section', { class: 'panel ses-next empty-next' },
-      h('h2', null, '🗓 Next session'),
+      h('h2', null, 'Next session'),
       h('p', { class: 'hint', style: { margin: 0 } }, 'Nothing planned yet. Plan the next game night: a date for the calendar, the scenes you have in mind, and the threads to pick up.'),
       h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', type: 'button', id: 'ses-new', onClick: plan }, '+ Plan the next session')));
   }
@@ -53,7 +53,7 @@ function nextPanel() {
     h('p', { class: 'ses-when' }, s.date ? whenLabel(s.date) : 'No date yet'),
     h('div', { class: 'btn-row' },
       h('button', { class: 'btn', type: 'button', onClick: () => { W.ui.sessionId = s.id; commit(); } }, 'Open'),
-      h('button', { class: 'btn', type: 'button', id: 'ses-ics', disabled: !s.date, onClick: () => downloadIcs(s) }, '📅 Add to calendar'),
+      h('button', { class: 'btn', type: 'button', id: 'ses-ics', disabled: !s.date, onClick: () => downloadIcs(s) }, 'Add to calendar'),
       h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(invite(s))) ? 'Invite copied: paste it in the group chat' : 'Copy failed') }, 'Copy the invite'),
       h('button', { class: 'btn ghost', type: 'button', onClick: plan }, '+ Plan another')));
 }
@@ -67,9 +67,9 @@ function sceneRow(s, sc, i) {
       h('span', { class: 'ses-scene-text' }, sc.text),
       sc.links?.length ? h('div', { class: 'wd-chips' }, chipsFor(sc.links)) : null),
     h('span', { class: 'ses-scene-tools' },
-      h('button', { class: 'x', type: 'button', 'aria-label': 'Move up', disabled: i === 0, onClick: () => { moveScene(W.saved, s.id, sc.id, -1); commit(); } }, '↑'),
-      h('button', { class: 'x', type: 'button', 'aria-label': 'Move down', disabled: i === s.scenes.length - 1, onClick: () => { moveScene(W.saved, s.id, sc.id, 1); commit(); } }, '↓'),
-      h('button', { class: 'x', type: 'button', 'aria-label': 'Remove scene', onClick: () => { removeScene(W.saved, s.id, sc.id); commit(); } }, '✕')));
+      h('button', { class: 'x', type: 'button', 'aria-label': 'Move up', disabled: i === 0, onClick: () => { moveScene(W.saved, s.id, sc.id, -1); commit(); } }, 'Up'),
+      h('button', { class: 'x', type: 'button', 'aria-label': 'Move down', disabled: i === s.scenes.length - 1, onClick: () => { moveScene(W.saved, s.id, sc.id, 1); commit(); } }, 'Down'),
+      h('button', { class: 'x', type: 'button', 'aria-label': 'Remove scene', onClick: () => { removeScene(W.saved, s.id, sc.id); commit(); } }, 'Remove')));
 }
 
 function sessionEditor(s) {
@@ -99,18 +99,18 @@ function sessionEditor(s) {
     s.scenes?.length ? h('ol', { class: 'ses-scenes' }, s.scenes.map((sc, i) => sceneRow(s, sc, i))) : h('p', { class: 'hint', style: { margin: 0 } }, 'No scenes yet. Add the ones you have in mind, or prep the session on the GM Screen and its scenes land here.'),
     h('div', { class: 'add-row' }, sceneIn, linkIn, h('button', { class: 'btn sm', type: 'button', id: 'ses-scene-add', onClick: addIt }, 'Add scene')),
     p ? h('div', { class: 'ses-plan' },
-      h('b', null, '🧰 Session in a Box'),
+      h('b', null, 'Session in a Box'),
       p.villain ? h('div', null, `Villain: ${p.villain.name} (PL ${p.villain.pl})${p.villain.why ? `. ${p.villain.why}` : ''}`) : null,
       p.minions ? h('div', null, `Minions: ${p.minions.count} × ${p.minions.name}`) : null,
-      p.rumor ? h('div', null, `📰 Rumor: ${p.rumor}`) : null) : null,
-    !p && gmPlan && s.status !== 'played' ? h('button', { class: 'btn sm', type: 'button', id: 'ses-attach', onClick: () => { attachPlan(W.saved, s.id, gmPlan); commit(); toast('The GM Screen\'s plan is kept with this session'); } }, '🧰 Keep the GM Screen\'s plan with this session') : null,
+      p.rumor ? h('div', null, `Rumor: ${p.rumor}`) : null) : null,
+    !p && gmPlan && s.status !== 'played' ? h('button', { class: 'btn sm', type: 'button', id: 'ses-attach', onClick: () => { attachPlan(W.saved, s.id, gmPlan); commit(); toast('The GM Screen\'s plan is kept with this session'); } }, 'Keep the GM Screen\'s plan with this session') : null,
     h('h3', null, 'Notes'), notes,
     castSection(s),
-    s.recap ? h('div', { class: 'ses-recap' }, h('b', null, `🎬 ${s.recap.headline}`), (s.recap.lines || []).map((l) => h('div', null, l))) : null,
+    s.recap ? h('div', { class: 'ses-recap' }, h('b', null, s.recap.headline), (s.recap.lines || []).map((l) => h('div', null, l))) : null,
     h('div', { class: 'btn-row' },
-      s.status !== 'played' ? h('button', { class: 'btn primary', type: 'button', id: 'ses-start', title: 'Starts the session on the GM Screen and sends "Previously on…" to the table', onClick: () => startHere(s) }, '▶ Start this session') : null,
+      s.status !== 'played' ? h('button', { class: 'btn primary', type: 'button', id: 'ses-start', title: 'Starts the session on the GM Screen and sends "Previously on…" to the table', onClick: () => startHere(s) }, 'Start this session') : null,
       s.status !== 'played' ? h('button', { class: 'btn', type: 'button', onClick: () => { markPlayed(W.saved, s.number, null, teamSnapshot()); commit(); } }, 'Mark played') : h('button', { class: 'btn', type: 'button', onClick: () => { updateSession(W.saved, s.id, { status: 'planned' }); commit(); } }, 'Mark not played'),
-      h('button', { class: 'btn', type: 'button', disabled: !s.date, onClick: () => downloadIcs(s) }, '📅 Calendar file'),
+      h('button', { class: 'btn', type: 'button', disabled: !s.date, onClick: () => downloadIcs(s) }, 'Calendar file'),
       h('span', { class: 'spacer' }),
       h('button', { class: 'btn ghost danger', type: 'button', onClick: async () => { const ok = await openDialog({ title: `Delete session ${s.number}?`, body: h('p', { style: { margin: 0 } }, 'Its scenes, notes and plan go. The World\'s timeline keeps what happened.'), buttons: [{ label: 'Keep', value: false }, { label: 'Delete', value: true, danger: true }] }); if (ok) { removeSession(W.saved, s.id); W.ui.sessionId = null; commit(); } } }, 'Delete')));
 }
@@ -137,7 +137,7 @@ function castSection(s) {
       h('button', { class: 'btn sm', type: 'button', 'aria-label': `Lower XP for ${c.name}`, disabled: !c.xp, onClick: () => { updateCast(W.saved, s.id, c, { xp: (c.xp || 0) - 1 }); commit(); } }, '−'),
       h('b', { class: 'num' }, c.xp || 0),
       h('button', { class: 'btn sm', type: 'button', 'aria-label': `Raise XP for ${c.name}`, onClick: () => { updateCast(W.saved, s.id, c, { xp: (c.xp || 0) + 1 }); commit(); } }, '+')),
-    h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${c.name} from this session`, onClick: () => { removeFromCast(W.saved, s.id, c.rosterId || c.name); commit(); } }, '✕'));
+    h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${c.name} from this session`, onClick: () => { removeFromCast(W.saved, s.id, c.rosterId || c.name); commit(); } }, 'Remove'));
   return h('div', { class: 'ses-cast', id: 'ses-cast' },
     h('h3', null, 'Who played'),
     cast.length ? h('ul', { class: 'ses-cast-list' }, cast.map(row))
@@ -150,7 +150,7 @@ function attendancePanel() {
   if (!a.sessions.length) return null;
   const cell = (p, s) => {
     const x = p.sessions[s.number];
-    return h('td', { title: x ? [x.conds.join(', '), x.note].filter(Boolean).join(' · ') : '' }, x ? (x.xp ? `✓ +${x.xp}` : '✓') : '');
+    return h('td', { title: x ? [x.conds.join(', '), x.note].filter(Boolean).join(' · ') : '' }, x ? (x.xp ? `Yes +${x.xp}` : 'Yes') : '');
   };
   return h('section', { class: 'wd-block', id: 'ses-attendance' },
     h('h2', null, 'Who played when'),
@@ -187,11 +187,11 @@ function threadsPanel() {
     h('div', null, h('span', null, t.text), t.opened ? h('small', { class: 'hint' }, ` · since S${t.opened}`) : null, t.links?.length ? h('div', { class: 'wd-chips' }, chipsFor(t.links)) : null),
     h('span', { class: 'ses-scene-tools' },
       t.closed == null
-        ? h('button', { class: 'btn sm ghost', type: 'button', title: 'Resolved', onClick: () => { closeThread(W.saved, t.id, lastSession(W.world) || true); commit(); } }, '✓ Tied up')
+        ? h('button', { class: 'btn sm ghost', type: 'button', title: 'Resolved', onClick: () => { closeThread(W.saved, t.id, lastSession(W.world) || true); commit(); } }, 'Tied up')
         : h('button', { class: 'btn sm ghost', type: 'button', onClick: () => { reopenThread(W.saved, t.id); commit(); } }, 'Reopen'),
-      h('button', { class: 'x', type: 'button', 'aria-label': 'Delete thread', onClick: () => { removeThread(W.saved, t.id); commit(); } }, '✕')));
+      h('button', { class: 'x', type: 'button', 'aria-label': 'Delete thread', onClick: () => { removeThread(W.saved, t.id); commit(); } }, 'Delete')));
   return h('section', { class: 'panel ses-threads' },
-    h('h2', null, '🧵 Plot threads'),
+    h('h2', null, 'Plot threads'),
     open.length ? h('ul', { class: 'ses-thread-list' }, open.map(row)) : h('p', { class: 'hint', style: { margin: 0 } }, 'Nothing left hanging. Note the loose ends here so the next session can pick them up.'),
     h('div', { class: 'add-row' }, textIn, linkIn, h('button', { class: 'btn sm', type: 'button', id: 'thr-add', onClick: add }, 'Add')),
     closed.length ? h('details', null, h('summary', null, `Tied up (${closed.length})`), h('ul', { class: 'ses-thread-list' }, closed.map(row))) : null);
@@ -201,7 +201,7 @@ function previouslyPanel() {
   const n = nextSession(W.saved)?.number ?? null;
   const p = previouslyOn(W.saved, W.world, { campaign: campaign(), before: n });
   return h('section', { class: 'panel ses-prev' },
-    h('h2', null, '📺 Previously on…'),
+    h('h2', null, 'Previously on…'),
     p ? [h('p', { class: 'ses-prev-title' }, p.title), h('ul', null, p.lines.map((l) => h('li', null, l))),
       h('div', { class: 'btn-row' },
         h('button', { class: 'btn sm', type: 'button', id: 'ses-prev-send', onClick: () => { W.hooks.postToTable?.(p.text); toast('Sent to the table'); } }, 'Send to the table'),

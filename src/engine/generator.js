@@ -15,6 +15,8 @@ import { checkLimits } from './limits.js';
 import { rollSpec, rangeOf, evalExpr } from './expr.js';
 import { makeIdentity } from './flavor.js';
 import { generateBio } from './lifepath.js';
+import { ensureAttack, hasFairAttack } from './genattack.js';
+import { grantStyle } from './genstyle.js';
 export const ENGINE_VERSION = 1;
 
 const clone = (x) => JSON.parse(JSON.stringify(x));
@@ -703,7 +705,7 @@ function buildMechanics(R, ctx) {
   if (!main && !arch.powerless && mode === 'strength') {
     // Paragons and powerhouses still get a ranged or area trick from their theme.
     const pick = rng.weighted(themeTemplates([theme], (t) => t.role === 'attack' && !t.strengthBased));
-    if (pick && rng.chance(0.75)) {
+    if (pick && (rng.chance(0.75) || arch.construct)) { // robots and androids always carry a built-in weapon
       main = instantiate(pick.tpl, rankFor(pick.tpl, ctx, R, 'main'), pick.theme, rng);
       main.tpl = tplKey(pick.tpl);
       ch.powers.push(main);
@@ -816,6 +818,22 @@ function buildMechanics(R, ctx) {
       fillAccuracy(w.attack.kind, w.name, abil, Math.min(attackT, 2 * pl - rank));
     }
   }
+  // A fighter with nothing but a weak Unarmed gets a weapon, a strike or its theme attack (genattack.js).
+  ensureAttack(ch, R, ctx, {
+    parseItem,
+    themeAttack: () => {
+      const pick = rng.weighted(themeTemplates(themes, (t) => t.role === 'attack' && !t.strengthBased));
+      if (!pick) return false;
+      const p = instantiate(pick.tpl, rankFor(pick.tpl, ctx, R, 'main'), pick.theme, rng);
+      p.tpl = tplKey(pick.tpl);
+      (ctx.device ? ctx.device.powers : ch.powers).push(p);
+      if (templateRolls(p, R)) {
+        const kind = attackKind(p, R);
+        fillAccuracy(kind, p.attackSkill, kind === 'ranged' ? ab.Dexterity : ab.Fighting, attackT);
+      }
+      return true;
+    },
+  });
   if (ctx.wantArmor) {
     const d0 = deriveAll(ch, R);
     const left = tough - d0.defenses.Toughness;
@@ -869,6 +887,9 @@ function buildMechanics(R, ctx) {
   if (!repair(ch, R, rng)) return fail(`repair2: ${errors(ch, R).map((e) => e.message).join('; ')}`);
   if (total(ch, R) !== budget) balance(ch, R, { ...ctx, budget });
   if (total(ch, R) !== budget || !legal(ch, R)) return fail(`budget ${total(ch, R)}/${budget}: ${errors(ch, R).map((e) => e.message).join('; ')}`);
+  if (!hasFairAttack(ch, R)) return fail('no attack worth rolling');
+  // A real fighting style (Martial Arts 3e): its skill, stances and some maneuvers, paid for with filler, so the build stays as rolled.
+  if (arch.styles && ctx.style) grantStyle(ch, R, { ...ctx, budget });
   return ch;
 }
 
@@ -937,7 +958,9 @@ export function generateCharacter(R, opts = {}) {
   if (arch.construct) ch.construct = arch.automaton ? 'automaton' : 'construct';
   if (arch.minion) ch.minion = true;
   ch.theme = { id: theme.id, name: theme.name, color: theme.color, secondary: themes[1] ? { id: themes[1].id, name: themes[1].name } : null };
-  if (style) ch.style = { name: style.name, summary: style.summary };
+  // The style on the sheet is the one the hero actually knows (genstyle.js), else the one that lent its skills.
+  const known = style && ch.styles?.[0] ? R.raw.styles.find((x) => x.name === ch.styles[0].name) : null;
+  if (style) ch.style = { name: (known || style).name, summary: (known || style).summary };
   ch.alignment = alignment;
   Object.assign(ch, makeIdentity(R, ch, { arch, theme, themes, rng: rng.fork('identity'), gender: opts.gender }));
   // A full life story (family, timeline, people, personality, hooks) for every rolled character.

@@ -52,7 +52,7 @@ export function heroOdds(b, R, heroTeam, n = 100, seed = 'balance') {
 export function scaledBattle(b, R, heroTeam, k) {
   const copy = createBattle({ seed: b.seed, name: b.name });
   copy.options = { ...b.options };
-  for (const c of b.combatants) {
+  for (const c of b.combatants.filter((x) => !x.summon)) { // minions called in the fight are not fighters to scale
     const ch = c.team === heroTeam ? c.ch : scaleCharacter(c.ch, k, R);
     addCombatant(copy, makeCombatant(R, ch, { id: c.id, team: c.team, style: c.style, tactics: c.tactics, heroPoints: c.heroPoints, name: c.team === heroTeam ? c.name : ch.identity.codename }));
   }

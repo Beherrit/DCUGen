@@ -20,7 +20,6 @@ const SETTING_COLOR = {
   Modern: '#2f6fde', Military: '#556b2f', Villain: '#8b1e3f', 'Sci-Fi': '#1f8f8a', Fantasy: '#7a3fb8', Steampunk: '#a0662b',
   Exotic: '#c2410c', Cosmic: '#3b2f8f', Mystic: '#6b3fa0',
 };
-const CAT_GLYPH = { Ground: '🚗', Water: '⛵', Air: '✈', Space: '🚀', Exotic: '🌀' };
 const colorOf = (s) => SETTING_COLOR[s] || '#555555';
 
 export function initGarage(rules, el, h2 = {}) {
@@ -67,7 +66,7 @@ function vehicleCard(v) {
   const col = colorOf(v.setting);
   const sel = picked.vehicles?.id === v.id;
   return h('button', { type: 'button', class: `bst-card ${sel ? 'sel' : ''}`, style: { '--rc': col, '--rc-ink': inkFor(col) }, onClick: () => { picked.vehicles = v; renderGarage(); scrollToDetail(); } },
-    h('div', { class: 'bst-card-top' }, h('span', { class: 'bst-glyph', 'aria-hidden': 'true' }, CAT_GLYPH[v.category] || '•'), h('span', { class: 'bst-cat' }, `${v.setting} · ${v.class || v.category}`), h('span', { class: 'bst-pl num' }, `${v.cost} ep`)),
+    h('div', { class: 'bst-card-top' }, h('span', { class: 'bst-cat' }, `${v.setting} · ${v.class || v.category}`), h('span', { class: 'bst-pl num' }, `${v.cost} ep`)),
     h('div', { class: 'bst-name' }, v.name),
     h('div', { class: 'bst-meta' }, [v.size, v.movement && v.movement !== 'Speed' ? v.movement : null, v.crew].filter(Boolean).join(' · ')),
     v.summary ? h('p', { class: 'bst-sum' }, v.summary) : null,
@@ -106,7 +105,7 @@ function vehicleDetail(v) {
         h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(`${v.name}: ${line}`)) ? 'Stat block copied' : 'Copy failed') }, 'Copy stat block'),
         h('span', { class: 'spacer' }),
         h('button', { class: 'btn', type: 'button', onClick: () => startFrom(v, 'vehicle') }, 'Copy to builder'),
-        h('button', { class: 'btn ghost', type: 'button', onClick: () => { picked.vehicles = randomVehicle(R, { seed: randomSeed(), setting: f.vehicles.setting || undefined, category: f.vehicles.category || undefined }); renderGarage(); } }, '🎲 Random variant')),
+        h('button', { class: 'btn ghost', type: 'button', onClick: () => { picked.vehicles = randomVehicle(R, { seed: randomSeed(), setting: f.vehicles.setting || undefined, category: f.vehicles.category || undefined }); renderGarage(); } }, 'Random variant')),
       h('div', { class: 'file-body gar-body' },
         h('div', { class: 'col' },
           h('section', { class: 'sec' }, h('h3', null, 'Traits'),
@@ -148,14 +147,14 @@ function vehicles(space = false) {
     h('div', { class: 'bst-filters' },
       h('input', { type: 'search', id: space ? 'ship-q' : 'veh-q', placeholder: space ? 'Search: freighter, cloak, tractor beam, hive...' : 'Search: galleon, tank, carpet, jet...', value: fv.q, 'aria-label': space ? 'Search starships' : 'Search vehicles', onInput: (e) => { fv.q = e.target.value; draw(); } }),
       space ? null : h('label', { class: 'field' }, h('span', null, 'Type'), h('select', { id: 'veh-cat', onChange: (e) => { fv.category = e.target.value; draw(); } },
-        h('option', { value: '' }, 'Ground, water, air, space'), cats.map((c) => h('option', { value: c, selected: c === fv.category }, `${CAT_GLYPH[c] || ''} ${c}`)))),
+        h('option', { value: '' }, 'Ground, water, air, space'), cats.map((c) => h('option', { value: c, selected: c === fv.category }, c)))),
       h('button', { class: 'btn primary', type: 'button', onClick: () => {
         const pool = all.filter((v) => !fv.setting || groupOf(v) === fv.setting);
         picked.vehicles = space || pool.length < all.length
           ? (pool.length ? pool[Math.floor(Math.random() * pool.length)] : null)
           : randomVehicle(R, { seed: randomSeed(), category: fv.category || undefined });
         renderGarage(); scrollToDetail();
-      } }, space ? '🎲 Random starship' : '🎲 Random vehicle')),
+      } }, space ? 'Random starship' : 'Random vehicle')),
     h('div', { class: 'bst-layout' }, h('div', { class: 'bst-list' }, grid), vehicleDetail(picked.vehicles)),
   ];
 }
@@ -197,7 +196,7 @@ function spaceTools() {
     h('section', { class: 'panel' }, h('h2', null, 'Sensor range'),
       num('Extended senses rank', 'sensor', 0, 30, drawSensor), sense),
     h('section', { class: 'panel' }, h('h2', null, 'Random world'),
-      h('button', { class: 'btn primary', type: 'button', onClick: () => { spaceState.planet = randomPlanet(R, { seed: randomSeed() }); renderGarage(); } }, '🎲 Roll a planet'),
+      h('button', { class: 'btn primary', type: 'button', onClick: () => { spaceState.planet = randomPlanet(R, { seed: randomSeed() }); renderGarage(); } }, 'Roll a planet'),
       planet ? h('dl', { class: 'bio-dl', style: { marginTop: '8px' } }, planetRows(planet)) : h('p', { class: 'hint' }, 'World type, gravity, atmosphere, temperature, hazards, who lives there and what\'s worth finding.')));
 }
 
@@ -218,7 +217,7 @@ function hqCard(q) {
   const col = colorOf(q.setting);
   const sel = picked.hq?.id === q.id;
   return h('button', { type: 'button', class: `bst-card ${sel ? 'sel' : ''}`, style: { '--rc': col, '--rc-ink': inkFor(col) }, onClick: () => { picked.hq = q; renderGarage(); scrollToDetail(); } },
-    h('div', { class: 'bst-card-top' }, h('span', { class: 'bst-glyph', 'aria-hidden': 'true' }, '🏰'), h('span', { class: 'bst-cat' }, q.setting), h('span', { class: 'bst-pl num' }, `${q.cost} ep`)),
+    h('div', { class: 'bst-card-top' }, h('span', { class: 'bst-cat' }, q.setting), h('span', { class: 'bst-pl num' }, `${q.cost} ep`)),
     h('div', { class: 'bst-name' }, q.name),
     h('div', { class: 'bst-meta' }, `${q.size}${q.interior_size ? ` (inside: ${q.interior_size})` : ''} · Toughness ${q.toughness ?? 6} · ${(q.features || []).length} features`),
     q.summary ? h('p', { class: 'bst-sum' }, q.summary) : null);
@@ -241,7 +240,7 @@ function hqDetail(q) {
         h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(`${q.name}: ${line}`)) ? 'Stat block copied' : 'Copy failed') }, 'Copy stat block'),
         h('span', { class: 'spacer' }),
         h('button', { class: 'btn', type: 'button', onClick: () => startFrom(q, 'hq') }, 'Copy to builder'),
-        h('button', { class: 'btn ghost', type: 'button', onClick: () => { picked.hq = randomHeadquarters(R, { seed: randomSeed(), setting: f.hq.setting || undefined }); renderGarage(); } }, '🎲 Random variant')),
+        h('button', { class: 'btn ghost', type: 'button', onClick: () => { picked.hq = randomHeadquarters(R, { seed: randomSeed(), setting: f.hq.setting || undefined }); renderGarage(); } }, 'Random variant')),
       h('div', { class: 'file-body gar-body' },
         h('div', { class: 'col' },
           h('section', { class: 'sec' }, h('h3', null, 'Traits'),
@@ -272,7 +271,7 @@ function headquarters() {
     chipRow(settings, fq.setting, (s) => { fq.setting = s; renderGarage(); }, counts),
     h('div', { class: 'bst-filters' },
       h('input', { type: 'search', id: 'hq-q', placeholder: 'Search: castle, moon, lab, hangar...', value: fq.q, 'aria-label': 'Search headquarters', onInput: (e) => { fq.q = e.target.value; draw(); } }),
-      h('button', { class: 'btn primary', type: 'button', onClick: () => { picked.hq = randomHeadquarters(R, { seed: randomSeed(), setting: fq.setting || undefined }); renderGarage(); scrollToDetail(); } }, '🎲 Random headquarters')),
+      h('button', { class: 'btn primary', type: 'button', onClick: () => { picked.hq = randomHeadquarters(R, { seed: randomSeed(), setting: fq.setting || undefined }); renderGarage(); scrollToDetail(); } }, 'Random headquarters')),
     h('div', { class: 'bst-layout' }, h('div', { class: 'bst-list' }, grid), hqDetail(picked.hq)),
   ];
 }
@@ -356,14 +355,14 @@ function builder() {
         num('Toughness', 'toughness', 6, 40)),
     h('div', { class: 'label', style: { marginTop: '10px' } }, 'Features'),
     h('ul', { class: 'gar-feats' }, (draft.features || []).map((x, i) => h('li', null, h('b', null, featureLabel(x)), findF(x.name, R)?.text ? `: ${findF(x.name, R).text}` : '',
-      h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${x.name}`, onClick: () => set((d) => { d.features.splice(i, 1); }) }, '✕')))),
+      h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${x.name}`, onClick: () => set((d) => { d.features.splice(i, 1); }) }, 'Remove')))),
     h('div', { class: 'add-row' }, featPick, h('button', { class: 'btn', type: 'button', onClick: () => set((d) => {
       const ex = d.features.find((x) => x.name === featPick.value);
       if (ex) ex.ranks = (ex.ranks || 1) + 1; else d.features.push({ name: featPick.value });
     }) }, 'Add feature')),
     isV ? [h('div', { class: 'label', style: { marginTop: '10px' } }, 'Weapons and systems'),
       h('ul', { class: 'gar-feats' }, (draft.powers || []).map((p, i) => h('li', null, h('b', null, p.name || p.effect), `: ${vehiclePowerText(p, R)}`,
-        h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${p.name}`, onClick: () => set((d) => { d.powers.splice(i, 1); }) }, '✕')))),
+        h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${p.name}`, onClick: () => set((d) => { d.powers.splice(i, 1); }) }, 'Remove')))),
       h('div', { class: 'add-row' }, powPick, h('button', { class: 'btn', type: 'button', onClick: () => set((d) => { d.powers = [...(d.powers || []), JSON.parse(JSON.stringify(presets[Number(powPick.value)].p))]; }) }, 'Add')),
       h('p', { class: 'hint' }, 'Presets come from every premade vehicle and starship: guns, torpedoes, shields, sensors, drives, tractor beams.')] : null);
 
@@ -395,7 +394,7 @@ function builder() {
           saveMine(m);
           if (draft?.id === x.id) draft = null;
           renderGarage();
-        } }, '✕'))))] : null);
+        } }, 'Remove'))))] : null);
   return [h('p', { class: 'hint' }, 'Build any vehicle, starship or base by the book: size sets the starting traits, and every extra rank, feature and weapon is priced for you. Start from a premade with "Copy to builder" on its page.'),
     h('div', { class: 'gar-build-layout' }, form, preview)];
 }

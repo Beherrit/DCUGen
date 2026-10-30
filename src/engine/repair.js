@@ -44,7 +44,9 @@ function linkLoneSpecialty(ch, p, R, claimed) {
   let skill = null;
   try { skill = COMBAT_SKILL[attackKind(p, R)]; } catch { return; }
   if (!skill) return;
-  const specs = (ch.skills || []).filter((s) => s.name === skill && s.spec && !GENERIC_SPECS.includes(s.spec));
+  // A fighting style's own skill belongs to its maneuvers and stances, not to a hand-built power.
+  const styleSpecs = new Set((Array.isArray(ch.styles) ? ch.styles : []).map((st) => st.skill?.spec));
+  const specs = (ch.skills || []).filter((s) => s.name === skill && s.spec && !GENERIC_SPECS.includes(s.spec) && !styleSpecs.has(s.spec));
   if (specs.some((s) => s.spec === p.name)) return;
   const free = specs.filter((s) => !claimed.has(s.spec));
   if (free.length === 1) p.attackSkill = free[0].spec;

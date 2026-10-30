@@ -10,13 +10,16 @@ export const MERGE_ROSTER = 'dcugen.roster.v1';
 export const MERGE_WORLD = 'dcugen.world.v1';
 export const DELETED = 'dcugen.roster.deleted.v1';
 
-/** Every dcugen.* key and its raw value. */
-export function snapshotAll() {
+/** Saved fight logs (dcugen.fight.<id> and their index) can run to many megabytes, so backup files leave them out unless asked. */
+const isFightLog = (k) => k.startsWith('dcugen.fight.') || k === 'dcugen.fights.index';
+
+/** Every dcugen.* key and its raw value. `fights: false` leaves the saved fight logs out. */
+export function snapshotAll({ fights = true } = {}) {
   const data = {};
   try {
     for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i);
-      if (k && k.startsWith(APP_KEYS_PREFIX)) data[k] = localStorage.getItem(k);
+      if (k && k.startsWith(APP_KEYS_PREFIX) && (fights || !isFightLog(k))) data[k] = localStorage.getItem(k);
     }
   } catch { /* storage unavailable */ }
   return { app: 'DCUGen', kind: 'backup', version: 1, savedAt: new Date().toISOString(), data };
@@ -71,11 +74,11 @@ export function restoreAll(backup, { mode = 'merge', skip = [], only = null } = 
   return { keys };
 }
 
-export function downloadBackup() {
-  const snap = snapshotAll();
+export function downloadBackup({ fights = false } = {}) {
+  const snap = snapshotAll({ fights });
   const n = Object.keys(snap.data).length;
-  download(`dcugen-backup-${snap.savedAt.slice(0, 10)}.json`, JSON.stringify(snap, null, 1), 'application/json');
-  toast(`Backup saved (${n} items)`);
+  download(`dcugen-backup${fights ? '-with-fights' : ''}-${snap.savedAt.slice(0, 10)}.json`, JSON.stringify(snap, null, 1), 'application/json');
+  toast(`Backup saved (${n} items${fights ? ', with saved fights' : ''})`);
 }
 
 export async function restoreDialog() {
@@ -99,7 +102,8 @@ export async function restoreDialog() {
 
 export function backupMenuItems() {
   return [
-    { label: 'Back up everything (.json)', hint: 'Roster, world, battle, notes, screen, settings: one file to keep or move', run: downloadBackup },
+    { label: 'Back up everything (.json)', hint: 'Roster, world, battle, notes, screen, settings: one file to keep or move (saved fight logs left out)', run: () => downloadBackup() },
+    { label: 'Back up with saved fights (.json)', hint: 'The same, plus every saved fight log from the Fights page (can be large)', run: () => downloadBackup({ fights: true }) },
     { label: 'Restore a backup…', hint: 'Merge or replace from a backup file', run: restoreDialog },
     { label: 'Sync with a cloud folder…', hint: 'Keep everything in a file in Dropbox, OneDrive, Google Drive or iCloud, for every device', run: () => import_syncDialog() },
     { label: `Storage: ${storageLine()}`, hint: 'Where your data lives in this browser', run: () => storageDialog() },

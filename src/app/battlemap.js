@@ -15,6 +15,8 @@ import { open3D } from './map3d.js';
 const NS = 'http://www.w3.org/2000/svg';
 const svg = (tag, attrs = {}, ...kids) => { const el = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) if (v != null) el.setAttribute(k, v); for (const c of kids.flat()) if (c != null) el.append(c); return el; };
 const CELL = 26;
+/** Font size that fits a piece's short word across its footprint. */
+const shortSize = (P, w, d) => Math.min(13, d * 0.5, (w * 1.6) / P.short.length);
 const TCOLORS = ['#e3242b', '#7b4fd6', '#e0a030', '#1f8a70', '#2b6cb0'];
 const imgKey = (id) => `dcugen.mapimg.${id}`;
 const ftFor = (shape, steps) => (AREA_BASE[shape]?.ft || 30) * 2 ** Math.max(0, (steps || 1) - 1);
@@ -114,14 +116,14 @@ export function drawMap(view) {
       for (let i = 0; i < p.w * 3; i++) g.append(svg('rect', { x: x + 2 + i * (CELL / 3), y: y + 3, width: CELL / 6, height: d - 6, fill: '#f4f4f4' }));
     } else if (P.flat) {
       g.append(svg('rect', { x, y, width: w, height: d, rx: P.model === 'park' ? 6 : 1, fill, class: 'bm-prop-body' }));
-      g.append(svg('text', { x: x + w / 2, y: y + d / 2 + 6, 'text-anchor': 'middle', class: 'bm-prop-icon', style: `font-size:${Math.min(w, d) * 0.45}px;opacity:.7` }, P.icon));
+      g.append(svg('text', { x: x + w / 2, y: y + d / 2, 'text-anchor': 'middle', 'dominant-baseline': 'central', class: 'bm-prop-short', style: `font-size:${shortSize(P, w, d)}px;opacity:.8` }, P.short));
     } else {
       const tall = Math.min(1.4, (propHeightFt(p) / map.scale) * 0.12 + 0.12) * CELL; // a shadow that grows with height
       const round = P.model === 'person' || P.model === 'pine' || P.model === 'oak' || P.model === 'bush' || P.model === 'rock' || P.model === 'dog' || P.model === 'fountain' || P.model === 'reactor';
       g.append(svg('rect', { x: x + tall * 0.6, y: y + tall * 0.6, width: w, height: d, rx: round ? Math.min(w, d) / 2 : 3, class: 'bm-prop-shadow' }));
       g.append(svg('rect', { x, y, width: w, height: d, rx: round ? Math.min(w, d) / 2 : P.blocks ? 2 : CELL * 0.25, fill, class: 'bm-prop-body' }));
       if (P.roof === 'gable') g.append(svg('line', { x1: long || p.w === p.d ? x + 3 : x + w / 2, y1: long || p.w === p.d ? y + d / 2 : y + 3, x2: long || p.w === p.d ? x + w - 3 : x + w / 2, y2: long || p.w === p.d ? y + d / 2 : y + d - 3, class: 'bm-prop-ridge' }));
-      g.append(svg('text', { x: x + w / 2, y: y + d / 2 + 6, 'text-anchor': 'middle', class: 'bm-prop-icon', style: `font-size:${Math.min(w, d) * (P.model === 'person' ? 0.75 : 0.55)}px` }, P.icon));
+      g.append(svg('text', { x: x + w / 2, y: y + d / 2, 'text-anchor': 'middle', 'dominant-baseline': 'central', class: 'bm-prop-short', style: `font-size:${shortSize(P, w, d)}px` }, P.short));
       if (p.floors > 1) g.append(svg('text', { x: x + w - 3, y: y + 11, 'text-anchor': 'end', class: 'bm-prop-floors' }, `${p.floors}F`));
     }
     if (view.gm && view.selP === p.id) g.append(svg('rect', { x: x + w - 6, y: y + d - 6, width: 12, height: 12, class: 'bm-handle size', 'data-handle': 'size' }));
@@ -172,7 +174,7 @@ export function drawMap(view) {
     else g.append(svg('text', { y: CELL * 0.22 * s, 'text-anchor': 'middle', class: 'bm-initial', style: `font-size:${15 * s}px` }, (t.name || '?').trim()[0].toUpperCase()));
     g.append(svg('circle', { r: rad, class: 'bm-ring-token' }));
     g.append(svg('text', { y: rad + 11, 'text-anchor': 'middle', class: 'bm-name' }, t.name.length > 16 ? `${t.name.slice(0, 15)}…` : t.name));
-    if (t.hidden) g.append(svg('text', { x: rad * 0.7, y: -rad * 0.6, class: 'bm-badge' }, '🙈'));
+    if (t.hidden) g.append(svg('text', { y: -rad - 3, 'text-anchor': 'middle', class: 'bm-badge' }, 'hidden'));
     root.append(g);
   }
   // the weather and the light, laid over everything (clicks pass through)
@@ -390,15 +392,15 @@ export function mapPanel(ctx) {
     const t = selTemplate();
     const sel = people.find((p) => p.key === map.sel && map.tokens[p.key]);
     if (ui.mode === 'paint') {
-      side.append(h('h3', null, '🧱 Painting'), h('p', { class: 'hint' }, ui.box ? 'Drag a box to fill it.' : 'Click or drag across squares.'),
+      side.append(h('h3', null, 'Painting'), h('p', { class: 'hint' }, ui.box ? 'Drag a box to fill it.' : 'Click or drag across squares.'),
         h('ul', { class: 'bm-legend' }, Object.entries(TERRAIN).map(([k, T]) => h('li', null, h('span', { class: 'bm-swatch', style: { background: T.color } }), h('b', null, T.label), ` ${T.hint}`))));
     }
     if (ui.mode === 'build') {
       const pick = (fn) => () => { fn(); ctx.save(); drawSide(caught); };
       side.append(h('div', { class: 'bm-build' },
-        h('h3', null, '🏠 Build'),
+        h('h3', null, 'Build'),
         h('div', { class: 'bm-cats', role: 'tablist', 'aria-label': 'Kinds of pieces' }, PROP_CATS.map(([c, label]) => h('button', { type: 'button', role: 'tab', id: `bm-cat-${c}`, 'aria-pressed': String((ui.cat || 'buildings') === c), onClick: pick(() => { ui.cat = c; }) }, label))),
-        h('div', { class: 'bm-pieces', role: 'group', 'aria-label': 'Pieces' }, Object.entries(PROPS).filter(([, P]) => P.cat === (ui.cat || 'buildings')).map(([k, P]) => h('button', { type: 'button', class: 'bm-piece', id: `bm-piece-${k}`, 'aria-pressed': String((ui.prop || 'house') === k), title: P.label, onClick: pick(() => { ui.prop = k; }) }, h('span', null, P.icon), h('small', null, P.label))))));
+        h('div', { class: 'bm-pieces', role: 'group', 'aria-label': 'Pieces' }, Object.entries(PROPS).filter(([, P]) => P.cat === (ui.cat || 'buildings')).map(([k, P]) => h('button', { type: 'button', class: 'bm-piece', id: `bm-piece-${k}`, 'aria-pressed': String((ui.prop || 'house') === k), title: P.label, onClick: pick(() => { ui.prop = k; }) }, h('small', null, P.label))))));
     }
     const pr = selProp();
     if (pr) {
@@ -414,7 +416,7 @@ export function mapPanel(ctx) {
           h('button', { class: 'btn sm ghost icon', type: 'button', id: 'bm-p-up', 'aria-label': 'One floor more', onClick: () => { pr.floors = Math.min(150, pr.floors + 1); persist(); redraw(); } }, '+'),
           h('span', { class: 'hint' }, `${pr.floors * 12} ft tall`))
         : num('Height (ft)', pr.ft, (v) => { pr.ft = Math.max(1, Math.min(300, v)); }, { min: 1, max: 300 });
-      side.append(h('h3', null, `${P.icon} ${P.label}`),
+      side.append(h('h3', null, P.label),
         h('p', { class: 'hint' }, P.blocks ? 'Blocks movement and line of sight.' : P.cover ? `Gives ${P.cover === 5 ? 'total' : 'partial'} cover: −${P.cover} to attacks through it.` : ''),
         h('div', { class: 'rc-row' },
           num('Wide', pr.w, (v) => { pr.w = Math.max(1, Math.min(map.w - pr.x, Math.round(v))); }, { min: 1, max: 60, id: 'bm-p-w' }),
@@ -442,7 +444,7 @@ export function mapPanel(ctx) {
       follow.addEventListener('change', () => { const g = templateGeom(t, map.tokens); if (isAimed(t)) Object.assign(t, { ox: g.ox, oy: g.oy }); else Object.assign(t, { x: g.x, y: g.y }); t.from = follow.value || null; persist(); redraw(); });
       const effect = h('input', { type: 'text', id: 'bm-effect', value: t.effect || '', 'aria-label': 'What the area does', placeholder: 'e.g. Damage 10, Affliction 8 vs Will' });
       effect.addEventListener('change', () => { t.effect = effect.value; ui.effect = effect.value; persist(); });
-      side.append(h('h3', null, `💥 ${t.shape}, ${fmtFt(t.ft)}`),
+      side.append(h('h3', null, `${t.shape}, ${fmtFt(t.ft)}`),
         h('div', { class: 'rc-row bm-trow' }, shape, steps), follow,
         h('p', null, names.length ? `Caught: ${names.join(', ')}` : 'Nobody inside.'),
         h('div', { class: 'seed-row' }, effect, h('button', { class: 'btn primary', type: 'button', id: 'bm-hit', disabled: !names.length, onClick: () => {
@@ -463,10 +465,10 @@ export function mapPanel(ctx) {
       const ranged = rangedOf(sel.key);
       const size = h('select', { 'aria-label': 'Token size', id: 'bm-size' }, [[1, '1 square'], [2, '2×2 (large)'], [3, '3×3 (huge)'], [4, '4×4 (gargantuan)'], [6, '6×6 (colossal)']].map(([n, l]) => h('option', { value: n, selected: n === sizeOf(me) }, l)));
       size.addEventListener('change', () => { me.size = Number(size.value); me.x = Math.min(me.x, map.w - me.size); me.y = Math.min(me.y, map.h - me.size); persist(); redraw(); });
-      side.append(h('h3', null, `📏 From ${sel.status.name}`),
+      side.append(h('h3', null, `From ${sel.status.name}`),
         h('div', { class: 'rc-row' }, size,
-          h('button', { class: 'btn sm ghost', type: 'button', id: 'bm-hide', 'aria-pressed': String(!!me.hidden), title: 'Hidden tokens are only on your screen', onClick: () => { me.hidden = !me.hidden; persist(); redraw(); } }, me.hidden ? '🙈 Hidden from players' : '👁 Players see it'),
-          h('button', { class: 'btn sm ghost', type: 'button', onClick: () => open3DFor(sel.key) }, '🧊 Their view')),
+          h('button', { class: 'btn sm ghost', type: 'button', id: 'bm-hide', 'aria-pressed': String(!!me.hidden), title: 'Hidden tokens are only on your screen', onClick: () => { me.hidden = !me.hidden; persist(); redraw(); } }, me.hidden ? 'Hidden from players' : 'Players see it'),
+          h('button', { class: 'btn sm ghost', type: 'button', onClick: () => open3DFor(sel.key) }, 'Their view')),
         h('ul', { class: 'bm-dists' }, present().filter((p) => p.key !== sel.key).map((p) => {
           const other = map.tokens[p.key];
           const ft = feetBetween(me, other, map.scale);
@@ -475,7 +477,7 @@ export function mapPanel(ctx) {
           const los = sightLine(map, me, other);
           return h('li', { class: adjacent ? 'adjacent' : '' }, h('b', null, p.status.name), ` ${fmtFt(Math.max(ft, map.scale))}`,
             adjacent ? h('span', { class: 'chip' }, 'close') : band ? h('span', { class: `chip ${band === 'out of range' ? 'warn' : ''}` }, `${ranged.name}: ${band}`) : null,
-            los.blocked ? h('span', { class: 'chip warn', title: 'A wall is in the way: no line of sight' }, '🧱 no line') : los.cover ? h('span', { class: 'chip', title: los.cover === 5 ? 'Total cover' : 'Partial cover' }, `🛡 cover −${los.cover}`) : null);
+            los.blocked ? h('span', { class: 'chip warn', title: 'A wall is in the way: no line of sight' }, 'no line') : los.cover ? h('span', { class: 'chip', title: los.cover === 5 ? 'Total cover' : 'Partial cover' }, `cover −${los.cover}`) : null);
         })));
     }
     if (ui.mode === 'build' && !pr) side.append(h('p', { class: 'hint' }, 'Click the map to put the piece down. Click a piece on the map to stretch it, make it taller, recolour, turn or copy it.'));
@@ -483,7 +485,7 @@ export function mapPanel(ctx) {
       side.append(h('h3', null, map.name || 'Battle map'),
         h('p', { class: 'hint' }, 'Pick a token to see distances, range, and whether walls or cover are in the way. Drag tokens to move them; drag the empty board to scroll a big map.'),
         moodHints(map),
-        h('p', { class: 'hint' }, '🖼 Picture puts a map image under the grid. 🧱 Paint marks walls, cover and rough ground. 💥 Template drops an area you can drag and aim. 🧊 3D shows it all in three dimensions.'));
+        h('p', { class: 'hint' }, 'Picture puts a map image under the grid. Paint marks walls, cover and rough ground. Template drops an area you can drag and aim. 3D shows it all in three dimensions.'));
     }
   };
 
@@ -503,7 +505,7 @@ export function mapPanel(ctx) {
     fileIn.addEventListener('change', async () => { const f = fileIn.files?.[0]; fileIn.value = ''; if (f) await setPicture(f); });
     const modeBtn = (m, label, title) => h('button', { type: 'button', 'aria-pressed': String(ui.mode === m), id: `bm-mode-${m}`, title, onClick: () => { ui.mode = m; ctx.save(); drawTools(); redraw(); } }, label);
     const row1 = h('div', { class: 'bm-row' },
-      h('label', { class: 'bm-mappick' }, '🗺', pick),
+      h('label', { class: 'bm-mappick' }, 'Map', pick),
       h('button', { class: 'btn sm', type: 'button', id: 'bm-new', onClick: () => newMapDialog() }, '+ New map'),
       h('button', { class: 'btn sm ghost', type: 'button', onClick: () => renameMap() }, 'Rename'),
       h('button', { class: 'btn sm ghost', type: 'button', onClick: () => { const c = JSON.parse(JSON.stringify(map)); c.id = Math.random().toString(36).slice(2, 10); c.name = `${map.name} (copy)`; gs.maps.push(c); switchMap(c.id); } }, 'Duplicate'),
@@ -513,16 +515,16 @@ export function mapPanel(ctx) {
       sceneSel('bm-weather', 'Weather', WEATHER, map.weather || 'clear', (v) => { map.weather = v; }),
       sceneSel('bm-light', 'Time of day', LIGHTS, map.light || 'day', (v) => { map.light = v; }),
       fileIn,
-      h('button', { class: 'btn sm', type: 'button', id: 'bm-picture', onClick: () => fileIn.click() }, map.bg ? '🖼 Change picture' : '🖼 Upload a map picture'),
-      h('button', { class: 'btn sm primary', type: 'button', id: 'bm-3d', onClick: () => open3DFor(null) }, '🧊 3D view'));
+      h('button', { class: 'btn sm', type: 'button', id: 'bm-picture', onClick: () => fileIn.click() }, map.bg ? 'Change picture' : 'Upload a map picture'),
+      h('button', { class: 'btn sm primary', type: 'button', id: 'bm-3d', onClick: () => open3DFor(null) }, '3D view'));
     const zoom = (k) => { map.zoom = Math.max(8, Math.min(80, Math.round((map.zoom || 26) * k))); ctx.save(); redraw(); };
     const fit = () => { const w = scroller.clientWidth - 2; map.zoom = Math.max(8, Math.min(80, Math.floor(w / map.w))); ctx.save(); redraw(); };
     const row2 = h('div', { class: 'bm-row' },
       h('div', { class: 'seg', role: 'group', 'aria-label': 'Tool' },
-        modeBtn('move', '✋ Move', 'Move tokens and templates'),
-        modeBtn('build', '🏠 Build', 'Put down houses, skyscrapers, trees, cars and more'),
-        modeBtn('paint', '🧱 Paint', 'Paint walls, cover and terrain on the squares'),
-        modeBtn('template', '💥 Template', 'Click the map to drop an area template')),
+        modeBtn('move', 'Move', 'Move tokens and templates'),
+        modeBtn('build', 'Build', 'Put down houses, skyscrapers, trees, cars and more'),
+        modeBtn('paint', 'Paint', 'Paint walls, cover and terrain on the squares'),
+        modeBtn('template', 'Template', 'Click the map to drop an area template')),
       ui.mode === 'paint' ? [
         (() => { const s = h('select', { 'aria-label': 'Paint', id: 'bm-paint' }, Object.entries(TERRAIN).map(([k, T]) => h('option', { value: k, selected: ui.paint === k }, T.label)), h('option', { value: 'erase', selected: ui.paint === 'erase' }, 'Eraser')); s.addEventListener('change', () => { ui.paint = s.value; ctx.save(); }); return s; })(),
         h('label', { class: 'bm-check' }, h('input', { type: 'checkbox', id: 'bm-box', checked: ui.box, onChange: (e) => { ui.box = e.target.checked; ctx.save(); redraw(); } }), 'Box'),
@@ -551,7 +553,7 @@ export function mapPanel(ctx) {
     grid.addEventListener('change', () => persist());
     const b = map.bg;
     return h('details', { class: 'bm-settings', open: gs.mapSettingsOpen || null, onToggle: (e) => { gs.mapSettingsOpen = e.target.open; ctx.save(); } },
-      h('summary', null, '⚙ Map size, scale, grid and picture'),
+      h('summary', null, 'Map size, scale, grid and picture'),
       h('div', { class: 'rc-row' },
         num('Squares across', map.w, (v) => resizeMap(map, v, map.h), { min: 5, max: 200, id: 'bm-w' }),
         num('Squares down', map.h, (v) => resizeMap(map, map.w, v), { min: 5, max: 200, id: 'bm-h' }),
@@ -583,7 +585,7 @@ export function mapPanel(ctx) {
       body: [h('img', { src: pic.data, alt: '', class: 'bm-preview' }),
         h('p', null, 'If the picture has a grid printed on it, count the squares across the top. If not, pick how big the place should be (at 10 ft a square, 30 squares is 300 ft).'),
         h('label', { class: 'bm-num' }, 'Squares across', across),
-        h('p', { class: 'hint' }, `Picture: ${pic.ow} × ${pic.oh} pixels. You can fine-tune the alignment later under ⚙.`)],
+        h('p', { class: 'hint' }, `Picture: ${pic.ow} × ${pic.oh} pixels. You can fine-tune the alignment later under Map size, scale, grid and picture.`)],
       buttons: [{ label: 'Cancel', value: false }, { label: 'Put it under the grid', value: true, primary: true }],
     });
     if (!ok) return;
@@ -597,7 +599,7 @@ export function mapPanel(ctx) {
     resizeMap(map, n, Math.ceil(map.bg.h));
     map.zoom = Math.max(8, Math.min(60, Math.floor((scroller.clientWidth || 900) / map.w)));
     persist(); drawTools(); redraw();
-    toast('Picture added. Paint walls and cover over it with 🧱 Paint.');
+    toast('Picture added. Paint walls and cover over it with Paint.');
   };
 
   const newMapDialog = async () => {
@@ -681,10 +683,10 @@ export function sharedMapView(myKeys = []) {
   draw();
   const zoom = (k) => { shared.zoom = Math.max(8, Math.min(60, Math.round(map.zoom * k))); map.zoom = shared.zoom; draw(); };
   return h('section', { class: 'play-card bm-play' },
-    h('div', { class: 'bm-row' }, h('h3', null, `🗺 ${map.name || 'The map'}`), h('span', { class: 'spacer' }),
+    h('div', { class: 'bm-row' }, h('h3', null, `${map.name || 'The map'}`), h('span', { class: 'spacer' }),
       h('button', { class: 'btn sm ghost icon', type: 'button', 'aria-label': 'Zoom out', onClick: () => zoom(1 / 1.25) }, '−'),
       h('button', { class: 'btn sm ghost icon', type: 'button', 'aria-label': 'Zoom in', onClick: () => zoom(1.25) }, '+'),
-      h('button', { class: 'btn sm primary', type: 'button', id: 'bm-play-3d', onClick: () => open3D({ map, tokens, bg: map.bg?.img ? assets.get(map.bg.img) : null, focus: mine }) }, '🧊 3D')),
+      h('button', { class: 'btn sm primary', type: 'button', id: 'bm-play-3d', onClick: () => open3D({ map, tokens, bg: map.bg?.img ? assets.get(map.bg.img) : null, focus: mine }) }, '3D')),
     scroller,
     moodHints(map),
     h('p', { class: 'hint' }, `1 square = ${map.scale} ft.${mine ? ' Drag your token to move; the GM sees it.' : ' The GM moves the tokens.'}`));

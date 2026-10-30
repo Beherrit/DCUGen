@@ -10,15 +10,15 @@ import { makeRng, randomSeed } from './rng.js';
 import { MOMENT_KINDS } from './world.js';
 
 export const HANDOUT_KINDS = {
-  wanted: { label: 'Wanted poster', glyph: '📜', blurb: 'Anyone in the World as a WANTED poster: portrait, aliases, crimes, last seen, reward.',
+  wanted: { label: 'Wanted poster', blurb: 'Anyone in the World as a WANTED poster: portrait, aliases, crimes, last seen, reward.',
     looks: { frontier: 'Old West / post office', noir: 'Police bulletin, 1940s', modern: 'Agency most-wanted', bounty: 'Off-world bounty board' } },
-  casefile: { label: 'Case file', glyph: '🗂', blurb: 'An agency dossier: mugshot, known facts, associates, threat assessment, stamps and redactions.',
+  casefile: { label: 'Case file', blurb: 'An agency dossier: mugshot, known facts, associates, threat assessment, stamps and redactions.',
     looks: { agency: 'Manila folder, CLASSIFIED', police: 'Incident report form', lab: 'Research facility record' } },
-  letter: { label: 'Letter or note', glyph: '✉', blurb: 'A letter from one person to another: handwritten, typed, a telegram, a company memo, or a ransom note.',
+  letter: { label: 'Letter or note', blurb: 'A letter from one person to another: handwritten, typed, a telegram, a company memo, or a ransom note.',
     looks: { handwritten: 'Handwritten on stationery', typed: 'Typewritten', telegram: 'Telegram', memo: 'Company memo', ransom: 'Ransom note (cut-out letters)' } },
-  texts: { label: 'Text messages', glyph: '📱', blurb: 'A phone screen: a thread of texts between two people, as evidence or a cliffhanger.',
+  texts: { label: 'Text messages', blurb: 'A phone screen: a thread of texts between two people, as evidence or a cliffhanger.',
     looks: { dark: 'Phone, dark', light: 'Phone, light', burner: 'Burner phone (old screen)' } },
-  report: { label: 'Report', glyph: '🧪', blurb: 'A lab, police or medical report with fields and [[redacted]] passages.',
+  report: { label: 'Report', blurb: 'A lab, police or medical report with fields and [[redacted]] passages.',
     looks: { lab: 'Laboratory report', police: 'Police report', medical: 'Medical chart', military: 'Military after-action report' } },
 };
 

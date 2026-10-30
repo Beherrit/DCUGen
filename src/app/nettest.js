@@ -49,7 +49,7 @@ export async function testConnection() {
   const [broker, types] = await Promise.all([brokerAnswers(), gatherCandidateTypes(iceServersFor(null) || DEFAULT_STUN)]);
   const res = summarizeConnectionTest({ broker, types, relayConfigured: hasRelay(relays) });
   body.replaceChildren(
-    h('ul', { class: 'nettest-rows' }, res.rows.map((r) => h('li', { class: r.ok ? 'ok' : 'bad' }, h('b', null, `${r.ok ? '✓' : '✗'} ${r.label}`), h('span', null, r.text)))),
+    h('ul', { class: 'nettest-rows' }, res.rows.map((r) => h('li', { class: r.ok ? 'ok' : 'bad' }, h('b', null, `${r.ok ? 'OK' : 'Failed'}: ${r.label}`), h('span', null, r.text)))),
     h('p', { class: `nettest-verdict ${res.ok ? 'ok' : 'bad'}` }, res.verdict),
   );
   return shown;

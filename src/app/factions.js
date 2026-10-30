@@ -30,7 +30,7 @@ export function factionsSection(ch, { change, roster = [] } = {}) {
     f.note ? h('span', { class: 'fx-note' }, f.note) : null,
     change ? h('span', { class: 'fx-tools no-print' },
       h('select', { 'aria-label': 'Role', value: f.role, onChange: (e) => change((c) => { c.factions[i].role = e.target.value; }) }, ROLES.map((r) => h('option', { value: r, selected: r === (f.role || 'Member') }, r))),
-      h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${f.name}`, onClick: () => change((c) => { c.factions.splice(i, 1); }) }, '✕')) : null);
+      h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${f.name}`, onClick: () => change((c) => { c.factions.splice(i, 1); }) }, 'Remove')) : null);
   const form = () => {
     const name = h('input', { type: 'text', list: 'fx-known', placeholder: 'Faction name', 'aria-label': 'Faction name', id: 'fx-name' });
     const role = h('select', { 'aria-label': 'Role' }, ROLES.map((r) => h('option', { value: r }, r)));

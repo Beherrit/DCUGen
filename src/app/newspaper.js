@@ -192,8 +192,8 @@ export function newsstandPage(ctx) {
     h('header', { class: 'wd-hero small np-hero' },
       h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'Newsstand'), h('h1', null, 'Front pages'), h('p', { class: 'wd-tagline' }, 'The papers of your world. Write a front page by hand or draft one from the campaign timeline, dress it with photos and adverts, pick a look (broadsheet, tabloid, EXTRA!, vintage, comic, underground), then save it to the World, print it, or send it to your players as a key or link.')),
       h('div', { class: 'btn-row', style: { flexDirection: 'column', alignItems: 'stretch' } },
-        h('button', { class: 'btn primary', type: 'button', onClick: () => startPaper(ctx, { draft: true }) }, '⚡ Draft from the campaign'),
-        h('button', { class: 'btn', type: 'button', onClick: () => startPaper(ctx) }, '✎ Blank front page'),
+        h('button', { class: 'btn primary', type: 'button', onClick: () => startPaper(ctx, { draft: true }) }, 'Draft from the campaign'),
+        h('button', { class: 'btn', type: 'button', onClick: () => startPaper(ctx) }, 'Blank front page'),
         sessions.length ? h('select', { 'aria-label': 'Draft the paper for a session', onChange: (e) => { if (e.target.value) startPaper(ctx, { draft: true, session: Number(e.target.value) }); } }, h('option', { value: '' }, 'Draft for a session…'), sessions.map((s) => h('option', { value: s }, `Session ${s}`))) : null)),
     papers.length ? h('div', { class: 'np-stand' }, papers.map((e) => h('div', { class: 'np-card' },
       paperThumb(e.paper, () => go(e.id)),
@@ -202,7 +202,7 @@ export function newsstandPage(ctx) {
         h('small', null, paperSummary(e.paper)),
         h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', type: 'button', onClick: () => go(e.id) }, 'Open'), h('button', { class: 'btn sm ghost', type: 'button', onClick: () => editPaper(ctx, e) }, 'Edit'), h('button', { class: 'btn sm ghost', type: 'button', onClick: () => printPaper(e.paper) }, 'Print')))))) :
       h('div', { class: 'empty' }, h('h2', null, 'No papers yet'), h('p', null, 'Draft one from the campaign (sessions, battles and what happened become the headlines) or start from a blank page.')),
-    h('section', { class: 'panel', style: { marginTop: '8px' } }, h('h2', null, '🔑 Open a front-page key'), h('p', { style: { margin: 0 } }, 'A GM or player sent you a key or link to a front page? Paste it here (or into the Forge\'s "Open a key" box) and it joins your newsstand.'), h('div', { class: 'seed-row' }, keyIn, h('button', { class: 'btn', type: 'button', onClick: openKey }, 'Open'))));
+    h('section', { class: 'panel', style: { marginTop: '8px' } }, h('h2', null, 'Open a front-page key'), h('p', { style: { margin: 0 } }, 'A GM or player sent you a key or link to a front page? Paste it here (or into the Forge\'s "Open a key" box) and it joins your newsstand.'), h('div', { class: 'seed-row' }, keyIn, h('button', { class: 'btn', type: 'button', onClick: openKey }, 'Open'))));
 }
 
 // ---- one saved issue ---------------------------------------------------------------------------------------
@@ -218,13 +218,13 @@ export function paperPage(ctx, e) {
     } catch (err) { toast(`Sharing needs a modern browser: ${err.message}`); }
   };
   const actions = h('div', { class: 'toolbar wd-actions no-print' },
-    ctx.ui.history.length ? h('button', { class: 'btn', type: 'button', onClick: ctx.back }, '← Back') : null,
-    h('button', { class: 'btn primary', type: 'button', onClick: () => editPaper(ctx, e) }, '✎ Edit this page'),
-    h('button', { class: 'btn', type: 'button', title: 'A new issue with the same masthead and look, fresh stories drafted from the campaign', onClick: () => startPaper(ctx, { draft: true, base: { ...clone(paper), stories: [], ads: [] } }) }, '⚡ Next edition'),
-    h('button', { class: 'btn', type: 'button', onClick: () => printPaper(paper) }, '🖨 Print / PDF'),
+    ctx.ui.history.length ? h('button', { class: 'btn', type: 'button', onClick: ctx.back }, 'Back') : null,
+    h('button', { class: 'btn primary', type: 'button', onClick: () => editPaper(ctx, e) }, 'Edit this page'),
+    h('button', { class: 'btn', type: 'button', title: 'A new issue with the same masthead and look, fresh stories drafted from the campaign', onClick: () => startPaper(ctx, { draft: true, base: { ...clone(paper), stories: [], ads: [] } }) }, 'Next edition'),
+    h('button', { class: 'btn', type: 'button', onClick: () => printPaper(paper) }, 'Print / PDF'),
     h('span', { class: 'spacer' }),
-    h('button', { class: 'btn', type: 'button', title: 'Copy a key that holds this front page, pictures included', onClick: () => share('key') }, '🔑 Copy key'),
-    h('button', { class: 'btn', type: 'button', onClick: () => share('link') }, '🔗 Copy link'),
+    h('button', { class: 'btn', type: 'button', title: 'Copy a key that holds this front page, pictures included', onClick: () => share('key') }, 'Copy key'),
+    h('button', { class: 'btn', type: 'button', onClick: () => share('link') }, 'Copy link'),
     h('button', { class: 'btn ghost', type: 'button', onClick: async () => toast((await copyText(paperMarkdown(paper))) ? 'Copied as Markdown' : 'Copy failed') }, 'Copy as Markdown'),
     h('button', { class: 'btn ghost', type: 'button', onClick: () => { download(`${(paper.masthead || 'front-page').toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${(paper.edition || 'edition').toLowerCase().replace(/[^a-z0-9]+/g, '-')}.json`, JSON.stringify({ app: 'DCUGen', kind: 'paper', v: 1, paper }, null, 2), 'application/json'); toast('Front page saved as a file'); } }, 'Save file'),
     h('button', { class: 'btn ghost danger', type: 'button', onClick: async () => {
@@ -281,9 +281,9 @@ export function editorPage(ctx) {
     const list = h('div', { class: 'np-story-list' }, d.stories.map((s, i) => storyCard(s, i)));
     const addMenu = h('div', { class: 'btn-row' },
       h('button', { class: 'btn sm', type: 'button', onClick: () => { d.stories.push(blankStory(d.stories.length ? 'brief' : 'lead')); ctx.ui.draftOpen[d.stories.at(-1).id] = true; rebuildForm(); } }, '+ Story'),
-      h('button', { class: 'btn sm', type: 'button', title: 'An evergreen story from the city desk, using your world\'s names', onClick: () => { d.stories.push(fillerStory(world, makeRng(randomSeed()), d.stories.length ? 'brief' : 'lead')); rebuildForm(); } }, '🎲 Filler story'),
-      h('button', { class: 'btn sm', type: 'button', title: 'Turn a session, battle or recorded moment into a story', onClick: fromTimeline }, '🕰 From the timeline…'),
-      h('button', { class: 'btn sm ghost', type: 'button', title: 'Replace every story with a fresh draft from the campaign', onClick: async () => { const ok = d.stories.some((s) => s.headline) ? await openDialog({ title: 'Redraft the stories?', body: h('p', { style: { margin: 0 } }, 'The stories you have are replaced with a new draft from the timeline. The masthead and look stay.'), buttons: [{ label: 'Keep mine', value: false }, { label: 'Redraft', value: true, primary: true }] }) : true; if (!ok) return; const fresh = draftPaper(world, { seed: randomSeed(), session: d.session ?? null, base: { ...d, ads: d.ads } }); d.stories = fresh.stories; rebuildForm(); } }, '⚡ Redraft all'));
+      h('button', { class: 'btn sm', type: 'button', title: 'An evergreen story from the city desk, using your world\'s names', onClick: () => { d.stories.push(fillerStory(world, makeRng(randomSeed()), d.stories.length ? 'brief' : 'lead')); rebuildForm(); } }, 'Filler story'),
+      h('button', { class: 'btn sm', type: 'button', title: 'Turn a session, battle or recorded moment into a story', onClick: fromTimeline }, 'From the timeline…'),
+      h('button', { class: 'btn sm ghost', type: 'button', title: 'Replace every story with a fresh draft from the campaign', onClick: async () => { const ok = d.stories.some((s) => s.headline) ? await openDialog({ title: 'Redraft the stories?', body: h('p', { style: { margin: 0 } }, 'The stories you have are replaced with a new draft from the timeline. The masthead and look stay.'), buttons: [{ label: 'Keep mine', value: false }, { label: 'Redraft', value: true, primary: true }] }) : true; if (!ok) return; const fresh = draftPaper(world, { seed: randomSeed(), session: d.session ?? null, base: { ...d, ads: d.ads } }); d.stories = fresh.stories; rebuildForm(); } }, 'Redraft all'));
     return h('section', { class: 'sec np-sec' }, h('h3', null, 'Stories', h('span', { class: 'pts' }, `${d.stories.length}`)), list, addMenu);
   }
 
@@ -303,11 +303,11 @@ export function editorPage(ctx) {
     const open = ctx.ui.draftOpen[s.id] ?? (i === 0 || !s.headline);
     const slot = h('select', { 'aria-label': 'Slot', onChange: (e2) => { s.slot = e2.target.value; redraw(); } }, Object.entries(STORY_SLOTS).map(([k, v]) => h('option', { value: k, selected: s.slot === k }, v)));
     const head = h('div', { class: 'np-story-head' },
-      h('button', { type: 'button', class: 'np-story-toggle', 'aria-expanded': String(open), onClick: () => { ctx.ui.draftOpen[s.id] = !open; rebuildForm(); } }, h('span', { class: 'wd-caret' }, open ? '▾' : '▸'), h('b', null, s.headline || 'Untitled story'), h('small', null, STORY_SLOTS[s.slot] || 'Brief')),
+      h('button', { type: 'button', class: 'np-story-toggle', 'aria-expanded': String(open), onClick: () => { ctx.ui.draftOpen[s.id] = !open; rebuildForm(); } }, h('span', { class: `wd-caret ${open ? 'open' : ''}`, 'aria-hidden': 'true' }), h('b', null, s.headline || 'Untitled story'), h('small', null, STORY_SLOTS[s.slot] || 'Brief')),
       h('span', { class: 'spacer' }),
-      h('button', { class: 'x', type: 'button', 'aria-label': 'Move up', title: 'Move up', disabled: i === 0, onClick: () => { [d.stories[i - 1], d.stories[i]] = [d.stories[i], d.stories[i - 1]]; rebuildForm(); } }, '↑'),
-      h('button', { class: 'x', type: 'button', 'aria-label': 'Move down', title: 'Move down', disabled: i === d.stories.length - 1, onClick: () => { [d.stories[i + 1], d.stories[i]] = [d.stories[i], d.stories[i + 1]]; rebuildForm(); } }, '↓'),
-      h('button', { class: 'x', type: 'button', 'aria-label': 'Remove story', title: 'Remove', onClick: () => { d.stories.splice(i, 1); rebuildForm(); } }, '✕'));
+      h('button', { class: 'x', type: 'button', 'aria-label': 'Move up', title: 'Move up', disabled: i === 0, onClick: () => { [d.stories[i - 1], d.stories[i]] = [d.stories[i], d.stories[i - 1]]; rebuildForm(); } }, 'Up'),
+      h('button', { class: 'x', type: 'button', 'aria-label': 'Move down', title: 'Move down', disabled: i === d.stories.length - 1, onClick: () => { [d.stories[i + 1], d.stories[i]] = [d.stories[i], d.stories[i + 1]]; rebuildForm(); } }, 'Down'),
+      h('button', { class: 'x', type: 'button', 'aria-label': 'Remove story', title: 'Remove', onClick: () => { d.stories.splice(i, 1); rebuildForm(); } }, 'Remove'));
     if (!open) return h('div', { class: 'np-story-card' }, head);
     return h('div', { class: 'np-story-card open' }, head,
       h('div', { class: 'jr-row' }, field('Slot', slot), field('Kicker', text(s, 'kicker', { placeholder: 'EXCLUSIVE · CRIME · CITY HALL' })), field('Byline', text(s, 'byline', { placeholder: 'By Lois Lane' }))),
@@ -357,9 +357,9 @@ export function editorPage(ctx) {
         h('div', { class: 'np-pic-row' },
           s.image?.src ? h('img', { class: 'np-pic-preview', src: s.image.src, alt: '' }) : h('div', { class: 'np-pic-preview empty' }, 'No picture'),
           h('div', { class: 'np-pic-btns' },
-            h('button', { class: 'btn sm', type: 'button', onClick: () => file.click() }, '⇪ Upload'),
-            h('button', { class: 'btn sm', type: 'button', title: 'A character\'s portrait as the press photo', onClick: fromRoster }, '🧑 From the roster'),
-            h('button', { class: 'btn sm', type: 'button', title: 'Paint one with the free AI painter', onClick: paint }, '🎨 Paint it'),
+            h('button', { class: 'btn sm', type: 'button', onClick: () => file.click() }, 'Upload'),
+            h('button', { class: 'btn sm', type: 'button', title: 'A character\'s portrait as the press photo', onClick: fromRoster }, 'From the roster'),
+            h('button', { class: 'btn sm', type: 'button', title: 'Paint one with the free AI painter', onClick: paint }, 'Paint it'),
             s.image?.src ? h('button', { class: 'btn sm ghost danger', type: 'button', onClick: () => { s.image = null; redraw(); drawPic(); } }, 'Remove') : null,
             status, file)),
         s.image?.src ? h('div', { class: 'jr-row' }, field('Caption', text(s.image, 'caption', { placeholder: 'What the picture shows' })), field('Credit', text(s.image, 'credit', { placeholder: 'Staff photo · Photo: J. Olsen' }))) : null);
@@ -372,7 +372,7 @@ export function editorPage(ctx) {
     const chips = h('div', { class: 'wd-chips' });
     const draw = () => {
       clear(chips);
-      for (const id of s.about || []) { const e = world.entities.get(id); if (!e) continue; chips.append(h('span', { class: 'wd-chip', style: { '--c': e.color || '#888' } }, e.name, h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${e.name}`, onClick: () => { s.about = s.about.filter((x) => x !== id); draw(); } }, '✕'))); }
+      for (const id of s.about || []) { const e = world.entities.get(id); if (!e) continue; chips.append(h('span', { class: 'wd-chip', style: { '--c': e.color || '#888' } }, e.name, h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${e.name}`, onClick: () => { s.about = s.about.filter((x) => x !== id); draw(); } }, 'Remove'))); }
     };
     draw();
     const names = [...world.entities.values()].filter((e) => e.type !== 'paper');
@@ -388,13 +388,13 @@ export function editorPage(ctx) {
       h('div', { class: 'jr-row' },
         field('Style', h('select', { 'aria-label': 'Advert style', onChange: (e2) => { a.style = e2.target.value; redraw(); } }, Object.entries(AD_STYLES).map(([k, v]) => h('option', { value: k, selected: a.style === k }, v)))),
         field('Label', text(a, 'tag', { placeholder: 'ADVERTISEMENT' })),
-        h('button', { class: 'x', type: 'button', 'aria-label': 'Remove advert', style: { alignSelf: 'end', marginBottom: '8px' }, onClick: () => { d.ads.splice(i, 1); rebuildForm(); } }, '✕')),
+        h('button', { class: 'x', type: 'button', 'aria-label': 'Remove advert', style: { alignSelf: 'end', marginBottom: '8px' }, onClick: () => { d.ads.splice(i, 1); rebuildForm(); } }, 'Remove')),
       field('Title', text(a, 'title', { placeholder: 'BIG BITE BURGERS' })),
       field('Text', text(a, 'text', { placeholder: 'Open all night. Open during the thing last Tuesday.', area: true, rows: 2 })))));
     return h('section', { class: 'sec np-sec' }, h('h3', null, 'Adverts', h('span', { class: 'pts' }, `${d.ads.length}`)), list,
       h('div', { class: 'btn-row' },
         h('button', { class: 'btn sm', type: 'button', onClick: () => { d.ads.push(blankAd()); rebuildForm(); } }, '+ Advert'),
-        h('button', { class: 'btn sm', type: 'button', title: 'An advert from the city\'s businesses, using your world\'s names', onClick: () => { d.ads.push(rollAd(world, makeRng(randomSeed()))); rebuildForm(); } }, '🎲 Roll an advert')));
+        h('button', { class: 'btn sm', type: 'button', title: 'An advert from the city\'s businesses, using your world\'s names', onClick: () => { d.ads.push(rollAd(world, makeRng(randomSeed()))); rebuildForm(); } }, 'Roll an advert')));
   }
 
   const saveIt = () => {
@@ -411,7 +411,7 @@ export function editorPage(ctx) {
   rebuildForm();
   return h('div', { class: 'wd-page np-editor' },
     h('header', { class: 'wd-hero small' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, ctx.ui.draftId ? 'Editing' : 'New front page'), h('h1', null, d.masthead || 'Front page'), h('p', { class: 'wd-tagline' }, 'Type on the left, the page sets itself on the right. Pictures: upload, a roster portrait, or a free AI painting.')),
-      h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', type: 'button', onClick: saveIt }, '💾 Save to the World'), h('button', { class: 'btn', type: 'button', onClick: () => printPaper(d) }, '🖨 Print'), h('button', { class: 'btn ghost', type: 'button', onClick: cancel }, 'Cancel'))),
+      h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', type: 'button', onClick: saveIt }, 'Save to the World'), h('button', { class: 'btn', type: 'button', onClick: () => printPaper(d) }, 'Print'), h('button', { class: 'btn ghost', type: 'button', onClick: cancel }, 'Cancel'))),
     h('div', { class: 'np-editor-grid' }, form, h('div', { class: 'np-preview-col' }, preview)),
-    h('div', { class: 'np-savebar no-print' }, h('button', { class: 'btn primary', type: 'button', onClick: saveIt }, '💾 Save to the World'), h('button', { class: 'btn ghost', type: 'button', onClick: cancel }, 'Cancel')));
+    h('div', { class: 'np-savebar no-print' }, h('button', { class: 'btn primary', type: 'button', onClick: saveIt }, 'Save to the World'), h('button', { class: 'btn ghost', type: 'button', onClick: cancel }, 'Cancel')));
 }

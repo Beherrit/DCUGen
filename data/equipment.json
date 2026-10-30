@@ -1855,5 +1855,1740 @@
       "source": "GG 65",
       "summary": "Magic wrist-guard that blocks blows better than its wearer could."
     }
+  ],
+  "weapon_qualities": [
+    {
+      "name": "Ammunition",
+      "cost": "+0 or +1 flat point per rank",
+      "summary": "As alternative ammunition, the attack uses the range of the weapon it is fired from based on that weapon's normal range due to its standard effect.",
+      "text": "As alternative ammunition, the attack uses the range of the weapon it is fired from based on that weapon's normal range due to its standard effect. Do not use the range that would normally be associated with this particular effect's rank. +0 or +1 flat point per rank if the weapon the ammunition is fired from doubles or more the effect's normal range based on its rank.",
+      "source": "MA 255"
+    },
+    {
+      "name": "Accurate",
+      "cost": "+1 flat point per rank",
+      "summary": "Attacks with the weapon gain a +2 bonus to the attack check per rank of this quality.",
+      "text": "Attacks with the weapon gain a +2 bonus to the attack check per rank of this quality. This bonus counts towards power level determinations. +1 flat point per rank.",
+      "source": "MA 255"
+    },
+    {
+      "name": "Aura",
+      "cost": "+1 flat point",
+      "summary": "The striking portion of the weapon is surrounded by an aura of some damaging force or energy (not the same as the Energy Aura power from the core rules, however).",
+      "text": "The striking portion of the weapon is surrounded by an aura of some damaging force or energy (not the same as the Energy Aura power from the core rules, however). In game terms, this applies an additional descriptor to the weapon's damage. For example, a sword with a flame aura has the \"fire\" descriptor while a hammer with a lightning aura has the \"electrical\" descriptor on its damage in addition to bludgeoning. This is primarily just a Damage descriptor but may, like the basic descriptors for damage type, change how the weapon affects some targets, such as a foe vulnerable to fire. The aura may also allow the wielder to perform different stunts with the weapon. +1 flat point.",
+      "source": "MA 255"
+    },
+    {
+      "name": "Bane",
+      "cost": "-1cost per rank ",
+      "summary": "The weapon is especially effective against a certain type of target.",
+      "text": "The weapon is especially effective against a certain type of target. This is typically additional ranks of Damage with a Limited flaw based on how rarely the target appears. Excluding about half the potential targets is worth a -1 flaw. Since the benefits of Bane are limited by power level, they can make the weapon less effectual overall. As such, Gamemasters may wish to bend the power level limits for Bane weapons, allowing their additional Damage bonus to exceed power level limits by up to 2 ranks. More than this is not recommended. -1cost per rank .",
+      "source": "MA 255"
+    },
+    {
+      "name": "Binding",
+      "cost": "+1 flat point",
+      "summary": "The weapon grants the benefits of the Weapon Bind advantage.",
+      "text": "The weapon grants the benefits of the Weapon Bind advantage. If you take a defend action while wielding the weapon, and successfully defend against an armed attack, you can make an immediate disarm attempt against the attacker as a reaction. +1 flat point.",
+      "source": "MA 256"
+    },
+    {
+      "name": "Breaking",
+      "cost": "+1 flat point",
+      "summary": "The weapon grants the benefits of the Weapon Break advantage.",
+      "text": "The weapon grants the benefits of the Weapon Break advantage. If you take a defend action while wielding the weapon, and successfully defend against an armed attack, you can make an immediate smash attack against the attacker's weapon as a reaction. +1 flat point.",
+      "source": "MA 256"
+    },
+    {
+      "name": "Carrier",
+      "cost": "Linked effect cost",
+      "summary": "The weapon's attack and damage serve as a carrier for another Linked effect, such as Affliction or Weaken.",
+      "text": "The weapon's attack and damage serve as a carrier for another Linked effect, such as Affliction or Weaken. The descriptor may be anything from a powerful electrical shock to a toxin or even a magical effect. The Linked effect may have its own modifiers to further define it. Linked effect cost.",
+      "source": "MA 256"
+    },
+    {
+      "name": "Choking",
+      "cost": "+1 flat point",
+      "summary": "The weapon provides the benefits of the Chokehold advantage.",
+      "text": "The weapon provides the benefits of the Chokehold advantage. After successful attack and grab checks, the target suffocates for as long as you maintain the hold. +1 flat point.",
+      "source": "MA 256"
+    },
+    {
+      "name": "Climbing",
+      "cost": "+1 flat point per rank",
+      "summary": "The weapon is designed to help the wielder with climbing.",
+      "text": "The weapon is designed to help the wielder with climbing. Each rank of this weapon quality provides a +2 bonus to Athletics checks for the purpose of climbing. +1 flat point per rank.",
+      "source": "MA 256"
+    },
+    {
+      "name": "Concealable",
+      "cost": "+1 flat point",
+      "summary": "The weapon is small and easy to conceal or can fold or collapse down into a concealable form.",
+      "text": "The weapon is small and easy to conceal or can fold or collapse down into a concealable form. This is similar to the Subtle modifier, and provides a +10 circumstance bonus to Sleight of Hand checks to conceal the weapon (base DC 20 to find it when it is concealed as a routine check). +1 flat point.",
+      "source": "MA 256"
+    },
+    {
+      "name": "Dangerous",
+      "cost": "+1 flat point per rank",
+      "summary": "Dangerous weapons are more likely to inflict critical hits.",
+      "text": "Dangerous weapons are more likely to inflict critical hits. Each rank of this quality increases the weapon's critical threat range by 1, to a maximum of 16-20 with 4 ranks. +1 flat point per rank.",
+      "source": "MA 256"
+    },
+    {
+      "name": "Defensive",
+      "cost": "+1 flat point",
+      "summary": "Like the Improved Defense advantage, when you take the defend action while wielding the weapon, you gain a +2 circumstance bonus to your active defense checks.",
+      "text": "Like the Improved Defense advantage, when you take the defend action while wielding the weapon, you gain a +2 circumstance bonus to your active defense checks. +1 flat point.",
+      "source": "MA 257"
+    },
+    {
+      "name": "Disabling",
+      "cost": "+1 flat point per rank",
+      "summary": "Disabling weapons are more likely to inflict disabling critical hits.",
+      "text": "Disabling weapons are more likely to inflict disabling critical hits. Each rank of this quality increases the weapon's disabling threat range by 1, to a maximum of 16-20 with 4 ranks. +1 flat point per rank.",
+      "source": "MA 257"
+    },
+    {
+      "name": "Disarming",
+      "cost": "+1 flat point",
+      "summary": "A disarming weapon is more effective in knocking things out of a target's grasp, allowing disarm attempts to be made with no circumstance penalty.",
+      "text": "A disarming weapon is more effective in knocking things out of a target's grasp, allowing disarm attempts to be made with no circumstance penalty. +1 flat point.",
+      "source": "MA 257"
+    },
+    {
+      "name": "Double",
+      "cost": "+1 flat point",
+      "summary": "A double weapon has two striking ends or sides, and can be used to strike twice, splitting the weapon's damage (as per the Split extra).",
+      "text": "A double weapon has two striking ends or sides, and can be used to strike twice, splitting the weapon's damage (as per the Split extra). +1 flat point.",
+      "source": "MA 257"
+    },
+    {
+      "name": "Easy",
+      "cost": "+1 flat point",
+      "summary": "An easy weapon is so simple to use that the wielder can use it with their fighting style even if they do not have the appropriate Weapon Element.",
+      "text": "An easy weapon is so simple to use that the wielder can use it with their fighting style even if they do not have the appropriate Weapon Element. However, a -1 penalty to initiative and attack is suffered while doing so. The Gamemaster may rule that some fighting styles cannot make use of this benefit if the types of attacks they use cannot utilize a weapon of that type at all. A fighting style that solely employs kicks, for example, would gain no such benefit with a cestus. +1 flat point.",
+      "source": "MA 257"
+    },
+    {
+      "name": "Empowered",
+      "cost": "+1 flat point per rank",
+      "summary": "Because of its design, weight, etc., the weapon's successful critical hits enjoys the benefits of one rank of the Empowered Critical advantage.",
+      "text": "Because of its design, weight, etc., the weapon's successful critical hits enjoys the benefits of one rank of the Empowered Critical advantage. A second rank of this weapon quality can be applied, as per the advantage. No further benefit is enjoyed if the total ranks of Empowered Critical from the wielder and weapon are greater than 2. +1 flat point per rank.",
+      "source": "MA 257"
+    },
+    {
+      "name": "Entangling",
+      "cost": "+1 flat point",
+      "summary": "Grab attacks made with the weapon are particularly difficult to escape from.",
+      "text": "Grab attacks made with the weapon are particularly difficult to escape from. Grabbed targets suffer a -2 circumstance penalty to checks to escape. +1 flat point.",
+      "source": "MA 257"
+    },
+    {
+      "name": "Extended",
+      "cost": "-1 or -2 flat points per rank",
+      "summary": "Attacks made with this reach weapon are made with half the usual attack bonus if the target is closer than the weapon's maximum reach.",
+      "text": "Attacks made with this reach weapon are made with half the usual attack bonus if the target is closer than the weapon's maximum reach. For 2 points, targets within such proximity cannot be effectively attacked at all with the weapon. -1 or -2 flat points per rank.",
+      "source": "MA 257"
+    },
+    {
+      "name": "Grabbing",
+      "cost": "+1 flat point (no cost if the attack has no other effect)",
+      "summary": "The weapon provides the benefits of the Fast Grab advantage.",
+      "text": "The weapon provides the benefits of the Fast Grab advantage. After a hit with the weapon, make an immediate grab check against the target as a free action. Use the weapon's Damage rank as its effective Strength rank. The weapon attack inflicts its normal damage and counts as the initial attack check to grab the target. +1 flat point. No cost if the weapon attack has no effect other than the grab.",
+      "source": "MA 257"
+    },
+    {
+      "name": "Impressive",
+      "cost": "+1 flat point",
+      "summary": "The weapon's design or function is sufficiently impressive to grant the wielder a +2 circumstance bonus to interaction checks involving it.",
+      "text": "The weapon's design or function is sufficiently impressive to grant the wielder a +2 circumstance bonus to interaction checks involving it. This usually takes the form of Intimidation checks when using the weapon to threaten someone. +1 flat point.",
+      "source": "MA 257"
+    },
+    {
+      "name": "Inaccurate",
+      "cost": "-1 flat point per rank",
+      "summary": "Attacks with the weapon suffer a -2 penalty to the attack check per rank of this quality.",
+      "text": "Attacks with the weapon suffer a -2 penalty to the attack check per rank of this quality. -1 flat point per rank.",
+      "source": "MA 257"
+    },
+    {
+      "name": "Indestructible",
+      "cost": "+1 flat point",
+      "summary": "The weapon's physical form cannot be damaged.",
+      "text": "The weapon's physical form cannot be damaged. It is immune to smash attacks and, while it can be taken away from the wielder, it cannot be destroyed. +1 flat point.",
+      "source": "MA 257"
+    },
+    {
+      "name": "Knockabout",
+      "cost": "+1 flat point per rank",
+      "summary": "The weapon's weight or design means it knocks the target about a bit more.",
+      "text": "The weapon's weight or design means it knocks the target about a bit more. Each rank increases the weapon's Damage by +1, but only for the purpose of determining whether knockback occurs and for knockback distance. In this manner, it functions like the Enhanced Knockback * advantage. +1 flat point per rank.",
+      "source": "MA 257"
+    },
+    {
+      "name": "Nonlethal",
+      "cost": "-1 flat point",
+      "summary": "Although most anything can kill, the weapon is intended to make this outcome much less likely.",
+      "text": "Although most anything can kill, the weapon is intended to make this outcome much less likely. It is only capable of inflicting a dying or dead condition upon landing a critical hit or as a finishing attack. -1 flat point.",
+      "source": "MA 257"
+    },
+    {
+      "name": "Penetrating",
+      "cost": "+1 flat point per rank",
+      "summary": "The weapon's Damage has the Penetrating modifier, allowing it to overcome Impervious Toughness, typically due to extreme sharpness or other \"armor piercing\" capability.",
+      "text": "The weapon's Damage has the Penetrating modifier, allowing it to overcome Impervious Toughness, typically due to extreme sharpness or other \"armor piercing\" capability. +1 flat point per rank.",
+      "source": "MA 257"
+    },
+    {
+      "name": "Personal",
+      "cost": "+1 flat point",
+      "summary": "The weapon is \"keyed\" to the wielder in some fashion (biometric signature, aura reading, magical link, etc.) such that only the intended wielder may use it.",
+      "text": "The weapon is \"keyed\" to the wielder in some fashion (biometric signature, aura reading, magical link, etc.) such that only the intended wielder may use it. The weapon simply doesn't function for anyone else. +1 flat point.",
+      "source": "MA 258"
+    },
+    {
+      "name": "Ranged",
+      "cost": "0 points (the complication pays for the extra)",
+      "summary": "Ranged use of exotic or archaic weapons is often handled by one of three methods: First Method The weapon is generally used at range and has the Ranged modifier on its Damage.",
+      "text": "Ranged use of exotic or archaic weapons is often handled by one of three methods: First Method The weapon is generally used at range and has the Ranged modifier on its Damage. It may or may not be Strength-Based, and ammunition is handled as a complication if it becomes one. This suits weapons like bows and slings, as well as things like hammers or shields that return to the wielder's hand when thrown. +1 point per rank. Second Method The weapon is used at range, but has a very finite number of uses (5 or less). It has the Ranged modifier on its Damage, but is Unreliable. This suits things like a brace of throwing knives or shuriken that run out quickly. +0 points per rank. Third Method The weapon can be used at range (typically thrown), but doing so deprives the wielder of the weapon until it can be retrieved, such as throwing a hammer, spear, or similar weapon. This is best treated as a combination of a stunt (allowing the weapon to attack at range) and a complication (depriving the wielder of the weapon) when it happens, with no change in the weapon's point cost and no fatigue or hero point cost for the stunt. In essence, the complication \"pays\" for the one-time extra. 0 points.",
+      "source": "MA 258"
+    },
+    {
+      "name": "Reach",
+      "cost": "+1 flat point per +5 feet of reach",
+      "summary": "The weapon's length or design provides the wielder with additional reach in attacking nearby targets.",
+      "text": "The weapon's length or design provides the wielder with additional reach in attacking nearby targets. +1 flat point per +5 feet of reach.",
+      "source": "MA 258"
+    },
+    {
+      "name": "Reinforced",
+      "cost": "+1 flat point",
+      "summary": "The weapon's Toughness is considered double normal for the sake of how much Strength may be applied while wielding it before it will break.",
+      "text": "The weapon's Toughness is considered double normal for the sake of how much Strength may be applied while wielding it before it will break. +1 flat point.",
+      "source": "MA 258"
+    },
+    {
+      "name": "Reluctant",
+      "cost": "+1 flat point per rank",
+      "summary": "The weapon is not easily disarmed, granting the wielder a +2 bonus per rank to resist a disarm attempt.",
+      "text": "The weapon is not easily disarmed, granting the wielder a +2 bonus per rank to resist a disarm attempt. +1 flat point per rank.",
+      "source": "MA 258"
+    },
+    {
+      "name": "Risky",
+      "cost": "-1 flat point",
+      "summary": "A critical miss with this weapon requires the wielder make an attack roll against themselves to see if they have inadvertently harmed themselves with the weapon.",
+      "text": "A critical miss with this weapon requires the wielder make an attack roll against themselves to see if they have inadvertently harmed themselves with the weapon. -1 flat point.",
+      "source": "MA 258"
+    },
+    {
+      "name": "Short Throw",
+      "cost": "-1 flat point",
+      "summary": "The distance the weapon may be thrown is half normal.",
+      "text": "The distance the weapon may be thrown is half normal. -1 flat point.",
+      "source": "MA 258"
+    },
+    {
+      "name": "Smashing",
+      "cost": "+1 flat point",
+      "summary": "The weapon is especially effective at smashing held objects.",
+      "text": "The weapon is especially effective at smashing held objects. You suffer no attack check penalty for making a smash attack against an object held by another character. +1 flat point.",
+      "source": "MA 258"
+    },
+    {
+      "name": "Stylistic",
+      "cost": "+1 flat point",
+      "summary": "The weapon is designed specifically for the forms, grip, and other characteristics of a particular fighting style.",
+      "text": "The weapon is designed specifically for the forms, grip, and other characteristics of a particular fighting style. This fighting style must be selected when this weapon quality is applied (essentially, when the weapon is made) and cannot be changed later. A wielder who practices this fighting style and has assumed any of its stances (excluding Neutral) gains a +1 bonus to attack and initiative with it while employing that fighting style's attacks. Anyone wielding the weapon and using a different fighting style or a Neutral stance suffers a -1 initiative penalty. +1 flat point.",
+      "source": "MA 258"
+    },
+    {
+      "name": "Tricky",
+      "cost": "-1 flat point per rank",
+      "summary": "The wielder's critical miss range with the weapon increases by one per rank of this weapon quality, as per the Uncertain flaw (pg 98).-1 flat point per rank.",
+      "text": "The wielder's critical miss range with the weapon increases by one per rank of this weapon quality, as per the Uncertain flaw (pg 98).-1 flat point per rank.",
+      "source": "MA 258"
+    },
+    {
+      "name": "Tripping",
+      "cost": "+1 flat point",
+      "summary": "The weapon is effective in making trip attacks, providing the benefits of the Improved Trip Chapter 8: Tools of the Fight Simple Melee Weapons Weapon Effect Critical Cost Brass Knuckles Strength-Based Damage 1 (bludgeoning), Easy, Reluctant 20 3 Caltrop * Burst Area Affliction 6 (Resisted by Dodge; Hindered and Impaired), Continuous, Extra Condition, Limited Degree 2; Limited to Speed 0 or Faster or Fighting 20 18 Cestus Strength-Based Daamage 1 (bludgeoning), Dangerous, Easy, Reluctant 2 19-20 5 Club Strength-Based Damage 2 (bludgeoning) 20 2 Fighting Stick Strength-Based Damage 1 (bludgeoning) 20 1 Gaff/Hook Strength-Based Damage 1 (piercing), Penetrating 20 2 Garotte (Stick) Strength-Based Damage 1 (bludgeoning) 20 1 Garotte (Wire) Grabbing (no damage), Choking -- 2 Kunai Strength-Based Damage 1 (piercing), Climbing, Concealable, Dangerous, Penetrating 19-20 5 Long Staff (Bo) Strength-Based Damage 2 (bludgeoning), Double, Reach 20 4 Mace Strength-Based Damage 2 (bludgeoning), Dangerous 19-20 3 Machete Strength-Based Damage 3 (slashing), Inaccurate 20 2 Marbles Burst Area Affliction 4 (Resisted by Dodge; Vulnerable, Prone), Continuous, Limited Degree, Limited to Speed 0 or Faster or Fighting 20 12 Pistol Grip Strength-Based Damage 1 (bludgeoning) 20 Varies Rifle Butt Strength-Based Damage 2 (bludgeoning) 20 Varies Rope Strength-Based Damage 1 (bludgeoning), Reach 2, Tripping 20 4 Sap Strength-Based Damage 2 (bludgeoning), Dangerous, Nonlethal 19-20 2 Scabbard, Sword Strength-Based Damage 1 (bludgeoning) 20 1 Scythe Strength-Based Damage 3 (slashing or piercing), Dangerous 2, Impressive, Inaccurate, Tripping 18-20 6 Shield, Small Strength-Based Damage 1 (bludgeoning) 20 2 Shield, Medium Strength-Based Damage 1 (bludgeoning) 20 4 Shield, Large Strength-Based Damage 2 (bludgeoning) 20 6 Short Staff (Jo) Strength-Based Damage 2 (bludgeoning), Double 20 3 Shovel/Spade Strength-Based Damage 2 (slashing) 20 2 Sickle, Hand Strength-Based Damage 2 (slashing), Risky 20 1 Tetsubo Strength-Based Damage 3 (bludgeoning), Impressive, Knockabout, Reinforced 20 6 Tonfa Strength-Based Damage 2 (bludgeoning), Defensive 20 3 * See the individual descriptions for more information advantage: no penalty to the attack check to trip, no opposing trip attack, and a choice of which trait your target uses to defend (Acrobatics or Athletics).",
+      "text": "The weapon is effective in making trip attacks, providing the benefits of the Improved Trip Simple Melee Weapons Weapon Effect Critical Cost Brass Knuckles Strength-Based Damage 1 (bludgeoning), Easy, Reluctant 20 3 Caltrop * Burst Area Affliction 6 (Resisted by Dodge; Hindered and Impaired), Continuous, Extra Condition, Limited Degree 2; Limited to Speed 0 or Faster or Fighting 20 18 Cestus Strength-Based Daamage 1 (bludgeoning), Dangerous, Easy, Reluctant 2 19-20 5 Club Strength-Based Damage 2 (bludgeoning) 20 2 Fighting Stick Strength-Based Damage 1 (bludgeoning) 20 1 Gaff/Hook Strength-Based Damage 1 (piercing), Penetrating 20 2 Garotte (Stick) Strength-Based Damage 1 (bludgeoning) 20 1 Garotte (Wire) Grabbing (no damage), Choking -- 2 Kunai Strength-Based Damage 1 (piercing), Climbing, Concealable, Dangerous, Penetrating 19-20 5 Long Staff (Bo) Strength-Based Damage 2 (bludgeoning), Double, Reach 20 4 Mace Strength-Based Damage 2 (bludgeoning), Dangerous 19-20 3 Machete Strength-Based Damage 3 (slashing), Inaccurate 20 2 Marbles Burst Area Affliction 4 (Resisted by Dodge; Vulnerable, Prone), Continuous, Limited Degree, Limited to Speed 0 or Faster or Fighting 20 12 Pistol Grip Strength-Based Damage 1 (bludgeoning) 20 Varies Rifle Butt Strength-Based Damage 2 (bludgeoning) 20 Varies Rope Strength-Based Damage 1 (bludgeoning), Reach 2, Tripping 20 4 Sap Strength-Based Damage 2 (bludgeoning), Dangerous, Nonlethal 19-20 2 Scabbard, Sword Strength-Based Damage 1 (bludgeoning) 20 1 Scythe Strength-Based Damage 3 (slashing or piercing), Dangerous 2, Impressive, Inaccurate, Tripping 18-20 6 Shield, Small Strength-Based Damage 1 (bludgeoning) 20 2 Shield, Medium Strength-Based Damage 1 (bludgeoning) 20 4 Shield, Large Strength-Based Damage 2 (bludgeoning) 20 6 Short Staff (Jo) Strength-Based Damage 2 (bludgeoning), Double 20 3 Shovel/Spade Strength-Based Damage 2 (slashing) 20 2 Sickle, Hand Strength-Based Damage 2 (slashing), Risky 20 1 Tetsubo Strength-Based Damage 3 (bludgeoning), Impressive, Knockabout, Reinforced 20 6 Tonfa Strength-Based Damage 2 (bludgeoning), Defensive 20 3 * See the individual descriptions for more information advantage: no penalty to the attack check to trip, no opposing trip attack, and a choice of which trait your target uses to defend (Acrobatics or Athletics). +1 flat point.",
+      "source": "MA 258"
+    },
+    {
+      "name": "Weak",
+      "cost": "-1 flat point",
+      "summary": "Only half (rounded down) of the wielder's Strength bonus applies to the Strength-Based weapon.",
+      "text": "Only half (rounded down) of the wielder's Strength bonus applies to the Strength-Based weapon. Apply the full Strength penalty, if applicable. If halving the Strength bonus results in a modifier less than +1, no Strength bonus is applied. -1 flat point.",
+      "source": "MA 259"
+    }
+  ],
+  "ma_weapons": [
+    {
+      "name": "Brass Knuckles",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 1 (bludgeoning), Easy, Reluctant",
+      "crit": "20",
+      "cost": 3,
+      "source": "MA 259",
+      "description": "Pieces of molded metal fitting over the fingers, brass knuckles add +1 damage to your unarmed strikes. They include similar items like chain-wrapped fists."
+    },
+    {
+      "name": "Caltrop",
+      "category": "Simple Melee Weapon",
+      "effect": "Burst Area Affliction 6 (Resisted by Dodge; Hindered and Impaired), Continuous, Extra Condition, Limited Degree 2; Limited to Speed 0 or Faster or Fighting",
+      "crit": "20",
+      "cost": 18,
+      "source": "MA 259",
+      "description": "These are multi-pronged metal spikes designed so one prong points up when the caltrop rests on a surface. You can scatter caltrops on the ground to injure opponents or, at least, slow them down. One bag of caltrops covers up to a 30-foot radius area. Each time someone moves at a rate greater than Speed -1 (or without sufficient ability to sense the area) through an area with caltrops, or each round someone spends fighting in such an area, the caltrops may slow them down (painfully). Melee Weapons Chapter 8: Tools of the Fight Archaic Melee Weapons Weapon Effect Critical Cost Axe, Hand Strength-Based Damage 1 (slashing) 20 1"
+    },
+    {
+      "name": "Cestus",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Daamage 1 (bludgeoning), Dangerous, Easy, Reluctant 2",
+      "crit": "19-20",
+      "cost": 5,
+      "source": "MA 259",
+      "description": "A glove or fist wrapping fitted with spikes and/or weights along its back and knuckles to enhance a punch's damage."
+    },
+    {
+      "name": "Club",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 2 (bludgeoning)",
+      "crit": "20",
+      "cost": 2,
+      "source": "MA 259",
+      "description": "The simplest bludgeoning weapon, possibly even a makeshift weapon, although clubs and cudgels (like the Irish shillelagh) suit some character concepts. Spikes may be added to a club, increasing Damage by +1 (piercing; +1 flat point)."
+    },
+    {
+      "name": "Fighting Stick",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 1 (bludgeoning)",
+      "crit": "20",
+      "cost": 1,
+      "source": "MA 259",
+      "description": "Whether called a stick, baton, or a more cultural or specific martial term, this weapon represents all simple thin, long sticks held one-handed for the purpose of combat. Fighting sticks are often used for their (comparative) lack of lethality or as a substitute for swords."
+    },
+    {
+      "name": "Gaff/Hook",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 1 (piercing), Penetrating",
+      "crit": "20",
+      "cost": 2,
+      "source": "MA 259",
+      "description": "This metal hook is used by sailors to load and unload ships. Occasionally a prosthetic one is used to replace a severed hand."
+    },
+    {
+      "name": "Garotte (Stick)",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 1 (bludgeoning)",
+      "crit": "20",
+      "cost": 1,
+      "source": "MA 259"
+    },
+    {
+      "name": "Garotte (Wire)",
+      "category": "Simple Melee Weapon",
+      "effect": "Grabbing (no damage), Choking",
+      "crit": null,
+      "cost": 2,
+      "source": "MA 259"
+    },
+    {
+      "name": "Kunai",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 1 (piercing), Climbing, Concealable, Dangerous, Penetrating",
+      "crit": "19-20",
+      "cost": 5,
+      "source": "MA 259",
+      "description": "An evolution of a mason's trowel or farmer's tool for digging holes, it is easily concealed by hanging it on the body. It can also be thrown, but is primarily meant as a thrusting weapon or as a makeshift piton."
+    },
+    {
+      "name": "Long Staff (Bo)",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 2 (bludgeoning), Double, Reach",
+      "crit": "20",
+      "cost": 4,
+      "source": "MA 259"
+    },
+    {
+      "name": "Mace",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 2 (bludgeoning), Dangerous",
+      "crit": "19-20",
+      "cost": 3,
+      "source": "MA 259",
+      "description": "Similar to a warhammer, but with a rounded, flanged, or spiked head. Maces are often also badges of office or associated with priestly or ceremonial functions. A morningstar is typically a heavier, spiked mace (piercing) with a longer handle."
+    },
+    {
+      "name": "Machete",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 3 (slashing), Inaccurate",
+      "crit": "20",
+      "cost": 2,
+      "source": "MA 259",
+      "description": "A single edged blade primarily intended as a tool for hacking through crops and underbrush. It may be used as a weapon, but its weight is designed for helping it cleave through obstacles rather than making accurate attacks."
+    },
+    {
+      "name": "Marbles",
+      "category": "Simple Melee Weapon",
+      "effect": "Burst Area Affliction 4 (Resisted by Dodge; Vulnerable, Prone), Continuous, Limited Degree, Limited to Speed 0 or Faster or Fighting",
+      "crit": "20",
+      "cost": 12,
+      "source": "MA 259",
+      "description": "Not designed to cause harm, these stone or glass spheres are dropped upon the ground to make an area precarious to cross. One bag of marbles covers up to a 30- Chapter 8: Tools of the Fight 262 foot radius area. Each time someone moves at a rate greater than Speed -1 (or without sufficient ability to sense the area) through an area containing marbles, or each round someone spends fighting in such an area, the marbles may cause them to trip."
+    },
+    {
+      "name": "Pistol Grip",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 1 (bludgeoning)",
+      "crit": "20",
+      "cost": "Varies",
+      "source": "MA 259",
+      "description": "A pistol's handgrip may be used as an improvised fist load in a maneuver commonly known as \"pistol whipping.\""
+    },
+    {
+      "name": "Rifle Butt",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 2 (bludgeoning)",
+      "crit": "20",
+      "cost": "Varies",
+      "source": "MA 259",
+      "description": "The wooden or metal stock of a longarm, such as a rifle or submachine gun, may be used as an improvised club."
+    },
+    {
+      "name": "Rope",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 1 (bludgeoning), Reach 2, Tripping",
+      "crit": "20",
+      "cost": 4,
+      "source": "MA 259",
+      "description": "A length of rope with weights or knots tied into it to improve its chance of causing harm. It may also be used to trip an opponent."
+    },
+    {
+      "name": "Sap",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 2 (bludgeoning), Dangerous, Nonlethal",
+      "crit": "19-20",
+      "cost": 2,
+      "source": "MA 259",
+      "description": "A simple weapon comprised of a bag or the like filled with stones, coins, sand, or something similar. It is used to knock out one's target rather than killing them. Its unassuming nature makes it ideal for street thugs."
+    },
+    {
+      "name": "Scabbard, Sword",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 1 (bludgeoning)",
+      "crit": "20",
+      "cost": 1,
+      "source": "MA 259",
+      "description": "Usually thought as nothing more than something within which to store a blade, a scabbard may be used as a blunt weapon and even thrown short distances. Using a longer scabbard than the blade within also allows small items and powders to be held in the hollow space beyond the blade's tip."
+    },
+    {
+      "name": "Scythe",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 3 (slashing or piercing), Dangerous 2, Impressive, Inaccurate, Tripping",
+      "crit": "18-20",
+      "cost": 6,
+      "source": "MA 259",
+      "description": "Originally a tool for cutting wheat and the like, the scythe has since been adapted for use as a two-handed weapon. Its curve is ideal for tripping."
+    },
+    {
+      "name": "Shield, Small",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 1 (bludgeoning)",
+      "crit": "20",
+      "cost": 2,
+      "source": "MA 259"
+    },
+    {
+      "name": "Shield, Medium",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 1 (bludgeoning)",
+      "crit": "20",
+      "cost": 4,
+      "source": "MA 259"
+    },
+    {
+      "name": "Shield, Large",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 2 (bludgeoning)",
+      "crit": "20",
+      "cost": 6,
+      "source": "MA 259"
+    },
+    {
+      "name": "Short Staff (Jo)",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 2 (bludgeoning), Double",
+      "crit": "20",
+      "cost": 3,
+      "source": "MA 259"
+    },
+    {
+      "name": "Shovel/Spade",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 2 (slashing)",
+      "crit": "20",
+      "cost": 2,
+      "source": "MA 259",
+      "description": "Due to a sharpened edge intended to break ground more easily, a shovel makes a good improvised weapon. Indeed, it has been used as such (to the point of undertaking training with it) by several military forces through the ages."
+    },
+    {
+      "name": "Sickle, Hand",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 2 (slashing), Risky",
+      "crit": "20",
+      "cost": 1,
+      "source": "MA 259",
+      "description": "This weapon is essentially a sickle blade mounted on a short haft the length of a forearm or less. It is meant as a tool for cutting plants."
+    },
+    {
+      "name": "Tetsubo",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 3 (bludgeoning), Impressive, Knockabout, Reinforced",
+      "crit": "20",
+      "cost": 6,
+      "source": "MA 259",
+      "description": "The tetsubo or kanabo is a more powerful club shod with iron studs. Legend has them as the weapons of the monstrous oni, and the Japanese saying \"like giving a kanabo to an oni\" means giving greater advantage to someone who already has an advantage (great strength in the oni's case)."
+    },
+    {
+      "name": "Tonfa",
+      "category": "Simple Melee Weapon",
+      "effect": "Strength-Based Damage 2 (bludgeoning), Defensive",
+      "crit": "20",
+      "cost": 3,
+      "source": "MA 259",
+      "description": "Originally a mill wheel handle, the tonfa is a stick slightly longer than forearm length, with a handle at a right angle, allowing the stick to extend along the wielder's forearm. Tonfa are common close combat weapons for law-enforcement, where they're commonly known as side-handle batons or \"T-batons\". Archaic Weapons"
+    },
+    {
+      "name": "Axe, Hand",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 1 (slashing)",
+      "crit": "20",
+      "cost": 1,
+      "source": "MA 260",
+      "description": "A light, one-handed axe designed for close combat and throwing. A tomahawk or hatchet would also suit this description."
+    },
+    {
+      "name": "Bagua Saber",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 4 (slashing), Dangerous, Impressive, Inaccurate",
+      "crit": "19-20",
+      "cost": 5,
+      "source": "MA 260",
+      "description": "A large, curved saber (dao) often used twohanded, this is a ferocious weapon popular during training to improve strength."
+    },
+    {
+      "name": "Battleaxe",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 3 (slashing), Breaking, Dangerous",
+      "crit": "19-20",
+      "cost": 5,
+      "source": "MA 260",
+      "description": "This is a heavy, wide-bladed chopping (slashing) blade attached to a handle."
+    },
+    {
+      "name": "Dagger/Knife",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 1 (piercing), Dangerous",
+      "crit": "19-20",
+      "cost": 2,
+      "source": "MA 260",
+      "description": "A short blade, less than 12 inches. Daggers may be single or double edged slashing weapons and are also often usable as piercing weapons. A dagger is typically a Dangerous weapon. Small or folding blades, like a switchblade or butterfly knife, may also be Concealable."
+    },
+    {
+      "name": "Flail",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-based Damage 2, Dangerous, Disarming, Reach",
+      "crit": "19-20",
+      "cost": 5,
+      "source": "MA 260",
+      "description": "A handle connected to a heavy (often spiked) weight by a chain or length of strong rope, allowing the weapon's head to swing or spin. A flail grants the benefit of additional Reach."
+    },
+    {
+      "name": "Greataxe",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 5 (slashing), Impressive, Smashing",
+      "crit": "20",
+      "cost": 7,
+      "source": "MA 260",
+      "description": "A big, heavy axe favored by those looking to dole out a lot of damage. It requires both hands to wield properly."
+    },
+    {
+      "name": "Greatsword",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 5 (slashing), Dangerous, Impressive",
+      "crit": "19-20",
+      "cost": 7,
+      "source": "MA 260",
+      "description": "A large, two-handed, wide-bladed sword."
+    },
+    {
+      "name": "Hunga Munga",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (slashing or piercing)",
+      "crit": "20",
+      "cost": 2,
+      "source": "MA 260",
+      "description": "Possessing three blades, one of which is considerably curved (for slashing), while the other two are more or less straight (for piercing), this weapon may be used in melee or thrown (use the third Ranged option, pg 258)."
+    },
+    {
+      "name": "Kama *",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (slashing), Dangerous",
+      "crit": "19-20",
+      "cost": 3,
+      "source": "MA 260"
+    },
+    {
+      "name": "Katana",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 3 (slashing), Dangerous",
+      "crit": "19-20",
+      "cost": 4,
+      "source": "MA 260",
+      "description": "The famous \"samurai sword\" wielded by noble warriors in feudal Japan. Katanas are slightly curved single-edged blades, worn by samurai with the edge facing up to facilitate Chapter 8: Tools of the Fight 263 quick drawing (the Quick Draw and Iaijitsu advantages are elements of kendo). It is traditionally worn as part of a pair (or daisho) with the shorter wakizashi blade."
+    },
+    {
+      "name": "Katana, Fantastic",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 6 (slashing), Dangerous 4, Penetrating 2",
+      "crit": "16-20",
+      "cost": 12,
+      "source": "MA 260",
+      "description": "This is a far more cinematic version of the standard katana, and is meant to allow the sort of outrageous combat maneuvers that have made the katana a gaming meme."
+    },
+    {
+      "name": "Katar",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (piercing or slashing), Penetrating, Reluctant",
+      "crit": "20",
+      "cost": 4,
+      "source": "MA 260",
+      "description": "The Indian \"punch dagger\" has an H-shaped grip, so the wielder's knuckles rest behind the wide, triangular blade, allowing it to thrust with considerable force, although they can also make slashing attacks. Katar are effective in punching through armor."
+    },
+    {
+      "name": "Kris",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (piercing or slashing), Dangerous 2",
+      "crit": "18-20",
+      "cost": 4,
+      "source": "MA 260",
+      "description": "An Indonesian dagger with a distinctive wavy or \"flame\" blade design, the kris is a cultural icon, and every adult male in Indonesia was expected to own one, often passed down as family heirlooms. The blade design allows kris to inflict terrible wounds. Indonesian legend attributes many supernatural powers to the kris, including the power to kill at a distance simply by pointing at a target, attacking targets by stabbing their shadow or footprints, alerting the wielder to imminent danger, and even controlling fire (flames being similar to the knife's own blade)."
+    },
+    {
+      "name": "Kukri",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (slashing), Dangerous",
+      "crit": "19-20",
+      "cost": 3,
+      "source": "MA 260",
+      "description": "A heavy Nepalese knife with an inward curving edge, used as both a tool and weapon. Kukri are perhaps most famous for being the favored weapons of Gurkha regiments, including the Royal Gurkha Rifles of the British Army."
+    },
+    {
+      "name": "Kwan Do",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 3 (slashing), Disarming, Reach",
+      "crit": "20",
+      "cost": 5,
+      "source": "MA 260"
+    },
+    {
+      "name": "Lance",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 3 (piercing), Extended 2, Reach 2",
+      "crit": "20",
+      "cost": 7,
+      "source": "MA 260",
+      "description": "A lance deals its full +3 damage when used from the back of a charging mount. It has reach, so you can strike opponents 10 feet away with it, but you can't use it against a foe nearer than that."
+    },
+    {
+      "name": "Main-Gauche",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 1 (piercing), Dangerous, Defensive, Disarming, Short Throw",
+      "crit": "19-20",
+      "cost": 3,
+      "source": "MA 260",
+      "description": "A dagger meant to be wielded in the offhand, it is primarily associated with fencing where it is used to aid in blocking a foe's sword."
+    },
+    {
+      "name": "Naginata",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 3 (slashing), Reach",
+      "crit": "20",
+      "cost": 4,
+      "source": "MA 260",
+      "description": "The Japanese naginata is a wooden haft topped with a curved blade similar to that of a katana or wakizashi. The Chinese guan dao (\"reclining moon blade\") is a similar weapon with a broader, more cleaver-like blade, traditionally with a red scarf or tassel attached between the blade and shaft. In Japan after the Edo period, the naginata became a symbol of status for women of the samurai class and a common \"woman's weapon\"--use is still taught to some Japanese schoolgirls as a sport."
+    },
+    {
+      "name": "Nine-Dragon Trident",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (piercing), Dangerous, Disarming, Reach",
+      "crit": "19-20",
+      "cost": 5,
+      "source": "MA 260",
+      "description": "A polearm topped with a complex collection of curving and hooked points, particularly effective in blocking and catching enemy weapons and in hooking and tripping opponents, as well as impaling them on one or several of the points."
+    },
+    {
+      "name": "Ninja-To",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (slashing)",
+      "crit": "20",
+      "cost": 2,
+      "source": "MA 260",
+      "description": "A short, straight sword carried and used by ninja. The ninja-to is a single edged blade with a chisel point and a square guard, typically worn in a back sheath and drawn over the shoulder. Many ninjas concealed other weapons upon their ninjato, such as a garrote wrapped around the hilt, extra space at the bottom of the scabbard for hiding things, a hole in the scabbard so it can be used as a snorkel and blowgun, etc. Such additional tricks may be represented by adding Alternate Effects."
+    },
+    {
+      "name": "No Dachi",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 5 (slashing), Dangerous, Impressive, Penetrating",
+      "crit": "19-20",
+      "cost": 8,
+      "source": "MA 260",
+      "description": "This massive, two-handed sword rises well up to the chest on most men and is ideal for attacking armored opponents. It was also used to kill a rider's mount."
+    },
+    {
+      "name": "Podao",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 3 (slashing or bludgeoning), Double, Reach",
+      "crit": "20",
+      "cost": 5,
+      "source": "MA 260",
+      "description": "A hafted weapon with a broad-headed blade (slashing) on one end and a heavy metal ring (bludgeoning) mounted on the haft's opposite tip."
+    },
+    {
+      "name": "Rapier",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (piercing), Dangerous 2",
+      "crit": "18-20",
+      "cost": 4,
+      "source": "MA 260",
+      "description": "A sword with a long, slender blade primarily intended for thrusting attacks. It is usually fitted with a basket hilt to protect the hand."
+    },
+    {
+      "name": "Sai *",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 1 (piercing), Defensive, Disarming",
+      "crit": "20",
+      "cost": 3,
+      "source": "MA 260"
+    },
+    {
+      "name": "Shang Gou *",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 1 (slashing), Disarming, Tripping",
+      "crit": "20",
+      "cost": 3,
+      "source": "MA 260"
+    },
+    {
+      "name": "Spear",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (piercing), Dangerous, Reach",
+      "crit": "19-20",
+      "cost": 4,
+      "source": "MA 260",
+      "description": "A haft or handle three to six feet long or more, ending in a sharp point. The simplest spears are sharpened sticks (the points often fire hardened). More common are spears with metal heads, often with sharpened Chapter 8: Tools of the Fight 264 edges as well as points, allowing the spear to be swung as a"
+    },
+    {
+      "name": "Sword",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 3 (slashing)",
+      "crit": "20",
+      "cost": 3,
+      "source": "MA 260",
+      "description": "Longer blades, over a foot in length, up to four feet or more. Like daggers, swords may be single or double-edged slashing weapons, as well as pointed piercing weapons. Particular sword designs have different qualities, including Binding, Breaking, Dangerous, and Defensive. Enchanted or high-tech swords may have other qualities or powers of their own."
+    },
+    {
+      "name": "Sword, Butterfly *",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (slashing), Dangerous",
+      "crit": "19-20",
+      "cost": 3,
+      "source": "MA 260"
+    },
+    {
+      "name": "Sword, Claymore",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 3 (slashing), Dangerous, Defensive",
+      "crit": "19-20",
+      "cost": 5,
+      "source": "MA 260",
+      "description": "Slightly smaller, lighter, and far more maneuverable than the greatsword. Its size but manageability also makes it useful defensively."
+    },
+    {
+      "name": "Sword, Falchion",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 3 (slashing), Dangerous 2, Smashing",
+      "crit": "18-20",
+      "cost": 6,
+      "source": "MA 260",
+      "description": "This weapon combines the versatility of a sword with the chopping power of an axe."
+    },
+    {
+      "name": "Sword, Gladius",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (slashing or piercing), Dangerous, Penetrating",
+      "crit": "19-20",
+      "cost": 4,
+      "source": "MA 260",
+      "description": "Favored by gladiators and armies that prefer to fight from behind shield walls and the like, this shortsword is intended as a thrusting weapon for piercing armor but also has an edge."
+    },
+    {
+      "name": "Sword, Wood",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 3 (slashing), Nonlethal",
+      "crit": "20",
+      "cost": 2,
+      "source": "MA 260",
+      "description": "Whether known as a bokken, shinai or something else, this is a wooden sword primarily intended for practice, strength training, and the like."
+    },
+    {
+      "name": "Trident",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-based Damage 3 (piercing), Dangerous, Disarming, Reach",
+      "crit": "19-20",
+      "cost": 6,
+      "source": "MA 260",
+      "description": "A spear with three tines or points, it is a piercing weapon. Since the trident is associated with the Greek and Roman sea gods, it is a common weapon and emblem for aquatic characters. Like a spear, a trident can be thrown."
+    },
+    {
+      "name": "Warhammer",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-based Damage 3 (bludgeoning), Smashing",
+      "crit": "20",
+      "cost": 4,
+      "source": "MA 260",
+      "description": "A large hammer with a long haft for enabling a more powerful swing."
+    },
+    {
+      "name": "Wakizashi",
+      "category": "Archaic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (slashing), Dangerous",
+      "crit": "19-20",
+      "cost": 3,
+      "source": "MA 260",
+      "description": "The shorter companion blade to a katana, the wakizashi was primarily useful for close-in fighting (particularly indoors). It was also used for beheading a fallen foe and, most famously, to commit ritual suicide. Exotic Weapons"
+    },
+    {
+      "name": "Chain",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (bludgeoning), Grabbing, Reach 2, Tripping, Weak",
+      "crit": "20",
+      "cost": 5,
+      "source": "MA 261",
+      "description": "A length of chain can strike targets at a distance and can make grabbing and tripping easier."
+    },
+    {
+      "name": "Chain, Barbed",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (slashing), Dangerous, Grabbing, Reach, Weak",
+      "crit": "19-20",
+      "cost": 4,
+      "source": "MA 261",
+      "description": "A short length of chain with spikes or barbs tied into the links and attached to a single-grip handle."
+    },
+    {
+      "name": "Chakar",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (bludgeoning), Disarming",
+      "crit": "20",
+      "cost": 3,
+      "source": "MA 261",
+      "description": "An unusual weapon wielded by gatka practitioners, a chakar is a flattened wood or metal circle between one and two feet across, spanned by a single rod/handle. Attached at regular intervals along its perimeter are ropes or thin chains ending in weighted balls which are swung into a target by twirling the chakar with both hands using the centralized handle. Using a chakar one-handed is possible but difficult (apply Inaccurate when doing so, but because it is limited to onehanded, the cost cancels out). It may also be thrown, usually high so its spinning weights swing into the target from above."
+    },
+    {
+      "name": "Kawanga",
+      "category": "Exotic Melee Weapon",
+      "effect": "Damage 1 (slashing), Climbing 2, Grabbing, Entangling, Reach 2",
+      "crit": "20",
+      "cost": 7,
+      "source": "MA 261",
+      "description": "A oneto three-pronged, light grappling hook attached to a length of rope or thin chain, the kawanga may be used as a raking weapon or to assist in climbing. King Dragon Heart-Piercing Pole/Dragon Pole: A ninefoot staff/pole used by lung ying and wing chun practitioners. It is primarily for building upper body strength, and in training and showmanship more than actual combat."
+    },
+    {
+      "name": "King Dragon Heart-Piercing Pole/Dragon Pole",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (bludgeoning), Dangerous, Extended, Inaccurate, Reach 2",
+      "crit": "19-20",
+      "cost": 5,
+      "source": "MA 261"
+    },
+    {
+      "name": "Kusari-Gama, Blade",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (slashing), Dangerous, Double 19-20 (4) 6 Kusari-Gama, Chain Damage 2 (bludgeoning), Grabbing, Entangling, Reach 20 (5) 6 Latigo Damage 1 (slashing), Grabbing, Reach",
+      "crit": "20",
+      "cost": 3,
+      "source": "MA 261"
+    },
+    {
+      "name": "Latigo w/Stringray",
+      "category": "Exotic Melee Weapon",
+      "effect": "Damage 1 (slashing or piercing), Dangerous, Grabbing, Reach",
+      "crit": "19-20",
+      "cost": 4,
+      "source": "MA 261"
+    },
+    {
+      "name": "Li Zhao",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (slashing), Dangerous, Reluctant 2, Quirk",
+      "crit": "19-20",
+      "cost": 4,
+      "source": "MA 261",
+      "description": "The \"talon gauntlet\" is a primary weapon of the si wang long fighting style. It consists of a gauntlet with fingers that have been sharpened to resemble deadly talons, allowing for slashing, claw-like strikes. The talons impose a -2 penalty (skill check or attack, as appropriate) to anything requiring fine use of the fingers, such as operating a computer, tools, or other, hand-held weapons (consider a -1 flat point flaw)."
+    },
+    {
+      "name": "Mancatcher",
+      "category": "Exotic Melee Weapon",
+      "effect": "Damage 1 (piercing), Choking, Entangling, Grabbing, Reach",
+      "crit": "20",
+      "cost": 5,
+      "source": "MA 261",
+      "description": "This weapon consists of a pole with two outwardly curving bands at one end, fitted into a nearly enclosed ring. This ring is pressed around a subject, grabbing them within the bands where spikes press upon them, making any struggling or attempts to yank free the mancatcher from its wielder painful. A mancatcher can also choke an enemy if it ensnares the subject's neck."
+    },
+    {
+      "name": "Meteor Hammer",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 3 (bludgeoning), Double, Entangling, Reach 2, Tripping",
+      "crit": "20",
+      "cost": 8,
+      "source": "MA 261",
+      "description": "Two heavy spheres are fitted to either end of a chain. The weapon can be swung from the chain, using both spheres to attack simultaneously (Reach 1), or from one of the spheres, extending its reach (Reach 2)."
+    },
+    {
+      "name": "Nekode *",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 1 (slashing), Penetrating",
+      "crit": "20",
+      "cost": 2,
+      "source": "MA 261"
+    },
+    {
+      "name": "Net",
+      "category": "Exotic Melee Weapon",
+      "effect": "Grabbing 2, Entangling",
+      "crit": "20",
+      "cost": 3,
+      "source": "MA 261",
+      "description": "A mesh of strong cord or even metal, thrown or cast over a target to entangle it."
+    },
+    {
+      "name": "Nunchaku",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (bludgeoning), Disarming, Impressive",
+      "crit": "20",
+      "cost": 4,
+      "source": "MA 261",
+      "description": "A pair of sticks or batons (about a foot in length) connected by a short piece of rope or chain, originally an adaptation of a threshing flail. Nunchaku are wielded with circular and twirling motions to deflect incoming attacks and give momentum to the wielder's strikes."
+    },
+    {
+      "name": "Pata",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (slashing), Easy, Penetrating 2, Reluctant 2, Quirk",
+      "crit": "20",
+      "cost": 6,
+      "source": "MA 261",
+      "description": "This sword is used by wearing the fingerless gauntlet from which its short sword blade extends. Using a pata renders that hand unable to perform any other tasks, as it has no articulate fingers."
+    },
+    {
+      "name": "Sash Whip",
+      "category": "Exotic Melee Weapon",
+      "effect": "Damage 1 (bludgeoning), Disarming, Grabbing, Reach",
+      "crit": "20",
+      "cost": 4,
+      "source": "MA 261",
+      "description": "Some Asian cultures used a length of cloth (a belt, sash, or even sarong), often with small weights sewn into it, which could be wielded and cracked like a whip. It is easily camouflaged as a mundane garment when not in use."
+    },
+    {
+      "name": "Shuko *",
+      "category": "Exotic Melee Weapon",
+      "effect": "Damage 1 (slashing), Climbing 2",
+      "crit": "20",
+      "cost": 3,
+      "source": "MA 261"
+    },
+    {
+      "name": "Sword, Chain",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (slashing), Grabbing, Inaccurate, Reach, Uncertain",
+      "crit": "20",
+      "cost": 2,
+      "source": "MA 261",
+      "description": "This weapon is comprised of two sword blades, each over a foot long, connected by a length of chain. An awkward weapon to use, it is easily concealed and the blades may be disconnected for throwing."
+    },
+    {
+      "name": "Sword, Hook",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 3 (slashing), Double or Reach, Tripping",
+      "crit": "20",
+      "cost": 5,
+      "source": "MA 261",
+      "description": "These Chinese weapons, usually wielded in pairs, are designed with curved hooks at the end of the blade, a crescent-shaped handguard, and a sharp, daggerlike pommel. This design allows the swords to be wielded in a variety of ways. Hook swords are effective at tripping, catching opposing weapons, and blocking. They can even be hooked together at the tips, swinging the second sword out so its pommel slashes, extending the wielder's reach (+1 Reach while doing so)."
+    },
+    {
+      "name": "Sword, Khopesh",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 3 (slashing), Smashing, Tripping",
+      "crit": "20",
+      "cost": 5,
+      "source": "MA 261",
+      "description": "This large blade has a hook at the end. It is particularly useful for making trip attacks or smashing objects."
+    },
+    {
+      "name": "Three-Section-Staff",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (bludgeoning), Disarming, Double, Impressive, Reach",
+      "crit": "20",
+      "cost": 6,
+      "source": "MA 261",
+      "description": "This weapon is used in a similar fashion as nunchaku, but has three segments. It can be used as a double weapon with greater reach."
+    },
+    {
+      "name": "Urumi",
+      "category": "Exotic Melee Weapon",
+      "effect": "Damage 2 (slashing), Dangerous 2, Disarming, Risky, Uncertain 3",
+      "crit": "18-20",
+      "cost": 1,
+      "source": "MA 261",
+      "description": "This coiling sword has a single flexible, whiplike blade. Experts can move it to whip and mold around their body, lashing out to cut or grasp an opponent. The difficulty of correctly using this blade can make it dangerous to its wielder, as well."
+    },
+    {
+      "name": "Velayudaya",
+      "category": "Exotic Melee Weapon",
+      "effect": "Damage 2 (slashing), Dangerous, Disarming, Grabbing, Reach, Risky, Uncertain 3",
+      "crit": "19-20",
+      "cost": 2,
+      "source": "MA 261",
+      "description": "This whip-like weapon is fitted with four lengths of flexible metal, each of which sports a double edge. The metal strips are capable of cutting and flaying an opponent (or an inexperienced wielder) with surprising lethality. This weapon is used by masters of angampora."
+    },
+    {
+      "name": "War Fan *",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 1 (bludgeoning or slashing), Concealed, Defensive",
+      "crit": "20",
+      "cost": 3,
+      "source": "MA 261"
+    },
+    {
+      "name": "Warpick, Heavy",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 3 (piercing), Penetrating 3",
+      "crit": "20",
+      "cost": 6,
+      "source": "MA 261"
+    },
+    {
+      "name": "Warpick, Light",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 1 (piercing), Penetrating",
+      "crit": "20",
+      "cost": 2,
+      "source": "MA 261"
+    },
+    {
+      "name": "Whip",
+      "category": "Exotic Melee Weapon",
+      "effect": "Damage 1 (slashing), Disarming, Grabbing, Reach 2",
+      "crit": "20",
+      "cost": 5,
+      "source": "MA 261",
+      "description": "A long, flexible strand, often braided leather, a whip can be cracked so the tip strikes with considerable force, used as a goad for animals (or even sentient slaves or prisoners). A whip can also wrap around a limb or limbs to restrain a target."
+    },
+    {
+      "name": "Whip, Chain",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 1 (bludgeoning), Concealable, Grabbing, Reach 2, Weak",
+      "crit": "20",
+      "cost": 4,
+      "source": "MA 261",
+      "description": "A series of metal bars held together by chain links, this weapon can be folded up and hidden within one's clothes to be unleashed and swung when needed. Each end is fitted with a weight that can deliver a lashing strike, aids in building momentum, and/or may be caught so that the weapon may change hands."
+    },
+    {
+      "name": "Wind and Fire Wheel *",
+      "category": "Exotic Melee Weapon",
+      "effect": "Strength-Based Damage 2 (slashing)",
+      "crit": "20",
+      "cost": 2,
+      "source": "MA 261"
+    },
+    {
+      "name": "Yo-Yo",
+      "category": "Exotic Melee Weapon",
+      "effect": "Damage 1 (bludgeoning or slashing if sharpened), Concealable, Reach",
+      "crit": "20",
+      "cost": 3,
+      "source": "MA 261",
+      "description": "Traditionally a toy with a length of string wrapped around an axle/spool fixed between two disks, practitioners of yo-yodo have turned it into a weapon. Using momentum and gravity, the disks are unspooled at the target before bringing the yo-yo back by pulling on the string, winding it back around the spool. The disks of some combat yo-yos are of sharpened or even serrated metal rather than wood or plastic. Ranged Weapons The following ranged weapons use the first option for ranged weapons presented earlier in this work (pg 258). Many of the previous weapons--particularly some blades and polearms-- can also be thrown using the second or third options for ranged weapons."
+    },
+    {
+      "name": "Arrow: Broad Head",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage as bow +2 ranks, Ammunition, Inaccurate",
+      "crit": "20",
+      "cost": "Bow + 1",
+      "source": "MA 267"
+    },
+    {
+      "name": "Arrow: Dragon's Tongue",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage as bow, Ammunition, Penetrating",
+      "crit": "20",
+      "cost": "Bow + 1",
+      "source": "MA 267"
+    },
+    {
+      "name": "Arrow: Fish Point",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage as bow, Ammunition, Secondary Effect, Triggered",
+      "crit": "20",
+      "cost": "Varies",
+      "source": "MA 267"
+    },
+    {
+      "name": "Arrow: Frog Crotch",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage as bow, Ammunition, Smashing (limited to cutting)",
+      "crit": "20",
+      "cost": "Bow + 1",
+      "source": "MA 267"
+    },
+    {
+      "name": "Arrow: Skinsplitter",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage as bow, Ammunition, Dangerous",
+      "crit": "19-20",
+      "cost": "Bow + 1",
+      "source": "MA 267"
+    },
+    {
+      "name": "Arrow: Willow Leaf",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage as bow, Ammunition, Precise",
+      "crit": "20",
+      "cost": "Bow + 1",
+      "source": "MA 267"
+    },
+    {
+      "name": "Blowgun",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Affliction (Poison; Resisted and Overcome by Fortitude; Impaired, Disabled, Incapacitated; Resistible [Toughness])",
+      "crit": "20",
+      "cost": "1/rank",
+      "source": "MA 267",
+      "description": "A hollow tube used to fire small darts by blowing into one end. The blowgun is typically a weapon for hunting or assassination using darts tipped with poisons because the weapon's actual damage is negligible."
+    },
+    {
+      "name": "Bow",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage 3 (piercing)",
+      "crit": "20",
+      "cost": 6,
+      "source": "MA 267",
+      "description": "Whether an archaic weapon of wood (often reinforced with horn or similar materials) or a modern bow made of metal or composites, it fires bladed or pointed arrows. A wide range of \"trick\" arrows are common (see the Trick Arrows section, pg 268) Some bows are specially crafted to work with the wielder's strength. This allows the bow's Damage to become Strength-Based. The Gamemaster should appropriately increase the value and DC to create such weapons compared to standard bows. Chapter 8: Tools of the Fight 268"
+    },
+    {
+      "name": "Bow, Strength",
+      "category": "Projectile Weapon",
+      "effect": "Strength-Based Ranged Damage 3 (piercing)",
+      "crit": "20",
+      "cost": 6,
+      "source": "MA 267"
+    },
+    {
+      "name": "Crossbow",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage 3 (piercing)",
+      "crit": "20",
+      "cost": 6,
+      "source": "MA 267",
+      "description": "Like a bow, but with a pistol-like trigger and stock, and generally easier to load and draw. A modern crossbow might even be semi-automatic, self-loading with each pull of the trigger."
+    },
+    {
+      "name": "Daikyu",
+      "category": "Projectile Weapon",
+      "effect": "Strength-Based Ranged Damage 4 (piercing), Dangerous, Extended Range",
+      "crit": "19-20",
+      "cost": 10,
+      "source": "MA 267",
+      "description": "An incredibly long bow standing taller than most men, the Japanese longbow is traditionally made of bamboo and fitted with a hemp string to grant it impressive power. Daikyu add the wielder's Strength bonus to their damage."
+    },
+    {
+      "name": "Fukumu-Bari",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage 1 (piercing), Diminished Range 2, Multiattack",
+      "crit": "20",
+      "cost": 1,
+      "source": "MA 267"
+    },
+    {
+      "name": "Hankyu",
+      "category": "Projectile Weapon",
+      "effect": "Strength-Based Ranged Damage 2 (piercing), Weak",
+      "crit": "20",
+      "cost": 3,
+      "source": "MA 267",
+      "description": "A short bow designed to be easily concealed and non-encumbering, the bow, therefore, suffers from a lack of power. Hankyu add some of the wielder's Strength bonus to their damage. There is a variation that collapses, making it and its arrows easier to hide. Add the Concealable quality (+1 point) to such a version."
+    },
+    {
+      "name": "Sling",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage 1 (bludgeoning)",
+      "crit": "20",
+      "cost": 2,
+      "source": "MA 267",
+      "description": "A small pouch able to hold a stone or metal \"bullet\" sphere. It is typically spun from cords, and one end of the weapon is released to sling the stone at the target. Staff slings place the pouch at the end of a long handle, which is swung or snapped to fire the sling bullet."
+    },
+    {
+      "name": "Slingshot",
+      "category": "Projectile Weapon",
+      "effect": "Ranged Damage 1 (bludgeoning), Accurate, Diminished Range",
+      "crit": "20",
+      "cost": 2,
+      "source": "MA 267",
+      "description": "A small, hand-held ranged weapon that uses an elastic sling mounted between two forks to propel a small stone, metal ball, or the like. Technically a child's toy, a slingshot can be surprisingly effective and accurate although its range is incredibly limited. Most modern slingshots collapse for ease of concealment and storage. Chapter 8: Tools of the Fight Projectile Weapons Weapon Effect Critical Cost Arrow Broad Head Ranged Damage as bow +2 ranks, Ammunition, Inaccurate 20 Bow + 1 Dragon's Tongue Ranged Damage as bow, Ammunition, Penetrating 20 Bow + 1 Fish Point Ranged Damage as bow, Ammunition, Secondary Effect, Triggered 20 Varies Frog Crotch Ranged Damage as bow, Ammunition, Smashing (limited to cutting) 20 Bow + 1"
+    },
+    {
+      "name": "Bolos",
+      "category": "Thrown Weapon",
+      "effect": "Ranged, Grabbing 3 (No Damage)",
+      "crit": "20",
+      "cost": 6,
+      "source": "MA 267",
+      "description": "This is a set of three or four weights connected by cords to a central hub. A bolo is thrown in such a way as to make the weights spin around the center point, allowing the cords to wrap around the target and restrain it. Like other thrown weapons, bolos use one of the three options listed for ranged weapons (pg 258)."
+    },
+    {
+      "name": "Boomerang",
+      "category": "Thrown Weapon",
+      "effect": "Ranged Damage 1 (bludgeoning)",
+      "crit": "20",
+      "cost": 2,
+      "source": "MA 267",
+      "description": "A common throwing weapon for heroes, a thrown boomerang returns to the thrower's hand, ready to be thrown again in the next round (less a Feature and more a special descriptor). Boomerang wielders often use this property of the weapon to feint, allowing for an attack against a vulnerable target on the return arc on the attacker's next turn."
+    },
+    {
+      "name": "Chakram",
+      "category": "Thrown Weapon",
+      "effect": "Ranged Damage 3 (slashing), Dangerous",
+      "crit": "19-20",
+      "cost": 7,
+      "source": "MA 267",
+      "description": "This Indian throwing weapon is a metal ring with a sharpened outer edge, spun when it is thrown for additional cutting power. A master chakram wielder may have the Throwing Mastery advantage and the Ricochet extra as a power with the training or skill descriptors."
+    },
+    {
+      "name": "Dart",
+      "category": "Thrown Weapon",
+      "effect": "Ranged Damage 1 (piercing), Diminished Range, Penetrating",
+      "crit": "20",
+      "cost": 2,
+      "source": "MA 267",
+      "description": "A weighted throwing spike, typically with vanes or fletching to help guide its flight."
+    },
+    {
+      "name": "Javelin",
+      "category": "Thrown Weapon",
+      "effect": "Ranged Damage 2 (piercing), Dangerous",
+      "crit": "19-20",
+      "cost": 5,
+      "source": "MA 267",
+      "description": "A thin, light spear about three feet long, primarily designed for throwing."
+    },
+    {
+      "name": "Nageteppo: Black Powder",
+      "category": "Thrown Weapon",
+      "effect": "Burst Area Damage 3 (bludgeoning)",
+      "crit": null,
+      "cost": 6,
+      "source": "MA 267"
+    },
+    {
+      "name": "Nageteppo: Flash Powder",
+      "category": "Thrown Weapon",
+      "effect": "Burst Area Affliction 3 (Resisted and Overcome by Fortitude; Impaired, Disabled, Unaware), Limited to Sight",
+      "crit": null,
+      "cost": 3,
+      "source": "MA 267"
+    },
+    {
+      "name": "Nageteppo: Lacquer Poison",
+      "category": "Thrown Weapon",
+      "effect": "Cloud Area Affliction 3 (Resisted and Overcome by Fortitude; Impaired, Disabled), Limited Degree",
+      "crit": null,
+      "cost": 3,
+      "source": "MA 267"
+    },
+    {
+      "name": "Nageteppo: Smoke",
+      "category": "Thrown Weapon",
+      "effect": "Cloud Area Concealment 2 (Normal Sight), Attack",
+      "crit": null,
+      "cost": 6,
+      "source": "MA 267"
+    },
+    {
+      "name": "Shuriken",
+      "category": "Thrown Weapon",
+      "effect": "Ranged Damage 1 (piercing), Multiattack",
+      "crit": "20",
+      "cost": 3,
+      "source": "MA 267",
+      "description": "These Japanese throwing weapons come in two main types: spike or bo shuriken are short metal spikes similar to large nails while star shuriken are flat star-shaped wheels with sharpened edges. Both are relatively easily concealed in sleeves or sashes and typically thrown several at a time (giving them the Multiattack modifier). Ninjas are infamous for applying poisons to the points and edges of shuriken, adding an Affliction effect (resisted and overcome by Fortitude) to the weapon's damage."
+    },
+    {
+      "name": "Steel Ball",
+      "category": "Thrown Weapon",
+      "effect": "Strength-Based Ranged Damage 1 (bludgeoning)",
+      "crit": "20",
+      "cost": 2,
+      "source": "MA 267",
+      "description": "This is essentially an over-sized ball bearing used for throwing. It has the advantage of not appearing as a weapon and being easy to conceal. If desperate, it can also be wrapped in a cloth or the like and used as a close ranged weapon with the Inaccurate quality. Trick Arrows The following arrowheads can be manufactured by anyone with sufficient talent, but are mainly used by characters that will employ the bow (or crossbow) as the primary expression of their abilities. Each arrow is presented in terms of its cost per rank, allowing the Gamemaster and players to customize them as desired, or as a flat cost, as appropriate. The cost of the Ammunition extra assumes +0, but increase to +1 cost per rank if the trick arrow's range would"
+    },
+    {
+      "name": "Helicopter Blade",
+      "category": "Improvised Weapon",
+      "effect": "Strength-Based Damage 4 (slashing), Impressive, Reach 4",
+      "crit": "20",
+      "toughness": 8,
+      "weight": 3,
+      "cost": 9,
+      "source": "MA 272",
+      "description": "When torn from a helicopter's main rotor, one of these blades can serve as an impromptu sword."
+    },
+    {
+      "name": "I-Beam",
+      "category": "Improvised Weapon",
+      "effect": "Strength-Based Damage 4 (bludgeoning), Impressive, Reach 4",
+      "crit": "20",
+      "toughness": 10,
+      "weight": 7,
+      "cost": 9,
+      "source": "MA 272",
+      "description": "Typical of the sort found on a high-rise construction site, this steel beam is intended to act as a structure's supporting skeleton but can make an effective club."
+    },
+    {
+      "name": "Manhole Cover",
+      "category": "Improvised Weapon",
+      "effect": "Strength-Based Damage 3 (bludgeoning), Defensive, Impressive",
+      "crit": "20",
+      "toughness": 9,
+      "weight": 2,
+      "cost": 5,
+      "source": "MA 272",
+      "description": "A round, metal plate used to cover a street's manhole. Although they are useful for hitting an opponent with, they can also be used as shields. Manhole covers can be thrown, although doing so deprives the wielder of the weapon."
+    },
+    {
+      "name": "Parking Meter",
+      "category": "Improvised Weapon",
+      "effect": "Strength-Based Damage 3 (bludgeoning)",
+      "crit": "20",
+      "toughness": 8,
+      "weight": 2,
+      "cost": 3,
+      "source": "MA 272",
+      "description": "The old fashioned, \"Insert coin, spin knob\" variety that may be rooted up from the ground and swung like a club by its steel pole."
+    },
+    {
+      "name": "Power Line",
+      "category": "Improvised Weapon",
+      "effect": "Damage 2 (slashing), Disarming, Grabbing, Reach 2+, Tripping, Weak",
+      "crit": "20",
+      "toughness": 7,
+      "weight": "Varies",
+      "cost": 6,
+      "source": "MA 272",
+      "description": "These high-tension cables are ideal for dishing out a good lashing, with weight and length varying (increase Extended Reach to suit longer sections). These statistics may also be used for telephone wire, although the Toughness is reduced to 5. Determine a powerline's weight based on its length (and thus its reach): 15 lbs per 5 feet."
+    },
+    {
+      "name": "Street Light",
+      "category": "Improvised Weapon",
+      "effect": "Strength-Based Damage 4 (bludgeoning), Impressive, Reach 5, Weak",
+      "crit": "20",
+      "toughness": 9,
+      "weight": 9,
+      "cost": 9,
+      "source": "MA 272",
+      "description": "Whether torn directly from the ground or picked up after being knocked down during a fight, street lights or lamp posts can make for handy improvised clubs."
+    },
+    {
+      "name": "Tank Turret",
+      "category": "Improvised Weapon",
+      "effect": "Strength-Based Damage 5 (bludgeoning), Impressive, Reach 3, Inaccurate",
+      "crit": "20",
+      "toughness": 12,
+      "weight": 8,
+      "cost": 8,
+      "source": "MA 272",
+      "description": "When torn off the tank's chassis, the main turret may be grasped by the cannon and swung like an oddly weighted club. Chapter 8: Tools of the Fight Armor Armor Effect Cost Fencing Protection 2, Limited to Piercing 1 Kendo Protection 2 2 Samurai Protection 4 4 Sparring Protection 2, Quirk (Hand and Foot Attacks become Nonlethal) 1 Stealth Suit Protection 2; Concealment 2 (Infravision), Partial, Passive; Enhanced Stealth 2 (+4) 5 Training Armor Impervious Protection 3, Limited to Bludgeoning, Reduced Agility 1 * 1 * See Better Mousetrap 3e 273"
+    },
+    {
+      "name": "Telephone Pole",
+      "category": "Improvised Weapon",
+      "effect": "Strength-Based Damage 4 (bludgeoning), Impressive, Reach 5",
+      "crit": "20",
+      "toughness": 3,
+      "weight": 6,
+      "cost": 10,
+      "source": "MA 272",
+      "description": "Whether torn directly from the ground or picked up after being knocked down during a fight, telephone poles make great improvised clubs."
+    },
+    {
+      "name": "Wrecking Ball, Small",
+      "category": "Improvised Weapon",
+      "effect": "Strength-Based Damage 4 (bludgeoning), Impressive, Reach 6+, Smashing",
+      "crit": "20",
+      "toughness": 10,
+      "weight": 6,
+      "cost": 12,
+      "source": "MA 272",
+      "description": "Torn from the crane from which it is swung during a demolition, anyone strong enough may use some of its remaining chain to swing it about like a giant flail."
+    },
+    {
+      "name": "Wrecking Ball, Large",
+      "category": "Improvised Weapon",
+      "effect": "Strength-Based Damage 6 (bludgeoning), Impressive, Reach 6+, Smashing",
+      "crit": "20",
+      "toughness": 12,
+      "weight": 8,
+      "cost": 14,
+      "source": "MA 272",
+      "description": "A much heavier version of the small wrecking ball, this demolition tool is usually used against reinforced structures. Armor"
+    }
+  ],
+  "ma_armor": [
+    {
+      "name": "Fencing",
+      "category": "Martial Arts Armor",
+      "effect": "Protection 2, Limited to Piercing",
+      "cost": 1,
+      "source": "MA 273",
+      "description": "A full suit made of durable nylon or cotton, ballistic material has been added to the upper suit. The face mask is comprised of a plastic or metal mesh screen over and around the face (some competitions now allow for a plastic viewing plate amongst the mesh) with a bib hanging beneath to protect the neck. The suit only protects against piercing attacks."
+    },
+    {
+      "name": "Kendo",
+      "category": "Martial Arts Armor",
+      "effect": "Protection 2",
+      "cost": 2,
+      "source": "MA 273",
+      "description": "Comprised of a helmet sporting a metal grill to protect the face, a wooden breastplate covers the chest while three padded, fabric faulds cover the waist's front. Fabric gauntlets with thick padding protect the forearms, wrists, and hands."
+    },
+    {
+      "name": "Samurai",
+      "category": "Martial Arts Armor",
+      "effect": "Protection 4",
+      "cost": 4,
+      "source": "MA 273",
+      "description": "Largely formed from layers of protective \"scale\" plates of metal where the body was most vulnerable and leather strips and scales elsewhere. The helmet typically sported a stylized face plate."
+    },
+    {
+      "name": "Sparring",
+      "category": "Martial Arts Armor",
+      "effect": "Protection 2, Quirk (Hand and Foot Attacks become Nonlethal)",
+      "cost": 1,
+      "source": "MA 273",
+      "description": "Used during practice bouts and competitions, this \"armor\" is little more than padding to cover the hands, top of the feet, and head (although the face remains exposed). Aside from providing protection, it also reduces the chance of harming one's opponents."
+    },
+    {
+      "name": "Stealth Suit",
+      "category": "Martial Arts Armor",
+      "effect": "Protection 2; Concealment 2 (Infravision), Partial, Passive; Enhanced Stealth 2 (+4)",
+      "cost": 5,
+      "source": "MA 273",
+      "description": "Used by high-tech espionage infiltrators and assassins, the suit is designed to blend into shadows and the like. Also, its materials muffle the sounds of movement and cool the body, reducing the wearer's heat signature."
+    },
+    {
+      "name": "Training Armor",
+      "category": "Martial Arts Armor",
+      "effect": "Impervious Protection 3, Limited to Bludgeoning, Reduced Agility 1 *",
+      "cost": 1,
+      "source": "MA 273",
+      "description": "This modern protective suit consists of heavily padded, open-faced headgear, chest protector, and shin guards. Some also come with padding for the top of the feet, adding Quirk (Foot Attacks become Nonlethal). The pads are not designed to protect against real weapons. Mystic and Outlandish Martial Arts Equipment The following weapons and items are designed as examples of the sort of mystical and unusual type of gear one would expect to find in the hands of someone who combines oriental mysticism or otherworldly skill with their martial arts. Some are a general type of weapon or item while others"
+    }
+  ],
+  "trick_arrows": [
+    {
+      "name": "Acid Arrow",
+      "category": "Trick Arrow",
+      "effect": "Ranged Weaken Toughness, Affects Objects, Ammunition",
+      "cost_text": "3 points per rank",
+      "description": "The arrowhead breaks, splashing an acid around the point of impact that eats through organic and inorganic matter. Add the Area extra to expand the arrow's splash.",
+      "source": "MA 268"
+    },
+    {
+      "name": "Adhesive Arrow",
+      "category": "Trick Arrow",
+      "effect": "Ranged Affliction (Resisted by Dodge, Overcome by Strength and Damage; Hindered and Vulnerable, Defenseless and Immobile), Ammunition, Contagious, Extra Condition, Limited Degree",
+      "cost_text": "3 points per rank",
+      "description": "The arrowhead makes whatever it strikes sticky with a special adhesive. This will not only stick the target to a nearby surface (what depends on where the target is struck), but also makes anything subsequently touching that spot also stick to it. Add the Area extra to expand the arrow's effect.",
+      "source": "MA 268"
+    },
+    {
+      "name": "Armor Piercing Arrow",
+      "category": "Trick Arrow",
+      "effect": "Penetrating",
+      "cost_text": "add 1 point per rank",
+      "description": "Regardless of the arrow's other aspects, it is also intended to punch through armor.",
+      "source": "MA 268"
+    },
+    {
+      "name": "Blunted Arrow",
+      "category": "Trick Arrow",
+      "effect": "Ranged Damage, Ammunition, Nonlethal",
+      "cost_text": "-1 point, plus 2 points per rank",
+      "description": "The arrowhead has no point and is sufficiently cushioned that it does not deliver a lethal blow. Chapter 8: Tools of the Fight",
+      "source": "MA 268"
+    },
+    {
+      "name": "Boomerang Arrow",
+      "category": "Trick Arrow",
+      "effect": "Ranged Damage, Ammunition, Indirect",
+      "cost_text": "1 point, plus 2 points per rank",
+      "description": "The arrowhead releases two spring-loaded wings while in flight, allowing it to bypass the intended target, boomerang, and strike from behind on the arrow's return course.",
+      "source": "MA 269"
+    },
+    {
+      "name": "Bouncing Arrow",
+      "category": "Trick Arrow",
+      "effect": "Ranged Damage, Ammunition, Ricochet",
+      "cost_text": "1 point, plus 2 points per rank",
+      "description": "The arrow is designed to be bounced off an appropriate surface to strike at an intended target following the ricochet without it losing any of its edge or momentum. Add more ranks of Ricochet to allow the arrow to bounce more than once.",
+      "source": "MA 269"
+    },
+    {
+      "name": "Climbing Line Arrow",
+      "category": "Trick Arrow",
+      "effect": "Movement 1 (Wall-Crawling), Ammunition, Limited to Wall-Crawling towards Target Point",
+      "cost_text": "1 point",
+      "description": "The arrowhead unspools a light line behind it, allowing someone to then climb up the line between the arrow's point of original and wherever it strikes.",
+      "source": "MA 269"
+    },
+    {
+      "name": "Concussive Arrow",
+      "category": "Trick Arrow",
+      "effect": "Ranged Damage, Ammunition, Enhanced Knockback*, Knockback Only",
+      "cost_text": "1 points, plus 1 point per rank",
+      "description": "The arrow releases a contained concussive explosion upon impact. This is pure force that is intended to be nonlethal. Add more ranks of Enhanced Knockback to make the arrowhead more potent, and an Area to make the concussive blast larger. * See Better Mousetrap 3e Electromagnetic Pulse (EMP) Effect: Ranged Weaken Electronics, Affects Only Objects, Broad, Simultaneous, Ammunition 4 points per rank The arrow emits a powerful-but-focused electromagnetic pulse (EMP) on impact that overloads electronics in the target. Weakened electronics must be repaired or components replaced to recover from its effects. Add the Area extra to spread this effect over a wider area.",
+      "source": "MA 269"
+    },
+    {
+      "name": "Explosive Arrow",
+      "category": "Trick Arrow",
+      "effect": "Burst Area Ranged Damage, Ammunition",
+      "cost_text": "3 points",
+      "description": "per rank An explosion is detonated upon the arrow's impact. Increase the ranks of Burst Area to increase the explosion's size.",
+      "source": "MA 269"
+    },
+    {
+      "name": "Fire-Fighting Arrow",
+      "category": "Trick Arrow",
+      "effect": "Burst Area Nullify Fire, Ammunition",
+      "cost_text": "2 points per rank",
+      "description": "A burst of fire-fighting foam is unleashed upon impact. Increase the ranks of Burst Area to increase the amount of area covered in foam.",
+      "source": "MA 269"
+    },
+    {
+      "name": "Flare Arrow",
+      "category": "Trick Arrow",
+      "effect": "Environmental Control (Light, 2 points/rank), Ammunition, Liberated *",
+      "cost_text": "2 points per rank",
+      "description": "The arrow unleashes a phosphorous glow at the apex of its flight or upon impact, filling the area with light. Add more ranks of Liberated to make the flare's light last longer. * See Better Mousetrap 3e",
+      "source": "MA 269"
+    },
+    {
+      "name": "Flash Arrow",
+      "category": "Trick Arrow",
+      "effect": "Cumulative Ranged Affliction (Resisted by Fortitude; Impaired, Disabled, Unaware), Ammunition, Limited to Vision",
+      "cost_text": "2 points per rank",
+      "description": "The arrow unleashes a bright-but-localized, blinding flash upon impact. Add the Burst Area extra if you'd like the flash to blind over a greater area.",
+      "source": "MA 269"
+    },
+    {
+      "name": "Flash-Bang Arrow",
+      "category": "Trick Arrow",
+      "effect": "Cumulative Ranged Affliction (Resisted by Will; Impaired, Disabled, Unaware), Ammunition, Extra Condition (Sense), Limited to Auditory and Vision",
+      "cost_text": "3 points per rank",
+      "description": "On impact, the arrowhead bursts loudly and with a blinding light. Add the Burst Area extra if you'd like the flash-bang to blind and deafen over a greater area.",
+      "source": "MA 269"
+    },
+    {
+      "name": "Freezing Arrow",
+      "category": "Trick Arrow",
+      "effect": "Ranged Damage (Cold), Ammunition",
+      "cost_text": "2 points per rank",
+      "description": "The arrowhead releases a freezing agent over the point of impact. Add an Area if you want the freezing cold to spread around more. Gas, Paralysis Effect: Cloud Area Ranged Affliction (Resisted by Fortitude; Hindered, Immobilized, Paralyzed), Ammunition 3 points per rank On impact, the arrowhead sprays a cloud of paralyzing gas around it. Additional ranks of Cloud will make the gas cover a wider area. Gas, Sleep Effect: Cloud Area Ranged Affliction (Resisted by Fortitude; Dazed, Stunned, Incapacitated), Ammunition, Sleep 3 points per rank Chapter 8: Tools of the Fight On impact, the arrowhead sprays a cloud of gas around it intended to put those in the cloud to sleep. Additional ranks of Cloud will make the gas cover a wider area. Gas, Tear Effect: Cloud Area Cumulative Ranged Affliction (Resisted by Fortitude; Impaired [Vision] and Dazed, Disabled [Vision] and Stunned, Unaware [Vision] and Incapacitated), Ammunition, Extra Condition, Limited to Vision (Impaired, Disabled, Unaware) 4 points per rank The arrowhead releases a cloud of tear gas on impact. Tear gas is both sickeningly choking and blinding.",
+      "source": "MA 269"
+    },
+    {
+      "name": "Incendiary Arrow",
+      "category": "Trick Arrow",
+      "effect": "Ranged Damage (Fire), Ammunition, Contagious",
+      "cost_text": "3 points per rank",
+      "description": "The arrow sparks with ignited white phosphorous on impact, not only burning the point of impact but potentially also starting a fire.",
+      "source": "MA 270"
+    },
+    {
+      "name": "Microphone Arrow",
+      "category": "Trick Arrow",
+      "effect": "Communication 2 (Radio), Ammunition, Subtle, Limited to Broadcasting",
+      "cost_text": "7 points",
+      "description": "When the arrow hits its target, a microphone in the arrowhead is activated. The microphone then broadcasts what it hears nearby.",
+      "source": "MA 270"
+    },
+    {
+      "name": "Net Arrow",
+      "category": "Trick Arrow",
+      "effect": "Burst Area Ranged Affliction (Resisted by Dodge, Overcome by Strength and Damage; Hindered and Vulnerable, Defenseless and Immobile), Ammunition, Extra Condition, Limited Degree",
+      "cost_text": "3 points per rank",
+      "description": "On impact, the entire arrow breaks apart, unfurling a net over the target area.",
+      "source": "MA 270"
+    },
+    {
+      "name": "Riot Arrow",
+      "category": "Trick Arrow",
+      "effect": "Burst Area Ranged Affliction (Resisted by Fortitude; Dazed, Stunned, Incapacitated), Ammunition",
+      "cost_text": "3 points",
+      "description": "per rank On impact, the arrowhead unleashes a barrage of rubber pellets, tiny bean bags, an electrical shock, or something similar that fills the area with a crowd control effect.",
+      "source": "MA 270"
+    },
+    {
+      "name": "Screamer Arrow",
+      "category": "Trick Arrow",
+      "effect": "Cumulative Ranged Affliction (Resisted by Fortitude; Impaired, Disabled, Unaware), Ammunition, Limited to Auditory",
+      "cost_text": "2 points per rank",
+      "description": "The arrow unleashes a loud-but-localized, deafening screech upon impact. Add the Burst Area extra if you'd like the sound to deafen over a greater area. Alternatively or additionally, apply sufficient ranks of the Line Area with Alternate Attack (Ranged) * and remove the Ranged extra to have the screamer unleash its sound along its flight trajectory. * See Better Mousetrap 3e",
+      "source": "MA 270"
+    },
+    {
+      "name": "Shocking Arrow",
+      "category": "Trick Arrow",
+      "effect": "Ranged Damage (Electricity), Ammunition, Contagious",
+      "cost_text": "3 points per rank",
+      "description": "This arrowhead zaps its target with a powerful electrical shock upon impact. The electricity may travel through conductive materials. Add the Burst Area if you want the electricity to discharge over a wider area.",
+      "source": "MA 270"
+    },
+    {
+      "name": "Shotgun Arrow",
+      "category": "Trick Arrow",
+      "effect": "Cone Area Ranged Damage, Ammunition",
+      "cost_text": "3 points",
+      "description": "per rank On impact, the arrowhead fires a cone of buckshot in the direction it is facing, much like a shotgun.",
+      "source": "MA 270"
+    },
+    {
+      "name": "Slick Arrow",
+      "category": "Trick Arrow",
+      "effect": "Burst Area Ranged Affliction (Resisted by Dodge, Overcome by Agility/Acrobatics; Vulnerable and Prone), Ammunition, Limited Degree 2",
+      "cost_text": "1 point per rank",
+      "description": "Chapter 8: Tools of the Fight Optional Rule: Improvised Weapon Damage If you want improvised weapons to stand apart from standard weapons a bit more, try the following option rule when it comes to their Damage modifier. The Damage modifier of an improvised weapon is equal to the wielder's Strength instead of that which is provided here. If the weapon's Toughness exceeds the wielder's Strength, there is an additional Damage bonus applied equal to the difference between the two, up to +2. A character with Strength 8 is wielding a tank turret as an improvised weapon. The tank would normally be Damage 5, but its Toughness of 12 is higher than the character's Strength by 4, so this applies an additional bonus of +2 (the maximum possible). In this character's hands, the tank turret is a Close Damage 10 weapon. On impact, the arrowhead covers the immediate area with an incredibly slippery substance.",
+      "source": "MA 270"
+    },
+    {
+      "name": "Smoke Arrow",
+      "category": "Trick Arrow",
+      "effect": "Cloud Area Ranged Concealment 2 (Visual), Ammunition, Attack, Liberated *",
+      "cost_text": "8 points",
+      "description": "On impact, the arrowhead mixes chemicals that create a thick cloud of smoke around it. * See Better Mousetrap 3e",
+      "source": "MA 271"
+    },
+    {
+      "name": "Tangle Line Arrow",
+      "category": "Trick Arrow",
+      "effect": "Ranged Affliction (Resisted by Dodge, Overcome by Damage/Strength; Prone and Vulnerable, Defenseless and Immobilized), Ammunition, Extra Condition, Limited Degree",
+      "cost_text": "2 points per rank",
+      "description": "On impact, this blunted arrowhead unleashes a cord with weighted ends. The cord's weights use the arrow's momentum to wrap around the target, possibly tripping and ensnaring it.",
+      "source": "MA 271"
+    },
+    {
+      "name": "Taser Arrow",
+      "category": "Trick Arrow",
+      "effect": "Range Affliction (Resisted by Fortitude; Dazed, Stunned, Incapacitated), Ammunition, Contagious",
+      "cost_text": "3 points per rank",
+      "description": "Being struck by this arrow means being zapped with a powerful electrical discharge intended to stun rather than cause actual harm. The electrical charge may travel through conductive materials.",
+      "source": "MA 271"
+    },
+    {
+      "name": "Tracer Arrow",
+      "category": "Trick Arrow",
+      "effect": "Senses 2 (Direction Sense, Distance Sense), Ammunition, Limited to Relative to Arrow's Position",
+      "cost_text": "1 point",
+      "description": "Activated when the arrow strikes something, the arrowhead contains a tracer beacon that someone who knows the signal's frequency may use to follow to the arrowhead's location.",
+      "source": "MA 271"
+    },
+    {
+      "name": "Tranquilizer Arrow",
+      "category": "Trick Arrow",
+      "effect": "Ranged Affliction (Resisted by Fortitude; Dazed, Stunned, Incapacitated), Ammunition, Sleep",
+      "cost_text": "2 points",
+      "description": "per rank The arrowhead injects its target with a tranquilizer upon impact, making the subject groggy or possibly putting them to sleep.",
+      "source": "MA 271"
+    },
+    {
+      "name": "Whistle Arrow",
+      "category": "Trick Arrow",
+      "effect": "Ranged Feature (Whistle), Ammunition",
+      "cost_text": "2 points",
+      "description": "The arrowhead has holes placed within it that allows air to pass through during flight, resulting in a loud whistle so long as the arrow remains airborne. This may be added to other trick arrow types to create a whistling variation.",
+      "source": "MA 271"
+    },
+    {
+      "name": "White Noise Arrow",
+      "category": "Trick Arrow",
+      "effect": "Burst Area Ranged Concealment (Auditory), Ammunition, Attack, Liberated *",
+      "cost_text": "4 points per rank",
+      "description": "The arrowhead emits white noise on impact, effectively canceling any other sound in the area. * See Better Mousetrap 3e",
+      "source": "MA 271"
+    }
+  ],
+  "mystic_items": [
+    {
+      "name": "Bracers of the Monkey",
+      "cost_text": "18 points",
+      "description": "Rumored to have been created by Sun Wukong, the Monkey King, these bracers grant the wearer understanding and ability with the monkey fist fighting style so long as they are worn. The Monkey King is not without a sense of humor, however. The wearer has been known to initiate hou quan maneuvers when least expected--crawling up walls when intending to only step out of someone's way, for instance, or uttering \"ook, ook\" or otherwise acting distinctly monkey-like in the middle of a conversation. Bracers of the Monkey (Removable): Variable 4 (Any Hou Quan Trait), Limited to Hou Quan Traits Not Already Known, Quirk (Monkey-Like Behavior), Uncontrolled - 15 points",
+      "source": "MA 274",
+      "category": "Mystic Item"
+    },
+    {
+      "name": "Artifact of the Way",
+      "cost_text": "5 points per rank plus Removable or Easily Removable",
+      "description": "These items, which range in appearance from a flashy piece of jewelry to a nondescript sash, have each been empowered by a master of both sorcery and the martial arts. They grant the wielder enhanced or entirely new martial talents, although what manifests is not within the wielder's control. Although fate usually gives them what they need (well, as best as the relevant fighting style is able to), it frequently acts to bestow the artifact's \"gifts\" at inopportune moments. Artifact of the Way (Removable): Variable (Any Trait of Respective Fighting Style), Limited to Fighting Style Traits Not Already Known, Uncontrolled - 5 points per rank plus Removable or Easily Removable Gamemasters should ",
+      "source": "MA 274",
+      "category": "Mystic Item"
+    },
+    {
+      "name": "Blade of the Celestial Emperor",
+      "cost_text": "40 points",
+      "description": "Thought to have purposefully been left on Earth by the Celestial Emperor of the Taoist faith--to what ends no one knows--this blade grants the wielder unimagined power. Legend holds that the blade was hidden by monks so only someone worthy of its power could find the clues scattered around the world, requiring a great quest be undertaken to find it. Blade of the Celestial Emperor (Easily Removable): Strength-Based Damage 4, Accurate, Combo Element, Multiattack, Penetrating 4; Enhanced Strength 5; Enhanced Stamina 5; Enhanced Agility 5; Enhanced Fighting 5; Variable 2 (Enhance Fighting Style Traits), Limited to Possessed Fighting Style Skills, Advantages, and Basic and Advanced Combat Maneuve",
+      "source": "MA 274",
+      "category": "Mystic Item"
+    },
+    {
+      "name": "Daikyu of Shooting Stars",
+      "cost_text": "15 points",
+      "description": "This enchanted bow is believed to have been crafted by the gods. It can fire incomparable distances with high accuracy. Daikyu of Shooting Stars (Easily Removable): Strength-Based Ranged Damage 5, Improved Critical 2, Extended Range 10; Enhanced Ranged Combat: Daikyu 6, Limited to Canceling Range Penalties - 15 points",
+      "source": "MA 274",
+      "category": "Mystic Item"
+    },
+    {
+      "name": "Dragon Sword",
+      "cost_text": "10 points",
+      "description": "Not truly magical, these rarest of katana are the work of the best swordmasters ancient Japan had to offer. The knowledge of how to create such durable, deadly, and priceless blades has since become lost in the darkness of history, unfortunately. Even today's most technologically apt craftsmen have been unable to replicate the techniques used to forge these invaluable blades. Dragon Sword (Easily Removable): Strength-Based Damage 6, Improved Critical 4, Penetrating 6 - 10 points Fiery Weapon Plus 18 points A fiery weapon (typically a sword) is one that has been enchanted to burst into flame. This is a common weapon in martial arts stories. Fiery Weapon: Strike 3 (Fire), Reaction (Contact), S",
+      "source": "MA 274",
+      "category": "Mystic Item"
+    },
+    {
+      "name": "Flaming Shuriken",
+      "cost_text": "6 points",
+      "description": "When thrown, these mystic shuriken burst into flame and explode upon impact. Chapter 8: Tools of the Fight Expanded Structure Size Categories Structure Size Points Cost Spaces Examples Galactic V 35 250B Planetary solar system Galactic IV 34 124B -- Galactic III 33 64B -- Galactic II 32 32B -- Galactic 31 16B -- Stellar V 30 8B Solar asteroid belt Stellar IV 29 4B -- Stellar III 28 2B -- Stellar II 27 1B -- Stellar 26 500M -- Planetary V 25 250M -- Planetary IV 24 125M -- Planetary III 23 64M Sun Planetary II 22 32M -- Planetary 21 16M -- Epic V 20 8M Jupiter, Saturn Epic IV 19 4M Neptune, Uranus Epic III 18 2M -- Epic II 17 1M Earth, Venus Epic 16 500K The moon, Mars, Mercury Titanic V 15 2",
+      "source": "MA 274",
+      "category": "Mystic Item"
+    },
+    {
+      "name": "Scorpion's Lash",
+      "cost_text": "11 points",
+      "description": "This is an unusual, extremely unorthodox weapon utilized by du zhua quan practitioners (pg 229). It consists of a thin chain with a sharpened, spike-like barb (the \"scorpion's stinger\") several inches long and weighted towards one end. The other end extends from the palm, through a metal ring fastened there by a special glove that stretches all the way down to the elbow. A spring-loaded device near the elbow causes the chain's length to pull around the forearm, guided by metal loops sewn to the gauntlet. A powerful, sharp flick of the arm causes the chain to unspool, lashing out to its full length, only to be pulled back immediately afterward. Scorpion's Lash: Affliction 5 (Resisted by Dodge",
+      "source": "MA 275",
+      "category": "Mystic Item"
+    }
   ]
 }

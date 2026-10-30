@@ -4,7 +4,7 @@ import { openApp, rollCharacter, showTab, codename } from './helpers.mjs';
 
 async function openHomebrew(page) {
   await showTab(page, 'workshop');
-  await page.getByRole('button', { name: '🧪 Homebrew' }).click();
+  await page.getByRole('button', { name: 'Homebrew', exact: true }).click();
 }
 
 test('make a theme and an archetype, roll with them, and share the pack with another browser', async ({ page, browser }) => {
@@ -27,11 +27,11 @@ test('make a theme and an archetype, roll with them, and share the pack with ano
   await expect(page.locator('.hb-items').nth(1)).toContainText('Fallen Angel');
 
   // Roll one with the theme: it opens on the Forge and the theme list has it.
-  await page.locator('.hb-item', { hasText: 'Hellfire' }).getByRole('button', { name: '🎲 Roll one' }).click();
+  await page.locator('.hb-item', { hasText: 'Hellfire' }).getByRole('button', { name: 'Roll one' }).click();
   await expect(page.locator('#view-forge')).toBeVisible();
   await expect(codename(page)).toBeVisible();
-  await expect(page.locator('#theme option', { hasText: 'Hellfire ✦' })).toHaveCount(1);
-  await expect(page.locator('#archetype option', { hasText: 'Fallen Angel ✦' })).toHaveCount(1);
+  await expect(page.locator('#theme option', { hasText: 'Hellfire (homebrew)' })).toHaveCount(1);
+  await expect(page.locator('#archetype option', { hasText: 'Fallen Angel (homebrew)' })).toHaveCount(1);
 
   // Share as a code; another browser loads it.
   await openHomebrew(page);
@@ -48,7 +48,7 @@ test('make a theme and an archetype, roll with them, and share the pack with ano
   await p2.locator('#hb-code-go').click();
   await expect(p2.locator('#toast')).toContainText('Ravensport: 1 theme, 1 archetype, 0 creatures loaded');
   await showTab(p2, 'forge');
-  await expect(p2.locator('#theme option', { hasText: 'Hellfire ✦' })).toHaveCount(1);
+  await expect(p2.locator('#theme option', { hasText: 'Hellfire (homebrew)' })).toHaveCount(1);
   await other.close();
   expect(errors).toEqual([]);
 });

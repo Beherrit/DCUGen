@@ -1053,5 +1053,177 @@
         "source": "DCA 122"
       }
     ]
+  },
+  "Extra Attacks": {
+    "extras": [
+      {
+        "name": "Mobility",
+        "cost_type": "flat_per_rank",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Sacrifice one extra attack to move an additional 5 feet (no more than half a move action in a round).",
+        "source": "MA 83"
+      },
+      {
+        "name": "Quick Combo",
+        "cost_type": "flat_per_rank",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Each rank applies a Combo Element to a qualified maneuver or power when used with the additional attacks.",
+        "source": "MA 83"
+      },
+      {
+        "name": "Quickened Charge",
+        "cost_type": "flat_per_rank",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Once per round spend one additional attack with a charge, making the charge a free action (all attacks must be Close range).",
+        "source": "MA 83"
+      }
+    ],
+    "flaws": [
+      {
+        "name": "Activation (Move Action)",
+        "cost_type": "flat_per_rank",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Using Extra Attacks takes an entire round.",
+        "source": "MA 83"
+      },
+      {
+        "name": "Chain",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Each attack depends on the one before it: if any misses, the series ends and the power is denied for the round.",
+        "source": "MA 84"
+      },
+      {
+        "name": "Declining",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Every extra attack after the first suffers a cumulative -5 to attack.",
+        "source": "MA 84"
+      },
+      {
+        "name": "Dispersed",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Every extra attack after the first suffers a cumulative -4 to the initiative result.",
+        "source": "MA 84"
+      },
+      {
+        "name": "Limited",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Restricts the power to specified types of attacks or powers.",
+        "source": "MA 84"
+      }
+    ]
+  },
+  "Communal": {
+    "extras": [
+      {
+        "name": "Fortunate",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Extra effort needs only one contributor (the controlling one) to pay the hero point.",
+        "source": "MA 82"
+      },
+      {
+        "name": "Fractioned",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Works with absent contributors at reduced rank (+1) or full potency if at least half are present (+2).",
+        "source": "MA 83",
+        "options": {
+          "+1": 1,
+          "+2": 2
+        }
+      },
+      {
+        "name": "Interchangeable",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Contributors may change the controlling contributor without turning the power off (all must pass a Will check).",
+        "source": "MA 83"
+      },
+      {
+        "name": "Leech",
+        "cost_type": "flat_per_rank",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Each rank lets one character stand in as a temporary contributor by losing access to as many power points.",
+        "source": "MA 83"
+      },
+      {
+        "name": "True Control",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": null,
+        "summary": "The controlling contributor uses only their own abilities instead of the average of all contributors.",
+        "source": "MA 83"
+      }
+    ],
+    "flaws": [
+      {
+        "name": "Difficult",
+        "cost_type": "flat",
+        "value": 1,
+        "max_steps": 1,
+        "summary": "Extra effort requires every contributor to pass a Will check (DC 10 + rank).",
+        "source": "MA 83"
+      },
+      {
+        "name": "Focused",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": null,
+        "summary": "One contributor must always be the effect's focus and always present for its use.",
+        "source": "MA 83"
+      },
+      {
+        "name": "Power Loss",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Each contributor loses one individual power while taking part (-2 per rank: all other powers).",
+        "source": "MA 84",
+        "options": {
+          "-1": 1,
+          "-2": 2
+        }
+      },
+      {
+        "name": "Resistible",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Contributors may refuse activation through opposed Will checks.",
+        "source": "MA 84"
+      },
+      {
+        "name": "Short-Circuit",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": null,
+        "summary": "Removing a contributor also inflicts a harmful effect (built on half the effect's points) on the others.",
+        "source": "MA 84"
+      },
+      {
+        "name": "Stationary",
+        "cost_type": "per_rank",
+        "value": 1,
+        "max_steps": null,
+        "summary": "No contributor may move from their location while the effect operates.",
+        "source": "MA 84"
+      }
+    ]
   }
 }

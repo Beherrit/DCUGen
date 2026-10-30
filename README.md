@@ -47,6 +47,12 @@ one to open DCUGen on your phone, one for each desktop download.
   **Drain** tracker on the sheet (the target missed by N, −1 as points fade, all back), and placed ranks fall off
   newest first as the drained points go. PL limits are checked on the build without placed points; placed points
   that push a defense pair over the limit show as a warning.
+- **Fighting styles** (Martial Arts 3e) – the Forge's Fighting styles section adds any of the 166 styles: pick Initiate, Student or Master,
+  turn on its stances, add weapon elements and buy its basic and advanced maneuvers (each a power, priced by its own formula). Points follow the
+  book, and "Buy the whole style as listed" matches the style's printed total. In the Play view a stance picker rolls the Assume Stance check
+  (free from Neutral, a move action otherwise, failure means Neutral) and puts the stance's bonuses on Dodge, Parry, attacks and initiative until
+  prone, stunned, vulnerable or another disrupting condition ends it. The Rules tab has every style, stance, maneuver, weapon and optional rule
+  with its page. Martial artists, weapon masters and crime fighters roll with a real style.
 - **Alternate forms** – More ▾ > 🎭 Alternate forms on the Forge gives a character up to 8 forms (civilian and costumed, armor on and
   off, a shapeshifter's shapes). Each form is a whole build with its own PL, traits, powers, gear, codename and
   picture, checked on its own; the person, bio, journal, world and roster entry are shared. Switch with the numbered

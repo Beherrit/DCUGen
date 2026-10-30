@@ -1,0 +1,877 @@
+[
+  {
+    "name": "Avoiding",
+    "kind": "core",
+    "dc": 15,
+    "dc_per_rank": 0,
+    "benefits": "Can use Dodge instead of Parry to avoid close combat attacks.",
+    "detriments": "-4 to attack.",
+    "text": "You are skilled at getting out of the way of oncoming attacks by moving to the side or under it.",
+    "mods": [
+      {
+        "stat": "attack",
+        "value": -4
+      }
+    ],
+    "flags": [
+      "dodgeForParry"
+    ],
+    "special": null,
+    "style": null,
+    "source": "MA 129"
+  },
+  {
+    "name": "Blocking",
+    "kind": "core",
+    "dc": 13,
+    "dc_per_rank": 0,
+    "benefits": "+2 to Parry.",
+    "detriments": "-2 to attack.",
+    "text": "You are prepared to block incoming attacks.",
+    "mods": [
+      {
+        "stat": "Parry",
+        "value": 2
+      },
+      {
+        "stat": "attack",
+        "value": -2
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": null,
+    "source": "MA 129"
+  },
+  {
+    "name": "Bobbing",
+    "kind": "core",
+    "dc": 15,
+    "dc_per_rank": 0,
+    "benefits": "+2 to Dodge.",
+    "detriments": "-2 to attack.",
+    "text": "You are in constant motion so as to better get out of the way.",
+    "mods": [
+      {
+        "stat": "Dodge",
+        "value": 2
+      },
+      {
+        "stat": "attack",
+        "value": -2
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": null,
+    "source": "MA 129"
+  },
+  {
+    "name": "Crane",
+    "kind": "core",
+    "dc": 18,
+    "dc_per_rank": 0,
+    "benefits": "+2 to attack and Parry.",
+    "detriments": "Immobile and has a Dodge modifier of +0.",
+    "text": "A confusing stance resembling a crane with outstretched arms (wings), standing on one leg with the other foot positioned at the supporting leg's knee.",
+    "mods": [
+      {
+        "stat": "attack",
+        "value": 2
+      },
+      {
+        "stat": "Parry",
+        "value": 2
+      },
+      {
+        "stat": "Dodge",
+        "value": 0,
+        "set": true
+      }
+    ],
+    "flags": [
+      "immobile"
+    ],
+    "special": null,
+    "style": null,
+    "source": "MA 129"
+  },
+  {
+    "name": "Disarming",
+    "kind": "core",
+    "dc": 13,
+    "dc_per_rank": 0,
+    "benefits": "+4 to attack checks to disarm.",
+    "detriments": "-2 to all other attack checks.",
+    "text": "You are prepared to disarm incoming attacks.",
+    "mods": [
+      {
+        "stat": "attack.disarm",
+        "value": 4
+      },
+      {
+        "stat": "attack",
+        "value": -2,
+        "except": "disarm"
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": null,
+    "source": "MA 129"
+  },
+  {
+    "name": "Disruptive",
+    "kind": "core",
+    "dc": 10,
+    "dc_per_rank": 0,
+    "benefits": "+8 to disrupt stance Close Combat or Ranged Combat (as appropriate): Fighting Style checks.",
+    "detriments": "-4 to all other Close Combat or Ranged Combat (as appropriate): Fighting Style checks.",
+    "text": "Your stance is prepared to throw your opponent's stance into disarray.",
+    "mods": [
+      {
+        "stat": "check.disruptStance",
+        "value": 8
+      },
+      {
+        "stat": "check.fightingStyle",
+        "value": -4,
+        "except": "disruptStance"
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": null,
+    "source": "MA 129"
+  },
+  {
+    "name": "Drunken",
+    "kind": "core",
+    "dc": 20,
+    "dc_per_rank": 0,
+    "benefits": "Deception +8 for feinting and tricking, +2 to Dodge, Defensive Roll 2.",
+    "detriments": "Acrobatics -8, Intimidation -4 ranks, -1 to attack.",
+    "text": "Something of a combination of several of the more evasive stances, the practitioner bobs, stumbles, and shuffles about as though drunk to make eluding attacks easier while misleading one's opponent.",
+    "mods": [
+      {
+        "stat": "skill:Deception",
+        "value": 8,
+        "only": "feintTrick"
+      },
+      {
+        "stat": "Dodge",
+        "value": 2
+      },
+      {
+        "stat": "advantage:Defensive Roll",
+        "value": 2
+      },
+      {
+        "stat": "skill:Acrobatics",
+        "value": -8
+      },
+      {
+        "stat": "skillRanks:Intimidation",
+        "value": -4
+      },
+      {
+        "stat": "attack",
+        "value": -1
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": null,
+    "source": "MA 129"
+  },
+  {
+    "name": "Extended",
+    "kind": "core",
+    "dc": 15,
+    "dc_per_rank": 0,
+    "benefits": "Add Reach 1 to all close combat attacks.",
+    "detriments": "-1 to Parry and Dodge.",
+    "text": "You use your body and balance to increase your reach.",
+    "mods": [
+      {
+        "stat": "reach",
+        "value": 1,
+        "only": "close"
+      },
+      {
+        "stat": "Parry",
+        "value": -1
+      },
+      {
+        "stat": "Dodge",
+        "value": -1
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": null,
+    "source": "MA 129"
+  },
+  {
+    "name": "Finishing",
+    "kind": "core",
+    "dc": 18,
+    "dc_per_rank": 0,
+    "benefits": "Double all close combat damage modifiers, but not beyond the PL limits.",
+    "detriments": "-4 to all other rolls, checks, and effect ranks (including Toughness resistance checks).",
+    "text": "You await an opponent to become helpless so that you may strike with the utmost deadliness.",
+    "mods": [
+      {
+        "stat": "damage.close",
+        "value": 2,
+        "mult": true,
+        "when": "targetHelplessWhileInStance"
+      },
+      {
+        "stat": "everything",
+        "value": -4,
+        "except": "damage.close"
+      }
+    ],
+    "flags": [],
+    "special": "You only gain the damage doubling if the target becomes helpless while you are already in this stance. Walking up to a helpless opponent and then assuming a finishing stance will not allow you to use its benefits on that enemy, although you still suffer the penalties.",
+    "style": null,
+    "source": "MA 129"
+  },
+  {
+    "name": "Firing",
+    "kind": "core",
+    "dc": 13,
+    "dc_per_rank": 0,
+    "benefits": "+1 to attack and damage with ranged attacks.",
+    "detriments": "-1 to attack and damage with other types of attacks.",
+    "text": "Your positioning is optimized for directing ranged attacks (arrows, gunfire, etc.) at targets.",
+    "mods": [
+      {
+        "stat": "attack.ranged",
+        "value": 1
+      },
+      {
+        "stat": "damage.ranged",
+        "value": 1
+      },
+      {
+        "stat": "attack",
+        "value": -1,
+        "except": "ranged"
+      },
+      {
+        "stat": "damage",
+        "value": -1,
+        "except": "ranged"
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": null,
+    "source": "MA 129"
+  },
+  {
+    "name": "Fluid",
+    "kind": "core",
+    "dc": 18,
+    "dc_per_rank": 0,
+    "benefits": "+1 rank of the Combo Element extra (pg 91) to the Extra Attacks effect (pg 84). If not using the Extra Attacks effect or Combo Actions (pg 87), you gain a +2 to any combat check or modifier you want. How this modifier is applied must be declared at the beginning of each round before anyone declares any actions or rolls any dice.",
+    "detriments": "-2 to Deception feinting and tricking checks, and -1 to parry.",
+    "text": "You are prepared to adapt your fighting style on the fly.",
+    "mods": [
+      {
+        "stat": "comboElementRank",
+        "value": 1
+      },
+      {
+        "stat": "skill:Deception",
+        "value": -2,
+        "only": "feintTrick"
+      },
+      {
+        "stat": "Parry",
+        "value": -1
+      }
+    ],
+    "flags": [],
+    "special": "If not using Extra Attacks or Combo Actions: +2 to any one combat check or modifier, declared at the start of each round.",
+    "style": null,
+    "source": "MA 129"
+  },
+  {
+    "name": "Grappler",
+    "kind": "core",
+    "dc": 15,
+    "dc_per_rank": 0,
+    "benefits": "+2 to grab checks whether to initiate, maintain, etc.",
+    "detriments": "-1 to Dodge and Parry.",
+    "text": "You are positioned to grapple whatever comes your way and maneuver it into a grab attempt.",
+    "mods": [
+      {
+        "stat": "attack.grab",
+        "value": 2
+      },
+      {
+        "stat": "Dodge",
+        "value": -1
+      },
+      {
+        "stat": "Parry",
+        "value": -1
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": null,
+    "source": "MA 129"
+  },
+  {
+    "name": "Grounded",
+    "kind": "core",
+    "dc": 18,
+    "dc_per_rank": 0,
+    "benefits": "+2 to any checks to resist a push, rush, trip, or body throw, and reduce knockback against you by 1 rank.",
+    "detriments": "-1 to attack, and you are vulnerable.",
+    "text": "You plant your feet firmly and ready your body to absorb impact.",
+    "mods": [
+      {
+        "stat": "resist.pushRushTripThrow",
+        "value": 2
+      },
+      {
+        "stat": "knockbackRank",
+        "value": -1
+      },
+      {
+        "stat": "attack",
+        "value": -1
+      }
+    ],
+    "flags": [
+      "vulnerable"
+    ],
+    "special": null,
+    "style": null,
+    "source": "MA 129"
+  },
+  {
+    "name": "Guarded",
+    "kind": "core",
+    "dc": 12,
+    "dc_per_rank": 0,
+    "benefits": "You may add up to +5 to your active defenses with a Defensive Attack. Increase to +10 if you also have the Defensive Attack advantage.",
+    "detriments": "You must take the same modifier as a penalty to your attack checks.",
+    "text": "You are prepared to defend rather than take the offensive.",
+    "mods": [
+      {
+        "stat": "defensiveAttackMax",
+        "value": 5,
+        "withAdvantage": 10,
+        "advantage": "Defensive Attack"
+      }
+    ],
+    "flags": [],
+    "special": "The Defensive Attack bonus taken is also applied as a penalty to attack checks.",
+    "style": null,
+    "source": "MA 130"
+  },
+  {
+    "name": "High",
+    "kind": "core",
+    "dc": 13,
+    "dc_per_rank": 0,
+    "benefits": "+2 to Dodge as an active defense (meaning it does not apply to resistance checks).",
+    "detriments": "-2 to resist knockback, trips, and body throws.",
+    "text": "You stretch out to your full height, possibly rising on the balls of your feet, elevating your center of gravity.",
+    "mods": [
+      {
+        "stat": "Dodge",
+        "value": 2,
+        "only": "active"
+      },
+      {
+        "stat": "resist.knockbackTripThrow",
+        "value": -2
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": null,
+    "source": "MA 130"
+  },
+  {
+    "name": "Kicker",
+    "kind": "core",
+    "dc": 15,
+    "dc_per_rank": 0,
+    "benefits": "+2 to attack and damage with foot (or equivalent part of the anatomy) attacks.",
+    "detriments": "-2 to attack and damage with attacks using other body parts.",
+    "text": "Your stance makes you better able to bring your feet to bear.",
+    "mods": [
+      {
+        "stat": "attack.foot",
+        "value": 2
+      },
+      {
+        "stat": "damage.foot",
+        "value": 2
+      },
+      {
+        "stat": "attack",
+        "value": -2,
+        "except": "foot"
+      },
+      {
+        "stat": "damage",
+        "value": -2,
+        "except": "foot"
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": null,
+    "source": "MA 130"
+  },
+  {
+    "name": "Low",
+    "kind": "core",
+    "dc": 13,
+    "dc_per_rank": 0,
+    "benefits": "+4 to resist trips and body throws.",
+    "detriments": "Hindered.",
+    "text": "Your stance is incredibly low to the ground, granting greater control over your center of gravity.",
+    "mods": [
+      {
+        "stat": "resist.tripThrow",
+        "value": 4
+      }
+    ],
+    "flags": [
+      "hindered"
+    ],
+    "special": null,
+    "style": null,
+    "source": "MA 130"
+  },
+  {
+    "name": "Misleading",
+    "kind": "core",
+    "dc": 15,
+    "dc_per_rank": 0,
+    "benefits": "+4 to Deception checks for feinting or tricking.",
+    "detriments": "-1 to initiative, -1 to attack.",
+    "text": "Your posture is intended to increase the chance of deceiving your opponents regarding your intentions.",
+    "mods": [
+      {
+        "stat": "skill:Deception",
+        "value": 4,
+        "only": "feintTrick"
+      },
+      {
+        "stat": "initiative",
+        "value": -1
+      },
+      {
+        "stat": "attack",
+        "value": -1
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": null,
+    "source": "MA 130"
+  },
+  {
+    "name": "(Named)",
+    "kind": "core",
+    "dc": 10,
+    "dc_per_rank": 1,
+    "benefits": "+2 to power checks/attack/whatever with the indicated power, as appropriate to how the power's action is initiated.",
+    "detriments": "-1 to Dodge and Parry. (The Gamemaster and/or player can tailor the penalty to something else if deemed more suitable).",
+    "text": "You've developed a stance that accommodates the needs of a particular power or combat maneuver that is martial arts related (a blast of Chi energy, for example).",
+    "mods": [
+      {
+        "stat": "powerCheck",
+        "value": 2,
+        "only": "namedPower"
+      },
+      {
+        "stat": "Dodge",
+        "value": -1
+      },
+      {
+        "stat": "Parry",
+        "value": -1
+      }
+    ],
+    "flags": [],
+    "special": "DC is 10 + 1 per rank. The Gamemaster has final say on what qualifies as something a stance is appropriate for, and may allow for greater or entirely different benefits (with comparable detriments as balance).",
+    "style": null,
+    "source": "MA 130"
+  },
+  {
+    "name": "Neutral",
+    "kind": "core",
+    "dc": 0,
+    "dc_per_rank": 0,
+    "benefits": "None.",
+    "detriments": "None.",
+    "text": "This is the default stance for martial artists and non-martial artists alike, whether prepared for combat, unconscious, at ease, etc. This means everyone may assume a Neutral stance as a free action without a skill check.",
+    "mods": [],
+    "flags": [],
+    "special": "The book lists the DC as N/A: assuming Neutral needs no check and is automatic.",
+    "style": null,
+    "source": "MA 130"
+  },
+  {
+    "name": "Offensive",
+    "kind": "core",
+    "dc": 12,
+    "dc_per_rank": 0,
+    "benefits": "You may add up to +5 to your attack with an All-Out Attack. Increase to +10 if you also have the All-Out Attack advantage.",
+    "detriments": "You must take the same modifier as a penalty to your active defenses (Dodge and Parry).",
+    "text": "You are prepared to go on the offensive rather than wait on your foe's attacks.",
+    "mods": [
+      {
+        "stat": "allOutAttackMax",
+        "value": 5,
+        "withAdvantage": 10,
+        "advantage": "All-Out Attack"
+      }
+    ],
+    "flags": [],
+    "special": "The All-Out Attack bonus taken is also applied as a penalty to Dodge and Parry.",
+    "style": null,
+    "source": "MA 130"
+  },
+  {
+    "name": "Power",
+    "kind": "core",
+    "dc": 15,
+    "dc_per_rank": 0,
+    "benefits": "+2 damage modifier with close combat attacks.",
+    "detriments": "-1 to Parry; -1 to initiative.",
+    "text": "Your positioning is designed to increase the power of your attack.",
+    "mods": [
+      {
+        "stat": "damage.close",
+        "value": 2
+      },
+      {
+        "stat": "Parry",
+        "value": -1
+      },
+      {
+        "stat": "initiative",
+        "value": -1
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": null,
+    "source": "MA 130"
+  },
+  {
+    "name": "Prone",
+    "kind": "core",
+    "dc": 15,
+    "dc_per_rank": 0,
+    "benefits": "You can crawl at two-thirds your normal speed while prone (or normal speed if you also possess the Prone Fighting advantage).",
+    "detriments": "-1 to initiative.",
+    "text": "You are capable of fighting more effectively while in the prone position.",
+    "mods": [
+      {
+        "stat": "initiative",
+        "value": -1
+      }
+    ],
+    "flags": [],
+    "special": "Crawl speed while prone is two-thirds normal (normal with the Prone Fighting advantage).",
+    "style": null,
+    "source": "MA 130"
+  },
+  {
+    "name": "Pugilist",
+    "kind": "core",
+    "dc": 15,
+    "dc_per_rank": 0,
+    "benefits": "+2 to attack and damage with hand (or equivalent part of the anatomy) attacks.",
+    "detriments": "-2 to attack and damage with attacks using other body parts.",
+    "text": "Your stance makes you better able to bring your fists to bear.",
+    "mods": [
+      {
+        "stat": "attack.hand",
+        "value": 2
+      },
+      {
+        "stat": "damage.hand",
+        "value": 2
+      },
+      {
+        "stat": "attack",
+        "value": -2,
+        "except": "hand"
+      },
+      {
+        "stat": "damage",
+        "value": -2,
+        "except": "hand"
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": null,
+    "source": "MA 130"
+  },
+  {
+    "name": "Reactive",
+    "kind": "core",
+    "dc": 13,
+    "dc_per_rank": 0,
+    "benefits": "+2 to Dodge resistance checks (meaning it does not apply to active defenses).",
+    "detriments": "-1 to attack.",
+    "text": "You take a position that allows you to more easily move in just about any direction without telegraphing your direction.",
+    "mods": [
+      {
+        "stat": "Dodge",
+        "value": 2,
+        "only": "resistance"
+      },
+      {
+        "stat": "attack",
+        "value": -1
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": null,
+    "source": "MA 130"
+  },
+  {
+    "name": "Showman",
+    "kind": "core",
+    "dc": 15,
+    "dc_per_rank": 0,
+    "benefits": "Deception +4 ranks, and Expertise: Acting or Expertise: Martial Showman +4 ranks (declare which when the stance is assumed).",
+    "detriments": "-1 to attack, -1 to Dodge and Parry.",
+    "text": "This stance is intended to both mislead and entertain. It is optimized for showing off and taking punishment as part of the show.",
+    "mods": [
+      {
+        "stat": "skillRanks:Deception",
+        "value": 4
+      },
+      {
+        "stat": "skillRanks:Expertise (Acting or Martial Showman)",
+        "value": 4
+      },
+      {
+        "stat": "attack",
+        "value": -1
+      },
+      {
+        "stat": "Dodge",
+        "value": -1
+      },
+      {
+        "stat": "Parry",
+        "value": -1
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": null,
+    "source": "MA 130"
+  },
+  {
+    "name": "Throwing",
+    "kind": "core",
+    "dc": 11,
+    "dc_per_rank": 0,
+    "benefits": "+2 Strength for the purpose of what may be thrown and how far.",
+    "detriments": "-2 to initiative.",
+    "text": "Your stance grants you leverage that effectively increases your Strength for the purpose of throwing an opponent.",
+    "mods": [
+      {
+        "stat": "strength",
+        "value": 2,
+        "only": "throwing"
+      },
+      {
+        "stat": "initiative",
+        "value": -2
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": null,
+    "source": "MA 131"
+  },
+  {
+    "name": "Wary",
+    "kind": "core",
+    "dc": 13,
+    "dc_per_rank": 0,
+    "benefits": "+4 to initiative.",
+    "detriments": "-1 to attack.",
+    "text": "The stance focuses on reacting quickly.",
+    "mods": [
+      {
+        "stat": "initiative",
+        "value": 4
+      },
+      {
+        "stat": "attack",
+        "value": -1
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": null,
+    "source": "MA 131"
+  },
+  {
+    "name": "Weapon",
+    "kind": "core",
+    "dc": 13,
+    "dc_per_rank": 0,
+    "benefits": "+1 to attack or Parry with the chosen weapon, and +2 to damage or initiative with the chosen weapon (announce your choices at the beginning of each round, before initiative is rolled).",
+    "detriments": "-1 to attack or Parry (same as the selected bonus) with all other attacks, -2 to damage for all other attacks.",
+    "text": "The stance accommodates the size and natural flow of wielding a particular sort of weapon, such as swords, axes, or staves. This stance will apply to any weapon element you are trained with for the relevant fighting style. However, you will have to switch weapon stances when shifting which weapon you choose to use.",
+    "mods": [
+      {
+        "stat": "attackOrParry",
+        "value": 1,
+        "only": "chosenWeapon"
+      },
+      {
+        "stat": "damageOrInitiative",
+        "value": 2,
+        "only": "chosenWeapon"
+      },
+      {
+        "stat": "attackOrParry",
+        "value": -1,
+        "except": "chosenWeapon"
+      },
+      {
+        "stat": "damage",
+        "value": -2,
+        "except": "chosenWeapon"
+      }
+    ],
+    "flags": [],
+    "special": "Announce which weapon element the stance applies to when assuming it, and the attack-or-Parry and damage-or-initiative choices at the start of each round.",
+    "style": null,
+    "source": "MA 131"
+  },
+  {
+    "name": "Firing (Vehicle)",
+    "kind": "style",
+    "dc": 13,
+    "dc_per_rank": 0,
+    "benefits": "+1 to attack and damage with ranged attacks (vehicle mounted weapons).",
+    "detriments": "-1 to attack and damage with other types of attacks.",
+    "text": "The Drive-Fu use of the Firing stance: it applies to vehicle mounted weapons instead of firearms.",
+    "mods": [
+      {
+        "stat": "attack.ranged",
+        "value": 1
+      },
+      {
+        "stat": "damage.ranged",
+        "value": 1
+      },
+      {
+        "stat": "attack",
+        "value": -1,
+        "except": "ranged"
+      },
+      {
+        "stat": "damage",
+        "value": -1,
+        "except": "ranged"
+      }
+    ],
+    "flags": [],
+    "special": "Drive-Fu lists Firing with the note \"apply to vehicle mounted weapons instead of firearms\"; same numbers as Firing.",
+    "style": "Drive-Fu",
+    "source": "MA 227"
+  },
+  {
+    "name": "Rubber Band",
+    "kind": "style",
+    "dc": 13,
+    "dc_per_rank": 0,
+    "benefits": "Enhanced Elongation 1.",
+    "detriments": "Suffer as though from the Distracting flaw.",
+    "text": "Your stance stretches your body to its limits, whipping your extremities back and forth to the point of becoming painful.",
+    "mods": [
+      {
+        "stat": "power:Elongation",
+        "value": 1
+      }
+    ],
+    "flags": [],
+    "special": "Suffer as though from the Distracting flaw (not simulated).",
+    "style": "Elastkata",
+    "source": "MA 245"
+  },
+  {
+    "name": "TK",
+    "kind": "style",
+    "dc": 14,
+    "dc_per_rank": 0,
+    "benefits": "Move Object +1 rank.",
+    "detriments": "-2 to Parry and Dodge.",
+    "text": "You assume a position of maximum comfort to best concentrate on your power, but doing so in turn makes you an easier target to strike.",
+    "mods": [
+      {
+        "stat": "power:Move Object",
+        "value": 1
+      },
+      {
+        "stat": "Parry",
+        "value": -2
+      },
+      {
+        "stat": "Dodge",
+        "value": -2
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": "Tooi Kokorozashi Te",
+    "source": "MA 248"
+  },
+  {
+    "name": "Pack",
+    "kind": "style",
+    "dc": 11,
+    "dc_per_rank": 0,
+    "benefits": "+1 to attack while an ally is directly opposite you on the other side of your target.",
+    "detriments": "-1 Parry and Dodge versus attacks against you from directions other than that of your current target/facing.",
+    "text": "You are better able to find a foe's weaknesses when an ally is distracting them.",
+    "mods": [
+      {
+        "stat": "attack",
+        "value": 1,
+        "when": "allyOppositeTarget"
+      },
+      {
+        "stat": "Parry",
+        "value": -1,
+        "when": "attackedFromOtherDirection"
+      },
+      {
+        "stat": "Dodge",
+        "value": -1,
+        "when": "attackedFromOtherDirection"
+      }
+    ],
+    "flags": [],
+    "special": null,
+    "style": "Weise Von Gestalt",
+    "source": "MA 249"
+  }
+]

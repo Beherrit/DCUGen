@@ -29,7 +29,7 @@ export function skillGuideBody(g, { compact = false } = {}) {
       g.trained_only ? h('span', { class: 'chip' }, 'Trained only') : null,
       g.opposed_by ? h('span', { class: 'chip' }, `Opposed by ${g.opposed_by}`) : null),
     (g.uses || []).map((u) => h('div', { class: 'sg-use' },
-      h('div', { class: 'sg-use-head' }, h('b', null, u.name), u.action ? h('span', { class: 'sg-action' }, `${u.action} action`) : null),
+      h('div', { class: 'sg-use-head' }, h('b', null, u.name), u.action ? h('span', { class: 'sg-action' }, `${u.action} action`) : null, u.source ? h('span', { class: 'sg-action' }, u.source) : null),
       u.text ? h('div', { class: 'sg-text' }, u.text) : null,
       (u.dcs || []).length ? h('table', { class: 'sg-dcs' }, h('tbody', null, u.dcs.map(([what, dc]) => h('tr', null, h('td', null, what), h('td', { class: 'num' }, formatSkillValue(u.name, what, dc)))))) : null)),
     g.examples ? h('p', { class: 'sg-examples' }, g.examples) : null,

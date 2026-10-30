@@ -72,7 +72,7 @@ export function advancementSection(ch, R, { change, onSpend, editing }) {
         h('span', { class: 'adv-pts num' }, e.type === 'pl' ? '' : `${e.type === 'award' ? sign(e.points) : e.points > 0 ? `−${e.points}` : `+${-e.points}`} pp`),
         h('span', { class: 'adv-note' }, e.note || '', e.journalId && ch.journal?.entries?.some((j) => j.id === e.journalId) && !/^Session/.test(e.note || '') ? h('small', { style: { color: 'var(--ink-3)' } }, ` · session ${ch.journal.entries.find((j) => j.id === e.journalId)?.session}`) : null),
         h('span', { class: 'adv-date num' }, e.date || ''),
-        e.type === 'award' ? h('button', { class: 'x no-print', type: 'button', 'aria-label': 'Remove this award', title: 'Remove this award (a mistake)', onClick: () => change((c) => removeEntry(c, e.id)) }, '✕') : null),
+        e.type === 'award' ? h('button', { class: 'x no-print', type: 'button', 'aria-label': 'Remove this award', title: 'Remove this award (a mistake)', onClick: () => change((c) => removeEntry(c, e.id)) }, 'Remove') : null),
       (e.changes || []).length ? h('ul', { class: 'adv-changes' }, e.changes.map((t) => h('li', null, t))) : null)))
       : h('p', { class: 'hint', style: { margin: 0 } }, 'Nothing yet. Add the points your GM awards, then press Spend.'));
 }
@@ -98,7 +98,7 @@ function goalBar(a) {
   const t = a.goal.target || 0;
   const pct = t ? Math.min(100, Math.round((have / t) * 100)) : 0;
   return h('div', { class: 'goal' },
-    h('div', { class: 'goal-text' }, '🎯 Saving for ', h('b', null, a.goal.note), t ? h('span', { class: 'num' }, ` · ${have}/${t} pp${have >= t ? ' · ready to buy!' : ''}`) : null),
+    h('div', { class: 'goal-text' }, 'Saving for ', h('b', null, a.goal.note), t ? h('span', { class: 'num' }, ` · ${have}/${t} pp${have >= t ? ' · ready to buy!' : ''}`) : null),
     t ? h('div', { class: 'meter', role: 'img', 'aria-label': `${have} of ${t} points saved` }, h('i', { class: have >= t ? 'done' : '', style: { width: `${pct}%` } })) : null);
 }
 
@@ -113,7 +113,7 @@ export function pointsBar(ch, R, { change, onSpend, editing }) {
   const saved = cost.budget - cost.total;
   const pts = h('input', { type: 'number', id: 'pb-award-pts', min: 1, max: 100, value: 1, 'aria-label': 'Points from the GM', style: { width: '64px' } });
   const note = h('input', { type: 'text', id: 'pb-award-note', placeholder: 'Why? (optional)', 'aria-label': 'Why the points were awarded' });
-  const awardRow = h('div', { class: 'pb-award no-print', hidden: true }, h('label', null, '🎁 The GM gave me', pts, 'points'), note,
+  const awardRow = h('div', { class: 'pb-award no-print', hidden: true }, h('label', null, 'The GM gave me', pts, 'points'), note,
     h('button', { class: 'btn primary sm', type: 'button', id: 'pb-award-add', onClick: () => {
       const n = Math.trunc(Number(pts.value));
       if (!n) return;
@@ -126,9 +126,9 @@ export function pointsBar(ch, R, { change, onSpend, editing }) {
   return h('section', { class: 'pts-bar no-print-controls', id: 'pts-bar' },
     h('div', { class: 'pb-figs' }, figures),
     h('div', { class: 'pb-actions no-print' },
-      h('button', { class: 'btn sm', type: 'button', id: 'pb-award', onClick: () => { awardRow.hidden = !awardRow.hidden; if (!awardRow.hidden) pts.focus(); } }, '🎁 Points from the GM'),
+      h('button', { class: 'btn sm', type: 'button', id: 'pb-award', onClick: () => { awardRow.hidden = !awardRow.hidden; if (!awardRow.hidden) pts.focus(); } }, 'Points from the GM'),
       saved > 0 && !editing ? h('button', { class: 'btn sm primary', type: 'button', id: 'pb-spend', onClick: () => { if (!ch.advancement) change((c) => startAdvancement(c, R)); onSpend?.(); } }, `Spend ${saved} saved point${saved === 1 ? '' : 's'}`) : null,
-      a ? h('button', { class: 'btn sm ghost', type: 'button', onClick: () => document.querySelector('.adv-track')?.scrollIntoView({ behavior: 'smooth' }) }, 'Log & goal ↓') : null),
+      a ? h('button', { class: 'btn sm ghost', type: 'button', onClick: () => document.querySelector('.adv-track')?.scrollIntoView({ behavior: 'smooth' }) }, 'Log & goal') : null),
     a?.goal ? goalBar(a) : null,
     awardRow);
 }

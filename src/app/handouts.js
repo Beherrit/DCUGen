@@ -101,10 +101,10 @@ function letterEl(hd, pic, reveal) {
 function textsEl(hd) {
   const f = hd.fields || {};
   return h('div', { class: 'ho-phone' },
-    h('div', { class: 'ho-phone-status' }, h('span', null, f.when || ''), h('span', null, '●●●  ▮')),
+    h('div', { class: 'ho-phone-status' }, h('span', null, f.when || ''), h('span', null, 'LTE')),
     h('div', { class: 'ho-phone-contact' }, h('span', { class: 'ho-avatar' }, (f.them || '?').slice(0, 1)), h('b', null, f.them || 'Unknown number')),
     h('div', { class: 'ho-thread' }, (hd.lines || []).map((l) => h('div', { class: `ho-bubble ${l.side === 'me' ? 'me' : 'them'}` }, h('span', null, l.text), l.time ? h('small', null, l.time) : null))),
-    h('div', { class: 'ho-phone-input' }, h('span', null, 'Message'), h('b', null, '↑')));
+    h('div', { class: 'ho-phone-input' }, h('span', null, 'Message'), h('b', null, 'Send')));
 }
 
 function reportEl(hd, pic, reveal) {
@@ -171,7 +171,7 @@ export function editHandout(ctx, e) { ctx.ui.hdraft = clone(e.handout); ctx.ui.h
 export async function newHandoutDialog(ctx, { kind = 'wanted', a = null } = {}) {
   const { world } = ctx;
   const pages = [...world.entities.values()].filter((e) => !['paper', 'handout'].includes(e.type)).sort((x, y) => (y.character ? 1 : 0) - (x.character ? 1 : 0) || x.name.localeCompare(y.name));
-  const kindSel = h('select', { 'aria-label': 'Kind' }, Object.entries(HANDOUT_KINDS).map(([k, K]) => h('option', { value: k, selected: k === kind }, `${K.glyph} ${K.label}`)));
+  const kindSel = h('select', { 'aria-label': 'Kind' }, Object.entries(HANDOUT_KINDS).map(([k, K]) => h('option', { value: k, selected: k === kind }, K.label)));
   const lookSel = h('select', { 'aria-label': 'Look' });
   const aSel = h('select', { 'aria-label': 'About' }, h('option', { value: '' }, '(no one in particular)'), pages.map((e) => h('option', { value: e.id, selected: a === e.id }, `${e.name}${e.character ? ` · PL ${e.character.pl}${e.character.alignment === 'villain' ? ' villain' : ''}` : ''}`)));
   const bSel = h('select', { 'aria-label': 'To' }, h('option', { value: '' }, '(someone)'), pages.filter((e) => e.type === 'person').map((e) => h('option', { value: e.id }, e.name)));
@@ -206,7 +206,7 @@ export function handoutsPage(ctx) {
   const list = [...world.entities.values()].filter((e) => e.type === 'handout' && e.handout).sort((a, b) => String(b.updated || b.created || '').localeCompare(String(a.updated || a.created || '')));
   const keyIn = h('input', { type: 'text', placeholder: 'Paste a handout key (DCUH1…) or link', 'aria-label': 'Handout key' });
   const openKey = async () => { const v = keyIn.value.trim(); if (!v) return; try { importHandout(ctx, await decodeHandout(v)); } catch (e) { toast(e.message); } };
-  const quick = (k) => h('button', { type: 'button', class: 'wd-quick', title: HANDOUT_KINDS[k].blurb, onClick: () => newHandoutDialog(ctx, { kind: k }) }, h('span', { class: 'wd-quick-glyph' }, HANDOUT_KINDS[k].glyph), h('b', null, HANDOUT_KINDS[k].label), h('small', null, HANDOUT_KINDS[k].blurb));
+  const quick = (k) => h('button', { type: 'button', class: 'wd-quick', title: HANDOUT_KINDS[k].blurb, onClick: () => newHandoutDialog(ctx, { kind: k }) }, h('b', null, HANDOUT_KINDS[k].label), h('small', null, HANDOUT_KINDS[k].blurb));
   return h('div', { class: 'wd-page' },
     h('header', { class: 'wd-hero small ho-hero' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, 'Handouts'), h('h1', null, 'Props for the table'), h('p', { class: 'wd-tagline' }, 'Wanted posters, case files, letters, ransom notes, telegrams, memos, phone screens and redacted reports. Drafted from the World (a page\'s ties, complications and what happened to them) or written by hand; saved as pages, printed, or sent as a key.')),
       h('button', { class: 'btn primary', type: 'button', onClick: () => newHandoutDialog(ctx) }, '+ New handout')),
@@ -216,7 +216,7 @@ export function handoutsPage(ctx) {
       h('div', { class: 'np-card-text' }, h('b', null, e.handout.title || HANDOUT_KINDS[e.handout.kind]?.label), h('span', null, [HANDOUT_KINDS[e.handout.kind]?.label, e.handout.date, e.session != null ? `Session ${e.session}` : null].filter(Boolean).join(' · ')), h('small', null, handoutSummary(e.handout)),
         h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', type: 'button', onClick: () => go(e.id) }, 'Open'), h('button', { class: 'btn sm ghost', type: 'button', onClick: () => editHandout(ctx, e) }, 'Edit'), h('button', { class: 'btn sm ghost', type: 'button', onClick: () => printHandout(e.handout, world) }, 'Print')))))) :
       h('div', { class: 'empty' }, h('h2', null, 'Nothing on the table yet'), h('p', null, 'Pick a kind above. A wanted poster for your villain takes one click.')),
-    h('section', { class: 'panel', style: { marginTop: '8px' } }, h('h2', null, '🔑 Open a handout key'), h('div', { class: 'seed-row' }, keyIn, h('button', { class: 'btn', type: 'button', onClick: openKey }, 'Open'))));
+    h('section', { class: 'panel', style: { marginTop: '8px' } }, h('h2', null, 'Open a handout key'), h('div', { class: 'seed-row' }, keyIn, h('button', { class: 'btn', type: 'button', onClick: openKey }, 'Open'))));
 }
 
 export function handoutPage(ctx, e) {
@@ -230,13 +230,13 @@ export function handoutPage(ctx, e) {
   const draw = () => clear(sheet).append(renderHandout(hd, { world, reveal: !!ctx.ui.reveal }));
   draw();
   const actions = h('div', { class: 'toolbar wd-actions no-print' },
-    ctx.ui.history.length ? h('button', { class: 'btn', type: 'button', onClick: ctx.back }, '← Back') : null,
-    h('button', { class: 'btn primary', type: 'button', onClick: () => editHandout(ctx, e) }, '✎ Edit'),
-    hasRedactions ? h('button', { class: 'btn', type: 'button', 'aria-pressed': String(!!ctx.ui.reveal), title: 'Show what the black bars hide (the GM\'s view)', onClick: () => { ctx.ui.reveal = !ctx.ui.reveal; ctx.renderWorld(); } }, ctx.ui.reveal ? '🙈 Hide redactions' : '👁 Reveal redactions') : null,
-    h('button', { class: 'btn', type: 'button', onClick: () => printHandout(hd, world) }, '🖨 Print / PDF'),
+    ctx.ui.history.length ? h('button', { class: 'btn', type: 'button', onClick: ctx.back }, 'Back') : null,
+    h('button', { class: 'btn primary', type: 'button', onClick: () => editHandout(ctx, e) }, 'Edit'),
+    hasRedactions ? h('button', { class: 'btn', type: 'button', 'aria-pressed': String(!!ctx.ui.reveal), title: 'Show what the black bars hide (the GM\'s view)', onClick: () => { ctx.ui.reveal = !ctx.ui.reveal; ctx.renderWorld(); } }, ctx.ui.reveal ? 'Hide redactions' : 'Reveal redactions') : null,
+    h('button', { class: 'btn', type: 'button', onClick: () => printHandout(hd, world) }, 'Print / PDF'),
     h('span', { class: 'spacer' }),
-    h('button', { class: 'btn', type: 'button', onClick: () => share('key') }, '🔑 Copy key'),
-    h('button', { class: 'btn', type: 'button', onClick: () => share('link') }, '🔗 Copy link'),
+    h('button', { class: 'btn', type: 'button', onClick: () => share('key') }, 'Copy key'),
+    h('button', { class: 'btn', type: 'button', onClick: () => share('link') }, 'Copy link'),
     h('button', { class: 'btn ghost', type: 'button', onClick: async () => toast((await copyText(handoutMarkdown(hd))) ? 'Copied as Markdown' : 'Copy failed') }, 'Copy as Markdown'),
     h('button', { class: 'btn ghost', type: 'button', onClick: () => { download(`${(hd.title || hd.kind).toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${hd.kind}.json`, JSON.stringify({ app: 'DCUGen', kind: 'handout', v: 1, handout: hd }, null, 2), 'application/json'); toast('Handout saved as a file'); } }, 'Save file'),
     h('button', { class: 'btn ghost danger', type: 'button', onClick: async () => {
@@ -307,8 +307,8 @@ export function handoutEditorPage(ctx) {
           d.picture?.src || auto ? h('img', { class: 'np-pic-preview', src: d.picture?.src || auto, alt: '' }) : h('div', { class: 'np-pic-preview empty' }, 'No picture'),
           h('div', { class: 'np-pic-btns' },
             auto ? h('small', { class: 'np-pic-status' }, 'Using the subject\'s portrait. Upload or paint to replace it.') : null,
-            h('button', { class: 'btn sm', type: 'button', onClick: () => file.click() }, '⇪ Upload'),
-            h('button', { class: 'btn sm', type: 'button', onClick: paint }, '🎨 Paint it'),
+            h('button', { class: 'btn sm', type: 'button', onClick: () => file.click() }, 'Upload'),
+            h('button', { class: 'btn sm', type: 'button', onClick: paint }, 'Paint it'),
             d.picture?.src ? h('button', { class: 'btn sm ghost danger', type: 'button', onClick: () => { d.picture = null; redraw(); drawPic(); } }, 'Remove') : null,
             status, file)),
         d.picture?.src && d.kind === 'report' ? field('Caption', text(d.picture, 'caption', { placeholder: 'Exhibit A' })) : null);
@@ -324,7 +324,7 @@ export function handoutEditorPage(ctx) {
         h('button', { type: 'button', class: `btn sm ${l.side === 'me' ? 'primary' : ''}`, title: 'Who sent it', onClick: () => { l.side = l.side === 'me' ? 'them' : 'me'; redraw(); draw(); } }, l.side === 'me' ? d.fields.me || 'Me' : d.fields.them || 'Them'),
         h('input', { type: 'text', value: l.text, 'aria-label': 'Message', style: { flex: 1 }, onInput: (ev) => { l.text = ev.target.value; redraw(); } }),
         h('input', { type: 'text', value: l.time || '', placeholder: '23:14', 'aria-label': 'Time', style: { width: '70px' }, onInput: (ev) => { l.time = ev.target.value; redraw(); } }),
-        h('button', { class: 'x', type: 'button', 'aria-label': 'Remove message', onClick: () => { d.lines.splice(i, 1); redraw(); draw(); } }, '✕'))),
+        h('button', { class: 'x', type: 'button', 'aria-label': 'Remove message', onClick: () => { d.lines.splice(i, 1); redraw(); draw(); } }, 'Remove'))),
       h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', type: 'button', onClick: () => { d.lines.push({ side: d.lines.at(-1)?.side === 'me' ? 'them' : 'me', text: '', time: '' }); redraw(); draw(); } }, '+ Message')));
     };
     draw();
@@ -342,15 +342,15 @@ export function handoutEditorPage(ctx) {
       BODY_LABEL[d.kind] ? field(BODY_LABEL[d.kind], text(d, 'body', { placeholder: '', label: 'Body', area: true, rows: d.kind === 'letter' ? 10 : 6 })) : null,
       ['casefile', 'report', 'letter'].includes(d.kind) && d.look !== 'ransom' ? h('p', { class: 'hint', style: { margin: 0 } }, 'Wrap a passage in [[double brackets]] to redact it. The GM can reveal the black bars on the saved page; the printed copy keeps them.') : null,
       d.kind === 'letter' && d.look === 'ransom' ? h('p', { class: 'hint', style: { margin: 0 } }, 'Every letter is cut from a different magazine. Keep it short and shouty.') : null,
-      h('div', { class: 'btn-row' }, h('button', { class: 'btn sm ghost', type: 'button', title: 'Draft the text again from the World', onClick: () => { const A = d.subject ? world.entities.get(d.subject) : null; const B = d.people.map((id) => world.entities.get(id)).find((e) => e && e.id !== d.subject) || null; const fresh = draftHandout(world, d.kind, { a: A, b: B, seed: randomSeed(), look: d.look }); Object.assign(d, { fields: fresh.fields, body: fresh.body, lines: fresh.lines, title: d.title || fresh.title }); ctx.renderWorld(); } }, '⚡ Redraft the words'))));
+      h('div', { class: 'btn-row' }, h('button', { class: 'btn sm ghost', type: 'button', title: 'Draft the text again from the World', onClick: () => { const A = d.subject ? world.entities.get(d.subject) : null; const B = d.people.map((id) => world.entities.get(id)).find((e) => e && e.id !== d.subject) || null; const fresh = draftHandout(world, d.kind, { a: A, b: B, seed: randomSeed(), look: d.look }); Object.assign(d, { fields: fresh.fields, body: fresh.body, lines: fresh.lines, title: d.title || fresh.title }); ctx.renderWorld(); } }, 'Redraft the words'))));
   redraw();
   const saveIt = () => { if (!d.title?.trim() && !d.body?.trim() && !d.lines.length) { toast('Give it a title or some text'); return; } const id = saveHandout(ctx, d, ctx.ui.hdraftId); ctx.ui.hdraft = null; ctx.ui.hdraftId = null; toast('Handout saved to the World'); go(id, { replace: true }); };
   const cancel = async () => { const ok = await openDialog({ title: 'Leave the editor?', body: h('p', { style: { margin: 0 } }, 'Changes since the last save are lost.'), buttons: [{ label: 'Stay', value: false }, { label: 'Leave', value: true, danger: true }] }); if (ok) { ctx.ui.hdraft = null; go(ctx.ui.hdraftId || 'handouts', { replace: true }); } };
   return h('div', { class: 'wd-page np-editor' },
     h('header', { class: 'wd-hero small ho-hero' }, h('div', { class: 'wd-hero-text' }, h('div', { class: 'eyebrow' }, ctx.ui.hdraftId ? 'Editing' : 'New handout'), h('h1', null, d.title || K.label), h('p', { class: 'wd-tagline' }, K.blurb)),
-      h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', type: 'button', onClick: saveIt }, '💾 Save to the World'), h('button', { class: 'btn', type: 'button', onClick: () => printHandout(d, world) }, '🖨 Print'), h('button', { class: 'btn ghost', type: 'button', onClick: cancel }, 'Cancel'))),
+      h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', type: 'button', onClick: saveIt }, 'Save to the World'), h('button', { class: 'btn', type: 'button', onClick: () => printHandout(d, world) }, 'Print'), h('button', { class: 'btn ghost', type: 'button', onClick: cancel }, 'Cancel'))),
     h('div', { class: 'np-editor-grid' }, form, h('div', { class: 'np-preview-col' }, preview)),
-    h('div', { class: 'np-savebar no-print' }, h('button', { class: 'btn primary', type: 'button', onClick: saveIt }, '💾 Save to the World'), h('button', { class: 'btn ghost', type: 'button', onClick: cancel }, 'Cancel')));
+    h('div', { class: 'np-savebar no-print' }, h('button', { class: 'btn primary', type: 'button', onClick: saveIt }, 'Save to the World'), h('button', { class: 'btn ghost', type: 'button', onClick: cancel }, 'Cancel')));
 }
 
 export { handoutId };

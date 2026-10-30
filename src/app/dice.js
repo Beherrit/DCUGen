@@ -16,13 +16,15 @@ export function rollCheck({ who, label, mod = 0, dc = null, note = '' }) {
   let deg = null;
   if (dc != null) {
     deg = total >= dc ? 1 + Math.floor((total - dc) / 5) : -(1 + Math.floor((dc - total - 1) / 5));
-    if (roll === 20) deg = deg > 0 ? deg + 1 : 1;
+    // Critical success (Hero's Handbook p10): one degree better, so one degree of failure becomes a success
+    // and two degrees of failure become one.
+    if (roll === 20) deg = deg > 0 ? deg + 1 : deg === -1 ? 1 : deg + 1;
   }
   const text = `${who} rolls ${label}: d20 ${roll} ${sign(mod)} = ${total}${dc != null ? ` vs DC ${dc} — ${deg > 0 ? `${deg} degree${deg > 1 ? 's' : ''} of success` : `${-deg} degree${deg < -1 ? 's' : ''} of failure`}` : ''}${roll === 20 ? ' (natural 20!)' : roll === 1 ? ' (natural 1)' : ''}${note ? ` · ${note}` : ''}`;
   return postRoll({ who, text, dice: { label, roll, mod, total, dc, deg } });
 }
 
-/** The "🎲 Roll" dropdown for a character. */
+/** The "Roll" dropdown for a character. */
 export function rollMenu(ch, R) {
   const who = ch.identity?.codename || ch.identity?.realName || 'Someone';
   let d;
@@ -34,7 +36,7 @@ export function rollMenu(ch, R) {
     document.querySelectorAll('.menu-list').forEach((m) => { m.hidden = true; });
     list.hidden = !open;
     btn.setAttribute('aria-expanded', String(open));
-  } }, '🎲 Roll ▾');
+  } }, 'Roll');
   const item = (label, hint, run) => h('button', { type: 'button', role: 'menuitem', onClick: () => { list.hidden = true; const e = run(); if (e) toast(e.text); } }, label, hint ? h('small', null, hint) : null);
   const group = (title) => h('div', { class: 'roll-group' }, title);
   list.append(group('Combat'));

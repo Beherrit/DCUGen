@@ -8,7 +8,7 @@
 
 export const MAX_FORMS = 8;
 // Each form keeps its own points ledger (advancement), because each form is its own build.
-export const FORM_FIELDS = ['pl', 'abilities', 'defenses', 'skills', 'advantages', 'powers', 'devices', 'equipment', 'portrait', 'theme', 'advancement'];
+export const FORM_FIELDS = ['pl', 'abilities', 'defenses', 'skills', 'advantages', 'powers', 'devices', 'equipment', 'styles', 'portrait', 'theme', 'advancement'];
 
 import { awardPoints } from './advancement.js';
 

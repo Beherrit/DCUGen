@@ -14,6 +14,7 @@ import { powerCost, primaryOwnCost } from '../engine/costs.js';
 import { gearCatalog, gearToEquipment, gearToDevice } from '../engine/gear.js';
 import { portraitBlock } from './portrait.js';
 import { houseRules } from '../engine/house.js';
+import { stylesSection } from './styles/section.js';
 import { poolTargets, targetLabel, poolPowers, poolCapacity, poolSpent, poolAvailable, poolFeeder, costPerRank, drain, loseDrained, settlePools, fmtPoints } from '../engine/pools.js';
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const clone = (x) => JSON.parse(JSON.stringify(x));
@@ -65,7 +66,7 @@ export function poolTracker(ch, p, path, change, R) {
   const dots = Math.round(Math.min(cap, 40));
   return h('div', { class: 'pool no-print-controls' },
     h('div', { class: 'pool-head' },
-      h('b', null, '⚡ Pool'),
+      h('b', null, 'Pool'),
       h('span', { class: 'pool-meter', role: 'img', 'aria-label': `${fmtPoints(spent)} of ${fmtPoints(avail)} power points placed` },
         Array.from({ length: dots }, (_, i) => h('i', { class: i < spent ? 'on' : i < avail ? '' : 'off' }))),
       h('span', { class: 'num pool-count' }, `${fmtPoints(spent)}/${fmtPoints(avail)} pp placed · ${fmtPoints(Math.max(0, free))} free`),
@@ -95,7 +96,7 @@ export function drainTracker(ch, p, path, change, R) {
   const resist = (p.detail && /Resisted by ([A-Za-z]+)/.exec(p.detail)?.[1]) || 'Fortitude or Will';
   return h('div', { class: 'pool drain no-print-controls' },
     h('div', { class: 'pool-head' },
-      h('b', null, '🩸 Drain'),
+      h('b', null, 'Drain'),
       h('span', { class: 'pool-meter', role: 'img', 'aria-label': `${held} of ${p.rank} points drained` }, Array.from({ length: Math.min(p.rank, 40) }, (_, i) => h('i', { class: i < held ? 'on' : '' }))),
       h('span', { class: 'num pool-count' }, `${held}/${p.rank} pp held`)),
     h('p', { class: 'hint pool-feed' }, `Target resists with ${resist} against DC ${10 + p.rank}. It loses ${houseRules().weaken === 'degrees' ? 'a power point per degree of failure (house rule)' : 'as many power points as it missed by'}, ${p.rank} at most in all, and gets them back over time.${fills.length ? ` What you hold fills ${fills.join(' and ')}.` : ' Tick "Pool" on a power in the Power Lab and pick this one under "Filled by" to spend what you steal.'}`),
@@ -106,11 +107,11 @@ export function drainTracker(ch, p, path, change, R) {
       h('button', { class: 'btn sm ghost', type: 'button', disabled: !held, title: 'Everything drained goes back', onClick: () => edit((q) => loseDrained(q, q.drained || 0)) }, 'All back')));
 }
 
-/** "📏 Range: …" under a power. */
+/** "Range: …" under a power. */
 function rangeLine(p, R) {
   const r = rangeInfo(p, R);
   if (!r) return null;
-  return h('div', { class: 'power-range' }, h('b', null, `📏 ${r.kind}: `), r.text);
+  return h('div', { class: 'power-range' }, h('b', null, `${r.kind}: `), r.text);
 }
 
 /** Short range text for the offense table. */
@@ -128,7 +129,7 @@ function aboutPower(p) {
 /** Linked effects (both work at once): their own name and description, under the effect they belong to. */
 function linkedAbout(p) {
   const withWords = (p.linked || []).filter((l) => l.description);
-  return withWords.length ? withWords.map((l) => h('div', { class: 'power-about linked' }, h('b', null, `🔗 ${l.name || l.effect}: `), l.description)) : null;
+  return withWords.length ? withWords.map((l) => h('div', { class: 'power-about linked' }, h('b', null, `Linked ${l.name || l.effect}: `), l.description)) : null;
 }
 
 export function whatItDoes(p, R, compact = false) {
@@ -185,9 +186,9 @@ export function renderFile(ch, R, opts = {}) {
       const str = s.d.abilities.Strength;
       const reach = strengthReach(str, R);
       if (!reach) return null;
-      return h('p', { class: 'ability-reach' }, h('b', null, '💪 Strength reach: '), `lifts ${reach.lift}`,
+      return h('p', { class: 'ability-reach' }, h('b', null, 'Strength reach: '), `lifts ${reach.lift}`,
         reach.throwPerson ? ` · throws a person ${reach.throwPerson}` : '', reach.throwCar ? ` · a car ${reach.throwCar}` : '',
-        ` · unarmed: close`, h('button', { class: 'linkish no-print', type: 'button', onClick: () => openRangeCalculator(ch, R) }, ' 📏 Range calculator'));
+        ` · unarmed: close`, h('button', { class: 'linkish no-print', type: 'button', onClick: () => openRangeCalculator(ch, R) }, ' Range calculator'));
     })());
 
   // ---- defenses ----
@@ -238,7 +239,7 @@ export function renderFile(ch, R, opts = {}) {
         return h('tr', null,
           h('td', null, a.name, a.alternate ? h('span', { style: { color: 'var(--ink-3)' } }, ' (AE)') : null),
           h('td', { class: 'n' }, a.roll ? sign(a.bonus) : a.kind === 'area' ? 'Area' : 'Perc.'),
-          h('td', null, `${a.effect} ${a.rank}${a.resistance ? ` · ${a.resistance}` : ''}${a.crit && a.crit < 20 ? ` · crit ${a.crit}-20` : ''}`),
+          h('td', null, `${a.effect} ${a.rank}${a.thrown ? ` (incl. +${a.thrown} Throwing Mastery)` : ''}${a.resistance ? ` · ${a.resistance}` : ''}${a.crit && a.crit < 20 ? ` · crit ${a.crit}-20` : ''}`),
           h('td', { class: 'range-cell' }, attackRange(a, R)),
           h('td', null, h('span', { class: 'ok', style: used > limit ? { color: 'var(--bad)' } : null }, `${used}/${limit}`)));
       })))));
@@ -252,14 +253,14 @@ export function renderFile(ch, R, opts = {}) {
         h('span', { class: 'power-name' }, p.name),
         p.effect ? ruleLink(p.effect === p.name ? 'ⓘ' : p.effect, p.effect, 'Effects') : null,
         alts.length ? h('span', { class: 'chip', title: p.dynamic ? 'Dynamic: split the pool between several effects at once' : 'Alternate Effects: one effect at a time' }, p.dynamic ? `Dynamic Array · ${primaryOwnCost(p, R)}-pp pool` : 'Array') : null,
-        p.linked?.length ? h('span', { class: 'chip', title: 'Linked effects work together, with one action' }, '🔗 Linked') : null,
-        p.pool ? h('span', { class: 'chip', title: 'Not always on: place its points during play' }, `⚡ Pool · ${fmtPoints(poolSpent(ch, p, R))}/${fmtPoints(poolAvailable(ch, p, R))} pp`) : null,
-        p.effect === 'Weaken' && p.drained ? h('span', { class: 'chip', title: 'Power points drained and still held' }, `🩸 ${p.drained}/${p.rank}`) : null,
+        p.linked?.length ? h('span', { class: 'chip', title: 'Linked effects work together, with one action' }, 'Linked') : null,
+        p.pool ? h('span', { class: 'chip', title: 'Not always on: place its points during play' }, `Pool · ${fmtPoints(poolSpent(ch, p, R))}/${fmtPoints(poolAvailable(ch, p, R))} pp`) : null,
+        p.effect === 'Weaken' && p.drained ? h('span', { class: 'chip', title: 'Power points drained and still held' }, `Drained ${p.drained}/${p.rank}`) : null,
         h('span', { class: 'power-cost num' }, inDevice ? `${cost} pp in device` : `${cost} pp`),
         editing ? h('span', { class: 'btn-row no-print' },
           stepper(p.rank, (d) => change((c) => { const q = getPower(c, path); q.rank = Math.max(1, q.rank + d); }), { min: 1, label: `${p.name} rank` }),
           h('button', { class: 'btn sm', type: 'button', onClick: () => opts.onEditPower?.(path) }, 'Open in Lab'),
-          h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${p.name}`, onClick: () => change((c) => removeAt(c, path)) }, '✕')) : null),
+          h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${p.name}`, onClick: () => change((c) => removeAt(c, path)) }, 'Remove')) : null),
       h('div', { class: 'power-text' }, describeEffect(p, R)),
       rangeLine(p, R),
       aboutPower(p),
@@ -271,13 +272,13 @@ export function renderFile(ch, R, opts = {}) {
         h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), rangeLine(a, R), aboutPower(a), linkedAbout(a), drainTracker(ch, a, { ...path, alt: i }, change, R), poolTracker(ch, a, { ...path, alt: i }, change, R), whatItDoes(a, R, true),
         editing ? h('span', { class: 'no-print' }, ' ',
           stepper(a.rank, (d) => change((c) => { const q = getPower(c, { ...path, alt: i }); q.rank = Math.max(1, q.rank + d); }), { min: 1, label: `${a.name} rank` }),
-          h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${a.name}`, onClick: () => change((c) => removeAt(c, { ...path, alt: i })) }, '✕')) : null)),
+          h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${a.name}`, onClick: () => change((c) => removeAt(c, { ...path, alt: i })) }, 'Remove')) : null)),
       h('details', { class: 'no-print' }, h('summary', null, 'Show the math'), mathTable(p, R), alts.length ? h('div', { class: 'math' }, `Alternate Effects: each costs ${p.dynamic ? 2 : 1} point${p.dynamic ? 's' : ''} and may cost no more than the primary effect on its own.`) : null));
   };
   const powers = h('section', { class: 'sec' },
     h('h3', null, 'Powers', h('span', { class: 'pts' }, `${s.cost.powers} pp`)),
     h('div', { class: 'read-legend no-print', 'aria-hidden': 'true' }, h('span', { class: 'lg-name' }, 'Name'), h('span', { class: 'lg-mech' }, 'How it works'), h('span', { class: 'lg-desc' }, 'What it does')),
-    (ch.powers || []).map((p, i) => powerCard(p, { device: null, index: i })),
+    (ch.powers || []).map((p, i) => (p.maneuver ? null : powerCard(p, { device: null, index: i }))),
     (ch.devices || []).map((dev, di) => {
       const dc = s.devices[di];
       return h('div', { class: 'device' },
@@ -285,10 +286,10 @@ export function renderFile(ch, R, opts = {}) {
           h('b', null, dev.name),
           h('span', { class: 'chip' }, dev.kind === 'easily' ? 'Easily Removable' : 'Removable'),
           h('span', { class: 'power-cost num', title: `${dev.kind === 'easily' ? 'Easily Removable: −2' : 'Removable: −1'} point per full 5 points of the whole device (${dc.raw} points of powers)` }, `${dc.raw} pp of powers − ${dc.discount} ${dev.kind === 'easily' ? 'Easily Removable' : 'Removable'} (${dev.kind === 'easily' ? 2 : 1} per 5) = ${dc.total} pp`),
-          editing ? h('button', { class: 'x no-print', type: 'button', 'aria-label': `Remove ${dev.name}`, onClick: () => change((c) => { c.devices.splice(di, 1); }) }, '✕') : null),
+          editing ? h('button', { class: 'x no-print', type: 'button', 'aria-label': `Remove ${dev.name}`, onClick: () => change((c) => { c.devices.splice(di, 1); }) }, 'Remove') : null),
         dev.powers.map((p, i) => powerCard(p, { device: di, index: i }, true)));
     }),
-    !ch.powers?.length && !ch.devices?.length ? h('p', { style: { color: 'var(--ink-3)', margin: 0 } }, 'No powers. All skill, training and gear.') : null,
+    !(ch.powers || []).some((p) => !p.maneuver) && !ch.devices?.length ? h('p', { style: { color: 'var(--ink-3)', margin: 0 } }, 'No powers. All skill, training and gear.') : null,
     editing ? h('div', { class: 'add-row no-print' }, h('button', { class: 'btn', type: 'button', onClick: () => opts.onAddPower?.() }, '+ Add a power from the Power Lab')) : null);
 
   // ---- advantages ----
@@ -307,7 +308,7 @@ export function renderFile(ch, R, opts = {}) {
           (a.rank || 1) > 1 || def?.ranked ? h('span', { class: 'adv-rank num' }, `${a.rank || 1}${max ? ` / ${max}` : ''}`) : null,
           h('span', { class: 'adv-type' }, def ? `${def.type}${def.book ? ` · ${def.book}` : ''}` : ''),
           editing && def?.ranked ? stepper(a.rank || 1, (d) => change((c) => { const x = c.advantages[i]; x.rank = (x.rank || 1) + d; if (x.rank <= 0) c.advantages.splice(i, 1); }), { min: 0, label: a.name }) : null,
-          editing ? h('button', { class: 'x no-print', type: 'button', 'aria-label': `Remove ${a.name}`, onClick: () => change((c) => { c.advantages.splice(i, 1); }) }, '✕') : null),
+          editing ? h('button', { class: 'x no-print', type: 'button', 'aria-label': `Remove ${a.name}`, onClick: () => change((c) => { c.advantages.splice(i, 1); }) }, 'Remove') : null),
         longParam ? h('div', { class: 'adv-what adv-custom' }, a.param) : null,
         def?.summary ? h('div', { class: 'adv-what' }, def.summary, (def.requires || []).length ? h('span', { class: 'adv-req' }, ` Requires ${def.requires.map((r) => r.replace(/^\w+:/, '')).join(', ')}.`) : null) : null);
     })),
@@ -358,6 +359,9 @@ export function renderFile(ch, R, opts = {}) {
         preview);
     })() : null);
 
+  // ---- fighting styles (Martial Arts 3e) ----
+  const fighting = stylesSection(ch, R, { editing, change, stepper, cost: s.cost });
+
   // ---- skills ----
   const skills = h('section', { class: 'sec' },
     h('h3', null, 'Skills', h('span', { class: 'pts' }, `${s.cost.skills} pp · ${s.cost.skillRanks} ranks`)),
@@ -391,7 +395,7 @@ export function renderFile(ch, R, opts = {}) {
     h('h3', null, 'Equipment', h('span', { class: 'pts' }, `${(ch.equipment || []).reduce((t, e) => t + (e.cost || 0), 0)} ep`)),
     (ch.equipment || []).map((e, i) => h('div', { class: 'power' },
       h('div', { class: 'power-top' }, h('span', { class: 'power-name' }, e.name), h('span', { class: 'power-cost' }, `${e.cost} ep`),
-        editing ? h('button', { class: 'x no-print', type: 'button', 'aria-label': `Remove ${e.name}`, onClick: () => change((c) => { c.equipment.splice(i, 1); }) }, '✕') : null),
+        editing ? h('button', { class: 'x no-print', type: 'button', 'aria-label': `Remove ${e.name}`, onClick: () => change((c) => { c.equipment.splice(i, 1); }) }, 'Remove') : null),
       e.effect ? h('div', { class: 'power-text' }, e.effect) : null)),
     editing ? (() => {
       const input = h('input', { type: 'search', list: 'eq-list', id: 'add-equip', placeholder: `Search ${eqItems.length} items: rifle, rope, chainmail, blaster...`, 'aria-label': 'Equipment to add' });
@@ -431,7 +435,7 @@ export function renderFile(ch, R, opts = {}) {
     h('div', { style: { marginTop: '12px' } },
       h('div', { class: 'label', style: { marginBottom: '6px' } }, 'Complications'),
       (ch.complications || []).map((x, i) => h('div', { class: 'comp' }, h('b', null, x.type,
-        editing ? h('button', { class: 'x no-print', type: 'button', 'aria-label': `Remove ${x.type}`, onClick: () => change((c) => { c.complications.splice(i, 1); }) }, '✕') : null), x.text)),
+        editing ? h('button', { class: 'x no-print', type: 'button', 'aria-label': `Remove ${x.type}`, onClick: () => change((c) => { c.complications.splice(i, 1); }) }, 'Remove') : null), x.text)),
       editing ? (() => {
         const type = h('input', { type: 'text', placeholder: 'Type (Enemy, Secret...)', id: 'add-comp-type', 'aria-label': 'Complication type' });
         const text = h('input', { type: 'text', placeholder: 'What it means for them', id: 'add-comp-text', 'aria-label': 'Complication text' });
@@ -449,7 +453,7 @@ export function renderFile(ch, R, opts = {}) {
   const c = s.cost;
   const parts = [
     ['Abilities', c.abilities, '#d1495b'], ['Powers', c.powers, '#2f6fde'], ['Advantages', c.advantages, '#e0a030'],
-    ['Skills', c.skills, '#3aa17e'], ['Defenses', c.defenses, '#8a5cd6'],
+    ['Skills', c.skills, '#3aa17e'], ['Defenses', c.defenses, '#8a5cd6'], ...(c.styles ? [['Fighting styles', c.styles, '#b5651d']] : []),
   ];
   const denom = Math.max(c.budget, c.total, 1);
   const points = h('section', { class: 'sec points' },
@@ -465,7 +469,7 @@ export function renderFile(ch, R, opts = {}) {
     opts.onChange && !opts.noAdvancement ? pointsBar(ch, R, { change, onSpend: opts.onSpend, editing }) : null,
     h('div', { class: 'file-body' },
       h('div', { class: 'col' }, abilities, defenses, offense, powers),
-      h('div', { class: 'col' }, advantages, skills, equipment, story, points,
+      h('div', { class: 'col' }, advantages, fighting, skills, equipment, story, points,
         opts.onChange && !opts.noAdvancement ? advancementSection(ch, R, { change, onSpend: opts.onSpend, editing }) : null)));
   file.style.setProperty('--hero', hero);
   file.style.setProperty('--hero-ink', inkFor(hero));

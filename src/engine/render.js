@@ -6,6 +6,7 @@ import { deriveAll } from './derive.js';
 import { checkLimits } from './limits.js';
 import { poolCapacity } from './pools.js';
 import { houseRules } from './house.js';
+import { styleSummaries, styleTextLines } from './martial/summary.js';
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
@@ -256,7 +257,7 @@ export function offenseLines(ch, R, d = deriveAll(ch, R)) {
   for (const a of d.attacks) {
     const effectName = a.effect === 'Damage' ? 'Damage' : a.effect;
     let text;
-    if (a.roll) text = `${sign(a.bonus)} ${a.kind === 'ranged' ? 'Ranged' : 'Close'}, ${effectName} ${a.rank}`;
+    if (a.roll) text = `${sign(a.bonus)} ${a.kind === 'ranged' ? 'Ranged' : 'Close'}, ${effectName} ${a.rank}${a.thrown ? ` (incl. +${a.thrown} Throwing Mastery)` : ''}`;
     else if (a.kind === 'area') text = `Area, ${effectName} ${a.rank} (DC ${dcFor(a, R)}; Dodge DC ${10 + a.rank} for half)`;
     else text = `Perception, ${effectName} ${a.rank} (DC ${dcFor(a, R)})`;
     if (a.crit && a.crit < 20) text += `, Crit. ${a.crit}-20`;
@@ -270,7 +271,7 @@ export function sheet(ch, R) {
   const d = deriveAll(ch, R);
   const cost = costBreakdown(ch, R);
   const issues = checkLimits(ch, R);
-  const powers = (ch.powers || []).map((p) => powerLines(p, R));
+  const powers = (ch.powers || []).filter((p) => !p.maneuver).map((p) => powerLines(p, R));
   const devices = (ch.devices || []).map((dev) => ({
     name: dev.name,
     kind: dev.kind,
@@ -304,6 +305,7 @@ export function sheet(ch, R) {
       limit: 2 * ch.pl,
     },
     powers, devices, skills, advantages,
+    styles: styleSummaries(ch, R),
     offense: offenseLines(ch, R, d),
     equipment: ch.equipment || [],
   };
@@ -352,12 +354,13 @@ export function statBlockText(ch, R) {
   if (s.equipment.length) out.push(`Equipment: ${s.equipment.map((e) => `${e.name}${e.effect ? ` (${e.effect})` : ''}`).join(', ')}.`);
   if (s.advantages.length) out.push(`Advantages: ${s.advantages.map((a) => a.label).join(', ')}.`);
   if (s.skills.length) out.push(`Skills: ${s.skills.map((k) => `${k.label} ${k.ranks} (${sign(k.bonus)})`).join(', ')}.`);
+  if (s.styles.length) out.push(`Fighting styles: ${styleTextLines(ch, R).join(' ')}`);
   out.push(`Offense: ${s.offense.map((o) => `${o.label} ${o.text}`).join(', ')}.`);
   const t = s.defenses.find((x) => x.name === 'Toughness');
   const toughText = t.noRoll !== t.value ? `${t.value}/${t.noRoll}*` : `${t.value}`;
   out.push(`Defense: ${s.defenses.map((x) => `${x.name} ${x.name === 'Toughness' ? toughText : x.value}`).join(', ')}${t.noRoll !== t.value ? ' *Without Defensive Roll bonus.' : ''}`);
   const c = s.cost;
-  out.push(`Power Points: Abilities ${c.abilities} + Powers ${c.powers} + Advantages ${c.advantages} + Skills ${c.skills} (${c.skillRanks} ranks) + Defenses ${c.defenses} = ${c.total}`);
+  out.push(`Power Points: Abilities ${c.abilities} + Powers ${c.powers} + Advantages ${c.advantages} + Skills ${c.skills} (${c.skillRanks} ranks) + Defenses ${c.defenses}${c.styles ? ` + Fighting styles ${c.styles}` : ''} = ${c.total}`);
   if (ch.complications?.length) out.push(`Complications: ${ch.complications.map((x) => `${x.type}: ${x.text}`).join(' ')}`);
   if (ch.origin?.text) { out.push(''); out.push(`Origin (${ch.origin.label}): ${ch.origin.text}`); }
   return out.join('\n');

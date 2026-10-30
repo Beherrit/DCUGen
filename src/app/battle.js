@@ -2,18 +2,27 @@
 // the fight play out turn by turn with a full log. Pause, step, run to the end, or run the same
 // match a hundred times for the odds.
 
-import { sortChars, sortSelect, sortPref } from './sorting.js';
 import { hasForms, activeForm, switchForm } from '../engine/forms.js';
 import { h, clear, toast, copyText, download, inkFor, openDialog } from './dom.js';
-import { state } from './store.js';
 import { randomSeed } from '../engine/rng.js';
-import { catalogEntries } from '../engine/workshop.js';
-import { catalogToCharacter } from '../engine/catalog.js';
 import { DIFFICULTIES, verdict, heroOdds, tuneBattle, scaleCharacter } from '../engine/balance.js';
 import { battleComic, comicSvg } from '../engine/comic.js';
 import { portraitOf } from '../engine/portrait.js';
 import { imageDialog } from './imageshare.js';
-import { createBattle, addCombatant, removeCombatant, makeCombatant, joinBattle, startBattle, step, runRound, runToEnd, battleText, simulateMany, serializeBattle, reviveBattle, placeAll, STYLES, TACTICS, ARENA, statusLine, conditionLabels, detectStyle, rebuildCombatant } from '../engine/battle.js';
+import { addPanel, quickStarts } from './battle-setup.js';
+import { tacticChips } from './battle-tactics.js';
+import { notSimulatedLine } from './battle-report.js';
+import { rolesNote } from './battle-roles.js';
+import { descriptorTags, attackTitle, insubChip } from './battle-descriptors.js';
+import { keepFinishedFight, keptNote, roomTabs } from './records/room.js';
+import { renderFights, openFight } from './records/fights-view.js';
+import { renderCityWar } from './citywar/view.js';
+import { renderTournament } from './tournament/view.js';
+import { KIND_CLASS, teamColor, renderLogInto, logControls } from './battle-log.js';
+import { uiBattle, wholeCover } from './battle-cover.js';
+import { gridBoard, initials } from './battle-grid.js';
+import { createBattle, addCombatant, removeCombatant, makeCombatant, joinBattle, startBattle, step, runRound, runToEnd, battleText, simulateMany, serializeBattle, reviveBattle, placeAll, squareName, STYLES, TACTICS, statusLine, conditionLabels, detectStyle, rebuildCombatant } from '../engine/battle.js';
+import { visibleTeams } from './battle-teams.js';
 
 const KEY = 'dcugen.battle.v1';
 let R;
@@ -21,16 +30,14 @@ let root;
 let hooks = {};
 let battle;
 let timer = null;
-let ui = { showDice: true, logWho: null, moreTeams: false, mineQ: '', speed: 700, filter: 'all', bestiaryQ: '', team: 'A', copies: 1, mc: null, mcBusy: false, showHelp: false };
-const TEAM_COLORS = { A: '#1f4fbf', B: '#c8202f', C: '#1a7f4b', D: '#a8670b' };
-const TEAMS = ['A', 'B', 'C', 'D'];
+let ui = { sub: 'fight', showDice: true, logWho: null, teamCount: 2, mineQ: '', speed: 700, filter: 'all', bestiaryQ: '', team: 'A', copies: 1, mc: null, mcBusy: false, showHelp: false };
 
 function load() {
   try {
     const raw = JSON.parse(localStorage.getItem(KEY) || 'null');
     if (raw?.combatants) return reviveBattle(R, raw);
   } catch { /* ignore */ }
-  return createBattle({ seed: randomSeed(), name: 'Battle' });
+  return uiBattle(randomSeed());
 }
 
 function save() {
@@ -43,7 +50,7 @@ export function initBattle(rules, el, h2 = {}) {
   hooks = h2;
   battle = load();
   document.addEventListener('keydown', (e) => {
-    if (!root || root.hidden || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (!root || root.hidden || ui.sub !== 'fight' || e.ctrlKey || e.metaKey || e.altKey) return;
     if (/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName)) return;
     if (document.querySelector('dialog[open]')) return;
     const k = e.key.toLowerCase();
@@ -123,8 +130,12 @@ function doEnd() { stopTimer(); runToEnd(battle, R); save(); renderBattle(); }
 
 function reset({ newSeed = false } = {}) {
   stopTimer();
-  const chars = battle.combatants.map((c) => ({ ch: c.ch, team: c.team, style: c.style, tactics: c.tactics, heroPoints: c.heroPoints, name: c.name, id: c.id }));
+  const chars = battle.combatants.filter((c) => !c.summon).map((c) => ({ ch: c.ch, team: c.team, style: c.style, tactics: c.tactics, heroPoints: c.heroPoints, name: c.name, id: c.id, carry: c.carry }));
+  const oldOptions = battle.options;
+  const oldCover = wholeCover(battle.cover);
   battle = createBattle({ seed: newSeed ? randomSeed() : battle.seed, name: battle.name });
+  battle.options = { ...battle.options, ...oldOptions };
+  battle.cover = oldCover;
   for (const x of chars) addCombatant(battle, makeCombatant(R, x.ch, x));
   ui.mc = null;
   save();
@@ -133,16 +144,17 @@ function reset({ newSeed = false } = {}) {
 
 function clearAll() {
   stopTimer();
-  battle = createBattle({ seed: randomSeed(), name: 'Battle' });
+  battle = uiBattle(randomSeed());
   ui.mc = null;
   save();
   renderBattle();
 }
 
+/** What the setup rail needs from this page (read fresh at each render, since the battle can be replaced). */
+const setupCx = () => ({ battle, R, ui, hooks, throwIn, save, render: renderBattle, sidePower, teamColor });
+
 // ---- pieces ---------------------------------------------------------------------------------------------
 
-const teamColor = (t) => TEAM_COLORS[t] || '#666';
-const initials = (name) => name.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
 
 function fighterCard(c) {
   const setup = battle.status === 'setup';
@@ -154,79 +166,43 @@ function fighterCard(c) {
   const conds = c.out || c.fled ? [] : conditionLabels(c).filter((x) => !['Dazed', 'Staggered', 'Fatigued', 'Exhausted'].includes(x));
   const main = c.attacks.filter((a) => !a.unarmed).sort((a, b) => b.rank - a.rank)[0] || c.attacks[0];
   const styleSel = h('select', { class: 'bt-mini', 'aria-label': `${c.name} fighting style`, onChange: (e) => { c.style = e.target.value; rebuildCombatant(c, R); save(); renderBattle(); } },
-    Object.entries(STYLES).map(([k, v]) => h('option', { value: k, selected: k === c.style }, `${v.glyph} ${v.label}`)));
+    Object.entries(STYLES).map(([k, v]) => h('option', { value: k, selected: k === c.style }, v.label)));
   const tacSel = h('select', { class: 'bt-mini', 'aria-label': `${c.name} target choice`, onChange: (e) => { c.tactics = e.target.value; save(); } },
     Object.entries(TACTICS).map(([k, v]) => h('option', { value: k, selected: k === c.tactics }, k === 'auto' ? `Target: ${S.target === 'lowWill' ? 'weakest will' : TACTICS[S.target]?.toLowerCase() || 'by style'}` : v)));
-  const teamSel = h('div', { class: 'bt-sides', role: 'group', 'aria-label': `${c.name} team` }, TEAMS.map((t) => h('button', { type: 'button', class: `bt-side ${t === c.team ? 'on' : ''}`, style: { '--t': teamColor(t) }, title: `Move to team ${t}`, 'aria-pressed': String(t === c.team), onClick: () => { c.team = t; placeAll(battle); save(); renderBattle(); } }, t)));
+  const teamSel = h('div', { class: 'bt-sides', role: 'group', 'aria-label': `${c.name} team` }, visibleTeams(battle, ui).map((t) => h('button', { type: 'button', class: `bt-side ${t === c.team ? 'on' : ''}`, style: { '--t': teamColor(t) }, title: `Move to team ${t}`, 'aria-pressed': String(t === c.team), onClick: () => { c.team = t; placeAll(battle); save(); renderBattle(); } }, t)));
   // Alternate forms: fight in any of them (DCA 88: each form is its own build)
   const formSel = hasForms(c.ch) ? h('select', { class: 'bt-mini', 'aria-label': `${c.name} form`, title: 'Which form they fight in', onChange: (e) => {
     const ch = switchForm(c.ch, Number(e.target.value));
     Object.assign(c, makeCombatant(R, ch, { id: c.id, team: c.team, style: null, tactics: c.tactics, heroPoints: c.heroPoints, name: c.name }));
     placeAll(battle); save(); renderBattle();
-  } }, c.ch.forms.map((f, i) => h('option', { value: i, selected: i === activeForm(c.ch) }, `🎭 ${f.name || `Form ${i + 1}`}`))) : null;
+  } }, c.ch.forms.map((f, i) => h('option', { value: i, selected: i === activeForm(c.ch) }, f.name || `Form ${i + 1}`))) : null;
   const hp = h('input', { type: 'number', class: 'bt-hp', min: 0, max: 9, value: c.heroPoints, 'aria-label': `${c.name} hero points`, title: 'Hero points', onChange: (e) => { c.heroPoints = Math.max(0, Number(e.target.value) || 0); save(); } });
   return h('article', { class: `bt-card ${c.out ? 'out' : ''} ${c.fled ? 'fled' : ''}`, style: { '--c': c.color, '--t': teamColor(c.team), '--c-ink': inkFor(c.color) } },
     h('div', { class: 'bt-card-head' },
-      h('span', { class: 'bt-token', title: `Zone ${c.pos + 1}` }, initials(c.name)),
+      h('span', { class: 'bt-token', title: `Square ${squareName(c.x, c.y)}` }, initials(c.name)),
       h('div', { class: 'bt-names' },
         h('b', null, c.name),
-        h('span', null, `PL ${c.pl} · ${S.glyph} ${S.label}${c.minion ? ' · minion' : ''}${hasForms(c.ch) ? ` · 🎭 ${c.ch.forms[activeForm(c.ch)]?.name || 'form'}` : ''}`)),
+        h('span', null, `PL ${c.pl} · ${S.label}${c.minion ? ' · minion' : ''}${rolesNote(c)}${hasForms(c.ch) ? ` · form: ${c.ch.forms[activeForm(c.ch)]?.name || 'form'}` : ''}`)),
       h('span', { class: 'bt-team', style: { background: teamColor(c.team) } }, c.team),
-      h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${c.name}`, title: 'Remove from the battle', onClick: () => { removeCombatant(battle, c.id); save(); renderBattle(); } }, '✕')),
+      h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${c.name}`, title: 'Remove from the battle', onClick: () => { removeCombatant(battle, c.id); save(); renderBattle(); } }, 'Remove')),
     h('div', { class: 'bt-stats' },
       [['DOD', d.defenses.Dodge], ['PAR', d.defenses.Parry], ['TOU', d.defenses.Toughness - c.bruises], ['FOR', d.defenses.immune?.Fortitude ? '—' : d.defenses.Fortitude], ['WIL', d.defenses.immune?.Will ? '—' : d.defenses.Will], ['INI', (d.initiative >= 0 ? '+' : '') + d.initiative]].map(([k, v]) => h('div', null, h('b', { class: 'num' }, v), h('span', null, k)))),
-    main ? h('div', { class: 'bt-main' }, `${main.name}: ${main.roll ? `+${main.bonus}, ` : `${main.area ? `${main.area} area` : 'perception'}, `}${main.effect} ${main.rank} (${main.resistance})`, c.attacks.length > 2 ? h('small', null, ` +${c.attacks.length - 1} more`) : null) : null,
-    setup ? h('div', { class: 'bt-opts' }, teamSel, formSel, styleSel, h('details', { class: 'bt-more' }, h('summary', null, 'More'), h('div', { class: 'bt-more-body' }, tacSel, h('label', { class: 'bt-hp-wrap', title: 'Hero points: re-roll a miss or shake off a daze' }, '★ Hero points', hp)))) : null,
+    main ? h('div', { class: 'bt-main', title: attackTitle(c) }, `${main.name}: ${main.roll ? `+${main.bonus}, ` : `${main.area ? `${main.area} area` : 'perception'}, `}${main.effect} ${main.rank} (${main.resistance})`, c.attacks.length > 2 ? h('small', null, ` +${c.attacks.length - 1} more`) : null) : null,
+    descriptorTags(c),
+    setup ? h('div', { class: 'bt-opts' }, teamSel, formSel, styleSel, h('details', { class: 'bt-more' }, h('summary', null, 'More'), h('div', { class: 'bt-more-body' }, tacSel, h('label', { class: 'bt-hp-wrap', title: 'Hero points: re-roll a miss or shake off a daze' }, 'Hero points', hp), notSimulatedLine(c)))) : null,
     !setup ? h('div', { class: 'bt-state' }, dmg,
       h('div', { class: 'bt-conds' },
-        c.fled ? h('span', { class: 'bt-cond fled' }, 'Fled') : c.out ? h('span', { class: 'bt-cond ko' }, statusLine(c)) : null,
+        c.fled ? h('span', { class: 'bt-cond fled' }, c.escaped ? 'Got away' : 'Fled') : c.out ? h('span', { class: 'bt-cond ko' }, statusLine(c)) : null,
         conds.map((x) => h('span', { class: 'bt-cond' }, x)),
-        c.heroPoints ? h('span', { class: 'bt-cond hp', title: 'Hero points' }, `★ ${c.heroPoints}`) : null,
+        insubChip(c) ? h('span', { class: 'bt-cond', title: 'Insubstantial form (Hero\'s Handbook p103)' }, insubChip(c)) : null,
+        c.heroPoints ? h('span', { class: 'bt-cond hp', title: 'Hero points' }, `Hero points ${c.heroPoints}`) : null,
         c.fatigue ? h('span', { class: 'bt-cond' }, c.fatigue >= 2 ? 'Exhausted' : 'Fatigued') : null),
       h('div', { class: 'bt-record' }, `${c.stats.hits}/${c.stats.attacks} hits · ${c.stats.kos} KO${c.stats.kos === 1 ? '' : 's'} · dealt ${c.stats.degrees}, took ${c.stats.taken}`)) : null,
     S.blurb && setup ? h('p', { class: 'bt-blurb' }, S.blurb) : null);
 }
 
-function arena() {
-  const zones = Array.from({ length: ARENA }, (_, i) => h('div', { class: 'bt-zone' }, h('span', { class: 'bt-zone-n' }, i + 1)));
-  const active = battle.status === 'running' ? battle.order[Math.min(battle.turn, battle.order.length - 1)] : null;
-  for (const c of battle.combatants) {
-    const tok = h('span', { class: `bt-token ${c.out || c.fled ? 'down' : ''} ${c.id === battle.order[battle.turn - 1] ? 'acting' : ''}`, title: `${c.name} (team ${c.team}) · ${statusLine(c)}`, style: { '--c': c.color, '--t': teamColor(c.team), '--c-ink': inkFor(c.color) } }, initials(c.name));
-    zones[Math.max(0, Math.min(ARENA - 1, c.pos))].append(tok);
-  }
-  void active;
-  return h('div', { class: 'bt-arena', role: 'img', 'aria-label': 'The arena, with every fighter in their zone' }, zones);
-}
-
-const KIND_CLASS = { round: 'round', init: 'init', hit: 'hit', crit: 'crit', miss: 'miss', resist: 'resist', condition: 'cond', ko: 'ko', heal: 'heal', hero: 'hero', move: 'move', flee: 'ko', end: 'end', skip: 'skip', attack: 'attack', recover: 'heal', note: 'note' };
-
-const diceText = (d) => `${d.label}: d20 ${d.roll}${d.mod != null ? ` ${d.mod >= 0 ? '+' : '−'} ${Math.abs(d.mod)}` : ''}${d.total != null ? ` = ${d.total}` : ''}${d.dc != null ? ` vs ${d.dc}` : ''}`;
-
-function logEntry(e) {
-  const el = h('div', { class: `bt-log-row ${KIND_CLASS[e.kind] || ''} ${e.important ? 'key' : ''}` },
-    h('span', { class: 'bt-log-text' }, e.text,
-      ui.showDice && e.dice?.length && e.kind !== 'init' && !/d20 \d/.test(e.text || '') ? h('small', { class: 'bt-log-roll' }, e.dice.map(diceText).join(' · ')) : null),
-    e.dice?.length ? h('span', { class: 'bt-log-dice', title: e.dice.map(diceText).join('\n') }, e.dice.slice(0, 4).map((d) => h('b', { class: `num ${d.roll === 20 ? 'nat20' : d.roll === 1 ? 'nat1' : ''}` }, d.roll))) : null);
-  return el;
-}
-
-/**
- * The log as turns: each fighter's turn is a block with who acted and everything that happened in it (moves,
- * attacks, rolls, what the target rolled, conditions), so you can read the fight action by action.
- */
-function logTurns(list) {
-  const blocks = [];
-  let cur = null;
-  for (const e of list) {
-    if (e.kind === 'round' || e.kind === 'end' || e.kind === 'init' && !e.actor) { blocks.push({ kind: e.kind, entries: [e] }); cur = null; continue; }
-    if (!cur || (e.actor && e.actor !== cur.actor) || e.round !== cur.round) {
-      cur = { kind: 'turn', actor: e.actor || null, round: e.round, entries: [] };
-      blocks.push(cur);
-    }
-    cur.entries.push(e);
-  }
-  return blocks;
-}
+/** The grid board. Selecting a fighter shades its ranges; in setup tokens can be dragged and cover dropped on a square. */
+const arena = () => gridBoard({ battle, ui, save, render: renderBattle, teamColor });
 
 let logHost; let liveHost; let arenaHost; let cardsHost; let nowHost;
 
@@ -244,21 +220,7 @@ function nowBanner() {
 
 function renderLog() {
   if (!logHost) return;
-  clear(logHost);
-  const who = ui.logWho && battle.combatants.some((c) => c.id === ui.logWho) ? ui.logWho : null;
-  const list = battle.log.filter((e) => (ui.filter === 'all' || e.important || ['round', 'ko', 'end', 'crit', 'hero'].includes(e.kind))
-    && (!who || e.kind === 'round' || e.actor === who || e.target === who || (e.text || '').includes(battle.combatants.find((c) => c.id === who)?.name || '\u0000')));
-  if (!list.length) { logHost.append(h('p', { class: 'hint', style: { margin: 0 } }, battle.status === 'setup' ? 'Start the fight and every action shows here, turn by turn: who moved, who they attacked, every roll and what it did.' : 'Nothing for this filter yet.')); return; }
-  const blocks = logTurns(list);
-  blocks.forEach((b, i) => {
-    if (b.kind !== 'turn') { for (const e of b.entries) logHost.append(logEntry(e)); return; }
-    const actor = b.actor ? battle.combatants.find((c) => c.id === b.actor) : null;
-    const last = i === blocks.length - 1;
-    logHost.append(h('div', { class: `bt-turn ${last && battle.status === 'running' ? 'latest' : ''}`, style: actor ? { '--t': teamColor(actor.team) } : null },
-      actor ? h('div', { class: 'bt-turn-head' }, h('span', { class: 'bt-log-team', style: { background: teamColor(actor.team) } }, actor.team), h('b', null, actor.name), h('span', { class: 'hint' }, `round ${b.round}`)) : null,
-      b.entries.map(logEntry)));
-  });
-  logHost.scrollTop = logHost.scrollHeight;
+  renderLogInto(logHost, { log: battle.log, fighters: battle.combatants, status: battle.status, filter: ui.filter, logWho: ui.logWho, showDice: ui.showDice }, teamColor);
 }
 
 /** Cheap re-render while the fight plays: cards, arena and log only. */
@@ -272,7 +234,7 @@ function renderLive() {
 
 function teamColumns() {
   const teams = [...new Set(battle.combatants.map((c) => c.team))].sort();
-  if (!teams.length) return [h('div', { class: 'empty bt-empty' }, h('h2', null, 'The arena is empty'), h('p', null, 'Pick fighters on the left, or use a quick start:'), h('div', { class: 'bt-quicks' }, quickStarts()), h('p', { class: 'hint' }, 'Every character sheet, roster card and Bestiary creature also has a "⚔ Battle Room" button to throw them in.'))];
+  if (!teams.length) return [h('div', { class: 'empty bt-empty' }, h('h2', null, 'The arena is empty'), h('p', null, 'Pick fighters on the left, or use a quick start:'), h('div', { class: 'bt-quicks' }, quickStarts(setupCx())), h('p', { class: 'hint' }, 'Every character sheet, roster card and Bestiary creature also has a "Battle Room" button to throw them in.'))];
   return teams.map((t) => h('section', { class: 'bt-team-col', style: { '--t': teamColor(t) } },
     h('div', { class: 'bt-team-head' }, h('span', { class: 'bt-team', style: { background: teamColor(t) } }, t), h('b', null, `Team ${t}`), h('span', { class: 'hint' }, (() => { const p = sidePower()[t]; return battle.status === 'setup' ? `${p.n} fighter${p.n === 1 ? '' : 's'} · PL ${p.avg.toFixed(p.avg % 1 ? 1 : 0)} avg · ${p.pl} total` : `${p.standing} of ${p.n} standing`; })())),
     battle.combatants.filter((c) => c.team === t).map(fighterCard)));
@@ -283,117 +245,15 @@ function statusBar() {
   const next = battle.status === 'running' ? battle.combatants.find((c) => c.id === battle.order[battle.turn]) : null;
   const chip = (text, cls = '') => h('span', { class: `chip ${cls}` }, text);
   return [
-    chip(battle.status === 'setup' ? 'Setting up' : battle.status === 'over' ? (battle.winner ? `Team ${battle.winner} wins` : 'Stalemate') : timer ? 'Playing' : 'Paused', battle.status === 'over' ? 'bt-chip-win' : ''),
+    chip(battle.status === 'setup' ? 'Setting up' : battle.status === 'over' ? (battle.winner ? `Team ${battle.winner} ${battle.gotAway ? 'got away' : 'wins'}` : 'Stalemate') : timer ? 'Playing' : 'Paused', battle.status === 'over' ? 'bt-chip-win' : ''),
     battle.status !== 'setup' ? chip(`Round ${battle.round}`) : null,
     acting ? chip(`Last: ${acting.name}`) : null,
     next && battle.status === 'running' ? chip(`Next: ${next.name}`) : null,
     chip(`Seed ${battle.seed}`),
+    battle.options.enclosed ? chip('Enclosed space') : null,
+    battle.options.ambush ? chip(`Team ${battle.options.ambush} ambushes`) : null,
+    ...(battle.status === 'setup' ? [] : tacticChips(battle, chip)),
   ];
-}
-
-// ---- adding fighters ------------------------------------------------------------------------------------
-
-/** One-click set-ups: the roster, a foe, a squad, an even match. */
-function quickStarts() {
-  const all = catalogEntries(R);
-  const heroes = state.roster.filter((c) => c.alignment !== 'villain' && !c.minion);
-  const villains = state.roster.filter((c) => c.alignment === 'villain');
-  const foe = (team, { minion = false, near = null } = {}) => {
-    const pl = near ?? (Math.round(battle.combatants.filter((c) => c.team !== team).reduce((s, c) => s + c.pl, 0) / Math.max(1, battle.combatants.filter((c) => c.team !== team).length)) || 8);
-    const pool = all.filter((e) => Math.abs(e.pl - pl) <= 2 && !!e.minion === minion);
-    const e = pool[Math.floor(Math.random() * pool.length)] || all[Math.floor(Math.random() * all.length)];
-    const ch = catalogToCharacter(e); ch.alignment = 'villain';
-    return { ch, name: e.name };
-  };
-  const evenUp = () => {
-    const p = sidePower();
-    const a = p.A?.w || 0; const b = p.B?.w || 0;
-    if (!a && !b) { toast('Add fighters first'); return; }
-    const weak = a <= b ? 'A' : 'B';
-    const gap = Math.abs(a - b);
-    if (gap < 3) { toast('The sides are already close'); return; }
-    let added = 0; let left = gap;
-    while (left > 2 && added < 6) { const f = foe(weak, { near: Math.min(left, Math.max(4, Math.round(p[weak]?.avg || p[weak === 'A' ? 'B' : 'A']?.avg || 8))) }); throwIn(f.ch, { team: weak, name: f.name }); left -= f.ch.pl; added++; }
-    toast(`Evened up: ${added} more on team ${weak}`);
-  };
-  const btn = (label, hint, fn, disabled = false) => h('button', { type: 'button', class: 'btn sm', title: hint, disabled, onClick: () => { try { fn(); } catch (e) { toast(e.message); } } }, label);
-  return [
-    btn(`My heroes → A${heroes.length ? ` (${heroes.length})` : ''}`, 'Everyone on the roster who is not a villain', () => { for (const c of heroes) throwIn(c, { team: 'A' }); toast(`${heroes.length} heroes on team A`); }, !heroes.length),
-    btn(`My villains → B${villains.length ? ` (${villains.length})` : ''}`, 'Every villain on the roster', () => { for (const c of villains) throwIn(c, { team: 'B' }); toast(`${villains.length} villains on team B`); }, !villains.length),
-    btn('🎲 Random foe → B', 'A creature or villain from the Bestiary near side A\'s power level', () => { const f = foe('B'); throwIn(f.ch, { team: 'B', name: f.name }); toast(`${f.name} steps in on team B`); }),
-    btn('👥 Squad of 5 minions → B', 'Five of the same minion from the Bestiary', () => { const f = foe('B', { minion: true }); throwIn(f.ch, { team: 'B', copies: 5, name: f.name }); toast(`5 × ${f.name} on team B`); }),
-    btn('⚖ Even it up', 'Adds Bestiary fighters to the weaker team until the power levels are close', evenUp, battle.combatants.length < 1),
-  ];
-}
-
-/** The team letters to offer on each row: A and B, and C and D once a fight uses more sides (or asks for them). */
-function rowTeams() {
-  const used = new Set(battle.combatants.map((c) => c.team));
-  return TEAMS.filter((t, i) => i < 2 || used.has(t) || ui.moreTeams);
-}
-
-/** A pickable fighter: its name and PL, and a button per team to throw it straight onto that side. */
-function pickRow({ name, meta, color, onAdd }) {
-  return h('div', { class: 'bt-pick', style: { '--c': color || '#888' } },
-    h('span', { class: 'swatch' }), h('span', { class: 'bt-pick-text' }, h('span', { class: 'bt-pick-name', title: name }, name), h('span', { class: 'bt-pick-meta' }, meta)),
-    h('span', { class: 'bt-pick-to' }, rowTeams().map((t) => h('button', { type: 'button', class: 'bt-side', style: { '--t': teamColor(t) }, title: `Add ${name} to team ${t}`, 'aria-label': `Add ${name} to team ${t}`, onClick: () => onAdd(t) }, t))));
-}
-
-function addPanel() {
-  const copies = h('input', { type: 'number', id: 'bt-copies', min: 1, max: 20, value: ui.copies || 1, 'aria-label': 'How many copies', title: 'Copies (for squads of minions)', style: { maxWidth: '64px' }, onChange: (e) => { ui.copies = Number(e.target.value) || 1; } });
-  const add = (ch, name, team) => {
-    const r = throwIn(ch, { team, copies: Number(copies.value) || 1, name });
-    toast(`${r.count > 1 ? `${r.count} × ` : ''}${name || ch.identity?.codename} join${r.count > 1 ? '' : 's'} team ${r.team}`);
-  };
-  // open tabs and roster
-  const mine = [];
-  for (const t of state.tabs || []) mine.push({ ch: t, from: 'tab' });
-  for (const c of state.roster) if (!mine.some((m) => m.ch.rosterId && m.ch.rosterId === c.rosterId)) mine.push({ ch: c, from: 'roster' });
-  const mineQ = h('input', { type: 'search', id: 'bt-mine-q', placeholder: 'Find a character…', value: ui.mineQ || '', 'aria-label': 'Find one of your characters' });
-  const mineList = h('div', { class: 'bt-pick-list', id: 'bt-mine' });
-  const drawMine = () => {
-    clear(mineList);
-    ui.mineQ = mineQ.value;
-    const term = mineQ.value.trim().toLowerCase();
-    const shown = sortChars(mine.filter(({ ch }) => !term || `${ch.identity?.codename || ''} ${ch.identity?.realName || ''}`.toLowerCase().includes(term)), sortPref('battle-mine'), (m) => m.ch);
-    if (!mine.length) { mineList.append(h('p', { class: 'hint', style: { margin: 0 } }, 'Roll or open characters on the Forge, or save some to the roster, and they show up here.')); return; }
-    for (const { ch, from } of shown.slice(0, 80)) mineList.append(pickRow({ name: ch.identity?.codename || 'Unnamed', meta: `PL ${ch.pl} · ${ch.alignment === 'villain' ? 'villain' : 'hero'}${from === 'tab' ? ' · open' : ''}`, color: ch.theme?.color, onAdd: (t) => add(ch, null, t) }));
-    if (!shown.length) mineList.append(h('p', { class: 'hint', style: { margin: 0 } }, 'Nothing matches.'));
-  };
-  mineQ.addEventListener('input', drawMine);
-  drawMine();
-  // bestiary quick search
-  const all = catalogEntries(R);
-  const q = h('input', { type: 'search', id: 'bt-beast-q', placeholder: 'Bestiary: dragon, thug, wolf, robot…', value: ui.bestiaryQ, 'aria-label': 'Search the bestiary' });
-  const beastList = h('div', { class: 'bt-pick-list', id: 'bt-beasts' });
-  const drawBeasts = () => {
-    clear(beastList);
-    const term = q.value.trim().toLowerCase();
-    ui.bestiaryQ = q.value;
-    const found = sortChars(all.filter((e) => !term || `${e.name} ${e.category} ${e.realm || ''} ${(e.tags || []).join(' ')}`.toLowerCase().includes(term)), sortPref('battle-beasts', 'plAsc')).slice(0, term ? 60 : 30);
-    for (const e of found) beastList.append(pickRow({ name: e.name, meta: `PL ${e.pl} · ${e.category}${e.minion ? ' · minion' : ''}`, color: e.minion ? '#8a5a44' : '#7a3fb8', onAdd: (t) => {
-      let ch;
-      try { ch = catalogToCharacter(e); } catch (err) { toast(err.message); return; }
-      ch.alignment = 'villain';
-      add(ch, e.name, t);
-    } }));
-    if (!found.length) beastList.append(h('p', { class: 'hint', style: { margin: 0 } }, 'Nothing matches.'));
-  };
-  q.addEventListener('input', drawBeasts);
-  drawBeasts();
-  return h('aside', { class: 'rail bt-rail', 'aria-label': 'Add fighters' },
-    h('h2', null, 'Pick the fighters'),
-    h('p', { class: 'hint', style: { margin: 0 } }, 'Press a team letter on a row to put them on that side.'),
-    h('div', { class: 'label' }, 'Quick starts'),
-    h('div', { class: 'bt-quicks' }, quickStarts()),
-    h('div', { class: 'bt-list-head' }, h('span', { class: 'label' }, 'Your characters'), sortSelect('battle-mine', drawMine, { id: 'bt-mine-sort' })),
-    mineQ, mineList,
-    h('div', { class: 'bt-list-head' }, h('span', { class: 'label' }, 'Bestiary'), sortSelect('battle-beasts', drawBeasts, { fallback: 'plAsc', modes: ['name', 'plAsc', 'plDesc'], id: 'bt-beast-sort' })),
-    q, beastList,
-    h('div', { class: 'add-row', style: { alignItems: 'center' } },
-      h('label', { class: 'bt-copies', title: 'Add several of the same (a squad of minions)' }, 'Copies ×', copies),
-      h('label', { class: 'bt-copies' }, h('input', { type: 'checkbox', checked: !!ui.moreTeams, onChange: (e) => { ui.moreTeams = e.target.checked; renderBattle(); } }), ' Teams C and D')),
-    h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', type: 'button', onClick: () => hooks.goBestiary?.() }, 'Open the Bestiary')));
 }
 
 // ---- the match-up at a glance ------------------------------------------------------------------------------
@@ -488,7 +348,7 @@ function balancePanel() {
   const foes = battle.combatants.filter((c) => c.team !== ui.heroTeam).map((c) => c.name).join(', ') || 'the other side';
   return h('section', { class: 'panel bt-balance', id: 'balance' },
     h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' } },
-      h('h2', null, '⚖ Will this fight wreck the party?'), h('span', { style: { flex: 1 } })),
+      h('h2', null, 'Will this fight wreck the party?'), h('span', { style: { flex: 1 } })),
     h('div', { class: 'rc-row' }, h('label', null, 'Heroes are', heroSel), h('label', null, 'The fight should be', goalSel),
       h('button', { class: 'btn sm', type: 'button', id: 'bal-check', disabled: ui.balanceBusy, onClick: check }, ui.balanceBusy ? 'Running…' : 'Check the odds'),
       h('button', { class: 'btn sm primary', type: 'button', id: 'bal-tune', disabled: ui.balanceBusy, onClick: tune }, 'Tune the opposition')),
@@ -505,16 +365,32 @@ function balancePanel() {
 function helpPanel() {
   return h('section', { class: 'panel bt-help' },
     h('h2', null, 'How the fight is run'),
-    h('p', { style: { margin: 0 } }, 'By the Hero\'s Handbook: attack checks against defense + 10, resistance checks against DC 15 + rank (Damage) or 10 + rank, degrees of failure, bruises that stack, dazed until the end of the next turn, staggered and incapacitated. A natural 20 always hits and is a critical (+5 to the DC) when the total also beats the defense. Minions drop on any failed Toughness check, never crit heroes, and heroes hit them with routine attacks (DCA 175). Afflictions get an end-of-turn recovery check; area effects a Dodge check for half. Concealment is −2 (partial) or −5 (total) to hit. Impervious, Penetrating, Multiattack, Immunity, Healing and Regeneration all count.'),
-    h('p', { style: { margin: 0 } }, 'Actions and maneuvers: Charge (twice the speed, −2 to hit) and Slam for fast heavy hitters, Aim (+5 close, +2 far, vulnerable meanwhile), Recover once per fight (the worst damage level goes, +2 defenses), Defend (attackers must beat a rolled defense), Feint, Grab and Escape (Athletics or Sleight of Hand), Power, Accurate, All-out and Defensive Attack (only on attacks with an attack check), Interpose, Takedown, Move-by Action, and team attacks by minion squads (+2 or +5 to the lead attack). Hero points re-roll a miss and keep the better roll (1–10 counts +10), or shake off dazed, stunned or fatigue; extra effort pushes a power a rank.'),
+    h('p', { style: { margin: 0 } }, 'By the Hero\'s Handbook: attack checks against defense + 10, resistance checks against DC 15 + rank (Damage) or 10 + rank, degrees of failure, bruises that stack, dazed until the end of the next turn, staggered and incapacitated. A natural 20 always hits and is a critical (+5 to the DC) when the total also beats the defense. Minions drop on any failed Toughness check, never crit heroes, and heroes hit them with routine attacks (DCA 175). Afflictions get an end-of-turn recovery check; area effects a Dodge check for half. Concealment and cover are −2 (partial) or −5 (total) to hit; total cover cannot be shot past, and cover can be shot, blasted or smashed to pieces. Knockback and shooting through cover are optional rules in the Scenery panel. Impervious, Penetrating, Multiattack, Immunity, Healing and Regeneration all count.'),
+    h('p', { style: { margin: 0 } }, 'Actions and maneuvers: Charge (twice the speed, −2 to hit) and Slam for fast heavy hitters, Aim (+5 close, +2 far, doubled with Improved Aim, vulnerable meanwhile), Recover once per fight (the worst damage level goes, +2 defenses), Defend (attackers must beat a rolled defense), Feint, Trip, Disarm and Smash (Improved Trip, Disarm and Smash remove the penalties), Grab and Escape (Athletics or Sleight of Hand), Stand and Drop Prone, Power, Accurate, All-out and Defensive Attack (only on attacks with an attack check), Interpose, Takedown, Move-by Action, and team attacks by minion squads (+2 or +5 to the lead attack). Hero points re-roll a miss and keep the better roll (1–10 counts +10), or shake off dazed, stunned or fatigue; extra effort pushes a power a rank.'),
     h('p', { style: { margin: 0 } }, 'How they think: each fighter plays to its style (brawlers charge and go all-out, blasters keep distance and aim, mentalists break the weakest will, support heals and interposes) and picks targets by what its attacks can do to them, how dangerous they are, and who is nearly down.'),
-    h('p', { style: { margin: 0, color: 'var(--ink-3)' } }, 'Not simulated yet: Summon, Create, Illusion, Deflect, Insubstantial, Environment, cover, Aid, Disarm, Trip and Smash. The arena is eight zones in a line; a zone apart is short range, three is medium (−2), five is long (−5).'));
+    h('p', { style: { margin: 0, color: 'var(--ink-3)' } }, 'Not simulated yet: Communal, and the parts of each effect the coverage list marks partial. The battlefield is a 12 by 12 grid (Street 5 ft, Block 30 ft or District 250 ft squares); a move covers the fighter\'s speed in feet, and a ranged attack is short to rank × 25 ft, medium to rank × 50 ft (−2) and long to rank × 100 ft (−5).'));
 }
 
 // ---- the page --------------------------------------------------------------------------------------------
 
+/** Switch between the Battle Room's pages: 'fight' (the arena), 'citywar', 'tournament' and 'fights' (saved fights and the leaderboard). */
+function goSub(sub) { ui.sub = sub; renderBattle(); }
+
+/** Load a City war fight (built by the City war, not yet started) into One fight; Fight! plays it exactly as the war did. */
+function watchFight(b) {
+  stopTimer();
+  b.keptId = 'city-war'; // the war already kept it in Fights, so it is not saved again as a Battle Room fight
+  battle = b; ui.mc = null; ui.sub = 'fight';
+  save();
+  renderBattle();
+}
+
 export function renderBattle() {
   if (!root) return;
+  keepFinishedFight(battle, save);
+  if (ui.sub === 'fights') { renderFights(root, goSub); return; }
+  if (ui.sub === 'citywar') { renderCityWar(root, { R, go: goSub, watch: watchFight }); return; }
+  if (ui.sub === 'tournament') { renderTournament(root, { R, go: goSub }); return; }
   clear(root);
   const setup = battle.status === 'setup';
   const over = battle.status === 'over';
@@ -528,18 +404,18 @@ export function renderBattle() {
   const steps = h('ol', { class: 'bt-steps', 'aria-label': 'Where you are' },
     [['Pick fighters', 'Press A or B on the left'], ['Check the sides', 'Styles, hero points, odds'], ['Fight!', 'Watch it, or step through'], ['Result', 'Rematch, comic, save it']].map(([t, hint], i) => h('li', { class: i + 1 < stepN ? 'done' : i + 1 === stepN ? 'now' : '' }, h('b', null, `${i + 1}`), h('span', null, t), h('small', null, hint))));
   const controls = h('div', { class: 'bt-controls' },
-    setup ? h('button', { class: 'btn primary big', type: 'button', id: 'bt-fight', disabled: !ready.ok, title: ready.ok ? 'Roll initiative and play the fight (Enter)' : ready.why, onClick: () => begin() }, '⚔ Fight!') : null,
+    setup ? h('button', { class: 'btn primary big', type: 'button', id: 'bt-fight', disabled: !ready.ok, title: ready.ok ? 'Roll initiative and play the fight (Enter)' : ready.why, onClick: () => begin() }, 'Fight!') : null,
     setup && ready.ok ? h('button', { class: 'btn', type: 'button', id: 'bt-stepwise', title: 'Roll initiative and wait: press Step for one action at a time', onClick: () => begin({ stepwise: true }) }, 'Step through it') : null,
     setup && !ready.ok ? h('span', { class: 'hint' }, ready.why) : null,
-    setup && ready.ok && lopsided ? h('span', { class: 'bt-warn' }, `Looks one-sided: ${sides.map((t) => `${t} ${p[t].w}`).join(' vs ')} (PL, minions count a third). `, h('button', { type: 'button', class: 'linkish', onClick: () => quickStarts()[4].click() }, 'Even it up')) : null,
-    !setup && !over ? h('button', { class: 'btn primary big', type: 'button', id: 'bt-play', title: 'Space', onClick: () => (timer ? (stopTimer(), renderBattle()) : play()) }, timer ? '❚❚ Pause' : '▶ Play') : null,
+    setup && ready.ok && lopsided ? h('span', { class: 'bt-warn' }, `Looks one-sided: ${sides.map((t) => `${t} ${p[t].w}`).join(' vs ')} (PL, minions count a third). `, h('button', { type: 'button', class: 'linkish', onClick: () => quickStarts(setupCx())[4].click() }, 'Even it up')) : null,
+    !setup && !over ? h('button', { class: 'btn primary big', type: 'button', id: 'bt-play', title: 'Space', onClick: () => (timer ? (stopTimer(), renderBattle()) : play()) }, timer ? 'Pause' : 'Play') : null,
     !setup && !over ? h('button', { class: 'btn', type: 'button', title: 'One action (N)', onClick: doStep }, 'Step') : null,
     !setup && !over ? h('button', { class: 'btn', type: 'button', title: 'One round (R)', onClick: doRound }, 'Round') : null,
     !setup && !over ? h('button', { class: 'btn', type: 'button', title: 'Finish it (E)', onClick: doEnd }, 'Run to the end') : null,
     !setup && !over ? h('label', { class: 'bt-speed' }, h('span', null, 'Speed'), speed) : null,
-    !setup ? h('button', { class: 'btn', type: 'button', title: 'Same fighters, same seed: replays this exact fight', onClick: () => reset() }, '↺ Replay') : null,
-    !setup ? h('button', { class: 'btn', type: 'button', title: 'Same fighters, new dice', onClick: () => reset({ newSeed: true }) }, '🎲 Rematch') : null,
-    setup ? h('button', { class: 'btn', type: 'button', title: 'New seed (different dice)', onClick: () => { battle.seed = randomSeed(); save(); renderBattle(); } }, '🎲 New seed') : null,
+    !setup ? h('button', { class: 'btn', type: 'button', title: 'Same fighters, same seed: replays this exact fight', onClick: () => reset() }, 'Replay') : null,
+    !setup ? h('button', { class: 'btn', type: 'button', title: 'Same fighters, new dice', onClick: () => reset({ newSeed: true }) }, 'Rematch') : null,
+    setup ? h('button', { class: 'btn', type: 'button', title: 'New seed (different dice)', onClick: () => { battle.seed = randomSeed(); save(); renderBattle(); } }, 'New seed') : null,
     h('span', { class: 'spacer' }),
     h('button', { class: 'btn', type: 'button', disabled: !battle.log.length, onClick: async () => toast((await copyText(battleText(battle))) ? 'Fight log copied' : 'Copy failed') }, 'Copy log'),
     h('button', { class: 'btn', type: 'button', disabled: !battle.log.length, onClick: () => { download(`${(battle.name || 'battle').toLowerCase().replace(/[^a-z0-9]+/g, '-')}-log.txt`, battleText(battle), 'text/plain'); } }, 'Save log'),
@@ -552,11 +428,7 @@ export function renderBattle() {
   arenaHost = h('div'); arenaHost.append(arena());
   cardsHost = h('div', { class: 'bt-teams' }); cardsHost.append(...teamColumns());
   logHost = h('div', { class: 'bt-log', 'aria-live': 'polite' });
-  const filter = h('div', { class: 'seg', role: 'group', 'aria-label': 'Log filter', style: { width: '200px' } },
-    [['all', 'Every action'], ['key', 'Key moments']].map(([v, t]) => h('button', { type: 'button', 'aria-pressed': String(ui.filter === v), onClick: () => { ui.filter = v; renderLog(); renderBattle(); } }, t)));
-  const whoSel = h('select', { id: 'bt-log-who', 'aria-label': 'Show one fighter', onChange: (e) => { ui.logWho = e.target.value || null; renderLog(); } },
-    h('option', { value: '' }, 'Everyone'), sortChars(battle.combatants, 'name').map((c) => h('option', { value: c.id, selected: c.id === ui.logWho }, `${c.name} (${c.team})`)));
-  const diceToggle = h('label', { class: 'bt-copies', title: 'Show every roll written out: d20, bonus, total and the DC' }, h('input', { type: 'checkbox', id: 'bt-log-dice', checked: ui.showDice !== false, onChange: (e) => { ui.showDice = e.target.checked; renderLog(); } }), ' Rolls');
+  const { filter, whoSel, diceToggle } = logControls(ui, battle.combatants, { onLog: renderLog, onFilter: () => { renderLog(); renderBattle(); } });
 
   const result = over ? resultPanel() : null;
 
@@ -564,6 +436,7 @@ export function renderBattle() {
     h('div', null, h('h1', null, 'Battle Room'), h('p', null, 'Put anyone against anyone: press A or B next to a fighter, then Fight! Each fighter plays to its strengths, and "What happened" shows every action and roll. Space plays and pauses, N steps, R runs a round, E runs to the end.')),
     h('span', { class: 'spacer' }),
     h('button', { class: 'btn sm ghost', type: 'button', 'aria-pressed': String(ui.showHelp), onClick: () => { ui.showHelp = !ui.showHelp; renderBattle(); } }, ui.showHelp ? 'Hide the rules used' : 'What\'s simulated?')));
+  root.append(roomTabs('fight', goSub));
   if (ui.showHelp) root.append(helpPanel());
   nowHost = h('div', { class: 'bt-now' }); nowHost.append(...nowBanner());
   const logPanel = h('section', { class: 'panel bt-panel bt-log-panel', id: 'bt-log-panel' },
@@ -571,7 +444,7 @@ export function renderBattle() {
     filter,
     logHost);
   root.append(h('div', { class: 'bt-layout' },
-    addPanel(),
+    addPanel(setupCx()),
     h('div', { class: 'bt-main-col' },
       steps,
       versusBar(),
@@ -593,17 +466,18 @@ function resultPanel() {
   const standing = battle.combatants.filter((c) => !c.out && !c.fled);
   const mvp = [...battle.combatants].sort((a, b) => (b.stats.kos * 10 + b.stats.degrees) - (a.stats.kos * 10 + a.stats.degrees))[0];
   return h('div', { class: 'bt-result', style: { '--t': battle.winner ? teamColor(battle.winner) : 'var(--ink-3)' } },
-    h('b', null, battle.winner ? `Team ${battle.winner} wins in ${battle.round} round${battle.round === 1 ? '' : 's'}` : `Stalemate after ${battle.round - 1} rounds`),
+    h('b', null, battle.winner ? `Team ${battle.winner} ${battle.gotAway ? 'gets away' : 'wins'} in ${battle.round} round${battle.round === 1 ? '' : 's'}` : `Stalemate after ${battle.round - 1} rounds`),
     h('span', null, standing.length ? `Still standing: ${standing.map((c) => `${c.name} (${statusLine(c).toLowerCase()})`).join(', ')}.` : 'Nobody is left standing.'),
+    keptNote(battle, (id) => { openFight(id); goSub('fights'); }),
     mvp && (mvp.stats.kos || mvp.stats.degrees) ? h('span', null, `Fight of the night: ${mvp.name}, ${mvp.stats.hits} hits, ${mvp.stats.kos} KO${mvp.stats.kos === 1 ? '' : 's'}.`) : null,
     h('div', { class: 'btn-row', style: { marginTop: '6px' } },
       h('button', { class: 'btn primary', type: 'button', id: 'bt-comic', title: 'Turn this fight into a six-panel comic page to share', onClick: () => {
         const comic = battleComic(battle, { portraitOf: (ch) => { const p = portraitOf(ch); return p.image || p.avatar; } });
         const svg = comicSvg(comic);
-        imageDialog({ title: `📖 ${comic.title}`, svg, file: `${comic.title}-comic`, text: `📖 ${comic.title.toUpperCase()}: ${comic.subtitle}\n${comic.panels.map((p) => `• ${p.sfx} ${p.caption}`).join('\n')}`, alt: `Comic page of ${comic.title}` });
-      } }, '📖 Make the comic'),
+        imageDialog({ title: comic.title, svg, file: `${comic.title}-comic`, text: `${comic.title.toUpperCase()}: ${comic.subtitle}\n${comic.panels.map((p) => `• ${p.sfx} ${p.caption}`).join('\n')}`, alt: `Comic page of ${comic.title}` });
+      } }, 'Make the comic'),
       hooks.recordBattle ? [
-        h('button', { class: 'btn', type: 'button', id: 'bt-record', disabled: battle.recorded, title: 'Adds the fight to the World: an event page on the campaign timeline, linked to everyone who fought (knocked out, fled or standing). It goes in the running session\'s recap, and a recurring villain who lost learns from it.', onClick: () => { try { hooks.recordBattle(battle); battle.recorded = true; save(); renderBattle(); } catch (e) { toast(e.message); } } }, battle.recorded ? '✓ Saved to the campaign' : '🌐 Save this fight to the campaign'),
+        h('button', { class: 'btn', type: 'button', id: 'bt-record', disabled: battle.recorded, title: 'Adds the fight to the World: an event page on the campaign timeline, linked to everyone who fought (knocked out, fled or standing). It goes in the running session\'s recap, and a recurring villain who lost learns from it.', onClick: () => { try { hooks.recordBattle(battle); battle.recorded = true; save(); renderBattle(); } catch (e) { toast(e.message); } } }, battle.recorded ? 'Saved to the campaign' : 'Save this fight to the campaign'),
         battle.recorded ? null : h('p', { class: 'hint bt-record-hint' }, 'Puts it on the World\'s timeline with everyone who fought, in tonight\'s recap, and lets a recurring villain who lost learn from it.'),
       ] : null));
 }

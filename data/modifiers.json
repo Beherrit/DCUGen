@@ -490,6 +490,147 @@
       "requires": [],
       "source": "DCA 133",
       "summary": "Change the effect's descriptors within a closely related (1) or broad (2) group."
+    },
+    {
+      "name": "Ammunition",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 0,
+      "options": {
+        "+0": 0,
+        "+1": 1
+      },
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 91",
+      "summary": "The power effect to which this extra is applied is meant to represent a special form of ammunition that cannot be effectively used on its own."
+    },
+    {
+      "name": "Combo Element",
+      "kind": "extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "MA 91",
+      "summary": "If the Combo Element's power works successfully against its target, you are granted a certain number of Combo Points (pg 87) towards performing a Combo Finish."
+    },
+    {
+      "name": "Conductor",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 91",
+      "summary": "Designate a medium through which the Close power can be transmitted."
+    },
+    {
+      "name": "Diminishing Counter",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 92",
+      "summary": "Even if your power proves too weak to counter another power completely, it still provides a small degree of protection by sapping the energy from the other power."
+    },
+    {
+      "name": "Improved Counter",
+      "kind": "extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 93",
+      "summary": "Aside from any contrary descriptor the Gamemaster may rule the power's descriptor naturally counters (light versus dark, for instance), choose an additional descriptor per rank of this extra that the power may counter."
+    },
+    {
+      "name": "Overwhelming Counter",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 93",
+      "summary": "When you successfully counter a power, your own power may overwhelm the other, causing the excess energy to surge towards the attacker."
+    },
+    {
+      "name": "Partial Resistance",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": {
+        "+1": 1,
+        "+2": 2
+      },
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 93",
+      "summary": "A successful resistance check against the effect that does not obtain at least two degrees of success is not wholly effective."
+    },
+    {
+      "name": "Pinball",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 93",
+      "summary": "Unlike normal, each \"bounce\" of an effect with the ricochet extra inflicts that effect upon whatever it is bouncing off."
+    },
+    {
+      "name": "Potent",
+      "kind": "extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 93",
+      "summary": "This extra may only be applied to effects with Parry, Dodge, Fortitude, or Will resistance checks."
+    },
+    {
+      "name": "Proficient",
+      "kind": "extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 93",
+      "summary": "Each rank of this power extra grants you a +2 bonus to the effect's power checks."
+    },
+    {
+      "name": "Recoverable",
+      "kind": "extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "MA 94",
+      "summary": "An effect with the Ricochet extra that is considered recoverable, such as when throwing a shield or melee weapon, allows any remaining bounces after the attack is made against the intended target to set the attack upon a return..."
+    },
+    {
+      "name": "Stacking",
+      "kind": "extra",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": {
+        "+1 per rank": 1,
+        "flat +1 per rank": 1
+      },
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 94",
+      "summary": "This extra allows a power with lingering effects, such as those with a duration of Concentration, Sustained, or Continuous, to use additional applications of the power to increase its resistance DC."
     }
   ],
   "flaws": [
@@ -753,6 +894,473 @@
       "requires": [],
       "source": "DCA 138",
       "summary": "Effect fails on a d20 roll of 10 or less (or has only five uses)."
+    },
+    {
+      "name": "Announcement",
+      "kind": "flaw",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "MA 94",
+      "summary": "An effect with this flaw has a colorful name, like \"Demon Fist of Oblivion\" or \"Sacred Mountain Fire Blade,\" and you are expected to shout it aloud when you use it."
+    },
+    {
+      "name": "Bad Bounce",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 94",
+      "summary": "Each \"bounce\" of an effect with the Ricochet extra requires its own attack or power check (as appropriate to the ricocheting effect) to strike the surface so the effect will change direction as desired."
+    },
+    {
+      "name": "Calling",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": {
+        "-1": 1,
+        "-2": 2
+      },
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 95",
+      "summary": "Instead of appearing beside the summoner, a summoned minion hearkens to the summoner's call and must travel from its current location."
+    },
+    {
+      "name": "Chained",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 95",
+      "summary": "Your power depends on the success of another action to activate."
+    },
+    {
+      "name": "Diluted",
+      "kind": "flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 96",
+      "summary": "This flaw may only be applied to effects with Parry, Dodge, Fortitude, or Will resistance checks."
+    },
+    {
+      "name": "Dulled",
+      "kind": "flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": {
+        "-1": 1,
+        "-2": 2
+      },
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 96",
+      "summary": "When subject to conditions selected when the flaw is chosen, the effect has its ranks reduced with regard to its influence or resistance check DC by an amount equal to the flaw's rank."
+    },
+    {
+      "name": "Fast Return",
+      "kind": "flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 96",
+      "summary": "One additional lost point returns per round at the end of the target's turn per rank of this flaw."
+    },
+    {
+      "name": "Gallant",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 97",
+      "summary": "Adding this flaw requires the character to spend a hero point to use the effect."
+    },
+    {
+      "name": "Immobile",
+      "kind": "flaw",
+      "cost_type": "flat",
+      "value": 1,
+      "options": {
+        "-1": 1,
+        "-2": 2
+      },
+      "max_steps": 1,
+      "requires": [],
+      "source": "MA 97",
+      "summary": "The power may only be activated while the character is stationary."
+    },
+    {
+      "name": "Inexact",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 97",
+      "summary": "An Area effect with an Inexact flaw requires making a separate attack check (or power check, if appropriate) for every qualified target in the area of effect."
+    },
+    {
+      "name": "Momentum-Based",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 97",
+      "summary": "This flaw may be applied to any non-Movement effect, making it reliant upon a Movement effect the character also possesses."
+    },
+    {
+      "name": "Nonlethal",
+      "kind": "flaw",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "MA 97",
+      "summary": "The effect is incapable of inflicting a dying or dead condition unless harm is inflicted as the result of a critical hit."
+    },
+    {
+      "name": "Obvious",
+      "kind": "flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 97",
+      "summary": "Obvious effects are more noticeable."
+    },
+    {
+      "name": "Prone",
+      "kind": "flaw",
+      "cost_type": "flat",
+      "value": 1,
+      "options": {
+        "-1": 1,
+        "-2": 2
+      },
+      "max_steps": 1,
+      "requires": [],
+      "source": "MA 98",
+      "summary": "You may be knocked prone (or set tumbling through the air if in flight, spinning through the water if swimming, and so on) upon activating the effect."
+    },
+    {
+      "name": "Push Over",
+      "kind": "flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 98",
+      "summary": "You are ill-prepared to prevent yourself from being knocked over by a solid blow."
+    },
+    {
+      "name": "Source",
+      "kind": "flaw",
+      "cost_type": "per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 98",
+      "summary": "The effect only works when you have access to a particular source to draw upon to activate and manifest the effect."
+    },
+    {
+      "name": "Strained",
+      "kind": "flaw",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": 1,
+      "requires": [],
+      "source": "MA 98",
+      "summary": "An effect with this flaw cannot make use of or benefit from extra effort (or exceptional extra effort; see Better Mousetrap 3e)."
+    },
+    {
+      "name": "Uncertain",
+      "kind": "flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 98",
+      "summary": "Increase your critical miss range with a particular attack (chosen when you acquire this flaw) by 1, resulting in a critical miss on a natural 1 or 2."
+    },
+    {
+      "name": "Weak Limbed",
+      "kind": "flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 98",
+      "summary": "When applied to Extra Limbs, your extra manipulative limbs have 1 rank of Strength less than your primary limbs per rank of this flaw."
+    }
+  ],
+  "style_extras": [
+    {
+      "name": "Aggressive",
+      "kind": "style extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 131",
+      "summary": "+1 to attack with all style combat maneuvers, but no Defensive Attack advantage or active Defend action."
+    },
+    {
+      "name": "Attack Focus",
+      "kind": "style extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 131",
+      "summary": "+2 to attack and initiative with a named group of attacks used from a non-Neutral stance, and no extra critical miss chance."
+    },
+    {
+      "name": "Defensive",
+      "kind": "style extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 131",
+      "summary": "+1 to Parry and Dodge while in a non-Neutral stance, but no All-Out Attack advantage or Charge action."
+    },
+    {
+      "name": "Divine",
+      "kind": "style extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 132",
+      "summary": "A divine power grants an appropriate Feature per rank to the practitioner or their maneuvers."
+    },
+    {
+      "name": "Esoteric",
+      "kind": "style extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 132",
+      "summary": "Obscure style: opponents who do not know it take -2 (1 rank) or -5 (2 ranks) on identify stance, disrupt stance and read opponent checks."
+    },
+    {
+      "name": "Fixed",
+      "kind": "style extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 132",
+      "summary": "+2 Parry or Dodge in a round the practitioner moves no more than 5 feet; a second rank covers the other defense."
+    },
+    {
+      "name": "Geomantic",
+      "kind": "style extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 132",
+      "summary": "With both feet planted, a Fighting Style check against an impact attack lowers its effect rank by the degrees of success."
+    },
+    {
+      "name": "Metahuman",
+      "kind": "style extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 132",
+      "summary": "+2 to power checks for powers and power-based maneuvers related to the style."
+    },
+    {
+      "name": "Mobile",
+      "kind": "style extra",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 133",
+      "summary": "+2 Parry or Dodge in a round the practitioner has moved more than 15 feet; a second rank covers the other defense."
+    },
+    {
+      "name": "Mystic",
+      "kind": "style extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 133",
+      "summary": "With a Fighting Style check and an Expertise: Magic check, a maneuver's Strength-based damage can use the rank of a magic power."
+    },
+    {
+      "name": "Spiritual",
+      "kind": "style extra",
+      "cost_type": "flat",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 133",
+      "summary": "Use Will instead of Fortitude for resistance checks (failure by one degree dazes, two stuns, three incapacitates); Fighting Style replaces Awareness for trance advantages."
+    }
+  ],
+  "style_flaws": [
+    {
+      "name": "Clumsy Attacks",
+      "kind": "style flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 134",
+      "summary": "-2 to attack and initiative with a named group or type of attacks used from a non-Neutral stance."
+    },
+    {
+      "name": "Demanding",
+      "kind": "style flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 134",
+      "summary": "Weekly practice required (1 rank 7 hours, 2 ranks 14 hours, 3 ranks 28 hours) or suffer a growing penalty; an extra rank per additional -1 penalty."
+    },
+    {
+      "name": "Ill-Favored Conditions",
+      "kind": "style flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 135",
+      "summary": "A named circumstance (outnumbered, drunk, cornered) costs -1 to attack, Parry or Dodge, or -2 to another combat check, per rank."
+    },
+    {
+      "name": "Impractical",
+      "kind": "style flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 135",
+      "summary": "A natural 1 reveals the style's impracticality: a penalty equal to the rank to all style checks for one round."
+    },
+    {
+      "name": "Listless",
+      "kind": "style flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 136",
+      "summary": "-4 to initiative per rank while using the style."
+    },
+    {
+      "name": "No Nonsense",
+      "kind": "style flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 136",
+      "summary": "-2 to Expertise: Martial Showman checks per rank; no Showboating maneuver."
+    },
+    {
+      "name": "Predictable",
+      "kind": "style flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 136",
+      "summary": "Opponents get +2 per rank to read opponent, identify stance and disrupt stance checks against the practitioner."
+    },
+    {
+      "name": "Slow",
+      "kind": "style flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 136",
+      "summary": "Maximum speed reduced by one rank per rank while using the style."
+    },
+    {
+      "name": "Style Weakness",
+      "kind": "style flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 136",
+      "summary": "-1 to Dodge and Parry against attacks from a chosen opposing fighting style."
+    },
+    {
+      "name": "Weak Defense",
+      "kind": "style flaw",
+      "cost_type": "flat_per_rank",
+      "value": 1,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 136",
+      "summary": "-1 per rank to Parry or Dodge while using the style; cannot be combined with the Defensive extra."
+    },
+    {
+      "name": "Weapon Dependent",
+      "kind": "style flaw",
+      "cost_type": "flat",
+      "value": 2,
+      "options": null,
+      "max_steps": null,
+      "requires": [],
+      "source": "MA 136",
+      "summary": "All style maneuvers need a real weapon element; unarmed is never a weapon element of the style."
     }
   ]
 }

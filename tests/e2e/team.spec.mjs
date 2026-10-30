@@ -20,7 +20,7 @@ test('put a hero in play, note their condition and points, and open their sheet'
   await row.getByLabel(`Add a condition to ${hero}`).selectOption('Vulnerable');
   await expect(row.locator('.team-cond')).toHaveCount(3);
   await row.getByLabel(`Remove Prone from ${hero}`).click();
-  await expect(row.locator('.team-cond')).toHaveText([/^✕Dazed:/, /^✕Vulnerable:/]);
+  await expect(row.locator('.team-cond')).toHaveText([/^Dazed:.*Remove$/, /^Vulnerable:.*Remove$/]);
   await heroes.getByLabel(`Raise bonus points for ${hero}`).click();
   await heroes.getByLabel(`Raise bonus points for ${hero}`).click();
   await heroes.getByLabel(`Notes for ${hero}`).fill('Owes the Penguin a favour');
@@ -62,7 +62,7 @@ test('team-wide buttons: hero points, +1 for every hero, initiative and the Batt
   await page.getByRole('button', { name: 'Roll initiative for everyone' }).click();
   await expect(page.locator('#view-gm .init-list')).toContainText(hero);
   await page.locator('#view-gm .ae-tabs button', { hasText: 'In play' }).click();
-  await page.getByRole('button', { name: '⚔ Everyone to the Battle Room' }).click();
+  await page.getByRole('button', { name: 'Everyone to the Battle Room' }).click();
   await expect(page.locator('#view-battle')).toBeVisible();
   await expect(page.locator('#view-battle')).toContainText(hero);
   expect(errors).toEqual([]);
@@ -106,6 +106,6 @@ test('marking a session played keeps who was in play, with their XP, and the att
   await expect(row.locator('.num')).toHaveText('2');
   await row.getByLabel(`Raise XP for ${hero}`).click();
   const att = page.locator('#ses-attendance');
-  await expect(att.locator('tbody tr', { hasText: hero })).toContainText('✓ +3');
+  await expect(att.locator('tbody tr', { hasText: hero })).toContainText('Yes +3');
   expect(errors).toEqual([]);
 });
