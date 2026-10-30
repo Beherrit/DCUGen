@@ -1,5 +1,6 @@
 // What a Weaken effect takes away. The trait is read from the power's detail text (combatant.js) as one of: Toughness,
-// Strength, Dodge, Parry, Will, Fortitude, Fighting (close attack checks and Parry), Dexterity (ranged attack checks),
+// Strength, Stamina (Toughness and Fortitude both), Dodge, Parry, Will, Fortitude, Fighting (close attack checks and
+// Parry), Dexterity (ranged attack checks),
 // an attack power by a word of its name ("Power:blast", lowers that attack's rank), or All (every defense, half as hard).
 
 const DEFENSES = ['Toughness', 'Dodge', 'Parry', 'Fortitude', 'Will'];
@@ -8,6 +9,7 @@ const DEFENSES = ['Toughness', 'Dodge', 'Parry', 'Fortitude', 'Will'];
 export function parseWeakenTrait(detail) {
   const d = String(detail || '').replace(/resisted by [a-z]+/i, '');
   if (/\ball (traits|abilities|defenses)\b|\bany trait\b|^\s*all\b/i.test(d)) return 'All';
+  if (/stamina/i.test(d)) return 'Stamina';
   if (/tough/i.test(d)) return 'Toughness';
   if (/strength/i.test(d)) return 'Strength';
   if (/fighting|close combat|melee/i.test(d)) return 'Fighting';
@@ -22,7 +24,7 @@ export function parseWeakenTrait(detail) {
 
 /** Take `lost` ranks of the trait off the fighter. Returns how much of it is now lost (the first trait's total for All). */
 export function weakenTraits(t, trait, lost) {
-  const keys = trait === 'All' ? DEFENSES : [trait];
+  const keys = trait === 'All' ? DEFENSES : trait === 'Stamina' ? ['Toughness', 'Fortitude'] : [trait]; // Stamina feeds both (DCA 13)
   const each = trait === 'All' ? Math.max(1, Math.ceil(lost / 2)) : lost;
   for (const k of keys) t.weakened[k] = (t.weakened[k] || 0) + each;
   return t.weakened[keys[0]];
