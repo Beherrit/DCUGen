@@ -1,5 +1,5 @@
 // What the Battle Room needs from the saved fights: keeping a fight when it ends, the "Saved to Fights" note on the
-// result, and the row of sub-tabs (One fight, City war, Fights) shared by the pages. battle.js only calls these.
+// result, and the row of sub-tabs (One fight, City war, Tournament, Fights) shared by the pages. battle.js only calls these.
 
 import { h } from '../dom.js';
 import { fightRecord } from '../../engine/records/record.js';
@@ -26,8 +26,8 @@ export function keptNote(battle, open) {
   return h('span', { class: 'hint bt-kept', id: 'bt-kept' }, 'Saved to Fights. ', h('button', { class: 'linkish', type: 'button', id: 'bt-kept-open', onClick: () => open(battle.keptId) }, 'Open it'));
 }
 
-/** The sub-tabs at the top of the Battle Room: go(sub) with 'fight', 'citywar' or 'fights'. */
+/** The sub-tabs at the top of the Battle Room: go(sub) with 'fight', 'citywar', 'tournament' or 'fights'. */
 export function roomTabs(current, go) {
   return h('div', { class: 'seg bt-subtabs', role: 'group', 'aria-label': 'Battle Room pages' },
-    [['fight', 'One fight'], ['citywar', 'City war'], ['fights', 'Fights']].map(([v, t]) => h('button', { type: 'button', id: `bt-sub-${v}`, 'aria-pressed': String(v === current), onClick: () => go(v) }, t)));
+    [['fight', 'One fight'], ['citywar', 'City war'], ['tournament', 'Tournament'], ['fights', 'Fights']].map(([v, t]) => h('button', { type: 'button', id: `bt-sub-${v}`, 'aria-pressed': String(v === current), onClick: () => go(v) }, t)));
 }

@@ -17,7 +17,7 @@ export const GANG_NAMES = [
 /** Team colors that stay apart on the map. */
 export const GANG_COLORS = ['#c0392b', '#2471a3', '#1e8449', '#b9770e', '#7d3c98', '#117a8b', '#a04000', '#5d6d7e', '#c2185b', '#6b8e23', '#283593', '#8d6e63'];
 
-const FIGHTERS = ['paragon', 'powerhouse', 'speedster', 'blaster', 'crimefighter', 'martialartist', 'weaponmaster', 'gadgeteer', 'battlesuit', 'mystic', 'psychic', 'shapeshifter', 'sizechanger', 'totem', 'elemental', 'infiltrator', 'mastermind', 'healer', 'android', 'robot'];
+export const FIGHTERS = ['paragon', 'powerhouse', 'speedster', 'blaster', 'crimefighter', 'martialartist', 'weaponmaster', 'gadgeteer', 'battlesuit', 'mystic', 'psychic', 'shapeshifter', 'sizechanger', 'totem', 'elemental', 'infiltrator', 'mastermind', 'healer', 'android', 'robot'];
 export const TACTIC_IDS = Object.keys(TEAM_TACTICS).filter((id) => id !== 'none');
 
 /** One start cell per team, spread over the map: the map is cut into regions and each team takes a random cell in its own. */

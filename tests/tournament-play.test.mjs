@@ -174,3 +174,15 @@ test('the bracket view lists rounds with entrants, waiting slots, byes, games an
   assert.deepEqual(dbl.sections.map((s) => s.title), ['Winners bracket', 'Losers bracket', 'Grand final']);
 });
 
+
+test('quick fill makes a field of named heroes from the seed, and a tournament can be played with them', () => {
+  const a = T.quickEntrants(R, { seed: 'qf', count: 8 });
+  assert.equal(a.length, 8);
+  assert.equal(new Set(a.map((e) => e.name)).size, 8, 'names are different');
+  assert.ok(a.every((e) => e.members.length === 1));
+  assert.deepEqual(T.quickEntrants(R, { seed: 'qf', count: 8 }).map((e) => e.name), a.map((e) => e.name));
+  const t = T.createTournament({ seed: 'qf', format: 'single', entrants: a });
+  T.playAll(t, R);
+  assert.equal(t.status, 'over');
+  assert.ok(t.champion);
+});

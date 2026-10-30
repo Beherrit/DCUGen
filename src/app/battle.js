@@ -15,6 +15,7 @@ import { notSimulatedLine } from './battle-report.js';
 import { keepFinishedFight, keptNote, roomTabs } from './records/room.js';
 import { renderFights, openFight } from './records/fights-view.js';
 import { renderCityWar } from './citywar/view.js';
+import { renderTournament } from './tournament/view.js';
 import { KIND_CLASS, teamColor, renderLogInto, logControls } from './battle-log.js';
 import { uiBattle, wholeCover } from './battle-cover.js';
 import { gridBoard, initials } from './battle-grid.js';
@@ -368,7 +369,7 @@ function helpPanel() {
 
 // ---- the page --------------------------------------------------------------------------------------------
 
-/** Switch between the Battle Room's pages: 'fight' (the arena), 'citywar' and 'fights' (saved fights and the leaderboard). */
+/** Switch between the Battle Room's pages: 'fight' (the arena), 'citywar', 'tournament' and 'fights' (saved fights and the leaderboard). */
 function goSub(sub) { ui.sub = sub; renderBattle(); }
 
 /** Load a City war fight (built by the City war, not yet started) into One fight; Fight! plays it exactly as the war did. */
@@ -385,6 +386,7 @@ export function renderBattle() {
   keepFinishedFight(battle, save);
   if (ui.sub === 'fights') { renderFights(root, goSub); return; }
   if (ui.sub === 'citywar') { renderCityWar(root, { R, go: goSub, watch: watchFight }); return; }
+  if (ui.sub === 'tournament') { renderTournament(root, { R, go: goSub }); return; }
   clear(root);
   const setup = battle.status === 'setup';
   const over = battle.status === 'over';

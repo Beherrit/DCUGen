@@ -2405,3 +2405,58 @@ html.read-color .power-about { font-style: normal; }
 #cw-standings tr.out td { color: var(--ink-3); }
 @media (max-width: 1000px) { .cw-layout { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 640px) { .cw-odds li { grid-template-columns: minmax(80px, 120px) minmax(0, 1fr) 40px; } .cw-mark { font-size: 8px; left: 2px; top: 1px; } }
+
+/* Battle Room: Tournament, brackets and round robins (src/app/tournament) */
+.bt-subtabs { max-width: 560px; }
+.tn-main { display: grid; gap: 16px; min-width: 0; }
+.tn-main > * { min-width: 0; }
+.tn-setup { display: grid; gap: 10px; }
+.tn-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px 16px; align-items: end; }
+.tn-options .label, .tn-options .hint { grid-column: 1 / -1; }
+.tn-field { display: grid; gap: 4px; font-size: 13px; min-width: 0; }
+.tn-field select { min-width: 0; max-width: 100%; }
+.tn-entrants { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.tn-entrant { display: grid; grid-template-columns: auto auto minmax(110px, 1fr) minmax(0, 1.4fr) minmax(120px, 160px) auto; gap: 6px 8px; align-items: center; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); cursor: grab; }
+.tn-seed { font-weight: 800; min-width: 1.6em; text-align: center; }
+.tn-members { color: var(--ink-3); overflow-wrap: anywhere; min-width: 0; }
+.tn-ename { min-width: 0; }
+.tn-row-btns { display: flex; gap: 4px; flex-wrap: wrap; }
+.tn-maketeam { flex-wrap: wrap; }
+.tn-champion { display: grid; gap: 2px; padding: 12px 16px; margin: 10px 0; border: 2px solid var(--ink); border-radius: 8px; background: var(--surface); }
+.tn-champion small { font: 700 11px/1 var(--font-label); text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); }
+.tn-champion b { font: 800 28px/1.1 var(--font-display); text-transform: uppercase; overflow-wrap: anywhere; }
+.tn-bracket { overflow-x: auto; max-width: 100%; padding-bottom: 8px; display: grid; gap: 14px; }
+.tn-section h3 { margin: 0 0 6px; font-size: 15px; }
+.tn-rounds { display: flex; gap: 18px; align-items: stretch; width: max-content; }
+.tn-round { display: flex; flex-direction: column; width: 190px; flex: 0 0 auto; }
+.tn-round h4 { margin: 0 0 6px; font: 700 12px/1 var(--font-label); text-transform: uppercase; letter-spacing: .05em; color: var(--ink-3); }
+.tn-matches { display: flex; flex-direction: column; justify-content: space-around; gap: 10px; flex: 1; }
+.tn-match { display: grid; gap: 2px; text-align: left; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); cursor: pointer; font: inherit; color: inherit; }
+.tn-match.sel { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.tn-match.next { border-color: var(--accent, #c0392b); }
+.tn-match.st-bye, .tn-match.st-skipped { opacity: .6; }
+.tn-match:focus-visible { outline: 3px solid var(--accent, #c0392b); outline-offset: 1px; }
+.tn-label { font: 700 11px/1.2 var(--font-label); color: var(--ink-3); }
+.tn-side { display: flex; justify-content: space-between; gap: 6px; }
+.tn-side.win { font-weight: 800; }
+.tn-side.wait { color: var(--ink-3); font-style: italic; }
+.tn-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.tn-name small { color: var(--ink-3); }
+.tn-foot { font-size: 11px; color: var(--ink-3); }
+.tn-games { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+.tn-game { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 6px 8px; border-left: 3px solid var(--line); background: var(--surface); }
+.tn-game.stale { border-left-color: var(--ink-3); }
+.tn-game-text { display: grid; min-width: 0; flex: 1 1 220px; }
+.tn-game-text small { color: var(--ink-3); }
+.tn-cell.r-W { font-weight: 700; }
+.tn-cell.r-L { color: var(--ink-3); }
+#tn-standings tr.out td { color: var(--ink-3); }
+.tn-odds { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; }
+.tn-odds li { display: grid; grid-template-columns: minmax(110px, 190px) minmax(0, 1fr) 44px; gap: 8px; align-items: center; }
+.tn-odds-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tn-bar { display: block; height: 12px; background: var(--line); border-radius: 6px; overflow: hidden; }
+.tn-bar i { display: block; height: 100%; background: var(--ink); }
+.tn-odds .num { text-align: right; }
+@media (max-width: 760px) { .tn-entrant { grid-template-columns: auto auto minmax(0, 1fr); } .tn-members, .tn-entrant .cw-tactic, .tn-row-btns { grid-column: 1 / -1; } }
+@media (max-width: 640px) { .tn-odds li { grid-template-columns: minmax(80px, 120px) minmax(0, 1fr) 40px; } .tn-round { width: 170px; } }
+.tn-checks { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px 18px; }

@@ -9,5 +9,6 @@ import { tournamentOdds, playOdds, tallyOdds, newTally } from './tournament/odds
 import { nextMatch, matchById } from './tournament/resolve.js';
 import { seedOf, entrantOf, MAX_REPLAYS } from './tournament/match.js';
 import { bracketOrder, nextPow2 } from './tournament/seeding.js';
+import { quickEntrants } from './tournament/quickfill.js';
 
-export { createTournament, restart, withSeed, copyTournament, serializeTournament, reviveTournament, normalizeSettings, FORMATS, FORMAT_LABELS, MAX_ENTRANTS, DEFAULT_SETTINGS, SCENERY, playNextMatch, playRound, playAll, standings, championOf, bracketView, matchView, tournamentOdds, playOdds, tallyOdds, newTally, nextMatch, matchById, seedOf, entrantOf, MAX_REPLAYS, bracketOrder, nextPow2 };
+export { createTournament, restart, withSeed, copyTournament, serializeTournament, reviveTournament, normalizeSettings, FORMATS, FORMAT_LABELS, MAX_ENTRANTS, DEFAULT_SETTINGS, SCENERY, playNextMatch, playRound, playAll, standings, championOf, bracketView, matchView, tournamentOdds, playOdds, tallyOdds, newTally, nextMatch, matchById, seedOf, entrantOf, MAX_REPLAYS, bracketOrder, nextPow2, quickEntrants };
