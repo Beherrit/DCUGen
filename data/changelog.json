@@ -1,5 +1,16 @@
 [
   {
+    "id": "2026-10-29",
+    "date": "2026-10-29",
+    "title": "Martial Arts: fighting styles, stances and maneuvers",
+    "items": [
+      "Fighting styles on the sheet: add any of the 166 styles from Mutants & Masterminds: Martial Arts 3e, pick Initiate, Student or Master, turn on its stances, add weapon elements and buy its basic and advanced maneuvers. The points add up the way the book prices a style, and the whole style can be bought as listed in one click.",
+      "Play view stances: pick a stance to roll the Assume Stance check (a free action from Neutral, a move action otherwise; a failed check drops you to Neutral). The stance's bonuses and penalties show on Dodge, Parry, attacks and initiative, and it ends when you are prone, stunned, vulnerable, defenseless, immobile, paralyzed, asleep or incapacitated.",
+      "Rules tab: the fighting styles, all 33 stances, every combat maneuver, the new weapons and qualities, headquarters features and the optional rules (hit location, disabling critical hits, off-hand attacks, new actions and pursuit maneuvers), each with its book page.",
+      "Martial artists, weapon masters and crime fighters the generator rolls now know a real fighting style, with its stances and some maneuvers."
+    ]
+  },
+  {
     "id": "2026-10-19",
     "date": "2026-10-19",
     "title": "Who played when",

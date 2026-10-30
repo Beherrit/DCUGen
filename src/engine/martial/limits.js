@@ -22,6 +22,12 @@ export function strengthManeuverNumbers(ch, R, power, abil = abilityTotals(ch, R
   return { bonus, rank: (abil.Strength ?? 0) + shape.plus };
 }
 
+/** Is this maneuver power over the power level limit for the character as built? */
+export function maneuverOverLimit(ch, R, power) {
+  const n = strengthManeuverNumbers(ch, R, power);
+  return !!n && n.bonus + n.rank > 2 * ch.pl;
+}
+
 export function checkStyleLimits(ch, R, issue) {
   const out = [];
   const abil = abilityTotals(ch, R);

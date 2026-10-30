@@ -153,3 +153,12 @@ test('a fighter whose build needed no repair keeps the style it was given', asyn
   const back = B.reviveBattle(R, JSON.parse(JSON.stringify(B.serializeBattle(b))));
   assert.equal(back.combatants.find((c) => c.id === 'ba').style, 'duelist');
 });
+
+test('a fighting style\'s own skill is not handed to a hand-built power as its specialty', () => {
+  const ch = { powers: [dmg({ range: 'Close' })], skills: [{ name: 'Close Combat', spec: 'Aikido', ranks: 4 }], styles: [{ name: 'Aikido', skill: { name: 'Close Combat', spec: 'Aikido' } }] };
+  repairPowerRoles(ch, R);
+  assert.equal(ch.powers[0].attackSkill, undefined);
+  const plain = { powers: [dmg({ range: 'Close' })], skills: [{ name: 'Close Combat', spec: 'Bolt Strike', ranks: 4 }] };
+  repairPowerRoles(plain, R);
+  assert.equal(plain.powers[0].attackSkill, 'Bolt Strike', 'a lone ordinary specialty is still linked');
+});

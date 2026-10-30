@@ -15,7 +15,7 @@ import { ABILITIES, BUYABLE_DEFENSES, PP_PER_PL } from './rules.js';
 import { costBreakdown, powerCost, deviceCost } from './costs.js';
 import { styleParts } from './martial/price.js';
 
-const TRAIT_KEYS = ['pl', 'abilities', 'defenses', 'skills', 'advantages', 'powers', 'devices', 'equipment'];
+const TRAIT_KEYS = ['pl', 'abilities', 'defenses', 'skills', 'advantages', 'powers', 'devices', 'equipment', 'styles'];
 
 /** The parts of a character that cost points (what a snapshot keeps). */
 export function traitSnapshot(ch) {
@@ -202,7 +202,7 @@ export function recordChanges(ch, R, note = '', { journalId = null } = {}) {
 export function revertChanges(ch) {
   if (!ch.advancement?.snapshot) return ch;
   const snap = JSON.parse(JSON.stringify(ch.advancement.snapshot));
-  for (const k of TRAIT_KEYS) if (snap[k] !== undefined) ch[k] = snap[k];
+  for (const k of TRAIT_KEYS) { if (snap[k] !== undefined) ch[k] = snap[k]; else if (k === 'styles') delete ch.styles; } // a build with no styles puts them away
   return ch;
 }
 

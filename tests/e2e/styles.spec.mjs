@@ -1,6 +1,6 @@
 // Fighting styles (Martial Arts 3e): add a style on the Forge, see what it costs, buy a maneuver, then use its stances.
 import { test, expect } from '@playwright/test';
-import { openApp, showTab } from './helpers.mjs';
+import { openApp, rollCharacter, showTab } from './helpers.mjs';
 
 async function startBlank(page) {
   await page.locator('#start-scratch, #build-scratch').first().click();
@@ -63,6 +63,18 @@ test('in the play view, assuming a stance changes the defense and Neutral clears
   await expect(parry).toHaveText(String(before + 2));
   await stance.locator('.fs-stance-btn[data-stance="Neutral"]').click();
   await expect(parry).toHaveText(String(before));
+  expect(errors).toEqual([]);
+});
+
+test('a rolled martial artist knows a real fighting style with stances and maneuvers', async ({ page }) => {
+  const errors = await openApp(page);
+  await page.locator('#rail-more summary').click().catch(() => {});
+  await page.locator('#archetype').selectOption('martialartist');
+  await rollCharacter(page, 'e2e-style-roll');
+  const card = page.locator('#fighting-styles .fs-card');
+  await expect(card).toHaveCount(1);
+  await expect(card.locator('.fs-stances li').first()).toContainText('Neutral');
+  await expect(card.locator('.fs-man').first()).toBeVisible();
   expect(errors).toEqual([]);
 });
 

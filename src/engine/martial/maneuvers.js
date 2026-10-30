@@ -73,6 +73,14 @@ export function removeManeuver(ch, styleName, name, detail) {
   return true;
 }
 
+/** Remove a maneuver given its power (the generator and the repairs find them that way). */
+export function removeManeuverPower(ch, power) {
+  const style = knownStyle(ch, power.style);
+  const m = style?.maneuvers.find((x) => maneuverLabel(x) === power.name);
+  if (!m) { ch.powers = (ch.powers || []).filter((p) => p !== power); return true; }
+  return removeManeuver(ch, power.style, m.name, m.detail);
+}
+
 /** Change the rank of a maneuver that is priced per rank; a printed price no longer applies. */
 export function setManeuverRank(ch, R, styleName, name, detail, rank) {
   const style = knownStyle(ch, styleName);

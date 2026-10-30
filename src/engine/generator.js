@@ -16,6 +16,7 @@ import { rollSpec, rangeOf, evalExpr } from './expr.js';
 import { makeIdentity } from './flavor.js';
 import { generateBio } from './lifepath.js';
 import { ensureAttack, hasFairAttack } from './genattack.js';
+import { grantStyle } from './genstyle.js';
 export const ENGINE_VERSION = 1;
 
 const clone = (x) => JSON.parse(JSON.stringify(x));
@@ -887,6 +888,8 @@ function buildMechanics(R, ctx) {
   if (total(ch, R) !== budget) balance(ch, R, { ...ctx, budget });
   if (total(ch, R) !== budget || !legal(ch, R)) return fail(`budget ${total(ch, R)}/${budget}: ${errors(ch, R).map((e) => e.message).join('; ')}`);
   if (!hasFairAttack(ch, R)) return fail('no attack worth rolling');
+  // A real fighting style (Martial Arts 3e): its skill, stances and some maneuvers, paid for with filler, so the build stays as rolled.
+  if (arch.styles && ctx.style) grantStyle(ch, R, { ...ctx, budget });
   return ch;
 }
 
@@ -955,7 +958,9 @@ export function generateCharacter(R, opts = {}) {
   if (arch.construct) ch.construct = arch.automaton ? 'automaton' : 'construct';
   if (arch.minion) ch.minion = true;
   ch.theme = { id: theme.id, name: theme.name, color: theme.color, secondary: themes[1] ? { id: themes[1].id, name: themes[1].name } : null };
-  if (style) ch.style = { name: style.name, summary: style.summary };
+  // The style on the sheet is the one the hero actually knows (genstyle.js), else the one that lent its skills.
+  const known = style && ch.styles?.[0] ? R.raw.styles.find((x) => x.name === ch.styles[0].name) : null;
+  if (style) ch.style = { name: (known || style).name, summary: (known || style).summary };
   ch.alignment = alignment;
   Object.assign(ch, makeIdentity(R, ch, { arch, theme, themes, rng: rng.fork('identity'), gender: opts.gender }));
   // A full life story (family, timeline, people, personality, hooks) for every rolled character.
