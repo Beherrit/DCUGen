@@ -19,7 +19,7 @@ export function maneuverList(ch, R, style, { editing, change, stepper }) {
         ranked && m.rank != null ? h('span', { class: 'chip' }, `rank ${m.rank}`) : null,
         h('span', { class: 'fs-pts num' }, priceText(def, m.rank, m.price)),
         editing && ranked ? stepper(m.rank ?? 1, (d) => change((c) => { setManeuverRank(c, R, style.name, m.name, m.detail, (m.rank ?? 1) + d); }), { min: firstRank(def) ?? 1, label: `${m.name} rank` }) : null,
-        editing ? h('button', { class: 'x no-print', type: 'button', 'aria-label': `Remove ${maneuverLabel(m)}`, onClick: () => change((c) => { removeManeuver(c, style.name, m.name, m.detail); }) }, '✕') : null),
+        editing ? h('button', { class: 'btn sm no-print', type: 'button', 'aria-label': `Remove ${maneuverLabel(m)}`, onClick: () => change((c) => { removeManeuver(c, style.name, m.name, m.detail); }) }, 'Remove') : null),
       h('div', { class: 'fs-man-line' }, maneuverLine(def, m.rank) || def?.summary || ''),
       def?.summary && def.tier !== 'basic' ? h('div', { class: 'fs-man-sum' }, def.summary) : null);
   }));

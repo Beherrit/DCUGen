@@ -67,7 +67,7 @@ export function styleCard(ch, R, style, ctx) {
       h('span', { class: 'chip' }, TIER_LABEL[style.tier] || style.tier),
       h('span', { class: 'chip' }, def.category),
       h('span', { class: 'fs-pts num', title: cost.text }, `${cost.total} pp`),
-      editing ? h('button', { class: 'x no-print', type: 'button', 'aria-label': `Remove ${style.name}`, onClick: () => change((c) => { removeStyle(c, style.name); }) }, '✕') : null),
+      editing ? h('button', { class: 'btn sm no-print', type: 'button', 'aria-label': `Remove ${style.name}`, onClick: () => change((c) => { removeStyle(c, style.name); }) }, 'Remove') : null),
     h('p', { class: 'fs-sum' }, `${def.summary} (${def.type}; Mutants & Masterminds: Martial Arts 3e, ${def.source}.)`),
     h('p', { class: 'fs-costs' }, h('b', null, 'Cost: '), `${cost.text}.`),
     editing ? tierControls(ch, style, ctx) : null,
