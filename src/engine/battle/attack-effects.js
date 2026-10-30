@@ -1,7 +1,7 @@
 // What a hit does: the resistance check and its result (damage, Weaken, Affliction, Nullify).
 
 import { sign, log } from './util.js';
-import { rollCheck, critNote, opposedCheck, opposedNote } from './checks.js';
+import { critNote, opposedCheck, opposedNote } from './checks.js';
 import { resistOf, weakenedAttack } from './conditions.js';
 import { dcOf, halfImmune } from './odds.js';
 import { immunityHit } from './immunity.js';
@@ -10,6 +10,8 @@ import { insubLoss, formWords, entraps } from './insubstantial.js';
 import { releaseHolds } from './maneuvers.js';
 import { resistFx } from './fortune.js';
 import { weakenTraits, traitLabel } from './weaken-traits.js';
+import { flawRankLoss } from './flaw-odds.js';
+import { senseStops, resistRoll } from './flaw-resist.js';
 
 // Reflect on an Immunity (DCA 102) sends the attack it stops back; reflect.js sets the hook (it needs this file, so it cannot be imported here).
 let reflectHook = null;
@@ -27,7 +29,8 @@ function retuned(b, c, atk, t) {
 export function applyEffect(b, R, c, atk, t, rng, { crit = false, rankShift = 0, multi = 0 } = {}) {
   atk = retuned(b, c, atk, t);
   const lost = insubLoss(c, atk);
-  let rank = Math.max(0, atk.rank + rankShift - weakenedAttack(c, atk).rank - lost);
+  let rank = Math.max(0, atk.rank + rankShift - weakenedAttack(c, atk).rank - lost - flawRankLoss(b, c, atk, t));
+  if (atk.flaws && !flawedRank(b, c, atk, t, rank)) return { landed: false };
   if (lost && rank <= 0) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${atk.name}: ${c.name} is ${formWords(c.insub)} and ${c.insub.rank === 4 ? 'cannot affect the physical world with it' : 'has no Strength to put behind it'}: no effect.` }); return { landed: false }; }
   const stopped = immunityHit(t, atk);
   if (stopped) {
@@ -46,10 +49,11 @@ export function applyEffect(b, R, c, atk, t, rng, { crit = false, rankShift = 0,
   const resist = resistOf(t, resistName);
   if (resist === null) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name} has no ${resistName} to affect: no effect.` }); return { landed: false }; }
   const dc = dcOf(atk, rank) + (crit ? 5 : 0) + multi;
-  const r = rollCheck(rng, resist, dc, resistFx(b, t, atk, c));
+  if (senseStops(b, c, atk, t, rng, dc, rank)) return { landed: false }; // Sense-Dependent: the target could not perceive it, or looked away
+  const { r, name, bonus } = resistRoll(rng, t, atk, resistName, resist, dc, resistFx(b, t, atk, c)); // Resistible adds a second check
   const { roll, total, fails } = r;
-  const dice = [{ label: `${resistName} check`, roll, mod: resist, total, dc }];
-  const base = `${t.name} resists with ${resistName}: d20 ${roll} ${sign(resist)} = ${total} vs DC ${dc}${crit ? ' (+5, critical)' : ''}${critNote(r)}`;
+  const dice = [{ label: `${name} check`, roll, mod: bonus, total, dc }];
+  const base = `${t.name} resists with ${name}: d20 ${roll} ${sign(bonus)} = ${total} vs DC ${dc}${crit ? ' (+5, critical)' : ''}${critNote(r)}`;
   if (!fails) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${base} — ${r.crit && r.base.success ? 'natural 20, ' : ''}resisted.`, dice }); return { landed: false, degrees: 0, rank }; }
   c.stats.degrees += fails;
   t.stats.taken += fails;
@@ -58,13 +62,25 @@ export function applyEffect(b, R, c, atk, t, rng, { crit = false, rankShift = 0,
     const trait = atk.weakens || 'Toughness';
     const lost = Math.min(fails, rank);
     const now = weakenTraits(t, trait, lost);
+    if (atk.flaws?.fastReturn) t.fastReturn = Math.max(t.fastReturn || 0, atk.flaws.fastReturn); // Fast Return (MA 96): more comes back each round
     log(b, { kind: 'condition', actor: c.id, target: t.id, text: `${base} — ${fails} degree${fails > 1 ? 's' : ''}: ${t.name} loses ${lost} rank${lost > 1 ? 's' : ''} of ${traitLabel(trait)} (now −${now}).`, dice });
     return { landed: true, degrees: fails };
   }
   return afflictionResult(b, c, atk, t, fails, dc, base, dice, rng);
 }
 
-function damageResult(b, c, t, fails, base, dice) {
+/** Fades and Dulled take ranks off this use: say so in the log. False when a Completely Dulled effect is down to nothing (MA 96) and does nothing. */
+function flawedRank(b, c, atk, t, rank) {
+  const loss = flawRankLoss(b, c, atk, t);
+  if (!loss) return true;
+  const why = [atk.flaws.fades && 'Fades', atk.flaws.dulled && 'Dulled'].filter(Boolean).join(' and ');
+  log(b, { kind: 'note', actor: c.id, target: t.id, text: `${atk.name}: ${why} takes ${loss} rank${loss > 1 ? 's' : ''} off: rank ${rank}.` });
+  if (rank > 0 || !atk.flaws.dulled?.complete) return true;
+  log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${atk.name}: Completely Dulled down to rank 0 is nullified: no effect.` });
+  return false;
+}
+
+export function damageResult(b, c, t, fails, base, dice) {
   const minionDown = t.minion && b.options.minionRule;
   let text; let ko = false;
   if (minionDown) { t.out = true; t.outReason = 'minion'; ko = true; text = `${base} — failed: ${t.name} goes down (minions drop on any failed check).`; }
@@ -93,7 +109,7 @@ function afflictionResult(b, c, atk, t, fails, dc, base, dice, rng) {
   else if (existing) degree = Math.max(existing.degree, degree);
   const names = tiers[degree - 1];
   if (atk.extraCondition && degree === 1 && tiers[1]) names.push(...tiers[1].filter((n) => !names.includes(n)));
-  const cond = { name: names[0], names, degree, from: c.id, source: atk.id, label: atk.name, dc: dcOf(atk, atk.rank), resist: atk.resistance, cumulative: !!atk.cumulative, progressive: !!atk.progressive, tiers, maxDegree: maxDeg, ...(entraps(atk) ? { entrap: true } : {}) };
+  const cond = { name: names[0], names, degree, from: c.id, source: atk.id, label: atk.name, dc: dcOf(atk, atk.rank), resist: atk.resistance, cumulative: !!atk.cumulative, progressive: !!atk.progressive, tiers, maxDegree: maxDeg, ...(entraps(atk) ? { entrap: true } : {}), ...(atk.flaws?.concentration ? { concentrate: true } : {}) };
   t.conditions = t.conditions.filter((x) => x !== existing);
   for (const n of names.slice(1)) t.conditions.push({ ...cond, name: n });
   t.conditions.push(cond);

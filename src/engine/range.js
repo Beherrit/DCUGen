@@ -44,15 +44,19 @@ export function measure(rank, R) {
 
 const steps = (p, name) => (p.extras || []).filter((m) => m.name === name).reduce((s, m) => s + (m.steps ?? 1), 0);
 
-/** The three range bands of a ranged effect: [{ band, ft, penalty }]. */
-export function rangeBands(rank, extended = 0) {
+// Diminished Range (DCA 135): ranks 1, 2 and 3 cut the feet per rank of the short, medium and long bands to these.
+const DIMINISHED = [[25, 50, 100], [10, 25, 50], [5, 10, 25], [2, 5, 10]];
+
+/** The three range bands of a ranged effect: [{ band, ft, penalty }]. `diminished` is the ranks of the Diminished Range flaw (0 to 3). */
+export function rangeBands(rank, extended = 0, diminished = 0) {
   const m = 2 ** extended;
-  return [{ band: 'short', ft: 25 * rank * m, penalty: 0 }, { band: 'medium', ft: 50 * rank * m, penalty: -2 }, { band: 'long', ft: 100 * rank * m, penalty: -5 }];
+  const [s, md, l] = DIMINISHED[Math.min(3, Math.max(0, diminished))];
+  return [{ band: 'short', ft: s * rank * m, penalty: 0 }, { band: 'medium', ft: md * rank * m, penalty: -2 }, { band: 'long', ft: l * rank * m, penalty: -5 }];
 }
 
 /** Which band a distance falls in: { band, penalty } or { band: 'out' }. */
-export function bandFor(ft, rank, extended = 0) {
-  for (const b of rangeBands(rank, extended)) if (ft <= b.ft) return b;
+export function bandFor(ft, rank, extended = 0, diminished = 0) {
+  for (const b of rangeBands(rank, extended, diminished)) if (ft <= b.ft) return b;
   return { band: 'out', ft: null, penalty: null };
 }
 

@@ -105,11 +105,19 @@ function stepsOf(p, name) {
   return (p.extras || []).filter((m) => m.name === name).reduce((s, m) => s + (m.steps ?? 1), 0);
 }
 
+/** A power's range after its Reduced Range flaw (DCA 136): one step down per rank, perception to ranged and ranged to close. */
+export function reducedRange(p, range) {
+  const steps = (p.flaws || []).filter((f) => f.name === 'Reduced Range').reduce((s, f) => s + (f.steps ?? 1), 0);
+  const ladder = ['Close', 'Ranged', 'Perception'];
+  const at = ladder.indexOf(range);
+  return at < 0 || !steps ? range : ladder[Math.max(0, at - steps)];
+}
+
 /** Classify how an attack effect is delivered. */
 export function attackKind(p, R) {
   const eff = R.effect(p.effect);
   if (hasExtra(p, 'Area')) return 'area';
-  const range = p.range || eff.range;
+  const range = reducedRange(p, p.range || eff.range);
   if (range === 'Perception') return 'perception';
   if (range === 'Ranged') return 'ranged';
   return 'close';

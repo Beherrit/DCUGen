@@ -14,10 +14,12 @@ import { coverPenalty } from './cover.js';
 import { kite, moveBy } from './move-by.js';
 import { runManeuver } from './maneuver-run.js';
 import { finishingFeat } from './feat.js';
+import { flawedAction } from './flaw-turn.js';
 
 /** The attack plan chosen for this turn: move into position, maybe aim, then attack. */
 export function attackTurn(b, R, c, choice, enemies, mode, rng) {
   const { attack, target } = choice;
+  if (choice.plan === 'attack' && flawedAction(b, c, attack, target, mode, rng)) return; // Activation, Increased Action, Immobile (flaw-turn.js)
   coverStep(b, c, attack, mode, target, enemies);
   kite(b, c, attack, target, enemies, mode);
   if (holdPosition(b, c, attack, target, mode)) return;
@@ -118,9 +120,9 @@ function pickTradeoffs(b, c, attack, target, enemies) {
 }
 
 /** Extra effort: push a power when losing (DCA 19). */
-function pickEffort(b, c, attack, target, rng) {
+export function pickEffort(b, c, attack, target, rng) {
   const hurt = c.staggered || c.bruises >= 2;
-  if (b.options.extraEffort && c.fatigue < 2 && attack.power && !attack.equipment && (forceEffort(b, c) || ((hurt || (b.round >= 3 && target.bruises === 0)) && ['mage', 'omni', 'blaster', 'tank', 'brawler', 'mentalist'].includes(c.style) && rng.chance(0.45)))) {
+  if (b.options.extraEffort && c.fatigue < 2 && attack.power && !attack.equipment && !attack.flaws?.strained && (forceEffort(b, c) || ((hurt || (b.round >= 3 && target.bruises === 0)) && ['mage', 'omni', 'blaster', 'tank', 'brawler', 'mentalist'].includes(c.style) && rng.chance(0.45)))) {
     return 'power';
   }
   return null;

@@ -1,6 +1,6 @@
 // Building a combatant from a character: its attacks, defenses, immunities and fight state.
 
-import { deriveAll, advantageRank, allPowers } from '../derive.js';
+import { deriveAll, advantageRank, allPowers, reducedRange } from '../derive.js';
 import { repairPowerRoles } from '../repair.js';
 import { hasExtra, extraOpt, clamp } from './util.js';
 import { STYLES, detectStyle } from './styles.js';
@@ -17,6 +17,7 @@ import { attackDescriptors } from './descriptors.js';
 import { immunitiesOf, fearImmune } from './immunity.js';
 import { variableSize } from './variable-descriptor.js';
 import { restoreForm } from './insubstantial.js';
+import { flawsOf, shapeAttack, freshFlawState } from './flaws.js';
 
 export function effectWeights(attack) {
   if (attack.effect === 'Damage') return [0, 1, 2.3, 3.8, 6.5];
@@ -49,7 +50,7 @@ function reachOf(a, p, R) {
   if (a.kind === 'area') {
     let eff = null;
     try { eff = R.effect(p.effect).range; } catch { eff = null; }
-    range = { Ranged: 'ranged', Perception: 'perception' }[p?.range || eff] || 'close';
+    range = { Ranged: 'ranged', Perception: 'perception' }[reducedRange(p, p?.range || eff)] || 'close';
   }
   const out = { range, ext: range === 'ranged' ? steps('Extended Range') : 0, reachFt: range === 'close' ? 5 * steps('Reach') : 0 };
   if (a.kind === 'area') {
@@ -84,8 +85,10 @@ function buildAttack(c, a0, R, where = new Map()) {
     perception: a.kind === 'perception',
     ...reachOf(a, p, R),
     fear: /terror|fear|despair|cowering/i.test(p?.detail || ''),
+    flaws: flawsOf(p),     // the flaws that change a fight, read once (flaws.js)
     power: p,
   };
+  shapeAttack(atk);
   if (['Affliction', 'Dazzle', 'Sleep', 'Snare', 'Mind Control', 'Suffocation'].includes(a.effect)) Object.assign(atk, parseAffliction(p || { effect: a.effect }, R));
   if (a.effect === 'Weaken') {
     const detail = String(p?.detail || '');
@@ -151,6 +154,9 @@ export function resetCombatant(c) {
     fatigue: 0, defMod: 0, feinted: false, grabbedBy: null, holding: null, nullified: 0, regen: 0, interposed: false,
     lastAttackId: null, usedEffort: 0, luckRound: null, inspired: null, inspireUsed: false, feats: [], teamedRound: null, surpriseActor: false,
     dropped: [],           // keys of items lost to a disarm or a smash: their attacks stay removed (items.js)
+    flaw: freshFlawState(), // what is switched on, used, faded or done for the flaws (flaws.js)
+    distracted: false,     // used a Distracting effect: vulnerable until the start of the next turn
+    fastReturn: 0,         // extra ranks of Weaken that return each round (Fast Return)
     noMove: false,         // the move action went on standing up this turn
     squaresMoved: 0,       // squares moved so far this turn (Move-by Action splits the speed)
     grants: [],            // traits lent by an ally's Affects Others power: [{ by, key, trait, kinds, amount }] (grants.js)
@@ -178,6 +184,7 @@ export function rebuildCombatant(c, R, d = null) {
   if (!d && JSON.stringify(c.ch?.powers || []) !== was && c.style !== 'minion') c.style = detectStyle(c.ch, R);
   d = d || deriveAll(c.ch, R);
   c.d = d;
+  c.flaw ||= freshFlawState();           // a battle saved before the flaws were simulated has none
   c.initBonus = d.initiative;
   const where = new Map(allPowers(c.ch).map((x) => [x.power, x]));
   c.attacks = d.attacks.map((a) => buildAttack(c, a, R, where)).filter((a) => (a.rank > 0 || a.effect !== 'Damage') && !(a.item && (c.dropped || []).includes(a.item.key)));
@@ -214,7 +221,7 @@ function powerStats(c) {
   c.sustainedProtection = pw.filter((p) => p.effect === 'Force Field' || (p.effect === 'Protection' && hasExtra(p, 'Sustained'))).reduce((s, p) => s + p.rank, 0);
   c.regenRank = pw.filter((p) => p.effect === 'Regeneration').reduce((s, p) => s + p.rank, 0);
   const heal = allPowers(c.ch).map((x) => x.power).find((p) => p.effect === 'Healing');
-  c.healing = heal ? { name: heal.name, rank: heal.rank, ranged: (heal.range || 'Close') !== 'Close' } : null;
+  c.healing = heal ? { name: heal.name, rank: heal.rank, ranged: reducedRange(heal, heal.range || 'Close') !== 'Close' } : null;
   const conceal = pw.find((p) => ['Concealment', 'Invisibility'].includes(p.effect) && (!p.detail || /visual|sight|vision/i.test(p.detail)));
   c.concealment = conceal ? ((conceal.flaws || []).some((f) => /Blending|Limited|Partial/i.test(f.name)) || conceal.rank < 2 ? 'partial' : 'total') : null;
   c.senses = pw.filter((p) => p.effect === 'Senses').map((p) => p.detail || '').join(' ');

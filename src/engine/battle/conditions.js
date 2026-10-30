@@ -139,7 +139,7 @@ export function defenseOf(c, which) {
   const s = activeConditions(c);
   let v = (c.d.defenses[which] ?? 0) + c.defMod - (c.weakened[which] || 0) - (which === 'Parry' ? c.weakened.Fighting || 0 : 0);
   if (s.has('Defenseless')) return 0;
-  if (s.has('Vulnerable') || c.aiming) v = Math.ceil(v / 2); // aiming leaves you vulnerable (DCA 175)
+  if (s.has('Vulnerable') || c.aiming || c.distracted) v = Math.ceil(v / 2); // aiming leaves you vulnerable (DCA 175), and so does a Distracting effect (DCA 135)
   return v;
 }
 

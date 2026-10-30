@@ -39,6 +39,7 @@ export function bestAttackVs(b, c, t, rng, { full = false } = {}) {
       if (templateShort(b, c, atk, t) > moveSq) continue; // a Cone or Line that cannot reach, even after a move
     }
     if (blocksDirect(b, c, atk, t)) continue; // total cover: the target cannot be picked
+    if (staysPut(atk) && (close ? Math.max(0, n - reachSquares(b, c, atk)) > 0 : rangePenalty(atk, n * sq) > 5)) continue; // a full-action or Immobile effect is used where the fighter stands
     const dist = close ? 0 : from;
     const trade = bestTradeoff(c, atk, t, dist, b);
     const opts = { bonusShift: -trade - (charge && close ? 2 : 0), rankShift: trade, dist, b };
@@ -57,6 +58,8 @@ export function bestAttackVs(b, c, t, rng, { full = false } = {}) {
   }
   return best;
 }
+
+const staysPut = (atk) => !!(atk.flaws && (atk.flaws.increased || atk.flaws.immobile));
 
 export function bestTradeoff(c, atk, t, dist, b = null) {
   if (!atk.roll || atk.unarmed && !c.adv['Power Attack'] && c.style !== 'brawler') return 0;

@@ -17,35 +17,53 @@ import { squares, squaresInMove, feet, inReach, areaVictims } from './geometry.j
 import { spotName } from './grid.js';
 import { traceAttack } from './trace.js';
 import { critImmune, slipsHold } from './immunity.js';
+import { flawKey } from './flaws.js';
+import { flawGate } from './flaw-gate.js';
+import { afterUse } from './flaw-effects.js';
+import { grabBasedUse } from './flaw-grab.js';
+import { inexactHit } from './flaw-resist.js';
 
-export function resolveAttack(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive = 0, effort = null, charge = false, slam = null, aimed = 0, team = 0 } = {}) {
+export function resolveAttack(b, R, c, atk, t, rng, opts = {}) {
   c.lastAttackId = atk.id;
   traceAttack(b, c, atk, t);
   noteAttack(b, c, t);
   c.stats.attacks++;
+  if (!atk.flaws) {
+    if (attackBody(b, R, c, atk, t, rng, opts, 0)) c.flaw.done[flawKey(atk)] = b.round; // a Chained effect hangs on this one having worked
+    return;
+  }
+  const gate = flawGate(b, R, c, atk, t, rng); // limits, uses, hero point, reliability roll, required check (flaw-gate.js)
+  if (!gate.go) { if (gate.spent) afterUse(b, R, c, atk, rng, false); return; }
+  afterUse(b, R, c, atk, rng, attackBody(b, R, c, atk, t, rng, opts, gate.rankShift));
+}
+
+/** The attack itself, after the flaws have let it go. Returns whether it landed (a hit that was not resisted), for Side Effect and Chained. */
+function attackBody(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive = 0, effort = null, charge = false, slam = null, aimed = 0, team = 0 }, checkShift) {
   const m = shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charge, slam, team });
   const { notes } = m;
+  m.rankShift += checkShift;
   let { rankShift } = m;
-  if (atk.area) { areaAttack(b, R, c, atk, t, rng, rankShift, notes); return; }
+  if (atk.flaws?.grab) return !!grabBasedUse(b, R, c, atk, t, rng, rankShift)?.landed;
+  if (atk.area) return areaAttack(b, R, c, atk, t, rng, rankShift, notes);
   if (!atk.roll) {
     log(b, { kind: 'attack', actor: c.id, target: t.id, text: `${c.name} ${attackVerb(c, atk, t, rng)} (perception range, no attack roll)${notes.length ? ` — ${notes.join('; ')}` : ''}.` });
-    applyEffect(b, R, c, atk, t, rng, { auto: true, crit: false, rankShift });
-    return;
+    return !!applyEffect(b, R, c, atk, t, rng, { auto: true, crit: false, rankShift })?.landed;
   }
   if (b.options.shootThrough) {
     const through = throughCover(b, c, atk, t, rng, m, aimed);
-    if (through === null) return;
+    if (through === null) return false;
     rankShift = through;
   }
   const r = rollToHit(b, c, atk, t, rng, m, aimed, notes);
   if (!r.hit) {
     log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${r.text} — ${r.roll === 1 ? 'natural 1, a clean miss' : 'miss'}${notes.length ? ` (${notes.join('; ')})` : ''}.`, dice: r.dice });
     afterDeflect(b, R, c, atk, t, rng, r, rankShift);
-    return;
+    return false;
   }
   const result = landHit(b, R, c, atk, t, rng, r, { rankShift, notes, slam: m.slam });
-  if (!result) return;
+  if (!result) return true; // an ally took the hit
   followUps(b, R, c, atk, t, rng, result, r.mod);
+  return !!result.landed;
 }
 
 /**
@@ -158,7 +176,9 @@ function areaAttack(b, R, c, atk, t, rng, rankShift, notes) {
   const victims = inArea.filter((x) => x.team !== c.team);
   const friendly = inArea.filter((x) => x.team === c.team);
   log(b, { kind: 'attack', actor: c.id, target: t.id, text: `${c.name} drops ${atk.name} (${atk.area} area) ${atk.range === 'close' ? 'around itself' : `on ${spotName(t)}`}: ${inArea.map((x) => x.name).join(', ') || 'nobody'} ${inArea.length > 1 ? 'are' : 'is'} caught in it${friendly.length && !atk.selective ? ` (${friendly.map((x) => x.name).join(', ')} too!)` : ''}${notes.length ? ` — ${notes.join('; ')}` : ''}.`, important: true });
+  let landedAny = false;
   for (const v of [...victims, ...friendly]) {
+    if (atk.flaws?.inexact && !inexactHit(b, c, atk, v, rng)) continue; // Inexact (MA 97): each target needs its own attack check first
     const shelter = coverDodgeBonus(b, c, v);
     const dodge = defenseOf(v, 'Dodge') - checkPenalty(v) + (v.adv.Evasion >= 2 ? 5 : v.adv.Evasion ? 2 : 0) + shelter;
     const dc = 10 + atk.rank + rankShift;
@@ -170,8 +190,9 @@ function areaAttack(b, R, c, atk, t, rng, rankShift, notes) {
     // its +2 or +5 to the Dodge check (p76); it never lets a target slip clear entirely.
     const full = atk.rank + rankShift;
     const r = applyEffect(b, R, c, atk, v, rng, { auto: true, crit: false, rankShift: rankShift - (half ? full - Math.max(1, Math.floor(full / 2)) : 0) });
-    if (r?.landed && v.team !== c.team) c.stats.hits++;
+    if (r?.landed && v.team !== c.team) { c.stats.hits++; landedAny = true; }
     maybeKnockback(b, R, c, atk, v, r, rng);
   }
   areaOnPieces(b, c, atk, t, atk.rank + rankShift, rng);
+  return landedAny;
 }

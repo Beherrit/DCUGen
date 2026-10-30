@@ -61,6 +61,7 @@ function toHitMod(b, c, atk, t, m, aimed, notes) {
   if (hurt) notes.push(hurt > 0 ? `${c.name} is impaired: −${hurt}` : `inspired: +${-hurt}`); // checkPenalty nets Impaired or Disabled against Inspire
   if (prone) notes.push(`prone: ${prone > 0 ? '+' : '−'}${Math.abs(prone)}`);
   if (weak) notes.push(`weakened: −${weak}`);
+  if (atk.flaws?.inaccurate) notes.push(`Inaccurate: −${2 * atk.flaws.inaccurate} (already in the bonus)`);
   if (aid) notes.push(`aid: +${aid}`);
   if (conceal) notes.push(`${conceal === 5 ? 'total' : 'partial'} concealment: −${conceal}`);
   if (cover) notes.push(`${coverLevel(shieldFor(b, c, atk, t))} cover: −${cover}`);
@@ -92,11 +93,13 @@ export function rollToHit(b, c, atk, t, rng, m, aimed, notes) {
   // Ultimate Effort (p79): a roll of 20 that is not a natural 20, so it is no automatic hit and no critical.
   const ultimate = !routine && ultimateAim(b, c, t, mod, dcUsed);
   let roll = ultimate ? 20 : routine ? 10 : d20(rng);
-  let v = judge(roll, mod, dcUsed, routine, ultimate);
+  const missMax = 1 + (atk.flaws?.uncertain || 0); // Uncertain (MA 98): the critical miss range grows by a rank
+  let v = judge(roll, mod, dcUsed, routine, ultimate, missMax);
   // Luck Control: an enemy controller can make a hit that matters be re-rolled at the worse of the two.
   const forced = v.hit && !routine && !ultimate ? forcesHit(b, c, atk, t, rng, { roll, mod, dcUsed }) : null;
-  if (forced) { notes.push(`Luck Control forced the roll from ${roll} to ${forced.roll}`); roll = forced.roll; v = judge(roll, mod, dcUsed, routine, ultimate); }
+  if (forced) { notes.push(`Luck Control forced the roll from ${roll} to ${forced.roll}`); roll = forced.roll; v = judge(roll, mod, dcUsed, routine, ultimate, missMax); }
   const { total, hit } = v;
+  if (missMax > 1 && roll > 1 && roll <= missMax && !routine) notes.push(`Uncertain: a natural ${roll} is a critical miss`);
   // A natural 20 always hits, but is a critical only if the total also reaches the defense (DCA 172).
   const crit = !ultimate && critOk(c, t, routine) && hit && (roll === 20 ? total >= dcUsed : roll >= atk.crit);
   const dice = routine ? [] : [{ label: 'Attack', roll, mod, total, dc: dcUsed }];
@@ -112,9 +115,9 @@ export function rollToHit(b, c, atk, t, rng, m, aimed, notes) {
 }
 
 /** The total and whether it hits. A routine attack always hits, a natural 20 always hits, a natural 1 never does. */
-function judge(roll, mod, dcUsed, routine, ultimate) {
+function judge(roll, mod, dcUsed, routine, ultimate, missMax = 1) {
   const total = roll + mod;
-  return { total, hit: routine || (roll === 20 && !ultimate) || (roll !== 1 && total >= dcUsed) };
+  return { total, hit: routine || (roll === 20 && !ultimate) || (roll > missMax && total >= dcUsed) };
 }
 
 /** Luck, a hero point or an ally's grant: re-roll a miss and take the better; 1-10 on the re-roll counts +10 (DCA 21, 77). An enemy's Luck Control can waste it. */

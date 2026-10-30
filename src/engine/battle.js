@@ -20,6 +20,8 @@
 // opposed and recovery checks, recover, heroic feat), Luck, Leadership, Inspire, Ultimate Effort, Daze, Startle, Set-up and extra effort with fatigue, range bands and movement, prone, vulnerable, defenseless.
 // Cover pieces made of real materials (partial and total cover, breaking it, shooting through it) and the optional knockback rule are simulated when a battle asks for them.
 // Deflect (the Defend action for the team, or as a Reaction, with Reflect and Redirect), Luck Control (grant, bestow, negate, force) and Throwing Mastery are simulated.
+// Flaws on attacks are simulated (flaw-*.js): Activation, Check Required, Concentration, Diminished and Reduced Range, Distracting, Fades, Grab-Based, Inaccurate, Increased Action,
+// Limited (to the limits the engine knows), Resistible, Sense-Dependent, Side Effect, Tiring, Uncontrolled, Unreliable, and the Martial Arts flaws that change a fight; the coverage list says which parts.
 // The AI scores a heal, a buff, a control, a Weaken and a guard in the same expected degrees as an attack and picks the best (utility.js); a fighter's roles (healer, controller, ...) only tip those weights a little.
 // Not simulated: Summon, Create, Illusion, Environment. Team attacks are simulated for minion squads.
 //

@@ -26,7 +26,7 @@ const powerRanks = (c, effect) => allPowers(c.ch, { includeAlternates: false }).
 export function massRank(c) {
   const own = c.ch?.massRank ?? c.ch?.mass;
   const base = typeof own === 'number' ? own : 2 + powerRanks(c, 'Growth') - Math.floor(powerRanks(c, 'Shrinking') / 2);
-  return base + (c.defending ? 2 : 0);
+  return base + (c.defending ? 2 : 0) - (c.flaw?.pushOver || 0); // Push Over (MA 98) leaves the user braced less
 }
 
 /** Which way a blow throws the target: along the line from the attacker, or toward its own team's edge when they share a square. */

@@ -8,6 +8,7 @@ import { bandFor } from '../range.js';
 import { immunityMatch } from './immunity.js';
 import { retune } from './variable-descriptor.js';
 import { insubLoss } from './insubstantial.js';
+import { flawFactor, flawRankLoss, betterOf } from './flaw-odds.js';
 
 export function hitOdds(bonus, defense) {
   let hit = 0;
@@ -27,7 +28,9 @@ export function resistOdds(resist, dc) {
 }
 
 export function dcOf(atk, rank = atk.rank) {
-  return (atk.effect === 'Damage' || atk.effect === 'Mental Blast' ? 15 : 10) + rank;
+  const base = (atk.effect === 'Damage' || atk.effect === 'Mental Blast' ? 15 : 10) + rank;
+  // Diluted (MA 96): each rank takes 1 off the resistance DC, which never goes below 10
+  return atk.flaws?.diluted ? Math.max(10, base - atk.flaws.diluted) : base;
 }
 
 /**
@@ -62,16 +65,19 @@ export function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, a
   atk = retune(target, atk)?.atk || atk; // Variable Descriptor: used with a descriptor the target is not immune to
   if (isImmune(target, atk)) return 0;
   const lost = insubLoss(c, atk);
-  let rank = atk.rank + rankShift - weakenedAttack(c, atk).rank - lost;
+  const factor = flawFactor(b, c, atk, target); // the flaws' share of the value: 0 when a flaw rules the use out
+  if (!factor) return 0;
+  let rank = atk.rank + rankShift - weakenedAttack(c, atk).rank - lost - flawRankLoss(b, c, atk, target);
   if (lost && rank <= 0) return 0; // an insubstantial fighter that cannot affect the physical world
+  if (atk.flaws) rank = Math.max(0, rank); // a Dulled effect left at rank 0 still has the base DC (MA 96)
   if (halfImmune(target, atk)) rank = Math.floor(rank / 2);
   const { hit, crit } = attackHit(c, atk, target, { bonusShift, autoHit, dist, b });
   if (atk.effect === 'Damage' && !atk.penetrating && rank <= Math.floor(target.impervious / 2)) return 0.05 * hit;
   const resist = resistOf(target, atk.resistance);
   if (resist === null) return 0;
   const dc = dcOf(atk, rank);
-  const dist1 = resistOdds(resist, dc);
-  const dist2 = resistOdds(resist, dc + 5);
+  const dist1 = resistDist(target, atk, resist, dc);
+  const dist2 = resistDist(target, atk, resist, dc + 5);
   const w = atk.weights || effectWeights(atk);
   let ev = 0;
   for (let i = 1; i < 5; i++) {
@@ -88,7 +94,14 @@ export function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, a
   // An affliction that is already on the target (and doesn't stack) is worth much less than something new
   if (atk.tiers && !atk.cumulative && target.conditions.some((x) => x.source === atk.id && x.from === c.id)) ev *= 0.4;
   if (!atk.roll && !atk.area) { const r = c.stats; void r; }
-  return ev;
+  return ev * factor;
+}
+
+/** The odds of each degree of failure against the attack's DC, counting a Resistible flaw's second check (the better of the two stands). */
+function resistDist(target, atk, resist, dc) {
+  const own = resistOdds(resist, dc);
+  const extra = atk.flaws?.resistible ? resistOf(target, atk.flaws.resistible) : null;
+  return extra == null ? own : betterOf(own, resistOdds(extra, dc));
 }
 
 /**
@@ -98,7 +111,7 @@ export function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, a
  */
 export function rangePenalty(atk, ft) {
   if ((atk.range ?? atk.kind) !== 'ranged') return 0;
-  const band = bandFor(ft, Math.max(1, atk.rank), atk.ext || 0);
+  const band = bandFor(ft, Math.max(1, atk.rank), atk.ext || 0, atk.dim || 0);
   if (band.band === 'out') return 99;
   return atk.area ? 0 : -band.penalty || 0;
 }

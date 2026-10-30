@@ -8,6 +8,8 @@ import { expireSupport } from './support-actions.js';
 import { STAND_SOURCES } from './prone.js';
 import { recoveryFx } from './fortune.js';
 import { expireFeats } from './feat.js';
+import { concentrationBroken } from './flaw-turn.js';
+import { snareFeedback } from './flaw-effects.js';
 
 /**
  * A snare-type affliction ("overcome by Damage") is broken with Damage, including Strength, or slipped with Sleight
@@ -32,6 +34,7 @@ export function endOfTurn(b, c, rng) {
   if (c.dazed && c.staggered) { c.dazed = false; } // staggered keeps the hindered part; dazed wears off
   // Sustained defenses come back as a free action
   if (c.nullified) { c.nullified = 0; log(b, { kind: 'recover', actor: c.id, text: `${c.name} restores its defenses.` }); }
+  concentrationBroken(b, c); // effects held by Concentration end when the one concentrating cannot (flaw-turn.js)
   // Recovery checks against afflictions (DCA 95)
   const sources = [...new Set(c.conditions.filter((x) => x.source !== 'grab' && x.source !== 'surprise' && x.source !== 'demoralize' && !STAND_SOURCES.includes(x.source)).map((x) => x.source))];
   for (const src of sources) {
@@ -45,6 +48,7 @@ export function endOfTurn(b, c, rng) {
     const { roll, total } = r;
     const ok = r.success;
     const dice = [{ label: `Recover (${how})`, roll, mod: resist, total, dc: lead.dc }];
+    if (breakout != null) snareFeedback(b, c, lead, rng); // Feedback (DCA 135): hitting the snare hurts whoever made it
     if (ok) {
       c.conditions = c.conditions.filter((x) => x.source !== src);
       if (c.out && ['affliction', 'asleep', 'paralyzed'].includes(c.outReason)) { c.out = false; c.outReason = null; }
@@ -60,7 +64,10 @@ export function endOfTurn(b, c, rng) {
       log(b, { kind: 'miss', actor: c.id, text: `${c.name} fails to shake off ${lead.label || 'the effect'}: d20 ${roll} ${sign(resist)} = ${total} vs DC ${lead.dc}${critNote(r)}.`, dice });
     }
   }
-  // Weakened traits recover a rank per round
-  for (const k of Object.keys(c.weakened)) { c.weakened[k] = Math.max(0, c.weakened[k] - 1); if (!c.weakened[k]) delete c.weakened[k]; }
+  // Weakened traits recover a rank per round, and one more per rank of Fast Return (MA 96)
+  const back = 1 + (c.fastReturn || 0);
+  if (c.fastReturn && Object.keys(c.weakened).length) log(b, { kind: 'recover', actor: c.id, text: `${c.name} recovers ${back} ranks of each weakened trait this round (Fast Return).` });
+  for (const k of Object.keys(c.weakened)) { c.weakened[k] = Math.max(0, c.weakened[k] - back); if (!c.weakened[k]) delete c.weakened[k]; }
+  if (!Object.keys(c.weakened).length) c.fastReturn = 0;
   if (c.fatigue >= 3) { c.out = true; c.outReason = 'exhausted'; log(b, { kind: 'ko', actor: c.id, text: `${c.name} collapses from exhaustion.`, important: true }); }
 }

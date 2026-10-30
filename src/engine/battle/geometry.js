@@ -46,7 +46,7 @@ export const inReach = (b, c, t, atk = null) => squares(c, t) <= reachSquares(b,
 
 /** Which range band the target is in for this attack: { band: 'short' | 'medium' | 'long' | 'out', penalty, ft }. */
 export function bandFrom(b, c, atk, t) {
-  return { ...bandFor(feet(b, c, t), Math.max(1, atk.rank), atk.ext || 0), dist: feet(b, c, t) };
+  return { ...bandFor(feet(b, c, t), Math.max(1, atk.rank), atk.ext || 0, atk.dim || 0), dist: feet(b, c, t) };
 }
 
 /** The squares a straight line from one position to another passes through, not counting either end. */
@@ -124,7 +124,7 @@ export const interacts = (b, p, q) => squares(p, q) <= 1 || feet(b, p, q) <= 30;
 export const inEarshot = (b, p, q) => feet(b, p, q) <= 60;
 
 /** The longest short range (no penalty) of any of the fighter's ranged attacks with an attack roll, in feet; 0 when it has none. */
-export const shortRangeFt = (c) => Math.max(0, ...c.attacks.filter((a) => a.range === 'ranged' && a.roll).map((a) => rangeBands(Math.max(1, a.rank), a.ext || 0)[0].ft));
+export const shortRangeFt = (c) => Math.max(0, ...c.attacks.filter((a) => a.range === 'ranged' && a.roll).map((a) => rangeBands(Math.max(1, a.rank), a.ext || 0, a.dim || 0)[0].ft));
 /** How close a shooter wants to get: the squares inside its short range, at least 1. */
 export const shootSquares = (b, c) => Math.max(1, Math.floor(shortRangeFt(c) / b.grid.squareFt));
 /** The most squares that still leave two positions within earshot (60 ft). */

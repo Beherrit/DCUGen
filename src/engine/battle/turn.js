@@ -20,6 +20,8 @@ import { deflectTurn } from './deflect-plan.js';
 import { utilityTurn } from './utility.js';
 import { refreshGrants } from './grants.js';
 import { insubTurn } from './insub-turn.js';
+import { flawsStartTurn, concentrationLost, uncontrolledFire, concentrate } from './flaw-turn.js';
+import { heldAttack } from './flaw-grab.js';
 
 const isHurt = (c) => c.staggered || c.bruises >= 2;
 
@@ -32,15 +34,19 @@ export function takeTurn(b, R, c, rng) {
   const conds = conditionLabels(c).filter((x) => x !== 'Fled');
   c.defending = false;
   c.deflecting = false;
+  flawsStartTurn(c);
+  concentrationLost(b, c, mode);
   if (mode === 'none' && cannotAct(b, c, conds)) return;
   if (mode === 'controlled') { controlledTurn(b, R, c, rng); return; }
   const enemies = enemiesOf(b, c);
   if (!enemies.length) return;
   if (losesNerve(b, c, enemies, rng)) return;
   insubTurn(b, c, enemies); // a free action: change form, and flow out of a hold
+  uncontrolledFire(b, R, c, enemies, rng); // an Uncontrolled power may go off by itself
   if (escapeGrab(b, c, rng)) return;
   recoverFromDaze(b, c, mode, rng);
   recoverFatigue(b, c);
+  if (concentrate(b, c)) return; // keeping a Concentration effect up takes the standard action
   if (withdrawTurn(b, c)) return;
   if (catchBreath(b, c, rng)) return;
   if (takeAimedShot(b, R, c, rng)) return;
@@ -146,6 +152,8 @@ function crushHeld(b, R, c, rng) {
   const victim = byId(b, c.holding);
   if (!victim || victim.out || victim.fled || victim.grabbedBy !== c.id) { c.holding = null; return false; }
   const unarmed = c.attacks.find((a) => a.unarmed) || c.attacks.find((a) => a.kind === 'close');
+  const special = heldAttack(c, victim, unarmed); // a Grab-Based effect works on the held victim (flaw-grab.js)
+  if (special) { resolveAttack(b, R, c, special, victim, rng, {}); return true; }
   if (!unarmed) return false;
   log(b, { kind: 'attack', actor: c.id, target: victim.id, text: `${c.name} ${c.style === 'beast' ? 'worries' : 'crushes'} ${victim.name} in ${c.style === 'beast' ? 'its jaws' : 'the hold'}: Damage ${unarmed.rank}, no attack roll needed.` });
   applyEffect(b, R, c, unarmed, victim, rng, { auto: true, crit: false });
