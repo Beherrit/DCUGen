@@ -2,7 +2,7 @@
 
 import { STYLES } from './styles.js';
 import { activeConditions, defenseOf, resistOf } from './conditions.js';
-import { squares, squaresInMove, reachSquares, lineClear, shootSquares } from './geometry.js';
+import { squares, squaresInMove, reachSquares, lineClear, shootSquares, templateShort } from './geometry.js';
 import { hitOdds, expectedValue, rangePenalty, threatOn } from './odds.js';
 import { targetBias, attackBias, feintBias, grabChance } from './tactics.js';
 import { blocksDirect } from './cover.js';
@@ -35,6 +35,7 @@ export function bestAttackVs(b, c, t, rng, { full = false } = {}) {
       if (!lineClear(b, c, t)) continue;
       if (rangePenalty(atk, from) > 5) from = Math.max(sq, from - moveSq * sq); // out of range: a move closer
       if (rangePenalty(atk, from) > 5) continue; // out of range even after a move
+      if (templateShort(b, c, atk, t) > moveSq) continue; // a Cone or Line that cannot reach, even after a move
     }
     if (blocksDirect(b, c, atk, t)) continue; // total cover: the target cannot be picked
     const dist = close ? 0 : from;

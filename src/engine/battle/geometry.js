@@ -12,6 +12,17 @@ export const squares = (p, q) => Math.max(Math.abs(p.x - q.x), Math.abs(p.y - q.
 /** Feet between two positions. */
 export const feet = (b, p, q) => squares(p, q) * b.grid.squareFt;
 export const sameSquare = (p, q) => p.x === q.x && p.y === q.y;
+
+/**
+ * How many squares short a Cone or Line is of the target: these start at the attacker and stretch only as far as
+ * their length (DCA 126), so being in range is not enough. 0 when it reaches, and always 0 for other attacks. The
+ * slack matches mapgeo's insideTemplate, which catches a token whose centre is within 0.3 squares of the end.
+ */
+export function templateShort(b, c, atk, t) {
+  if (atk.area !== 'Cone' && atk.area !== 'Line') return 0;
+  const length = atk.areaFt / b.grid.squareFt + 0.3;
+  return Math.max(0, Math.hypot(t.x - c.x, t.y - c.y) - length);
+}
 export const spot = (c) => ({ x: c.x, y: c.y });
 
 /** Squares per move action: the fighter's move distance in feet over the square size, at least 1 (0 when it cannot move). */

@@ -49,8 +49,17 @@ function toHitMod(b, c, atk, t, m, aimed, notes) {
   const conceal = concealmentPenalty(c, t, atk);
   const cover = coverPenalty(b, c, t, atk);
   const aid = aidBonus(c, t);
-  let mod = atk.bonus - m.trade + m.allOut - m.defensive - checkPenalty(c) - rangePenalty(atk, dist) - conceal - cover - (m.charge ? 2 : 0) + aimed + aid - weakenedAttack(c, atk).bonus;
-  mod += proneMod(c, t, atk);
+  const range = rangePenalty(atk, dist);
+  const hurt = checkPenalty(c);
+  const prone = proneMod(c, t, atk);
+  const weak = weakenedAttack(c, atk).bonus;
+  let mod = atk.bonus - m.trade + m.allOut - m.defensive - hurt - range - conceal - cover - (m.charge ? 2 : 0) + aimed + aid - weak;
+  mod += prone;
+  // Every penalty the attacker carries is named, so a low bonus in the log can be traced
+  if (range) notes.push(`${range >= 5 ? 'long' : 'medium'} range: −${range}`);
+  if (hurt) notes.push(hurt > 0 ? `${c.name} is impaired: −${hurt}` : `inspired: +${-hurt}`); // checkPenalty nets Impaired or Disabled against Inspire
+  if (prone) notes.push(`prone: ${prone > 0 ? '+' : '−'}${Math.abs(prone)}`);
+  if (weak) notes.push(`weakened: −${weak}`);
   if (aid) notes.push(`aid: +${aid}`);
   if (conceal) notes.push(`${conceal === 5 ? 'total' : 'partial'} concealment: −${conceal}`);
   if (cover) notes.push(`${coverLevel(shieldFor(b, c, atk, t))} cover: −${cover}`);

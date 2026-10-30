@@ -3,7 +3,7 @@
 import { log, alliesOf } from './util.js';
 import { rollCheck } from './checks.js';
 import { conditionLabels, checkPenalty, defenseOf, canAct } from './conditions.js';
-import { feet, squares, squaresInMove, reachSquares, inReach, lineClear, shootSquares } from './geometry.js';
+import { feet, squares, squaresInMove, reachSquares, inReach, lineClear, shootSquares, templateShort, areaVictims } from './geometry.js';
 import { stepToward } from './path.js';
 import { hitOdds, rangePenalty, concealmentPenalty } from './odds.js';
 import { bestTradeoff } from './plan.js';
@@ -25,6 +25,7 @@ export function attackTurn(b, R, c, choice, enemies, mode, rng) {
   if (closed.over) return;
   const charge = closed.charge;
   if (attack.range !== 'close' && !lineClear(b, c, target)) { log(b, { kind: 'skip', actor: c.id, text: `${c.name} has no clear line to ${target.name} and holds the shot.` }); return; }
+  if (attack.area && !areaVictims(b, c, attack, target).some((x) => x.team !== c.team)) { log(b, { kind: 'skip', actor: c.id, text: `${c.name} can't catch anyone with ${attack.name} from here and holds it.` }); return; }
   if (choice.plan !== 'attack') { runManeuver(b, c, choice, rng); moveBy(b, c, attack, target, enemies, mode); return; }
   if (!charge && lineUpShot(b, c, attack, target, enemies, rng)) return;
   finishingFeat(b, c, attack, target); // a hero point can raise the limit on a finishing blow
@@ -51,6 +52,12 @@ function closeIn(b, c, attack, target, mode, rng) {
     if (mode !== 'full') { log(b, { kind: 'skip', actor: c.id, text: `${c.name} is out of range and can't close the distance.` }); return { over: true }; }
     moveToward(b, c, target, rng, 1, shootSquares(b, c));
     if (rangePenalty(attack, feet(b, c, target)) > 5) return { over: true }; // still out of range: the turn went on moving
+  }
+  if (attack.range === 'ranged' && templateShort(b, c, attack, target) > 0) {
+    // A Cone or Line starts at the attacker: step in until its far end reaches the target
+    if (mode !== 'full') { log(b, { kind: 'skip', actor: c.id, text: `${c.name} is too far for ${attack.name} to reach and can't close the distance.` }); return { over: true }; }
+    moveToward(b, c, target, rng, 1, Math.max(1, Math.floor(attack.areaFt / b.grid.squareFt)));
+    if (templateShort(b, c, attack, target) > 0) return { over: true }; // still short: the turn went on moving
   }
   if (attack.range === 'close' && !inReach(b, c, target, attack)) {
     if (mode !== 'full') { log(b, { kind: 'skip', actor: c.id, text: `${c.name} is ${conditionLabels(c).join(', ').toLowerCase()} and can't close the distance.` }); return { over: true }; }

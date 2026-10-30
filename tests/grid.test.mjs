@@ -29,6 +29,11 @@ function checkAttack(b, e, sq) {
   if (e.range === 'ranged') {
     const longest = 100 * Math.max(1, e.rank) * 2 ** e.ext;
     assert.ok(e.ft <= longest, `${who.name} used ${e.name} (rank ${e.rank}) at ${e.ft} ft, beyond long range ${longest}`);
+    if (e.area === 'Cone' || e.area === 'Line') {
+      // a Cone or Line starts at the attacker, so its target must lie within its length (DCA 126)
+      const along = Math.hypot(e.from.x - e.to.x, e.from.y - e.to.y);
+      assert.ok(along <= atk.areaFt / sq + 0.3 + 1e-9, `${who.name} aimed ${e.name} (${e.area}, ${atk.areaFt} ft) at a target ${(along * sq).toFixed(0)} ft away`);
+    }
   } else if (e.range === 'close' && !e.area) {
     const reach = 1 + Math.floor(((who.elongFt || 0) + (atk?.reachFt || 0)) / sq);
     assert.ok(squares <= reach, `${who.name} made a close attack from ${squares} squares away (reach ${reach})`);

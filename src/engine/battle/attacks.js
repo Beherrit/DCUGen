@@ -156,7 +156,7 @@ function areaAttack(b, R, c, atk, t, rng, rankShift, notes) {
   const inArea = areaVictims(b, c, atk, t).filter((x) => !atk.selective || x.team !== c.team);
   const victims = inArea.filter((x) => x.team !== c.team);
   const friendly = inArea.filter((x) => x.team === c.team);
-  log(b, { kind: 'attack', actor: c.id, target: t.id, text: `${c.name} drops ${atk.name} (${atk.area} area) ${atk.range === 'close' ? 'around itself' : `on ${spotName(t)}`}: ${inArea.map((x) => x.name).join(', ') || 'nobody'} ${inArea.length === 1 ? 'is' : 'are'} caught in it${friendly.length && !atk.selective ? ` (${friendly.map((x) => x.name).join(', ')} too!)` : ''}${notes.length ? ` — ${notes.join('; ')}` : ''}.`, important: true });
+  log(b, { kind: 'attack', actor: c.id, target: t.id, text: `${c.name} drops ${atk.name} (${atk.area} area) ${atk.range === 'close' ? 'around itself' : `on ${spotName(t)}`}: ${inArea.map((x) => x.name).join(', ') || 'nobody'} ${inArea.length > 1 ? 'are' : 'is'} caught in it${friendly.length && !atk.selective ? ` (${friendly.map((x) => x.name).join(', ')} too!)` : ''}${notes.length ? ` — ${notes.join('; ')}` : ''}.`, important: true });
   for (const v of [...victims, ...friendly]) {
     const shelter = coverDodgeBonus(b, c, v);
     const dodge = defenseOf(v, 'Dodge') - checkPenalty(v) + (v.adv.Evasion >= 2 ? 5 : v.adv.Evasion ? 2 : 0) + shelter;
