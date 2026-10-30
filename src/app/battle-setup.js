@@ -41,11 +41,11 @@ export function quickStarts(cx) {
   };
   const btn = (label, hint, fn, disabled = false) => h('button', { type: 'button', class: 'btn sm', title: hint, disabled, onClick: () => { try { fn(); } catch (e) { toast(e.message); } } }, label);
   return [
-    btn(`My heroes → A${heroes.length ? ` (${heroes.length})` : ''}`, 'Everyone on the roster who is not a villain', () => { for (const c of heroes) throwIn(c, { team: 'A' }); toast(`${heroes.length} heroes on team A`); }, !heroes.length),
-    btn(`My villains → B${villains.length ? ` (${villains.length})` : ''}`, 'Every villain on the roster', () => { for (const c of villains) throwIn(c, { team: 'B' }); toast(`${villains.length} villains on team B`); }, !villains.length),
-    btn('🎲 Random foe → B', 'A creature or villain from the Bestiary near side A\'s power level', () => { const f = foe('B'); throwIn(f.ch, { team: 'B', name: f.name }); toast(`${f.name} steps in on team B`); }),
-    btn('👥 Squad of 5 minions → B', 'Five of the same minion from the Bestiary', () => { const f = foe('B', { minion: true }); throwIn(f.ch, { team: 'B', copies: 5, name: f.name }); toast(`5 × ${f.name} on team B`); }),
-    btn('⚖ Even it up', 'Adds Bestiary fighters to the weaker team until the power levels are close', evenUp, battle.combatants.length < 1),
+    btn(`My heroes to A${heroes.length ? ` (${heroes.length})` : ''}`, 'Everyone on the roster who is not a villain', () => { for (const c of heroes) throwIn(c, { team: 'A' }); toast(`${heroes.length} heroes on team A`); }, !heroes.length),
+    btn(`My villains to B${villains.length ? ` (${villains.length})` : ''}`, 'Every villain on the roster', () => { for (const c of villains) throwIn(c, { team: 'B' }); toast(`${villains.length} villains on team B`); }, !villains.length),
+    btn('Random foe to B', 'A creature or villain from the Bestiary near side A\'s power level', () => { const f = foe('B'); throwIn(f.ch, { team: 'B', name: f.name }); toast(`${f.name} steps in on team B`); }),
+    btn('Squad of 5 minions to B', 'Five of the same minion from the Bestiary', () => { const f = foe('B', { minion: true }); throwIn(f.ch, { team: 'B', copies: 5, name: f.name }); toast(`5 × ${f.name} on team B`); }),
+    btn('Even it up', 'Adds Bestiary fighters to the weaker team until the power levels are close', evenUp, battle.combatants.length < 1),
   ];
 }
 

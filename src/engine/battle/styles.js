@@ -3,18 +3,18 @@
 import { deriveAll, advantageRank, allPowers } from '../derive.js';
 
 export const STYLES = {
-  brawler: { label: 'Brawler', glyph: '👊', blurb: 'Closes in and hits hard with fists, claws or sheer strength. All-out when the enemy is reeling.', close: 1.45, ranged: 0.7, target: 'closest' },
-  duelist: { label: 'Skilled fighter', glyph: '🗡', blurb: 'Lives on skill: picks the hurt target, feints high defenses, fights defensively when pressed, chains Takedowns through minions.', close: 1.3, ranged: 0.9, target: 'hurt' },
-  gunner: { label: 'Gear fighter', glyph: '🔫', blurb: 'Depends on equipment and devices. Keeps its distance, picks the best weapon for the target, and is in trouble if it gets grabbed.', close: 0.8, ranged: 1.35, target: 'weakest' },
-  blaster: { label: 'Blaster', glyph: '💥', blurb: 'Ranged powers. Stays out of reach, trades accuracy for power against soft targets, and drops area effects on groups.', close: 0.6, ranged: 1.35, target: 'weakest' },
-  mage: { label: 'Spellcaster', glyph: '🔮', blurb: 'Chooses the effect that fits the target: afflictions against weak wills, damage against the fragile, dispels sustained defenses. Pushes with extra effort when losing.', close: 0.7, ranged: 1.2, target: 'weakest', variety: true },
-  mentalist: { label: 'Mentalist', glyph: '🧠', blurb: 'Perception-range mental attacks. Goes for the weakest Will first and turns controlled enemies on their friends.', close: 0.5, ranged: 1.1, target: 'lowWill' },
-  tank: { label: 'Powerhouse', glyph: '🛡', blurb: 'Takes hits and gives them back. Charges the biggest threat and leans on Power Attack and Impervious.', close: 1.35, ranged: 0.9, target: 'strongest' },
-  speedster: { label: 'Speedster', glyph: '⚡', blurb: 'Hit and run with Move-by Action: strikes and ends the turn out of reach, so slow fighters have to chase.', close: 1.3, ranged: 0.9, target: 'hurt', hitAndRun: true },
-  support: { label: 'Support', glyph: '✚', blurb: 'Heals the worst-hurt ally first, interposes to take hits, and otherwise sets up the team with afflictions.', close: 0.8, ranged: 1.1, target: 'strongest' },
-  beast: { label: 'Beast', glyph: '🐾', blurb: 'Instinct: lunges at the closest prey, bites and grabs, and may break off when badly hurt.', close: 1.5, ranged: 0.6, target: 'closest', grabs: true, flees: true },
-  minion: { label: 'Minion', glyph: '👥', blurb: 'Mobs the closest enemy, goes down on any failed Toughness check (DCA 194), and may run once the fight turns.', close: 1.1, ranged: 1.1, target: 'closest', flees: true },
-  omni: { label: 'Omni-power', glyph: '✦', blurb: 'Variable or sprawling arrays: reconfigures every turn to whatever hurts this enemy most.', close: 1.0, ranged: 1.1, target: 'weakest', variety: true },
+  brawler: { label: 'Brawler', blurb: 'Closes in and hits hard with fists, claws or sheer strength. All-out when the enemy is reeling.', close: 1.45, ranged: 0.7, target: 'closest' },
+  duelist: { label: 'Skilled fighter', blurb: 'Lives on skill: picks the hurt target, feints high defenses, fights defensively when pressed, chains Takedowns through minions.', close: 1.3, ranged: 0.9, target: 'hurt' },
+  gunner: { label: 'Gear fighter', blurb: 'Depends on equipment and devices. Keeps its distance, picks the best weapon for the target, and is in trouble if it gets grabbed.', close: 0.8, ranged: 1.35, target: 'weakest' },
+  blaster: { label: 'Blaster', blurb: 'Ranged powers. Stays out of reach, trades accuracy for power against soft targets, and drops area effects on groups.', close: 0.6, ranged: 1.35, target: 'weakest' },
+  mage: { label: 'Spellcaster', blurb: 'Chooses the effect that fits the target: afflictions against weak wills, damage against the fragile, dispels sustained defenses. Pushes with extra effort when losing.', close: 0.7, ranged: 1.2, target: 'weakest', variety: true },
+  mentalist: { label: 'Mentalist', blurb: 'Perception-range mental attacks. Goes for the weakest Will first and turns controlled enemies on their friends.', close: 0.5, ranged: 1.1, target: 'lowWill' },
+  tank: { label: 'Powerhouse', blurb: 'Takes hits and gives them back. Charges the biggest threat and leans on Power Attack and Impervious.', close: 1.35, ranged: 0.9, target: 'strongest' },
+  speedster: { label: 'Speedster', blurb: 'Hit and run with Move-by Action: strikes and ends the turn out of reach, so slow fighters have to chase.', close: 1.3, ranged: 0.9, target: 'hurt', hitAndRun: true },
+  support: { label: 'Support', blurb: 'Heals the worst-hurt ally first, interposes to take hits, and otherwise sets up the team with afflictions.', close: 0.8, ranged: 1.1, target: 'strongest' },
+  beast: { label: 'Beast', blurb: 'Instinct: lunges at the closest prey, bites and grabs, and may break off when badly hurt.', close: 1.5, ranged: 0.6, target: 'closest', grabs: true, flees: true },
+  minion: { label: 'Minion', blurb: 'Mobs the closest enemy, goes down on any failed Toughness check (DCA 194), and may run once the fight turns.', close: 1.1, ranged: 1.1, target: 'closest', flees: true },
+  omni: { label: 'Omni-power', blurb: 'Variable or sprawling arrays: reconfigures every turn to whatever hurts this enemy most.', close: 1.0, ranged: 1.1, target: 'weakest', variety: true },
 };
 export const TACTICS = { auto: 'By style', closest: 'Closest', weakest: 'Weakest defenses', strongest: 'Biggest threat', hurt: 'Most hurt', lowWill: 'Weakest will', random: 'Anyone' };
 

@@ -68,5 +68,5 @@ test('a character with alternate forms fights in the form picked on their card',
   const formSel = page.locator('.bt-card select[aria-label$="form"]');
   await expect(formSel).toHaveCount(1);
   await formSel.selectOption({ index: 0 });
-  await expect(page.locator('.bt-card .bt-names')).toContainText('🎭');
+  await expect(page.locator('.bt-card .bt-names')).toContainText('form: ');
 });

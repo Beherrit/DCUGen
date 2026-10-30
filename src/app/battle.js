@@ -165,7 +165,7 @@ function fighterCard(c) {
   const conds = c.out || c.fled ? [] : conditionLabels(c).filter((x) => !['Dazed', 'Staggered', 'Fatigued', 'Exhausted'].includes(x));
   const main = c.attacks.filter((a) => !a.unarmed).sort((a, b) => b.rank - a.rank)[0] || c.attacks[0];
   const styleSel = h('select', { class: 'bt-mini', 'aria-label': `${c.name} fighting style`, onChange: (e) => { c.style = e.target.value; rebuildCombatant(c, R); save(); renderBattle(); } },
-    Object.entries(STYLES).map(([k, v]) => h('option', { value: k, selected: k === c.style }, `${v.glyph} ${v.label}`)));
+    Object.entries(STYLES).map(([k, v]) => h('option', { value: k, selected: k === c.style }, v.label)));
   const tacSel = h('select', { class: 'bt-mini', 'aria-label': `${c.name} target choice`, onChange: (e) => { c.tactics = e.target.value; save(); } },
     Object.entries(TACTICS).map(([k, v]) => h('option', { value: k, selected: k === c.tactics }, k === 'auto' ? `Target: ${S.target === 'lowWill' ? 'weakest will' : TACTICS[S.target]?.toLowerCase() || 'by style'}` : v)));
   const teamSel = h('div', { class: 'bt-sides', role: 'group', 'aria-label': `${c.name} team` }, visibleTeams(battle, ui).map((t) => h('button', { type: 'button', class: `bt-side ${t === c.team ? 'on' : ''}`, style: { '--t': teamColor(t) }, title: `Move to team ${t}`, 'aria-pressed': String(t === c.team), onClick: () => { c.team = t; placeAll(battle); save(); renderBattle(); } }, t)));
@@ -174,25 +174,25 @@ function fighterCard(c) {
     const ch = switchForm(c.ch, Number(e.target.value));
     Object.assign(c, makeCombatant(R, ch, { id: c.id, team: c.team, style: null, tactics: c.tactics, heroPoints: c.heroPoints, name: c.name }));
     placeAll(battle); save(); renderBattle();
-  } }, c.ch.forms.map((f, i) => h('option', { value: i, selected: i === activeForm(c.ch) }, `🎭 ${f.name || `Form ${i + 1}`}`))) : null;
+  } }, c.ch.forms.map((f, i) => h('option', { value: i, selected: i === activeForm(c.ch) }, f.name || `Form ${i + 1}`))) : null;
   const hp = h('input', { type: 'number', class: 'bt-hp', min: 0, max: 9, value: c.heroPoints, 'aria-label': `${c.name} hero points`, title: 'Hero points', onChange: (e) => { c.heroPoints = Math.max(0, Number(e.target.value) || 0); save(); } });
   return h('article', { class: `bt-card ${c.out ? 'out' : ''} ${c.fled ? 'fled' : ''}`, style: { '--c': c.color, '--t': teamColor(c.team), '--c-ink': inkFor(c.color) } },
     h('div', { class: 'bt-card-head' },
       h('span', { class: 'bt-token', title: `Square ${squareName(c.x, c.y)}` }, initials(c.name)),
       h('div', { class: 'bt-names' },
         h('b', null, c.name),
-        h('span', null, `PL ${c.pl} · ${S.glyph} ${S.label}${c.minion ? ' · minion' : ''}${rolesNote(c)}${hasForms(c.ch) ? ` · 🎭 ${c.ch.forms[activeForm(c.ch)]?.name || 'form'}` : ''}`)),
+        h('span', null, `PL ${c.pl} · ${S.label}${c.minion ? ' · minion' : ''}${rolesNote(c)}${hasForms(c.ch) ? ` · form: ${c.ch.forms[activeForm(c.ch)]?.name || 'form'}` : ''}`)),
       h('span', { class: 'bt-team', style: { background: teamColor(c.team) } }, c.team),
-      h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${c.name}`, title: 'Remove from the battle', onClick: () => { removeCombatant(battle, c.id); save(); renderBattle(); } }, '✕')),
+      h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${c.name}`, title: 'Remove from the battle', onClick: () => { removeCombatant(battle, c.id); save(); renderBattle(); } }, 'Remove')),
     h('div', { class: 'bt-stats' },
       [['DOD', d.defenses.Dodge], ['PAR', d.defenses.Parry], ['TOU', d.defenses.Toughness - c.bruises], ['FOR', d.defenses.immune?.Fortitude ? '—' : d.defenses.Fortitude], ['WIL', d.defenses.immune?.Will ? '—' : d.defenses.Will], ['INI', (d.initiative >= 0 ? '+' : '') + d.initiative]].map(([k, v]) => h('div', null, h('b', { class: 'num' }, v), h('span', null, k)))),
     main ? h('div', { class: 'bt-main' }, `${main.name}: ${main.roll ? `+${main.bonus}, ` : `${main.area ? `${main.area} area` : 'perception'}, `}${main.effect} ${main.rank} (${main.resistance})`, c.attacks.length > 2 ? h('small', null, ` +${c.attacks.length - 1} more`) : null) : null,
-    setup ? h('div', { class: 'bt-opts' }, teamSel, formSel, styleSel, h('details', { class: 'bt-more' }, h('summary', null, 'More'), h('div', { class: 'bt-more-body' }, tacSel, h('label', { class: 'bt-hp-wrap', title: 'Hero points: re-roll a miss or shake off a daze' }, '★ Hero points', hp), notSimulatedLine(c)))) : null,
+    setup ? h('div', { class: 'bt-opts' }, teamSel, formSel, styleSel, h('details', { class: 'bt-more' }, h('summary', null, 'More'), h('div', { class: 'bt-more-body' }, tacSel, h('label', { class: 'bt-hp-wrap', title: 'Hero points: re-roll a miss or shake off a daze' }, 'Hero points', hp), notSimulatedLine(c)))) : null,
     !setup ? h('div', { class: 'bt-state' }, dmg,
       h('div', { class: 'bt-conds' },
         c.fled ? h('span', { class: 'bt-cond fled' }, c.escaped ? 'Got away' : 'Fled') : c.out ? h('span', { class: 'bt-cond ko' }, statusLine(c)) : null,
         conds.map((x) => h('span', { class: 'bt-cond' }, x)),
-        c.heroPoints ? h('span', { class: 'bt-cond hp', title: 'Hero points' }, `★ ${c.heroPoints}`) : null,
+        c.heroPoints ? h('span', { class: 'bt-cond hp', title: 'Hero points' }, `Hero points ${c.heroPoints}`) : null,
         c.fatigue ? h('span', { class: 'bt-cond' }, c.fatigue >= 2 ? 'Exhausted' : 'Fatigued') : null),
       h('div', { class: 'bt-record' }, `${c.stats.hits}/${c.stats.attacks} hits · ${c.stats.kos} KO${c.stats.kos === 1 ? '' : 's'} · dealt ${c.stats.degrees}, took ${c.stats.taken}`)) : null,
     S.blurb && setup ? h('p', { class: 'bt-blurb' }, S.blurb) : null);
@@ -231,7 +231,7 @@ function renderLive() {
 
 function teamColumns() {
   const teams = [...new Set(battle.combatants.map((c) => c.team))].sort();
-  if (!teams.length) return [h('div', { class: 'empty bt-empty' }, h('h2', null, 'The arena is empty'), h('p', null, 'Pick fighters on the left, or use a quick start:'), h('div', { class: 'bt-quicks' }, quickStarts(setupCx())), h('p', { class: 'hint' }, 'Every character sheet, roster card and Bestiary creature also has a "⚔ Battle Room" button to throw them in.'))];
+  if (!teams.length) return [h('div', { class: 'empty bt-empty' }, h('h2', null, 'The arena is empty'), h('p', null, 'Pick fighters on the left, or use a quick start:'), h('div', { class: 'bt-quicks' }, quickStarts(setupCx())), h('p', { class: 'hint' }, 'Every character sheet, roster card and Bestiary creature also has a "Battle Room" button to throw them in.'))];
   return teams.map((t) => h('section', { class: 'bt-team-col', style: { '--t': teamColor(t) } },
     h('div', { class: 'bt-team-head' }, h('span', { class: 'bt-team', style: { background: teamColor(t) } }, t), h('b', null, `Team ${t}`), h('span', { class: 'hint' }, (() => { const p = sidePower()[t]; return battle.status === 'setup' ? `${p.n} fighter${p.n === 1 ? '' : 's'} · PL ${p.avg.toFixed(p.avg % 1 ? 1 : 0)} avg · ${p.pl} total` : `${p.standing} of ${p.n} standing`; })())),
     battle.combatants.filter((c) => c.team === t).map(fighterCard)));
@@ -345,7 +345,7 @@ function balancePanel() {
   const foes = battle.combatants.filter((c) => c.team !== ui.heroTeam).map((c) => c.name).join(', ') || 'the other side';
   return h('section', { class: 'panel bt-balance', id: 'balance' },
     h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' } },
-      h('h2', null, '⚖ Will this fight wreck the party?'), h('span', { style: { flex: 1 } })),
+      h('h2', null, 'Will this fight wreck the party?'), h('span', { style: { flex: 1 } })),
     h('div', { class: 'rc-row' }, h('label', null, 'Heroes are', heroSel), h('label', null, 'The fight should be', goalSel),
       h('button', { class: 'btn sm', type: 'button', id: 'bal-check', disabled: ui.balanceBusy, onClick: check }, ui.balanceBusy ? 'Running…' : 'Check the odds'),
       h('button', { class: 'btn sm primary', type: 'button', id: 'bal-tune', disabled: ui.balanceBusy, onClick: tune }, 'Tune the opposition')),
@@ -401,18 +401,18 @@ export function renderBattle() {
   const steps = h('ol', { class: 'bt-steps', 'aria-label': 'Where you are' },
     [['Pick fighters', 'Press A or B on the left'], ['Check the sides', 'Styles, hero points, odds'], ['Fight!', 'Watch it, or step through'], ['Result', 'Rematch, comic, save it']].map(([t, hint], i) => h('li', { class: i + 1 < stepN ? 'done' : i + 1 === stepN ? 'now' : '' }, h('b', null, `${i + 1}`), h('span', null, t), h('small', null, hint))));
   const controls = h('div', { class: 'bt-controls' },
-    setup ? h('button', { class: 'btn primary big', type: 'button', id: 'bt-fight', disabled: !ready.ok, title: ready.ok ? 'Roll initiative and play the fight (Enter)' : ready.why, onClick: () => begin() }, '⚔ Fight!') : null,
+    setup ? h('button', { class: 'btn primary big', type: 'button', id: 'bt-fight', disabled: !ready.ok, title: ready.ok ? 'Roll initiative and play the fight (Enter)' : ready.why, onClick: () => begin() }, 'Fight!') : null,
     setup && ready.ok ? h('button', { class: 'btn', type: 'button', id: 'bt-stepwise', title: 'Roll initiative and wait: press Step for one action at a time', onClick: () => begin({ stepwise: true }) }, 'Step through it') : null,
     setup && !ready.ok ? h('span', { class: 'hint' }, ready.why) : null,
     setup && ready.ok && lopsided ? h('span', { class: 'bt-warn' }, `Looks one-sided: ${sides.map((t) => `${t} ${p[t].w}`).join(' vs ')} (PL, minions count a third). `, h('button', { type: 'button', class: 'linkish', onClick: () => quickStarts(setupCx())[4].click() }, 'Even it up')) : null,
-    !setup && !over ? h('button', { class: 'btn primary big', type: 'button', id: 'bt-play', title: 'Space', onClick: () => (timer ? (stopTimer(), renderBattle()) : play()) }, timer ? '❚❚ Pause' : '▶ Play') : null,
+    !setup && !over ? h('button', { class: 'btn primary big', type: 'button', id: 'bt-play', title: 'Space', onClick: () => (timer ? (stopTimer(), renderBattle()) : play()) }, timer ? 'Pause' : 'Play') : null,
     !setup && !over ? h('button', { class: 'btn', type: 'button', title: 'One action (N)', onClick: doStep }, 'Step') : null,
     !setup && !over ? h('button', { class: 'btn', type: 'button', title: 'One round (R)', onClick: doRound }, 'Round') : null,
     !setup && !over ? h('button', { class: 'btn', type: 'button', title: 'Finish it (E)', onClick: doEnd }, 'Run to the end') : null,
     !setup && !over ? h('label', { class: 'bt-speed' }, h('span', null, 'Speed'), speed) : null,
-    !setup ? h('button', { class: 'btn', type: 'button', title: 'Same fighters, same seed: replays this exact fight', onClick: () => reset() }, '↺ Replay') : null,
-    !setup ? h('button', { class: 'btn', type: 'button', title: 'Same fighters, new dice', onClick: () => reset({ newSeed: true }) }, '🎲 Rematch') : null,
-    setup ? h('button', { class: 'btn', type: 'button', title: 'New seed (different dice)', onClick: () => { battle.seed = randomSeed(); save(); renderBattle(); } }, '🎲 New seed') : null,
+    !setup ? h('button', { class: 'btn', type: 'button', title: 'Same fighters, same seed: replays this exact fight', onClick: () => reset() }, 'Replay') : null,
+    !setup ? h('button', { class: 'btn', type: 'button', title: 'Same fighters, new dice', onClick: () => reset({ newSeed: true }) }, 'Rematch') : null,
+    setup ? h('button', { class: 'btn', type: 'button', title: 'New seed (different dice)', onClick: () => { battle.seed = randomSeed(); save(); renderBattle(); } }, 'New seed') : null,
     h('span', { class: 'spacer' }),
     h('button', { class: 'btn', type: 'button', disabled: !battle.log.length, onClick: async () => toast((await copyText(battleText(battle))) ? 'Fight log copied' : 'Copy failed') }, 'Copy log'),
     h('button', { class: 'btn', type: 'button', disabled: !battle.log.length, onClick: () => { download(`${(battle.name || 'battle').toLowerCase().replace(/[^a-z0-9]+/g, '-')}-log.txt`, battleText(battle), 'text/plain'); } }, 'Save log'),
@@ -471,10 +471,10 @@ function resultPanel() {
       h('button', { class: 'btn primary', type: 'button', id: 'bt-comic', title: 'Turn this fight into a six-panel comic page to share', onClick: () => {
         const comic = battleComic(battle, { portraitOf: (ch) => { const p = portraitOf(ch); return p.image || p.avatar; } });
         const svg = comicSvg(comic);
-        imageDialog({ title: `📖 ${comic.title}`, svg, file: `${comic.title}-comic`, text: `📖 ${comic.title.toUpperCase()}: ${comic.subtitle}\n${comic.panels.map((p) => `• ${p.sfx} ${p.caption}`).join('\n')}`, alt: `Comic page of ${comic.title}` });
-      } }, '📖 Make the comic'),
+        imageDialog({ title: comic.title, svg, file: `${comic.title}-comic`, text: `${comic.title.toUpperCase()}: ${comic.subtitle}\n${comic.panels.map((p) => `• ${p.sfx} ${p.caption}`).join('\n')}`, alt: `Comic page of ${comic.title}` });
+      } }, 'Make the comic'),
       hooks.recordBattle ? [
-        h('button', { class: 'btn', type: 'button', id: 'bt-record', disabled: battle.recorded, title: 'Adds the fight to the World: an event page on the campaign timeline, linked to everyone who fought (knocked out, fled or standing). It goes in the running session\'s recap, and a recurring villain who lost learns from it.', onClick: () => { try { hooks.recordBattle(battle); battle.recorded = true; save(); renderBattle(); } catch (e) { toast(e.message); } } }, battle.recorded ? '✓ Saved to the campaign' : '🌐 Save this fight to the campaign'),
+        h('button', { class: 'btn', type: 'button', id: 'bt-record', disabled: battle.recorded, title: 'Adds the fight to the World: an event page on the campaign timeline, linked to everyone who fought (knocked out, fled or standing). It goes in the running session\'s recap, and a recurring villain who lost learns from it.', onClick: () => { try { hooks.recordBattle(battle); battle.recorded = true; save(); renderBattle(); } catch (e) { toast(e.message); } } }, battle.recorded ? 'Saved to the campaign' : 'Save this fight to the campaign'),
         battle.recorded ? null : h('p', { class: 'hint bt-record-hint' }, 'Puts it on the World\'s timeline with everyone who fought, in tonight\'s recap, and lets a recurring villain who lost learn from it.'),
       ] : null));
 }
