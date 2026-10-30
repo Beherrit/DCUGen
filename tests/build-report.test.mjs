@@ -36,17 +36,17 @@ test('a combatant and its character give the same report', () => {
 });
 
 test('traits the simulator does not use are ignored with the reason from the coverage list', () => {
-  const ch = person({ powers: [power('Summon'), power('Damage', ['Conductor'], ['Tiring'])], skills: [{ name: 'Stealth', ranks: 4 }, { name: 'Persuasion', ranks: 4 }] });
+  const ch = person({ powers: [power('Damage', ['Ammunition', 'Conductor'], ['Tiring'])], skills: [{ name: 'Stealth', ranks: 4 }, { name: 'Persuasion', ranks: 4 }] });
   const report = buildReport(ch);
   const names = report.ignored.map((x) => x.name);
-  assert.ok(names.includes('Summon') && names.includes('Conductor') && names.includes('Stealth'), names.join(', '));
+  assert.ok(names.includes('Ammunition') && names.includes('Conductor') && names.includes('Stealth'), names.join(', '));
   assert.equal(report.ignored.find((x) => x.name === 'Stealth').why, entries.find((e) => e.kind === 'skill' && e.name === 'Stealth').note);
   assert.ok(!names.includes('Persuasion') && !names.includes('Damage'));
 });
 
 test('a trait the list does not know is left out rather than guessed at, and a trait is listed once however often it appears', () => {
-  const report = buildReport(person({ powers: [power('Time Bubble'), power('Summon'), power('Summon')] }));
-  assert.deepEqual(report.ignored.map((x) => x.name), ['Summon']);
+  const report = buildReport(person({ powers: [power('Time Bubble'), power('Damage', ['Ammunition']), power('Damage', ['Ammunition'])] }));
+  assert.deepEqual(report.ignored.map((x) => x.name), ['Ammunition']);
   assert.deepEqual(buildReport(person()), { used: [], partial: [], ignored: [] });
 });
 

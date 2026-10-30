@@ -40,7 +40,7 @@ const gone = (c) => c.out || (c.fled && !c.escaped);
 /** What the battle came to: the winning letter (null for a stalemate), rounds, and the knockouts each side dealt. */
 export function readResult(b) {
   const kos = (letter) => b.combatants.filter((c) => c.team === letter).reduce((s, c) => s + c.stats.kos, 0);
-  const left = (letter) => b.combatants.filter((c) => c.team === letter && !gone(c)).length;
+  const left = (letter) => b.combatants.filter((c) => c.team === letter && !c.summon && !gone(c)).length; // a summoned minion is not a fighter of the team
   return {
     winner: b.winner || null, gotAway: !!b.gotAway, rounds: Math.max(1, Math.min(b.round, b.options.maxRounds)),
     kosA: kos('A'), kosB: kos('B'), leftA: left('A'), leftB: left('B'),

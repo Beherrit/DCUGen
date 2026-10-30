@@ -130,7 +130,7 @@ function doEnd() { stopTimer(); runToEnd(battle, R); save(); renderBattle(); }
 
 function reset({ newSeed = false } = {}) {
   stopTimer();
-  const chars = battle.combatants.map((c) => ({ ch: c.ch, team: c.team, style: c.style, tactics: c.tactics, heroPoints: c.heroPoints, name: c.name, id: c.id, carry: c.carry }));
+  const chars = battle.combatants.filter((c) => !c.summon).map((c) => ({ ch: c.ch, team: c.team, style: c.style, tactics: c.tactics, heroPoints: c.heroPoints, name: c.name, id: c.id, carry: c.carry }));
   const oldOptions = battle.options;
   const oldCover = wholeCover(battle.cover);
   battle = createBattle({ seed: newSeed ? randomSeed() : battle.seed, name: battle.name });

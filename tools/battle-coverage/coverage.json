@@ -79,8 +79,8 @@
   {
     "kind": "effect",
     "name": "Duplication",
-    "status": "none",
-    "note": "Duplicates are not created.",
+    "status": "partial",
+    "note": "Summon Duplicate, Active: a copy of the summoner with the same traits except this power, a minion that acts in full and needs no orders. At the full-copy rank (points not counting Duplication over 15, rounded up) it is exact; lower, it is scaled down. house rule: the book says 'proportionately lower-ranked traits' and no formula, so abilities, defenses, power ranks and skill ranks are multiplied by (rank x 15 / points) and rounded down. The summoner's hero points are not spendable for the duplicate; Multiple Minions and the other Summon extras work as for Summon.",
     "source": "DCA 94"
   },
   {
@@ -380,8 +380,8 @@
   {
     "kind": "effect",
     "name": "Summon",
-    "status": "none",
-    "note": "Summoned allies are not created.",
+    "status": "partial",
+    "note": "A standard action calls a minion built on rank x 15 points (power level = rank, from the kind the power's words name) into the nearest open square beside the summoner, on its team, with its own initiative, acting from the next round, dazed (a standard action only) unless Active or Heroic. Multiple Minions sets the cap (a downed minion still holds its place), Horde calls them all at once, Sacrifice shifts a hit onto a minion for a hero point, Resistible gives the minion a Will check, Feedback hurts the summoner when a minion is damaged. Minions vanish when the summoner is out. Not modelled: Variable Type (the minion is always the same kind), Attitude, Controlled beyond needing orders, Mental Link beyond the orders, and the summon ending when the summoner is stunned or the power is nullified.",
     "source": "DCA 118"
   },
   {
@@ -1491,8 +1491,8 @@
   {
     "kind": "action",
     "name": "Command",
-    "status": "n/a",
-    "note": "Minions fight on their own turn under the same AI, and Summon is not simulated, so there are no orders to give.",
+    "status": "partial",
+    "note": "Directing a minion is a move action: a minion called by Summon (not Active or Heroic, not a duplicate) waits for orders and acts only after its summoner has commanded it; one command reaches every minion waiting (a single 'attack!'), and orders stand until the fight is over. A summoner called with a full action commands in the turn it summons, else at the start of its next full turn. Different orders to different minions, and changing orders, are not modelled.",
     "source": "DCA 175"
   },
   {
@@ -2201,8 +2201,8 @@
   {
     "kind": "flaw",
     "name": "Calling",
-    "status": "none",
-    "note": "Needs the Summon effect, which is not simulated (summoned allies are not created), so there is no minion to call.",
+    "status": "partial",
+    "note": "A Summon with Calling brings its minion in from the summoner's team edge instead of beside the summoner, so it must walk in (and a Dazed minion walks and cannot attack in the same turn). The -1 and -2 versions (follow the summoner or go to where it was activated), the distance limit by Summon rank and the minion staying where it fell when downed are not told apart.",
     "source": "MA 95"
   },
   {
@@ -2316,5 +2316,12 @@
     "status": "none",
     "note": "Needs the Extra Limbs effect, which is not simulated (extra limbs do not hold or attack).",
     "source": "MA 98"
+  },
+  {
+    "kind": "rule",
+    "name": "Summon: Sacrifice, Resistible and Feedback",
+    "status": "full",
+    "note": "Sacrifice: a summoner hit by an effect needing a resistance check spends a hero point to shift it to a minion in range, when the hit is worth the minion (summon-sacrifice.js). Resistible: the minion rolls its Will against 10 + rank and, if it resists, no second try. Feedback: damaging a minion makes the summoner resist that Damage rank with the effect's rank as the bonus (feedback.js).",
+    "source": "DCA 118, 135"
   }
 ]

@@ -16,6 +16,7 @@ import { damageResult } from './damage-result.js';
 import { resistStep } from './resist-step.js';
 import { scheduleAfter } from './extra-after.js';
 import { attackFormResult } from './attack-form-effect.js';
+import { manifestationFeedback } from './feedback.js';
 
 export { damageResult };
 
@@ -38,6 +39,9 @@ function retuned(b, c, atk, t) {
 export function applyEffect(b, R, c, atk, t, rng, opts = {}) {
   const res = applyBase(b, R, c, atk, t, rng, opts);
   if (atk.ex && !opts.later) scheduleAfter(b, c, atk, t, res, opts); // Secondary Effect, Increased Duration, Contagious (extra-after.js)
+  if (res?.landed && t.summon?.feedback && res.rank > 0 && (atk.effect === 'Damage' || atk.effect === 'Mental Blast')) { // a damaged minion hurts a summoner with Feedback (feedback.js)
+    manifestationFeedback(b, c, b.combatants.find((x) => x.id === t.summon.by), { rank: t.summon.rank, damage: res.rank, what: t.name }, rng);
+  }
   return res;
 }
 

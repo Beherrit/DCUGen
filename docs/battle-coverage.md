@@ -10,16 +10,16 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 
 | Kind | Total | Full | Partial | None | n/a | Covered |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| effect | 63 | 6 | 30 | 19 | 8 | 65% |
+| effect | 63 | 6 | 32 | 17 | 8 | 69% |
 | extra | 50 | 19 | 20 | 3 | 8 | 93% |
-| flaw | 41 | 11 | 21 | 3 | 6 | 91% |
+| flaw | 41 | 11 | 22 | 2 | 6 | 94% |
 | advantage | 75 | 30 | 21 | 1 | 23 | 98% |
 | skill | 16 | 8 | 0 | 2 | 6 | 80% |
-| action | 20 | 10 | 9 | 0 | 1 | 100% |
+| action | 20 | 10 | 10 | 0 | 0 | 100% |
 | maneuver | 12 | 7 | 4 | 1 | 0 | 92% |
 | condition | 30 | 18 | 10 | 1 | 1 | 97% |
-| rule | 38 | 18 | 17 | 1 | 2 | 97% |
-| all | 345 | 127 | 132 | 31 | 55 | 89% |
+| rule | 39 | 19 | 17 | 1 | 2 | 97% |
+| all | 346 | 128 | 136 | 28 | 54 | 90% |
 
 ## Effects
 
@@ -36,7 +36,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Damage | full | Toughness check at 15 + rank with cumulative bruises, dazed, staggered and incapacitated; Strength gives built-in close Damage. | DCA 93 |
 | Dazzle | partial | Fought as an Affliction (impaired, disabled, unaware) but the sense it blocks is not tracked, except that an Immunity to a sense (sight or hearing) or to dazzle effects stops it. | DCA 94 |
 | Deflect | partial | Taking the Defend action to deflect protects the user and every ally in long range until its next turn; the user rolls d20 (10 or less counts 11) plus its rank against the attacker, -2 at medium range and -5 at long range, and the attacker beats the better of that and the flat defense. A rank-for-defense Defend rolls the rank in place of its own Dodge or Parry. Area, perception and non-Dodge, non-Parry attacks are never deflected. Reflect and Redirect (the Deflect extras) send a beaten attack back; the AI deflects when its own attack is worth less than the harm to its allies, or when Bodyguard or Hold the Line asks. Extended Range and descriptor effects (such as 'resistance to psionic') are not read. | DCA 95 |
-| Duplication | none | Duplicates are not created. | DCA 94 |
+| Duplication | partial | Summon Duplicate, Active: a copy of the summoner with the same traits except this power, a minion that acts in full and needs no orders. At the full-copy rank (points not counting Duplication over 15, rounded up) it is exact; lower, it is scaled down. house rule: the book says 'proportionately lower-ranked traits' and no formula, so abilities, defenses, power ranks and skill ranks are multiplied by (rank x 15 / points) and rounded down. The summoner's hero points are not spendable for the duplicate; Multiple Minions and the other Summon extras work as for Summon. | DCA 94 |
 | Element Control | none | Control effects (Move Object style) are not simulated. | DCA 95 |
 | Elongation | partial | Stretches the fighter's close reach by the distance of its rank (rank 1 is 60 ft), counted in whole squares at the scale of the fight; the help it gives to grabbing is not applied. | DCA 96 |
 | Energy Absorption | none | Absorbing energy attacks into Enhanced Traits is not simulated. | DCA 95 |
@@ -79,7 +79,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Speed | partial | Sets how far the fighter moves each turn; Speed is not used for chasing or running away. | DCA 117 |
 | Strike | full | Fights as Damage (DCA 117). | DCA 117 |
 | Suffocation | partial | Fought as a progressive Fortitude Affliction; holding breath and the book's conditions are not followed. | DCA 117 |
-| Summon | none | Summoned allies are not created. | DCA 118 |
+| Summon | partial | A standard action calls a minion built on rank x 15 points (power level = rank, from the kind the power's words name) into the nearest open square beside the summoner, on its team, with its own initiative, acting from the next round, dazed (a standard action only) unless Active or Heroic. Multiple Minions sets the cap (a downed minion still holds its place), Horde calls them all at once, Sacrifice shifts a hit onto a minion for a hero point, Resistible gives the minion a Will check, Feedback hurts the summoner when a minion is damaged. Minions vanish when the summoner is out. Not modelled: Variable Type (the minion is always the same kind), Attitude, Controlled beyond needing orders, Mental Link beyond the orders, and the summon ending when the summoner is stunned or the power is nullified. | DCA 118 |
 | Super-Speed | none | Not counted as movement, and the Improved Initiative it grants is not applied. | DCA 119 |
 | Swimming | partial | Counts as movement speed; water is not in the arena. | DCA 119 |
 | Teleport | partial | Counts as movement speed; Teleport Attack and ranged placement are not simulated. | DCA 120 |
@@ -172,7 +172,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Unreliable | partial | A d20 each use: 10 or less and it fails with the action spent, a hero point makes it work; a detail such as "one shot" or "five uses" counts uses instead (DCA 138). The AI halves its value. Recovering spent uses by hero point is not simulated. Applies to attack effects; the same flaw on a healing, defense, movement or sense power does nothing in a fight. | DCA 138 |
 | Announcement | n/a | Shouting the name is free and nothing in a fight stops it (no silence or gag effect is simulated), so it changes nothing. | MA 94 |
 | Bad Bounce | partial | The flaw is read onto the attack and the per-bounce attack check DC is ready (10 against a still surface, else 10 + defense, +2 per earlier bounce), but needs the Ricochet extra, which is not simulated yet. | MA 94 |
-| Calling | none | Needs the Summon effect, which is not simulated (summoned allies are not created), so there is no minion to call. | MA 95 |
+| Calling | partial | A Summon with Calling brings its minion in from the summoner's team edge instead of beside the summoner, so it must walk in (and a Dazed minion walks and cannot attack in the same turn). The -1 and -2 versions (follow the summoner or go to where it was activated), the distance limit by Summon rank and the minion staying where it fell when downed are not told apart. | MA 95 |
 | Chained | partial | A chained attack works only if the power named in its detail worked (hit and was not resisted) in the user's previous turn, so the AI uses the prerequisite first (MA 95). A prerequisite that is not one of the fighter's attacks, or none named, counts as done. | MA 95 |
 | Diluted | full | Each rank takes 1 off the effect's resistance DC, never below 10, without lowering its ranks (MA 96); the DC, the odds and Afflictions that persist all use it. | MA 96 |
 | Dulled | partial | While the condition in its detail holds (the same phrase table as Limited, read as "against ..."), the effect loses the flaw's ranks; at rank 0 the base DC stays, and Completely Dulled (-2) at rank 0 does nothing (MA 96). A condition the engine cannot read never applies. | MA 96 |
@@ -314,7 +314,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Trick | partial | Deception against the foe's Deception or Insight: a win leaves the foe heedless (it feeds Redirect), a loss by more than a degree leaves the trickster vulnerable. The hazards the book names (a precipice, a junction box) are not in the fight. | DCA 58 |
 | Trip | full | Close attack against Parry at -2, then Acrobatics or Athletics against the target; a win leaves it prone, a loss gives it a counter-trip. The AI trips when a friend who fights up close is within reach of the target or the target shoots, and the odds beat 0.35. Not used on minions. |  |
 | Crawl | full | A prone fighter is hindered, so it moves at half speed (the Prone condition); the Slither effect, which crawls at full speed, is not special-cased. | DCA 175 |
-| Command | n/a | Minions fight on their own turn under the same AI, and Summon is not simulated, so there are no orders to give. | DCA 175 |
+| Command | partial | Directing a minion is a move action: a minion called by Summon (not Active or Heroic, not a duplicate) waits for orders and acts only after its summoner has commanded it; one command reaches every minion waiting (a single 'attack!'), and orders stand until the fight is over. A summoner called with a full action commands in the turn it summons, else at the start of its next full turn. Different orders to different minions, and changing orders, are not modelled. | DCA 175 |
 
 ## Maneuvers
 
@@ -410,3 +410,4 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Damaging objects | full | Cover pieces are defenseless objects: a hit at DC 10 is an automatic critical, two degrees of failure on the Toughness check punch a hole and three destroy the piece. Area attacks, shooting through cover and knockback collisions roll against it too. |  |
 | Minions: demoralized as a group | full | Enemy minions that can see and hear the demoralizer are demoralized together by one check against the highest resistance among them; a demoralized minion of a side facing Intimidate and Break flees half again as readily. |  |
 | Fighting Withdrawal: escape | partial | Under the Fighting Withdrawal tactic a fighter who starts a turn on its own edge and is not held gets away; the team wins by getting half its fighters out, or by holding out for a set number of rounds. Escape is only a tactic: other fights never let anyone leave. |  |
+| Summon: Sacrifice, Resistible and Feedback | full | Sacrifice: a summoner hit by an effect needing a resistance check spends a hero point to shift it to a minion in range, when the hit is worth the minion (summon-sacrifice.js). Resistible: the minion rolls its Will against 10 + rank and, if it resists, no second try. Feedback: damaging a minion makes the summoner resist that Damage rank with the effect's rank as the bonus (feedback.js). | DCA 118, 135 |

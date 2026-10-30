@@ -3,8 +3,9 @@
 // obvious thing. The choices are scored in utility.js and the files beside it.
 
 import { stopOf } from './control-stop.js';
+import { summonsOf } from './summon.js';
 
-export const ROLES = ['healer', 'controller', 'debuffer', 'buffer', 'protector', 'striker', 'tank'];
+export const ROLES = ['healer', 'controller', 'debuffer', 'buffer', 'protector', 'striker', 'tank', 'summoner'];
 /** The weight a matching role puts on its kind of choice. */
 export const ROLE_WEIGHT = 1.15;
 
@@ -20,6 +21,7 @@ export function detectRoles(c) {
   if (c.deflect || c.adv.Interpose || gifts.some((g) => g.trait === 'Toughness')) roles.push('protector');
   if (damage.some((a) => a.rank >= c.pl - 2)) roles.push('striker');
   if (c.d.defenses.Toughness >= c.pl + 2 || c.impervious > 0 || c.sustainedProtection >= c.pl / 2) roles.push('tank');
+  if (c.ch && summonsOf(c.ch).length) roles.push('summoner');
   return roles;
 }
 

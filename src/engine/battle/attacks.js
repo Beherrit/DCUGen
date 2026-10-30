@@ -30,6 +30,7 @@ import { flawGate } from './flaw-gate.js';
 import { afterUse } from './flaw-effects.js';
 import { grabBasedUse } from './flaw-grab.js';
 import { inexactHit } from './flaw-resist.js';
+import { sacrificeFor } from './summon-sacrifice.js';
 
 export function resolveAttack(b, R, c, atk, t, rng, opts = {}) {
   if (c.out || c.fled) return; // a fighter struck down on its own turn (by a readied attack as it moved in) attacks no more
@@ -164,6 +165,12 @@ function landHit(b, R, c, atk, t, rng, r, { rankShift, notes, slam }) {
     log(b, { kind: 'hit', actor: c.id, target: t.id, text, dice });
     log(b, { kind: 'condition', actor: guard.id, target: t.id, text: `${guard.name} interposes and takes the hit meant for ${t.name}!`, important: true });
     applyEffect(b, R, c, atk, guard, rng, { crit, rankShift, multi: 0 });
+    return null;
+  }
+  const victim = sacrificeFor(b, c, atk, t); // Summon with Sacrifice: a minion takes the effect instead (summon-sacrifice.js)
+  if (victim) {
+    log(b, { kind: crit ? 'crit' : 'hit', actor: c.id, target: t.id, text, dice });
+    applyEffect(b, R, c, atk, victim, rng, { crit, rankShift, multi: 0 });
     return null;
   }
   let multi = 0;

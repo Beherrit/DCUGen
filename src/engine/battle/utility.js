@@ -10,6 +10,7 @@ import { traceChoice } from './trace.js';
 import { healOption } from './utility-heal.js';
 import { buffOption } from './utility-buff.js';
 import { stabilizeOption } from './stabilize.js';
+import { powerOptions } from './power-options.js';
 
 /** What the planned turn is worth, or Infinity when it is a special plan with its own rule. */
 export function ownUtility(choice) {
@@ -23,7 +24,7 @@ export function utilityTurn(b, R, c, choice, enemies, mode, rng) {
   const own = ownUtility(choice);
   if (own === Infinity) return false;
   let best = null;
-  for (const o of [healOption(b, c, enemies, mode), buffOption(b, c, enemies, mode), stabilizeOption(b, c, mode)]) if (o && (!best || o.u > best.u)) best = o;
+  for (const o of [healOption(b, c, enemies, mode), buffOption(b, c, enemies, mode), stabilizeOption(b, c, mode), ...powerOptions(b, R, c, enemies, mode)]) if (o && (!best || o.u > best.u)) best = o;
   if (!best || best.u <= own) return false;
   traceChoice(b, c, best.kind, best.u, own);
   best.run(b, R, c, rng);

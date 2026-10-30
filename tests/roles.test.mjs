@@ -26,8 +26,8 @@ const rolesOf = (powers, spec = {}) => { const b = powerArena([['x', 'A', { ...P
 
 // ---- detection ----------------------------------------------------------------------------------------
 
-test('roles come from the build: a healer, a controller, a debuffer, a buffer, a protector, a striker, a tank', () => {
-  assert.deepEqual(ROLES, ['healer', 'controller', 'debuffer', 'buffer', 'protector', 'striker', 'tank']);
+test('roles come from the build: a healer, a controller, a debuffer, a buffer, a protector, a striker, a tank, a summoner', () => {
+  assert.deepEqual(ROLES, ['healer', 'controller', 'debuffer', 'buffer', 'protector', 'striker', 'tank', 'summoner']);
   assert.deepEqual(rolesOf([]), [], 'a plain fighter has no role');
   assert.ok(rolesOf([mend(5)]).includes('healer'));
   assert.ok(rolesOf([power('Stun', 'Affliction', 6, { detail: 'Resisted by Fortitude; Dazed, Stunned, Incapacitated' })]).includes('controller'));

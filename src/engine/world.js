@@ -676,7 +676,8 @@ export function mergeWorldSaved(current, incoming) {
 }
 
 /** Record a Battle Room fight as an event with everyone who fought in it. */
-export function recordBattle(saved, battle, world) {
+export function recordBattle(saved, battle0, world) {
+  const battle = { ...battle0, combatants: battle0.combatants.filter((c) => !c.summon) }; // minions called in the fight are not people in the world
   const name = `${battle.name || 'Battle'}: ${battle.winner ? `team ${battle.winner} ${battle.gotAway ? 'gets away' : 'wins'}` : 'stalemate'}`;
   const teams = [...new Set(battle.combatants.map((c) => c.team))].sort();
   const sides = teams.map((t) => `Team ${t}: ${battle.combatants.filter((c) => c.team === t).map((c) => c.name).join(', ')}`).join(' vs ');

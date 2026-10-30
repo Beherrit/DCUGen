@@ -183,6 +183,10 @@ export function resetCombatant(c) {
     deflectRound: null,    // the round a Reaction deflect was last used
     luckCtlRound: null,    // the round a Luck Control reaction was last used (luck.js)
     bestowedRound: null,   // the round an ally last bestowed a luck point on this fighter
+    summon: null,          // set on a summoned minion or duplicate: { by, power, since, needsOrders, commanded, ... } (summon.js)
+    summonDazed: false,    // a summoned minion is dazed unless its power is Active (summon.js)
+    summoned: [],          // the ids of the minions this fighter has called in this fight
+    resistedSummon: {},    // Resistible Summon powers whose minion resisted: no second try (summon-run.js)
     stats: { attacks: 0, hits: 0, crits: 0, degrees: 0, kos: 0, healed: 0, taken: 0 },
   });
 }

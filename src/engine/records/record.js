@@ -70,7 +70,7 @@ export function recordId(seed, counter = 1) {
  */
 export function fightRecord(b, { source = 'battle-room', label = '', date, counter = 1 } = {}) {
   const teams = {};
-  b.combatants.forEach((c, i) => (teams[c.team] ||= []).push(fighterOf(b, c, i)));
+  b.combatants.forEach((c, i) => { if (!c.summon) (teams[c.team] ||= []).push(fighterOf(b, c, i)); }); // called minions are in the log, not on the roster
   const max = b.options?.maxRounds || MAX_ROUNDS;
   return {
     v: 1, id: recordId(b.seed, counter), date: date || new Date().toISOString(), source, label: label || '',

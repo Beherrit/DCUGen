@@ -72,7 +72,7 @@ export function conditionLabels(c) {
   const basic = activeConditions(c);
   const named = new Set();
   if (c.staggered && !c.out) named.add('Staggered');
-  else if (c.dazed && !c.out) named.add('Dazed');
+  else if ((c.dazed || c.summonDazed) && !c.out) named.add('Dazed');
   if (c.fatigue === 1) named.add('Fatigued'); if (c.fatigue >= 2) named.add('Exhausted');
   if (c.grabbedBy) named.add(basic.has('Bound') ? 'Bound' : 'Restrained');
   for (const x of c.conditions) named.add(x.name);
@@ -163,6 +163,6 @@ export function canAct(c) {
   if (s.has('Stunned') || s.has('Unaware')) return 'none';
   if (c.surpriseActor) return 'standard'; // the surprise round: a standard action, or a move instead (DCA 167)
   if (s.has('Controlled')) return 'controlled';
-  if (s.has('Dazed') || s.has('Compelled')) return 'standard';
+  if (s.has('Dazed') || s.has('Compelled') || c.summonDazed) return 'standard'; // a summoned minion is dazed unless the power is Active (summon.js)
   return 'full';
 }

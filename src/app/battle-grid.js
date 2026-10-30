@@ -92,10 +92,12 @@ function token(cx, c, slot, count, svg, redraw) {
   const [dx, dy] = OFFSETS[Math.min(count, 4) - 1][slot % 4];
   const r = count > 1 ? 3.4 : 4.4;
   const acting = c.id === battle.order[battle.turn - 1];
-  const g = el('g', { class: `bg-token ${c.out || c.fled ? 'down' : ''} ${acting ? 'acting' : ''} ${ui.selId === c.id ? 'sel' : ''}`, tabindex: 0, role: 'button', 'aria-label': `${c.name}, team ${c.team}, ${statusLine(c)}, at ${squareName(c.x, c.y)}`, 'data-id': c.id },
-    el('circle', { cx: c.x * CELL + CELL / 2 + dx, cy: c.y * CELL + CELL / 2 + dy, r, fill: c.color, stroke: teamColor(c.team), 'stroke-width': ui.selId === c.id || acting ? 1.6 : 1 }),
+  const maker = c.summon ? battle.combatants.find((x) => x.id === c.summon.by) : null;
+  const called = c.summon ? `${c.summon.duplicate ? 'duplicate' : 'summoned'} by ${maker?.name || 'a summoner'}` : '';
+  const g = el('g', { class: `bg-token ${c.out || c.fled ? 'down' : ''} ${acting ? 'acting' : ''} ${ui.selId === c.id ? 'sel' : ''} ${c.summon ? 'summoned' : ''}`, tabindex: 0, role: 'button', 'aria-label': `${c.name}, ${called ? `${called}, ` : ''}team ${c.team}, ${statusLine(c)}, at ${squareName(c.x, c.y)}`, 'data-id': c.id },
+    el('circle', { cx: c.x * CELL + CELL / 2 + dx, cy: c.y * CELL + CELL / 2 + dy, r, fill: c.color, stroke: teamColor(c.team), 'stroke-width': ui.selId === c.id || acting ? 1.6 : 1, 'stroke-dasharray': c.summon ? '1.4 1' : null }),
     el('text', { x: c.x * CELL + CELL / 2 + dx, y: c.y * CELL + CELL / 2 + dy + 1.2, 'text-anchor': 'middle', fill: inkFor(c.color), class: 'bg-initials', style: count > 1 ? 'font-size:3px' : null }, initials(c.name)),
-    el('title', {}, `${c.name} (team ${c.team}) at ${squareName(c.x, c.y)} · ${statusLine(c)}`));
+    el('title', {}, `${c.name} (team ${c.team}${called ? `, ${called}` : ''}) at ${squareName(c.x, c.y)} · ${statusLine(c)}`));
   const select = () => { ui.selId = ui.selId === c.id ? null : c.id; redraw(); };
   g.addEventListener('click', (e) => { if (!g.dataset.dragged) { e.stopPropagation(); select(); } g.dataset.dragged = ''; });
   g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(); } });

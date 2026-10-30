@@ -30,6 +30,7 @@ import { trapTurn } from './trap.js';
 import { assessTurn } from './assessment.js';
 import { weaponDefends, fetchWeapon } from './weapon-reactions.js';
 import { runHoming, freeHeld, concentrateHeld } from './extra-run.js';
+import { issueCommand } from './summon-run.js';
 
 const isHurt = (c) => c.staggered || c.bruises >= 2;
 
@@ -40,7 +41,7 @@ export function takeTurn(b, R, c, rng) {
   dropReady(b, c); // a readied action that did not happen is lost (ready.js)
   markTurn(b, c);
   refreshGrants(b);
-  const mode = canAct(c);
+  let mode = canAct(c);
   const conds = conditionLabels(c).filter((x) => x !== 'Fled');
   c.defending = false;
   c.deflecting = false;
@@ -54,6 +55,7 @@ export function takeTurn(b, R, c, rng) {
   assessTurn(b, c, enemies, rng); // Assessment: size up each foe once, a free action (assessment.js)
   if (!enemies.length) { steadyIdle(b, R, c, mode, rng); return; } // nobody left to fight: a medic tends a dying teammate (stabilize.js)
   if (losesNerve(b, c, enemies, rng)) return;
+  if (mode === 'full' && issueCommand(b, c)) mode = 'standard'; // Command, a move action: orders to minions still waiting for them (summon-run.js)
   insubTurn(b, c, enemies); // a free action: change form, and flow out of a hold
   uncontrolledFire(b, R, c, enemies, rng); // an Uncontrolled power may go off by itself
   runHoming(b, R, c, rng); // a Homing attack that missed tries again, as a free action (extra-run.js)
@@ -116,7 +118,7 @@ function controlledTurn(b, R, c, rng) {
 /** Morale: beasts and minions may break and run. */
 function losesNerve(b, c, enemies, rng) {
   const S = STYLES[c.style];
-  if (!mayFlee(b, c)) return false;
+  if (c.summon || !mayFlee(b, c)) return false; // a summoned minion is helpful to the summoner and does not run (summon.js)
   if (!(S.flees && !c.adv.Fearless && (c.staggered || (c.minion && c.bruises >= 1 && alliesOf(b, c).length < enemies.length)) && rng.chance(fleeChance(b, c, c.minion ? 0.35 : 0.3)))) return false;
   c.fled = true;
   log(b, { kind: 'flee', actor: c.id, text: `${c.name} has had enough and ${c.style === 'beast' ? 'bolts for cover' : 'runs for it'}.`, important: true });

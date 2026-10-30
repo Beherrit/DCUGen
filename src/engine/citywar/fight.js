@@ -54,7 +54,7 @@ export function buildFightBattle(war, R, rec) {
 export function playFight(war, R, rec) {
   const b = runToEnd(buildFightBattle(war, R, rec), R);
   const gone = (c) => c.out || (c.fled && !c.escaped);
-  const side = (letter) => b.combatants.filter((c) => c.team === letter);
+  const side = (letter) => b.combatants.filter((c) => c.team === letter && !c.summon); // minions called in the fight are not members
   Object.assign(rec, {
     winner: b.winner || null, gotAway: !!b.gotAway, rounds: Math.max(1, Math.min(b.round, b.options.maxRounds)),
     koA: side('A').filter(gone).length, koB: side('B').filter(gone).length,
