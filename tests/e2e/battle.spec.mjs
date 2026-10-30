@@ -70,3 +70,13 @@ test('a character with alternate forms fights in the form picked on their card',
   await formSel.selectOption({ index: 0 });
   await expect(page.locator('.bt-card .bt-names')).toContainText('form: ');
 });
+
+test('a fighter card shows its attack descriptors and what it is immune to', async ({ page }) => {
+  const errors = await openApp(page);
+  await showTab(page, 'battle');
+  await addBeast(page, 'storm elemental', 'A');
+  const card = page.locator('.bt-card').first();
+  await expect(card.locator('.bt-tag').first()).toContainText('Descriptors:');
+  await expect(card.locator('.bt-tag.imm')).toContainText('electricity damage');
+  expect(errors).toEqual([]);
+});

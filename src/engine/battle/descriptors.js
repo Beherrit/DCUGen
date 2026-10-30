@@ -175,10 +175,13 @@ export function showDescriptors(list) {
   return exact.length ? exact : l;
 }
 
+/** An attack's descriptors as the log and the Battle Room name them (the exact ones, or the family when that is all it has). */
+export const descriptorsOf = (atk) => showDescriptors(atk.descriptors);
+
 /** An attack's descriptors in plain words for the Battle Room: "fire, energy". */
 export function attackDescriptorWords(atk) {
   const l = atk.descriptors || [];
-  const shown = showDescriptors(l);
+  const shown = descriptorsOf(atk);
   const fams = ['physical', 'energy'].filter((f) => l.includes(f));
   return [...new Set([...shown, ...fams])].join(', ');
 }
