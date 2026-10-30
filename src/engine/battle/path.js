@@ -45,7 +45,7 @@ export function reachableFrom(b, from, budget, free = []) {
  * Where a fighter ends up walking toward `goal` for up to `maxSq` steps, stopping as soon as it is within `stopAt`
  * squares of it. Returns the square (the fighter's own when it cannot or need not move). Nothing moves here.
  */
-export function stepToward(b, c, goal, maxSq, stopAt = 0) {
+function walkToward(b, c, goal, maxSq, stopAt = 0) {
   let at = { x: c.x, y: c.y };
   if (!maxSq || squares(at, goal) <= stopAt) return at;
   const dist = distancesTo(b, goal, [at]);
@@ -63,6 +63,29 @@ export function stepToward(b, c, goal, maxSq, stopAt = 0) {
     at = { x: best.x, y: best.y };
   }
   return at;
+}
+
+/** Straight toward the goal ignoring scenery and walls, but inside the playing area: how a fighter moves under the ground or through solid things. */
+function straightToward(b, c, goal, maxSq, stopAt) {
+  let at = { x: c.x, y: c.y };
+  for (let s = 0; s < maxSq && squares(at, goal) > stopAt; s++) {
+    const next = { x: at.x + Math.sign(goal.x - at.x), y: at.y + Math.sign(goal.y - at.y) };
+    if (next.x < b.grid.play.x0 || next.x > b.grid.play.x1 || next.y < b.grid.play.y0 || next.y > b.grid.play.y1) break;
+    at = next;
+  }
+  return at;
+}
+
+/**
+ * Where a fighter ends up walking toward a goal. A burrower goes under everything at its burrowing speed; a fighter who can pass through
+ * solid things (Movement: Permeate) takes the straight way when that gets it nearer than walking round, at a speed rank or two less.
+ */
+export function stepToward(b, c, goal, maxSq, stopAt = 0) {
+  if (c.burrows) return straightToward(b, c, goal, maxSq, stopAt);
+  const walked = walkToward(b, c, goal, maxSq, stopAt);
+  if (c.permeates == null) return walked;
+  const through = straightToward(b, c, goal, Math.max(1, Math.floor(maxSq / 2 ** c.permeates)), stopAt);
+  return squares(through, goal) < squares(walked, goal) ? through : walked;
 }
 
 /** Steps from every square to the goal, walking around walls and pieces. */

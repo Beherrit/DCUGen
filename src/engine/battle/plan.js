@@ -13,6 +13,7 @@ import { feintPick, setUpAllies, closeBest } from './tricks.js';
 import { interactionImmune, slipsHold } from './immunity.js';
 import { attackValue } from './utility-attack.js';
 import { assessBias } from './assessment.js';
+import { attackCount } from './extra-attacks-read.js';
 
 /**
  * Best attack for c against t, with the trade-off already folded in. A close attack counts when the target is in reach, or
@@ -44,7 +45,7 @@ export function bestAttackVs(b, c, t, rng, { full = false } = {}) {
     const dist = close ? 0 : from;
     const trade = bestTradeoff(c, atk, t, dist, b);
     const opts = { bonusShift: -trade - (charge && close ? 2 : 0), rankShift: trade, dist, b };
-    const ev = attackValue(b, c, atk, t, expectedValue(c, atk, t, opts), opts); // utility.js: control and Weaken count for more than their degrees
+    const ev = attackValue(b, c, atk, t, expectedValue(c, atk, t, opts), opts) * attackCount(c, atk); // utility.js: control and Weaken count for more than their degrees
     let score = ev * (close ? S.close : S.ranged);
     if (c.style === 'gunner' && (atk.equipment || atk.device)) score *= 1.3;
     if (c.style === 'mentalist' && atk.resistance === 'Will') score *= 1.3;

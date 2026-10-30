@@ -71,7 +71,7 @@ export function lightOn(b, c) {
 
 /** Set what the effects do to each fighter now: ranks of speed lost and the light on it. Run when an effect starts and at the start of every turn. */
 export function refreshEnvironment(b) {
-  for (const c of b.combatants) { c.slowed = slowOf(b, c); c.lit = lightOn(b, c); }
+  for (const c of b.combatants) { c.slowed = c.adaptsWeather ? 0 : Math.max(0, slowOf(b, c) - (c.sureFooted || 0)); c.lit = lightOn(b, c); } // Sure-footed and an adaptation to the weather take the speed loss off (Movement, p109)
 }
 
 /** An effect lasts while its user can keep it up. Called with the other upkeeps before every end check. */

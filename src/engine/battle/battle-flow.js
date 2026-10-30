@@ -18,6 +18,7 @@ import { createUpkeep, withoutCreated } from './create.js';
 import { environmentUpkeep, environmentRound } from './environment.js';
 import { illusionUpkeep } from './illusion.js';
 import { shapeUpkeep } from './shapeshift.js';
+import { returnFromDeath } from './immortality.js';
 import { transformUpkeep } from './transform.js';
 import { restoreStartForm } from './form-swap.js';
 
@@ -122,6 +123,7 @@ function checkOver(b) {
   transformUpkeep(b); // and a Transform on a being (transform.js)
   if (withdrawOver(b)) return true;
   const teams = new Set(alive(b).map((c) => c.team));
+  for (const c of b.combatants) if (c.dead && c.returnRound != null && c.returnRound <= b.options.maxRounds) teams.add(c.team); // an Immortal who will be back is still in the fight (immortality.js)
   if (teams.size <= 1 && !deathsPending(b)) { // a lethal fight goes on until the dying have died or steadied
     b.status = 'over';
     b.winner = teams.size ? [...teams][0] : null;
@@ -148,6 +150,7 @@ export function step(b, R) {
     b.round += 1;
     if (checkOver(b)) return b.log.length - before;
     log(b, { kind: 'round', text: `Round ${b.round}.`, important: true });
+    returnFromDeath(b); // Immortality: the dead whose time has come get up (immortality.js)
     environmentRound(b, b.round, () => rngFor(b)); // every tenth round the extreme heat and cold ask their Fortitude checks
     if (b.round === 2) endSurprise(b);
     for (const c of alive(b)) regenerate(b, c);

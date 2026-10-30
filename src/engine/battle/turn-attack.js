@@ -16,6 +16,7 @@ import { kite, moveBy } from './move-by.js';
 import { runManeuver } from './maneuver-run.js';
 import { finishingFeat } from './feat.js';
 import { flawedAction } from './flaw-turn.js';
+import { runExtraAttacks } from './extra-attacks.js';
 
 // Extra effort is chosen in effort.js; the tests read it from here.
 export { pickEffort };
@@ -40,7 +41,8 @@ export function attackTurn(b, R, c, choice, enemies, mode, rng) {
   const team = teamAttack(b, c, attack, target, rng);
   const slam = slamRank(b, c, attack, charge);
   // Takedown chains and the attack itself
-  resolveAttack(b, R, c, attack, target, rng, { trade: charge ? 0 : trade, allOut: charge ? 0 : allOut, defensive: charge ? 0 : defensive, effort, charge, slam, team });
+  const landed = resolveAttack(b, R, c, attack, target, rng, { trade: charge ? 0 : trade, allOut: charge ? 0 : allOut, defensive: charge ? 0 : defensive, effort, charge, slam, team });
+  runExtraAttacks(b, R, c, attack, target, rng, landed); // Extra Attacks: more attacks with the same power (extra-attacks.js)
   extraAction(b, R, c, rng, effort); // extra effort for another standard action (effort.js)
   moveBy(b, c, attack, target, enemies, mode);
 }

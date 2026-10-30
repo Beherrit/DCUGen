@@ -46,7 +46,7 @@ export function grab(b, R, c, t, rng, { free = false } = {}) {
   const str = gripOf(c);
   if (!free) {
     const dc = 10 + defenseOf(t, 'Parry');
-    const bonus = (c.attacks.find((a) => a.unarmed)?.bonus ?? c.d.abilities.Fighting ?? 0) - checkPenalty(c);
+    const bonus = (c.attacks.find((a) => a.unarmed)?.bonus ?? c.d.abilities.Fighting ?? 0) - checkPenalty(c) + (c.limbBonus || 0); // all the limbs on the grab: +1 a rank of Extra Limbs, to +5 (p98)
     const roll = d20(rng); const total = roll + bonus;
     if (!(roll === 20 || (roll !== 1 && total >= dc))) { log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${c.name} tries to grab ${t.name}: d20 ${roll} ${sign(bonus)} = ${total} vs Parry DC ${dc} — ${t.name} slips away.`, dice: [{ label: 'Grab', roll, mod: bonus, total, dc }] }); return; }
     log(b, { kind: 'hit', actor: c.id, target: t.id, text: `${c.name} grabs at ${t.name}: d20 ${roll} ${sign(bonus)} = ${total} vs Parry DC ${dc} — got a hold.`, dice: [{ label: 'Grab', roll, mod: bonus, total, dc }] });
@@ -58,6 +58,7 @@ export function grab(b, R, c, t, rng, { free = false } = {}) {
   const dice = [{ label: 'Resist grab', roll, mod: resist, total, dc }];
   if (!fails) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name} resists the hold: d20 ${roll} ${sign(resist)} = ${total} vs DC ${dc}${critNote(r)} — breaks free.`, dice }); return; }
   t.grabbedBy = c.id; c.holding = t.id;
+  if (c.limbDistract) c.distracted = true; // Distracting Extra Limbs: vulnerable while the limbs are busy
   t.conditions = t.conditions.filter((x) => x.source !== 'grab');
   if (fails >= 2) t.conditions.push({ name: 'Bound', degree: 2, from: c.id, source: 'grab', label: 'held', tiers: [['Restrained'], ['Bound']] });
   log(b, { kind: 'condition', actor: c.id, target: t.id, text: `${t.name} fails to resist (d20 ${roll} ${sign(resist)} = ${total} vs DC ${dc}, ${fails} degree${fails > 1 ? 's' : ''}${critNote(r)}): ${fails >= 2 ? 'BOUND — defenseless and immobile' : 'RESTRAINED — hindered and vulnerable'} in ${c.name}'s grip.`, dice, important: true });

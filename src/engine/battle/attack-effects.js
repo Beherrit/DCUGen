@@ -17,6 +17,7 @@ import { resistStep } from './resist-step.js';
 import { scheduleAfter } from './extra-after.js';
 import { attackFormResult } from './attack-form-effect.js';
 import { manifestationFeedback } from './feedback.js';
+import { absorbEnergy } from './absorb.js';
 
 export { damageResult };
 
@@ -37,6 +38,7 @@ function retuned(b, c, atk, t) {
  * `later` marks an effect that comes back by itself (Secondary Effect, a held effect, Homing): it is not scheduled again.
  */
 export function applyEffect(b, R, c, atk, t, rng, opts = {}) {
+  if (t.absorbs?.length) absorbEnergy(b, c, atk, t, opts.rankShift || 0); // Energy Absorption: the attack feeds a trait, whatever it does (absorb.js)
   const res = applyBase(b, R, c, atk, t, rng, opts);
   if (atk.ex && !opts.later) scheduleAfter(b, c, atk, t, res, opts); // Secondary Effect, Increased Duration, Contagious (extra-after.js)
   if (res?.landed && t.summon?.feedback && res.rank > 0 && (atk.effect === 'Damage' || atk.effect === 'Mental Blast')) { // a damaged minion hurts a summoner with Feedback (feedback.js)

@@ -22,6 +22,9 @@ import { extrasOf } from './extras.js';
 import { formAttack } from './attack-form.js';
 import { powerAttacks } from './power-attacks.js';
 import { applyMods } from './mods.js';
+import { extraAttacksOf } from './extra-attacks-read.js';
+import { absorbsOf } from './absorb.js';
+import { movementTraits, burrowSpeed, limbBonus } from './movement-powers.js';
 import { activeForm } from '../forms.js';
 
 export function effectWeights(attack) {
@@ -114,12 +117,14 @@ function buildAttack(c, a0, R, where = new Map()) {
 
 function bestMoveRank(ch) {
   let best = 0;
+  let burrow = 0;
   let flying = false;
   for (const { power: p } of allPowers(ch, { includeAlternates: false })) {
-    if (['Speed', 'Flight', 'Teleport', 'Swimming'].includes(p.effect)) { best = Math.max(best, p.rank); if (p.effect === 'Flight') flying = true; }
+    if (['Speed', 'Flight', 'Teleport', 'Swimming', 'Super-Speed'].includes(p.effect)) { best = Math.max(best, p.rank); if (p.effect === 'Flight') flying = true; }
     if (p.effect === 'Leaping') best = Math.max(best, Math.floor(p.rank / 2));
+    if (p.effect === 'Burrowing') burrow = Math.max(burrow, burrowSpeed(p.rank));
   }
-  return { rank: best, flying };
+  return { rank: Math.max(best, burrow), flying, burrowing: burrow > best }; // Burrowing is a speed rank 5 under its rank, under the ground
 }
 
 /** The feet an Elongation power stretches the fighter's reach: the distance of its rank (Hero's Handbook p96). */
@@ -208,7 +213,8 @@ export function rebuildCombatant(c, R, d = null) {
   d = d || deriveAll(c.ch, R);
   c.d = d;
   c.flaw ||= freshFlawState();           // a battle saved before the flaws were simulated has none
-  c.initBonus = d.initiative;
+  const mt = movementTraits(c.ch);
+  c.initBonus = d.initiative + 4 * mt.superSpeed; // Super-Speed: Improved Initiative as an Enhanced Trait, +4 a rank (movement-powers.js)
   const where = new Map(allPowers(c.ch).map((x) => [x.power, x]));
   c.attacks = [...d.attacks, ...powerAttacks(c.ch, R, d.abilities)].map((a) => buildAttack(c, a, R, where)).filter((a) => (a.rank > 0 || a.effect !== 'Damage') && !(a.item && (c.dropped || []).includes(a.item.key)) && !(a.ex?.attackForm && !a.formOk));
   powerStats(c);
@@ -217,7 +223,11 @@ export function rebuildCombatant(c, R, d = null) {
   const mv = bestMoveRank(c.ch);
   c.speed = 1 + Math.min(4, Math.floor(mv.rank / 3));
   c.flying = mv.flying;
+  c.absorbs = absorbsOf(c.ch);            // Energy Absorption: the kinds of attack it feeds on (absorb.js)
+  c.extraAttacks = extraAttacksOf(c.ch); // Extra Attacks (Martial Arts p83), or null (extra-attacks-read.js)
+  Object.assign(c, { burrows: mv.burrowing, permeates: mt.permeate, slithers: mt.slithers, sureFooted: mt.sureFooted, adaptsWeather: mt.adaptation, limbBonus: limbBonus(mt), limbDistract: mt.limbsDistract });
   c.adv = Object.fromEntries(['Power Attack', 'Accurate Attack', 'All-out Attack', 'Defensive Attack', 'Takedown', 'Interpose', 'Evasion', 'Fearless', 'Seize Initiative', 'Move-by Action', 'Fast Grab', 'Improved Grab', 'Improved Hold', 'Chokehold', 'Agile Feint', 'Uncanny Dodge', 'Improved Initiative', 'Diehard', 'Instant Up', 'Luck', 'Taunt', 'Teamwork', 'Improved Trip', 'Improved Disarm', 'Improved Smash', 'Prone Fighting', 'Improved Aim', 'Improved Defense', 'Grabbing Finesse', 'Leadership', 'Inspire', 'Set-up', 'Startle', 'Great Endurance', 'Extraordinary Effort', 'Assessment', 'Quick Draw', 'Improvised Weapon', 'Redirect', 'Weapon Bind', 'Weapon Break', 'Fascinate'].map((n) => [n, advantageRank(c.ch, n)]));
+  if (mt.limbs > 0) c.adv['Improved Grab'] = Math.max(1, c.adv['Improved Grab'] || 0); // Extra Limbs give the benefits of Improved Grab (p98)
   if (fearImmune(c)) c.adv.Fearless = Math.max(1, c.adv.Fearless || 0); // Immunity to fear is Fearless (DCA 77, 102)
   const sk = (name) => d.skills.find((s) => s.name === name)?.bonus ?? (d.abilities[R.skillAbility(name)] ?? 0);
   c.skills = { Deception: sk('Deception'), Insight: sk('Insight'), Acrobatics: sk('Acrobatics'), Athletics: sk('Athletics'), Intimidation: sk('Intimidation'), 'Sleight of Hand': sk('Sleight of Hand'), Treatment: d.skills.find((s) => s.name === 'Treatment')?.bonus ?? null };

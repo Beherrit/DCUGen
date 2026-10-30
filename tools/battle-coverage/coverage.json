@@ -23,8 +23,8 @@
   {
     "kind": "effect",
     "name": "Burrowing",
-    "status": "none",
-    "note": "Burrowing is not counted as movement and no one goes underground.",
+    "status": "partial",
+    "note": "Counts as movement at a speed rank 5 under its rank, under the ground: a burrower walks straight past scenery and walls. house rule: the ground of the fight is soil (hard clay and rock would slow it by one and two more ranks). Not modelled: tunnels left behind, Penetrating, surprise from underground (the book gives none), and an attack against someone under the ground.",
     "source": "DCA 89"
   },
   {
@@ -100,8 +100,8 @@
   {
     "kind": "effect",
     "name": "Energy Absorption",
-    "status": "none",
-    "note": "Absorbing energy attacks into Enhanced Traits is not simulated.",
+    "status": "partial",
+    "note": "A hit of the kind of attack the power names (its descriptors) raises Strength, a defense, speed or a Ranged Damage rank to the lower of the power's rank and the attack's rank; it fades 1 each turn and a further hit tops it off, never past the rank. It gives no resistance: the hit is suffered as usual. Not modelled: other traits it could enhance.",
     "source": "DCA 95"
   },
   {
@@ -135,8 +135,8 @@
   {
     "kind": "effect",
     "name": "Extra Limbs",
-    "status": "none",
-    "note": "Extra limbs (holding while attacking) are not modelled.",
+    "status": "partial",
+    "note": "The benefits of Improved Grab (a grabber is not vulnerable and its hold cannot be broken as easily) and +1 a rank to a maximum of +5 on a grab attempt; a Distracting flaw leaves the user vulnerable after a grab. Extra limbs give no extra actions (the book's default). house rule: Weak Limbed takes its ranks off the +1 a rank bonus, since the limbs add no Strength of their own to a grab. Not modelled: off-hand penalties, the Ambidexterity advantage, and attacking with the limbs that are free during a hold.",
     "source": "DCA 98"
   },
   {
@@ -184,8 +184,8 @@
   {
     "kind": "effect",
     "name": "Immortality",
-    "status": "none",
-    "note": "Returning after incapacitation is not simulated.",
+    "status": "partial",
+    "note": "In a fight with Lethal damage on, a dead Immortal comes back after 19 less its rank as a time rank, in rounds (rank 20 and 19 the next round, 18 after 2, 17 after 5, 16 after 10, 15 after 20, 14 after 40; lower ranks are longer than a fight), with every damage condition gone and no hero points. The fight does not end while an Immortal who will be back is on the losing side. Without Lethal damage nobody dies, so it does nothing. The Limited flaw (a way of dying it cannot return from) is not read.",
     "source": "DCA 102"
   },
   {
@@ -275,8 +275,8 @@
   {
     "kind": "effect",
     "name": "Movement",
-    "status": "none",
-    "note": "Special movement types are not counted.",
+    "status": "partial",
+    "note": "Read by the words of the power: Permeate (the straight way through scenery and walls at a speed rank less per missing rank of it, used when it gets nearer than walking round), Slithering (no penalty for attacking while prone), Sure-footed (each rank takes a rank off the speed lost to impeding weather) and Environmental Adaptation to wind, ice or mud (takes all of it). Wall-crawling, water-walking, swinging, safe fall, trackless, and dimension, space and time travel have no use on a flat board with no water.",
     "source": "DCA 109"
   },
   {
@@ -387,8 +387,8 @@
   {
     "kind": "effect",
     "name": "Super-Speed",
-    "status": "none",
-    "note": "Not counted as movement, and the Improved Initiative it grants is not applied.",
+    "status": "full",
+    "note": "Improved Initiative as an Enhanced Trait (+4 to the initiative check a rank), a ground speed rank equal to the power rank (the fighter moves that far each turn), and Quickness, which only speeds up routine tasks and has no use in a fight.",
     "source": "DCA 119"
   },
   {
@@ -2091,14 +2091,14 @@
     "kind": "effect",
     "name": "Communal",
     "status": "none",
-    "note": "Martial Arts (3e) effect; not simulated in fights yet.",
+    "note": "Not built: a Communal effect is a pool of points that two or more characters build powers from together and use while touching, and nothing in a character records who else contributes, which component powers it holds or who controls it. It needs a way to link characters on the sheet first.",
     "source": "MA 81"
   },
   {
     "kind": "effect",
     "name": "Extra Attacks",
-    "status": "none",
-    "note": "Martial Arts (3e) effect; not simulated in fights yet.",
+    "status": "partial",
+    "note": "After the regular attack, rank more attacks with the same power, each with the normal attack modifier, at the same foe or any other in range, and the AI counts the extras in the worth of an attack. Declining (-5 more on each), Chain (a miss ends them), Limited and Activation (Move Action: only if the fighter has not moved) work. Dispersed (later attacks at a lower initiative) is not played out, the attacks are all made at once; the Mobility, Quick Combo and Quickened Charge extras and moving a step between attacks are not modelled. Takedown chains on top, as the book allows when the GM does.",
     "source": "MA 83"
   },
   {

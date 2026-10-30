@@ -17,6 +17,7 @@ import { rollCheck, critNote } from './checks.js';
 import { resistOf } from './conditions.js';
 import { plainFx } from './fortune.js';
 import { stabilizePenalty, debilitated } from './debilitated.js';
+import { noteDeath } from './immortality.js';
 
 export const lethalOn = (b) => !!b.options?.lethal;
 export const DYING_DC = 15;
@@ -37,6 +38,7 @@ const bonusOf = (c) => {
 export function kill(b, c, why = 'dies') {
   c.dead = true; c.dying = false; c.stable = false; c.out = true; c.outReason = 'dead';
   log(b, { kind: 'ko', actor: c.id, text: `${c.name} ${why}.`, important: true });
+  noteDeath(b, c); // Immortality: it may come back (immortality.js)
 }
 
 /** The fighter stops dying and lies there incapacitated. */

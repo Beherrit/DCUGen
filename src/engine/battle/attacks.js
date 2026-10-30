@@ -33,23 +33,26 @@ import { inexactHit } from './flaw-resist.js';
 import { sacrificeFor } from './summon-sacrifice.js';
 
 export function resolveAttack(b, R, c, atk, t, rng, opts = {}) {
-  if (c.out || c.fled) return; // a fighter struck down on its own turn (by a readied attack as it moved in) attacks no more
+  if (c.out || c.fled) return false; // a fighter struck down on its own turn (by a readied attack as it moved in) attacks no more
   c.lastAttackId = atk.id;
   traceAttack(b, c, atk, t);
   noteAttack(b, c, t);
   c.stats.attacks++;
   if (!atk.flaws || opts.homing != null) { // a Homing retry is a free action: no flaw gate
-    if (attackBody(b, R, c, atk, t, rng, opts, 0)) c.flaw.done[flawKey(atk)] = b.round; // a Chained effect hangs on this one having worked
-    return;
+    const landed = attackBody(b, R, c, atk, t, rng, opts, 0);
+    if (landed) c.flaw.done[flawKey(atk)] = b.round; // a Chained effect hangs on this one having worked
+    return landed;
   }
   const gate = flawGate(b, R, c, atk, t, rng); // limits, uses, hero point, reliability roll, required check (flaw-gate.js)
-  if (!gate.go) { if (gate.spent) afterUse(b, R, c, atk, rng, false); return; }
-  afterUse(b, R, c, atk, rng, attackBody(b, R, c, atk, t, rng, opts, gate.rankShift));
+  if (!gate.go) { if (gate.spent) afterUse(b, R, c, atk, rng, false); return false; }
+  const landed = attackBody(b, R, c, atk, t, rng, opts, gate.rankShift);
+  afterUse(b, R, c, atk, rng, landed);
+  return landed;
 }
 
 /** The attack itself, after the flaws have let it go. Returns whether it landed (a hit that was not resisted), for Side Effect and Chained. */
-function attackBody(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive = 0, effort = null, charge = false, slam = null, aimed = 0, team = 0, homing = null }, checkShift) {
-  const m = shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charge, slam, team });
+function attackBody(b, R, c, atk, t, rng, { trade = 0, allOut = 0, defensive = 0, effort = null, charge = false, slam = null, aimed = 0, team = 0, homing = null, declining = 0 }, checkShift) {
+  const m = shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charge, slam, team, declining });
   const { notes } = m;
   m.rankShift += checkShift;
   let { rankShift } = m;
@@ -112,7 +115,7 @@ function rollAndLand(b, R, c, atk, t, rng, m, { rankShift, notes, aimed, homing 
  * Apply the trade-offs, charge, slam, team bonus and extra effort to the attack. Maneuvers only apply to attacks
  * with an attack check (DCA 178). Returns the trade-offs that stand, the rank shift, and the notes for the log.
  */
-function shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charge, slam, team }) {
+function shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charge, slam, team, declining }) {
   if (!atk.roll || atk.area) { trade = 0; allOut = 0; defensive = 0; }
   let rankShift = trade;
   const notes = [];
@@ -124,9 +127,10 @@ function shiftAndNotes(b, c, atk, rng, { trade, allOut, defensive, effort, charg
   if (allOut) notes.push(`All-out Attack: +${allOut} to hit, −${allOut} defenses until next turn`);
   if (defensive) notes.push(`Defensive Attack: −${defensive} to hit, +${defensive} defenses`);
   let bonus = 0;
+  if (declining) { bonus -= declining; notes.push(`Declining: −${declining} to hit`); } // Extra Attacks with Declining (MA 84)
   if (effort) { // extra effort: +1 rank, +1 Strength, two benefits, or +2 on the attack check (effort.js)
     const e = effortEffect(b, c, rng, effort);
-    rankShift += e.rank; bonus = e.hit;
+    rankShift += e.rank; bonus += e.hit;
     notes.push(e.text);
   }
   return { trade, allOut, defensive, charge, rankShift, notes, slam: !!slam, bonus };

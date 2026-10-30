@@ -13,6 +13,7 @@ import { expireFeats } from './feat.js';
 import { concentrationBroken } from './flaw-turn.js';
 import { snareFeedback } from './flaw-effects.js';
 import { runSecondary, spreadContagion } from './extra-run.js';
+import { fadeMods } from './mods.js';
 
 /**
  * A snare-type affliction ("overcome by Damage") is broken with Damage, including Strength, or slipped with Sleight
@@ -34,6 +35,7 @@ export function endOfTurn(b, c, rng, R = null) {
   for (const t of b.combatants) if (t.feinted?.by === c.id && t.feinted.round < b.round) t.feinted = null;
   expireSupport(b, c);
   expireFeats(b, c);
+  if (fadeMods(c).length) log(b, { kind: 'note', actor: c.id, text: `${c.name}'s absorbed energy has faded away.` }); // Energy Absorption fades 1 a turn (mods.js)
   if (c.out) return;
   if (c.dazed && !c.staggered) { c.dazed = false; }
   if (c.dazed && c.staggered) { c.dazed = false; } // staggered keeps the hindered part; dazed wears off

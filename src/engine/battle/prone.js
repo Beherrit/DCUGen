@@ -16,7 +16,7 @@ export const standableProne = (c) => c.conditions.filter((x) => x.name === 'Pron
 export function proneMod(c, t, atk) {
   let mod = 0;
   if (activeConditions(t).has('Prone')) mod += atk.kind === 'close' ? (t.adv['Prone Fighting'] ? 0 : 5) : -5;
-  if (activeConditions(c).has('Prone') && atk.kind === 'close' && !c.adv['Prone Fighting']) mod -= 5;
+  if (activeConditions(c).has('Prone') && atk.kind === 'close' && !c.adv['Prone Fighting'] && !c.slithers) mod -= 5; // Slithering: no penalty for attacks while prone (p110)
   return mod;
 }
 
