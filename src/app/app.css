@@ -695,7 +695,6 @@ body.drop-ready::after { content: "Drop to import characters"; position: fixed; 
 .key-box code.key-long { max-height: 120px; overflow: auto; font-size: 11px; }
 .bio-name-link { border: 0; background: none; padding: 0; font: inherit; font-weight: 700; color: var(--hero-link, #2f6fde); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
 .bio-name-link:hover { text-decoration-thickness: 2px; }
-.bio-open { font-size: 12px; }
 
 /* ---------- Battle Room ---------- */
 .bt-layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 20px; align-items: start; }
@@ -2277,10 +2276,9 @@ body.player-mode .gm-only { display: none !important; }
 .start-here h2 { font: 800 26px/1 var(--font-display); text-transform: uppercase; }
 .start-here .hint { margin: 0; }
 .start-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; text-align: left; margin-top: 6px; }
-.start-card { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 10px; align-items: start; padding: 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; font: inherit; text-align: left; }
+.start-card { display: grid; grid-template-columns: 1fr; row-gap: 4px; align-items: start; padding: 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; font: inherit; text-align: left; }
 .start-card:hover { border-color: var(--accent); box-shadow: var(--shadow); }
 .start-card.primary { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--surface)); }
-.start-glyph { grid-row: span 2; font-size: 26px; line-height: 1; }
 .start-card b { font: 800 16px/1.2 var(--font-label); }
 .start-card small { color: var(--ink-2); font-size: 13px; line-height: 1.35; }
 .rail-more { border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; }

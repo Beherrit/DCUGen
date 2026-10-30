@@ -78,19 +78,19 @@ function safe(fn) { try { return fn(); } catch { return 0; } }
 export function diffTraits(before, after, R) {
   const out = [];
   const push = (text, points) => out.push({ text, points });
-  if ((before.pl || 0) !== (after.pl || 0)) push(`Power level ${before.pl} → ${after.pl}`, 0);
+  if ((before.pl || 0) !== (after.pl || 0)) push(`Power level ${before.pl} to ${after.pl}`, 0);
 
   for (const a of ABILITIES) {
     const x = before.abilities?.[a];
     const y = after.abilities?.[a];
     if (x === y) continue;
     const cost = (v) => (v === null ? -10 : 2 * (v || 0));
-    push(`${a} ${x ?? '—'} → ${y ?? '—'}`, cost(y) - cost(x));
+    push(`${a} ${x ?? '—'} to ${y ?? '—'}`, cost(y) - cost(x));
   }
   for (const d of BUYABLE_DEFENSES) {
     const x = before.defenses?.[d] || 0;
     const y = after.defenses?.[d] || 0;
-    if (x !== y) push(`${d} ${sign(y - x)} rank${Math.abs(y - x) === 1 ? '' : 's'} (bought ${x} → ${y})`, y - x);
+    if (x !== y) push(`${d} ${sign(y - x)} rank${Math.abs(y - x) === 1 ? '' : 's'} (bought ${x} to ${y})`, y - x);
   }
 
   // Skills cost 1 point per 2 ranks across all skills, so the per-skill point change is approximate;
@@ -102,7 +102,7 @@ export function diffTraits(before, after, R) {
   const skillLines = [];
   for (const [k, s] of as) {
     const old = bs.get(k)?.ranks || 0;
-    if (s.ranks !== old) skillLines.push(`${label(s)} ${old} → ${s.ranks} ranks`);
+    if (s.ranks !== old) skillLines.push(`${label(s)} ${old} to ${s.ranks} ranks`);
   }
   for (const [k, s] of bs) if (!as.has(k)) skillLines.push(`${label(s)} removed (${s.ranks} ranks)`);
   if (skillLines.length) push(`Skills: ${skillLines.join(', ')}`, skillPts);
@@ -114,7 +114,7 @@ export function diffTraits(before, after, R) {
     const old = ba.get(k)?.rank || 0;
     const now = a.rank || 1;
     if (!ba.has(k)) push(`New advantage: ${label(a)}${now > 1 ? ` ${now}` : ''}`, now);
-    else if (now !== old) push(`${label(a)} ${old} → ${now}`, now - old);
+    else if (now !== old) push(`${label(a)} ${old} to ${now}`, now - old);
   }
   for (const [k, a] of ba) if (!aa.has(k)) push(`Removed advantage: ${label(a)}`, -(a.rank || 1));
 
@@ -126,7 +126,7 @@ export function diffTraits(before, after, R) {
   for (const [name, st] of ast) {
     const old = bst.get(name);
     if (!old) push(`New fighting style: ${name} (${st.tier})`, stylePts(st));
-    else if (stylePts(old) !== stylePts(st)) push(`${name} style: ${old.tier} → ${st.tier}${old.stances !== st.stances ? (st.stances ? ', stances added' : ', stances dropped') : ''}`, stylePts(st) - stylePts(old));
+    else if (stylePts(old) !== stylePts(st)) push(`${name} style: ${old.tier} to ${st.tier}${old.stances !== st.stances ? (st.stances ? ', stances added' : ', stances dropped') : ''}`, stylePts(st) - stylePts(old));
   }
   for (const [name, st] of bst) if (!ast.has(name)) push(`Removed fighting style: ${name}`, -stylePts(st));
 
@@ -139,10 +139,10 @@ export function diffTraits(before, after, R) {
     if (!old) { push(`New power: ${name} (${p.effect} ${p.rank})`, pcost(p)); continue; }
     if (JSON.stringify(old) === JSON.stringify(p)) continue;
     const bits = [];
-    if (old.rank !== p.rank) bits.push(`rank ${old.rank} → ${p.rank}`);
+    if (old.rank !== p.rank) bits.push(`rank ${old.rank} to ${p.rank}`);
     if (JSON.stringify(old.extras || []) !== JSON.stringify(p.extras || [])) bits.push('extras changed');
     if (JSON.stringify(old.flaws || []) !== JSON.stringify(p.flaws || [])) bits.push('flaws changed');
-    if ((old.alternates || []).length !== (p.alternates || []).length) bits.push(`alternate effects ${(old.alternates || []).length} → ${(p.alternates || []).length}`);
+    if ((old.alternates || []).length !== (p.alternates || []).length) bits.push(`alternate effects ${(old.alternates || []).length} to ${(p.alternates || []).length}`);
     if (!bits.length) bits.push('changed');
     push(`${name}: ${bits.join(', ')}`, pcost(p) - pcost(old));
   }

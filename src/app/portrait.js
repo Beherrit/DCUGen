@@ -356,14 +356,14 @@ export function portraitBlock(ch, { change, size = 'file' } = {}) {
   const newPortrait = () => change((c) => setPortrait(c, { seed: newPortraitSeed(), source: 'ai', image: null, hidden: false }));
   const controls = change ? h('div', { class: 'portrait-tools no-print' },
     p.hidden
-      ? [h('button', { class: 'btn sm', type: 'button', title: CREDIT, onClick: newPortrait }, '🖼 New portrait'),
+      ? [h('button', { class: 'btn sm', type: 'button', title: CREDIT, onClick: newPortrait }, 'New portrait'),
         h('button', { class: 'btn sm', type: 'button', title: 'Use a picture of your own', onClick: () => fileIn.click() }, 'Upload…'), fileIn]
       : [
-        h('button', { class: 'btn sm', type: 'button', title: 'A new AI painting with the same prompt and new dice', onClick: newPortrait }, '🎲 New portrait'),
+        h('button', { class: 'btn sm', type: 'button', title: 'A new AI painting with the same prompt and new dice', onClick: newPortrait }, 'New portrait'),
         h('button', { class: 'btn sm', type: 'button', title: 'Use a picture of your own', onClick: () => fileIn.click() }, 'Upload…'),
-        h('button', { class: 'btn sm', type: 'button', title: 'Source and prompt', onClick: settings }, p.source === 'upload' ? (ch.portrait?.aiSaved ? 'AI painting ✓' : 'Your picture') : p.source === 'builtin' ? 'Built-in art' : `${PORTRAIT_STYLES[p.style]?.label || 'AI'} · ${p.custom ? 'edited prompt' : 'style & painter'}`),
+        h('button', { class: 'btn sm', type: 'button', title: 'Source and prompt', onClick: settings }, p.source === 'upload' ? (ch.portrait?.aiSaved ? 'AI painting' : 'Your picture') : p.source === 'builtin' ? 'Built-in art' : `${PORTRAIT_STYLES[p.style]?.label || 'AI'} · ${p.custom ? 'edited prompt' : 'style & painter'}`),
         h('button', { class: 'btn sm ghost', type: 'button', title: 'Copy the prompt to use in any other image tool', onClick: async () => toast((await copyText(p.prompt)) ? 'Prompt copied' : 'Copy failed') }, 'Copy prompt'),
-        h('button', { class: 'btn sm ghost danger', type: 'button', title: 'Remove the portrait from this character', onClick: () => change((c) => clearPortrait(c)) }, '🗑 Delete portrait'),
+        h('button', { class: 'btn sm ghost danger', type: 'button', title: 'Remove the portrait from this character', onClick: () => change((c) => clearPortrait(c)) }, 'Delete portrait'),
         fileIn,
       ]) : null;
   if (p.hidden) return h('div', { class: `portrait ${size} hidden` }, controls);

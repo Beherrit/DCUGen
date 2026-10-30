@@ -49,7 +49,7 @@ export function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
     const file = h('article', { class: 'file bio' }, head, toolbar || null,
       h('div', { class: 'bio-empty' },
         h('p', null, 'No life story yet. Roll one: family, childhood, the events that made them, the people in their life, personality, secrets and story hooks for the GM. Or write your own from a blank page.'),
-        change ? h('div', { class: 'btn-row', style: { justifyContent: 'center' } }, h('button', { class: 'btn primary big', type: 'button', id: 'bio-generate', onClick: regen }, 'Roll a life story'), h('button', { class: 'btn big', type: 'button', id: 'bio-write', onClick: writeOwn }, '✎ Write your own')) : null),
+        change ? h('div', { class: 'btn-row', style: { justifyContent: 'center' } }, h('button', { class: 'btn primary big', type: 'button', id: 'bio-generate', onClick: regen }, 'Roll a life story'), h('button', { class: 'btn big', type: 'button', id: 'bio-write', onClick: writeOwn }, 'Write your own')) : null),
       h('div', { class: 'file-body' }, h('div', { class: 'col', style: { gridColumn: '1 / -1' } }, factions, journal)));
     file.style.setProperty('--hero', hero);
     file.style.setProperty('--hero-ink', inkFor(hero));
@@ -61,13 +61,13 @@ export function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
   });
 
   const summary = h('section', { class: 'sec bio-summary' },
-    h('h3', null, 'Their story', change ? h('span', { class: 'pts no-print' }, h('button', { class: 'linkish', type: 'button', id: 'bio-edit', title: 'Change any part of the life story by hand', onClick: () => { editingBio = true; change((c) => c); } }, '✎ Edit the whole bio'), ' · ', h('button', { class: 'linkish', type: 'button', id: 'bio-blank', title: 'Throw the rolled story away and write one from a blank page', onClick: writeOwn }, 'start blank'), ' · ', h('button', { class: 'linkish', type: 'button', onClick: regen }, bio.manual ? 'Roll a life story' : 'Roll a new life')) : null),
+    h('h3', null, 'Their story', change ? h('span', { class: 'pts no-print' }, h('button', { class: 'linkish', type: 'button', id: 'bio-edit', title: 'Change any part of the life story by hand', onClick: () => { editingBio = true; change((c) => c); } }, 'Edit the whole bio'), ' · ', h('button', { class: 'linkish', type: 'button', id: 'bio-blank', title: 'Throw the rolled story away and write one from a blank page', onClick: writeOwn }, 'start blank'), ' · ', h('button', { class: 'linkish', type: 'button', onClick: regen }, bio.manual ? 'Roll a life story' : 'Roll a new life')) : null),
     change
       ? h('textarea', { class: 'bio-summary-edit', id: 'bio-summary', 'aria-label': 'Biography summary', onChange: (e) => change((c) => { c.bio = { ...c.bio, summary: e.target.value, edited: true }; }) }, bio.summary || '')
       : h('p', null, bio.summary));
 
   const sections = (bio.sections || []).map((s) => h('section', { class: 'sec bio-sec' },
-    h('h3', null, s.title, change ? h('span', { class: 'pts no-print' }, h('button', { class: 'linkish', type: 'button', title: `Re-roll ${s.title}`, onClick: () => reroll(s.id) }, '🎲 re-roll')) : null),
+    h('h3', null, s.title, change ? h('span', { class: 'pts no-print' }, h('button', { class: 'linkish', type: 'button', title: `Re-roll ${s.title}`, onClick: () => reroll(s.id) }, 're-roll')) : null),
     h('dl', { class: 'bio-dl' }, (s.items || []).map((it) => [h('dt', null, it.label), h('dd', null, it.text)]))));
 
   const timeline = (bio.timeline || []).length ? h('section', { class: 'sec' },
@@ -106,7 +106,7 @@ export function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
     (bio.hooks || []).length ? h('ul', { class: 'bio-hooks' }, bio.hooks.map((x) => h('li', null, x))) : null,
     (bio.complications || []).length ? [h('div', { class: 'label', style: { margin: '10px 0 6px' } }, 'Complications from their past (DCA 27)'),
       h('ul', { class: 'bio-comps' }, bio.complications.map((c) => h('li', null, h('b', null, `${c.type}: `), c.text,
-        change && !haveComp.has(`${c.type}|${c.text}`) ? h('button', { class: 'btn sm no-print', type: 'button', onClick: () => change((x) => { x.complications = [...(x.complications || []), { type: c.type, text: c.text }]; }) }, 'Add to sheet') : h('span', { class: 'bio-added' }, ' ✓ on sheet'))))] : null,
+        change && !haveComp.has(`${c.type}|${c.text}`) ? h('button', { class: 'btn sm no-print', type: 'button', onClick: () => change((x) => { x.complications = [...(x.complications || []), { type: c.type, text: c.text }]; }) }, 'Add to sheet') : h('span', { class: 'bio-added' }, ' added to sheet'))))] : null,
     (bio.benefits?.skills?.length || bio.benefits?.advantages?.length) ? [h('div', { class: 'label', style: { margin: '10px 0 6px' } }, 'What their past suggests (buy with points if you like)'),
       h('ul', { class: 'bio-comps' },
         (bio.benefits.skills || []).map((s) => h('li', null, h('b', null, `${s.name}${s.spec ? ` (${s.spec})` : ''}`), s.why ? `: ${s.why}` : '')),
@@ -127,7 +127,7 @@ export function renderBio(ch, R, { change, toolbar, onOpenPerson } = {}) {
 function person(name, relation, who, status, onOpen) {
   return h('li', null,
     h('div', null, onOpen
-      ? h('button', { type: 'button', class: 'bio-name-link', title: `Open ${name} as a full character in a new tab`, onClick: onOpen }, name || 'Unnamed', h('span', { class: 'bio-open', 'aria-hidden': 'true' }, ' ↗'))
+      ? h('button', { type: 'button', class: 'bio-name-link', title: `Open ${name} as a full character in a new tab`, onClick: onOpen }, name || 'Unnamed')
       : h('b', null, name || 'Unnamed'), relation ? h('span', { class: 'bio-rel' }, relation) : null),
     who ? h('div', { class: 'bio-who' }, who) : null,
     status ? h('div', { class: 'bio-status' }, status) : null);

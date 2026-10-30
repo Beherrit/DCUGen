@@ -33,11 +33,11 @@ export function companionsSection(ch) {
       h('button', { class: 'btn sm', type: 'button', 'aria-expanded': String(open), onClick: () => { if (open) openCompanion.delete(comp.id); else openCompanion.add(comp.id); F.renderCurrent(); } }, open ? 'Hide sheet' : 'Show sheet'),
       open ? h('button', { class: 'btn sm', type: 'button', 'aria-pressed': String(editing), onClick: () => { if (editing) editingCompanion.delete(comp.id); else editingCompanion.add(comp.id); F.renderCurrent(); } }, editing ? 'Done editing' : 'Edit') : null,
       h('button', { class: 'btn sm', type: 'button', title: 'Open as its own tab (Power Lab, Bio, exports), then save it back', onClick: () => setCurrent({ ...JSON.parse(JSON.stringify(comp)), companionOf: { ownerId: ch.id, ownerName: ch.identity?.codename || 'their hero', index: i } }, { newTab: true }) }, 'Open in a tab'),
-      h('button', { class: 'btn sm', type: 'button', title: 'Add to the Battle Room', onClick: () => F.api.throwIn?.(comp) }, '⚔'),
+      h('button', { class: 'btn sm', type: 'button', title: 'Add to the Battle Room', onClick: () => F.api.throwIn?.(comp) }, 'Battle Room'),
       h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${comp.identity?.codename}`, onClick: async () => {
         const ok = await openDialog({ title: `Remove ${comp.identity?.codename}?`, body: h('p', { style: { margin: 0 } }, 'Their sheet goes with them. Save them to the roster first if you want to keep a copy.'), buttons: [{ label: 'Keep', value: false }, { label: 'Remove', value: true, danger: true }] });
         if (ok) { const o = JSON.parse(JSON.stringify(state.current)); o.companions.splice(i, 1); if (!o.companions.length) delete o.companions; F.commit(o); }
-      } }, '✕'));
+      } }, 'Remove'));
     const body = open ? renderFile(comp, F.R, { editing, onChange: (c) => setAt(i, c), noPortrait: false }).el : null;
     return h('div', { class: 'comp-card' }, head, !b.ok || b.budget != null ? h('p', { class: `hint comp-budget ${b.ok ? '' : 'bad'}` }, b.message) : null, body ? h('div', { class: 'comp-sheet' }, body) : null);
   });
@@ -131,7 +131,7 @@ export function companionBanner(ch) {
     toast(`Open ${ch.companionOf.ownerName} first, then save back.`);
   };
   return h('div', { class: 'comp-banner no-print' },
-    h('span', null, `🐾 ${ch.identity?.codename || 'This companion'} belongs to ${ch.companionOf.ownerName}. Changes here stay in this tab until you save them back.`),
+    h('span', null, `${ch.identity?.codename || 'This companion'} belongs to ${ch.companionOf.ownerName}. Changes here stay in this tab until you save them back.`),
     h('button', { class: 'btn sm primary', type: 'button', onClick: back }, `Save back to ${ch.companionOf.ownerName}`));
 }
 
