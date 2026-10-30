@@ -10,6 +10,7 @@ import { deflectPenalty } from './deflect.js';
 import { tacticOf } from './tactics-list.js';
 import { vipOf } from './tactics-marks.js';
 import { isFrontliner } from './tactics-position.js';
+import { protectWeight } from './utility-protect.js';
 
 const WORTH_IT = 0.05;
 
@@ -59,8 +60,8 @@ export function deflectTurn(b, c, choice, enemies, mode) {
   if (!c.deflect || c.deflect.reaction || (mode !== 'full' && mode !== 'standard')) return false;
   const harm = deflectHarm(b, c, enemies);
   if (harm <= WORTH_IT) return false;
-  const own = choice.plan === 'attack' ? (choice.ev ?? 0) : 0;
-  if (!(harm > own || asked(b, c, enemies))) return false;
+  const own = choice.plan === 'attack' ? (choice.utility ?? choice.ev ?? 0) : 0; // the attack, in the same units as the harm kept off the team
+  if (!(harm * protectWeight(b, c) > own || asked(b, c, enemies))) return false;
   c.defending = true;
   c.deflecting = true;
   log(b, { kind: 'note', actor: c.id, text: `${c.name} takes the Defend action to deflect (Deflect ${c.deflect.rank}): attacks on the team must beat a deflection roll until their next turn.`, important: true });

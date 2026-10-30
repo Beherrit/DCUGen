@@ -10,6 +10,7 @@ import { coverPlan, throughFactor } from './cover-plan.js';
 import { gripOf, grabAppetite } from './maneuvers.js';
 import { maneuverPlan } from './plan-maneuvers.js';
 import { feintPick, setUpAllies, closeBest } from './tricks.js';
+import { attackValue } from './utility-attack.js';
 
 /**
  * Best attack for c against t, with the trade-off already folded in. A close attack counts when the target is in reach, or
@@ -21,7 +22,7 @@ export function bestAttackVs(b, c, t, rng, { full = false } = {}) {
   const sq = b.grid.squareFt;
   const n = squares(c, t);
   const moveSq = full ? squaresInMove(b, c) : 0;
-  let best = { attack: null, ev: 0, score: 0 };
+  let best = { attack: null, ev: 0, score: 0, base: 0 };
   for (const atk of c.attacks) {
     const close = atk.range === 'close';
     let from = n * sq;
@@ -38,7 +39,8 @@ export function bestAttackVs(b, c, t, rng, { full = false } = {}) {
     if (blocksDirect(b, c, atk, t)) continue; // total cover: the target cannot be picked
     const dist = close ? 0 : from;
     const trade = bestTradeoff(c, atk, t, dist, b);
-    const ev = expectedValue(c, atk, t, { bonusShift: -trade - (charge && close ? 2 : 0), rankShift: trade, dist, b });
+    const opts = { bonusShift: -trade - (charge && close ? 2 : 0), rankShift: trade, dist, b };
+    const ev = attackValue(b, c, atk, t, expectedValue(c, atk, t, opts), opts); // utility.js: control and Weaken count for more than their degrees
     let score = ev * (close ? S.close : S.ranged);
     if (c.style === 'gunner' && (atk.equipment || atk.device)) score *= 1.3;
     if (c.style === 'mentalist' && atk.resistance === 'Will') score *= 1.3;
@@ -47,8 +49,9 @@ export function bestAttackVs(b, c, t, rng, { full = false } = {}) {
     if (atk.stunt) score *= 0.95;
     if (atk.unarmed && c.attacks.length > 1) score *= 0.9;
     score *= attackBias(b, c, atk, t) * throughFactor(b, c, atk, t, from);
+    const base = score; // the attack's utility before the die-roll wobble
     score *= 0.9 + rng.next() * 0.2;
-    if (score > best.score) best = { attack: atk, ev, score };
+    if (score > best.score) best = { attack: atk, ev, score, base };
   }
   return best;
 }
@@ -118,8 +121,9 @@ export function choosePlan(b, R, c, enemies, rng, mode) {
     const reachable = need === 0 || (mode === 'full' && need <= moveSq * 2);
     const ft = n * b.grid.squareFt;
     const pick = bestAttackVs(b, c, t, rng, { full: mode === 'full' });
-    const pref = targetPref(c, t, n, ft, tactic, rng) * targetBias(b, c, t, { dist: n, enemies });
-    scored.push({ t, n, ft, need, reachable, pick, score: (pick.score || 0.01) * pref });
+    const tb = targetBias(b, c, t, { dist: n, enemies });
+    const pref = targetPref(c, t, n, ft, tactic, rng) * tb;
+    scored.push({ t, n, ft, need, reachable, pick, tb, score: (pick.score || 0.01) * pref });
   }
   scored.sort((x, y) => y.score - x.score);
   const top = scored[0];
@@ -135,7 +139,7 @@ export function choosePlan(b, R, c, enemies, rng, mode) {
     const stopAt = shooter ? shootSquares(b, c) : reachSquares(b, c);
     if (closeAtk && top.need > 0 && !shooter) return { target: t, attack: null, plan: 'move', stopAt };
     const alt = scored.find((s) => s.pick.attack && s.pick.ev > 0.02);
-    if (alt) return { target: alt.t, attack: alt.pick.attack, plan: 'attack' };
+    if (alt) return { target: alt.t, attack: alt.pick.attack, plan: 'attack', utility: alt.pick.base * alt.tb };
     if (top.n > stopAt) return { target: t, attack: null, plan: 'move', stopAt };
     return null;
   }
@@ -146,5 +150,5 @@ export function choosePlan(b, R, c, enemies, rng, mode) {
   const maneuver = maneuverPlan(b, c, top, mode);
   if (maneuver) return maneuver;
   if (wantsFeint(b, c, t, top, mode)) return { target: t, attack: top.pick.attack, plan: 'feint' };
-  return { target: t, attack: top.pick.attack, plan: 'attack', ev: top.pick.ev };
+  return { target: t, attack: top.pick.attack, plan: 'attack', ev: top.pick.ev, utility: top.pick.base * top.tb }; // utility: what the attack is worth next to a heal, a buff or a guard
 }

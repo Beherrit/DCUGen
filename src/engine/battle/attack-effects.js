@@ -2,14 +2,15 @@
 
 import { sign, log } from './util.js';
 import { rollCheck, critNote, opposedCheck, opposedNote } from './checks.js';
-import { resistOf } from './conditions.js';
+import { resistOf, weakenedAttack } from './conditions.js';
 import { dcOf, isImmune, halfImmune } from './odds.js';
 import { releaseHolds } from './maneuvers.js';
 import { resistFx } from './fortune.js';
+import { weakenTraits, traitLabel } from './weaken-traits.js';
 
 /** Resolve the effect of a hit (or an automatic effect). Returns { landed, ko, degrees, rank } (the rank for Damage). */
 export function applyEffect(b, R, c, atk, t, rng, { crit = false, rankShift = 0, multi = 0 } = {}) {
-  let rank = Math.max(0, atk.rank + rankShift);
+  let rank = Math.max(0, atk.rank + rankShift - weakenedAttack(c, atk).rank);
   const why = isImmune(t, atk);
   if (why) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name} is ${why}: no effect.` }); return { landed: false }; }
   const half = halfImmune(t, atk);
@@ -34,8 +35,8 @@ export function applyEffect(b, R, c, atk, t, rng, { crit = false, rankShift = 0,
   if (atk.effect === 'Weaken') {
     const trait = atk.weakens || 'Toughness';
     const lost = Math.min(fails, rank);
-    t.weakened[trait] = (t.weakened[trait] || 0) + lost;
-    log(b, { kind: 'condition', actor: c.id, target: t.id, text: `${base} — ${fails} degree${fails > 1 ? 's' : ''}: ${t.name} loses ${lost} rank${lost > 1 ? 's' : ''} of ${trait} (now −${t.weakened[trait]}).`, dice });
+    const now = weakenTraits(t, trait, lost);
+    log(b, { kind: 'condition', actor: c.id, target: t.id, text: `${base} — ${fails} degree${fails > 1 ? 's' : ''}: ${t.name} loses ${lost} rank${lost > 1 ? 's' : ''} of ${traitLabel(trait)} (now −${now}).`, dice });
     return { landed: true, degrees: fails };
   }
   return afflictionResult(b, c, atk, t, fails, dc, base, dice, rng);

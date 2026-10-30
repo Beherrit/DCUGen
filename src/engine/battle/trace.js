@@ -14,3 +14,9 @@ export function traceAttack(b, c, atk, t) {
   b.trace.push({ kind: 'attack', round: b.round, tick: b.tick, actor: c.id, target: t.id, range: atk.range, rank: atk.rank, ext: atk.ext || 0, area: atk.area || null, name: atk.name,
     ft: feet(b, c, t), squares: squares(c, t), reach: reachSquares(b, c, atk), from: { x: c.x, y: c.y }, to: { x: t.x, y: t.y } });
 }
+
+/** A fighter took a non-attack option because it scored higher than its best attack (heal, buff, protect), in b.trace.choices. */
+export function traceChoice(b, c, kind, utility, own) {
+  if (!b.trace) return;
+  (b.trace.choices ||= []).push({ choice: kind, round: b.round, tick: b.tick, actor: c.id, utility, own }); // kept apart: the grid tests read b.trace entry by entry as moves and attacks
+}

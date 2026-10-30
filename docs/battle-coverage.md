@@ -11,7 +11,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Kind | Total | Full | Partial | None | n/a | Covered |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | effect | 63 | 6 | 29 | 20 | 8 | 64% |
-| extra | 50 | 8 | 6 | 31 | 5 | 31% |
+| extra | 50 | 8 | 7 | 30 | 5 | 33% |
 | flaw | 41 | 0 | 1 | 37 | 3 | 3% |
 | advantage | 75 | 28 | 12 | 14 | 21 | 74% |
 | skill | 16 | 8 | 0 | 2 | 6 | 80% |
@@ -19,7 +19,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | maneuver | 12 | 7 | 4 | 1 | 0 | 92% |
 | condition | 30 | 16 | 8 | 5 | 1 | 83% |
 | rule | 38 | 16 | 11 | 11 | 0 | 71% |
-| all | 345 | 98 | 78 | 125 | 44 | 58% |
+| all | 345 | 98 | 79 | 124 | 44 | 59% |
 
 ## Effects
 
@@ -49,7 +49,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Flight | partial | Sets how far the fighter moves each turn and the log wording; nothing else about flying (height, ground effects) is modelled. | DCA 99 |
 | Force Field | full | Counts as sustained Protection with Impervious; Nullify can switch it off. | DCA 100 |
 | Growth | partial | Strength, Stamina, Dodge, Parry, Intimidation and Stealth change; extra reach and size effects do not. | DCA 100 |
-| Healing | partial | Healers restore bruises, dazed and staggered at DC 10; Healing's other uses such as stabilizing a dying hero are not simulated. | DCA 100 |
+| Healing | partial | A DC 10 check by touch as a standard action: each degree heals one damage condition (staggered, dazed, bruises), worst first, and a failed check cannot be tried again on that subject. The AI weighs a heal against its best attack in expected degrees. Stabilizing, the extras and the other uses are not simulated. | DCA 100 |
 | Illusion | none | Illusions are not simulated. | DCA 101 |
 | Immortality | none | Returning after incapacitation is not simulated. | DCA 102 |
 | Immunity | partial | Immunity is matched by text against attack descriptors and defenses, including half effect; unusual immunities may be missed. | DCA 102 |
@@ -65,11 +65,11 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Morph | n/a | Changing appearance has no combat effect here. | DCA 108 |
 | Move Object | none | Moving or throwing objects with a power is not simulated. | DCA 108 |
 | Movement | none | Special movement types are not counted. | DCA 109 |
-| Nullify | partial | Opposed check against sustained protection only; other powers cannot be nullified. | DCA 111 |
+| Nullify | partial | Opposed check against sustained protection only; other powers cannot be nullified. The AI values it by the gain for the allies who strike while the protection is down. | DCA 111 |
 | Power-Lifting | n/a | Only changes how much can be lifted. | DCA 111 |
 | Protection | full | Adds to Toughness, with Impervious and Sustained handled. | DCA 111 |
 | Quickness | n/a | Only speeds up routine tasks. | DCA 112 |
-| Regeneration | partial | Recovers one damage condition per round using a simplified rank count; the book's recovery timings are not followed. | DCA 112 |
+| Regeneration | partial | Recovers one damage condition per round using a simplified rank count; the book's recovery timings are not followed. With Affects Others it is lent to an ally by touch and counts as a heal. | DCA 112 |
 | Remote Sensing | n/a | Sensing from afar has no combat effect here. | DCA 112 |
 | Senses | partial | Only senses that see through concealment (radar, tremor, danger sense and the like) are used. | DCA 113 |
 | Shapeshift | none | Changing form in a fight is not simulated. | DCA 116 |
@@ -85,7 +85,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Teleport | partial | Counts as movement speed; Teleport Attack and ranged placement are not simulated. | DCA 120 |
 | Transform | none | Transformations are not simulated. | DCA 120 |
 | Variable | partial | Only Omni-power fighters reconfigure, into four fixed attacks sized to half the points. | DCA 121 |
-| Weaken | partial | Weakens one trait guessed from the power's detail and returns a rank each round; the book's recovery rate differs. | DCA 122 |
+| Weaken | partial | Weakens one trait read from the power's detail (Toughness, Strength, Dodge, Parry, Will, Fortitude, Fighting, Dexterity, an attack power by a word of its name, or all defenses) and returns a rank each round; the book's recovery rate differs. The AI values it by what the loss does to the team's next attacks or to the enemy's threat. | DCA 122 |
 | Communal | none | Martial Arts (3e) effect; not simulated in fights yet. | MA 81 |
 | Extra Attacks | none | Martial Arts (3e) effect; not simulated in fights yet. | MA 83 |
 
@@ -97,7 +97,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Affects Corporeal | none | Only matters with Insubstantial, which is not simulated. | DCA 125 |
 | Affects Insubstantial | none | Insubstantial is not simulated. | DCA 125 |
 | Affects Objects | none | Objects are not in the fight. | DCA 125 |
-| Affects Others | none | Defenses and powers cannot be given to allies in a fight. | DCA 125 |
+| Affects Others | partial | Enhanced Trait (Dodge, Parry, Toughness, Fortitude, Will, Fighting, Dexterity, Agility, Stamina), Protection and Regeneration can be lent to one ally at a time by touch and last while the giver can keep them up; other powers cannot be given to allies in a fight. | DCA 125 |
 | Alternate Effect | partial | Alternate attacks are separate attack choices, switched for free; alternate defenses and utilities are ignored. | DCA 125 |
 | Alternate Resistance | partial | The attack uses the resistance recorded on the power; the cost changes are not checked. | DCA 126 |
 | Area | partial | Burst, Cloud, Cylinder, Cone and Line catch whoever is inside the shape on the grid, sized by the Area rank (a 30 ft burst, a 60 ft cone, a 30 ft long line, doubled per extra rank); a Ranged area is centered on the target within long range, a Close one on the attacker. Each victim gets a Dodge for half. Shapeable is treated as a burst and Perception ignores concealment. | DCA 126 |

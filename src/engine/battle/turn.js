@@ -3,21 +3,22 @@
 import { log, byId, enemiesOf, alliesOf } from './util.js';
 import { STYLES } from './styles.js';
 import { activeConditions, conditionLabels, canAct } from './conditions.js';
-import { squares, squaresInMove, reachSquares, inReach, inRangeNow, shootSquares } from './geometry.js';
-import { stepToward } from './path.js';
+import { reachSquares, inReach, inRangeNow, shootSquares } from './geometry.js';
 import { choosePlan, bestAttackVs } from './plan.js';
-import { moveTo, moveToward } from './movement.js';
+import { moveToward } from './movement.js';
 import { resolveAttack } from './attacks.js';
 import { applyEffect } from './attack-effects.js';
 import { feint, grab, tryEscape } from './maneuvers.js';
-import { heal, spendHeroPoint, recoverAction } from './support.js';
+import { spendHeroPoint, recoverAction } from './support.js';
 import { attackTurn } from './turn-attack.js';
-import { markTurn, mayFlee, mayDefend, recoverEarly, healsFreely, healThreshold, coverDefends, fleeChance, withdrawTurn, withdrawHolds } from './tactics.js';
+import { markTurn, mayFlee, mayDefend, recoverEarly, coverDefends, fleeChance, withdrawTurn, withdrawHolds } from './tactics.js';
 import { supportTurn } from './support-plan.js';
 import { recoverFatigue, fortuneTurn } from './fortune-turn.js';
 import { shootCover } from './cover-damage.js';
 import { planStanding, standOrDrop } from './stand.js';
 import { deflectTurn } from './deflect-plan.js';
+import { utilityTurn } from './utility.js';
+import { refreshGrants } from './grants.js';
 
 const isHurt = (c) => c.staggered || c.bruises >= 2;
 
@@ -25,6 +26,7 @@ const isHurt = (c) => c.staggered || c.bruises >= 2;
 export function takeTurn(b, R, c, rng) {
   c.defMod = 0;
   markTurn(b, c);
+  refreshGrants(b);
   const mode = canAct(c);
   const conds = conditionLabels(c).filter((x) => x !== 'Fled');
   c.defending = false;
@@ -40,9 +42,9 @@ export function takeTurn(b, R, c, rng) {
   if (withdrawTurn(b, c)) return;
   if (catchBreath(b, c, rng)) return;
   if (takeAimedShot(b, R, c, rng)) return;
-  if (healFirst(b, c, rng)) return;
   if (crushHeld(b, R, c, rng)) return;
   const choice = planStanding(c, () => choosePlan(b, R, c, enemies, rng, mode)); // a prone fighter plans as if it were on its feet
+  if (utilityTurn(b, R, c, choice, enemies, mode, rng)) return; // a heal or a buff that beats the best attack
   if (!choice) { log(b, { kind: 'skip', actor: c.id, text: `${c.name} finds nothing worth doing and holds position.` }); return; }
   if (withdrawHolds(b, c, choice)) return;
   if (fortuneTurn(b, c, choice, enemies)) return;
@@ -133,18 +135,6 @@ function takeAimedShot(b, R, c, rng) {
     return true;
   }
   c.aiming = null;
-  return false;
-}
-
-/** Support: heal first if someone needs it. */
-function healFirst(b, c, rng) {
-  if (!(c.healing && (c.style === 'support' || healsFreely(b, c) || rng.chance(0.4)))) return false;
-  const need = healThreshold(b, c);
-  const patient = alliesOf(b, c).concat([c]).filter((a) => a.bruises >= need || a.staggered || (need < 2 && a.dazed)).sort((x, y) => (y.staggered ? 10 : 0) + y.bruises - ((x.staggered ? 10 : 0) + x.bruises))[0];
-  if (patient && (c.healing.ranged || squares(c, patient) - reachSquares(b, c) <= squaresInMove(b, c))) {
-    if (!c.healing.ranged && !inReach(b, c, patient) && canAct(c) === 'full') moveTo(b, c, stepToward(b, c, patient, squaresInMove(b, c), reachSquares(b, c)), `to reach ${patient.name}`);
-    if (c.healing.ranged || inReach(b, c, patient)) { heal(b, c, patient, rng); return true; }
-  }
   return false;
 }
 

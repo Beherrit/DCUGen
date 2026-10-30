@@ -2,7 +2,7 @@
 // Luck Control forcing a hit to be re-rolled, and the hero point re-roll of a miss (which Luck Control may grant or negate).
 
 import { sign, d20 } from './util.js';
-import { activeConditions, checkPenalty, defenseVs, feintedBy, useFeint, aidBonus } from './conditions.js';
+import { activeConditions, checkPenalty, defenseVs, feintedBy, useFeint, aidBonus, weakenedAttack } from './conditions.js';
 import { rangePenalty, concealmentPenalty, hitOdds } from './odds.js';
 import { feet } from './geometry.js';
 import { proneMod } from './prone.js';
@@ -49,7 +49,7 @@ function toHitMod(b, c, atk, t, m, aimed, notes) {
   const conceal = concealmentPenalty(c, t, atk);
   const cover = coverPenalty(b, c, t, atk);
   const aid = aidBonus(c, t);
-  let mod = atk.bonus - m.trade + m.allOut - m.defensive - checkPenalty(c) - rangePenalty(atk, dist) - conceal - cover - (m.charge ? 2 : 0) + aimed + aid;
+  let mod = atk.bonus - m.trade + m.allOut - m.defensive - checkPenalty(c) - rangePenalty(atk, dist) - conceal - cover - (m.charge ? 2 : 0) + aimed + aid - weakenedAttack(c, atk).bonus;
   mod += proneMod(c, t, atk);
   if (aid) notes.push(`aid: +${aid}`);
   if (conceal) notes.push(`${conceal === 5 ? 'total' : 'partial'} concealment: −${conceal}`);

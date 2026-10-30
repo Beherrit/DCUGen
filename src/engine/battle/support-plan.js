@@ -10,6 +10,7 @@ import { tacticOf } from './tactics-list.js';
 import { stepToSquare } from './tactics-position.js';
 import { demoralSkill, resistanceTo, canDemoralize, minionsInSight, demoralize, aid, aidAttackOf } from './support-actions.js';
 import { dazeByChoice } from './daze.js';
+import { protectWeight, aidDefenseGain } from './utility-protect.js';
 import { demoralizerOf, demoralizeTarget, potentialEv, championOf, championFoe, ownValue } from './tactics-support.js';
 
 /** Intimidate and Break: the team's intimidator goes for the most dangerous enemy, walking within earshot first. */
@@ -82,7 +83,11 @@ function aidByChoice(b, c, choice, mode, rng) {
   const better = near.filter((a) => !aidBonus(a, foe)).map((a) => ({ a, ev: gainOf(a) })).filter((x) => x.ev > Math.max(0.05, ownValue(choice)))
     .sort((x, y) => y.ev - x.ev || x.a.id.localeCompare(y.a.id))[0];
   if (better) return aidAllyAttack(b, c, better.a, foe, mode, rng);
-  const hurt = near.find((a) => a.staggered && !aidBonus(a, foe, 'defense') && threatOn(foe, a, feet(b, foe, a)) > 0.05);
+  // Aid to defense, for a staggered ally: worth the harm the foe would do to it, less what it does with +2 on its defense (utility-protect.js).
+  const weight = protectWeight(b, c);
+  const guarded = near.filter((a) => a.staggered && !aidBonus(a, foe, 'defense')).map((a) => ({ a, ev: aidDefenseGain(b, a, foe, pAid) * weight }))
+    .filter((x) => x.ev > 0.05).sort((x, y) => y.ev - x.ev || x.a.id.localeCompare(y.a.id))[0];
+  const hurt = guarded?.a;
   if (!hurt) return false;
   const attack = getInPosition(b, c, foe, mode);
   if (!attack) return false;

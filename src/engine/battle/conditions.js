@@ -121,9 +121,23 @@ export function defenseVs(t, which, attacker) {
   return s.has('Defenseless') ? base : base + aidBonus(t, attacker, 'defense');
 }
 
+/**
+ * What Weaken has taken off one of c's attacks: ranks from a "Power:<word>" entry whose word is in the attack's name, effect
+ * or descriptors, and check bonus from Fighting (close attacks) or Dexterity (ranged ones). Zeros when nothing is weakened.
+ */
+export function weakenedAttack(c, atk) {
+  const out = { rank: 0, bonus: 0 };
+  const w = c.weakened;
+  for (const k in w) {
+    if (k.startsWith('Power:') && `${atk.name} ${atk.effect} ${(atk.descriptors || []).join(' ')}`.toLowerCase().includes(k.slice(6))) out.rank += w[k];
+  }
+  out.bonus = atk.range === 'close' ? w.Fighting || 0 : w.Dexterity || 0;
+  return out;
+}
+
 export function defenseOf(c, which) {
   const s = activeConditions(c);
-  let v = (c.d.defenses[which] ?? 0) + c.defMod - (c.weakened[which] || 0);
+  let v = (c.d.defenses[which] ?? 0) + c.defMod - (c.weakened[which] || 0) - (which === 'Parry' ? c.weakened.Fighting || 0 : 0);
   if (s.has('Defenseless')) return 0;
   if (s.has('Vulnerable') || c.aiming) v = Math.ceil(v / 2); // aiming leaves you vulnerable (DCA 175)
   return v;

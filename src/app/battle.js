@@ -12,6 +12,7 @@ import { imageDialog } from './imageshare.js';
 import { addPanel, quickStarts } from './battle-setup.js';
 import { tacticChips } from './battle-tactics.js';
 import { notSimulatedLine } from './battle-report.js';
+import { rolesNote } from './battle-roles.js';
 import { keepFinishedFight, keptNote, roomTabs } from './records/room.js';
 import { renderFights, openFight } from './records/fights-view.js';
 import { renderCityWar } from './citywar/view.js';
@@ -180,7 +181,7 @@ function fighterCard(c) {
       h('span', { class: 'bt-token', title: `Square ${squareName(c.x, c.y)}` }, initials(c.name)),
       h('div', { class: 'bt-names' },
         h('b', null, c.name),
-        h('span', null, `PL ${c.pl} · ${S.glyph} ${S.label}${c.minion ? ' · minion' : ''}${hasForms(c.ch) ? ` · 🎭 ${c.ch.forms[activeForm(c.ch)]?.name || 'form'}` : ''}`)),
+        h('span', null, `PL ${c.pl} · ${S.glyph} ${S.label}${c.minion ? ' · minion' : ''}${rolesNote(c)}${hasForms(c.ch) ? ` · 🎭 ${c.ch.forms[activeForm(c.ch)]?.name || 'form'}` : ''}`)),
       h('span', { class: 'bt-team', style: { background: teamColor(c.team) } }, c.team),
       h('button', { class: 'x', type: 'button', 'aria-label': `Remove ${c.name}`, title: 'Remove from the battle', onClick: () => { removeCombatant(battle, c.id); save(); renderBattle(); } }, '✕')),
     h('div', { class: 'bt-stats' },

@@ -3,11 +3,13 @@
 import { log } from './util.js';
 import { rollCheck, critNote } from './checks.js';
 
+/** Healing (Hero's Handbook p103): a DC 10 check, one damage condition healed per degree, worst first. A failed check cannot be tried again on the same subject in the fight. */
 export function heal(b, c, patient, rng) {
   const dc = 10;
   const r = rollCheck(rng, c.healing.rank, dc);
   const { roll, total } = r;
   const deg = r.success ? r.degrees : 0;
+  if (!r.success) patient.healFailed = true;
   const fixed = [];
   for (let i = 0; i < deg; i++) {
     if (patient.staggered) { patient.staggered = false; fixed.push('staggered'); }

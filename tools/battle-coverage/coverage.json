@@ -171,7 +171,7 @@
     "kind": "effect",
     "name": "Healing",
     "status": "partial",
-    "note": "Healers restore bruises, dazed and staggered at DC 10; Healing's other uses such as stabilizing a dying hero are not simulated.",
+    "note": "A DC 10 check by touch as a standard action: each degree heals one damage condition (staggered, dazed, bruises), worst first, and a failed check cannot be tried again on that subject. The AI weighs a heal against its best attack in expected degrees. Stabilizing, the extras and the other uses are not simulated.",
     "source": "DCA 100"
   },
   {
@@ -283,7 +283,7 @@
     "kind": "effect",
     "name": "Nullify",
     "status": "partial",
-    "note": "Opposed check against sustained protection only; other powers cannot be nullified.",
+    "note": "Opposed check against sustained protection only; other powers cannot be nullified. The AI values it by the gain for the allies who strike while the protection is down.",
     "source": "DCA 111"
   },
   {
@@ -311,7 +311,7 @@
     "kind": "effect",
     "name": "Regeneration",
     "status": "partial",
-    "note": "Recovers one damage condition per round using a simplified rank count; the book's recovery timings are not followed.",
+    "note": "Recovers one damage condition per round using a simplified rank count; the book's recovery timings are not followed. With Affects Others it is lent to an ally by touch and counts as a heal.",
     "source": "DCA 112"
   },
   {
@@ -423,7 +423,7 @@
     "kind": "effect",
     "name": "Weaken",
     "status": "partial",
-    "note": "Weakens one trait guessed from the power's detail and returns a rank each round; the book's recovery rate differs.",
+    "note": "Weakens one trait read from the power's detail (Toughness, Strength, Dodge, Parry, Will, Fortitude, Fighting, Dexterity, an attack power by a word of its name, or all defenses) and returns a rank each round; the book's recovery rate differs. The AI values it by what the loss does to the team's next attacks or to the enemy's threat.",
     "source": "DCA 122"
   },
   {
@@ -457,8 +457,8 @@
   {
     "kind": "extra",
     "name": "Affects Others",
-    "status": "none",
-    "note": "Defenses and powers cannot be given to allies in a fight.",
+    "status": "partial",
+    "note": "Enhanced Trait (Dodge, Parry, Toughness, Fortitude, Will, Fighting, Dexterity, Agility, Stamina), Protection and Regeneration can be lent to one ally at a time by touch and last while the giver can keep them up; other powers cannot be given to allies in a fight.",
     "source": "DCA 125"
   },
   {

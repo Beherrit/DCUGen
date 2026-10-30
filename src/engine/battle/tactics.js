@@ -115,6 +115,10 @@ export const mayDefend = (b, c) => tacticOf(b, c) !== 'noretreat';
 export const recoverEarly = (b, c) => tacticOf(b, c) === 'sustain';
 /** Sustain: any healer heals, not only support fighters. */
 export const healsFreely = (b, c) => tacticOf(b, c) === 'sustain';
+/** Sustain: a heal counts double in the utility comparison (utility.js). */
+export const healBias = (b, c) => (tacticOf(b, c) === 'sustain' ? 2 : 1);
+/** Bodyguard: guarding someone is worth half again as much in the utility comparison. */
+export const protectBias = (b, c) => (tacticOf(b, c) === 'bodyguard' ? 1.5 : 1);
 /** Bruises an ally needs before a healer steps in (and, below 2, a dazed ally counts too). */
 export const healThreshold = (b, c) => (tacticOf(b, c) === 'sustain' ? 1 : 2);
 /** Focus Fire: a pair of minions is enough for a team attack on the marked target. */

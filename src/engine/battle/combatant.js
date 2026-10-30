@@ -10,6 +10,9 @@ import { AREA_BASE, rankFt } from '../range.js';
 import { ultimateKinds, dazeSkills } from './fortune-kinds.js';
 import { deflectOf } from './deflect.js';
 import { luckControlOf } from './luck.js';
+import { parseWeakenTrait } from './weaken-traits.js';
+import { giftsOf, applyGrants } from './grants.js';
+import { detectRoles } from './roles.js';
 
 export function effectWeights(attack) {
   if (attack.effect === 'Damage') return [0, 1, 2.3, 3.8, 6.5];
@@ -75,7 +78,7 @@ function buildAttack(c, a0, R) {
   if (a.effect === 'Weaken') {
     const detail = String(p?.detail || '');
     atk.resist = (/resisted by ([A-Za-z]+)/i.exec(detail)?.[1]) || 'Fortitude';
-    atk.weakens = /tough/i.test(detail) ? 'Toughness' : /strength/i.test(detail) ? 'Strength' : /will|intellect|awareness|presence/i.test(detail) ? 'Will' : /dodge|agility/i.test(detail) ? 'Dodge' : /fort/i.test(detail) ? 'Fortitude' : 'Toughness';
+    atk.weakens = parseWeakenTrait(detail);
     atk.resistance = atk.resist;
   }
   if (a.effect === 'Nullify') atk.resistance = 'Rank or Will';
@@ -169,6 +172,8 @@ export function resetCombatant(c) {
     dropped: [],           // keys of items lost to a disarm or a smash: their attacks stay removed (items.js)
     noMove: false,         // the move action went on standing up this turn
     squaresMoved: 0,       // squares moved so far this turn (Move-by Action splits the speed)
+    grants: [],            // traits lent by an ally's Affects Others power: [{ by, key, trait, kinds, amount }] (grants.js)
+    healFailed: false,     // a Healing check on this fighter failed: no second try this fight (the book says wait a minute)
     aid: [],               // Aid received: [{ by, vs, mode, amount, until }]
     escaped: false,        // got away under Fighting Withdrawal (also marked fled, so it leaves the fight)
     recovered: false,      // the Recover action: once per conflict (DCA 177)
@@ -211,7 +216,10 @@ export function rebuildCombatant(c, R, d = null) {
   c.luckCtl = luckControlOf(c.ch);       // Luck Control: { caps, mineOnly } or null
   // Precise Attack is bought per pairing, like "Ranged, Cover" (DCA 77)
   c.precise = (c.ch.advantages || []).filter((a) => a.name === 'Precise Attack').map((a) => String(a.param || '').toLowerCase());
+  c.gifts = giftsOf(c.ch);               // traits this fighter can lend to an ally
   addOmniStunts(c, d);
+  applyGrants(c);
+  c.roles = detectRoles(c);
   return c;
 }
 

@@ -19,6 +19,7 @@
 // opposed and recovery checks, recover, heroic feat), Luck, Leadership, Inspire, Ultimate Effort, Daze, Startle, Set-up and extra effort with fatigue, range bands and movement, prone, vulnerable, defenseless.
 // Cover pieces made of real materials (partial and total cover, breaking it, shooting through it) and the optional knockback rule are simulated when a battle asks for them.
 // Deflect (the Defend action for the team, or as a Reaction, with Reflect and Redirect), Luck Control (grant, bestow, negate, force) and Throwing Mastery are simulated.
+// The AI scores a heal, a buff, a control, a Weaken and a guard in the same expected degrees as an attack and picks the best (utility.js); a fighter's roles (healer, controller, ...) only tip those weights a little.
 // Not simulated: Summon, Create, Illusion, Insubstantial, Environment. Team attacks are simulated for minion squads.
 //
 // The code lives in src/engine/battle/ (see README.md there); this file keeps the names the rest of the app imports.

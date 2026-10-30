@@ -1,6 +1,6 @@
 // Probability helpers: hit and resistance odds, immunity, and the expected value of an attack on a target.
 
-import { activeConditions, checkPenalty, defenseVs, resistOf, aidBonus } from './conditions.js';
+import { activeConditions, checkPenalty, defenseVs, resistOf, aidBonus, weakenedAttack } from './conditions.js';
 import { effectWeights } from './combatant.js';
 import { coverPenalty, coverDodgeBonus, preciseIgnores } from './cover.js';
 import { proneMod } from './prone.js';
@@ -69,11 +69,8 @@ function immunityMatch(target, atk, wantHalf) {
   return null;
 }
 
-/** Expected "harm" of an attack on a target: how much it would change the fight, in rough degrees. */
-export function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, autoHit = false, dist = 0, b = null } = {}) {
-  if (isImmune(target, atk)) return 0;
-  let rank = atk.rank + rankShift;
-  if (halfImmune(target, atk)) rank = Math.floor(rank / 2);
+/** The chance an attack roll lands, and the chance it is a critical (both 1 when there is no roll to make). */
+export function attackHit(c, atk, target, { bonusShift = 0, autoHit = false, dist = 0, b = null } = {}) {
   let hit = 1; let crit = 0;
   if (atk.roll && !autoHit) {
     const def = defenseVs(target, atk.kind === 'close' ? 'Parry' : 'Dodge', c);
@@ -82,10 +79,20 @@ export function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, a
     bonus -= concealmentPenalty(c, target, atk) + coverPenalty(b, c, target, atk);
     if (c.aiming?.target === target.id) bonus += c.aiming.bonus;
     bonus += aidBonus(c, target);
+    bonus -= weakenedAttack(c, atk).bonus;
     ({ hit, crit } = hitOdds(bonus, def));
     if (target.defending) hit *= target.adv['Improved Defense'] ? 0.5 : 0.55;
     if (activeConditions(target).has('Defenseless')) crit = hit;
   }
+  return { hit, crit };
+}
+
+/** Expected "harm" of an attack on a target: how much it would change the fight, in rough degrees. */
+export function expectedValue(c, atk, target, { bonusShift = 0, rankShift = 0, autoHit = false, dist = 0, b = null } = {}) {
+  if (isImmune(target, atk)) return 0;
+  let rank = atk.rank + rankShift - weakenedAttack(c, atk).rank;
+  if (halfImmune(target, atk)) rank = Math.floor(rank / 2);
+  const { hit, crit } = attackHit(c, atk, target, { bonusShift, autoHit, dist, b });
   if (atk.effect === 'Damage' && !atk.penetrating && rank <= Math.floor(target.impervious / 2)) return 0.05 * hit;
   const resist = resistOf(target, atk.resistance);
   if (resist === null) return 0;
