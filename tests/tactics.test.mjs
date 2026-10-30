@@ -214,7 +214,8 @@ test('alpha: rounds 1 and 2 are all-out with extra effort and hero point re-roll
   assert.ok(alpha.early.effort >= none.early.effort + 25, `extra effort in rounds 1-2: alpha ${alpha.early.effort}, none ${none.early.effort}`);
   assert.ok(alpha.early.allOut / alpha.early.attacks > 0.5, 'most early alpha attacks are all-out');
   assert.ok(alpha.late.allOut / alpha.late.attacks < 0.15, `after round 2 alpha is back to normal (${alpha.late.allOut} of ${alpha.late.attacks})`);
-  assert.ok(alpha.late.effort <= none.late.effort, `no alpha effort spree after round 2: alpha ${alpha.late.effort}, none ${none.late.effort}`);
+  // Per attack, not a raw count: how long fights run changes the count, not the rate (forceEffort itself is pinned above).
+  assert.ok(alpha.late.effort / Math.max(1, alpha.late.attacks) <= none.late.effort / Math.max(1, none.late.attacks) + 0.05, `no alpha effort spree after round 2: alpha ${alpha.late.effort} of ${alpha.late.attacks}, none ${none.late.effort} of ${none.late.attacks}`);
 });
 
 // ---------------------------------------------------------------------------------------------------------

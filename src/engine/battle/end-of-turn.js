@@ -9,6 +9,17 @@ import { STAND_SOURCES } from './prone.js';
 import { recoveryFx } from './fortune.js';
 import { expireFeats } from './feat.js';
 
+/**
+ * A snare-type affliction ("overcome by Damage") is broken with Damage, including Strength, or slipped with Sleight
+ * of Hand, whichever is better, not with the defense that resisted it. Returns null for other afflictions.
+ */
+function overcomeBonus(b, c, lead) {
+  const atk = b.combatants.find((x) => x.id === lead.from)?.attacks.find((a) => a.id === lead.source);
+  if (atk?.overcome !== 'Damage') return null;
+  const damage = Math.max(0, ...c.attacks.filter((a) => a.effect === 'Damage' && !a.area).map((a) => a.rank));
+  return Math.max(damage, c.skills?.['Sleight of Hand'] ?? 0);
+}
+
 export function endOfTurn(b, c, rng) {
   c.interposed = false;
   c.noMove = false; c.squaresMoved = 0; // this turn's movement is over
@@ -26,16 +37,18 @@ export function endOfTurn(b, c, rng) {
   for (const src of sources) {
     const group = c.conditions.filter((x) => x.source === src);
     const lead = group[0];
-    const resist = resistOf(c, lead.resist || 'Fortitude');
+    const breakout = overcomeBonus(b, c, lead);
+    const resist = breakout ?? resistOf(c, lead.resist || 'Fortitude');
+    const how = breakout == null ? lead.resist : 'Strength, Damage or Sleight of Hand';
     if (resist === null) { c.conditions = c.conditions.filter((x) => x.source !== src); continue; }
     const r = rollCheck(rng, resist, lead.dc, recoveryFx(b, c, lead));
     const { roll, total } = r;
     const ok = r.success;
-    const dice = [{ label: `Recover (${lead.resist})`, roll, mod: resist, total, dc: lead.dc }];
+    const dice = [{ label: `Recover (${how})`, roll, mod: resist, total, dc: lead.dc }];
     if (ok) {
       c.conditions = c.conditions.filter((x) => x.source !== src);
       if (c.out && ['affliction', 'asleep', 'paralyzed'].includes(c.outReason)) { c.out = false; c.outReason = null; }
-      log(b, { kind: 'recover', actor: c.id, text: `${c.name} shakes off ${lead.label || 'the effect'}: ${lead.resist} d20 ${roll} ${sign(resist)} = ${total} vs DC ${lead.dc}${critNote(r)} — recovered.`, dice });
+      log(b, { kind: 'recover', actor: c.id, text: `${c.name} shakes off ${lead.label || 'the effect'}: ${how} d20 ${roll} ${sign(resist)} = ${total} vs DC ${lead.dc}${critNote(r)} — recovered.`, dice });
     } else if (lead.progressive && lead.degree < (lead.maxDegree || 3)) {
       const deg = lead.degree + 1;
       const names = lead.tiers[deg - 1];

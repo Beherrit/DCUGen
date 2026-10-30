@@ -36,7 +36,11 @@ export function parseAffliction(p, R) {
   const limited = (p.flaws || []).filter((f) => f.name === 'Limited Degree').reduce((s, f) => s + (f.steps ?? 1), 0);
   const maxDegree = Math.max(1, Math.min(tiers.length, 3 - limited));
   const cap = (v) => v.charAt(0).toUpperCase() + v.slice(1);
-  return { resist: cap(resist.toLowerCase()), tiers: tiers.slice(0, maxDegree), maxDegree, cumulative: hasExtra(p, 'Cumulative'), progressive: hasExtra(p, 'Progressive'), extraCondition: hasExtra(p, 'Extra Condition') };
+  // "Overcome by Damage" (Snare, and Afflictions written that way): the target breaks out with Damage, including
+  // Strength, or Sleight of Hand, instead of the defense that resisted it (the Snare effect, Hero's Handbook).
+  const overcomeText = (/overcome by ([A-Za-z ]+?)\s*(?:[;,.]|$)/i.exec(detail)?.[1]) || (p.effect === 'Snare' ? 'Damage' : null);
+  const overcome = overcomeText ? cap(overcomeText.trim().toLowerCase()) : null;
+  return { overcome, resist: cap(resist.toLowerCase()), tiers: tiers.slice(0, maxDegree), maxDegree, cumulative: hasExtra(p, 'Cumulative'), progressive: hasExtra(p, 'Progressive'), extraCondition: hasExtra(p, 'Extra Condition') };
 }
 /** A fighter holding someone is hindered and vulnerable (p176); Improved Grab and Grabbing Finesse spare it the vulnerable part (p75, p77). */
 function holdingConditions(c, add) {
