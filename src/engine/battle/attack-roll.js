@@ -1,12 +1,13 @@
 // The attack roll: how the attack is worded, the to-hit modifier, the roll against defense, and the hero point re-roll.
 
 import { sign, d20 } from './util.js';
-import { activeConditions, checkPenalty, defenseVs, feintedBy, aidBonus } from './conditions.js';
+import { activeConditions, checkPenalty, defenseVs, feintedBy, useFeint, aidBonus } from './conditions.js';
 import { rangePenalty, concealmentPenalty, hitOdds } from './odds.js';
 import { feet } from './geometry.js';
 import { proneMod } from './prone.js';
 import { spendOnMiss } from './tactics.js';
 import { coverPenalty, coverLevel, shieldFor } from './cover.js';
+import { canReroll, payReroll, ultimateAim } from './fortune.js';
 
 const VERBS = {
   brawler: ['swings at', 'hammers', 'slams', 'pounds on'], duelist: ['cuts at', 'strikes at', 'lunges at', 'snaps a strike at'],
@@ -71,26 +72,29 @@ export function rollToHit(b, c, atk, t, rng, m, aimed, notes) {
   // Against a minion, a non-minion can take the attack as a routine check (DCA 175): no roll when 10 does it.
   const finishing = atk.kind === 'close' && activeConditions(t).has('Defenseless');
   const routine = finishing ? finishingRoutine(c, t, mod, dcUsed) : t.minion && !c.minion && !t.defending && 10 + mod >= dcUsed;
-  const roll = routine ? 10 : d20(rng);
+  // Ultimate Effort (p79): a roll of 20 that is not a natural 20, so it is no automatic hit and no critical.
+  const ultimate = !routine && ultimateAim(b, c, t, mod, dcUsed);
+  const roll = ultimate ? 20 : routine ? 10 : d20(rng);
   const total = roll + mod;
-  const hit = routine || roll === 20 || (roll !== 1 && total >= dcUsed);
+  const natural = roll === 20 && !ultimate;
+  const hit = routine || natural || (roll !== 1 && total >= dcUsed);
   // A natural 20 always hits, but is a critical only if the total also reaches the defense (DCA 172).
-  const crit = critOk(c, t, routine) && hit && (roll === 20 ? total >= dcUsed : roll >= atk.crit);
+  const crit = !ultimate && critOk(c, t, routine) && hit && (roll === 20 ? total >= dcUsed : roll >= atk.crit);
   const dice = routine ? [] : [{ label: 'Attack', roll, mod, total, dc: dcUsed }];
   let text = routine
     ? `${c.name} ${attackVerb(c, atk, t, rng)}: ${finishing ? 'finishing attack as a routine check' : 'routine attack against a minion'}, ${10 + mod} vs ${which} DC ${dcUsed}`
     : `${c.name} ${attackVerb(c, atk, t, rng)}: d20 ${roll} ${sign(mod)} = ${total} vs ${which} ${t.defending ? '' : 'DC '}${dcUsed}${finishing ? ' (finishing attack)' : ''}`;
-  if (feintedBy(t, c)) { text += ' (feinted: vulnerable to this attack)'; t.feinted = null; }
+  if (feintedBy(t, c)) { text += ' (feinted: vulnerable to this attack)'; useFeint(t, c); }
   const out = { roll, total, mod, hit, crit, dice, text, dcUsed, which };
-  if (!hit && b.options.heroPoints && c.heroPoints > 0 && roll !== 1 && (c.style !== 'minion') && (spendOnMiss(b, c) || t.staggered || c.staggered || rng.chance(0.5))) rerollMiss(c, atk, t, rng, out, routine);
+  if (!hit && !ultimate && canReroll(b, c) && roll !== 1 && (c.style !== 'minion') && (spendOnMiss(b, c) || t.staggered || c.staggered || rng.chance(0.5))) rerollMiss(b, c, atk, t, rng, out, routine);
   if (activeConditions(t).has('Defenseless') && out.hit && critOk(c, t, routine)) out.crit = true;
   return out;
 }
 
-/** Hero point: re-roll a miss and take the better; 1-10 on the re-roll counts +10 (DCA 21). */
-function rerollMiss(c, atk, t, rng, out, routine) {
+/** Luck, or a hero point: re-roll a miss and take the better; 1-10 on the re-roll counts +10 (DCA 21, 77). */
+function rerollMiss(b, c, atk, t, rng, out, routine) {
   const { roll, mod, dcUsed } = out;
-  c.heroPoints--;
+  const how = payReroll(b, c);
   const r2 = d20(rng);
   const r2b = r2 <= 10 ? r2 + 10 : r2;
   const better = Math.max(roll, r2b);
@@ -98,5 +102,5 @@ function rerollMiss(c, atk, t, rng, out, routine) {
   out.hit = r2 === 20 || out.total >= dcUsed;
   out.crit = critOk(c, t, routine) && out.hit && (r2 === 20 ? out.total >= dcUsed : better >= atk.crit);
   out.dice.push({ label: 'Hero point re-roll', roll: r2b, mod, total: out.total, dc: dcUsed });
-  out.text += `. Miss! ${c.name} spends a hero point to re-roll: ${r2}${r2 <= 10 ? ' (+10, below 11)' : ''} ${sign(mod)} = ${out.total}`;
+  out.text += `. Miss! ${c.name} ${how === 'Luck' ? 'uses Luck' : 'spends a hero point'} to re-roll: ${r2}${r2 <= 10 ? ' (+10, below 11)' : ''} ${sign(mod)} = ${out.total}`;
 }

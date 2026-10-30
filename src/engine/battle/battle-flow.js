@@ -9,6 +9,7 @@ import { resetCombatant, rebuildCombatant } from './combatant.js';
 import { takeTurn } from './turn.js';
 import { regenerate } from './support.js';
 import { endOfTurn } from './end-of-turn.js';
+import { expireInspire } from './fortune-turn.js';
 import { announceTactics, withdrawOver } from './tactics.js';
 import { resetScenery } from './cover.js';
 
@@ -136,6 +137,7 @@ export function step(b, R) {
   if (!c || c.out || c.fled) return b.log.length - before;
   // Joined an earlier team attack this round: that was this fighter's turn (they delayed into it).
   if (c.teamedRound === b.round) return b.log.length - before;
+  expireInspire(b, c);
   const rng = rngFor(b);
   if (c.conditions.some((x) => x.source === 'surprise')) log(b, { kind: 'skip', actor: c.id, text: `${c.name} is surprised and loses the round.` });
   else {

@@ -19,14 +19,15 @@ export function heal(b, c, patient, rng) {
   log(b, { kind: fixed.length ? 'heal' : 'miss', actor: c.id, target: patient.id, text: `${c.name} uses ${c.healing.name} on ${patient === c ? `${c.name === 'it' ? 'itself' : 'themself'}` : patient.name}: d20 ${roll} + ${c.healing.rank} = ${total} vs DC 10${critNote(r, { degrees: true })} — ${fixed.length ? `removes ${fixed.join(', ')}` : 'no effect'}.`, dice: [{ label: 'Healing', roll, mod: c.healing.rank, total, dc }], important: fixed.length > 1 });
 }
 
+/** Spend a hero point to 'recover' (dazed and stunned, else fatigue) or only from 'fatigue'. */
 export function spendHeroPoint(b, c, use) {
   if (c.heroPoints <= 0) return false;
   c.heroPoints--;
-  if (use === 'recover') {
+  if (use === 'recover' || use === 'fatigue') {
     // A hero point removes dazed, fatigued or stunned, or turns exhausted into fatigued (DCA 21)
     const fixed = [];
-    if (c.dazed && !c.staggered) { c.dazed = false; fixed.push('dazed'); }
-    const stun = c.conditions.find((x) => x.name === 'Stunned');
+    if (use === 'recover' && c.dazed && !c.staggered) { c.dazed = false; fixed.push('dazed'); }
+    const stun = use === 'recover' && c.conditions.find((x) => x.name === 'Stunned');
     if (stun) { c.conditions = c.conditions.filter((x) => x.source !== stun.source); fixed.push('stunned'); }
     if (c.fatigue > 0 && !fixed.length) { c.fatigue--; fixed.push(c.fatigue ? 'exhausted (now fatigued)' : 'fatigue'); }
     log(b, { kind: 'hero', actor: c.id, text: `${c.name} spends a hero point to recover${fixed.length ? ` from being ${fixed.join(' and ')}` : ''} (${c.heroPoints} left).`, important: true });

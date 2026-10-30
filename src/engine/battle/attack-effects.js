@@ -5,6 +5,7 @@ import { rollCheck, critNote, opposedCheck, opposedNote } from './checks.js';
 import { resistOf } from './conditions.js';
 import { dcOf, isImmune, halfImmune } from './odds.js';
 import { releaseHolds } from './maneuvers.js';
+import { resistFx } from './fortune.js';
 
 /** Resolve the effect of a hit (or an automatic effect). Returns { landed, ko, degrees, rank } (the rank for Damage). */
 export function applyEffect(b, R, c, atk, t, rng, { crit = false, rankShift = 0, multi = 0 } = {}) {
@@ -22,7 +23,7 @@ export function applyEffect(b, R, c, atk, t, rng, { crit = false, rankShift = 0,
   const resist = resistOf(t, resistName);
   if (resist === null) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name} has no ${resistName} to affect: no effect.` }); return { landed: false }; }
   const dc = dcOf(atk, rank) + (crit ? 5 : 0) + multi;
-  const r = rollCheck(rng, resist, dc);
+  const r = rollCheck(rng, resist, dc, resistFx(b, t, atk));
   const { roll, total, fails } = r;
   const dice = [{ label: `${resistName} check`, roll, mod: resist, total, dc }];
   const base = `${t.name} resists with ${resistName}: d20 ${roll} ${sign(resist)} = ${total} vs DC ${dc}${crit ? ' (+5, critical)' : ''}${critNote(r)}`;

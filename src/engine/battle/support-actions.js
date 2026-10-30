@@ -5,6 +5,8 @@ import { sign, d20, log, enemiesOf } from './util.js';
 import { opposedCheck, opposedNote, checkResult, critNote } from './checks.js';
 import { checkPenalty, resistOf, isImpaired } from './conditions.js';
 import { inEarshot } from './geometry.js';
+import { tacticOf } from './tactics-list.js';
+import { plainFx, hurt } from './fortune.js';
 
 /** The demoralizer's skill: Intimidation, or Deception when the fighter has Taunt and it is better. */
 export function demoralSkill(c) {
@@ -47,7 +49,8 @@ export function demoralize(b, c, t, rng, { skill = demoralSkill(c) } = {}) {
   const group = t.minion ? [t, ...minionsInSight(b, c).filter((x) => x !== t)] : [t];
   const theirs = Math.max(...group.map((x) => resistanceTo(x, skill)));
   const mine = skill.value - checkPenalty(c);
-  const duel = opposedCheck(rng, { bonus: mine }, { bonus: theirs });
+  const boss = tacticOf(b, c) === 'intimidate';
+  const duel = opposedCheck(rng, { bonus: mine, fx: plainFx(b, c, 'demoralize check', () => boss) }, { bonus: theirs, fx: plainFx(b, t, 'demoralize resistance', () => hurt(t)) });
   const [r1, r2] = duel.rolls;
   const degrees = duel.winner === 'a' ? duel.degrees : 0;
   const dice = [{ label: 'Demoralize', roll: r1, mod: mine, total: duel.totals.a, dc: duel.totals.b }];

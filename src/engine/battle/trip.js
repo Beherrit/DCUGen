@@ -8,6 +8,7 @@ import { hitOdds } from './odds.js';
 import { closeBonus, attackCheck, contest } from './maneuver-checks.js';
 import { opposedOdds } from './checks.js';
 import { makeProne, proneMod } from './prone.js';
+import { plainFx, hurt } from './fortune.js';
 
 export const TRIP_PENALTY = 2;
 const CLOSE = { kind: 'close' };
@@ -35,7 +36,7 @@ export function trip(b, c, t, rng) {
   const lead = `${c.name} tries to trip ${t.name}${improved ? ' (Improved Trip)' : ` at -${TRIP_PENALTY}`}: ${check.text}`;
   if (!check.hit) { log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${lead} — miss.`, dice: check.dice }); return; }
   c.stats.hits++;
-  const duel = contest(rng, skillOf(c), defendWith(c, t));
+  const duel = contest(rng, skillOf(c), defendWith(c, t), null, plainFx(b, t, 'trip resistance', () => hurt(t)));
   const dice = [...check.dice, ...duel.dice];
   if (duel.won) {
     makeProne(t, c, 'trip', 'tripped');

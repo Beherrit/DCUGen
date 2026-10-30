@@ -7,6 +7,7 @@ import { STYLES, detectStyle } from './styles.js';
 import { SEVERITY, parseAffliction } from './conditions.js';
 import { itemFor, deviceOf } from './items.js';
 import { AREA_BASE, rankFt } from '../range.js';
+import { ultimateKinds, dazeSkills } from './fortune-kinds.js';
 
 export function effectWeights(attack) {
   if (attack.effect === 'Damage') return [0, 1, 2.3, 3.8, 6.5];
@@ -145,7 +146,8 @@ export function makeCombatant(R, ch, opts = {}) {
     pl: ch.pl || 10,
     minion: !!ch.minion || style === 'minion',
     style, tactics: opts.tactics || 'auto',
-    heroPoints: opts.heroPoints ?? (ch.minion || style === 'minion' || style === 'beast' ? 0 : 1 + advantageRank(ch, 'Luck')),
+    heroPoints: opts.heroPoints ?? (ch.minion || style === 'minion' || style === 'beast' ? 0 : 1),
+    luck: opts.luck ?? (ch.minion || style === 'minion' || style === 'beast' ? 0 : advantageRank(ch, 'Luck')), // re-rolls left this fight (Luck, p78)
     x: 0, y: 0,
   };
   resetCombatant(c);
@@ -160,7 +162,7 @@ export function resetCombatant(c) {
     conditions: [],        // [{ name, degree, from, source, dc, resist, cumulative, progressive, tiers, extraCondition, until }]
     weakened: {},          // trait -> ranks lost
     fatigue: 0, defMod: 0, feinted: false, grabbedBy: null, holding: null, nullified: 0, regen: 0, interposed: false,
-    lastAttackId: null, usedEffort: 0, teamedRound: null, surpriseActor: false,
+    lastAttackId: null, usedEffort: 0, luckRound: null, inspired: null, inspireUsed: false, feats: [], teamedRound: null, surpriseActor: false,
     dropped: [],           // keys of items lost to a disarm or a smash: their attacks stay removed (items.js)
     noMove: false,         // the move action went on standing up this turn
     squaresMoved: 0,       // squares moved so far this turn (Move-by Action splits the speed)
@@ -190,9 +192,11 @@ export function rebuildCombatant(c, R, d = null) {
   const mv = bestMoveRank(c.ch);
   c.speed = 1 + Math.min(4, Math.floor(mv.rank / 3));
   c.flying = mv.flying;
-  c.adv = Object.fromEntries(['Power Attack', 'Accurate Attack', 'All-out Attack', 'Defensive Attack', 'Takedown', 'Interpose', 'Evasion', 'Fearless', 'Seize Initiative', 'Move-by Action', 'Fast Grab', 'Improved Grab', 'Improved Hold', 'Chokehold', 'Agile Feint', 'Uncanny Dodge', 'Improved Initiative', 'Diehard', 'Instant Up', 'Luck', 'Taunt', 'Teamwork', 'Improved Trip', 'Improved Disarm', 'Improved Smash', 'Prone Fighting', 'Improved Aim', 'Improved Defense', 'Grabbing Finesse'].map((n) => [n, advantageRank(c.ch, n)]));
+  c.adv = Object.fromEntries(['Power Attack', 'Accurate Attack', 'All-out Attack', 'Defensive Attack', 'Takedown', 'Interpose', 'Evasion', 'Fearless', 'Seize Initiative', 'Move-by Action', 'Fast Grab', 'Improved Grab', 'Improved Hold', 'Chokehold', 'Agile Feint', 'Uncanny Dodge', 'Improved Initiative', 'Diehard', 'Instant Up', 'Luck', 'Taunt', 'Teamwork', 'Improved Trip', 'Improved Disarm', 'Improved Smash', 'Prone Fighting', 'Improved Aim', 'Improved Defense', 'Grabbing Finesse', 'Leadership', 'Inspire', 'Set-up', 'Startle'].map((n) => [n, advantageRank(c.ch, n)]));
   const sk = (name) => d.skills.find((s) => s.name === name)?.bonus ?? (d.abilities[R.skillAbility(name)] ?? 0);
   c.skills = { Deception: sk('Deception'), Insight: sk('Insight'), Acrobatics: sk('Acrobatics'), Athletics: sk('Athletics'), Intimidation: sk('Intimidation'), 'Sleight of Hand': sk('Sleight of Hand') };
+  c.ultimate = ultimateKinds(c.ch);      // the checks an Ultimate Effort covers
+  c.dazeSkills = dazeSkills(c.ch);       // the skills a Daze can use
   c.moveRank = mv.rank;
   c.moveFt = rankFt(mv.rank);
   c.elongFt = elongationFt(c.ch);

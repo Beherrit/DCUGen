@@ -324,7 +324,9 @@ test('bodyguard: in whole fights the guards stay beside the VIP and interpose fo
       runToEnd(f, R);
       for (const e of f.log.filter((x) => /interposes/.test(x.text) && x.actor === 'A0')) { if (e.target === 'A1') interVip++; else interOther++; }
     }
-    for (const i of range(8)) {
+    // Averaged over 32 seeds rather than 8: a single set of 8 fights can go either way (seeds 0 to 7 once came out 4.00
+    // against 3.32), while across 32 the guards stay clearly closer to the VIP (about 3.2 against 4.8 squares).
+    for (const i of range(32)) {
       const A = [hero('paragon', `ba-${i}`), hero('blaster', `bb-${i}`), hero('mystic', `bc-${i}`), hero('weaponmaster', `bd-${i}`)];
       const f = arena(tactic, `bg-${i}`, A, [hero('powerhouse', `be-${i}`), hero('speedster', `bf-${i}`)], { vip: { A: 'A2' } });
       startBattle(f, R);

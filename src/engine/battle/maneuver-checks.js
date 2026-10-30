@@ -2,7 +2,7 @@
 
 import { sign, d20 } from './util.js';
 import { opposedCheck, opposedNote } from './checks.js';
-import { feintedBy, defenseVs } from './conditions.js';
+import { feintedBy, useFeint, defenseVs } from './conditions.js';
 
 /** The bonus for a close maneuver such as a grab or a trip: the unarmed attack, else Fighting. */
 export function closeBonus(c) {
@@ -13,16 +13,16 @@ export function closeBonus(c) {
 export function attackCheck(c, t, rng, which, mod) {
   const feinted = feintedBy(t, c);
   const dc = 10 + defenseVs(t, which, c);
-  if (feinted) t.feinted = null;
+  if (feinted) useFeint(t, c);
   const roll = d20(rng);
   const total = roll + mod;
   const hit = roll === 20 || (roll !== 1 && total >= dc);
   return { hit, roll, total, dc, dice: [{ label: 'Attack', roll, mod, total, dc }], text: `d20 ${roll} ${sign(mod)} = ${total} vs ${which} DC ${dc}${feinted ? ' (feinted: vulnerable)' : ''}` };
 }
 
-/** An opposed check of the first side's bonus against the second's: `won` is true when the first side wins. */
-export function contest(rng, mine, theirs) {
-  const res = opposedCheck(rng, { bonus: mine }, { bonus: theirs });
+/** An opposed check of the first side's bonus against the second's: `won` is true when the first side wins. `fxMine` and `fxTheirs` are the sides' fortune hooks. */
+export function contest(rng, mine, theirs, fxMine = null, fxTheirs = null) {
+  const res = opposedCheck(rng, { bonus: mine, fx: fxMine }, { bonus: theirs, fx: fxTheirs });
   const [r1, r2] = res.rolls;
   return {
     won: res.winner === 'a',

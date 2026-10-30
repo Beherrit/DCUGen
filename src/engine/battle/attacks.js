@@ -5,6 +5,8 @@ import { checkPenalty, defenseOf } from './conditions.js';
 import { applyEffect } from './attack-effects.js';
 import { grab, grabAppetite } from './maneuvers.js';
 import { rollCheck, critNote } from './checks.js';
+import { dodgeFx } from './fortune.js';
+import { featInterposer } from './feat.js';
 import { attackVerb, rollToHit } from './attack-roll.js';
 import { noteAttack, interposeFor } from './tactics.js';
 import { shieldFor, coverLevel, coverDodgeBonus } from './cover.js';
@@ -77,6 +79,16 @@ function throughCover(b, c, atk, t, rng, m, aimed) {
   return s.go ? s.rankShift : null;
 }
 
+/**
+ * The ally who takes this hit, or null. One with Interpose goes by its tactics, else when the victim is hurt or weaker; with
+ * no such ally, one without Interpose may borrow it with a hero point (Heroic Feat) to save a victim who would go down.
+ */
+function pickGuard(b, c, atk, t, rankShift, crit) {
+  const regular = alliesOf(b, t).find((a) => a.adv.Interpose && !a.interposed && squares(a, t) <= Math.max(1, squaresInMove(b, a)) && !a.staggered && a.style !== 'minion');
+  if (regular) return (interposeFor(b, regular, t) ?? (t.staggered || t.bruises >= 2 || t.pl < regular.pl)) ? regular : null;
+  return featInterposer(b, c, atk, t, atk.rank + rankShift, crit);
+}
+
 /** A hit: count it, log it, and apply the effect (to an Interposing ally if there is one). Returns the effect result, or null if it was interposed. */
 function landHit(b, R, c, atk, t, rng, r, { rankShift, notes, slam }) {
   const { crit, total, dcUsed, dice } = r;
@@ -85,8 +97,8 @@ function landHit(b, R, c, atk, t, rng, r, { rankShift, notes, slam }) {
   if (crit) c.stats.crits++;
   text += ` — ${crit ? 'CRITICAL HIT' : 'hit'}${notes.length ? ` (${notes.join('; ')})` : ''}.`;
   // Interpose: an ally within range of its normal movement (p76) takes the hit
-  const guard = alliesOf(b, t).find((a) => a.adv.Interpose && !a.interposed && squares(a, t) <= Math.max(1, squaresInMove(b, a)) && !a.staggered && a.style !== 'minion');
-  if (guard && (interposeFor(b, guard, t) ?? (t.staggered || t.bruises >= 2 || t.pl < guard.pl))) {
+  const guard = pickGuard(b, c, atk, t, rankShift, crit);
+  if (guard) {
     guard.interposed = true;
     log(b, { kind: 'hit', actor: c.id, target: t.id, text, dice });
     log(b, { kind: 'condition', actor: guard.id, target: t.id, text: `${guard.name} interposes and takes the hit meant for ${t.name}!`, important: true });
@@ -147,7 +159,7 @@ function areaAttack(b, R, c, atk, t, rng, rankShift, notes) {
     const shelter = coverDodgeBonus(b, c, v);
     const dodge = defenseOf(v, 'Dodge') - checkPenalty(v) + (v.adv.Evasion >= 2 ? 5 : v.adv.Evasion ? 2 : 0) + shelter;
     const dc = 10 + atk.rank + rankShift;
-    const dodgeCheck = rollCheck(rng, dodge, dc);
+    const dodgeCheck = rollCheck(rng, dodge, dc, dodgeFx(b, v, atk, atk.rank + rankShift));
     const { roll, total } = dodgeCheck;
     const half = dodgeCheck.success;
     log(b, { kind: half ? 'resist' : 'hit', actor: c.id, target: v.id, text: `${v.name} dives for cover: Dodge d20 ${roll} ${sign(dodge)} = ${total} vs DC ${dc}${shelter ? ` (includes +${shelter} for cover)` : ''}${critNote(dodgeCheck)} — ${half ? 'half effect' : 'full effect'}.`, dice: [{ label: 'Dodge', roll, mod: dodge, total, dc }] });

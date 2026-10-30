@@ -6,6 +6,8 @@ import { resistOf } from './conditions.js';
 import { releaseHolds } from './maneuvers.js';
 import { expireSupport } from './support-actions.js';
 import { STAND_SOURCES } from './prone.js';
+import { recoveryFx } from './fortune.js';
+import { expireFeats } from './feat.js';
 
 export function endOfTurn(b, c, rng) {
   c.interposed = false;
@@ -13,6 +15,7 @@ export function endOfTurn(b, c, rng) {
   // A feint lasts until the end of the feinter's next round (DCA 64).
   for (const t of b.combatants) if (t.feinted?.by === c.id && t.feinted.round < b.round) t.feinted = null;
   expireSupport(b, c);
+  expireFeats(b, c);
   if (c.out) return;
   if (c.dazed && !c.staggered) { c.dazed = false; }
   if (c.dazed && c.staggered) { c.dazed = false; } // staggered keeps the hindered part; dazed wears off
@@ -25,7 +28,7 @@ export function endOfTurn(b, c, rng) {
     const lead = group[0];
     const resist = resistOf(c, lead.resist || 'Fortitude');
     if (resist === null) { c.conditions = c.conditions.filter((x) => x.source !== src); continue; }
-    const r = rollCheck(rng, resist, lead.dc);
+    const r = rollCheck(rng, resist, lead.dc, recoveryFx(b, c, lead));
     const { roll, total } = r;
     const ok = r.success;
     const dice = [{ label: `Recover (${lead.resist})`, roll, mod: resist, total, dc: lead.dc }];

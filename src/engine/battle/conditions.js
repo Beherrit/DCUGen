@@ -72,13 +72,29 @@ export function conditionLabels(c) {
   return [...named];
 }
 
+/** The bonus Inspire gives c on all its checks (p77); inspirations do not stack, the highest counts. */
+export const inspireBonus = (c) => c.inspired?.bonus || 0;
+
+/** The penalty on c's checks: Impaired -2 or Disabled -5, less any Inspire bonus (so it is negative when c is inspired and unhurt). Every check subtracts it. */
 export function checkPenalty(c) {
   const s = activeConditions(c);
-  return (s.has('Disabled') ? 5 : s.has('Impaired') ? 2 : 0);
+  return (s.has('Disabled') ? 5 : s.has('Impaired') ? 2 : 0) - inspireBonus(c);
 }
 
-/** Did this attacker's feint leave the target vulnerable to them (DCA 64)? */
-export function feintedBy(t, c) { return !!(t.feinted && c && t.feinted.by === c.id); }
+/** Did this attacker's feint leave the target vulnerable to them (DCA 64)? With Set-up (p78) the feinter hands it to named allies instead of keeping it. */
+export function feintedBy(t, c) {
+  const f = t.feinted;
+  if (!f || !c) return false;
+  return f.for ? f.for.includes(c.id) : f.by === c.id;
+}
+
+/** The attacker's feint on the target is used up by this attack: a Set-up feint stays for the other allies it was handed to. */
+export function useFeint(t, c) {
+  const f = t.feinted;
+  if (!f) return;
+  if (f.for && f.for.length > 1) f.for = f.for.filter((id) => id !== c.id);
+  else t.feinted = null;
+}
 
 /** Impaired or worse from any source (a demoralize, an Affliction, exhaustion). */
 export function isImpaired(c) { const s = activeConditions(c); return s.has('Impaired') || s.has('Disabled'); }

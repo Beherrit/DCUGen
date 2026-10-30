@@ -43,6 +43,7 @@ test('a fighter that holds someone is hindered and vulnerable; letting go remove
 test('a successful grab leaves the grabber vulnerable to the next attack', () => {
   const { b, g, f } = arena();
   const before = defenseVs(g, 'Parry', f);
+  f.heroPoints = 0; // a hero point would re-roll the target's 1 (fortune.js); this test is about the hold, not the re-roll
   grab(b, R, g, f, always(1), { free: true }); // the target's resistance roll is a 1
   assert.equal(g.holding, f.id);
   assert.equal(defenseVs(g, 'Parry', f), Math.ceil(before / 2));

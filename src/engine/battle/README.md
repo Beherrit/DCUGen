@@ -4,7 +4,7 @@
 is not simulated). The code is split by job:
 
 - `util.js`: the per-turn random stream, the log, dice, small helpers, who is alive.
-- `checks.js`: the one way to resolve a check: degrees, the natural 20 critical success, opposed checks with the tie rule, `rollCheck` for resistance and other checks against a DC. Every check except attack rolls and initiative goes through it.
+- `checks.js`: the one way to resolve a check: degrees, the natural 20 critical success, opposed checks with the tie rule, `rollCheck` for resistance and other checks against a DC. Every check except attack rolls and initiative goes through it. A check can carry a fortune hook (`fx`) that re-rolls it or fixes it at 20.
 - `constants.js`: the round limit.
 - `grid.js`: the 12 by 12 grid (`b.grid`), its scales (street 5 ft, block 30 ft, district 250 ft), the wall ring of an enclosed room, square names, and turning old saved zones into squares. `geometry.js`: distances in squares and feet, reach, range bands, a clear line, moves per turn, area templates. `path.js`: walking (around walls and cover), reachable squares, the best square to back off to. `placement.js`: teams on their edges and where an ambush puts fighters. `trace.js`: the optional `b.trace` record the grid tests read.
 - `styles.js`: fighting styles, targeting tactics, `detectStyle`.
@@ -18,6 +18,7 @@ is not simulated). The code is split by job:
 - `attacks.js`: `resolveAttack`, Interpose, Fast Grab, Takedown, area attacks.
 - `attack-effects.js`: what a hit does (damage, Weaken, Affliction, Nullify).
 - `maneuvers.js`: feint, grab, escape, release. `support.js`: healing, hero points, Recover, Regeneration.
+- `fortune.js`: hero points and Luck on a fighter's own checks (Improve Roll, the hooks `checkFx`, `resistFx`, `dodgeFx`, `recoveryFx`, `plainFx`) and Ultimate Effort. `fortune-kinds.js`: which checks an Ultimate Effort covers and which skills a Daze uses. `feat.js`: Heroic Feat (Interpose to save an ally, Power or All-out Attack for a finishing blow). `fortune-turn.js`: recovering from fatigue, Leadership and Inspire. `tricks.js`: the feint skill (Agile Feint, Startle) and Set-up. `daze.js`: Daze and when the AI uses it.
 - `end-of-turn.js`: recovery checks and the weakened traits coming back.
 - `battle-flow.js`: create, start, ambush, join, step, round, run to the end.
 - `tactics.js`: team tactics, the small hooks the turn code calls (all neutral when a team has none). `tactics-list.js`: the list and `tacticOf`. `tactics-marks.js`: focus and lockdown targets, the VIP. `tactics-position.js`: the line, the guard, kiting (squares, not zones).
@@ -31,5 +32,5 @@ is not simulated). The code is split by job:
 - `summaries.js`: status lines, battle text, many-run tallies, save and load.
 
 The app is bundled by tools/build.mjs, which does not allow import cycles, so keep imports flowing one way: util,
-constants and checks at the bottom, then styles, conditions, combatant, materials, cover, odds, support-actions, prone, items, the tactics files, plan-maneuvers, plan, movement, maneuvers, support, support-plan, attack-effects,
+constants and checks at the bottom, then styles, conditions, fortune-kinds, combatant, materials, cover, odds, fortune, tricks, feat, support-actions, prone, items, the tactics files, plan-maneuvers, plan, movement, maneuvers, support, fortune-turn, daze, support-plan, attack-effects,
 attack-roll, cover-damage, knockback, attacks, turn-attack, turn, end-of-turn, battle-flow and summaries on top. The grid files sit low: grid, then geometry (which needs conditions), path, trace and placement, all before cover and movement.

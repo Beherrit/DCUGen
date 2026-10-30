@@ -19,6 +19,9 @@ export function demoralizerOf(b, team) {
 /** The most threatening enemy that is not already impaired and could be demoralized. */
 export const demoralizeTarget = (b, team) => pickMark(b, team, 'demo', (e) => canDemoralize(e) && !isImpaired(e));
 
+/** What the fighter's best attack is worth this turn: 0 when it only closes in, Infinity when the plan is something else. */
+export const ownValue = (choice) => (choice.plan === 'attack' ? choice.ev ?? 0 : choice.plan === 'move' ? 0 : Infinity);
+
 /** The best any of c's attacks could do to one of these foes if they were in reach. */
 export const potentialEv = (c, foes) => Math.max(0, ...foes.map((e) => bestEvNow(c, e, 0)));
 

@@ -15,8 +15,8 @@
 // vs Impervious, Immunity by descriptor and defense, Concealment misses, Healing and Regeneration,
 // Power / Accurate / All-out / Defensive Attack trade-offs, feints, Demoralize and Aid, grabs (restrained and bound),
 // Trip, Disarm and Smash (with the Improved advantages), finishing attacks, standing up from prone and dropping prone, Move-by Action,
-// Takedown, Interpose, Evasion, Luck, Seize Initiative, Fearless, hero points (improve a roll,
-// recover) and extra effort with fatigue, range bands and movement, prone, vulnerable, defenseless.
+// Takedown, Interpose, Evasion, Seize Initiative, Fearless, hero points (improve a roll on attacks, resistance,
+// opposed and recovery checks, recover, heroic feat), Luck, Leadership, Inspire, Ultimate Effort, Daze, Startle, Set-up and extra effort with fatigue, range bands and movement, prone, vulnerable, defenseless.
 // Cover pieces made of real materials (partial and total cover, breaking it, shooting through it) and the optional knockback rule are simulated when a battle asks for them.
 // Not simulated: Summon, Create, Illusion, Deflect, Insubstantial, Environment. Team attacks are simulated for minion squads.
 //

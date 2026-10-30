@@ -13,6 +13,7 @@ import { positionGoal, stepToSquare, wantsKite, aimsAlways, tradeoffBias, forceE
 import { coverPenalty } from './cover.js';
 import { kite, moveBy } from './move-by.js';
 import { runManeuver } from './maneuver-run.js';
+import { finishingFeat } from './feat.js';
 
 /** The attack plan chosen for this turn: move into position, maybe aim, then attack. */
 export function attackTurn(b, R, c, choice, enemies, mode, rng) {
@@ -26,6 +27,7 @@ export function attackTurn(b, R, c, choice, enemies, mode, rng) {
   if (attack.range !== 'close' && !lineClear(b, c, target)) { log(b, { kind: 'skip', actor: c.id, text: `${c.name} has no clear line to ${target.name} and holds the shot.` }); return; }
   if (choice.plan !== 'attack') { runManeuver(b, c, choice, rng); moveBy(b, c, attack, target, enemies, mode); return; }
   if (!charge && lineUpShot(b, c, attack, target, enemies, rng)) return;
+  finishingFeat(b, c, attack, target); // a hero point can raise the limit on a finishing blow
   const { trade, allOut, defensive } = pickTradeoffs(b, c, attack, target, enemies);
   const effort = pickEffort(b, c, attack, target, rng);
   const team = teamAttack(b, c, attack, target, rng);

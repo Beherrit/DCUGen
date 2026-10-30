@@ -9,6 +9,7 @@ import { attackCheck, contest } from './maneuver-checks.js';
 import { opposedOdds } from './checks.js';
 import { proneMod } from './prone.js';
 import { loseItem } from './items.js';
+import { plainFx } from './fortune.js';
 
 export const DISARM_PENALTY = 2;
 export const DISARM_RANGED_PENALTY = 5;
@@ -40,7 +41,7 @@ export function disarm(b, c, atk, t, item, rng, dist) {
   const lead = `${c.name} tries to disarm ${t.name} of the ${item.name}${improved ? ' (Improved Disarm)' : ` at -${penaltyOf(c, atk)}`}: ${check.text}`;
   if (!check.hit) { log(b, { kind: 'miss', actor: c.id, target: t.id, text: `${lead} — miss.`, dice: check.dice }); return; }
   c.stats.hits++;
-  const duel = contest(rng, atk.rank, strengthOf(t));
+  const duel = contest(rng, atk.rank, strengthOf(t), null, plainFx(b, t, 'disarm resistance'));
   const detail = `${lead} — hit. Damage ${atk.rank} against Strength, ${duel.text}`;
   const dice = [...check.dice, ...duel.dice];
   if (duel.won) {

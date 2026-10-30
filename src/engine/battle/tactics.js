@@ -3,9 +3,9 @@
 // (focus target, lockdown target, VIP) in tactics-marks.js, and positions and kiting in tactics-position.js.
 
 import { alive, log } from './util.js';
-import { activeConditions, defenseOf, isDemoralized, aidBonus } from './conditions.js';
+import { activeConditions, defenseOf, isDemoralized, aidBonus, feintedBy } from './conditions.js';
 import { hitOdds, rangePenalty } from './odds.js';
-import { TEAM_TACTICS, tacticOf } from './tactics-list.js';
+import { TEAM_TACTICS, tacticOf, alphaNow } from './tactics-list.js';
 import { focusTarget, lockTarget, isControlled, hasControl, isControlAttack, vipOf } from './tactics-marks.js';
 import { isFrontliner, positionGoal, stepToSquare, wantsKite, kiteThreat, kiteSquare, aimsAlways, isMeleeThreat } from './tactics-position.js';
 import { coverStep, coverDefends } from './tactics-cover.js';
@@ -16,7 +16,7 @@ import { feet, inReach } from './geometry.js';
 
 export { TEAM_TACTICS, tacticOf, positionGoal, stepToSquare, wantsKite, kiteThreat, kiteSquare, aimsAlways, isMeleeThreat, coverStep, coverDefends, withdrawTurn, withdrawHolds, withdrawOver, fleeChance };
 
-const alpha = (b, c) => tacticOf(b, c) === 'alpha' && b.round <= 2;
+const alpha = alphaNow;
 
 /** At the start of a battle: forget old marks and say which teams play a tactic. */
 export function announceTactics(b) {
@@ -46,7 +46,7 @@ export function targetBias(b, c, t, { enemies }) {
     case 'bodyguard': return (t.vipHit?.[c.team] ?? -1) > (c.prevTurnTick ?? 0) ? 3 : 1;
     case 'lockdown': return lockdownBias(b, c, t);
     case 'pickoff': return pickoffBias(t, enemies) * (t.minion && activeConditions(t).has('Defenseless') ? 1.5 : 1); // a finishing attack
-    case 'flank': return t.feinted?.by === c.id || activeConditions(t).has('Vulnerable') || (inReach(b, c, t) && isProne(t)) ? 2.5 : 1;
+    case 'flank': return feintedBy(t, c) || activeConditions(t).has('Vulnerable') || (inReach(b, c, t) && isProne(t)) ? 2.5 : 1;
     case 'intimidate': return isDemoralized(t) ? 3 : 1;
     case 'aid': return aidBonus(c, t) ? 2.5 : 1;
     default: return 1;

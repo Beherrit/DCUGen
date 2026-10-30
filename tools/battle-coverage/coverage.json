@@ -1038,8 +1038,8 @@
   {
     "kind": "advantage",
     "name": "Set-up",
-    "status": "none",
-    "note": "Handing a bonus to an ally is not simulated.",
+    "status": "partial",
+    "note": "A feint can be handed to one ally per rank: the target is vulnerable to their next attack instead of the feinter's. Demoralize and Daze are not handed over.",
     "source": "DCA 78"
   },
   {
@@ -1087,22 +1087,22 @@
   {
     "kind": "advantage",
     "name": "Inspire",
-    "status": "none",
-    "note": "Granting bonuses to allies is not simulated.",
+    "status": "partial",
+    "note": "Once per fight, a standard action and a hero point: allies in interaction range get +1 per rank on all checks until the start of the inspirer's next turn. Used on the first round or when the side is losing.",
     "source": "DCA 76"
   },
   {
     "kind": "advantage",
     "name": "Leadership",
-    "status": "none",
-    "note": "Removing conditions from allies with a hero point is not simulated.",
+    "status": "full",
+    "note": "A standard action and a hero point remove dazed, stunned or fatigued from an ally in interaction range; used when the ally would do more than the leader (always for a Sustain team).",
     "source": "DCA 76"
   },
   {
     "kind": "advantage",
     "name": "Luck",
     "status": "partial",
-    "note": "Adds one hero point per rank, usable on any hero point use, instead of a re-roll once per round.",
+    "note": "A separate pool of re-rolls, one a round up to its rank a fight, spent before hero points on attacks, resistance, opposed and recovery checks; not on healing, aid, stand or smash checks.",
     "source": "DCA 77"
   },
   {
@@ -1115,8 +1115,8 @@
   {
     "kind": "advantage",
     "name": "Ultimate Effort",
-    "status": "none",
-    "note": "Automatic 20s are not simulated.",
+    "status": "partial",
+    "note": "A hero point makes an attack check, a Toughness, Will, Fortitude or Dodge check a roll of 20 (not a natural 20), as the advantage's parameter names; other kinds of check are not covered.",
     "source": "DCA 79"
   },
   {
@@ -1276,8 +1276,8 @@
   {
     "kind": "advantage",
     "name": "Daze",
-    "status": "none",
-    "note": "Dazing with Intimidation or Deception is not simulated.",
+    "status": "partial",
+    "note": "A standard action: Deception or Intimidation against the target's best of that skill, Insight or Will; a win leaves the target dazed. Not handed to allies with Set-up.",
     "source": "DCA 73"
   },
   {
@@ -1346,8 +1346,8 @@
   {
     "kind": "advantage",
     "name": "Startle",
-    "status": "none",
-    "note": "Startle as a feint is not simulated.",
+    "status": "full",
+    "note": "Feints with Intimidation when it is better; the target resists with Insight, Intimidation or Will.",
     "source": "DCA 78"
   },
   {
@@ -1747,13 +1747,13 @@
     "kind": "rule",
     "name": "Hero point: Improve Roll",
     "status": "partial",
-    "note": "Only a missed attack roll is re-rolled (1-10 counts as 11-20); resistance checks and other rolls are not."
+    "note": "A missed attack, a failed Toughness, Fortitude, Will or Dodge check, a lost opposed check (feint, trip, disarm, grab, escape, demoralize, Daze) and a recovery check are re-rolled (1-10 counts as 11-20) when the failure matters; healing, aid, stand and smash checks are not."
   },
   {
     "kind": "rule",
     "name": "Hero point: Recover",
     "status": "full",
-    "note": "Removes dazed, stunned or fatigue, or turns exhausted into fatigued."
+    "note": "Removes dazed, stunned or fatigue, or turns exhausted into fatigued, at the start of a turn or when stunned."
   },
   {
     "kind": "rule",
@@ -1764,8 +1764,8 @@
   {
     "kind": "rule",
     "name": "Hero point: Heroic Feat",
-    "status": "none",
-    "note": "Borrowing an advantage with a hero point is not simulated."
+    "status": "partial",
+    "note": "Interpose is borrowed to take a hit that would knock out an ally, and Power Attack or All-out Attack for a finishing blow; other advantages are not."
   },
   {
     "kind": "rule",

@@ -14,6 +14,7 @@ import { heal, spendHeroPoint, recoverAction } from './support.js';
 import { attackTurn } from './turn-attack.js';
 import { markTurn, mayFlee, mayDefend, recoverEarly, healsFreely, healThreshold, coverDefends, fleeChance, withdrawTurn, withdrawHolds } from './tactics.js';
 import { supportTurn } from './support-plan.js';
+import { recoverFatigue, fortuneTurn } from './fortune-turn.js';
 import { shootCover } from './cover-damage.js';
 import { planStanding, standOrDrop } from './stand.js';
 
@@ -33,6 +34,7 @@ export function takeTurn(b, R, c, rng) {
   if (losesNerve(b, c, enemies, rng)) return;
   if (escapeGrab(b, c, rng)) return;
   recoverFromDaze(b, c, mode, rng);
+  recoverFatigue(b, c);
   if (withdrawTurn(b, c)) return;
   if (catchBreath(b, c, rng)) return;
   if (takeAimedShot(b, R, c, rng)) return;
@@ -41,6 +43,7 @@ export function takeTurn(b, R, c, rng) {
   const choice = planStanding(c, () => choosePlan(b, R, c, enemies, rng, mode)); // a prone fighter plans as if it were on its feet
   if (!choice) { log(b, { kind: 'skip', actor: c.id, text: `${c.name} finds nothing worth doing and holds position.` }); return; }
   if (withdrawHolds(b, c, choice)) return;
+  if (fortuneTurn(b, c, choice, enemies)) return;
   if (supportTurn(b, c, choice, enemies, mode, rng)) return;
   if (digIn(b, c, choice, enemies, mode)) return;
   standOrDrop(b, c, choice, enemies, mode, rng);

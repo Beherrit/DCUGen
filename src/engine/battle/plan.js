@@ -9,6 +9,7 @@ import { blocksDirect } from './cover.js';
 import { coverPlan, throughFactor } from './cover-plan.js';
 import { gripOf, grabAppetite } from './maneuvers.js';
 import { maneuverPlan } from './plan-maneuvers.js';
+import { feintPick, setUpAllies, closeBest } from './tricks.js';
 
 /**
  * Best attack for c against t, with the trade-off already folded in. A close attack counts when the target is in reach, or
@@ -70,16 +71,19 @@ export function bestTradeoff(c, atk, t, dist, b = null) {
   return best;
 }
 
-/** Feint: skilled fighters against a defense they can't crack. */
+/**
+ * Feint: skilled fighters against a defense they can't crack. With Set-up the follow-up that counts is the best ally's
+ * (see tricks.js), who gets the benefit instead of the feinter.
+ */
 function wantsFeint(b, c, t, top, mode) {
   const flank = feintBias(b, c);
-  if (!((flank || c.style === 'duelist' || c.adv['Agile Feint']) && top.pick.attack?.roll && top.reachable && top.need <= squaresInMove(b, c) && !t.feinted && mode === 'full')) return false;
-  const atk = top.pick.attack;
+  const gift = setUpAllies(b, c, t);
+  if (!((flank || c.style === 'duelist' || c.adv['Agile Feint'] || c.adv.Startle || gift.length) && top.pick.attack?.roll && top.reachable && top.need <= squaresInMove(b, c) && !t.feinted && mode === 'full')) return false;
+  const atk = gift.length ? closeBest(b, gift[0], t).atk : top.pick.attack;
   const def = defenseOf(t, atk.kind === 'close' ? 'Parry' : 'Dodge');
   const now = hitOdds(atk.bonus, def).hit;
   const after = hitOdds(atk.bonus, Math.ceil(def / 2)).hit;
-  const feintSkill = Math.max(c.skills.Deception, c.adv['Agile Feint'] ? c.skills.Acrobatics : -99);
-  const opposed = Math.max(t.skills.Insight, t.skills.Deception);
+  const { mine: feintSkill, theirs: opposed } = feintPick(c, t);
   if (flank) return feintSkill >= opposed - flank.slack && after >= now * flank.ratio;
   const pFeint = hitOdds(feintSkill, opposed).hit;
   return after * pFeint > now * 2.1;

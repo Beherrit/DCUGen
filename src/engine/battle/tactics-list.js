@@ -18,6 +18,9 @@ export const TEAM_TACTICS = {
   withdraw: { label: 'Fighting Withdrawal', blurb: 'The goal is escape: fighters walk to their own edge and leave, while tanks and Interposers cover the retreat. The team wins by getting half its fighters away, or by holding out for a set number of rounds.' },
 };
 
+/** Alpha Strike is on: the team plays it and the fight is in its first two rounds. */
+export const alphaNow = (b, c) => tacticOf(b, c) === 'alpha' && b.round <= 2;
+
 /** The tactic id for c's team, or 'none'. */
 export function tacticOf(b, c) {
   const id = b.options?.teamTactics?.[c.team];

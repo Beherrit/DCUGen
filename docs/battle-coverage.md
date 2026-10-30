@@ -13,12 +13,12 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | effect | 61 | 6 | 27 | 20 | 8 | 62% |
 | extra | 38 | 8 | 5 | 20 | 5 | 39% |
 | flaw | 22 | 0 | 1 | 18 | 3 | 5% |
-| advantage | 75 | 26 | 7 | 21 | 21 | 61% |
+| advantage | 75 | 28 | 11 | 15 | 21 | 72% |
 | action | 20 | 9 | 7 | 4 | 0 | 80% |
 | maneuver | 12 | 7 | 4 | 1 | 0 | 92% |
 | condition | 30 | 16 | 8 | 5 | 1 | 83% |
-| rule | 38 | 16 | 10 | 12 | 0 | 68% |
-| all | 296 | 88 | 69 | 101 | 38 | 61% |
+| rule | 38 | 16 | 11 | 11 | 0 | 71% |
+| all | 296 | 90 | 74 | 94 | 38 | 64% |
 
 ## Effects
 
@@ -187,18 +187,18 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Quick Draw | none | Drawing weapons is not simulated. | DCA 77 |
 | Ranged Attack | full | Adds to the ranged attack bonus in derive. | DCA 77 |
 | Redirect | none | Redirecting a missed attack is not simulated. | DCA 78 |
-| Set-up | none | Handing a bonus to an ally is not simulated. | DCA 78 |
+| Set-up | partial | A feint can be handed to one ally per rank: the target is vulnerable to their next attack instead of the feinter's. Demoralize and Daze are not handed over. | DCA 78 |
 | Takedown | full | A free attack against the next minion after taking one out; chains up to five. | DCA 78 |
 | Throwing Mastery | none | Thrown weapons are not simulated. | DCA 79 |
 | Uncanny Dodge | full | The fighter is stunned but not vulnerable in a surprise round. | DCA 79 |
 | Weapon Bind | none | Reactions to disarm are not simulated. | DCA 79 |
 | Weapon Break | none | Reactions to attack weapons are not simulated. | DCA 79 |
 | Beginner's Luck | none | Skill ranks are not boosted in a fight. | DCA 72 |
-| Inspire | none | Granting bonuses to allies is not simulated. | DCA 76 |
-| Leadership | none | Removing conditions from allies with a hero point is not simulated. | DCA 76 |
-| Luck | partial | Adds one hero point per rank, usable on any hero point use, instead of a re-roll once per round. | DCA 77 |
+| Inspire | partial | Once per fight, a standard action and a hero point: allies in interaction range get +1 per rank on all checks until the start of the inspirer's next turn. Used on the first round or when the side is losing. | DCA 76 |
+| Leadership | full | A standard action and a hero point remove dazed, stunned or fatigued from an ally in interaction range; used when the ally would do more than the leader (always for a Sustain team). | DCA 76 |
+| Luck | partial | A separate pool of re-rolls, one a round up to its rank a fight, spent before hero points on attacks, resistance, opposed and recovery checks; not on healing, aid, stand or smash checks. | DCA 77 |
 | Seize Initiative | partial | The fighter goes first, but no hero point is spent. | DCA 78 |
-| Ultimate Effort | none | Automatic 20s are not simulated. | DCA 79 |
+| Ultimate Effort | partial | A hero point makes an attack check, a Toughness, Will, Fortitude or Dodge check a roll of 20 (not a natural 20), as the advantage's parameter names; other kinds of check are not covered. | DCA 79 |
 | Assessment | none | Insight reads of a foe's numbers are not simulated. | DCA 70 |
 | Benefit | n/a | A perk with no combat rule. | DCA 72 |
 | Diehard | none | There is no dying state to stabilize from. | DCA 73 |
@@ -221,7 +221,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Attractive | n/a | Social only. | DCA 70 |
 | Connected | n/a | Social only. | DCA 72 |
 | Contacts | n/a | Social only. | DCA 72 |
-| Daze | none | Dazing with Intimidation or Deception is not simulated. | DCA 73 |
+| Daze | partial | A standard action: Deception or Intimidation against the target's best of that skill, Insight or Will; a win leaves the target dazed. Not handed to allies with Set-up. | DCA 73 |
 | Fascinate | none | Fascinating a foe is not simulated. | DCA 74 |
 | Favored Foe | none | The bonus against a chosen foe is not applied. | DCA 75 |
 | Hide in Plain Sight | n/a | Stealth is not simulated. | DCA 75 |
@@ -231,7 +231,7 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Languages | n/a | Language has no combat meaning. | DCA 76 |
 | Ritualist | n/a | Rituals are not simulated. | DCA 78 |
 | Skill Mastery | n/a | Skill checks are not simulated. | DCA 78 |
-| Startle | none | Startle as a feint is not simulated. | DCA 78 |
+| Startle | full | Feints with Intimidation when it is better; the target resists with Insight, Intimidation or Will. | DCA 78 |
 | Taunt | full | Lets the fighter demoralize with Deception instead of Intimidation; targets resist with Deception, Insight or Will. | DCA 78 |
 | Tracking | n/a | Out of combat skill use. | DCA 79 |
 | Well-informed | n/a | Social only. | DCA 79 |
@@ -317,10 +317,10 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 
 | Name | Status | Note | Source |
 | --- | --- | --- | --- |
-| Hero point: Improve Roll | partial | Only a missed attack roll is re-rolled (1-10 counts as 11-20); resistance checks and other rolls are not. |  |
-| Hero point: Recover | full | Removes dazed, stunned or fatigue, or turns exhausted into fatigued. |  |
+| Hero point: Improve Roll | partial | A missed attack, a failed Toughness, Fortitude, Will or Dodge check, a lost opposed check (feint, trip, disarm, grab, escape, demoralize, Daze) and a recovery check are re-rolled (1-10 counts as 11-20) when the failure matters; healing, aid, stand and smash checks are not. |  |
+| Hero point: Recover | full | Removes dazed, stunned or fatigue, or turns exhausted into fatigued, at the start of a turn or when stunned. |  |
 | Hero point: Edit Scene | none | Scene edits are not simulated. |  |
-| Hero point: Heroic Feat | none | Borrowing an advantage with a hero point is not simulated. |  |
+| Hero point: Heroic Feat | partial | Interpose is borrowed to take a hit that would knock out an ally, and Power Attack or All-out Attack for a finishing blow; other advantages are not. |  |
 | Hero point: Inspiration | none | Hints from the GM have no combat effect. |  |
 | Hero point: Instant Counter | none | Countering an effect as a reaction is not simulated. |  |
 | Extra effort: +1 power rank | partial | A fighter pushing an attack power gains +1 rank and a level of fatigue (applied at once, not at the start of the next turn). |  |

@@ -1,4 +1,4 @@
-// When a fighter demoralizes or aids instead of attacking: the fighter's own judgement, and the Intimidate and Break
+// When a fighter demoralizes, aids or dazes instead of attacking: the fighter's own judgement, and the Intimidate and Break
 // and Aid the Champion tactics. A turn that does neither falls through to the usual plan, so a fighter without the
 // skills (or a good attack) plays exactly as before. The actions themselves are in support-actions.js.
 
@@ -9,10 +9,8 @@ import { bestEvNow, rangePenalty, threatOn, hitOdds } from './odds.js';
 import { tacticOf } from './tactics-list.js';
 import { stepToSquare } from './tactics-position.js';
 import { demoralSkill, resistanceTo, canDemoralize, minionsInSight, demoralize, aid, aidAttackOf } from './support-actions.js';
-import { demoralizerOf, demoralizeTarget, potentialEv, championOf, championFoe } from './tactics-support.js';
-
-/** What the fighter's best attack is worth this turn: 0 when it only closes in, Infinity when the plan is something else. */
-const ownValue = (choice) => (choice.plan === 'attack' ? choice.ev ?? 0 : choice.plan === 'move' ? 0 : Infinity);
+import { dazeByChoice } from './daze.js';
+import { demoralizerOf, demoralizeTarget, potentialEv, championOf, championFoe, ownValue } from './tactics-support.js';
 
 /** Intimidate and Break: the team's intimidator goes for the most dangerous enemy, walking within earshot first. */
 function intimidateTurn(b, c, mode, rng) {
@@ -109,5 +107,5 @@ export function supportTurn(b, c, choice, enemies, mode, rng) {
   const id = tacticOf(b, c);
   if (id === 'intimidate' && intimidateTurn(b, c, mode, rng)) return true;
   if (id === 'aid' && aidChampionTurn(b, c, enemies, mode, rng)) return true;
-  return demoralizeByChoice(b, c, choice, enemies, rng) || aidByChoice(b, c, choice, mode, rng);
+  return demoralizeByChoice(b, c, choice, enemies, rng) || aidByChoice(b, c, choice, mode, rng) || dazeByChoice(b, c, choice, enemies, rng);
 }

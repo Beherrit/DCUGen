@@ -5,17 +5,24 @@ import { activeConditions, checkPenalty, defenseOf } from './conditions.js';
 import { expectedValue } from './odds.js';
 import { inReach } from './geometry.js';
 import { rollCheck, opposedCheck, opposedNote, critNote } from './checks.js';
+import { tacticOf } from './tactics-list.js';
+import { plainFx, hurt } from './fortune.js';
+import { feintPick, setUpAllies } from './tricks.js';
 
 export function feint(b, c, t, rng) {
-  const useAcro = c.adv['Agile Feint'] && c.skills.Acrobatics > c.skills.Deception;
-  const mine = useAcro ? c.skills.Acrobatics : c.skills.Deception;
-  const theirs = Math.max(t.skills.Insight, t.skills.Deception);
-  const duel = opposedCheck(rng, { bonus: mine }, { bonus: theirs });
+  const { name, mine, theirs } = feintPick(c, t);
+  const flank = tacticOf(b, c) === 'flank';
+  const duel = opposedCheck(rng, { bonus: mine, fx: plainFx(b, c, 'feint check', () => flank) }, { bonus: theirs, fx: plainFx(b, t, 'feint resistance', () => hurt(t)) });
   const [r1, r2] = duel.rolls;
   const ok = duel.winner === 'a';
-  // Vulnerable against the feinter's next attack, until the end of the feinter's next round (DCA 64).
-  if (ok) t.feinted = { by: c.id, round: b.round };
-  log(b, { kind: ok ? 'condition' : 'miss', actor: c.id, target: t.id, text: `${c.name} feints ${useAcro ? 'with acrobatics' : ''}: ${useAcro ? 'Acrobatics' : 'Deception'} d20 ${r1} ${sign(mine)} = ${duel.totals.a} vs ${t.name}'s Insight d20 ${r2} ${sign(theirs)} = ${duel.totals.b} — ${ok ? `${t.name} falls for it and is vulnerable to the next attack` : 'not fooled'}${opposedNote(duel)}.`, dice: [{ label: 'Feint', roll: r1, mod: mine, total: duel.totals.a, dc: duel.totals.b }] });
+  // Vulnerable against the feinter's next attack, until the end of the feinter's next round (DCA 64). With Set-up
+  // (p78) the feinter hands it to allies instead, and the target is vulnerable to theirs.
+  const gift = ok ? setUpAllies(b, c, t) : [];
+  if (ok) t.feinted = gift.length ? { by: c.id, round: b.round, for: gift.map((a) => a.id) } : { by: c.id, round: b.round };
+  const how = name === 'Deception' ? '' : name === 'Acrobatics' ? 'with acrobatics' : 'with intimidation (Startle)';
+  const against = name === 'Intimidation' ? 'Insight, Intimidation or Will' : 'Insight';
+  const result = gift.length ? `${t.name} falls for it and is vulnerable to ${gift.map((a) => `${a.name}'s`).join(' and ')} next attack (Set-up)` : `${t.name} falls for it and is vulnerable to the next attack`;
+  log(b, { kind: ok ? 'condition' : 'miss', actor: c.id, target: t.id, text: `${c.name} feints ${how}: ${name} d20 ${r1} ${sign(mine)} = ${duel.totals.a} vs ${t.name}'s ${against} d20 ${r2} ${sign(theirs)} = ${duel.totals.b} — ${ok ? result : 'not fooled'}${opposedNote(duel)}.`, dice: [{ label: 'Feint', roll: r1, mod: mine, total: duel.totals.a, dc: duel.totals.b }] });
 }
 
 /** The ability a hold is made with: Strength, or Dexterity with Grabbing Finesse (p75). */
@@ -42,7 +49,7 @@ export function grab(b, R, c, t, rng, { free = false } = {}) {
   }
   const resist = Math.max(defenseOf(t, 'Dodge'), t.d.abilities.Strength ?? 0) - checkPenalty(t);
   const dc = 10 + str + (c.adv['Improved Hold'] ? 5 : 0);
-  const r = rollCheck(rng, resist, dc);
+  const r = rollCheck(rng, resist, dc, plainFx(b, t, 'grab resistance'));
   const { roll, total, fails } = r;
   const dice = [{ label: 'Resist grab', roll, mod: resist, total, dc }];
   if (!fails) { log(b, { kind: 'resist', actor: c.id, target: t.id, text: `${t.name} resists the hold: d20 ${roll} ${sign(resist)} = ${total} vs DC ${dc}${critNote(r)} — breaks free.`, dice }); return; }
@@ -59,7 +66,7 @@ export function tryEscape(b, c, holder, rng) {
   // Escape (DCA 176): Athletics or Sleight of Hand against the hold
   const mine = Math.max(c.skills.Athletics, c.skills['Sleight of Hand'] ?? -99) - checkPenalty(c);
   const dc = 10 + gripOf(holder) + (holder.adv['Improved Hold'] ? 5 : 0);
-  const r = rollCheck(rng, mine, dc);
+  const r = rollCheck(rng, mine, dc, plainFx(b, c, 'escape check'));
   const { roll, total } = r;
   const ok = r.success;
   if (ok) { c.grabbedBy = null; holder.holding = null; c.conditions = c.conditions.filter((x) => x.source !== 'grab'); }
