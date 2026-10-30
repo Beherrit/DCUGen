@@ -7,28 +7,19 @@
 //   and every ally in range, any number of times.
 // - The Reaction extra makes it a reaction instead, once a round, for the fighter itself and allies within short range.
 // - Reflect sends a deflected attack back (reflect.js).
-// - A Deflect can be limited by its descriptor: "resistance to psionic" (or a Limited flaw naming one) works only on
-//   attacks with that descriptor. A Deflect that names no limit works on every attack it can reach.
+// - A Deflect can be limited (deflect-limit.js): fire only, lightning only, ranged attacks only, resistance to psionic.
+//   It then works only on those attacks. A Deflect that names no limit works on every attack it can reach.
 // The deflector's roll stands against the target's flat defense: the attacker has to beat the better of the two.
 
 import { allPowers } from '../derive.js';
 import { bandFor } from '../range.js';
 import { hasExtra, d20, alive } from './util.js';
-import { canonical } from './descriptors.js';
+import { deflectLimit, limitCovers } from './deflect-limit.js';
 import { canAct } from './conditions.js';
 import { feet, lineClear } from './geometry.js';
 
-const LIMIT = /\b(?:resist\w*\s+to|protect\w*\s+(?:from|against)|defen[cs]e\s+(?:from|against)|limited\s+to|only\s+(?:against|vs\.?|versus)|against|versus)\s+([^.;,]+)/i;
-
-/** The descriptors a Deflect is limited to, from its descriptors, detail or Limited flaw; null when it names no limit. */
-function deflectLimit(p) {
-  const limited = (p.flaws || []).filter((f) => /limited/i.test(f.name || '')).map((f) => `limited to ${String(f.option || f.detail || '').replace(/^to\s+/i, '')}`);
-  const only = [...(p.descriptors || []), p.detail, ...limited].flatMap((t) => canonical(LIMIT.exec(String(t || ''))?.[1]));
-  return only.length ? [...new Set(only)] : null;
-}
-
-/** Can this fighter's Deflect stop this attack? A limited Deflect stops only attacks with one of its descriptors. */
-export const deflectCovers = (d, atk) => !d.deflect.only || (atk.descriptors || []).some((x) => d.deflect.only.includes(x));
+/** Can this fighter's Deflect stop this attack? A limited Deflect stops only what its limit names (deflect-limit.js). */
+export const deflectCovers = (d, atk) => limitCovers(d.deflect.only, atk);
 
 /** A character's best Deflect power: { name, rank, reaction, reflect, redirect, only }, or null. */
 export function deflectOf(ch) {

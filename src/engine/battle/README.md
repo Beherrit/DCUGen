@@ -16,6 +16,7 @@ is not simulated). The code is split by job:
 - `plan.js`: the best attack against a target, the trade-off, and `choosePlan`.
 - `turn.js`: `takeTurn` and the checks that can end a turn early. `turn-attack.js`: the attacking half of a turn.
 - `movement.js`: `moveTo` (logs the squares and feet), `moveToward`.
+- `deflect-limit.js`: what a limited Deflect works on (fire only, lightning only, ranged attacks only).
 - `attack-roll.js`: attack wording, the to-hit modifier and roll, the Defend roll, the hero point re-roll (and a critical turned into a normal hit by an Immunity to critical hits). `deflect.js`: Deflect, who can deflect for whom and the roll that raises the number to beat. `deflect-plan.js`: when a fighter takes the Defend action to deflect. `reflect.js`: the log line for a deflection and Reflect and Redirect, for Deflect and for an Immunity with Reflect.
 - `build-report.js`: which of a fighter's powers, modifiers, advantages and skills the simulator uses and which it ignores, read from the shipped coverage list (`src/generated/battle-coverage.js`, made from `tools/battle-coverage/coverage.json` by `node tools/build.mjs data` or `node tools/battle-coverage/report.mjs`).
 - `attacks.js`: `resolveAttack`, Interpose, Fast Grab, Takedown, area attacks.
