@@ -10,16 +10,16 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 
 | Kind | Total | Full | Partial | None | n/a | Covered |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| effect | 61 | 6 | 29 | 18 | 8 | 66% |
-| extra | 38 | 8 | 6 | 19 | 5 | 42% |
-| flaw | 22 | 0 | 1 | 18 | 3 | 5% |
+| effect | 63 | 6 | 29 | 20 | 8 | 64% |
+| extra | 50 | 8 | 6 | 31 | 5 | 31% |
+| flaw | 41 | 0 | 1 | 37 | 3 | 3% |
 | advantage | 75 | 28 | 12 | 14 | 21 | 74% |
 | skill | 16 | 8 | 0 | 2 | 6 | 80% |
 | action | 20 | 9 | 7 | 4 | 0 | 80% |
 | maneuver | 12 | 7 | 4 | 1 | 0 | 92% |
 | condition | 30 | 16 | 8 | 5 | 1 | 83% |
 | rule | 38 | 16 | 11 | 11 | 0 | 71% |
-| all | 312 | 98 | 78 | 92 | 44 | 66% |
+| all | 345 | 98 | 78 | 125 | 44 | 58% |
 
 ## Effects
 
@@ -86,6 +86,8 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Transform | none | Transformations are not simulated. | DCA 120 |
 | Variable | partial | Only Omni-power fighters reconfigure, into four fixed attacks sized to half the points. | DCA 121 |
 | Weaken | partial | Weakens one trait guessed from the power's detail and returns a rank each round; the book's recovery rate differs. | DCA 122 |
+| Communal | none | Martial Arts (3e) effect; not simulated in fights yet. | MA 81 |
+| Extra Attacks | none | Martial Arts (3e) effect; not simulated in fights yet. | MA 83 |
 
 ## Extras
 
@@ -129,6 +131,18 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Sustained | partial | Only Sustained Protection is used (and can be nullified). | DCA 132 |
 | Triggered | none | Triggered effects are not simulated. | DCA 132 |
 | Variable Descriptor | none | Descriptors are fixed. | DCA 133 |
+| Ammunition | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 91 |
+| Combo Element | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 91 |
+| Conductor | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 91 |
+| Diminishing Counter | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 92 |
+| Improved Counter | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 93 |
+| Overwhelming Counter | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 93 |
+| Partial Resistance | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 93 |
+| Pinball | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 93 |
+| Potent | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 93 |
+| Proficient | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 93 |
+| Recoverable | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 94 |
+| Stacking | none | Martial Arts (3e) extra; not simulated in fights yet. | MA 94 |
 
 ## Flaws
 
@@ -156,6 +170,25 @@ Status: **full** is simulated as the book says, **partial** is simulated but sim
 | Tiring | none | Fatigue from using the power is not applied. | DCA 138 |
 | Uncontrolled | none | Random results are not applied. | DCA 138 |
 | Unreliable | none | Uses that may fail are not rolled. | DCA 138 |
+| Announcement | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 94 |
+| Bad Bounce | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 94 |
+| Calling | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 95 |
+| Chained | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 95 |
+| Diluted | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 96 |
+| Dulled | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 96 |
+| Fast Return | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 96 |
+| Gallant | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 97 |
+| Immobile | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 97 |
+| Inexact | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 97 |
+| Momentum-Based | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 97 |
+| Nonlethal | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 97 |
+| Obvious | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 97 |
+| Prone | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 98 |
+| Push Over | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 98 |
+| Source | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 98 |
+| Strained | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 98 |
+| Uncertain | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 98 |
+| Weak Limbed | none | Martial Arts (3e) flaw; not simulated in fights yet. | MA 98 |
 
 ## Advantages
 
