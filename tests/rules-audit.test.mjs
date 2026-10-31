@@ -93,3 +93,63 @@ test('fractional costs below 1 point per 5 ranks get the book\'s guideline warni
   const cheap = P('Protection', 12, { flaws: ['Limited', 'Unreliable', 'Tiring', 'Distracting', 'Fades'].map((name) => ({ name })) });
   assert.ok(issues(hero({ powers: [cheap] })).some((i) => /1 point per 6 ranks/.test(i.message) && i.severity === 'warning'));
 });
+
+test('modifier prerequisites read the duration after Increased Duration and Sustained (DCA 129, 132, 135, 136)', () => {
+  const warns = (p) => issues(hero({ powers: [p] })).filter((i) => i.rule === 'power').map((i) => i.message);
+  // Concentration needs a sustained effect: a Sustained Protection qualifies, a plain (permanent) one doesn't.
+  assert.deepEqual(warns(P('Protection', 4, { extras: [{ name: 'Sustained' }], flaws: [{ name: 'Concentration' }] })), []);
+  assert.equal(warns(P('Protection', 4, { flaws: [{ name: 'Concentration' }] })).length, 1);
+  // Permanent needs a sustained or continuous effect.
+  assert.deepEqual(warns(P('Growth', 4, { flaws: [{ name: 'Permanent' }] })), []);
+  assert.match(warns(P('Damage', 4, { flaws: [{ name: 'Permanent' }] })).join(), /Permanent needs an effect that is "lasting"/);
+  // Increased Duration makes an instant Damage concentration: no longer "instant" for Secondary Effect.
+  assert.deepEqual(warns(P('Damage', 4, { extras: [{ name: 'Secondary Effect' }] })), []);
+  assert.equal(warns(P('Damage', 4, { extras: [{ name: 'Secondary Effect' }, { name: 'Increased Duration' }] })).length, 1);
+});
+
+test('Super-Speed gives Improved Initiative at its rank on the sheet (DCA 119: Super-Speed 10 is +40)', () => {
+  const ch = hero({ powers: [P('Super-Speed', 10, { name: 'Speed Force' })] });
+  assert.equal(deriveAll(ch, R).initiative, 2 + 40);
+});
+
+test('size changes Stealth and Intimidation: Shrinking +rank Stealth, -half Intimidation; Normal Strength keeps both Strength and Intimidation (DCA 117)', () => {
+  const skills = [{ name: 'Stealth', ranks: 4 }, { name: 'Intimidation', ranks: 4 }];
+  const bonus = (ch, n) => deriveAll(ch, R).skills.find((s) => s.name === n).bonus;
+  const tiny = hero({ skills, powers: [P('Shrinking', 12)] }); // the book's example: +12 Stealth, -6 Intimidation, -3 Strength
+  assert.equal(bonus(tiny, 'Stealth'), 2 + 4 + 12);
+  assert.equal(bonus(tiny, 'Intimidation'), 2 + 4 - 6);
+  assert.equal(deriveAll(tiny, R).abilities.Strength, 2 - 3);
+  const strong = hero({ skills, powers: [P('Shrinking', 12, { extras: [{ name: 'Normal Strength' }] })] });
+  assert.equal(bonus(strong, 'Intimidation'), 2 + 4);
+  assert.equal(deriveAll(strong, R).abilities.Strength, 2);
+  assert.equal(bonus(strong, 'Stealth'), 2 + 4 + 12);
+  const big = hero({ skills, powers: [P('Growth', 8)] });
+  assert.equal(bonus(big, 'Stealth'), 2 + 4 - 8);
+  assert.equal(bonus(big, 'Intimidation'), 2 + 4 + 4);
+});
+
+test('untrained checks are limited only for skills usable untrained, not attack skills or trained-only ones (DCA 66)', () => {
+  const skillIssues = (abilities, more = {}) => issues(hero({ abilities: { ...hero().abilities, ...abilities }, ...more })).filter((i) => i.rule === 'skill').map((i) => i.message);
+  // Intellect's skills are all trained-only; Dexterity's are Ranged Combat (an attack) and trained-only ones.
+  assert.deepEqual(skillIssues({ Intellect: 22, Dexterity: 21 }), []);
+  // Presence 21 makes an untrained Deception, Intimidation and Persuasion +21.
+  assert.equal(skillIssues({ Presence: 21 }).filter((m) => /^Untrained (Deception|Intimidation|Persuasion) \+21/.test(m)).length, 3);
+  // A skill with ranks is checked as a trained skill instead, so it isn't reported twice.
+  assert.ok(!skillIssues({ Presence: 21 }, { skills: [{ name: 'Deception', ranks: 1 }] }).some((m) => /Untrained Deception/.test(m)));
+  // Size counts: Agility 8 and Shrinking 16 make an untrained Stealth +24 at PL 10.
+  assert.match(skillIssues({ Agility: 8 }, { powers: [P('Shrinking', 16)] }).join(), /Untrained Stealth \+24 \(Agility 8, size\)/);
+});
+
+test('advantages that apply to one thing must name it; choices come from the sheet first', async () => {
+  const { paramChoices, paramRequired } = await import('../src/engine/advparams.js');
+  assert.equal(paramRequired(R.advantage('Improved Critical')), true);
+  assert.equal(paramRequired(R.advantage('Languages')), false);
+  assert.equal(paramRequired(R.advantage('Precise Attack')), false);
+  const ch = hero({ skills: [{ name: 'Expertise', spec: 'Magic', ranks: 4 }], powers: [P('Damage', 8, { name: 'Fire Bolt', range: 'Ranged' })] });
+  assert.deepEqual(paramChoices(ch, R, R.advantage('Improved Critical')).slice(0, 2), ['Unarmed', 'Fire Bolt']);
+  assert.equal(paramChoices(ch, R, R.advantage('Skill Mastery'))[0], 'Expertise (Magic)');
+  assert.deepEqual(paramChoices(ch, R, R.advantage('Daze')), ['Deception', 'Intimidation']);
+  const msgs = issues(hero({ advantages: [{ name: 'Improved Critical', rank: 1 }, { name: 'Languages', rank: 2 }] })).map((i) => i.message);
+  assert.ok(msgs.some((m) => /Improved Critical needs to name its attack/.test(m)));
+  assert.ok(!msgs.some((m) => /Languages/.test(m)));
+});

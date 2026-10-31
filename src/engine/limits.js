@@ -6,9 +6,10 @@
 //   Dodge + Toughness, Parry + Toughness        <= 2 x PL
 //   Fortitude + Will                            <= 2 x PL
 
-import { ABILITIES, traitKind } from './rules.js';
-import { deriveAll, allPowers, enhancedAdvantageRank } from './derive.js';
+import { traitKind } from './rules.js';
+import { deriveAll, allPowers, enhancedAdvantageRank, durationOf, untrainedSkills, untrainedBonus } from './derive.js';
 import { missingPrerequisiteText } from './prereqs.js';
+import { paramRequired } from './advparams.js';
 import { costBreakdown, alternateOwnCost, primaryOwnCost, equipmentPoints, effectCost } from './costs.js';
 import { EP_PER_EQUIPMENT_RANK } from './rules.js';
 import { powerTags } from './powersmith.js';
@@ -94,10 +95,13 @@ export function checkLimits(ch, R) {
     const bonus = (d.abilities[ability] ?? 0) + ranks;
     if (bonus > pl + 10) out.push(issue('skill', `${label} +${bonus} (Enhanced ${label} ${ranks}) exceeds PL + 10 (${pl + 10}).`, 'error', { pl: true }));
   }
-  for (const a of ABILITIES) {
-    if (a === 'Stamina') continue; // no skills use Stamina
-    const v = d.abilities[a];
-    if (v != null && v > pl + 10) out.push(issue('skill', `${a} ${v} makes untrained skills exceed PL + 10 (${pl + 10}).`, 'error', { pl: true }));
+  // Untrained checks: only skills anyone may use untrained, and not the attack skills (Fighting and Dexterity are
+  // limited through attacks; Intellect's skills are all trained-only).
+  const trained = new Set([...d.skills.map((x) => x.name), ...[...enhancedSkills.keys()].map((l) => l.replace(/\s*\(.*\)$/, ''))]);
+  for (const k of untrainedSkills(R)) {
+    if (trained.has(k.name)) continue;
+    const bonus = untrainedBonus(ch, R, k.name, d.abilities);
+    if (bonus != null && bonus > pl + 10) out.push(issue('skill', `Untrained ${k.name} +${bonus} (${k.ability} ${d.abilities[k.ability]}${bonus !== d.abilities[k.ability] ? ', size' : ''}) exceeds PL + 10 (${pl + 10}).`, 'error', { pl: true }));
   }
 
   // Advantages. Ranks from Enhanced Trait powers count toward the advantage's maximum (Enhanced Luck is still Luck).
@@ -112,6 +116,7 @@ export function checkLimits(ch, R) {
     const max = def.max_rank === 'half_pl' ? Math.floor(pl / 2) : def.max_rank;
     if (max != null && rank + enhanced > max) out.push(issue('advantage', `${adv.name} ${rank + enhanced}${enhanced ? ` (${enhanced} from Enhanced ${adv.name})` : ''} exceeds its maximum of ${max}.`, 'error', { source: def.source }));
     for (const req of missingPrerequisiteText(ch, R, def.name)) out.push(issue('advantage', `${adv.name} requires ${req}.`, 'warning', { source: def.source }));
+    if (paramRequired(def) && !adv.param && !adv.detail) out.push(issue('advantage', `${adv.name} needs to name its ${def.param} (pick it in Edit mode).`, 'warning', { source: def.source }));
   }
   // Advantages bought only as Enhanced Trait powers follow the same caps and prerequisites.
   for (const { power: p, alternateOf } of allPowers(ch)) {
@@ -164,7 +169,7 @@ export function checkLimits(ch, R) {
     }
     // "Permanent effects cannot have Alternate Effects, nor can they be Alternate Effects" (DCA 125).
     if (alternateOf || (p.alternates || []).length) {
-      if (durationOf(p, eff) === 'Permanent') out.push(issue('power', `${p.name}: ${eff.name} is permanent, and permanent effects can't be in an array (they can't be switched off). Add Sustained or move it out of the array.`, 'warning', { source: 'DCA 125' }));
+      if (durationOf(p, R, { withFlaws: true }) === 'Permanent') out.push(issue('power', `${p.name}: ${eff.name} is permanent, and permanent effects can't be in an array (they can't be switched off). Add Sustained or move it out of the array.`, 'warning', { source: 'DCA 125' }));
     }
     if (alternateOf) {
       const own = alternateOwnCost(p, R);
@@ -185,13 +190,6 @@ export function checkLimits(ch, R) {
   else if (cost.total < cost.budget) out.push(issue('budget', `${cost.budget - cost.total} power points unspent.`, 'info'));
 
   return house(out);
-}
-
-/** A power's duration after the Sustained extra (permanent to sustained) and the Permanent flaw (sustained to permanent). */
-function durationOf(p, eff) {
-  if ((p.flaws || []).some((m) => m.name === 'Permanent')) return 'Permanent';
-  if (eff.duration === 'Permanent' && (p.extras || []).some((m) => m.name === 'Sustained')) return 'Sustained';
-  return eff.duration;
 }
 
 /** Supporting characters, minions and creatures: built as stat blocks, so the point budget is advisory. */

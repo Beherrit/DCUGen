@@ -731,7 +731,8 @@
       },
       {
         "name": "Improved Critical",
-        "rank": 1
+        "rank": 1,
+        "param": "Sunblade"
       },
       {
         "name": "Fearless",
@@ -2632,7 +2633,7 @@
     "skills": [
       {
         "name": "Stealth",
-        "ranks": 6
+        "ranks": 4
       },
       {
         "name": "Deception",
@@ -3177,7 +3178,8 @@
       },
       {
         "name": "Improved Critical",
-        "rank": 1
+        "rank": 1,
+        "param": "Four-Fisted Fury"
       },
       {
         "name": "Fearless",
@@ -3341,7 +3343,8 @@
       },
       {
         "name": "Favored Foe",
-        "rank": 1
+        "rank": 1,
+        "param": "Bounties"
       },
       {
         "name": "Improved Grab",
@@ -3860,7 +3863,8 @@
       },
       {
         "name": "Improved Critical",
-        "rank": 1
+        "rank": 1,
+        "param": "Collapsar Maul"
       }
     ],
     "powers": [
@@ -5105,7 +5109,7 @@
     "skills": [
       {
         "name": "Stealth",
-        "ranks": 8
+        "ranks": 4
       },
       {
         "name": "Close Combat",

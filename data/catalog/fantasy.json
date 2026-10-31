@@ -1990,7 +1990,7 @@
     "skills": [
       {
         "name": "Stealth",
-        "ranks": 6
+        "ranks": 4
       },
       {
         "name": "Perception",
@@ -8145,7 +8145,8 @@
     "advantages": [
       {
         "name": "Improved Critical",
-        "rank": 2
+        "rank": 2,
+        "param": "Keen Edge"
       }
     ],
     "powers": [

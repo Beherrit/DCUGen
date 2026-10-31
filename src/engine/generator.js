@@ -10,8 +10,9 @@
 import { makeRng, randomSeed } from './rng.js';
 import { ABILITIES, BUYABLE_DEFENSES, PP_PER_PL, EP_PER_EQUIPMENT_RANK } from './rules.js';
 import { costBreakdown, powerCost, alternateOwnCost, primaryOwnCost, equipmentPoints } from './costs.js';
-import { deriveAll, advantageRank, attackKind, allPowers } from './derive.js';
+import { deriveAll, advantageRank, attackKind, allPowers, untrainedSkills, untrainedBonus } from './derive.js';
 import { grantPrerequisites, isLastPrerequisite } from './prereqs.js';
+import { paramChoices, paramRequired } from './advparams.js';
 import { checkLimits } from './limits.js';
 import { rollSpec, rangeOf, evalExpr } from './expr.js';
 import { makeIdentity } from './flavor.js';
@@ -175,8 +176,10 @@ function repair(ch, R, budgetRng) {
       if (sk && sk.ranks > 0) { sk.ranks -= Math.min(sk.ranks, s.bonus - pl - 10); if (!sk.ranks) ch.skills.splice(ch.skills.indexOf(sk), 1); fixed = true; break; }
     }
     if (fixed) continue;
-    for (const a of ABILITIES) {
-      if (a !== 'Stamina' && d.abilities[a] > pl + 10) { ch.abilities[a] -= d.abilities[a] - pl - 10; fixed = true; break; }
+    for (const k of untrainedSkills(R)) {
+      if (d.skills.some((x) => x.name === k.name)) continue;
+      const over = (untrainedBonus(ch, R, k.name, d.abilities) ?? 0) - pl - 10;
+      if (over > 0 && ch.abilities[k.ability] != null && ch.abilities[k.ability] > -5) { ch.abilities[k.ability] -= Math.min(over, ch.abilities[k.ability] + 5); fixed = true; break; }
     }
     if (fixed) continue;
 
@@ -451,6 +454,12 @@ function grantAdvantage(ch, R, name, ctx, fixedParam) {
     }
     case 'Minion': case 'Sidekick': param = rng.pick(['Henchman', 'Robot assistant', 'Loyal hound', 'Apprentice', 'Drone']); break;
     default: break;
+  }
+  // An advantage that has to name its target gets one (Second Chance (Mind control), Ultimate Effort (Will checks)).
+  if (param == null && paramRequired(def) && !(existing && def.ranked)) {
+    const choices = paramChoices(ch, R, def).filter((c) => !ch.advantages.some((a) => a.name === name && a.param === c));
+    if (!choices.length) return false;
+    param = rng.pick(choices);
   }
   if (existing && def.ranked && (param == null || existing.param === param)) { existing.rank++; return true; }
   addAdvantage(ch, name, 1, param);

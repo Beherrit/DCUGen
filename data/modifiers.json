@@ -784,7 +784,9 @@
       "value": 1,
       "options": null,
       "max_steps": 1,
-      "requires": [],
+      "requires": [
+        "lasting"
+      ],
       "source": "DCA 136",
       "summary": "Continuous effect becomes permanent: always on, no extra effort."
     },

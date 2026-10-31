@@ -221,7 +221,7 @@ export function rebuildCombatant(c, R, d = null) {
   c.d = d;
   c.flaw ||= freshFlawState();           // a battle saved before the flaws were simulated has none
   const mt = movementTraits(c.ch);
-  c.initBonus = d.initiative + 4 * mt.superSpeed; // Super-Speed: Improved Initiative as an Enhanced Trait, +4 a rank (movement-powers.js)
+  c.initBonus = d.initiative; // includes Super-Speed's Improved Initiative (derive.js initiative)
   const where = new Map(allPowers(c.ch).map((x) => [x.power, x]));
   c.attacks = [...d.attacks, ...powerAttacks(c.ch, R, d.abilities), ...maneuverAttacks(c.ch, R, d)].map((a) => buildAttack(c, a, R, where)).filter((a) => (a.rank > 0 || a.effect !== 'Damage') && !(a.item && (c.dropped || []).includes(a.item.key)) && !(a.ex?.attackForm && !a.formOk));
   powerStats(c);

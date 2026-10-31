@@ -58,16 +58,20 @@ export function skillRanks(ch, name, spec) {
     .reduce((t, s) => t + (s.ranks || 0), 0);
 }
 
+/** Shrinking ranks that cost Strength and Intimidation: all of them, except those bought with Normal Strength (DCA 117). */
+function shrinkWeak(ch) {
+  return activePowers(ch).filter((p) => p.effect === 'Shrinking' && !(p.extras || []).some((m) => m.name === 'Normal Strength')).reduce((s, p) => s + p.rank, 0);
+}
+
 export function abilityTotals(ch, R) {
   const growth = rankOf(ch, 'Growth');
-  const shrink = rankOf(ch, 'Shrinking');
   const out = {};
   for (const a of ABILITIES) {
     const base = ch.abilities?.[a];
     if (base === null) { out[a] = null; continue; }
     let v = (base || 0) + sumEnhanced(ch, R, a) + placedOn(ch, a);
     if (a === 'Strength' || a === 'Stamina') v += growth;
-    if (a === 'Strength') v -= Math.floor(shrink / 4);
+    if (a === 'Strength') v -= Math.floor(shrinkWeak(ch) / 4);
     out[a] = v;
   }
   return out;
@@ -98,6 +102,32 @@ export function defenseTotals(ch, R, abil = abilityTotals(ch, R)) {
   return out;
 }
 
+/**
+ * Size modifiers to skills (DCA 100, 117): Growth +1 Intimidation per 2 ranks and -1 Stealth a rank; Shrinking +1
+ * Stealth a rank and -1 Intimidation per 2 ranks (none with Normal Strength).
+ */
+export function sizeSkillMod(ch, name) {
+  const growth = rankOf(ch, 'Growth');
+  if (name === 'Intimidation') return Math.floor(growth / 2) - Math.floor(shrinkWeak(ch) / 2);
+  if (name === 'Stealth') return rankOf(ch, 'Shrinking') - growth;
+  return 0;
+}
+
+/**
+ * Skills anyone can use untrained that are not attack skills: an untrained check is the ability alone (plus size), so it
+ * is held to PL + 10 too. Close and Ranged Combat are attack bonuses, limited with the attack instead (DCA 66).
+ */
+export function untrainedSkills(R) {
+  return (R.raw.skills || []).filter((k) => !k.trained_only && !/^(Close|Ranged) Combat$/.test(k.name));
+}
+
+/** The bonus for an untrained check of this skill. */
+export function untrainedBonus(ch, R, name, abil = abilityTotals(ch, R)) {
+  const ability = R.skillAbility(name);
+  if (abil[ability] == null) return null;
+  return abil[ability] + sizeSkillMod(ch, name);
+}
+
 export function skillBonuses(ch, R, abil = abilityTotals(ch, R)) {
   return (ch.skills || [])
     .filter((s) => s.ranks > 0)
@@ -105,10 +135,8 @@ export function skillBonuses(ch, R, abil = abilityTotals(ch, R)) {
       const ability = R.skillAbility(s.name);
       const label = s.spec ? `${s.name} (${s.spec})` : s.name;
       const enhanced = sumEnhanced(ch, R, label) + placedOn(ch, `skill:${label}`);
-      const growth = rankOf(ch, 'Growth');
       let bonus = (abil[ability] ?? 0) + s.ranks + enhanced;
-      if (s.name === 'Intimidation') bonus += Math.floor(growth / 2);
-      if (s.name === 'Stealth') bonus -= growth;
+      bonus += sizeSkillMod(ch, s.name);
       return { ...s, ability, bonus };
     });
 }
@@ -131,6 +159,28 @@ export function reducedRange(p, range) {
   const ladder = ['Close', 'Ranged', 'Perception'];
   const at = ladder.indexOf(range);
   return at < 0 || !steps ? range : ladder[Math.min(ladder.length - 1, Math.max(0, at + steps))];
+}
+
+const DURATION_LADDER = ['Instant', 'Concentration', 'Sustained', 'Continuous'];
+
+/**
+ * A power's duration after its duration extras (DCA 129, 132): Increased Duration moves it up one step a rank
+ * (instant, concentration, sustained, continuous) and Sustained makes a permanent effect sustained. These are what the
+ * duration flaws act on, so modifier prerequisites read this. `withFlaws` also applies the Concentration flaw
+ * (sustained to concentration) and Permanent (sustained or continuous to permanent): the duration in play.
+ */
+export function durationOf(p, R, { withFlaws = false } = {}) {
+  let d = R.effect(p.effect).duration;
+  const has = (list, name) => (list || []).filter((m) => m.name === name).reduce((s, m) => s + (m.steps ?? 1), 0);
+  if (d === 'Permanent' && has(p.extras, 'Sustained')) d = 'Sustained';
+  const up = has(p.extras, 'Increased Duration');
+  const at = DURATION_LADDER.indexOf(d);
+  if (up && at >= 0) d = DURATION_LADDER[Math.min(DURATION_LADDER.length - 1, at + up)];
+  if (withFlaws) {
+    if (d === 'Sustained' && has(p.flaws, 'Concentration')) d = 'Concentration';
+    if ((d === 'Sustained' || d === 'Continuous') && has(p.flaws, 'Permanent')) d = 'Permanent';
+  }
+  return d;
 }
 
 /** Classify how an attack effect is delivered. */
@@ -221,7 +271,9 @@ export function attacks(ch, R, abil = abilityTotals(ch, R)) {
 }
 
 export function initiative(ch, R, abil = abilityTotals(ch, R)) {
-  return (abil.Agility ?? 0) + 4 * advantageRank(ch, 'Improved Initiative');
+  // The Super-Speed shorthand includes Enhanced Improved Initiative at its rank (DCA 119): +4 a rank.
+  const superSpeed = activePowers(ch).filter((p) => p.effect === 'Super-Speed').reduce((m, p) => Math.max(m, p.rank || 0), 0);
+  return (abil.Agility ?? 0) + 4 * (advantageRank(ch, 'Improved Initiative') + superSpeed);
 }
 
 export function deriveAll(ch, R) {
