@@ -127,3 +127,15 @@ test('size changes Stealth and Intimidation: Shrinking +rank Stealth, -half Inti
   assert.equal(bonus(big, 'Stealth'), 2 + 4 - 8);
   assert.equal(bonus(big, 'Intimidation'), 2 + 4 + 4);
 });
+
+test('untrained checks are limited only for skills usable untrained, not attack skills or trained-only ones (DCA 66)', () => {
+  const skillIssues = (abilities, more = {}) => issues(hero({ abilities: { ...hero().abilities, ...abilities }, ...more })).filter((i) => i.rule === 'skill').map((i) => i.message);
+  // Intellect's skills are all trained-only; Dexterity's are Ranged Combat (an attack) and trained-only ones.
+  assert.deepEqual(skillIssues({ Intellect: 22, Dexterity: 21 }), []);
+  // Presence 21 makes an untrained Deception, Intimidation and Persuasion +21.
+  assert.equal(skillIssues({ Presence: 21 }).filter((m) => /^Untrained (Deception|Intimidation|Persuasion) \+21/.test(m)).length, 3);
+  // A skill with ranks is checked as a trained skill instead, so it isn't reported twice.
+  assert.ok(!skillIssues({ Presence: 21 }, { skills: [{ name: 'Deception', ranks: 1 }] }).some((m) => /Untrained Deception/.test(m)));
+  // Size counts: Agility 8 and Shrinking 16 make an untrained Stealth +24 at PL 10.
+  assert.match(skillIssues({ Agility: 8 }, { powers: [P('Shrinking', 16)] }).join(), /Untrained Stealth \+24 \(Agility 8, size\)/);
+});

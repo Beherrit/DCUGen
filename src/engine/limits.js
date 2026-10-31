@@ -6,8 +6,8 @@
 //   Dodge + Toughness, Parry + Toughness        <= 2 x PL
 //   Fortitude + Will                            <= 2 x PL
 
-import { ABILITIES, traitKind } from './rules.js';
-import { deriveAll, allPowers, enhancedAdvantageRank, durationOf } from './derive.js';
+import { traitKind } from './rules.js';
+import { deriveAll, allPowers, enhancedAdvantageRank, durationOf, untrainedSkills, untrainedBonus } from './derive.js';
 import { missingPrerequisiteText } from './prereqs.js';
 import { costBreakdown, alternateOwnCost, primaryOwnCost, equipmentPoints, effectCost } from './costs.js';
 import { EP_PER_EQUIPMENT_RANK } from './rules.js';
@@ -94,10 +94,13 @@ export function checkLimits(ch, R) {
     const bonus = (d.abilities[ability] ?? 0) + ranks;
     if (bonus > pl + 10) out.push(issue('skill', `${label} +${bonus} (Enhanced ${label} ${ranks}) exceeds PL + 10 (${pl + 10}).`, 'error', { pl: true }));
   }
-  for (const a of ABILITIES) {
-    if (a === 'Stamina') continue; // no skills use Stamina
-    const v = d.abilities[a];
-    if (v != null && v > pl + 10) out.push(issue('skill', `${a} ${v} makes untrained skills exceed PL + 10 (${pl + 10}).`, 'error', { pl: true }));
+  // Untrained checks: only skills anyone may use untrained, and not the attack skills (Fighting and Dexterity are
+  // limited through attacks; Intellect's skills are all trained-only).
+  const trained = new Set([...d.skills.map((x) => x.name), ...[...enhancedSkills.keys()].map((l) => l.replace(/\s*\(.*\)$/, ''))]);
+  for (const k of untrainedSkills(R)) {
+    if (trained.has(k.name)) continue;
+    const bonus = untrainedBonus(ch, R, k.name, d.abilities);
+    if (bonus != null && bonus > pl + 10) out.push(issue('skill', `Untrained ${k.name} +${bonus} (${k.ability} ${d.abilities[k.ability]}${bonus !== d.abilities[k.ability] ? ', size' : ''}) exceeds PL + 10 (${pl + 10}).`, 'error', { pl: true }));
   }
 
   // Advantages. Ranks from Enhanced Trait powers count toward the advantage's maximum (Enhanced Luck is still Luck).

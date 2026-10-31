@@ -102,6 +102,32 @@ export function defenseTotals(ch, R, abil = abilityTotals(ch, R)) {
   return out;
 }
 
+/**
+ * Size modifiers to skills (DCA 100, 117): Growth +1 Intimidation per 2 ranks and -1 Stealth a rank; Shrinking +1
+ * Stealth a rank and -1 Intimidation per 2 ranks (none with Normal Strength).
+ */
+export function sizeSkillMod(ch, name) {
+  const growth = rankOf(ch, 'Growth');
+  if (name === 'Intimidation') return Math.floor(growth / 2) - Math.floor(shrinkWeak(ch) / 2);
+  if (name === 'Stealth') return rankOf(ch, 'Shrinking') - growth;
+  return 0;
+}
+
+/**
+ * Skills anyone can use untrained that are not attack skills: an untrained check is the ability alone (plus size), so it
+ * is held to PL + 10 too. Close and Ranged Combat are attack bonuses, limited with the attack instead (DCA 66).
+ */
+export function untrainedSkills(R) {
+  return (R.raw.skills || []).filter((k) => !k.trained_only && !/^(Close|Ranged) Combat$/.test(k.name));
+}
+
+/** The bonus for an untrained check of this skill. */
+export function untrainedBonus(ch, R, name, abil = abilityTotals(ch, R)) {
+  const ability = R.skillAbility(name);
+  if (abil[ability] == null) return null;
+  return abil[ability] + sizeSkillMod(ch, name);
+}
+
 export function skillBonuses(ch, R, abil = abilityTotals(ch, R)) {
   return (ch.skills || [])
     .filter((s) => s.ranks > 0)
@@ -109,13 +135,8 @@ export function skillBonuses(ch, R, abil = abilityTotals(ch, R)) {
       const ability = R.skillAbility(s.name);
       const label = s.spec ? `${s.name} (${s.spec})` : s.name;
       const enhanced = sumEnhanced(ch, R, label) + placedOn(ch, `skill:${label}`);
-      const growth = rankOf(ch, 'Growth');
       let bonus = (abil[ability] ?? 0) + s.ranks + enhanced;
-      // Size (DCA 100, 117): Growth +1 Intimidation per 2 ranks and -1 Stealth a rank; Shrinking +1 Stealth a rank and
-      // -1 Intimidation per 2 ranks (none with Normal Strength).
-      const shrink = rankOf(ch, 'Shrinking');
-      if (s.name === 'Intimidation') bonus += Math.floor(growth / 2) - Math.floor(shrinkWeak(ch) / 2);
-      if (s.name === 'Stealth') bonus += shrink - growth;
+      bonus += sizeSkillMod(ch, s.name);
       return { ...s, ability, bonus };
     });
 }
