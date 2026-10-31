@@ -110,10 +110,12 @@ export function explainPower(p, R) {
       parts.push(`Stretches to reach up to ${distanceAt(rank, R) || `distance rank ${rank}`} away.`);
       break;
     case 'Growth':
-      parts.push(`Grows larger: +${rank} Strength and Stamina, −${Math.floor(rank / 2)} to Dodge and Parry, +${Math.floor(rank / 2)} Intimidation.`);
+      parts.push(`Grows larger: +${rank} Strength and Stamina, −${Math.floor(rank / 2)} to Dodge and Parry, +${Math.floor(rank / 2)} Intimidation, −${rank} Stealth.`);
       break;
     case 'Shrinking':
-      parts.push(`Shrinks: +${Math.floor(rank / 2)} to Dodge and Parry, harder to spot, −${Math.floor(rank / 4)} Strength.`);
+      parts.push((p.extras || []).some((m) => m.name === 'Normal Strength')
+        ? `Shrinks: +${Math.floor(rank / 2)} to Dodge and Parry, +${rank} Stealth, keeping full Strength.`
+        : `Shrinks: +${Math.floor(rank / 2)} to Dodge and Parry, +${rank} Stealth, −${Math.floor(rank / 4)} Strength, −${Math.floor(rank / 2)} Intimidation.`);
       break;
     case 'Insubstantial':
       parts.push(['', 'Fluid form: flows through cracks and resists physical harm.', 'Gaseous form: drifts, immune to most physical effects.', 'Energy form: immune to physical damage, only energy affects you.', 'Incorporeal: passes through solid objects; only special effects can touch you.'][Math.min(4, rank)] || eff.summary);

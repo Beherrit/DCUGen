@@ -4807,7 +4807,7 @@
       },
       {
         "name": "Stealth",
-        "ranks": 10
+        "ranks": 6
       }
     ],
     "advantages": [],
@@ -7343,7 +7343,7 @@
     "skills": [
       {
         "name": "Stealth",
-        "ranks": 10
+        "ranks": 7
       },
       {
         "name": "Deception",

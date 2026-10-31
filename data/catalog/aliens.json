@@ -2632,7 +2632,7 @@
     "skills": [
       {
         "name": "Stealth",
-        "ranks": 6
+        "ranks": 4
       },
       {
         "name": "Deception",
@@ -5105,7 +5105,7 @@
     "skills": [
       {
         "name": "Stealth",
-        "ranks": 8
+        "ranks": 4
       },
       {
         "name": "Close Combat",
