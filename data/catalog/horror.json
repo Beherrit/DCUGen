@@ -1048,7 +1048,8 @@
       },
       {
         "name": "Improved Critical",
-        "rank": 1
+        "rank": 1,
+        "param": "Hessian Sabre"
       },
       {
         "name": "Startle",
@@ -1193,7 +1194,8 @@
       },
       {
         "name": "Improved Critical",
-        "rank": 1
+        "rank": 1,
+        "param": "Hellforged Greatsword"
       },
       {
         "name": "Power Attack",
@@ -2764,7 +2766,8 @@
       },
       {
         "name": "Improved Critical",
-        "rank": 1
+        "rank": 1,
+        "param": "Burning Blade"
       },
       {
         "name": "Interpose",
@@ -3220,7 +3223,8 @@
       },
       {
         "name": "Improved Critical",
-        "rank": 2
+        "rank": 2,
+        "param": "Four Blades"
       },
       {
         "name": "Leadership",
@@ -7044,7 +7048,8 @@
       },
       {
         "name": "Improved Critical",
-        "rank": 1
+        "rank": 1,
+        "param": "Sun-Bright Sword"
       },
       {
         "name": "Leadership",
@@ -8873,7 +8878,8 @@
     "advantages": [
       {
         "name": "Improved Critical",
-        "rank": 1
+        "rank": 1,
+        "param": "Head-Plucking Hands"
       },
       {
         "name": "Improved Grab",

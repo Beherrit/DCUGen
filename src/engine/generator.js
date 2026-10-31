@@ -12,6 +12,7 @@ import { ABILITIES, BUYABLE_DEFENSES, PP_PER_PL, EP_PER_EQUIPMENT_RANK } from '.
 import { costBreakdown, powerCost, alternateOwnCost, primaryOwnCost, equipmentPoints } from './costs.js';
 import { deriveAll, advantageRank, attackKind, allPowers, untrainedSkills, untrainedBonus } from './derive.js';
 import { grantPrerequisites, isLastPrerequisite } from './prereqs.js';
+import { paramChoices, paramRequired } from './advparams.js';
 import { checkLimits } from './limits.js';
 import { rollSpec, rangeOf, evalExpr } from './expr.js';
 import { makeIdentity } from './flavor.js';
@@ -453,6 +454,12 @@ function grantAdvantage(ch, R, name, ctx, fixedParam) {
     }
     case 'Minion': case 'Sidekick': param = rng.pick(['Henchman', 'Robot assistant', 'Loyal hound', 'Apprentice', 'Drone']); break;
     default: break;
+  }
+  // An advantage that has to name its target gets one (Second Chance (Mind control), Ultimate Effort (Will checks)).
+  if (param == null && paramRequired(def) && !(existing && def.ranked)) {
+    const choices = paramChoices(ch, R, def).filter((c) => !ch.advantages.some((a) => a.name === name && a.param === c));
+    if (!choices.length) return false;
+    param = rng.pick(choices);
   }
   if (existing && def.ranked && (param == null || existing.param === param)) { existing.rank++; return true; }
   addAdvantage(ch, name, 1, param);

@@ -8145,7 +8145,8 @@
     "advantages": [
       {
         "name": "Improved Critical",
-        "rank": 2
+        "rank": 2,
+        "param": "Keen Edge"
       }
     ],
     "powers": [

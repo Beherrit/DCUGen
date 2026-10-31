@@ -181,7 +181,8 @@
       },
       {
         "name": "Favored Foe",
-        "rank": 1
+        "rank": 1,
+        "param": "Its assigned target"
       }
     ],
     "powers": [
@@ -608,7 +609,8 @@
     "advantages": [
       {
         "name": "Healing Touch",
-        "rank": 1
+        "rank": 1,
+        "param": "Treatment"
       }
     ],
     "powers": [
@@ -1026,7 +1028,8 @@
       },
       {
         "name": "Daze",
-        "rank": 1
+        "rank": 1,
+        "param": "Deception"
       },
       {
         "name": "Improved Initiative",
@@ -1294,7 +1297,8 @@
     "advantages": [
       {
         "name": "Improved Critical",
-        "rank": 1
+        "rank": 1,
+        "param": "Chin Autocannons"
       },
       {
         "name": "Improved Initiative",
@@ -3416,7 +3420,8 @@
       },
       {
         "name": "Improved Critical",
-        "rank": 1
+        "rank": 1,
+        "param": "Thermite Breath"
       },
       {
         "name": "Fast Grab",
@@ -5072,7 +5077,8 @@
       },
       {
         "name": "Ultimate Effort",
-        "rank": 1
+        "rank": 1,
+        "param": "Intellect checks"
       }
     ],
     "powers": [
@@ -5924,7 +5930,8 @@
       },
       {
         "name": "Improved Critical",
-        "rank": 1
+        "rank": 1,
+        "param": "Bone Scythes"
       }
     ],
     "powers": [

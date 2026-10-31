@@ -9,6 +9,7 @@
 import { traitKind } from './rules.js';
 import { deriveAll, allPowers, enhancedAdvantageRank, durationOf, untrainedSkills, untrainedBonus } from './derive.js';
 import { missingPrerequisiteText } from './prereqs.js';
+import { paramRequired } from './advparams.js';
 import { costBreakdown, alternateOwnCost, primaryOwnCost, equipmentPoints, effectCost } from './costs.js';
 import { EP_PER_EQUIPMENT_RANK } from './rules.js';
 import { powerTags } from './powersmith.js';
@@ -115,6 +116,7 @@ export function checkLimits(ch, R) {
     const max = def.max_rank === 'half_pl' ? Math.floor(pl / 2) : def.max_rank;
     if (max != null && rank + enhanced > max) out.push(issue('advantage', `${adv.name} ${rank + enhanced}${enhanced ? ` (${enhanced} from Enhanced ${adv.name})` : ''} exceeds its maximum of ${max}.`, 'error', { source: def.source }));
     for (const req of missingPrerequisiteText(ch, R, def.name)) out.push(issue('advantage', `${adv.name} requires ${req}.`, 'warning', { source: def.source }));
+    if (paramRequired(def) && !adv.param && !adv.detail) out.push(issue('advantage', `${adv.name} needs to name its ${def.param} (pick it in Edit mode).`, 'warning', { source: def.source }));
   }
   // Advantages bought only as Enhanced Trait powers follow the same caps and prerequisites.
   for (const { power: p, alternateOf } of allPowers(ch)) {
