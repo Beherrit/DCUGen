@@ -3,7 +3,7 @@
 import { makeRng } from './rng.js';
 import { RANGE_STEPS } from './rules.js';
 import { baseCostPerRank, rangeDelta, modifierValue, effectCost, powerCost } from './costs.js';
-import { reducedRange } from './derive.js';
+import { reducedRange, durationOf } from './derive.js';
 /** Step-by-step cost math for one power, for showing the user how the number is reached. */
 export function costMath(p, R) {
   const eff = R.effect(p.effect);
@@ -47,7 +47,10 @@ export function powerTags(p, R) {
   if (range === 'Ranged') tags.add('ranged');
   if (range === 'Close') tags.add('close');
   if (range === 'Personal') tags.add('personal');
-  if (eff.duration) tags.add(String(eff.duration).toLowerCase());
+  // The duration the flaws act on: after Increased Duration and Sustained (Concentration on a Sustained Protection is fine).
+  const duration = durationOf(p, R);
+  if (duration) tags.add(String(duration).toLowerCase());
+  if (duration === 'Sustained' || duration === 'Continuous') tags.add('lasting'); // what the Permanent flaw needs (DCA 136)
   if (!eff.fixed_cost) tags.add('ranked');
   return tags;
 }

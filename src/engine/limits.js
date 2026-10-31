@@ -7,7 +7,7 @@
 //   Fortitude + Will                            <= 2 x PL
 
 import { ABILITIES, traitKind } from './rules.js';
-import { deriveAll, allPowers, enhancedAdvantageRank } from './derive.js';
+import { deriveAll, allPowers, enhancedAdvantageRank, durationOf } from './derive.js';
 import { missingPrerequisiteText } from './prereqs.js';
 import { costBreakdown, alternateOwnCost, primaryOwnCost, equipmentPoints, effectCost } from './costs.js';
 import { EP_PER_EQUIPMENT_RANK } from './rules.js';
@@ -164,7 +164,7 @@ export function checkLimits(ch, R) {
     }
     // "Permanent effects cannot have Alternate Effects, nor can they be Alternate Effects" (DCA 125).
     if (alternateOf || (p.alternates || []).length) {
-      if (durationOf(p, eff) === 'Permanent') out.push(issue('power', `${p.name}: ${eff.name} is permanent, and permanent effects can't be in an array (they can't be switched off). Add Sustained or move it out of the array.`, 'warning', { source: 'DCA 125' }));
+      if (durationOf(p, R, { withFlaws: true }) === 'Permanent') out.push(issue('power', `${p.name}: ${eff.name} is permanent, and permanent effects can't be in an array (they can't be switched off). Add Sustained or move it out of the array.`, 'warning', { source: 'DCA 125' }));
     }
     if (alternateOf) {
       const own = alternateOwnCost(p, R);
@@ -185,13 +185,6 @@ export function checkLimits(ch, R) {
   else if (cost.total < cost.budget) out.push(issue('budget', `${cost.budget - cost.total} power points unspent.`, 'info'));
 
   return house(out);
-}
-
-/** A power's duration after the Sustained extra (permanent to sustained) and the Permanent flaw (sustained to permanent). */
-function durationOf(p, eff) {
-  if ((p.flaws || []).some((m) => m.name === 'Permanent')) return 'Permanent';
-  if (eff.duration === 'Permanent' && (p.extras || []).some((m) => m.name === 'Sustained')) return 'Sustained';
-  return eff.duration;
 }
 
 /** Supporting characters, minions and creatures: built as stat blocks, so the point budget is advisory. */

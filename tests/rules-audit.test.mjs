@@ -93,3 +93,16 @@ test('fractional costs below 1 point per 5 ranks get the book\'s guideline warni
   const cheap = P('Protection', 12, { flaws: ['Limited', 'Unreliable', 'Tiring', 'Distracting', 'Fades'].map((name) => ({ name })) });
   assert.ok(issues(hero({ powers: [cheap] })).some((i) => /1 point per 6 ranks/.test(i.message) && i.severity === 'warning'));
 });
+
+test('modifier prerequisites read the duration after Increased Duration and Sustained (DCA 129, 132, 135, 136)', () => {
+  const warns = (p) => issues(hero({ powers: [p] })).filter((i) => i.rule === 'power').map((i) => i.message);
+  // Concentration needs a sustained effect: a Sustained Protection qualifies, a plain (permanent) one doesn't.
+  assert.deepEqual(warns(P('Protection', 4, { extras: [{ name: 'Sustained' }], flaws: [{ name: 'Concentration' }] })), []);
+  assert.equal(warns(P('Protection', 4, { flaws: [{ name: 'Concentration' }] })).length, 1);
+  // Permanent needs a sustained or continuous effect.
+  assert.deepEqual(warns(P('Growth', 4, { flaws: [{ name: 'Permanent' }] })), []);
+  assert.match(warns(P('Damage', 4, { flaws: [{ name: 'Permanent' }] })).join(), /Permanent needs an effect that is "lasting"/);
+  // Increased Duration makes an instant Damage concentration: no longer "instant" for Secondary Effect.
+  assert.deepEqual(warns(P('Damage', 4, { extras: [{ name: 'Secondary Effect' }] })), []);
+  assert.equal(warns(P('Damage', 4, { extras: [{ name: 'Secondary Effect' }, { name: 'Increased Duration' }] })).length, 1);
+});
