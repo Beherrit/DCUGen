@@ -302,6 +302,9 @@ details > summary { cursor: pointer; color: var(--ink-2); font: 600 12.5px/1.4 v
 .adv-preview { margin-top: 6px; padding: 6px 8px; font-size: 13px; color: var(--ink-2); background: var(--surface-2); border-left: 3px solid var(--line); border-radius: 0 4px 4px 0; display: grid; gap: 2px; }
 .adv-preview b { color: var(--ink); }
 .adv-req { color: var(--ink-3); }
+.adv-fix { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 4px; font-size: 13px; }
+.adv-fix .adv-req { color: var(--warn); }
+.adv-fix-in { flex: 1 1 140px; min-width: 120px; }
 .adv { display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface-2); font-size: 13.5px; }
 .adv .r { font-weight: 700; }
 .skills { width: 100%; border-collapse: collapse; font-size: 14px; }

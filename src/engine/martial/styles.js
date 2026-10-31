@@ -9,6 +9,7 @@
 
 import { TIERS, stylesOf, knownStyle, styleDef, parseStyleSkill } from './lookup.js';
 import { grantPrerequisites } from '../prereqs.js';
+import { paramRequired } from '../advparams.js';
 
 const dropEmpty = (ch, key) => { ch[key] = (ch[key] || []).filter((x) => (x.ranks ?? x.rank ?? 1) > 0); };
 
@@ -32,6 +33,8 @@ export function addSkillRanks(ch, entry, skill, ranks) {
 export function addAdvantageRanks(ch, entry, adv, ranks, R) {
   if (ranks <= 0) return;
   ch.advantages = ch.advantages || [];
+  // An advantage that has to name an attack names the style's own (its maneuvers are attacks with the style skill).
+  if (R && !adv.param && paramRequired(R.advantage(adv.name)) && R.advantage(adv.name).param === 'attack' && entry?.name) adv = { ...adv, param: entry.name };
   // An advantage the style lists can need another first (Improved Joint Lock needs Joint Lock, MA 66): the style brings it too.
   // A prerequisite that can't be handed out (a weapon element is picked on the style) is left for the limits to flag.
   if (R) grantPrerequisites(ch, R, adv.name, adv.param, {

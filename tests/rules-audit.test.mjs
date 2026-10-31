@@ -139,3 +139,17 @@ test('untrained checks are limited only for skills usable untrained, not attack 
   // Size counts: Agility 8 and Shrinking 16 make an untrained Stealth +24 at PL 10.
   assert.match(skillIssues({ Agility: 8 }, { powers: [P('Shrinking', 16)] }).join(), /Untrained Stealth \+24 \(Agility 8, size\)/);
 });
+
+test('advantages that apply to one thing must name it; choices come from the sheet first', async () => {
+  const { paramChoices, paramRequired } = await import('../src/engine/advparams.js');
+  assert.equal(paramRequired(R.advantage('Improved Critical')), true);
+  assert.equal(paramRequired(R.advantage('Languages')), false);
+  assert.equal(paramRequired(R.advantage('Precise Attack')), false);
+  const ch = hero({ skills: [{ name: 'Expertise', spec: 'Magic', ranks: 4 }], powers: [P('Damage', 8, { name: 'Fire Bolt', range: 'Ranged' })] });
+  assert.deepEqual(paramChoices(ch, R, R.advantage('Improved Critical')).slice(0, 2), ['Unarmed', 'Fire Bolt']);
+  assert.equal(paramChoices(ch, R, R.advantage('Skill Mastery'))[0], 'Expertise (Magic)');
+  assert.deepEqual(paramChoices(ch, R, R.advantage('Daze')), ['Deception', 'Intimidation']);
+  const msgs = issues(hero({ advantages: [{ name: 'Improved Critical', rank: 1 }, { name: 'Languages', rank: 2 }] })).map((i) => i.message);
+  assert.ok(msgs.some((m) => /Improved Critical needs to name its attack/.test(m)));
+  assert.ok(!msgs.some((m) => /Languages/.test(m)));
+});
