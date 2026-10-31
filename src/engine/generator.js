@@ -10,7 +10,7 @@
 import { makeRng, randomSeed } from './rng.js';
 import { ABILITIES, BUYABLE_DEFENSES, PP_PER_PL, EP_PER_EQUIPMENT_RANK } from './rules.js';
 import { costBreakdown, powerCost, alternateOwnCost, primaryOwnCost, equipmentPoints } from './costs.js';
-import { deriveAll, advantageRank, attackKind, allPowers } from './derive.js';
+import { deriveAll, advantageRank, attackKind, allPowers, untrainedSkills, untrainedBonus } from './derive.js';
 import { grantPrerequisites, isLastPrerequisite } from './prereqs.js';
 import { checkLimits } from './limits.js';
 import { rollSpec, rangeOf, evalExpr } from './expr.js';
@@ -175,8 +175,10 @@ function repair(ch, R, budgetRng) {
       if (sk && sk.ranks > 0) { sk.ranks -= Math.min(sk.ranks, s.bonus - pl - 10); if (!sk.ranks) ch.skills.splice(ch.skills.indexOf(sk), 1); fixed = true; break; }
     }
     if (fixed) continue;
-    for (const a of ABILITIES) {
-      if (a !== 'Stamina' && d.abilities[a] > pl + 10) { ch.abilities[a] -= d.abilities[a] - pl - 10; fixed = true; break; }
+    for (const k of untrainedSkills(R)) {
+      if (d.skills.some((x) => x.name === k.name)) continue;
+      const over = (untrainedBonus(ch, R, k.name, d.abilities) ?? 0) - pl - 10;
+      if (over > 0 && ch.abilities[k.ability] != null && ch.abilities[k.ability] > -5) { ch.abilities[k.ability] -= Math.min(over, ch.abilities[k.ability] + 5); fixed = true; break; }
     }
     if (fixed) continue;
 
