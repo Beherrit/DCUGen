@@ -27,9 +27,11 @@ function buyAdvantages(ch, R, entry, def) {
     const key = `${known.name}|${a.detail || ''}`;
     wanted.set(key, { name: known.name, param: a.detail, rank: (wanted.get(key)?.rank || 0) + (a.rank ?? 1) });
   }
-  for (const w of wanted.values()) {
+  // Prerequisites the style lists itself go first (Attack Specialist before Attack Mastery), so they aren't bought twice.
+  const needsOther = (w) => (R.advantage(w.name)?.requires || []).some((r) => [...wanted.values()].some((o) => o !== w && r === `advantage:${o.name}`));
+  for (const w of [...wanted.values()].sort((a, b) => needsOther(a) - needsOther(b))) {
     const have = (ch.advantages || []).filter((x) => x.name === w.name && (x.param || null) === (w.param || null)).reduce((t, x) => t + (x.rank || 1), 0);
-    addAdvantageRanks(ch, entry, { name: w.name, param: w.param }, w.rank - have);
+    addAdvantageRanks(ch, entry, { name: w.name, param: w.param }, w.rank - have, R);
   }
 }
 
