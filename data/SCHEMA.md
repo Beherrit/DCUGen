@@ -40,7 +40,7 @@ Names are the exact book names (Title Case), because power templates and tests r
   "value": 1,                    // magnitude per step (always positive; flaws are subtracted)
   "options": null,               // when the value depends on a choice: {"label": value}
   "max_steps": 1,                // how many times it can stack (null = unlimited)
-  "requires": [],                // tags the power must have: attack, ranged, close, resisted, sustained, instant, personal, ranked
+  "requires": [],                // tags the power must have: attack, ranged, close, resisted, sustained, instant, lasting (sustained or continuous), personal, ranked; durations are read after Increased Duration and Sustained
   "source": "DCA 125",
   "summary": "+2 attack check bonus per rank."
 }

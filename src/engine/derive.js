@@ -133,6 +133,28 @@ export function reducedRange(p, range) {
   return at < 0 || !steps ? range : ladder[Math.min(ladder.length - 1, Math.max(0, at + steps))];
 }
 
+const DURATION_LADDER = ['Instant', 'Concentration', 'Sustained', 'Continuous'];
+
+/**
+ * A power's duration after its duration extras (DCA 129, 132): Increased Duration moves it up one step a rank
+ * (instant, concentration, sustained, continuous) and Sustained makes a permanent effect sustained. These are what the
+ * duration flaws act on, so modifier prerequisites read this. `withFlaws` also applies the Concentration flaw
+ * (sustained to concentration) and Permanent (sustained or continuous to permanent): the duration in play.
+ */
+export function durationOf(p, R, { withFlaws = false } = {}) {
+  let d = R.effect(p.effect).duration;
+  const has = (list, name) => (list || []).filter((m) => m.name === name).reduce((s, m) => s + (m.steps ?? 1), 0);
+  if (d === 'Permanent' && has(p.extras, 'Sustained')) d = 'Sustained';
+  const up = has(p.extras, 'Increased Duration');
+  const at = DURATION_LADDER.indexOf(d);
+  if (up && at >= 0) d = DURATION_LADDER[Math.min(DURATION_LADDER.length - 1, at + up)];
+  if (withFlaws) {
+    if (d === 'Sustained' && has(p.flaws, 'Concentration')) d = 'Concentration';
+    if ((d === 'Sustained' || d === 'Continuous') && has(p.flaws, 'Permanent')) d = 'Permanent';
+  }
+  return d;
+}
+
 /** Classify how an attack effect is delivered. */
 export function attackKind(p, R) {
   const eff = R.effect(p.effect);
