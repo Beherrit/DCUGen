@@ -273,14 +273,20 @@ async function desktopSync() {
     const haveLocal = (() => { try { return !!localStorage.getItem('dcugen.roster.v1'); } catch { return false; } })();
     if (!haveLocal && vault && Object.keys(vault).length) { restoreAll({ app: 'DCUGen', data: vault }, { mode: 'replace' }); location.reload(); return; }
   } catch { /* no vault yet */ }
-  // Send only what changed (and what was removed), not the whole store every few seconds.
+  // The keys changed here but not yet on disk, kept for the next start: storage-boot.js takes the vault's
+  // copy of every other key, which is newer when a crash beat the browser to saving its own.
+  const VAULT_PENDING = 'dcugenVaultPending';
+  // Send only what changed (and what was removed), not the whole store every time.
   const changed = new Set();
   const removed = new Set();
   const proto = Storage.prototype;
   const set = proto.setItem; const remove = proto.removeItem;
   const ours = (store, k) => store === localStorage && String(k).startsWith('dcugen.');
-  proto.setItem = function setItem(k, v) { set.call(this, k, v); if (ours(this, k)) { changed.add(String(k)); removed.delete(String(k)); } };
-  proto.removeItem = function removeItem(k) { remove.call(this, k); if (ours(this, k)) { removed.add(String(k)); changed.delete(String(k)); } };
+  const notePending = () => { try { set.call(localStorage, VAULT_PENDING, JSON.stringify([...changed, ...removed])); } catch { /* full */ } };
+  let timer = null;
+  const soon = () => { if (!timer) timer = setTimeout(flush, 400); };
+  proto.setItem = function setItem(k, v) { set.call(this, k, v); if (ours(this, k)) { changed.add(String(k)); removed.delete(String(k)); notePending(); soon(); } };
+  proto.removeItem = function removeItem(k) { remove.call(this, k); if (ours(this, k)) { removed.add(String(k)); changed.delete(String(k)); notePending(); soon(); } };
   const take = () => {
     const data = {};
     for (const k of changed) { const v = localStorage.getItem(k); if (v !== null) data[k] = v; }
@@ -288,15 +294,30 @@ async function desktopSync() {
     changed.clear(); removed.clear();
     return change;
   };
-  const flush = async () => {
+  const putBack = (change) => { for (const k of Object.keys(change.data)) changed.add(k); for (const k of change.removed) removed.add(k); };
+  // A change is saved to disk moments after it is made, not on a timer, so a crash loses next to nothing.
+  async function flush() {
+    clearTimeout(timer); timer = null;
     if (!changed.size && !removed.size) return;
     const change = take();
-    try { await (d.vaultUpdate ? d.vaultUpdate(change) : d.vaultSave(change.data)); } catch { for (const k of Object.keys(change.data)) changed.add(k); for (const k of change.removed) removed.add(k); }
+    try { await (d.vaultUpdate ? d.vaultUpdate(change) : d.vaultSave(change.data)); } catch { putBack(change); }
+    notePending();
+  }
+  // Closing the window: save and wait for the disk, since an answer that comes after the page is gone is lost.
+  const flushNow = () => {
+    if (!changed.size && !removed.size) return;
+    const change = take();
+    let ok = false;
+    try { ok = d.vaultUpdateNow ? d.vaultUpdateNow(change) : false; } catch { /* old desktop app */ }
+    if (ok) notePending(); else { putBack(change); flush(); }
   };
   // Start from a complete copy on disk.
-  try { await d.vaultSave(snapshotAll().data); } catch { /* retried with the next change */ }
-  setInterval(flush, 4000);
-  window.addEventListener('beforeunload', () => { flush(); });
+  const all = snapshotAll().data;
+  try { await d.vaultSave(all); } catch { for (const k of Object.keys(all)) changed.add(k); }
+  notePending();
+  setInterval(flush, 4000); // retries anything that failed
+  window.addEventListener('beforeunload', flushNow);
+  window.addEventListener('pagehide', flushNow);
   document.body.classList.add('desktop');
 }
 

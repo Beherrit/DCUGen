@@ -33,6 +33,7 @@
   let failed = false;
   const dirty = new Map();
   let timer = null;
+  let aborts = 0;
   const open = () => new Promise((resolve, reject) => {
     const r = indexedDB.open('dcugen', 2);
     r.onupgradeneeded = () => {
@@ -47,10 +48,15 @@
     if (timer) { clearTimeout(timer); timer = null; }
     if (!db || !dirty.size) return;
     try {
-      const tx = db.transaction('kv', 'readwrite');
+      // 'strict': the write is on the disk when it completes, not still in a cache a power cut would empty.
+      const tx = db.transaction('kv', 'readwrite', { durability: 'strict' });
       const st = tx.objectStore('kv');
-      for (const [k, v] of dirty) { if (v === null) st.delete(k); else st.put(v, k); }
+      const batch = new Map(dirty);
+      for (const [k, v] of batch) { if (v === null) st.delete(k); else st.put(v, k); }
       dirty.clear();
+      // A write that failed is tried again, unless the key has changed since.
+      tx.onabort = () => { for (const [k, v] of batch) if (!dirty.has(k)) dirty.set(k, v); if (++aborts < 5) schedule(); };
+      tx.oncomplete = () => { aborts = 0; };
     } catch { /* closing */ }
   };
   const schedule = () => { if (!timer) timer = setTimeout(flush, 200); };
@@ -123,7 +129,28 @@
     try { navigator.storage?.persist?.(); } catch { /* best effort: ask the browser not to evict */ }
     // The app is running on data it never saw: start it again on the real data.
     if (started && clobbered.length) location.reload();
-  }).catch(() => { failed = true; ready = true; });
+  }).catch(() => { failed = true; ready = true; }).then(() => fromVault());
+
+  // Desktop app: every change is forced onto the disk in the vault moments after it is made, while the
+  // browser's own stores can lag a few seconds and lose them in a crash or power cut. So before the app
+  // starts, take the vault's value of any key that differs, except the keys the last run changed and had
+  // not yet got onto disk (app.js lists them under dcugenVaultPending): those are newer here.
+  function fromVault() {
+    const d = window.dcugenDesktop;
+    if (started || !d?.vaultLoad) return undefined;
+    const wait = new Promise((r) => setTimeout(() => r(null), 5000));
+    return Promise.race([d.vaultLoad(), wait]).then((vault) => {
+      if (started || !vault) return;
+      let pending = [];
+      try { pending = JSON.parse(map.get('dcugenVaultPending') || '[]'); } catch { /* none */ }
+      const skip = new Set(Array.isArray(pending) ? pending : []);
+      for (const [k, v] of Object.entries(vault)) {
+        if (!k.startsWith('dcugen.') || typeof v !== 'string' || skip.has(k) || early.has(k) || map.get(k) === v) continue;
+        try { proto.setItem.call(real, k, v); } catch { /* full: keep what is here */ }
+      }
+      flush();
+    }).catch(() => { /* no vault: carry on with what is here */ });
+  }
 
   // Normally IndexedDB answers in milliseconds. If it hangs, start anyway after a while (the guard above
   // keeps the data safe) rather than show a blank page.
