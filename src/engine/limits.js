@@ -6,9 +6,9 @@
 //   Dodge + Toughness, Parry + Toughness        <= 2 x PL
 //   Fortitude + Will                            <= 2 x PL
 
-import { ABILITIES } from './rules.js';
-import { deriveAll, allPowers } from './derive.js';
-import { costBreakdown, alternateOwnCost, primaryOwnCost, equipmentPoints } from './costs.js';
+import { ABILITIES, traitKind } from './rules.js';
+import { deriveAll, allPowers, advantageRank, enhancedAdvantageRank, skillRanks } from './derive.js';
+import { costBreakdown, alternateOwnCost, primaryOwnCost, equipmentPoints, effectCost } from './costs.js';
 import { EP_PER_EQUIPMENT_RANK } from './rules.js';
 import { powerTags } from './powersmith.js';
 import { withoutPlaced, hasPlaced, poolPowers, poolSpent, poolAvailable, fmtPoints } from './pools.js';
@@ -79,20 +79,50 @@ export function checkLimits(ch, R) {
   for (const s of d.skills) {
     if (s.bonus > pl + 10) out.push(issue('skill', `${s.name}${s.spec ? ` (${s.spec})` : ''} +${s.bonus} exceeds PL + 10 (${pl + 10}).`, 'error', { pl: true }));
   }
+  // A skill bought only through Enhanced Trait (Enhanced Perception 12) has no entry in the skill list, but its bonus
+  // is limited all the same.
+  const listed = new Set(d.skills.map((s) => (s.spec ? `${s.name} (${s.spec})` : s.name)));
+  const enhancedSkills = new Map();
+  for (const { power: p, alternateOf } of allPowers(ch)) {
+    if (alternateOf || p.pool || p.effect !== 'Enhanced Trait' || !p.option || listed.has(p.option)) continue;
+    if (traitKind(p.option, R) !== 'skill') continue;
+    enhancedSkills.set(p.option, (enhancedSkills.get(p.option) || 0) + (p.rank || 0));
+  }
+  for (const [label, ranks] of enhancedSkills) {
+    const ability = R.skillAbility(label.replace(/\s*\(.*\)$/, ''));
+    const bonus = (d.abilities[ability] ?? 0) + ranks;
+    if (bonus > pl + 10) out.push(issue('skill', `${label} +${bonus} (Enhanced ${label} ${ranks}) exceeds PL + 10 (${pl + 10}).`, 'error', { pl: true }));
+  }
   for (const a of ABILITIES) {
     if (a === 'Stamina') continue; // no skills use Stamina
     const v = d.abilities[a];
     if (v != null && v > pl + 10) out.push(issue('skill', `${a} ${v} makes untrained skills exceed PL + 10 (${pl + 10}).`, 'error', { pl: true }));
   }
 
-  // Advantages
+  // Advantages. Ranks from Enhanced Trait powers count toward the advantage's maximum (Enhanced Luck is still Luck).
+  const seenAdv = new Set();
   for (const adv of ch.advantages || []) {
     const def = R.advantage(adv.name);
     if (!def) { out.push(issue('data', `Unknown advantage "${adv.name}".`)); continue; }
     const rank = adv.rank || 1;
+    const enhanced = seenAdv.has(adv.name) ? 0 : enhancedAdvantageRank(ch, adv.name);
+    seenAdv.add(adv.name);
     if (!def.ranked && rank > 1) out.push(issue('advantage', `${adv.name} is not a ranked advantage.`, 'error', { source: def.source }));
     const max = def.max_rank === 'half_pl' ? Math.floor(pl / 2) : def.max_rank;
-    if (max != null && rank > max) out.push(issue('advantage', `${adv.name} ${rank} exceeds its maximum of ${max}.`, 'error', { source: def.source }));
+    if (max != null && rank + enhanced > max) out.push(issue('advantage', `${adv.name} ${rank + enhanced}${enhanced ? ` (${enhanced} from Enhanced ${adv.name})` : ''} exceeds its maximum of ${max}.`, 'error', { source: def.source }));
+    for (const req of unmetRequirements(ch, def)) out.push(issue('advantage', `${adv.name} requires ${req}.`, 'warning', { source: def.source }));
+  }
+  // Advantages bought only as Enhanced Trait powers follow the same caps and prerequisites.
+  for (const { power: p, alternateOf } of allPowers(ch)) {
+    if (alternateOf || p.pool || p.effect !== 'Enhanced Trait' || !p.option || seenAdv.has(p.option)) continue;
+    const def = R.advantage(p.option);
+    if (!def) continue;
+    seenAdv.add(p.option);
+    const rank = enhancedAdvantageRank(ch, p.option);
+    if (!def.ranked && rank > 1) out.push(issue('advantage', `${p.name}: ${p.option} is not a ranked advantage, so Enhanced ${p.option} ${rank} buys nothing past rank 1.`, 'warning', { source: def.source }));
+    const max = def.max_rank === 'half_pl' ? Math.floor(pl / 2) : def.max_rank;
+    if (max != null && rank > max) out.push(issue('advantage', `${p.name}: Enhanced ${p.option} ${rank} exceeds its maximum of ${max}.`, 'error', { source: def.source }));
+    for (const req of unmetRequirements(ch, def)) out.push(issue('advantage', `${p.option} requires ${req}.`, 'warning', { source: def.source }));
   }
   const eqRanks = (ch.advantages || []).filter((a) => a.name === 'Equipment').reduce((s, a) => s + (a.rank || 1), 0);
   const ep = equipmentPoints(ch);
@@ -124,6 +154,17 @@ export function checkLimits(ch, R) {
         }
       }
     }
+    // Fractional costs: "as a general rule, 1:5 (five ranks per power point) should be the lowest" (DCA 124).
+    if (!eff.fixed_cost) {
+      try {
+        const c = effectCost(p, R);
+        if (c.perRank < -3) out.push(issue('power', `${p.name} costs 1 point per ${2 - c.perRank} ranks; the book's guideline is no cheaper than 1 per 5 (GM's call).`, 'warning', { source: 'DCA 124' }));
+      } catch { /* reported as data issues */ }
+    }
+    // "Permanent effects cannot have Alternate Effects, nor can they be Alternate Effects" (DCA 125).
+    if (alternateOf || (p.alternates || []).length) {
+      if (durationOf(p, eff) === 'Permanent') out.push(issue('power', `${p.name}: ${eff.name} is permanent, and permanent effects can't be in an array (they can't be switched off). Add Sustained or move it out of the array.`, 'warning', { source: 'DCA 125' }));
+    }
     if (alternateOf) {
       const own = alternateOwnCost(p, R);
       const primary = primaryOwnCost(alternateOf, R);
@@ -143,6 +184,31 @@ export function checkLimits(ch, R) {
   else if (cost.total < cost.budget) out.push(issue('budget', `${cost.budget - cost.total} power points unspent.`, 'info'));
 
   return house(out);
+}
+
+/** A power's duration after the Sustained extra (permanent to sustained) and the Permanent flaw (sustained to permanent). */
+function durationOf(p, eff) {
+  if ((p.flaws || []).some((m) => m.name === 'Permanent')) return 'Permanent';
+  if (eff.duration === 'Permanent' && (p.extras || []).some((m) => m.name === 'Sustained')) return 'Sustained';
+  return eff.duration;
+}
+
+/** Prerequisites an advantage lists ("skill:Expertise (Magic)", "advantage:Trance") that the character lacks. Style-tier prerequisites are checked with the fighting styles. */
+function unmetRequirements(ch, def) {
+  const out = [];
+  for (const req of def.requires || []) {
+    const [kind, ...rest] = String(req).split(':');
+    const what = rest.join(':');
+    if (/\(Style\)/.test(what)) continue;
+    if (kind === 'skill') {
+      const m = /^(.*?)\s*\((.*)\)$/.exec(what);
+      const name = m ? m[1] : what; const spec = m ? m[2] : null;
+      if (skillRanks(ch, name, spec) <= 0) out.push(`the ${what} skill`);
+    } else if (kind === 'advantage') {
+      if (advantageRank(ch, what) <= 0) out.push(`the ${what} advantage`);
+    }
+  }
+  return out;
 }
 
 /** Supporting characters, minions and creatures: built as stat blocks, so the point budget is advisory. */

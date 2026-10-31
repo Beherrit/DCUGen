@@ -239,7 +239,9 @@ export function describeEffect(p, R) {
 export function powerLines(p, R) {
   const cost = powerCost(p, R);
   const own = effectCost(p, R).total + (p.linked || []).reduce((t, l) => t + effectCost(l, R).total, 0);
-  const lines = [{ name: p.name, text: describeEffect(p, R), cost: p.alternates?.length ? own : cost, primary: true, power: p }];
+  const dynamic = !!(p.dynamic && p.alternates?.length);
+  // A Dynamic base effect is printed with its extra point (Force Blast ... Dynamic • 37 points); the pool stays its own cost.
+  const lines = [{ name: p.name, text: describeEffect(p, R), cost: p.alternates?.length ? own + (dynamic ? 1 : 0) : cost, primary: true, power: p, ...(dynamic ? { pool: own } : {}) }];
   for (const a of p.alternates || []) {
     lines.push({ name: a.name, text: describeEffect(a, R), cost: p.dynamic ? 2 : 1, alternate: true, dynamic: !!p.dynamic, power: a });
   }
@@ -327,7 +329,7 @@ export function statBlockText(ch, R) {
     const [first, ...alts] = p.lines;
     let line = `${first.name}: ${first.text} • ${plural(first.cost, 'point')}`;
     if (alts.length) line += `; ${alts.map((a) => `${a.dynamic ? 'DAE' : 'AE'}: ${a.name}: ${a.text} • ${plural(a.cost, 'point')}`).join('; ')}`;
-    if (alts.length && alts[0].dynamic) line += ` (${plural(first.cost, 'point')} Dynamic pool)`;
+    if (alts.length && alts[0].dynamic) line += ` (${plural(first.pool ?? first.cost, 'point')} Dynamic pool)`;
     powerBits.push(line);
   }
   for (const dev of s.devices) {
