@@ -106,3 +106,24 @@ test('modifier prerequisites read the duration after Increased Duration and Sust
   assert.deepEqual(warns(P('Damage', 4, { extras: [{ name: 'Secondary Effect' }] })), []);
   assert.equal(warns(P('Damage', 4, { extras: [{ name: 'Secondary Effect' }, { name: 'Increased Duration' }] })).length, 1);
 });
+
+test('Super-Speed gives Improved Initiative at its rank on the sheet (DCA 119: Super-Speed 10 is +40)', () => {
+  const ch = hero({ powers: [P('Super-Speed', 10, { name: 'Speed Force' })] });
+  assert.equal(deriveAll(ch, R).initiative, 2 + 40);
+});
+
+test('size changes Stealth and Intimidation: Shrinking +rank Stealth, -half Intimidation; Normal Strength keeps both Strength and Intimidation (DCA 117)', () => {
+  const skills = [{ name: 'Stealth', ranks: 4 }, { name: 'Intimidation', ranks: 4 }];
+  const bonus = (ch, n) => deriveAll(ch, R).skills.find((s) => s.name === n).bonus;
+  const tiny = hero({ skills, powers: [P('Shrinking', 12)] }); // the book's example: +12 Stealth, -6 Intimidation, -3 Strength
+  assert.equal(bonus(tiny, 'Stealth'), 2 + 4 + 12);
+  assert.equal(bonus(tiny, 'Intimidation'), 2 + 4 - 6);
+  assert.equal(deriveAll(tiny, R).abilities.Strength, 2 - 3);
+  const strong = hero({ skills, powers: [P('Shrinking', 12, { extras: [{ name: 'Normal Strength' }] })] });
+  assert.equal(bonus(strong, 'Intimidation'), 2 + 4);
+  assert.equal(deriveAll(strong, R).abilities.Strength, 2);
+  assert.equal(bonus(strong, 'Stealth'), 2 + 4 + 12);
+  const big = hero({ skills, powers: [P('Growth', 8)] });
+  assert.equal(bonus(big, 'Stealth'), 2 + 4 - 8);
+  assert.equal(bonus(big, 'Intimidation'), 2 + 4 + 4);
+});

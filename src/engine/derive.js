@@ -58,16 +58,20 @@ export function skillRanks(ch, name, spec) {
     .reduce((t, s) => t + (s.ranks || 0), 0);
 }
 
+/** Shrinking ranks that cost Strength and Intimidation: all of them, except those bought with Normal Strength (DCA 117). */
+function shrinkWeak(ch) {
+  return activePowers(ch).filter((p) => p.effect === 'Shrinking' && !(p.extras || []).some((m) => m.name === 'Normal Strength')).reduce((s, p) => s + p.rank, 0);
+}
+
 export function abilityTotals(ch, R) {
   const growth = rankOf(ch, 'Growth');
-  const shrink = rankOf(ch, 'Shrinking');
   const out = {};
   for (const a of ABILITIES) {
     const base = ch.abilities?.[a];
     if (base === null) { out[a] = null; continue; }
     let v = (base || 0) + sumEnhanced(ch, R, a) + placedOn(ch, a);
     if (a === 'Strength' || a === 'Stamina') v += growth;
-    if (a === 'Strength') v -= Math.floor(shrink / 4);
+    if (a === 'Strength') v -= Math.floor(shrinkWeak(ch) / 4);
     out[a] = v;
   }
   return out;
@@ -107,8 +111,11 @@ export function skillBonuses(ch, R, abil = abilityTotals(ch, R)) {
       const enhanced = sumEnhanced(ch, R, label) + placedOn(ch, `skill:${label}`);
       const growth = rankOf(ch, 'Growth');
       let bonus = (abil[ability] ?? 0) + s.ranks + enhanced;
-      if (s.name === 'Intimidation') bonus += Math.floor(growth / 2);
-      if (s.name === 'Stealth') bonus -= growth;
+      // Size (DCA 100, 117): Growth +1 Intimidation per 2 ranks and -1 Stealth a rank; Shrinking +1 Stealth a rank and
+      // -1 Intimidation per 2 ranks (none with Normal Strength).
+      const shrink = rankOf(ch, 'Shrinking');
+      if (s.name === 'Intimidation') bonus += Math.floor(growth / 2) - Math.floor(shrinkWeak(ch) / 2);
+      if (s.name === 'Stealth') bonus += shrink - growth;
       return { ...s, ability, bonus };
     });
 }
@@ -243,7 +250,9 @@ export function attacks(ch, R, abil = abilityTotals(ch, R)) {
 }
 
 export function initiative(ch, R, abil = abilityTotals(ch, R)) {
-  return (abil.Agility ?? 0) + 4 * advantageRank(ch, 'Improved Initiative');
+  // The Super-Speed shorthand includes Enhanced Improved Initiative at its rank (DCA 119): +4 a rank.
+  const superSpeed = activePowers(ch).filter((p) => p.effect === 'Super-Speed').reduce((m, p) => Math.max(m, p.rank || 0), 0);
+  return (abil.Agility ?? 0) + 4 * (advantageRank(ch, 'Improved Initiative') + superSpeed);
 }
 
 export function deriveAll(ch, R) {
