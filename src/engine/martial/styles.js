@@ -8,6 +8,7 @@
 // Every function changes the character it is given (callers pass a copy) and returns true when something changed.
 
 import { TIERS, stylesOf, knownStyle, styleDef, parseStyleSkill } from './lookup.js';
+import { grantPrerequisites } from '../prereqs.js';
 
 const dropEmpty = (ch, key) => { ch[key] = (ch[key] || []).filter((x) => (x.ranks ?? x.rank ?? 1) > 0); };
 
@@ -28,9 +29,15 @@ export function addSkillRanks(ch, entry, skill, ranks) {
   if (rec) rec.ranks += ranks; else entry.added.skills.push({ ...skill, ranks });
 }
 
-export function addAdvantageRanks(ch, entry, adv, ranks) {
+export function addAdvantageRanks(ch, entry, adv, ranks, R) {
   if (ranks <= 0) return;
   ch.advantages = ch.advantages || [];
+  // An advantage the style lists can need another first (Improved Joint Lock needs Joint Lock, MA 66): the style brings it too.
+  // A prerequisite that can't be handed out (a weapon element is picked on the style) is left for the limits to flag.
+  if (R) grantPrerequisites(ch, R, adv.name, adv.param, {
+    add: (name, param) => addAdvantageRanks(ch, entry, { name, param }, 1),
+    addSkill: (name, spec, n) => addSkillRanks(ch, entry, spec ? { name, spec } : { name }, n),
+  });
   const row = ch.advantages.find((a) => a.name === adv.name && (a.param || null) === (adv.param || null));
   if (row) row.rank = (row.rank || 1) + ranks; else ch.advantages.push({ name: adv.name, rank: ranks, ...(adv.param ? { param: adv.param } : {}) });
   const rec = entry.added.advantages.find((a) => a.name === adv.name && (a.param || null) === (adv.param || null));

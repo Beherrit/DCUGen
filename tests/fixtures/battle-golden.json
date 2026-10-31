@@ -3233,7 +3233,7 @@
    "1|round||Round 1 begins. 3 fighters, 3 sides.",
    "1|init||Initiative: Professor Lotus 11, Psion 9, Gloom 8.",
    "1|move|A0|Professor Lotus moves to Psion from B6 to J6, 240 ft.",
-   "1|condition|A0|Professor Lotus tries to trip Psion (Improved Trip): d20 15 +18 = 33 vs Parry DC 23 — hit. Acrobatics or Athletics d20 19 +10 = 29 against d20 5 +2 = 7: Psion is thrown to the ground, PRONE.",
+   "1|condition|A0|Professor Lotus tries to trip Psion (Improved Trip): d20 15 +18 = 33 vs Parry DC 23 — hit. Acrobatics or Athletics d20 19 +9 = 28 against d20 5 +2 = 7: Psion is thrown to the ground, PRONE.",
    "1|note|A0|Angampora (Mobile): Professor Lotus kept moving, +2 to Parry until its next turn.",
    "1|attack|B0|Psion presses on Professor Lotus with Psychic Blast (perception range, no attack roll).",
    "1|condition|B0|Professor Lotus resists with Toughness: d20 15 +5 = 20 vs DC 22 — 1 degree: bruised (−1 to Toughness).",

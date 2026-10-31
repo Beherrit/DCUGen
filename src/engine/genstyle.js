@@ -4,6 +4,7 @@
 // then Initiate. A style small enough is bought whole at Master. The package costs about 14% of the budget, and the
 // generator's balancing trims or spends the rest, so the character still lands on exactly 15 points per power level.
 
+import { isLastPrerequisite, prerequisitesGrantable } from './prereqs.js';
 import { costBreakdown } from './costs.js';
 import { checkLimits } from './limits.js';
 import { advantageDef, knownStyle, parseStyleSkill } from './martial/lookup.js';
@@ -76,11 +77,12 @@ function studentPackage(c, R, def, rng, pl) {
   const basics = priced(R, def.basic_maneuvers);
   buyBasics(c, R, entry, def, rng, Math.ceil(basics.length / 2));
   buyAdvanced(c, R, def, rng, 1);
-  const ads = (def.advantage_list || []).filter((a) => !a.external && !/ Stances$/.test(a.name) && advantageDef(R, a.name) && !/select/i.test(a.detail || ''));
+  const ads = (def.advantage_list || []).filter((a) => !a.external && !/ Stances$/.test(a.name) && advantageDef(R, a.name) && !/select/i.test(a.detail || '')
+    && prerequisitesGrantable(c, R, advantageDef(R, a.name).name));
   for (const a of pickSome(rng, ads, Math.ceil(ads.length / 2))) {
     const name = advantageDef(R, a.name).name;
     const have = (c.advantages || []).filter((x) => x.name === name && (x.param || null) === (a.detail || null)).reduce((t, x) => t + (x.rank || 1), 0);
-    addAdvantageRanks(c, entry, { name, param: a.detail }, (a.rank ?? 1) - have);
+    addAdvantageRanks(c, entry, { name, param: a.detail }, (a.rank ?? 1) - have, R);
   }
 }
 
@@ -120,8 +122,8 @@ const FIGHT_SKILLS = new Set(['Close Combat', 'Ranged Combat', 'Acrobatics', 'At
 function fund(ch, R, target, rng) {
   const own = new Set((ch.styles || []).flatMap((s) => (s.added?.advantages || []).map((a) => a.name)));
   for (let i = 0; i < 200 && costBreakdown(ch, R).total > target; i++) {
-    const allSkills = (ch.skills || []).filter((k) => k.ranks > 0 && k.name !== 'Close Combat' && k.name !== 'Ranged Combat');
-    const allAdvs = (ch.advantages || []).filter((a) => !KEEP.has(a.name) && !own.has(a.name));
+    const allSkills = (ch.skills || []).filter((k) => k.ranks > 0 && k.name !== 'Close Combat' && k.name !== 'Ranged Combat' && !isLastPrerequisite(ch, R, { skill: k }));
+    const allAdvs = (ch.advantages || []).filter((a) => !KEEP.has(a.name) && !own.has(a.name) && !isLastPrerequisite(ch, R, { advantage: a }));
     const softSkills = allSkills.filter((k) => !FIGHT_SKILLS.has(k.name));
     const softAdvs = allAdvs.filter((a) => !FIGHT_ADVANTAGES.has(a.name));
     const soft = softSkills.length || softAdvs.length;

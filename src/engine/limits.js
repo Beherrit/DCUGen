@@ -7,7 +7,8 @@
 //   Fortitude + Will                            <= 2 x PL
 
 import { ABILITIES, traitKind } from './rules.js';
-import { deriveAll, allPowers, advantageRank, enhancedAdvantageRank, skillRanks } from './derive.js';
+import { deriveAll, allPowers, enhancedAdvantageRank } from './derive.js';
+import { missingPrerequisiteText } from './prereqs.js';
 import { costBreakdown, alternateOwnCost, primaryOwnCost, equipmentPoints, effectCost } from './costs.js';
 import { EP_PER_EQUIPMENT_RANK } from './rules.js';
 import { powerTags } from './powersmith.js';
@@ -110,7 +111,7 @@ export function checkLimits(ch, R) {
     if (!def.ranked && rank > 1) out.push(issue('advantage', `${adv.name} is not a ranked advantage.`, 'error', { source: def.source }));
     const max = def.max_rank === 'half_pl' ? Math.floor(pl / 2) : def.max_rank;
     if (max != null && rank + enhanced > max) out.push(issue('advantage', `${adv.name} ${rank + enhanced}${enhanced ? ` (${enhanced} from Enhanced ${adv.name})` : ''} exceeds its maximum of ${max}.`, 'error', { source: def.source }));
-    for (const req of unmetRequirements(ch, def)) out.push(issue('advantage', `${adv.name} requires ${req}.`, 'warning', { source: def.source }));
+    for (const req of missingPrerequisiteText(ch, R, def.name)) out.push(issue('advantage', `${adv.name} requires ${req}.`, 'warning', { source: def.source }));
   }
   // Advantages bought only as Enhanced Trait powers follow the same caps and prerequisites.
   for (const { power: p, alternateOf } of allPowers(ch)) {
@@ -122,7 +123,7 @@ export function checkLimits(ch, R) {
     if (!def.ranked && rank > 1) out.push(issue('advantage', `${p.name}: ${p.option} is not a ranked advantage, so Enhanced ${p.option} ${rank} buys nothing past rank 1.`, 'warning', { source: def.source }));
     const max = def.max_rank === 'half_pl' ? Math.floor(pl / 2) : def.max_rank;
     if (max != null && rank > max) out.push(issue('advantage', `${p.name}: Enhanced ${p.option} ${rank} exceeds its maximum of ${max}.`, 'error', { source: def.source }));
-    for (const req of unmetRequirements(ch, def)) out.push(issue('advantage', `${p.option} requires ${req}.`, 'warning', { source: def.source }));
+    for (const req of missingPrerequisiteText(ch, R, def.name)) out.push(issue('advantage', `${p.option} requires ${req}.`, 'warning', { source: def.source }));
   }
   const eqRanks = (ch.advantages || []).filter((a) => a.name === 'Equipment').reduce((s, a) => s + (a.rank || 1), 0);
   const ep = equipmentPoints(ch);
@@ -191,24 +192,6 @@ function durationOf(p, eff) {
   if ((p.flaws || []).some((m) => m.name === 'Permanent')) return 'Permanent';
   if (eff.duration === 'Permanent' && (p.extras || []).some((m) => m.name === 'Sustained')) return 'Sustained';
   return eff.duration;
-}
-
-/** Prerequisites an advantage lists ("skill:Expertise (Magic)", "advantage:Trance") that the character lacks. Style-tier prerequisites are checked with the fighting styles. */
-function unmetRequirements(ch, def) {
-  const out = [];
-  for (const req of def.requires || []) {
-    const [kind, ...rest] = String(req).split(':');
-    const what = rest.join(':');
-    if (/\(Style\)/.test(what)) continue;
-    if (kind === 'skill') {
-      const m = /^(.*?)\s*\((.*)\)$/.exec(what);
-      const name = m ? m[1] : what; const spec = m ? m[2] : null;
-      if (skillRanks(ch, name, spec) <= 0) out.push(`the ${what} skill`);
-    } else if (kind === 'advantage') {
-      if (advantageRank(ch, what) <= 0) out.push(`the ${what} advantage`);
-    }
-  }
-  return out;
 }
 
 /** Supporting characters, minions and creatures: built as stat blocks, so the point budget is advisory. */

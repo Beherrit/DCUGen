@@ -11,6 +11,7 @@ import { makeRng, randomSeed } from './rng.js';
 import { ABILITIES, BUYABLE_DEFENSES, PP_PER_PL, EP_PER_EQUIPMENT_RANK } from './rules.js';
 import { costBreakdown, powerCost, alternateOwnCost, primaryOwnCost, equipmentPoints } from './costs.js';
 import { deriveAll, advantageRank, attackKind, allPowers } from './derive.js';
+import { grantPrerequisites, isLastPrerequisite } from './prereqs.js';
 import { checkLimits } from './limits.js';
 import { rollSpec, rangeOf, evalExpr } from './expr.js';
 import { makeIdentity } from './flavor.js';
@@ -293,14 +294,14 @@ function balance(ch, R, ctx) {
 
   const trimmers = [
     { weight: 4, fn: () => {
-      const s = rng.pick(ch.skills.filter((x) => x.ranks > 0 && x.name !== 'Close Combat' && x.name !== 'Ranged Combat'));
+      const s = rng.pick(ch.skills.filter((x) => x.ranks > 0 && x.name !== 'Close Combat' && x.name !== 'Ranged Combat' && !isLastPrerequisite(ch, R, { skill: x })));
       if (!s) return false;
       s.ranks -= 1;
       if (!s.ranks) ch.skills.splice(ch.skills.indexOf(s), 1);
       return true;
     } },
     { weight: 3, fn: () => {
-      const a = rng.pick(ch.advantages.filter((x) => !['Equipment', 'Defensive Roll', 'Close Attack', 'Ranged Attack'].includes(x.name)));
+      const a = rng.pick(ch.advantages.filter((x) => !['Equipment', 'Defensive Roll', 'Close Attack', 'Ranged Attack'].includes(x.name) && !isLastPrerequisite(ch, R, { advantage: x })));
       if (!a) return false;
       a.rank -= 1;
       if (a.rank <= 0) ch.advantages.splice(ch.advantages.indexOf(a), 1);
@@ -412,6 +413,8 @@ function grantAdvantage(ch, R, name, ctx, fixedParam) {
   if (!def) return false;
   const existing = ch.advantages.find((a) => a.name === name);
   if (existing && !def.ranked) return false;
+  // Prerequisites come first (Attack Mastery needs Attack Specialist, Healing Trance needs Trance).
+  if (!grantPrerequisites(ch, R, name, fixedParam, { add: (n, p) => addAdvantage(ch, n, 1, p), addSkill: (n, spec, r) => addSkill(ch, n, r, spec) })) return false;
   let param = fixedParam;
   if (fixedParam) { if (existing && existing.param === fixedParam) return false; addAdvantage(ch, name, 1, fixedParam); return true; }
   switch (name) {
