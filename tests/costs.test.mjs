@@ -55,7 +55,8 @@ test('extras: Area, Accurate (flat per rank), Multiattack', () => {
 test('alternate effects add 1 point each, 2 if dynamic', () => {
   const p = P('Blast', 10, { alternates: [P('Damage', 10, { name: 'Alt 1', range: 'Ranged' }), P('Affliction', 10, { name: 'Alt 2', range: 'Ranged' })] });
   assert.equal(powerCost(p, R), 22);
-  assert.equal(powerCost({ ...p, dynamic: true }, R), 24);
+  // Dynamic: 1 point for the base effect, 2 for each Dynamic Alternate Effect (DCA 125).
+  assert.equal(powerCost({ ...p, dynamic: true }, R), 25);
 });
 
 test('removable devices: -1 per 5 points, easily removable -2 per 5', () => {

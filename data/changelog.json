@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-10-31",
+    "date": "2026-10-31",
+    "title": "Rules check: Dynamic arrays, Enhanced advantages and range extras priced and limited by the book",
+    "items": [
+      "Dynamic arrays now cost the book's extra point for the base effect (DCA 125), so Green Lantern's Force Blast prints at 37 points.",
+      "Advantages bought with Enhanced Trait now count: Enhanced Close Attack, Ranged Attack, Improved Initiative, Defensive Roll and the rest raise the sheet's numbers, and the power level limits and advantage caps see them.",
+      "The Increased Range extra now makes an effect ranged (or perception), the same as picking the range, so it uses the right attack check and limit.",
+      "A skill bought only as Enhanced Trait is held to PL + 10 like any other.",
+      "New warnings: advantages missing their prerequisites (Ritualist without Expertise: Magic, Improved Reversal without Reversal...), permanent effects inside an array, and costs cheaper than 1 point per 5 ranks."
+    ]
+  },
+  {
     "id": "2026-10-30",
     "date": "2026-10-30",
     "title": "The Battle Room grows up: a 12 by 12 arena, team tactics, roles, and most of the book's powers",

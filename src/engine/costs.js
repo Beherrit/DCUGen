@@ -4,7 +4,7 @@
 //   if cost per rank >= 1: total = cost per rank x rank
 //   else: 1 point buys (2 - cost per rank) ranks   (0 -> 1 point per 2 ranks, -1 -> per 3 ranks, ...)
 //   then add flat extras and subtract flat flaws.
-//   Alternate Effects add a flat 1 point each (2 if Dynamic).
+//   Alternate Effects add a flat 1 point each (2 if Dynamic). A Dynamic array's base effect pays 1 more (DCA 125).
 //   Removable devices: -1 point per 5 points of total cost (Easily Removable: -2 per 5).
 
 import { ABILITIES, RANGE_STEPS, PP_PER_PL, EP_PER_EQUIPMENT_RANK, traitKind } from './rules.js';
@@ -79,8 +79,11 @@ export function powerCost(power, R) {
   if (power.maneuver) return maneuverPowerCost(power, R); // a fighting style maneuver, priced by its own formula
   let total = effectCost(power, R).total;
   for (const link of power.linked || []) total += effectCost(link, R).total;
-  const aeCost = power.dynamic ? 2 : 1;
-  total += (power.alternates || []).length * aeCost;
+  const aes = (power.alternates || []).length;
+  total += aes * (power.dynamic ? 2 : 1);
+  // "Making the base effect of an array Dynamic requires 1 power point" (DCA 125): Green Lantern's Force Blast,
+  // Ranged Damage 18, Dynamic, is printed at 37 points.
+  if (power.dynamic && aes) total += 1;
   return total;
 }
 

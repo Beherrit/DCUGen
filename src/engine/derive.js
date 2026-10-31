@@ -30,10 +30,26 @@ function rankOf(ch, effect) {
   return activePowers(ch).filter((p) => p.effect === effect).reduce((s, p) => s + p.rank, 0);
 }
 
+/** Does an Enhanced Trait power's option name this advantage ("Improved Initiative", or "Improved Critical (Blast)")? */
+function enhancesAdvantage(p, name, param) {
+  if (p.effect !== 'Enhanced Trait' || !p.option) return false;
+  const opt = String(p.option);
+  if (opt !== name && !opt.startsWith(`${name} (`)) return false;
+  if (param == null) return true;
+  return p.param === param || p.detail === param || opt === `${name} (${param})`;
+}
+
+/** Ranks of an advantage the character has: bought, plus Enhanced Trait powers that grant it (DCA 96, "Enhanced Advantage"). */
 export function advantageRank(ch, name, param) {
-  return (ch.advantages || [])
+  const bought = (ch.advantages || [])
     .filter((a) => a.name === name && (param == null || a.param === param))
     .reduce((s, a) => s + (a.rank || 1), 0);
+  return bought + enhancedAdvantageRank(ch, name, param);
+}
+
+/** Ranks of an advantage that come from active Enhanced Trait powers only. */
+export function enhancedAdvantageRank(ch, name, param) {
+  return activePowers(ch).filter((p) => enhancesAdvantage(p, name, param)).reduce((s, p) => s + (p.rank || 0), 0);
 }
 
 export function skillRanks(ch, name, spec) {
@@ -105,12 +121,16 @@ function stepsOf(p, name) {
   return (p.extras || []).filter((m) => m.name === name).reduce((s, m) => s + (m.steps ?? 1), 0);
 }
 
-/** A power's range after its Reduced Range flaw (DCA 136): one step down per rank, perception to ranged and ranged to close. */
+/**
+ * A power's range after its Increased Range extra and Reduced Range flaw (DCA 130, 136): one step up or down per rank,
+ * close to ranged to perception. Both are priced per rank like any modifier, so the range they buy must count too.
+ */
 export function reducedRange(p, range) {
-  const steps = (p.flaws || []).filter((f) => f.name === 'Reduced Range').reduce((s, f) => s + (f.steps ?? 1), 0);
+  const count = (list, name) => (list || []).filter((m) => m.name === name).reduce((s, m) => s + (m.steps ?? 1), 0);
+  const steps = count(p?.extras, 'Increased Range') - count(p?.flaws, 'Reduced Range');
   const ladder = ['Close', 'Ranged', 'Perception'];
   const at = ladder.indexOf(range);
-  return at < 0 || !steps ? range : ladder[Math.max(0, at - steps)];
+  return at < 0 || !steps ? range : ladder[Math.min(ladder.length - 1, Math.max(0, at + steps))];
 }
 
 /** Classify how an attack effect is delivered. */

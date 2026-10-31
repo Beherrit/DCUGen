@@ -3,6 +3,7 @@
 import { makeRng } from './rng.js';
 import { RANGE_STEPS } from './rules.js';
 import { baseCostPerRank, rangeDelta, modifierValue, effectCost, powerCost } from './costs.js';
+import { reducedRange } from './derive.js';
 /** Step-by-step cost math for one power, for showing the user how the number is reached. */
 export function costMath(p, R) {
   const eff = R.effect(p.effect);
@@ -28,6 +29,7 @@ export function costMath(p, R) {
   lines.push(...flats);
   for (const l of p.linked || []) lines.push({ label: `Linked: ${l.name || l.effect}`, flat: powerCost(l, R) });
   const aes = (p.alternates || []).length;
+  if (aes && p.dynamic) lines.push({ label: 'Dynamic base effect', flat: 1 });
   if (aes) lines.push({ label: `${aes} ${p.dynamic ? 'Dynamic ' : ''}Alternate Effect${aes > 1 ? 's' : ''}`, flat: aes * (p.dynamic ? 2 : 1) });
   lines.push({ label: 'Total', total: powerCost(p, R), final: true });
   return { lines, ratio: c.ratio, perRank: c.perRank, total: powerCost(p, R) };
@@ -36,7 +38,7 @@ export function costMath(p, R) {
 /** Tags used by modifier "requires", for a power in its current state. */
 export function powerTags(p, R) {
   const eff = R.effect(p.effect);
-  const range = p.range || eff.range;
+  const range = reducedRange(p, p.range || eff.range);
   const area = (p.extras || []).some((m) => m.name === 'Area');
   const tags = new Set();
   if ((eff.attack || eff.type === 'Attack') && !area && (range === 'Close' || range === 'Ranged')) tags.add('attack');
@@ -120,7 +122,7 @@ export function randomPower(R, { pl = 10, effect, seed = Math.random(), chaos = 
     if (effectCost({ ...p, rank: 10 }, R).perRank < 0) p.flaws.pop(); // keep it at 1:2 or better
   }
   const area = p.extras.some((m) => m.name === 'Area');
-  const range = p.range || eff.range;
+  const range = reducedRange(p, p.range || eff.range);
   const rolls = (eff.attack || eff.type === 'Attack') && !area && (range === 'Close' || range === 'Ranged');
   const isAttack = eff.attack || eff.type === 'Attack';
   p.rank = isAttack ? (rolls ? clampRank(rng.int(pl - 3, pl + 2)) : clampRank(rng.int(Math.max(1, pl - 3), pl))) : clampRank(rng.int(1, Math.max(2, pl)));

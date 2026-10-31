@@ -16,7 +16,7 @@ test('linked effects add their full cost; a Dynamic array shares the primary as 
   assert.equal(primaryOwnCost(p, R), 32);
   assert.equal(powerCost(p, R), 33);
   p.dynamic = true;
-  assert.equal(powerCost(p, R), 34);
+  assert.equal(powerCost(p, R), 35); // +1 for the Dynamic base effect, +2 for the Dynamic AE (DCA 125)
   const notes = explainPower(p, R).notes.map((n) => `${n.name}: ${n.text}`).join('\n');
   assert.match(notes, /Linked: Blinding Flash: Happens at the same time/);
   assert.match(notes, /32-point pool/);

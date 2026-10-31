@@ -157,7 +157,7 @@ function render() {
       'Dynamic array'));
   const linkNote = linkSel != null
     ? h('p', { class: 'hint lab-note' }, `Linked to ${base().name}: both work at the same time with one action, and the linked effect costs its full price on top. Linked effects usually share the same range and duration.`)
-    : arr.dynamic ? h('p', { class: 'hint lab-note' }, 'Dynamic array: the primary\'s points are a shared pool. Use one effect at full power, or split the pool and run several effects at lower ranks at once. Each Dynamic AE costs 2 points.') : null;
+    : arr.dynamic ? h('p', { class: 'hint lab-note' }, 'Dynamic array: the primary\'s points are a shared pool. Use one effect at full power, or split the pool and run several effects at lower ranks at once. Making the primary Dynamic costs 1 point, and each Dynamic AE costs 2 (DCA 125).') : null;
 
   const rangeable = eff.range in RANGE_STEPS;
   const builder = h('div', { class: 'panel' },
@@ -229,7 +229,7 @@ function render() {
   }).filter(Boolean);
   const fmt = (v) => (v > 0 ? `+${v}` : `${v}`);
   const costPanel = h('div', { class: 'panel' },
-    h('div', { class: 'big-cost' }, h('b', { class: 'num' }, total), h('span', null, `power points${arr.alternates.length ? ` for the whole array (${primaryCost} + ${arr.alternates.length} ${arr.dynamic ? 'Dynamic AE × 2' : 'AE × 1'})` : ''}`)),
+    h('div', { class: 'big-cost' }, h('b', { class: 'num' }, total), h('span', null, `power points${arr.alternates.length ? ` for the whole array (${primaryCost}${arr.dynamic ? ' + 1 Dynamic' : ''} + ${arr.alternates.length} ${arr.dynamic ? 'Dynamic AE × 2' : 'AE × 1'})` : ''}`)),
     arr.dynamic ? h('div', { class: 'pool-line', id: 'lab-pool' }, h('b', { class: 'num' }, primaryCost), ' point pool, shared by every effect in the array') : null,
     err ? h('ul', { class: 'issues' }, h('li', { class: 'error' }, err)) : null,
     math ? h('div', { class: 'math' },
