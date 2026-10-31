@@ -71,7 +71,7 @@ export async function addCompanionDialog(owner) {
     const k = kindSel.value;
     kindHint.textContent = COMPANION_KINDS[k].blurb;
     rankRow.hidden = !COMPANION_KINDS[k].advantage;
-    plIn.value = suggestedPl(owner, k, Number(rankIn.value) || 1);
+    plIn.value = COMPANION_KINDS[k].power ? suggestedPl(owner, k) : suggestedPl(owner, k, Number(rankIn.value) || 1);
     plRow.hidden = !['roll', 'blank'].includes(srcSel.value);
     creatureRow.hidden = srcSel.value !== 'bestiary';
     rosterRow.hidden = srcSel.value !== 'roster';
