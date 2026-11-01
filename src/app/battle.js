@@ -23,6 +23,8 @@ import { KIND_CLASS, teamColor, renderLogInto, logControls } from './battle-log.
 import { uiBattle, wholeCover } from './battle-cover.js';
 import { gridBoard, initials } from './battle-grid.js';
 import { createBattle, addCombatant, removeCombatant, makeCombatant, joinBattle, startBattle, step, runRound, runToEnd, battleText, simulateMany, serializeBattle, reviveBattle, placeAll, squareName, STYLES, TACTICS, statusLine, conditionLabels, detectStyle, rebuildCombatant } from '../engine/battle.js';
+import { variablesOf } from '../engine/active-powers.js';
+import { setActiveConfig } from '../engine/variable-config.js';
 import { visibleTeams } from './battle-teams.js';
 
 const KEY = 'dcugen.battle.v1';
@@ -177,6 +179,16 @@ function fighterCard(c) {
     Object.assign(c, makeCombatant(R, ch, { id: c.id, team: c.team, style: null, tactics: c.tactics, heroPoints: c.heroPoints, name: c.name }));
     placeAll(battle); save(); renderBattle();
   } }, c.ch.forms.map((f, i) => h('option', { value: i, selected: i === activeForm(c.ch) }, f.name || `Form ${i + 1}`))) : null;
+  // A Variable's menu of configurations (DCA 121): fight in the one picked
+  const vars = variablesOf(c.ch).filter(({ power }) => (power.configs || []).length);
+  const cfgSel = vars.length ? h('select', { class: 'bt-mini', 'aria-label': `${c.name} Variable configuration`, title: 'Which Variable configuration they fight in', onChange: (e) => {
+    const [vi, id] = e.target.value.split('|');
+    const ch = setActiveConfig(c.ch, vars[Number(vi)].path, id || null);
+    Object.assign(c, makeCombatant(R, ch, { id: c.id, team: c.team, style: c.style, tactics: c.tactics, heroPoints: c.heroPoints, name: c.name }));
+    placeAll(battle); save(); renderBattle();
+  } }, vars.map(({ power }, vi) => h('optgroup', { label: power.name },
+    h('option', { value: `${vi}|`, selected: !power.activeConfig }, `${power.name}: off`),
+    power.configs.map((cfg) => h('option', { value: `${vi}|${cfg.id}`, selected: power.activeConfig === cfg.id }, `${power.name}: ${cfg.name}`))))) : null;
   const hp = h('input', { type: 'number', class: 'bt-hp', min: 0, max: 9, value: c.heroPoints, 'aria-label': `${c.name} hero points`, title: 'Hero points', onChange: (e) => { c.heroPoints = Math.max(0, Number(e.target.value) || 0); save(); } });
   return h('article', { class: `bt-card ${c.out ? 'out' : ''} ${c.fled ? 'fled' : ''}`, style: { '--c': c.color, '--t': teamColor(c.team), '--c-ink': inkFor(c.color) } },
     h('div', { class: 'bt-card-head' },
@@ -191,7 +203,7 @@ function fighterCard(c) {
     main ? h('div', { class: 'bt-main', title: attackTitle(c) }, `${main.name}: ${main.roll ? `+${main.bonus}, ` : `${main.area ? `${main.area} area` : 'perception'}, `}${main.effect} ${main.rank} (${main.resistance})`, c.attacks.length > 2 ? h('small', null, ` +${c.attacks.length - 1} more`) : null) : null,
     styleLine(c),
     descriptorTags(c),
-    setup ? h('div', { class: 'bt-opts' }, teamSel, formSel, styleSel, h('details', { class: 'bt-more' }, h('summary', null, 'More'), h('div', { class: 'bt-more-body' }, tacSel, h('label', { class: 'bt-hp-wrap', title: 'Hero points: re-roll a miss or shake off a daze' }, 'Hero points', hp), notSimulatedLine(c)))) : null,
+    setup ? h('div', { class: 'bt-opts' }, teamSel, formSel, cfgSel, styleSel, h('details', { class: 'bt-more' }, h('summary', null, 'More'), h('div', { class: 'bt-more-body' }, tacSel, h('label', { class: 'bt-hp-wrap', title: 'Hero points: re-roll a miss or shake off a daze' }, 'Hero points', hp), notSimulatedLine(c)))) : null,
     !setup ? h('div', { class: 'bt-state' }, dmg,
       h('div', { class: 'bt-conds' },
         c.fled ? h('span', { class: 'bt-cond fled' }, c.escaped ? 'Got away' : 'Fled') : c.out ? h('span', { class: 'bt-cond ko' }, statusLine(c)) : null,

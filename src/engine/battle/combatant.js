@@ -16,6 +16,7 @@ import { detectRoles } from './roles.js';
 import { attackDescriptors } from './descriptors.js';
 import { immunitiesOf, fearImmune } from './immunity.js';
 import { variableSize } from './variable-descriptor.js';
+import { withActive } from '../active-powers.js';
 import { restoreForm } from './insubstantial.js';
 import { flawsOf, shapeAttack, freshFlawState } from './flaws.js';
 import { extrasOf } from './extras.js';
@@ -138,6 +139,7 @@ function elongationFt(ch) {
 }
 /** Build a combatant from a character. opts: { team, style, tactics, heroPoints, name, carry: { bruises, fatigue } }. A carry is damage taken in an earlier fight, put back when the battle starts (startBattle). */
 export function makeCombatant(R, ch, opts = {}) {
+  ch = withActive(ch); // fights with its Variable's active configuration and any invention in use
   repairPowerRoles(ch, R);
   const d = deriveAll(ch, R);
   const style = opts.style && STYLES[opts.style] ? opts.style : detectStyle(ch, R);
@@ -214,6 +216,7 @@ export function resetCombatant(c) {
 export function rebuildCombatant(c, R, d = null) {
   // A fighter saved before hand-built attack powers were repaired: repair it, and redo the style that was
   // guessed from the broken build (it saw no attacks, so a ranged fighter read as a brawler or powerhouse).
+  if (c.ch) c.ch = withActive(c.ch);
   const was = JSON.stringify(c.ch?.powers || []);
   repairPowerRoles(c.ch, R);
   if (!d && JSON.stringify(c.ch?.powers || []) !== was && c.style !== 'minion') c.style = detectStyle(c.ch, R);
@@ -273,12 +276,12 @@ function powerStats(c) {
   c.concealDark = !!conceal && /dark|shadow|night|gloom|murk/i.test(`${conceal.name} ${conceal.detail || ''} ${(conceal.descriptors || []).join(' ')}`);
   c.senses = pw.filter((p) => p.effect === 'Senses').map((p) => p.detail || '').join(' ');
   const variable = pw.find((p) => p.effect === 'Variable');
-  c.variable = variable ? { name: variable.name, points: variable.rank * 5 } : null;
+  c.variable = variable ? { name: variable.name, points: variable.rank * 5, configs: (variable.configs || []).length } : null;
 }
 
 /** Omni-powers: a Variable pool can be configured into an attack each turn. */
 function addOmniStunts(c, d) {
-  if (c.variable && c.style === 'omni') {
+  if (c.variable && c.style === 'omni' && !c.variable.configs) { // a Variable with a menu of configurations fights with the one picked
     const base = d.abilities.Dexterity ?? 0;
     const rank = clamp(Math.floor(c.variable.points / 2), 1, 2 * c.pl - base);
     const stunt = (name, effect, extra) => ({ id: `variable|${effect}|${name}`, name: `${c.variable.name}: ${name}`, effect, kind: 'ranged', range: 'ranged', ext: 0, reachFt: 0, rank, bonus: base, roll: true, resistance: 'Toughness', descriptors: ['variable'], crit: 20, weights: null, stunt: true, power: null, ...extra });

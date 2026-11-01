@@ -17,6 +17,7 @@ import { portraitBlock } from './portrait.js';
 import { houseRules } from '../engine/house.js';
 import { stylesSection } from './styles/section.js';
 import { poolTargets, targetLabel, poolPowers, poolCapacity, poolSpent, poolAvailable, poolFeeder, costPerRank, drain, loseDrained, settlePools, fmtPoints } from '../engine/pools.js';
+import { configSwitcher } from './variable-menu.js';
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const clone = (x) => JSON.parse(JSON.stringify(x));
 
@@ -268,6 +269,7 @@ export function renderFile(ch, R, opts = {}) {
       linkedAbout(p),
       drainTracker(ch, p, path, change, R),
       poolTracker(ch, p, path, change, R),
+      p.effect === 'Variable' ? configSwitcher(ch, p, path, change, R) : null,
       whatItDoes(p, R),
       alts.map((a, i) => h('div', { class: 'ae' },
         h('b', null, `${p.dynamic ? 'DAE' : 'AE'}: ${a.name} `), describeEffect(a, R), rangeLine(a, R), aboutPower(a), linkedAbout(a), drainTracker(ch, a, { ...path, alt: i }, change, R), poolTracker(ch, a, { ...path, alt: i }, change, R), whatItDoes(a, R, true),

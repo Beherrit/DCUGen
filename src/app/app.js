@@ -8,7 +8,7 @@ import { toast } from './dom.js';
 import { initForge, roll, setCurrent, renderCurrent, restoreTabs, undo, redo, updateOpen, refreshForgeLists } from './forge.js';
 import { initHomebrew } from './homebrew.js';
 import { initRoster, renderRoster, openRosterKey } from './roster.js';
-import { initLab, openInLab, renderLab } from './lab.js';
+import { initLab, openInLab, renderLab, editInLab } from './lab.js';
 import { initGm, renderGm, addToInitiative } from './gm.js';
 import { initWorkshop, renderWorkshop, openHomebrew } from './workshop.js';
 import { initRules, renderRules, enableRuleLinks, allRules, openRule } from './rules.js';
@@ -379,6 +379,7 @@ async function boot() {
     goTab: (t) => showTab(t),
     editPower: (path) => { openInLab(state.current, path); showTab('lab'); },
     addPower: () => { openInLab(state.current, null); showTab('lab'); },
+    editTemp: (power, title, done) => { editInLab(power, { title, onDone: (pw) => { showTab('forge'); done(pw); }, onCancel: () => showTab('forge') }); showTab('lab'); },
     browseGear: () => showTab('garage'),
     throwIn: (ch) => throwInBattle(ch),
     goBattle: () => showTab('battle'),

@@ -57,6 +57,15 @@ one to open DCUGen on your phone, one for each desktop download.
   off, a shapeshifter's shapes). Each form is a whole build with its own PL, traits, powers, gear, codename and
   picture, checked on its own; the person, bio, journal, world and roster entry are shared. Switch with the numbered
   tabs; the forms travel with the character in the roster, exports and keys.
+- **Variable menus** – a Variable keeps a menu of configurations (DCA 121): open the Variable in the Power Lab, add
+  configurations and build their powers there. Each is priced against rank × 5 and checked against the power level
+  limits as if it were on. Switch with one tap on the sheet or in Play view (the configuration's attacks, defenses and
+  skills count while it's on), and pick the configuration a fighter uses on its Battle Room card.
+- **Inventing and rituals** – More ▾ > Inventing and rituals on the Forge, for characters with Inventor or Ritualist
+  (DCA 145-146): plan a device or ritual from a Power Lab power and the bench works out the design and construction
+  (or research and performance) DCs and times. Make each check routine or roll it (it goes to the Table), cut the time
+  a rank for each −5, or jury-rig it for a hero point. The finished invention works for one scene on the sheet and in
+  Play; End of scene uses it up, a hero point buys another scene, or buy it for good as a Removable device.
 - **Companions** – More ▾ > 🐾 Add a companion (or + Companion under the sheet) adds a sidekick (5 power points per rank of Sidekick, DCA 78), a minion (15 per rank
   of Minion, minion rules, DCA 77) or any other follower (an animal, a summoned creature, an ally), each with a full
   character sheet: roll one, start blank, take a creature from the Bestiary or copy someone from the roster. The

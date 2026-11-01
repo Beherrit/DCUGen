@@ -5,6 +5,9 @@ import { costBreakdown, powerCost, deviceCost, effectCost, primaryOwnCost } from
 import { deriveAll } from './derive.js';
 import { checkLimits } from './limits.js';
 import { poolCapacity } from './pools.js';
+import { variablesOf } from './active-powers.js';
+import { configsText } from './variable-config.js';
+import { INVENT_KINDS, inventionCost, statusText } from './inventing.js';
 import { houseRules } from './house.js';
 import { styleSummaries, styleTextLines } from './martial/summary.js';
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
@@ -355,6 +358,9 @@ export function statBlockText(ch, R) {
   for (const p of ch.powers || []) addAbout(p);
   for (const dev of ch.devices || []) for (const p of dev.powers || []) addAbout(p);
   if (about.length) out.push('Power descriptions:', ...about);
+  // A Variable's menu of configurations (DCA 121), and inventions and rituals on hand (DCA 145-146).
+  for (const { power } of variablesOf(ch)) { const t = configsText(power, R); if (t) out.push(`${power.name}: ${t}.`); }
+  if (ch.inventions?.length) out.push(`Inventions and rituals: ${ch.inventions.map((i) => `${i.power?.name || 'Invention'} (${(INVENT_KINDS[i.kind] || INVENT_KINDS.invention).label.toLowerCase()}, ${plural(inventionCost(i.power, R), 'point')}; ${statusText(i).toLowerCase()})`).join(', ')}.`);
   if (s.equipment.length) out.push(`Equipment: ${s.equipment.map((e) => `${e.name}${e.effect ? ` (${e.effect})` : ''}`).join(', ')}.`);
   if (s.advantages.length) out.push(`Advantages: ${s.advantages.map((a) => a.label).join(', ')}.`);
   if (s.skills.length) out.push(`Skills: ${s.skills.map((k) => `${k.label} ${k.ranks} (${sign(k.bonus)})`).join(', ')}.`);

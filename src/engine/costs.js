@@ -8,6 +8,7 @@
 //   Removable devices: -1 point per 5 points of total cost (Easily Removable: -2 per 5).
 
 import { ABILITIES, RANGE_STEPS, PP_PER_PL, EP_PER_EQUIPMENT_RANK, traitKind } from './rules.js';
+import { isTemp } from './active-powers.js';
 import { maneuverPowerCost, styleCostParts, maneuverPoints } from './martial/price.js';
 const TRAIT_BASE = { ability: 2, defense: 1, skill: 0, advantage: 1 };
 
@@ -123,7 +124,7 @@ export function costBreakdown(ch, R) {
     if (v === null) return s - 10; // an absent ability is worth -10 points
     return s + 2 * (v || 0);
   }, 0);
-  const powers = (ch.powers || []).filter((p) => !p.maneuver).reduce((s, p) => s + powerCost(p, R), 0)
+  const powers = (ch.powers || []).filter((p) => !p.maneuver && !isTemp(p)).reduce((s, p) => s + powerCost(p, R), 0)
     + (ch.devices || []).reduce((s, d) => s + deviceCost(d, R).total, 0);
   const advantages = (ch.advantages || []).reduce((s, a) => s + (a.rank || 1), 0);
   const ranks = skillRanksTotal(ch);

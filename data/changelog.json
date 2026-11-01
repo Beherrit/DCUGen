@@ -1,5 +1,16 @@
 [
   {
+    "id": "2026-11-01",
+    "date": "2026-11-01",
+    "title": "Variable menus and the Inventing and Rituals bench",
+    "items": [
+      "A Variable can keep a menu of configurations, as the book suggests (DCA 121): build each one in the Power Lab (Edit the Variable, then + New configuration and + Add a power). Each is priced against the Variable's rank x 5 and checked against the power level limits as if it were on.",
+      "Switch configurations with one tap on the sheet or in Play view: the configuration's attacks, defenses and skills count while it is on, and cost nothing extra on the build. In the Battle Room, pick the configuration a fighter uses on its card.",
+      "Inventors and ritualists get a bench (Forge > More > Inventing and rituals, DCA 145-146): plan a device or ritual from a Power Lab power, see its DCs and times, make each check routine or rolled, cut the time for -5 a rank, or jury-rig it for a hero point.",
+      "A finished invention works for one scene and shows up on the sheet and in Play; End of scene uses it up, a hero point buys another scene, or buy it for good as a Removable device."
+    ]
+  },
+  {
     "id": "2026-10-31",
     "date": "2026-10-31",
     "title": "Rules check: Dynamic arrays, Enhanced advantages and range extras priced and limited by the book",
