@@ -16,6 +16,9 @@ import { powerTags } from './powersmith.js';
 import { withoutPlaced, hasPlaced, poolPowers, poolSpent, poolAvailable, fmtPoints } from './pools.js';
 import { houseRules } from './house.js';
 import { checkStyleLimits } from './martial/limits.js';
+import { asBuilt, withActive, variablesOf, activeConfigOf } from './active-powers.js';
+import { configCost, configCapacity, withOnlyConfig } from './variable-config.js';
+import { INVENT_KINDS, inventionCost } from './inventing.js';
 function issue(rule, message, severity = 'error', extra = {}) {
   return { rule, message, severity, ...extra };
 }
@@ -33,6 +36,50 @@ function house(out) {
 }
 
 export function checkLimits(ch, R) {
+  const built = asBuilt(ch);
+  const out = checkBuild(built, R);
+  out.push(...checkTemporary(built, ch, R, out));
+  return house(out);
+}
+
+/**
+ * Variable configurations (DCA 121) and inventions (DCA 145): each is checked as if it were on, against the power
+ * level limits and the power rules. Issues the build already has are not repeated.
+ */
+function checkTemporary(built, ch, R, baseIssues) {
+  const out = [];
+  const seen = new Set(baseIssues.map((i) => i.message));
+  const fresh = (c, label) => checkBuild(withActive(c), R).filter((i) => i.rule !== 'budget' && i.rule !== 'pool' && !seen.has(i.message))
+    .map((i) => ({ ...i, message: `${label}: ${i.message}` }));
+  for (const { power: v } of variablesOf(built)) {
+    const cap = configCapacity(v);
+    for (const cfg of v.configs || []) {
+      const cost = configCost(cfg, R);
+      if (cost > cap) out.push(issue('variable', `${v.name}: configuration "${cfg.name}" costs ${cost} power points; ${v.name} ${v.rank} has ${cap} (5 per rank).`, 'error', { source: 'DCA 121' }));
+      out.push(...fresh(withOnlyConfig(built, v, cfg.id), `${v.name} › ${cfg.name}`));
+    }
+  }
+  // A configuration switched on right now, together with points placed from the same Variable as a pool.
+  for (const { power: v } of variablesOf(ch)) {
+    const cfg = activeConfigOf(v);
+    if (!cfg || !v.pool) continue;
+    const both = configCost(cfg, R) + poolSpent(ch, v, R);
+    if (both > configCapacity(v)) out.push(issue('variable', `${v.name}: "${cfg.name}" (${configCost(cfg, R)} pp) plus ${fmtPoints(poolSpent(ch, v, R))} pp placed is more than its ${configCapacity(v)}.`, 'error', { source: 'DCA 121' }));
+  }
+  for (const inv of built.inventions || []) {
+    const k = INVENT_KINDS[inv.kind] || INVENT_KINDS.invention;
+    const label = `${k.label} ${inv.power?.name || ''}`.trim();
+    if (!(built.advantages || []).some((a) => a.name === k.advantage)) out.push(issue('invention', `${label} needs the ${k.advantage} advantage.`, 'warning', { source: k.source }));
+    if (inv.status === 'failed' || inv.status === 'spent') continue;
+    const c = JSON.parse(JSON.stringify(built));
+    c.inventions = c.inventions.map((i) => (i.id === inv.id ? { ...i, status: 'active' } : { ...i, status: i.status === 'active' ? 'shelved' : i.status }));
+    for (const x of fresh(c, label)) out.push(x);
+    if (inventionCost(inv.power, R) < 1) out.push(issue('invention', `${label} costs nothing.`, 'warning'));
+  }
+  return out;
+}
+
+function checkBuild(ch, R) {
   const pl = ch.pl;
   const out = [];
   // Limits apply to the build. Points placed from a pool right now are checked separately, as warnings.
@@ -189,7 +236,7 @@ export function checkLimits(ch, R) {
   } else if (cost.total > cost.budget) out.push(issue('budget', ch.advancement ? `Spent ${cost.total} power points; starting points plus GM awards give ${cost.budget}.` : `Spent ${cost.total} power points; PL ${pl} allows ${cost.budget}.`));
   else if (cost.total < cost.budget) out.push(issue('budget', `${cost.budget - cost.total} power points unspent.`, 'info'));
 
-  return house(out);
+  return out;
 }
 
 /** Supporting characters, minions and creatures: built as stat blocks, so the point budget is advisory. */

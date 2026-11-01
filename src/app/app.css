@@ -2520,3 +2520,35 @@ html.read-color .power-about { font-style: normal; }
   .top-tools { gap: 3px; flex-wrap: wrap; justify-content: flex-end; }
   .top-tools button { padding-left: 6px; padding-right: 6px; font-size: 13px; } /* words, not icons, so keep them compact */
 }
+
+/* Variable configurations (DCA 121) */
+.var-menu { margin: 6px 0; display: grid; gap: 6px; }
+.var-menu-head { font-size: 14px; }
+.var-menu-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.var-pick { display: grid; text-align: left; gap: 2px; padding: 6px 10px; border: 1px solid var(--line, #c9ced6); border-radius: 8px; background: var(--paper, #fff); color: inherit; cursor: pointer; min-width: 120px; max-width: 100%; }
+.var-pick small { color: var(--ink-3); font-size: 12px; }
+.var-pick[aria-pressed="true"] { border-color: var(--blue); box-shadow: inset 0 0 0 2px var(--blue); }
+.var-cost.over, .hint.bad { color: var(--bad); }
+.var-menu-edit .var-cfgs { display: grid; gap: 8px; }
+.var-cfg { border: 1px solid var(--line, #c9ced6); border-radius: 8px; padding: 8px; display: grid; gap: 6px; }
+.var-cfg-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.var-cfg-name { flex: 1; min-width: 140px; }
+.var-cfg-powers { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.var-cfg-powers li { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.lab-sub { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 12px; margin-bottom: 10px; border: 2px solid var(--blue); border-radius: 10px; }
+.lab-sub .spacer { flex: 1; }
+
+/* Inventing and rituals bench (DCA 145-146) */
+.bench { display: grid; gap: 10px; }
+.bench-skills { display: flex; flex-wrap: wrap; gap: 6px; }
+.bench-skills .chip.off { opacity: .55; }
+.bench-new { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; }
+.bench-card { border: 1px solid var(--line, #c9ced6); border-radius: 10px; padding: 10px; display: grid; gap: 6px; }
+.bench-card.active { border-color: var(--blue); }
+.bench-card.failed { opacity: .8; }
+.bench-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.bench-power { margin: 0; color: var(--ink-3); font-size: 14px; }
+.bench-step { display: grid; gap: 6px; }
+.bench-cut { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 14px; }
+.bench .bench-cut input.bench-faster { width: 72px; flex: none; }
+.bench-log ol { margin: 4px 0 0; padding-left: 20px; font-size: 13px; }

@@ -9,6 +9,7 @@ import { statLine } from './lab-text.js';
 import { attackSkillField, stampRole } from './lab-attack.js';
 import { poolCapacity } from '../engine/pools.js';
 import { RANGE_STEPS, ABILITIES, BUYABLE_DEFENSES } from '../engine/rules.js';
+import { variableMenuEditor } from './variable-menu.js';
 let R;
 let root;
 let hooks = {};
@@ -16,6 +17,9 @@ let selected = -1; // -1 = primary, otherwise index of the alternate effect
 let linkSel = null; // index of a linked effect on the selected primary or AE, or null for the effect itself
 let target = null; // {path} when editing a character's power, or null
 let lockEffect = false;
+// Editing a power that lives somewhere else for a while: a power of a Variable configuration, an invention.
+// { lab, target, selected, linkSel, title, onDone(power) } holds what to go back to.
+let sub = null;
 
 const clone = (x) => JSON.parse(JSON.stringify(x));
 const blank = () => ({ name: 'New Power', effect: 'Damage', rank: 8, range: 'Ranged', extras: [], flaws: [], descriptors: [], alternates: [] });
@@ -30,8 +34,33 @@ export function initLab(rules, el, h2) {
   render();
 }
 
+/**
+ * Open the lab on a power that is kept somewhere else (a Variable configuration, an invention). When the user
+ * presses Done, onDone(power) gets the edited copy; Cancel drops it. The lab then goes back to what it had.
+ */
+export function editInLab(power, { title, onDone, onCancel } = {}) {
+  const was = sub ? { ...sub } : { lab: state.lab, target, selected, linkSel };
+  sub = { lab: was.lab, target: was.target, selected: was.selected, linkSel: was.linkSel, title: title || 'Editing a power', onDone, onCancel };
+  state.lab = { ...blank(), ...clone(power || blank()) };
+  state.lab.alternates = state.lab.alternates || [];
+  target = null; selected = -1; linkSel = null;
+  render();
+}
+
+function leaveSub(done) {
+  const s = sub;
+  if (!s) return;
+  const edited = clone(state.lab);
+  if (!edited.alternates?.length) delete edited.alternates;
+  sub = null;
+  state.lab = s.lab; target = s.target; selected = s.selected ?? -1; linkSel = s.linkSel ?? null;
+  if (done) s.onDone?.(stampRole(edited, R)); else s.onCancel?.();
+  render();
+}
+
 /** Open the lab on a character's power (path) or empty for adding a new one. */
 export function openInLab(ch, path) {
+  sub = null;
   if (path) {
     const p = clone(getPower(ch, path));
     p.alternates = p.alternates || [];
@@ -242,18 +271,42 @@ function render() {
       'Cost per rank = base + range change + per-rank extras − per-rank flaws. Below 1, each point buys more ranks (0 = 1 point per 2 ranks, −1 = per 3). Flat modifiers are added last. Linked effects add their full cost. Each Alternate Effect adds 1 point (2 if Dynamic) and may not cost more than the primary.'),
     aeWarnings.length ? h('ul', { class: 'issues' }, aeWarnings.map((w) => h('li', { class: 'error' }, w))) : null,
     h('div', { class: 'field' }, h('span', null, `What ${p.name || 'it'} does`), whatItDoes(p, R)),
+    arr.effect === 'Variable' && selected < 0 && linkSel == null ? variableMenuEditor(arr, R, {
+      pl,
+      changed: () => render(),
+      editPower: (cfg, i) => {
+        const title = `${arr.name} › ${cfg.name}: ${i == null ? 'a new power' : cfg.powers[i]?.name || 'power'}`;
+        const keepTarget = target;
+        editInLab(i == null ? { ...blank(), descriptors: [...(arr.descriptors || [])] } : cfg.powers[i], { title, onDone: (pw) => {
+          const c2 = (state.lab.configs || []).find((x) => x.id === cfg.id);
+          if (!c2) return;
+          if (i == null) c2.powers.push(pw); else c2.powers[i] = pw;
+          // Editing a character's Variable: keep the character in step.
+          if (keepTarget && state.current) { const c = clone(state.current); setPower(c, keepTarget.path, stampRole(clone(state.lab), R)); hooks.applyToCurrent?.(c); }
+        } });
+      },
+      saveToCharacter: target && ch ? () => { const c = clone(ch); setPower(c, target.path, stampRole(clone(arr), R)); hooks.applyToCurrent?.(c); } : null,
+    }) : null,
     h('div', { class: 'field' }, h('span', null, 'Stat block line'),
       h('div', { class: 'statblock-text', id: 'lab-text' }, statLine(arr, R))),
     h('div', { class: 'btn-row' },
       h('button', { class: 'btn', type: 'button', onClick: async () => toast((await copyText(statLine(arr, R))) ? 'Power copied' : 'Select the text to copy it') }, 'Copy'),
-      ch && target ? h('button', { class: 'btn primary', type: 'button', onClick: () => {
+      sub ? null : ch && target ? h('button', { class: 'btn primary', type: 'button', onClick: () => {
         const c = clone(ch); setPower(c, target.path, stampRole(clone(arr), R)); hooks.applyToCurrent?.(c); toast('Power saved to the character');
       } }, `Save to ${ch.identity?.codename || 'character'}`) : null,
-      ch ? h('button', { class: target ? 'btn' : 'btn primary', type: 'button', onClick: () => {
+      sub ? null : ch ? h('button', { class: target ? 'btn' : 'btn primary', type: 'button', onClick: () => {
         const c = clone(ch); const np = clone(arr); stampRole(np, R); c.powers = [...(c.powers || []), np];
         hooks.applyToCurrent?.(c); target = { path: { device: null, index: c.powers.length - 1 } }; toast(`Added to ${c.identity?.codename || 'character'}`);
       } }, `Add as new power to ${ch.identity?.codename || 'character'}`) : h('span', { style: { color: 'var(--ink-3)', fontSize: '13px' } }, 'Roll or open a character to add this power to them.')));
 
+  if (sub) {
+    root.append(h('div', { class: 'lab-sub', role: 'status', id: 'lab-sub' },
+      h('b', null, sub.title),
+      h('span', { class: 'hint' }, ' Build the power here, then press Done to put it back.'),
+      h('span', { class: 'spacer' }),
+      h('button', { class: 'btn ghost', type: 'button', onClick: () => leaveSub(false) }, 'Cancel'),
+      h('button', { class: 'btn primary', type: 'button', id: 'lab-sub-done', onClick: () => leaveSub(true) }, 'Done')));
+  }
   root.append(h('div', { class: 'page-head' },
     h('div', null, h('h1', null, 'Power Lab'),
       h('p', null, 'Build any power from the DC Adventures effects and modifiers and watch the point math as you go. Only modifiers that fit the effect are offered, so random powers stay legal too.'))));

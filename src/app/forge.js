@@ -21,6 +21,7 @@ import { hasForms, activeForm, addForm, switchForm, renameForm, removeForm, MAX_
 import { companionsOf } from '../engine/companions.js';
 import { addVersion, versionsOf, removeVersion, restoreVersion, historyKey, moveHistory } from './history.js';
 import { renderPlay } from './play.js';
+import { openInventingBench } from './inventing.js';
 import { openRangeCalculator } from './rangecalc.js';
 import { F } from './forge-common.js';
 import { saveTabs, putActive, canUndo, canRedo, undo, redo, setCurrent, switchTab, tabStrip, restoreTabs, updateOpen } from './forge-tabs.js';
@@ -370,6 +371,19 @@ function commit(c) {
   putActive(c); saveTabs(); fresh = false; renderCurrent(); emit('current');
 }
 
+/** The Inventing and Rituals bench for the open character (DCA 145-146). */
+function openBench() {
+  openInventingBench(R, {
+    get: () => state.current,
+    apply: (c) => commit(c),
+    labPower: () => (state.lab && state.lab.effect !== 'Variable' ? state.lab : null),
+    editInLab: (power, title, done) => {
+      document.getElementById('dialog')?.close();
+      api.editTemp?.(power, title, (pw) => { done(pw); openBench(); });
+    },
+  });
+}
+
 /**
  * Alternate forms: numbered tabs for up to 8 builds of the same character. Each is a whole build (its
  * own PL, traits, powers, codename, picture); the person, bio and journal are shared.
@@ -481,6 +495,7 @@ function drawCurrent(ch) {
       { label: 'New build', hint: 'Keep the name and story, roll new powers and stats', run: () => rebuild(ch) },
       ch.companionOf ? null : { label: 'Add a companion', id: 'toolbar-companion', hint: 'A sidekick, minion or animal with a full sheet', run: () => addCompanionDialog(ch) },
       hasForms(ch) ? null : { label: 'Alternate forms', id: 'add-forms', hint: 'Up to 8 builds of the same person', run: addFormsFlow },
+      { label: 'Inventing and rituals', id: 'invent-bench-btn', hint: 'Inventor or Ritualist: build a device or perform a ritual for a scene', run: () => openBench() },
     ]),
     h('span', { class: 'undo-group' },
       h('button', { class: 'btn ghost icon', type: 'button', id: 'undo', title: 'Undo (Ctrl+Z)', 'aria-label': 'Undo', disabled: !canUndo(), onClick: undo }, 'Undo'),
@@ -509,6 +524,7 @@ function drawCurrent(ch) {
     fileHost.append(h('div', { class: 'toolbar play-toolbar' }, toolbar.querySelector('#undo')?.parentElement || null));
     fileHost.append(renderPlay(ch, R, {
       change: (fn) => { const c = JSON.parse(JSON.stringify(ch)); fn(c); onChange(c); },
+      openBench: () => openBench(),
       openCompanion: (i) => { const comp = companionsOf(ch)[i]; if (comp) setCurrent({ ...JSON.parse(JSON.stringify(comp)), companionOf: { ownerId: ch.id, ownerName: ch.identity?.codename || 'their hero', index: i } }, { newTab: true }); },
     }));
     fresh = false;

@@ -2,6 +2,7 @@
 
 import { ABILITIES, BUYABLE_DEFENSES, traitKind } from './rules.js';
 import { placedOn } from './pools.js';
+import { withActive } from './active-powers.js';
 /** Every power the character has, including those inside devices, alternates and links. */
 export function allPowers(ch, { includeAlternates = true } = {}) {
   const out = [];
@@ -277,6 +278,7 @@ export function initiative(ch, R, abil = abilityTotals(ch, R)) {
 }
 
 export function deriveAll(ch, R) {
+  ch = withActive(ch); // a Variable's active configuration and inventions in use count while they are on
   const abil = abilityTotals(ch, R);
   return {
     abilities: abil,

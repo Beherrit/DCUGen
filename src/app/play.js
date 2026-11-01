@@ -17,6 +17,10 @@ import { stanceCard } from './styles/stance-card.js';
 import { currentStance, dropBrokenStance } from '../engine/martial/stance.js';
 import { inStance } from '../engine/martial/stance-mods.js';
 import { stanceDef } from '../engine/martial/lookup.js';
+import { configSwitcher } from './variable-menu.js';
+import { inventionsPlayCard } from './inventing.js';
+import { endInventionScene } from '../engine/inventing.js';
+import { variablesOf } from '../engine/active-powers.js';
 
 const sign = (n) => (n >= 0 ? `+${n}` : `${n}`);
 const recent = []; // this visit's rolls, newest first
@@ -77,7 +81,7 @@ export function renderPlay(ch, R, opts) {
         toast('Extra effort: you become more fatigued (spend a hero point to cancel it: press − on Hero points and set Fatigue back)');
       } }, 'Extra effort'),
       h('button', { class: 'btn', type: 'button', disabled: !s.heroPoints, title: 'Spend a hero point: re-roll, improve a check, recover...', onClick: () => setPlay((st) => { st.heroPoints = Math.max(0, st.heroPoints - 1); }) }, 'Spend hero point'),
-      h('button', { class: 'btn ghost', type: 'button', title: 'Damage, conditions and fatigue clear; hero points stay', onClick: () => setPlay((st) => Object.assign(st, endScene(st))) }, 'End of scene')));
+      h('button', { class: 'btn ghost', type: 'button', title: 'Damage, conditions and fatigue clear; hero points stay. Inventions and rituals in use are spent.', onClick: () => opts.change((c) => { c.play = endScene(playState(c)); if (endInventionScene(c)) toast('Inventions and rituals in use are spent: a hero point buys another scene.'); }) }, 'End of scene')));
 
   // ---- defenses ----
   const defTile = (name, v, label) => h('button', { type: 'button', class: 'play-tile', disabled: v == null, onClick: () => roll(`${name} check`, v) },
@@ -117,6 +121,12 @@ export function renderPlay(ch, R, opts) {
   });
   const powers = trackers.length ? h('section', { class: 'play-card' }, h('h3', null, 'Drain & pools'), trackers) : null;
 
+  // ---- a Variable's configurations (DCA 121) and inventions on hand (DCA 145) ----
+  const menus = variablesOf(ch).filter(({ power }) => (power.configs || []).length)
+    .map(({ power, path }) => h('div', { class: 'play-tracker' }, h('b', null, power.name), configSwitcher(ch, power, path, change, R, { compact: true })));
+  const variables = menus.length ? h('section', { class: 'play-card', id: 'play-variable' }, h('h3', null, 'Variable'), menus) : null;
+  const inventions = inventionsPlayCard(ch, R, change, () => opts.openBench?.());
+
   // ---- companions ----
   const comps = companionsOf(ch);
   const companions = comps.length ? h('section', { class: 'play-card' }, h('h3', null, 'Companions'),
@@ -134,5 +144,5 @@ export function renderPlay(ch, R, opts) {
 
   const stance = stanceCard(ch, R, d0, s, { roll, setPlay });
 
-  return h('div', { class: 'play' }, status, sharedMapView(ch.rosterId ? [ch.rosterId] : []), stance, defenses, attacks, skills, conditions, powers, companions, log);
+  return h('div', { class: 'play' }, status, sharedMapView(ch.rosterId ? [ch.rosterId] : []), stance, variables, defenses, attacks, skills, conditions, powers, inventions, companions, log);
 }
